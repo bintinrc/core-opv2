@@ -12,17 +12,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by sw on 7/12/16.
+ * @author Soewandi Wirjawan
  */
 public class CommonUtil {
 
-    public static void clickBtn(WebDriver driver, String xpath) throws InterruptedException {
+    private CommonUtil()
+    {
+    }
+
+    public static void clickBtn(WebDriver driver, String xpath) {
         WebElement el = driver.findElement(By.xpath(xpath));
         pause100ms();
         moveAndClick(driver, el);
     }
 
-    public static void moveAndClick(WebDriver driver, WebElement el) throws InterruptedException {
+    public static void moveAndClick(WebDriver driver, WebElement el) {
         Actions action = new Actions(driver);
         action.moveToElement(el);
         action.click();
@@ -30,27 +34,38 @@ public class CommonUtil {
         pause1s();
     }
 
-    public static void inputText(WebDriver driver, String xpath, String value) throws InterruptedException {
+    public static void inputText(WebDriver driver, String xpath, String value) {
         WebElement el = driver.findElement(By.xpath(xpath));
         el.clear();
         el.sendKeys(value);
         pause1s();
     }
 
-    public static void pause10s() throws InterruptedException {
-        Thread.sleep(10000);
+    public static void pause10s() {
+        pause(10000);
     }
 
-    public static void pause1s() throws InterruptedException {
-        Thread.sleep(1000);
+    public static void pause1s() {
+        pause(1000);
     }
 
-    public static void pause100ms() throws InterruptedException {
-        Thread.sleep(100);
+    public static void pause100ms() {
+        pause(100);
     }
 
-    public static void pause10ms() throws InterruptedException {
-        Thread.sleep(10);
+    public static void pause10ms() {
+        pause(10);
+    }
+
+    public static void pause(long millis) {
+        try
+        {
+            Thread.sleep(millis);
+        }
+        catch(InterruptedException ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
     public static WebElement getResultInTable(WebDriver driver, String tableXpath, String value) {
@@ -81,7 +96,7 @@ public class CommonUtil {
         });
     }
 
-    public static void closeModal(WebDriver driver) throws InterruptedException {
+    public static void closeModal(WebDriver driver) {
         Actions builder = new Actions(driver);
         builder.moveToElement(driver.findElement(By.xpath("//div[@class='nv-text-ellipsis nv-navtitle ng-binding']")), 5, 5).click().build().perform();
         CommonUtil.pause100ms();
