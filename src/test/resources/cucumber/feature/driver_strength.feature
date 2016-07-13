@@ -1,4 +1,3 @@
-@selenium
 Feature: driver strength
 
   Scenario: op login into operator portal

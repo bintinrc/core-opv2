@@ -7,7 +7,7 @@ Feature: op login and logout
     Then op is in dp administrator
 
   Scenario: op logout from operator portal (uid:b0997f2e-1db7-4088-a3b9-30c9e0fa1d0f)
-    Given op click dp administrator
+    Given op click navigation dp administrator
     When logout button is clicked
     Then op back in the login page
     Then close browser

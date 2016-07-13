@@ -40,6 +40,9 @@ public class MainPage extends LoadableComponent<MainPage> {
         } else if (navTitle.equals("driver strength")) {
             container = "container.driver-strength";
             mainTitle = "driver-strength";
+        } else if (navTitle.equals("driver type management")) {
+            container = "container.driver-type-management";
+            mainTitle = "driver-type-management";
         }
 
         driver.findElement(By.xpath("//button[@ng-click=\"ctrl.navigateTo('" + container + "')\"]")).click();
