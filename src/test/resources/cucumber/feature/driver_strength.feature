@@ -27,13 +27,15 @@ Feature: driver strength
     Given op click navigation driver strength
     When driver coming status is changed
 
+  Scenario: op view contact aldira putra
+    Given op click navigation dp administrator
+    Given op click navigation driver strength
+    When searching driver aldira putra
+    When clicking on aldira putra view contact button
 
-  # view contact
   # add new
   # edit existing
   # delete existing
-
-
 
   Scenario: op logout from operator portal
     Given op click navigation dp administrator

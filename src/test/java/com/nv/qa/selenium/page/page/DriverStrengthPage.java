@@ -106,6 +106,16 @@ public class DriverStrengthPage extends LoadableComponent<LoginPage> {
         Assert.assertTrue(!before.equals(after));
     }
 
+    public void clickViewContactButton(String name) throws InterruptedException {
+        driver.findElement(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData']/td[@class='contact column-locked-right']/md-menu/button")).click();
+        CommonUtil.pause1s();
+
+        WebElement el = driver.findElement(By.xpath("//div[@aria-hidden='false']/md-menu-content[@class='contact-info md-nvOrange-theme']/md-menu-item[@class='contact-info-details']/div[1]/div[2]"));
+        Assert.assertTrue(name.trim().equalsIgnoreCase(el.getText()));
+
+        CommonUtil.closeModal(driver);
+    }
+
     private void changeComingStatusState(WebElement el) throws InterruptedException {
         CommonUtil.pause1s();
         el.findElement(By.xpath("//td[@class='coming column-locked-right']/nv-toggle-button/button")).click();
@@ -142,9 +152,8 @@ public class DriverStrengthPage extends LoadableComponent<LoginPage> {
         CommonUtil.pause1s();
         el.sendKeys(Keys.RETURN);
         CommonUtil.pause100ms();
-
-        Actions builder = new Actions(driver);
-        builder.moveToElement(driver.findElement(By.xpath("//div[@class='nv-text-ellipsis nv-navtitle ng-binding']")), 5, 5).click().build().perform();
-        CommonUtil.pause100ms();
+        CommonUtil.closeModal(driver);
     }
+
+
 }

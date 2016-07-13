@@ -1,4 +1,3 @@
-@selenium
 Feature: distribution point partners
 
   Scenario: op login into operator portal

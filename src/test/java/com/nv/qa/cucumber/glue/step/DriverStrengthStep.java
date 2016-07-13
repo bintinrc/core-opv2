@@ -58,4 +58,10 @@ public class DriverStrengthStep {
     public void changeComingStatus() throws InterruptedException {
         dsPage.changeComingStatus();
     }
+
+
+    @When("^clicking on ([^\"]*) view contact button$")
+    public void clickViewContactButton(String name) throws InterruptedException {
+        dsPage.clickViewContactButton(name);
+    }
 }

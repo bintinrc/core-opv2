@@ -80,4 +80,10 @@ public class CommonUtil {
             }
         });
     }
+
+    public static void closeModal(WebDriver driver) throws InterruptedException {
+        Actions builder = new Actions(driver);
+        builder.moveToElement(driver.findElement(By.xpath("//div[@class='nv-text-ellipsis nv-navtitle ng-binding']")), 5, 5).click().build().perform();
+        CommonUtil.pause100ms();
+    }
 }
