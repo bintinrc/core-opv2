@@ -1,6 +1,5 @@
 package com.nv.qa.cucumber.glue.step;
 
-import com.nv.qa.selenium.page.page.DpPage;
 import com.nv.qa.selenium.page.page.PricingTemplatePage;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.SeleniumSharedDriver;
@@ -45,6 +44,28 @@ public class PricingTemplateStep
     public void verifyNewPricingTemplateCreatedSuccessfully()
     {
         CommonUtil.inputText(driver, "//input[@placeholder='Search rule']", newPricingTemplateName);
+        CommonUtil.pause1s();
+        String pricingTemplateNameFromTable = pricingTemplatePage.getTextOnTable(1, "ctrl.table.name");
+        Assert.assertEquals(newPricingTemplateName, pricingTemplateNameFromTable);
+    }
+
+    @When("^op update rules on Pricing Template$")
+    public void updateRules()
+    {
+        newPricingTemplateName += " [EDITED]";
+        pricingTemplatePage.clickActionButton(1, PricingTemplatePage.ACTION_BUTTON_EDIT);
+        CommonUtil.pause1s();
+        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Name']", newPricingTemplateName);
+        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Description']", "Create by Cucumber with Selenium. [EDITED]");
+        CommonUtil.clickBtn(driver, "//nv-api-text-button[@name='Update']");
+    }
+
+    @Then("^rules on Pricing Template updated successfully$")
+    public void verifyPricingTemplateUpdatedSuccessfully()
+    {
+        System.out.println("TEMPLATE NAME: "+newPricingTemplateName);
+        CommonUtil.inputText(driver, "//input[@placeholder='Search rule']", newPricingTemplateName);
+        CommonUtil.pause1s();
         String pricingTemplateNameFromTable = pricingTemplatePage.getTextOnTable(1, "ctrl.table.name");
         Assert.assertEquals(newPricingTemplateName, pricingTemplateNameFromTable);
     }
@@ -53,14 +74,21 @@ public class PricingTemplateStep
     public void deleteRules()
     {
         CommonUtil.inputText(driver, "//input[@placeholder='Search rule']", newPricingTemplateName);
+        CommonUtil.pause1s();
         pricingTemplatePage.clickActionButton(1, PricingTemplatePage.ACTION_BUTTON_DELETE);
+        CommonUtil.pause1s();
+        CommonUtil.clickBtn(driver, "//button[@type='button'][@aria-label='Delete']");
+        CommonUtil.pause1s();
+
     }
 
     @Then("^rules on Pricing Template deleted successfully$")
     public void verifyPricingTemplateDeletedSuccessfully()
     {
         CommonUtil.inputText(driver, "//input[@placeholder='Search rule']", newPricingTemplateName);
+        CommonUtil.pause1s();
+        String expectedValue = null;
         String pricingTemplateNameFromTable = pricingTemplatePage.getTextOnTable(1, "ctrl.table.name");
-        Assert.assertEquals(newPricingTemplateName, pricingTemplateNameFromTable);
+        Assert.assertEquals(expectedValue, pricingTemplateNameFromTable);
     }
 }

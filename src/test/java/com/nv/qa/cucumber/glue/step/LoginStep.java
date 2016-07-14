@@ -1,7 +1,6 @@
 package com.nv.qa.cucumber.glue.step;
 
 import com.nv.qa.selenium.page.page.LoginPage;
-import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.SeleniumSharedDriver;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -9,7 +8,6 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -25,7 +23,6 @@ public class LoginStep {
     @Before
     public void setup() {
         driver = SeleniumSharedDriver.getInstance().getDriver();
-        driver.manage().window().setSize(new Dimension(APIEndpoint.SELENIUM_WINDOW_WIDTH, APIEndpoint.SELENIUM_WINDOW_HEIGHT));
         loginPage = new LoginPage(driver);
     }
 
@@ -54,10 +51,12 @@ public class LoginStep {
         loginPage.backToLoginPage();
     }
 
-    //-- global hooks to close browser
+    /**
+     * Global hooks to close browser. Put "@closeBrowser" on the top of your Scenario at feature file
+     * to make Cucumber invoke this method after the Scenario executed.
+     */
     @After("@closeBrowser")
     public void closeBrowser() {
         SeleniumSharedDriver.getInstance().closeDriver();
     }
-
 }
