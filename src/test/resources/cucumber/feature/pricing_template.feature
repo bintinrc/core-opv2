@@ -3,7 +3,7 @@ Feature: Pricing Template
   Scenario: op login into operator portal
     Given op is in op portal login page
     When login button is clicked
-    When login as "daniel.hutapea@ninjavan.co" with password "Sephiroth2889"
+    When login as "{operator-portal-uid}" with password "{operator-portal-pwd}"
     Then op is in dp administrator
 
   Scenario: Operator create new rules on Pricing Template menu.
