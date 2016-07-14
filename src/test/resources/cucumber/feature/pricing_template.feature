@@ -16,8 +16,8 @@ Feature: Pricing Template
     When op delete rules on Pricing Template
     Then rules on Pricing Template deleted successfully
 
+  @closeBrowser
   Scenario: op logout from operator portal
     Given op click navigation dp administrator
     When logout button is clicked
     Then op back in the login page
-    Then close browser
