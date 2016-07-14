@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
+ *
  * @author Soewandi Wirjawan
  */
 public final class APIEndpoint
