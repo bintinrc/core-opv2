@@ -57,8 +57,8 @@ Feature: driver strength
     When in driver strength delete new driver button is clicked
     Then in driver strength the created driver should not exist
 
+  @closeBrowser
   Scenario: op logout from operator portal
     Given op click navigation dp administrator
     When logout button is clicked
     Then op back in the login page
-    Then close browser

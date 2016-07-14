@@ -1,3 +1,4 @@
+@selenium
 Feature: driver type management
 
   Scenario: op login into operator portal
@@ -136,8 +137,8 @@ Feature: driver type management
     Given op click navigation driver type management
     When driver type management is filtered by 6PM to 10PM of Timeslot
 
+  @closeBrowser
   Scenario: op logout from operator portal
     Given op click navigation dp administrator
     When logout button is clicked
     Then op back in the login page
-    Then close browser

@@ -25,7 +25,6 @@ public class LogoutStep {
 
     @After
     public void teardown() {
-
     }
 
     @When("^logout button is clicked$")

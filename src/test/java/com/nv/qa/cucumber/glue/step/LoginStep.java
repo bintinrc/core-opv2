@@ -50,7 +50,8 @@ public class LoginStep {
         loginPage.backToLoginPage();
     }
 
-    @Then("^close browser$")
+    //-- global hooks to close browser
+    @After("@closeBrowser")
     public void closeBrowser() {
         SeleniumSharedDriver.getInstance().closeDriver();
     }

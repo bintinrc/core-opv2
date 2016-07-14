@@ -1,3 +1,4 @@
+@selenium
 Feature: dp administration
 
   Scenario: op login into operator portal
@@ -120,8 +121,8 @@ Feature: dp administration
     When download button in dp-users is clicked
     Then file dp-users should exist
 
+  @closeBrowser
   Scenario: op logout from operator portal
     Given op click navigation dp administrator
     When logout button is clicked
     Then op back in the login page
-    Then close browser
