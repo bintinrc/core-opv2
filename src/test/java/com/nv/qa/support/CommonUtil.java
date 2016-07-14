@@ -39,6 +39,7 @@ public class CommonUtil {
     public static void inputText(WebDriver driver, String xpath, String value) {
         WebElement el = driver.findElement(By.xpath(xpath));
         el.clear();
+        pause100ms();
         el.sendKeys(value);
         pause1s();
     }
