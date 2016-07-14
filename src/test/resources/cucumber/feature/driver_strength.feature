@@ -7,50 +7,50 @@ Feature: driver strength
     When login as "{operator-portal-uid}" with password "{operator-portal-pwd}"
     Then op is in dp administrator
 
-  Scenario: op filter driver strength by zones
+  Scenario: op filter driver strength by zones (uid:70921910-cb0a-4283-93ad-34431fd86b98)
     Given op click navigation driver strength
     When in driver strength driver strength is filtered by zone
 
-  Scenario: op filter driver strength by driver-type
+  Scenario: op filter driver strength by driver-type (uid:3f54984e-aaa1-494c-a27b-68af2d809071)
     Given op click navigation dp administrator
     Given op click navigation driver strength
     When in driver strength driver strength is filtered by driver-type
 
   # add new
-  Scenario: op add new driver
+  Scenario: op add new driver (uid:b7a6c2b2-66c0-4e7d-890c-b0099cef4b5a)
     Given op click navigation dp administrator
     Given op click navigation driver strength
     When in driver strength add new driver button is clicked
     When in driver strength enter default value of new driver
     Then in driver strength new driver should get created
 
-  Scenario: op search driver using searching box
+  Scenario: op search driver using searching box (uid:9e1d4874-d927-438a-abdf-8cde0308f35b)
     Given op click navigation dp administrator
     Given op click navigation driver strength
     When in driver strength searching driver
     Then in driver strength verifying driver
 
-  Scenario: op change driver coming status
+  Scenario: op change driver coming status (uid:bd210076-fd96-4d1a-8277-ec119286680c)
     Given op click navigation dp administrator
     Given op click navigation driver strength
     When in driver strength searching driver
     When in driver strength driver coming status is changed
-#
-  Scenario: op view contact aldira putra
+
+  Scenario: op view contact (uid:830216ec-bc25-4921-8950-40e6bd8818af)
     Given op click navigation dp administrator
     Given op click navigation driver strength
     When in driver strength searching driver
     When in driver strength clicking on view contact button
 
   # edit existing
-  Scenario: op add new driver
+  Scenario: op edit new driver (uid:204f21ef-8b0c-4b74-a6e0-c191199d3f5a)
     Given op click navigation dp administrator
     Given op click navigation driver strength
     When in driver strength searching new created driver
     When in driver strength edit new driver button is clicked
 
   # delete existing
-  Scenario: op add new driver
+  Scenario: op delete new driver (uid:419e1f4d-a226-492f-a655-eb92d48be704)
     Given op click navigation dp administrator
     Given op click navigation driver strength
     When in driver strength searching new created driver
