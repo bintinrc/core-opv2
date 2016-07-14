@@ -39,29 +39,64 @@ public class DriverStrengthStep {
         dsPage.verifyDownloadedFile();
     }
 
-    @When("^driver strength is filtered by ([^\"]*)$")
+    @When("^in driver strength driver strength is filtered by ([^\"]*)$")
     public void filteredBy(String type) throws InterruptedException {
         dsPage.filteredBy(type);
     }
 
-    @When("^searching driver ([^\"]*)$")
-    public void searchDriver(String value) throws InterruptedException {
-        dsPage.searchDriver(value);
+    @When("^in driver strength searching driver$")
+    public void searchDriver() throws InterruptedException {
+        dsPage.searchDriver();
     }
 
-    @Then("^verifying driver ([^\"]*)$")
-    public void verifyDriver(String value) throws InterruptedException {
-        dsPage.verifyDriver(value);
+    @Then("^in driver strength verifying driver$")
+    public void verifyDriver() throws InterruptedException {
+        dsPage.verifyDriver();
     }
 
-    @When("^driver coming status is changed$")
+    @When("^in driver strength driver coming status is changed$")
     public void changeComingStatus() throws InterruptedException {
         dsPage.changeComingStatus();
     }
 
 
-    @When("^clicking on ([^\"]*) view contact button$")
-    public void clickViewContactButton(String name) throws InterruptedException {
-        dsPage.clickViewContactButton(name);
+    @When("^in driver strength clicking on view contact button$")
+    public void clickViewContactButton() throws InterruptedException {
+        dsPage.clickViewContactButton();
+    }
+
+    @When("^in driver strength add new driver button is clicked$")
+    public void clickAddNewDriver() {
+        dsPage.clickAddNewDriver();
+    }
+
+    @When("^in driver strength enter default value of new driver$")
+    public void enterDefaultValue() {
+        dsPage.enterDefaultValue();
+    }
+
+    @Then("^in driver strength new driver should get created$")
+    public void verifyNewDriver() {
+        dsPage.verifyNewDriver();
+    }
+
+    @When("^in driver strength searching new created driver$")
+    public void searchingNewDriver() {
+        dsPage.searchingNewDriver();
+    }
+
+    @When("^in driver strength edit new driver button is clicked$")
+    public void editNewDriver() {
+        dsPage.editNewDriver();
+    }
+
+    @When("^in driver strength delete new driver button is clicked$")
+    public void deleteNewDriver() {
+        dsPage.deleteNewDriver();
+    }
+
+    @Then("^in driver strength the created driver should not exist$")
+    public void createdDriverShouldNotExist() {
+        dsPage.createdDriverShouldNotExist();
     }
 }

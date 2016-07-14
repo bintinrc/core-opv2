@@ -1,6 +1,8 @@
 package com.nv.qa.selenium.page.page;
 
 import com.nv.qa.support.CommonUtil;
+import com.nv.qa.support.DateUtil;
+import com.nv.qa.support.ScenarioHelper;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -75,20 +77,20 @@ public class DriverStrengthPage extends LoadableComponent<LoginPage> {
         Assert.assertTrue(listDriver.size() == min.getValue());
     }
 
-    public void searchDriver(String value) throws InterruptedException {
+    public void searchDriver() throws InterruptedException {
         CommonUtil.inputText(driver,
                 "//input[@placeholder='Search Drivers...'][@ng-model='searchText']",
-                value);
+                "Driver " + ScenarioHelper.getInstance().getTmpId());
     }
 
-    public void verifyDriver(String value) {
+    public void verifyDriver() {
         boolean isFound = false;
         List<WebElement> listDriver = driver.findElements(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData'][@class='ng-scope']"));
         for (WebElement d : listDriver) {
             List<WebElement> el = d.findElements(By.tagName("td"));
             for (WebElement e : el) {
                 if (e.getText().trim().length() > 0) {
-                    if (e.getText().trim().equalsIgnoreCase(value)) {
+                    if (e.getText().trim().equalsIgnoreCase("Driver " + ScenarioHelper.getInstance().getTmpId())) {
                         isFound = true;
                     }
                 }
@@ -106,14 +108,90 @@ public class DriverStrengthPage extends LoadableComponent<LoginPage> {
         Assert.assertTrue(!before.equals(after));
     }
 
-    public void clickViewContactButton(String name) throws InterruptedException {
+    public void clickViewContactButton() throws InterruptedException {
         driver.findElement(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData']/td[@class='contact column-locked-right']/md-menu/button")).click();
         CommonUtil.pause1s();
 
+        String name = "Driver " + ScenarioHelper.getInstance().getTmpId();
         WebElement el = driver.findElement(By.xpath("//div[@aria-hidden='false']/md-menu-content[@class='contact-info md-nvOrange-theme']/md-menu-item[@class='contact-info-details']/div[1]/div[2]"));
-        Assert.assertTrue(name.trim().equalsIgnoreCase(el.getText()));
+        Assert.assertTrue(name.equalsIgnoreCase(el.getText()));
 
         CommonUtil.closeModal(driver);
+    }
+
+    public void clickAddNewDriver() {
+        CommonUtil.clickBtn(driver, "//button[@aria-label='Add New Driver']");
+        CommonUtil.pause1s();
+    }
+
+    public void enterDefaultValue() {
+        String tmpId = DateUtil.getCurrentTime_HH_MM_SS();
+        ScenarioHelper.getInstance().setTmpId(tmpId);
+
+
+        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='First Name']", "Driver");
+        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Last Name']", tmpId);
+        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Driver License Number']", "D" + tmpId);
+        CommonUtil.inputText(driver, "//input[@type='number'][@aria-label='COD Limit']", "100");
+
+        // add vehicle
+        CommonUtil.clickBtn(driver, "//button[@aria-label='Add More Vehicles']");
+        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='License Number']", "D" + tmpId);
+        CommonUtil.inputText(driver, "//input[@type='number'][@aria-label='Vehicle Capacity']", "100");
+
+        // add contact
+        CommonUtil.clickBtn(driver, "//button[@aria-label='Add More Contacts']");
+        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Contact']", "D" + tmpId + "@NV.CO");
+
+        // add zone
+        CommonUtil.clickBtn(driver, "//button[@aria-label='Add More Zones']");
+        CommonUtil.inputText(driver, "//input[@type='number'][@aria-label='Min']", "1");
+        CommonUtil.inputText(driver, "//input[@type='number'][@aria-label='Max']", "1");
+        CommonUtil.inputText(driver, "//input[@type='number'][@aria-label='Cost']", "1");
+
+        // username + password
+        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Username']", "D" + tmpId);
+        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Password']", "D00" + tmpId);
+
+        // save
+        CommonUtil.clickBtn(driver, "//button[@aria-label='Save Button']");
+        CommonUtil.pause10s();
+    }
+
+    public void verifyNewDriver() {
+        CommonUtil.inputText(driver,
+                "//input[@placeholder='Search Drivers...'][@ng-model='searchText']",
+                "Driver " + ScenarioHelper.getInstance().getTmpId());
+        int size = driver.findElements(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData']")).size();
+        Assert.assertTrue(size == 1);
+    }
+
+    public void searchingNewDriver() {
+        CommonUtil.inputText(driver,
+                "//input[@placeholder='Search Drivers...'][@ng-model='searchText']",
+                "Driver " + ScenarioHelper.getInstance().getTmpId());
+    }
+
+    public void editNewDriver() {
+        driver.findElement(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData']/td[@class='actions column-locked-right']/nv-icon-button[1]/button")).click();
+        CommonUtil.pause1s();
+
+        CommonUtil.inputText(driver, "//input[@type='number'][@aria-label='Vehicle Capacity']", "1000");
+        CommonUtil.clickBtn(driver, "//button[@aria-label='Save Button']");
+        CommonUtil.pause1s();
+    }
+
+    public void deleteNewDriver() {
+        driver.findElement(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData']/td[@class='actions column-locked-right']/nv-icon-button[2]/button")).click();
+        CommonUtil.pause1s();
+
+        driver.findElement(By.xpath("//md-dialog[@aria-label='Confirm deleteAre you ...']/md-dialog-actions/button[2]")).click();
+        CommonUtil.pause1s();
+    }
+
+    public void createdDriverShouldNotExist() {
+        int size = driver.findElements(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData']")).size();
+        Assert.assertTrue(size == 0);
     }
 
     private void changeComingStatusState(WebElement el) throws InterruptedException {
