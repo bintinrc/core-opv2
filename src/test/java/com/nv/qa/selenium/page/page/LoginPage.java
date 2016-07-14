@@ -4,7 +4,6 @@ import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.LoadableComponent;
@@ -12,7 +11,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 /**
- * Created by sw on 6/30/16.
+ *
+ * @author Soewandi Wirjawan
  */
 public class LoginPage extends LoadableComponent<LoginPage> {
 

@@ -1,6 +1,7 @@
 package com.nv.qa.cucumber.glue.step;
 
 import com.nv.qa.selenium.page.page.LoginPage;
+import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.SeleniumSharedDriver;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -8,10 +9,12 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 
 /**
- * Created by sw on 6/30/16.
+ *
+ * @author Soewandi Wirjawan
  */
 @ScenarioScoped
 public class LoginStep {
@@ -22,6 +25,7 @@ public class LoginStep {
     @Before
     public void setup() {
         driver = SeleniumSharedDriver.getInstance().getDriver();
+        driver.manage().window().setSize(new Dimension(APIEndpoint.SELENIUM_WINDOW_WIDTH, APIEndpoint.SELENIUM_WINDOW_HEIGHT));
         loginPage = new LoginPage(driver);
     }
 
