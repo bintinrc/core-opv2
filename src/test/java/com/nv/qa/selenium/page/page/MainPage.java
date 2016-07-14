@@ -43,6 +43,9 @@ public class MainPage extends LoadableComponent<MainPage> {
         } else if (navTitle.equals("driver type management")) {
             container = "container.driver-type-management";
             mainTitle = "driver-type-management";
+        } else if (navTitle.equals("Pricing Template")) {
+            container = "container.pricing-template";
+            mainTitle = "pricing-template";
         }
 
         driver.findElement(By.xpath("//button[@ng-click=\"ctrl.navigateTo('" + container + "')\"]")).click();

@@ -2,6 +2,7 @@ package com.nv.qa.support;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -100,5 +101,20 @@ public class CommonUtil {
         Actions builder = new Actions(driver);
         builder.moveToElement(driver.findElement(By.xpath("//div[@class='nv-text-ellipsis nv-navtitle ng-binding']")), 5, 5).click().build().perform();
         CommonUtil.pause100ms();
+    }
+
+    public static WebElement getElementByXpath(WebDriver driver, String xpathExpression)
+    {
+        WebElement element = null;
+
+        try
+        {
+            element = driver.findElement(By.xpath(xpathExpression));
+        }
+        catch(NoSuchElementException ex)
+        {
+        }
+
+        return element;
     }
 }
