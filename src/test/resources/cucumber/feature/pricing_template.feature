@@ -4,7 +4,7 @@ Feature: Pricing Template
     Given op is in op portal login page
     When login button is clicked
     When login as "{operator-portal-uid}" with password "{operator-portal-pwd}"
-    Then op is in dp administrator
+    Then op is in dp administration
 
   Scenario: Operator create new rules on Pricing Template menu.
     Given op click navigation Pricing Template
@@ -18,6 +18,6 @@ Feature: Pricing Template
 
   @closeBrowser
   Scenario: op logout from operator portal
-    Given op click navigation dp administrator
+    Given op click navigation DP Administration
     When logout button is clicked
     Then op back in the login page

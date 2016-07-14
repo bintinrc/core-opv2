@@ -10,6 +10,9 @@ import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * Created by sw on 6/30/16.
@@ -17,6 +20,12 @@ import org.testng.Assert;
 public class MainPage extends LoadableComponent<MainPage> {
 
     private final WebDriver driver;
+    private final Map<String, String> map = new HashMap<String, String>() {{
+        put("DP Administration","container.dp-administration.dp-partners");
+        put("Driver Strength","container.driver-strength");
+        put("Driver Type Management","container.driver-type-management");
+        put("Pricing Template","container.pricing-template");
+    }};
 
     public MainPage(WebDriver driver) {
         this.driver = driver;
@@ -32,24 +41,10 @@ public class MainPage extends LoadableComponent<MainPage> {
     }
 
     public void clickNavigation(String navTitle) throws InterruptedException {
-        String container = null;
-        String mainTitle = null;
-        if (navTitle.equals("dp administrator")) {
-            container = "container.dp-administration.dp-partners";
-            mainTitle = "dp-administration";
-        } else if (navTitle.equals("driver strength")) {
-            container = "container.driver-strength";
-            mainTitle = "driver-strength";
-        } else if (navTitle.equals("driver type management")) {
-            container = "container.driver-type-management";
-            mainTitle = "driver-type-management";
-        } else if (navTitle.equals("Pricing Template")) {
-            container = "container.pricing-template";
-            mainTitle = "pricing-template";
-        }
+        String container = map.get(navTitle);
+        final String mainDashboard = navTitle.toLowerCase().replaceAll(" ", "-");
 
         driver.findElement(By.xpath("//button[@ng-click=\"ctrl.navigateTo('" + container + "')\"]")).click();
-        final String mainDashboard = mainTitle;
         (new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS)).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
                 return d.getCurrentUrl().toLowerCase().endsWith(mainDashboard);
