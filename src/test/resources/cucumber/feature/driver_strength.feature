@@ -7,6 +7,14 @@ Feature: driver strength
     When login as "{operator-portal-uid}" with password "{operator-portal-pwd}"
     Then op is in dp administration
 
+  # add new
+  Scenario: op add new driver (uid:b7a6c2b2-66c0-4e7d-890c-b0099cef4b5a)
+    Given op click navigation DP Administration
+    Given op click navigation Driver Strength
+    When in driver strength add new driver button is clicked
+    When in driver strength enter default value of new driver
+    Then in driver strength new driver should get created
+
   Scenario: op filter driver strength by zones (uid:70921910-cb0a-4283-93ad-34431fd86b98)
     Given op click navigation DP Administration
     Given op click navigation Driver Strength
@@ -16,14 +24,6 @@ Feature: driver strength
     Given op click navigation DP Administration
     Given op click navigation Driver Strength
     When in driver strength driver strength is filtered by driver-type
-
-  # add new
-  Scenario: op add new driver (uid:b7a6c2b2-66c0-4e7d-890c-b0099cef4b5a)
-    Given op click navigation DP Administration
-    Given op click navigation Driver Strength
-    When in driver strength add new driver button is clicked
-    When in driver strength enter default value of new driver
-    Then in driver strength new driver should get created
 
   Scenario: op search driver using searching box (uid:9e1d4874-d927-438a-abdf-8cde0308f35b)
     Given op click navigation DP Administration

@@ -91,14 +91,6 @@ public class CommonUtil {
         return result;
     }
 
-    public static Map.Entry<String, Integer> getMinEntry(Map<String, Integer> map) {
-        return Collections.min(map.entrySet(), new Comparator<Map.Entry<String, Integer>>() {
-            public int compare(Map.Entry<String, Integer> entry1, Map.Entry<String, Integer> entry2) {
-                return entry1.getValue().compareTo(entry2.getValue());
-            }
-        });
-    }
-
     public static void closeModal(WebDriver driver) {
         Actions builder = new Actions(driver);
         builder.moveToElement(driver.findElement(By.xpath("//div[@class='nv-text-ellipsis nv-navtitle ng-binding']")), 5, 5).click().build().perform();
