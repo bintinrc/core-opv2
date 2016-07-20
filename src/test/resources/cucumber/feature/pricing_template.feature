@@ -1,3 +1,4 @@
+@selenium
 Feature: Pricing Template
 
   Scenario: op login into operator portal

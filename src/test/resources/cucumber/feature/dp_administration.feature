@@ -1,3 +1,4 @@
+@selenium
 Feature: dp administration
 
   Scenario: op login into operator portal

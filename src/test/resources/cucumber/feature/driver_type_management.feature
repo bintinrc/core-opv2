@@ -1,3 +1,4 @@
+@selenium
 Feature: driver type management
 
   Scenario: op login into operator portal
