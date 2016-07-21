@@ -1,4 +1,4 @@
-@selenium
+@selenium @wip
 Feature: Pricing Template
 
   Scenario: op login into operator portal
@@ -15,6 +15,12 @@ Feature: Pricing Template
     Then rules on Pricing Template updated successfully
     When op delete rules on Pricing Template
     Then rules on Pricing Template deleted successfully
+
+  Scenario: Operator
+    Given op click navigation Pricing Template
+    Given op have two default rules "PT Cucumber Test 1" and "PT Cucumber Test 2"
+    When do nothing
+    Then do something
 
   @closeBrowser
   Scenario: op logout from operator portal
