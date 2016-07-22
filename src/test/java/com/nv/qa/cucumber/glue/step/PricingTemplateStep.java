@@ -1,7 +1,9 @@
 package com.nv.qa.cucumber.glue.step;
 
 import com.nv.qa.selenium.page.page.PricingTemplatePage;
+import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.SeleniumSharedDriver;
+import cucumber.api.DataTable;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -9,8 +11,10 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  *
@@ -76,22 +80,39 @@ public class PricingTemplateStep
     public void createDefaultTwoRulesIfNotExists(String defaultRulesName1, String defaultRulesName2)
     {
         String rulesDescription = "Please don't touch this rules. This rules created by Cucumber with Selenium for testing purpose.";
-        String rules1 = "function getDefaultPrice() {\\n    return 987.6;\\n}";
+        String rules1 = "function getDefaultPrice() {\\n    return 1.2;\\n}";
         String rules1Id = pricingTemplatePage.createDefaultRulesIfNotExists(defaultRulesName1, rulesDescription, rules1);
 
         String importScript = String.format("importScript(%s);", rules1Id);
-        String rules2 = importScript+"\\nfunction calculate(deliveryType, orderType, timeSlot, size, weight, insuredValue, \\ncodValue, fromDp, toDp, fromZone, toZone) {\\n    var price = getDefaultPrice();\\n\\n    // order type\\n    if (deliveryType == \"STANDARD\") {\\n        price = 8;\\n    } else if (deliveryType == \"EXPRESS\") {\\n        price = 9;\\n    } else if (deliveryType == \"NEXT_DAY\") {\\n        price = 11;\\n    } else if (deliveryType == \"SAMEDAY\") {\\n        price = 12;\\n    } else {\\n        throw \"Unknown order type.\";\\n    }\\n\\n    // size\\n    if (size == \"S\") {\\n        // initial price is for smallest size already (hence we do nothing here)\\n    } else if (size == \"M\") {\\n        price += 1.5;\\n    } else if (size == \"L\") {\\n        price += 4.5;\\n    } else if (size == \"XL\") {\\n        price += 12;\\n    } else if (size == \"XXL\") {\\n        price += 16; // nothing in the document for XXL\\n    } else {\\n        throw \"Unknown size.\";\\n    }\\n\\n    return price;}";
+        String rules2 = importScript+"\\n\\nfunction calculate(deliveryType, orderType, timeslotType, size, weight, insuredValue, \\ncodValue, fromDp, toDp, fromZone, toZone) {\\n    var price = getDefaultPrice();\\n\\n    if (deliveryType == \"STANDARD\") {\\n        price += 2;\\n    } else if (deliveryType == \"EXPRESS\") {\\n        price += 3;\\n    } else if (deliveryType == \"NEXT_DAY\") {\\n        price += 5;\\n    } else if (deliveryType == \"SAMEDAY\") {\\n        price += 7;\\n    } else {\\n        throw \"Unknown delivery type.\";\\n    }\\n\\n    if (orderType == \"NORMAL\") {\\n        price += 11;\\n    } else if (orderType == \"RETURN\") {\\n        price += 13;\\n    } else if (orderType == \"C2C\") {\\n        price += 17;\\n    } else {\\n        throw \"Unknown order type.\";\\n    }\\n\\n    if (timeslotType == \"NONE\") {\\n        price += 19;\\n    } else if (timeslotType == \"DAY_NIGHT\") {\\n        price += 23;\\n    } else if (timeslotType == \"TIMESLOT\") {\\n        price += 29;\\n    } else {\\n        throw \"Unknown timeslot type.\";\\n    }\\n\\n    if (size == \"S\") {\\n        price += 31;\\n    } else if (size == \"M\") {\\n        price += 37;\\n    } else if (size == \"L\") {\\n        price += 41;\\n    } else if (size == \"XL\") {\\n        price += 43;\\n    } else if (size == \"XXL\") {\\n        price += 47;\\n    } else {\\n        throw \"Unknown size.\";\\n    }\\n\\n    price += weight + 53.4;\\n\\n    return price;\\n}";
 
         pricingTemplatePage.createDefaultRulesIfNotExists(defaultRulesName2, rulesDescription, rules2);
     }
 
-    @When("^do nothing$")
-    public void whenDoNothing()
+    @When("^op click Run Test on Operator V2 Portal using this Rules Check below:$")
+    public void simulateRunTest(DataTable dataTable)
     {
+        Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
+        String deliveryType = mapOfData.get("deliveryType");
+        String orderType = mapOfData.get("orderType");
+        String timeslotType = mapOfData.get("timeslotType");
+        String size = mapOfData.get("size");
+        String weight = mapOfData.get("weight");
+        pricingTemplatePage.simulateRunTest(deliveryType, orderType, timeslotType, size, weight);
     }
 
-    @Then("^do something")
-    public void thenDoSomething()
+    @Then("^op will find the cost equal to \\\"([^\\\"]*)\\\" and the comments equal to \\\"([^\\\"]*)\\\"")
+    public void verifyCostAndComments(String expectedCost, String expectedComments)
     {
+        WebElement costEl = CommonUtil.getElementByXpath(driver, "//div[text()='Unit Cost']/following-sibling::div[1]");
+        String actualCost = costEl.getText();
+        Assert.assertEquals(expectedCost, actualCost);
+
+        WebElement commentsEl = CommonUtil.getElementByXpath(driver, "//div[text()='Comments']/following-sibling::div[1]");
+        String actualComments = commentsEl.getText();
+        Assert.assertEquals(expectedComments, actualComments);
+
+        CommonUtil.pause1s();
+        CommonUtil.clickBtn(driver, "//button[@id='button-cancel-dialog']");
     }
 }

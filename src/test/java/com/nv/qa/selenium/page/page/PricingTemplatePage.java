@@ -32,9 +32,7 @@ public class PricingTemplatePage
 
     public void createRules(String rulesName, String description, String rules)
     {
-        CommonUtil.pause(3000);
         CommonUtil.clickBtn(driver, "//button[@id='button-create-rules']");
-        CommonUtil.pause1s();
         CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Name']", rulesName);
         CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Description']", description);
 
@@ -105,6 +103,17 @@ public class PricingTemplatePage
         CommonUtil.pause1s();
         CommonUtil.clickBtn(driver, "//button[@type='button'][@aria-label='Delete']");
         CommonUtil.pause1s();
+    }
+
+    public void simulateRunTest(String deliveryType, String orderType, String timeslotType, String size, String weight)
+    {
+        clickActionButton(1, PricingTemplatePage.ACTION_BUTTON_EDIT);
+        CommonUtil.selectValueFromMdSelectMenu(driver, "//md-input-container[@label='Delivery Type']", String.format("//md-option[@value='%s']", deliveryType));
+        CommonUtil.selectValueFromMdSelectMenu(driver, "//md-input-container[@label='Order Type']", String.format("//md-option[@value='%s']", orderType));
+        CommonUtil.selectValueFromMdSelectMenu(driver, "//md-input-container[@label='Timeslot Type']", String.format("//md-option[@value='%s']", timeslotType));
+        CommonUtil.selectValueFromMdSelectMenu(driver, "//md-input-container[@label='Size']", String.format("//md-option[@value='%s']", size));
+        CommonUtil.inputText(driver, "//input[@aria-label='Weight']", weight);
+        CommonUtil.clickBtn(driver, "//button[@id='button-run-test']");
     }
 
     public String searchAndGetTextOnTable(String filter, int rowNumber, String columnDataTitle)

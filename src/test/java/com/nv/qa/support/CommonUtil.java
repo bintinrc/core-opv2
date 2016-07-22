@@ -111,4 +111,14 @@ public class CommonUtil {
 
         return element;
     }
+
+    public static void selectValueFromMdSelectMenu(WebDriver driver, String xpathMdSelectMenu, String xpathMdSelectOption)
+    {
+        WebElement mdSelectMenu = CommonUtil.getElementByXpath(driver, xpathMdSelectMenu);
+        mdSelectMenu.click();
+        pause(500);
+        WebElement mdSelectOption = CommonUtil.getElementByXpath(driver, xpathMdSelectOption);
+        mdSelectOption.click();
+        pause(500);
+    }
 }

@@ -1,4 +1,4 @@
-@selenium @wip
+@selenium
 Feature: Pricing Template
 
   Scenario: op login into operator portal
@@ -7,7 +7,7 @@ Feature: Pricing Template
     When login as "{operator-portal-uid}" with password "{operator-portal-pwd}"
     Then op is in dp administration
 
-  Scenario: Operator create, update and delete rules on Pricing Template menu.
+  Scenario: Operator create, update and delete rules on Pricing Template menu. (uid:0c1175e7-b5af-474c-b0a8-3b89ea786a59)
     Given op click navigation Pricing Template
     When op create new rules on Pricing Template
     Then new rules on Pricing Template created successfully
@@ -16,11 +16,16 @@ Feature: Pricing Template
     When op delete rules on Pricing Template
     Then rules on Pricing Template deleted successfully
 
-  Scenario: Operator
+  Scenario: Operator do Run Test at selected Pricing Template. (uid:4918efb7-c16c-46a5-9ffa-20b2879c58c7)
     Given op click navigation Pricing Template
     Given op have two default rules "PT Cucumber Test 1" and "PT Cucumber Test 2"
-    When do nothing
-    Then do something
+    When op click Run Test on Operator V2 Portal using this Rules Check below:
+      | deliveryType | EXPRESS   |
+      | orderType    | NORMAL    |
+      | timeslotType | DAY_NIGHT |
+      | size         | L         |
+      | weight       | 2.3       |
+    Then op will find the cost equal to "134.9" and the comments equal to "OK"
 
   @closeBrowser
   Scenario: op logout from operator portal
