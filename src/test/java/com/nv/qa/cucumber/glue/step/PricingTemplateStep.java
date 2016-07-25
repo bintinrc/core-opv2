@@ -26,6 +26,8 @@ public class PricingTemplateStep
     private WebDriver driver;
     private PricingTemplatePage pricingTemplatePage;
     private String newPricingTemplateName;
+    private String pricingTemplateLinkedToAShipper;
+    private String shipperLinkedToPricingTemplate;
 
     @Before
     public void setup()
@@ -101,7 +103,7 @@ public class PricingTemplateStep
         pricingTemplatePage.simulateRunTest(deliveryType, orderType, timeslotType, size, weight);
     }
 
-    @Then("^op will find the cost equal to \\\"([^\\\"]*)\\\" and the comments equal to \\\"([^\\\"]*)\\\"")
+    @Then("^op will find the cost equal to \\\"([^\\\"]*)\\\" and the comments equal to \\\"([^\\\"]*)\\\"$")
     public void verifyCostAndComments(String expectedCost, String expectedComments)
     {
         WebElement costEl = CommonUtil.getElementByXpath(driver, "//div[text()='Unit Cost']/following-sibling::div[1]");
@@ -114,5 +116,24 @@ public class PricingTemplateStep
 
         CommonUtil.pause1s();
         CommonUtil.clickBtn(driver, "//button[@id='button-cancel-dialog']");
+    }
+
+    @When("^op linking Pricing Template \\\"([^\\\"]*)\\\" or \\\"([^\\\"]*)\\\" to shipper \\\"([^\\\"]*)\\\"$")
+    public void linkPricingTemplateToShipper(String defaultRulesName1, String defaultRulesName2, String shipperName)
+    {
+        shipperLinkedToPricingTemplate = shipperName;
+        pricingTemplateLinkedToAShipper = pricingTemplatePage.linkPricingTemplateToShipper(defaultRulesName1, defaultRulesName2, shipperName);
+    }
+
+    @Then("^Pricing Template linked to the shipper successfully$")
+    public void verifyPricingTemplateLinkedToShipperSuccessfully()
+    {
+        CommonUtil.inputText(driver, "//input[@placeholder='Search rule']", pricingTemplateLinkedToAShipper);
+        CommonUtil.pause1s();
+        pricingTemplatePage.clickActionButton(1, PricingTemplatePage.ACTION_BUTTON_SHIPPERS);
+        CommonUtil.pause1s();
+        boolean isPricingTemplateContainShipper = pricingTemplatePage.isPricingTemplateContainShipper(shipperLinkedToPricingTemplate);
+        CommonUtil.clickBtn(driver, "//button[@id='button-cancel-dialog']");
+        Assert.assertEquals(true, isPricingTemplateContainShipper);
     }
 }

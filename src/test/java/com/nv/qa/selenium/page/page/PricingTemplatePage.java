@@ -6,6 +6,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.List;
+
 /**
  *
  * @author Daniel Joi Partogi Hutapea
@@ -114,6 +116,84 @@ public class PricingTemplatePage
         CommonUtil.selectValueFromMdSelectMenu(driver, "//md-input-container[@label='Size']", String.format("//md-option[@value='%s']", size));
         CommonUtil.inputText(driver, "//input[@aria-label='Weight']", weight);
         CommonUtil.clickBtn(driver, "//button[@id='button-run-test']");
+    }
+
+    public String linkPricingTemplateToShipper(String defaultRulesName1, String defaultRulesName2, String shipperName)
+    {
+        String pricingTemplateLinkedToAShipper = null;
+        String[] rulesToTest = {defaultRulesName1, defaultRulesName2};
+
+        for(String rules : rulesToTest)
+        {
+            pricingTemplateLinkedToAShipper = rules;
+            CommonUtil.inputText(driver, "//input[@placeholder='Search rule']", pricingTemplateLinkedToAShipper);
+            CommonUtil.pause1s();
+            clickActionButton(1, PricingTemplatePage.ACTION_BUTTON_SHIPPERS);
+            CommonUtil.pause1s();
+
+            /**
+             * Assign shipper with value $shipperName to Pricing Template with value $defaultRulesName1 or $defaultRulesName2
+             * only if the shipper does not have that shipper.
+             */
+            if(!isPricingTemplateContainShipper(shipperName))
+            {
+                CommonUtil.inputText(driver, "//input[@aria-label=concat('Type shipper',\"'\", 's name')]", shipperName);
+                CommonUtil.pause1s();
+                CommonUtil.clickBtn(driver, String.format("//div[@ng-repeat='item in items | filter:model[title] track by $index' and normalize-space(text())='%s']", shipperName));
+                CommonUtil.clickBtn(driver, "//div[@class='idle ng-binding ng-scope' and text()='Complete']");
+
+                /**
+                 * Check is Shipper already linked to another Pricing Template by find "Proceed" button.
+                 * Click "Proceed" button if found to override the shipper's Pricing Template.
+                 */
+                WebElement proceedBtn = CommonUtil.getElementByXpath(driver, "//div[@class='idle ng-binding ng-scope' and text()='Proceed']");
+
+                if(proceedBtn!=null)
+                {
+                    proceedBtn.click();
+                }
+
+                /**
+                 * Check error element first, if error element not found then linking Pricing Template to the Shipper success.
+                 */
+                if(CommonUtil.isElementExist(driver, "//md-dialog[@aria-label='ErrorUnexpected error']/md-dialog-content/h2[text()='Error']"))
+                {
+                    CommonUtil.pause100ms();
+                    CommonUtil.clickBtn(driver, "//md-dialog[@aria-label='ErrorUnexpected error']/md-dialog-actions/button/span[text()='Close']");
+                    CommonUtil.pause100ms();
+                    throw new RuntimeException("Failed to linking Pricing Template to the Shipper.");
+                }
+
+                break;
+            }
+            else
+            {
+                /**
+                 * Shipper already linked to this Pricing Template.
+                 * Click "Discard Changes".
+                 */
+                CommonUtil.clickBtn(driver, "//button[@id='button-cancel-dialog']");
+            }
+        }
+
+        return pricingTemplateLinkedToAShipper;
+    }
+
+    public boolean isPricingTemplateContainShipper(String shipperName)
+    {
+        boolean isFound = false;
+        List<WebElement> elements = CommonUtil.getElementsByXpath(driver, "//div[@ng-repeat='shipper in ctrl.connectedShippers']//div[2]");
+
+        for(WebElement element : elements)
+        {
+            if(shipperName.equalsIgnoreCase(element.getText()))
+            {
+                isFound = true;
+                break;
+            }
+        }
+
+        return isFound;
     }
 
     public String searchAndGetTextOnTable(String filter, int rowNumber, String columnDataTitle)

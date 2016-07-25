@@ -27,6 +27,12 @@ Feature: Pricing Template
       | weight       | 2.3       |
     Then op will find the cost equal to "134.9" and the comments equal to "OK"
 
+  Scenario: Operator linking a Pricing Template to a Shipper. (uid:0800ac82-a359-4d5f-a666-12b6d3877540)
+    Given op click navigation Pricing Template
+    Given op have two default rules "PT Cucumber Test 1" and "PT Cucumber Test 2"
+    When op linking Pricing Template "PT Cucumber Test 1" or "PT Cucumber Test 2" to shipper "Daniel Joi Partogi Hutapea"
+    Then Pricing Template linked to the shipper successfully
+
   @closeBrowser
   Scenario: op logout from operator portal
     Given op click navigation DP Administration

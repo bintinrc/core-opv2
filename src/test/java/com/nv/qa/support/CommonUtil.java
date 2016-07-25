@@ -112,6 +112,26 @@ public class CommonUtil {
         return element;
     }
 
+    public static List<WebElement> getElementsByXpath(WebDriver driver, String xpathExpression)
+    {
+        List<WebElement> elements = null;
+
+        try
+        {
+            elements = driver.findElements(By.xpath(xpathExpression));
+        }
+        catch(NoSuchElementException ex)
+        {
+        }
+
+        return elements;
+    }
+
+    public static boolean isElementExist(WebDriver driver, String xpathExpression)
+    {
+        return getElementByXpath(driver, xpathExpression)!=null;
+    }
+
     public static void selectValueFromMdSelectMenu(WebDriver driver, String xpathMdSelectMenu, String xpathMdSelectOption)
     {
         WebElement mdSelectMenu = CommonUtil.getElementByXpath(driver, xpathMdSelectMenu);
