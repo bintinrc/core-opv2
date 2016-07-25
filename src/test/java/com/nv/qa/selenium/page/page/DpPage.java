@@ -1,5 +1,6 @@
 package com.nv.qa.selenium.page.page;
 
+import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.DateUtil;
 import com.nv.qa.support.ScenarioHelper;
@@ -8,57 +9,34 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.LoadableComponent;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by sw on 7/4/16.
  */
-public class DpPage extends LoadableComponent<LoginPage> {
+public class DpPage  {
 
     private final WebDriver driver;
-    private final String TMP_STORAGE = "/Users/sw/Downloads/";
+    private static final Map<String, String> BTNNAME_FILENAME = new HashMap<String, String>() {{
+        put("dp-partners","dp-partners.csv");
+        put("dps","dps.csv");
+        put("dp-users","dp-users.csv");
+    }};
 
     public DpPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
-    @Override
-    protected void load() {
-
-    }
-
-    @Override
-    protected void isLoaded() throws Error {
-
-    }
-
     public void downloadFile(String type) throws InterruptedException {
-        String filename = null;
-        if (type.equals("dp-partners")) {
-            filename = "dp-partners.csv";
-        } else if (type.equals("dps")) {
-            filename = "dps.csv";
-        } else if (type.equals("dp-users")) {
-            filename = "dp-users.csv";
-        }
-
-        CommonUtil.clickBtn(driver, "//button[@filename='" + filename + "']");
+        CommonUtil.clickBtn(driver, "//button[@filename='" + BTNNAME_FILENAME.get(type) + "']");
     }
 
     public void verifyDownloadedFile(String type) {
-        String filename = null;
-        if (type.equals("dp-partners")) {
-            filename = "dp-partners.csv";
-        } else if (type.equals("dps")) {
-            filename = "dps.csv";
-        } else if (type.equals("dp-users")) {
-            filename = "dp-users.csv";
-        }
-
-        File f = new File(TMP_STORAGE + filename);
+        File f = new File(APIEndpoint.SELENIUM_WRITE_PATH + BTNNAME_FILENAME.get(type));
         boolean isFileExisted = f.exists();
         if (isFileExisted) {
             f.delete();

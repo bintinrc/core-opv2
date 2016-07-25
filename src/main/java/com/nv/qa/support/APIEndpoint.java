@@ -25,6 +25,7 @@ public final class APIEndpoint
     public static final int SELENIUM_SCRIPT_TIMEOUT_SECONDS;
     public static final int SELENIUM_WINDOW_WIDTH;
     public static final int SELENIUM_WINDOW_HEIGHT;
+    public static final String SELENIUM_WRITE_PATH;
 
     public static final String OPERATOR_PORTAL_URL;
     public static final String OPERATOR_PORTAL_UID;
@@ -63,6 +64,7 @@ public final class APIEndpoint
                 SELENIUM_SCRIPT_TIMEOUT_SECONDS = getPropertyValueAsInteger(props, "selenium-script-timeout-seconds");
                 SELENIUM_WINDOW_WIDTH = getPropertyValueAsInteger(props, "selenium-window-width");
                 SELENIUM_WINDOW_HEIGHT = getPropertyValueAsInteger(props, "selenium-window-height");
+                SELENIUM_WRITE_PATH = props.getProperty("selenium-write_path");
 
                 OPERATOR_PORTAL_URL = props.getProperty("operator-portal-url");
                 OPERATOR_PORTAL_UID = props.getProperty("operator-portal-uid");

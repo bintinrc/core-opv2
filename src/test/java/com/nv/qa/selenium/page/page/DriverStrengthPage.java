@@ -1,5 +1,6 @@
 package com.nv.qa.selenium.page.page;
 
+import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.DateUtil;
 import com.nv.qa.support.ScenarioHelper;
@@ -20,34 +21,22 @@ import java.util.Map;
 /**
  * Created by sw on 7/12/16.
  */
-public class DriverStrengthPage extends LoadableComponent<LoginPage> {
+public class DriverStrengthPage {
 
     private final WebDriver driver;
-    private final String TMP_STORAGE = "/Users/sw/Downloads/";
+    private final static String FILENAME = "drivers.csv";
 
     public DriverStrengthPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
-    @Override
-    protected void load() {
-
-    }
-
-    @Override
-    protected void isLoaded() throws Error {
-
-    }
-
     public void downloadFile() throws InterruptedException {
-        String filename = "drivers.csv";
-        CommonUtil.clickBtn(driver, "//button[@filename='" + filename + "']");
+        CommonUtil.clickBtn(driver, "//button[@filename='" + FILENAME + "']");
     }
 
     public void verifyDownloadedFile() {
-        String filename = "drivers.csv";
-        File f = new File(TMP_STORAGE + filename);
+        File f = new File(APIEndpoint.SELENIUM_WRITE_PATH + FILENAME);
         boolean isFileExisted = f.exists();
         if (isFileExisted) {
             f.delete();
@@ -56,16 +45,13 @@ public class DriverStrengthPage extends LoadableComponent<LoginPage> {
     }
 
     public void filteredBy(String type) throws InterruptedException {
-        String className = null;
         String placeHolder = null;
         String filterKey = null;
 
         if (type.equals("zone")) {
-            className = "zone";
             placeHolder = "Search or Select Zone(s)";
             filterKey = "Z-Out of Zone";
         } else if (type.equals("driver-type")) {
-            className = "driver-type ng-binding";
             placeHolder = "Search or Select Driver Type(s)";
             filterKey = "Ops";
         }

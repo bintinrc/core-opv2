@@ -20,6 +20,7 @@ import java.util.Map;
 public class MainPage extends LoadableComponent<MainPage> {
 
     private final WebDriver driver;
+    private final String MAIN_DASHBOARD = "dp-administration";
     private final Map<String, String> map = new HashMap<String, String>() {{
         put("DP Administration","container.dp-administration.dp-partners");
         put("Driver Strength","container.driver-strength");
@@ -56,15 +57,14 @@ public class MainPage extends LoadableComponent<MainPage> {
     }
 
     public void dpAdm() throws InterruptedException {
-        final String mainDashboard = "dp-administration";
         (new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS)).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
-                return d.getCurrentUrl().toLowerCase().endsWith(mainDashboard);
+                return d.getCurrentUrl().toLowerCase().endsWith(MAIN_DASHBOARD);
             }
         });
 
         String url = driver.getCurrentUrl().toLowerCase();
-        Assert.assertTrue(url.endsWith(mainDashboard));
+        Assert.assertTrue(url.endsWith(MAIN_DASHBOARD));
         CommonUtil.pause10s();
     }
 

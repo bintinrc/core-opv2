@@ -1,5 +1,6 @@
 package com.nv.qa.selenium.page.page;
 
+import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -16,7 +17,6 @@ import java.util.List;
 public class DriverTypeManagementPage {
 
     private final WebDriver driver;
-    private final String TMP_STORAGE = "/Users/sw/Downloads/";
 
     public DriverTypeManagementPage(WebDriver driver) {
         this.driver = driver;
@@ -56,7 +56,7 @@ public class DriverTypeManagementPage {
     }
 
     public void verifyFile() throws InterruptedException {
-        File f = new File(TMP_STORAGE + "driver-types.csv");
+        File f = new File(APIEndpoint.SELENIUM_WRITE_PATH + "driver-types.csv");
         boolean isFileExisted = f.exists();
         if (isFileExisted) {
             f.delete();

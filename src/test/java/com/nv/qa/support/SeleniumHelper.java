@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -51,7 +52,13 @@ public class SeleniumHelper {
     public static WebDriver getWebDriverChrome() {
         System.setProperty("webdriver.chrome.driver", APIEndpoint.SELENIUM_CHROME_DRIVER);
 
+        String downloadFilepath = APIEndpoint.SELENIUM_WRITE_PATH;
+        HashMap<String, Object> chromePrefs = new HashMap<>();
+        chromePrefs.put("profile.default_content_settings.popups", 0);
+        chromePrefs.put("download.default_directory", downloadFilepath);
+
         ChromeOptions options = new ChromeOptions();
+        options.setExperimentalOption("prefs", chromePrefs);
 
         WebDriver driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
