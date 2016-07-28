@@ -138,7 +138,4 @@ Feature: driver type management
     When driver type management is filtered by 6PM to 10PM of Timeslot
 
   @closeBrowser
-  Scenario: op logout from operator portal
-    Given op click navigation DP Administration
-    When logout button is clicked
-    Then op back in the login page
+  Scenario: close browser

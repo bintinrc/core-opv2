@@ -34,7 +34,4 @@ Feature: Pricing Template
     Then Pricing Template linked to the shipper successfully
 
   @closeBrowser
-  Scenario: op logout from operator portal
-    Given op click navigation DP Administration
-    When logout button is clicked
-    Then op back in the login page
+  Scenario: close browser

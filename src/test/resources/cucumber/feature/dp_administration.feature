@@ -122,7 +122,4 @@ Feature: dp administration
     Then file dp-users should exist
 
   @closeBrowser
-  Scenario: op logout from operator portal
-    Given op click navigation DP Administration
-    When logout button is clicked
-    Then op back in the login page
+  Scenario: close browser
