@@ -45,7 +45,8 @@ public class MainPage extends LoadableComponent<MainPage> {
         String container = map.get(navTitle);
         final String mainDashboard = navTitle.toLowerCase().replaceAll(" ", "-");
 
-        driver.findElement(By.xpath("//button[@ng-click=\"ctrl.navigateTo('" + container + "')\"]")).click();
+//        driver.findElement(By.xpath("//button[@ng-click=\"ctrl.navigateTo('" + container + "')\"]")).click();
+        driver.findElement(By.xpath("//button[contains(@ng-click,\"ctrl.navigateTo('" + container + "'\")]")).click();
         (new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS)).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
                 return d.getCurrentUrl().toLowerCase().endsWith(mainDashboard);
