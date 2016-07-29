@@ -25,13 +25,6 @@ Feature: driver type management
     When searching created driver and edit
     Then verify changes of created driver type
 
-  Scenario: op delete driver type (uid:82959c45-2b6d-4899-98aa-02e88f59793e)
-    Given op click navigation DP Administration
-    Given op click navigation Driver Type Management
-    When searching created driver
-    When created driver is deleted
-    Then the created driver should not exist
-
   Scenario: op filter driver type management by delivery date (uid:6389d609-4c56-4856-8204-0246bce0f3d0)
     Given op click navigation DP Administration
     Given op click navigation Driver Type Management
@@ -136,6 +129,13 @@ Feature: driver type management
     Given op click navigation DP Administration
     Given op click navigation Driver Type Management
     When driver type management is filtered by 6PM to 10PM of Timeslot
+
+  Scenario: op delete driver type (uid:82959c45-2b6d-4899-98aa-02e88f59793e)
+    Given op click navigation DP Administration
+    Given op click navigation Driver Type Management
+    When searching created driver
+    When created driver is deleted
+    Then the created driver should not exist
 
   @closeBrowser
   Scenario: close browser
