@@ -128,7 +128,7 @@ public class PricingTemplateStep
     @Then("^Pricing Template linked to the shipper successfully$")
     public void verifyPricingTemplateLinkedToShipperSuccessfully()
     {
-        CommonUtil.inputText(driver, "//input[@placeholder='Search rule']", pricingTemplateLinkedToAShipper);
+        CommonUtil.inputText(driver, "//input[@placeholder='search script']", pricingTemplateLinkedToAShipper);
         CommonUtil.pause1s();
         pricingTemplatePage.clickActionButton(1, PricingTemplatePage.ACTION_BUTTON_SHIPPERS);
         CommonUtil.pause1s();

@@ -99,7 +99,7 @@ public class PricingTemplatePage
 
     public void searchAndDeleteRules(int rowNumber, String rulesName)
     {
-        CommonUtil.inputText(driver, "//input[@placeholder='Search rule']", rulesName);
+        CommonUtil.inputText(driver, "//input[@placeholder='search script']", rulesName);
         CommonUtil.pause1s();
         clickActionButton(rowNumber, PricingTemplatePage.ACTION_BUTTON_DELETE);
         CommonUtil.pause1s();
@@ -126,7 +126,7 @@ public class PricingTemplatePage
         for(String rules : rulesToTest)
         {
             pricingTemplateLinkedToAShipper = rules;
-            CommonUtil.inputText(driver, "//input[@placeholder='Search rule']", pricingTemplateLinkedToAShipper);
+            CommonUtil.inputText(driver, "//input[@placeholder='search script']", pricingTemplateLinkedToAShipper);
             CommonUtil.pause1s();
             clickActionButton(1, PricingTemplatePage.ACTION_BUTTON_SHIPPERS);
             CommonUtil.pause1s();
@@ -198,7 +198,7 @@ public class PricingTemplatePage
 
     public String searchAndGetTextOnTable(String filter, int rowNumber, String columnDataTitle)
     {
-        CommonUtil.inputText(driver, "//input[@placeholder='Search rule']", filter);
+        CommonUtil.inputText(driver, "//input[@placeholder='search script']", filter);
         CommonUtil.pause1s();
         return getTextOnTable(1, columnDataTitle);
     }

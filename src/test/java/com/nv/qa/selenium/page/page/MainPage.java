@@ -25,7 +25,7 @@ public class MainPage extends LoadableComponent<MainPage> {
         put("DP Administration","container.dp-administration.dp-partners");
         put("Driver Strength","container.driver-strength");
         put("Driver Type Management","container.driver-type-management");
-        put("Pricing Template","container.pricing-template");
+        put("Pricing Scripts","container.pricing-template");
         put("Hubs Administration","container.hub-list");
     }};
 
@@ -47,7 +47,10 @@ public class MainPage extends LoadableComponent<MainPage> {
         String name = navTitle.toLowerCase().replaceAll(" ", "-");
         if (navTitle.trim().equalsIgnoreCase("hubs administration")) {
             name = "hub";
+        } else if (navTitle.trim().equalsIgnoreCase("pricing scripts")) {
+            name = "pricing-script";
         }
+
         final String mainDashboard = name;
 
         driver.findElement(By.xpath("//button[contains(@ng-click,\"ctrl.navigateTo('" + container + "'\")]")).click();
