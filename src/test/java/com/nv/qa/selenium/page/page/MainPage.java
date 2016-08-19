@@ -26,6 +26,7 @@ public class MainPage extends LoadableComponent<MainPage> {
         put("Driver Strength","container.driver-strength");
         put("Driver Type Management","container.driver-type-management");
         put("Pricing Template","container.pricing-template");
+        put("Hubs Administration","container.hub-list");
     }};
 
     public MainPage(WebDriver driver) {
@@ -43,9 +44,12 @@ public class MainPage extends LoadableComponent<MainPage> {
 
     public void clickNavigation(String navTitle) throws InterruptedException {
         String container = map.get(navTitle);
-        final String mainDashboard = navTitle.toLowerCase().replaceAll(" ", "-");
+        String name = navTitle.toLowerCase().replaceAll(" ", "-");
+        if (navTitle.trim().equalsIgnoreCase("hubs administration")) {
+            name = "hub";
+        }
+        final String mainDashboard = name;
 
-//        driver.findElement(By.xpath("//button[@ng-click=\"ctrl.navigateTo('" + container + "')\"]")).click();
         driver.findElement(By.xpath("//button[contains(@ng-click,\"ctrl.navigateTo('" + container + "'\")]")).click();
         (new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS)).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
