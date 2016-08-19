@@ -27,6 +27,7 @@ public class MainPage extends LoadableComponent<MainPage> {
         put("Driver Type Management","container.driver-type-management");
         put("Pricing Scripts","container.pricing-template");
         put("Hubs Administration","container.hub-list");
+        put("Blocked Dates","container.blocked-dates");
     }};
 
     public MainPage(WebDriver driver) {
