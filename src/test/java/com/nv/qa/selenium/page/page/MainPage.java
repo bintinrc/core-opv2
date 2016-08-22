@@ -25,7 +25,7 @@ public class MainPage extends LoadableComponent<MainPage> {
         put("DP Administration","container.dp-administration.dp-partners");
         put("Driver Strength","container.driver-strength");
         put("Driver Type Management","container.driver-type-management");
-        put("Pricing Scripts","container.pricing-script");
+        put("Pricing Scripts","container.pricing-scripts");
         put("Hubs Administration","container.hub-list");
         put("Blocked Dates","container.blocked-dates");
     }};
