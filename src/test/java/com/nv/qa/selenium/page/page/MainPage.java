@@ -48,8 +48,6 @@ public class MainPage extends LoadableComponent<MainPage> {
         String name = navTitle.toLowerCase().replaceAll(" ", "-");
         if (navTitle.trim().equalsIgnoreCase("hubs administration")) {
             name = "hub";
-        } else if (navTitle.trim().equalsIgnoreCase("pricing scripts")) {
-            name = "pricing-script";
         }
 
         final String mainDashboard = name;
