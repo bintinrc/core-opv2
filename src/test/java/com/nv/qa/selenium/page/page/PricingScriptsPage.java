@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class PricingTemplatePage
+public class PricingScriptsPage
 {
     public static final String ACTION_BUTTON_CODE = "code";
     public static final String ACTION_BUTTON_EDIT = "edit";
@@ -21,87 +21,91 @@ public class PricingTemplatePage
 
     private final WebDriver driver;
 
-    public PricingTemplatePage(WebDriver driver)
+    public PricingScriptsPage(WebDriver driver)
     {
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
-    public void createRules(String rulesName, String description)
+    public void createScript(String scriptName, String description)
     {
-        createRules(rulesName, description, null);
+        createScript(scriptName, description, null);
     }
 
-    public void createRules(String rulesName, String description, String rules)
+    public void createScript(String scriptName, String description, String script)
     {
         CommonUtil.clickBtn(driver, "//button[@id='button-create-rules']");
-        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Name']", rulesName);
+        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Name']", scriptName);
         CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Description']", description);
 
-        if(rules!=null)
+        if(script!=null)
         {
-            if(driver instanceof JavascriptExecutor)
-            {
-                JavascriptExecutor javascriptExecutor = (JavascriptExecutor)driver;
-                javascriptExecutor.executeScript(String.format("window.ace.edit('ace-editor').setValue('%s');", rules));
-                CommonUtil.pause100ms();
-            }
-            else
-            {
-                throw new RuntimeException("Cannot execute Javascript.");
-            }
+            updateAceEditorValue(script);
         }
 
         CommonUtil.clickBtn(driver, "//nv-api-text-button[@name='Save']");
     }
 
-    public String createDefaultRulesIfNotExists(String rulesName, String rulesDescription, String rules)
+    public String createDefaultScriptIfNotExists(String scriptName, String scriptDescription, String script)
     {
         /**
-         * Check if the rules exist.
+         * Check if the script exist.
          */
-        String pricingTemplateName = searchAndGetTextOnTable(rulesName, 1, "ctrl.table.name");
+        String pricingScriptsName = searchAndGetTextOnTable(scriptName, 1, "ctrl.table.name");
 
-        if(pricingTemplateName==null || pricingTemplateName.isEmpty())
+        if(pricingScriptsName==null || pricingScriptsName.isEmpty())
         {
-            createRules(rulesName, rulesDescription, rules);
+            createScript(scriptName, scriptDescription, script);
+        }
+        else
+        {
+            updateScript(1, scriptName, scriptDescription, script);
         }
 
-        String pricingTemplateId = searchAndGetTextOnTable(rulesName, 1, "ctrl.table.id");
+        String pricingScriptsId = searchAndGetTextOnTable(scriptName, 1, "ctrl.table.id");
 
-        if(pricingTemplateId==null)
+        if(pricingScriptsId==null)
         {
-            throw new RuntimeException("Failed to create rules if not exists.");
+            throw new RuntimeException("Failed to create script if not exists.");
         }
 
-        return pricingTemplateId;
+        return pricingScriptsId;
     }
 
-    public void updateRules(int rowNumber, String newRulesName, String newDescription)
+    public void updateScript(int rowNumber, String newScriptName, String newDescription)
     {
-        updateRules(rowNumber, newRulesName, newDescription, null);
+        updateScript(rowNumber, newScriptName, newDescription, null);
     }
 
-    public void updateRules(int rowNumber, String newRulesName, String newDescription, String newRules)
+    public void updateScript(int rowNumber, String newScriptName, String newDescription, String newScript)
     {
-        clickActionButton(rowNumber, PricingTemplatePage.ACTION_BUTTON_EDIT);
+        clickActionButton(rowNumber, PricingScriptsPage.ACTION_BUTTON_EDIT);
         CommonUtil.pause1s();
-        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Name']", newRulesName);
+        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Name']", newScriptName);
         CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Description']", newDescription);
 
-        if(newRules!=null)
+        if(newScript!=null)
         {
-            CommonUtil.inputText(driver, "//div[@class='ace_content']", newRules);
+            String oldScript = getAceEditorValue().replaceAll(System.lineSeparator(), "\\\\n"); // Replace all "CrLf" to "\n".
+
+            /**
+             * Updating script using the same code makes Angular Ace Editor two ways data binding not works.
+             * Refer to this JIRA NV-2830.
+             */
+            if(!oldScript.equals(newScript))
+            {
+                updateAceEditorValue(newScript);
+            }
         }
 
         CommonUtil.clickBtn(driver, "//nv-api-text-button[@name='Update']");
     }
 
-    public void searchAndDeleteRules(int rowNumber, String rulesName)
+    public void searchAndDeleteScript(int rowNumber, String scriptName)
     {
-        CommonUtil.inputText(driver, "//input[@placeholder='search script']", rulesName);
+        CommonUtil.inputText(driver, "//input[@placeholder='search script']", scriptName);
         CommonUtil.pause1s();
-        clickActionButton(rowNumber, PricingTemplatePage.ACTION_BUTTON_DELETE);
+        clickActionButton(rowNumber, PricingScriptsPage.ACTION_BUTTON_DELETE);
         CommonUtil.pause1s();
         CommonUtil.clickBtn(driver, "//button[@type='button'][@aria-label='Delete']");
         CommonUtil.pause1s();
@@ -109,7 +113,7 @@ public class PricingTemplatePage
 
     public void simulateRunTest(String deliveryType, String orderType, String timeslotType, String size, String weight)
     {
-        clickActionButton(1, PricingTemplatePage.ACTION_BUTTON_EDIT);
+        clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_EDIT);
         CommonUtil.selectValueFromMdSelectMenu(driver, "//md-input-container[@label='Delivery Type']", String.format("//md-option[@value='%s']", deliveryType));
         CommonUtil.selectValueFromMdSelectMenu(driver, "//md-input-container[@label='Order Type']", String.format("//md-option[@value='%s']", orderType));
         CommonUtil.selectValueFromMdSelectMenu(driver, "//md-input-container[@label='Timeslot Type']", String.format("//md-option[@value='%s']", timeslotType));
@@ -118,24 +122,24 @@ public class PricingTemplatePage
         CommonUtil.clickBtn(driver, "//button[@id='button-run-test']");
     }
 
-    public String linkPricingTemplateToShipper(String defaultRulesName1, String defaultRulesName2, String shipperName)
+    public String linkPricingScriptsToShipper(String defaultScriptName1, String defaultScriptName2, String shipperName)
     {
-        String pricingTemplateLinkedToAShipper = null;
-        String[] rulesToTest = {defaultRulesName1, defaultRulesName2};
+        String pricingScriptsLinkedToAShipper = null;
+        String[] scriptToTest = {defaultScriptName1, defaultScriptName2};
 
-        for(String rules : rulesToTest)
+        for(String script : scriptToTest)
         {
-            pricingTemplateLinkedToAShipper = rules;
-            CommonUtil.inputText(driver, "//input[@placeholder='search script']", pricingTemplateLinkedToAShipper);
+            pricingScriptsLinkedToAShipper = script;
+            CommonUtil.inputText(driver, "//input[@placeholder='search script']", pricingScriptsLinkedToAShipper);
             CommonUtil.pause1s();
-            clickActionButton(1, PricingTemplatePage.ACTION_BUTTON_SHIPPERS);
+            clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_SHIPPERS);
             CommonUtil.pause1s();
 
             /**
-             * Assign shipper with value $shipperName to Pricing Template with value $defaultRulesName1 or $defaultRulesName2
+             * Assign shipper with value $shipperName to Pricing Scripts with value $defaultScriptName1 or $defaultScriptName2
              * only if the shipper does not have that shipper.
              */
-            if(!isPricingTemplateContainShipper(shipperName))
+            if(!isPricingScriptsContainShipper(shipperName))
             {
                 CommonUtil.inputText(driver, "//input[@aria-label=concat('Type shipper',\"'\", 's name')]", shipperName);
                 CommonUtil.pause1s();
@@ -143,8 +147,8 @@ public class PricingTemplatePage
                 CommonUtil.clickBtn(driver, "//div[@class='idle ng-binding ng-scope' and text()='Complete']");
 
                 /**
-                 * Check is Shipper already linked to another Pricing Template by find "Proceed" button.
-                 * Click "Proceed" button if found to override the shipper's Pricing Template.
+                 * Check is Shipper already linked to another Pricing Scripts by find "Proceed" button.
+                 * Click "Proceed" button if found to override the shipper's Pricing Scripts.
                  */
                 WebElement proceedBtn = CommonUtil.getElementByXpath(driver, "//div[@class='idle ng-binding ng-scope' and text()='Proceed']");
 
@@ -154,14 +158,14 @@ public class PricingTemplatePage
                 }
 
                 /**
-                 * Check error element first, if error element not found then linking Pricing Template to the Shipper success.
+                 * Check error element first, if error element not found then linking Pricing Scripts to the Shipper success.
                  */
                 if(CommonUtil.isElementExist(driver, "//md-dialog[@aria-label='ErrorUnexpected error']/md-dialog-content/h2[text()='Error']"))
                 {
                     CommonUtil.pause100ms();
                     CommonUtil.clickBtn(driver, "//md-dialog[@aria-label='ErrorUnexpected error']/md-dialog-actions/button/span[text()='Close']");
                     CommonUtil.pause100ms();
-                    throw new RuntimeException("Failed to linking Pricing Template to the Shipper.");
+                    throw new RuntimeException("Failed to linking Pricing Scripts to the Shipper.");
                 }
 
                 break;
@@ -169,17 +173,17 @@ public class PricingTemplatePage
             else
             {
                 /**
-                 * Shipper already linked to this Pricing Template.
+                 * Shipper already linked to this Pricing Scripts.
                  * Click "Discard Changes".
                  */
                 CommonUtil.clickBtn(driver, "//button[@id='button-cancel-dialog']");
             }
         }
 
-        return pricingTemplateLinkedToAShipper;
+        return pricingScriptsLinkedToAShipper;
     }
 
-    public boolean isPricingTemplateContainShipper(String shipperName)
+    public boolean isPricingScriptsContainShipper(String shipperName)
     {
         boolean isFound = false;
         List<WebElement> elements = CommonUtil.getElementsByXpath(driver, "//div[@ng-repeat='shipper in ctrl.connectedShippers']//div[2]");
@@ -225,7 +229,7 @@ public class PricingTemplatePage
     /**
      *
      * @param rowNumber Start from 1. Row number where the action button located.
-     * @param actionButtonName Valid value are PricingTemplatePage.ACTION_BUTTON_CODE, PricingTemplatePage.ACTION_BUTTON_EDIT, PricingTemplatePage.ACTION_BUTTON_SHIPPERS, PricingTemplatePage.ACTION_BUTTON_DELETE.
+     * @param actionButtonName Valid value are PricingScriptsPage.ACTION_BUTTON_CODE, PricingScriptsPage.ACTION_BUTTON_EDIT, PricingScriptsPage.ACTION_BUTTON_SHIPPERS, PricingScriptsPage.ACTION_BUTTON_DELETE.
      */
     public void clickActionButton(int rowNumber, String actionButtonName)
     {
@@ -237,5 +241,41 @@ public class PricingTemplatePage
         }
 
         element.click();
+    }
+
+    private void updateAceEditorValue(String script)
+    {
+        if(driver instanceof JavascriptExecutor)
+        {
+            /**
+             * editor.setValue(str, -1) // Moves cursor to the start.
+             * editor.setValue(str, 1) // Moves cursor to the end.
+             */
+            JavascriptExecutor javascriptExecutor = (JavascriptExecutor)driver;
+            javascriptExecutor.executeScript(String.format("window.ace.edit('ace-editor').setValue('%s', 1);", script));
+            CommonUtil.pause100ms();
+        }
+        else
+        {
+            throw new RuntimeException("Cannot execute Javascript.");
+        }
+    }
+
+    private String getAceEditorValue()
+    {
+        String value = "";
+
+        if(driver instanceof JavascriptExecutor)
+        {
+            JavascriptExecutor javascriptExecutor = (JavascriptExecutor)driver;
+            value = String.valueOf(javascriptExecutor.executeScript("return window.ace.edit('ace-editor').getValue();"));
+            CommonUtil.pause100ms();
+        }
+        else
+        {
+            throw new RuntimeException("Cannot execute Javascript.");
+        }
+
+        return value;
     }
 }
