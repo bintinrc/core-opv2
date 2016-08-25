@@ -216,7 +216,7 @@ public class PricingScriptsPage
     public String getTextOnTable(int rowNumber, String columnDataTitle)
     {
         String text = null;
-        WebElement element = CommonUtil.getElementByXpath(driver, String.format("//table[@ng-table='ctrl.pricingTemplateParams']/tbody/tr[%d]/td[@data-title='%s']", rowNumber, columnDataTitle));
+        WebElement element = CommonUtil.getElementByXpath(driver, String.format("//table[@ng-table='ctrl.pricingScriptParams']/tbody/tr[%d]/td[@data-title='%s']", rowNumber, columnDataTitle));
 
         if(element!=null)
         {
@@ -233,7 +233,7 @@ public class PricingScriptsPage
      */
     public void clickActionButton(int rowNumber, String actionButtonName)
     {
-        WebElement element = CommonUtil.getElementByXpath(driver, String.format("//table[@ng-table='ctrl.pricingTemplateParams']/tbody/tr[%d]/td[@data-title='ctrl.table.actions']/div/*[@name='%s']", rowNumber, actionButtonName));
+        WebElement element = CommonUtil.getElementByXpath(driver, String.format("//table[@ng-table='ctrl.pricingScriptParams']/tbody/tr[%d]/td[@data-title='ctrl.table.actions']/div/*[@name='%s']", rowNumber, actionButtonName));
 
         if(element==null)
         {
