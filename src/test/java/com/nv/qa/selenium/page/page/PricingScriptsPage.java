@@ -141,7 +141,7 @@ public class PricingScriptsPage
              */
             if(!isPricingScriptsContainShipper(shipperName))
             {
-                CommonUtil.inputText(driver, "//input[@aria-label=concat('Type shipper',\"'\", 's name')]", shipperName);
+                CommonUtil.inputText(driver, "//input[@aria-label=concat('Find Shipper',\"'\", 's name')]", shipperName);
                 CommonUtil.pause1s();
                 CommonUtil.clickBtn(driver, String.format("//div[@ng-repeat='item in items | filter:model[title] track by $index' and normalize-space(text())='%s']", shipperName));
                 CommonUtil.clickBtn(driver, "//div[@class='idle ng-binding ng-scope' and text()='Complete']");
