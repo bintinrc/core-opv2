@@ -46,7 +46,7 @@ public class PricingScriptsStep
     @Then("^new script on Pricing Scripts created successfully$")
     public void verifyNewPricingScriptsCreatedSuccessfully()
     {
-        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, "ctrl.table.name");
+        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, "name");
         Assert.assertEquals(newPricingScriptsName, pricingScriptsNameFromTable);
     }
 
@@ -60,7 +60,7 @@ public class PricingScriptsStep
     @Then("^script on Pricing Scripts updated successfully$")
     public void verifyPricingScriptsUpdatedSuccessfully()
     {
-        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, "ctrl.table.name");
+        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, "name");
         Assert.assertEquals(newPricingScriptsName, pricingScriptsNameFromTable);
     }
 
@@ -74,7 +74,7 @@ public class PricingScriptsStep
     public void verifyPricingScriptsDeletedSuccessfully()
     {
         String expectedValue = null;
-        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, "ctrl.table.name");
+        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, "name");
         Assert.assertEquals(expectedValue, pricingScriptsNameFromTable);
     }
 
@@ -128,7 +128,7 @@ public class PricingScriptsStep
     @Then("^Pricing Scripts linked to the shipper successfully$")
     public void verifyPricingScriptsLinkedToShipperSuccessfully()
     {
-        CommonUtil.inputText(driver, "//input[@placeholder='search script']", pricingScriptsLinkedToAShipper);
+        CommonUtil.inputText(driver, "//input[@placeholder='Search Script...']", pricingScriptsLinkedToAShipper);
         CommonUtil.pause1s();
         pricingScriptsPage.clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_SHIPPERS);
         CommonUtil.pause1s();
