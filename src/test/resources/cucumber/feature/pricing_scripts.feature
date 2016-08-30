@@ -30,7 +30,7 @@ Feature: Pricing Scripts
   Scenario: Operator linking a Pricing Scripts to a Shipper. (uid:0800ac82-a359-4d5f-a666-12b6d3877540)
     Given op click navigation Pricing Scripts
     Given op have two default script "Script Cucumber Test 1" and "Script Cucumber Test 2"
-    When op linking Pricing Scripts "Script Cucumber Test 1" or "Script Cucumber Test 2" to shipper "QA Account"
+    When op linking Pricing Scripts "Script Cucumber Test 1" or "Script Cucumber Test 2" to shipper "Pricing Script Link Shipper"
     Then Pricing Scripts linked to the shipper successfully
 
   @closeBrowser
