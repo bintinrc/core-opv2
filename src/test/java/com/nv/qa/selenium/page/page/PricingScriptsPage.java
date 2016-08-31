@@ -51,7 +51,7 @@ public class PricingScriptsPage
         /**
          * Check if the script exist.
          */
-        String pricingScriptsName = searchAndGetTextOnTable(scriptName, 1, "ctrl.table.name");
+        String pricingScriptsName = searchAndGetTextOnTable(scriptName, 1, "name");
 
         if(pricingScriptsName==null || pricingScriptsName.isEmpty())
         {
@@ -62,12 +62,16 @@ public class PricingScriptsPage
             updateScript(1, scriptName, scriptDescription, script);
         }
 
-        String pricingScriptsId = searchAndGetTextOnTable(scriptName, 1, "ctrl.table.id");
+        CommonUtil.pause1s();
+
+        String pricingScriptsId = searchAndGetTextOnTable(scriptName, 1, "id");
 
         if(pricingScriptsId==null)
         {
             throw new RuntimeException("Failed to create script if not exists.");
         }
+
+        CommonUtil.pause1s();
 
         return pricingScriptsId;
     }
@@ -103,7 +107,7 @@ public class PricingScriptsPage
 
     public void searchAndDeleteScript(int rowNumber, String scriptName)
     {
-        CommonUtil.inputText(driver, "//input[@placeholder='search script']", scriptName);
+        CommonUtil.inputText(driver, "//input[@placeholder='Search Script...']", scriptName);
         CommonUtil.pause1s();
         clickActionButton(rowNumber, PricingScriptsPage.ACTION_BUTTON_DELETE);
         CommonUtil.pause1s();
@@ -130,7 +134,7 @@ public class PricingScriptsPage
         for(String script : scriptToTest)
         {
             pricingScriptsLinkedToAShipper = script;
-            CommonUtil.inputText(driver, "//input[@placeholder='search script']", pricingScriptsLinkedToAShipper);
+            CommonUtil.inputText(driver, "//input[@placeholder='Search Script...']", pricingScriptsLinkedToAShipper);
             CommonUtil.pause1s();
             clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_SHIPPERS);
             CommonUtil.pause1s();
@@ -141,9 +145,9 @@ public class PricingScriptsPage
              */
             if(!isPricingScriptsContainShipper(shipperName))
             {
-                CommonUtil.inputText(driver, "//input[@aria-label=concat('Find Shipper',\"'\", 's name')]", shipperName);
+                CommonUtil.inputText(driver, "//input[@aria-label='Find Shipper']", shipperName);
                 CommonUtil.pause1s();
-                CommonUtil.clickBtn(driver, String.format("//div[@ng-repeat='item in items | filter:model[title] track by $index' and normalize-space(text())='%s']", shipperName));
+                CommonUtil.clickBtn(driver, String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", shipperName));
                 CommonUtil.clickBtn(driver, "//div[@class='idle ng-binding ng-scope' and text()='Complete']");
 
                 /**
@@ -202,7 +206,7 @@ public class PricingScriptsPage
 
     public String searchAndGetTextOnTable(String filter, int rowNumber, String columnDataTitle)
     {
-        CommonUtil.inputText(driver, "//input[@placeholder='search script']", filter);
+        CommonUtil.inputText(driver, "//input[@placeholder='Search Script...']", filter);
         CommonUtil.pause1s();
         return getTextOnTable(1, columnDataTitle);
     }
@@ -216,11 +220,11 @@ public class PricingScriptsPage
     public String getTextOnTable(int rowNumber, String columnDataTitle)
     {
         String text = null;
-        WebElement element = CommonUtil.getElementByXpath(driver, String.format("//table[@ng-table='ctrl.pricingScriptParams']/tbody/tr[%d]/td[@data-title='%s']", rowNumber, columnDataTitle));
+        WebElement element = CommonUtil.getElementByXpath(driver, String.format("//tr[@md-virtual-repeat='script in ctrl.tableData'][%d]/td[@class='%s ng-binding']", rowNumber, columnDataTitle));
 
         if(element!=null)
         {
-            text = element.getText();
+            text = element.getText().trim();
         }
 
         return text;
@@ -233,7 +237,7 @@ public class PricingScriptsPage
      */
     public void clickActionButton(int rowNumber, String actionButtonName)
     {
-        WebElement element = CommonUtil.getElementByXpath(driver, String.format("//table[@ng-table='ctrl.pricingScriptParams']/tbody/tr[%d]/td[@data-title='ctrl.table.actions']/div/*[@name='%s']", rowNumber, actionButtonName));
+        WebElement element = CommonUtil.getElementByXpath(driver, String.format("//tr[@md-virtual-repeat='script in ctrl.tableData'][%d]/td[@class='actions column-locked-right']/div/*[@name='%s']", rowNumber, actionButtonName));
 
         if(element==null)
         {
