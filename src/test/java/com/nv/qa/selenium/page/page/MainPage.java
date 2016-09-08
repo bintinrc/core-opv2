@@ -21,7 +21,7 @@ public class MainPage extends LoadableComponent<MainPage> {
 
     private final WebDriver driver;
 //    private final String MAIN_DASHBOARD = "dp-administration";
-    private final String MAIN_DASHBOARD = "https://operatorv2-staging.ninjavan.co/#/sg/";
+    private final String MAIN_DASHBOARD = "https://operatorv2-qa.ninjavan.co/#/sg/";
     private final Map<String, String> map = new HashMap<String, String>() {{
         put("DP Administration","container.dp-administration.dp-partners");
         put("Driver Strength","container.driver-strength");
