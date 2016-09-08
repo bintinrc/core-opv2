@@ -220,11 +220,12 @@ public class PricingScriptsPage
     public String getTextOnTable(int rowNumber, String columnDataTitle)
     {
         String text = null;
-        WebElement element = CommonUtil.getElementByXpath(driver, String.format("//tr[@md-virtual-repeat='script in ctrl.tableData'][%d]/td[@class='%s ng-binding']", rowNumber, columnDataTitle));
+        WebElement element = CommonUtil.getElementByXpath(driver, String.format("//tr[@md-virtual-repeat='script in ctrl.tableData'][%d]/td[@class='%s']", rowNumber, columnDataTitle));
 
         if(element!=null)
         {
             text = element.getText().trim();
+            System.out.println("Text: "+text);
         }
 
         return text;
