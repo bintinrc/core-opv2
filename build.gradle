@@ -1,89 +1,23 @@
+group 'com.nv.qa'
+version '1.0-SNAPSHOT'
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+
 buildscript {
     repositories {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
+        jcenter()
     }
     dependencies {
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:1.2"
-    }
-}
-group 'com.nv.qa'
-version '1.0-SNAPSHOT'
-apply plugin: 'java'
-apply plugin: 'org.sonarqube'
-apply from: 'cucumber.gradle'
-
-sourceCompatibility = 1.7
-
-configurations {
-    cucumberRuntime {
-        extendsFrom testRuntime
-    }
-}
-
-task showInfo() {
-    println "==============================================================================="
-    println 'gradle.gradleHomeDir           : ' + gradle.gradleHomeDir
-    println 'project.sourceCompatibility    : ' + project.sourceCompatibility
-    println 'project.targetCompatibility    : ' + project.targetCompatibility
-    println 'sourceCompatibility            : ' + sourceCompatibility
-    println 'targetCompatibility            : ' + targetCompatibility
-    println "==============================================================================="
-}
-
-task cucumber() {
-    dependsOn assemble, compileTestJava
-    doLast {
-        javaexec {
-            main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
-            args = [
-                    '--plugin', 'pretty',
-                    '--plugin', 'html:build/reports/cucumber-junit/htmloutput',
-                    '--plugin', 'json:build/reports/cucumber-junit/cucumber.json',
-                    '--plugin', 'junit:build/reports/cucumber-junit/cucumber.xml',
-                    '--monochrome',
-                    '--glue', 'com.nv.qa.cucumber.glue',
-                    'src/test/resources/cucumber/feature'
-            ]
-            if (project.hasProperty('environment')) {
-                systemProperties = ['environment': project.getProperty('environment')]
-            }
-        }
-    }
-}
-
-//-- e.g.:
-//-- gradle cucumberTagged -Ptags=@authentication,@shipper,@wip
-task cucumberTagged() {
-    dependsOn assemble, compileTestJava
-    doLast {
-        javaexec {
-            main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
-            args = [
-                    '--plugin', 'pretty',
-                    '--plugin', 'html:build/reports/cucumber-junit/htmloutput',
-                    '--plugin', 'json:build/reports/cucumber-junit/cucumber.json',
-                    '--plugin', 'junit:build/reports/cucumber-junit/cucumber.xml',
-                    '--monochrome',
-                    '--glue', 'com.nv.qa.cucumber.glue',
-                    '--tags', tags,
-                    'src/test/resources/cucumber/feature'
-            ]
-            if (project.hasProperty('environment')) {
-                systemProperties = ['environment': project.getProperty('environment')]
-            }
-        }
+        classpath "org.apache.commons:commons-lang3:3.4"
     }
 }
 
 repositories {
     mavenCentral()
-    maven {
-        url "https://repository-saucelabs.forge.cloudbees.com/release"
-    }
 }
 
 dependencies {
@@ -104,5 +38,128 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-core:2.6.3'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.6.3'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
+}
 
+test {
+    testLogging {
+        showStandardStreams = true
+        events 'started', 'passed'
+    }
+}
+
+task showInfo << {
+    println "==============================================================================="
+    println 'gradle.gradleHomeDir           : ' + gradle.gradleHomeDir
+    println 'project.sourceCompatibility    : ' + project.sourceCompatibility
+    println 'project.targetCompatibility    : ' + project.targetCompatibility
+    println 'sourceCompatibility            : ' + sourceCompatibility
+    println 'targetCompatibility            : ' + targetCompatibility
+    println "==============================================================================="
+}
+
+import org.apache.tools.ant.filters.ReplaceTokens
+import org.apache.commons.lang3.RandomStringUtils
+import java.text.SimpleDateFormat
+
+/**
+ * Definitions for hold static value.
+ */
+def buildFolder = 'build/cucumber/feature'
+def mainFolder = 'src/test/resources/cucumber/feature'
+def mainResources = 'src/main/resources'
+def propertiesExtension = '-config.properties'
+def propertiesFileName
+def tokenMap;
+def environment = 'local';
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testRuntime
+    }
+}
+
+/**
+ * Tasks for manipulating folder. The cucumber files will be copied to buildFolder.
+ */
+task folderPrep() {
+    doFirst {
+        delete fileTree(buildFolder)
+    }
+    doLast {
+        mkdir(buildFolder)
+    }
+}
+
+/**
+ * Prepare all token key value map.
+ */
+task tokenPrep() {
+    /**
+     * Check the environment properties.
+     */
+    if (project.hasProperty('environment')) {
+        environment = project.getProperty('environment')
+    }
+    propertiesFileName = mainResources + '/' + environment + propertiesExtension
+    println "Properties files for token used is $propertiesFileName"
+
+    /**
+     * Load properties files tokens.
+     */
+    Properties properties = new Properties()
+    File propertiesFile = new File(propertiesFileName)
+    properties.load(new FileInputStream(propertiesFile))
+    tokenMap = properties.toSorted()
+
+    /**
+     * Configure special token.
+     */
+    def simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
+    tokenMap.put("DATE_TODAY", simpleDateFormat.format(Calendar.getInstance().getTime()))
+
+    def simpleDateFormatWithHour = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+    tokenMap.put("DATETIME_TODAY", simpleDateFormatWithHour.format(Calendar.getInstance().getTime()))
+
+    def simpleDateFormatZulu = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+    tokenMap.put("DATETIMEZULU_TODAY", simpleDateFormatZulu.format(Calendar.getInstance().getTime()))
+
+    tokenMap.put("RANDOM_32", RandomStringUtils.randomAlphanumeric(32).toUpperCase());
+    tokenMap.put("RANDOM_34", RandomStringUtils.randomAlphanumeric(34).toUpperCase());
+}
+
+/**
+ * Copy all files & folder under mainFolder to buildFolder and replace corresponding token based on tokenMap.
+ */
+task tokenReplacer(type: Copy) {
+    dependsOn folderPrep, tokenPrep
+    from mainFolder
+    into buildFolder
+    filter(ReplaceTokens, tokens: tokenMap, beginToken: '{', endToken: '}')
+}
+
+/**
+ * Execute Cucumber task.
+ *
+ * Note: Using JavaExec like this makes you can debug the code.
+ */
+task runCucumber(dependsOn: ['tokenReplacer', 'assemble', 'compileTestJava'], type: JavaExec) {
+    main = "cucumber.api.cli.Main"
+    classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+    args = [
+            '--plugin', 'pretty',
+            '--plugin', 'html:build/reports/cucumber-junit/htmloutput',
+            '--plugin', 'json:build/reports/cucumber-junit/cucumber.json',
+            '--plugin', 'junit:build/reports/cucumber-junit/cucumber.xml',
+            '--monochrome',
+            '--glue', 'com.nv.qa.cucumber.glue',
+            buildFolder
+    ]
+
+    if(project.hasProperty('tags')) {
+        args '--tags', tags
+    }
+
+    if (project.hasProperty('environment')) {
+        systemProperties = ['environment': environment]
+    }
 }
