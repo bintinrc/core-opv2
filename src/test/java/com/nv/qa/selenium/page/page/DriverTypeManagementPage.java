@@ -104,7 +104,7 @@ public class DriverTypeManagementPage {
         driver.findElement(By.xpath("//tr[@md-virtual-repeat='driverTypeProp in ctrl.tableData']/td[9]/nv-icon-button[1]")).click();
         CommonUtil.pause1s();
 
-        driver.findElement(By.xpath("//button[@class='button-group-button md-button md-nvBlue-theme md-ink-ripple'][@aria-label='Normal Delivery']")).click();
+        driver.findElement(By.xpath("//button[@class='button-group-button md-button md-nvBlue-theme md-ink-ripple'][@aria-label='C2C + Return Pick Up']")).click();
         CommonUtil.pause1s();
 
         driver.findElement(By.xpath("//button[@aria-label='Save Button']")).click();
@@ -117,7 +117,7 @@ public class DriverTypeManagementPage {
         for (WebElement e : elm) {
             List<WebElement> tds = e.findElements(By.tagName("td"));
             for (WebElement td : tds) {
-                if (td.getText().equalsIgnoreCase("Normal Delivery")) {
+                if (td.getText().equalsIgnoreCase("C2C + Return Pick Up")) {
                     isFound = true;
                     break;
                 }
