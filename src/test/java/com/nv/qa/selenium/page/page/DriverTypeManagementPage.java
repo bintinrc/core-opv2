@@ -2,6 +2,7 @@ package com.nv.qa.selenium.page.page;
 
 import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
+import com.nv.qa.support.ScenarioHelper;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -9,6 +10,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -68,7 +71,8 @@ public class DriverTypeManagementPage {
         driver.findElement(By.xpath("//button[@aria-label='Create Driver Type']")).click();
         CommonUtil.pause1s();
 
-        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Name']", "testing");
+        ScenarioHelper.getInstance().setTmpId(String.format("QA Testing %s", new SimpleDateFormat("yyyyMMddHH24mmss").format(new Date())));
+        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Name']", ScenarioHelper.getInstance().getTmpId());
         CommonUtil.pause1s();
 
         driver.findElement(By.xpath("//button[@aria-label='Save Button']")).click();
@@ -83,7 +87,7 @@ public class DriverTypeManagementPage {
         for (WebElement e : elm) {
             List<WebElement> tds = e.findElements(By.tagName("td"));
             for (WebElement td : tds) {
-                if (td.getText().equalsIgnoreCase("testing")) {
+                if (td.getText().equalsIgnoreCase(ScenarioHelper.getInstance().getTmpId())) {
                     isFound = true;
                     break;
                 }
@@ -94,7 +98,7 @@ public class DriverTypeManagementPage {
     }
 
     public void searchingCreatedDriver() throws InterruptedException {
-        CommonUtil.inputText(driver, "//input[@placeholder='Search Driver Types...'][@ng-model='searchText']", "testing");
+        CommonUtil.inputText(driver, "//input[@placeholder='Search Driver Types...'][@ng-model='searchText']", ScenarioHelper.getInstance().getTmpId());
         CommonUtil.pause1s();
     }
 
