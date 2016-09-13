@@ -14,7 +14,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.nv.qa.selenium.page.page.ShipmentManagementPage.*;
 
@@ -30,11 +33,18 @@ public class ShipmentManagementStep {
     private String id = "";
     private String start = "";
     private String end = "";
+    private final Map<String, Integer> searchToColumnMap = new HashMap<>();
+    private final List<String> searchVariable = new ArrayList<>();
 
     @Before
     public void setup() {
         driver = SeleniumSharedDriver.getInstance().getDriver();
         shipmentManagementPage = new ShipmentManagementPage(driver);
+        searchToColumnMap.put("Shipment Status", 4);
+        searchToColumnMap.put("Start Hub", 5);
+        searchToColumnMap.put("Last Inbound Hub", 6);
+        searchToColumnMap.put("Pending Hub", 7);
+        searchToColumnMap.put("End Hub", 8);
     }
 
     @After
@@ -80,7 +90,7 @@ public class ShipmentManagementStep {
 
     @Then("^shipment created$")
     public void shipmentCreated() throws Throwable {
-        Assert.assertNotNull(driver.findElement(By.xpath("//div[@ng-if=\"nvLoad.status === 'loaded'\"][@aria-hidden=\"false\"]")));
+        Assert.assertNotNull("shipment table loaded", driver.findElement(By.xpath("//div[@ng-if=\"nvLoad.status === 'loaded'\"][@aria-hidden=\"false\"]")));
         CommonUtil.clickBtn(driver, XPATH_EDIT_SEARCH_FILTER_BUTTON);
     }
 
@@ -122,8 +132,8 @@ public class ShipmentManagementStep {
             }
         }
 
-        Assert.assertEquals(start, startHub);
-        Assert.assertEquals(end, endHub);
+        Assert.assertEquals("start hub value", start, startHub);
+        Assert.assertEquals("end hub value", end, endHub);
 
         CommonUtil.clickBtn(driver, XPATH_EDIT_SEARCH_FILTER_BUTTON);
     }
@@ -140,7 +150,7 @@ public class ShipmentManagementStep {
             }
         }
 
-        Assert.assertEquals(status, actualStat);
+        Assert.assertEquals("Shipment status", status, actualStat);
         CommonUtil.clickBtn(driver, XPATH_EDIT_SEARCH_FILTER_BUTTON);
     }
 
@@ -161,6 +171,18 @@ public class ShipmentManagementStep {
             }
         }
 
-        Assert.assertTrue(isRemoved);
+        Assert.assertTrue("is Shipment removed", isRemoved);
+    }
+
+    @When("^filter ([^\"]*) is ([^\"]*)$")
+    public void fillSearchFilter(String filter, String value) throws Throwable {
+        CommonUtil.clickBtn(driver, "//nv-filter-box[div[div[text()='" + filter + "']]]/nv-autocomplete/div");
+        CommonUtil.pause100ms();
+        CommonUtil.clickBtn(driver, "//md-virtual-repeat-container[@class='md-autocomplete-suggestions-container md-whiteframe-z1 md-virtual-repeat-container md-orient-vertical']/div/div/ul/li[md-autocomplete-parent-scope[span[text()='" + value + "']]]");
+        CommonUtil.pause100ms();
+        CommonUtil.clickBtn(driver, "//nv-filter-box[div[div[text()='" + filter + "']]]/nv-autocomplete/div");
+
+        CommonUtil.pause1s();
+
     }
 }
