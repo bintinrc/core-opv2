@@ -225,7 +225,6 @@ public class PricingScriptsPage
         if(element!=null)
         {
             text = element.getText().trim();
-            System.out.println("Text: "+text);
         }
 
         return text;
