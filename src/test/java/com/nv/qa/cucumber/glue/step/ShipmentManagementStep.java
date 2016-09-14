@@ -33,6 +33,7 @@ public class ShipmentManagementStep {
     private String id = "";
     private String start = "";
     private String end = "";
+    private String comment = "";
     private final Map<String, Integer> searchToColumnMap = new HashMap<>();
     private final List<String> searchVariable = new ArrayList<>();
 
@@ -57,31 +58,32 @@ public class ShipmentManagementStep {
         CommonUtil.clickBtn(driver, XPATH_CREATE_SHIPMENT_BUTTON);
     }
 
-    @When("^create Shipment with Start Hub ([^\"]*) and End hub ([^\"]*)$")
-    public void createShipment(String startHub, String endHub) throws Throwable {
+    @When("^create Shipment with Start Hub ([^\"]*), End hub ([^\"]*) and comment ([^\"]*)$")
+    public void createShipment(String startHub, String endHub, String comment) throws Throwable {
 
         shipmentManagementPage.selectStartHub(startHub);
         CommonUtil.pause10ms();
         shipmentManagementPage.selectEndHub(endHub);
         CommonUtil.pause10ms();
-        CommonUtil.inputText(driver, XPATH_COMMENT_TEXT_AREA, "AUTOMATION TEST");
+        CommonUtil.inputText(driver, XPATH_COMMENT_TEXT_AREA, comment);
 
         CommonUtil.clickBtn(driver, XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
         CommonUtil.pause1s();
 
     }
 
-    @When("^edit Shipment with Start Hub ([^\"]*) and End hub ([^\"]*)$")
-    public void editShipment(String startHub, String endHub) throws Throwable {
+    @When("^edit Shipment with Start Hub ([^\"]*), End hub ([^\"]*) and comment ([^\"]*)$")
+    public void editShipment(String startHub, String endHub, String comment) throws Throwable {
 
         shipmentManagementPage.selectStartHub(startHub);
         CommonUtil.pause10ms();
         shipmentManagementPage.selectEndHub(endHub);
         CommonUtil.pause10ms();
-        CommonUtil.inputText(driver, XPATH_COMMENT_TEXT_AREA, "AUTOMATION TEST");
+        CommonUtil.inputText(driver, XPATH_COMMENT_TEXT_AREA, comment);
 
         start = startHub;
         end = endHub;
+        this.comment = comment;
 
         CommonUtil.clickBtn(driver, XPATH_SAVE_CHANGES_BUTTON);
         CommonUtil.pause1s();
@@ -122,6 +124,7 @@ public class ShipmentManagementStep {
         List<WebElement> shipments =shipmentManagementPage.grabShipments();
         String startHub = "";
         String endHub = "";
+        String komen = "";
         for (WebElement shipment : shipments) {
             String spId = shipment.findElements(By.tagName("td")).get(2).findElement(By.tagName("span")).getText();
 
@@ -132,8 +135,14 @@ public class ShipmentManagementStep {
             }
         }
 
+        WebElement shipment =shipmentManagementPage.grabShipments().get(0);
+        shipmentManagementPage.clickShipmentActionButton(shipment, "Edit");
+        komen = driver.findElement(By.xpath(XPATH_COMMENT_TEXT_AREA)).getAttribute("value");
+        CommonUtil.clickBtn(driver, XPATH_DISCARD_CHANGE_BUTTON);
+
         Assert.assertEquals("start hub value", start, startHub);
         Assert.assertEquals("end hub value", end, endHub);
+        Assert.assertEquals("comment value", comment, komen);
 
         CommonUtil.clickBtn(driver, XPATH_EDIT_SEARCH_FILTER_BUTTON);
     }

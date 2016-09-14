@@ -28,6 +28,7 @@ public class ShipmentManagementPage {
     public static final String XPATH_SORT_DIV = "//div[@id='select_order_container']";
     public static final String XPATH_DELETE_CONFIRMATION_BUTTON = "//button[span[text()='Delete']]";
     public static final String XPATH_CANCEL_SHIPMENT_BUTTON = "//button[span[text()='Cancel Shipment']]";
+    public static final String XPATH_DISCARD_CHANGE_BUTTON = "//button[h5[text()='Discard Changes']]";
 
     public final String EDIT_ACTION = "Edit";
     public final String FORCE_ACTION = "Force";

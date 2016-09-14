@@ -11,14 +11,14 @@ Feature: shipment management
   Scenario: Create Shipment (uid:7a3373f0-67f1-4f1a-b6b2-6447a2621305)
     Given op click navigation Shipment Management
     When create shipment button is clicked
-    When create Shipment with Start Hub 30JKB and End hub DOJO
+    When create Shipment with Start Hub 30JKB, End hub DOJO and comment Auto Comment
     Then shipment created
 
   # edit shipment
   Scenario: Edit Shipment (uid:5fbdb7d5-0a54-42de-bd8e-960ad26ff43e)
     Given op click Load All Shipment
     When shipment Edit action button clicked
-    When edit Shipment with Start Hub DOJO and End hub EASTGW
+    When edit Shipment with Start Hub DOJO, End hub EASTGW and comment Auto Comment Edited
     Then shipment edited
 
   # force success shipment
