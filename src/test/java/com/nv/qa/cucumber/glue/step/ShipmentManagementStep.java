@@ -12,12 +12,8 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.nv.qa.selenium.page.page.ShipmentManagementPage.*;
 
@@ -34,18 +30,11 @@ public class ShipmentManagementStep {
     private String start = "";
     private String end = "";
     private String comment = "";
-    private final Map<String, Integer> searchToColumnMap = new HashMap<>();
-    private final List<String> searchVariable = new ArrayList<>();
 
     @Before
     public void setup() {
         driver = SeleniumSharedDriver.getInstance().getDriver();
         shipmentManagementPage = new ShipmentManagementPage(driver);
-        searchToColumnMap.put("Shipment Status", 4);
-        searchToColumnMap.put("Start Hub", 5);
-        searchToColumnMap.put("Last Inbound Hub", 6);
-        searchToColumnMap.put("Pending Hub", 7);
-        searchToColumnMap.put("End Hub", 8);
     }
 
     @After
@@ -106,39 +95,31 @@ public class ShipmentManagementStep {
     @When("^shipment ([^\"]*) action button clicked$")
     public void clickActionButton(String actionButton) throws Throwable {
 
-        WebElement shipment =shipmentManagementPage.grabShipments().get(0);
-        id = shipment.findElements(By.tagName("td")).get(2).findElement(By.tagName("span")).getText();
-        start = shipment.findElements(By.tagName("td")).get(5).findElement(By.tagName("span")).getText();
-        end = shipment.findElements(By.tagName("td")).get(8).findElement(By.tagName("span")).getText();
+        ShipmentManagementPage.Shipment shipment = shipmentManagementPage.getShipmentFromTable(0);
+        id = shipment.getId();
+        start = shipment.getStartHub();
+        end = shipment.getEndHub();
 
-        shipmentManagementPage.clickShipmentActionButton(shipment, actionButton);
-        CommonUtil.pause1s();
+        shipment.clickShipmentActionButton(actionButton);
 
-        if (actionButton.equals(shipmentManagementPage.DELETE_ACTION)) {
-            CommonUtil.clickBtn(driver, XPATH_DELETE_CONFIRMATION_BUTTON);
-        }
     }
 
     @Then("^shipment edited$")
     public void shipmentEdited() throws Throwable {
-        List<WebElement> shipments =shipmentManagementPage.grabShipments();
+        List<ShipmentManagementPage.Shipment> shipments =shipmentManagementPage.getShipmentsFromTable();
         String startHub = "";
         String endHub = "";
         String komen = "";
-        for (WebElement shipment : shipments) {
-            String spId = shipment.findElements(By.tagName("td")).get(2).findElement(By.tagName("span")).getText();
+        for (ShipmentManagementPage.Shipment shipment : shipments) {
+            String spId = shipment.getId();
 
             if (spId.equals(id)) {
-                startHub = shipment.findElements(By.tagName("td")).get(5).findElement(By.tagName("span")).getText();
-                endHub = shipment.findElements(By.tagName("td")).get(8).findElement(By.tagName("span")).getText();
+                startHub = shipment.getStartHub();
+                endHub = shipment.getEndHub();
+                komen = shipment.getComment();
 
             }
         }
-
-        WebElement shipment =shipmentManagementPage.grabShipments().get(0);
-        shipmentManagementPage.clickShipmentActionButton(shipment, "Edit");
-        komen = driver.findElement(By.xpath(XPATH_COMMENT_TEXT_AREA)).getAttribute("value");
-        CommonUtil.clickBtn(driver, XPATH_DISCARD_CHANGE_BUTTON);
 
         Assert.assertEquals("start hub value", start, startHub);
         Assert.assertEquals("end hub value", end, endHub);
@@ -149,13 +130,13 @@ public class ShipmentManagementStep {
 
     @Then("^shipment status is ([^\"]*)$")
     public void checkStatus(String status) throws Throwable {
-        List<WebElement> shipments =shipmentManagementPage.grabShipments();
+        List<ShipmentManagementPage.Shipment> shipments =shipmentManagementPage.getShipmentsFromTable();
         String actualStat = "";
-        for (WebElement shipment : shipments) {
-            String spId = shipment.findElements(By.tagName("td")).get(2).findElement(By.tagName("span")).getText();
+        for (ShipmentManagementPage.Shipment shipment : shipments) {
+            String spId = shipment.getId();
 
             if (spId.equals(id)) {
-                actualStat = shipment.findElements(By.tagName("td")).get(4).findElement(By.tagName("span")).getText();
+                actualStat = shipment.getStatus();
             }
         }
 
@@ -170,10 +151,10 @@ public class ShipmentManagementStep {
 
     @Then("^shipment deleted$")
     public void isShipmentDeleted() throws Throwable {
-        List<WebElement> shipments =shipmentManagementPage.grabShipments();
+        List<ShipmentManagementPage.Shipment> shipments =shipmentManagementPage.getShipmentsFromTable();
         boolean isRemoved = true;
-        for (WebElement shipment : shipments) {
-            String spId = shipment.findElements(By.tagName("td")).get(2).findElement(By.tagName("span")).getText();
+        for (ShipmentManagementPage.Shipment shipment : shipments) {
+            String spId = shipment.getId();
 
             if (spId.equals(id)) {
                 isRemoved = false;

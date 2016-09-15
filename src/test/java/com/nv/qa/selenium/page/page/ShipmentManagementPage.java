@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,10 +31,21 @@ public class ShipmentManagementPage {
     public static final String XPATH_CANCEL_SHIPMENT_BUTTON = "//button[span[text()='Cancel Shipment']]";
     public static final String XPATH_DISCARD_CHANGE_BUTTON = "//button[h5[text()='Discard Changes']]";
 
-    public final String EDIT_ACTION = "Edit";
-    public final String FORCE_ACTION = "Force";
-    public final String DELETE_ACTION = "Delete";
 
+    public List<Shipment> getShipmentsFromTable() {
+        List<Shipment> shipmentsResult = new ArrayList<>();
+        List<WebElement> shipments = driver.findElements(By.xpath(XPATH_SHIPMENTS_TR));
+        for (WebElement shipment : shipments) {
+            Shipment sh = new Shipment(shipment);
+            shipmentsResult.add(sh);
+        }
+
+        return shipmentsResult;
+    }
+
+    public Shipment getShipmentFromTable(int index) {
+        return getShipmentsFromTable().get(index);
+    }
 
     public ShipmentManagementPage(WebDriver driver) {
         this.driver = driver;
@@ -75,22 +87,91 @@ public class ShipmentManagementPage {
         CommonUtil.clickBtn(driver,XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + var2 + "']]");
     }
 
-    public List<WebElement> grabShipments() {
-        return driver.findElements(By.xpath(XPATH_SHIPMENTS_TR));
-    }
+    public class Shipment {
 
-    public void clickShipmentActionButton(WebElement shipment, String actionButton) {
-        WebElement editAction = grabShipmentAction(shipment, actionButton);
-        CommonUtil.moveAndClick(driver, editAction);
-    }
+        private final WebElement shipment;
+        private String id;
+        private String status;
+        private String startHub;
+        private String endHub;
+        private String comment;
 
-    private WebElement grabShipmentAction(WebElement shipment, String action) {
-        List<WebElement> actionButtons = shipment.findElements(By.tagName("button"));
-        for (WebElement actionButton : actionButtons) {
-            if (actionButton.getAttribute("aria-label").equalsIgnoreCase(action)) {
-                return actionButton;
+
+        public final String EDIT_ACTION = "Edit";
+        public final String FORCE_ACTION = "Force";
+        public final String DELETE_ACTION = "Delete";
+
+        public Shipment(WebElement shipment) {
+            this.shipment = shipment;
+            this.id = shipment.findElements(By.tagName("td")).get(2).findElement(By.tagName("span")).getText();
+            this.status = shipment.findElements(By.tagName("td")).get(4).findElement(By.tagName("span")).getText();
+            this.startHub = shipment.findElements(By.tagName("td")).get(5).findElement(By.tagName("span")).getText();
+            this.endHub = shipment.findElements(By.tagName("td")).get(8).findElement(By.tagName("span")).getText();
+            this.comment = shipment.findElements(By.tagName("td")).get(10).getText();
+        }
+
+        public void clickShipmentActionButton(String actionButton) {
+            WebElement editAction = grabShipmentAction(actionButton);
+            CommonUtil.moveAndClick(driver, editAction);
+
+            if (actionButton.equals(DELETE_ACTION)) {
+                CommonUtil.pause1s();
+                CommonUtil.clickBtn(driver, XPATH_DELETE_CONFIRMATION_BUTTON);
             }
         }
-        return null;
+
+        public WebElement grabShipmentAction(String action) {
+            List<WebElement> actionButtons = shipment.findElements(By.tagName("button"));
+            for (WebElement actionButton : actionButtons) {
+                if (actionButton.getAttribute("aria-label").equalsIgnoreCase(action)) {
+                    return actionButton;
+                }
+            }
+            return null;
+        }
+
+        public WebElement getShipment() {
+            return shipment;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public String getStartHub() {
+            return startHub;
+        }
+
+        public void setStartHub(String startHub) {
+            this.startHub = startHub;
+        }
+
+        public String getEndHub() {
+            return endHub;
+        }
+
+        public void setEndHub(String endHub) {
+            this.endHub = endHub;
+        }
+
+        public String getComment() {
+            return comment;
+        }
+
+        public void setComment(String comment) {
+            this.comment = comment;
+        }
     }
 }
