@@ -166,11 +166,11 @@ public class ShipmentManagementStep {
 
     @When("^filter ([^\"]*) is ([^\"]*)$")
     public void fillSearchFilter(String filter, String value) throws Throwable {
-        CommonUtil.clickBtn(driver, "//nv-filter-box[div[div[text()='" + filter + "']]]/nv-autocomplete/div");
+        CommonUtil.clickBtn(driver, shipmentManagementPage.grabXPathFilter(filter));
         CommonUtil.pause100ms();
-        CommonUtil.clickBtn(driver, "//md-virtual-repeat-container[@class='md-autocomplete-suggestions-container md-whiteframe-z1 md-virtual-repeat-container md-orient-vertical']/div/div/ul/li[md-autocomplete-parent-scope[span[text()='" + value + "']]]");
+        CommonUtil.clickBtn(driver, shipmentManagementPage.grabXPathFilterValue(value));
         CommonUtil.pause100ms();
-        CommonUtil.clickBtn(driver, "//nv-filter-box[div[div[text()='" + filter + "']]]/nv-autocomplete/div");
+        CommonUtil.clickBtn(driver, shipmentManagementPage.grabXPathFilter(filter));
 
         CommonUtil.pause1s();
 

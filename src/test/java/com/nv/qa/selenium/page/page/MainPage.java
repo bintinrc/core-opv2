@@ -29,7 +29,7 @@ public class MainPage extends LoadableComponent<MainPage> {
         put("Pricing Scripts","container.pricing-scripts");
         put("Hubs Administration","container.hub-list");
         put("Blocked Dates","container.blocked-dates");
-        put("Shipment Management","container.shipping-management");
+        put("Shipment Management","container.shipment-management");
     }};
 
     public MainPage(WebDriver driver) {
@@ -51,7 +51,7 @@ public class MainPage extends LoadableComponent<MainPage> {
         if (navTitle.trim().equalsIgnoreCase("hubs administration")) {
             name = "hub";
         } else if (navTitle.trim().equalsIgnoreCase("shipment management")) {
-            name = "shipping-management";
+            name = "shipment-management";
         }
 
         final String mainDashboard = name;

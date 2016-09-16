@@ -18,7 +18,7 @@ public class ShipmentManagementPage {
     private final WebDriver driver;
     public static final String XPATH_CREATE_SHIPMENT_BUTTON = "//nv-table-button[@id='create-shipment-1']/button";
     public static final String XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON = "//nv-table-button[@id='createButton']/button";
-    public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[@aria-label=\"Load All Shipments\"]";
+    public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[span[text()='Load All Shipments']]";
     public static final String XPATH_SAVE_CHANGES_BUTTON = "//button[span[text()='Save Changes']]";
     public static final String XPATH_START_HUB_DROPDOWN = "//div[p[text()='Start Hub']]/md-select";
     public static final String XPATH_END_HUB_DROPDOWN = "//div[p[text()='End Hub']]/md-select";
@@ -26,7 +26,7 @@ public class ShipmentManagementPage {
     public static final String XPATH_COMMENT_TEXT_AREA = "//textarea[@id=\"comment\"]";
     public static final String XPATH_SHIPMENTS_TR = "//tr[@md-virtual-repeat=\"shipment in ctrl.shipments\"]";
     public static final String XPATH_EDIT_SEARCH_FILTER_BUTTON = "//button[span[text()='Edit Filters & Sort']]";
-    public static final String XPATH_SORT_DIV = "//div[@id='select_order_container']";
+    public static final String XPATH_SORT_DIV = "//div[div[span[text()='Sort by']]]";
     public static final String XPATH_DELETE_CONFIRMATION_BUTTON = "//button[span[text()='Delete']]";
     public static final String XPATH_CANCEL_SHIPMENT_BUTTON = "//button[span[text()='Cancel Shipment']]";
     public static final String XPATH_DISCARD_CHANGE_BUTTON = "//button[h5[text()='Discard Changes']]";
@@ -87,6 +87,14 @@ public class ShipmentManagementPage {
         CommonUtil.clickBtn(driver,XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + var2 + "']]");
     }
 
+    public String grabXPathFilter(String filterLabel) {
+        return "//nv-filter-box[div[div[text()='" + filterLabel + "']]]/nv-autocomplete/div";
+    }
+
+    public String grabXPathFilterValue(String value) {
+        return "//md-virtual-repeat-container[@class='md-autocomplete-suggestions-container md-whiteframe-z1 md-virtual-repeat-container md-orient-vertical']/div/div/ul/li[md-autocomplete-parent-scope[span[text()='" + value + "']]]";
+    }
+
     public class Shipment {
 
         private final WebElement shipment;
@@ -96,9 +104,6 @@ public class ShipmentManagementPage {
         private String endHub;
         private String comment;
 
-
-        public final String EDIT_ACTION = "Edit";
-        public final String FORCE_ACTION = "Force";
         public final String DELETE_ACTION = "Delete";
 
         public Shipment(WebElement shipment) {
