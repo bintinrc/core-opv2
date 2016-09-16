@@ -53,12 +53,12 @@ Feature: driver type management
   Scenario: op filter driver type management by Less than 3 Parcels (uid:32f9251f-8ee3-4789-a1b7-0d2cdd4354e8)
     Given op click navigation DP Administration
     Given op click navigation Driver Type Management
-    When driver type management is filtered by Less than 3 Parcels of Reservation Size
+    When driver type management is filtered by Less Than 3 Parcels of Reservation Size
 
   Scenario: op filter driver type management by Less than 10 Parcels (uid:fcb002e7-b1ab-4587-8c23-1d258b8dc4fe)
     Given op click navigation DP Administration
     Given op click navigation Driver Type Management
-    When driver type management is filtered by Less than 10 Parcels of Reservation Size
+    When driver type management is filtered by Less Than 10 Parcels of Reservation Size
 
   Scenario: op filter driver type management by Trolley Required (uid:a8e592f4-a079-4bc6-bf72-8a3a02acc9a3)
     Given op click navigation DP Administration
@@ -78,7 +78,7 @@ Feature: driver type management
   Scenario: op filter driver type management by Larger than Van Load (uid:7ae0c02a-202d-4d56-8a69-e32adf5be6af)
     Given op click navigation DP Administration
     Given op click navigation Driver Type Management
-    When driver type management is filtered by Larger than Van Load of Reservation Size
+    When driver type management is filtered by Larger Than Van Load of Reservation Size
 
   Scenario: op filter driver type management by Small (uid:d731ae1d-4e4a-4b18-a3d5-503fd69ede7e)
     Given op click navigation DP Administration
@@ -103,32 +103,32 @@ Feature: driver type management
   Scenario: op filter driver type management by 9AM to 6PM (uid:6ae4ef97-3891-4938-b861-d8addf60fa25)
     Given op click navigation DP Administration
     Given op click navigation Driver Type Management
-    When driver type management is filtered by 9AM to 6PM of Timeslot
+    When driver type management is filtered by 9AM To 6PM of Timeslot
 
   Scenario: op filter driver type management by 9AM to 10PM (uid:0f04a728-a23f-419a-bac3-2712764dfa8b)
     Given op click navigation DP Administration
     Given op click navigation Driver Type Management
-    When driver type management is filtered by 9AM to 10PM of Timeslot
+    When driver type management is filtered by 9AM TO 10PM of Timeslot
 
   Scenario: op filter driver type management by 9AM to 12PM (uid:af8ab673-e4ef-4eae-956c-83c9bcc774de)
     Given op click navigation DP Administration
     Given op click navigation Driver Type Management
-    When driver type management is filtered by 9AM to 12PM of Timeslot
+    When driver type management is filtered by 9AM TO 12PM of Timeslot
 
   Scenario: op filter driver type management by 12PM to 3PM (uid:9dfee534-bcf1-4bf3-8e63-5abba766a73c)
     Given op click navigation DP Administration
     Given op click navigation Driver Type Management
-    When driver type management is filtered by 12PM to 3PM of Timeslot
+    When driver type management is filtered by 12PM TO 3PM of Timeslot
 
   Scenario: op filter driver type management by 3PM to 6PM (uid:8dfca2a0-a406-4e59-9c5c-c00bb61d1bae)
     Given op click navigation DP Administration
     Given op click navigation Driver Type Management
-    When driver type management is filtered by 3PM to 6PM of Timeslot
+    When driver type management is filtered by 3PM TO 6PM of Timeslot
 
   Scenario: op filter driver type management by 6PM to 10PM (uid:a59a9afe-356c-4653-b913-18cf9a77096e)
     Given op click navigation DP Administration
     Given op click navigation Driver Type Management
-    When driver type management is filtered by 6PM to 10PM of Timeslot
+    When driver type management is filtered by 6PM TO 10PM of Timeslot
 
   Scenario: op delete driver type (uid:82959c45-2b6d-4899-98aa-02e88f59793e)
     Given op click navigation DP Administration
