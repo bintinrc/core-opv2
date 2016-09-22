@@ -3,15 +3,14 @@ package com.nv.qa.cucumber.glue.step;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.ScenarioHelper;
 import com.nv.qa.support.SeleniumSharedDriver;
+import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -30,8 +29,11 @@ public class BlockedDatesStep {
     }
 
     @After
-    public void teardown() {
-
+    public void teardown(Scenario scenario) {
+        if (scenario.isFailed()) {
+            final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            scenario.embed(screenshot, "image/png");
+        }
     }
 
     @When("^blocked dates add$")

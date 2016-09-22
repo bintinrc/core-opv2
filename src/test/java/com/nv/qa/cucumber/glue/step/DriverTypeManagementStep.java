@@ -2,11 +2,14 @@ package com.nv.qa.cucumber.glue.step;
 
 import com.nv.qa.selenium.page.page.DriverTypeManagementPage;
 import com.nv.qa.support.SeleniumSharedDriver;
+import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -25,8 +28,11 @@ public class DriverTypeManagementStep {
     }
 
     @After
-    public void teardown() {
-
+    public void teardown(Scenario scenario) {
+        if (scenario.isFailed()) {
+            final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            scenario.embed(screenshot, "image/png");
+        }
     }
 
     @When("^driver type management is filtered by ([^\"]*) of ([^\"]*)$")
