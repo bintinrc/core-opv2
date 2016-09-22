@@ -1,4 +1,4 @@
-@selenium
+@selenium @saas
 Feature: blocked dates
 
   Scenario: op login into operator portal

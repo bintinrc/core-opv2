@@ -1,4 +1,4 @@
-@selenium
+@selenium @saas
 Feature: op login and logout
 
   Scenario: op login into operator portal (uid:142de4e2-23e8-49da-8ad4-ec887b90f011)

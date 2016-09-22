@@ -1,4 +1,4 @@
-@selenium @shipment
+@selenium @shipment @saas
 Feature: shipment management
 
   Scenario: op login into operator portal
