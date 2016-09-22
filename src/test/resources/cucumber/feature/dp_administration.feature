@@ -5,7 +5,7 @@ Feature: dp administration
     Given op is in op portal login page
     When login button is clicked
     When login as "{operator-portal-uid}" with password "{operator-portal-pwd}"
-    Then op is in dp administration
+    Then op is in main page
 
   # download dp partner
   Scenario: op download dp partner csv list (uid:7554e32c-4b13-4693-8f0f-51faf3cc940b)

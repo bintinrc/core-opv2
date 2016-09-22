@@ -5,10 +5,10 @@ Feature: op login and logout
     Given op is in op portal login page
     When login button is clicked
     When login as "{operator-portal-uid}" with password "{operator-portal-pwd}"
-    Then op is in dp administration
+    Then op is in main page
 
   Scenario: op logout from operator portal (uid:b0997f2e-1db7-4088-a3b9-30c9e0fa1d0f)
-    Given op click navigation DP Administration
+#    Given op click navigation DP Administration
     When logout button is clicked
     Then op back in the login page
 

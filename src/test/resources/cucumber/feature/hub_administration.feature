@@ -5,7 +5,7 @@ Feature: hubs administration
     Given op is in op portal login page
     When login button is clicked
     When login as "{operator-portal-uid}" with password "{operator-portal-pwd}"
-    Then op is in dp administration
+    Then op is in main page
 
   # download hub list
   Scenario: download hub list (uid:2a3dd749-c251-45a7-893b-84b8611f5665)

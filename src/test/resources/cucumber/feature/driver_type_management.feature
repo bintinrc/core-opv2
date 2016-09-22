@@ -5,7 +5,7 @@ Feature: driver type management
     Given op is in op portal login page
     When login button is clicked
     When login as "{operator-portal-uid}" with password "{operator-portal-pwd}"
-    Then op is in dp administration
+    Then op is in main page
 
   Scenario: op download driver type management file (uid:a1f987ea-5292-41e3-8781-666e77cd4555)
     Given op click navigation Driver Type Management

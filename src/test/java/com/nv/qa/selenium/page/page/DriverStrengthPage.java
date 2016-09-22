@@ -50,14 +50,15 @@ public class DriverStrengthPage {
 
         if (type.equals("zone")) {
             placeHolder = "Search or Select Zone(s)";
-            filterKey = "Z-Out of Zone";
+            filterKey = "z-out of zone";
         } else if (type.equals("driver-type")) {
             placeHolder = "Search or Select Driver Type(s)";
             filterKey = "Ops";
         }
 
         inputListBox(driver, placeHolder, filterKey);
-        List<WebElement> listDriver = driver.findElements(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData'][@class='ng-scope']"));
+//        List<WebElement> listDriver = driver.findElements(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData'][@class='ng-scope']"));
+        List<WebElement> listDriver = driver.findElements(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData']"));
         CommonUtil.pause100ms();
 
         Assert.assertTrue(listDriver.size() > 0);
@@ -71,7 +72,8 @@ public class DriverStrengthPage {
 
     public void verifyDriver() {
         boolean isFound = false;
-        List<WebElement> listDriver = driver.findElements(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData'][@class='ng-scope']"));
+//        List<WebElement> listDriver = driver.findElements(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData'][@class='ng-scope']"));
+        List<WebElement> listDriver = driver.findElements(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData']"));
         for (WebElement d : listDriver) {
             List<WebElement> el = d.findElements(By.tagName("td"));
             for (WebElement e : el) {
@@ -87,7 +89,7 @@ public class DriverStrengthPage {
     }
 
     public void changeComingStatus() throws InterruptedException {
-        WebElement firstDriver = driver.findElements(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData'][@class='ng-scope']")).get(0);
+        WebElement firstDriver = driver.findElements(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData']")).get(0);
         String before = getComingStatusState(firstDriver);
         changeComingStatusState(firstDriver);
         String after = getComingStatusState(firstDriver);
@@ -165,6 +167,7 @@ public class DriverStrengthPage {
         CommonUtil.inputText(driver, "//input[@type='number'][@aria-label='Vehicle Capacity']", "1000");
         CommonUtil.clickBtn(driver, "//button[@aria-label='Save Button']");
         CommonUtil.pause1s();
+        CommonUtil.closeModal(driver);
     }
 
     public void deleteNewDriver() {
@@ -199,6 +202,5 @@ public class DriverStrengthPage {
         CommonUtil.pause100ms();
         CommonUtil.closeModal(driver);
     }
-
 
 }

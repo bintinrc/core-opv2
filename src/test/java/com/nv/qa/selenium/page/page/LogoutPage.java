@@ -32,7 +32,7 @@ public class LogoutPage extends LoadableComponent<LogoutPage> {
     }
 
     public void logout() throws InterruptedException {
-        WebElement elm = driver.findElement(By.xpath("//span[@class='nv-text-ellipsis nv-p-med name ng-binding']"));
+        WebElement elm = driver.findElement(By.xpath("//span[(contains(@class, 'nv-text-ellipsis nv-p-med name'))]"));
 
         Actions acts = new Actions(driver);
         acts.moveToElement(elm).click().perform();

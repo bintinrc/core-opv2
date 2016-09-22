@@ -1,10 +1,7 @@
 package com.nv.qa.support;
 
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
 import java.util.Collections;
@@ -93,7 +90,9 @@ public class CommonUtil {
 
     public static void closeModal(WebDriver driver) {
         Actions builder = new Actions(driver);
-        builder.moveToElement(driver.findElement(By.xpath("//div[@class='nv-text-ellipsis nv-navtitle ng-binding']")), 5, 5).click().build().perform();
+//        builder.moveToElement(driver.findElement(By.xpath("//div[@class='nv-text-ellipsis nv-navtitle ng-binding']")), 5, 5).click().build().perform();
+        builder.moveToElement(driver.findElement(By.xpath("//div[(contains(@class, 'nv-text-ellipsis nv-navtitle'))]")), 5, 5).click().build().perform();
+//        builder.moveToElement(driver.findElement(By.xpath("//div[(contains(@class, 'nv-text-ellipsis nv-navtitle'))]"))).sendKeys(Keys.ESCAPE).perform();
         CommonUtil.pause100ms();
     }
 

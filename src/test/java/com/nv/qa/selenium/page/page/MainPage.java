@@ -2,8 +2,10 @@ package com.nv.qa.selenium.page.page;
 
 import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
+import com.nv.qa.support.SeleniumHelper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.LoadableComponent;
@@ -21,7 +23,8 @@ public class MainPage extends LoadableComponent<MainPage> {
 
     private final WebDriver driver;
 //    private final String MAIN_DASHBOARD = "dp-administration";
-    private final String MAIN_DASHBOARD = "https://operatorv2-qa.ninjavan.co/#/sg/";
+//    private final String MAIN_DASHBOARD = "https://operatorv2-qa.ninjavan.co/#/sg/";
+//    private final String MAIN_DASHBOARD = "https://operatorv2-qa.ninjavan.co/#/";
     private final Map<String, String> map = new HashMap<String, String>() {{
         put("DP Administration","container.dp-administration.dp-partners");
         put("Driver Strength","container.driver-strength");
@@ -68,7 +71,7 @@ public class MainPage extends LoadableComponent<MainPage> {
     }
 
     public void dpAdm() throws InterruptedException {
-        (new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS)).until(new ExpectedCondition<Boolean>() {
+        /*(new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS)).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
                 return d.getCurrentUrl().toLowerCase().endsWith(MAIN_DASHBOARD);
             }
@@ -76,6 +79,11 @@ public class MainPage extends LoadableComponent<MainPage> {
 
         String url = driver.getCurrentUrl().toLowerCase();
         Assert.assertTrue(url.endsWith(MAIN_DASHBOARD));
+        CommonUtil.pause10s();*/
+
+        SeleniumHelper.waitUntilElementVisible(driver, driver.findElement(By.xpath("//md-content[(contains(@class,'nv-container-landing-page md-padding'))]/h2[@class='md-title']")));
+        WebElement elm = driver.findElement(By.xpath("//md-content[(contains(@class,'nv-container-landing-page md-padding'))]/h2[@class='md-title']"));
+        Assert.assertTrue(elm.getText().contains("Welcome to Operator V2"));
         CommonUtil.pause10s();
     }
 

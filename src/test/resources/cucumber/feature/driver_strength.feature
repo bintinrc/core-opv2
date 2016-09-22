@@ -5,7 +5,7 @@ Feature: driver strength
     Given op is in op portal login page
     When login button is clicked
     When login as "{operator-portal-uid}" with password "{operator-portal-pwd}"
-    Then op is in dp administration
+    Then op is in main page
 
   # add new
   Scenario: op add new driver (uid:b7a6c2b2-66c0-4e7d-890c-b0099cef4b5a)

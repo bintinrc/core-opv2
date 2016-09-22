@@ -5,7 +5,7 @@ Feature: blocked dates
     Given op is in op portal login page
     When login button is clicked
     When login as "{operator-portal-uid}" with password "{operator-portal-pwd}"
-    Then op is in dp administration
+    Then op is in main page
 
   # add blocked dates
   Scenario: add blocked date (uid:0877c2fd-f75e-4f90-96a8-8ce8da082009)

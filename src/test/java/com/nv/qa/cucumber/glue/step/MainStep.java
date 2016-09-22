@@ -41,7 +41,7 @@ public class MainStep {
         mainPage.clickNavigation(navTitle);
     }
 
-    @Then("^op is in dp administration$")
+    @Then("^op is in main page$")
     public void dpAdm() throws InterruptedException {
         mainPage.dpAdm();
     }
