@@ -1,0 +1,3 @@
+[submodule "commons"]
+	path = commons
+	url = https://git.ninjavan.co/scm/qa/commons.git

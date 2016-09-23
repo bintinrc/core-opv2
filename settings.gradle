@@ -1,1 +1,3 @@
 rootProject.name = 'operator-v2'
+
+include 'commons'
