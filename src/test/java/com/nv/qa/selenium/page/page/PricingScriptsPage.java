@@ -148,13 +148,13 @@ public class PricingScriptsPage
                 CommonUtil.inputText(driver, "//input[@aria-label='Find Shipper']", shipperName);
                 CommonUtil.pause1s();
                 CommonUtil.clickBtn(driver, String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", shipperName));
-                CommonUtil.clickBtn(driver, "//div[@class='idle ng-binding ng-scope' and text()='Complete']");
+                CommonUtil.clickBtn(driver, "//div[contains(@class, 'idle ng-binding ng-scope') and text()='Complete']");
 
                 /**
                  * Check is Shipper already linked to another Pricing Scripts by find "Proceed" button.
                  * Click "Proceed" button if found to override the shipper's Pricing Scripts.
                  */
-                WebElement proceedBtn = CommonUtil.getElementByXpath(driver, "//div[@class='idle ng-binding ng-scope' and text()='Proceed']");
+                WebElement proceedBtn = CommonUtil.getElementByXpath(driver, "//button[div[contains(@class, 'idle ng-binding ng-scope') and text()='Proceed']]");
 
                 if(proceedBtn!=null)
                 {
