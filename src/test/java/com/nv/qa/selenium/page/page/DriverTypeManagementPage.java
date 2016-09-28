@@ -55,7 +55,7 @@ public class DriverTypeManagementPage {
     }
 
     public void downloadFile() throws InterruptedException {
-        CommonUtil.clickBtn(driver, "//button[@filename='driver-types.csv']");
+        CommonUtil.clickBtn(driver, "//div[@filename='driver-types.csv']/nv-api-text-button/button");
     }
 
     public void verifyFile() throws InterruptedException {

@@ -13,7 +13,10 @@ import org.junit.Assert;
 import org.openqa.selenium.*;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by sw on 8/19/16.
@@ -38,12 +41,13 @@ public class BlockedDatesStep {
 
     @When("^blocked dates add$")
     public void add() {
-        List<WebElement> els = driver.findElements(By.xpath("//div[@ng-repeat=\"day in week track by $index\" and @class=\"layout-padding ng-scope layout-row flex\"]/div[@ng-bind-html=\"dataService.getDayContent(day)\"]"));
-        if (!els.isEmpty()) {
-            WebElement el = els.get(0);
-            String tmp = el.getAttribute("id");
-            ScenarioHelper.getInstance().setTmpId(convertDate(tmp.substring(0,6) + "20" + tmp.substring(6)));
-            el.click();
+        List<WebElement> elm = driver.findElements(By.xpath("//div[@ng-repeat='day in week track by $index' and not(contains(@class, 'active')) and not(contains(@class, 'not-same-month'))]"));
+        if (!elm.isEmpty()) {
+            WebElement day = elm.get(0);
+            day.click();
+
+            WebElement yearElm = driver.findElement(By.xpath("//md-select[@ng-model='calendar.year']/md-select-value/span/div"));
+            ScenarioHelper.getInstance().setTmpId(yearElm.getText() + "-" + getMonth() + "-" + getDay(day));
             CommonUtil.clickBtn(driver, "//button[@type='submit'][@aria-label='Save Button']");
         }
     }
@@ -72,6 +76,7 @@ public class BlockedDatesStep {
                 WebElement inner = el.findElement(By.xpath("p/span[1]"));
                 if (inner.getText().contains(ScenarioHelper.getInstance().getTmpId())) {
                     el.findElement(By.xpath("button[@ng-click=\"removeDate(date, $event)\"]")).click();
+                    CommonUtil.clickBtn(driver, "//button[@type='submit'][@aria-label='Save Button']");
                     isRemoved = true;
                     break;
                 }
@@ -96,12 +101,23 @@ public class BlockedDatesStep {
         }
     }
 
-    private String convertDate(String date) {
+    private String getDay(WebElement day) {
+        WebElement dayTxt = day.findElement(By.xpath("div[1]"));
+        int dayNumber = Integer.parseInt(dayTxt.getText());
+        return dayNumber < 10 ? "0" + dayNumber : "" + dayNumber;
+    }
+
+    private String getMonth() {
+        String monthText = null;
         try {
-            return new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd-MM-yyyy").parse(date));
+            WebElement monthElm = driver.findElement(By.xpath("//md-select[@ng-model='calendar.month']/md-select-value/span/div"));
+            Date date = new SimpleDateFormat("MMMM", Locale.ENGLISH).parse(monthElm.getText());
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            int month = cal.get(Calendar.MONTH) + 1;
+            monthText = month < 10 ? "0" + month : "" + month;
         } catch (Exception e) {
-            e.printStackTrace();
         }
-        return null;
+        return monthText;
     }
 }

@@ -49,17 +49,15 @@ public class MainPage extends LoadableComponent<MainPage> {
     }
 
     public void clickNavigation(String navTitle) throws InterruptedException {
-        String container = map.get(navTitle);
-        String name = navTitle.toLowerCase().replaceAll(" ", "-");
+        CommonUtil.inputText(driver, "//input[@placeholder='Search Function or Id' and @ng-model='ctrl.search']", navTitle);
+        driver.findElement(By.xpath("//div[@class='search-container']/nv-section-item/button[div='" + navTitle + "']")).click();
+
+        String endURL = navTitle.toLowerCase().replaceAll(" ", "-");
         if (navTitle.trim().equalsIgnoreCase("hubs administration")) {
-            name = "hub";
-        } else if (navTitle.trim().equalsIgnoreCase("shipment management")) {
-            name = "shipment-management";
+            endURL = "hub";
         }
 
-        final String mainDashboard = name;
-
-        driver.findElement(By.xpath("//button[contains(@ng-click,\"ctrl.navigateTo('" + container + "'\")]")).click();
+        final String mainDashboard = endURL;
         (new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS)).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
                 return d.getCurrentUrl().toLowerCase().endsWith(mainDashboard);
@@ -71,16 +69,6 @@ public class MainPage extends LoadableComponent<MainPage> {
     }
 
     public void dpAdm() throws InterruptedException {
-        /*(new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS)).until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d) {
-                return d.getCurrentUrl().toLowerCase().endsWith(MAIN_DASHBOARD);
-            }
-        });
-
-        String url = driver.getCurrentUrl().toLowerCase();
-        Assert.assertTrue(url.endsWith(MAIN_DASHBOARD));
-        CommonUtil.pause10s();*/
-
         SeleniumHelper.waitUntilElementVisible(driver, driver.findElement(By.xpath("//md-content[(contains(@class,'nv-container-landing-page md-padding'))]/h2[@class='md-title']")));
         WebElement elm = driver.findElement(By.xpath("//md-content[(contains(@class,'nv-container-landing-page md-padding'))]/h2[@class='md-title']"));
         Assert.assertTrue(elm.getText().contains("Welcome to Operator V2"));

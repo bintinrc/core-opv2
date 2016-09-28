@@ -38,7 +38,7 @@ public class LogoutPage extends LoadableComponent<LogoutPage> {
         acts.moveToElement(elm).click().perform();
         CommonUtil.pause1s();
 
-        elm = driver.findElement(By.xpath("//button[@class='nv-button md-button md-ink-ripple'][@ng-click='logout()']"));
+        elm = driver.findElement(By.xpath("//button[@class='nv-button flat alternate md-button md-ink-ripple'][@ng-click='logout()']"));
         acts.moveToElement(elm).click().perform();
     }
 

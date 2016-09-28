@@ -101,9 +101,15 @@ public class DriverStrengthPage {
         CommonUtil.pause1s();
 
         String name = "Driver " + ScenarioHelper.getInstance().getTmpId();
-        WebElement el = driver.findElement(By.xpath("//div[@aria-hidden='false']/md-menu-content[@class='contact-info md-nvOrange-theme']/md-menu-item[@class='contact-info-details']/div[1]/div[2]"));
-        Assert.assertTrue(name.equalsIgnoreCase(el.getText()));
-
+        boolean isFound = false;
+        List<WebElement> elm = driver.findElements(By.xpath("//md-menu-item[@class='contact-info-details' and @role='menuitem']/div/div[@class='ng-binding']"));
+        for (WebElement e: elm) {
+            if (e.getText().equalsIgnoreCase(name)) {
+                isFound = true;
+                break;
+            }
+        }
+        Assert.assertTrue(isFound);
         CommonUtil.closeModal(driver);
     }
 

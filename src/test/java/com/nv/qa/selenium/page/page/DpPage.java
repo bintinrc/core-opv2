@@ -34,7 +34,7 @@ public class DpPage  {
     }
 
     public void downloadFile(String type) throws InterruptedException {
-        CommonUtil.clickBtn(driver, "//button[@filename='" + BTNNAME_FILENAME.get(type) + "']");
+        CommonUtil.clickBtn(driver, "//div[@filename='" + BTNNAME_FILENAME.get(type) + "']/nv-download-csv-button/div/nv-api-text-button/button");
     }
 
     public void verifyDownloadedFile(String type) {

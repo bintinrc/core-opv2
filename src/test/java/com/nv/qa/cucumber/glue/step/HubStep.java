@@ -35,7 +35,7 @@ public class HubStep {
 
     @When("^hubs administration download button is clicked$")
     public void download() {
-        CommonUtil.clickBtn(driver, "//button[@filename='hubs.csv']");
+        CommonUtil.clickBtn(driver, "//div[@filename='hubs.csv']/nv-api-text-button/button");
     }
 
     @Then("^hubs administration file should exist$")
