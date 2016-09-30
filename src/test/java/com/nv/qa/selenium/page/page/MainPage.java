@@ -48,9 +48,17 @@ public class MainPage extends LoadableComponent<MainPage> {
     protected void isLoaded() throws Error {
     }
 
-    public void clickNavigation(String navTitle) throws InterruptedException {
-        CommonUtil.inputText(driver, "//input[@placeholder='Search Function or Id' and @ng-model='ctrl.search']", navTitle);
-        driver.findElement(By.xpath("//div[@class='search-container']/nv-section-item/button[div='" + navTitle + "']")).click();
+    public void clickNavigation(String parentTitle, String navTitle) throws InterruptedException {
+//        CommonUtil.inputText(driver, "//input[@placeholder='Search Function or Id' and @ng-model='ctrl.search']", navTitle);
+//        driver.findElement(By.xpath("//div[@class='search-container']/nv-section-item/button[div='" + navTitle + "']")).click();
+//        driver.findElement(By.xpath("//nv-section-item/button[div='" + navTitle + "']")).click();
+
+        WebElement navElm = driver.findElement(By.xpath("//nv-section-item/button[div='" + navTitle + "']"));
+        if (!navElm.isDisplayed()) {
+            driver.findElement(By.xpath("//nv-section-header/button[span='" + parentTitle + "']")).click();
+        }
+
+        navElm.click();
 
         String endURL = navTitle.toLowerCase().replaceAll(" ", "-");
         if (navTitle.trim().equalsIgnoreCase("hubs administration")) {

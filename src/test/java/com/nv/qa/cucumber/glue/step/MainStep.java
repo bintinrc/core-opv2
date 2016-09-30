@@ -36,9 +36,9 @@ public class MainStep {
         }
     }
 
-    @Given("^op click navigation ([^\"]*)$")
-    public void clickNavigation(String navTitle) throws InterruptedException {
-        mainPage.clickNavigation(navTitle);
+    @Given("^op click navigation ([^\"]*) in ([^\"]*)$")
+    public void clickNavigation(String navTitle, String parentTitle) throws InterruptedException {
+        mainPage.clickNavigation(parentTitle, navTitle);
     }
 
     @Then("^op is in main page$")

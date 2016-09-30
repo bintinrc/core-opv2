@@ -43,7 +43,7 @@ public class PricingScriptsPage
             updateAceEditorValue(script);
         }
 
-        CommonUtil.clickBtn(driver, "//nv-api-text-button[@name='Save']");
+        CommonUtil.clickBtn(driver, "//nv-api-text-button[@name='commons.save']");
     }
 
     public String createDefaultScriptIfNotExists(String scriptName, String scriptDescription, String script)
@@ -102,7 +102,7 @@ public class PricingScriptsPage
             }
         }
 
-        CommonUtil.clickBtn(driver, "//nv-api-text-button[@name='Update']");
+        CommonUtil.clickBtn(driver, "//nv-api-text-button[@name='commons.update']");
     }
 
     public void searchAndDeleteScript(int rowNumber, String scriptName)

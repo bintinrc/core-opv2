@@ -9,7 +9,7 @@ Feature: shipment management
 
   # create shipment
   Scenario: Create Shipment (uid:7a3373f0-67f1-4f1a-b6b2-6447a2621305)
-    Given op click navigation Shipment Management
+    Given op click navigation Shipment Management in Inter-Hub
     When create shipment button is clicked
     When create Shipment with Start Hub 30JKB, End hub DOJO and comment Auto Comment
     Then shipment created
