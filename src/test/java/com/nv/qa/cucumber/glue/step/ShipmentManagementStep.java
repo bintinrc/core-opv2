@@ -11,10 +11,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 
 import java.util.List;
 
@@ -174,9 +171,11 @@ public class ShipmentManagementStep {
     public void fillSearchFilter(String filter, String value) throws Throwable {
         CommonUtil.clickBtn(driver, shipmentManagementPage.grabXPathFilter(filter));
         CommonUtil.pause100ms();
-        CommonUtil.clickBtn(driver, shipmentManagementPage.grabXPathFilterValue(value));
+        CommonUtil.inputText(driver, shipmentManagementPage.grabXPathFilterTF(filter), value);
         CommonUtil.pause100ms();
-        CommonUtil.clickBtn(driver, shipmentManagementPage.grabXPathFilter(filter));
+        WebElement test = driver.findElement(By.xpath("//md-virtual-repeat-container[@class='md-autocomplete-suggestions-container md-whiteframe-z1 md-virtual-repeat-container md-orient-vertical']/div/div/ul/li"));
+        System.out.println(test.getText());
+        CommonUtil.clickBtn(driver, shipmentManagementPage.grabXPathFilterDropdown(value));
 
         CommonUtil.pause1s();
 
