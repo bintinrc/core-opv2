@@ -26,3 +26,6 @@ Feature: shipment management
     When choose above shipment
     When scan order to shipment
     Then order in shipment
+
+  @closeBrowser
+  Scenario: close browser
