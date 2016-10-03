@@ -56,7 +56,7 @@ public class DriverStrengthPage {
             filterKey = "Ops";
         }
 
-        inputListBox(driver, placeHolder, filterKey);
+        CommonUtil.inputListBox(driver, placeHolder, filterKey);
 //        List<WebElement> listDriver = driver.findElements(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData'][@class='ng-scope']"));
         List<WebElement> listDriver = driver.findElements(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData']"));
         CommonUtil.pause100ms();
@@ -199,14 +199,14 @@ public class DriverStrengthPage {
         return el.findElement(By.xpath("//td[@class='coming column-locked-right']/nv-toggle-button")).getAttribute("md-theme");
     }
 
-    private void inputListBox(WebDriver driver, String placeHolder, String searchValue) throws InterruptedException {
-        WebElement el = driver.findElement(By.xpath("//input[@placeholder='" + placeHolder + "']"));
-        el.clear();
-        el.sendKeys(searchValue);
-        CommonUtil.pause1s();
-        el.sendKeys(Keys.RETURN);
-        CommonUtil.pause100ms();
-        CommonUtil.closeModal(driver);
-    }
+//    private void inputListBox(WebDriver driver, String placeHolder, String searchValue) throws InterruptedException {
+//        WebElement el = driver.findElement(By.xpath("//input[@placeholder='" + placeHolder + "']"));
+//        el.clear();
+//        el.sendKeys(searchValue);
+//        CommonUtil.pause1s();
+//        el.sendKeys(Keys.RETURN);
+//        CommonUtil.pause100ms();
+//        CommonUtil.closeModal(driver);
+//    }
 
 }

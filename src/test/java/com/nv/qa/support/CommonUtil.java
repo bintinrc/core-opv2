@@ -138,4 +138,14 @@ public class CommonUtil {
         mdSelectOption.click();
         pause(500);
     }
+
+    public static void inputListBox(WebDriver driver, String placeHolder, String searchValue) throws InterruptedException {
+        WebElement el = driver.findElement(By.xpath("//input[@placeholder='" + placeHolder + "']"));
+        el.clear();
+        el.sendKeys(searchValue);
+        CommonUtil.pause1s();
+        el.sendKeys(Keys.RETURN);
+        CommonUtil.pause100ms();
+        CommonUtil.closeModal(driver);
+    }
 }
