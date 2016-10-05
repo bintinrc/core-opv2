@@ -93,8 +93,12 @@ public class ShipmentManagementPage {
         return "//nv-filter-box[div[div[text()='" + filterLabel + "']]]/nv-autocomplete/div";
     }
 
-    public String grabXPathFilterValue(String value) {
-        return "//md-virtual-repeat-container[@class='md-autocomplete-suggestions-container md-whiteframe-z1 md-virtual-repeat-container md-orient-vertical']/div/div/ul/li[md-autocomplete-parent-scope[span[text()='" + value + "']]]";
+    public String grabXPathFilterTF(String filterLabel) {
+        return grabXPathFilter(filterLabel) + "/label/md-autocomplete/md-autocomplete-wrap/input";
+    }
+
+    public String grabXPathFilterDropdown(String value) {
+        return "//md-virtual-repeat-container[@class='md-autocomplete-suggestions-container md-whiteframe-z1 md-virtual-repeat-container md-orient-vertical']/div/div/ul/li";
     }
 
     public class Shipment {
