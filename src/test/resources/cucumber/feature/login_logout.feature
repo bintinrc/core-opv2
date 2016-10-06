@@ -8,7 +8,6 @@ Feature: op login and logout
     Then op is in main page
 
   Scenario: op logout from operator portal (uid:b0997f2e-1db7-4088-a3b9-30c9e0fa1d0f)
-#    Given op click navigation DP Administration
     When logout button is clicked
     Then op back in the login page
 

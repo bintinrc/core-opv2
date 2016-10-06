@@ -62,9 +62,11 @@ public class DriverStrengthPage {
     }
 
     public void findZoneAndType() {
-        CommonUtil.pause100ms();
-        driverType = driver.findElement(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData'][1]/td[@class='driver-type']")).getText();
-        zone = driver.findElement(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData'][1]/td[@class='zone']/div")).getText();
+        try {
+            CommonUtil.pause100ms();
+            driverType = driver.findElement(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData'][1]/td[@class='driver-type']")).getText();
+            zone = driver.findElement(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData'][1]/td[@class='zone']/div")).getText();
+        } catch (Exception e) {}
     }
 
     public void searchDriver() throws InterruptedException {
