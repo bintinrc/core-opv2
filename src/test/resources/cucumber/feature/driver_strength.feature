@@ -43,12 +43,14 @@ Feature: driver strength
 
   # edit existing
   Scenario: op edit new driver (uid:204f21ef-8b0c-4b74-a6e0-c191199d3f5a)
+    Given op click navigation Blocked Dates in Shipper Support
     Given op click navigation Driver Strength in Fleet
     When in driver strength searching new created driver
     When in driver strength edit new driver button is clicked
 
   # delete existing
   Scenario: op delete new driver (uid:419e1f4d-a226-492f-a655-eb92d48be704)
+    Given op click navigation Blocked Dates in Shipper Support
     Given op click navigation Driver Strength in Fleet
     When in driver strength searching new created driver
     When in driver strength delete new driver button is clicked
