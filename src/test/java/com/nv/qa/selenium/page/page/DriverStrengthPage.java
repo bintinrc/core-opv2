@@ -6,17 +6,12 @@ import com.nv.qa.support.DateUtil;
 import com.nv.qa.support.ScenarioHelper;
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.LoadableComponent;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by sw on 7/12/16.
@@ -25,6 +20,8 @@ public class DriverStrengthPage {
 
     private final WebDriver driver;
     private final static String FILENAME = "drivers.csv";
+    private String driverType;
+    private String zone;
 
     public DriverStrengthPage(WebDriver driver) {
         this.driver = driver;
@@ -50,10 +47,10 @@ public class DriverStrengthPage {
 
         if (type.equals("zone")) {
             placeHolder = "Search or Select Zone(s)";
-            filterKey = "z-out of zone";
+            filterKey = zone != null ? zone : "z-out of zone";
         } else if (type.equals("driver-type")) {
             placeHolder = "Search or Select Driver Type(s)";
-            filterKey = "Ops";
+            filterKey = driverType != null ? driverType : "Ops";
         }
 
         CommonUtil.inputListBox(driver, placeHolder, filterKey);
@@ -62,6 +59,12 @@ public class DriverStrengthPage {
         CommonUtil.pause100ms();
 
         Assert.assertTrue(listDriver.size() > 0);
+    }
+
+    public void findZoneAndType() {
+        CommonUtil.pause100ms();
+        driverType = driver.findElement(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData'][1]/td[@class='driver-type']")).getText();
+        zone = driver.findElement(By.xpath("//tr[@md-virtual-repeat='driver in ctrl.tableData'][1]/td[@class='zone']/div")).getText();
     }
 
     public void searchDriver() throws InterruptedException {
@@ -103,7 +106,7 @@ public class DriverStrengthPage {
         String name = "Driver " + ScenarioHelper.getInstance().getTmpId();
         boolean isFound = false;
         List<WebElement> elm = driver.findElements(By.xpath("//md-menu-item[@class='contact-info-details' and @role='menuitem']/div/div[@class='ng-binding']"));
-        for (WebElement e: elm) {
+        for (WebElement e : elm) {
             if (e.getText().equalsIgnoreCase(name)) {
                 isFound = true;
                 break;

@@ -50,6 +50,11 @@ public class DriverStrengthStep {
         dsPage.filteredBy(type);
     }
 
+    @When("^in driver find zone and type of the driver$")
+    public void findZoneAndType() {
+        dsPage.findZoneAndType();
+    }
+
     @When("^in driver strength searching driver$")
     public void searchDriver() throws InterruptedException {
         dsPage.searchDriver();

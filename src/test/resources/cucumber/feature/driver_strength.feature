@@ -16,10 +16,14 @@ Feature: driver strength
 
   Scenario: op filter driver strength by zones (uid:70921910-cb0a-4283-93ad-34431fd86b98)
     Given op click navigation Driver Strength in Fleet
+    When in driver strength searching driver
+    When in driver find zone and type of the driver
     When in driver strength driver strength is filtered by zone
 
   Scenario: op filter driver strength by driver-type (uid:3f54984e-aaa1-494c-a27b-68af2d809071)
     Given op click navigation Driver Strength in Fleet
+    When in driver strength searching driver
+    When in driver find zone and type of the driver
     When in driver strength driver strength is filtered by driver-type
 
   Scenario: op search driver using searching box (uid:9e1d4874-d927-438a-abdf-8cde0308f35b)

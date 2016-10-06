@@ -90,7 +90,7 @@ public class CommonUtil {
 
     public static void closeModal(WebDriver driver) {
         Actions builder = new Actions(driver);
-        builder.moveToElement(driver.findElement(By.xpath("//div[(contains(@class, 'nv-text-ellipsis nv-h4 ng-binding'))]")), 5, 5).click().build().perform();
+        builder.moveToElement(driver.findElement(By.xpath("//div[(contains(@class, 'nv-text-ellipsis nv-h4'))]")), 5, 5).click().build().perform();
         CommonUtil.pause100ms();
     }
 
