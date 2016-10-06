@@ -1,13 +1,13 @@
 package com.nv.qa.cucumber.glue.step;
 
 import com.nv.qa.selenium.page.page.MainPage;
+import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.SeleniumSharedDriver;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -39,6 +39,7 @@ public class MainStep {
     @Given("^op click navigation ([^\"]*) in ([^\"]*)$")
     public void clickNavigation(String navTitle, String parentTitle) throws InterruptedException {
         mainPage.clickNavigation(parentTitle, navTitle);
+        CommonUtil.pause1s();
     }
 
     @Then("^op is in main page$")

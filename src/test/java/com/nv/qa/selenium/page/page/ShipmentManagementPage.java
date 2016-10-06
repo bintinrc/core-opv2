@@ -1,6 +1,7 @@
 package com.nv.qa.selenium.page.page;
 
 import com.nv.qa.support.CommonUtil;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -32,7 +33,9 @@ public class ShipmentManagementPage {
     public static final String XPATH_DELETE_CONFIRMATION_BUTTON = "//button[span[text()='Delete']]";
     public static final String XPATH_CANCEL_SHIPMENT_BUTTON = "//button[span[text()='Cancel Shipment']]";
     public static final String XPATH_DISCARD_CHANGE_BUTTON = "//button[h5[text()='Discard Changes']]";
-
+    public static final String XPATH_SHIPMENT_SCAN = "//div[contains(@class,'table-shipment-scan-container')]/table/tbody/tr";
+    public static final String XPATH_CLOSE_SCAN_MODAL_BUTTON = "//button[span[text()=' Close ']]";
+    public static final String XPATH_CLEAR_FILTER_BUTTON = "//button[span[text()='Clear All Filters']]";
 
     public List<Shipment> getShipmentsFromTable() {
         List<Shipment> shipmentsResult = new ArrayList<>();
@@ -99,6 +102,12 @@ public class ShipmentManagementPage {
 
     public String grabXPathFilterDropdown(String value) {
         return "//md-virtual-repeat-container[@class='md-autocomplete-suggestions-container md-whiteframe-z1 md-virtual-repeat-container md-orient-vertical']/div/div/ul/li";
+    }
+
+    public void shipmentScanExist(String source, String hub) {
+        String xpath = XPATH_SHIPMENT_SCAN + "[td[text()='" + source + "']]" + "[td[text()='" + hub + "']]";
+        WebElement scan = driver.findElement(By.xpath(xpath));
+        Assert.assertEquals("shipment(" + source + ") not exist", "tr", scan.getTagName());
     }
 
     public class Shipment {

@@ -115,7 +115,7 @@ public class ShipmentScanningStep {
         scanningPage.selectHub(hub);
     }
 
-    @Then("^get first shipment$")
+    @Then("^get first shipment for shipment scanning$")
     public void get_first_shipment() throws Throwable {
         ShipmentManagementPage.Shipment shipment = shipmentManagementPage.getShipmentFromTable(0);
         shipmentId = shipment.getId();

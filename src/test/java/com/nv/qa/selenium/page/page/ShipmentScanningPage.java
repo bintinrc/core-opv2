@@ -27,7 +27,7 @@ public class ShipmentScanningPage {
     }
 
     public void selectHub(String hubName) {
-        CommonUtil.clickBtn(driver, ShipmentScanningPage.XPATH_HUB_DROPDOWN);
+        CommonUtil.clickBtn(driver, XPATH_HUB_DROPDOWN);
 
         CommonUtil.pause10ms();
 
@@ -35,7 +35,7 @@ public class ShipmentScanningPage {
     }
 
     public void selectShipment(String shipmentId) {
-        CommonUtil.clickBtn(driver, ShipmentScanningPage.XPATH_SHIPMENT_DROPDOWN);
+        CommonUtil.clickBtn(driver, XPATH_SHIPMENT_DROPDOWN);
 
         CommonUtil.pause10ms();
 

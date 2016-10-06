@@ -54,9 +54,9 @@ public class ShipmentManagementStep {
     public void createShipment(String startHub, String endHub, String comment) throws Throwable {
 
         shipmentManagementPage.selectStartHub(startHub);
-        CommonUtil.pause10ms();
+        CommonUtil.pause1s();
         shipmentManagementPage.selectEndHub(endHub);
-        CommonUtil.pause10ms();
+        CommonUtil.pause1s();
         CommonUtil.inputText(driver, XPATH_COMMENT_TEXT_AREA, comment);
 
         CommonUtil.clickBtn(driver, XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
@@ -84,7 +84,7 @@ public class ShipmentManagementStep {
 
     @Then("^shipment created$")
     public void shipmentCreated() throws Throwable {
-        Assert.assertNotNull("shipment table loaded", driver.findElement(By.xpath("//div[@ng-if=\"nvLoad.status === 'loaded'\"][@aria-hidden=\"false\"]")));
+        Assert.assertNotNull("toast info shown", driver.findElement(By.xpath("//div[@id='toast-container']/div[@class='toast toast-info']")));
         CommonUtil.clickBtn(driver, XPATH_EDIT_SEARCH_FILTER_BUTTON);
     }
 
@@ -170,14 +170,41 @@ public class ShipmentManagementStep {
     @When("^filter ([^\"]*) is ([^\"]*)$")
     public void fillSearchFilter(String filter, String value) throws Throwable {
         CommonUtil.clickBtn(driver, shipmentManagementPage.grabXPathFilter(filter));
-        CommonUtil.pause100ms();
+        CommonUtil.pause1s();
         CommonUtil.inputText(driver, shipmentManagementPage.grabXPathFilterTF(filter), value);
-        CommonUtil.pause100ms();
-        WebElement test = driver.findElement(By.xpath("//md-virtual-repeat-container[@class='md-autocomplete-suggestions-container md-whiteframe-z1 md-virtual-repeat-container md-orient-vertical']/div/div/ul/li"));
-        System.out.println(test.getText());
+        CommonUtil.pause1s();
         CommonUtil.clickBtn(driver, shipmentManagementPage.grabXPathFilterDropdown(value));
 
         CommonUtil.pause1s();
 
+    }
+
+    @Given("^op click edit filter$")
+    public void op_click_edit_filter() throws Throwable {
+        CommonUtil.clickBtn(driver, XPATH_EDIT_SEARCH_FILTER_BUTTON);
+        CommonUtil.pause1s();
+    }
+
+    @Then("^shipment scan with source ([^\"]*) in hub ([^\"]*)$")
+    public void shipment_scan_with_source_VAN_INBOUND_in_hub_JKB(String source, String hub) throws Throwable {
+        try {
+            shipmentManagementPage.shipmentScanExist(source, hub);
+        } finally {
+            close_scan_modal();
+        }
+    }
+
+    public void close_scan_modal() throws Throwable {
+        CommonUtil.clickBtn(driver, ShipmentManagementPage.XPATH_CLOSE_SCAN_MODAL_BUTTON);
+        CommonUtil.pause1s();
+    }
+
+    @When("^clear filter$")
+    public void clear_filter() throws Throwable {
+        try {
+            CommonUtil.clickBtn(driver, ShipmentManagementPage.XPATH_CLEAR_FILTER_BUTTON);
+        } catch (Exception ignored) {
+        }
+        CommonUtil.pause(2000);
     }
 }

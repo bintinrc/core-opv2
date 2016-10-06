@@ -1,4 +1,4 @@
-@selenium @shipment @dev
+@selenium @shipment
 Feature: shipment management
 
   Scenario: op login into operator portal
@@ -19,7 +19,7 @@ Feature: shipment management
     Then shipment created
     When filter Pending Hub is 30JKB
     When op click Load All Shipment
-    Then get first shipment
+    Then get first shipment for shipment scanning
 #    scan order to shipment
     Given op click navigation Shipment Scanning in Inter-Hub
     When choose hub 30JKB
