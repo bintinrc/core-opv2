@@ -21,7 +21,7 @@ public class ShipmentManagementPage {
     public static final String XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON = "//nv-table-button[@id='createButton']/button";
 //    public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[span[text()='Load All Shipments']]";
     public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[contains(@aria-label, 'Load All Shipment')]";
-    public static final String XPATH_SAVE_CHANGES_BUTTON = "//button[span[text()='Save Changes']]";
+    public static final String XPATH_SAVE_CHANGES_BUTTON = "//button[div[text()='Save Changes']]";
     public static final String XPATH_START_HUB_DROPDOWN = "//div[p[text()='Start Hub']]/md-select";
     public static final String XPATH_END_HUB_DROPDOWN = "//div[p[text()='End Hub']]/md-select";
     public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, \"md-active\")]/md-select-menu/md-content/md-option";
@@ -31,7 +31,7 @@ public class ShipmentManagementPage {
     public static final String XPATH_EDIT_SEARCH_FILTER_BUTTON = "//button[contains(@aria-label, 'Edit Filters and Sort')]";
     public static final String XPATH_SORT_DIV = "//div[div[span[text()='Sort by']]]";
     public static final String XPATH_DELETE_CONFIRMATION_BUTTON = "//button[span[text()='Delete']]";
-    public static final String XPATH_CANCEL_SHIPMENT_BUTTON = "//button[span[text()='Cancel Shipment']]";
+    public static final String XPATH_CANCEL_SHIPMENT_BUTTON = "//button[div[text()='Cancel Shipment']]";
     public static final String XPATH_DISCARD_CHANGE_BUTTON = "//button[h5[text()='Discard Changes']]";
     public static final String XPATH_SHIPMENT_SCAN = "//div[contains(@class,'table-shipment-scan-container')]/table/tbody/tr";
     public static final String XPATH_CLOSE_SCAN_MODAL_BUTTON = "//button[span[text()=' Close ']]";
