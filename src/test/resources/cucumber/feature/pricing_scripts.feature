@@ -25,7 +25,7 @@ Feature: Pricing Scripts
       | timeslotType | DAY_NIGHT |
       | size         | L         |
       | weight       | 2.3       |
-    Then op will find the cost equal to "134.9" and the comments equal to "OK"
+    Then op will find the cost equal to "S$134.9" and the comments equal to "OK"
 
   Scenario: Operator linking a Pricing Scripts to a Shipper. (uid:0800ac82-a359-4d5f-a666-12b6d3877540)
     Given op click navigation Pricing Scripts in Shipper

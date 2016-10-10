@@ -118,7 +118,7 @@ public class PricingScriptsStep
     @Then("^op will find the cost equal to \\\"([^\\\"]*)\\\" and the comments equal to \\\"([^\\\"]*)\\\"$")
     public void verifyCostAndComments(String expectedCost, String expectedComments)
     {
-        WebElement costEl = CommonUtil.getElementByXpath(driver, "//div[text()='Unit Cost']/following-sibling::div[1]");
+        WebElement costEl = CommonUtil.getElementByXpath(driver, "//div[text()='Fee Detail']/following-sibling::div[2]");
         String actualCost = costEl.getText();
         Assert.assertEquals(expectedCost, actualCost);
 
