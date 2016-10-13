@@ -101,11 +101,11 @@ public class ShipmentScanningStep {
             Assert.assertNotNull(x.getId(), "Asyng id");
             Assert.assertEquals(x.getStatus(), STATUS_SUCCESS, "Status");
             Assert.assertNotNull(x.getMessage(), "Message");
-            Assert.assertEquals(x.getOrder_ref_no(), createOrderRequests.get(idx++).getOrder_ref_no(), "Order ref No");
-            Assert.assertNotNull(x.getTracking_id(), "Tracking ID");
-            Assert.assertEquals(x.getTracking_id().length(), TRACKING_ID_LENGTH, "Tracking id length");
+            Assert.assertEquals(x.getOrderRefNo(), createOrderRequests.get(idx++).getOrderRefNo(), "Order ref No");
+            Assert.assertNotNull(x.getTrackingId(), "Tracking ID");
+            Assert.assertEquals(x.getTrackingId().length(), TRACKING_ID_LENGTH, "Tracking id length");
 
-            trackingId = x.getTracking_id();
+            trackingId = x.getTrackingId();
             System.out.println(trackingId);
         }
     }

@@ -137,10 +137,10 @@ public class OrderCreateHelper {
     }
 
     public static void populateRequest(com.nv.qa.model.order_creation.v3.CreateOrderRequest req) {
-        req.setPickup_date(getDateString(req.getPickup_date()));
-        req.setDelivery_date(getDateString(req.getDelivery_date()));
-        req.setOrder_ref_no(getShipperRef(req.getOrder_ref_no()));
-        req.setRequested_tracking_id(getRequestedTrackingId(req.getRequested_tracking_id()));
+        req.setPickupDate(getDateString(req.getPickupDate()));
+        req.setDeliveryDate(getDateString(req.getDeliveryDate()));
+        req.setOrderRefNo(getShipperRef(req.getOrderRefNo()));
+        req.setRequestedTrackingId(getRequestedTrackingId(req.getRequestedTrackingId()));
     }
 
     //-- Client stuff
