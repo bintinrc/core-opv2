@@ -5,12 +5,12 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -24,8 +24,6 @@ public class SeleniumHelper {
 
     public static WebDriver getWebDriver() {
         switch (APIEndpoint.SELENIUM_DRIVER.toLowerCase()) {
-            case "htmlunit":
-                return getWebDriverHtmlUnit();
             case "chrome":
                 return getWebDriverChrome();
             case "firefox":
@@ -59,18 +57,11 @@ public class SeleniumHelper {
 
         ChromeOptions options = new ChromeOptions();
         options.setExperimentalOption("prefs", chromePrefs);
+        if(APIEndpoint.SELENIUM_CHROME_BINARY_PATH != null && !APIEndpoint.SELENIUM_CHROME_BINARY_PATH.isEmpty()) {
+            options.setBinary(APIEndpoint.SELENIUM_CHROME_BINARY_PATH);
+        }
 
         WebDriver driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        driver.manage().timeouts().pageLoadTimeout(APIEndpoint.SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        driver.manage().timeouts().setScriptTimeout(APIEndpoint.SELENIUM_SCRIPT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        driver.manage().window().maximize();
-        return driver;
-    }
-
-
-    public static WebDriver getWebDriverHtmlUnit() {
-        WebDriver driver = new HtmlUnitDriver(true);
         driver.manage().timeouts().implicitlyWait(APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(APIEndpoint.SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         driver.manage().timeouts().setScriptTimeout(APIEndpoint.SELENIUM_SCRIPT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
@@ -239,4 +230,5 @@ public class SeleniumHelper {
         action.pause(APIEndpoint.SELENIUM_INTERACTION_WAIT_MILLISECONDS);
         action.perform();
     }
+
 }

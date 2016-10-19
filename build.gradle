@@ -26,9 +26,8 @@ dependencies {
     testCompile 'info.cukes:cucumber-guice:1.2.4'
     testCompile 'info.cukes:cucumber-testng:1.2.4'
     testCompile 'com.google.inject:guice:4.0'
-    testCompile 'org.seleniumhq.selenium:selenium-java:2.52.0'
-    testCompile 'org.seleniumhq.selenium:selenium-htmlunit-driver:2.52.0'
-    testCompile 'org.seleniumhq.selenium:selenium-firefox-driver:2.52.0'
+    testCompile 'org.seleniumhq.selenium:selenium-java:3.0.0'
+    testCompile 'org.seleniumhq.selenium:selenium-firefox-driver:3.0.0'
 
     compile 'com.jayway.restassured:rest-assured:2.8.0'
     compile 'com.jayway.restassured:json-path:2.8.0'

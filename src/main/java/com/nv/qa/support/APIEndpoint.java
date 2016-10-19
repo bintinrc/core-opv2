@@ -19,6 +19,7 @@ public final class APIEndpoint
     public static final int STEP_DELAY_MILLISECONDS;
     public static final String SELENIUM_DRIVER;
     public static final String SELENIUM_CHROME_DRIVER;
+    public static final String SELENIUM_CHROME_BINARY_PATH;
     public static final int SELENIUM_INTERACTION_WAIT_MILLISECONDS;
     public static final int SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS;
     public static final int SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS;
@@ -63,6 +64,7 @@ public final class APIEndpoint
 
                 SELENIUM_DRIVER = props.getProperty("selenium-driver");
                 SELENIUM_CHROME_DRIVER = props.getProperty("selenium-chrome-driver-location");
+                SELENIUM_CHROME_BINARY_PATH = props.getProperty("selenium-chrome_binary-path");
                 SELENIUM_INTERACTION_WAIT_MILLISECONDS = getPropertyValueAsInteger(props, "selenium-interaction-wait-seconds") * 1000;
                 SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS = getPropertyValueAsInteger(props, "selenium-implicit-wait-timeout-seconds");
                 SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS = getPropertyValueAsInteger(props, "selenium-page-load-timeout-seconds");

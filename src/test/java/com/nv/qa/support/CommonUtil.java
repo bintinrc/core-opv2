@@ -45,6 +45,10 @@ public class CommonUtil {
         pause(10000);
     }
 
+    public static void pause3s() {
+        pause(3000);
+    }
+
     public static void pause1s() {
         pause(1000);
     }
