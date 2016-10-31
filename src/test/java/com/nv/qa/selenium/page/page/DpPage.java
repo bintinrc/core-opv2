@@ -11,8 +11,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,12 +36,13 @@ public class DpPage  {
     }
 
     public void verifyDownloadedFile(String type) {
-        File f = new File(APIEndpoint.SELENIUM_WRITE_PATH + BTNNAME_FILENAME.get(type));
+        String pathname = APIEndpoint.SELENIUM_WRITE_PATH + BTNNAME_FILENAME.get(type);
+        File f = new File(pathname);
         boolean isFileExisted = f.exists();
         if (isFileExisted) {
             f.delete();
         }
-        Assert.assertTrue(isFileExisted);
+        Assert.assertTrue(pathname + "not exist",isFileExisted);
     }
 
 
@@ -184,6 +183,7 @@ public class DpPage  {
 
         CommonUtil.inputText(driver, textAreaXpath, editValue);
         CommonUtil.clickBtn(driver, "//button[@type='submit'][@aria-label='Save Button']");
+        CommonUtil.pause3s();
     }
 
     public void clickViewBtn(String type) throws InterruptedException {

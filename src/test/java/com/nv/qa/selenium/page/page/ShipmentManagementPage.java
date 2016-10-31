@@ -22,6 +22,7 @@ public class ShipmentManagementPage {
 //    public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[span[text()='Load All Shipments']]";
     public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[contains(@aria-label, 'Load All Shipment')]";
     public static final String XPATH_SAVE_CHANGES_BUTTON = "//button[div[text()='Save Changes']]";
+    public static final String XPATH_LINEHAUL_DROPDOWN = "//div[p[text()='Select Linehaul']]/md-select";
     public static final String XPATH_START_HUB_DROPDOWN = "//div[p[text()='Start Hub']]/md-select";
     public static final String XPATH_END_HUB_DROPDOWN = "//div[p[text()='End Hub']]/md-select";
     public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, \"md-active\")]/md-select-menu/md-content/md-option";
@@ -57,12 +58,23 @@ public class ShipmentManagementPage {
         PageFactory.initElements(driver, this);
     }
 
+    private WebElement grabLineHaul() {
+        return driver.findElement(By.xpath(XPATH_LINEHAUL_DROPDOWN));
+    }
+
     private WebElement grabStartHubDiv() {
         return driver.findElement(By.xpath(XPATH_START_HUB_DROPDOWN));
     }
 
     private WebElement grabEndHubDiv() {
         return driver.findElement(By.xpath(XPATH_END_HUB_DROPDOWN));
+    }
+
+    public void selectFirstLineHaul() {
+        grabLineHaul().click();
+        CommonUtil.pause10ms();
+
+        CommonUtil.clickBtn(driver,XPATH_HUB_ACTIVE_DROPDOWN + "[@ng-repeat='l in ctrl.linehauls']");
     }
 
     public void selectStartHub(String hubName) {

@@ -53,6 +53,8 @@ public class ShipmentManagementStep {
     @When("^create Shipment with Start Hub ([^\"]*), End hub ([^\"]*) and comment ([^\"]*)$")
     public void createShipment(String startHub, String endHub, String comment) throws Throwable {
 
+        shipmentManagementPage.selectFirstLineHaul();
+        CommonUtil.pause1s();
         shipmentManagementPage.selectStartHub(startHub);
         CommonUtil.pause1s();
         shipmentManagementPage.selectEndHub(endHub);
@@ -104,6 +106,7 @@ public class ShipmentManagementStep {
         end = shipment.getEndHub();
 
         shipment.clickShipmentActionButton(actionButton);
+        CommonUtil.pause(3000);
 
     }
 
@@ -140,16 +143,18 @@ public class ShipmentManagementStep {
 
             if (spId.equals(id)) {
                 actualStat = shipment.getStatus();
+                break;
             }
         }
 
-        Assert.assertEquals("Shipment status", status, actualStat);
+        Assert.assertEquals("Shipment " + id + " status", status, actualStat);
         CommonUtil.clickBtn(driver, XPATH_EDIT_SEARCH_FILTER_BUTTON);
     }
 
     @When("^cancel shipment button clicked$")
     public void clickCancelShipmentButton() throws Throwable {
         CommonUtil.clickBtn(driver, XPATH_CANCEL_SHIPMENT_BUTTON);
+        CommonUtil.pause(5000);
     }
 
     @Then("^shipment deleted$")
