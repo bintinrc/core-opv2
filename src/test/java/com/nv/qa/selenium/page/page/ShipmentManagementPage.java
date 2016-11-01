@@ -105,7 +105,7 @@ public class ShipmentManagementPage {
     }
 
     public String grabXPathFilter(String filterLabel) {
-        return "//nv-filter-box[div[div[text()='" + filterLabel + "']]]/nv-autocomplete/div";
+        return "//nv-filter-box/div[div[p[text()='" + filterLabel + "']]]/div/nv-autocomplete/div";
     }
 
     public String grabXPathFilterTF(String filterLabel) {
