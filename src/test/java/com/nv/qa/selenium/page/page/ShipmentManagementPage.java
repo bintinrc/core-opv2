@@ -35,7 +35,7 @@ public class ShipmentManagementPage {
     public static final String XPATH_CANCEL_SHIPMENT_BUTTON = "//button[div[text()='Cancel Shipment']]";
     public static final String XPATH_DISCARD_CHANGE_BUTTON = "//button[h5[text()='Discard Changes']]";
     public static final String XPATH_SHIPMENT_SCAN = "//div[contains(@class,'table-shipment-scan-container')]/table/tbody/tr";
-    public static final String XPATH_CLOSE_SCAN_MODAL_BUTTON = "//button[span[text()=' Close ']]";
+    public static final String XPATH_CLOSE_SCAN_MODAL_BUTTON = "//button[@aria-label='Cancel']";
     public static final String XPATH_CLEAR_FILTER_BUTTON = "//button[span[text()='Clear All Filters']]";
 
     public List<Shipment> getShipmentsFromTable() {

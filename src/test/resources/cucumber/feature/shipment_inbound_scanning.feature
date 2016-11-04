@@ -1,5 +1,5 @@
-@selenium @shipment @dev
-Feature: shipment management
+@selenium @shipment
+Feature: shipment inbound scanning
 
   Scenario: op login into operator portal
     Given op is in op portal login page
