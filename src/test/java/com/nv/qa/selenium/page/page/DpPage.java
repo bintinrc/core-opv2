@@ -98,8 +98,9 @@ public class DpPage  {
             expectedValue = String.format("8300%s", ScenarioHelper.getInstance().getTmpId());
         }
 
-        WebElement result = CommonUtil.getResultInTable(driver, "//table[@ng-table='" + ngTable + "']/tbody/tr", expectedValue);
-        Assert.assertTrue(result != null);
+        String tableXpath = "//table[@ng-table='" + ngTable + "']/tbody/tr";
+        WebElement result = CommonUtil.getResultInTable(driver, tableXpath, expectedValue);
+        Assert.assertTrue(tableXpath + " not found",result != null);
     }
 
     public void clickAddBtn(String type) throws InterruptedException {
@@ -129,6 +130,7 @@ public class DpPage  {
             CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Name']", String.format("DP %s", ScenarioHelper.getInstance().getTmpId()));
             CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Shortname']", String.format("DP%s", ScenarioHelper.getInstance().getTmpId()));
             CommonUtil.inputText(driver, "//input[@type='tel'][@aria-label='Contact No.']", String.format("8100%s", ScenarioHelper.getInstance().getTmpId()));
+            CommonUtil.inputText(driver, "//div[label[text()='Shipper Account']]//input", "QA\n");
             CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Address Line 1']", "Jl. Utan Kayu Raya No. 76");
             CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Address Line 2']", "Rawamangun");
             CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='City']", "Jakarta");
@@ -179,6 +181,8 @@ public class DpPage  {
 
         if (type.equals("dp-users")) {
             CommonUtil.inputText(driver, "//input[@type='password'][@aria-label='Password']", "Ninjitsu89");
+        } else if (type.equals("dps")) {
+            CommonUtil.inputText(driver, "//div[label[text()='Shipper Account']]//input", "QA\n");
         }
 
         CommonUtil.inputText(driver, textAreaXpath, editValue);
