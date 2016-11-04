@@ -91,7 +91,7 @@ public class ReservationStep {
 
             Actions action = new Actions(driver);
             action.moveToElement(el).click().perform();
-            driver.findElement(By.xpath("//button[@aria-label='Delete' and .//span[text()='Delete']]")).click();
+            driver.findElement(By.xpath("//button[span[text()='Delete']]")).click();
             CommonUtil.pause1s();
         }
     }
