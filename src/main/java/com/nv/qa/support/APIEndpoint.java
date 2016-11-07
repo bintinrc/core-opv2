@@ -2,6 +2,7 @@ package com.nv.qa.support;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -71,7 +72,10 @@ public final class APIEndpoint
                 SELENIUM_SCRIPT_TIMEOUT_SECONDS = getPropertyValueAsInteger(props, "selenium-script-timeout-seconds");
                 SELENIUM_WINDOW_WIDTH = getPropertyValueAsInteger(props, "selenium-window-width");
                 SELENIUM_WINDOW_HEIGHT = getPropertyValueAsInteger(props, "selenium-window-height");
-                SELENIUM_WRITE_PATH = props.getProperty("selenium-write_path");
+                SELENIUM_WRITE_PATH = props.getProperty("selenium-write-path");
+                {
+                    new File(SELENIUM_WRITE_PATH).mkdirs();
+                }
 
                 OPERATOR_PORTAL_URL = props.getProperty("operator-portal-url");
                 OPERATOR_PORTAL_UID = props.getProperty("operator-portal-uid");
