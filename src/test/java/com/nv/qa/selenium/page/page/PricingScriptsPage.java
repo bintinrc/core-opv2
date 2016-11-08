@@ -115,7 +115,7 @@ public class PricingScriptsPage
         CommonUtil.pause1s();
     }
 
-    public void simulateRunTest(String deliveryType, String orderType, String timeslotType, String size, String weight)
+    public void simulateRunTest(String deliveryType, String orderType, String timeslotType, String size, String weight, String insuredValue, String codValue)
     {
         clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_EDIT);
         CommonUtil.selectValueFromMdSelectMenu(driver, "//md-input-container[@label='Delivery Type']", String.format("//md-option[@value='%s']", deliveryType));
@@ -123,6 +123,8 @@ public class PricingScriptsPage
         CommonUtil.selectValueFromMdSelectMenu(driver, "//md-input-container[@label='Timeslot Type']", String.format("//md-option[@value='%s']", timeslotType));
         CommonUtil.selectValueFromMdSelectMenu(driver, "//md-input-container[@label='Size']", String.format("//md-option[@value='%s']", size));
         CommonUtil.inputText(driver, "//input[@aria-label='Weight']", weight);
+        CommonUtil.inputText(driver, "//input[@aria-label='Insured Value']", insuredValue);
+        CommonUtil.inputText(driver, "//input[@aria-label='COD Value']", codValue);
         CommonUtil.clickBtn(driver, "//button[@id='button-run-test']");
     }
 

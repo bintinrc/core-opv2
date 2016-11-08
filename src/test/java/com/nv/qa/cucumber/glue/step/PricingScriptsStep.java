@@ -94,11 +94,11 @@ public class PricingScriptsStep
     public void createDefaultTwoScriptIfNotExists(String defaultScriptName1, String defaultScriptName2)
     {
         String scriptDescription = "Please don't touch this script. This script created by Cucumber with Selenium for testing purpose.";
-        String script1 = "function getDefaultPrice() {\\n    return 1.2;\\n}";
+        String script1 = "function getDefaultPrice() {\\n    return 0.2;\\n}";
         String script1Id = pricingScriptsPage.createDefaultScriptIfNotExists(defaultScriptName1, scriptDescription, script1);
 
         String importScript = String.format("importScript(%s);", script1Id);
-        String script2 = importScript+"\\n\\nfunction calculate(deliveryType, orderType, timeslotType, size, weight,\\n    fromZone, toZone) {\\n    var price = getDefaultPrice();\\n\\n    if (deliveryType == \"STANDARD\") {\\n        price += 2;\\n    } else if (deliveryType == \"EXPRESS\") {\\n        price += 3;\\n    } else if (deliveryType == \"NEXT_DAY\") {\\n        price += 5;\\n    } else if (deliveryType == \"SAME_DAY\") {\\n        price += 7;\\n    } else {\\n        throw \"Unknown delivery type.\";\\n    }\\n\\n    if (orderType == \"NORMAL\") {\\n        price += 11;\\n    } else if (orderType == \"RETURN\") {\\n        price += 13;\\n    } else if (orderType == \"C2C\") {\\n        price += 17;\\n    } else {\\n        throw \"Unknown order type.\";\\n    }\\n\\n    if (timeslotType == \"NONE\") {\\n        price += 19;\\n    } else if (timeslotType == \"DAY_NIGHT\") {\\n        price += 23;\\n    } else if (timeslotType == \"TIMESLOT\") {\\n        price += 29;\\n    } else {\\n        throw \"Unknown timeslot type.\";\\n    }\\n\\n    if (size == \"S\") {\\n        price += 31;\\n    } else if (size == \"M\") {\\n        price += 37;\\n    } else if (size == \"L\") {\\n        price += 41;\\n    } else if (size == \"XL\") {\\n        price += 43;\\n    } else if (size == \"XXL\") {\\n        price += 47;\\n    } else {\\n        throw \"Unknown size.\";\\n    }\\n\\n    price += weight + 53.4;\\n\\n    return price;\\n}";
+        String script2 = importScript+"\\n\\nfunction calculate(deliveryType, orderType, timeslotType, size, weight,\\n    fromZone, toZone, codValue, insuredValue) {\\n\\n    var price = getDefaultPrice();\\n\\n    if (deliveryType == \"STANDARD\") {\\n        price += 0.3;\\n    } else if (deliveryType == \"EXPRESS\") {\\n        price += 0.5;\\n    } else if (deliveryType == \"NEXT_DAY\") {\\n        price += 0.7;\\n    } else if (deliveryType == \"SAME_DAY\") {\\n        price += 1.1;\\n    } else {\\n        throw \"Unknown delivery type.\";\\n    }\\n\\n    if (orderType == \"NORMAL\") {\\n        price += 1.3;\\n    } else if (orderType == \"RETURN\") {\\n        price += 1.7;\\n    } else if (orderType == \"C2C\") {\\n        price += 1.9;\\n    } else {\\n        throw \"Unknown order type.\";\\n    }\\n\\n    if (timeslotType == \"NONE\") {\\n        price += 2.3;\\n    } else if (timeslotType == \"DAY_NIGHT\") {\\n        price += 2.9;\\n    } else if (timeslotType == \"TIMESLOT\") {\\n        price += 3.1;\\n    } else {\\n        throw \"Unknown timeslot type.\";\\n    }\\n\\n    if (size == \"S\") {\\n        price += 3.7;\\n    } else if (size == \"M\") {\\n        price += 4.1;\\n    } else if (size == \"L\") {\\n        price += 4.3;\\n    } else if (size == \"XL\") {\\n        price += 4.7;\\n    } else if (size == \"XXL\") {\\n        price += 5.3;\\n    } else {\\n        throw \"Unknown size.\";\\n    }\\n\\n    price += weight;\\n\\n    var result = {};\\n    result.delivery_fee = price;\\n    result.cod_fee = codValue;\\n    result.insurance_fee = insuredValue;\\n\tresult.gst = 7;\\n    result.handling_fee = 11;\\n\\n    return result;\\n}";
 
         pricingScriptsPage.createDefaultScriptIfNotExists(defaultScriptName2, scriptDescription, script2);
     }
@@ -112,15 +112,46 @@ public class PricingScriptsStep
         String timeslotType = mapOfData.get("timeslotType");
         String size = mapOfData.get("size");
         String weight = mapOfData.get("weight");
-        pricingScriptsPage.simulateRunTest(deliveryType, orderType, timeslotType, size, weight);
+        String insuredValue = mapOfData.get("insuredValue");
+        String codValue = mapOfData.get("codValue");
+        pricingScriptsPage.simulateRunTest(deliveryType, orderType, timeslotType, size, weight, insuredValue, codValue);
     }
 
-    @Then("^op will find the cost equal to \\\"([^\\\"]*)\\\" and the comments equal to \\\"([^\\\"]*)\\\"$")
-    public void verifyCostAndComments(String expectedCost, String expectedComments)
+    @Then("^op will find the price result:$")
+    public void verifyCostAndComments(DataTable dataTable)
     {
-        WebElement costEl = CommonUtil.getElementByXpath(driver, "//div[text()='Fee Detail']/following-sibling::div[2]");
-        String actualCost = costEl.getText();
-        Assert.assertEquals(expectedCost, actualCost);
+        Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
+        String expectedTotal = mapOfData.get("total");
+        String expectedGst = mapOfData.get("gst");
+        String expectedCodFee = mapOfData.get("codFee");
+        String expectedInsuranceFee = mapOfData.get("insuranceFee");
+        String expectedDeliveryFee = mapOfData.get("deliveryFee");
+        String expectedHandlingFee = mapOfData.get("handlingFee");
+        String expectedComments = mapOfData.get("comments");
+
+        WebElement totalEl = CommonUtil.getElementByXpath(driver, "//div[text()='Fee Detail']/following-sibling::div[2]");
+        String actualTotal = totalEl.getText();
+        Assert.assertEquals(expectedTotal, actualTotal);
+
+        WebElement gstEl = CommonUtil.getElementByXpath(driver, "//div[text()='Fee Detail']/following-sibling::div[4]");
+        String actualGst = gstEl.getText();
+        Assert.assertEquals(expectedGst, actualGst);
+
+        WebElement codFeeEl = CommonUtil.getElementByXpath(driver, "//div[text()='Fee Detail']/following-sibling::div[6]");
+        String actualCodFee = codFeeEl.getText();
+        Assert.assertEquals(expectedCodFee, actualCodFee);
+
+        WebElement insuranceFeeEl = CommonUtil.getElementByXpath(driver, "//div[text()='Fee Detail']/following-sibling::div[8]");
+        String actualInsuranceFee = insuranceFeeEl.getText();
+        Assert.assertEquals(expectedInsuranceFee, actualInsuranceFee);
+
+        WebElement deliveryFeeEl = CommonUtil.getElementByXpath(driver, "//div[text()='Fee Detail']/following-sibling::div[10]");
+        String actualDeliveryFee = deliveryFeeEl.getText();
+        Assert.assertEquals(expectedDeliveryFee, actualDeliveryFee);
+
+        WebElement handlingFeeEl = CommonUtil.getElementByXpath(driver, "//div[text()='Fee Detail']/following-sibling::div[12]");
+        String actualHandlingFee = handlingFeeEl.getText();
+        Assert.assertEquals(expectedHandlingFee, actualHandlingFee);
 
         WebElement commentsEl = CommonUtil.getElementByXpath(driver, "//div[text()='Comments']/following-sibling::div[1]");
         String actualComments = commentsEl.getText();
