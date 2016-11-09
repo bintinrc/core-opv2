@@ -17,7 +17,7 @@ public class ShipmentScanningPage {
     public static final String XPATH_HUB_DROPDOWN = "//md-select[@name='hub']";
     public static final String XPATH_SHIPMENT_DROPDOWN = "//md-select[@name='shipment']";
     public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
-    public static final String XPATH_SELECT_SHIPMENT_BUTTON = "//button[span[text()='Select Shipment']]";
+    public static final String XPATH_SELECT_SHIPMENT_BUTTON = "//button[@aria-label='Select Shipment']";
     public static final String XPATH_BARCODE_SCAN = "//input[@id='scan_barcode_input']";
     public static final String XPATH_ORDER_IN_SHIPMENT = "//td[@class='tracking-id ng-binding']";
 
