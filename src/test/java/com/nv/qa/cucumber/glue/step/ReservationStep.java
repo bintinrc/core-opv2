@@ -25,7 +25,7 @@ public class ReservationStep {
     private int eReservation = 0;
     private int nReservation = 0;
 
-    private static String RESERVED_DATE = "//div[@ng-repeat='day in week track by $index' and @class='layout-padding ng-scope ng-isolate-scope layout-column flex nvYellow disabled']";
+    private static String RESERVED_DATE = "//div[@ng-repeat='day in week track by $index' and @class='layout-padding ng-scope ng-isolate-scope layout-column flex disabled nvYellow']";
     private static String UNRESERVED_DATE = "//div[@ng-repeat='day in week track by $index' and @class='layout-padding ng-scope ng-isolate-scope layout-column flex nvGreen nv-secondary']";
 
     @Before
