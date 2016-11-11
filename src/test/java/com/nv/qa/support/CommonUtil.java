@@ -4,10 +4,7 @@ import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -39,6 +36,30 @@ public class CommonUtil {
         pause100ms();
         el.sendKeys(value);
         pause1s();
+    }
+
+    public static void chooseValueFromMdContain(WebDriver driver, String xpathContainer, String value) {
+
+        driver.findElement(By.xpath(xpathContainer)).click();
+        CommonUtil.pause10ms();
+
+        CommonUtil.clickBtn(driver,"//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option[div[contains(text(),'" + value + "')]]");
+    }
+
+    public static void chooseValuesFromMdContain(WebDriver driver, String xpathContainer, List<String> values) {
+
+        driver.findElement(By.xpath(xpathContainer)).click();
+        CommonUtil.pause10ms();
+
+        //clear selected item
+        List<WebElement> activeItem = driver.findElements(By.xpath("//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option[@aria-selected='true']"));
+        for (WebElement item : activeItem) {
+            CommonUtil.moveAndClick(driver, item);
+        }
+
+        for (String value : values) {
+            CommonUtil.clickBtn(driver, "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option[div[contains(text(),'" + value + "')]]");
+        }
     }
 
     public static void pause10s() {

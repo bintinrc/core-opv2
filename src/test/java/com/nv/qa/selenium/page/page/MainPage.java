@@ -63,6 +63,8 @@ public class MainPage extends LoadableComponent<MainPage> {
         String endURL = navTitle.toLowerCase().replaceAll(" ", "-");
         if (navTitle.trim().equalsIgnoreCase("hubs administration")) {
             endURL = "hub";
+        } else if (navTitle.trim().equalsIgnoreCase("linehaul management")) {
+            endURL = "linehaul/entries";
         }
 
         final String mainDashboard = endURL;
