@@ -4,15 +4,11 @@ import com.nv.qa.model.Linehaul;
 import com.nv.qa.selenium.page.page.ShipmentLinehaulPage;
 import com.nv.qa.support.JsonHelper;
 import com.nv.qa.support.SeleniumSharedDriver;
-import cucumber.api.Scenario;
-import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.junit.Assert;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -37,14 +33,6 @@ public class ShipmentLinehaulStep{
     public void setup() {
         driver = SeleniumSharedDriver.getInstance().getDriver();
         shipmentLinehaulPage = new ShipmentLinehaulPage(driver);
-    }
-
-    @After
-    public void sem(Scenario scenario) {
-        if (scenario.isFailed()) {
-            final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-            scenario.embed(screenshot, "image/png");
-        }
     }
 
     @When("^create new linehaul:$")

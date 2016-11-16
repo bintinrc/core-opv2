@@ -1,11 +1,9 @@
-@selenium
+@PricingScripts @selenium
 Feature: Pricing Scripts
 
-  Scenario: op login into operator portal
-    Given op is in op portal login page
-    When login button is clicked
-    When login as "{operator-portal-uid}" with password "{operator-portal-pwd}"
-    Then op is in main page
+  @LaunchBrowser
+  Scenario: Login to Operator V2
+    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
   Scenario: Operator create, update and delete script on Pricing Scripts menu. (uid:0c1175e7-b5af-474c-b0a8-3b89ea786a59)
     Given op click navigation Pricing Scripts in Shipper
@@ -50,5 +48,5 @@ Feature: Pricing Scripts
     When op linking Pricing Scripts "Script Cucumber Test 1" or "Script Cucumber Test 2" to shipper "Pricing Script Link Shipper"
     Then Pricing Scripts linked to the shipper successfully
 
-  @closeBrowser
-  Scenario: close browser
+  @KillBrowser
+  Scenario: Kill Browser

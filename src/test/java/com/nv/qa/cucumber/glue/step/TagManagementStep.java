@@ -1,52 +1,36 @@
 package com.nv.qa.cucumber.glue.step;
 
+import com.google.inject.Inject;
 import com.nv.qa.selenium.page.page.TagManagementPage;
-import com.nv.qa.support.SeleniumSharedDriver;
-import cucumber.api.Scenario;
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.junit.Assert;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
 
 /**
  *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class TagManagementStep
+public class TagManagementStep extends AbstractSteps
 {
     private static final String DEFAULT_TAG_NAME = "AAA";
     private static final String EDITED_TAG_NAME = "AAB";
     private static final String DEFAULT_TAG_DESCRIPTION = "This tag is created by Automation Test for testing purpose only. Ignore this tag.";
     private static final String EDITED_TAG_DESCRIPTION = DEFAULT_TAG_DESCRIPTION + " [EDITED]";
 
-    private WebDriver driver;
     private TagManagementPage tagManagementPage;
 
-    public TagManagementStep()
+    @Inject
+    public TagManagementStep(CommonScenario commonScenario)
     {
+        super(commonScenario);
     }
 
-    @Before
-    public void setup()
+    @Override
+    public void init()
     {
-        driver = SeleniumSharedDriver.getInstance().getDriver();
-        tagManagementPage = new TagManagementPage(driver);
-    }
-
-    @After
-    public void teardown(Scenario scenario)
-    {
-        if(scenario.isFailed())
-        {
-            final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-            scenario.embed(screenshot, "image/png");
-        }
+        tagManagementPage = new TagManagementPage(getDriver());
     }
 
     @When("^op create new tag on Tag Management$")

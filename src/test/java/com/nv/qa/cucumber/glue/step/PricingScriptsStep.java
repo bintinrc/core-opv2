@@ -1,20 +1,14 @@
 package com.nv.qa.cucumber.glue.step;
 
+import com.google.inject.Inject;
 import com.nv.qa.selenium.page.page.PricingScriptsPage;
 import com.nv.qa.support.CommonUtil;
-import com.nv.qa.support.SeleniumSharedDriver;
 import cucumber.api.DataTable;
-import cucumber.api.Scenario;
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.junit.Assert;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.Date;
@@ -25,27 +19,23 @@ import java.util.Map;
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class PricingScriptsStep
+public class PricingScriptsStep extends AbstractSteps
 {
-    private WebDriver driver;
     private PricingScriptsPage pricingScriptsPage;
     private String newPricingScriptsName;
     private String pricingScriptsLinkedToAShipper;
     private String shipperLinkedToPricingScripts;
 
-    @Before
-    public void setup()
+    @Inject
+    public PricingScriptsStep(CommonScenario commonScenario)
     {
-        driver = SeleniumSharedDriver.getInstance().getDriver();
-        pricingScriptsPage = new PricingScriptsPage(driver);
+        super(commonScenario);
     }
 
-    @After
-    public void teardown(Scenario scenario) {
-        if (scenario.isFailed()) {
-            final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-            scenario.embed(screenshot, "image/png");
-        }
+    @Override
+    public void init()
+    {
+        pricingScriptsPage = new PricingScriptsPage(getDriver());
     }
 
     @When("^op create new script on Pricing Scripts$")
@@ -129,36 +119,36 @@ public class PricingScriptsStep
         String expectedHandlingFee = mapOfData.get("handlingFee");
         String expectedComments = mapOfData.get("comments");
 
-        WebElement totalEl = CommonUtil.getElementByXpath(driver, "//div[text()='Fee Detail']/following-sibling::div[2]");
+        WebElement totalEl = CommonUtil.getElementByXpath(getDriver(), "//div[text()='Fee Detail']/following-sibling::div[2]");
         String actualTotal = totalEl.getText();
         Assert.assertEquals(expectedTotal, actualTotal);
 
-        WebElement gstEl = CommonUtil.getElementByXpath(driver, "//div[text()='Fee Detail']/following-sibling::div[4]");
+        WebElement gstEl = CommonUtil.getElementByXpath(getDriver(), "//div[text()='Fee Detail']/following-sibling::div[4]");
         String actualGst = gstEl.getText();
         Assert.assertEquals(expectedGst, actualGst);
 
-        WebElement codFeeEl = CommonUtil.getElementByXpath(driver, "//div[text()='Fee Detail']/following-sibling::div[6]");
+        WebElement codFeeEl = CommonUtil.getElementByXpath(getDriver(), "//div[text()='Fee Detail']/following-sibling::div[6]");
         String actualCodFee = codFeeEl.getText();
         Assert.assertEquals(expectedCodFee, actualCodFee);
 
-        WebElement insuranceFeeEl = CommonUtil.getElementByXpath(driver, "//div[text()='Fee Detail']/following-sibling::div[8]");
+        WebElement insuranceFeeEl = CommonUtil.getElementByXpath(getDriver(), "//div[text()='Fee Detail']/following-sibling::div[8]");
         String actualInsuranceFee = insuranceFeeEl.getText();
         Assert.assertEquals(expectedInsuranceFee, actualInsuranceFee);
 
-        WebElement deliveryFeeEl = CommonUtil.getElementByXpath(driver, "//div[text()='Fee Detail']/following-sibling::div[10]");
+        WebElement deliveryFeeEl = CommonUtil.getElementByXpath(getDriver(), "//div[text()='Fee Detail']/following-sibling::div[10]");
         String actualDeliveryFee = deliveryFeeEl.getText();
         Assert.assertEquals(expectedDeliveryFee, actualDeliveryFee);
 
-        WebElement handlingFeeEl = CommonUtil.getElementByXpath(driver, "//div[text()='Fee Detail']/following-sibling::div[12]");
+        WebElement handlingFeeEl = CommonUtil.getElementByXpath(getDriver(), "//div[text()='Fee Detail']/following-sibling::div[12]");
         String actualHandlingFee = handlingFeeEl.getText();
         Assert.assertEquals(expectedHandlingFee, actualHandlingFee);
 
-        WebElement commentsEl = CommonUtil.getElementByXpath(driver, "//div[text()='Comments']/following-sibling::div[1]");
+        WebElement commentsEl = CommonUtil.getElementByXpath(getDriver(), "//div[text()='Comments']/following-sibling::div[1]");
         String actualComments = commentsEl.getText();
         Assert.assertEquals(expectedComments, actualComments);
 
         CommonUtil.pause1s();
-        CommonUtil.clickBtn(driver, "//button[@id='button-cancel-dialog']");
+        CommonUtil.clickBtn(getDriver(), "//button[@id='button-cancel-dialog']");
     }
 
     @When("^op linking Pricing Scripts \\\"([^\\\"]*)\\\" or \\\"([^\\\"]*)\\\" to shipper \\\"([^\\\"]*)\\\"$")
@@ -171,12 +161,12 @@ public class PricingScriptsStep
     @Then("^Pricing Scripts linked to the shipper successfully$")
     public void verifyPricingScriptsLinkedToShipperSuccessfully()
     {
-        CommonUtil.inputText(driver, "//input[@placeholder='Search Script...']", pricingScriptsLinkedToAShipper);
+        CommonUtil.inputText(getDriver(), "//input[@placeholder='Search Script...']", pricingScriptsLinkedToAShipper);
         CommonUtil.pause1s();
         pricingScriptsPage.clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_SHIPPERS);
         CommonUtil.pause1s();
         boolean isPricingScriptsContainShipper = pricingScriptsPage.isPricingScriptsContainShipper(shipperLinkedToPricingScripts);
-        CommonUtil.clickBtn(driver, "//button[@id='button-cancel-dialog']");
+        CommonUtil.clickBtn(getDriver(), "//button[@id='button-cancel-dialog']");
         Assert.assertEquals(true, isPricingScriptsContainShipper);
     }
 }
