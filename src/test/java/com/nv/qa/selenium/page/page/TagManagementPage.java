@@ -11,9 +11,9 @@ import org.openqa.selenium.support.PageFactory;
  */
 public class TagManagementPage extends SimplePage
 {
-    public static final String COLUMN_CLASS_NO = "column-index ng-binding";
-    public static final String COLUMN_CLASS_TAG_NAME = "name  ng-binding";
-    public static final String COLUMN_CLASS_DESCRIPTION = "description  ng-binding";
+    public static final String COLUMN_CLASS_NO = "column-index";
+    public static final String COLUMN_CLASS_TAG_NAME = "name";
+    public static final String COLUMN_CLASS_DESCRIPTION = "description";
 
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
     public static final String ACTION_BUTTON_DELETE = "commons.delete";
@@ -26,31 +26,20 @@ public class TagManagementPage extends SimplePage
 
     public void clickTagNameColumnHeader()
     {
-        WebElement we = getElementByXpath("//th[contains(@class, 'name')]");
+        WebElement we = findElementByXpath("//th[contains(@class, 'name')]");
         moveAndClick(we);
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)
     {
-        String text = null;
-
-        try
-        {
-            WebElement we = getElementByXpath(String.format("//tr[@md-virtual-repeat='tag in getTableData()'][%d]/td[@class='%s']", rowNumber, columnDataClass));
-            text = we.getText().trim();
-        }
-        catch(NoSuchElementException ex)
-        {
-        }
-
-        return text;
+        return getTextOnTable(rowNumber, columnDataClass, "tag in getTableData()");
     }
 
     public void clickActionButton(int rowNumber, String actionButtonName)
     {
         try
         {
-            WebElement we = getElementByXpath(String.format("//tr[@md-virtual-repeat='tag in getTableData()'][%d]/td[@class='actions column-locked-right ng-isolate-scope']/div/*[@name='%s']", rowNumber, actionButtonName));
+            WebElement we = findElementByXpath(String.format("//tr[@md-virtual-repeat='tag in getTableData()'][%d]/td[@class='actions column-locked-right ng-isolate-scope']/div/*[@name='%s']", rowNumber, actionButtonName));
             moveAndClick(we);
         }
         catch(NoSuchElementException ex)
@@ -61,7 +50,7 @@ public class TagManagementPage extends SimplePage
 
     public void clickCreateTag()
     {
-        clickButton("//button[@aria-label='Create Tag']");
+        click("//button[@aria-label='Create Tag']");
     }
 
     public void setTagNameValue(String value)
@@ -76,16 +65,16 @@ public class TagManagementPage extends SimplePage
 
     public void clickSubmitOnAddTag()
     {
-        clickButton("//button[@aria-label='Save Button']");
+        click("//button[@aria-label='Save Button']");
     }
 
     public void clickSubmitChangesOnEditTag()
     {
-        clickButton("//button[@aria-label='Save Button']");
+        click("//button[@aria-label='Save Button']");
     }
 
     public void clickDeleteOnConfirmDeleteDialog()
     {
-        clickButton("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
+        click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
     }
 }

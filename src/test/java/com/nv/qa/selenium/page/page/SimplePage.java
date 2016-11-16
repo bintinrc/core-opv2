@@ -1,9 +1,7 @@
 package com.nv.qa.selenium.page.page;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import com.nv.qa.support.CommonUtil;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
 import java.util.List;
@@ -21,9 +19,9 @@ public class SimplePage
         this.driver = driver;
     }
 
-    public void clickButton(String xpathExpression)
+    public void click(String xpathExpression)
     {
-        WebElement we = getElementByXpath(xpathExpression);
+        WebElement we = findElementByXpath(xpathExpression);
         moveAndClick(we);
     }
 
@@ -39,23 +37,62 @@ public class SimplePage
 
     public void sendKeys(String xpathExpression, CharSequence... keysToSend)
     {
-        WebElement we = getElementByXpath(xpathExpression);
+        WebElement we = findElementByXpath(xpathExpression);
         we.clear();
         pause500ms();
         we.sendKeys(keysToSend);
         pause500ms();
     }
 
-    public WebElement getElementByXpath(String xpathExpression)
+    public WebElement findElementByXpath(String xpathExpression)
     {
         return driver.findElement(By.xpath(xpathExpression));
     }
 
-    public List<WebElement> getElementsByXpath(String xpathExpression)
+    public List<WebElement> findElementsByXpath(String xpathExpression)
     {
         return driver.findElements(By.xpath(xpathExpression));
     }
 
+    public void closeModal()
+    {
+        WebElement we = findElementByXpath("//div[(contains(@class, 'nv-text-ellipsis nv-h4'))]");
+
+        Actions actions = new Actions(driver);
+        actions.moveToElement(we, 5, 5)
+                .click()
+                .build()
+                .perform();
+        CommonUtil.pause100ms();
+    }
+
+    public String getTextOnTable(int rowNumber, String columnDataClass, String mdVirtualRepeat)
+    {
+        String text = null;
+
+        try
+        {
+            //tag in getTableData()
+            WebElement we = findElementByXpath(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, '%s')]", mdVirtualRepeat, rowNumber, columnDataClass));
+            text = we.getText().trim();
+        }
+        catch(NoSuchElementException ex)
+        {
+        }
+
+        return text;
+    }
+
+    public void inputListBox(String placeHolder, String searchValue) throws InterruptedException
+    {
+        WebElement we = findElementByXpath("//input[@placeholder='" + placeHolder + "']");
+        we.clear();
+        we.sendKeys(searchValue);
+        pause1s();
+        we.sendKeys(Keys.RETURN);
+        pause100ms();
+        closeModal();
+    }
 
     public void pause100ms()
     {
@@ -75,6 +112,11 @@ public class SimplePage
     public void pause3s()
     {
         pause(3000);
+    }
+
+    public void pause5s()
+    {
+        pause(5000);
     }
 
     public void pause10s()

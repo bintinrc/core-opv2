@@ -17,7 +17,7 @@ public class RouteGroupTemplatesPage extends SimplePage
 
     public void createRouteGroupTemplate(String routeGroupTemplateName, String filterQuery)
     {
-        clickButton("//button[@aria-label='Add Template']");
+        click("//button[@aria-label='Add Template']");
         setRouteGroupNameValue(routeGroupTemplateName);
         setFilterQuery(filterQuery);
         clickSubmitOnAddTag();
@@ -35,6 +35,6 @@ public class RouteGroupTemplatesPage extends SimplePage
 
     public void clickSubmitOnAddTag()
     {
-        clickButton("//button[@aria-label='Save Button']");
+        click("//button[@aria-label='Save Button']");
     }
 }
