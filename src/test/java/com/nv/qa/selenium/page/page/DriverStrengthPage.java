@@ -94,7 +94,7 @@ public class DriverStrengthPage extends SimplePage
     {
         boolean isFound = false;
 
-        List<WebElement> listDriver = findElementsByXpath("//tr[@md-virtual-repeat='driver in ctrl.tableData']");
+        List<WebElement> listDriver = findElementsByXpath("//tr[@md-virtual-repeat='driver in getTableData()']");
 
         for(WebElement d : listDriver)
         {
@@ -118,7 +118,7 @@ public class DriverStrengthPage extends SimplePage
 
     public void changeComingStatus() throws InterruptedException
     {
-        WebElement firstDriver = findElementsByXpath("//tr[@md-virtual-repeat='driver in ctrl.tableData']").get(0);
+        WebElement firstDriver = findElementsByXpath("//tr[@md-virtual-repeat='driver in getTableData()']").get(0);
         String before = getComingStatusState(firstDriver);
         changeComingStatusState(firstDriver);
         String after = getComingStatusState(firstDriver);
@@ -127,7 +127,7 @@ public class DriverStrengthPage extends SimplePage
 
     public void clickViewContactButton() throws InterruptedException
     {
-        click("//tr[@md-virtual-repeat='driver in ctrl.tableData']/td[@class='contact column-locked-right']/md-menu/button");
+        click("//tr[@md-virtual-repeat='driver in getTableData()']/td[contains(@class, 'actions column-locked-right')]/md-menu/button");
         pause1s();
 
         String name = "Driver " + ScenarioHelper.getInstance().getTmpId();
@@ -191,6 +191,11 @@ public class DriverStrengthPage extends SimplePage
         sendKeys("//input[@type='text'][@aria-label='Password']", "D00"+tmpId);
 
         /**
+         * Comments.
+         */
+        sendKeys("//textarea[@aria-label='Comments']", "This driver is created by \"Automation Test\" for testing purpose.");
+
+        /**
          * Save.
          */
         click("//button[@aria-label='Save Button']");
@@ -210,14 +215,16 @@ public class DriverStrengthPage extends SimplePage
 
     public void searchingNewDriver()
     {
-        sendKeys("//input[@placeholder='Search Drivers...'][@ng-model='searchText']", "Driver "+ScenarioHelper.getInstance().getTmpId());
+        String driverName = "Driver "+ScenarioHelper.getInstance().getTmpId();
+        click("//button[@aria-label='Load Everything']");
+        sendKeys("//th[contains(@class, 'name')]/nv-search-input-filter/md-input-container/div/input", driverName);
     }
 
     public void editNewDriver()
     {
-        click("//tr[@md-virtual-repeat='driver in ctrl.tableData']/td[@class='actions column-locked-right']/nv-icon-button[1]/button");
+        click("//tr[@md-virtual-repeat='driver in getTableData()']/td[contains(@class, 'actions column-locked-right')]/nv-icon-button[1]/button");
         pause1s();
-
+        sendKeys("//textarea[@aria-label='Comments']", "This driver is created by \"Automation Test\" for testing purpose. [EDITED]");
         sendKeys("//input[@type='number'][@aria-label='Vehicle Capacity']", "1000");
         click("//button[@aria-label='Save Button']");
         pause1s();
@@ -226,29 +233,34 @@ public class DriverStrengthPage extends SimplePage
 
     public void deleteNewDriver()
     {
-        click("//tr[@md-virtual-repeat='driver in ctrl.tableData']/td[@class='actions column-locked-right']/nv-icon-button[2]/button");
+        click("//tr[@md-virtual-repeat='driver in getTableData()']/td[contains(@class, 'actions column-locked-right')]/nv-icon-button[2]/button");
         pause1s();
 
-        click("//md-dialog[@aria-label='Confirm deleteAre you ...']/md-dialog-actions/button[2]");
+        click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
         pause1s();
     }
 
     public void createdDriverShouldNotExist()
     {
-        int size = findElementsByXpath("//tr[@md-virtual-repeat='driver in ctrl.tableData']").size();
-        Assert.assertTrue(size == 0);
+        /**
+         * Check first row does not contain deleted driver.
+         */
+
+        String expectedDriverName = "Driver "+ScenarioHelper.getInstance().getTmpId();
+        String actualDriverName = getTextOnTable(1, COLUMN_CLASS_NAME);
+        Assert.assertNotEquals(expectedDriverName, actualDriverName);
     }
 
     private void changeComingStatusState(WebElement el) throws InterruptedException
     {
         pause1s();
-        el.findElement(By.xpath("//td[@class='coming column-locked-right']/nv-toggle-button/button")).click();
+        el.findElement(By.xpath("//td[contains(@class, 'availability')]/nv-toggle-button/button")).click();
         pause1s();
     }
 
     private String getComingStatusState(WebElement el)
     {
-        return el.findElement(By.xpath("//td[@class='coming column-locked-right']/nv-toggle-button")).getAttribute("md-theme");
+        return el.findElement(By.xpath("//td[contains(@class, 'availability')]/nv-toggle-button")).getAttribute("md-theme");
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)
