@@ -72,7 +72,6 @@ public class SimplePage
 
         try
         {
-            //tag in getTableData()
             WebElement we = findElementByXpath(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, '%s')]", mdVirtualRepeat, rowNumber, columnDataClass));
             text = we.getText().trim();
         }

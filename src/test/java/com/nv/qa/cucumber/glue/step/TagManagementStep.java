@@ -17,7 +17,7 @@ public class TagManagementStep extends AbstractSteps
     private static final String DEFAULT_TAG_NAME = "AAA";
     private static final String EDITED_TAG_NAME = "AAB";
     private static final String DEFAULT_TAG_DESCRIPTION = "This tag is created by Automation Test for testing purpose only. Ignore this tag.";
-    private static final String EDITED_TAG_DESCRIPTION = DEFAULT_TAG_DESCRIPTION + " [EDITED]";
+    private static final String EDITED_DEFAULT_TAG_DESCRIPTION = DEFAULT_TAG_DESCRIPTION + " [EDITED]";
 
     private TagManagementPage tagManagementPage;
 
@@ -84,17 +84,18 @@ public class TagManagementStep extends AbstractSteps
 
         tagManagementPage.clickActionButton(1, TagManagementPage.ACTION_BUTTON_EDIT);
         tagManagementPage.setTagNameValue(EDITED_TAG_NAME);
-        tagManagementPage.setDescriptionValue(EDITED_TAG_DESCRIPTION);
+        tagManagementPage.setDescriptionValue(EDITED_DEFAULT_TAG_DESCRIPTION);
         tagManagementPage.clickSubmitChangesOnEditTag();
     }
 
     @Then("^tag on Tag Management updated successfully$")
-    public void verifyTagManagementUpdatedSuccessfully()
+    public void verifyTagUpdatedSuccessfully()
     {
         String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
-        String actualTagDescription = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DESCRIPTION);
         Assert.assertEquals(EDITED_TAG_NAME, actualTagName);
-        Assert.assertEquals(EDITED_TAG_DESCRIPTION, actualTagDescription);
+
+        String actualTagDescription = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DESCRIPTION);
+        Assert.assertEquals(EDITED_DEFAULT_TAG_DESCRIPTION, actualTagDescription);
     }
 
     @When("^op delete tag on Tag Management$")
