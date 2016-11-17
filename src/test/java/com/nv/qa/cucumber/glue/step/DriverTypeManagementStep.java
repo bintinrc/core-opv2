@@ -1,26 +1,29 @@
 package com.nv.qa.cucumber.glue.step;
 
+import com.google.inject.Inject;
 import com.nv.qa.selenium.page.page.DriverTypeManagementPage;
-import com.nv.qa.support.SeleniumSharedDriver;
-import cucumber.api.java.Before;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.openqa.selenium.WebDriver;
 
 /**
  * Created by sw on 7/13/16.
  */
 @ScenarioScoped
-public class DriverTypeManagementStep {
-
-    private WebDriver driver;
+public class DriverTypeManagementStep extends AbstractSteps
+{
     private DriverTypeManagementPage dtmPage;
 
-    @Before
-    public void setup() {
-        driver = SeleniumSharedDriver.getInstance().getDriver();
-        dtmPage = new DriverTypeManagementPage(driver);
+    @Inject
+    public DriverTypeManagementStep(CommonScenario commonScenario)
+    {
+        super(commonScenario);
+    }
+
+    @Override
+    public void init()
+    {
+        dtmPage = new DriverTypeManagementPage(getDriver());
     }
 
     @When("^driver type management is filtered by ([^\"]*) of ([^\"]*)$")
