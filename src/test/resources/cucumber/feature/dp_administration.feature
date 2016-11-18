@@ -1,11 +1,9 @@
-@selenium
+@DpAdministration @selenium
 Feature: dp administration
 
-  Scenario: op login into operator portal
-    Given op is in op portal login page
-    When login button is clicked
-    When login as "{operator-portal-uid}" with password "{operator-portal-pwd}"
-    Then op is in main page
+  @LaunchBrowser
+  Scenario: Login to Operator V2
+    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
   # download dp partner
   Scenario: op download dp partner csv list (uid:7554e32c-4b13-4693-8f0f-51faf3cc940b)
@@ -121,5 +119,5 @@ Feature: dp administration
     When download button in dp-users is clicked
     Then file dp-users should exist
 
-  @closeBrowser
-  Scenario: close browser
+  @KillBrowser
+  Scenario: Kill Browser
