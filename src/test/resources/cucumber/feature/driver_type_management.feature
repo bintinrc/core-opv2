@@ -1,11 +1,9 @@
-@selenium @saas
+@DriverTypeManagement @selenium @saas
 Feature: driver type management
 
-  Scenario: op login into operator portal
-    Given op is in op portal login page
-    When login button is clicked
-    When login as "{operator-portal-uid}" with password "{operator-portal-pwd}"
-    Then op is in main page
+  @LaunchBrowser
+  Scenario: Login to Operator V2
+    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
   Scenario: op download driver type management file (uid:a1f987ea-5292-41e3-8781-666e77cd4555)
     Given op click navigation Driver Type Management in Fleet
@@ -135,5 +133,5 @@ Feature: driver type management
     When created driver is deleted
     Then the created driver should not exist
 
-  @closeBrowser
-  Scenario: close browser
+  @KillBrowser
+  Scenario: Kill Browser
