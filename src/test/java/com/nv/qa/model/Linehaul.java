@@ -12,6 +12,7 @@ public class Linehaul {
     private String name;
     private String comment;
     private String frequency;
+    private String id;
     private List<String> hubs = new ArrayList<>();
     private List<String> days = new ArrayList<>();
 
@@ -29,6 +30,14 @@ public class Linehaul {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getFrequency() {
