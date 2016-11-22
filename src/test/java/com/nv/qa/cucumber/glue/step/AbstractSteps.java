@@ -1,5 +1,7 @@
 package com.nv.qa.cucumber.glue.step;
 
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -17,6 +19,12 @@ public abstract class AbstractSteps
     }
 
     public abstract void init();
+
+    public void takesScreenshot()
+    {
+        final byte[] screenshot = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.BYTES);
+        commonScenario.getCurrentScenario().embed(screenshot, "image/png");
+    }
 
     public WebDriver getDriver()
     {

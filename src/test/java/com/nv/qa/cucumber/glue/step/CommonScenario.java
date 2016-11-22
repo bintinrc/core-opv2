@@ -20,9 +20,21 @@ import org.openqa.selenium.WebDriver;
 public class CommonScenario
 {
     private WebDriver driver;
+    private Scenario scenario;
 
     public CommonScenario()
     {
+    }
+
+    /**
+     * Inject object Scenario each time the scenario is running.
+     *
+     * @param scenario
+     */
+    @Before
+    public void before(Scenario scenario)
+    {
+        this.scenario = scenario;
     }
 
     @Before("@LaunchBrowser")
@@ -67,6 +79,11 @@ public class CommonScenario
 
         MainPage mainPage = new MainPage(driver);
         mainPage.dpAdm();
+    }
+
+    public Scenario getCurrentScenario()
+    {
+        return scenario;
     }
 
     public WebDriver getDriver()
