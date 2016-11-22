@@ -5,7 +5,7 @@ Feature: Sample Feature
   Scenario: Launch browser.
 
   Scenario: Test Open Google, Yahoo, and Google Roboto font sample.
-    When browser open "https://www.traveloka.com/"
+    When browser open "http://www.karyasarma.com"
     Then take screenshot with delay 10s
     Then print browser console log
     When browser open "https://www.google.com"
