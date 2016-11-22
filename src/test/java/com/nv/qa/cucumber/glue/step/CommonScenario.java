@@ -3,11 +3,13 @@ package com.nv.qa.cucumber.glue.step;
 import com.google.inject.Singleton;
 import com.nv.qa.selenium.page.page.LoginPage;
 import com.nv.qa.selenium.page.page.MainPage;
+import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.SeleniumSharedDriver;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -79,6 +81,32 @@ public class CommonScenario
 
         MainPage mainPage = new MainPage(driver);
         mainPage.dpAdm();
+    }
+
+    @Then("^take screenshot$")
+    public void takeScreenShot()
+    {
+        takesScreenshot();
+    }
+
+    @Then("^take screenshot with delay (\\d+)s$")
+    public void takeScreenShotWithDelayInSecond(int delayInSecond)
+    {
+        CommonUtil.pause(delayInSecond*1000);
+        takesScreenshot();
+    }
+
+    @Then("take screenshot with delay (\\d+)ms$")
+    public void takeScreenShotWithDelayInMillisecond(int delayInMillisecond)
+    {
+        CommonUtil.pause(delayInMillisecond);
+        takesScreenshot();
+    }
+
+    public void takesScreenshot()
+    {
+        final byte[] screenshot = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.BYTES);
+        getCurrentScenario().embed(screenshot, "image/png");
     }
 
     public Scenario getCurrentScenario()
