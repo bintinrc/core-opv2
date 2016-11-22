@@ -6,6 +6,10 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -13,6 +17,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 /**
  * Created by ferdinand on 4/19/16.
@@ -49,6 +54,11 @@ public class SeleniumHelper {
     public static WebDriver getWebDriverChrome() {
         System.setProperty("webdriver.chrome.driver", APIEndpoint.SELENIUM_CHROME_DRIVER);
 
+        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        LoggingPreferences logPrefs = new LoggingPreferences();
+        logPrefs.enable(LogType.BROWSER, Level.ALL);
+        capabilities.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+
         String downloadFilepath = APIEndpoint.SELENIUM_WRITE_PATH;
         HashMap<String, Object> chromePrefs = new HashMap<>();
         chromePrefs.put("profile.default_content_settings.popups", 0);
@@ -57,11 +67,15 @@ public class SeleniumHelper {
         ChromeOptions options = new ChromeOptions();
         options.setExperimentalOption("prefs", chromePrefs);
         options.addArguments("--disable-extensions");
-        if(APIEndpoint.SELENIUM_CHROME_BINARY_PATH != null && !APIEndpoint.SELENIUM_CHROME_BINARY_PATH.isEmpty()) {
+
+        if(APIEndpoint.SELENIUM_CHROME_BINARY_PATH!=null && !APIEndpoint.SELENIUM_CHROME_BINARY_PATH.isEmpty())
+        {
             options.setBinary(APIEndpoint.SELENIUM_CHROME_BINARY_PATH);
         }
 
-        WebDriver driver = new ChromeDriver(options);
+        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+
+        WebDriver driver = new ChromeDriver(capabilities);
         driver.manage().timeouts().implicitlyWait(APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(APIEndpoint.SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         driver.manage().timeouts().setScriptTimeout(APIEndpoint.SELENIUM_SCRIPT_TIMEOUT_SECONDS, TimeUnit.SECONDS);

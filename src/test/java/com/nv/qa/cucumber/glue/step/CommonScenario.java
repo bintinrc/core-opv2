@@ -10,9 +10,15 @@ import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
+
+import java.util.Date;
 
 /**
  *
@@ -107,6 +113,23 @@ public class CommonScenario
     {
         final byte[] screenshot = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.BYTES);
         getCurrentScenario().embed(screenshot, "image/png");
+    }
+
+    @When("browser open \"([^\"]*)\"")
+    public void browserOpen(String url)
+    {
+        getDriver().get(url);
+    }
+
+    @Then("print browser console log")
+    public void printBrowserConsoleLog()
+    {
+        LogEntries logEntries = getDriver().manage().logs().get(LogType.BROWSER);
+
+        for(LogEntry entry : logEntries)
+        {
+            System.out.println(new Date(entry.getTimestamp())+" [" + entry.getLevel() + "] "+entry.getMessage());
+        }
     }
 
     public Scenario getCurrentScenario()
