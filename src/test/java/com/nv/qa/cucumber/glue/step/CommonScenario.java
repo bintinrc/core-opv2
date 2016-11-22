@@ -128,7 +128,7 @@ public class CommonScenario
 
         for(LogEntry entry : logEntries)
         {
-            System.out.println(new Date(entry.getTimestamp())+" [" + entry.getLevel() + "] "+entry.getMessage());
+            getCurrentScenario().write(new Date(entry.getTimestamp())+" [" + entry.getLevel() + "] "+entry.getMessage());
         }
     }
 
