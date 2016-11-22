@@ -19,7 +19,6 @@ public class ShipmentManagementPage {
     private final WebDriver driver;
     public static final String XPATH_CREATE_SHIPMENT_BUTTON = "//nv-table-button[@id='create-shipment-1']/button";
     public static final String XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON = "//nv-table-button[@id='createButton']/button";
-//    public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[span[text()='Load All Shipments']]";
     public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[contains(@aria-label, 'Load All Shipment')]";
     public static final String XPATH_SAVE_CHANGES_BUTTON = "//button[div[text()='Save Changes']]";
     public static final String XPATH_LINEHAUL_DROPDOWN = "//div[p[text()='Select Linehaul']]/md-select";
@@ -27,8 +26,7 @@ public class ShipmentManagementPage {
     public static final String XPATH_END_HUB_DROPDOWN = "//div[p[text()='End Hub']]/md-select";
     public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, \"md-active\")]/md-select-menu/md-content/md-option";
     public static final String XPATH_COMMENT_TEXT_AREA = "//textarea[@id=\"comment\"]";
-    public static final String XPATH_SHIPMENTS_TR = "//tr[@md-virtual-repeat=\"shipment in ctrl.shipments\"]";
-//    public static final String XPATH_EDIT_SEARCH_FILTER_BUTTON = "//button[span[text()='Edit Filters & Sort']]";
+    public static final String XPATH_SHIPMENTS_TR = "//tr[@md-virtual-repeat='shipment in getTableData()']";
     public static final String XPATH_EDIT_SEARCH_FILTER_BUTTON = "//button[contains(@aria-label, 'Edit Filters and Sort')]";
     public static final String XPATH_SORT_DIV = "//div[div[span[text()='Sort by']]]";
     public static final String XPATH_DELETE_CONFIRMATION_BUTTON = "//button[span[text()='Delete']]";
@@ -37,6 +35,10 @@ public class ShipmentManagementPage {
     public static final String XPATH_SHIPMENT_SCAN = "//div[contains(@class,'table-shipment-scan-container')]/table/tbody/tr";
     public static final String XPATH_CLOSE_SCAN_MODAL_BUTTON = "//button[@aria-label='Cancel']";
     public static final String XPATH_CLEAR_FILTER_BUTTON = "//button[span[text()='Clear All Filters']]";
+
+    public void clickEditSearchFilterButton() {
+        CommonUtil.clickBtn(driver, XPATH_EDIT_SEARCH_FILTER_BUTTON);
+    }
 
     public List<Shipment> getShipmentsFromTable() {
         List<Shipment> shipmentsResult = new ArrayList<>();
@@ -135,11 +137,11 @@ public class ShipmentManagementPage {
 
         public Shipment(WebElement shipment) {
             this.shipment = shipment;
-            this.id = shipment.findElements(By.tagName("td")).get(2).findElement(By.tagName("span")).getText();
-            this.status = shipment.findElements(By.tagName("td")).get(4).findElement(By.tagName("span")).getText();
-            this.startHub = shipment.findElements(By.tagName("td")).get(5).findElement(By.tagName("span")).getText();
-            this.endHub = shipment.findElements(By.tagName("td")).get(8).findElement(By.tagName("span")).getText();
-            this.comment = shipment.findElements(By.tagName("td")).get(10).getText();
+            this.id = shipment.findElements(By.tagName("td")).get(2).getText().trim();
+            this.status = shipment.findElements(By.tagName("td")).get(4).getText().trim();
+            this.startHub = shipment.findElements(By.tagName("td")).get(5).getText().trim();
+            this.endHub = shipment.findElements(By.tagName("td")).get(8).getText().trim();
+            this.comment = shipment.findElements(By.tagName("td")).get(10).getText().trim();
         }
 
         public void clickShipmentActionButton(String actionButton) {

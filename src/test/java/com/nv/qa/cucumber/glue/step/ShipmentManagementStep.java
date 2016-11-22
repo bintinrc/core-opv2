@@ -86,8 +86,9 @@ public class ShipmentManagementStep {
 
     @Then("^shipment created$")
     public void shipmentCreated() throws Throwable {
-        Assert.assertNotNull("toast info shown", driver.findElement(By.xpath("//div[@id='toast-container']/div[@class='toast toast-info']")));
-        CommonUtil.clickBtn(driver, XPATH_EDIT_SEARCH_FILTER_BUTTON);
+        WebElement toast = driver.findElement(By.xpath("//div[@id='toast-container']//div[contains(text(),'Shipment') and contains(text(),'created')]"));
+        Assert.assertNotNull("toast info not shown", toast);
+        id = toast.getText().split(" ")[1];
     }
 
     @Given("^op click Load All Shipment$")
@@ -100,12 +101,15 @@ public class ShipmentManagementStep {
     @When("^shipment ([^\"]*) action button clicked$")
     public void clickActionButton(String actionButton) throws Throwable {
 
-        ShipmentManagementPage.Shipment shipment = shipmentManagementPage.getShipmentFromTable(0);
-        id = shipment.getId();
-        start = shipment.getStartHub();
-        end = shipment.getEndHub();
+        List<ShipmentManagementPage.Shipment> shipments =shipmentManagementPage.getShipmentsFromTable();
 
-        shipment.clickShipmentActionButton(actionButton);
+        for (ShipmentManagementPage.Shipment shipment : shipments) {
+            if (shipment.getId().equals(id)) {
+                shipment.clickShipmentActionButton(actionButton);
+                break;
+            }
+        }
+
         CommonUtil.pause(3000);
 
     }
@@ -130,8 +134,6 @@ public class ShipmentManagementStep {
         Assert.assertEquals("start hub value", start, startHub);
         Assert.assertEquals("end hub value", end, endHub);
         Assert.assertEquals("comment value", comment, komen);
-
-        CommonUtil.clickBtn(driver, XPATH_EDIT_SEARCH_FILTER_BUTTON);
     }
 
     @Then("^shipment status is ([^\"]*)$")
@@ -148,7 +150,6 @@ public class ShipmentManagementStep {
         }
 
         Assert.assertEquals("Shipment " + id + " status", status, actualStat);
-        CommonUtil.clickBtn(driver, XPATH_EDIT_SEARCH_FILTER_BUTTON);
     }
 
     @When("^cancel shipment button clicked$")
@@ -159,7 +160,11 @@ public class ShipmentManagementStep {
 
     @Then("^shipment deleted$")
     public void isShipmentDeleted() throws Throwable {
-        List<ShipmentManagementPage.Shipment> shipments =shipmentManagementPage.getShipmentsFromTable();
+
+        WebElement toast = driver.findElement(By.xpath("//div[@id='toast-container']//div[contains(text(),'Success delete Shipping ID " + id + "')]"));
+        Assert.assertNotNull("toast info not shown", toast);
+
+        List<ShipmentManagementPage.Shipment> shipments = shipmentManagementPage.getShipmentsFromTable();
         boolean isRemoved = true;
         for (ShipmentManagementPage.Shipment shipment : shipments) {
             String spId = shipment.getId();
@@ -186,7 +191,7 @@ public class ShipmentManagementStep {
 
     @Given("^op click edit filter$")
     public void op_click_edit_filter() throws Throwable {
-        CommonUtil.clickBtn(driver, XPATH_EDIT_SEARCH_FILTER_BUTTON);
+        shipmentManagementPage.clickEditSearchFilterButton();
         CommonUtil.pause1s();
     }
 
