@@ -46,6 +46,7 @@ public class ShipmentLinehaulStep{
 
     @When("^create new linehaul:$")
     public void createLinehaul(Map<String, String> arg1) throws IOException {
+        shipmentLinehaulPage.clickCreateLinehaul();
         fillLinehaulForm(arg1);
         shipmentLinehaulPage.clickOnLabelCreate();
         shipmentLinehaulPage.clickCreateButton();
@@ -53,12 +54,15 @@ public class ShipmentLinehaulStep{
 
     @Then("^linehaul exist$")
     public void linehaulExist() throws Throwable {
-        shipmentLinehaulPage.search(linehaul.getName());
-        List<WebElement> list = shipmentLinehaulPage.grabListOfLinehaulComment();
+        WebElement toast = driver.findElement(By.xpath("//div[@id='toast-container']//div[contains(text(),'Linehaul') and contains(text(),'created')]"));
+        Assert.assertNotNull("toast info not shown", toast);
+        linehaulId = toast.getText().split(" ")[1];
+        shipmentLinehaulPage.search(linehaulId);
+        List<WebElement> list = shipmentLinehaulPage.grabListOfLinehaulId();
         boolean isExist = false;
         for (WebElement item : list) {
             String text = item.getText();
-            if (text.contains(linehaul.getComment())) {
+            if (text.contains(linehaulId)) {
                 isExist = true;
                 break;
             }

@@ -1,4 +1,4 @@
-@selenium @shipment @dev
+@selenium @shipment
 Feature: shipment linehaul
 
   Scenario: op login into operator portal
@@ -18,5 +18,5 @@ Feature: shipment linehaul
       | days      | Monday,Friday           |
     Then linehaul exist
 
-#  @closeBrowser
-#  Scenario: close browser
+  @closeBrowser
+  Scenario: close browser

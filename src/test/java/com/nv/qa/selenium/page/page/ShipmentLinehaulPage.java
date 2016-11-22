@@ -119,8 +119,8 @@ public class ShipmentLinehaulPage {
         return driver.findElements(By.xpath(XPATH_TABLE_ITEM));
     }
 
-    public List<WebElement> grabListOfLinehaulComment() {
-        return driver.findElements(By.xpath(XPATH_TABLE_ITEM+"/td[12]"));
+    public List<WebElement> grabListOfLinehaulId() {
+        return driver.findElements(By.xpath(XPATH_TABLE_ITEM+"/td[3]"));
     }
 
     public List<Linehaul> grabListofLinehaul() {
