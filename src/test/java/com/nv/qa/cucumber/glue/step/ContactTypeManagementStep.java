@@ -3,8 +3,6 @@ package com.nv.qa.cucumber.glue.step;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.SeleniumHelper;
 import com.nv.qa.support.SeleniumSharedDriver;
-import cucumber.api.Scenario;
-import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -23,14 +21,6 @@ public class ContactTypeManagementStep {
     @Before
     public void setup() {
         driver = SeleniumSharedDriver.getInstance().getDriver();
-    }
-
-    @After
-    public void teardown(Scenario scenario) {
-        if (scenario.isFailed()) {
-            final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-            scenario.embed(screenshot, "image/png");
-        }
     }
 
     @When("^contact type management, add contact type button is clicked$")

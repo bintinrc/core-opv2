@@ -4,15 +4,11 @@ import com.nv.qa.selenium.page.page.ShipmentInboundScanningPage;
 import com.nv.qa.selenium.page.page.ShipmentManagementPage;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.SeleniumSharedDriver;
-import cucumber.api.Scenario;
-import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.junit.Assert;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
@@ -34,14 +30,6 @@ public class ShipmentInboundScanningStep {
         driver = SeleniumSharedDriver.getInstance().getDriver();
         shipmentManagementPage = new ShipmentManagementPage(driver);
         scanningPage = new ShipmentInboundScanningPage(driver);
-    }
-
-    @After
-    public void teardown(Scenario scenario) {
-        if (scenario.isFailed()) {
-            final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-            scenario.embed(screenshot, "image/png");
-        }
     }
 
     @Then("^get first shipment for shipment inbound scanning$")

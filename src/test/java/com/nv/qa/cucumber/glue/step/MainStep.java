@@ -3,14 +3,10 @@ package com.nv.qa.cucumber.glue.step;
 import com.nv.qa.selenium.page.page.MainPage;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.SeleniumSharedDriver;
-import cucumber.api.Scenario;
-import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -26,14 +22,6 @@ public class MainStep {
     public void setup() {
         driver = SeleniumSharedDriver.getInstance().getDriver();
         mainPage = new MainPage(driver);
-    }
-
-    @After
-    public void teardown(Scenario scenario) {
-        if (scenario.isFailed()) {
-            final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-            scenario.embed(screenshot, "image/png");
-        }
     }
 
     @Given("^op click navigation ([^\"]*) in ([^\"]*)$")

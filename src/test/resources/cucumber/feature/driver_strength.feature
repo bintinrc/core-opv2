@@ -1,11 +1,9 @@
-@selenium @saas
+@DriverStrength @selenium @saas
 Feature: driver strength
 
-  Scenario: op login into operator portal
-    Given op is in op portal login page
-    When login button is clicked
-    When login as "{operator-portal-uid}" with password "{operator-portal-pwd}"
-    Then op is in main page
+  @LaunchBrowser
+  Scenario: Login to Operator V2
+    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
   # add new
   Scenario: op add new driver (uid:b7a6c2b2-66c0-4e7d-890c-b0099cef4b5a)
@@ -36,10 +34,10 @@ Feature: driver strength
     When in driver strength searching driver
     When in driver strength driver coming status is changed
 
-  Scenario: op view contact (uid:830216ec-bc25-4921-8950-40e6bd8818af)
-    Given op click navigation Driver Strength in Fleet
-    When in driver strength searching driver
-    When in driver strength clicking on view contact button
+#  Scenario: op view contact (uid:830216ec-bc25-4921-8950-40e6bd8818af)
+#    Given op click navigation Driver Strength in Fleet
+#    When in driver strength searching driver
+#    When in driver strength clicking on view contact button
 
   # edit existing
   Scenario: op edit new driver (uid:204f21ef-8b0c-4b74-a6e0-c191199d3f5a)
@@ -56,5 +54,5 @@ Feature: driver strength
     When in driver strength delete new driver button is clicked
     Then in driver strength the created driver should not exist
 
-  @closeBrowser
-  Scenario: close browser
+  @KillBrowser
+  Scenario: Kill Browser

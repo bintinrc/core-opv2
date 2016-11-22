@@ -8,15 +8,11 @@ import com.nv.qa.model.order_creation.v3.CreateOrderResponse;
 import com.nv.qa.selenium.page.page.ShipmentManagementPage;
 import com.nv.qa.selenium.page.page.ShipmentScanningPage;
 import com.nv.qa.support.*;
-import cucumber.api.Scenario;
-import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 
@@ -53,14 +49,6 @@ public class ShipmentScanningStep {
         driver = SeleniumSharedDriver.getInstance().getDriver();
         shipmentManagementPage = new ShipmentManagementPage(driver);
         scanningPage = new ShipmentScanningPage(driver);
-    }
-
-    @After
-    public void teardown(Scenario scenario) {
-        if (scenario.isFailed()) {
-            final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-            scenario.embed(screenshot, "image/png");
-        }
     }
 
     @Given("^Create an V3 order with the following attributes:$")
