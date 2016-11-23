@@ -67,6 +67,7 @@ public class SeleniumHelper {
         ChromeOptions options = new ChromeOptions();
         options.setExperimentalOption("prefs", chromePrefs);
         options.addArguments("--disable-extensions");
+        //options.addArguments("--start-maximized"); Maximize on Mac does not cover entire screen.
 
         if(APIEndpoint.SELENIUM_CHROME_BINARY_PATH!=null && !APIEndpoint.SELENIUM_CHROME_BINARY_PATH.isEmpty())
         {
@@ -79,7 +80,9 @@ public class SeleniumHelper {
         driver.manage().timeouts().implicitlyWait(APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(APIEndpoint.SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         driver.manage().timeouts().setScriptTimeout(APIEndpoint.SELENIUM_SCRIPT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        driver.manage().window().maximize();
+        //driver.manage().window().maximize(); //This works for IE and Firefox. Chrome does not work. There is a bug submitted for this on ChromeDriver project. Use "ChromeOptions.addArguments("--start-maximized");" instead.
+        driver.manage().window().setSize(new Dimension(APIEndpoint.SELENIUM_WINDOW_WIDTH, APIEndpoint.SELENIUM_WINDOW_HEIGHT));
+        driver.manage().window().setPosition(new Point(0, 0));
         return driver;
     }
 

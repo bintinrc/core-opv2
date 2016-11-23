@@ -69,7 +69,7 @@ public class CommonScenario
     @After
     public void teardown(Scenario scenario)
     {
-        if (scenario.isFailed())
+        if(scenario.isFailed())
         {
             WebDriver driver = SeleniumSharedDriver.getInstance().getDriver();
             final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
