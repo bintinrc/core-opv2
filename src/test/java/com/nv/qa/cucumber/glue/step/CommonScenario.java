@@ -74,6 +74,7 @@ public class CommonScenario
             WebDriver driver = SeleniumSharedDriver.getInstance().getDriver();
             final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
             scenario.embed(screenshot, "image/png");
+            printBrowserConsoleLog();
         }
     }
 
