@@ -68,6 +68,11 @@ public class SimplePage
 
     public String getTextOnTable(int rowNumber, String columnDataClass, String mdVirtualRepeat)
     {
+        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, mdVirtualRepeat);
+    }
+
+    public String getTextOnTableWithMdVirtualRepeat(int rowNumber, String columnDataClass, String mdVirtualRepeat)
+    {
         String text = null;
 
         try
@@ -80,6 +85,48 @@ public class SimplePage
         }
 
         return text;
+    }
+
+    public void clickActionButtonOnTableWithMdVirtualRepeat(int rowNumber, String actionButtonName, String ngRepeat)
+    {
+        try
+        {
+            WebElement we = findElementByXpath(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'actions')]//nv-icon-button[@name='%s']", ngRepeat, rowNumber, actionButtonName));
+            moveAndClick(we);
+        }
+        catch(NoSuchElementException ex)
+        {
+            throw new RuntimeException("Cannot find action button on table.", ex);
+        }
+    }
+
+    public String getTextOnTableWithNgRepeat(int rowNumber, String columnDataClass, String ngRepeat)
+    {
+        String text = null;
+
+        try
+        {
+            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[contains(@class, '%s')]", ngRepeat, rowNumber, columnDataClass));
+            text = we.getText().trim();
+        }
+        catch(NoSuchElementException ex)
+        {
+        }
+
+        return text;
+    }
+
+    public void clickActionButtonOnTableWithNgRepeat(int rowNumber, String actionButtonName, String ngRepeat)
+    {
+        try
+        {
+            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[contains(@class, 'actions')]//nv-icon-button[@name='%s']", ngRepeat, rowNumber, actionButtonName));
+            moveAndClick(we);
+        }
+        catch(NoSuchElementException ex)
+        {
+            throw new RuntimeException("Cannot find action button on table.", ex);
+        }
     }
 
     public void inputListBox(String placeHolder, String searchValue) throws InterruptedException

@@ -44,7 +44,7 @@ public class RouteGroupTemplatesStep extends AbstractSteps
     @Then("^new 'route group template' on 'Route Group Templates' created successfully$")
     public void verifyNewRouteGroupTemplateCreatedSuccessfully()
     {
-        routeGroupTemplatesPage.searchTemplates(routeGroupTemplateName);
+        routeGroupTemplatesPage.searchTable(routeGroupTemplateName);
 
         String actualName = routeGroupTemplatesPage.getTextOnTable(1, RouteGroupTemplatesPage.COLUMN_CLASS_NAME);
         Assert.assertEquals(routeGroupTemplateName, actualName);
@@ -65,7 +65,7 @@ public class RouteGroupTemplatesStep extends AbstractSteps
     @Then("^'route group template' on 'Route Group Templates' updated successfully$")
     public void verifyRouteGroupTemplateUpdatedSuccessfully()
     {
-        routeGroupTemplatesPage.searchTemplates(routeGroupTemplateName);
+        routeGroupTemplatesPage.searchTable(routeGroupTemplateName);
 
         String actualName = routeGroupTemplatesPage.getTextOnTable(1, RouteGroupTemplatesPage.COLUMN_CLASS_NAME);
         Assert.assertEquals(routeGroupTemplateName, actualName);
@@ -75,13 +75,13 @@ public class RouteGroupTemplatesStep extends AbstractSteps
     }
 
     @When("^op delete 'route group template' on 'Route Group Templates'$")
-    public void deleteTag()
+    public void deleteRouteGroupTemplate()
     {
         routeGroupTemplatesPage.deleteRouteGroupTemplate(routeGroupTemplateName);
     }
 
     @Then("^'route group template' on 'Route Group Templates' deleted successfully$")
-    public void verifyTagDeletedSuccessfully()
+    public void verifyRouteGroupTemplateDeletedSuccessfully()
     {
         /**
          * Check the route group template does not exists in table.

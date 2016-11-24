@@ -65,6 +65,8 @@ public class MainPage extends LoadableComponent<MainPage> {
             endURL = "hub";
         } else if (navTitle.trim().equalsIgnoreCase("linehaul management")) {
             endURL = "linehaul/entries";
+        } else if (navTitle.trim().equalsIgnoreCase("route groups")) {
+            endURL = "route-group";
         }
 
         final String mainDashboard = endURL;
