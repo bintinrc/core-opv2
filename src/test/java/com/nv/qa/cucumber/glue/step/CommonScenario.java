@@ -61,7 +61,7 @@ public class CommonScenario
     }
 
     /**
-     * Save screenshot if scenario failed.
+     * Save screenshot and print "browser console log" if scenario failed.
      * You can find screenshot image at './build/report/cucumber-junit/htmloutput/index.html'.
      *
      * @param scenario
@@ -71,8 +71,7 @@ public class CommonScenario
     {
         if(scenario.isFailed())
         {
-            WebDriver driver = SeleniumSharedDriver.getInstance().getDriver();
-            final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            final byte[] screenshot = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.BYTES);
             scenario.embed(screenshot, "image/png");
             printBrowserConsoleLog();
         }
@@ -81,12 +80,12 @@ public class CommonScenario
     @Given("^op login into Operator V2 with username \"([^\"]*)\" and password \"([^\"]*)\"$")
     public void loginToOperatorV2(String username, String password) throws InterruptedException
     {
-        LoginPage loginPage = new LoginPage(driver);
+        LoginPage loginPage = new LoginPage(getDriver());
         loginPage.get();
         loginPage.clickLoginButton();
         loginPage.enterCredential(username, password);
 
-        MainPage mainPage = new MainPage(driver);
+        MainPage mainPage = new MainPage(getDriver());
         mainPage.dpAdm();
     }
 
@@ -125,11 +124,19 @@ public class CommonScenario
     @Then("print browser console log")
     public void printBrowserConsoleLog()
     {
-        LogEntries logEntries = getDriver().manage().logs().get(LogType.BROWSER);
-
-        for(LogEntry entry : logEntries)
+        try
         {
-            getCurrentScenario().write(new Date(entry.getTimestamp())+" [" + entry.getLevel() + "] "+entry.getMessage());
+            LogEntries logEntries = getDriver().manage().logs().get(LogType.BROWSER);
+
+            for(LogEntry entry : logEntries)
+            {
+                getCurrentScenario().write(new Date(entry.getTimestamp())+" [" + entry.getLevel() + "] "+entry.getMessage());
+            }
+        }
+        catch(Exception ex)
+        {
+            System.out.println("[WARNING] Failed print browser log. Cause:");
+            ex.printStackTrace(System.err);
         }
     }
 
