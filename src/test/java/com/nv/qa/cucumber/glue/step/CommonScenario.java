@@ -71,9 +71,9 @@ public class CommonScenario
     {
         if(scenario.isFailed())
         {
-            final byte[] screenshot = ((TakesScreenshot) SeleniumSharedDriver.getInstance().getDriver()).getScreenshotAs(OutputType.BYTES);
-            scenario.embed(screenshot, "image/png");
-            printBrowserConsoleLog();
+            WebDriver currentDriver = SeleniumSharedDriver.getInstance().getDriver(); // Don't use getDriver() because some feature files does not use CommonScenario.
+            takesScreenshot(currentDriver, scenario);
+            printBrowserConsoleLog(currentDriver, scenario);
         }
     }
 
@@ -111,8 +111,13 @@ public class CommonScenario
 
     public void takesScreenshot()
     {
-        final byte[] screenshot = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.BYTES);
-        getCurrentScenario().embed(screenshot, "image/png");
+        takesScreenshot(getDriver(), getCurrentScenario());
+    }
+
+    private void takesScreenshot(WebDriver currentDriver, Scenario currentScenario)
+    {
+        final byte[] screenshot = ((TakesScreenshot) currentDriver).getScreenshotAs(OutputType.BYTES);
+        currentScenario.embed(screenshot, "image/png");
     }
 
     @When("browser open \"([^\"]*)\"")
@@ -124,13 +129,18 @@ public class CommonScenario
     @Then("print browser console log")
     public void printBrowserConsoleLog()
     {
+        printBrowserConsoleLog(getDriver(), getCurrentScenario());
+    }
+
+    private void printBrowserConsoleLog(WebDriver currentDriver, Scenario currentScenario)
+    {
         try
         {
-            LogEntries logEntries = SeleniumSharedDriver.getInstance().getDriver().manage().logs().get(LogType.BROWSER);
+            LogEntries logEntries = currentDriver.manage().logs().get(LogType.BROWSER);
 
             for(LogEntry entry : logEntries)
             {
-                getCurrentScenario().write(new Date(entry.getTimestamp())+" [" + entry.getLevel() + "] "+entry.getMessage());
+                currentScenario.write(new Date(entry.getTimestamp())+" [" + entry.getLevel() + "] "+entry.getMessage());
             }
         }
         catch(Exception ex)
