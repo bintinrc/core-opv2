@@ -71,7 +71,7 @@ public class CommonScenario
     {
         if(scenario.isFailed())
         {
-            final byte[] screenshot = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.BYTES);
+            final byte[] screenshot = ((TakesScreenshot) SeleniumSharedDriver.getInstance().getDriver()).getScreenshotAs(OutputType.BYTES);
             scenario.embed(screenshot, "image/png");
             printBrowserConsoleLog();
         }
@@ -126,7 +126,7 @@ public class CommonScenario
     {
         try
         {
-            LogEntries logEntries = getDriver().manage().logs().get(LogType.BROWSER);
+            LogEntries logEntries = SeleniumSharedDriver.getInstance().getDriver().manage().logs().get(LogType.BROWSER);
 
             for(LogEntry entry : logEntries)
             {
