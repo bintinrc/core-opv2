@@ -1,11 +1,9 @@
 package com.nv.qa.selenium.page.page;
 
 import com.nv.qa.support.APIEndpoint;
-import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.DateUtil;
 import com.nv.qa.support.ScenarioHelper;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -176,7 +174,7 @@ public class DpPage extends SimplePage
     {
         if(type.equals("dp-partners"))
         {
-            String tmpId = DateUtil.getCurrentTime_HH_MM_SS();
+            String tmpId = DateUtil.getTimestamp();
             ScenarioHelper.getInstance().setTmpId(tmpId);
 
             sendKeys("//input[@type='text'][@aria-label='Partner Name']", String.format("Partner %s", tmpId));
