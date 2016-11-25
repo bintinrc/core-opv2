@@ -6,11 +6,11 @@ Feature: shipment inbound scanning
     When login button is clicked
     When login as "{operator-portal-uid}" with password "{operator-portal-pwd}"
     Then op is in main page
+    Then op click navigation Shipment Management in Inter-Hub
 
   Scenario: shipment inbound to van (uid:eed4a9d2-45c9-4b77-9b71-f88ff1423f0f)
 ###create shipment
-    Given op click navigation Shipment Management in Inter-Hub
-    When create shipment button is clicked
+    Given create shipment button is clicked
     When create Shipment with Start Hub 30JKB, End hub DOJO and comment Auto Comment
     Then shipment created
     When filter Shipment Status is Pending
@@ -35,13 +35,13 @@ Feature: shipment inbound scanning
     Then shipment scan with source VAN_INBOUND in hub 30JKB
     When shipment Delete action button clicked
     Then shipment deleted
+    Then op click edit filter
+    Then clear filter
 
 
   Scenario: shipment inbound to transit hub (uid:12758688-5e0d-4121-9b27-e11765138648)
 ###search shipment
-    Given op click edit filter
-    When clear filter
-    When create shipment button is clicked
+    Given create shipment button is clicked
     When create Shipment with Start Hub 30JKB, End hub DOJO and comment Auto Comment
     Then shipment created
     When filter Shipment Status is Pending

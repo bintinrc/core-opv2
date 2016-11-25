@@ -19,7 +19,7 @@ public class ShipmentManagementPage {
     private final WebDriver driver;
     public static final String XPATH_CREATE_SHIPMENT_BUTTON = "//nv-table-button[@id='create-shipment-1']/button";
     public static final String XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON = "//nv-table-button[@id='createButton']/button";
-    public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[contains(@aria-label, 'Load All Shipment')]";
+    public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[@ng-click='ctrl.onSearch()']";
     public static final String XPATH_SAVE_CHANGES_BUTTON = "//button[div[text()='Save Changes']]";
     public static final String XPATH_LINEHAUL_DROPDOWN = "//div[p[text()='Select Linehaul']]/md-select";
     public static final String XPATH_START_HUB_DROPDOWN = "//div[p[text()='Start Hub']]/md-select";
@@ -104,6 +104,8 @@ public class ShipmentManagementPage {
         sortVars.get(1).click();
         CommonUtil.pause10ms();
         CommonUtil.clickBtn(driver,XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + var2 + "']]");
+
+        CommonUtil.pause1s();
     }
 
     public String grabXPathFilter(String filterLabel) {
