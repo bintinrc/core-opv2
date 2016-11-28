@@ -44,19 +44,27 @@ public class ShipmentLinehaulStep{
         shipmentLinehaulPage.clickCreateLinehaul();
     }
 
+    @When("^op click delete linehaul button$")
+    public void deleteButtonClicked() throws Throwable {
+        shipmentLinehaulPage.clickOnLabelEdit();
+        shipmentLinehaulPage.clickDeleteButton();
+    }
+
     @When("^create new linehaul:$")
     public void createLinehaul(Map<String, String> arg1) throws IOException {
-        shipmentLinehaulPage.clickCreateLinehaul();
+//        shipmentLinehaulPage.clickCreateLinehaul();
         fillLinehaulForm(arg1);
         shipmentLinehaulPage.clickOnLabelCreate();
         shipmentLinehaulPage.clickCreateButton();
+
+        WebElement toast = driver.findElement(By.xpath("//div[@id='toast-container']//div[contains(text(),'Linehaul') and contains(text(),'created')]"));
+        Assert.assertNotNull("toast info not shown", toast);
+        linehaulId = toast.getText().split(" ")[1];
     }
 
     @Then("^linehaul exist$")
     public void linehaulExist() throws Throwable {
-        WebElement toast = driver.findElement(By.xpath("//div[@id='toast-container']//div[contains(text(),'Linehaul') and contains(text(),'created')]"));
-        Assert.assertNotNull("toast info not shown", toast);
-        linehaulId = toast.getText().split(" ")[1];
+
         shipmentLinehaulPage.search(linehaulId);
         List<WebElement> list = shipmentLinehaulPage.grabListOfLinehaulId();
         boolean isExist = false;
@@ -69,6 +77,7 @@ public class ShipmentLinehaulStep{
         }
 
         Assert.assertTrue("linehaul not exist", isExist);
+        CommonUtil.pause3s();
     }
 
     @Given("^op click tab ([^\"]*)$")
@@ -83,11 +92,15 @@ public class ShipmentLinehaulStep{
 
     @When("^op click edit action button$")
     public void editActionButtonClicked() throws Throwable {
-        List<WebElement> list = shipmentLinehaulPage.grabListOfLinehaul();
-        Linehaul tmp = shipmentLinehaulPage.extractLinehaulInfoFromTable(list.get(0));
-        linehaulId = tmp.getId();
-        list.get(0).findElement(By.tagName("button")).click();
-        CommonUtil.pause1s();
+
+        shipmentLinehaulPage.search(linehaulId);
+        List<Linehaul> list = shipmentLinehaulPage.grabListofLinehaul();
+        for (Linehaul item : list) {
+            if (item.getId().equals(linehaulId)) {
+                item.clickEditButton();
+                break;
+            }
+        }
     }
 
     @When("^edit linehaul with:$")
@@ -105,5 +118,26 @@ public class ShipmentLinehaulStep{
         shipmentLinehaulPage.fillHubs(linehaul.getHubs());
         shipmentLinehaulPage.chooseFrequency(linehaul.getFrequency());
         shipmentLinehaulPage.chooseWorkingDays(linehaul.getDays());
+    }
+
+    @Then("^linehaul deleted$")
+    public void linehaulDeleted() throws Throwable {
+        WebElement toast = driver.findElement(By.xpath("//div[@id='toast-container']//div[contains(text(),'Linehaul " + linehaulId + " deleted')]"));
+        Assert.assertNotNull("toast info not shown", toast);
+    }
+
+    @Then("^linehaul edited$")
+    public void linehaul_edited() throws Throwable {
+        WebElement toast = driver.findElement(By.xpath("//div[@id='toast-container']//div[contains(text(),'Linehaul " + linehaulId + " updated')]"));
+        Assert.assertNotNull("toast info not shown", toast);
+        linehaulExist();
+        List<Linehaul> list = shipmentLinehaulPage.grabListofLinehaul();
+        for (Linehaul item : list) {
+            if (item.getId().equals(linehaulId)) {
+                Assert.assertEquals("Linehaul name", linehaul.getName(), item.getName());
+                Assert.assertEquals("Linehaul frequency", linehaul.getFrequency().toLowerCase(), item.getFrequency().toLowerCase());
+                break;
+            }
+        }
     }
 }

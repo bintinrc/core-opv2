@@ -1,5 +1,8 @@
 package com.nv.qa.model;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,12 +12,34 @@ import java.util.List;
  * on 10/25/16.
  */
 public class Linehaul {
+
+    private WebElement element;
     private String name;
     private String comment;
     private String frequency;
     private String id;
     private List<String> hubs = new ArrayList<>();
     private List<String> days = new ArrayList<>();
+
+    public Linehaul() {
+    }
+
+    public Linehaul(WebElement element) {
+        this.element = element;
+        List<WebElement> column = element.findElements(By.tagName("td"));
+        id = column.get(2).getText().trim();
+        name = column.get(3).getText();
+        String hubs = (column.get(4).getText() + "," + column.get(5).getText() + "," + column.get(6).getText()).replaceAll("\\s+", "");
+        if (hubs.contains(",-")) {
+            hubs = hubs.replace(",-", "");
+        }
+        String[] arrLegs = hubs.split(",");
+        Collections.addAll(this.hubs, arrLegs);
+        frequency = column.get(7).getText();
+        arrLegs = column.get(8).getText().split(",");
+        Collections.addAll(this.days, arrLegs);
+        comment = column.get(11).getText();
+    }
 
     public String getName() {
         return name;
@@ -64,6 +89,10 @@ public class Linehaul {
     public void setDays(String days) {
         String[] arrLegs = days.split(",");
         Collections.addAll(this.days, arrLegs);
+    }
+
+    public void clickEditButton() {
+        element.findElement(By.tagName("button")).click();
     }
 
 

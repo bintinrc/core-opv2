@@ -52,7 +52,6 @@ public class ShipmentManagementStep {
         CommonUtil.inputText(driver, XPATH_COMMENT_TEXT_AREA, comment);
 
         CommonUtil.clickBtn(driver, XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
-        CommonUtil.pause1s();
 
     }
 

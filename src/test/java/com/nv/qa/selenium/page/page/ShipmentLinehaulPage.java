@@ -19,7 +19,7 @@ public class ShipmentLinehaulPage {
     private final WebDriver driver;
 
     private static final String XPATH_CREATE_LINEHAUL_BUTTON = "//button[div[text()='Create Linehaul']]";
-    private static final String XPATH_EDIT_ACTION_BUTTON = "//nv-icon-button[@name='Edit']/button";
+    private static final String XPATH_DELETE_BUTTON = "//button[@aria-label='Delete']";
     private static final String XPATH_LINEHAUL_NAME_TF = "//input[contains(@name,'linehaul-name')]";
     private static final String XPATH_COMMENT_TF = "//textarea[contains(@name,'comments')]";
     private static final String XPATH_ADD_HUB_BUTTON = "//button[@aria-label='Add Hub']";
@@ -40,10 +40,6 @@ public class ShipmentLinehaulPage {
 
     public void clickCreateLinehaul() {
         CommonUtil.clickBtn(driver, XPATH_CREATE_LINEHAUL_BUTTON);
-    }
-
-    public void clickEditActionButton() {
-        CommonUtil.clickBtn(driver, XPATH_EDIT_ACTION_BUTTON);
     }
 
     public void clickAddHubButton() {
@@ -127,26 +123,14 @@ public class ShipmentLinehaulPage {
         List<WebElement> list = grabListOfLinehaul();
         List<Linehaul> result = new ArrayList<>();
         for (WebElement element : list) {
-            Linehaul linehaul = extractLinehaulInfoFromTable(element);
+            Linehaul linehaul = new Linehaul(element);
             result.add(linehaul);
         }
 
         return result;
     }
 
-    public Linehaul extractLinehaulInfoFromTable(WebElement element) {
-        Linehaul linehaul = new Linehaul();
-        List<WebElement> column = element.findElements(By.tagName("td"));
-        linehaul.setId(column.get(3).getText().trim());
-        linehaul.setName(column.get(4).getText());
-        String hubs = (column.get(5).getText() + "," + column.get(6).getText() + "," + column.get(7).getText()).replaceAll("\\s+", "");
-        if (column.get(6).getText().contains(",-")) {
-            hubs = hubs.replace(",-", "");
-        }
-        linehaul.setHubs(hubs);
-        linehaul.setFrequency(column.get(8).getText());
-        linehaul.setDays(column.get(9).getText());
-        linehaul.setComment(column.get(12).getText());
-        return linehaul;
+    public void clickDeleteButton() {
+        CommonUtil.clickBtn(driver, XPATH_DELETE_BUTTON);
     }
 }
