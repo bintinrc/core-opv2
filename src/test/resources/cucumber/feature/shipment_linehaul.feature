@@ -9,7 +9,7 @@ Feature: shipment linehaul
     Then op click navigation Linehaul Management in Inter-Hub
 
   # create linehaul
-  Scenario: Create Linehaul
+  Scenario: Create Linehaul (uid:3eeaa647-c1a2-40a1-8ee4-da898e7e2e7d)
     Given op click create linehaul button
     When create new linehaul:
       | name      | LINEHAUL AUTOMATION     |
@@ -23,7 +23,7 @@ Feature: shipment linehaul
     Then linehaul deleted
 
   # edit linehaul
-  Scenario: Edit Linehaul
+  Scenario: Edit Linehaul (uid:85dbd34f-25ea-4ada-accc-884a8098f8e2)
     Given op click tab LINEHAUL ENTRIES
     Given op click create linehaul button
     When create new linehaul:
@@ -46,7 +46,7 @@ Feature: shipment linehaul
     Then linehaul deleted
 
   # delete linehaul
-  Scenario: Delete Linehaul
+  Scenario: Delete Linehaul (uid:89bc519c-6f5d-4f99-864a-2dbba4c52c22)
     Given op click tab LINEHAUL ENTRIES
     Given op click create linehaul button
     When create new linehaul:
