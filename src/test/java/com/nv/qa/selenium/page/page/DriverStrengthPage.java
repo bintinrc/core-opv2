@@ -85,9 +85,9 @@ public class DriverStrengthPage extends SimplePage
 
     public void searchDriver() throws InterruptedException
     {
-        String driverName = "Driver "+ScenarioHelper.getInstance().getTmpId();
+        String driverUsername = "D"+ScenarioHelper.getInstance().getTmpId();
         click("//button[@aria-label='Load Everything']");
-        sendKeys("//th[contains(@class, 'name')]/nv-search-input-filter/md-input-container/div/input", driverName);
+        sendKeys("//th[contains(@class, 'username')]/nv-search-input-filter/md-input-container/div/input", driverUsername);
     }
 
     public void verifyDriver()
@@ -155,7 +155,7 @@ public class DriverStrengthPage extends SimplePage
 
     public void enterDefaultValue()
     {
-        String tmpId = DateUtil.getCurrentTime_HH_MM_SS();
+        String tmpId = DateUtil.getTimestamp();
         ScenarioHelper.getInstance().setTmpId(tmpId);
 
         sendKeys("//input[@type='text'][@aria-label='First Name']", "Driver");
@@ -204,20 +204,20 @@ public class DriverStrengthPage extends SimplePage
 
     public void verifyNewDriver()
     {
-        String expectedName = "Driver "+ScenarioHelper.getInstance().getTmpId();
+        String expectedUsername = "D"+ScenarioHelper.getInstance().getTmpId();
 
         click("//button[@aria-label='Load Everything']");
-        sendKeys("//th[contains(@class, 'name')]/nv-search-input-filter/md-input-container/div/input", expectedName);
+        sendKeys("//th[contains(@class, 'username')]/nv-search-input-filter/md-input-container/div/input", expectedUsername);
 
         String actualName = getTextOnTable(1, COLUMN_CLASS_NAME);
-        Assert.assertEquals(expectedName, actualName);
+        Assert.assertEquals(expectedUsername, actualName);
     }
 
     public void searchingNewDriver()
     {
-        String driverName = "Driver "+ScenarioHelper.getInstance().getTmpId();
+        String driverUsername = "D"+ScenarioHelper.getInstance().getTmpId();
         click("//button[@aria-label='Load Everything']");
-        sendKeys("//th[contains(@class, 'name')]/nv-search-input-filter/md-input-container/div/input", driverName);
+        sendKeys("//th[contains(@class, 'username')]/nv-search-input-filter/md-input-container/div/input", driverUsername);
     }
 
     public void editNewDriver()
