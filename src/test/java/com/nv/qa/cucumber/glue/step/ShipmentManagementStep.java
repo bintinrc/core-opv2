@@ -145,8 +145,15 @@ public class ShipmentManagementStep {
     @When("^cancel shipment button clicked$")
     public void clickCancelShipmentButton() throws Throwable {
         CommonUtil.clickBtn(driver, XPATH_CANCEL_SHIPMENT_BUTTON);
-        WebElement toast = CommonUtil.getToast(driver);
-        Assert.assertTrue("toast message not contains Cancelled", toast.getText().contains("Success changed status to Cancelled for Shipment ID " + id));
+        List<WebElement> toasts = CommonUtil.getToasts(driver);
+        String text = "";
+        for (WebElement toast : toasts) {
+            text = toast.getText();
+            if (text.contains("Success changed status to Cancelled for Shipment ID " + id)) {
+                break;
+            }
+        }
+        Assert.assertTrue("toast message not contains Cancelled", text.contains("Success changed status to Cancelled for Shipment ID " + id));
         CommonUtil.pause(5000);
     }
 

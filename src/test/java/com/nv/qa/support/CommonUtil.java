@@ -117,6 +117,10 @@ public class CommonUtil {
         return getElementByXpath(driver, "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
     }
 
+    public static List<WebElement> getToasts(WebDriver driver) {
+        return getElementsByXpath(driver, "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
+    }
+
     public static void closeModal(WebDriver driver) {
         Actions builder = new Actions(driver);
         builder.moveToElement(driver.findElement(By.xpath("//div[(contains(@class, 'nv-text-ellipsis nv-h4'))]")), 5, 5).click().build().perform();

@@ -75,21 +75,21 @@ public class ShipmentManagementPage {
 
     public void selectFirstLineHaul() {
         grabLineHaul().click();
-        CommonUtil.pause10ms();
+        CommonUtil.pause1s();
 
         CommonUtil.clickBtn(driver,XPATH_HUB_ACTIVE_DROPDOWN + "[@ng-repeat='l in ctrl.linehauls']");
     }
 
     public void selectStartHub(String hubName) {
         grabStartHubDiv().click();
-        CommonUtil.pause10ms();
+        CommonUtil.pause1s();
 
         CommonUtil.clickBtn(driver,XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + hubName + "']]");
     }
 
     public void selectEndHub(String hubName) {
         grabEndHubDiv().click();
-        CommonUtil.pause10ms();
+        CommonUtil.pause1s();
 
         CommonUtil.clickBtn(driver,XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + hubName + "']]");
     }
@@ -99,11 +99,11 @@ public class ShipmentManagementPage {
         List<WebElement> sortVars = sort.findElements(By.tagName("md-select"));
 
         sortVars.get(0).click();
-        CommonUtil.pause10ms();
+        CommonUtil.pause1s();
         CommonUtil.clickBtn(driver,XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + var1 + "']]");
 
         sortVars.get(1).click();
-        CommonUtil.pause10ms();
+        CommonUtil.pause1s();
         CommonUtil.clickBtn(driver,XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + var2 + "']]");
 
         CommonUtil.pause1s();
