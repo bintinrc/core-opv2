@@ -5,6 +5,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -76,6 +77,14 @@ public class CommonUtil {
 
     public static void pause100ms() {
         pause(100);
+    }
+
+    public static void pause200ms() {
+        pause(200);
+    }
+
+    public static void pause500ms() {
+        pause(500);
     }
 
     public static void pause10ms() {
@@ -172,5 +181,17 @@ public class CommonUtil {
         el.sendKeys(Keys.RETURN);
         CommonUtil.pause100ms();
         CommonUtil.closeModal(driver);
+    }
+
+    public static String replaceParam(String data, Map<String,String> mapOfDynamicVariable)
+    {
+        String result = data;
+
+        for(Map.Entry<String,String> entry : mapOfDynamicVariable.entrySet())
+        {
+            result = result.replaceAll("\\{\\{"+entry.getKey()+"\\}\\}", entry.getValue());
+        }
+
+        return result;
     }
 }

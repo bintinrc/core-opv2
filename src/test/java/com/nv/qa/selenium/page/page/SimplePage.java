@@ -73,11 +73,26 @@ public class SimplePage
 
     public String getTextOnTableWithMdVirtualRepeat(int rowNumber, String columnDataClass, String mdVirtualRepeat)
     {
+        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, mdVirtualRepeat, false);
+    }
+
+    public String getTextOnTableWithMdVirtualRepeat(int rowNumber, String columnDataClass, String mdVirtualRepeat, boolean classMustExact)
+    {
         String text = null;
 
         try
         {
-            WebElement we = findElementByXpath(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, '%s')]", mdVirtualRepeat, rowNumber, columnDataClass));
+            WebElement we;
+
+            if(classMustExact)
+            {
+                we = findElementByXpath(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[@class='%s']", mdVirtualRepeat, rowNumber, columnDataClass));
+            }
+            else
+            {
+                we = findElementByXpath(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, '%s')]", mdVirtualRepeat, rowNumber, columnDataClass));
+            }
+
             text = we.getText().trim();
         }
         catch(NoSuchElementException ex)
@@ -143,6 +158,11 @@ public class SimplePage
     public void pause100ms()
     {
         pause(100);
+    }
+
+    public void pause200ms()
+    {
+        pause(200);
     }
 
     public void pause500ms()
