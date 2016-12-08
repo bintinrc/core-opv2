@@ -11,7 +11,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -57,8 +56,9 @@ public class ShipmentLinehaulStep{
         shipmentLinehaulPage.clickOnLabelCreate();
         shipmentLinehaulPage.clickCreateButton();
 
-        WebElement toast = driver.findElement(By.xpath("//div[@id='toast-container']//div[contains(text(),'Linehaul') and contains(text(),'created')]"));
-        Assert.assertNotNull("toast info not shown", toast);
+        WebElement toast = CommonUtil.getToast(driver);
+        Assert.assertTrue("toast message not contain linehaul xxx created", toast.getText().contains("Linehaul") && toast.getText().contains("created"));
+
         linehaulId = toast.getText().split(" ")[1];
     }
 
@@ -122,14 +122,16 @@ public class ShipmentLinehaulStep{
 
     @Then("^linehaul deleted$")
     public void linehaulDeleted() throws Throwable {
-        WebElement toast = driver.findElement(By.xpath("//div[@id='toast-container']//div[contains(text(),'Linehaul " + linehaulId + " deleted')]"));
-        Assert.assertNotNull("toast info not shown", toast);
+        String msg = "Linehaul " + linehaulId + " deleted";
+        WebElement toast = CommonUtil.getToast(driver);
+        Assert.assertTrue("toast message not contains " + msg, toast.getText().contains(msg));
     }
 
     @Then("^linehaul edited$")
     public void linehaul_edited() throws Throwable {
-        WebElement toast = driver.findElement(By.xpath("//div[@id='toast-container']//div[contains(text(),'Linehaul " + linehaulId + " updated')]"));
-        Assert.assertNotNull("toast info not shown", toast);
+        String msg = "Linehaul " + linehaulId + " updated";
+        WebElement toast = CommonUtil.getToast(driver);
+        Assert.assertTrue("toast message not contain " + msg, toast.getText().contains(msg));
         linehaulExist();
         List<Linehaul> list = shipmentLinehaulPage.grabListofLinehaul();
         for (Linehaul item : list) {

@@ -75,8 +75,9 @@ public class ShipmentManagementStep {
 
     @Then("^shipment created$")
     public void shipmentCreated() throws Throwable {
-        WebElement toast = driver.findElement(By.xpath("//div[@id='toast-container']//div[contains(text(),'Shipment') and contains(text(),'created')]"));
-        Assert.assertNotNull("toast info not shown", toast);
+
+        WebElement toast = CommonUtil.getToast(driver);
+        Assert.assertTrue("toast message not contains Shipment xxx created", toast.getText().contains("Shipment") && toast.getText().contains("created"));
         id = toast.getText().split(" ")[1];
     }
 
@@ -144,14 +145,24 @@ public class ShipmentManagementStep {
     @When("^cancel shipment button clicked$")
     public void clickCancelShipmentButton() throws Throwable {
         CommonUtil.clickBtn(driver, XPATH_CANCEL_SHIPMENT_BUTTON);
+        List<WebElement> toasts = CommonUtil.getToasts(driver);
+        String text = "";
+        for (WebElement toast : toasts) {
+            text = toast.getText();
+            if (text.contains("Success changed status to Cancelled for Shipment ID " + id)) {
+                break;
+            }
+        }
+        Assert.assertTrue("toast message not contains Cancelled", text.contains("Success changed status to Cancelled for Shipment ID " + id));
         CommonUtil.pause(5000);
     }
 
     @Then("^shipment deleted$")
     public void isShipmentDeleted() throws Throwable {
 
-        WebElement toast = driver.findElement(By.xpath("//div[@id='toast-container']//div[contains(text(),'Success delete Shipping ID " + id + "')]"));
-        Assert.assertNotNull("toast info not shown", toast);
+        String msg = "Success delete Shipping ID " + id;
+        WebElement toast = CommonUtil.getToast(driver);
+        Assert.assertTrue("toast message not contains " + msg, toast.getText().contains(msg));
 
         List<ShipmentManagementPage.Shipment> shipments = shipmentManagementPage.getShipmentsFromTable();
         boolean isRemoved = true;

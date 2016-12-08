@@ -42,7 +42,7 @@ public class CommonUtil {
     public static void chooseValueFromMdContain(WebDriver driver, String xpathContainer, String value) {
 
         driver.findElement(By.xpath(xpathContainer)).click();
-        CommonUtil.pause10ms();
+        CommonUtil.pause1s();
 
         CommonUtil.clickBtn(driver,"//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option[div[contains(text(),'" + value + "')]]");
     }
@@ -120,6 +120,14 @@ public class CommonUtil {
         WebElement result = CommonUtil.getResultInTable(driver, "//table[@ng-table='" + ngTable + "']/tbody/tr", txt);
         Assert.assertTrue(result != null);
         return result;
+    }
+
+    public static WebElement getToast(WebDriver driver) {
+        return getElementByXpath(driver, "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
+    }
+
+    public static List<WebElement> getToasts(WebDriver driver) {
+        return getElementsByXpath(driver, "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
     }
 
     public static void closeModal(WebDriver driver) {
