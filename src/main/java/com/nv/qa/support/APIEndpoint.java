@@ -38,6 +38,9 @@ public final class APIEndpoint
     public static final String SHIPPER_CLIENT_ID;
     public static final String SHIPPER_CLIENT_SECRET;
 
+    public static final String OPERATOR_V1_CLIENT_ID;
+    public static final String OPERATOR_V1_CLIENT_SECRET;
+
     static
     {
         try
@@ -85,6 +88,9 @@ public final class APIEndpoint
                 SHIPPER_ID = Integer.valueOf(props.getProperty("shipper-v3-id"));
                 SHIPPER_CLIENT_ID = props.getProperty("shipper-client-id");
                 SHIPPER_CLIENT_SECRET = props.getProperty("shipper-client-secret");
+
+                OPERATOR_V1_CLIENT_ID = props.getProperty("operator-v1-client-id");
+                OPERATOR_V1_CLIENT_SECRET = props.getProperty("operator-v1-client-secret");
             }
         }
         catch(IOException ex)
