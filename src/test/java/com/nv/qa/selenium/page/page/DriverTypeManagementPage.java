@@ -56,7 +56,7 @@ public class DriverTypeManagementPage extends SimplePage
             }
         }
 
-        Assert.assertTrue(valid);
+        Assert.assertTrue(filterType + " doesn't contains " + filterValue.toLowerCase(),valid);
     }
 
     public void downloadFile() throws InterruptedException
