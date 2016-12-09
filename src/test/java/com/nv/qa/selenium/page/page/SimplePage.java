@@ -155,6 +155,11 @@ public class SimplePage
         closeModal();
     }
 
+    public void pause50ms()
+    {
+        pause(50);
+    }
+
     public void pause100ms()
     {
         pause(100);

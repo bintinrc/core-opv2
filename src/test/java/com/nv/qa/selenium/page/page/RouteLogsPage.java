@@ -5,6 +5,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  *
  * @author Daniel Joi Partogi Hutapea
@@ -23,15 +26,30 @@ public class RouteLogsPage extends SimplePage
 
     public static final String SELECT_TAG_XPATH = "//md-select[contains(@aria-label, 'Select Tag:')]";
 
+    public static final SimpleDateFormat DATE_PICKER_ID_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
+
     public RouteLogsPage(WebDriver driver)
     {
         super(driver);
         PageFactory.initElements(driver, this);
     }
 
+    public void selectRouteDateFilter(Date fromDate, Date toDate)
+    {
+        click("//md-datepicker[@name='fromDateField']/button");
+        pause100ms();
+        click(String.format("//td[contains(@aria-label, '%s')]", DATE_PICKER_ID_SDF.format(fromDate)));
+        pause50ms();
+        click("//md-datepicker[@name='toDateField']/button");
+        pause100ms();
+        click(String.format("//td[contains(@aria-label, '%s')]", DATE_PICKER_ID_SDF.format(toDate)));
+        pause50ms();
+    }
+
     public void clickLoadSelection()
     {
         click("//button[@aria-label='Load Selection']");
+        pause100ms();
     }
 
     public void clickLoadWaypointsOfSelectedRoutesOnly()
@@ -66,7 +84,7 @@ public class RouteLogsPage extends SimplePage
     public void deleteRoute(String routeId)
     {
         searchAndVerifyRouteExist(routeId);
-        click("//button[@aria-label='Delete Route']");
+        clickActionButtonOnTable(1, ACTION_BUTTON_DELETE_ROUTE);
         pause200ms();
         click("//button[@aria-label='Delete']");
         pause200ms();

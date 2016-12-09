@@ -109,6 +109,7 @@ public class RouteLogsStep extends AbstractSteps
     public void createNewRoute(DataTable dataTable) throws IOException
     {
         Calendar currentCalendar = Calendar.getInstance();
+        currentCalendar.add(Calendar.DATE, -1);
 
         Map<String,String> mapOfDynamicVariable = new HashMap();
         mapOfDynamicVariable.put("created_date", CREATED_DATE_SDF.format(new Date()));
@@ -121,11 +122,16 @@ public class RouteLogsStep extends AbstractSteps
         createRouteResponse = operatorPortalRoutingClient.createRoute(createRouteRequest);
     }
 
-    @When("^op click 'Load Selection'$")
+    @When("^op select route date filter and click 'Load Selection'$")
     public void loadSelection()
     {
+        Calendar fromCalendar = Calendar.getInstance();
+        fromCalendar.add(Calendar.DATE, -1);
+
+        Calendar toCalendar = Calendar.getInstance();
+
+        routeLogsPage.selectRouteDateFilter(fromCalendar.getTime(), toCalendar.getTime());
         routeLogsPage.clickLoadSelection();
-        CommonUtil.pause100ms();
     }
 
     @When("^op click 'Edit Route' and then click 'Load Waypoints of Selected Route\\(s\\) Only'$")
