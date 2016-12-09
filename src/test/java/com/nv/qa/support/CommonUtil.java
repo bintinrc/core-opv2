@@ -191,6 +191,19 @@ public class CommonUtil {
         CommonUtil.closeModal(driver);
     }
 
+    /**
+     * This method return 9 digit random number.
+     *
+     * @return
+     */
+    public static String generateTrackingRefNo()
+    {
+        long millis = System.currentTimeMillis();
+        long secondsSince1970 = millis/1000;
+        String result = String.valueOf(secondsSince1970).substring(1); //Remove the first index to remove the most significant value of timestamp.
+        return result;
+    }
+
     public static String replaceParam(String data, Map<String,String> mapOfDynamicVariable)
     {
         String result = data;

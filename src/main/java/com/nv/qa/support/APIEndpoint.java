@@ -38,6 +38,11 @@ public final class APIEndpoint
     public static final String SHIPPER_CLIENT_ID;
     public static final String SHIPPER_CLIENT_SECRET;
 
+    public static final int SHIPPER_V2_ID;
+    public static final String SHIPPER_V2_NAME;
+    public static final String SHIPPER_V2_CLIENT_ID;
+    public static final String SHIPPER_V2_CLIENT_SECRET;
+
     public static final String OPERATOR_V1_CLIENT_ID;
     public static final String OPERATOR_V1_CLIENT_SECRET;
 
@@ -88,6 +93,11 @@ public final class APIEndpoint
                 SHIPPER_ID = Integer.valueOf(props.getProperty("shipper-v3-id"));
                 SHIPPER_CLIENT_ID = props.getProperty("shipper-client-id");
                 SHIPPER_CLIENT_SECRET = props.getProperty("shipper-client-secret");
+
+                SHIPPER_V2_ID = getPropertyValueAsInteger(props, "shipper-v2-id");
+                SHIPPER_V2_NAME = props.getProperty("shipper-v2-name");
+                SHIPPER_V2_CLIENT_ID = props.getProperty("shipper-v2-client-id");
+                SHIPPER_V2_CLIENT_SECRET = props.getProperty("shipper-v2-client-secret");
 
                 OPERATOR_V1_CLIENT_ID = props.getProperty("operator-v1-client-id");
                 OPERATOR_V1_CLIENT_SECRET = props.getProperty("operator-v1-client-secret");
