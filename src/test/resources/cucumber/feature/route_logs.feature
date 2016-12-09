@@ -11,15 +11,10 @@ Feature: Route Groups
       | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"(Edit Details) This route is created for testing 'Operator V2 - Routing - Route Logs' menu. Ignore this route. Created at {{created_date}}."} |
     Given op click navigation Blocked Dates in Shipper Support
     Given op click navigation Route Logs in Routing
-    Then take screenshot with delay 1s
     When op select route date filter and click 'Load Selection'
-    Then take screenshot with delay 1s
     When op click 'Edit Details'
-    Then take screenshot with delay 1s
     When op edit 'Assigned Driver' to driver 'OpV2 No.2' and edit 'Comments'
-    Then take screenshot with delay 1s
     Then route's driver must be changed to 'OpV2 No.2' in table list
-    Then take screenshot with delay 1s
 
   @ArchiveRoute
   Scenario: Operator 'Add New Tag' on Operator V2 - Route Logs menu
