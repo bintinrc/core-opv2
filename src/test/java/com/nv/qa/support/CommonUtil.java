@@ -206,6 +206,11 @@ public class CommonUtil {
 
     public static String replaceParam(String data, Map<String,String> mapOfDynamicVariable)
     {
+        if(data==null)
+        {
+            return null;
+        }
+
         String result = data;
 
         for(Map.Entry<String,String> entry : mapOfDynamicVariable.entrySet())

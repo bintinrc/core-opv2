@@ -7,7 +7,8 @@ Feature: Route Groups
 
   Scenario: Operator create, update and delete 'route group' on 'Route Groups'. (uid:21c16416-b5c7-40c9-adb1-98c37bdf820f)
     Given op click navigation Route Groups in Routing
-    When op create new 'route group' on 'Route Groups'
+    When op create new 'route group' on 'Route Groups' using data below:
+      | generateName | true |
     When op click navigation Route Groups in Routing
     Then new 'route group' on 'Route Groups' created successfully
     When op update 'route group' on 'Route Groups'
