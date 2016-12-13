@@ -17,7 +17,7 @@ public class RouteLogsPage extends SimplePage
     private static final String MD_VIRTUAL_REPEAT = "route in getTableData()";
 
     public static final String COLUMN_CLASS_FILTER_ROUTE_ID = "id";
-    public static final String COLUMN_CLASS_DATA_ROUTE_ID = "id ";
+    public static final String COLUMN_CLASS_DATA_ROUTE_ID = "id";
     public static final String COLUMN_CLASS_DATA_DRIVER_NAME = "_driver-name ";
 
     public static final String ACTION_BUTTON_EDIT_ROUTE = "container.route-logs.edit-route";
@@ -117,7 +117,7 @@ public class RouteLogsPage extends SimplePage
         pause100ms();
         click(String.format("//div[@class='md-select-menu-container md-active md-clickable']/md-select-menu/md-content/md-option/div[@class='md-text ng-binding' and contains(text(), '%s')]", newTag));
         pause100ms();
-        click("//span[text()='Route Date']"); //Click on random element to close 'Select Tag' dialog.
+        click("//nv-table-description/div/div/span[text()='Showing']"); //Click on random element to close 'Select Tag' dialog.
         pause200ms();
     }
 

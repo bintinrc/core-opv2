@@ -86,7 +86,7 @@ public class SimplePage
 
             if(classMustExact)
             {
-                we = findElementByXpath(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[@class='%s']", mdVirtualRepeat, rowNumber, columnDataClass));
+                we = findElementByXpath(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[normalize-space(@class)='%s']", mdVirtualRepeat, rowNumber, columnDataClass));
             }
             else
             {
