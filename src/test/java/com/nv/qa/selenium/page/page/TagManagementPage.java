@@ -1,9 +1,7 @@
 package com.nv.qa.selenium.page.page;
 
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
 
 /**
  *
@@ -11,6 +9,8 @@ import org.openqa.selenium.support.PageFactory;
  */
 public class TagManagementPage extends SimplePage
 {
+    private static final String MD_VIRTUAL_REPEAT = "tag in getTableData()";
+
     public static final String COLUMN_CLASS_NO = "column-index";
     public static final String COLUMN_CLASS_TAG_NAME = "name";
     public static final String COLUMN_CLASS_DESCRIPTION = "description";
@@ -21,13 +21,13 @@ public class TagManagementPage extends SimplePage
     public TagManagementPage(WebDriver driver)
     {
         super(driver);
-        PageFactory.initElements(driver, this);
     }
 
     public void clickTagNameColumnHeader()
     {
         WebElement we = findElementByXpath("//th[contains(@class, 'name')]");
         moveAndClick(we);
+        pause200ms();
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)
@@ -35,46 +35,45 @@ public class TagManagementPage extends SimplePage
         return getTextOnTable(rowNumber, columnDataClass, "tag in getTableData()");
     }
 
-    public void clickActionButton(int rowNumber, String actionButtonName)
+    public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
     {
-        try
-        {
-            WebElement we = findElementByXpath(String.format("//tr[@md-virtual-repeat='tag in getTableData()'][%d]/td[@class='actions column-locked-right ng-isolate-scope']/div/*[@name='%s']", rowNumber, actionButtonName));
-            moveAndClick(we);
-        }
-        catch(NoSuchElementException ex)
-        {
-            throw new RuntimeException("Cannot find action button.", ex);
-        }
+        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
+        pause200ms();
     }
 
     public void clickCreateTag()
     {
         click("//button[@aria-label='Create Tag']");
+        pause200ms();
     }
 
     public void setTagNameValue(String value)
     {
         sendKeys("//input[@aria-label='Tag Name']", value);
+        pause100ms();
     }
 
     public void setDescriptionValue(String value)
     {
         sendKeys("//textarea[@aria-label='Description']", value);
+        pause100ms();
     }
 
     public void clickSubmitOnAddTag()
     {
         click("//button[@aria-label='Save Button']");
+        pause200ms();
     }
 
     public void clickSubmitChangesOnEditTag()
     {
         click("//button[@aria-label='Save Button']");
+        pause200ms();
     }
 
     public void clickDeleteOnConfirmDeleteDialog()
     {
         click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
+        pause200ms();
     }
 }

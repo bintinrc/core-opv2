@@ -50,7 +50,7 @@ public class TagManagementStep extends AbstractSteps
 
             if(DEFAULT_TAG_NAME.equals(actualTagName) || EDITED_TAG_NAME.equals(actualTagName))
             {
-                tagManagementPage.clickActionButton(1, TagManagementPage.ACTION_BUTTON_DELETE);
+                tagManagementPage.clickActionButtonOnTable(1, TagManagementPage.ACTION_BUTTON_DELETE);
                 tagManagementPage.pause100ms();
                 tagManagementPage.clickDeleteOnConfirmDeleteDialog();
             }
@@ -82,7 +82,7 @@ public class TagManagementStep extends AbstractSteps
         String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
         Assert.assertEquals(DEFAULT_TAG_NAME, actualTagName);
 
-        tagManagementPage.clickActionButton(1, TagManagementPage.ACTION_BUTTON_EDIT);
+        tagManagementPage.clickActionButtonOnTable(1, TagManagementPage.ACTION_BUTTON_EDIT);
         tagManagementPage.setTagNameValue(EDITED_TAG_NAME);
         tagManagementPage.setDescriptionValue(EDITED_DEFAULT_TAG_DESCRIPTION);
         tagManagementPage.clickSubmitChangesOnEditTag();
@@ -107,7 +107,7 @@ public class TagManagementStep extends AbstractSteps
         String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
         Assert.assertEquals(EDITED_TAG_NAME, actualTagName);
 
-        tagManagementPage.clickActionButton(1, TagManagementPage.ACTION_BUTTON_DELETE);
+        tagManagementPage.clickActionButtonOnTable(1, TagManagementPage.ACTION_BUTTON_DELETE);
         tagManagementPage.pause100ms();
         tagManagementPage.clickDeleteOnConfirmDeleteDialog();
     }
