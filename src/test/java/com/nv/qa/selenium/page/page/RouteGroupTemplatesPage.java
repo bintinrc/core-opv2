@@ -2,7 +2,6 @@ package com.nv.qa.selenium.page.page;
 
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.PageFactory;
 
 /**
  *
@@ -20,7 +19,6 @@ public class RouteGroupTemplatesPage extends SimplePage
     public RouteGroupTemplatesPage(WebDriver driver)
     {
         super(driver);
-        PageFactory.initElements(driver, this);
     }
 
     public void createRouteGroupTemplate(String routeGroupTemplateName, String filterQuery)
