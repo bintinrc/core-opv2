@@ -1,10 +1,9 @@
 package com.nv.qa.selenium.page.page;
 
-import com.nv.qa.support.CommonUtil;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
@@ -12,19 +11,19 @@ import java.util.List;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class PricingScriptsPage
+public class PricingScriptsPage extends SimplePage
 {
+    private static final String MD_VIRTUAL_REPEAT = "script in ctrl.tableData";
+    public static final String COLUMN_CLASS_NAME = "name";
+
     public static final String ACTION_BUTTON_CODE = "code";
     public static final String ACTION_BUTTON_EDIT = "edit";
     public static final String ACTION_BUTTON_SHIPPERS = "Shippers";
     public static final String ACTION_BUTTON_DELETE = "delete";
 
-    private final WebDriver driver;
-
     public PricingScriptsPage(WebDriver driver)
     {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
     public void createScript(String scriptName, String description)
@@ -34,16 +33,16 @@ public class PricingScriptsPage
 
     public void createScript(String scriptName, String description, String script)
     {
-        CommonUtil.clickBtn(driver, "//button[@id='button-create-rules']");
-        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Name']", scriptName);
-        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Description']", description);
+        click("//button[@id='button-create-rules']");
+        sendKeys("//input[@type='text'][@aria-label='Name']", scriptName);
+        sendKeys("//input[@type='text'][@aria-label='Description']", description);
 
         if(script!=null)
         {
             updateAceEditorValue(script);
         }
 
-        CommonUtil.clickBtn(driver, "//nv-api-text-button[@name='commons.save']");
+        click("//nv-api-text-button[@name='commons.save']");
     }
 
     public String createDefaultScriptIfNotExists(String scriptName, String scriptDescription, String script)
@@ -62,7 +61,7 @@ public class PricingScriptsPage
             updateScript(1, scriptName, scriptDescription, script);
         }
 
-        CommonUtil.pause1s();
+        pause1s();
 
         String pricingScriptsId = searchAndGetTextOnTable(scriptName, 1, "id");
 
@@ -71,7 +70,7 @@ public class PricingScriptsPage
             throw new RuntimeException("Failed to create script if not exists.");
         }
 
-        CommonUtil.pause1s();
+        pause1s();
 
         return pricingScriptsId;
     }
@@ -84,9 +83,9 @@ public class PricingScriptsPage
     public void updateScript(int rowNumber, String newScriptName, String newDescription, String newScript)
     {
         clickActionButton(rowNumber, PricingScriptsPage.ACTION_BUTTON_EDIT);
-        CommonUtil.pause1s();
-        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Name']", newScriptName);
-        CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Description']", newDescription);
+        pause1s();
+        sendKeys("//input[@type='text'][@aria-label='Name']", newScriptName);
+        sendKeys("//input[@type='text'][@aria-label='Description']", newDescription);
 
         if(newScript!=null)
         {
@@ -102,30 +101,35 @@ public class PricingScriptsPage
             }
         }
 
-        CommonUtil.clickBtn(driver, "//nv-api-text-button[@name='commons.update']");
+        click("//nv-api-text-button[@name='commons.update']");
     }
 
     public void searchAndDeleteScript(int rowNumber, String scriptName)
     {
-        CommonUtil.inputText(driver, "//input[@placeholder='Search Script...']", scriptName);
-        CommonUtil.pause1s();
+        searchScript(scriptName);
         clickActionButton(rowNumber, PricingScriptsPage.ACTION_BUTTON_DELETE);
-        CommonUtil.pause1s();
-        CommonUtil.clickBtn(driver, "//button[@type='button'][@aria-label='Delete']");
-        CommonUtil.pause1s();
+        pause1s();
+        click("//button[@type='button'][@aria-label='Delete']");
+        pause1s();
+    }
+
+    public void searchScript(String scriptName)
+    {
+        sendKeys("//input[@placeholder='Search Script...']", scriptName);
+        pause1s();
     }
 
     public void simulateRunTest(String deliveryType, String orderType, String timeslotType, String size, String weight, String insuredValue, String codValue)
     {
         clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_EDIT);
-        CommonUtil.selectValueFromMdSelectMenu(driver, "//md-input-container[@label='Delivery Type']", String.format("//md-option[@value='%s']", deliveryType));
-        CommonUtil.selectValueFromMdSelectMenu(driver, "//md-input-container[@label='Order Type']", String.format("//md-option[@value='%s']", orderType));
-        CommonUtil.selectValueFromMdSelectMenu(driver, "//md-input-container[@label='Timeslot Type']", String.format("//md-option[@value='%s']", timeslotType));
-        CommonUtil.selectValueFromMdSelectMenu(driver, "//md-input-container[@label='Size']", String.format("//md-option[@value='%s']", size));
-        CommonUtil.inputText(driver, "//input[@aria-label='Weight']", weight);
-        CommonUtil.inputText(driver, "//input[@aria-label='Insured Value']", insuredValue);
-        CommonUtil.inputText(driver, "//input[@aria-label='COD Value']", codValue);
-        CommonUtil.clickBtn(driver, "//button[@id='button-run-test']");
+        selectValueFromMdSelectMenu("//md-input-container[@label='Delivery Type']", String.format("//md-option[@value='%s']", deliveryType));
+        selectValueFromMdSelectMenu("//md-input-container[@label='Order Type']", String.format("//md-option[@value='%s']", orderType));
+        selectValueFromMdSelectMenu("//md-input-container[@label='Timeslot Type']", String.format("//md-option[@value='%s']", timeslotType));
+        selectValueFromMdSelectMenu("//md-input-container[@label='Size']", String.format("//md-option[@value='%s']", size));
+        sendKeys("//input[@aria-label='Weight']", weight);
+        sendKeys("//input[@aria-label='Insured Value']", insuredValue);
+        sendKeys("//input[@aria-label='COD Value']", codValue);
+        click("//button[@id='button-run-test']");
     }
 
     public String linkPricingScriptsToShipper(String defaultScriptName1, String defaultScriptName2, String shipperName)
@@ -136,10 +140,9 @@ public class PricingScriptsPage
         for(String script : scriptToTest)
         {
             pricingScriptsLinkedToAShipper = script;
-            CommonUtil.inputText(driver, "//input[@placeholder='Search Script...']", pricingScriptsLinkedToAShipper);
-            CommonUtil.pause1s();
+            searchScript(pricingScriptsLinkedToAShipper);
             clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_SHIPPERS);
-            CommonUtil.pause1s();
+            pause1s();
 
             /**
              * Assign shipper with value $shipperName to Pricing Scripts with value $defaultScriptName1 or $defaultScriptName2
@@ -147,16 +150,16 @@ public class PricingScriptsPage
              */
             if(!isPricingScriptsContainShipper(shipperName))
             {
-                CommonUtil.inputText(driver, "//input[@aria-label='Find Shipper']", shipperName);
-                CommonUtil.pause1s();
-                CommonUtil.clickBtn(driver, String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", shipperName));
-                CommonUtil.clickBtn(driver, "//div[contains(@class, 'idle ng-binding ng-scope') and text()='Complete']");
+                sendKeys("//input[@aria-label='Find Shipper']", shipperName);
+                pause1s();
+                click(String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", shipperName));
+                click("//div[contains(@class, 'idle ng-binding ng-scope') and text()='Complete']");
 
                 /**
                  * Check is Shipper already linked to another Pricing Scripts by find "Proceed" button.
                  * Click "Proceed" button if found to override the shipper's Pricing Scripts.
                  */
-                WebElement proceedBtn = CommonUtil.getElementByXpath(driver, "//button[div[contains(@class, 'idle ng-binding ng-scope') and text()='Proceed']]");
+                WebElement proceedBtn = findElementByXpath("//button[div[contains(@class, 'idle ng-binding ng-scope') and text()='Proceed']]");
 
                 if(proceedBtn!=null)
                 {
@@ -166,11 +169,11 @@ public class PricingScriptsPage
                 /**
                  * Check error element first, if error element not found then linking Pricing Scripts to the Shipper success.
                  */
-                if(CommonUtil.isElementExist(driver, "//md-dialog[@aria-label='ErrorUnexpected error']/md-dialog-content/h2[text()='Error']"))
+                if(isElementExist("//md-dialog[@aria-label='ErrorUnexpected error']/md-dialog-content/h2[text()='Error']"))
                 {
-                    CommonUtil.pause100ms();
-                    CommonUtil.clickBtn(driver, "//md-dialog[@aria-label='ErrorUnexpected error']/md-dialog-actions/button/span[text()='Close']");
-                    CommonUtil.pause100ms();
+                    pause100ms();
+                    click("//md-dialog[@aria-label='ErrorUnexpected error']/md-dialog-actions/button/span[text()='Close']");
+                    pause100ms();
                     throw new RuntimeException("Failed to linking Pricing Scripts to the Shipper.");
                 }
 
@@ -182,7 +185,7 @@ public class PricingScriptsPage
                  * Shipper already linked to this Pricing Scripts.
                  * Click "Discard Changes".
                  */
-                CommonUtil.clickBtn(driver, "//button[@id='button-cancel-dialog']");
+                click("//button[@id='button-cancel-dialog']");
             }
         }
 
@@ -192,15 +195,22 @@ public class PricingScriptsPage
     public boolean isPricingScriptsContainShipper(String shipperName)
     {
         boolean isFound = false;
-        List<WebElement> elements = CommonUtil.getElementsByXpath(driver, "//div[@ng-repeat='shipper in ctrl.connectedShippers']//div[2]");
 
-        for(WebElement element : elements)
+        try
         {
-            if(shipperName.equalsIgnoreCase(element.getText()))
+            List<WebElement> elements = findElementsByXpath("//div[@ng-repeat='shipper in ctrl.connectedShippers']//div[2]");
+
+            for(WebElement element : elements)
             {
-                isFound = true;
-                break;
+                if(shipperName.equalsIgnoreCase(element.getText()))
+                {
+                    isFound = true;
+                    break;
+                }
             }
+        }
+        catch(NoSuchElementException ex)
+        {
         }
 
         return isFound;
@@ -208,74 +218,52 @@ public class PricingScriptsPage
 
     public String searchAndGetTextOnTable(String filter, int rowNumber, String columnDataTitle)
     {
-        CommonUtil.inputText(driver, "//input[@placeholder='Search Script...']", filter);
-        CommonUtil.pause1s();
+        searchScript(filter);
         return getTextOnTable(1, columnDataTitle);
     }
 
-    /**
-     *
-     * @param rowNumber Start from 1.
-     * @param columnDataTitle data-title value. Example: <td data-title="ctrl.table.id" sortable="'id'" class="id ng-binding" data-title-text="ID"> 1 </td>
-     * @return
-     */
-    public String getTextOnTable(int rowNumber, String columnDataTitle)
+    public String getTextOnTable(int rowNumber, String columnDataClass)
     {
-        String text = null;
-        WebElement element = CommonUtil.getElementByXpath(driver, String.format("//tr[@md-virtual-repeat='script in ctrl.tableData'][%d]/td[@class='%s']", rowNumber, columnDataTitle));
-
-        if(element!=null)
-        {
-            text = element.getText().trim();
-        }
-
-        return text;
+        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT, true);
     }
 
-    /**
-     *
-     * @param rowNumber Start from 1. Row number where the action button located.
-     * @param actionButtonName Valid value are PricingScriptsPage.ACTION_BUTTON_CODE, PricingScriptsPage.ACTION_BUTTON_EDIT, PricingScriptsPage.ACTION_BUTTON_SHIPPERS, PricingScriptsPage.ACTION_BUTTON_DELETE.
-     */
     public void clickActionButton(int rowNumber, String actionButtonName)
     {
-        WebElement element = CommonUtil.getElementByXpath(driver, String.format("//tr[@md-virtual-repeat='script in ctrl.tableData'][%d]/td[@class='actions column-locked-right']/div/*[@name='%s']", rowNumber, actionButtonName));
-
-        if(element==null)
+        try
         {
-            throw new RuntimeException("Cannot find action button.");
+            WebElement element = findElementByXpath(String.format("//tr[@md-virtual-repeat='script in ctrl.tableData'][%d]/td[@class='actions column-locked-right']/div/*[@name='%s']", rowNumber, actionButtonName));
+            element.click();
+            pause1s();
         }
-
-        element.click();
+        catch(Exception ex)
+        {
+            throw new RuntimeException("Cannot find action button.", ex);
+        }
     }
 
     private void updateAceEditorValue(String script)
     {
-        if(driver instanceof JavascriptExecutor)
-        {
-            /**
-             * editor.setValue(str, -1) // Moves cursor to the start.
-             * editor.setValue(str, 1) // Moves cursor to the end.
-             */
-            JavascriptExecutor javascriptExecutor = (JavascriptExecutor)driver;
-            javascriptExecutor.executeScript(String.format("window.ace.edit('ace-editor').setValue('%s', 1);", script));
-            CommonUtil.pause100ms();
-        }
-        else
-        {
-            throw new RuntimeException("Cannot execute Javascript.");
-        }
+        /**
+         * editor.setValue(str, -1) // Moves cursor to the start.
+         * editor.setValue(str, 1) // Moves cursor to the end.
+         */
+        executeJavascript(String.format("window.ace.edit('ace-editor').setValue('%s', 1);", script));
     }
 
     private String getAceEditorValue()
     {
+        return executeJavascript("return window.ace.edit('ace-editor').getValue();");
+    }
+
+    private String executeJavascript(String script)
+    {
         String value = "";
 
-        if(driver instanceof JavascriptExecutor)
+        if(getDriver() instanceof JavascriptExecutor)
         {
-            JavascriptExecutor javascriptExecutor = (JavascriptExecutor)driver;
-            value = String.valueOf(javascriptExecutor.executeScript("return window.ace.edit('ace-editor').getValue();"));
-            CommonUtil.pause100ms();
+            JavascriptExecutor javascriptExecutor = (JavascriptExecutor)getDriver();
+            value = String.valueOf(javascriptExecutor.executeScript(script));
+            pause100ms();
         }
         else
         {

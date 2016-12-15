@@ -155,6 +155,31 @@ public class SimplePage
         closeModal();
     }
 
+    public void selectValueFromMdSelectMenu(String xpathMdSelectMenu, String xpathMdSelectOption)
+    {
+        WebElement mdSelectMenu = findElementByXpath(xpathMdSelectMenu);
+        mdSelectMenu.click();
+        pause500ms();
+        WebElement mdSelectOption = CommonUtil.getElementByXpath(driver, xpathMdSelectOption);
+        mdSelectOption.click();
+        pause500ms();
+    }
+
+    public boolean isElementExist(String xpathExpression)
+    {
+        WebElement we = null;
+
+        try
+        {
+            we = findElementByXpath(xpathExpression);
+        }
+        catch(NoSuchElementException ex)
+        {
+        }
+
+        return we!=null;
+    }
+
     public void pause50ms()
     {
         pause(50);

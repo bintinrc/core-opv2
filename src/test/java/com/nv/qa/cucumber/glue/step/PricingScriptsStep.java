@@ -48,7 +48,7 @@ public class PricingScriptsStep extends AbstractSteps
     @Then("^new script on Pricing Scripts created successfully$")
     public void verifyNewPricingScriptsCreatedSuccessfully()
     {
-        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, "name");
+        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, PricingScriptsPage.COLUMN_CLASS_NAME);
         Assert.assertEquals(newPricingScriptsName, pricingScriptsNameFromTable);
     }
 
@@ -62,7 +62,7 @@ public class PricingScriptsStep extends AbstractSteps
     @Then("^script on Pricing Scripts updated successfully$")
     public void verifyPricingScriptsUpdatedSuccessfully()
     {
-        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, "name");
+        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, PricingScriptsPage.COLUMN_CLASS_NAME);
         Assert.assertEquals(newPricingScriptsName, pricingScriptsNameFromTable);
     }
 
@@ -76,7 +76,7 @@ public class PricingScriptsStep extends AbstractSteps
     public void verifyPricingScriptsDeletedSuccessfully()
     {
         String expectedValue = null;
-        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, "name");
+        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, PricingScriptsPage.COLUMN_CLASS_NAME);
         Assert.assertEquals(expectedValue, pricingScriptsNameFromTable);
     }
 
@@ -161,10 +161,8 @@ public class PricingScriptsStep extends AbstractSteps
     @Then("^Pricing Scripts linked to the shipper successfully$")
     public void verifyPricingScriptsLinkedToShipperSuccessfully()
     {
-        CommonUtil.inputText(getDriver(), "//input[@placeholder='Search Script...']", pricingScriptsLinkedToAShipper);
-        CommonUtil.pause1s();
+        pricingScriptsPage.searchScript(pricingScriptsLinkedToAShipper);
         pricingScriptsPage.clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_SHIPPERS);
-        CommonUtil.pause1s();
         boolean isPricingScriptsContainShipper = pricingScriptsPage.isPricingScriptsContainShipper(shipperLinkedToPricingScripts);
         CommonUtil.clickBtn(getDriver(), "//button[@id='button-cancel-dialog']");
         Assert.assertEquals(true, isPricingScriptsContainShipper);
