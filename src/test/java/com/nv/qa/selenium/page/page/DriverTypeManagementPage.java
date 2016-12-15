@@ -145,7 +145,7 @@ public class DriverTypeManagementPage extends SimplePage
 
             for(WebElement td : tds)
             {
-                if(td.getText().equalsIgnoreCase("C2C + Return Pick Up"))
+                if(td.getText().equalsIgnoreCase("Normal Delivery, C2C + Return Pick Up"))
                 {
                     isFound = true;
                     break;
