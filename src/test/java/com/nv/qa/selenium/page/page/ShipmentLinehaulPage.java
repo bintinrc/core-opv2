@@ -60,7 +60,7 @@ public class ShipmentLinehaulPage {
 
     public void clickTab(String nameTab) {
         String xpath = XPATH_LINEHAUL_ENTRIES_TAB;
-        if (nameTab.equalsIgnoreCase("linehaul date")) {
+        if (nameTab.equalsIgnoreCase("LINEHAUL DATE")) {
             xpath = XPATH_LINEHAUL_DATE_TAB;
         }
 
@@ -132,5 +132,9 @@ public class ShipmentLinehaulPage {
 
     public void clickDeleteButton() {
         CommonUtil.clickBtn(driver, XPATH_DELETE_BUTTON);
+    }
+
+    public void clickLinhaulScheduleDate(Integer date) {
+        CommonUtil.clickBtn(driver, "//div[@tabindex='" + date + "']");
     }
 }

@@ -1,4 +1,4 @@
-@selenium @shipment
+@selenium @shipment @dev
 Feature: shipment linehaul
 
   Scenario: op login into operator portal
@@ -10,13 +10,14 @@ Feature: shipment linehaul
 
   # create linehaul
   Scenario: Create Linehaul (uid:3eeaa647-c1a2-40a1-8ee4-da898e7e2e7d)
+    Given op click tab LINEHAUL ENTRIES
     Given op click create linehaul button
     When create new linehaul:
-      | name      | LINEHAUL AUTOMATION     |
-      | comment   | created at              |
-      | hubs      | 30JKB,DOJO,EASTGW       |
-      | frequency | Weekly                  |
-      | days      | Monday,Friday           |
+      | name      | JKT-AUTO            |
+      | comment   | created at          |
+      | hubs      | 30JKB,DOJO,EASTGW   |
+      | frequency | Weekly              |
+      | days      | Monday,Friday       |
     Then linehaul exist
     When op click edit action button
     When op click delete linehaul button
@@ -27,19 +28,19 @@ Feature: shipment linehaul
     Given op click tab LINEHAUL ENTRIES
     Given op click create linehaul button
     When create new linehaul:
-      | name      | LINEHAUL AUTOMATION     |
-      | comment   | created at              |
-      | hubs      | 30JKB,DOJO,EASTGW       |
-      | frequency | Weekly                  |
-      | days      | Monday,Friday           |
+      | name      | JKT-AUTO            |
+      | comment   | created at          |
+      | hubs      | 30JKB,DOJO,EASTGW   |
+      | frequency | Weekly              |
+      | days      | Monday,Friday       |
     Then linehaul exist
     When op click edit action button
     When edit linehaul with:
-      | name      | LINEHAUL AUTOMATION EDITED    |
-      | comment   | created at                    |
-      | hubs      | 30JKB,EASTGW                  |
-      | frequency | Weekly                        |
-      | days      | Monday,Friday                 |
+      | name      | JKT-AUTO EDITED    |
+      | comment   | created at         |
+      | hubs      | 30JKB,EASTGW       |
+      | frequency | Weekly             |
+      | days      | Monday,Friday      |
     Then linehaul edited
     When op click edit action button
     When op click delete linehaul button
@@ -50,12 +51,27 @@ Feature: shipment linehaul
     Given op click tab LINEHAUL ENTRIES
     Given op click create linehaul button
     When create new linehaul:
-      | name      | LINEHAUL AUTOMATION     |
-      | comment   | created at              |
-      | hubs      | 30JKB,DOJO,EASTGW       |
-      | frequency | Weekly                  |
-      | days      | Monday,Friday           |
+      | name      | JKT-AUTO            |
+      | comment   | created at          |
+      | hubs      | 30JKB,DOJO,EASTGW   |
+      | frequency | Weekly              |
+      | days      | Monday,Friday       |
     Then linehaul exist
+    When op click edit action button
+    When op click delete linehaul button
+    Then linehaul deleted
+
+  Scenario: Check linehaul schedule
+    Given op click tab LINEHAUL ENTRIES
+    Given op click create linehaul button
+    When create new linehaul:
+      | name      | JKT-AUTO            |
+      | comment   | created at          |
+      | hubs      | 30JKB,DOJO,EASTGW   |
+      | frequency | Weekly              |
+      | days      | Monday,Friday       |
+    Then linehaul exist
+    Then Schedule is right
     When op click edit action button
     When op click delete linehaul button
     Then linehaul deleted

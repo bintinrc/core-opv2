@@ -52,10 +52,13 @@ public class CommonUtil {
         driver.findElement(By.xpath(xpathContainer)).click();
         CommonUtil.pause10ms();
 
-        //clear selected item
-        List<WebElement> activeItem = driver.findElements(By.xpath("//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option[@aria-selected='true']"));
-        for (WebElement item : activeItem) {
-            CommonUtil.moveAndClick(driver, item);
+        if (driver.findElements(By.xpath("//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option[@aria-selected='false']")).size() < 7) {
+
+            //clear selected item
+            List<WebElement> activeItem = driver.findElements(By.xpath("//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option[@aria-selected='true']"));
+            for (WebElement item : activeItem) {
+                CommonUtil.moveAndClick(driver, item);
+            }
         }
 
         for (String value : values) {
@@ -219,5 +222,25 @@ public class CommonUtil {
         }
 
         return result;
+    }
+
+    public static int dayToInteger(String day) {
+        if (day.equalsIgnoreCase("SUNDAY")) {
+            return 1;
+        } else if (day.equalsIgnoreCase("MONDAY")) {
+            return 2;
+        } else if (day.equalsIgnoreCase("TUESDAY")) {
+            return 3;
+        } else if (day.equalsIgnoreCase("WEDNESDAY")) {
+            return 4;
+        } else if (day.equalsIgnoreCase("THURSDAY")) {
+            return 5;
+        } else if (day.equalsIgnoreCase("FRIDAY")) {
+            return 6;
+        } else if (day.equalsIgnoreCase("SATURDAY")) {
+            return 7;
+        } else {
+            return 0;
+        }
     }
 }
