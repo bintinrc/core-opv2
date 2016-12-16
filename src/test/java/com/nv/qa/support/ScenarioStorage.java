@@ -26,4 +26,9 @@ public class ScenarioStorage
     {
         return (T) mapOfData.get(key);
     }
+
+    public boolean containsKey(String key)
+    {
+        return mapOfData.containsKey(key);
+    }
 }
