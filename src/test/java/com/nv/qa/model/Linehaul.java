@@ -1,5 +1,6 @@
 package com.nv.qa.model;
 
+import com.nv.qa.support.CommonUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -93,6 +94,7 @@ public class Linehaul {
 
     public void clickEditButton() {
         element.findElement(By.tagName("button")).click();
+        CommonUtil.pause1s();
     }
 
 

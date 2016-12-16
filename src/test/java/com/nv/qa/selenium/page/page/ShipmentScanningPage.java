@@ -20,6 +20,7 @@ public class ShipmentScanningPage {
     public static final String XPATH_SELECT_SHIPMENT_BUTTON = "//button[@aria-label='Select Shipment']";
     public static final String XPATH_BARCODE_SCAN = "//input[@id='scan_barcode_input']";
     public static final String XPATH_ORDER_IN_SHIPMENT = "//td[@class='tracking-id ng-binding']";
+    public static final String XPATH_RACK_SECTOR = "//div[contains(@class,'rack-sector-card')]/div[2]";
 
     public ShipmentScanningPage(WebDriver driver) {
         this.driver = driver;
@@ -47,6 +48,9 @@ public class ShipmentScanningPage {
     }
 
     public void checkOrderInShipment(String orderId) {
+        String rack = driver.findElement(By.xpath(XPATH_RACK_SECTOR)).getText();
+        Assert.assertTrue("order is " + rack, !rack.equalsIgnoreCase("INVALID") && !rack.equalsIgnoreCase("DUPLICATE"));
+
         WebElement order = driver.findElement(By.xpath(XPATH_ORDER_IN_SHIPMENT + "[text()='" + orderId + "']"));
         Assert.assertEquals("order in shipment", orderId, order.getText());
     }

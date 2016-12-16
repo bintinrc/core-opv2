@@ -16,9 +16,7 @@ import org.openqa.selenium.WebElement;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by lanangjati
@@ -141,5 +139,29 @@ public class ShipmentLinehaulStep{
                 break;
             }
         }
+    }
+
+    @Then("^Schedule is right$")
+    public void scheduleIsRight() throws Throwable {
+        shipmentLinehaulPage.clickTab("LINEHAUL DATE");
+
+        Calendar now = Calendar.getInstance();
+        List<Integer> dates = new ArrayList<>();
+        for (String day : linehaul.getDays()) {
+            Integer dayNumber = CommonUtil.dayToInteger(day);
+            Integer todayNumber = now.get(Calendar.DAY_OF_WEEK);
+            Integer diffToDayNumber = todayNumber - dayNumber;
+            if (todayNumber < dayNumber) {
+                diffToDayNumber += 7;
+            }
+            dates.add(now.get(Calendar.DAY_OF_MONTH) + diffToDayNumber);
+        }
+
+        for (Integer date : dates) {
+            shipmentLinehaulPage.clickLinhaulScheduleDate(date);
+        }
+
+        shipmentLinehaulPage.clickTab("LINEHAUL ENTRIES");
+
     }
 }
