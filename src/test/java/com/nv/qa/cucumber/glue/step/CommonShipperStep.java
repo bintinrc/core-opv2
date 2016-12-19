@@ -88,7 +88,7 @@ public class CommonShipperStep extends AbstractSteps
          * Please give a minute for the server to create the order before retrieving the order above.
          * Create Order V2 using async when creating an order.
          */
-        CommonUtil.pause1s();
+        CommonUtil.pause3s();
 
         String asyncOrderId = listOfCreateOrderResponse.get(0).getId();
         Order order = orderCreateV2Client.retrieveOrder(asyncOrderId);
