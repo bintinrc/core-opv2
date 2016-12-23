@@ -9,7 +9,9 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.junit.Assert;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
@@ -83,7 +85,6 @@ public class ShipmentManagementStep {
 
     @Given("^op click Load All Shipment$")
     public void listAllShipment() throws Throwable {
-        shipmentManagementPage.setupSort("Id", "Latest first");
         CommonUtil.clickBtn(driver, XPATH_LOAD_ALL_SHIPMENT_BUTTON);
         CommonUtil.pause(3000);
     }
@@ -179,11 +180,12 @@ public class ShipmentManagementStep {
 
     @When("^filter ([^\"]*) is ([^\"]*)$")
     public void fillSearchFilter(String filter, String value) throws Throwable {
-        CommonUtil.clickBtn(driver, shipmentManagementPage.grabXPathFilter(filter));
-        CommonUtil.pause1s();
-        CommonUtil.inputText(driver, shipmentManagementPage.grabXPathFilterTF(filter), value);
-        CommonUtil.pause1s();
-        CommonUtil.clickBtn(driver, shipmentManagementPage.grabXPathFilterDropdown(value));
+        shipmentManagementPage.clickAddFilter(filter, value);
+//        CommonUtil.clickBtn(driver, shipmentManagementPage.grabXPathFilter(filter));
+//        CommonUtil.pause1s();
+//        CommonUtil.inputText(driver, shipmentManagementPage.grabXPathFilterTF(filter), value);
+//        CommonUtil.pause1s();
+//        CommonUtil.clickBtn(driver, shipmentManagementPage.grabXPathFilterDropdown(value));
 
         CommonUtil.pause1s();
 
@@ -211,9 +213,16 @@ public class ShipmentManagementStep {
 
     @When("^clear filter$")
     public void clear_filter() throws Throwable {
-        try {
+        if (driver.findElement(By.xpath(ShipmentManagementPage.XPATH_CLEAR_FILTER_BUTTON)).isDisplayed()){
+            if (driver.findElement(By.xpath(ShipmentManagementPage.XPATH_CLEAR_FILTER_VALUE)).isDisplayed()){
+                List<WebElement> clearValueBtnList = driver.findElements(By.xpath(ShipmentManagementPage.XPATH_CLEAR_FILTER_VALUE));
+                for (WebElement clearBtn : clearValueBtnList) {
+                    clearBtn.click();
+                    CommonUtil.pause1s();
+                }
+            }
+
             CommonUtil.clickBtn(driver, ShipmentManagementPage.XPATH_CLEAR_FILTER_BUTTON);
-        } catch (Exception ignored) {
         }
         CommonUtil.pause(2000);
     }

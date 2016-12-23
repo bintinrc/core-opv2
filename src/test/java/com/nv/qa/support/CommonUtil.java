@@ -39,6 +39,19 @@ public class CommonUtil {
         pause1s();
     }
 
+    public static void hoverMouseTo(WebDriver driver, String xpath) {
+        WebElement el = driver.findElement(By.xpath(xpath));
+        pause100ms();
+        moveTo(driver, el);
+    }
+
+    public static void moveTo(WebDriver driver, WebElement el) {
+        Actions action = new Actions(driver);
+        action.moveToElement(el);
+        action.perform();
+        pause1s();
+    }
+
     public static void chooseValueFromMdContain(WebDriver driver, String xpathContainer, String value) {
 
         driver.findElement(By.xpath(xpathContainer)).click();

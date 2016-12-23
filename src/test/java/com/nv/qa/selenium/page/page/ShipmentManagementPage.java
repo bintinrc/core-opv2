@@ -19,7 +19,7 @@ public class ShipmentManagementPage {
     private final WebDriver driver;
     public static final String XPATH_CREATE_SHIPMENT_BUTTON = "//nv-table-button[@id='create-shipment-1']/button";
     public static final String XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON = "//nv-table-button[@id='createButton']/button";
-    public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[@ng-click='ctrl.onSearch()']";
+    public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[@aria-label='Load Selection']";
     public static final String XPATH_SAVE_CHANGES_BUTTON = "//button[div[text()='Save Changes']]";
     public static final String XPATH_LINEHAUL_DROPDOWN = "//div[p[text()='Select Linehaul']]/md-select";
     public static final String XPATH_START_HUB_DROPDOWN = "//div[p[text()='Start Hub']]/md-select";
@@ -35,7 +35,8 @@ public class ShipmentManagementPage {
     public static final String XPATH_DISCARD_CHANGE_BUTTON = "//button[h5[text()='Discard Changes']]";
     public static final String XPATH_SHIPMENT_SCAN = "//div[contains(@class,'table-shipment-scan-container')]/table/tbody/tr";
     public static final String XPATH_CLOSE_SCAN_MODAL_BUTTON = "//button[@aria-label='Cancel']";
-    public static final String XPATH_CLEAR_FILTER_BUTTON = "//button[span[text()='Clear All Filters']]";
+    public static final String XPATH_CLEAR_FILTER_BUTTON = "//button[@aria-label='Clear All Selections']";
+    public static final String XPATH_CLEAR_FILTER_VALUE = "//button[@aria-label='Clear All']";
 
     public void clickEditSearchFilterButton() {
         CommonUtil.clickBtn(driver, XPATH_EDIT_SEARCH_FILTER_BUTTON);
@@ -109,16 +110,24 @@ public class ShipmentManagementPage {
         CommonUtil.pause1s();
     }
 
-    public String grabXPathFilter(String filterLabel) {
-        return "//nv-filter-box/div[div[p[text()='" + filterLabel + "']]]/div/nv-autocomplete/div";
+    public void clickAddFilter(String filterLabel, String value) {
+        CommonUtil.clickBtn(driver, "//input[@placeholder='Select Filter']");
+        CommonUtil.clickBtn(driver, grabXPathFilterDropdown(filterLabel));
+        CommonUtil.hoverMouseTo(driver, "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
+        CommonUtil.clickBtn(driver, "//h4[text()='Select Search Filters']");
+
+        CommonUtil.clickBtn(driver, grabXPathFilter(filterLabel));
+        CommonUtil.clickBtn(driver, grabXPathFilterDropdown(value));
+        CommonUtil.hoverMouseTo(driver, "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
+        CommonUtil.clickBtn(driver, "//h4[text()='Select Search Filters']");
     }
 
-    public String grabXPathFilterTF(String filterLabel) {
-        return grabXPathFilter(filterLabel) + "/label/md-autocomplete/md-autocomplete-wrap/input";
+    public String grabXPathFilter(String filterLabel) {
+        return "//nv-filter-box/div[div/p[text()='" + filterLabel + "']]/div/nv-autocomplete";
     }
 
     public String grabXPathFilterDropdown(String value) {
-        return "//md-virtual-repeat-container[@class='md-autocomplete-suggestions-container md-whiteframe-z1 md-virtual-repeat-container md-orient-vertical']/div/div/ul/li";
+        return "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span[text()='" + value + "']";
     }
 
     public void shipmentScanExist(String source, String hub) {
