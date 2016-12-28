@@ -1,5 +1,5 @@
 @RouteLogs @selenium
-Feature: Route Groups
+Feature: Route Logs
 
   @LaunchBrowser
   Scenario: Login to Operator V2
