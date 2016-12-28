@@ -46,6 +46,7 @@ public class RouteGroupsPage extends SimplePage
         clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
         pause100ms();
         click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
+        pause1s();
     }
 
     public void setRouteGroupNameValue(String value)
