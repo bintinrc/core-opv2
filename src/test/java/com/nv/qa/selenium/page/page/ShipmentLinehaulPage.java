@@ -2,12 +2,14 @@ package com.nv.qa.selenium.page.page;
 
 import com.nv.qa.model.Linehaul;
 import com.nv.qa.support.CommonUtil;
+import com.nv.qa.support.SeleniumHelper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -19,6 +21,7 @@ public class ShipmentLinehaulPage {
     private final WebDriver driver;
 
     private static final String XPATH_CREATE_LINEHAUL_BUTTON = "//button[div[text()='Create Linehaul']]";
+    private static final String XPATH_CREATE_LINEHAUL_BUTTON_ONSCHEDULE = "//button[div[text()='create linehaul']]";
     private static final String XPATH_DELETE_BUTTON = "//button[@aria-label='Delete']";
     private static final String XPATH_LINEHAUL_NAME_TF = "//input[contains(@name,'linehaul-name')]";
     private static final String XPATH_COMMENT_TF = "//textarea[contains(@name,'comments')]";
@@ -32,6 +35,8 @@ public class ShipmentLinehaulPage {
     private static final String XPATH_TABLE_ITEM = "//tr[@md-virtual-repeat='lh in ctrl.linehauls']";
     private static final String XPATH_LINEHAUL_ENTRIES_TAB = "//md-tab-item/span[text()='Linehaul Entries']";
     private static final String XPATH_LINEHAUL_DATE_TAB = "//md-tab-item/span[text()='Linehaul Date']";
+    private static final String XPATH_SCHEDULE_MONTH = "//md-select[contains(@aria-label,'Month:')]";
+    private static final String XPATH_SCHEDULE_YEAR = "//md-select[contains(@aria-label,'Year:')]";
 
     public ShipmentLinehaulPage(WebDriver driver) {
         this.driver = driver;
@@ -40,6 +45,10 @@ public class ShipmentLinehaulPage {
 
     public void clickCreateLinehaul() {
         CommonUtil.clickBtn(driver, XPATH_CREATE_LINEHAUL_BUTTON);
+    }
+
+    public void clickCreateLinehaulOnSchedule() {
+        CommonUtil.clickBtn(driver, XPATH_CREATE_LINEHAUL_BUTTON_ONSCHEDULE);
     }
 
     public void clickAddHubButton() {
@@ -134,7 +143,24 @@ public class ShipmentLinehaulPage {
         CommonUtil.clickBtn(driver, XPATH_DELETE_BUTTON);
     }
 
-    public void clickLinhaulScheduleDate(Integer date) {
-        CommonUtil.clickBtn(driver, "//div[@tabindex='" + date + "']");
+    public void clickLinhaulScheduleDate(Calendar date) {
+        CommonUtil.chooseValueFromMdContain(driver, XPATH_SCHEDULE_MONTH, CommonUtil.integerToMonth(date.get(Calendar.MONTH)));
+        CommonUtil.pause3s();
+        CommonUtil.chooseValueFromMdContain(driver, XPATH_SCHEDULE_YEAR, String.valueOf(date.get(Calendar.YEAR)));
+        CommonUtil.pause3s();
+
+        CommonUtil.clickBtn(driver, "//div[@tabindex='" + date.get(Calendar.DAY_OF_MONTH) + "']");
+    }
+
+    public void clickEditLinehaulAtDate(String linehaulId) {
+        CommonUtil.clickBtn(driver, getXpathLinehaulInfoOnSchedule(linehaulId) + "/div/nv-icon-text-button/button[@aria-label='edit linehaul']");
+    }
+
+    public void checkLinehaulAtDate(String linehaulId) {
+        SeleniumHelper.waitUntilElementVisible(driver, driver.findElement(By.xpath(getXpathLinehaulInfoOnSchedule(linehaulId))));
+    }
+
+    private String getXpathLinehaulInfoOnSchedule(String linehaulId) {
+        return "//md-card-content[div[span[text()='Linehaul ID : " + linehaulId + "']]]";
     }
 }

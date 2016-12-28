@@ -38,7 +38,12 @@ public class ShipmentLinehaulStep{
 
     @When("^op click create linehaul button$")
     public void createActionButtonClicked() throws Throwable {
-        shipmentLinehaulPage.clickCreateLinehaul();
+        String url = driver.getCurrentUrl();
+        if (url.endsWith("entries")) {
+            shipmentLinehaulPage.clickCreateLinehaul();
+        } else {
+            shipmentLinehaulPage.clickCreateLinehaulOnSchedule();
+        }
     }
 
     @When("^op click delete linehaul button$")
@@ -63,6 +68,7 @@ public class ShipmentLinehaulStep{
     @Then("^linehaul exist$")
     public void linehaulExist() throws Throwable {
 
+        shipmentLinehaulPage.clickTab("LINEHAUL ENTRIES");
         shipmentLinehaulPage.search(linehaulId);
         List<WebElement> list = shipmentLinehaulPage.grabListOfLinehaulId();
         boolean isExist = false;
@@ -145,23 +151,28 @@ public class ShipmentLinehaulStep{
     public void scheduleIsRight() throws Throwable {
         shipmentLinehaulPage.clickTab("LINEHAUL DATE");
 
-        Calendar now = Calendar.getInstance();
-        List<Integer> dates = new ArrayList<>();
+        List<Calendar> dates = new ArrayList<>();
         for (String day : linehaul.getDays()) {
             Integer dayNumber = CommonUtil.dayToInteger(day);
+            Calendar now = Calendar.getInstance();
             Integer todayNumber = now.get(Calendar.DAY_OF_WEEK);
-            Integer diffToDayNumber = todayNumber - dayNumber;
-            if (todayNumber < dayNumber) {
+            Integer diffToDayNumber = dayNumber - todayNumber;
+            if (diffToDayNumber < 0) {
                 diffToDayNumber += 7;
             }
-            dates.add(now.get(Calendar.DAY_OF_MONTH) + diffToDayNumber);
+            now.add(Calendar.DATE, diffToDayNumber);
+            dates.add(now);
         }
 
-        for (Integer date : dates) {
+        for (Calendar date : dates) {
             shipmentLinehaulPage.clickLinhaulScheduleDate(date);
+            shipmentLinehaulPage.checkLinehaulAtDate(linehaulId);
         }
 
-        shipmentLinehaulPage.clickTab("LINEHAUL ENTRIES");
+    }
 
+    @When("^op click edit linehaul button on schedule$")
+    public void op_click_edit_linehaul_button_on_schedule() throws Throwable {
+        shipmentLinehaulPage.clickEditLinehaulAtDate(linehaulId);
     }
 }
