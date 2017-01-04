@@ -83,7 +83,7 @@ public class ShipmentManagementStep {
         id = toast.getText().split(" ")[1];
     }
 
-    @Given("^op click Load All Shipment$")
+    @Given("^op click Load All Selection$")
     public void listAllShipment() throws Throwable {
         CommonUtil.clickBtn(driver, XPATH_LOAD_ALL_SHIPMENT_BUTTON);
         CommonUtil.pause(3000);

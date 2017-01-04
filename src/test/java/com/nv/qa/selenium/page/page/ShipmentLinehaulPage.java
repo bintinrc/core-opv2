@@ -31,12 +31,14 @@ public class ShipmentLinehaulPage {
     private static final String XPATH_LABEL_EDIT_LINEHAUL = "//h4[text()='Edit Linehaul']";
     private static final String XPATH_CREATE_BUTTON = "//button[@aria-label='Create']";
     private static final String XPATH_SAVE_CHANGES_BUTTON = "//button[@aria-label='Save Changes']";
-    private static final String XPATH_SEARCH = "//input[@id='id']";
-    private static final String XPATH_TABLE_ITEM = "//tr[@md-virtual-repeat='lh in ctrl.linehauls']";
+    private static final String XPATH_SEARCH = "//th[@nv-table-filter='id']//input[@id='id']";
+    private static final String XPATH_TABLE_ITEM = "//tr[@md-virtual-repeat='linehaul in getTableData()']";
     private static final String XPATH_LINEHAUL_ENTRIES_TAB = "//md-tab-item/span[text()='Linehaul Entries']";
     private static final String XPATH_LINEHAUL_DATE_TAB = "//md-tab-item/span[text()='Linehaul Date']";
     private static final String XPATH_SCHEDULE_MONTH = "//md-select[contains(@aria-label,'Month:')]";
     private static final String XPATH_SCHEDULE_YEAR = "//md-select[contains(@aria-label,'Year:')]";
+    public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[@aria-label='Load Selection']";
+    public static final String XPATH_EDIT_SEARCH_FILTER_BUTTON = "//button[contains(@aria-label, 'Edit Filter')]";
 
     public ShipmentLinehaulPage(WebDriver driver) {
         this.driver = driver;
@@ -74,6 +76,7 @@ public class ShipmentLinehaulPage {
         }
 
         CommonUtil.clickBtn(driver, xpath);
+        CommonUtil.pause3s();
     }
 
     public void clickOnLabelCreate() {
@@ -162,5 +165,14 @@ public class ShipmentLinehaulPage {
 
     private String getXpathLinehaulInfoOnSchedule(String linehaulId) {
         return "//md-card-content[div[span[text()='Linehaul ID : " + linehaulId + "']]]";
+    }
+
+    public void clickLoadAllShipmentButton() throws Throwable {
+        CommonUtil.clickBtn(driver, XPATH_LOAD_ALL_SHIPMENT_BUTTON);
+        CommonUtil.pause(3000);
+    }
+
+    public void clickEditSearchFilterButton() {
+        CommonUtil.clickBtn(driver, XPATH_EDIT_SEARCH_FILTER_BUTTON);
     }
 }

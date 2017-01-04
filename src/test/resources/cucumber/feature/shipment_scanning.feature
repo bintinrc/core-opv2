@@ -18,7 +18,7 @@ Feature: shipment scanning
     When create Shipment with Start Hub 30JKB, End hub DOJO and comment Auto Comment
     Then shipment created
     When filter Last Inbound Hub is 30JKB
-    When op click Load All Shipment
+    When op click Load All Selection
     Then get first shipment for shipment scanning
     Then op click edit filter
     Then clear filter

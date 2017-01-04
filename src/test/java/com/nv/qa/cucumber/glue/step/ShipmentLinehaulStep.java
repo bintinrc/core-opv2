@@ -48,8 +48,14 @@ public class ShipmentLinehaulStep{
 
     @When("^op click delete linehaul button$")
     public void deleteButtonClicked() throws Throwable {
-        shipmentLinehaulPage.clickOnLabelEdit();
-        shipmentLinehaulPage.clickDeleteButton();
+        shipmentLinehaulPage.search(linehaulId);
+        List<Linehaul> list = shipmentLinehaulPage.grabListofLinehaul();
+        for (Linehaul item : list) {
+            if (item.getId().equals(linehaulId)) {
+                item.clickDeleteButton();
+                break;
+            }
+        }
     }
 
     @When("^create new linehaul:$")
@@ -69,6 +75,7 @@ public class ShipmentLinehaulStep{
     public void linehaulExist() throws Throwable {
 
         shipmentLinehaulPage.clickTab("LINEHAUL ENTRIES");
+        shipmentLinehaulPage.clickLoadAllShipmentButton();
         shipmentLinehaulPage.search(linehaulId);
         List<WebElement> list = shipmentLinehaulPage.grabListOfLinehaulId();
         boolean isExist = false;
@@ -126,7 +133,7 @@ public class ShipmentLinehaulStep{
 
     @Then("^linehaul deleted$")
     public void linehaulDeleted() throws Throwable {
-        String msg = "Linehaul " + linehaulId + " deleted";
+        String msg = "Success delete Linehaul ID " + linehaulId;
         WebElement toast = CommonUtil.getToast(driver);
         Assert.assertTrue("toast message not contains " + msg, toast.getText().contains(msg));
     }
@@ -136,6 +143,7 @@ public class ShipmentLinehaulStep{
         String msg = "Linehaul " + linehaulId + " updated";
         WebElement toast = CommonUtil.getToast(driver);
         Assert.assertTrue("toast message not contain " + msg, toast.getText().contains(msg));
+        shipmentLinehaulPage.clickTab("LINEHAUL DATE");
         linehaulExist();
         List<Linehaul> list = shipmentLinehaulPage.grabListofLinehaul();
         for (Linehaul item : list) {
@@ -174,5 +182,11 @@ public class ShipmentLinehaulStep{
     @When("^op click edit linehaul button on schedule$")
     public void op_click_edit_linehaul_button_on_schedule() throws Throwable {
         shipmentLinehaulPage.clickEditLinehaulAtDate(linehaulId);
+    }
+
+    @Given("^op click edit linhaul filter$")
+    public void op_click_edit_filter() throws Throwable {
+        shipmentLinehaulPage.clickEditSearchFilterButton();
+        CommonUtil.pause1s();
     }
 }

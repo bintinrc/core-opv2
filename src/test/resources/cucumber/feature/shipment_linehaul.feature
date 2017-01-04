@@ -18,9 +18,9 @@ Feature: shipment linehaul
       | frequency | Weekly              |
       | days      | Monday,Friday       |
     Then linehaul exist
-    When op click edit action button
     When op click delete linehaul button
     Then linehaul deleted
+    Then op click edit linhaul filter
 
   Scenario: Edit Linehaul (uid:85dbd34f-25ea-4ada-accc-884a8098f8e2)
     Given op click tab LINEHAUL ENTRIES
@@ -40,9 +40,9 @@ Feature: shipment linehaul
       | frequency | Weekly             |
       | days      | Monday,Friday      |
     Then linehaul edited
-    When op click edit action button
     When op click delete linehaul button
     Then linehaul deleted
+    Then op click edit linhaul filter
 
   Scenario: Delete Linehaul (uid:89bc519c-6f5d-4f99-864a-2dbba4c52c22)
     Given op click tab LINEHAUL ENTRIES
@@ -54,9 +54,9 @@ Feature: shipment linehaul
       | frequency | Weekly              |
       | days      | Monday,Friday       |
     Then linehaul exist
-    When op click edit action button
     When op click delete linehaul button
     Then linehaul deleted
+    Then op click edit linhaul filter
 
   Scenario: Check linehaul schedule (uid:8b178ed7-6da6-4207-8cb6-f75327533ba2)
     Given op click tab LINEHAUL ENTRIES
@@ -70,9 +70,10 @@ Feature: shipment linehaul
     Then linehaul exist
     Then Schedule is right
     Then op click tab LINEHAUL ENTRIES
-    When op click edit action button
+    Then op click Load All Selection
     When op click delete linehaul button
     Then linehaul deleted
+    Then op click edit linhaul filter
 
   Scenario: Create linehaul on linehaul schedule page (uid:fe37a8e4-b435-45ef-8411-8bd0a37450d0)
     Given op click tab LINEHAUL DATE
@@ -87,9 +88,10 @@ Feature: shipment linehaul
     Then linehaul exist
     Then Schedule is right
     Then op click tab LINEHAUL ENTRIES
-    When op click edit action button
+    Then op click Load All Selection
     When op click delete linehaul button
     Then linehaul deleted
+    Then op click edit linhaul filter
 
   Scenario: Edit Linehaul on linehaul schedule page (uid:e24343fb-3ca4-4109-8221-873e88744351)
       Given op click tab LINEHAUL DATE
@@ -111,9 +113,9 @@ Feature: shipment linehaul
         | frequency | Weekly             |
         | days      | Monday,Friday      |
       Then linehaul edited
-      When op click edit action button
       When op click delete linehaul button
       Then linehaul deleted
+    Then op click edit linhaul filter
 
   @closeBrowser
   Scenario: close browser
