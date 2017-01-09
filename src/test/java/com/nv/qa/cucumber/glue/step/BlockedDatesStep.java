@@ -31,6 +31,17 @@ public class BlockedDatesStep {
 
     @When("^blocked dates add$")
     public void add() {
+
+        /**
+         * Set default year of "Blocked Dates" on right panel to current year.
+         */
+        WebElement blockedDatesYearWe = driver.findElement(By.xpath("//div[contains(@class, 'list')]/md-content[contains(@class, 'list-content')]/div/md-input-container"));
+        blockedDatesYearWe.click();
+
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        WebElement currentYearOptionWe = driver.findElement(By.xpath(String.format("//md-option[@ng-repeat='m in yearList' and @value='%d']", currentYear)));
+        currentYearOptionWe.click();
+
         List<WebElement> elm = driver.findElements(By.xpath("//div[@ng-repeat='day in week track by $index' and not(contains(@class, 'active')) and not(contains(@class, 'not-same-month'))]"));
         if (!elm.isEmpty()) {
             WebElement day = elm.get(0);

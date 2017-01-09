@@ -1,5 +1,5 @@
-@selenium @saas
-Feature: blocked dates
+@BlockedDates @selenium @saas
+Feature: Blocked Dates
 
   Scenario: op login into operator portal
     Given op is in op portal login page
