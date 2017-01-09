@@ -22,6 +22,8 @@ public class Linehaul {
     private List<String> hubs = new ArrayList<>();
     private List<String> days = new ArrayList<>();
 
+    public static final String XPATH_DELETE_CONFIRMATION_BUTTON = "//button[span[text()='Delete']]";
+
     public Linehaul() {
     }
 
@@ -93,7 +95,21 @@ public class Linehaul {
     }
 
     public void clickEditButton() {
-        element.findElement(By.tagName("button")).click();
+        clickActionBtn("Edit");
+    }
+
+    public void clickDeleteButton() {
+        clickActionBtn("Delete");
+        element.findElement(By.xpath(XPATH_DELETE_CONFIRMATION_BUTTON)).click();
+        CommonUtil.pause1s();
+    }
+
+    private void clickActionBtn(String name) {
+        for (WebElement btn : element.findElements(By.tagName("button"))) {
+            if (btn.getAttribute("aria-label").equalsIgnoreCase(name)) {
+                btn.click();
+            }
+        }
         CommonUtil.pause1s();
     }
 

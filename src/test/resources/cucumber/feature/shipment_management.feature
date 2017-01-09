@@ -13,7 +13,7 @@ Feature: shipment management
     When create shipment button is clicked
     When create Shipment with Start Hub 30JKB, End hub DOJO and comment Auto Comment
     Then shipment created
-    Given op click Load All Shipment
+    Given op click Load All Selection
     When shipment Delete action button clicked
     Then shipment deleted
     Then op click edit filter
@@ -23,7 +23,7 @@ Feature: shipment management
     When create shipment button is clicked
     When create Shipment with Start Hub 30JKB, End hub DOJO and comment Auto Comment
     Then shipment created
-    Given op click Load All Shipment
+    Given op click Load All Selection
     When shipment Edit action button clicked
     When edit Shipment with Start Hub DOJO, End hub EASTGW and comment Auto Comment Edited
     Then shipment edited
@@ -36,10 +36,10 @@ Feature: shipment management
     When create shipment button is clicked
     When create Shipment with Start Hub 30JKB, End hub DOJO and comment Auto Comment
     Then shipment created
-    Given op click Load All Shipment
+    Given op click Load All Selection
     When shipment Force action button clicked
     Then op click edit filter
-    Then op click Load All Shipment
+    Then op click Load All Selection
     Then shipment status is Completed
     When shipment Delete action button clicked
     Then shipment deleted
@@ -50,7 +50,7 @@ Feature: shipment management
     When create shipment button is clicked
     When create Shipment with Start Hub 30JKB, End hub DOJO and comment Auto Comment
     Then shipment created
-    Given op click Load All Shipment
+    Given op click Load All Selection
     When shipment Edit action button clicked
     When cancel shipment button clicked
     Then shipment status is Cancelled
@@ -63,7 +63,7 @@ Feature: shipment management
     When create shipment button is clicked
     When create Shipment with Start Hub 30JKB, End hub DOJO and comment Auto Comment
     Then shipment created
-    Given op click Load All Shipment
+    Given op click Load All Selection
     When shipment Delete action button clicked
     Then shipment deleted
 

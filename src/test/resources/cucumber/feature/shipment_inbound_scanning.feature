@@ -15,7 +15,7 @@ Feature: shipment inbound scanning
     Then shipment created
     When filter Shipment Status is Pending
     When filter End Hub is DOJO
-    When op click Load All Shipment
+    When op click Load All Selection
     Then get first shipment for shipment inbound scanning
 ###inbound shipment
     Given op click edit filter
@@ -29,7 +29,7 @@ Feature: shipment inbound scanning
     Given op click navigation Shipment Management in Inter-Hub
     When filter Shipment Status is Transit
     When filter Last Inbound Hub is 30JKB
-    When op click Load All Shipment
+    When op click Load All Selection
     Then inbounded shipment exist
     When shipment Scans action button clicked
     Then shipment scan with source VAN_INBOUND in hub 30JKB
@@ -46,7 +46,7 @@ Feature: shipment inbound scanning
     Then shipment created
     When filter Shipment Status is Pending
     When filter End Hub is DOJO
-    When op click Load All Shipment
+    When op click Load All Selection
     Then get first shipment for shipment inbound scanning
 ###inbound shipment
     Given op click edit filter
@@ -60,7 +60,7 @@ Feature: shipment inbound scanning
     Given op click navigation Shipment Management in Inter-Hub
     When filter Shipment Status is Transit
     When filter Last Inbound Hub is EASTGW
-    When op click Load All Shipment
+    When op click Load All Selection
     Then inbounded shipment exist
     When shipment Scans action button clicked
     Then shipment scan with source HUB_INBOUND in hub EASTGW
@@ -76,7 +76,7 @@ Feature: shipment inbound scanning
     Then shipment created
     When filter Shipment Status is Pending
     When filter End Hub is DOJO
-    When op click Load All Shipment
+    When op click Load All Selection
     Then get first shipment for shipment inbound scanning
 ###inbound shipment
     Given op click edit filter
@@ -90,7 +90,7 @@ Feature: shipment inbound scanning
     Given op click navigation Shipment Management in Inter-Hub
     When filter Shipment Status is Completed
     When filter Last Inbound Hub is DOJO
-    When op click Load All Shipment
+    When op click Load All Selection
     Then inbounded shipment exist
     When shipment Scans action button clicked
     Then shipment scan with source HUB_INBOUND in hub DOJO
