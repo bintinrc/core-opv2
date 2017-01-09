@@ -135,13 +135,13 @@ public class DpPage extends SimplePage
         {
             ngRepeat = "dp in $data";
             columnClass = COLUMN_CLASS_DP_DIRECTION;
-            expectedValue = "No directions provided.";
+            expectedValue = String.format("No directions provided. [%s]", ScenarioHelper.getInstance().getTmpId());
         }
         else if(type.equals("edit dp-users"))
         {
             ngRepeat = "dpUser in $data";
             columnClass = COLUMN_CLASS_DP_USER_CONTACT_NO;
-            expectedValue = String.format("8300%s", ScenarioHelper.getInstance().getTmpId());
+            expectedValue = String.format("+65 %s", ScenarioHelper.getInstance().getTmpId());
         }
 
         searchTable(expectedValue);
@@ -179,7 +179,7 @@ public class DpPage extends SimplePage
 
             sendKeys("//input[@type='text'][@aria-label='Partner Name']", String.format("Partner %s", tmpId));
             sendKeys("//input[@type='text'][@aria-label='POC Name']", String.format("Poc %s", tmpId));
-            sendKeys("//input[@type='tel'][@aria-label='POC No.']", String.format("8000%s", tmpId));
+            sendKeys("//input[@type='tel'][@aria-label='POC No.']", String.format("+65 %s", tmpId));
             sendKeys("//input[@type='email'][@aria-label='POC Email']", String.format("%s@poc.co", tmpId));
             sendKeys("//textarea[@name='restrictions'][@aria-label='Restrictions']", "NA");
         }
@@ -187,7 +187,7 @@ public class DpPage extends SimplePage
         {
             sendKeys("//input[@type='text'][@aria-label='Name']", String.format("DP %s", ScenarioHelper.getInstance().getTmpId()));
             sendKeys("//input[@type='text'][@aria-label='Shortname']", String.format("DP%s", ScenarioHelper.getInstance().getTmpId()));
-            sendKeys("//input[@type='tel'][@aria-label='Contact No.']", String.format("8100%s", ScenarioHelper.getInstance().getTmpId()));
+            sendKeys("//input[@type='tel'][@aria-label='Contact No.']", String.format("+65 %s", ScenarioHelper.getInstance().getTmpId()));
             sendKeys("//div[label[text()='Shipper Account']]//input", "QA\n");
             sendKeys("//input[@type='text'][@aria-label='Address Line 1']", "Jl. Utan Kayu Raya No. 76");
             sendKeys("//input[@type='text'][@aria-label='Address Line 2']", "Rawamangun");
@@ -201,7 +201,7 @@ public class DpPage extends SimplePage
         {
             sendKeys("//input[@type='text'][@aria-label='First Name']", "User");
             sendKeys("//input[@type='text'][@aria-label='Last Name']", ScenarioHelper.getInstance().getTmpId());
-            sendKeys("//input[@type='tel'][@aria-label='Contact No.']", String.format("8200%s", ScenarioHelper.getInstance().getTmpId()));
+            sendKeys("//input[@type='tel'][@aria-label='Contact No.']", String.format("+65 %s", ScenarioHelper.getInstance().getTmpId()));
             sendKeys("//input[@type='email'][@aria-label='Email']", String.format("%s@poc.co", ScenarioHelper.getInstance().getTmpId()));
             sendKeys("//input[@type='text'][@aria-label='Username']", String.format("user%s", ScenarioHelper.getInstance().getTmpId()));
             sendKeys("//input[@type='password'][@aria-label='Password']", "Ninjitsu89");
@@ -234,7 +234,7 @@ public class DpPage extends SimplePage
 
             placeHolder = "Search Distribution Points...";
             textAreaXpath = "//textarea[@name='directions'][@aria-label='Directions']";
-            editValue = "No directions provided.";
+            editValue = String.format("No directions provided. [%s]", ScenarioHelper.getInstance().getTmpId());
         }
         else if(type.equals("dp-users"))
         {
@@ -243,7 +243,7 @@ public class DpPage extends SimplePage
 
             placeHolder = "Search Distribution Point Users...";
             textAreaXpath = "//input[@type='tel'][@aria-label='Contact No.']";
-            editValue = String.format("8300%s", ScenarioHelper.getInstance().getTmpId());
+            editValue = String.format("+65 %s", ScenarioHelper.getInstance().getTmpId());
         }
 
         /**
