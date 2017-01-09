@@ -129,7 +129,7 @@ public class DpPage extends SimplePage
         {
             ngRepeat = "dpPartner in $data";
             columnClass = COLUMN_CLASS_DP_PARTNER_RESTRICTION;
-            expectedValue = "No restrictions enforced.";
+            expectedValue = String.format("No restrictions enforced. [%s]", ScenarioHelper.getInstance().getTmpId());
         }
         else if(type.equals("edit dps"))
         {
@@ -180,7 +180,7 @@ public class DpPage extends SimplePage
             sendKeys("//input[@type='text'][@aria-label='Partner Name']", String.format("Partner %s", tmpId));
             sendKeys("//input[@type='text'][@aria-label='POC Name']", String.format("Poc %s", tmpId));
             sendKeys("//input[@type='tel'][@aria-label='POC No.']", String.format("8000%s", tmpId));
-            sendKeys("//input[@type='email'][@aria-label='POC Email']", String.format("%s@%s.poc", tmpId, tmpId));
+            sendKeys("//input[@type='email'][@aria-label='POC Email']", String.format("%s@poc.co", tmpId));
             sendKeys("//textarea[@name='restrictions'][@aria-label='Restrictions']", "NA");
         }
         else if(type.equals("dps"))
@@ -202,7 +202,7 @@ public class DpPage extends SimplePage
             sendKeys("//input[@type='text'][@aria-label='First Name']", "User");
             sendKeys("//input[@type='text'][@aria-label='Last Name']", ScenarioHelper.getInstance().getTmpId());
             sendKeys("//input[@type='tel'][@aria-label='Contact No.']", String.format("8200%s", ScenarioHelper.getInstance().getTmpId()));
-            sendKeys("//input[@type='email'][@aria-label='Email']", String.format("%s@%s.poc", ScenarioHelper.getInstance().getTmpId(), ScenarioHelper.getInstance().getTmpId()));
+            sendKeys("//input[@type='email'][@aria-label='Email']", String.format("%s@poc.co", ScenarioHelper.getInstance().getTmpId()));
             sendKeys("//input[@type='text'][@aria-label='Username']", String.format("user%s", ScenarioHelper.getInstance().getTmpId()));
             sendKeys("//input[@type='password'][@aria-label='Password']", "Ninjitsu89");
         }
@@ -225,7 +225,7 @@ public class DpPage extends SimplePage
             columnClass = COLUMN_CLASS_DP_PARTNER_NAME;
             placeHolder = "Search Distribution Point Partners...";
             textAreaXpath = "//textarea[@name='restrictions'][@aria-label='Restrictions']";
-            editValue = "No restrictions enforced.";
+            editValue = String.format("No restrictions enforced. [%s]", ScenarioHelper.getInstance().getTmpId());
         }
         else if(type.equals("dps"))
         {
@@ -259,7 +259,13 @@ public class DpPage extends SimplePage
 
         if(type.equals("dp-users"))
         {
-            sendKeys("//input[@type='password'][@aria-label='Password']", "Ninjitsu89");
+            /**
+             * Since 9 January 2017, we cannot change DP User password from edit dialog.
+             *
+             * Password:
+             * Please contact it-support if you want to change the password.
+             */
+            //sendKeys("//input[@type='password'][@aria-label='Password']", "Ninjitsu89");
         }
         else if(type.equals("dps"))
         {

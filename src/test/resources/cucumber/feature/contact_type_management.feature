@@ -1,5 +1,5 @@
-@selenium
-Feature: contact type management
+@ContactTypeManagement @selenium
+Feature: Contact Type Management
 
   Scenario: op login into operator portal
     Given op is in op portal login page
