@@ -44,14 +44,14 @@ public class SimplePage
         pause300ms();
     }
 
-    public void sendKeysAndEnter(String xpathExpression, CharSequence... keysToSend)
+    public void sendKeysAndEnter(String xpathExpression, String keysToSend)
     {
         WebElement we = findElementByXpath(xpathExpression);
         we.clear();
         pause300ms();
         we.sendKeys(keysToSend);
         pause100ms();
-        we.sendKeys(Keys.ENTER);
+        we.sendKeys(Keys.RETURN);
         pause300ms();
     }
 
