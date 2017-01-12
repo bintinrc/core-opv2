@@ -29,19 +29,30 @@ public class SimplePage
     {
         Actions action = new Actions(driver);
         action.moveToElement(we);
-        pause500ms();
+        pause300ms();
         action.click();
         action.perform();
-        pause500ms();
+        pause300ms();
     }
 
     public void sendKeys(String xpathExpression, CharSequence... keysToSend)
     {
         WebElement we = findElementByXpath(xpathExpression);
         we.clear();
-        pause500ms();
+        pause300ms();
         we.sendKeys(keysToSend);
-        pause500ms();
+        pause300ms();
+    }
+
+    public void sendKeysAndEnter(String xpathExpression, CharSequence... keysToSend)
+    {
+        WebElement we = findElementByXpath(xpathExpression);
+        we.clear();
+        pause300ms();
+        we.sendKeys(keysToSend);
+        pause100ms();
+        we.sendKeys(Keys.ENTER);
+        pause300ms();
     }
 
     public WebElement findElementByXpath(String xpathExpression)
@@ -193,6 +204,16 @@ public class SimplePage
     public void pause200ms()
     {
         pause(200);
+    }
+
+    public void pause300ms()
+    {
+        pause(300);
+    }
+
+    public void pause400ms()
+    {
+        pause(400);
     }
 
     public void pause500ms()
