@@ -109,7 +109,7 @@ public class CommonRouteStep extends AbstractSteps
         Calendar currentCalendar = Calendar.getInstance();
         currentCalendar.add(Calendar.DATE, -1);
 
-        Map<String,String> mapOfDynamicVariable = new HashMap();
+        Map<String,String> mapOfDynamicVariable = new HashMap<>();
         mapOfDynamicVariable.put("created_date", CREATED_DATE_SDF.format(new Date()));
         mapOfDynamicVariable.put("formatted_route_date", ROUTE_DATE_SDF.format(currentCalendar.getTime()));
 

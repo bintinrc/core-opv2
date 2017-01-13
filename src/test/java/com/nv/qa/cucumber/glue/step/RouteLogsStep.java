@@ -95,7 +95,7 @@ public class RouteLogsStep extends AbstractSteps
             }
         }
 
-        Map<String,String> mapOfDynamicVariable = new HashMap();
+        Map<String,String> mapOfDynamicVariable = new HashMap<>();
         CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
         mapOfDynamicVariable.put("route_id", String.valueOf(createRouteResponse.getId()));
         String expectedRedirectUrl = CommonUtil.replaceParam(redirectUrl, mapOfDynamicVariable);
