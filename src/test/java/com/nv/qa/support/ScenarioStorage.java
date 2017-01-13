@@ -22,6 +22,7 @@ public class ScenarioStorage
         mapOfData.put(key, value);
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T get(String key)
     {
         return (T) mapOfData.get(key);

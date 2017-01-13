@@ -73,6 +73,7 @@ public class ShipmentScanningStep {
         payload = JsonHelper.toJson(createOrderRequests);
     }
 
+    @SuppressWarnings("unchecked")
     public void sendOrderCreateV3Req() throws Throwable {
         Response r = orderCreateV3Client.getCreateOrderResponse(payload);
         r.then().statusCode(200);
