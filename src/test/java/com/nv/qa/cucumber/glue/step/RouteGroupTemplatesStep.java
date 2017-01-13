@@ -62,7 +62,7 @@ public class RouteGroupTemplatesStep extends AbstractSteps
          */
         if(order!=null)
         {
-            Map<String,String> mapOfDynamicVariable = new HashMap();
+            Map<String,String> mapOfDynamicVariable = new HashMap<>();
             mapOfDynamicVariable.put("tracking_id", order.getTracking_id());
             routeGroupTemplateFilter = CommonUtil.replaceParam(routeGroupTemplateFilter, mapOfDynamicVariable);
         }

@@ -200,7 +200,11 @@ public class OrderCreateHelper {
             AuthResponse resp = client.login(loginRequest);
             CREATE_ORDER_ACCESS_TOKEN = resp.getAccess_token();
 
-            client.refreshShipperAccountCache(APIEndpoint.SHIPPER_ID);
+            /**
+             * I deleted this line below because it called deprecated method
+             * that does not have any implementation (all code in this method is commented).
+             */
+            //client.refreshShipperAccountCache(APIEndpoint.SHIPPER_ID);
         }
         return CREATE_ORDER_ACCESS_TOKEN;
     }

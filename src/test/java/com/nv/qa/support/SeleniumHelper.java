@@ -238,13 +238,15 @@ public class SeleniumHelper {
 
     public static void hoverOnElm(Actions action, WebElement elm) {
         action.moveToElement(elm);
-        action.pause(APIEndpoint.SELENIUM_INTERACTION_WAIT_MILLISECONDS);
+        CommonUtil.pause(APIEndpoint.SELENIUM_INTERACTION_WAIT_MILLISECONDS);
+        //action.pause(APIEndpoint.SELENIUM_INTERACTION_WAIT_MILLISECONDS); //pause action is deprecated and will remove from selenium on new version.
         action.perform();
     }
 
     public static void clickOnElm(Actions action, WebElement elm) {
         action.click(elm);
-        action.pause(APIEndpoint.SELENIUM_INTERACTION_WAIT_MILLISECONDS);
+        CommonUtil.pause(APIEndpoint.SELENIUM_INTERACTION_WAIT_MILLISECONDS);
+        //action.pause(APIEndpoint.SELENIUM_INTERACTION_WAIT_MILLISECONDS); //pause action is deprecated and will remove from selenium on new version.
         action.perform();
     }
 
