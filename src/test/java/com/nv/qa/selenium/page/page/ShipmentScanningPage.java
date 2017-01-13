@@ -29,18 +29,16 @@ public class ShipmentScanningPage {
 
     public void selectHub(String hubName) {
         CommonUtil.clickBtn(driver, XPATH_HUB_DROPDOWN);
-
-        CommonUtil.pause10ms();
-
+        CommonUtil.pause50ms();
         selectDropdownValue(hubName);
+        CommonUtil.pause50ms();
     }
 
     public void selectShipment(String shipmentId) {
         CommonUtil.clickBtn(driver, XPATH_SHIPMENT_DROPDOWN);
-
-        CommonUtil.pause10ms();
-
+        CommonUtil.pause50ms();
         selectDropdownValue(shipmentId);
+        CommonUtil.pause50ms();
     }
 
     private void selectDropdownValue(String value) {

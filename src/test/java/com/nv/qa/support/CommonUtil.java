@@ -103,6 +103,10 @@ public class CommonUtil {
         pause(500);
     }
 
+    public static void pause50ms() {
+        pause(50);
+    }
+
     public static void pause10ms() {
         pause(10);
     }
