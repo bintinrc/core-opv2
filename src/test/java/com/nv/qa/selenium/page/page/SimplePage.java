@@ -223,29 +223,39 @@ public class SimplePage
 
     public void pause1s()
     {
-        pause(1000);
+        pause(1_000);
+    }
+
+    public void pause2s()
+    {
+        pause(2_000);
     }
 
     public void pause3s()
     {
-        pause(3000);
+        pause(3_000);
+    }
+
+    public void pause4s()
+    {
+        pause(4_000);
     }
 
     public void pause5s()
     {
-        pause(5000);
+        pause(5_000);
     }
 
     public void pause10s()
     {
-        pause(10000);
+        pause(10_000);
     }
 
     public void pause(long millis)
     {
         try
         {
-            Thread.sleep(1000);
+            Thread.sleep(millis);
         }
         catch(InterruptedException ex)
         {

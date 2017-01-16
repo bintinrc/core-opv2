@@ -3,7 +3,6 @@ package com.nv.qa.cucumber.glue.step;
 import com.google.inject.Inject;
 import com.nv.qa.model.operator_portal.routing.CreateRouteResponse;
 import com.nv.qa.selenium.page.page.RouteLogsPage;
-import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -22,6 +21,8 @@ import java.util.*;
 @ScenarioScoped
 public class RouteLogsStep extends AbstractSteps
 {
+    private static final int ALERT_WAIT_TIMEOUT_IN_SECONDS = 15;
+
     @Inject private ScenarioStorage scenarioStorage;
     private RouteLogsPage routeLogsPage;
 
@@ -55,9 +56,9 @@ public class RouteLogsStep extends AbstractSteps
         CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
         routeLogsPage.searchAndVerifyRouteExist(String.valueOf(createRouteResponse.getId()));
         routeLogsPage.clickActionButtonOnTable(1, RouteLogsPage.ACTION_BUTTON_EDIT_ROUTE);
-        CommonUtil.pause100ms();
+        pause100ms();
         routeLogsPage.clickLoadWaypointsOfSelectedRoutesOnly();
-        CommonUtil.pause1s();
+        pause1s();
     }
 
     @Then("^op redirect to this page '([^\\\"]*)'$")
@@ -73,24 +74,25 @@ public class RouteLogsStep extends AbstractSteps
             if(!primaryWindowHandle.equals(windowName))
             {
                 getDriver().switchTo().window(windowName);
-                CommonUtil.pause500ms();
+                pause3s();
 
                 try
                 {
-                    WebDriverWait webDriverWait = new WebDriverWait(getDriver(), 10);
+                    WebDriverWait webDriverWait = new WebDriverWait(getDriver(), ALERT_WAIT_TIMEOUT_IN_SECONDS);
                     Alert alert = webDriverWait.until(ExpectedConditions.alertIsPresent());
                     alert.accept();
                 }
                 catch(Exception ex)
                 {
+                    System.out.println(String.format("Alert is not present after %ds.", ALERT_WAIT_TIMEOUT_IN_SECONDS));
                 }
 
-                CommonUtil.pause100ms();
+                pause100ms();
                 actualCurrentUrl = getDriver().getCurrentUrl();
                 getDriver().close();
-                CommonUtil.pause100ms();
+                pause100ms();
                 getDriver().switchTo().window(primaryWindowHandle);
-                CommonUtil.pause500ms();
+                pause500ms();
                 break;
             }
         }
@@ -98,7 +100,7 @@ public class RouteLogsStep extends AbstractSteps
         Map<String,String> mapOfDynamicVariable = new HashMap<>();
         CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
         mapOfDynamicVariable.put("route_id", String.valueOf(createRouteResponse.getId()));
-        String expectedRedirectUrl = CommonUtil.replaceParam(redirectUrl, mapOfDynamicVariable);
+        String expectedRedirectUrl = replaceParam(redirectUrl, mapOfDynamicVariable);
 
         Assert.assertEquals(actualCurrentUrl, expectedRedirectUrl, String.format("Operator does not redirect to page %s", redirectUrl));
     }
@@ -115,7 +117,7 @@ public class RouteLogsStep extends AbstractSteps
         CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
         routeLogsPage.searchAndVerifyRouteExist(String.valueOf(createRouteResponse.getId()));
         routeLogsPage.clickActionButtonOnTable(1, RouteLogsPage.ACTION_BUTTON_EDIT_DETAILS);
-        CommonUtil.pause100ms();
+        pause100ms();
     }
 
     @When("^op edit 'Assigned Driver' to driver '([^\\\"]*)' and edit 'Comments'$")
