@@ -11,10 +11,12 @@ import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
+import java.util.Date;
 import java.util.List;
 
 /**
- * Created by sw on 10/3/16.
+ *
+ * @author Soewandi Wirjawan
  */
 @ScenarioScoped
 public class ReservationStep {
@@ -22,9 +24,10 @@ public class ReservationStep {
     private WebDriver driver;
     private int eReservation = 0;
     private int nReservation = 0;
+    private String comments = "";
 
-    private static String RESERVED_DATE = "//div[@ng-repeat='day in week track by $index' and @class='layout-padding ng-scope ng-isolate-scope layout-column flex disabled nvYellow']";
-    private static String UNRESERVED_DATE = "//div[@ng-repeat='day in week track by $index' and @class='layout-padding ng-scope ng-isolate-scope layout-column flex nvGreen nv-secondary']";
+    private static String RESERVED_DATE = "//div[@ng-repeat='day in week track by $index'][contains(@class, 'nvYellow')]";
+    private static String UNRESERVED_DATE = "//div[@ng-repeat='day in week track by $index'][@class='layout-padding ng-scope ng-isolate-scope layout-column flex nvGreen nv-secondary']";
 
     @Before
     public void setup() {
@@ -66,6 +69,9 @@ public class ReservationStep {
                 }
             }
 
+            comments = String.format("This reservation is created by automation test from Operator V2. Created at %s.", new Date().toString());
+            CommonUtil.inputText(driver, "//md-input-container[@form='createForm']/input[@aria-label='Comments']", comments);
+
             driver.findElement(By.xpath("//button[@type='submit' and .//span[text()='Create Reservation']]")).click();
             CommonUtil.pause1s();
         }
@@ -100,7 +106,8 @@ public class ReservationStep {
             WebElement timeslot = driver.findElement(By.xpath("//form[@name='editForm']/div/nv-button-timeslot/div/div/button[@aria-label='12PM-3PM' and .//span[text()='12PM-3PM']]"));
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", timeslot);
 
-            CommonUtil.inputText(driver, "//form[@name='editForm']/div/md-input-container/input[@type='text' and @aria-label='Comments' and @ng-model='model']", "EDIT VALUE");
+            comments = String.format("This reservation is updated by automation test from Operator V2. Updated at %s.", new Date().toString());
+            CommonUtil.inputText(driver, "//md-input-container[@form='editForm']/input[@aria-label='Comments']", comments);
             driver.findElement(By.xpath("//button[@type='submit' and .//span[text()='Save changes']]")).click();
             CommonUtil.pause1s();
         }

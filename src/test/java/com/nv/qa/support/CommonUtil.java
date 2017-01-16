@@ -19,24 +19,25 @@ public class CommonUtil {
 
     public static void clickBtn(WebDriver driver, String xpath) {
         WebElement el = driver.findElement(By.xpath(xpath));
-        pause100ms();
+        pause50ms();
         moveAndClick(driver, el);
     }
 
     public static void moveAndClick(WebDriver driver, WebElement el) {
         Actions action = new Actions(driver);
         action.moveToElement(el);
+        pause300ms();
         action.click();
         action.perform();
-        pause1s();
+        pause300ms();
     }
 
     public static void inputText(WebDriver driver, String xpath, String value) {
         WebElement el = driver.findElement(By.xpath(xpath));
         el.clear();
-        pause100ms();
+        pause300ms();
         el.sendKeys(value);
-        pause1s();
+        pause300ms();
     }
 
     public static void hoverMouseTo(WebDriver driver, String xpath) {
@@ -80,15 +81,15 @@ public class CommonUtil {
     }
 
     public static void pause10s() {
-        pause(10000);
+        pause(10_000);
     }
 
     public static void pause3s() {
-        pause(3000);
+        pause(3_000);
     }
 
     public static void pause1s() {
-        pause(1000);
+        pause(1_000);
     }
 
     public static void pause100ms() {
@@ -97,6 +98,10 @@ public class CommonUtil {
 
     public static void pause200ms() {
         pause(200);
+    }
+
+    public static void pause300ms() {
+        pause(300);
     }
 
     public static void pause500ms() {
