@@ -7,7 +7,7 @@ import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import org.testng.Assert;
+import org.junit.Assert;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -47,6 +47,6 @@ public class AddParcelToRouteStep extends AbstractSteps
         String actualTrackingIdOnTable = addParcelToRoutePage.getTextOnTable(1, AddParcelToRoutePage.COLUMN_CLASS_TRACKING_ID);
         String expectedTrackingId = order.getTracking_id();
 
-        Assert.assertEquals(actualTrackingIdOnTable, expectedTrackingId, "Order did not added to route.");
+        Assert.assertEquals("Order did not added to route.", actualTrackingIdOnTable, expectedTrackingId);
     }
 }

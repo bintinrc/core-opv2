@@ -8,10 +8,10 @@ import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 
 import java.util.*;
 
@@ -83,6 +83,7 @@ public class RouteLogsStep extends AbstractSteps
                 {
                     WebDriverWait webDriverWait = new WebDriverWait(getDriver(), ALERT_WAIT_TIMEOUT_IN_SECONDS);
                     Alert alert = webDriverWait.until(ExpectedConditions.alertIsPresent());
+                    pause200ms();
                     alert.accept();
                 }
                 catch(Exception ex)
@@ -106,7 +107,7 @@ public class RouteLogsStep extends AbstractSteps
         mapOfDynamicVariable.put("route_id", String.valueOf(createRouteResponse.getId()));
         String expectedRedirectUrl = replaceParam(redirectUrl, mapOfDynamicVariable);
 
-        Assert.assertEquals(actualCurrentUrl, expectedRedirectUrl, String.format("Operator does not redirect to page %s", redirectUrl));
+        Assert.assertEquals(String.format("Operator does not redirect to page %s", redirectUrl), actualCurrentUrl, expectedRedirectUrl);
     }
 
     @Then("^op close Edit Routes dialog$")
@@ -135,7 +136,7 @@ public class RouteLogsStep extends AbstractSteps
     public void verifyRouteDriverIsChanged(String newDriverName)
     {
         String actualDriverName = routeLogsPage.getTextOnTable(1, RouteLogsPage.COLUMN_CLASS_DATA_DRIVER_NAME);
-        Assert.assertEquals(actualDriverName, newDriverName, "Driver is not change.");
+        Assert.assertEquals("Driver is not change.", actualDriverName, newDriverName);
     }
 
     @When("^op add tag '([^\\\"]*)'$")
@@ -151,7 +152,7 @@ public class RouteLogsStep extends AbstractSteps
         CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
         String tags = routeLogsPage.getRouteTag(String.valueOf(createRouteResponse.getId()));
         boolean isContainsNewTag = tags.contains(newTag);
-        Assert.assertTrue(isContainsNewTag, String.format("Route does not contains tag '%s'.", newTag));
+        Assert.assertTrue(String.format("Route does not contains tag '%s'.", newTag), isContainsNewTag);
     }
 
     @When("^op delete route on Operator V2$")
@@ -167,7 +168,7 @@ public class RouteLogsStep extends AbstractSteps
         CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
         routeLogsPage.searchTableByRouteId(String.valueOf(createRouteResponse.getId()));
         boolean isTableEmpty = routeLogsPage.isTableEmpty();
-        Assert.assertTrue(isTableEmpty, "Route still exist in table. Fail to delete route.");
+        Assert.assertTrue("Route still exist in table. Fail to delete route.", isTableEmpty);
         scenarioStorage.put("routeDeleted", true);
     }
 }

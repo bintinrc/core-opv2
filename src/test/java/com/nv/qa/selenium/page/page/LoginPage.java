@@ -2,13 +2,13 @@ package com.nv.qa.selenium.page.page;
 
 import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 
 /**
  *

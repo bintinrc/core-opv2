@@ -1,7 +1,5 @@
 package com.nv.qa.cucumber.glue.step;
 
-import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.response.Response;
 import com.nv.qa.api.client.order_create.OrderCreateV3Client;
 import com.nv.qa.model.order_creation.v3.CreateOrderRequest;
 import com.nv.qa.model.order_creation.v3.CreateOrderResponse;
@@ -13,8 +11,10 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
-import org.testng.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,20 +79,20 @@ public class ShipmentScanningStep {
         r.then().statusCode(200);
         r.then().contentType(ContentType.JSON);
         String json = r.then().extract().body().asString();
-        Assert.assertNotNull(json, "Response json not null");
+        Assert.assertNotNull("Response json not null", json);
 
         createOrderResponses = JsonHelper.fromJsonCollection(json, List.class, CreateOrderResponse.class);
-        Assert.assertNotNull(createOrderResponses, "Response pojo not null");
-        Assert.assertEquals(createOrderResponses.size(), createOrderRequests.size(), "Size");
+        Assert.assertNotNull("Response pojo not null", createOrderResponses);
+        Assert.assertEquals("Size", createOrderResponses.size(), createOrderRequests.size());
 
         int idx = 0;
         for (CreateOrderResponse x : createOrderResponses) {
-            Assert.assertNotNull(x.getId(), "Asyng id");
-            Assert.assertEquals(x.getStatus(), STATUS_SUCCESS, "Status");
-            Assert.assertNotNull(x.getMessage(), "Message");
-            Assert.assertEquals(x.getOrderRefNo(), createOrderRequests.get(idx++).getOrderRefNo(), "Order ref No");
-            Assert.assertNotNull(x.getTrackingId(), "Tracking ID");
-            Assert.assertEquals(x.getTrackingId().length(), TRACKING_ID_LENGTH, "Tracking id length");
+            Assert.assertNotNull("Asyng id", x.getId());
+            Assert.assertEquals("Status", x.getStatus(), STATUS_SUCCESS);
+            Assert.assertNotNull("Message", x.getMessage());
+            Assert.assertEquals("Order ref No", x.getOrderRefNo(), createOrderRequests.get(idx++).getOrderRefNo());
+            Assert.assertNotNull("Tracking ID", x.getTrackingId());
+            Assert.assertEquals("Tracking id length", x.getTrackingId().length(), TRACKING_ID_LENGTH);
 
             trackingId = x.getTrackingId();
             System.out.println(trackingId);
