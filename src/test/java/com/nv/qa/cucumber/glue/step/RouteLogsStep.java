@@ -3,6 +3,7 @@ package com.nv.qa.cucumber.glue.step;
 import com.google.inject.Inject;
 import com.nv.qa.model.operator_portal.routing.CreateRouteResponse;
 import com.nv.qa.selenium.page.page.RouteLogsPage;
+import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -25,11 +26,13 @@ public class RouteLogsStep extends AbstractSteps
 
     @Inject private ScenarioStorage scenarioStorage;
     private RouteLogsPage routeLogsPage;
+    private CommonScenario commonScenario;
 
     @Inject
     public RouteLogsStep(CommonScenario commonScenario)
     {
         super(commonScenario);
+        this.commonScenario = commonScenario;
     }
 
     @Override
@@ -84,7 +87,8 @@ public class RouteLogsStep extends AbstractSteps
                 }
                 catch(Exception ex)
                 {
-                    System.out.println(String.format("Alert is not present after %ds.", ALERT_WAIT_TIMEOUT_IN_SECONDS));
+                    commonScenario.getCurrentScenario().write(String.format("Alert is not present after %ds.", ALERT_WAIT_TIMEOUT_IN_SECONDS));
+                    commonScenario.getCurrentScenario().write(CommonUtil.getStackTrace(ex));
                 }
 
                 pause100ms();

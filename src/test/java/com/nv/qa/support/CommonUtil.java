@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -125,6 +127,14 @@ public class CommonUtil {
         {
             ex.printStackTrace();
         }
+    }
+
+    public static String getStackTrace(Throwable cause)
+    {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        cause.printStackTrace(pw);
+        return sw.toString();
     }
 
     public static WebElement getResultInTable(WebDriver driver, String tableXpath, String value) {
