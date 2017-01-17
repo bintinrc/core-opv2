@@ -107,7 +107,7 @@ public class RouteLogsStep extends AbstractSteps
         mapOfDynamicVariable.put("route_id", String.valueOf(createRouteResponse.getId()));
         String expectedRedirectUrl = replaceParam(redirectUrl, mapOfDynamicVariable);
 
-        Assert.assertEquals(String.format("Operator does not redirect to page %s", redirectUrl), actualCurrentUrl, expectedRedirectUrl);
+        Assert.assertEquals(String.format("Operator does not redirect to page %s", redirectUrl), expectedRedirectUrl, actualCurrentUrl);
     }
 
     @Then("^op close Edit Routes dialog$")
@@ -136,7 +136,7 @@ public class RouteLogsStep extends AbstractSteps
     public void verifyRouteDriverIsChanged(String newDriverName)
     {
         String actualDriverName = routeLogsPage.getTextOnTable(1, RouteLogsPage.COLUMN_CLASS_DATA_DRIVER_NAME);
-        Assert.assertEquals("Driver is not change.", actualDriverName, newDriverName);
+        Assert.assertEquals("Driver is not change.", newDriverName, actualDriverName);
     }
 
     @When("^op add tag '([^\\\"]*)'$")

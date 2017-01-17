@@ -83,16 +83,16 @@ public class ShipmentScanningStep {
 
         createOrderResponses = JsonHelper.fromJsonCollection(json, List.class, CreateOrderResponse.class);
         Assert.assertNotNull("Response pojo not null", createOrderResponses);
-        Assert.assertEquals("Size", createOrderResponses.size(), createOrderRequests.size());
+        Assert.assertEquals("Size", createOrderRequests.size(), createOrderResponses.size());
 
         int idx = 0;
         for (CreateOrderResponse x : createOrderResponses) {
             Assert.assertNotNull("Asyng id", x.getId());
-            Assert.assertEquals("Status", x.getStatus(), STATUS_SUCCESS);
+            Assert.assertEquals("Status", STATUS_SUCCESS, x.getStatus());
             Assert.assertNotNull("Message", x.getMessage());
-            Assert.assertEquals("Order ref No", x.getOrderRefNo(), createOrderRequests.get(idx++).getOrderRefNo());
+            Assert.assertEquals("Order ref No", createOrderRequests.get(idx++).getOrderRefNo(), x.getOrderRefNo());
             Assert.assertNotNull("Tracking ID", x.getTrackingId());
-            Assert.assertEquals("Tracking id length", x.getTrackingId().length(), TRACKING_ID_LENGTH);
+            Assert.assertEquals("Tracking id length", TRACKING_ID_LENGTH, x.getTrackingId().length());
 
             trackingId = x.getTrackingId();
             System.out.println(trackingId);

@@ -47,6 +47,6 @@ public class AddParcelToRouteStep extends AbstractSteps
         String actualTrackingIdOnTable = addParcelToRoutePage.getTextOnTable(1, AddParcelToRoutePage.COLUMN_CLASS_TRACKING_ID);
         String expectedTrackingId = order.getTracking_id();
 
-        Assert.assertEquals("Order did not added to route.", actualTrackingIdOnTable, expectedTrackingId);
+        Assert.assertEquals("Order did not added to route.", expectedTrackingId, actualTrackingIdOnTable);
     }
 }

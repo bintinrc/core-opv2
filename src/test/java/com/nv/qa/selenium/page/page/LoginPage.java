@@ -31,7 +31,7 @@ public class LoginPage extends LoadableComponent<LoginPage> {
     @Override
     protected void isLoaded() throws Error {
         String url = driver.getCurrentUrl();
-        Assert.assertTrue(url.contains(APIEndpoint.OPERATOR_PORTAL_URL));
+        Assert.assertTrue("Default Operator Portal URL not loaded.", url.contains(APIEndpoint.OPERATOR_PORTAL_URL));
     }
 
     public void clickLoginButton() throws InterruptedException {
@@ -60,7 +60,6 @@ public class LoginPage extends LoadableComponent<LoginPage> {
     public void backToLoginPage() throws InterruptedException {
         CommonUtil.pause1s();
         String url = driver.getCurrentUrl();
-        Assert.assertTrue(url.contains(APIEndpoint.OPERATOR_PORTAL_URL));
+        Assert.assertTrue("Default Operator Portal URL not loaded.", url.contains(APIEndpoint.OPERATOR_PORTAL_URL));
     }
-
 }
