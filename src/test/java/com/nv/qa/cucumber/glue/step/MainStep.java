@@ -35,4 +35,9 @@ public class MainStep {
         mainPage.dpAdm();
     }
 
+    @Given("^op refresh page$")
+    public void refreshPage() {
+        mainPage.refreshPage();
+    }
+
 }
