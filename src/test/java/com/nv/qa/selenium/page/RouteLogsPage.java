@@ -96,8 +96,7 @@ public class RouteLogsPage extends SimplePage
 
     public void searchTableByRouteId(String routeId)
     {
-        searchTable(COLUMN_CLASS_FILTER_ROUTE_ID, routeId);
-        pause200ms();
+        searchTableCustom1(COLUMN_CLASS_FILTER_ROUTE_ID, routeId);
     }
 
     public void searchAndVerifyRouteExist(String routeId)
@@ -123,11 +122,6 @@ public class RouteLogsPage extends SimplePage
     {
         searchAndVerifyRouteExist(routeId);
         return findElementByXpath(SELECT_TAG_XPATH).getText();
-    }
-
-    public void searchTable(String columnClass, String keywords)
-    {
-        sendKeys(String.format("//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input", columnClass), keywords);
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)

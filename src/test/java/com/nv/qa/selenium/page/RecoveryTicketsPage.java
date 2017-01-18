@@ -12,6 +12,11 @@ import java.util.Map;
  */
 public class RecoveryTicketsPage extends SimplePage
 {
+    private static final String MD_VIRTUAL_REPEAT = "ticket in getTableData()";
+
+    public static final String COLUMN_CLASS_FILTER_TRACKING_ID = "tracking-id";
+    public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking-id";
+
     public static final String TICKET_TYPE_DAMAGED = "DAMAGED";
     public static final String TICKET_TYPE_MISSING = "MISSING";
 
@@ -104,7 +109,17 @@ public class RecoveryTicketsPage extends SimplePage
         pause50ms();
     }
 
-    public void searchTicket(String keywords)
+    public void searchTableByTrackingId(String trackingId)
+    {
+        searchTableCustom1(COLUMN_CLASS_FILTER_TRACKING_ID, trackingId);
+    }
+
+    public String getTextOnTable(int rowNumber, String columnDataClass)
+    {
+        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
+    }
+
+    public void searchTicket22(String keywords)
     {
         sendKeysAndEnter("//input[@placeholder='Search Ticket Types...']", keywords);
         pause1s();
@@ -164,19 +179,10 @@ public class RecoveryTicketsPage extends SimplePage
 
     public boolean verifyTicketIsExist(String trackingId)
     {
-        boolean isExist = false;
-        searchTicket(trackingId);
-
-        try
-        {
-            WebElement element = findElementByXpath("//tr[@md-virtual-repeat='ticketProp in ctrl.ticketsProps']/td[@class='track-id ng-binding']");
-            String actualTrackingId = element.getText().trim();
-            isExist = trackingId.equals(actualTrackingId);
-        }
-        catch(NoSuchElementException ex)
-        {
-        }
-
+        searchTableByTrackingId(trackingId);
+        pause3s();
+        String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
+        boolean isExist = trackingId.equals(actualTrackingId);
         return isExist;
     }
 }

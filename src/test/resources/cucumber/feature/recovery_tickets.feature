@@ -1,4 +1,4 @@
-@RecoveryTickets @selenium
+@RecoveryTickets
 Feature: Recovery Tickets
 
   @LaunchBrowser

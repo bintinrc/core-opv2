@@ -191,6 +191,12 @@ public class SimplePage
         return we!=null;
     }
 
+    public void searchTableCustom1(String columnClass, String keywords)
+    {
+        sendKeys(String.format("//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input", columnClass), keywords);
+        pause200ms();
+    }
+
     public void pause50ms()
     {
         pause(50);
