@@ -51,7 +51,7 @@ public class TagManagementStep extends AbstractSteps
             if(DEFAULT_TAG_NAME.equals(actualTagName) || EDITED_TAG_NAME.equals(actualTagName))
             {
                 tagManagementPage.clickActionButtonOnTable(1, TagManagementPage.ACTION_BUTTON_DELETE);
-                tagManagementPage.pause100ms();
+                pause100ms();
                 tagManagementPage.clickDeleteOnConfirmDeleteDialog();
             }
             else
@@ -108,8 +108,9 @@ public class TagManagementStep extends AbstractSteps
         Assert.assertEquals(EDITED_TAG_NAME, actualTagName);
 
         tagManagementPage.clickActionButtonOnTable(1, TagManagementPage.ACTION_BUTTON_DELETE);
-        tagManagementPage.pause100ms();
+        pause100ms();
         tagManagementPage.clickDeleteOnConfirmDeleteDialog();
+        pause200ms();
     }
 
     @Then("^tag on Tag Management deleted successfully$")
