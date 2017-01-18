@@ -1,4 +1,4 @@
-package com.nv.qa.selenium.page.page;
+package com.nv.qa.selenium.page;
 
 import org.openqa.selenium.WebDriver;
 

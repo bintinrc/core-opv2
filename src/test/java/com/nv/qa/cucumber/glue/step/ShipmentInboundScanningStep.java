@@ -1,7 +1,7 @@
 package com.nv.qa.cucumber.glue.step;
 
-import com.nv.qa.selenium.page.page.ShipmentInboundScanningPage;
-import com.nv.qa.selenium.page.page.ShipmentManagementPage;
+import com.nv.qa.selenium.page.ShipmentInboundScanningPage;
+import com.nv.qa.selenium.page.ShipmentManagementPage;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.SeleniumSharedDriver;
 import cucumber.api.java.Before;

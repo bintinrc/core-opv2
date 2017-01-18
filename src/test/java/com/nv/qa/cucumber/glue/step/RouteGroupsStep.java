@@ -2,8 +2,8 @@ package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Inject;
 import com.nv.qa.model.order_creation.v2.Order;
-import com.nv.qa.selenium.page.page.RouteGroupsPage;
-import com.nv.qa.selenium.page.page.TagManagementPage;
+import com.nv.qa.selenium.page.RouteGroupsPage;
+import com.nv.qa.selenium.page.TagManagementPage;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.DataTable;

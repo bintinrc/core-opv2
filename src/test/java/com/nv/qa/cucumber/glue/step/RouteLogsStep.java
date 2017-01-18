@@ -2,7 +2,7 @@ package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Inject;
 import com.nv.qa.model.operator_portal.routing.CreateRouteResponse;
-import com.nv.qa.selenium.page.page.RouteLogsPage;
+import com.nv.qa.selenium.page.RouteLogsPage;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.java.en.Then;

@@ -1,8 +1,8 @@
 package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Singleton;
-import com.nv.qa.selenium.page.page.LoginPage;
-import com.nv.qa.selenium.page.page.MainPage;
+import com.nv.qa.selenium.page.LoginPage;
+import com.nv.qa.selenium.page.MainPage;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.SeleniumSharedDriver;
 import cucumber.api.Scenario;

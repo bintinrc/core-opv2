@@ -1,4 +1,4 @@
-package com.nv.qa.selenium.page.page;
+package com.nv.qa.selenium.page;
 
 import com.nv.qa.model.Linehaul;
 import com.nv.qa.support.CommonUtil;

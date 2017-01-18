@@ -23,10 +23,10 @@ Feature: Add Parcel To Route
     Given Operator V2 add 'Transaction' to 'Route Group'
     Given Operator V1 create new route using data below:
       | createRouteRequest | {"zoneId":16, "hubId":1, "vehicleId":880, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"(Add Parcel to Route) This route is created for testing purpose only. Ignore this route. Created at {{created_date}}."} |
-    #Note: Tag BB4 = 165
-    Given Operator V1 set route tags [165]
+    #Note: Tag ZZZ = 250
+    Given Operator V1 set route tags [250]
     Given op click navigation Add Parcel to Route in Routing
-    When Operator V2 choose route group, select tag BB4 and submit
+    When Operator V2 choose route group, select tag "ZZZ" and submit
     Then verify parcel added to route
     Given op click navigation Route Group Templates in Routing
     Then Operator V2 clean up 'Route Group Templates'

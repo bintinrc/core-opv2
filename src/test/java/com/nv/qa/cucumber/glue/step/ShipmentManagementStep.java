@@ -1,6 +1,6 @@
 package com.nv.qa.cucumber.glue.step;
 
-import com.nv.qa.selenium.page.page.ShipmentManagementPage;
+import com.nv.qa.selenium.page.ShipmentManagementPage;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.SeleniumSharedDriver;
 import cucumber.api.java.Before;
@@ -15,7 +15,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-import static com.nv.qa.selenium.page.page.ShipmentManagementPage.*;
+import static com.nv.qa.selenium.page.ShipmentManagementPage.*;
 
 /**
  * Created by lanangjati

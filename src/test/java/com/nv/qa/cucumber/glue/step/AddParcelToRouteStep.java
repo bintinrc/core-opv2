@@ -2,7 +2,7 @@ package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Inject;
 import com.nv.qa.model.order_creation.v2.Order;
-import com.nv.qa.selenium.page.page.AddParcelToRoutePage;
+import com.nv.qa.selenium.page.AddParcelToRoutePage;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.java.en.Then;
@@ -29,13 +29,13 @@ public class AddParcelToRouteStep extends AbstractSteps
         addParcelToRoutePage = new AddParcelToRoutePage(getDriver());
     }
 
-    @When("Operator V2 choose route group, select tag BB4 and submit")
-    public void submitOnAddParcelToRoute()
+    @When("^Operator V2 choose route group, select tag \"([^\"]*)\" and submit$")
+    public void submitOnAddParcelToRoute(String tag)
     {
         String routeGroupName = scenarioStorage.get("routeGroupName");
         addParcelToRoutePage.selectRouteGroup(routeGroupName);
         addParcelToRoutePage.selectTag("FLT"); //Unselect tag FLT. Tag FLT is default tag on this page.
-        addParcelToRoutePage.selectTag("BB4");
+        addParcelToRoutePage.selectTag(tag);
         addParcelToRoutePage.clickSubmit();
         CommonUtil.pause1s();
     }

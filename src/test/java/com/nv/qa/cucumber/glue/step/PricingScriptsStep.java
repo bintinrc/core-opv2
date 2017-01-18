@@ -1,7 +1,7 @@
 package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Inject;
-import com.nv.qa.selenium.page.page.PricingScriptsPage;
+import com.nv.qa.selenium.page.PricingScriptsPage;
 import com.nv.qa.support.CommonUtil;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;

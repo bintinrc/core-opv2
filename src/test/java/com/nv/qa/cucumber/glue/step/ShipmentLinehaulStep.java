@@ -1,7 +1,7 @@
 package com.nv.qa.cucumber.glue.step;
 
 import com.nv.qa.model.Linehaul;
-import com.nv.qa.selenium.page.page.ShipmentLinehaulPage;
+import com.nv.qa.selenium.page.ShipmentLinehaulPage;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.JsonHelper;
 import com.nv.qa.support.SeleniumSharedDriver;

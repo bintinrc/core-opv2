@@ -1,7 +1,7 @@
 package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Inject;
-import com.nv.qa.selenium.page.page.DpPage;
+import com.nv.qa.selenium.page.DpPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;

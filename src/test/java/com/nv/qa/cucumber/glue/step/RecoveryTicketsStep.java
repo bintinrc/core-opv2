@@ -1,7 +1,7 @@
 package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Inject;
-import com.nv.qa.selenium.page.page.RecoveryTicketsPage;
+import com.nv.qa.selenium.page.RecoveryTicketsPage;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;

@@ -1,6 +1,6 @@
 package com.nv.qa.cucumber.glue.step;
 
-import com.nv.qa.selenium.page.page.LoginPage;
+import com.nv.qa.selenium.page.LoginPage;
 import com.nv.qa.support.SeleniumSharedDriver;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
