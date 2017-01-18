@@ -86,7 +86,7 @@ public class MainPage extends LoadableComponent<MainPage> {
         SeleniumHelper.waitUntilElementVisible(driver, driver.findElement(By.xpath("//md-content[(contains(@class,'nv-container-landing-page md-padding'))]/h2[@class='md-title']")));
         WebElement elm = driver.findElement(By.xpath("//md-content[(contains(@class,'nv-container-landing-page md-padding'))]/h2[@class='md-title']"));
         Assert.assertTrue(elm.getText().contains("Welcome to Operator V2"));
-        CommonUtil.pause3s();
+        CommonUtil.pause5s();
     }
 
     public void refreshPage() {
