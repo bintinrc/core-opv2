@@ -120,6 +120,7 @@ public class RouteGroupTemplatesStep extends AbstractSteps
     {
         String routeGroupTemplateName = scenarioStorage.get("routeGroupTemplateName");
         routeGroupTemplatesPage.deleteRouteGroupTemplate(routeGroupTemplateName);
+        pause1s();
     }
 
     @Then("^'route group template' on 'Route Group Templates' deleted successfully$")

@@ -60,6 +60,10 @@ public class HubStep {
         if (type.equalsIgnoreCase("add")) {
             expectedValue = String.format("Hub %s", ScenarioHelper.getInstance().getTmpId());
         }
+
+        CommonUtil.inputText(driver, "//input[@placeholder='Search Hubs...']", expectedValue);
+        CommonUtil.pause1s();
+
         WebElement result = CommonUtil.getResultInTable(driver, "//table[@ng-table='ctrl.hubsTableParams']/tbody/tr", expectedValue);
         Assert.assertTrue(result != null);
     }

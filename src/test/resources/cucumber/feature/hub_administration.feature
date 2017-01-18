@@ -1,4 +1,4 @@
-@selenium @saas
+@HubAdministration @selenium @saas
 Feature: hubs administration
 
   Scenario: op login into operator portal
