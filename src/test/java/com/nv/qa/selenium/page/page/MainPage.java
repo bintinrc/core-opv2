@@ -89,4 +89,17 @@ public class MainPage extends LoadableComponent<MainPage> {
         CommonUtil.pause3s();
     }
 
+    public void refreshPage() {
+        String currentUrl = driver.getCurrentUrl().toLowerCase();
+        driver.navigate().refresh();
+
+        (new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS)).until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver d) {
+                return d.getCurrentUrl().toLowerCase().equalsIgnoreCase(currentUrl);
+            }
+        });
+
+        Assert.assertTrue(driver.getCurrentUrl().equalsIgnoreCase(currentUrl));
+    }
+
 }
