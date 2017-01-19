@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class SimplePage
 {
+    public static final int DEFAULT_MAX_RETRY_FOR_STALE_ELEMENT_REFERENCE = 5;
     private WebDriver driver;
 
     public SimplePage(WebDriver driver)
@@ -33,6 +34,32 @@ public class SimplePage
         action.click();
         action.perform();
         pause300ms();
+    }
+
+    public void sendKeys(int maxRetryStaleElementReference, String xpathExpression, CharSequence... keysToSend)
+    {
+        boolean success = false;
+        StaleElementReferenceException exception = null;
+
+        for(int i=0; i<maxRetryStaleElementReference; i++)
+        {
+            try
+            {
+                sendKeys(xpathExpression, keysToSend);
+                success = true;
+                break;
+            }
+            catch(StaleElementReferenceException ex)
+            {
+                exception = ex;
+                System.out.println(String.format("[WARNING] Stale element reference detected for element (xpath='%s') %d times.", xpathExpression, (i+1)));
+            }
+        }
+
+        if(!success)
+        {
+            throw new RuntimeException(String.format("Retrying stale element reference reach maximum retry. Max retry = %d.", maxRetryStaleElementReference), exception);
+        }
     }
 
     public void sendKeys(String xpathExpression, CharSequence... keysToSend)

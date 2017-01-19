@@ -1,9 +1,6 @@
 package com.nv.qa.selenium.page;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 import java.util.List;
 
@@ -115,7 +112,7 @@ public class PricingScriptsPage extends SimplePage
 
     public void searchScript(String scriptName)
     {
-        sendKeys("//input[@placeholder='Search Script...']", scriptName);
+        sendKeys(DEFAULT_MAX_RETRY_FOR_STALE_ELEMENT_REFERENCE, "//input[@placeholder='Search Script...']", scriptName);
         pause1s();
     }
 

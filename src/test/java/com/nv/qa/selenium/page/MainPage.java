@@ -58,7 +58,7 @@ public class MainPage extends LoadableComponent<MainPage> {
             driver.findElement(By.xpath("//nv-section-header/button[span='" + parentTitle + "']")).click();
         }
 
-        CommonUtil.pause200ms();
+        CommonUtil.pause1s();
 
         navElm.click();
 
