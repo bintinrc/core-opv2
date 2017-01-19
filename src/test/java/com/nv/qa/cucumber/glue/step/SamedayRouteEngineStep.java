@@ -50,5 +50,6 @@ public class SamedayRouteEngineStep extends AbstractSteps
         samedayRouteEnginePage.selectDriverOnRouteSettingsPage("OpV2No.1");
         takesScreenshot();
         samedayRouteEnginePage.clickCreate1RoutesButton();
+        pause5s();
     }
 }

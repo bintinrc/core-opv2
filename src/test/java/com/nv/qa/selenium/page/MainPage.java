@@ -6,8 +6,8 @@ import com.nv.qa.support.SeleniumHelper;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -19,61 +19,94 @@ import java.util.Map;
 /**
  * Created by sw on 6/30/16.
  */
-public class MainPage extends LoadableComponent<MainPage> {
-
+public class MainPage extends LoadableComponent<MainPage>
+{
+    private static final int MAX_RETRY = 2;
     private final WebDriver driver;
-//    private final String MAIN_DASHBOARD = "dp-administration";
-//    private final String MAIN_DASHBOARD = "https://operatorv2-qa.ninjavan.co/#/sg/";
-//    private final String MAIN_DASHBOARD = "https://operatorv2-qa.ninjavan.co/#/";
-    private final Map<String, String> map = new HashMap<String, String>() {{
-        put("DP Administration","container.dp-administration.dp-partners");
-        put("Driver Strength","container.driver-strength");
-        put("Driver Type Management","container.driver-type-management");
-        put("Pricing Scripts","container.pricing-scripts");
-        put("Hubs Administration","container.hub-list");
-        put("Blocked Dates","container.blocked-dates");
-        put("Shipment Management","container.shipment-management");
-    }};
+    private final Map<String, String> map = new HashMap<String, String>()
+    {
+        {
+            put("DP Administration","container.dp-administration.dp-partners");
+            put("Driver Strength","container.driver-strength");
+            put("Driver Type Management","container.driver-type-management");
+            put("Pricing Scripts","container.pricing-scripts");
+            put("Hubs Administration","container.hub-list");
+            put("Blocked Dates","container.blocked-dates");
+            put("Shipment Management","container.shipment-management");
+        }
+    };
 
-    public MainPage(WebDriver driver) {
+    public MainPage(WebDriver driver)
+    {
         this.driver = driver;
-        PageFactory.initElements(driver, this);
     }
 
     @Override
-    protected void load() {
+    protected void load()
+    {
     }
 
     @Override
-    protected void isLoaded() throws Error {
+    protected void isLoaded() throws Error
+    {
     }
 
-    public void clickNavigation(String parentTitle, String navTitle) throws InterruptedException {
-//        CommonUtil.inputText(driver, "//input[@placeholder='Search Function or Id' and @ng-model='ctrl.search']", navTitle);
-//        driver.findElement(By.xpath("//div[@class='search-container']/nv-section-item/button[div='" + navTitle + "']")).click();
-//        driver.findElement(By.xpath("//nv-section-item/button[div='" + navTitle + "']")).click();
+    public void clickNavigation(String parentTitle, String navTitle) throws InterruptedException
+    {
+        String navElmXpath = "//nv-section-item/button[div='" + navTitle + "']";
+        WebElement navElm = driver.findElement(By.xpath(navElmXpath));
 
-        WebElement navElm = driver.findElement(By.xpath("//nv-section-item/button[div='" + navTitle + "']"));
-        if (!navElm.isDisplayed()) {
+        if(!navElm.isDisplayed())
+        {
             driver.findElement(By.xpath("//nv-section-header/button[span='" + parentTitle + "']")).click();
         }
 
         CommonUtil.pause1s();
 
-        navElm.click();
+        boolean isNavElmClicked = false;
+        WebDriverException exception = null;
+
+        for(int i=0; i<MAX_RETRY; i++)
+        {
+            try
+            {
+                navElm.click();
+                isNavElmClicked = true;
+                break;
+            }
+            catch(WebDriverException ex)
+            {
+                exception = ex;
+                System.out.println(String.format("[WARNING] Element is not clickable exception detected for element (xpath='%s') %d times.", navElmXpath, (i+1)));
+            }
+        }
+
+        if(!isNavElmClicked)
+        {
+            throw new RuntimeException(String.format("Retrying 'element is not clickable exception' reach maximum retry. Max retry = %d.", MAX_RETRY), exception);
+        }
 
         String endURL = navTitle.toLowerCase().replaceAll(" ", "-");
-        if (navTitle.trim().equalsIgnoreCase("hubs administration")) {
+
+        if(navTitle.trim().equalsIgnoreCase("hubs administration"))
+        {
             endURL = "hub";
-        } else if (navTitle.trim().equalsIgnoreCase("linehaul management")) {
+        }
+        else if(navTitle.trim().equalsIgnoreCase("linehaul management"))
+        {
             endURL = "linehaul/entries";
-        } else if (navTitle.trim().equalsIgnoreCase("route groups")) {
+        }
+        else if(navTitle.trim().equalsIgnoreCase("route groups"))
+        {
             endURL = "route-group";
         }
 
         final String mainDashboard = endURL;
-        (new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS)).until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d) {
+
+        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until(new ExpectedCondition<Boolean>()
+        {
+            public Boolean apply(WebDriver d)
+            {
                 return d.getCurrentUrl().toLowerCase().endsWith(mainDashboard);
             }
         });
@@ -82,24 +115,27 @@ public class MainPage extends LoadableComponent<MainPage> {
         Assert.assertTrue(url.endsWith(mainDashboard));
     }
 
-    public void dpAdm() throws InterruptedException {
+    public void dpAdm() throws InterruptedException
+    {
         SeleniumHelper.waitUntilElementVisible(driver, driver.findElement(By.xpath("//md-content[(contains(@class,'nv-container-landing-page md-padding'))]/h2[@class='md-title']")));
         WebElement elm = driver.findElement(By.xpath("//md-content[(contains(@class,'nv-container-landing-page md-padding'))]/h2[@class='md-title']"));
         Assert.assertTrue(elm.getText().contains("Welcome to Operator V2"));
         CommonUtil.pause5s();
     }
 
-    public void refreshPage() {
+    public void refreshPage()
+    {
         String currentUrl = driver.getCurrentUrl().toLowerCase();
         driver.navigate().refresh();
 
-        (new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS)).until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d) {
-                return d.getCurrentUrl().toLowerCase().equalsIgnoreCase(currentUrl);
+        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until(new ExpectedCondition<Boolean>()
+        {
+            public Boolean apply(WebDriver d)
+            {
+                return d.getCurrentUrl().equalsIgnoreCase(currentUrl);
             }
         });
 
         Assert.assertTrue(driver.getCurrentUrl().equalsIgnoreCase(currentUrl));
     }
-
 }

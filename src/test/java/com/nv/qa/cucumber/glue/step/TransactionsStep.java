@@ -40,5 +40,6 @@ public class TransactionsStep extends AbstractSteps
         takesScreenshot();
         transactionsPage.clickAddTransactionsOnAddToRouteGroupDialog();
         takesScreenshot();
+        pause5s();
     }
 }

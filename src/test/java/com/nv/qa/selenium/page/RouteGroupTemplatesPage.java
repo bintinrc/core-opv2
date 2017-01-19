@@ -32,7 +32,6 @@ public class RouteGroupTemplatesPage extends SimplePage
     public void editRouteGroupTemplate(String filterRouteGroupTemplateName, String newRouteGroupTemplateName, String newFilterQuery)
     {
         searchTable(filterRouteGroupTemplateName);
-        pause100ms();
         String actualName = getTextOnTable(1, RouteGroupTemplatesPage.COLUMN_CLASS_NAME);
         Assert.assertEquals(filterRouteGroupTemplateName, actualName);
 
@@ -45,10 +44,11 @@ public class RouteGroupTemplatesPage extends SimplePage
     public void deleteRouteGroupTemplate(String filterRouteGroupTemplateName)
     {
         searchTable(filterRouteGroupTemplateName);
-        pause100ms();
+        pause300ms();
         clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
-        pause100ms();
+        pause300ms();
         click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
+        pause300ms();
     }
 
     public void setRouteGroupTemplateNameValue(String value)
@@ -59,11 +59,13 @@ public class RouteGroupTemplatesPage extends SimplePage
     public void setFilterQuery(String value)
     {
         sendKeys("//textarea[@aria-label='Filter Query']", value);
+        pause100ms();
     }
 
     public void clickSubmitOnAddDialog()
     {
         click("//button[@aria-label='Save Button']");
+        pause100ms();
     }
 
     public void clickSubmitOnEditDialog()
@@ -74,6 +76,7 @@ public class RouteGroupTemplatesPage extends SimplePage
     public void searchTable(String keyword)
     {
         sendKeys("//input[@type='text'][@ng-model='searchText']", keyword);
+        pause200ms();
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)

@@ -52,13 +52,13 @@ public class SimplePage
             catch(StaleElementReferenceException ex)
             {
                 exception = ex;
-                System.out.println(String.format("[WARNING] Stale element reference detected for element (xpath='%s') %d times.", xpathExpression, (i+1)));
+                System.out.println(String.format("[WARNING] Stale element reference exception detected for element (xpath='%s') %d times.", xpathExpression, (i+1)));
             }
         }
 
         if(!success)
         {
-            throw new RuntimeException(String.format("Retrying stale element reference reach maximum retry. Max retry = %d.", maxRetryStaleElementReference), exception);
+            throw new RuntimeException(String.format("Retrying 'stale element reference exception' reach maximum retry. Max retry = %d.", maxRetryStaleElementReference), exception);
         }
     }
 

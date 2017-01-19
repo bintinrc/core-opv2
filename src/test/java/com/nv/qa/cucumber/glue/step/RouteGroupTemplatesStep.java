@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.nv.qa.model.order_creation.v2.Order;
 import com.nv.qa.selenium.page.RouteGroupTemplatesPage;
 import com.nv.qa.selenium.page.TagManagementPage;
-import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
@@ -64,7 +63,7 @@ public class RouteGroupTemplatesStep extends AbstractSteps
         {
             Map<String,String> mapOfDynamicVariable = new HashMap<>();
             mapOfDynamicVariable.put("tracking_id", order.getTracking_id());
-            routeGroupTemplateFilter = CommonUtil.replaceParam(routeGroupTemplateFilter, mapOfDynamicVariable);
+            routeGroupTemplateFilter = replaceParam(routeGroupTemplateFilter, mapOfDynamicVariable);
         }
 
         scenarioStorage.put("routeGroupTemplateName", routeGroupTemplateName);
@@ -144,7 +143,7 @@ public class RouteGroupTemplatesStep extends AbstractSteps
         }
         catch(Exception ex)
         {
-            System.out.println("Failed to delete 'Route Group Template'.");
+            System.out.println("[WARNING] Failed to delete 'Route Group Template'.");
         }
     }
 }

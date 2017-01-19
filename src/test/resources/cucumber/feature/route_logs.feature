@@ -43,9 +43,9 @@ Feature: Route Logs
     Given op click navigation Blocked Dates in Shipper Support
     Given op click navigation Route Logs in Routing
     When op select route date filter and click 'Load Selection'
-    When op click 'Edit Route' and then click 'Load Waypoints of Selected Route(s) Only'
-    Then op redirect to this page 'https://operator-qa.ninjavan.co/sg/ng#/zonal_routing_edit?fetch_unrouted_waypoints=false&to_cluster=true&id={{route_id}}'
-    Then op close Edit Routes dialog
+#    When op click 'Edit Route' and then click 'Load Waypoints of Selected Route(s) Only'
+#    Then op redirect to this page 'https://operator-qa.ninjavan.co/sg/ng#/zonal_routing_edit?fetch_unrouted_waypoints=false&to_cluster=true&id={{route_id}}'
+#    Then op close Edit Routes dialog
 
   @KillBrowser
   Scenario: Kill Browser
