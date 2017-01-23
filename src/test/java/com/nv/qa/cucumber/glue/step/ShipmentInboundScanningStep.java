@@ -11,6 +11,8 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -24,6 +26,7 @@ public class ShipmentInboundScanningStep {
     private ShipmentManagementPage shipmentManagementPage;
     private ShipmentInboundScanningPage scanningPage;
     private String shipmentId = "";
+    private Calendar endDate = Calendar.getInstance();
 
     @Before
     public void setup() {
@@ -50,7 +53,8 @@ public class ShipmentInboundScanningStep {
 
     @When("^scan shipment to inbound$")
     public void scan_shipment_to_inbound() throws Throwable {
-        CommonUtil.inputText(driver, ShipmentInboundScanningPage.XPATH_SCAN_INPUT, shipmentId + "\n");
+        scanningPage.inputShipmentToInbound(shipmentId);
+        scanningPage.checkSessionScan(shipmentId);
     }
 
     @Then("^inbounded shipment exist$")
@@ -65,5 +69,17 @@ public class ShipmentInboundScanningStep {
         }
 
         Assert.assertTrue("shipment(" + shipmentId + ") not exist", isExist);
+    }
+
+    @When("^change end date$")
+    public void click_change_end_date_button() throws Throwable {
+        Calendar now = Calendar.getInstance();
+        now.add(Calendar.DATE, 2);
+        List<String> mustCheckId = scanningPage.grabSessionIdNotChangedScan();
+        scanningPage.clickEditEndDate();
+        String today = new SimpleDateFormat("yyyy-MM-dd").format(now.getTime());
+        scanningPage.inputEndDate(today);
+        scanningPage.clickChangeDateButton();
+        scanningPage.checkEndDateSessionScanChange(mustCheckId, today);
     }
 }
