@@ -136,6 +136,27 @@ public class ShipmentManagementPage {
         Assert.assertEquals("shipment(" + source + ") not exist", "tr", scan.getTagName());
     }
 
+    public String createShipment(String startHub, String endHub, String comment) {
+        CommonUtil.clickBtn(driver, XPATH_CREATE_SHIPMENT_BUTTON);
+
+        selectFirstLineHaul();
+        CommonUtil.pause1s();
+
+        selectStartHub(startHub);
+        CommonUtil.pause1s();
+
+        selectEndHub(endHub);
+        CommonUtil.pause1s();
+
+        CommonUtil.inputText(driver, XPATH_COMMENT_TEXT_AREA, comment);
+
+        CommonUtil.clickBtn(driver, XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
+
+        WebElement toast = CommonUtil.getToast(driver);
+        Assert.assertTrue("toast message not contains Shipment xxx created", toast.getText().contains("Shipment") && toast.getText().contains("created"));
+        return toast.getText().split(" ")[1];
+    }
+
     public class Shipment {
 
         private final WebElement shipment;

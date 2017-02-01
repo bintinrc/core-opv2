@@ -2,6 +2,7 @@ package com.nv.qa.cucumber.glue.step;
 
 import com.nv.qa.selenium.page.ShipmentManagementPage;
 import com.nv.qa.support.CommonUtil;
+import com.nv.qa.support.ScenarioStorage;
 import com.nv.qa.support.SeleniumSharedDriver;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
@@ -13,6 +14,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import javax.inject.Inject;
 import java.util.List;
 
 import static com.nv.qa.selenium.page.ShipmentManagementPage.*;
@@ -24,9 +26,11 @@ import static com.nv.qa.selenium.page.ShipmentManagementPage.*;
 @ScenarioScoped
 public class ShipmentManagementStep {
 
+    @Inject
+    private ScenarioStorage scenarioStorage;
+
     private WebDriver driver;
     private ShipmentManagementPage shipmentManagementPage;
-    private String id = "";
     private String start = "";
     private String end = "";
     private String comment = "";
@@ -37,24 +41,11 @@ public class ShipmentManagementStep {
         shipmentManagementPage = new ShipmentManagementPage(driver);
     }
 
-    @When("^create shipment button is clicked$")
-    public void ClickCreateShipmentButton() throws Throwable {
-        CommonUtil.clickBtn(driver, XPATH_CREATE_SHIPMENT_BUTTON);
-    }
-
     @When("^create Shipment with Start Hub ([^\"]*), End hub ([^\"]*) and comment ([^\"]*)$")
     public void createShipment(String startHub, String endHub, String comment) throws Throwable {
 
-        shipmentManagementPage.selectFirstLineHaul();
-        CommonUtil.pause1s();
-        shipmentManagementPage.selectStartHub(startHub);
-        CommonUtil.pause1s();
-        shipmentManagementPage.selectEndHub(endHub);
-        CommonUtil.pause1s();
-        CommonUtil.inputText(driver, XPATH_COMMENT_TEXT_AREA, comment);
-
-        CommonUtil.clickBtn(driver, XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
-
+        String id = shipmentManagementPage.createShipment(startHub, endHub, comment);
+        scenarioStorage.put(ScenarioStorage.KEY_SHIPMENT_ID, id);
     }
 
     @When("^edit Shipment with Start Hub ([^\"]*), End hub ([^\"]*) and comment ([^\"]*)$")
@@ -75,14 +66,6 @@ public class ShipmentManagementStep {
 
     }
 
-    @Then("^shipment created$")
-    public void shipmentCreated() throws Throwable {
-
-        WebElement toast = CommonUtil.getToast(driver);
-        Assert.assertTrue("toast message not contains Shipment xxx created", toast.getText().contains("Shipment") && toast.getText().contains("created"));
-        id = toast.getText().split(" ")[1];
-    }
-
     @Given("^op click Load All Selection$")
     public void listAllShipment() throws Throwable {
         CommonUtil.clickBtn(driver, XPATH_LOAD_ALL_SHIPMENT_BUTTON);
@@ -95,7 +78,7 @@ public class ShipmentManagementStep {
         List<ShipmentManagementPage.Shipment> shipments =shipmentManagementPage.getShipmentsFromTable();
 
         for (ShipmentManagementPage.Shipment shipment : shipments) {
-            if (shipment.getId().equals(id)) {
+            if (shipment.getId().equals(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID))) {
                 shipment.clickShipmentActionButton(actionButton);
                 break;
             }
@@ -114,7 +97,7 @@ public class ShipmentManagementStep {
         for (ShipmentManagementPage.Shipment shipment : shipments) {
             String spId = shipment.getId();
 
-            if (spId.equals(id)) {
+            if (spId.equals(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID))) {
                 startHub = shipment.getStartHub();
                 endHub = shipment.getEndHub();
                 komen = shipment.getComment();
@@ -134,13 +117,13 @@ public class ShipmentManagementStep {
         for (ShipmentManagementPage.Shipment shipment : shipments) {
             String spId = shipment.getId();
 
-            if (spId.equals(id)) {
+            if (spId.equals(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID))) {
                 actualStat = shipment.getStatus();
                 break;
             }
         }
 
-        Assert.assertEquals("Shipment " + id + " status", status, actualStat);
+        Assert.assertEquals("Shipment " + scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID) + " status", status, actualStat);
     }
 
     @When("^cancel shipment button clicked$")
@@ -150,18 +133,18 @@ public class ShipmentManagementStep {
         String text = "";
         for (WebElement toast : toasts) {
             text = toast.getText();
-            if (text.contains("Success changed status to Cancelled for Shipment ID " + id)) {
+            if (text.contains("Success changed status to Cancelled for Shipment ID " + scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID))) {
                 break;
             }
         }
-        Assert.assertTrue("toast message not contains Cancelled", text.contains("Success changed status to Cancelled for Shipment ID " + id));
+        Assert.assertTrue("toast message not contains Cancelled", text.contains("Success changed status to Cancelled for Shipment ID " + scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID)));
         CommonUtil.pause(5000);
     }
 
     @Then("^shipment deleted$")
     public void isShipmentDeleted() throws Throwable {
 
-        String msg = "Success delete Shipping ID " + id;
+        String msg = "Success delete Shipping ID " + scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID);
         WebElement toast = CommonUtil.getToast(driver);
         Assert.assertTrue("toast message not contains " + msg, toast.getText().contains(msg));
 
@@ -170,7 +153,7 @@ public class ShipmentManagementStep {
         for (ShipmentManagementPage.Shipment shipment : shipments) {
             String spId = shipment.getId();
 
-            if (spId.equals(id)) {
+            if (spId.equals(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID))) {
                 isRemoved = false;
             }
         }

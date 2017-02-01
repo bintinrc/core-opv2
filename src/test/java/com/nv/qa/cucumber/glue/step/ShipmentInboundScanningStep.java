@@ -3,6 +3,7 @@ package com.nv.qa.cucumber.glue.step;
 import com.nv.qa.selenium.page.ShipmentInboundScanningPage;
 import com.nv.qa.selenium.page.ShipmentManagementPage;
 import com.nv.qa.support.CommonUtil;
+import com.nv.qa.support.ScenarioStorage;
 import com.nv.qa.support.SeleniumSharedDriver;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Then;
@@ -11,6 +12,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
+import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -22,23 +24,18 @@ import java.util.List;
 @ScenarioScoped
 public class ShipmentInboundScanningStep {
 
+    @Inject
+    private ScenarioStorage scenarioStorage;
+
     private WebDriver driver;
     private ShipmentManagementPage shipmentManagementPage;
     private ShipmentInboundScanningPage scanningPage;
-    private String shipmentId = "";
-    private Calendar endDate = Calendar.getInstance();
 
     @Before
     public void setup() {
         driver = SeleniumSharedDriver.getInstance().getDriver();
         shipmentManagementPage = new ShipmentManagementPage(driver);
         scanningPage = new ShipmentInboundScanningPage(driver);
-    }
-
-    @Then("^get first shipment for shipment inbound scanning$")
-    public void get_first_shipment() throws Throwable {
-        ShipmentManagementPage.Shipment shipment = shipmentManagementPage.getShipmentFromTable(0);
-        shipmentId = shipment.getId();
     }
 
     @When("^choose inbound hub ([^\"]*)$")
@@ -53,8 +50,8 @@ public class ShipmentInboundScanningStep {
 
     @When("^scan shipment to inbound$")
     public void scan_shipment_to_inbound() throws Throwable {
-        scanningPage.inputShipmentToInbound(shipmentId);
-        scanningPage.checkSessionScan(shipmentId);
+        scanningPage.inputShipmentToInbound(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID));
+        scanningPage.checkSessionScan(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID));
     }
 
     @Then("^inbounded shipment exist$")
@@ -62,13 +59,13 @@ public class ShipmentInboundScanningStep {
         List<ShipmentManagementPage.Shipment> shipmentList = shipmentManagementPage.getShipmentsFromTable();
         boolean isExist = false;
         for (ShipmentManagementPage.Shipment shipment : shipmentList) {
-            if (shipment.getId().equalsIgnoreCase(shipmentId)) {
+            if (shipment.getId().equalsIgnoreCase(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID))) {
                 isExist = true;
                 break;
             }
         }
 
-        Assert.assertTrue("shipment(" + shipmentId + ") not exist", isExist);
+        Assert.assertTrue("shipment(" + scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID) + ") not exist", isExist);
     }
 
     @When("^change end date$")

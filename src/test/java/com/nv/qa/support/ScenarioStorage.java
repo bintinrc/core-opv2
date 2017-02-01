@@ -11,6 +11,9 @@ import java.util.Map;
 @ScenarioScoped
 public class ScenarioStorage
 {
+    public static final String KEY_SHIPMENT_ID = "shipment-id";
+    public static final String KEY_TRACKING_ID = "tracking-id";
+
     private Map<String, Object> mapOfData = new HashMap<>();
 
     public ScenarioStorage()

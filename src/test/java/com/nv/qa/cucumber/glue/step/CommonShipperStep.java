@@ -2,24 +2,22 @@ package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Inject;
 import com.nv.qa.api.client.order_create.OrderCreateV2Client;
+import com.nv.qa.api.client.order_create.OrderCreateV3Client;
 import com.nv.qa.model.order_creation.authentication.AuthRequest;
 import com.nv.qa.model.order_creation.v2.CreateOrderRequest;
 import com.nv.qa.model.order_creation.v2.CreateOrderResponse;
 import com.nv.qa.model.order_creation.v2.Order;
-import com.nv.qa.support.APIEndpoint;
-import com.nv.qa.support.CommonUtil;
-import com.nv.qa.support.JsonHelper;
-import com.nv.qa.support.ScenarioStorage;
+import com.nv.qa.support.*;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import org.junit.Assert;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
@@ -31,8 +29,13 @@ public class CommonShipperStep extends AbstractSteps
     private static final SimpleDateFormat CREATED_DATE_SDF = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
     private static final SimpleDateFormat CURRENT_DATE_SDF = new SimpleDateFormat("yyyy-MM-dd");
 
-    @Inject private ScenarioStorage scenarioStorage;
+    @Inject
+    private ScenarioStorage scenarioStorage;
+
     private OrderCreateV2Client orderCreateV2Client;
+    private OrderCreateV3Client orderCreateV3Client;
+    List<com.nv.qa.model.order_creation.v3.CreateOrderRequest> createOrderRequests = new ArrayList<>();
+    List<com.nv.qa.model.order_creation.v3.CreateOrderResponse> createOrderResponses = new ArrayList<>();
 
     @Inject
     public CommonShipperStep(CommonScenario commonScenario)
@@ -93,5 +96,51 @@ public class CommonShipperStep extends AbstractSteps
         String asyncOrderId = listOfCreateOrderResponse.get(0).getId();
         Order order = orderCreateV2Client.retrieveOrder(asyncOrderId);
         scenarioStorage.put("order", order);
+    }
+
+    @Given("^Create an V3 order with the following attributes:$")
+    public void shipperCreateV3Order(List<Map<String, String>> requests) throws Throwable
+    {
+        orderCreateV3Client = OrderCreateHelper.getVersion3Client();
+        for (Map<String, String> request : requests) {
+            sendOrderCreateV3Req(request);
+        }
+
+        CommonUtil.pause1s();
+    }
+
+    private String createV3Order(Map<String, String> arg1) throws Throwable {
+        createOrderRequests.clear();
+        com.nv.qa.model.order_creation.v3.CreateOrderRequest x = JsonHelper.mapToObject(arg1, com.nv.qa.model.order_creation.v3.CreateOrderRequest.class);
+        //-- fix keywords
+        OrderCreateHelper.populateRequest(x);
+        createOrderRequests.add(x);
+        return JsonHelper.toJson(createOrderRequests);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void sendOrderCreateV3Req(Map<String, String> arg1) throws Throwable {
+        String payload = createV3Order(arg1);
+        Response r = orderCreateV3Client.getCreateOrderResponse(payload);
+        r.then().statusCode(200);
+        r.then().contentType(ContentType.JSON);
+        String json = r.then().extract().body().asString();
+        Assert.assertNotNull("Response json not null", json);
+
+        createOrderResponses = JsonHelper.fromJsonCollection(json, List.class, com.nv.qa.model.order_creation.v3.CreateOrderResponse.class);
+        Assert.assertNotNull("Response pojo not null", createOrderResponses);
+        Assert.assertEquals("Size", createOrderRequests.size(), createOrderResponses.size());
+
+        int idx = 0;
+        for (com.nv.qa.model.order_creation.v3.CreateOrderResponse x : createOrderResponses) {
+            Assert.assertNotNull("Asyng id", x.getId());
+            Assert.assertEquals("Status", "SUCCESS", x.getStatus());
+            Assert.assertNotNull("Message", x.getMessage());
+            Assert.assertEquals("Order ref No", createOrderRequests.get(idx++).getOrderRefNo(), x.getOrderRefNo());
+            Assert.assertNotNull("Tracking ID", x.getTrackingId());
+            Assert.assertEquals("Tracking id length", 18, x.getTrackingId().length());
+
+            scenarioStorage.put(ScenarioStorage.KEY_TRACKING_ID, x.getTrackingId());
+        }
     }
 }
