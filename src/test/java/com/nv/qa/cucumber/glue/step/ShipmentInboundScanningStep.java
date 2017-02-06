@@ -38,18 +38,12 @@ public class ShipmentInboundScanningStep {
         scanningPage = new ShipmentInboundScanningPage(driver);
     }
 
-    @When("^choose inbound hub ([^\"]*)$")
-    public void choose_inbound_hub_JKB(String hub) throws Throwable {
+    @When("^inbound scanning shipment ([^\"]*) in hub ([^\"]*)$")
+    public void inboundScanning(String label, String hub) throws Throwable {
         scanningPage.selectHub(hub);
-    }
-
-    @When("^click button ([^\"]*) on Inbound Scanning$")
-    public void clickButton(String label) throws Throwable {
         CommonUtil.clickBtn(driver, scanningPage.grabXpathButton(label));
-    }
+        CommonUtil.clickBtn(driver, scanningPage.grabXpathButton("Start Inbound"));
 
-    @When("^scan shipment to inbound$")
-    public void scan_shipment_to_inbound() throws Throwable {
         scanningPage.inputShipmentToInbound(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID));
         scanningPage.checkSessionScan(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID));
     }

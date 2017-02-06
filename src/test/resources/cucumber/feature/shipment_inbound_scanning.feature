@@ -1,4 +1,4 @@
-@selenium @shipment @dev
+@selenium @shipment
 Feature: shipment inbound scanning
 
   Scenario: op login into operator portal
@@ -13,10 +13,7 @@ Feature: shipment inbound scanning
     When create Shipment with Start Hub 30JKB, End hub DOJO and comment Auto Comment
 ###inbound shipment
     Given op click navigation Inbound Scanning in Inter-Hub
-    When choose inbound hub 30JKB
-    When click button Into Van on Inbound Scanning
-    When click button Start Inbound on Inbound Scanning
-    When scan shipment to inbound
+    When inbound scanning shipment Into Van in hub 30JKB
 ###check status shipment
     Given op click navigation Shipment Management in Inter-Hub
     When filter Shipment Status is Transit
@@ -36,10 +33,7 @@ Feature: shipment inbound scanning
     When create Shipment with Start Hub 30JKB, End hub DOJO and comment Auto Comment
 ###inbound shipment
     Given op click navigation Inbound Scanning in Inter-Hub
-    When choose inbound hub EASTGW
-    When click button Into Hub on Inbound Scanning
-    When click button Start Inbound on Inbound Scanning
-    When scan shipment to inbound
+    When inbound scanning shipment Into Hub in hub EASTGW
 ###check status shipment
     Given op click navigation Shipment Management in Inter-Hub
     When filter Shipment Status is Transit
@@ -58,10 +52,7 @@ Feature: shipment inbound scanning
     When create Shipment with Start Hub 30JKB, End hub DOJO and comment Auto Comment
 ###inbound shipment
     Given op click navigation Inbound Scanning in Inter-Hub
-    When choose inbound hub DOJO
-    When click button Into Hub on Inbound Scanning
-    When click button Start Inbound on Inbound Scanning
-    When scan shipment to inbound
+    When inbound scanning shipment Into Hub in hub DOJO
 ###check status shipment
     Given op click navigation Shipment Management in Inter-Hub
     When filter Shipment Status is Completed
@@ -88,10 +79,7 @@ Feature: shipment inbound scanning
     When scan order to shipment in hub 30JKB
 ###inbound shipment
     Given op click navigation Inbound Scanning in Inter-Hub
-    When choose inbound hub 30JKB
-    When click button Into Van on Inbound Scanning
-    When click button Start Inbound on Inbound Scanning
-    When scan shipment to inbound
+    When inbound scanning shipment Into Van in hub 30JKB
     When change end date
 ###check status shipment
     Given op click navigation Shipment Management in Inter-Hub
