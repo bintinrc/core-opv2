@@ -1,4 +1,4 @@
-@AddParcelToRoute @selenium
+@AddParcelToRoute @selenium @wip
 Feature: Add Parcel To Route
 
   @LaunchBrowser
