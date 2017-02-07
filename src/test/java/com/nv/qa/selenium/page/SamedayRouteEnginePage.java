@@ -15,14 +15,14 @@ public class SamedayRouteEnginePage extends SimplePage
 
     public void selectRouteGroup(String routeGroupName)
     {
-        click("//md-select[@aria-label='Route Group']");
+        click("//md-select[@aria-label='Select Route Group']");
         pause100ms();
         click(String.format("//md-option/div[contains(text(), '%s')]", routeGroupName));
     }
 
     public void selectHub(String hubName)
     {
-        click("//md-select[@aria-label='Hub']");
+        click("//md-select[@aria-label='Select Hub']");
         pause100ms();
         click(String.format("//md-option/div[contains(text(), '%s')]", hubName));
     }
