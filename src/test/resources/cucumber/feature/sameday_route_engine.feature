@@ -19,8 +19,8 @@ Feature: Sameday Route Engine
       | generateName | false |
     When op click navigation Route Groups in Routing
     Then new 'route group' on 'Route Groups' created successfully
-    Given op click navigation Transactions in Routing
-    Given Operator V2 add 'Transaction' to 'Route Group'
+    Given op click navigation Transactions V2 in Routing
+    Given Operator V2 add 'Transaction V2' to 'Route Group'
     Given op click navigation Same-day Route Engine in Routing
     When op 'Run Route Engine' on Same-Day Route Engine menu using data below:
       | hub                          | 30JKB    |

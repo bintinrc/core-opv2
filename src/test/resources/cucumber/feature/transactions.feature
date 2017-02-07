@@ -19,8 +19,8 @@ Feature: Transactions
       | generateName | true |
     When op click navigation Route Groups in Routing
     Then new 'route group' on 'Route Groups' created successfully
-    Given op click navigation Transactions in Routing
-    When Operator V2 add 'Transaction' to 'Route Group'
+    Given op click navigation Transactions V2 in Routing
+    When Operator V2 add 'Transaction V2' to 'Route Group'
     Given op click navigation Route Group Templates in Routing
     Then Operator V2 clean up 'Route Group Templates'
     Given op click navigation Route Groups in Routing
