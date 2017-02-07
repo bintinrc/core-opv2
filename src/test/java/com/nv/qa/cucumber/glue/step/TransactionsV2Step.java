@@ -1,6 +1,7 @@
 package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Inject;
+import com.nv.qa.model.order_creation.v2.Order;
 import com.nv.qa.selenium.page.TransactionsV2Page;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.java.en.When;
@@ -26,13 +27,17 @@ public class TransactionsV2Step extends AbstractSteps
         transactionsPage = new TransactionsV2Page(getDriver());
     }
 
-    @When("^Operator V2 add 'Transaction V2' to 'Route Group'$")
-    public void addTransactionToRouteGroup()
+    @When("^Operator V2 add created Transaction to Route Group$")
+    public void addCreatedTransactionToRouteGroup()
     {
+
+        Order order = scenarioStorage.get("order");
+        String expectedTrackingId = order.getTracking_id();
 
         String routeGroupName = scenarioStorage.get("routeGroupName");
 
         transactionsPage.clickLoadSelectionButton();
+        transactionsPage.searchByTrackingId(expectedTrackingId);
         transactionsPage.selectAllShown();
         transactionsPage.clickAddToRouteGroupButton();
         transactionsPage.selectRouteGroupOnAddToRouteGroupDialog(routeGroupName);

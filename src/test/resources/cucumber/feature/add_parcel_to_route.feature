@@ -1,4 +1,4 @@
-@AddParcelToRoute @selenium @wip
+@AddParcelToRoute @selenium
 Feature: Add Parcel To Route
 
   @LaunchBrowser
@@ -26,8 +26,7 @@ Feature: Add Parcel To Route
 
     #changed
     Given op click navigation Transactions V2 in Routing
-    # TODO: add only one.
-    Given Operator V2 add 'Transaction V2' to 'Route Group'
+    Given Operator V2 add created Transaction to Route Group
 
 
     Given Operator V1 create new route using data below:
