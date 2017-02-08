@@ -100,6 +100,10 @@ public class MainPage extends LoadableComponent<MainPage>
         {
             endURL = "route-group";
         }
+        else if(navTitle.trim().equalsIgnoreCase("Transactions V2"))
+        {
+            endURL = "transactions/v2";
+        }
 
         final String mainDashboard = endURL;
 

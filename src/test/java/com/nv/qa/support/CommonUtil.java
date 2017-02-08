@@ -309,4 +309,9 @@ public class CommonUtil {
             return null;
         }
     }
+
+    public static void columnSearchTable(WebDriver driver, String columnName, String value) {
+        String xpath = "//th[span[text()='" + columnName + "']]/nv-search-input-filter/md-input-container/div/input";
+        inputText(driver, xpath, value);
+    }
 }

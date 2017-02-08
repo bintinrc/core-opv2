@@ -18,7 +18,7 @@ public class AddParcelToRoutePage extends SimplePage
 
     public void selectRouteGroup(String routeGroupName)
     {
-        click("//md-select[@aria-label='Choose Route Groups']");
+        click("//md-select[@aria-label='Select Route Group(s)']");
         pause100ms();
         click(String.format("//md-option/div[contains(text(), '%s')]", routeGroupName));
         pause100ms();
