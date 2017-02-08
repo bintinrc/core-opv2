@@ -165,6 +165,14 @@ public class SeleniumHelper {
         );
     }
 
+    /**
+     * Deprecated, should use waitUntilElementVisible(WebDriver driver, final By by) instead.
+     * the calling of driver.findElement before this function negates the purpose of implicit wait.
+     *
+     * @param driver
+     * @param element
+     */
+    @Deprecated
     public static void waitUntilElementVisible(WebDriver driver, final WebElement element) {
 //        (new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS)).until(
 //                new ExpectedCondition<Boolean>() {
@@ -181,17 +189,15 @@ public class SeleniumHelper {
 
     }
 
+    public static void waitUntilElementVisible(WebDriver driver, final By by) {
+        (new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, SLEEP_POLL_MILIS)).until(
+                ExpectedConditions.visibilityOfElementLocated(by)
+        );
+    }
+
     public static void waitUntilElementInvisible(WebDriver driver, final By by) {
         (new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, SLEEP_POLL_MILIS)).until(
                 ExpectedConditions.invisibilityOfElementLocated(by)
-        );
-
-    }
-
-    public static void waitUntilElementPresent(WebDriver driver, final By locator) {
-        (new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, SLEEP_POLL_MILIS)).until(
-//                ExpectedConditions.presenceOfElementLocated(locator)
-                ExpectedConditions.visibilityOfElementLocated(locator)
         );
 
     }

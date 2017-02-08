@@ -84,6 +84,7 @@ public class CommonScenario
         loginPage.get();
         loginPage.clickLoginButton();
         loginPage.enterCredential(username, password);
+        loginPage.checkForGoogleSimpleVerification("Singapore");
 
         MainPage mainPage = new MainPage(getDriver());
         mainPage.dpAdm();

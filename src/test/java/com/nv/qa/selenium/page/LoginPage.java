@@ -2,9 +2,11 @@ package com.nv.qa.selenium.page;
 
 import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
+import com.nv.qa.support.SeleniumHelper;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.LoadableComponent;
@@ -55,6 +57,31 @@ public class LoginPage extends LoadableComponent<LoginPage> {
 
         driver.findElement(By.xpath("//input[@id='signIn'][@name='signIn']")).click();
         CommonUtil.pause10ms();
+    }
+
+    public void checkForGoogleSimpleVerification(String location) {
+        if(driver.findElements(By.xpath("//span[text()='Enter the city you usually sign in from']")).size() > 0) {
+            WebElement enterCityButton = driver.findElement(By.xpath(
+                "//span[text()='Enter the city you usually sign in from']/../.."
+            ));
+            enterCityButton.click();
+            CommonUtil.pause1s();
+
+
+            String txtAnswerXpath = "//input[@id='answer' and @type='text']";
+            SeleniumHelper.waitUntilElementVisible(driver, By.xpath(txtAnswerXpath));
+            WebElement txtAnswer = driver.findElement(By.xpath(
+                    txtAnswerXpath
+            ));
+            txtAnswer.clear();
+            txtAnswer.sendKeys(location);
+
+            WebElement submitButton = driver.findElement(By.xpath(
+                    "//input[@id='submit' and @type='submit']"
+            ));
+            submitButton.click();
+            CommonUtil.pause1s();
+        }
     }
 
     public void backToLoginPage() throws InterruptedException {
