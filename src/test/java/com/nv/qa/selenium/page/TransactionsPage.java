@@ -1,5 +1,6 @@
 package com.nv.qa.selenium.page;
 
+import com.nv.qa.support.CommonUtil;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -22,7 +23,17 @@ public class TransactionsPage extends SimplePage
 
     public void clickLoadAllEntriesButton()
     {
-        click("//button[@aria-label='Load All Entries']");
+        click("//button[@aria-label='Load Selection']");
+    }
+
+    public void selectShipperFilter(String shipperId) {
+        String xpathExpression = "//div[div[p[text()='Shipper']]]/div/nv-autocomplete/div/label/md-autocomplete/md-autocomplete-wrap";
+        click(xpathExpression);
+        sendKeysAndEnter(xpathExpression + "/input", shipperId);
+    }
+
+    public void searchTrackingId(String trackingId) {
+        CommonUtil.columnSearchTable(getDriver(), "Tracking ID", trackingId);
     }
 
     public void selectAllShown()
