@@ -1,4 +1,4 @@
-@AddParcelToRoute @selenium
+@AddParcelToRoute @selenium 
 Feature: Add Parcel To Route
 
   @LaunchBrowser
@@ -15,7 +15,7 @@ Feature: Add Parcel To Route
     When op click navigation Route Groups in Routing
     Then new 'route group' on 'Route Groups' created successfully
     Given op click navigation Transactions V2 in Routing
-    Given Operator V2 add 'Transaction' to 'Route Group'
+    Given Operator V2 add created Transaction to Route Group
     Given Operator V1 create new route using data below:
       | createRouteRequest | {"zoneId":16, "hubId":1, "vehicleId":880, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"(Add Parcel to Route) This route is created for testing purpose only. Ignore this route. Created at {{created_date}}."} |
     #Note: Tag ZZZ = 250
