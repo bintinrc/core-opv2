@@ -52,7 +52,7 @@ public class CommonShipperStep extends AbstractSteps
             shipperAuthRequest.setClient_id(APIEndpoint.SHIPPER_V2_CLIENT_ID);
             shipperAuthRequest.setClient_secret(APIEndpoint.SHIPPER_V2_CLIENT_SECRET);
 
-            orderCreateV2Client = new OrderCreateV2Client(APIEndpoint.API_BASE_URL);
+            orderCreateV2Client = new OrderCreateV2Client(APIEndpoint.API_BASE_URL, APIEndpoint.ORDER_CREATE_BASE_URL);
             orderCreateV2Client.login(shipperAuthRequest);
         }
         catch(Exception ex)

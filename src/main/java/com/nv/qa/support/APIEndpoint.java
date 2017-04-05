@@ -34,6 +34,7 @@ public final class APIEndpoint
     public static final String OPERATOR_PORTAL_PWD;
 
     public static final String API_BASE_URL;
+    public static final String ORDER_CREATE_BASE_URL;
     public static final int SHIPPER_ID;
     public static final String SHIPPER_CLIENT_ID;
     public static final String SHIPPER_CLIENT_SECRET;
@@ -90,6 +91,7 @@ public final class APIEndpoint
                 OPERATOR_PORTAL_PWD = props.getProperty("operator-portal-pwd");
 
                 API_BASE_URL = props.getProperty("api-server-base-url");
+                ORDER_CREATE_BASE_URL = props.getProperty("order-create-server-base-url");
                 SHIPPER_ID = Integer.valueOf(props.getProperty("shipper-v3-id"));
                 SHIPPER_CLIENT_ID = props.getProperty("shipper-client-id");
                 SHIPPER_CLIENT_SECRET = props.getProperty("shipper-client-secret");

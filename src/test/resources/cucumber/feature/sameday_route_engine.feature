@@ -1,4 +1,4 @@
-@SamedayRouteEngine @selenium @wip
+@SamedayRouteEngine @selenium
 Feature: Sameday Route Engine
 
   @LaunchBrowser
