@@ -11,6 +11,13 @@ public class TransactionsV2Page extends SimplePage {
         super(driver);
     }
 
+    public void removeFilter(String filterName) {
+        if (filterName.contains("time")) {
+            click("//div[div[p[text()='" + filterName + "']]]/div/nv-icon-button/button");
+        } else {
+            click("//div[div[p[text()='" + filterName + "']]]/div/div/nv-icon-button/button");
+        }
+    }
 
     public void clickLoadSelectionButton() {
         click("//button[@aria-label='Load Selection']");
