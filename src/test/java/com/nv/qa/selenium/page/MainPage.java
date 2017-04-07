@@ -2,7 +2,6 @@ package com.nv.qa.selenium.page;
 
 import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
-import com.nv.qa.support.SeleniumHelper;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -86,6 +85,21 @@ public class MainPage extends LoadableComponent<MainPage>
             throw new RuntimeException(String.format("Retrying 'element is not clickable exception' reach maximum retry. Max retry = %d.", MAX_RETRY), exception);
         }
 
+        final String mainDashboard = grabEndURL(navTitle);
+
+        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until(new ExpectedCondition<Boolean>()
+        {
+            public Boolean apply(WebDriver d)
+            {
+                return d.getCurrentUrl().toLowerCase().endsWith(mainDashboard);
+            }
+        });
+
+        String url = driver.getCurrentUrl().toLowerCase();
+        Assert.assertTrue(url.endsWith(mainDashboard));
+    }
+
+    private String grabEndURL(String navTitle) {
         String endURL = navTitle.toLowerCase().replaceAll(" ", "-");
 
         if(navTitle.trim().equalsIgnoreCase("hubs administration"))
@@ -104,26 +118,25 @@ public class MainPage extends LoadableComponent<MainPage>
         {
             endURL = "transactions/v2";
         }
-
-        final String mainDashboard = endURL;
-
-        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until(new ExpectedCondition<Boolean>()
+        else if (navTitle.trim().equalsIgnoreCase("all orders"))
         {
-            public Boolean apply(WebDriver d)
-            {
+            endURL = "order";
+        }
+        return endURL;
+    }
+
+    public void dpAdm() throws InterruptedException
+    {
+        String mainDashboard = grabEndURL("All Orders");
+
+        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver d) {
                 return d.getCurrentUrl().toLowerCase().endsWith(mainDashboard);
             }
         });
 
         String url = driver.getCurrentUrl().toLowerCase();
         Assert.assertTrue(url.endsWith(mainDashboard));
-    }
-
-    public void dpAdm() throws InterruptedException
-    {
-        SeleniumHelper.waitUntilElementVisible(driver, driver.findElement(By.xpath("//md-content[(contains(@class,'nv-container-landing-page md-padding'))]/h2[@class='md-title']")));
-        WebElement elm = driver.findElement(By.xpath("//md-content[(contains(@class,'nv-container-landing-page md-padding'))]/h2[@class='md-title']"));
-        Assert.assertTrue(elm.getText().contains("Welcome to Operator V2"));
         CommonUtil.pause5s();
     }
 
