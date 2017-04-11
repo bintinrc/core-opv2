@@ -62,10 +62,15 @@ public class RouteGroupsPage extends SimplePage
     public void clickCreateRouteGroupAndAddTransactionsOnEditDialog()
     {
         clickCreateRouteGroupAndAddTransactionsOnCreateDialog();
+        pause1s();
     }
 
     public void searchTable(String keyword)
     {
+        click("//md-datepicker[@ng-model='ctrl.filter.toDate']/button");
+        pause1s();
+        click("//td[contains(@class, 'md-calendar-date-today')]");
+        pause1s();
         sendKeys("//input[@type='text'][@ng-model='searchText']", keyword);
     }
 
