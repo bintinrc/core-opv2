@@ -3,6 +3,10 @@ package com.nv.qa.selenium.page;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  *
  * @author Daniel Joi Partogi Hutapea
@@ -67,9 +71,12 @@ public class RouteGroupsPage extends SimplePage
 
     public void searchTable(String keyword)
     {
+        Format formatter = new SimpleDateFormat("EEEE MMMM dd yyyy");
+        String s = formatter.format(new Date());
+
         click("//md-datepicker[@ng-model='ctrl.filter.toDate']/button");
         pause1s();
-        click("//td[contains(@class, 'md-calendar-date-today')]");
+        click("//td[@aria-label='" + s + "']");
         pause1s();
         sendKeys("//input[@type='text'][@ng-model='searchText']", keyword);
     }
