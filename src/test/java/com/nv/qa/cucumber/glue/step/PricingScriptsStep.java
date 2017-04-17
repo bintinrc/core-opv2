@@ -75,7 +75,7 @@ public class PricingScriptsStep extends AbstractSteps
     @Then("^script on Pricing Scripts deleted successfully$")
     public void verifyPricingScriptsDeletedSuccessfully()
     {
-        String expectedValue = null;
+        String expectedValue = "";
         String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, PricingScriptsPage.COLUMN_CLASS_NAME);
         Assert.assertEquals(expectedValue, pricingScriptsNameFromTable);
     }

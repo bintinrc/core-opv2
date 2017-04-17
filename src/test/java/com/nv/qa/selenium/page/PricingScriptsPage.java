@@ -10,13 +10,19 @@ import java.util.List;
  */
 public class PricingScriptsPage extends SimplePage
 {
-    private static final String MD_VIRTUAL_REPEAT = "script in ctrl.tableData";
+    private static final String MD_VIRTUAL_REPEAT = "script in getTableData()";
     public static final String COLUMN_CLASS_NAME = "name";
 
     public static final String ACTION_BUTTON_CODE = "code";
-    public static final String ACTION_BUTTON_EDIT = "edit";
-    public static final String ACTION_BUTTON_SHIPPERS = "Shippers";
+    public static final String ACTION_BUTTON_EDIT = "edit script";
+    public static final String ACTION_BUTTON_SHIPPERS = "link shippers";
     public static final String ACTION_BUTTON_DELETE = "delete";
+    public static final String WRITE_SCRIPT_TAB = "//md-tab-item[span[text()='Write Script']]";
+    public static final String SCRIPT_INFO_TAB = "//md-tab-item[span[text()='Script Info']]";
+    public static final String SAVE_CHANGE_BUTTON = "//nv-api-text-button[@name='commons.save-changes']";
+    public static final String DELETE_SCRIPT_BUTTON = "//nv-api-text-button[@name='container.pricing-scripts.delete-script']";
+    public static final String SRIPT_NAME_TEXT_FIELD = "//input[@type='text'][@aria-label='Name']";
+    public static final String SRIPT_DESCRIPTION_TEXT_FIELD = "//input[@type='text'][@aria-label='Description']";
 
     public PricingScriptsPage(WebDriver driver)
     {
@@ -30,16 +36,16 @@ public class PricingScriptsPage extends SimplePage
 
     public void createScript(String scriptName, String description, String script)
     {
-        click("//button[@id='button-create-rules']");
-        sendKeys("//input[@type='text'][@aria-label='Name']", scriptName);
-        sendKeys("//input[@type='text'][@aria-label='Description']", description);
+        click("//button[@aria-label='Create Script']");
+        sendKeys(SRIPT_NAME_TEXT_FIELD, scriptName);
+        sendKeys(SRIPT_DESCRIPTION_TEXT_FIELD, description);
 
         if(script!=null)
         {
             updateAceEditorValue(script);
         }
 
-        click("//nv-api-text-button[@name='commons.save']");
+        click(SAVE_CHANGE_BUTTON);
     }
 
     public String createDefaultScriptIfNotExists(String scriptName, String scriptDescription, String script)
@@ -81,11 +87,13 @@ public class PricingScriptsPage extends SimplePage
     {
         clickActionButton(rowNumber, PricingScriptsPage.ACTION_BUTTON_EDIT);
         pause1s();
-        sendKeys("//input[@type='text'][@aria-label='Name']", newScriptName);
-        sendKeys("//input[@type='text'][@aria-label='Description']", newDescription);
+        click(SCRIPT_INFO_TAB);
+        sendKeys(SRIPT_NAME_TEXT_FIELD, newScriptName);
+        sendKeys(SRIPT_DESCRIPTION_TEXT_FIELD, newDescription);
 
         if(newScript!=null)
         {
+            click(WRITE_SCRIPT_TAB);
             String oldScript = getAceEditorValue().replaceAll(System.lineSeparator(), "\\\\n"); // Replace all "CrLf" to "\n".
 
             /**
@@ -97,22 +105,21 @@ public class PricingScriptsPage extends SimplePage
                 updateAceEditorValue(newScript);
             }
         }
-
-        click("//nv-api-text-button[@name='commons.update']");
+        click(SAVE_CHANGE_BUTTON);
     }
 
     public void searchAndDeleteScript(int rowNumber, String scriptName)
     {
         searchScript(scriptName);
-        clickActionButton(rowNumber, PricingScriptsPage.ACTION_BUTTON_DELETE);
+        clickActionButton(rowNumber, PricingScriptsPage.ACTION_BUTTON_EDIT);
         pause1s();
-        click("//button[@type='button'][@aria-label='Delete']");
+        click(DELETE_SCRIPT_BUTTON);
         pause1s();
     }
 
     public void searchScript(String scriptName)
     {
-        sendKeys(DEFAULT_MAX_RETRY_FOR_STALE_ELEMENT_REFERENCE, "//input[@placeholder='Search Script...']", scriptName);
+        sendKeys(DEFAULT_MAX_RETRY_FOR_STALE_ELEMENT_REFERENCE, "//th[@column='name']//input", scriptName);
         pause1s();
     }
 
@@ -228,7 +235,7 @@ public class PricingScriptsPage extends SimplePage
     {
         try
         {
-            WebElement element = findElementByXpath(String.format("//tr[@md-virtual-repeat='script in ctrl.tableData'][%d]/td[@class='actions column-locked-right']/div/*[@name='%s']", rowNumber, actionButtonName));
+            WebElement element = findElementByXpath(String.format("//tr[@md-virtual-repeat='script in getTableData()'][%d]/td[contains(@class,'actions column-locked-right')]/nv-icon-button[@name='%s']", rowNumber, actionButtonName));
             element.click();
             pause1s();
         }
