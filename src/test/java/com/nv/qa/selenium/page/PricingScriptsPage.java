@@ -126,14 +126,17 @@ public class PricingScriptsPage extends SimplePage
     public void simulateRunTest(String deliveryType, String orderType, String timeslotType, String size, String weight, String insuredValue, String codValue)
     {
         clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_EDIT);
-        selectValueFromMdSelectMenu("//md-input-container[@label='Delivery Type']", String.format("//md-option[@value='%s']", deliveryType));
-        selectValueFromMdSelectMenu("//md-input-container[@label='Order Type']", String.format("//md-option[@value='%s']", orderType));
-        selectValueFromMdSelectMenu("//md-input-container[@label='Timeslot Type']", String.format("//md-option[@value='%s']", timeslotType));
-        selectValueFromMdSelectMenu("//md-input-container[@label='Size']", String.format("//md-option[@value='%s']", size));
-        sendKeys("//input[@aria-label='Weight']", weight);
+        selectValueFromMdSelectMenu("//md-input-container[@label='container.pricing-scripts.description-delivery-type']", String.format("//md-option[@value='%s']", deliveryType));
+        selectValueFromMdSelectMenu("//md-input-container[@label='container.pricing-scripts.description-order-type']", String.format("//md-option[@value='%s']", orderType));
+        selectValueFromMdSelectMenu("//md-input-container[@label='container.pricing-scripts.description-time-slot-type']", String.format("//md-option[@value='%s']", timeslotType));
+        selectValueFromMdSelectMenu("//md-input-container[@label='container.pricing-scripts.measurement']", "//md-option[div[text()=' Size ']]");
+        selectValueFromMdSelectMenu("//md-input-container[@label='commons.size']", String.format("//md-option[@value='%s']", size));
+//        sendKeys("//input[@aria-label='Weight']", weight);
+        click("//input[@aria-label='Insured Value']");
         sendKeys("//input[@aria-label='Insured Value']", insuredValue);
+        click("//input[@aria-label='COD Value']");
         sendKeys("//input[@aria-label='COD Value']", codValue);
-        click("//button[@id='button-run-test']");
+        click("//button[@aria-label='Run Check']");
     }
 
     public String linkPricingScriptsToShipper(String defaultScriptName1, String defaultScriptName2, String shipperName)
