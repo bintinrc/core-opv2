@@ -165,7 +165,7 @@ public class PricingScriptsStep extends AbstractSteps
         pricingScriptsPage.searchScript(pricingScriptsLinkedToAShipper);
         pricingScriptsPage.clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_SHIPPERS);
         boolean isPricingScriptsContainShipper = pricingScriptsPage.isPricingScriptsContainShipper(shipperLinkedToPricingScripts);
-        CommonUtil.clickBtn(getDriver(), "//button[@id='button-cancel-dialog']");
+        CommonUtil.clickBtn(getDriver(), pricingScriptsPage.CLOSE_BUTTON);
         Assert.assertEquals(true, isPricingScriptsContainShipper);
     }
 }

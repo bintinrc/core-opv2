@@ -1,5 +1,6 @@
 package com.nv.qa.selenium.page;
 
+import com.nv.qa.support.SeleniumHelper;
 import org.openqa.selenium.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class PricingScriptsPage extends SimplePage
     public static final String DELETE_SCRIPT_BUTTON = "//nv-api-text-button[@name='container.pricing-scripts.delete-script']";
     public static final String SRIPT_NAME_TEXT_FIELD = "//input[@type='text'][@aria-label='Name']";
     public static final String SRIPT_DESCRIPTION_TEXT_FIELD = "//input[@type='text'][@aria-label='Description']";
+    public static final String CLOSE_BUTTON = "//nv-icon-button[@name='Cancel']";
 
     public PricingScriptsPage(WebDriver driver)
     {
@@ -46,6 +48,12 @@ public class PricingScriptsPage extends SimplePage
         }
 
         click(SAVE_CHANGE_BUTTON);
+
+        SeleniumHelper.waitUntilElementVisible(getDriver(), By.xpath("//md-dialog[@aria-label='Dialog']"));
+
+        pause3s();
+
+        click(CLOSE_BUTTON);
     }
 
     public String createDefaultScriptIfNotExists(String scriptName, String scriptDescription, String script)
@@ -157,21 +165,21 @@ public class PricingScriptsPage extends SimplePage
              */
             if(!isPricingScriptsContainShipper(shipperName))
             {
-                sendKeys("//input[@aria-label='Find Shipper']", shipperName);
+                sendKeys("//input[@aria-label='Search or Select...']", shipperName);
                 pause1s();
                 click(String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", shipperName));
-                click("//div[contains(@class, 'idle ng-binding ng-scope') and text()='Complete']");
+                click("//button[@aria-label='Save changes']");
 
                 /**
                  * Check is Shipper already linked to another Pricing Scripts by find "Proceed" button.
                  * Click "Proceed" button if found to override the shipper's Pricing Scripts.
                  */
-                WebElement proceedBtn = findElementByXpath("//button[div[contains(@class, 'idle ng-binding ng-scope') and text()='Proceed']]");
-
-                if(proceedBtn!=null)
-                {
-                    proceedBtn.click();
-                }
+//                WebElement proceedBtn = findElementByXpath("//button[div[contains(@class, 'idle ng-binding ng-scope') and text()='Proceed']]");
+//
+//                if(proceedBtn!=null)
+//                {
+//                    proceedBtn.click();
+//                }
 
                 /**
                  * Check error element first, if error element not found then linking Pricing Scripts to the Shipper success.
@@ -192,7 +200,7 @@ public class PricingScriptsPage extends SimplePage
                  * Shipper already linked to this Pricing Scripts.
                  * Click "Discard Changes".
                  */
-                click("//button[@id='button-cancel-dialog']");
+                click(CLOSE_BUTTON);
             }
         }
 
@@ -205,7 +213,7 @@ public class PricingScriptsPage extends SimplePage
 
         try
         {
-            List<WebElement> elements = findElementsByXpath("//div[@ng-repeat='shipper in ctrl.connectedShippers']//div[2]");
+            List<WebElement> elements = findElementsByXpath("//tr[@ng-repeat='shipper in $data']/td");
 
             for(WebElement element : elements)
             {
