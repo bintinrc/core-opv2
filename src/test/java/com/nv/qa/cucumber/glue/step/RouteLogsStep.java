@@ -135,6 +135,10 @@ public class RouteLogsStep extends AbstractSteps
     @Then("^route's driver must be changed to '([^\\\"]*)' in table list$")
     public void verifyRouteDriverIsChanged(String newDriverName)
     {
+        routeLogsPage.clickEditFilter();
+        routeLogsPage.clickLoadSelection();
+        CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
+        routeLogsPage.searchAndVerifyRouteExist(String.valueOf(createRouteResponse.getId()));
         String actualDriverName = routeLogsPage.getTextOnTable(1, RouteLogsPage.COLUMN_CLASS_DATA_DRIVER_NAME);
         Assert.assertEquals("Driver is not change.", newDriverName, actualDriverName);
     }

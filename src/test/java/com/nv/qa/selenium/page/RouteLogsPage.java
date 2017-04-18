@@ -50,6 +50,12 @@ public class RouteLogsPage extends SimplePage
         pause100ms();
     }
 
+    public void clickEditFilter()
+    {
+        click("//button[@aria-label='Edit Filters']");
+        pause100ms();
+    }
+
     public void clickLoadWaypointsOfSelectedRoutesOnly()
     {
         click("//div[text()='Load Waypoints of Selected Route(s) Only']");
