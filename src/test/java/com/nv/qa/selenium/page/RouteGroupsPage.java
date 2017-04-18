@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -71,8 +72,11 @@ public class RouteGroupsPage extends SimplePage
 
     public void searchTable(String keyword)
     {
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.DATE, 1);
         Format formatter = new SimpleDateFormat("EEEE MMMM dd yyyy");
-        String s = formatter.format(new Date());
+        String s = formatter.format(c.getTime());
 
         click("//md-datepicker[@ng-model='ctrl.filter.toDate']/button");
         pause1s();

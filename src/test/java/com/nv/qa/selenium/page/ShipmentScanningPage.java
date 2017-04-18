@@ -35,6 +35,7 @@ public class ShipmentScanningPage {
     }
 
     public void selectShipment(String shipmentId) {
+        CommonUtil.pause3s();
         CommonUtil.clickBtn(driver, XPATH_SHIPMENT_DROPDOWN);
         CommonUtil.pause50ms();
         selectDropdownValue(shipmentId);
