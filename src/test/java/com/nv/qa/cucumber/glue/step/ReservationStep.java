@@ -26,7 +26,8 @@ public class ReservationStep {
     private int nReservation = 0;
     private String comments = "";
 
-    private static String RESERVED_DATE = "//div[@ng-repeat='day in week track by $index'][contains(@class, 'nvYellow')]";
+//    private static String RESERVED_DATE = "//div[@ng-repeat='day in week track by $index'][contains(@class, 'nvYellow')]"; //-- reservation date.
+    private static String RESERVED_DATE = "//span[@class='reservation-calendar-item-time ng-binding']"; //-- the reservation slot inside a date.
     private static String UNRESERVED_DATE = "//div[@ng-repeat='day in week track by $index'][@class='layout-padding ng-scope ng-isolate-scope layout-column flex nvGreen nv-secondary']";
 
     @Before
@@ -47,6 +48,7 @@ public class ReservationStep {
     public void addShipperAndAddress(String shipper, String address, String volume) throws Exception {
         initResercation(shipper, address);
         eReservation = driver.findElements(By.xpath(RESERVED_DATE)).size();
+        System.out.println("Reservation count before add new : " + eReservation);
 
         List<WebElement> elms = driver.findElements(By.xpath(UNRESERVED_DATE));
         if (!elms.isEmpty()) {
@@ -80,6 +82,7 @@ public class ReservationStep {
     @When("^reservation, delete$")
     public void delete() {
         eReservation = driver.findElements(By.xpath(RESERVED_DATE)).size();
+        System.out.println("Reservation count before delete : " + eReservation);
 
         List<WebElement> elms = driver.findElements(By.xpath(RESERVED_DATE));
         if (!elms.isEmpty()) {
@@ -95,6 +98,7 @@ public class ReservationStep {
     @When("^reservation, edit")
     public void edit() {
         eReservation = driver.findElements(By.xpath(RESERVED_DATE)).size();
+        System.out.println("Reservation count before edit : " + eReservation);
 
         List<WebElement> elms = driver.findElements(By.xpath(RESERVED_DATE));
         if (!elms.isEmpty()) {
