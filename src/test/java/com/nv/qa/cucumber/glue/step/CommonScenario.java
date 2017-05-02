@@ -86,7 +86,6 @@ public class CommonScenario
         loginPage.get();
         System.out.println("Login Page Get");
         loginPage.clickLoginButton();
-        System.out.println("Click Login button");
         loginPage.enterCredential(username, password);
         loginPage.checkForGoogleSimpleVerification("Singapore");
 
