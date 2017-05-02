@@ -32,7 +32,6 @@ public class BlockedDatesStep {
 
     @When("^blocked dates add$")
     public void add() {
-        System.out.println("HERE ADD");
 
         /**
          * Set default year of "Blocked Dates" on right panel to current year.
