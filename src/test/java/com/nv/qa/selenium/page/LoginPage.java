@@ -38,9 +38,21 @@ public class LoginPage extends LoadableComponent<LoginPage> {
 
     public void clickLoginButton() throws InterruptedException {
         driver.findElement(By.xpath("//button[@ng-click='ctrl.login()']")).click();
-        (new WebDriverWait(driver, 10000)).until(new ExpectedCondition<Boolean>() {
+
+        String expectedUrl1 = "https://accounts.google.com/ServiceLogin";
+        String expectedUrl2 = "https://accounts.google.com/signin/oauth/identifier";
+
+        (new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS)).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
-                return d.getCurrentUrl().startsWith("https://accounts.google.com/ServiceLogin");
+                String currentUrl = d.getCurrentUrl();
+                boolean isExpectedUrlFound = currentUrl.startsWith(expectedUrl1) || currentUrl.startsWith(expectedUrl2);
+                System.out.println("===== GOOGLE LOGIN PAGE =====");
+                System.out.println("Current URL          : "+currentUrl);
+                System.out.println("Expected URL 1       : "+expectedUrl1);
+                System.out.println("Expected URL 2       : "+expectedUrl2);
+                System.out.println("Is Expected URL Found: "+isExpectedUrlFound);
+                System.out.println("=============================");
+                return isExpectedUrlFound;
             }
         });
     }
