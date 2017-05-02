@@ -50,6 +50,7 @@ public class CommonScenario
     {
         System.out.println("Launching browser.");
         driver = SeleniumSharedDriver.getInstance().getDriver();
+        System.out.println("Get Driver: "+driver);
     }
 
     @After("@KillBrowser")
@@ -80,6 +81,7 @@ public class CommonScenario
     @Given("^op login into Operator V2 with username \"([^\"]*)\" and password \"([^\"]*)\"$")
     public void loginToOperatorV2(String username, String password) throws InterruptedException
     {
+        System.out.println("Login to Operator V2");
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.get();
         loginPage.clickLoginButton();
