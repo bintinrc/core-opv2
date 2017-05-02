@@ -84,7 +84,6 @@ public class CommonScenario
         System.out.println("Login to Operator V2");
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.get();
-        System.out.println("Login Page Get");
         loginPage.clickLoginButton();
         loginPage.enterCredential(username, password);
         loginPage.checkForGoogleSimpleVerification("Singapore");
