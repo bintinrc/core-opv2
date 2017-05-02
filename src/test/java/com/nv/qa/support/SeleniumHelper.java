@@ -76,9 +76,7 @@ public class SeleniumHelper {
 
         capabilities.setCapability(ChromeOptions.CAPABILITY, options);
 
-        System.out.println("Before new ChromeDriver(capabilities)");
         WebDriver driver = new ChromeDriver(capabilities);
-        System.out.println("Get Web Driver");
         driver.manage().timeouts().implicitlyWait(APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(APIEndpoint.SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         driver.manage().timeouts().setScriptTimeout(APIEndpoint.SELENIUM_SCRIPT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
