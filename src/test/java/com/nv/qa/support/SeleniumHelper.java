@@ -85,7 +85,6 @@ public class SeleniumHelper {
         //driver.manage().window().maximize(); //This works for IE and Firefox. Chrome does not work. There is a bug submitted for this on ChromeDriver project. Use "ChromeOptions.addArguments("--start-maximized");" instead.
         driver.manage().window().setSize(new Dimension(APIEndpoint.SELENIUM_WINDOW_WIDTH, APIEndpoint.SELENIUM_WINDOW_HEIGHT));
         driver.manage().window().setPosition(new Point(0, 0));
-        System.out.println("Before return driver");
         return driver;
     }
 
