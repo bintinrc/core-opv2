@@ -27,7 +27,6 @@ public class BlockedDatesStep {
     @Before
     public void setup() {
         driver = SeleniumSharedDriver.getInstance().getDriver();
-        System.out.println("HERE");
     }
 
     @When("^blocked dates add$")
