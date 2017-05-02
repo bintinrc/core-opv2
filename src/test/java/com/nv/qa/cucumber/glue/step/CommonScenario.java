@@ -18,10 +18,6 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Date;
 
 /**
@@ -85,7 +81,6 @@ public class CommonScenario
     @Given("^op login into Operator V2 with username \"([^\"]*)\" and password \"([^\"]*)\"$")
     public void loginToOperatorV2(String username, String password) throws InterruptedException
     {
-        checkConnection();
         System.out.println("Login to Operator V2");
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.get();
@@ -97,28 +92,6 @@ public class CommonScenario
 
         MainPage mainPage = new MainPage(getDriver());
         mainPage.dpAdm();
-    }
-
-    public void checkConnection()
-    {
-        try
-        {
-            URL oracle = new URL("https://operatorv2-qa.ninjavan.co/#/login");
-            URLConnection yc = oracle.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-
-            String inputLine;
-            while ((inputLine = in.readLine()) != null)
-            {
-                System.out.println(inputLine);
-            }
-
-            in.close();
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
     }
 
     @Then("^take screenshot$")
