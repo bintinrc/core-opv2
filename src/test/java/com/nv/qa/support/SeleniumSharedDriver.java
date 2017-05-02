@@ -21,7 +21,9 @@ public class SeleniumSharedDriver {
 
     public WebDriver getDriver() {
         if (driver == null) {
+            System.out.println("Get Driver Here...");
             driver = SeleniumHelper.getWebDriver();
+            System.out.println("Driver: "+driver);
         }
         return driver;
     }
