@@ -38,8 +38,10 @@ public class LoginPage extends LoadableComponent<LoginPage> {
 
     public void clickLoginButton() throws InterruptedException {
         driver.findElement(By.xpath("//button[@ng-click='ctrl.login()']")).click();
+        System.out.println("Find button login");
         (new WebDriverWait(driver, 10000)).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
+                System.out.println("Current URL: "+d.getCurrentUrl());
                 return d.getCurrentUrl().startsWith("https://accounts.google.com/ServiceLogin");
             }
         });
