@@ -57,7 +57,7 @@ public class LoginPage extends LoadableComponent<LoginPage> {
             System.out.println("===== GOOGLE LOGIN PAGE =====");
             System.out.println("Current URL          : "+currentUrl);
             System.out.println("Expected URL 1       : "+GOOGLE_EXPECTED_URL_1);
-            System.out.println("Expected URL 2       : "+GOOGLE_EXPECTED_URL_1);
+            System.out.println("Expected URL 2       : "+GOOGLE_EXPECTED_URL_2);
             System.out.println("Is Expected URL Found: "+isExpectedUrlFound);
             System.out.println("=============================");
 
