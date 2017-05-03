@@ -44,8 +44,6 @@ public class LoginPage extends LoadableComponent<LoginPage> {
 
     public void enterCredential(String username, String password) throws InterruptedException
     {
-        driver.findElement(By.xpath("//button[@ng-click='ctrl.login()']")).click();
-
         final StringBuilder googlePageUrlSb = new StringBuilder();
 
         WebDriverWait webDriverWait = new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS);
@@ -93,7 +91,8 @@ public class LoginPage extends LoadableComponent<LoginPage> {
         CommonUtil.pause10ms();
     }
 
-    public void enterCredentialWithMethod2(String username, String password) throws InterruptedException {
+    public void enterCredentialWithMethod2(String username, String password) throws InterruptedException
+    {
         driver.findElement(By.xpath("//input[@id='identifierId'][@name='identifier']")).sendKeys(username);
         CommonUtil.pause10ms();
 
