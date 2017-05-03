@@ -8,7 +8,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -17,6 +16,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  * @author Soewandi Wirjawan
  */
 public class LoginPage extends LoadableComponent<LoginPage> {
+
+    private static final String GOOGLE_EXPECTED_URL_1 = "https://accounts.google.com/ServiceLogin";
+    private static final String GOOGLE_EXPECTED_URL_2 = "https://accounts.google.com/signin/oauth/identifier";
 
     private final WebDriver driver;
 
@@ -38,26 +40,46 @@ public class LoginPage extends LoadableComponent<LoginPage> {
 
     public void clickLoginButton() throws InterruptedException {
         driver.findElement(By.xpath("//button[@ng-click='ctrl.login()']")).click();
-
-        String expectedUrl1 = "https://accounts.google.com/ServiceLogin";
-        String expectedUrl2 = "https://accounts.google.com/signin/oauth/identifier";
-
-        (new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS)).until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d) {
-                String currentUrl = d.getCurrentUrl();
-                boolean isExpectedUrlFound = currentUrl.startsWith(expectedUrl1) || currentUrl.startsWith(expectedUrl2);
-                System.out.println("===== GOOGLE LOGIN PAGE =====");
-                System.out.println("Current URL          : "+currentUrl);
-                System.out.println("Expected URL 1       : "+expectedUrl1);
-                System.out.println("Expected URL 2       : "+expectedUrl2);
-                System.out.println("Is Expected URL Found: "+isExpectedUrlFound);
-                System.out.println("=============================");
-                return isExpectedUrlFound;
-            }
-        });
     }
 
-    public void enterCredential(String username, String password) throws InterruptedException {
+    public void enterCredential(String username, String password) throws InterruptedException
+    {
+        driver.findElement(By.xpath("//button[@ng-click='ctrl.login()']")).click();
+
+        final StringBuilder googlePageUrlSb = new StringBuilder();
+
+        WebDriverWait webDriverWait = new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS);
+        webDriverWait.until((WebDriver d) ->
+        {
+            String currentUrl = d.getCurrentUrl();
+            googlePageUrlSb.setLength(0);
+            googlePageUrlSb.append(currentUrl);
+            boolean isExpectedUrlFound = currentUrl.startsWith(GOOGLE_EXPECTED_URL_1) || currentUrl.startsWith(GOOGLE_EXPECTED_URL_2);
+
+            System.out.println("===== GOOGLE LOGIN PAGE =====");
+            System.out.println("Current URL          : "+currentUrl);
+            System.out.println("Expected URL 1       : "+GOOGLE_EXPECTED_URL_1);
+            System.out.println("Expected URL 2       : "+GOOGLE_EXPECTED_URL_1);
+            System.out.println("Is Expected URL Found: "+isExpectedUrlFound);
+            System.out.println("=============================");
+
+            return isExpectedUrlFound;
+        });
+
+
+        String googlePageUrl = googlePageUrlSb.toString();
+
+        if(googlePageUrl.startsWith(GOOGLE_EXPECTED_URL_1))
+        {
+            enterCredentialWithMethod1(username, password);
+        }
+        else if(googlePageUrl.startsWith(GOOGLE_EXPECTED_URL_2))
+        {
+            enterCredentialWithMethod2(username, password);
+        }
+    }
+
+    public void enterCredentialWithMethod1(String username, String password) throws InterruptedException {
         driver.findElement(By.xpath("//input[@id='Email'][@name='Email']")).sendKeys(username);
         CommonUtil.pause10ms();
 
@@ -68,6 +90,20 @@ public class LoginPage extends LoadableComponent<LoginPage> {
         CommonUtil.pause10ms();
 
         driver.findElement(By.xpath("//input[@id='signIn'][@name='signIn']")).click();
+        CommonUtil.pause10ms();
+    }
+
+    public void enterCredentialWithMethod2(String username, String password) throws InterruptedException {
+        driver.findElement(By.xpath("//input[@id='identifierId'][@name='identifier']")).sendKeys(username);
+        CommonUtil.pause10ms();
+
+        driver.findElement(By.xpath("//div[@id='identifierNext']")).click();
+        CommonUtil.pause10ms();
+
+        driver.findElement(By.xpath("//input[@name='password']")).sendKeys(password);
+        CommonUtil.pause10ms();
+
+        driver.findElement(By.xpath("//div[@id='passwordNext']")).click();
         CommonUtil.pause10ms();
     }
 
