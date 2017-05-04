@@ -119,6 +119,7 @@ public class ReservationStep {
 
     @Then("^reservation, verify \"([^\"]*)\"")
     public void verify(String type) {
+        CommonUtil.pause3s();
         if (type.equalsIgnoreCase("new")) {
             nReservation = driver.findElements(By.xpath(RESERVED_DATE)).size();
             Assert.assertEquals(eReservation + 1, nReservation);
