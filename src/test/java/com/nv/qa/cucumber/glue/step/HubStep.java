@@ -49,8 +49,8 @@ public class HubStep {
         ScenarioHelper.getInstance().setTmpId(tmpId);
 
         CommonUtil.inputText(driver, "//input[@type='text'][@aria-label='Hub Name']", String.format("Hub %s", tmpId));
-        CommonUtil.inputText(driver, "//input[@type='number'][@aria-label='Latitude']", "1.2843043");
-        CommonUtil.inputText(driver, "//input[@type='number'][@aria-label='Longitude']", "103.8095597");
+        CommonUtil.inputText(driver, "//input[@type='number'][@aria-label='commons.latitude']", "1.2843043");
+        CommonUtil.inputText(driver, "//input[@type='number'][@aria-label='commons.longitude']", "103.8095597");
         CommonUtil.clickBtn(driver, "//button[@type='submit'][@aria-label='Save Button']");
     }
 
