@@ -105,6 +105,7 @@ public class PricingScriptsStep extends AbstractSteps
         String insuredValue = mapOfData.get("insuredValue");
         String codValue = mapOfData.get("codValue");
         pricingScriptsPage.simulateRunTest(deliveryType, orderType, timeslotType, size, weight, insuredValue, codValue);
+        pause1s();
     }
 
     @Then("^op will find the price result:$")
@@ -123,27 +124,26 @@ public class PricingScriptsStep extends AbstractSteps
         String actualTotal = totalEl.getText();
         Assert.assertEquals(expectedTotal, actualTotal);
 
-        WebElement gstEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container[label[text()='GST']]/div[@class='readonly ng-binding']");
+        /*WebElement gstEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container[label[text()='GST']]/div[@class='readonly ng-binding']");
         String actualGst = gstEl.getText();
-        Assert.assertEquals(expectedGst, actualGst);
+        Assert.assertEquals("GST", expectedGst, actualGst);*/
 
-        //todo: wait fix UI from felix
-//        WebElement codFeeEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container[label[text()='Grand Total']]/div[class='readonly ng-binding']");
-//        String actualCodFee = codFeeEl.getText();
-//        Assert.assertEquals(expectedCodFee, actualCodFee);
-//
-//        WebElement insuranceFeeEl = CommonUtil.getElementByXpath(getDriver(), "//div[text()='Fee Detail']/following-sibling::div[8]");
-//        String actualInsuranceFee = insuranceFeeEl.getText();
-//        Assert.assertEquals(expectedInsuranceFee, actualInsuranceFee);
-//
-//        WebElement deliveryFeeEl = CommonUtil.getElementByXpath(getDriver(), "//div[text()='Fee Detail']/following-sibling::div[10]");
-//        String actualDeliveryFee = deliveryFeeEl.getText();
-//        Assert.assertEquals(expectedDeliveryFee, actualDeliveryFee);
-//
-//        WebElement handlingFeeEl = CommonUtil.getElementByXpath(getDriver(), "//div[text()='Fee Detail']/following-sibling::div[12]");
-//        String actualHandlingFee = handlingFeeEl.getText();
-//        Assert.assertEquals(expectedHandlingFee, actualHandlingFee);
-//
+        WebElement codFeeEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container[label[text()='COD Fee']]/div[@class='readonly ng-binding']");
+        String actualCodFee = codFeeEl.getText();
+        Assert.assertEquals(expectedCodFee, actualCodFee);
+
+        WebElement insuranceFeeEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container[label[text()='Insurance Fee']]/div[@class='readonly ng-binding']");
+        String actualInsuranceFee = insuranceFeeEl.getText();
+        Assert.assertEquals(expectedInsuranceFee, actualInsuranceFee);
+
+        WebElement deliveryFeeEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container[label[text()='Delivery Fee']]/div[@class='readonly ng-binding']");
+        String actualDeliveryFee = deliveryFeeEl.getText();
+        Assert.assertEquals(expectedDeliveryFee, actualDeliveryFee);
+
+        WebElement handlingFeeEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container[label[text()='Handling Fee']]/div[@class='readonly ng-binding']");
+        String actualHandlingFee = handlingFeeEl.getText();
+        Assert.assertEquals(expectedHandlingFee, actualHandlingFee);
+
         WebElement commentsEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container[label[text()='Comments']]/div[@class='readonly ng-binding']");
         String actualComments = commentsEl.getText();
         Assert.assertEquals(expectedComments, actualComments);

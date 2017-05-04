@@ -139,11 +139,11 @@ public class PricingScriptsPage extends SimplePage
         selectValueFromMdSelectMenu("//md-input-container[@label='container.pricing-scripts.description-time-slot-type']", String.format("//md-option[@value='%s']", timeslotType));
         selectValueFromMdSelectMenu("//md-input-container[@label='container.pricing-scripts.measurement']", "//md-option[div[text()=' Size ']]");
         selectValueFromMdSelectMenu("//md-input-container[@label='commons.size']", String.format("//md-option[@value='%s']", size));
-//        sendKeys("//input[@aria-label='Weight']", weight);
-        click("//input[@aria-label='Insured Value']");
-        sendKeys("//input[@aria-label='Insured Value']", insuredValue);
-        click("//input[@aria-label='COD Value']");
-        sendKeys("//input[@aria-label='COD Value']", codValue);
+        //sendKeys("//input[@aria-label='Weight']", weight);
+        //click("//input[@aria-label='Insured Value']");
+        //sendKeys("//input[@aria-label='Insured Value']", insuredValue);
+        //click("//input[@aria-label='COD Value']");
+        //sendKeys("//input[@aria-label='COD Value']", codValue);
         click("//button[@aria-label='Run Check']");
     }
 
