@@ -36,7 +36,9 @@ public class TransactionsV2Step extends AbstractSteps
 
         String routeGroupName = scenarioStorage.get("routeGroupName");
 
-        transactionsPage.removeFilter("Creation Time");
+        transactionsPage.removeFilter("Start Datetime");
+        transactionsPage.removeFilter("End Datetime");
+        transactionsPage.setCreationTimeFilter();
         transactionsPage.clickLoadSelectionButton();
         transactionsPage.searchByTrackingId(expectedTrackingId);
         transactionsPage.selectAllShown();

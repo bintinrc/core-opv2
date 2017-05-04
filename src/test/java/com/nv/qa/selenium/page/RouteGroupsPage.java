@@ -1,11 +1,10 @@
 package com.nv.qa.selenium.page;
 
+import com.nv.qa.support.CommonUtil;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
-import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -14,6 +13,8 @@ import java.util.Date;
  */
 public class RouteGroupsPage extends SimplePage
 {
+    private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
+
     private static final String MD_VIRTUAL_REPEAT = "routeGroup in ctrl.routeGroupsTableData";
     public static final String COLUMN_CLASS_NAME = "name";
 
@@ -29,6 +30,7 @@ public class RouteGroupsPage extends SimplePage
     {
         click("//button[@aria-label='Create Route Group']");
         setRouteGroupNameValue(routeGroupName);
+        setRouteGroupDescriptionValue(String.format("This Route Group is created by automation test from Operator V2. Created at %s.", new Date().toString()));
         clickCreateRouteGroupAndAddTransactionsOnCreateDialog();
     }
 
@@ -37,7 +39,7 @@ public class RouteGroupsPage extends SimplePage
         searchTable(filterRouteGroupName);
         pause100ms();
         String actualName = getTextOnTable(1, RouteGroupsPage.COLUMN_CLASS_NAME);
-        Assert.assertEquals(filterRouteGroupName, actualName);
+        Assert.assertTrue("Route Group name not matched.", actualName.startsWith(filterRouteGroupName)); //Route Group name is concatenated with description.
 
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
         setRouteGroupNameValue(newRouteGroupName);
@@ -59,6 +61,11 @@ public class RouteGroupsPage extends SimplePage
         sendKeys("//input[@aria-label='Name']", value);
     }
 
+    public void setRouteGroupDescriptionValue(String value)
+    {
+        sendKeys("//input[@aria-label='Description']", value);
+    }
+
     public void clickCreateRouteGroupAndAddTransactionsOnCreateDialog()
     {
         click("//button[@aria-label='Save Button']");
@@ -72,15 +79,11 @@ public class RouteGroupsPage extends SimplePage
 
     public void searchTable(String keyword)
     {
-        Calendar c = Calendar.getInstance();
-        c.setTime(new Date());
-        c.add(Calendar.DATE, 1);
-        Format formatter = new SimpleDateFormat("EEEE MMMM dd yyyy");
-        String s = formatter.format(c.getTime());
+        String dateLabel = DATE_FILTER_SDF.format(CommonUtil.getNextDate(1));
 
         click("//md-datepicker[@ng-model='ctrl.filter.toDate']/button");
         pause1s();
-        click("//td[@aria-label='" + s + "']");
+        click("//td[@aria-label='" + dateLabel + "']");
         pause1s();
         sendKeys("//input[@type='text'][@ng-model='searchText']", keyword);
     }

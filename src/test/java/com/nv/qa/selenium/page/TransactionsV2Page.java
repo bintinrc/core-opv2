@@ -1,58 +1,82 @@
 package com.nv.qa.selenium.page;
 
+import com.nv.qa.support.CommonUtil;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+import java.text.SimpleDateFormat;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
-public class TransactionsV2Page extends SimplePage {
-    public TransactionsV2Page(WebDriver driver) {
+public class TransactionsV2Page extends SimplePage
+{
+    private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
+
+    public TransactionsV2Page(WebDriver driver)
+    {
         super(driver);
     }
 
-    public void removeFilter(String filterName) {
-        if (filterName.contains("time")) {
+    public void setCreationTimeFilter()
+    {
+        String dateLabel = DATE_FILTER_SDF.format(CommonUtil.getNextDate(1));
+        click("//md-datepicker[@ng-model='container.toDate']/button");
+        pause1s();
+        click("//td[@aria-label='" + dateLabel + "']");
+        pause1s();
+    }
+
+    public void removeFilter(String filterName)
+    {
+        if (filterName.contains("time"))
+        {
             click("//div[div[p[text()='" + filterName + "']]]/div/nv-icon-button/button");
-        } else {
+        }
+        else
+        {
             click("//div[div[p[text()='" + filterName + "']]]/div/div/nv-icon-button/button");
         }
     }
 
-    public void clickLoadSelectionButton() {
+    public void clickLoadSelectionButton()
+    {
         click("//button[@aria-label='Load Selection']");
     }
 
-    public void searchByTrackingId(String trackingId) {
+    public void searchByTrackingId(String trackingId)
+    {
         //-- get checkbox relative to the tracking id cell
-        WebElement textbox = findElementByXpath(
-                "//input[@ng-model='searchText' and @tabindex='13']"
-        );
+        WebElement textbox = findElementByXpath("//input[@ng-model='searchText' and @tabindex='13']");
         textbox.clear();
         textbox.sendKeys(trackingId);
         pause100ms();
     }
 
-    public void selectAllShown() {
+    public void selectAllShown()
+    {
         click("//button[@aria-label='Selection']");
         pause100ms();
         click("//button[@aria-label='Select All Shown']");
         pause100ms();
     }
 
-    public void clickAddToRouteGroupButton() {
+    public void clickAddToRouteGroupButton()
+    {
         click("//button[@aria-label='Add to Route Group']");
         pause100ms();
     }
 
-    public void selectRouteGroupOnAddToRouteGroupDialog(String routeGroupName) {
+    public void selectRouteGroupOnAddToRouteGroupDialog(String routeGroupName)
+    {
         click("//md-select[@aria-label='Route Group']");
         pause100ms();
         click(String.format("//md-option/div[contains(text(), '%s')]", routeGroupName));
         pause100ms();
     }
 
-    public void clickAddTransactionsOnAddToRouteGroupDialog() {
+    public void clickAddTransactionsOnAddToRouteGroupDialog()
+    {
         click("//button[@aria-label='Save Button']");
     }
 }

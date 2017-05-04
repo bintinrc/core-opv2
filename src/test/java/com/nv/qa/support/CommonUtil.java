@@ -6,6 +6,8 @@ import org.openqa.selenium.interactions.Actions;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -313,5 +315,13 @@ public class CommonUtil {
     public static void columnSearchTable(WebDriver driver, String columnName, String value) {
         String xpath = "//th[span[text()='" + columnName + "']]/nv-search-input-filter/md-input-container/div/input";
         inputText(driver, xpath, value);
+    }
+
+    public static Date getNextDate(int day)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, day);
+        return cal.getTime();
     }
 }

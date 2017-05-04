@@ -86,7 +86,7 @@ public class RouteGroupsStep extends AbstractSteps
         routeGroupsPage.searchTable(routeGroupName);
 
         String actualName = routeGroupsPage.getTextOnTable(1, RouteGroupsPage.COLUMN_CLASS_NAME);
-        Assert.assertEquals(routeGroupName, actualName);
+        Assert.assertTrue("Route Group name not matched.", actualName.startsWith(routeGroupName)); //Route Group name is concatenated with description.
     }
 
     @When("^op update 'route group' on 'Route Groups'$")
@@ -105,7 +105,7 @@ public class RouteGroupsStep extends AbstractSteps
         String routeGroupName = scenarioStorage.get("routeGroupName");
         routeGroupsPage.searchTable(routeGroupName);
         String actualName = routeGroupsPage.getTextOnTable(1, RouteGroupsPage.COLUMN_CLASS_NAME);
-        Assert.assertEquals(routeGroupName, actualName);
+        Assert.assertTrue("Route Group name not matched.", actualName.startsWith(routeGroupName)); //Route Group name is concatenated with description.
     }
 
     @When("^op delete 'route group' on 'Route Groups'$")
