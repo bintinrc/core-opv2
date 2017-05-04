@@ -94,16 +94,16 @@ public class LoginPage extends LoadableComponent<LoginPage> {
     public void enterCredentialWithMethod2(String username, String password) throws InterruptedException
     {
         driver.findElement(By.xpath("//input[@id='identifierId'][@name='identifier']")).sendKeys(username);
-        CommonUtil.pause10ms();
+        CommonUtil.pause100ms();
 
         driver.findElement(By.xpath("//div[@id='identifierNext']")).click();
-        CommonUtil.pause10ms();
+        CommonUtil.pause100ms();
 
         driver.findElement(By.xpath("//input[@name='password']")).sendKeys(password);
-        CommonUtil.pause10ms();
+        CommonUtil.pause100ms();
 
         driver.findElement(By.xpath("//div[@id='passwordNext']")).click();
-        CommonUtil.pause10ms();
+        CommonUtil.pause100ms();
     }
 
     public void checkForGoogleSimpleVerification(String location) {
