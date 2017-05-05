@@ -63,10 +63,14 @@ public class ReservationStep extends AbstractSteps
     public void initReservation(String shipper, String address) throws Exception
     {
         CommonUtil.inputListBox(getDriver(), "Search or Select Shipper", shipper);
+        takesScreenshot();
         SeleniumHelper.waitUntilElementVisible(getDriver(), By.xpath("//input[@placeholder='Search or Select Address']"));
+        takesScreenshot();
 
         CommonUtil.inputListBox(getDriver(), "Search or Select Address", address);
+        takesScreenshot();
         SeleniumHelper.waitUntilElementVisible(getDriver(), By.xpath("//nv-calendar[@ng-model='ctrl.createForm.selectedDate']"));
+        takesScreenshot();
     }
 
     @When("^reservation, create input shipper \"([^\"]*)\" and address \"([^\"]*)\" with volume \"([^\"]*)\"$")
@@ -76,35 +80,46 @@ public class ReservationStep extends AbstractSteps
         updateNumberOfReservedDate("BEFORE ADD NEW");
 
         List<WebElement> elms = getDriver().findElements(By.xpath(UNRESERVED_DATE));
+        takesScreenshot();
 
         if(!elms.isEmpty())
         {
             elms.get(0).click();
+            takesScreenshot();
 
             WebElement btn = getDriver().findElement(By.xpath("//button[@ng-click='ctrl.showCreateReservation()']"));
+            takesScreenshot();
             ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView();", btn);
+            takesScreenshot();
 
             CommonUtil.pause1s();
             btn.click();
+            takesScreenshot();
             CommonUtil.pause1s();
             btn.click();
+            takesScreenshot();
 
             getDriver().findElement(By.xpath("//md-select[@ng-model='ctrl.createForm.approxVolume']")).click();
+            takesScreenshot();
             List<WebElement> vols = getDriver().findElements(By.xpath("//md-option[@ng-repeat='volume in ctrl.volumeOptions']/div"));
+            takesScreenshot();
 
             for(WebElement v : vols)
             {
                 if(v.isDisplayed() && v.getText().equalsIgnoreCase(volume))
                 {
                     v.click();
+                    takesScreenshot();
                     break;
                 }
             }
 
             comments = String.format("This reservation is created by automation test from Operator V2. Created at %s.", new Date().toString());
             CommonUtil.inputText(getDriver(), "//md-input-container[@form='createForm']/input[@aria-label='Comments']", comments);
+            takesScreenshot();
 
             getDriver().findElement(By.xpath("//button[@type='submit' and .//span[text()='Create Reservation']]")).click();
+            takesScreenshot();
             CommonUtil.pause1s();
         }
     }
@@ -115,14 +130,18 @@ public class ReservationStep extends AbstractSteps
         updateNumberOfReservedDate("BEFORE DELETE");
 
         List<WebElement> elms = getDriver().findElements(By.xpath(RESERVED_DATE));
+        takesScreenshot();
 
         if(!elms.isEmpty())
         {
             WebElement el = elms.get(elms.size() - 1).findElement(By.xpath("//nv-icon-button[@name='Delete Reservation']"));
+            takesScreenshot();
 
             Actions action = new Actions(getDriver());
             action.moveToElement(el).click().perform();
+            takesScreenshot();
             getDriver().findElement(By.xpath("//button[span[text()='Delete']]")).click();
+            takesScreenshot();
             CommonUtil.pause1s();
         }
     }
@@ -133,6 +152,7 @@ public class ReservationStep extends AbstractSteps
         updateNumberOfReservedDate("BEFORE EDIT");
 
         List<WebElement> elms = getDriver().findElements(By.xpath(RESERVED_DATE));
+        takesScreenshot();
 
         if(!elms.isEmpty())
         {
@@ -140,13 +160,17 @@ public class ReservationStep extends AbstractSteps
 
             Actions action = new Actions(getDriver());
             action.moveToElement(el).click().perform();
+            takesScreenshot();
 
             WebElement timeslot = getDriver().findElement(By.xpath("//form[@name='editForm']/div/nv-button-timeslot/div/div/button[@aria-label='12PM-3PM' and .//span[text()='12PM-3PM']]"));
             ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView();", timeslot);
+            takesScreenshot();
 
             comments = String.format("This reservation is updated by automation test from Operator V2. Updated at %s.", new Date().toString());
             CommonUtil.inputText(getDriver(), "//md-input-container[@form='editForm']/input[@aria-label='Comments']", comments);
+            takesScreenshot();
             getDriver().findElement(By.xpath("//button[@type='submit' and .//span[text()='Save changes']]")).click();
+            takesScreenshot();
             CommonUtil.pause1s();
         }
     }
