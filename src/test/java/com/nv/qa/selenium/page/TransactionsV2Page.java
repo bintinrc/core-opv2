@@ -21,10 +21,35 @@ public class TransactionsV2Page extends SimplePage
     public void setCreationTimeFilter()
     {
         String dateLabel = DATE_FILTER_SDF.format(CommonUtil.getNextDate(1));
+
+        /**
+         * Set fromHour & fromMinute of Creation Time.
+         */
+        click("//md-input-container[@model='container.fromHour']");
+        pause500ms();
+        click("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), ' 00 ')]");
+        pause500ms();
+        click("//md-input-container[@model='container.fromMinute']");
+        pause500ms();
+        click("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), ' 00 ')]");
+        pause500ms();
+
+        /**
+         * Set toHour & toMinute of Creation Time.
+         */
+        click("//md-input-container[@model='container.toHour']");
+        pause500ms();
+        click("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), ' 23 ')]");
+        pause500ms();
+        click("//md-input-container[@model='container.toMinute']");
+        pause500ms();
+        click("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), ' 30 ')]");
+        pause500ms();
+
         click("//md-datepicker[@ng-model='container.toDate']/button");
-        pause1s();
+        pause500ms();
         click("//td[@aria-label='" + dateLabel + "']");
-        pause1s();
+        pause500ms();
     }
 
     public void removeFilter(String filterName)
