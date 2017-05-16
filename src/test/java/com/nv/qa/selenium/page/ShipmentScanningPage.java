@@ -7,6 +7,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.List;
+
 /**
  * Created by lanangjati
  * on 9/26/16.
@@ -19,7 +21,7 @@ public class ShipmentScanningPage {
     public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
     public static final String XPATH_SELECT_SHIPMENT_BUTTON = "//button[@aria-label='Select Shipment']";
     public static final String XPATH_BARCODE_SCAN = "//input[@id='scan_barcode_input']";
-    public static final String XPATH_ORDER_IN_SHIPMENT = "//td[@class='tracking-id ng-binding']";
+    public static final String XPATH_ORDER_IN_SHIPMENT = "//td[contains(@class, 'tracking-id')]";
     public static final String XPATH_RACK_SECTOR = "//div[contains(@class,'rack-sector-card')]/div/h2[@ng-show='ctrl.rackInfo']";
 
     public ShipmentScanningPage(WebDriver driver) {
@@ -51,7 +53,20 @@ public class ShipmentScanningPage {
         String rack = driver.findElement(By.xpath(XPATH_RACK_SECTOR)).getText();
         Assert.assertTrue("order is " + rack, !rack.equalsIgnoreCase("INVALID") && !rack.equalsIgnoreCase("DUPLICATE"));
 
-        WebElement order = driver.findElement(By.xpath(XPATH_ORDER_IN_SHIPMENT + "[text()='" + orderId + "']"));
-        Assert.assertEquals("order in shipment", orderId, order.getText());
+        List<WebElement> orders = driver.findElements(By.xpath(XPATH_ORDER_IN_SHIPMENT));
+        boolean orderExist = false;
+
+        for (WebElement order : orders) {
+
+            if (order.getText().equalsIgnoreCase(orderId)) {
+                orderExist = true;
+                break;
+            }
+        }
+
+        Assert.assertTrue("order " + orderId + " doesn't exist in shipment", orderExist);
+
+//        WebElement order = driver.findElement(By.xpath(XPATH_ORDER_IN_SHIPMENT + "[text()='" + orderId + "']"));
+//        Assert.assertEquals("order in shipment", orderId, order.getText());
     }
 }
