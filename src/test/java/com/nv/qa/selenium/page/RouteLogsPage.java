@@ -73,7 +73,7 @@ public class RouteLogsPage extends SimplePage
 
     public void editAssignedDriver(String newDriverName)
     {
-        sendKeys("//input[@aria-label='Assigned Driver']", newDriverName);
+        sendKeys("//div/label[text()='Assigned Driver']/following-sibling::nv-autocomplete//input", newDriverName);
         pause1s();
         click(String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", newDriverName));
         pause100ms();
@@ -88,7 +88,9 @@ public class RouteLogsPage extends SimplePage
     public void deleteRoute(String routeId)
     {
         searchAndVerifyRouteExist(routeId);
-        clickActionButtonOnTable(1, ACTION_BUTTON_DELETE_ROUTE);
+        clickActionButtonOnTable(1, RouteLogsPage.ACTION_BUTTON_EDIT_DETAILS);
+        pause200ms();
+        click("//button[@aria-label='Delete']");
         pause200ms();
         click("//button[@aria-label='Delete']");
         pause200ms();
