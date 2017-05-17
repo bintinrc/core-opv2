@@ -35,12 +35,12 @@ Feature: Pricing Scripts
       | comments     | OK              |
     Examples:
       | Note                               | hiptest-uid                              | orderType | deliveryType | timeslotType | size | total  | deliveryFee | insurance | cod |
-      | NORMAL - STANDARD - NONE - S       | uid:317ae297-3148-4c7a-8a5f-493bd0414fa5 | NORMAL    | STANDARD     | NONE         | S    | 20.116 | 7.8         | 0         | 0   |
-      | NORMAL - NEXT_DAY - DAY_NIGHT - XL | uid:7c32f2be-7af3-4aba-a569-58ba34e6b599 | NORMAL    | NEXT_DAY     | DAY_NIGHT    | XL   | 22.256 | 9.8         | 0         | 0   |
-      | C2C - EXPRESS - DAY_NIGHT - M      | uid:debec413-5470-41fc-bcf3-e8b5a8dd8148 | C2C       | EXPRESS      | DAY_NIGHT    | M    | 22.042 | 9.6         | 0         | 0   |
-      | C2C - SAME_DAY - NONE - XL         | uid:a6f888dd-33ff-46fe-b49e-d9f1e1e81eeb | C2C       | SAME_DAY     | NONE         | XL   | 22.684 | 10.2        | 0         | 0   |
-      | RETURN - NEXT_DAY - TIMESLOT - L   | uid:0aee7e86-0a1a-4065-b08a-9c466b65c8be | RETURN    | NEXT_DAY     | TIMESLOT     | L    | 22.47  | 10          | 0         | 0   |
-      | RETURN - STANDARD - TIMESLOT - M   | uid:23cd797e-1225-4a56-857f-3a54df98e804 | RETURN    | STANDARD     | TIMESLOT     | M    | 21.828 | 9.4         | 0         | 0   |
+      | NORMAL - STANDARD - NONE - S       | uid:317ae297-3148-4c7a-8a5f-493bd0414fa5 | NORMAL    | STANDARD     | NONE         | S    | 22.256 | 9.8         | 0         | 0   |
+      | NORMAL - NEXT_DAY - DAY_NIGHT - XL | uid:7c32f2be-7af3-4aba-a569-58ba34e6b599 | NORMAL    | NEXT_DAY     | DAY_NIGHT    | XL   | 24.396 | 11.8        | 0         | 0   |
+      | C2C - EXPRESS - DAY_NIGHT - M      | uid:debec413-5470-41fc-bcf3-e8b5a8dd8148 | C2C       | EXPRESS      | DAY_NIGHT    | M    | 24.182 | 11.6        | 0         | 0   |
+      | C2C - SAME_DAY - NONE - XL         | uid:a6f888dd-33ff-46fe-b49e-d9f1e1e81eeb | C2C       | SAME_DAY     | NONE         | XL   | 24.824 | 12.2        | 0         | 0   |
+      | RETURN - NEXT_DAY - TIMESLOT - L   | uid:0aee7e86-0a1a-4065-b08a-9c466b65c8be | RETURN    | NEXT_DAY     | TIMESLOT     | L    | 24.61  | 12          | 0         | 0   |
+      | RETURN - STANDARD - TIMESLOT - M   | uid:23cd797e-1225-4a56-857f-3a54df98e804 | RETURN    | STANDARD     | TIMESLOT     | M    | 23.968 | 11.4        | 0         | 0   |
 
   Scenario: Operator linking a Pricing Scripts to a Shipper. (uid:0800ac82-a359-4d5f-a666-12b6d3877540)
     Given op click navigation Pricing Scripts in Shipper
