@@ -35,15 +35,21 @@ public class SamedayRouteEngineStep extends AbstractSteps
     {
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
         String hubName = mapOfData.get("hub");
+        String routingAlgorithm = mapOfData.get("routingAlgorithm");
         String fleetType1OperatingHoursFrom = mapOfData.get("fleetType1OperatingHoursFrom");
         String fleetType1OperatingHoursTo = mapOfData.get("fleetType1OperatingHoursTo");
+        String fleetType1BreakingHoursFrom = mapOfData.get("fleetType1BreakingHoursFrom");
+        String fleetType1BreakingHoursTo = mapOfData.get("fleetType1BreakingHoursTo");
 
         String routeGroupName = scenarioStorage.get("routeGroupName");
 
         samedayRouteEnginePage.selectRouteGroup(routeGroupName);
         samedayRouteEnginePage.selectHub(hubName);
+        samedayRouteEnginePage.selectRoutingAlgorithm(routingAlgorithm);
         samedayRouteEnginePage.selectFleetType1OperatingHoursFrom(fleetType1OperatingHoursFrom);
         samedayRouteEnginePage.selectFleetType1OperatingHoursTo(fleetType1OperatingHoursTo);
+        samedayRouteEnginePage.selectFleetType1BreakHoursFrom(fleetType1BreakingHoursFrom);
+        samedayRouteEnginePage.selectFleetType1BreakHoursTo(fleetType1BreakingHoursTo);
         takesScreenshot();
         samedayRouteEnginePage.clickRunRouteEngineButton();
         takesScreenshot();

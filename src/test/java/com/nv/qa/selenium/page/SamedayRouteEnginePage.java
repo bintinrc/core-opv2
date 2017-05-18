@@ -20,6 +20,13 @@ public class SamedayRouteEnginePage extends SimplePage
         click(String.format("//md-option/div[contains(text(), '%s')]", routeGroupName));
     }
 
+    public void selectRoutingAlgorithm(String routingAlgorithm)
+    {
+        click("//md-select[@aria-label='Select Routing Algorithm']");
+        pause100ms();
+        click(String.format("//md-option/div[contains(text(), '%s')]", routingAlgorithm));
+    }
+
     public void selectHub(String hubName)
     {
         click("//md-select[@aria-label='Select Hub']");
@@ -37,14 +44,28 @@ public class SamedayRouteEnginePage extends SimplePage
     {
         click("//md-select[contains(@aria-label,'Operating Hours')]");
         pause100ms();
-        click(String.format("//md-option/div[contains(text(), '%s')]", operatingHoursFrom));
+        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", operatingHoursFrom));
     }
 
     public void selectFleetType1OperatingHoursTo(String operatingHoursTo)
     {
-        click("//md-select[contains(@aria-label,'To')]");
+        click("(//md-select[contains(@aria-label,'To')])[1]");
         pause100ms();
-        click(String.format("//md-option/div[contains(text(), '%s')]", operatingHoursTo));
+        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", operatingHoursTo));
+    }
+
+    public void selectFleetType1BreakHoursFrom(String breakingHoursFrom)
+    {
+        click("//md-select[contains(@aria-label,'Break Hours')]");
+        pause100ms();
+        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", breakingHoursFrom));
+    }
+
+    public void selectFleetType1BreakHoursTo(String breakingHoursTo)
+    {
+        click("(//md-select[contains(@aria-label,'To')])[2]");
+        pause100ms();
+        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", breakingHoursTo));
     }
 
     public void selectDriverOnRouteSettingsPage(String driverName)
