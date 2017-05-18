@@ -143,5 +143,6 @@ public class CommonRouteStep extends AbstractSteps
         }
 
         operatorPortalRoutingClient.setRouteTags(createRouteResponse.getId(), tagIds);
+        pause1s();
     }
 }

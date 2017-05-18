@@ -44,6 +44,7 @@ public class TransactionsV2Step extends AbstractSteps
         transactionsPage.selectAllShown();
         transactionsPage.clickAddToRouteGroupButton();
         transactionsPage.selectRouteGroupOnAddToRouteGroupDialog(routeGroupName);
+        pause2s();
         takesScreenshot();
         transactionsPage.clickAddTransactionsOnAddToRouteGroupDialog();
         takesScreenshot();
