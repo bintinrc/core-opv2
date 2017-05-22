@@ -7,8 +7,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
-import java.util.List;
-
 /**
  * Created by lanangjati
  * on 9/26/16.
@@ -39,34 +37,23 @@ public class ShipmentScanningPage {
     public void selectShipment(String shipmentId) {
         CommonUtil.pause3s();
         CommonUtil.clickBtn(driver, XPATH_SHIPMENT_DROPDOWN);
-        CommonUtil.pause50ms();
+        CommonUtil.pause500ms();
         selectDropdownValue(shipmentId);
-        CommonUtil.pause50ms();
+        CommonUtil.pause500ms();
         CommonUtil.clickBtn(driver, XPATH_SELECT_SHIPMENT_BUTTON);
     }
 
     private void selectDropdownValue(String value) {
-        CommonUtil.clickBtn(driver, XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()=' " + value + " ']]");
+        CommonUtil.clickBtn(driver, String.format("//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", value));
     }
 
     public void checkOrderInShipment(String orderId) {
         String rack = driver.findElement(By.xpath(XPATH_RACK_SECTOR)).getText();
         Assert.assertTrue("order is " + rack, !rack.equalsIgnoreCase("INVALID") && !rack.equalsIgnoreCase("DUPLICATE"));
 
-        List<WebElement> orders = driver.findElements(By.xpath(XPATH_ORDER_IN_SHIPMENT));
-        boolean orderExist = false;
-
-        for (WebElement order : orders) {
-
-            if (order.getText().equalsIgnoreCase(orderId)) {
-                orderExist = true;
-                break;
-            }
-        }
+        WebElement orderWe = driver.findElement(By.xpath(String.format("//td[contains(@class, 'tracking-id')][contains(text(), '%s')]", orderId)));
+        boolean orderExist = orderWe!=null;
 
         Assert.assertTrue("order " + orderId + " doesn't exist in shipment", orderExist);
-
-//        WebElement order = driver.findElement(By.xpath(XPATH_ORDER_IN_SHIPMENT + "[text()='" + orderId + "']"));
-//        Assert.assertEquals("order in shipment", orderId, order.getText());
     }
 }
