@@ -3,16 +3,14 @@ package com.nv.qa.cucumber.glue.step;
 import com.google.inject.Inject;
 import com.nv.qa.model.order_creation.v2.Order;
 import com.nv.qa.selenium.page.AddParcelToRoutePage;
-import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 
-import java.util.List;
-
 /**
+ *
  * @author Daniel Joi Partogi Hutapea
  */
 public class AddParcelToRouteStep extends AbstractSteps
@@ -40,7 +38,7 @@ public class AddParcelToRouteStep extends AbstractSteps
         addParcelToRoutePage.selectTag("FLT"); //Unselect tag FLT. Tag FLT is default tag on this page.
         addParcelToRoutePage.selectTag(tag);
         addParcelToRoutePage.clickSubmit();
-        CommonUtil.pause1s();
+        pause3s();
     }
 
     @Then("verify parcel added to route")
@@ -48,11 +46,8 @@ public class AddParcelToRouteStep extends AbstractSteps
     {
         Order order = scenarioStorage.get("order");
         String expectedTrackingId = order.getTracking_id();
-
-        WebElement actualTrackngId = addParcelToRoutePage.findElementByXpath(
-                "//td[@class='tracking_id ng-binding' and contains(text(), '" + expectedTrackingId + "')]"
-        );
-
-        Assert.assertEquals("Order did not added to route.", expectedTrackingId, actualTrackngId.getText());
+        String xpath = String.format("//td[@class='tracking_id ng-binding' and contains(text(), '%s')]", expectedTrackingId);
+        WebElement actualTrackingId = addParcelToRoutePage.findElementByXpath(xpath);
+        Assert.assertEquals("Order did not added to route.", expectedTrackingId, actualTrackingId.getText());
     }
 }
