@@ -34,10 +34,10 @@ Feature: driver strength
     When in driver strength searching driver
     When in driver strength driver coming status is changed
 
-#  Scenario: op view contact (uid:830216ec-bc25-4921-8950-40e6bd8818af)
-#    Given op click navigation Driver Strength in Fleet
-#    When in driver strength searching driver
-#    When in driver strength clicking on view contact button
+  Scenario: op view contact (uid:830216ec-bc25-4921-8950-40e6bd8818af)
+    Given op click navigation Driver Strength in Fleet
+    When in driver strength searching driver
+    When in driver strength clicking on view contact button
 
   # edit existing
   Scenario: op edit new driver (uid:204f21ef-8b0c-4b74-a6e0-c191199d3f5a)

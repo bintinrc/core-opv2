@@ -130,20 +130,9 @@ public class DriverStrengthPage extends SimplePage
         click("//tr[@md-virtual-repeat='driver in getTableData()']/td[contains(@class, 'actions column-locked-right')]/md-menu/button");
         pause1s();
 
-        String name = "Driver " + ScenarioHelper.getInstance().getTmpId();
-        boolean isFound = false;
-        List<WebElement> elm = findElementsByXpath("//md-menu-item[@class='contact-info-details' and @role='menuitem']/div/div[@class='ng-binding']");
-
-        for(WebElement e : elm)
-        {
-            if(e.getText().equalsIgnoreCase(name))
-            {
-                isFound = true;
-                break;
-            }
-        }
-
-        Assert.assertTrue(isFound);
+        String expectedLicensoNo = "D" + ScenarioHelper.getInstance().getTmpId();
+        WebElement licenseNoWe = findElementByXpath("//div[@aria-hidden='false']/md-menu-content/md-menu-item[@class='contact-info-details' and @role='menuitem']/div[2]/div[2]");
+        Assert.assertEquals("License No. is not equal.", expectedLicensoNo, licenseNoWe.getText());
         closeModal();
     }
 
