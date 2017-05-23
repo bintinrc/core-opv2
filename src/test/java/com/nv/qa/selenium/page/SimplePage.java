@@ -20,6 +20,12 @@ public class SimplePage
         this.driver = driver;
     }
 
+    public void altClick(String xpath)
+    {
+        findElementByXpath(xpath).sendKeys(Keys.ENTER);
+        pause50ms();
+    }
+
     public void click(String xpathExpression)
     {
         WebElement we = findElementByXpath(xpathExpression);

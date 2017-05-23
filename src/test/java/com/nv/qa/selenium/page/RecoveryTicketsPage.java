@@ -1,8 +1,6 @@
 package com.nv.qa.selenium.page;
 
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.util.Map;
 
@@ -111,18 +109,22 @@ public class RecoveryTicketsPage extends SimplePage
 
     public void searchTableByTrackingId(String trackingId)
     {
-        searchTableCustom1(COLUMN_CLASS_FILTER_TRACKING_ID, trackingId);
+        altClick("//button[@aria-label='Clear All']");
+        pause50ms();
+        click("//button[@aria-label='Remove Filter']");
+        pause50ms();
+        sendKeys("//input[@placeholder='Select Filter']", "Query");
+        pause50ms();
+        click("//md-virtual-repeat-container[@aria-hidden='false']/div/div[2]/ul/li/md-autocomplete-parent-scope/span/span[contains(text(), 'Query')]");
+        pause50ms();
+        sendKeys("//input[@aria-label='Query']", trackingId);
+        pause50ms();
+        altClick("//button[@aria-label='Load Selection']");
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)
     {
         return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
-    }
-
-    public void searchTicket22(String keywords)
-    {
-        sendKeysAndEnter("//input[@placeholder='Search Ticket Types...']", keywords);
-        pause1s();
     }
 
     public void createTicket(String trackingId, Map<String,String> mapOfParam)

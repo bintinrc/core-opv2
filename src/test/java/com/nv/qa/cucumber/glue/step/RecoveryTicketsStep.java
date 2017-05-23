@@ -41,6 +41,7 @@ public class RecoveryTicketsStep extends AbstractSteps
         scenarioStorage.put("trackingId", trackingId);
         scenarioStorage.put("mapOfTicketData", mapOfTicketParam);
         recoveryTicketsPage.createTicket(trackingId, mapOfTicketParam);
+        pause3s();
     }
 
     @Then("^verify ticket is created successfully$")

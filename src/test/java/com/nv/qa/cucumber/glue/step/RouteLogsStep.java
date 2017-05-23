@@ -155,7 +155,7 @@ public class RouteLogsStep extends AbstractSteps
             }
 
             takesScreenshot();
-            writeToScenarioLog(String.format("%s Trying to click 'Edit Filter Button' x%d.", level, counter++));
+            writeToScenarioLog(String.format("%s Trying to click 'Edit Filter' button x%d.", level, counter++));
 
             routeLogsPage.clickEditFilter();
             loadSelectionButtonIsVisible = routeLogsPage.isLoadSelectionVisible();
