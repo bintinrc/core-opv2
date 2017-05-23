@@ -151,6 +151,11 @@ public class CommonScenario
         }
     }
 
+    public void writeToScenarioLog(String message)
+    {
+        getCurrentScenario().write(message);
+    }
+
     public Scenario getCurrentScenario()
     {
         return scenario;

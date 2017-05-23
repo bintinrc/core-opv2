@@ -29,6 +29,11 @@ public abstract class AbstractSteps
         commonScenario.getCurrentScenario().embed(screenshot, "image/png");
     }
 
+    public void writeToScenarioLog(String message)
+    {
+        commonScenario.writeToScenarioLog(message);
+    }
+
     public String replaceParam(String data, Map<String,String> mapOfDynamicVariable)
     {
         return CommonUtil.replaceParam(data, mapOfDynamicVariable);

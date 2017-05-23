@@ -23,6 +23,7 @@ import java.util.*;
 public class RouteLogsStep extends AbstractSteps
 {
     private static final int ALERT_WAIT_TIMEOUT_IN_SECONDS = 15;
+    private static final int MAX_RETRY = 10;
 
     @Inject private ScenarioStorage scenarioStorage;
     private RouteLogsPage routeLogsPage;
@@ -64,7 +65,7 @@ public class RouteLogsStep extends AbstractSteps
         pause1s();
     }
 
-    @Then("^op redirect to this page '([^\\\"]*)'$")
+    @Then("^op redirect to this page '([^\"]*)'$")
     public void verifyLoadWaypointsOfSelectedRoute(String redirectUrl)
     {
         String primaryWindowHandle = getDriver().getWindowHandle();
@@ -125,17 +126,42 @@ public class RouteLogsStep extends AbstractSteps
         pause100ms();
     }
 
-    @When("^op edit 'Assigned Driver' to driver '([^\\\"]*)' and edit 'Comments'$")
+    @When("^op edit 'Assigned Driver' to driver '([^\"]*)' and edit 'Comments'$")
     public void opEditAssignedDriverAndComments(String newDriverName)
     {
         routeLogsPage.editAssignedDriver(newDriverName);
         routeLogsPage.clickSaveButtonOnEditDetailsDialog();
     }
 
-    @Then("^route's driver must be changed to '([^\\\"]*)' in table list$")
+    @Then("^route's driver must be changed to '([^\"]*)' in table list$")
     public void verifyRouteDriverIsChanged(String newDriverName)
     {
-        routeLogsPage.clickEditFilter();
+        boolean loadSelectionButtonIsVisible;
+        int counter = 1;
+
+        /**
+         * Sometimes button "Edit Filter" is not clicked correctly
+         * and it makes "Load Selection" button does not appear.
+         * So we need to click that "Edit Filter" button over and over until
+         * "Load Selection" button is appear.
+         */
+        do
+        {
+            String level = "[INFO]";
+
+            if(counter>1)
+            {
+                level = "[WARNING]";
+            }
+
+            takesScreenshot();
+            writeToScenarioLog(String.format("%s Trying to click 'Edit Filter Button' x%d.", level, counter++));
+
+            routeLogsPage.clickEditFilter();
+            loadSelectionButtonIsVisible = routeLogsPage.isLoadSelectionVisible();
+        }
+        while(!loadSelectionButtonIsVisible && counter<=MAX_RETRY);
+
         routeLogsPage.clickLoadSelection();
         CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
         routeLogsPage.searchAndVerifyRouteExist(String.valueOf(createRouteResponse.getId()));
@@ -143,14 +169,14 @@ public class RouteLogsStep extends AbstractSteps
         Assert.assertEquals("Driver is not change.", newDriverName, actualDriverName);
     }
 
-    @When("^op add tag '([^\\\"]*)'$")
+    @When("^op add tag '([^\"]*)'$")
     public void opAddNewTagToRoute(String newTag)
     {
         CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
         routeLogsPage.selectTag(String.valueOf(createRouteResponse.getId()), newTag);
     }
 
-    @Then("route's tag must contain '([^\\\"]*)'")
+    @Then("route's tag must contain '([^\"]*)'")
     public void verifyNewTagAddedToRoute(String newTag)
     {
         CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");

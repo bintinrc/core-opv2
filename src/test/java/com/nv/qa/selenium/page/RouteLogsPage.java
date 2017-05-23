@@ -21,7 +21,6 @@ public class RouteLogsPage extends SimplePage
 
     public static final String ACTION_BUTTON_EDIT_ROUTE = "container.route-logs.edit-route";
     public static final String ACTION_BUTTON_EDIT_DETAILS = "container.route-logs.edit-details";
-    public static final String ACTION_BUTTON_DELETE_ROUTE = "container.route-logs.delete-route";
 
     public static final String SELECT_TAG_XPATH = "//md-select[contains(@aria-label, 'Select Tag:')]";
 
@@ -42,6 +41,11 @@ public class RouteLogsPage extends SimplePage
         pause100ms();
         click(String.format("//td[contains(@aria-label, '%s')]", DATE_PICKER_ID_SDF.format(toDate)));
         pause50ms();
+    }
+
+    public boolean isLoadSelectionVisible()
+    {
+        return isElementExist("//button[@aria-label='Load Selection']");
     }
 
     public void clickLoadSelection()
