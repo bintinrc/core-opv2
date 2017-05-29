@@ -36,26 +36,26 @@ public class SamedayRouteEngineStep extends AbstractSteps
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
         String hubName = mapOfData.get("hub");
         String routingAlgorithm = mapOfData.get("routingAlgorithm");
-        String fleetType1OperatingHoursFrom = mapOfData.get("fleetType1OperatingHoursFrom");
-        String fleetType1OperatingHoursTo = mapOfData.get("fleetType1OperatingHoursTo");
-        String fleetType1BreakingHoursFrom = mapOfData.get("fleetType1BreakingHoursFrom");
-        String fleetType1BreakingHoursTo = mapOfData.get("fleetType1BreakingHoursTo");
+        String fleetType1OperatingHoursStart = mapOfData.get("fleetType1OperatingHoursStart");
+        String fleetType1OperatingHoursEnd = mapOfData.get("fleetType1OperatingHoursEnd");
+        String fleetType1BreakingDurationStart = mapOfData.get("fleetType1BreakingDurationStart");
+        String fleetType1BreakingDurationEnd = mapOfData.get("fleetType1BreakingDurationEnd");
 
         String routeGroupName = scenarioStorage.get("routeGroupName");
 
         samedayRouteEnginePage.selectRouteGroup(routeGroupName);
         samedayRouteEnginePage.selectHub(hubName);
         samedayRouteEnginePage.selectRoutingAlgorithm(routingAlgorithm);
-        samedayRouteEnginePage.selectFleetType1OperatingHoursFrom(fleetType1OperatingHoursFrom);
-        samedayRouteEnginePage.selectFleetType1OperatingHoursTo(fleetType1OperatingHoursTo);
-        samedayRouteEnginePage.selectFleetType1BreakHoursFrom(fleetType1BreakingHoursFrom);
-        samedayRouteEnginePage.selectFleetType1BreakHoursTo(fleetType1BreakingHoursTo);
+        samedayRouteEnginePage.selectFleetType1OperatingHoursStart(fleetType1OperatingHoursStart);
+        samedayRouteEnginePage.selectFleetType1OperatingHoursEnd(fleetType1OperatingHoursEnd);
+        samedayRouteEnginePage.selectFleetType1BreakDurationStart(fleetType1BreakingDurationStart);
+        samedayRouteEnginePage.selectFleetType1BreakDurationEnd(fleetType1BreakingDurationEnd);
         takesScreenshot();
         samedayRouteEnginePage.clickRunRouteEngineButton();
         takesScreenshot();
         samedayRouteEnginePage.selectDriverOnRouteSettingsPage("OpV2No.1");
         takesScreenshot();
         samedayRouteEnginePage.clickCreate1RoutesButton();
-        pause5s();
+        takesScreenshot();
     }
 }

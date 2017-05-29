@@ -4,7 +4,10 @@ import com.google.inject.Inject;
 import com.nv.qa.model.order_creation.v2.Order;
 import com.nv.qa.selenium.page.TransactionsV2Page;
 import com.nv.qa.support.ScenarioStorage;
+import com.nv.qa.support.SeleniumHelper;
 import cucumber.api.java.en.When;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -44,10 +47,13 @@ public class TransactionsV2Step extends AbstractSteps
         transactionsPage.selectAllShown();
         transactionsPage.clickAddToRouteGroupButton();
         transactionsPage.selectRouteGroupOnAddToRouteGroupDialog(routeGroupName);
-        pause2s();
+        pause1s();
         takesScreenshot();
+        SeleniumHelper.BROWSER_MOB_PROXY.setLatency(5, TimeUnit.SECONDS);
+        SeleniumHelper.BROWSER_MOB_PROXY.setWriteBandwidthLimit(1024);
+        SeleniumHelper.BROWSER_MOB_PROXY.setReadBandwidthLimit(1024);
         transactionsPage.clickAddTransactionsOnAddToRouteGroupDialog();
         takesScreenshot();
-        pause5s();
+        pause1s();
     }
 }

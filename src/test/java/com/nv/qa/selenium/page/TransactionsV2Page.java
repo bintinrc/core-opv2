@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
  */
 public class TransactionsV2Page extends SimplePage
 {
+    private static final int SAVE_BUTTON_LOADING_TIMEOUT_IN_SECONDS = 30;
     private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
 
     public TransactionsV2Page(WebDriver driver)
@@ -103,5 +104,6 @@ public class TransactionsV2Page extends SimplePage
     public void clickAddTransactionsOnAddToRouteGroupDialog()
     {
         click("//button[@aria-label='Save Button']");
+        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular", SAVE_BUTTON_LOADING_TIMEOUT_IN_SECONDS);
     }
 }

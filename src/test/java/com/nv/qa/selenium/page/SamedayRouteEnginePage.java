@@ -8,6 +8,8 @@ import org.openqa.selenium.WebDriver;
  */
 public class SamedayRouteEnginePage extends SimplePage
 {
+    private static final int SAVE_BUTTON_LOADING_TIMEOUT_IN_SECONDS = 30;
+
     public SamedayRouteEnginePage(WebDriver driver)
     {
         super(driver);
@@ -22,14 +24,14 @@ public class SamedayRouteEnginePage extends SimplePage
 
     public void selectRoutingAlgorithm(String routingAlgorithm)
     {
-        click("//md-select[@aria-label='Select Routing Algorithm']");
+        click("//md-select[@aria-label='Routing Algorithm']");
         pause100ms();
         click(String.format("//md-option/div[contains(text(), '%s')]", routingAlgorithm));
     }
 
     public void selectHub(String hubName)
     {
-        click("//md-select[@aria-label='Select Hub']");
+        click("//md-select[@aria-label='Hub']");
         pause100ms();
         click(String.format("//md-option/div[contains(text(), '%s')]", hubName));
     }
@@ -37,35 +39,35 @@ public class SamedayRouteEnginePage extends SimplePage
     public void clickRunRouteEngineButton()
     {
         click("//button[@aria-label='Run Route Engine']");
-        pause100ms();
+        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Run Route Engine']//md-progress-circular", SAVE_BUTTON_LOADING_TIMEOUT_IN_SECONDS);
     }
 
-    public void selectFleetType1OperatingHoursFrom(String operatingHoursFrom)
+    public void selectFleetType1OperatingHoursStart(String operatingHoursStart)
     {
-        click("//md-select[contains(@aria-label,'Operating Hours')]");
+        click("//md-select[contains(@aria-label,'Operating Start')]");
         pause100ms();
-        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", operatingHoursFrom));
+        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", operatingHoursStart));
     }
 
-    public void selectFleetType1OperatingHoursTo(String operatingHoursTo)
+    public void selectFleetType1OperatingHoursEnd(String operatingHoursTo)
     {
-        click("(//md-select[contains(@aria-label,'To')])[1]");
+        click("//md-select[contains(@aria-label,'Operating End')]");
         pause100ms();
         click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", operatingHoursTo));
     }
 
-    public void selectFleetType1BreakHoursFrom(String breakingHoursFrom)
+    public void selectFleetType1BreakDurationStart(String breakDurationStart)
     {
-        click("//md-select[contains(@aria-label,'Break Hours')]");
+        click("//md-select[contains(@aria-label,'Break Start')]");
         pause100ms();
-        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", breakingHoursFrom));
+        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", breakDurationStart));
     }
 
-    public void selectFleetType1BreakHoursTo(String breakingHoursTo)
+    public void selectFleetType1BreakDurationEnd(String breakDurationEnd)
     {
-        click("(//md-select[contains(@aria-label,'To')])[2]");
+        click("//md-select[contains(@aria-label,'Break End')]");
         pause100ms();
-        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", breakingHoursTo));
+        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", breakDurationEnd));
     }
 
     public void selectDriverOnRouteSettingsPage(String driverName)
@@ -79,6 +81,6 @@ public class SamedayRouteEnginePage extends SimplePage
     public void clickCreate1RoutesButton()
     {
         click("//button[@aria-label='Create 1 Route(s)']");
-        pause200ms();
+        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Create 1 Route(s)']//md-progress-circular", SAVE_BUTTON_LOADING_TIMEOUT_IN_SECONDS);
     }
 }

@@ -18,12 +18,12 @@ Feature: Sameday Route Engine
     Given Operator V2 add created Transaction to Route Group
     Given op click navigation Same-day Route Engine in Routing
     When op 'Run Route Engine' on Same-Day Route Engine menu using data below:
-      | hub                          | 30JKB                    |
-      | routingAlgorithm             | Same Day Pickup/Delivery |
-      | fleetType1OperatingHoursFrom | 0900 hrs                 |
-      | fleetType1OperatingHoursTo   | 2300 hrs                 |
-      | fleetType1BreakingHoursFrom  | 1200 hrs                 |
-      | fleetType1BreakingHoursTo    | 1300 hrs                 |
+      | hub                             | 30JKB                    |
+      | routingAlgorithm                | Same Day Pickup/Delivery |
+      | fleetType1OperatingHoursStart   | 0900 hrs                 |
+      | fleetType1OperatingHoursEnd     | 2300 hrs                 |
+      | fleetType1BreakingDurationStart | 1200 hrs                 |
+      | fleetType1BreakingDurationEnd   | 1300 hrs                 |
     Given op click navigation Route Groups in Routing
     Then Operator V2 clean up 'Route Groups'
 

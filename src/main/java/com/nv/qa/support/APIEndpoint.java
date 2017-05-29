@@ -18,6 +18,7 @@ public final class APIEndpoint
     private static final String ENVIRONMENT_SYSTEM_PROPERTY = "environment";
 
     public static final int STEP_DELAY_MILLISECONDS;
+    public static final boolean ENABLE_PROXY;
     public static final String SELENIUM_DRIVER;
     public static final String SELENIUM_CHROME_DRIVER;
     public static final String SELENIUM_CHROME_BINARY_PATH;
@@ -71,6 +72,7 @@ public final class APIEndpoint
                  * Read new properties variable below.
                  */
                 STEP_DELAY_MILLISECONDS = Integer.valueOf(props.getProperty("step-delay-seconds")) * 1000;
+                ENABLE_PROXY = Boolean.parseBoolean(props.getProperty("enable-proxy"));
 
                 SELENIUM_DRIVER = props.getProperty("selenium-driver");
                 SELENIUM_CHROME_DRIVER = props.getProperty("selenium-chrome-driver-location");
