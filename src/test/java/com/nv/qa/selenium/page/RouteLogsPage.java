@@ -94,9 +94,9 @@ public class RouteLogsPage extends SimplePage
         searchAndVerifyRouteExist(routeId);
         clickActionButtonOnTable(1, RouteLogsPage.ACTION_BUTTON_EDIT_DETAILS);
         pause200ms();
-        click("//button[@aria-label='Delete']");
+        altClick("//button[@aria-label='Delete']");
         pause200ms();
-        click("//button[@aria-label='Delete']");
+        altClick("//button[@aria-label='Delete']");
         pause200ms();
     }
 
