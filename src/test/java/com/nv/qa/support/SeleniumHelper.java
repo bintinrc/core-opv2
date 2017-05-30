@@ -88,6 +88,8 @@ public class SeleniumHelper
 
         if(APIEndpoint.ENABLE_PROXY)
         {
+            System.out.println("[WARNING] Browser Mob Proxy is enabled. Please note enable this feature will make automation run slower.");
+
             if(BROWSER_MOB_PROXY==null)
             {
                 BROWSER_MOB_PROXY = new BrowserMobProxyServer();
