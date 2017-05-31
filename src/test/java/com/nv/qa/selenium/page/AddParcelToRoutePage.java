@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
  */
 public class AddParcelToRoutePage extends SimplePage
 {
+    private static final int SUBMIT_BUTTON_LOADING_TIMEOUT_IN_SECONDS = 30;
     public static final String NG_REPEAT = "row in $data";
     public static final String COLUMN_CLASS_TRACKING_ID = "tracking_id";
 
@@ -35,7 +36,7 @@ public class AddParcelToRoutePage extends SimplePage
     public void clickSubmit()
     {
         click("//button[@aria-label='Submit']");
-        pause200ms();
+        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Submit']//md-progress-circular", SUBMIT_BUTTON_LOADING_TIMEOUT_IN_SECONDS);
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)

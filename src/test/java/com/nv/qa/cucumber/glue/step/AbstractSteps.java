@@ -29,6 +29,11 @@ public abstract class AbstractSteps
         commonScenario.getCurrentScenario().embed(screenshot, "image/png");
     }
 
+    public void reloadPage()
+    {
+        commonScenario.getDriver().navigate().refresh();
+    }
+
     public void writeToScenarioLog(String message)
     {
         commonScenario.writeToScenarioLog(message);

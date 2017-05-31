@@ -250,7 +250,7 @@ public class SimplePage
             {
                 try
                 {
-                    boolean isElementDisplayed = driver.findElement(locator).isDisplayed();
+                    boolean isElementDisplayed = findElement(locator, getDriver()).isDisplayed();
                     System.out.println(String.format("[INFO] Wait Until Invisibility Of Element Located: Is element '%s' still displayed? %b", locator, isElementDisplayed));
                     return !isElementDisplayed;
                 }
@@ -277,12 +277,70 @@ public class SimplePage
         catch(Exception ex)
         {
             ex.printStackTrace(System.err);
+            throw ex;
         }
         finally
         {
             resetImplicitTimeout();
         }
+    }
 
+    public void waitUntilVisibilityOfElementLocated(String xpath, long timeoutInSeconds)
+    {
+        waitUntilVisibilityOfElementLocated(By.xpath(xpath), timeoutInSeconds);
+    }
+
+    public void waitUntilVisibilityOfElementLocated(By locator, long timeoutInSeconds)
+    {
+        try
+        {
+            setImplicitTimeout(0);
+
+            new WebDriverWait(driver, timeoutInSeconds).until((WebDriver driver) ->
+            {
+                try
+                {
+                    WebElement webElement = elementIfVisible(findElement(locator, driver));
+                    boolean isElementDisplayed = webElement!=null;
+                    System.out.println(String.format("[INFO] Wait Until Visibility Of Element Located: Is element '%s' displayed? %b", locator, isElementDisplayed));
+                    return webElement;
+                }
+                catch(StaleElementReferenceException ex)
+                {
+                    return null;
+                }
+            });
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace(System.err);
+            throw ex;
+        }
+        finally
+        {
+            resetImplicitTimeout();
+        }
+    }
+
+    private static WebElement findElement(By by, WebDriver driver)
+    {
+        try
+        {
+            return driver.findElement(by);
+        }
+        catch(NoSuchElementException ex)
+        {
+            throw ex;
+        }
+        catch(WebDriverException ex)
+        {
+            throw ex;
+        }
+    }
+
+    private static WebElement elementIfVisible(WebElement element)
+    {
+        return element.isDisplayed()? element : null;
     }
 
     public void pause50ms()

@@ -69,6 +69,8 @@ public class TagManagementStep extends AbstractSteps
     @Then("^new tag on Tag Management created successfully$")
     public void verifyNewTagCreatedSuccessfully()
     {
+        reloadPageAndEnableSortByName();
+
         String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
         Assert.assertEquals(DEFAULT_TAG_NAME, actualTagName);
     }
@@ -91,6 +93,8 @@ public class TagManagementStep extends AbstractSteps
     @Then("^tag on Tag Management updated successfully$")
     public void verifyTagUpdatedSuccessfully()
     {
+        reloadPageAndEnableSortByName();
+
         String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
         Assert.assertEquals(EDITED_TAG_NAME, actualTagName);
 
@@ -101,6 +105,8 @@ public class TagManagementStep extends AbstractSteps
     @When("^op delete tag on Tag Management$")
     public void deleteTag()
     {
+        reloadPageAndEnableSortByName();
+
         /**
          * Check first row is tag EDITED_TAG_NAME.
          */
@@ -121,5 +127,11 @@ public class TagManagementStep extends AbstractSteps
          */
         String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
         Assert.assertNotEquals(EDITED_TAG_NAME, actualTagName);
+    }
+
+    private void reloadPageAndEnableSortByName()
+    {
+        reloadPage();
+        tagManagementPage.clickTagNameColumnHeader(); // Enable sort name ascending.
     }
 }

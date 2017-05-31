@@ -38,7 +38,6 @@ public class AddParcelToRouteStep extends AbstractSteps
         addParcelToRoutePage.selectTag("FLT"); //Unselect tag FLT. Tag FLT is default tag on this page.
         addParcelToRoutePage.selectTag(tag);
         addParcelToRoutePage.clickSubmit();
-        pause3s();
     }
 
     @Then("verify parcel added to route")
