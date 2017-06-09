@@ -96,7 +96,7 @@ public class RouteLogsPage extends SimplePage
         pause200ms();
         altClick("//button[@aria-label='Delete']");
         pause200ms();
-        altClick("//button[@aria-label='Delete']");
+        click("//button[@aria-label='Delete']");
         pause200ms();
     }
 
