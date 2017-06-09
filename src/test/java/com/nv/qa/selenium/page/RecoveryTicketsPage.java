@@ -10,6 +10,8 @@ import java.util.Map;
  */
 public class RecoveryTicketsPage extends SimplePage
 {
+    private static final int SUBMIT_BUTTON_LOADING_TIMEOUT_IN_SECONDS = 30;
+    private static final int MAX_RETRY = 10;
     private static final String MD_VIRTUAL_REPEAT = "ticket in getTableData()";
 
     public static final String COLUMN_CLASS_FILTER_TRACKING_ID = "tracking-id";
@@ -78,17 +80,17 @@ public class RecoveryTicketsPage extends SimplePage
 
     public void setTicketNotes(String ticketNotes)
     {
-        sendKeys("//input[@aria-label='Ticket Notes']", ticketNotes);
+        sendKeys("//textarea[@aria-label='Ticket Notes']", ticketNotes);
     }
 
     public void setCustZendeskId(String custZendeskId)
     {
-        sendKeys("//input[@aria-label='Cust Zendesk Id']", custZendeskId);
+        sendKeys("//input[@aria-label='Customer Zendesk ID']", custZendeskId);
     }
 
     public void setShipperZendeskId(String shipperZendeskId)
     {
-        sendKeys("//input[@aria-label='Shipper Zendesk Id']", shipperZendeskId);
+        sendKeys("//input[@aria-label='Shipper Zendesk ID']", shipperZendeskId);
     }
 
     public void selectOrderOutcome(String orderOutcome)
@@ -104,6 +106,7 @@ public class RecoveryTicketsPage extends SimplePage
     public void clickCreateTicketOnCreateNewTicketDialog()
     {
         click("//button[@aria-label='Create Ticket']");
+        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Create Ticket']//md-progress-circular", SUBMIT_BUTTON_LOADING_TIMEOUT_IN_SECONDS);
         pause50ms();
     }
 
@@ -134,7 +137,7 @@ public class RecoveryTicketsPage extends SimplePage
         String ticketType = mapOfParam.get("ticketType");
 
         click("//button[@aria-label='Create New Ticket']");
-        sendKeys("//input[@aria-label='Tracking ID']", trackingId);
+        sendKeys("//input[@aria-label='Tracking ID']", trackingId+" "); // Add 1 <SPACE> character at the end of tracking ID to make the textbox get trigged and request tracking ID validation to backend.
         selectEntrySource(entrySource);
         selectInvestigatingParty(investigatingParty);
         selectTicketType(ticketType);
@@ -149,7 +152,6 @@ public class RecoveryTicketsPage extends SimplePage
             String custZendeskId = mapOfParam.get("custZendeskId");
             String shipperZendeskId = mapOfParam.get("shipperZendeskId");
             String orderOutcome = mapOfParam.get("orderOutcome");
-            String comments = mapOfParam.get("comments");
 
             selectTicketSubType(ticketSubType);
             selectParcelLocation(parcelLocation);
@@ -159,7 +161,6 @@ public class RecoveryTicketsPage extends SimplePage
             setCustZendeskId(custZendeskId);
             setShipperZendeskId(shipperZendeskId);
             selectOrderOutcome(orderOutcome);
-            setComments(comments);
         }
         else if(TICKET_TYPE_MISSING.equals(ticketType))
         {
@@ -167,13 +168,41 @@ public class RecoveryTicketsPage extends SimplePage
             String ticketNotes = mapOfParam.get("ticketNotes");
             String custZendeskId = mapOfParam.get("custZendeskId");
             String shipperZendeskId = mapOfParam.get("shipperZendeskId");
-            String comments = mapOfParam.get("comments");
 
             setParcelDescription(parcelDescription);
             setTicketNotes(ticketNotes);
             setCustZendeskId(custZendeskId);
             setShipperZendeskId(shipperZendeskId);
-            setComments(comments);
+        }
+
+        try
+        {
+            setImplicitTimeout(0);
+
+            /**
+             * Sometimes tracking ID textbox does not call the backend to verify the Tracking ID.
+             * To fix it, we need key in the tracking ID over and over until the textbox call the backend
+             * and enable the "Create Ticket" button.
+             */
+
+            int counter = 0;
+
+            while(isElementExist("//button[@aria-label='Create Ticket'][@disabled='disabled']") && counter<=MAX_RETRY)
+            {
+                System.out.println("[INFO] Button \"Create Ticket\" still disabled. Trying to key in Tracking ID again.");
+                sendKeys("//input[@aria-label='Tracking ID']", trackingId);
+                pause1s();
+                counter++;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            resetImplicitTimeout();
         }
 
         clickCreateTicketOnCreateNewTicketDialog();

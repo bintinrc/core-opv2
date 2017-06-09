@@ -1,6 +1,7 @@
 package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Inject;
+import com.nv.qa.model.order_creation.v2.Order;
 import com.nv.qa.selenium.page.RecoveryTicketsPage;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.DataTable;
@@ -37,11 +38,11 @@ public class RecoveryTicketsStep extends AbstractSteps
     public void createNewTicket(DataTable dataTable)
     {
         Map<String,String> mapOfTicketParam = dataTable.asMap(String.class, String.class);
-        String trackingId = String.format("RECOV%d", System.currentTimeMillis());
+        Order order = scenarioStorage.get("order");
+        String trackingId = order.getTracking_id();
         scenarioStorage.put("trackingId", trackingId);
         scenarioStorage.put("mapOfTicketData", mapOfTicketParam);
         recoveryTicketsPage.createTicket(trackingId, mapOfTicketParam);
-        pause3s();
     }
 
     @Then("^verify ticket is created successfully$")
