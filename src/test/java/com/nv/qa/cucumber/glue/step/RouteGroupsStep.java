@@ -23,6 +23,8 @@ import java.util.Map;
 @ScenarioScoped
 public class RouteGroupsStep extends AbstractSteps
 {
+    private static final int MAX_RETRY = 10;
+
     @Inject private ScenarioStorage scenarioStorage;
     private RouteGroupsPage routeGroupsPage;
 
@@ -83,10 +85,34 @@ public class RouteGroupsStep extends AbstractSteps
     public void verifyNewRouteGroupCreatedSuccessfully()
     {
         String routeGroupName = scenarioStorage.get("routeGroupName");
-        routeGroupsPage.searchTable(routeGroupName);
+        int counter = 0;
+        String actualName;
+        boolean retry;
 
-        String actualName = routeGroupsPage.getTextOnTable(1, RouteGroupsPage.COLUMN_CLASS_NAME);
-        Assert.assertTrue("Route Group name not matched.", actualName.startsWith(routeGroupName)); //Route Group name is concatenated with description.
+        do
+        {
+            takesScreenshot();
+            routeGroupsPage.searchTable(routeGroupName);
+            actualName = routeGroupsPage.getTextOnTable(1, RouteGroupsPage.COLUMN_CLASS_NAME);
+
+            retry = actualName!=null && counter++<=MAX_RETRY;
+
+            if(retry)
+            {
+                takesScreenshot();
+                reloadPage();
+            }
+        }
+        while(actualName!=null && counter<=MAX_RETRY);
+
+        if(actualName!=null)
+        {
+            Assert.assertTrue("Route Group name not matched.", actualName.startsWith(routeGroupName)); //Route Group name is concatenated with description.
+        }
+        else
+        {
+            Assert.fail("Route Group name not found.");
+        }
     }
 
     @When("^op update 'route group' on 'Route Groups'$")
