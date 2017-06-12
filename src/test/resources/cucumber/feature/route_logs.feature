@@ -1,4 +1,4 @@
-@RouteLogs @selenium
+@RouteLogs @selenium @Temp
 Feature: Route Logs
 
   @LaunchBrowser

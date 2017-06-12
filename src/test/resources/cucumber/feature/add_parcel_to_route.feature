@@ -1,4 +1,4 @@
-@AddParcelToRoute @selenium
+@AddParcelToRoute @selenium @Temp
 Feature: Add Parcel To Route
 
   @LaunchBrowser

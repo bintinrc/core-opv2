@@ -13,6 +13,7 @@ import java.util.Date;
  */
 public class RouteLogsPage extends SimplePage
 {
+    private static final int MAX_TIMEOUT = 10;
     private static final String MD_VIRTUAL_REPEAT = "route in getTableData()";
 
     public static final String COLUMN_CLASS_FILTER_ROUTE_ID = "id";
@@ -94,8 +95,9 @@ public class RouteLogsPage extends SimplePage
         searchAndVerifyRouteExist(routeId);
         clickActionButtonOnTable(1, RouteLogsPage.ACTION_BUTTON_EDIT_DETAILS);
         pause200ms();
-        altClick("//button[@aria-label='Delete']");
+        click("//button[@aria-label='Delete']");
         pause200ms();
+        waitUntilVisibilityOfElementLocated("//button[@aria-label='Delete']", MAX_TIMEOUT);
         click("//button[@aria-label='Delete']");
         pause200ms();
     }

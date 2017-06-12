@@ -34,10 +34,15 @@ public class AddParcelToRouteStep extends AbstractSteps
     public void submitOnAddParcelToRoute(String tag)
     {
         String routeGroupName = scenarioStorage.get("routeGroupName");
+        takesScreenshot();
         addParcelToRoutePage.selectRouteGroup(routeGroupName);
+        takesScreenshot();
         addParcelToRoutePage.selectTag("FLT"); //Unselect tag FLT. Tag FLT is default tag on this page.
+        takesScreenshot();
         addParcelToRoutePage.selectTag(tag);
+        takesScreenshot();
         addParcelToRoutePage.clickSubmit();
+        takesScreenshot();
     }
 
     @Then("verify parcel added to route")
@@ -46,6 +51,7 @@ public class AddParcelToRouteStep extends AbstractSteps
         Order order = scenarioStorage.get("order");
         String expectedTrackingId = order.getTracking_id();
         String xpath = String.format("//td[@class='tracking_id ng-binding' and contains(text(), '%s')]", expectedTrackingId);
+        takesScreenshot();
         WebElement actualTrackingId = addParcelToRoutePage.findElementByXpath(xpath);
         Assert.assertEquals("Order did not added to route.", expectedTrackingId, actualTrackingId.getText());
     }
