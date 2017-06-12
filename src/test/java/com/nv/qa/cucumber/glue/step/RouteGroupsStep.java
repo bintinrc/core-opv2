@@ -104,7 +104,7 @@ public class RouteGroupsStep extends AbstractSteps
                 reloadPage();
             }
         }
-        while(actualName==null && counter<=MAX_RETRY);
+        while(retry);
 
         if(actualName!=null)
         {
