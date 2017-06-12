@@ -95,9 +95,8 @@ public class RouteLogsPage extends SimplePage
         searchAndVerifyRouteExist(routeId);
         clickActionButtonOnTable(1, RouteLogsPage.ACTION_BUTTON_EDIT_DETAILS);
         pause200ms();
-        click("//button[@aria-label='Delete']");
+        click("//button[@ng-class='ngClazz'][@aria-label='Delete']");
         pause200ms();
-        waitUntilVisibilityOfElementLocated("//button[@aria-label='Delete']", MAX_TIMEOUT);
         click("//button[@aria-label='Delete']");
         pause200ms();
     }
