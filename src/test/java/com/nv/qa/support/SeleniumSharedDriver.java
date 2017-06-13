@@ -10,6 +10,11 @@ public class SeleniumSharedDriver {
 
     private static SeleniumSharedDriver singleton = new SeleniumSharedDriver();
 
+    static
+    {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> SeleniumSharedDriver.getInstance().closeDriver()));
+    }
+
     private SeleniumSharedDriver() {
     }
 

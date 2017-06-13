@@ -43,14 +43,16 @@ test {
     }
 }
 
-task showInfo << {
-    println "==============================================================================="
-    println 'gradle.gradleHomeDir           : ' + gradle.gradleHomeDir
-    println 'project.sourceCompatibility    : ' + project.sourceCompatibility
-    println 'project.targetCompatibility    : ' + project.targetCompatibility
-    println 'sourceCompatibility            : ' + sourceCompatibility
-    println 'targetCompatibility            : ' + targetCompatibility
-    println "==============================================================================="
+task showInfo {
+    doLast {
+        println "==============================================================================="
+        println 'gradle.gradleHomeDir           : ' + gradle.gradleHomeDir
+        println 'project.sourceCompatibility    : ' + project.sourceCompatibility
+        println 'project.targetCompatibility    : ' + project.targetCompatibility
+        println 'sourceCompatibility            : ' + sourceCompatibility
+        println 'targetCompatibility            : ' + targetCompatibility
+        println "==============================================================================="
+    }
 }
 
 tasks.withType(JavaCompile) {
@@ -60,6 +62,8 @@ tasks.withType(JavaCompile) {
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.apache.commons.lang3.RandomStringUtils
 import java.text.SimpleDateFormat
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 /**
  * Definitions for hold static value.
@@ -161,5 +165,47 @@ task runCucumber(dependsOn: ['tokenReplacer', 'assemble', 'compileTestJava'], ty
 
     if (project.hasProperty('environment')) {
         systemProperties = ['environment': environment]
+    }
+}
+
+task runCucumberParallel(dependsOn: ['tokenReplacer', 'assemble', 'compileTestJava']) {
+    doLast {
+        def executorService = Executors.newFixedThreadPool(4)
+
+        fileTree(dir: buildFolder, include:'**/*.feature').each{ file ->
+            executorService.execute(new Runnable() {
+                @Override
+                void run() {
+                    javaexec {
+                        main = "cucumber.api.cli.Main"
+                        classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+                        args = [
+                                '--plugin', 'pretty',
+                                '--plugin', "html:build/reports/cucumber-junit/htmloutput-${file.name}",
+                                '--plugin', "json:build/reports/cucumber-junit/cucumber-${file.name}.json",
+                                '--plugin', "junit:build/reports/cucumber-junit/cucumber-${file.name}.xml",
+                                '--monochrome',
+                                '--glue', 'com.nv.qa.cucumber.glue',
+                                file
+                        ]
+
+                        if(project.hasProperty('tags')) {
+                            args '--tags', tags
+                        }
+
+                        if (project.hasProperty('environment')) {
+                            systemProperties = ['environment': environment]
+                        }
+
+                    }
+                }
+            })
+        }
+
+        println "Shutting down ExecutorService ..."
+        executorService.shutdown()
+        println "Await termination ..."
+        executorService.awaitTermination(1, TimeUnit.HOURS)
+        println "ExecutionService is done."
     }
 }
