@@ -168,6 +168,9 @@ task runCucumber(dependsOn: ['tokenReplacer', 'assemble', 'compileTestJava'], ty
     }
 }
 
+/**
+ * Execute Cucumber task in parallel.
+ */
 task runCucumberParallel(dependsOn: ['tokenReplacer', 'assemble', 'compileTestJava']) {
     doLast {
         def executorService = Executors.newFixedThreadPool(4)
@@ -181,8 +184,7 @@ task runCucumberParallel(dependsOn: ['tokenReplacer', 'assemble', 'compileTestJa
                         classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
                         args = [
                                 '--plugin', 'pretty',
-                                '--plugin', "html:build/reports/cucumber-junit/htmloutput-${file.name}",
-                                '--plugin', "json:build/reports/cucumber-junit/cucumber-${file.name}.json",
+                                '--plugin', "html:build/reports/cucumber-junit/htmloutput/${file.name}",
                                 '--plugin', "junit:build/reports/cucumber-junit/cucumber-${file.name}.xml",
                                 '--monochrome',
                                 '--glue', 'com.nv.qa.cucumber.glue',
