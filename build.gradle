@@ -1,57 +1,33 @@
-group 'com.nv.qa'
-version '1.0.1'
-apply plugin: 'java'
+group "com.nv.qa"
+version "1.1.0"
+apply plugin: "java"
 
 sourceCompatibility = 1.8
-
-buildscript {
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-        jcenter()
-    }
-    dependencies {
-        classpath "org.apache.commons:commons-lang3:3.4"
-    }
-}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testCompile 'info.cukes:cucumber-java:1.2.5'
-    testCompile 'info.cukes:cucumber-junit:1.2.5'
-    testCompile 'info.cukes:cucumber-guice:1.2.5'
-    testCompile 'com.google.inject:guice:4.1.0'
-    testCompile 'org.seleniumhq.selenium:selenium-java:3.0.1'
-    testCompile 'org.seleniumhq.selenium:selenium-firefox-driver:3.0.1'
-    testCompile 'net.lightbody.bmp:browsermob-core:2.1.4'
+    testCompile "info.cukes:cucumber-java:1.2.5"
+    testCompile "info.cukes:cucumber-junit:1.2.5"
+    testCompile "info.cukes:cucumber-guice:1.2.5"
+    testCompile "com.google.inject:guice:4.1.0"
+    testCompile "org.seleniumhq.selenium:selenium-java:3.4.0"
+    testCompile "org.seleniumhq.selenium:selenium-firefox-driver:3.4.0"
+    testCompile "net.lightbody.bmp:browsermob-core:2.1.4"
 
-    compile 'io.fastjson:boon:0.33'
-    compile 'org.apache.commons:commons-lang3:3.4'
-    compile 'commons-beanutils:commons-beanutils:1.9.2'
-    compile 'ch.qos.logback:logback-classic:1.2.3'
-    compile project(':commons')
+    compile "io.fastjson:boon:0.33"
+    compile "org.apache.commons:commons-lang3:3.5"
+    compile "commons-beanutils:commons-beanutils:1.9.3"
+    compile "ch.qos.logback:logback-classic:1.2.3"
+    compile project(":commons")
 }
 
 test {
     testLogging {
         showStandardStreams = true
-        events 'started', 'passed'
-    }
-}
-
-task showInfo {
-    doLast {
-        println "==============================================================================="
-        println 'gradle.gradleHomeDir           : ' + gradle.gradleHomeDir
-        println 'project.sourceCompatibility    : ' + project.sourceCompatibility
-        println 'project.targetCompatibility    : ' + project.targetCompatibility
-        println 'sourceCompatibility            : ' + sourceCompatibility
-        println 'targetCompatibility            : ' + targetCompatibility
-        println "==============================================================================="
+        events "started", "passed"
     }
 }
 
@@ -59,86 +35,43 @@ tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:unchecked"
 }
 
+task showInfo {
+    doLast {
+        println "==============================================================================="
+        println "gradle.gradleHomeDir           : $gradle.gradleHomeDir"
+        println "project.sourceCompatibility    : $project.sourceCompatibility"
+        println "project.targetCompatibility    : $project.targetCompatibility"
+        println "sourceCompatibility            : $sourceCompatibility"
+        println "targetCompatibility            : $targetCompatibility"
+        println "==============================================================================="
+    }
+}
+
 import org.apache.tools.ant.filters.ReplaceTokens
-import org.apache.commons.lang3.RandomStringUtils
-import java.text.SimpleDateFormat
+
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
-/**
- * Definitions for hold static value.
- */
-def buildFolder = 'build/cucumber/feature'
-def mainFolder = 'src/test/resources/cucumber/feature'
-def mainResources = 'src/main/resources'
-def propertiesExtension = '-config.properties'
-def propertiesFileName
-def tokenMap
-def environment = 'local'
+def testOutputResourcesDir = sourceSets.test.output.resourcesDir as String
+def cucumberFeatureDir = "$testOutputResourcesDir/cucumber"
+def cucumberGluePackage = "com.nv.qa.cucumber.glue"
 
-configurations {
-    cucumberRuntime {
-        extendsFrom testRuntime
-    }
-}
+processTestResources {
+    def environment = "local"
 
-/**
- * Tasks for manipulating folder. The cucumber files will be copied to buildFolder.
- */
-task folderPrep() {
-    doFirst {
-        delete fileTree(buildFolder)
+    if(project.hasProperty("environment"))
+    {
+        environment = project.getProperty("environment")
     }
-    doLast {
-        mkdir(buildFolder)
-    }
-}
 
-/**
- * Prepare all token key value map.
- */
-task tokenPrep() {
-    /**
-     * Check the environment properties.
-     */
-    if (project.hasProperty('environment')) {
-        environment = project.getProperty('environment')
-    }
-    propertiesFileName = mainResources + '/' + environment + propertiesExtension
-    println "Properties files for token used is $propertiesFileName"
+    def propertiesFileName = "${sourceSets.test.resources.srcDirs[0]}/$environment-config.properties"
+    println "[GRADLE_INFO] Resource is filtered and replaced using this properties file: $propertiesFileName"
 
-    /**
-     * Load properties files tokens.
-     */
     Properties properties = new Properties()
-    File propertiesFile = new File(propertiesFileName)
-    properties.load(new FileInputStream(propertiesFile))
-    tokenMap = properties.toSorted()
+    properties.load(new FileInputStream(new File(propertiesFileName)))
+    def tokens = properties.toSorted()
 
-    /**
-     * Configure special token.
-     */
-    def simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
-    tokenMap.put("DATE_TODAY", simpleDateFormat.format(Calendar.getInstance().getTime()))
-
-    def simpleDateFormatWithHour = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
-    tokenMap.put("DATETIME_TODAY", simpleDateFormatWithHour.format(Calendar.getInstance().getTime()))
-
-    def simpleDateFormatZulu = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-    tokenMap.put("DATETIMEZULU_TODAY", simpleDateFormatZulu.format(Calendar.getInstance().getTime()))
-
-    tokenMap.put("RANDOM_32", RandomStringUtils.randomAlphanumeric(32).toUpperCase())
-    tokenMap.put("RANDOM_34", RandomStringUtils.randomAlphanumeric(34).toUpperCase())
-}
-
-/**
- * Copy all files & folder under mainFolder to buildFolder and replace corresponding token based on tokenMap.
- */
-task tokenReplacer(type: Copy) {
-    dependsOn folderPrep, tokenPrep
-    from mainFolder
-    into buildFolder
-    filter(ReplaceTokens, tokens: tokenMap, beginToken: '{', endToken: '}')
+    filter(ReplaceTokens, tokens: tokens, beginToken: "{", endToken: "}")
 }
 
 /**
@@ -146,68 +79,95 @@ task tokenReplacer(type: Copy) {
  *
  * Note: Using JavaExec like this makes you can debug the code.
  */
-task runCucumber(dependsOn: ['tokenReplacer', 'assemble', 'compileTestJava'], type: JavaExec) {
+task runCucumber(dependsOn: ["testClasses"], type: JavaExec) {
     main = "cucumber.api.cli.Main"
-    classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+    classpath = sourceSets.test.runtimeClasspath
     args = [
-            '--plugin', 'pretty',
-            '--plugin', 'html:build/reports/cucumber-junit/htmloutput',
-            '--plugin', 'json:build/reports/cucumber-junit/cucumber.json',
-            '--plugin', 'junit:build/reports/cucumber-junit/cucumber.xml',
-            '--monochrome',
-            '--glue', 'com.nv.qa.cucumber.glue',
-            buildFolder
+            "--plugin", "pretty",
+            "--plugin", "html:build/reports/cucumber-junit/htmloutput",
+            "--plugin", "json:build/reports/cucumber-junit/cucumber.json",
+            "--plugin", "junit:build/reports/cucumber-junit/cucumber.xml",
+            "--monochrome",
+            "--glue", cucumberGluePackage,
+            cucumberFeatureDir
     ]
 
-    if(project.hasProperty('tags')) {
-        args '--tags', tags
+    if(project.hasProperty("tags"))
+    {
+        args "--tags", project.getProperty("tags")
     }
 
-    if (project.hasProperty('environment')) {
-        systemProperties = ['environment': environment]
+    if(project.hasProperty("environment"))
+    {
+        systemProperties["environment"] = project.getProperty("environment")
     }
+
+    /**
+     * Add all value from gradle arguments start with -D to System properties.
+     */
+    systemProperties System.properties
 }
 
 /**
  * Execute Cucumber task in parallel.
  */
-task runCucumberParallel(dependsOn: ['tokenReplacer', 'assemble', 'compileTestJava']) {
+task runCucumberParallel(dependsOn: ["testClasses"]) {
     doLast {
-        def executorService = Executors.newFixedThreadPool(4)
+        def forkCount = 4
 
-        fileTree(dir: buildFolder, include:'**/*.feature').each{ file ->
+        if(project.hasProperty("forkCount"))
+        {
+            forkCount = project.getProperty("forkCount") as Integer
+        }
+
+        println "[GRADLE_INFO] Number of fork: $forkCount"
+        def executorService = Executors.newFixedThreadPool(forkCount)
+        println "[GRADLE_INFO] Cucumber Feature Directory: $cucumberFeatureDir"
+
+        fileTree(dir: cucumberFeatureDir, include: "**/*.feature").each{ featureFile ->
+            println "[GRADLE_INFO] Running feature file: $featureFile"
+
             executorService.execute(new Runnable() {
                 @Override
                 void run() {
                     javaexec {
                         main = "cucumber.api.cli.Main"
-                        classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+                        classpath = sourceSets.test.runtimeClasspath
                         args = [
-                                '--plugin', 'pretty',
-                                '--plugin', "html:build/reports/cucumber-junit/htmloutput/${file.name}",
-                                '--plugin', "junit:build/reports/cucumber-junit/cucumber-${file.name}.xml",
-                                '--monochrome',
-                                '--glue', 'com.nv.qa.cucumber.glue',
-                                file
+                                "--plugin", "pretty",
+                                "--plugin", "html:build/reports/cucumber-junit/htmloutput/${featureFile.name}",
+                                "--plugin", "junit:build/reports/cucumber-junit/cucumber-${featureFile.name}.xml",
+                                "--monochrome",
+                                "--glue", cucumberGluePackage,
+                                featureFile
                         ]
 
-                        if(project.hasProperty('tags')) {
-                            args '--tags', tags
+                        if(project.hasProperty("tags"))
+                        {
+                            def tags = project.getProperty("tags")
+                            args "--tags", tags
                         }
 
-                        if (project.hasProperty('environment')) {
-                            systemProperties = ['environment': environment]
+                        if(project.hasProperty("environment"))
+                        {
+                            def environment = project.getProperty("environment")
+                            systemProperties["environment"] = environment
                         }
+
+                        /**
+                         * Add all value from gradle arguments start with -D to System properties.
+                         */
+                        systemProperties System.properties
 
                     }
                 }
             })
         }
 
-        println "Shutting down ExecutorService ..."
+        println "[GRADLE_INFO] Shutting down ExecutorService ..."
         executorService.shutdown()
-        println "Await termination ..."
+        println "[GRADLE_INFO] Await termination ..."
         executorService.awaitTermination(1, TimeUnit.HOURS)
-        println "ExecutionService is done."
+        println "[GRADLE_INFO] ExecutionService is done."
     }
 }
