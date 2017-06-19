@@ -6,34 +6,42 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Ferdinand Kurniadi
  */
-public class SeleniumSharedDriver {
-
-    private static SeleniumSharedDriver singleton = new SeleniumSharedDriver();
+public class SeleniumSharedDriver
+{
+    private static SeleniumSharedDriver INSTANCE = new SeleniumSharedDriver();
+    private WebDriver driver = null;
 
     static
     {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> SeleniumSharedDriver.getInstance().closeDriver()));
     }
 
-    private SeleniumSharedDriver() {
+    private SeleniumSharedDriver()
+    {
     }
 
-    public static SeleniumSharedDriver getInstance() {
-        return singleton;
+    public static SeleniumSharedDriver getInstance()
+    {
+        return INSTANCE;
     }
 
-    private WebDriver driver = null;
-
-    public WebDriver getDriver() {
-        if (driver == null) {
+    public WebDriver getDriver()
+    {
+        if(driver==null)
+        {
             driver = SeleniumHelper.getWebDriver();
         }
+
         return driver;
     }
 
-    public void closeDriver() {
-        if (driver != null) {
+    public void closeDriver()
+    {
+        if(driver!=null)
+        {
+            driver.close();
             driver.quit();
+            System.out.println("WebDriver quiting!");
             driver = null;
         }
     }

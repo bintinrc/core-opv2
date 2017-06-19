@@ -28,7 +28,7 @@ import java.util.logging.Level;
 public class SeleniumHelper
 {
     public static BrowserMobProxy BROWSER_MOB_PROXY = null;
-    static final int SLEEP_POLL_MILIS = 1000;
+    private static final int SLEEP_POLL_MILLIS = 1000;
 
     private SeleniumHelper()
     {
@@ -88,12 +88,18 @@ public class SeleniumHelper
 
         if(APIEndpoint.ENABLE_PROXY)
         {
-            System.out.println("[WARNING] Browser Mob Proxy is enabled. Please note enable this feature will make automation run slower.");
+            System.out.println("[WARN] Browser Mob Proxy is enabled. Please note enable this feature will make automation run slower. Use this proxy only for investigate an issue.");
 
             if(BROWSER_MOB_PROXY==null)
             {
+                System.out.println("[INFO] Starting Browser Mob Proxy Server ...");
                 BROWSER_MOB_PROXY = new BrowserMobProxyServer();
                 BROWSER_MOB_PROXY.start(0);
+                System.out.println(String.format("[INFO] Browser Mob Proxy Server is started at port \"%d\".", BROWSER_MOB_PROXY.getPort()));
+                BROWSER_MOB_PROXY.setReadBandwidthLimit(APIEndpoint.PROXY_READ_BANDWIDTH_LIMIT_IN_BPS);
+                System.out.println(String.format("[INFO] Set Mob Proxy Server read bandwidth limit to \"%,d\" bytes per seconds.", APIEndpoint.PROXY_READ_BANDWIDTH_LIMIT_IN_BPS));
+                BROWSER_MOB_PROXY.setWriteBandwidthLimit(APIEndpoint.PROXY_WRITE_BANDWIDTH_LIMIT_IN_BPS);
+                System.out.println(String.format("[INFO] Set Mob Proxy Server write bandwidth limit to \"%,d\" bytes per seconds.", APIEndpoint.PROXY_WRITE_BANDWIDTH_LIMIT_IN_BPS));
             }
 
             Proxy seleniumProxy = ClientUtil.createSeleniumProxy(BROWSER_MOB_PROXY);
@@ -180,12 +186,12 @@ public class SeleniumHelper
 
     public static void waitPageLoad(WebDriver driver)
     {
-        new WebDriverWait(driver, APIEndpoint.SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS, SLEEP_POLL_MILIS).until((WebDriver webDriver) -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete"));
+        new WebDriverWait(driver, APIEndpoint.SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS, SLEEP_POLL_MILLIS).until((WebDriver webDriver) -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete"));
     }
 
     public static void waitAngularLoad(WebDriver driver)
     {
-        new WebDriverWait(driver, APIEndpoint.SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS, SLEEP_POLL_MILIS).until((WebDriver webDriver) -> Boolean.valueOf(((JavascriptExecutor) driver).executeScript("return (window.angular !== undefined) && (angular.element(document).injector() !== undefined) && (angular.element(document).injector().get('$http').pendingRequests.length === 0)").toString()));
+        new WebDriverWait(driver, APIEndpoint.SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS, SLEEP_POLL_MILLIS).until((WebDriver webDriver) -> Boolean.valueOf(((JavascriptExecutor) driver).executeScript("return (window.angular !== undefined) && (angular.element(document).injector() !== undefined) && (angular.element(document).injector().get('$http').pendingRequests.length === 0)").toString()));
     }
 
     /**
@@ -198,17 +204,17 @@ public class SeleniumHelper
     @Deprecated
     public static void waitUntilElementVisible(WebDriver driver, final WebElement element)
     {
-        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, SLEEP_POLL_MILIS).until(ExpectedConditions.visibilityOf(element));
+        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, SLEEP_POLL_MILLIS).until(ExpectedConditions.visibilityOf(element));
     }
 
     public static void waitUntilElementVisible(WebDriver driver, final By by)
     {
-        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, SLEEP_POLL_MILIS).until(ExpectedConditions.visibilityOfElementLocated(by));
+        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, SLEEP_POLL_MILLIS).until(ExpectedConditions.visibilityOfElementLocated(by));
     }
 
     public static void waitUntilElementInvisible(WebDriver driver, final By by)
     {
-        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, SLEEP_POLL_MILIS).until(ExpectedConditions.invisibilityOfElementLocated(by));
+        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, SLEEP_POLL_MILLIS).until(ExpectedConditions.invisibilityOfElementLocated(by));
     }
 
     public static WebElement navBarElement(WebDriver driver, String navTitle)

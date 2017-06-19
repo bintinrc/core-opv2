@@ -18,7 +18,11 @@ public final class APIEndpoint
     private static final String ENVIRONMENT_SYSTEM_PROPERTY = "environment";
 
     public static final int STEP_DELAY_MILLISECONDS;
+
     public static final boolean ENABLE_PROXY;
+    public static final long PROXY_READ_BANDWIDTH_LIMIT_IN_BPS;
+    public static final long PROXY_WRITE_BANDWIDTH_LIMIT_IN_BPS;
+
     public static final String SELENIUM_DRIVER;
     public static final String SELENIUM_CHROME_DRIVER;
     public static final String SELENIUM_CHROME_BINARY_PATH;
@@ -71,40 +75,45 @@ public final class APIEndpoint
                 /**
                  * Read new properties variable below.
                  */
-                STEP_DELAY_MILLISECONDS = Integer.valueOf(props.getProperty("step-delay-seconds")) * 1000;
-                ENABLE_PROXY = Boolean.parseBoolean(props.getProperty("enable-proxy"));
+                STEP_DELAY_MILLISECONDS = getPropertyValueAsInteger(props, "step-delay-seconds") * 1000;
 
-                SELENIUM_DRIVER = props.getProperty("selenium-driver");
-                SELENIUM_CHROME_DRIVER = props.getProperty("selenium-chrome-driver-location");
-                SELENIUM_CHROME_BINARY_PATH = props.getProperty("selenium-chrome_binary-path");
+                ENABLE_PROXY = getPropertyValueAsBoolean(props, "enable-proxy");
+                PROXY_READ_BANDWIDTH_LIMIT_IN_BPS = getPropertyValueAsLong(props, "proxy-read-bandwidth-limit-in-bps");
+                PROXY_WRITE_BANDWIDTH_LIMIT_IN_BPS = getPropertyValueAsLong(props, "proxy-write-bandwidth-limit-in-bps");
+
+                SELENIUM_DRIVER = getPropertyValueAsString(props, "selenium-driver");
+                SELENIUM_CHROME_DRIVER = getPropertyValueAsString(props, "selenium-chrome-driver-location");
+                SELENIUM_CHROME_BINARY_PATH = getPropertyValueAsString(props, "selenium-chrome_binary-path");
                 SELENIUM_INTERACTION_WAIT_MILLISECONDS = getPropertyValueAsInteger(props, "selenium-interaction-wait-seconds") * 1000;
                 SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS = getPropertyValueAsInteger(props, "selenium-implicit-wait-timeout-seconds");
                 SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS = getPropertyValueAsInteger(props, "selenium-page-load-timeout-seconds");
                 SELENIUM_SCRIPT_TIMEOUT_SECONDS = getPropertyValueAsInteger(props, "selenium-script-timeout-seconds");
                 SELENIUM_WINDOW_WIDTH = getPropertyValueAsInteger(props, "selenium-window-width");
                 SELENIUM_WINDOW_HEIGHT = getPropertyValueAsInteger(props, "selenium-window-height");
-                SELENIUM_WRITE_PATH = props.getProperty("selenium-write-path");
+                SELENIUM_WRITE_PATH = getPropertyValueAsString(props, "selenium-write-path");
+
                 {
+                    // Ensure directory exist.
                     new File(SELENIUM_WRITE_PATH).mkdirs();
                 }
 
-                OPERATOR_PORTAL_URL = props.getProperty("operator-portal-url");
-                OPERATOR_PORTAL_UID = props.getProperty("operator-portal-uid");
-                OPERATOR_PORTAL_PWD = props.getProperty("operator-portal-pwd");
+                OPERATOR_PORTAL_URL = getPropertyValueAsString(props, "operator-portal-url");
+                OPERATOR_PORTAL_UID = getPropertyValueAsString(props, "operator-portal-uid");
+                OPERATOR_PORTAL_PWD = getPropertyValueAsString(props, "operator-portal-pwd");
 
-                API_BASE_URL = props.getProperty("api-server-base-url");
-                ORDER_CREATE_BASE_URL = props.getProperty("order-create-server-base-url");
-                SHIPPER_ID = Integer.valueOf(props.getProperty("shipper-v3-id"));
-                SHIPPER_CLIENT_ID = props.getProperty("shipper-client-id");
-                SHIPPER_CLIENT_SECRET = props.getProperty("shipper-client-secret");
+                API_BASE_URL = getPropertyValueAsString(props, "api-server-base-url");
+                ORDER_CREATE_BASE_URL = getPropertyValueAsString(props, "order-create-server-base-url");
+                SHIPPER_ID = getPropertyValueAsInteger(props, "shipper-v3-id");
+                SHIPPER_CLIENT_ID = getPropertyValueAsString(props, "shipper-client-id");
+                SHIPPER_CLIENT_SECRET = getPropertyValueAsString(props, "shipper-client-secret");
 
                 SHIPPER_V2_ID = getPropertyValueAsInteger(props, "shipper-v2-id");
-                SHIPPER_V2_NAME = props.getProperty("shipper-v2-name");
-                SHIPPER_V2_CLIENT_ID = props.getProperty("shipper-v2-client-id");
-                SHIPPER_V2_CLIENT_SECRET = props.getProperty("shipper-v2-client-secret");
+                SHIPPER_V2_NAME = getPropertyValueAsString(props, "shipper-v2-name");
+                SHIPPER_V2_CLIENT_ID = getPropertyValueAsString(props, "shipper-v2-client-id");
+                SHIPPER_V2_CLIENT_SECRET = getPropertyValueAsString(props, "shipper-v2-client-secret");
 
-                OPERATOR_V1_CLIENT_ID = props.getProperty("operator-v1-client-id");
-                OPERATOR_V1_CLIENT_SECRET = props.getProperty("operator-v1-client-secret");
+                OPERATOR_V1_CLIENT_ID = getPropertyValueAsString(props, "operator-v1-client-id");
+                OPERATOR_V1_CLIENT_SECRET = getPropertyValueAsString(props, "operator-v1-client-secret");
             }
         }
         catch(IOException ex)
@@ -117,19 +126,23 @@ public final class APIEndpoint
     {
     }
 
+    private static String getPropertyValueAsString(Properties props, String key)
+    {
+        return props.getProperty(key, "");
+    }
+
+    private static boolean getPropertyValueAsBoolean(Properties props, String key)
+    {
+        return Boolean.parseBoolean(props.getProperty(key, "false"));
+    }
+
     private static int getPropertyValueAsInteger(Properties props, String key)
     {
-        int value = 0;
+        return Integer.parseInt(props.getProperty(key, "0"));
+    }
 
-        try
-        {
-            value = Integer.parseInt(props.getProperty(key, "0"));
-        }
-        catch(NumberFormatException ex)
-        {
-            ex.printStackTrace();
-        }
-
-        return value;
+    private static long getPropertyValueAsLong(Properties props, String key)
+    {
+        return Long.parseLong(props.getProperty(key, "0"));
     }
 }
