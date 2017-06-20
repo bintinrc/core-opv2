@@ -27,7 +27,7 @@ task showInfo {
 }
 
 def testOutputResourcesDir = sourceSets.test.output.resourcesDir as String
-def cucumberFeatureDir = "$testOutputResourcesDir/cucumber"
+def cucumberFeatureDir = "$testOutputResourcesDir/cucumber/feature"
 def cucumberGluePackage = project.ext.cucumberGluePackage
 
 processTestResources {
@@ -103,16 +103,20 @@ task runCucumberParallel(dependsOn: ["testClasses"]) {
         fileTree(dir: cucumberFeatureDir, include: "**/*.feature").each{ featureFile ->
             println "[GRADLE_INFO] Running feature file: $featureFile"
 
-            executorService.execute(new Runnable() {
+            executorService.execute(new Runnable()
+            {
                 @Override
-                void run() {
+                void run()
+                {
+                    def reportFileName = featureFile.absolutePath.substring(cucumberFeatureDir.length()+1).replaceAll("/", "-")
+
                     javaexec {
                         main = "cucumber.api.cli.Main"
                         classpath = sourceSets.test.runtimeClasspath
                         args = [
                                 "--plugin", "pretty",
-                                "--plugin", "html:build/reports/cucumber-junit/htmloutput/${featureFile.name}",
-                                "--plugin", "junit:build/reports/cucumber-junit/cucumber-${featureFile.name}.xml",
+                                "--plugin", "html:build/reports/cucumber-junit/htmloutput/${reportFileName}",
+                                "--plugin", "junit:build/reports/cucumber-junit/cucumber-${reportFileName}.xml",
                                 "--monochrome",
                                 "--glue", cucumberGluePackage,
                                 featureFile

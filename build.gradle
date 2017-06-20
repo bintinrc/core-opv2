@@ -17,7 +17,7 @@ dependencies {
     testCompile "org.seleniumhq.selenium:selenium-firefox-driver:3.4.0"
     testCompile "net.lightbody.bmp:browsermob-core:2.1.4"
 
-    compile "io.fastjson:boon:0.33"
+    compile "io.fastjson:boon:0.34"
     compile "org.apache.commons:commons-lang3:3.5"
     compile "commons-beanutils:commons-beanutils:1.9.3"
     compile "ch.qos.logback:logback-classic:1.2.3"
