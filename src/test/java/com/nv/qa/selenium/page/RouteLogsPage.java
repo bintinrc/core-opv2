@@ -1,6 +1,7 @@
 package com.nv.qa.selenium.page;
 
 import org.junit.Assert;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -97,8 +98,25 @@ public class RouteLogsPage extends SimplePage
         pause200ms();
         click("//button[@ng-class='ngClazz'][@aria-label='Delete']");
         pause200ms();
-        click("//button[@aria-label='Delete']");
-        pause200ms();
+
+        boolean clicked = false;
+        int counter = 0;
+
+        while(!clicked && counter<4)
+        {
+            try
+            {
+                click("//button[@aria-label='Delete']");
+                pause200ms();
+                clicked = true;
+            }
+            catch(StaleElementReferenceException ex)
+            {
+                ex.printStackTrace(System.err);
+                System.out.println("Trying to recover from a stale element: " + ex.getMessage());
+                counter++;
+            }
+        }
     }
 
     public boolean isTableEmpty()
