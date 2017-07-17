@@ -1,5 +1,5 @@
 @selenium @shipment
-Feature: shipment scanning
+Feature: Shipment Scanning
 
   Scenario: op login into operator portal
     Given op is in op portal login page
