@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 
 /**
@@ -14,6 +16,8 @@ import java.util.Properties;
  */
 public final class APIEndpoint
 {
+    private static final SimpleDateFormat TEMP_FOLDER_DATE_FORMAT = new SimpleDateFormat("dd-MMM-yyyy_hhmmss_SSS");
+
     private static final String CONFIGURATION_FILE = "config.properties";
     private static final String ENVIRONMENT_SYSTEM_PROPERTY = "environment";
 
@@ -90,7 +94,7 @@ public final class APIEndpoint
                 SELENIUM_SCRIPT_TIMEOUT_SECONDS = getPropertyValueAsInteger(props, "selenium-script-timeout-seconds");
                 SELENIUM_WINDOW_WIDTH = getPropertyValueAsInteger(props, "selenium-window-width");
                 SELENIUM_WINDOW_HEIGHT = getPropertyValueAsInteger(props, "selenium-window-height");
-                SELENIUM_WRITE_PATH = getPropertyValueAsString(props, "selenium-write-path");
+                SELENIUM_WRITE_PATH = getPropertyValueAsString(props, "selenium-write-path") + TEMP_FOLDER_DATE_FORMAT.format(new Date()) + File.separatorChar;
 
                 {
                     // Ensure directory exist.

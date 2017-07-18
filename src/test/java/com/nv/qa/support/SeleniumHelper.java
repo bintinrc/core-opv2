@@ -16,8 +16,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -29,7 +27,6 @@ import java.util.logging.Level;
  */
 public class SeleniumHelper
 {
-    private static final SimpleDateFormat TEMP_FOLDER_DATE_FORMAT = new SimpleDateFormat("dd-MMM-yyyy_hhmmss_SSS");
     public static BrowserMobProxy BROWSER_MOB_PROXY = null;
     private static final int SLEEP_POLL_MILLIS = 1000;
 
@@ -74,7 +71,7 @@ public class SeleniumHelper
         logPrefs.enable(LogType.BROWSER, Level.ALL);
         capabilities.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
 
-        String downloadFilepath = APIEndpoint.SELENIUM_WRITE_PATH+TEMP_FOLDER_DATE_FORMAT.format(new Date())+"/";
+        String downloadFilepath = APIEndpoint.SELENIUM_WRITE_PATH;
         HashMap<String, Object> chromePrefs = new HashMap<>();
         chromePrefs.put("profile.default_content_settings.popups", 0);
         chromePrefs.put("download.default_directory", downloadFilepath);
