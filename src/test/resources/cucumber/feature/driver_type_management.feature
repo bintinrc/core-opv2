@@ -1,4 +1,4 @@
-@DriverTypeManagement @selenium @saas
+@DriverTypeManagement @selenium @saas @current
 Feature: driver type management
 
   @LaunchBrowser

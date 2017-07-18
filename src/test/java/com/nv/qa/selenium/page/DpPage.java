@@ -1,6 +1,7 @@
 package com.nv.qa.selenium.page;
 
 import com.nv.qa.support.APIEndpoint;
+import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.DateUtil;
 import com.nv.qa.support.ScenarioHelper;
 import org.junit.Assert;
@@ -19,6 +20,8 @@ import java.util.Map;
  */
 public class DpPage extends SimplePage
 {
+    private static final int MAX_RETRY = 10;
+
     public static final String COLUMN_CLASS_DP_PARTNER_NAME = "name ng-binding";
     public static final String COLUMN_CLASS_DP_PARTNER_RESTRICTION = "ng-binding";
 
@@ -28,7 +31,7 @@ public class DpPage extends SimplePage
     public static final String COLUMN_CLASS_DP_USER_USERNAME = "username ng-binding";
     public static final String COLUMN_CLASS_DP_USER_CONTACT_NO = "contact-no ng-binding";
 
-    private static final Map<String, String> BTNNAME_FILENAME = new HashMap<String, String>()
+    private static final Map<String, String> BTN_NAME_FILENAME = new HashMap<String,String>()
     {
         {
             put("dp-partners","dp-partners.csv");
@@ -45,21 +48,32 @@ public class DpPage extends SimplePage
 
     public void downloadFile(String type) throws InterruptedException
     {
-        click("//div[@filename='" + BTNNAME_FILENAME.get(type) + "']/nv-download-csv-button/div/nv-api-text-button/button");
+        CommonUtil.deleteFile(APIEndpoint.SELENIUM_WRITE_PATH + BTN_NAME_FILENAME.get(type));
+        click("//div[@filename='" + BTN_NAME_FILENAME.get(type) + "']/nv-download-csv-button/div/nv-api-text-button/button");
+        CommonUtil.pause1s();
     }
 
     public void verifyDownloadedFile(String type)
     {
-        String pathname = APIEndpoint.SELENIUM_WRITE_PATH + BTNNAME_FILENAME.get(type);
-        File f = new File(pathname);
-        boolean isFileExisted = f.exists();
+        String pathname = APIEndpoint.SELENIUM_WRITE_PATH + BTN_NAME_FILENAME.get(type);
+        int counter = 0;
+        boolean isFileExists;
 
-        if(isFileExisted)
+        do
         {
-            f.delete();
-        }
+            isFileExists = new File(pathname).exists();
 
-        Assert.assertTrue(pathname + "not exist", isFileExisted);
+            if(!isFileExists)
+            {
+                CommonUtil.pause1s();
+            }
+
+            counter++;
+        }
+        while(!isFileExists && counter<MAX_RETRY);
+
+        CommonUtil.deleteFile(pathname);
+        Assert.assertTrue(pathname + " not exist", isFileExists);
     }
 
     public void search(String type) throws InterruptedException
