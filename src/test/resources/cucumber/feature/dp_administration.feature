@@ -1,4 +1,4 @@
-@DpAdministration @selenium @current
+@DpAdministration @selenium
 Feature: dp administration
 
   @LaunchBrowser
