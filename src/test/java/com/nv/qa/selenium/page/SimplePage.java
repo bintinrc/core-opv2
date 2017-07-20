@@ -429,4 +429,20 @@ public class SimplePage
     {
         return driver;
     }
+
+    public WebElement findElementByXpath(String xpath, WebElement parent){
+        return this.findElementBy(By.xpath(xpath), parent);
+    }
+
+    public List<WebElement> findElementsByXpath(String xpath, WebElement parent){
+        return this.findElementsBy(By.xpath(xpath), parent);
+    }
+
+    public WebElement findElementBy(By by, WebElement parent){
+        return parent.findElement(by);
+    }
+
+    public List<WebElement> findElementsBy(By by, WebElement parent){
+        return parent.findElements(by);
+    }
 }
