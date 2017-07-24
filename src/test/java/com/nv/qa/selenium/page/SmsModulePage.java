@@ -19,9 +19,9 @@ import java.util.List;
 public class SmsModulePage extends SimplePage{
 
     private static final String COMMA = ",";
-    private static final String NEW_LINE = "/r/n";
+    private static final String NEW_LINE = "\r\n";
     private static final String SMS_CAMPAIGN_FILE_NAME = "sms_campaign.csv";
-    private static final String SMS_CAMPAIGN_HEADER = "tracking_id, name, email, job";
+    private static final String SMS_CAMPAIGN_HEADER = "tracking_id,name,email,job";
     private static final String FILE_PATH = APIEndpoint.SELENIUM_WRITE_PATH + SMS_CAMPAIGN_FILE_NAME;
     private static final int LOADING_TIMEOUT_IN_SECONDS = 30;
     private static final String MD_VIRTUAL_REPEAT = "sms in getTableData()";
@@ -62,36 +62,38 @@ public class SmsModulePage extends SimplePage{
     private void uploadFile(){
         WebElement inputElement = getDriver().findElement(By.xpath("//input[@type='file']"));
         inputElement.sendKeys(FILE_PATH);
-        waitUntilInvisibilityOfElementLocated("//div[@class='uploading-progress-container']",LOADING_TIMEOUT_IN_SECONDS);
+        pause3s();
     }
 
     public void continueOnCsvUploadFailure(){
-        waitUntilVisibilityOfElementLocated("//md-dialog[@class='nv-partial-failed-upload-csv']", LOADING_TIMEOUT_IN_SECONDS);
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'nv-partial-failed-upload-csv')]", LOADING_TIMEOUT_IN_SECONDS);
         findElementByXpath("//nv-icon-text-button[@text='commons.continue']").click();
-        waitUntilInvisibilityOfElementLocated("//md-dialog[@class='nv-partial-failed-upload-csv']", LOADING_TIMEOUT_IN_SECONDS);
+        waitUntilInvisibilityOfElementLocated("//md-dialog[contains(@class,'nv-partial-failed-upload-csv')]", LOADING_TIMEOUT_IN_SECONDS);
         pause1s();
+        Assert.assertFalse(isElementExist("//md-card[contains(@class,'sms-editor')]"));
+        Assert.assertFalse(isElementExist("//md-dialog[contains(@class,'nv-partial-failed-upload-csv')"));
     }
 
-    public void composeSms(){
-        waitUntilVisibilityOfElementLocated("//md-card[@class='sms-editor']", LOADING_TIMEOUT_IN_SECONDS);
+    public void composeSms(String name, String trackingId){
+        waitUntilVisibilityOfElementLocated("//md-card[contains(@class,'sms-editor')]", LOADING_TIMEOUT_IN_SECONDS);
         //check the uploaded file name is correct
-        WebElement uploadedFileNameElement = findElementByXpath("//div[@class='uploaded-info']//div[1]/p/b");
+        WebElement uploadedFileNameElement = findElementByXpath("//div[contains(@class,'uploaded-info')]//div[1]/p/b");
         Assert.assertEquals(SMS_CAMPAIGN_FILE_NAME, uploadedFileNameElement.getText());
-        WebElement totalRecords = findElementByXpath("//div[@class='uploaded-info']//div[1]/p/b");
+        WebElement totalRecords = findElementByXpath("//div[contains(@class,'uploaded-info')]//div[2]/p/b");
         Assert.assertEquals("1", totalRecords.getText());
         //entry the template
         String template = "Hallo {{name}}, your parcel with tracking id {{tracking_id}} is ready to be delivered";
         sendKeys("//textarea[@name='message']", template);
         pause100ms();
-        click("//nv-icon-text-button[on-click='ctrl.updatePreview()']");
+        click("//nv-icon-text-button[@on-click='ctrl.updatePreview()']");
         pause1s();
-        Assert.assertEquals("Hallo Jon Snow, your parcel with tracking id ABCDEF is ready to be delivered",
-                findElementByXpath("//textarea[@name='preview']").getText());
+        Assert.assertEquals("Hallo "+name+", your parcel with tracking id "+trackingId+" is ready to be delivered",
+                findElementByXpath("//textarea[@name='preview']").getAttribute("value"));
 
     }
 
     public void sendSms(){
-        click("//button[@aria-label='Send SMS']");
+        click("//nv-api-text-button[@text='container.sms.send-sms']");
         waitUntilVisibilityOfElementLocated("//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div", LOADING_TIMEOUT_IN_SECONDS);
         WebElement successToast = CommonUtil.getToast(getDriver());
         Assert.assertEquals("Successfully sent 1 SMS", successToast.getText());
@@ -108,9 +110,9 @@ public class SmsModulePage extends SimplePage{
     }
 
     public void verifySmsHistoryTrackingIdValid(String trackingId, String contactNumber){
-        waitUntilVisibilityOfElementLocated("//md-card[@class='sms-history']", LOADING_TIMEOUT_IN_SECONDS);
+        waitUntilVisibilityOfElementLocated("//md-card[contains(@class,'sms-history')]", LOADING_TIMEOUT_IN_SECONDS);
         //assert that tracking id is equal
-        WebElement trackingIdElement = findElementByXpath("//md-card[@class='sms-history']/md-card-content/div/span");
+        WebElement trackingIdElement = findElementByXpath("//md-card[contains(@class,'sms-history')]/md-card-content/div/span");
         Assert.assertEquals(trackingId, trackingIdElement.getText());
 
         //check the contact number

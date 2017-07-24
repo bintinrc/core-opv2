@@ -50,8 +50,8 @@ public class MainPage extends LoadableComponent<MainPage>
     {
     }
 
-    public void clickNavigation(String parentTitle, String navTitle) throws InterruptedException
-    {
+
+    public void clickNavigation(String parentTitle, String navTitle, String urlPart) throws  InterruptedException{
         String navElmXpath = "//nv-section-item/button[div='" + navTitle + "']";
         WebElement navElm = driver.findElement(By.xpath(navElmXpath));
 
@@ -85,18 +85,22 @@ public class MainPage extends LoadableComponent<MainPage>
             throw new RuntimeException(String.format("Retrying 'element is not clickable exception' reach maximum retry. Max retry = %d.", MAX_RETRY), exception);
         }
 
-        final String mainDashboard = grabEndURL(navTitle);
-
         new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until(new ExpectedCondition<Boolean>()
         {
             public Boolean apply(WebDriver d)
             {
-                return d.getCurrentUrl().toLowerCase().endsWith(mainDashboard);
+                return d.getCurrentUrl().toLowerCase().endsWith(urlPart);
             }
         });
 
         String url = driver.getCurrentUrl().toLowerCase();
-        Assert.assertTrue(url.endsWith(mainDashboard));
+        Assert.assertTrue(url.endsWith(urlPart));
+    }
+
+    public void clickNavigation(String parentTitle, String navTitle) throws InterruptedException
+    {
+        final String mainDashboard = grabEndURL(navTitle);
+        clickNavigation(parentTitle, navTitle, mainDashboard);
     }
 
     private String grabEndURL(String navTitle) {
