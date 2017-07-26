@@ -11,7 +11,11 @@ import org.openqa.selenium.WebElement;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by rizaqpratama on 7/18/17.
@@ -25,10 +29,14 @@ public class SmsModulePage extends SimplePage{
     private static final String FILE_PATH = APIEndpoint.SELENIUM_WRITE_PATH + SMS_CAMPAIGN_FILE_NAME;
     private static final int LOADING_TIMEOUT_IN_SECONDS = 30;
     private static final String MD_VIRTUAL_REPEAT = "sms in getTableData()";
-
+    private static Map<String, Object> cache;
+    private SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD hh:ss");
 
     public SmsModulePage(WebDriver driver){
         super(driver);
+        if(cache== null) {
+            cache = new ConcurrentHashMap<>();
+        }
     }
 
     public void uploadCsvCampaignFile(List<SmsCampaignCsv> data){
@@ -66,6 +74,7 @@ public class SmsModulePage extends SimplePage{
     }
 
     public void continueOnCsvUploadFailure(){
+        pause1s();
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'nv-partial-failed-upload-csv')]", LOADING_TIMEOUT_IN_SECONDS);
         findElementByXpath("//nv-icon-text-button[@text='commons.continue']").click();
         waitUntilInvisibilityOfElementLocated("//md-dialog[contains(@class,'nv-partial-failed-upload-csv')]", LOADING_TIMEOUT_IN_SECONDS);
@@ -76,20 +85,27 @@ public class SmsModulePage extends SimplePage{
 
     public void composeSms(String name, String trackingId){
         waitUntilVisibilityOfElementLocated("//md-card[contains(@class,'sms-editor')]", LOADING_TIMEOUT_IN_SECONDS);
+        String smsDate = sdf.format(new Date());
+        cache.put("sms-date", smsDate);
         //check the uploaded file name is correct
         WebElement uploadedFileNameElement = findElementByXpath("//div[contains(@class,'uploaded-info')]//div[1]/p/b");
         Assert.assertEquals(SMS_CAMPAIGN_FILE_NAME, uploadedFileNameElement.getText());
         WebElement totalRecords = findElementByXpath("//div[contains(@class,'uploaded-info')]//div[2]/p/b");
         Assert.assertEquals("1", totalRecords.getText());
         //entry the template
-        String template = "Hallo {{name}}, your parcel with tracking id {{tracking_id}} is ready to be delivered";
+        String template = "Hallo {{name}}, your parcel with tracking id {{tracking_id}} is ready to be delivered. sms-date: "+smsDate;
         sendKeys("//textarea[@name='message']", template);
         pause100ms();
         click("//nv-icon-text-button[@on-click='ctrl.updatePreview()']");
         pause1s();
-        Assert.assertEquals("Hallo "+name+", your parcel with tracking id "+trackingId+" is ready to be delivered",
+        Assert.assertEquals("Hallo "+name+", your parcel with tracking id "+trackingId+" is ready to be delivered. sms-date: "+smsDate,
                 findElementByXpath("//textarea[@name='preview']").getAttribute("value"));
 
+    }
+
+
+    public void waitForSmsToBeProcessed(){
+        pause10s();
     }
 
     public void sendSms(){
@@ -100,7 +116,8 @@ public class SmsModulePage extends SimplePage{
     }
 
     public void searchSmsSentHistory(String trackingId){
-        sendKeys("//textarea[@name='trackingId']",trackingId);
+        sendKeys("//input[@name='trackingId']",trackingId);
+        click("//nv-icon-text-button[@text='commons.load']/button");
     }
 
     public void verifySmsHistoryTrackingIdInvalid(String trackingId){
@@ -111,13 +128,19 @@ public class SmsModulePage extends SimplePage{
 
     public void verifySmsHistoryTrackingIdValid(String trackingId, String contactNumber){
         waitUntilVisibilityOfElementLocated("//md-card[contains(@class,'sms-history')]", LOADING_TIMEOUT_IN_SECONDS);
+        String smsDate = (String)cache.get("sms-date");
         //assert that tracking id is equal
         WebElement trackingIdElement = findElementByXpath("//md-card[contains(@class,'sms-history')]/md-card-content/div/span");
-        Assert.assertEquals(trackingId, trackingIdElement.getText());
+        Assert.assertEquals("Tracking id: "+trackingId, trackingIdElement.getText());
 
         //check the contact number
-        String number=  getTextOnTableWithMdVirtualRepeat(0,"to-number", MD_VIRTUAL_REPEAT);
+        String number=  getTextOnTableWithMdVirtualRepeat(1,"to-number", MD_VIRTUAL_REPEAT, false);
         Assert.assertEquals(contactNumber, number);
+
+
+        //check sms-date on the message field
+        String message =  getTextOnTableWithMdVirtualRepeat(1,"message", MD_VIRTUAL_REPEAT, false);
+        Assert.assertTrue("It contain sms-date woth same date", message.contains(smsDate));
 
     }
 

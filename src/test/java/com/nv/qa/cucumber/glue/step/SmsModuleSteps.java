@@ -45,18 +45,25 @@ public class SmsModuleSteps extends AbstractSteps
         smsModulePage.sendSms();
     }
 
+    @Then("^op wait for sms to be processed")
+    public void waitForSmsToBeProcessed(){
+        smsModulePage.waitForSmsToBeProcessed();
+    }
+
     @When("^op search sms sent history for tracking id ([^\"]*)$")
     public void searchHistory(String trackingId){
         smsModulePage.searchSmsSentHistory(trackingId);
     }
 
-    @Then("^op verify that tracking id ([^\"]*)$ is invalid")
+    @Then("^op verify that tracking id ([^\"]*) is invalid")
     public void verifyOnTrackingIdInvalid(String trackingId){
+        smsModulePage.searchSmsSentHistory(trackingId);
         smsModulePage.verifySmsHistoryTrackingIdInvalid(trackingId);
     }
 
-    @Then("^op verify that sms sent to phone number ([^\"]*)$ and tracking id ([^\"]*)$")
+    @Then("^op verify that sms sent to phone number ([^\"]*) and tracking id ([^\"]*)")
     public void verifyOnTrackingIdValid(String trackingId, String contactNumber){
+        smsModulePage.searchSmsSentHistory(trackingId);
         smsModulePage.verifySmsHistoryTrackingIdValid(trackingId, contactNumber);
     }
 }
