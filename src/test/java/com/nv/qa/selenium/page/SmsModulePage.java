@@ -122,6 +122,10 @@ public class SmsModulePage extends SimplePage{
         click("//li[@ng-repeat='field in ctrl.fields'][3]/span[2]/input");
         pause100ms();
         click("//nv-icon-text-button[@on-click='ctrl.updatePreview()']");
+
+    }
+
+    public void verifyThatPreviewUsingShortenedUrl(){
         pause10s();
         Assert.assertTrue("The produced sms using ninja url shortener", findElementByXpath("//textarea[@name='preview']").getAttribute("value")
                 .contains("http://staging.nnj.vn"));

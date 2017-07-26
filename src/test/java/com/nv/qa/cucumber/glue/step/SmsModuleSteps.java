@@ -45,9 +45,14 @@ public class SmsModuleSteps extends AbstractSteps
         smsModulePage.composeSms(name, trackingId);
     }
 
-    @Then("^op compose sms with url shortener")
+    @Then("^op compose sms using url shortener")
     public void composeSmsWithUrlShortener(){
         smsModulePage.composeSmsWithUrlShortener();
+    }
+
+    @Then("^op verify sms preview using shortened url")
+    public void verifyPreviewUsingShortenedUrl(){
+        smsModulePage.verifyThatPreviewUsingShortenedUrl();
     }
 
     @When("^op send sms")
