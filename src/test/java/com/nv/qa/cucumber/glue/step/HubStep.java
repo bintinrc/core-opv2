@@ -11,31 +11,54 @@ import org.openqa.selenium.*;
 import java.io.File;
 
 /**
- * Created by sw on 8/19/16.
+ *
+ * @author Soewandi Wirjawan
  */
 @ScenarioScoped
-public class HubStep {
+public class HubStep
+{
+    private static final int MAX_RETRY = 10;
+    private static final String HUBS_CSV_FILE_NAME = "hubs.csv";
+    private static final String HUBS_CSV_FILE_NAME_LOCATION = APIEndpoint.SELENIUM_WRITE_PATH + HUBS_CSV_FILE_NAME;
 
     private WebDriver driver;
 
     @Before
-    public void setup() {
+    public void setup()
+    {
         driver = SeleniumSharedDriver.getInstance().getDriver();
     }
 
     @When("^hubs administration download button is clicked$")
-    public void download() {
-        CommonUtil.clickBtn(driver, "//div[@filename='hubs.csv']/nv-api-text-button/button");
+    public void download()
+    {
+        CommonUtil.deleteFile(HUBS_CSV_FILE_NAME_LOCATION);
+        CommonUtil.clickBtn(driver, String.format("//div[@filename='%s']/nv-api-text-button/button", HUBS_CSV_FILE_NAME));
+        CommonUtil.pause1s();
     }
 
     @Then("^hubs administration file should exist$")
-    public void verifyFile() {
-        File f = new File(APIEndpoint.SELENIUM_WRITE_PATH + "hubs.csv");
-        boolean isFileExisted = f.exists();
-        if (isFileExisted) {
-            f.delete();
+    public void verifyFile()
+    {
+        File file = new File(HUBS_CSV_FILE_NAME_LOCATION);
+        int counter = 0;
+        boolean isFileExists;
+
+        do
+        {
+            isFileExists = file.exists();
+
+            if(!isFileExists)
+            {
+                CommonUtil.pause1s();
+            }
+
+            counter++;
         }
-        Assert.assertTrue(isFileExisted);
+        while(!isFileExists && counter<MAX_RETRY);
+
+        CommonUtil.deleteFile(file);
+        Assert.assertTrue(HUBS_CSV_FILE_NAME_LOCATION + " not exist", isFileExists);
     }
 
     @When("^hubs administration add button is clicked$")

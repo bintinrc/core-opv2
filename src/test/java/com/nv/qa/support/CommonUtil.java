@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Calendar;
@@ -323,5 +324,28 @@ public class CommonUtil {
         cal.setTime(new Date());
         cal.add(Calendar.DATE, day);
         return cal.getTime();
+    }
+
+    public static boolean deleteFile(String pathname)
+    {
+        File file = new File(pathname);
+        return deleteFile(file);
+    }
+
+    public static boolean deleteFile(File file)
+    {
+        boolean deleted = false;
+
+        if(file.exists())
+        {
+            deleted = file.delete();
+
+            if(deleted)
+            {
+                System.out.println(String.format("[INFO] File '%s' is deleted.", file.getAbsolutePath()));
+            }
+        }
+
+        return deleted;
     }
 }

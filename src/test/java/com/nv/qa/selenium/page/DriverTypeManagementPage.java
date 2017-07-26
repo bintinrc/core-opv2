@@ -1,6 +1,7 @@
 package com.nv.qa.selenium.page;
 
 import com.nv.qa.support.APIEndpoint;
+import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.ScenarioHelper;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -19,6 +20,10 @@ import java.util.List;
  */
 public class DriverTypeManagementPage extends SimplePage
 {
+    private static final int MAX_RETRY = 10;
+    private static final String DRIVER_TYPES_CSV_FILE_NAME = "driver-types.csv";
+    private static final String DRIVER_TYPES_CSV_FILE_LOCATION = APIEndpoint.SELENIUM_WRITE_PATH + DRIVER_TYPES_CSV_FILE_NAME;
+
     public DriverTypeManagementPage(WebDriver driver)
     {
         super(driver);
@@ -61,20 +66,32 @@ public class DriverTypeManagementPage extends SimplePage
 
     public void downloadFile() throws InterruptedException
     {
-        click("//div[@filename='driver-types.csv']/nv-api-text-button/button");
+        CommonUtil.deleteFile(DRIVER_TYPES_CSV_FILE_LOCATION);
+        click(String.format("//div[@filename='%s']/nv-api-text-button/button", DRIVER_TYPES_CSV_FILE_NAME));
+        CommonUtil.pause1s();
     }
 
     public void verifyFile() throws InterruptedException
     {
-        File f = new File(APIEndpoint.SELENIUM_WRITE_PATH + "driver-types.csv");
-        boolean isFileExisted = f.exists();
+        File file = new File(DRIVER_TYPES_CSV_FILE_LOCATION);
+        int counter = 0;
+        boolean isFileExists;
 
-        if(isFileExisted)
+        do
         {
-            f.delete();
-        }
+            isFileExists = file.exists();
 
-        Assert.assertTrue(isFileExisted);
+            if(!isFileExists)
+            {
+                CommonUtil.pause1s();
+            }
+
+            counter++;
+        }
+        while(!isFileExists && counter<MAX_RETRY);
+
+        CommonUtil.deleteFile(file);
+        Assert.assertTrue(DRIVER_TYPES_CSV_FILE_LOCATION + " not exist", isFileExists);
     }
 
     public void clickDriverTypeButton() throws InterruptedException
