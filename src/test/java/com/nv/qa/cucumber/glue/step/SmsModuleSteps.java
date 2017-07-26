@@ -35,9 +35,19 @@ public class SmsModuleSteps extends AbstractSteps
         smsModulePage.continueOnCsvUploadFailure();
     }
 
+    @Then("^op verify sms module page resetted")
+    public void onSmsModulePageResetted(){
+        smsModulePage.verifyThatPageReset();
+    }
+
     @When("^op compose sms with data : ([^\"]*), ([^\"]*)")
     public void composeSms(String name, String trackingId){
         smsModulePage.composeSms(name, trackingId);
+    }
+
+    @Then("^op compose sms with url shortener")
+    public void composeSmsWithUrlShortener(){
+        smsModulePage.composeSmsWithUrlShortener();
     }
 
     @When("^op send sms")
