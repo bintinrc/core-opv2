@@ -78,6 +78,9 @@ public class SmsModulePage extends SimplePage{
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'nv-partial-failed-upload-csv')]", LOADING_TIMEOUT_IN_SECONDS);
         findElementByXpath("//nv-icon-text-button[@text='commons.continue']").click();
         waitUntilInvisibilityOfElementLocated("//md-dialog[contains(@class,'nv-partial-failed-upload-csv')]", LOADING_TIMEOUT_IN_SECONDS);
+    }
+
+    public void verifyThatPageReset(){
         pause1s();
         Assert.assertFalse(isElementExist("//md-card[contains(@class,'sms-editor')]"));
         Assert.assertFalse(isElementExist("//md-dialog[contains(@class,'nv-partial-failed-upload-csv')"));
@@ -100,6 +103,28 @@ public class SmsModulePage extends SimplePage{
         pause1s();
         Assert.assertEquals("Hallo "+name+", your parcel with tracking id "+trackingId+" is ready to be delivered. sms-date: "+smsDate,
                 findElementByXpath("//textarea[@name='preview']").getAttribute("value"));
+
+    }
+
+
+    public void composeSmsWithUrlShortener(){
+        waitUntilVisibilityOfElementLocated("//md-card[contains(@class,'sms-editor')]", LOADING_TIMEOUT_IN_SECONDS);
+        //check the uploaded file name is correct
+        WebElement uploadedFileNameElement = findElementByXpath("//div[contains(@class,'uploaded-info')]//div[1]/p/b");
+        Assert.assertEquals(SMS_CAMPAIGN_FILE_NAME, uploadedFileNameElement.getText());
+        WebElement totalRecords = findElementByXpath("//div[contains(@class,'uploaded-info')]//div[2]/p/b");
+        Assert.assertEquals("1", totalRecords.getText());
+        //entry the template
+        String template = "email : {{email}}";
+        sendKeys("//textarea[@name='message']", template);
+        pause100ms();
+        //check the shorten url click box
+        click("//li[@ng-repeat='field in ctrl.fields'][3]/span[2]/input");
+        pause100ms();
+        click("//nv-icon-text-button[@on-click='ctrl.updatePreview()']");
+        pause10s();
+        Assert.assertTrue("The produced sms using ninja url shortener", findElementByXpath("//textarea[@name='preview']").getAttribute("value")
+                .contains("http://staging.nnj.vn"));
 
     }
 

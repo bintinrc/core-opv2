@@ -79,6 +79,7 @@ public class SeleniumHelper
         ChromeOptions options = new ChromeOptions();
         options.setExperimentalOption("prefs", chromePrefs);
         options.addArguments("--disable-extensions");
+        options.addArguments("--allow-running-insecure-content");
         //options.addArguments("--start-maximized"); Maximize on Mac does not cover entire screen.
 
         if(APIEndpoint.SELENIUM_CHROME_BINARY_PATH!=null && !APIEndpoint.SELENIUM_CHROME_BINARY_PATH.isEmpty())
