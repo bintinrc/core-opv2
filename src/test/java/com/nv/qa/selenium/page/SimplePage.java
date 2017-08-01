@@ -162,6 +162,27 @@ public class SimplePage
         }
     }
 
+    /**
+     *
+     * @param rowNumber
+     * @param columnClassName
+     * @param buttonAriaLabel
+     * @param ngRepeat
+     */
+    public void clickButtonOnTableWithMdVirtualRepeat(int rowNumber, String columnClassName, String buttonAriaLabel,  String ngRepeat)
+    {
+        try
+        {
+            WebElement we = findElementByXpath(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, '%s')" +
+                    "]//button[@aria-label='%s']", ngRepeat, rowNumber, columnClassName, buttonAriaLabel));
+            moveAndClick(we);
+        }
+        catch(NoSuchElementException ex)
+        {
+            throw new RuntimeException("Cannot find action button on table.", ex);
+        }
+    }
+
     public String getTextOnTableWithNgRepeat(int rowNumber, String columnDataClass, String ngRepeat)
     {
         String text = null;
@@ -183,6 +204,20 @@ public class SimplePage
         try
         {
             WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[contains(@class, 'actions')]//nv-icon-button[@name='%s']", ngRepeat, rowNumber, actionButtonName));
+            moveAndClick(we);
+        }
+        catch(NoSuchElementException ex)
+        {
+            throw new RuntimeException("Cannot find action button on table.", ex);
+        }
+    }
+
+    public void clickButtonOnTableWithNgRepeat(int rowNumber, String className, String buttonAriaLabel, String ngRepeat)
+    {
+        try
+        {
+            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[contains(@class, '%s')]//button[@aria-label='%s']",
+                    ngRepeat, rowNumber, className, buttonAriaLabel));
             moveAndClick(we);
         }
         catch(NoSuchElementException ex)
