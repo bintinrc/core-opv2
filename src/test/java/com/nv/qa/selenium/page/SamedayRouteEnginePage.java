@@ -148,4 +148,16 @@ public class SamedayRouteEnginePage extends SimplePage
         });
 
     }
+
+    public void openUnroutedDetailDialog(){
+        click("//button[@aria-label='View Unrouted Waypoints']");
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'nv-unrouted-detail-dialog')]", WAIT_TIMEOUT);
+        pause3s();
+    }
+
+    public void verifyUnroutedDetailDialog(){
+        String unroutedCount = findElementByXpath("//md-dialog[contains(@class, 'nv-unrouted-detail-dialog')]/md-dialog-content/div[1]/div[1]/p/b")
+                .getText();
+        Assert.assertEquals("1",unroutedCount);
+    }
 }

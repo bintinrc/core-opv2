@@ -96,6 +96,20 @@ public class CommonShipperStep extends AbstractSteps
         String asyncOrderId = listOfCreateOrderResponse.get(0).getId();
         Order order = orderCreateV2Client.retrieveOrder(asyncOrderId);
         scenarioStorage.put("order", order);
+        saveTrackingId(order.getTracking_id());
+    }
+
+    private void saveTrackingId(String trackingId){
+        List<String> trackingIds = scenarioStorage.get("trackingIds");
+        if(trackingIds== null){
+            trackingIds = new ArrayList<>();
+            scenarioStorage.put("trackingIds", trackingIds);
+        }
+        trackingIds.add(trackingId);
+    }
+
+    private List<String> getTrackingIds(){
+        return scenarioStorage.get("trackingIds");
     }
 
     @Given("^Create an V3 order with the following attributes:$")

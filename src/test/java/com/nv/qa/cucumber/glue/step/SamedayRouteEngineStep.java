@@ -55,8 +55,12 @@ public class SamedayRouteEngineStep extends AbstractSteps
         samedayRouteEnginePage.setFleetType1Capacity(fleetType1Capacity);
         samedayRouteEnginePage.selectFleetType1OperatingHoursStart(fleetType1OperatingHoursStart);
         samedayRouteEnginePage.selectFleetType1OperatingHoursEnd(fleetType1OperatingHoursEnd);
-        samedayRouteEnginePage.selectFleetType1BreakDurationStart(fleetType1BreakingDurationStart);
-        samedayRouteEnginePage.selectFleetType1BreakDurationEnd(fleetType1BreakingDurationEnd);
+        if(fleetType1BreakingDurationStart!=null){
+            samedayRouteEnginePage.selectFleetType1BreakDurationStart(fleetType1BreakingDurationStart);
+        }
+        if(fleetType1BreakingDurationEnd!=null){
+            samedayRouteEnginePage.selectFleetType1BreakDurationEnd(fleetType1BreakingDurationEnd);
+        }
         takesScreenshot();
         samedayRouteEnginePage.clickRunRouteEngineButton();
         takesScreenshot();
@@ -108,5 +112,15 @@ public class SamedayRouteEngineStep extends AbstractSteps
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    @When("^op open unrouted detail dialog")
+    public void openUnroutedDetailDialog(){
+        samedayRouteEnginePage.openUnroutedDetailDialog();
+    }
+
+    @Then("^op verify the unrouted detail dialog")
+    public void verifyUnroutedDetailDialog(){
+        samedayRouteEnginePage.verifyUnroutedDetailDialog();
     }
 }

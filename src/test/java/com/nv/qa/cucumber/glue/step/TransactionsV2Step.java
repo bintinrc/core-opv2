@@ -6,6 +6,8 @@ import com.nv.qa.selenium.page.TransactionsV2Page;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.java.en.When;
 
+import java.util.List;
+
 /**
  *
  * @author Daniel Joi Partogi Hutapea
@@ -49,5 +51,28 @@ public class TransactionsV2Step extends AbstractSteps
         transactionsPage.clickAddTransactionsOnAddToRouteGroupDialog();
         takesScreenshot();
         pause1s();
+    }
+
+
+    @When("^Operator V2 add created Transactions to Route Group$")
+    public void addCreatedTransactionsToRouteGroup()
+    {
+        List<String> trackingIds = scenarioStorage.get("trackingIds");
+        trackingIds.forEach((String trackingId) ->{
+            String routeGroupName = scenarioStorage.get("routeGroupName");
+            transactionsPage.removeFilter("Start Datetime");
+            transactionsPage.removeFilter("End Datetime");
+            transactionsPage.setCreationTimeFilter();
+            transactionsPage.clickLoadSelectionButton();
+            transactionsPage.searchByTrackingId(trackingId);
+            transactionsPage.selectAllShown();
+            transactionsPage.clickAddToRouteGroupButton();
+            transactionsPage.selectRouteGroupOnAddToRouteGroupDialog(routeGroupName);
+            pause1s();
+            takesScreenshot();
+            transactionsPage.clickAddTransactionsOnAddToRouteGroupDialog();
+            takesScreenshot();
+            pause3s();
+        });
     }
 }
