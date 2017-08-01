@@ -1,6 +1,18 @@
 package com.nv.qa.selenium.page;
 
+
+import com.nv.qa.support.APIEndpoint;
+import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
 
 /**
  *
@@ -9,6 +21,8 @@ import org.openqa.selenium.WebDriver;
 public class SamedayRouteEnginePage extends SimplePage
 {
     private static final int SAVE_BUTTON_LOADING_TIMEOUT_IN_SECONDS = 30;
+    private static final int WAIT_TIMEOUT = 30;
+
 
     public SamedayRouteEnginePage(WebDriver driver)
     {
@@ -82,5 +96,56 @@ public class SamedayRouteEnginePage extends SimplePage
     {
         click("//button[@aria-label='Create 1 Route(s)']");
         waitUntilInvisibilityOfElementLocated("//button[@aria-label='Create 1 Route(s)']//md-progress-circular", SAVE_BUTTON_LOADING_TIMEOUT_IN_SECONDS);
+    }
+
+    public void setFleetType1Capacity(String capacity){
+        sendKeys("//input[@aria-label='Capacity']", capacity);
+
+    }
+
+    public void openWaypointDetail(){
+        clickButtonOnTableWithNgRepeat(1, "wps", "wps", "route in ctrl.routeResponse.solution.routes");
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'nv-route-detail-dialog')]", WAIT_TIMEOUT);
+        pause10s();
+    }
+
+    public void verifyWaypointDetailContent(String trackingId, String routeGroupName ){
+        //check the waypoint have correct tracking id
+        String trackingIdData =  getTextOnTableWithMdVirtualRepeat(1,"tracking_id","route in ctrl.routeResponse.solution.routes" );
+        Assert.assertEquals(trackingId, trackingIdData);
+
+        String trackingIdData2= getTextOnTableWithMdVirtualRepeat(2,"tracking_id","route in ctrl.routeResponse.solution.routes" );
+        Assert.assertEquals(trackingId, trackingIdData2);
+        //check the number of waypoint
+        String waypointTotal= findElementByXpath("//md-dialog[contains(@class, 'nv-route-detail-dialog')]/md-dialog-content/div[1]/div[2]/p").getText();
+        Assert.assertEquals(2, waypointTotal);
+
+        //check waypoint is pickup and delivery
+        Assert.assertEquals("PICKUP", getTextOnTableWithMdVirtualRepeat(1, "type", "route in ctrl.routeResponse.solution.routes"));
+        Assert.assertEquals("DELIVERY", getTextOnTableWithMdVirtualRepeat(2, "type", "route in ctrl.routeResponse.solution.routes" ));
+    }
+
+    public void downloadCsvOnWaypointDetails(String trackingId) throws IOException {
+        String routeName = "route-detail-"+findElementByXpath("//md-dialog[contains(@class, 'nv-route-detail-dialog')" +
+                "]/md-dialog-content/div[1]/div[1]/p/b")
+                .getText();
+        //clear the downloaded file first
+        File csvFile = new File(APIEndpoint.SELENIUM_WRITE_PATH+"/"+routeName+".csv");
+        if(csvFile.exists()){
+            csvFile.delete();
+        }
+        click("//button[@aria-label='Download CSV']");
+        new WebDriverWait(getDriver(), WAIT_TIMEOUT).until((WebDriver driver) -> {
+            File csvFileDownloaded = new File(APIEndpoint.SELENIUM_WRITE_PATH+"/"+routeName+".csv");
+            return csvFileDownloaded.exists();
+        });
+
+        //check the downloaded file
+        List<String> lines = Files.readAllLines(Paths.get(APIEndpoint.SELENIUM_WRITE_PATH+"/"+routeName+".csv"), Charset.defaultCharset());
+        lines.forEach((String str)->{
+            String [] columnData = str.split(",");
+            Assert.assertFalse("Shouldn't have break in the exported csv",columnData[1].startsWith("break"));
+        });
+
     }
 }
