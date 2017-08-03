@@ -1,17 +1,22 @@
 package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Inject;
+import com.nv.qa.integration.client.operator.BulkyTrackingClient;
+import com.nv.qa.integration.model.core.BulkyOrder;
+import com.nv.qa.model.order_creation.v2.Order;
 import com.nv.qa.selenium.page.SamedayRouteEnginePage;
+import com.nv.qa.support.APIEndpoint;
+import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import com.nv.qa.model.order_creation.v2.Order;
+import org.junit.Assert;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  *
@@ -22,6 +27,7 @@ public class SamedayRouteEngineStep extends AbstractSteps
 {
     @Inject private ScenarioStorage scenarioStorage;
     private SamedayRouteEnginePage samedayRouteEnginePage;
+    private BulkyTrackingClient bulkyTrackingClient;
 
     @Inject
     public SamedayRouteEngineStep(CommonScenario commonScenario)
@@ -33,6 +39,7 @@ public class SamedayRouteEngineStep extends AbstractSteps
     public void init()
     {
         samedayRouteEnginePage = new SamedayRouteEnginePage(getDriver());
+        bulkyTrackingClient = new BulkyTrackingClient(APIEndpoint.API_BASE_URL);
     }
 
     @When("^op 'Run Route Engine' on Same-Day Route Engine menu using data below:$")
@@ -123,4 +130,31 @@ public class SamedayRouteEngineStep extends AbstractSteps
     public void verifyUnroutedDetailDialog(){
         samedayRouteEnginePage.verifyUnroutedDetailDialog();
     }
+
+    @When("^op update timeslot on same day route engine")
+    public void updateTimeslot(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(TimeZone.getTimeZone(Optional.ofNullable(CommonUtil.getOperatorTimezone(getDriver())).orElse("UTC")));
+        cal.add(Calendar.DATE, 1);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        scenarioStorage.put("new-suggested-date", sdf.format(cal.getTime()));
+        samedayRouteEnginePage.changeTheSuggestedDate(sdf.format(cal.getTime()));
+        scenarioStorage.put("bulky-tracking-id", samedayRouteEnginePage.getWaypointTrackingIds());
+        samedayRouteEnginePage.clickUpdateTimeslotBtn();
+    }
+
+    @Then("^op verify the updated timeslot")
+    public void verifyBulkyOrderTimeslotUpdated(){
+        String suggestedDate = scenarioStorage.get("new-suggested-date");
+        String trackingIdsString = scenarioStorage.get("bulky-tracking-id");
+        List<String> trackingIds = Arrays.asList(trackingIdsString.split(","));
+        trackingIds.forEach((String trId) -> {
+            BulkyOrder order = bulkyTrackingClient.getBulkyOrderDetail(trId);
+            Assert.assertEquals(suggestedDate,order.getSuggested_timeslot().getDate());
+        });
+
+
+    }
+
+
 }

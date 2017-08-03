@@ -1,7 +1,9 @@
 package com.nv.qa.selenium.page;
 
 
+import com.google.inject.Inject;
 import com.nv.qa.support.APIEndpoint;
+import com.nv.qa.support.ScenarioStorage;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -22,6 +24,8 @@ public class SamedayRouteEnginePage extends SimplePage
 {
     private static final int SAVE_BUTTON_LOADING_TIMEOUT_IN_SECONDS = 30;
     private static final int WAIT_TIMEOUT = 30;
+    @Inject
+    private ScenarioStorage scenarioStorage;
 
 
     public SamedayRouteEnginePage(WebDriver driver)
@@ -106,7 +110,7 @@ public class SamedayRouteEnginePage extends SimplePage
     public void openWaypointDetail(){
         clickButtonOnTableWithNgRepeat(1, "wps", "wps", "route in ctrl.routeResponse.solution.routes");
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'nv-route-detail-dialog')]", WAIT_TIMEOUT);
-        pause10s();
+        waitUntilVisibilityOfElementLocated("//tr[@md-virtual-repeat='wp in getTableData()']", WAIT_TIMEOUT);
     }
 
     public void verifyWaypointDetailContent(String trackingId, String routeGroupName ){
@@ -159,5 +163,32 @@ public class SamedayRouteEnginePage extends SimplePage
         String unroutedCount = findElementByXpath("//md-dialog[contains(@class, 'nv-unrouted-detail-dialog')]/md-dialog-content/div[1]/div[1]/p/b")
                 .getText();
         Assert.assertEquals("1",unroutedCount);
+    }
+
+    public void changeTheSuggestedDate(String suggestedDate){
+        findElementByXpath("//md-datepicker[@ng-model='ctrl.suggested_date']//input").clear();
+        sendKeys("//md-datepicker[@ng-model='ctrl.suggested_date']//input", suggestedDate);
+    }
+
+    public void clickUpdateTimeslotBtn(){
+        click("//nv-api-text-button[@on-click='ctrl.onSaveSuggestedRoute()']/button");
+        pause50ms();
+        waitUntilInvisibilityOfElementLocated("//nv-api-text-button[@on-click='ctrl.onSaveSuggestedRoute()']//md-progress-circular", WAIT_TIMEOUT);
+    }
+
+    public String getWaypointTrackingIds(){
+        StringBuilder sb = new StringBuilder();
+        int waypointTotal=Integer.valueOf(findElementByXpath("//md-dialog[contains(@class, 'nv-route-detail-dialog')]/md-dialog-content/div[1]/div[2]/p")
+                .getText());
+        for(int i =0; i<waypointTotal; i++){
+            String trackingId = getTextOnTableWithMdVirtualRepeat(i+1, "tracking_id","wp in getTableData()");
+            if(!trackingId.equalsIgnoreCase("-")){
+                sb.append(trackingId);
+                if(i!=waypointTotal-1){
+                    sb.append(",");
+                }
+            }
+        }
+        return sb.toString();
     }
 }

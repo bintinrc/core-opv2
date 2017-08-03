@@ -2,15 +2,15 @@ package com.nv.qa.support;
 
 import org.junit.Assert;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.Actions;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.net.URLDecoder;
+import java.util.*;
 
 /**
  *
@@ -348,4 +348,23 @@ public class CommonUtil {
 
         return deleted;
     }
+
+    public static Set<Cookie> getCookies(WebDriver driver){
+        return driver.manage().getCookies();
+    }
+    public static String getOperatorTimezone(WebDriver driver) {
+        String cookie = driver.manage().getCookieNamed("user").getValue();
+        try {
+            String cookier = URLDecoder.decode(cookie,"UTF-8");
+            return (String) JsonHelper.fromJsonToHashMap(cookier).get("timezone");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+
+
+
+
 }
