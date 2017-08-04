@@ -57,7 +57,9 @@ public class TransactionsV2Page extends SimplePage
     {
         if (filterName.contains("time"))
         {
-            click("//div[div[p[text()='" + filterName + "']]]/div/nv-icon-button/button");
+            if(isElementExist("//div[div[p[text()='" + filterName + "']]]/div/nv-icon-button/button")){
+                click("//div[div[p[text()='" + filterName + "']]]/div/nv-icon-button/button");
+            }
         }
         else
         {
