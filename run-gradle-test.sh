@@ -6,4 +6,5 @@ export DISPLAY=:1
 # fix chrome process hang
 export DBUS_SESSION_BUS_ADDRESS=/dev/null
 
+printenv
 gradle --no-daemon clean runCucumberParallel -PforkCount=4 -Penvironment=qa -Ptags=@LoginLogout
