@@ -94,20 +94,11 @@ public final class APIEndpoint
                 if(seleniumChromeBinaryPathTemp==null || seleniumChromeBinaryPathTemp.isEmpty())
                 {
                     seleniumChromeBinaryPathTemp = System.getenv("bamboo_capability_system_builder_command_google_chrome");
-                    System.out.println("[INFO] Using SELENIUM_CHROME_BINARY_PATH from \"System Environment\" variable. [bamboo_capability_system_builder_command_google_chrome = '"+seleniumChromeBinaryPathTemp+'\'');
+                    System.out.println("[INFO] Using SELENIUM_CHROME_BINARY_PATH from \"System Environment\" variable. [bamboo_capability_system_builder_command_google_chrome = '"+seleniumChromeBinaryPathTemp+"']");
                 }
 
                 SELENIUM_CHROME_BINARY_PATH = seleniumChromeBinaryPathTemp;
-
-                System.out.println("===== System Environment Variables =====");
-                Map<String,String> mapOfSystemEnvironmentVariable = System.getenv();
-
-                for(Map.Entry<String,String> entry : mapOfSystemEnvironmentVariable.entrySet())
-                {
-                    System.out.println(entry.getKey()+" = "+entry.getValue());
-                }
-
-                System.out.println("========================================");
+                System.out.println("[INFO] Selenium Chrome Binary Path = "+SELENIUM_CHROME_BINARY_PATH);
 
                 SELENIUM_INTERACTION_WAIT_MILLISECONDS = getPropertyValueAsInteger(props, "selenium-interaction-wait-seconds") * 1000;
                 SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS = getPropertyValueAsInteger(props, "selenium-implicit-wait-timeout-seconds");
