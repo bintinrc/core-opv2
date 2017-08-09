@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -97,6 +98,16 @@ public final class APIEndpoint
                 }
 
                 SELENIUM_CHROME_BINARY_PATH = seleniumChromeBinaryPathTemp;
+
+                System.out.println("===== System Environment Variables =====");
+                Map<String,String> mapOfSystemEnvironmentVariable = System.getenv();
+
+                for(Map.Entry<String,String> entry : mapOfSystemEnvironmentVariable.entrySet())
+                {
+                    System.out.println(entry.getKey()+" = "+entry.getValue());
+                }
+
+                System.out.println("========================================");
 
                 SELENIUM_INTERACTION_WAIT_MILLISECONDS = getPropertyValueAsInteger(props, "selenium-interaction-wait-seconds") * 1000;
                 SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS = getPropertyValueAsInteger(props, "selenium-implicit-wait-timeout-seconds");
