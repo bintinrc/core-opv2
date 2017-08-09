@@ -87,7 +87,17 @@ public final class APIEndpoint
 
                 SELENIUM_DRIVER = getPropertyValueAsString(props, "selenium-driver");
                 SELENIUM_CHROME_DRIVER = getPropertyValueAsString(props, "selenium-chrome-driver-location");
-                SELENIUM_CHROME_BINARY_PATH = getPropertyValueAsString(props, "selenium-chrome_binary-path");
+
+                String seleniumChromeBinaryPathTemp = getPropertyValueAsString(props, "selenium-chrome_binary-path");
+
+                if(seleniumChromeBinaryPathTemp==null || seleniumChromeBinaryPathTemp.isEmpty())
+                {
+                    seleniumChromeBinaryPathTemp = System.getenv("SELENIUM_CHROME_BINARY_PATH");
+                    System.out.println("[INFO] Using SELENIUM_CHROME_BINARY_PATH from \"System Environment\" variable. Value = "+seleniumChromeBinaryPathTemp);
+                }
+
+                SELENIUM_CHROME_BINARY_PATH = seleniumChromeBinaryPathTemp;
+
                 SELENIUM_INTERACTION_WAIT_MILLISECONDS = getPropertyValueAsInteger(props, "selenium-interaction-wait-seconds") * 1000;
                 SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS = getPropertyValueAsInteger(props, "selenium-implicit-wait-timeout-seconds");
                 SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS = getPropertyValueAsInteger(props, "selenium-page-load-timeout-seconds");
