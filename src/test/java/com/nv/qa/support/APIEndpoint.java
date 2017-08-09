@@ -93,8 +93,8 @@ public final class APIEndpoint
 
                 if(seleniumChromeBinaryPathTemp==null || seleniumChromeBinaryPathTemp.isEmpty())
                 {
-                    seleniumChromeBinaryPathTemp = System.getenv("SELENIUM_CHROME_BINARY_PATH");
-                    System.out.println("[INFO] Using SELENIUM_CHROME_BINARY_PATH from \"System Environment\" variable. Value = "+seleniumChromeBinaryPathTemp);
+                    seleniumChromeBinaryPathTemp = System.getenv("bamboo_capability_system_builder_command_google_chrome");
+                    System.out.println("[INFO] Using SELENIUM_CHROME_BINARY_PATH from \"System Environment\" variable. [bamboo_capability_system_builder_command_google_chrome = '"+seleniumChromeBinaryPathTemp+'\'');
                 }
 
                 SELENIUM_CHROME_BINARY_PATH = seleniumChromeBinaryPathTemp;
