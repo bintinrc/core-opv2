@@ -116,8 +116,8 @@ public class ShipmentManagementPage {
         CommonUtil.hoverMouseTo(driver, "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
         CommonUtil.clickBtn(driver, "//h4[text()='Select Search Filters']");
 
-        CommonUtil.clickBtn(driver, grabXPathFilter(filterLabel));
-        CommonUtil.clickBtn(driver, grabXPathFilterDropdown(value));
+        CommonUtil.inputText(driver, String.format("//nv-autocomplete[@item-types='%s']//input[@aria-label='Search or Select...']", filterLabel), value);
+        CommonUtil.clickBtn(driver, String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", value));
         CommonUtil.hoverMouseTo(driver, "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
         CommonUtil.clickBtn(driver, "//h4[text()='Select Search Filters']");
     }
