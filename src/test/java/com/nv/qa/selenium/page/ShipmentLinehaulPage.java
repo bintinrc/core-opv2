@@ -92,18 +92,18 @@ public class ShipmentLinehaulPage {
         CommonUtil.inputText(driver, XPATH_SEARCH, value);
         CommonUtil.pause500ms();
 
-        System.out.println("[INFO] Waiting until 'Loading more results...' done.");
+        System.out.println("[INFO] Waiting until 'Loading more results...' disappear.");
 
         try
         {
             //Set implicit wait to 0s to make find element more faster.
             driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
             SeleniumHelper.waitUntilElementInvisible(driver, By.xpath("//h5[text()='Loading more results...']"));
-            System.out.println("[INFO] 'Loading more results...' is done.");
+            System.out.println("[INFO] 'Loading more results...' is disappeared.");
         }
         catch(Exception ex)
         {
-            System.out.println("[WARN] 'Loading more results...' is still displayed.");
+            System.out.println("[WARN] 'Loading more results...' is still appear. Error: "+ex.getMessage());
         }
         finally
         {
@@ -114,7 +114,7 @@ public class ShipmentLinehaulPage {
     }
 
     public void fillLinehaulNameFT(String name) {
-        CommonUtil.inputText(driver, XPATH_LINEHAUL_NAME_TF, name);
+        CommonUtil.retryIfStaleElementReferenceExceptionOccurred(()->CommonUtil.inputText(driver, XPATH_LINEHAUL_NAME_TF, name), "fillLinehaulNameFT");
     }
 
     public void fillCommentsFT(String comment) {

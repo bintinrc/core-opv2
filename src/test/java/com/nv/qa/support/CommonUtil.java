@@ -16,7 +16,9 @@ import java.util.*;
  *
  * @author Soewandi Wirjawan
  */
-public class CommonUtil {
+public class CommonUtil
+{
+    private static final int MAX_RETRY_ON_STALE_ELEMENT_REFERENCE_EXCEPTION = 10;
 
     private CommonUtil()
     {
@@ -349,22 +351,75 @@ public class CommonUtil {
         return deleted;
     }
 
-    public static Set<Cookie> getCookies(WebDriver driver){
+    public static void retryIfStaleElementReferenceExceptionOccurred(Runnable runnable)
+    {
+        retryIfStaleElementReferenceExceptionOccurred(runnable, null);
+    }
+
+    public static void retryIfStaleElementReferenceExceptionOccurred(Runnable runnable, String methodName)
+    {
+        StaleElementReferenceException staleElementReferenceException = null;
+        boolean isStaleElementReferenceExceptionOccurred;
+        int counter = 0;
+
+        do
+        {
+            try
+            {
+                runnable.run();
+                isStaleElementReferenceExceptionOccurred = false;
+            }
+            catch(StaleElementReferenceException ex)
+            {
+                staleElementReferenceException = ex;
+                isStaleElementReferenceExceptionOccurred = true;
+
+                if(methodName==null)
+                {
+                    System.out.println(String.format("[WARN] StaleElementReferenceException is occurred. Retrying %dx...", (counter+1)));
+                }
+                else
+                {
+                    System.out.println(String.format("[WARN] StaleElementReferenceException is occurred on method '%s'. Retrying %dx...", methodName, (counter+1)));
+                }
+            }
+
+            counter++;
+        }
+        while(isStaleElementReferenceExceptionOccurred && counter<MAX_RETRY_ON_STALE_ELEMENT_REFERENCE_EXCEPTION);
+
+        if(isStaleElementReferenceExceptionOccurred)
+        {
+            if(methodName==null)
+            {
+                throw new RuntimeException(String.format("StaleElementReferenceException still occurred after trying  %d times.", MAX_RETRY_ON_STALE_ELEMENT_REFERENCE_EXCEPTION), staleElementReferenceException);
+            }
+            else
+            {
+                throw new RuntimeException(String.format("StaleElementReferenceException still occurred on method '%s' after trying %d times.", methodName, MAX_RETRY_ON_STALE_ELEMENT_REFERENCE_EXCEPTION), staleElementReferenceException);
+            }
+        }
+    }
+
+    public static Set<Cookie> getCookies(WebDriver driver)
+    {
         return driver.manage().getCookies();
     }
-    public static String getOperatorTimezone(WebDriver driver) {
+
+    public static String getOperatorTimezone(WebDriver driver)
+    {
         String cookie = driver.manage().getCookieNamed("user").getValue();
-        try {
+
+        try
+        {
             String cookier = URLDecoder.decode(cookie,"UTF-8");
             return (String) JsonHelper.fromJsonToHashMap(cookier).get("timezone");
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             System.out.println(e.getMessage());
         }
+
         return null;
     }
-
-
-
-
-
 }
