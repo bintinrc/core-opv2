@@ -158,7 +158,7 @@ public class SimplePage
         }
         catch(NoSuchElementException ex)
         {
-            throw new RuntimeException("Cannot find action button on table.", ex);
+            throw new RuntimeException(String.format("Cannot find action button '%s' on table.", actionButtonName), ex);
         }
     }
 

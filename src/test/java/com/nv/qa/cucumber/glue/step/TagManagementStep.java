@@ -14,8 +14,8 @@ import org.junit.Assert;
 @ScenarioScoped
 public class TagManagementStep extends AbstractSteps
 {
-    private static final String DEFAULT_TAG_NAME = "AAA";
-    private static final String EDITED_TAG_NAME = "AAB";
+    public static final String DEFAULT_TAG_NAME = "AAA";
+    public static final String EDITED_TAG_NAME = "AAB";
     private static final String DEFAULT_TAG_DESCRIPTION = "This tag is created by Automation Test for testing purpose only. Ignore this tag.";
     private static final String EDITED_DEFAULT_TAG_DESCRIPTION = DEFAULT_TAG_DESCRIPTION + " [EDITED]";
 
@@ -44,7 +44,8 @@ public class TagManagementStep extends AbstractSteps
          */
         tagManagementPage.clickTagNameColumnHeader();
 
-        for(int i=0; i<2; i++)
+        //This code below is removed because KH said the ops want that button to be removed.
+        /*for(int i=0; i<2; i++)
         {
             String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
 
@@ -58,7 +59,7 @@ public class TagManagementStep extends AbstractSteps
             {
                 break; // Quit from loop if cannot find DEFAULT_TAG_NAME or EDITED_TAG_NAME on the first row.
             }
-        }
+        }*/
 
         tagManagementPage.clickCreateTag();
         tagManagementPage.setTagNameValue(DEFAULT_TAG_NAME);
