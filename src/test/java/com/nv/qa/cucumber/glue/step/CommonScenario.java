@@ -3,6 +3,7 @@ package com.nv.qa.cucumber.glue.step;
 import com.google.inject.Singleton;
 import com.nv.qa.selenium.page.LoginPage;
 import com.nv.qa.selenium.page.MainPage;
+import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.SeleniumSharedDriver;
 import cucumber.api.Scenario;
@@ -18,6 +19,11 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -27,6 +33,8 @@ import java.util.Date;
 @Singleton
 public class CommonScenario
 {
+    private static final SimpleDateFormat HTML_PAGE_SOURCE_DATE_SUFFIX_SDF = new SimpleDateFormat("dd-MMM-yyyy_hh-mm-ss");
+
     private WebDriver driver;
     private Scenario scenario;
 
@@ -74,6 +82,7 @@ public class CommonScenario
             WebDriver currentDriver = SeleniumSharedDriver.getInstance().getDriver(); // Don't use getDriver() because some feature files does not use CommonScenario.
             takesScreenshot(currentDriver, scenario);
             printBrowserConsoleLog(currentDriver, scenario);
+            printLastPageHtmlSourceToFile(currentDriver, scenario);
         }
     }
 
@@ -148,6 +157,31 @@ public class CommonScenario
         {
             System.out.println("[WARNING] Failed print browser log. Cause:");
             ex.printStackTrace(System.err);
+        }
+    }
+
+    private void printLastPageHtmlSourceToFile(WebDriver currentDriver, Scenario currentScenario)
+    {
+        try
+        {
+            String scenarioName = currentScenario.getName();
+            String lastPageHtmlSource = currentDriver.getPageSource();
+            String htmlPageSourceName = scenarioName.split("\\(uid:")[0].trim().replaceAll(" ", "_")+'_'+HTML_PAGE_SOURCE_DATE_SUFFIX_SDF.format(new Date())+".html";
+
+            File outputFile = new File(APIEndpoint.REPORT_HTML_OUTPUT_DIR, htmlPageSourceName);
+            System.out.println(String.format("[INFO] Writing last page HTML source to file '%s'...", outputFile.getAbsolutePath()));
+
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+            bw.write(lastPageHtmlSource);
+            bw.newLine();
+            bw.flush();
+            bw.close();
+
+            System.out.println(String.format("[INFO] Writing last page HTML source to file '%s' is done.", outputFile));
+        }
+        catch(Exception ex)
+        {
+            System.out.println("[WARN] Cannot write last page html source to last-page.html.");
         }
     }
 

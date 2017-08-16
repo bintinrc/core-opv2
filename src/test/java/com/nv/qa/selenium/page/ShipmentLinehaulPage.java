@@ -11,6 +11,7 @@ import org.openqa.selenium.support.PageFactory;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by lanangjati
@@ -89,6 +90,27 @@ public class ShipmentLinehaulPage {
 
     public void search(String value) {
         CommonUtil.inputText(driver, XPATH_SEARCH, value);
+        CommonUtil.pause500ms();
+
+        System.out.println("[INFO] Waiting until 'Loading more results...' done.");
+
+        try
+        {
+            //Set implicit wait to 0s to make find element more faster.
+            driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+            SeleniumHelper.waitUntilElementInvisible(driver, By.xpath("//h5[text()='Loading more results...']"));
+            System.out.println("[INFO] 'Loading more results...' is done.");
+        }
+        catch(Exception ex)
+        {
+            System.out.println("[WARN] 'Loading more results...' is still displayed.");
+        }
+        finally
+        {
+            //Reset implicit timeout.
+            driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+        }
+
     }
 
     public void fillLinehaulNameFT(String name) {

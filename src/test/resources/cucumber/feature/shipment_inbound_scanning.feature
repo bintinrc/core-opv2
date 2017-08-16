@@ -1,4 +1,4 @@
-@selenium @shipment @current
+@selenium @shipment
 Feature: Shipment Inbound Scanning
 
   Scenario: op login into operator portal

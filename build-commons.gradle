@@ -56,11 +56,12 @@ processTestResources {
  * Note: Using JavaExec like this makes you can debug the code.
  */
 task runCucumber(dependsOn: ["testClasses"], type: JavaExec) {
+    def reportHtmlOutputDir = "build/reports/cucumber-junit/htmloutput"
     main = "cucumber.api.cli.Main"
     classpath = sourceSets.test.runtimeClasspath
     args = [
             "--plugin", "pretty",
-            "--plugin", "html:build/reports/cucumber-junit/htmloutput",
+            "--plugin", "html:$reportHtmlOutputDir",
             "--plugin", "json:build/reports/cucumber-junit/cucumber.json",
             "--plugin", "junit:build/reports/cucumber-junit/cucumber.xml",
             "--monochrome",
@@ -72,6 +73,8 @@ task runCucumber(dependsOn: ["testClasses"], type: JavaExec) {
     {
         args "--tags", project.getProperty("tags")
     }
+
+    systemProperties["REPORT_HTML_OUTPUT_DIR"] = reportHtmlOutputDir
 
     if(project.hasProperty("environment"))
     {
@@ -109,13 +112,14 @@ task runCucumberParallel(dependsOn: ["testClasses"]) {
                 void run()
                 {
                     def reportFileName = featureFile.absolutePath.substring(cucumberFeatureDir.length()+1).replaceAll("/", "-")
+                    def reportHtmlOutputDir = "build/reports/cucumber-junit/htmloutput/${reportFileName}"
 
                     javaexec {
                         main = "cucumber.api.cli.Main"
                         classpath = sourceSets.test.runtimeClasspath
                         args = [
                                 "--plugin", "pretty",
-                                "--plugin", "html:build/reports/cucumber-junit/htmloutput/${reportFileName}",
+                                "--plugin", "html:$reportHtmlOutputDir",
                                 "--plugin", "junit:build/reports/cucumber-junit/cucumber-${reportFileName}.xml",
                                 "--monochrome",
                                 "--glue", cucumberGluePackage,
@@ -127,6 +131,8 @@ task runCucumberParallel(dependsOn: ["testClasses"]) {
                             def tags = project.getProperty("tags")
                             args "--tags", tags
                         }
+
+                        systemProperties["REPORT_HTML_OUTPUT_DIR"] = reportHtmlOutputDir
 
                         if(project.hasProperty("environment"))
                         {

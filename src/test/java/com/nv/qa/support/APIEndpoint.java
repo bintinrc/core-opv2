@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -21,6 +20,8 @@ public final class APIEndpoint
 
     private static final String CONFIGURATION_FILE = "config.properties";
     private static final String ENVIRONMENT_SYSTEM_PROPERTY = "environment";
+
+    public static final String REPORT_HTML_OUTPUT_DIR = System.getProperty("REPORT_HTML_OUTPUT_DIR");
 
     public static final int STEP_DELAY_MILLISECONDS;
 

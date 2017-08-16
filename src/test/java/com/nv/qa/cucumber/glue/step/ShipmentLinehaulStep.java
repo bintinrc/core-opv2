@@ -135,14 +135,31 @@ public class ShipmentLinehaulStep{
     public void linehaulDeleted() throws Throwable {
         String msg = "Success delete Linehaul ID " + linehaulId;
         WebElement toast = CommonUtil.getToast(driver);
-        Assert.assertTrue("toast message not contains " + msg, toast.getText().contains(msg));
+
+        if(toast==null)
+        {
+            Assert.fail("Cannot find toast message.");
+        }
+        else
+        {
+            Assert.assertTrue(String.format("Toast message not contains: '%s'", msg), toast.getText().contains(msg));
+        }
     }
 
     @Then("^linehaul edited$")
     public void linehaul_edited() throws Throwable {
         String msg = "Linehaul " + linehaulId + " updated";
         WebElement toast = CommonUtil.getToast(driver);
-        Assert.assertTrue("toast message not contain " + msg, toast.getText().contains(msg));
+
+        if(toast==null)
+        {
+            Assert.fail("Cannot find toast message.");
+        }
+        else
+        {
+            Assert.assertTrue(String.format("Toast message not contains: '%s'", msg), toast.getText().contains(msg));
+        }
+
         shipmentLinehaulPage.clickTab("LINEHAUL DATE");
         linehaulExist();
         List<Linehaul> list = shipmentLinehaulPage.grabListofLinehaul();
