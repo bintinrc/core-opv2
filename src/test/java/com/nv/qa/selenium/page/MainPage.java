@@ -2,6 +2,7 @@ package com.nv.qa.selenium.page;
 
 import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
+import com.nv.qa.support.SeleniumHelper;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -20,7 +21,6 @@ import java.util.Map;
  */
 public class MainPage extends LoadableComponent<MainPage>
 {
-    private static final int MAX_RETRY = 2;
     private final WebDriver driver;
     private final Map<String, String> map = new HashMap<String, String>()
     {
@@ -52,6 +52,11 @@ public class MainPage extends LoadableComponent<MainPage>
 
 
     public void clickNavigation(String parentTitle, String navTitle, String urlPart) throws  InterruptedException{
+        //-- ensure no dialog that prevents menu from being clicked.
+        driver.navigate().refresh();
+        CommonUtil.pause1s();
+        SeleniumHelper.waitPageLoad(driver);
+
         String navElmXpath = "//nv-section-item/button[div='" + navTitle + "']";
         WebElement navElm = driver.findElement(By.xpath(navElmXpath));
 
@@ -61,32 +66,10 @@ public class MainPage extends LoadableComponent<MainPage>
         }
 
         CommonUtil.pause1s();
+        navElm.click();
 
-        boolean isNavElmClicked = false;
-        WebDriverException exception = null;
-
-        for(int i=0; i<MAX_RETRY; i++)
-        {
-            try
-            {
-                navElm.click();
-                isNavElmClicked = true;
-                break;
-            }
-            catch(WebDriverException ex)
-            {
-                exception = ex;
-                System.out.println(String.format("[WARNING] Element is not clickable exception detected for element (xpath='%s') %d times.", navElmXpath, (i+1)));
-            }
-        }
-
-        if(!isNavElmClicked)
-        {
-            throw new RuntimeException(String.format("Retrying 'element is not clickable exception' reach maximum retry. Max retry = %d.", MAX_RETRY), exception);
-        }
-
-        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until(new ExpectedCondition<Boolean>()
-        {
+        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until(
+        new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d)
             {
                 return d.getCurrentUrl().toLowerCase().endsWith(urlPart);
