@@ -66,19 +66,19 @@ Feature: Sms Module
 
 
 
-  @LaunchBrowser
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
-
-  Scenario: Operator using url shortener on sms editor (uid:9ba5f071-f569-41d4-81e5-92316cc34bd3)
-    Given op click custom navigation SMS Module in Mass Communications and url sms
-    Then op upload sms campaign csv file
-      | tracking_id              | name                 | email            | job                |
-      | NVSGQANV7000000917       | Sim Sze Kiat         | qa@ninjavan.co   |	Dev             |
-    Then op compose sms using url shortener
-    Then op verify sms preview using shortened url
-
-  @KillBrowser
-  Scenario: Kill Browser
+#  @LaunchBrowser
+#  Scenario: Login to Operator V2
+#    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+#
+#  Scenario: Operator using url shortener on sms editor (uid:9ba5f071-f569-41d4-81e5-92316cc34bd3)
+#    Given op click custom navigation SMS Module in Mass Communications and url sms
+#    Then op upload sms campaign csv file
+#      | tracking_id              | name                 | email            | job                |
+#      | NVSGQANV7000000917       | Sim Sze Kiat         | qa@ninjavan.co   |	Dev             |
+#    Then op compose sms using url shortener
+#    Then op verify sms preview using shortened url
+#
+#  @KillBrowser
+#  Scenario: Kill Browser
 
     
