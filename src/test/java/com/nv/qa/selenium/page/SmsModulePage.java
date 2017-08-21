@@ -18,10 +18,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by rizaqpratama on 7/18/17.
+ *
+ * @author Rizaq Pratama
  */
-public class SmsModulePage extends SimplePage{
-
+public class SmsModulePage extends SimplePage
+{
     private static final String COMMA = ",";
     private static final String NEW_LINE = "\r\n";
     private static final String SMS_CAMPAIGN_FILE_NAME = "sms_campaign.csv";
@@ -32,27 +33,35 @@ public class SmsModulePage extends SimplePage{
     private static Map<String, Object> cache;
     private SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD hh:ss");
 
-    public SmsModulePage(WebDriver driver){
+    public SmsModulePage(WebDriver driver)
+    {
         super(driver);
-        if(cache== null) {
+
+        if(cache== null)
+        {
             cache = new ConcurrentHashMap<>();
         }
     }
 
-    public void uploadCsvCampaignFile(List<SmsCampaignCsv> data){
-        try {
+    public void uploadCsvCampaignFile(List<SmsCampaignCsv> data)
+    {
+        try
+        {
             createSmsCampaignCsv(data);
             uploadFile();
-        } catch (FileNotFoundException e) {
+        }
+        catch(FileNotFoundException e)
+        {
             e.printStackTrace();
         }
-
     }
 
-
-    private void createSmsCampaignCsv(List<SmsCampaignCsv> data) throws FileNotFoundException{
+    private void createSmsCampaignCsv(List<SmsCampaignCsv> data) throws FileNotFoundException
+    {
         StringBuilder smsCampaignData = new StringBuilder();
-        data.stream().forEach((row)->{
+
+        data.stream().forEach((row)->
+        {
             StringBuilder sb = new StringBuilder();
             sb.append(row.getTracking_id()).append(COMMA);
             sb.append(row.getName()).append(COMMA);
@@ -60,33 +69,37 @@ public class SmsModulePage extends SimplePage{
             sb.append(row.getJob()).append(COMMA);
             smsCampaignData.append(sb.toString()).append(NEW_LINE);
         });
+
         PrintWriter pw = new PrintWriter(new FileOutputStream(FILE_PATH));
         pw.println(SMS_CAMPAIGN_HEADER);
         pw.print(smsCampaignData.toString());
         pw.close();
     }
 
-
-    private void uploadFile(){
+    private void uploadFile()
+    {
         WebElement inputElement = getDriver().findElement(By.xpath("//input[@type='file']"));
         inputElement.sendKeys(FILE_PATH);
         pause3s();
     }
 
-    public void continueOnCsvUploadFailure(){
+    public void continueOnCsvUploadFailure()
+    {
         pause1s();
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'nv-partial-failed-upload-csv')]", LOADING_TIMEOUT_IN_SECONDS);
         findElementByXpath("//nv-icon-text-button[@text='commons.continue']").click();
         waitUntilInvisibilityOfElementLocated("//md-dialog[contains(@class,'nv-partial-failed-upload-csv')]", LOADING_TIMEOUT_IN_SECONDS);
     }
 
-    public void verifyThatPageReset(){
+    public void verifyThatPageReset()
+    {
         pause1s();
         Assert.assertFalse(isElementExist("//md-card[contains(@class,'sms-editor')]"));
         Assert.assertFalse(isElementExist("//md-dialog[contains(@class,'nv-partial-failed-upload-csv')"));
     }
 
-    public void composeSms(String name, String trackingId){
+    public void composeSms(String name, String trackingId)
+    {
         waitUntilVisibilityOfElementLocated("//md-card[contains(@class,'sms-editor')]", LOADING_TIMEOUT_IN_SECONDS);
         String smsDate = sdf.format(new Date());
         cache.put("sms-date", smsDate);
@@ -103,11 +116,10 @@ public class SmsModulePage extends SimplePage{
         pause1s();
         Assert.assertEquals("Hallo "+name+", your parcel with tracking id "+trackingId+" is ready to be delivered. sms-date: "+smsDate,
                 findElementByXpath("//textarea[@name='preview']").getAttribute("value"));
-
     }
 
-
-    public void composeSmsWithUrlShortener(){
+    public void composeSmsWithUrlShortener()
+    {
         waitUntilVisibilityOfElementLocated("//md-card[contains(@class,'sms-editor')]", LOADING_TIMEOUT_IN_SECONDS);
         //check the uploaded file name is correct
         WebElement uploadedFileNameElement = findElementByXpath("//div[contains(@class,'uploaded-info')]//div[1]/p/b");
@@ -122,40 +134,44 @@ public class SmsModulePage extends SimplePage{
         click("//li[@ng-repeat='field in ctrl.fields'][3]/span[2]/input");
         pause100ms();
         click("//nv-icon-text-button[@on-click='ctrl.updatePreview()']");
-
     }
 
-    public void verifyThatPreviewUsingShortenedUrl(){
+    public void verifyThatPreviewUsingShortenedUrl()
+    {
         pause10s();
-        Assert.assertTrue("The produced sms using ninja url shortener", findElementByXpath("//textarea[@name='preview']").getAttribute("value")
-                .contains("http://staging.nnj.vn"));
-
+        String actualValue = findElementByXpath("//textarea[@name='preview']").getAttribute("value");
+        String expectedValue = "http://qa.nnj.vn";
+        Assert.assertTrue(String.format("The produced sms using ninja url shortener is failed: actual = [%s] expected = [%s]", actualValue, expectedValue), actualValue.contains(expectedValue));
     }
 
-
-    public void waitForSmsToBeProcessed(){
+    public void waitForSmsToBeProcessed()
+    {
         pause10s();
     }
 
-    public void sendSms(){
+    public void sendSms()
+    {
         click("//nv-api-text-button[@text='container.sms.send-sms']");
         waitUntilVisibilityOfElementLocated("//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div", LOADING_TIMEOUT_IN_SECONDS);
         WebElement successToast = CommonUtil.getToast(getDriver());
         Assert.assertEquals("Successfully sent 1 SMS", successToast.getText());
     }
 
-    public void searchSmsSentHistory(String trackingId){
+    public void searchSmsSentHistory(String trackingId)
+    {
         sendKeys("//input[@name='trackingId']",trackingId);
         click("//nv-icon-text-button[@text='commons.load']/button");
     }
 
-    public void verifySmsHistoryTrackingIdInvalid(String trackingId){
+    public void verifySmsHistoryTrackingIdInvalid(String trackingId)
+    {
         waitUntilVisibilityOfElementLocated("//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div", LOADING_TIMEOUT_IN_SECONDS);
         WebElement failedToast = CommonUtil.getToast(getDriver());
         Assert.assertEquals("Order with trackingId "+trackingId+" not found!", failedToast.getText());
     }
 
-    public void verifySmsHistoryTrackingIdValid(String trackingId, String contactNumber){
+    public void verifySmsHistoryTrackingIdValid(String trackingId, String contactNumber)
+    {
         waitUntilVisibilityOfElementLocated("//md-card[contains(@class,'sms-history')]", LOADING_TIMEOUT_IN_SECONDS);
         String smsDate = (String)cache.get("sms-date");
         //assert that tracking id is equal
@@ -166,16 +182,8 @@ public class SmsModulePage extends SimplePage{
         String number=  getTextOnTableWithMdVirtualRepeat(1,"to-number", MD_VIRTUAL_REPEAT, false);
         Assert.assertEquals(contactNumber, number);
 
-
         //check sms-date on the message field
         String message =  getTextOnTableWithMdVirtualRepeat(1,"message", MD_VIRTUAL_REPEAT, false);
         Assert.assertTrue("It contain sms-date woth same date", message.contains(smsDate));
-
     }
-
-
-
-
-
-
 }
