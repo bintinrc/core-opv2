@@ -35,6 +35,8 @@ public class AddParcelToRouteStep extends AbstractSteps
     {
         String routeGroupName = scenarioStorage.get("routeGroupName");
         takesScreenshot();
+        addParcelToRoutePage.selectCurrentDate();
+        takesScreenshot();
         addParcelToRoutePage.selectRouteGroup(routeGroupName);
         takesScreenshot();
         addParcelToRoutePage.selectTag("FLT"); //Unselect tag FLT. Tag FLT is default tag on this page.

@@ -178,6 +178,7 @@ public class CommonScenario
             bw.close();
 
             System.out.println(String.format("[INFO] Writing last page HTML source to file '%s' is done.", outputFile));
+            currentScenario.write(String.format("Last page HTML source file can be seen here: <a href='%s'>%s</a>", htmlPageSourceName, htmlPageSourceName));
         }
         catch(Exception ex)
         {

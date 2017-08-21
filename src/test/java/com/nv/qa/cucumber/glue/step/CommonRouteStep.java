@@ -2,6 +2,7 @@ package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Inject;
 import com.nv.qa.api.client.operator_portal.OperatorPortalRoutingClient;
+import com.nv.qa.constants.NvTimeZone;
 import com.nv.qa.model.operator_portal.authentication.AuthRequest;
 import com.nv.qa.model.operator_portal.routing.CreateRouteRequest;
 import com.nv.qa.model.operator_portal.routing.CreateRouteResponse;
@@ -47,7 +48,7 @@ public class CommonRouteStep extends AbstractSteps
             operatorAuthRequest.setClientId(APIEndpoint.OPERATOR_V1_CLIENT_ID);
             operatorAuthRequest.setClientSecret(APIEndpoint.OPERATOR_V1_CLIENT_SECRET);
 
-            operatorPortalRoutingClient = new OperatorPortalRoutingClient(APIEndpoint.API_BASE_URL, APIEndpoint.API_BASE_URL+"/auth/login?grant_type=client_credentials");
+            operatorPortalRoutingClient = new OperatorPortalRoutingClient(APIEndpoint.API_BASE_URL, APIEndpoint.API_BASE_URL+"/auth/login?grant_type=client_credentials", null, NvTimeZone.ASIA_SINGAPORE);
             operatorPortalRoutingClient.login(operatorAuthRequest);
         }
         catch(Exception ex)

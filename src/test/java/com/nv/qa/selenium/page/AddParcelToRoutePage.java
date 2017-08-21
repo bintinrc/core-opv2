@@ -1,6 +1,9 @@
 package com.nv.qa.selenium.page;
 
+import com.nv.qa.support.CommonUtil;
 import org.openqa.selenium.WebDriver;
+
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -8,6 +11,7 @@ import org.openqa.selenium.WebDriver;
  */
 public class AddParcelToRoutePage extends SimplePage
 {
+    private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
     private static final int SUBMIT_BUTTON_LOADING_TIMEOUT_IN_SECONDS = 30;
     public static final String NG_REPEAT = "row in $data";
     public static final String COLUMN_CLASS_TRACKING_ID = "tracking_id";
@@ -15,6 +19,15 @@ public class AddParcelToRoutePage extends SimplePage
     public AddParcelToRoutePage(WebDriver driver)
     {
         super(driver);
+    }
+
+    public void selectCurrentDate()
+    {
+        String dateLabel = DATE_FILTER_SDF.format(CommonUtil.getBeforeDate(1));
+
+        click("//md-datepicker[@id='commons.model.route-date']/button");
+        pause1s();
+        click("//td[@aria-label='" + dateLabel + "']");
     }
 
     public void selectRouteGroup(String routeGroupName)

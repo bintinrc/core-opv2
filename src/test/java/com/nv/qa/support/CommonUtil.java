@@ -24,13 +24,15 @@ public class CommonUtil
     {
     }
 
-    public static void clickBtn(WebDriver driver, String xpath) {
+    public static void clickBtn(WebDriver driver, String xpath)
+    {
         WebElement el = driver.findElement(By.xpath(xpath));
         pause50ms();
         moveAndClick(driver, el);
     }
 
-    public static void moveAndClick(WebDriver driver, WebElement el) {
+    public static void moveAndClick(WebDriver driver, WebElement el)
+    {
         Actions action = new Actions(driver);
         action.moveToElement(el);
         pause300ms();
@@ -39,7 +41,8 @@ public class CommonUtil
         pause300ms();
     }
 
-    public static void inputText(WebDriver driver, String xpath, String value) {
+    public static void inputText(WebDriver driver, String xpath, String value)
+    {
         WebElement el = driver.findElement(By.xpath(xpath));
         el.clear();
         pause300ms();
@@ -47,87 +50,102 @@ public class CommonUtil
         pause300ms();
     }
 
-    public static void hoverMouseTo(WebDriver driver, String xpath) {
+    public static void hoverMouseTo(WebDriver driver, String xpath)
+    {
         WebElement el = driver.findElement(By.xpath(xpath));
         pause100ms();
         moveTo(driver, el);
     }
 
-    public static void moveTo(WebDriver driver, WebElement el) {
+    public static void moveTo(WebDriver driver, WebElement el)
+    {
         Actions action = new Actions(driver);
         action.moveToElement(el);
         action.perform();
         pause1s();
     }
 
-    public static void chooseValueFromMdContain(WebDriver driver, String xpathContainer, String value) {
-
+    public static void chooseValueFromMdContain(WebDriver driver, String xpathContainer, String value)
+    {
         driver.findElement(By.xpath(xpathContainer)).click();
         CommonUtil.pause1s();
 
         CommonUtil.clickBtn(driver,"//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option[div[contains(text(),'" + value + "')]]");
     }
 
-    public static void chooseValuesFromMdContain(WebDriver driver, String xpathContainer, List<String> values) {
-
+    public static void chooseValuesFromMdContain(WebDriver driver, String xpathContainer, List<String> values)
+    {
         driver.findElement(By.xpath(xpathContainer)).click();
         CommonUtil.pause10ms();
 
-        if (driver.findElements(By.xpath("//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option[@aria-selected='false']")).size() < 7) {
-
+        if(driver.findElements(By.xpath("//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option[@aria-selected='false']")).size() < 7)
+        {
             //clear selected item
             List<WebElement> activeItem = driver.findElements(By.xpath("//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option[@aria-selected='true']"));
-            for (WebElement item : activeItem) {
+            for(WebElement item : activeItem)
+            {
                 CommonUtil.moveAndClick(driver, item);
             }
         }
 
-        for (String value : values) {
+        for(String value : values)
+        {
             CommonUtil.clickBtn(driver, "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option[div[contains(text(),'" + value + "')]]");
         }
     }
 
-    public static void pause10s() {
+    public static void pause10s()
+    {
         pause(10_000);
     }
 
-    public static void pause5s() {
+    public static void pause5s()
+    {
         pause(5_000);
     }
 
-    public static void pause3s() {
+    public static void pause3s()
+    {
         pause(3_000);
     }
 
-    public static void pause1s() {
+    public static void pause1s()
+    {
         pause(1_000);
     }
 
-    public static void pause100ms() {
+    public static void pause100ms()
+    {
         pause(100);
     }
 
-    public static void pause200ms() {
+    public static void pause200ms()
+    {
         pause(200);
     }
 
-    public static void pause300ms() {
+    public static void pause300ms()
+    {
         pause(300);
     }
 
-    public static void pause500ms() {
+    public static void pause500ms()
+    {
         pause(500);
     }
 
-    public static void pause50ms() {
+    public static void pause50ms()
+    {
         pause(50);
     }
 
-    public static void pause10ms() {
+    public static void pause10ms()
+    {
         pause(10);
     }
 
-    public static void pause(long millis) {
+    public static void pause(long millis)
+    {
         try
         {
             Thread.sleep(millis);
@@ -146,12 +164,16 @@ public class CommonUtil
         return sw.toString();
     }
 
-    public static WebElement getResultInTable(WebDriver driver, String tableXpath, String value) {
+    public static WebElement getResultInTable(WebDriver driver, String tableXpath, String value)
+    {
         List<WebElement> trs = driver.findElements(By.xpath(tableXpath)); //tr
-        for (WebElement tr : trs) {
+        for (WebElement tr : trs)
+        {
             List<WebElement> tds = tr.findElements(By.tagName("td"));
-            for (WebElement td : tds) {
-                if (td.getText().trim().equalsIgnoreCase(value)) {
+            for(WebElement td : tds)
+            {
+                if(td.getText().trim().equalsIgnoreCase(value))
+                {
                     return tr;
                 }
             }
@@ -159,22 +181,26 @@ public class CommonUtil
         return null;
     }
 
-    public static WebElement verifySearchingResults(WebDriver driver, String placeHolder, String ngTable) {
+    public static WebElement verifySearchingResults(WebDriver driver, String placeHolder, String ngTable)
+    {
         String txt = driver.findElement(By.xpath("//input[@placeholder='" + placeHolder + "'][@ng-model='searchText']")).getAttribute("value");
         WebElement result = CommonUtil.getResultInTable(driver, "//table[@ng-table='" + ngTable + "']/tbody/tr", txt);
         Assert.assertTrue(result != null);
         return result;
     }
 
-    public static WebElement getToast(WebDriver driver) {
+    public static WebElement getToast(WebDriver driver)
+    {
         return getElementByXpath(driver, "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
     }
 
-    public static List<WebElement> getToasts(WebDriver driver) {
+    public static List<WebElement> getToasts(WebDriver driver)
+    {
         return getElementsByXpath(driver, "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
     }
 
-    public static void closeModal(WebDriver driver) {
+    public static void closeModal(WebDriver driver)
+    {
         Actions builder = new Actions(driver);
         builder.moveToElement(driver.findElement(By.xpath("//div[(contains(@class, 'nv-text-ellipsis nv-h4'))]")), 5, 5).click().build().perform();
         CommonUtil.pause100ms();
@@ -225,7 +251,8 @@ public class CommonUtil
         pause(500);
     }
 
-    public static void inputListBox(WebDriver driver, String placeHolder, String searchValue) throws InterruptedException {
+    public static void inputListBox(WebDriver driver, String placeHolder, String searchValue) throws InterruptedException
+    {
         WebElement el = driver.findElement(By.xpath("//input[@placeholder='" + placeHolder + "']"));
         el.clear();
         el.sendKeys(searchValue);
@@ -265,7 +292,8 @@ public class CommonUtil
         return result;
     }
 
-    public static int dayToInteger(String day) {
+    public static int dayToInteger(String day)
+    {
         if (day.equalsIgnoreCase("SUNDAY")) {
             return 1;
         } else if (day.equalsIgnoreCase("MONDAY")) {
@@ -285,7 +313,8 @@ public class CommonUtil
         }
     }
 
-    public static String integerToMonth(int month) {
+    public static String integerToMonth(int month)
+    {
         if (month == 0) {
             return "January";
         } else if (month == 1) {
@@ -315,7 +344,8 @@ public class CommonUtil
         }
     }
 
-    public static void columnSearchTable(WebDriver driver, String columnName, String value) {
+    public static void columnSearchTable(WebDriver driver, String columnName, String value)
+    {
         String xpath = "//th[span[text()='" + columnName + "']]/nv-search-input-filter/md-input-container/div/input";
         inputText(driver, xpath, value);
     }
@@ -325,6 +355,14 @@ public class CommonUtil
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         cal.add(Calendar.DATE, day);
+        return cal.getTime();
+    }
+
+    public static Date getBeforeDate(int day)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, -1*day);
         return cal.getTime();
     }
 
