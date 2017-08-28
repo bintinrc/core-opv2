@@ -6,20 +6,16 @@ Feature: Sms Module
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
   Scenario: Operator send sms valid data (uid:231d6a7a-d613-4abb-b734-4f7135e888d7)
+    Given Shipper create Order V2 Parcel using data below:
+      | v2OrderRequest | {"from_postcode":"159363","from_address1":"30 Jalan Kilang Barat","from_address2":"Ninja Van HQ","from_city":"SG","from_state":"SG","from_country":"SG","from_email":"shipper.normal.{{tracking_ref_no}}@test.com","from_name":"Sim Sze Kiat","from_contact":"+6588698632","to_postcode":"318993","to_address1":"998 Toa Payoh North","to_address2":"#01-10","to_city":"SG","to_state":"SG","to_country":"SG","to_email":"customer.normal.{{tracking_ref_no}}@test.com","to_name":"C-N-{{tracking_ref_no}} Customer","to_contact":"98765432","delivery_date":"{{cur_date}}","pickup_date":"{{cur_date}}","pickup_reach_by":"{{cur_date}} 15:00:00","delivery_reach_by":"{{cur_date}} 17:00:00","weekend":true,"staging":false,"pickup_timewindow_id":1,"delivery_timewindow_id":2,"max_delivery_days":0,"cod_goods":null,"cod_shipping":null,"instruction":"This order is created for testing purpose only. Ignore this order. Created at {{created_date}}.","shipper_customer_ref_no":"27","tracking_ref_no":"{{tracking_ref_no}}","shipper_order_ref_no":"{{tracking_ref_no}}","type":"Normal","parcels":[{"parcel_size_id":0,"volume":1,"weight":4}]} |
     Given op click custom navigation SMS Module in Mass Communications and url sms
     Then op upload sms campaign csv file
       | tracking_id              | name                 | email            | job                |
-      | NVSGQANV7000000917       | Sim Sze Kiat         | qa@ninjavan.co   |	Dev             |
-    When op compose sms with data : Sim Sze Kiat, NVSGQANV7000000917
+      | _created_                | Sim Sze Kiat         | qa@ninjavan.co   |	Dev             |
+    When op compose sms with data : Sim Sze Kiat, _created_
     Then op send sms
 
-  @KillBrowser
-  Scenario: Kill Browser
 
-
-  @LaunchBrowser
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
   Scenario: Operator send sms invalid data (uid:4601d827-7a33-4127-92e2-5774fed0c2b0)
     Given op click custom navigation SMS Module in Mass Communications and url sms
@@ -29,49 +25,32 @@ Feature: Sms Module
     Then op continue on invalid dialog
     Then op verify sms module page resetted
 
-  @KillBrowser
-  Scenario: Kill Browser
-
-
-  @LaunchBrowser
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
   Scenario: Check sent sms history (uid:9af02fed-a582-4313-b501-e7e4074b0d46)
+    Given Shipper create Order V2 Parcel using data below:
+      | v2OrderRequest | {"from_postcode":"159363","from_address1":"30 Jalan Kilang Barat","from_address2":"Ninja Van HQ","from_city":"SG","from_state":"SG","from_country":"SG","from_email":"shipper.normal.{{tracking_ref_no}}@test.com","from_name":"Sim Sze Kiat","from_contact":"+6588698632","to_postcode":"318993","to_address1":"998 Toa Payoh North","to_address2":"#01-10","to_city":"SG","to_state":"SG","to_country":"SG","to_email":"customer.normal.{{tracking_ref_no}}@test.com","to_name":"C-N-{{tracking_ref_no}} Customer","to_contact":"98765432","delivery_date":"{{cur_date}}","pickup_date":"{{cur_date}}","pickup_reach_by":"{{cur_date}} 15:00:00","delivery_reach_by":"{{cur_date}} 17:00:00","weekend":true,"staging":false,"pickup_timewindow_id":1,"delivery_timewindow_id":2,"max_delivery_days":0,"cod_goods":null,"cod_shipping":null,"instruction":"This order is created for testing purpose only. Ignore this order. Created at {{created_date}}.","shipper_customer_ref_no":"27","tracking_ref_no":"{{tracking_ref_no}}","shipper_order_ref_no":"{{tracking_ref_no}}","type":"Normal","parcels":[{"parcel_size_id":0,"volume":1,"weight":4}]} |
     Given op click custom navigation SMS Module in Mass Communications and url sms
     Then op upload sms campaign csv file
         | tracking_id              | name                 | email            | job              |
-        | NVSGQANV7000000917       | Sim Sze Kiat         | qa@ninjavan.co   |	Dev             |
-    When op compose sms with data : Sim Sze Kiat, NVSGQANV7000000917
+        | _created_                | Sim Sze Kiat         | qa@ninjavan.co   |	Dev             |
+    When op compose sms with data : Sim Sze Kiat, _created_
     Then op send sms
     Then op wait for sms to be processed
-    Then op verify that sms sent to phone number NVSGQANV7000000917 and tracking id +6588698632
+    Then op verify that sms sent to phone number _created_ and tracking id +6588698632
 
-  @KillBrowser
-  Scenario: Kill Browser
-
-
-  @LaunchBrowser
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
   Scenario: Check sms history with invalid tracking id (uid:b9f8f867-c428-4d7a-96d9-b1c597571c60)
     Given op click custom navigation SMS Module in Mass Communications and url sms
     Then op verify that tracking id SOMERANDOMTRACKINGID is invalid
 
-  @KillBrowser
-  Scenario: Kill Browser
-
-
-  @LaunchBrowser
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
   Scenario: Operator using url shortener on sms editor (uid:9ba5f071-f569-41d4-81e5-92316cc34bd3)
+    Given Shipper create Order V2 Parcel using data below:
+      | v2OrderRequest | {"from_postcode":"159363","from_address1":"30 Jalan Kilang Barat","from_address2":"Ninja Van HQ","from_city":"SG","from_state":"SG","from_country":"SG","from_email":"shipper.normal.{{tracking_ref_no}}@test.com","from_name":"Sim Sze Kiat","from_contact":"+6588698632","to_postcode":"318993","to_address1":"998 Toa Payoh North","to_address2":"#01-10","to_city":"SG","to_state":"SG","to_country":"SG","to_email":"customer.normal.{{tracking_ref_no}}@test.com","to_name":"C-N-{{tracking_ref_no}} Customer","to_contact":"98765432","delivery_date":"{{cur_date}}","pickup_date":"{{cur_date}}","pickup_reach_by":"{{cur_date}} 15:00:00","delivery_reach_by":"{{cur_date}} 17:00:00","weekend":true,"staging":false,"pickup_timewindow_id":1,"delivery_timewindow_id":2,"max_delivery_days":0,"cod_goods":null,"cod_shipping":null,"instruction":"This order is created for testing purpose only. Ignore this order. Created at {{created_date}}.","shipper_customer_ref_no":"27","tracking_ref_no":"{{tracking_ref_no}}","shipper_order_ref_no":"{{tracking_ref_no}}","type":"Normal","parcels":[{"parcel_size_id":0,"volume":1,"weight":4}]} |
     Given op click custom navigation SMS Module in Mass Communications and url sms
     Then op upload sms campaign csv file
       | tracking_id              | name                 | email            | job                |
-      | NVSGQANV7000000917       | Sim Sze Kiat         | qa@ninjavan.co   |	Dev             |
+      | _created_                | Sim Sze Kiat         | qa@ninjavan.co   |	Dev             |
     Then op compose sms using url shortener
     Then op verify sms preview using shortened url
 
