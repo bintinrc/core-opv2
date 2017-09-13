@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class SimplePage
 {
     public static final int DEFAULT_MAX_RETRY_FOR_STALE_ELEMENT_REFERENCE = 5;
-    private WebDriver driver;
+    protected WebDriver driver;
 
     public SimplePage(WebDriver driver)
     {

@@ -1,10 +1,8 @@
 package com.nv.qa.selenium.page;
 
-import com.nv.qa.support.APIEndpoint;
-import com.nv.qa.support.CommonUtil;
-import com.nv.qa.support.DateUtil;
-import com.nv.qa.support.ScenarioHelper;
+import com.nv.qa.support.*;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -22,14 +20,15 @@ public class DpPage extends SimplePage
 {
     private static final int MAX_RETRY = 10;
 
-    public static final String COLUMN_CLASS_DP_PARTNER_NAME = "name ng-binding";
-    public static final String COLUMN_CLASS_DP_PARTNER_RESTRICTION = "ng-binding";
+    //-- refer to the data-title-text attribute on the cell. see getTextOnTable for detail
+    public static final String DP_PARTNER_NAME_COL = "Name";
+    public static final String DP_PARTNER_RESTRICTION_COL = "Restrictions";
 
-    public static final String COLUMN_CLASS_DP_NAME = "name ng-binding";
-    public static final String COLUMN_CLASS_DP_DIRECTION = "directions ng-binding";
+    public static final String DP_NAME_COL = "Name";
+    public static final String DP_DIRECTION_COL = "Directions";
 
-    public static final String COLUMN_CLASS_DP_USER_USERNAME = "username ng-binding";
-    public static final String COLUMN_CLASS_DP_USER_CONTACT_NO = "contact-no ng-binding";
+    public static final String DP_USER_USERNAME_COL = "Username";
+    public static final String DP_USER_CONTACT_NO_COL = "Contact";
 
     private static final Map<String, String> BTN_NAME_FILENAME = new HashMap<String,String>()
     {
@@ -88,27 +87,27 @@ public class DpPage extends SimplePage
             placeHolder = "Search Distribution Point Partners...";
             prefix = "Partner %s";
             ngRepeat = "dpPartner in $data";
-            columnClass = COLUMN_CLASS_DP_PARTNER_NAME;
+            columnClass = DP_PARTNER_NAME_COL;
         }
         else if(type.equals("dps"))
         {
             placeHolder = "Search Distribution Points...";
             prefix = "DP %s";
             ngRepeat = "dp in $data";
-            columnClass = COLUMN_CLASS_DP_NAME;
+            columnClass = DP_NAME_COL;
         }
         else if(type.equals("dp-users"))
         {
             placeHolder = "Search Distribution Point Users...";
             prefix = "user%s";
             ngRepeat = "dpUser in $data";
-            columnClass = COLUMN_CLASS_DP_USER_USERNAME;
+            columnClass = DP_USER_USERNAME_COL;
         }
 
         String keywords = String.format(prefix, ScenarioHelper.getInstance().getTmpId());
         searchTable(keywords);
         //sendKeys("//input[@placeholder='" + placeHolder + "'][@ng-model='searchText']", keywords);
-        pause100ms();
+        CommonUtil.pause1s();
 
         String expectedValue = String.format(prefix, ScenarioHelper.getInstance().getTmpId());
         String actualValue = getTextOnTable(ngRepeat, 1, columnClass);
@@ -124,37 +123,37 @@ public class DpPage extends SimplePage
         if(type.equals("add dp-partners"))
         {
             ngRepeat = "dpPartner in $data";
-            columnClass = COLUMN_CLASS_DP_PARTNER_NAME;
+            columnClass = DP_PARTNER_NAME_COL;
             expectedValue = String.format("Partner %s", ScenarioHelper.getInstance().getTmpId());
-        }
-        else if(type.equals("add dps"))
-        {
-            ngRepeat = "dp in $data";
-            columnClass = COLUMN_CLASS_DP_NAME;
-            expectedValue = String.format("DP %s", ScenarioHelper.getInstance().getTmpId());
-        }
-        else if(type.equals("add dp-users"))
-        {
-            ngRepeat = "dpUser in $data";
-            columnClass = COLUMN_CLASS_DP_USER_USERNAME;
-            expectedValue = String.format("user%s", ScenarioHelper.getInstance().getTmpId());
         }
         else if(type.equals("edit dp-partners"))
         {
             ngRepeat = "dpPartner in $data";
-            columnClass = COLUMN_CLASS_DP_PARTNER_RESTRICTION;
+            columnClass = DP_PARTNER_RESTRICTION_COL;
             expectedValue = String.format("No restrictions enforced. [%s]", ScenarioHelper.getInstance().getTmpId());
+        }
+        else if(type.equals("add dps"))
+        {
+            ngRepeat = "dp in $data";
+            columnClass = DP_NAME_COL;
+            expectedValue = String.format("DP %s", ScenarioHelper.getInstance().getTmpId());
         }
         else if(type.equals("edit dps"))
         {
             ngRepeat = "dp in $data";
-            columnClass = COLUMN_CLASS_DP_DIRECTION;
+            columnClass = DP_DIRECTION_COL;
             expectedValue = String.format("No directions provided. [%s]", ScenarioHelper.getInstance().getTmpId());
+        }
+        else if(type.equals("add dp-users"))
+        {
+            ngRepeat = "dpUser in $data";
+            columnClass = DP_USER_USERNAME_COL;
+            expectedValue = String.format("user%s", ScenarioHelper.getInstance().getTmpId());
         }
         else if(type.equals("edit dp-users"))
         {
             ngRepeat = "dpUser in $data";
-            columnClass = COLUMN_CLASS_DP_USER_CONTACT_NO;
+            columnClass = DP_USER_CONTACT_NO_COL;
             expectedValue = String.format("+65 %s", ScenarioHelper.getInstance().getTmpId());
         }
 
@@ -236,7 +235,7 @@ public class DpPage extends SimplePage
         if(type.equals("dp-partners"))
         {
             ngRepeat = "dpPartner in $data";
-            columnClass = COLUMN_CLASS_DP_PARTNER_NAME;
+            columnClass = DP_PARTNER_NAME_COL;
             placeHolder = "Search Distribution Point Partners...";
             textAreaXpath = "//textarea[@name='restrictions'][@aria-label='Restrictions']";
             editValue = String.format("No restrictions enforced. [%s]", ScenarioHelper.getInstance().getTmpId());
@@ -244,7 +243,7 @@ public class DpPage extends SimplePage
         else if(type.equals("dps"))
         {
             ngRepeat = "dp in $data";
-            columnClass = COLUMN_CLASS_DP_NAME;
+            columnClass = DP_NAME_COL;
 
             placeHolder = "Search Distribution Points...";
             textAreaXpath = "//textarea[@name='directions'][@aria-label='Directions']";
@@ -253,7 +252,7 @@ public class DpPage extends SimplePage
         else if(type.equals("dp-users"))
         {
             ngRepeat = "dpUser in $data";
-            columnClass = COLUMN_CLASS_DP_USER_USERNAME;
+            columnClass = DP_USER_USERNAME_COL;
 
             placeHolder = "Search Distribution Point Users...";
             textAreaXpath = "//input[@type='tel'][@aria-label='Contact No.']";
@@ -311,17 +310,22 @@ public class DpPage extends SimplePage
 
         if(type.equals("dps"))
         {
+            //--
+            //-- <h4>Distribution Points</h4>
             mainTitle = "Distribution Points";
         }
         else if(type.equals("dp-users"))
         {
+            //-- <h4>Distribution Point Users</h4>
             mainTitle = "Distribution Point Users";
         }
 
-        WebElement we = findElementByXpath("//div[@class='data-header ng-scope ng-isolate-scope layout-row']");
-        String text = we.getAttribute("main-title");
-        pause100ms();
-        Assert.assertTrue(text.equals(mainTitle));
+        SeleniumHelper.waitUntilElementVisible(
+                driver,
+                By.xpath(
+                        String.format("//h4[text() = '%s']", mainTitle)
+                )
+        );
     }
 
     public void searchTable(String keyword)
@@ -329,17 +333,47 @@ public class DpPage extends SimplePage
         sendKeys("//input[@type='text'][@ng-model='searchText']", keyword);
     }
 
-    public String getTextOnTable(String ngRepeat, int rowNumber, String columnDataClass)
+    /**
+     *  refer to the data-title-text attribute on the cell.
+     *  since class are inconsistent and data-title value are too long.
+     *
+     *  e.g.:
+     *  <tr ng-repeat="dpPartner in $data">
+     *     <td data-title="'commons.id' | translate" sortable="'id'" class="id" data-title-text="Id"> 1223 </td>
+     *     <td data-title="'commons.name' | translate" sortable="'name'" class="name" data-title-text="Name"> Partner 1505289247109 </td>
+     *     <td data-title="'container.dp-administration.dp-partners.header-poc-name' | translate" sortable="'pocName'" class="poc-name" data-title-text="POC Name"> Poc 1505289247109 </td>
+     *     <td data-title="'container.dp-administration.dp-partners.header-poc-no' | translate" sortable="'pocTel'" class="poc-tel" data-title-text="POC No."> +65 1505289247109 </td>
+     *     <td data-title="'container.dp-administration.dp-partners.header-poc-email' | translate" sortable="'pocEmail'" class="poc-email" data-title-text="POC Email"> 1505289247109@poc.co </td>
+     *     <td data-title="'container.dp-administration.dp-partners.header-restrictions' | translate" data-title-text="Restrictions"> No restrictions enforced. [1505289247109] </td>
+     *     <td data-title="'commons.actions' | translate" class="actions" data-title-text="Actions">
+     *         <div class="nv-icon-button-group layout-align-center-center layout-row" layout="row" layout-align="center center">
+     *             <nv-icon-button md-theme="nvBlue" class="" name="Edit" icon="edit" on-click="ctrl.editDPPartner($event, dpPartner.id)">
+     *                 <button class="nv-button md-button md-nvBlue-theme md-ink-ripple raised" type="button" ng-transclude="" aria-label="Edit" ng-class="ngChildClass" ng-click="onClick({$event: $event})" ng-disabled="disabled">
+     *                     <i class="material-icons">edit</i>
+     *                     <div class="md-ripple-container"></div>
+     *                 </button>
+     *             </nv-icon-button>
+     *             <nv-icon-button md-theme="nvGreen" class="" name="View DPs" icon="arrow_forward" on-click="ctrl.viewDPs(dpPartner)">
+     *                 <button class="nv-button md-button md-nvGreen-theme md-ink-ripple raised" type="button" ng-transclude="" aria-label="View DPs" ng-class="ngChildClass" ng-click="onClick({$event: $event})" ng-disabled="disabled">
+     *                     <i class="material-icons">arrow_forward</i>
+     *                 </button>
+     *             </nv-icon-button>
+     *         </div>
+     *     </td> </tr>
+     */
+    public String getTextOnTable(String ngRepeat, int rowNumber, String dataTitleText)
     {
         String text = null;
 
         try
         {
-            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[@class='%s']", ngRepeat, rowNumber, columnDataClass));
+            //-- e.g.: //tr[@ng-repeat='dpPartner in $data'][1]/td[@data-title-text='Restrictions']
+            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[@data-title-text='%s']", ngRepeat, rowNumber, dataTitleText));
             text = we.getText().trim();
         }
         catch(NoSuchElementException ex)
         {
+            ex.printStackTrace();
         }
 
         return text;
