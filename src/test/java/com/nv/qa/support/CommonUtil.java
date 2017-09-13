@@ -189,14 +189,24 @@ public class CommonUtil
         return result;
     }
 
+    /**
+     * Get toast element. Only call this when you sure toast will we invoked.
+     *
+     * @param driver
+     * @return
+     */
     public static WebElement getToast(WebDriver driver)
     {
-        return getElementByXpath(driver, "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
+        String xpath = "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div";
+        SeleniumHelper.waitUntilElementVisible(driver, By.xpath(xpath));
+        return getElementByXpath(driver, xpath);
     }
 
     public static List<WebElement> getToasts(WebDriver driver)
     {
-        return getElementsByXpath(driver, "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
+        String xpath = "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div";
+        SeleniumHelper.waitUntilElementVisible(driver, By.xpath(xpath));
+        return getElementsByXpath(driver, xpath);
     }
 
     public static void closeModal(WebDriver driver)
