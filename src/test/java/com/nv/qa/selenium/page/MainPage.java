@@ -6,18 +6,16 @@ import com.nv.qa.support.SeleniumHelper;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
- * Created by sw on 6/30/16.
+ *
+ * @author Soewandi Wirjawan
  */
 public class MainPage extends LoadableComponent<MainPage>
 {
@@ -50,9 +48,9 @@ public class MainPage extends LoadableComponent<MainPage>
     {
     }
 
-
-    public void clickNavigation(String parentTitle, String navTitle, String urlPart) throws  InterruptedException{
-        //-- ensure no dialog that prevents menu from being clicked.
+    public void clickNavigation(String parentTitle, String navTitle, String urlPart) throws  InterruptedException
+    {
+        // Ensure no dialog that prevents menu from being clicked.
         driver.navigate().refresh();
         CommonUtil.pause1s();
         SeleniumHelper.waitPageLoad(driver);
@@ -68,14 +66,7 @@ public class MainPage extends LoadableComponent<MainPage>
         CommonUtil.pause1s();
         navElm.click();
 
-        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until(
-        new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d)
-            {
-                return d.getCurrentUrl().toLowerCase().endsWith(urlPart);
-            }
-        });
-
+        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until((d)->d.getCurrentUrl().toLowerCase().endsWith(urlPart));
         String url = driver.getCurrentUrl().toLowerCase();
         Assert.assertTrue(url.endsWith(urlPart));
     }
@@ -86,7 +77,8 @@ public class MainPage extends LoadableComponent<MainPage>
         clickNavigation(parentTitle, navTitle, mainDashboard);
     }
 
-    private String grabEndURL(String navTitle) {
+    private String grabEndURL(String navTitle)
+    {
         String endURL = navTitle.toLowerCase().replaceAll(" ", "-");
 
         if(navTitle.trim().equalsIgnoreCase("hubs administration"))
@@ -97,31 +89,38 @@ public class MainPage extends LoadableComponent<MainPage>
         {
             endURL = "linehaul/entries";
         }
-        else if(navTitle.trim().equalsIgnoreCase("route groups"))
+        else if(navTitle.trim().equalsIgnoreCase("1. Create Route Groups"))
+        {
+            endURL = "transactions/v2";
+        }
+        else if(navTitle.trim().equalsIgnoreCase("2. Route Group Management"))
         {
             endURL = "route-group";
         }
-        else if(navTitle.trim().equalsIgnoreCase("Transactions V2"))
+        else if(navTitle.trim().equalsIgnoreCase("3. Route Engine - Zonal Routing"))
         {
-            endURL = "transactions/v2";
+            endURL = "zonal-routing";
+        }
+        else if(navTitle.trim().equalsIgnoreCase("4. Route Engine - Bulk Add to Route"))
+        {
+            endURL = "add-parcel-to-route";
+        }
+        else if(navTitle.trim().equalsIgnoreCase("5. Route Engine - Same-Day Route Engine"))
+        {
+            endURL = "same-day-route-engine";
         }
         else if (navTitle.trim().equalsIgnoreCase("all orders"))
         {
             endURL = "order";
         }
+
         return endURL;
     }
 
     public void dpAdm() throws InterruptedException
     {
         String mainDashboard = grabEndURL("All Orders");
-
-        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d) {
-                return d.getCurrentUrl().toLowerCase().endsWith(mainDashboard);
-            }
-        });
-
+        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until((d)->d.getCurrentUrl().toLowerCase().endsWith(mainDashboard));
         String url = driver.getCurrentUrl().toLowerCase();
         Assert.assertTrue(url.endsWith(mainDashboard));
         CommonUtil.pause5s();
@@ -129,17 +128,10 @@ public class MainPage extends LoadableComponent<MainPage>
 
     public void refreshPage()
     {
-        final String currentUrl = driver.getCurrentUrl().toLowerCase();
+        String previousUrl = driver.getCurrentUrl().toLowerCase();
         driver.navigate().refresh();
-
-        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until(new ExpectedCondition<Boolean>()
-        {
-            public Boolean apply(WebDriver d)
-            {
-                return d.getCurrentUrl().equalsIgnoreCase(currentUrl);
-            }
-        });
-
-        Assert.assertTrue(driver.getCurrentUrl().equalsIgnoreCase(currentUrl));
+        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until((d)->d.getCurrentUrl().equalsIgnoreCase(previousUrl));
+        String currentUrl = driver.getCurrentUrl().toLowerCase();
+        Assert.assertEquals("Page URL is different after page is refreshed.", previousUrl, currentUrl);
     }
 }
