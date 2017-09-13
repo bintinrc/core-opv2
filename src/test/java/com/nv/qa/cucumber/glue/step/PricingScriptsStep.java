@@ -120,33 +120,33 @@ public class PricingScriptsStep extends AbstractSteps
         String expectedHandlingFee = mapOfData.get("handlingFee");
         String expectedComments = mapOfData.get("comments");
 
-        WebElement totalEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container[label[text()='Grand Total']]/div[@class='readonly ng-binding']");
+        WebElement totalEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container/label[text()='Grand Total']/following-sibling::div[1]");
         String actualTotal = totalEl.getText();
-        Assert.assertEquals(expectedTotal, actualTotal);
+        Assert.assertEquals("Total", expectedTotal, actualTotal);
 
         /*WebElement gstEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container[label[text()='GST']]/div[@class='readonly ng-binding']");
         String actualGst = gstEl.getText();
         Assert.assertEquals("GST", expectedGst, actualGst);*/
 
-        WebElement codFeeEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container[label[text()='COD Fee']]/div[@class='readonly ng-binding']");
+        WebElement codFeeEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container/label[text()='COD Fee']/following-sibling::div[1]");
         String actualCodFee = codFeeEl.getText();
-        Assert.assertEquals(expectedCodFee, actualCodFee);
+        Assert.assertEquals("COD Fee", expectedCodFee, actualCodFee);
 
-        WebElement insuranceFeeEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container[label[text()='Insurance Fee']]/div[@class='readonly ng-binding']");
+        WebElement insuranceFeeEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container/label[text()='Insurance Fee']/following-sibling::div[1]");
         String actualInsuranceFee = insuranceFeeEl.getText();
-        Assert.assertEquals(expectedInsuranceFee, actualInsuranceFee);
+        Assert.assertEquals("Insurance Fee", expectedInsuranceFee, actualInsuranceFee);
 
-        WebElement deliveryFeeEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container[label[text()='Delivery Fee']]/div[@class='readonly ng-binding']");
+        WebElement deliveryFeeEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container/label[text()='Delivery Fee']/following-sibling::div[1]");
         String actualDeliveryFee = deliveryFeeEl.getText();
-        Assert.assertEquals(expectedDeliveryFee, actualDeliveryFee);
+        Assert.assertEquals("Delivery Fee", expectedDeliveryFee, actualDeliveryFee);
 
-        WebElement handlingFeeEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container[label[text()='Handling Fee']]/div[@class='readonly ng-binding']");
+        WebElement handlingFeeEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container/label[text()='Handling Fee']/following-sibling::div[1]");
         String actualHandlingFee = handlingFeeEl.getText();
-        Assert.assertEquals(expectedHandlingFee, actualHandlingFee);
+        Assert.assertEquals("Handling Fee", expectedHandlingFee, actualHandlingFee);
 
-        WebElement commentsEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container[label[text()='Comments']]/div[@class='readonly ng-binding']");
+        WebElement commentsEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container/label[text()='Comments']/following-sibling::div[1]");
         String actualComments = commentsEl.getText();
-        Assert.assertEquals(expectedComments, actualComments);
+        Assert.assertEquals("Comments", expectedComments, actualComments);
 
         CommonUtil.pause1s();
         CommonUtil.clickBtn(getDriver(), "//button[@aria-label='Cancel']");
