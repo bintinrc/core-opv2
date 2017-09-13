@@ -36,7 +36,7 @@ Feature: Route Logs
     When op delete route on Operator V2
     Then route must be deleted successfully
 
-    @ArchiveRoute
+  @ArchiveRoute
   Scenario: Operator 'Edit Route' on Operator V2 - Route Logs menu (uid:0ea01bbb-0651-4186-84b4-0b3f4a522d3e)
     Given Operator V1 create new route using data below:
       | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"(Edit Route) This route is created for testing 'Operator V2 - Routing - Route Logs' menu. Ignore this route. Created at {{created_date}}."} |

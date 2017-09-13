@@ -143,7 +143,7 @@ public class RouteLogsPage extends SimplePage
         searchAndVerifyRouteExist(routeId);
         click(SELECT_TAG_XPATH);
         pause100ms();
-        click(String.format("//div[@class='md-select-menu-container md-active md-clickable']/md-select-menu/md-content/md-option/div[@class='md-text ng-binding' and contains(text(), '%s')]", newTag));
+        click(String.format("//div[@class='md-select-menu-container md-active md-clickable']/md-select-menu/md-content/md-option/div[@class='md-text' and contains(text(), '%s')]", newTag));
         pause100ms();
         click("//nv-table-description/div/div/span[text()='Showing']"); //Click on random element to close 'Select Tag' dialog.
         pause200ms();
