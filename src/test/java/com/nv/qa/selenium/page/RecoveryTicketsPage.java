@@ -1,5 +1,6 @@
 package com.nv.qa.selenium.page;
 
+import com.nv.qa.support.CommonUtil;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Map;
@@ -107,21 +108,27 @@ public class RecoveryTicketsPage extends SimplePage
     {
         click("//button[@aria-label='Create Ticket']");
         waitUntilInvisibilityOfElementLocated("//button[@aria-label='Create Ticket']//md-progress-circular", SUBMIT_BUTTON_LOADING_TIMEOUT_IN_SECONDS);
-        pause50ms();
+        CommonUtil.pause1s();
     }
 
     public void searchTableByTrackingId(String trackingId)
-    {
-        altClick("//button[@aria-label='Clear All']");
-        pause50ms();
-        click("//button[@aria-label='Remove Filter']");
-        pause50ms();
-        sendKeys("//input[@placeholder='Select Filter']", "Query");
-        pause50ms();
-        click("//md-virtual-repeat-container[@aria-hidden='false']/div/div[2]/ul/li/md-autocomplete-parent-scope/span/span[contains(text(), 'Query')]");
-        pause50ms();
-        sendKeys("//input[@aria-label='Query']", trackingId);
-        pause50ms();
+    {//button[@aria-label='Clear All']
+
+        //-- remove default filters
+        click("//button[@aria-label='Clear All Selections']");
+        CommonUtil.pause1s();
+
+        //-- select tracking id filter
+        sendKeys("//input[@placeholder='Select Filter']", "Tracking IDs");
+        CommonUtil.pause1s();
+        click("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']//span[text()='Tracking IDs']");
+
+        //-- fill tracking id by filling it and press ENTER
+        sendKeys("//div[@class='main-title']//p[text()='Tracking IDs']/../..//input", trackingId);
+        altClick("//div[@class='main-title']//p[text()='Tracking IDs']/../..//input");
+        CommonUtil.pause1s();
+
+        //-- click load selection
         altClick("//button[@aria-label='Load Selection']");
     }
 
