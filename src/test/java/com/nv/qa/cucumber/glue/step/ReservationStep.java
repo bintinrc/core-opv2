@@ -24,8 +24,8 @@ public class ReservationStep extends AbstractSteps
     private int nReservation = 0;
     private String comments = "";
 
-    private static String RESERVED_DATE = "//span[@class='reservation-calendar-item-time ng-binding']"; //-- the reservation slot inside a date.
-    private static String UNRESERVED_DATE = "//div[@ng-repeat='day in week track by $index'][@class='layout-padding ng-scope ng-isolate-scope layout-column flex nvGreen nv-secondary']";
+    private static String RESERVED_DATE = "//div[@ng-repeat='day in week track by $index'][contains(@class,'nvYellow')]"; //-- the reservation slot inside a date.
+    private static String UNRESERVED_DATE = "//div[@ng-repeat='day in week track by $index'][@class='layout-padding layout-column flex nvGreen nv-secondary']";
 
     @Inject
     public ReservationStep(CommonScenario commonScenario)
@@ -51,7 +51,7 @@ public class ReservationStep extends AbstractSteps
             WebElement parentWe = we.findElement(By.xpath("../../.."));
             System.out.println("Child    : "+we.getAttribute("outerHTML"));
             System.out.println("Parent   : "+parentWe.getAttribute("outerHTML"));
-            System.out.println("Tab Index: "+parentWe.getAttribute("tabindex"));
+            System.out.println("Tab Index: "+we.getAttribute("tabindex"));
         }
 
         System.out.println();
