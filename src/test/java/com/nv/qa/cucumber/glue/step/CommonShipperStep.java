@@ -96,6 +96,7 @@ public class CommonShipperStep extends AbstractSteps
         String asyncOrderId = listOfCreateOrderResponse.get(0).getId();
         Order order = orderCreateV2Client.retrieveOrder(asyncOrderId);
         scenarioStorage.put("order", order);
+        scenarioStorage.put("orderAsyncId", asyncOrderId);
         saveTrackingId(order.getTracking_id());
     }
 
@@ -147,7 +148,7 @@ public class CommonShipperStep extends AbstractSteps
 
         int idx = 0;
         for (com.nv.qa.model.order_creation.v3.CreateOrderResponse x : createOrderResponses) {
-            Assert.assertNotNull("Asyng id", x.getId());
+            Assert.assertNotNull("Async id", x.getId());
             Assert.assertEquals("Status", "SUCCESS", x.getStatus());
             Assert.assertNotNull("Message", x.getMessage());
             Assert.assertEquals("Order ref No", createOrderRequests.get(idx++).getOrderRefNo(), x.getOrderRefNo());

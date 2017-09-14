@@ -146,10 +146,11 @@ public class SamedayRouteEngineStep extends AbstractSteps
     @Then("^op verify the updated timeslot")
     public void verifyBulkyOrderTimeslotUpdated(){
         String suggestedDate = scenarioStorage.get("new-suggested-date");
+        String AsyncIdString = scenarioStorage.get("orderAsyncId");
         String trackingIdsString = scenarioStorage.get("bulky-tracking-id");
         List<String> trackingIds = Arrays.asList(trackingIdsString.split(","));
         trackingIds.forEach((String trId) -> {
-            BulkyOrder order = bulkyTrackingClient.getBulkyOrderDetail(trId);
+            BulkyOrder order = bulkyTrackingClient.getBulkyOrderDetail(trId, AsyncIdString);
             Assert.assertEquals(suggestedDate,order.getSuggested_timeslot().getDate());
         });
 
