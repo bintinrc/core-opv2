@@ -11,7 +11,7 @@ Feature: Recovery Tickets
     Given op click navigation Recovery Tickets in Recovery
     When op create new ticket on Recovery Tickets menu with this property below:
       | entrySource        | CUSTOMER COMPLAINT        |
-      | investigatingParty | DISTRIBUTION POINTS       |
+      | investigatingParty | DISTRIBUTION POINTS SG    |
       | ticketType         | DAMAGED                   |
       | ticketSubType      | IMPROPER PACKAGING        |
       | parcelLocation     | DAMAGED RACK              |
@@ -30,7 +30,7 @@ Feature: Recovery Tickets
     Given op click navigation Recovery Tickets in Recovery
     When op create new ticket on Recovery Tickets menu with this property below:
       | entrySource        | CUSTOMER COMPLAINT        |
-      | investigatingParty | DISTRIBUTION POINTS       |
+      | investigatingParty | DISTRIBUTION POINTS SG    |
       | ticketType         | MISSING                   |
       | parcelDescription  | Dummy parcel description. |
       | ticketNotes        | Dummy ticket notes.       |
