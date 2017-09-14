@@ -52,7 +52,7 @@ public class AddParcelToRouteStep extends AbstractSteps
     {
         Order order = scenarioStorage.get("order");
         String expectedTrackingId = order.getTracking_id();
-        String xpath = String.format("//td[@class='tracking_id ng-binding' and contains(text(), '%s')]", expectedTrackingId);
+        String xpath = String.format("//td[contains(@class, 'tracking_id') and contains(text(), '%s')]", expectedTrackingId);
         takesScreenshot();
         WebElement actualTrackingId = addParcelToRoutePage.findElementByXpath(xpath);
         Assert.assertEquals("Order did not added to route.", expectedTrackingId, actualTrackingId.getText());
