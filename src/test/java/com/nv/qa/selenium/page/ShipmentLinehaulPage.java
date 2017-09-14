@@ -182,7 +182,7 @@ public class ShipmentLinehaulPage {
     }
 
     public void checkLinehaulAtDate(String linehaulId) {
-        SeleniumHelper.waitUntilElementVisible(driver, driver.findElement(By.xpath(getXpathLinehaulInfoOnSchedule(linehaulId))));
+        SeleniumHelper.waitUntilElementVisible(driver, By.xpath(getXpathLinehaulInfoOnSchedule(linehaulId)));
     }
 
     private String getXpathLinehaulInfoOnSchedule(String linehaulId) {

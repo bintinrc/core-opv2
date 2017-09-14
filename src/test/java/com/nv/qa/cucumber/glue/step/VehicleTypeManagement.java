@@ -30,7 +30,7 @@ public class VehicleTypeManagement {
 
     @When("^vehicle type management, add new vehicle type of \"([^\"]*)\"$")
     public void addNewVehicle(String name) {
-        SeleniumHelper.waitUntilElementVisible(driver, driver.findElement(By.xpath("//input[@type='text' and @aria-label='Name']")));
+        SeleniumHelper.waitUntilElementVisible(driver, By.xpath("//input[@type='text' and @aria-label='Name']"));
         CommonUtil.inputText(driver, "//input[@type='text' and @aria-label='Name']", name);
         CommonUtil.clickBtn(driver, "//button[@type='submit' and @aria-label='Save Button']");
     }

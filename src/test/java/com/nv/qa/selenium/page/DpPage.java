@@ -320,12 +320,7 @@ public class DpPage extends SimplePage
             mainTitle = "Distribution Point Users";
         }
 
-        SeleniumHelper.waitUntilElementVisible(
-                driver,
-                By.xpath(
-                        String.format("//h4[text() = '%s']", mainTitle)
-                )
-        );
+        SeleniumHelper.waitUntilElementVisible(driver, By.xpath(String.format("//h4[text() = '%s']", mainTitle)));
     }
 
     public void searchTable(String keyword)

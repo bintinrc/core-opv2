@@ -1,4 +1,4 @@
-@selenium @shipment
+@ShipmentInboundScanning @selenium @shipment
 Feature: Shipment Inbound Scanning
 
   Scenario: op login into operator portal
@@ -26,7 +26,6 @@ Feature: Shipment Inbound Scanning
     Then shipment deleted
     Then op click edit filter
     Then clear filter
-
 
   Scenario: shipment inbound to transit hub (uid:12758688-5e0d-4121-9b27-e11765138648)
     Given op refresh page

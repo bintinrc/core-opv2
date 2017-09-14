@@ -30,7 +30,7 @@ public class ContactTypeManagementStep {
 
     @When("^contact type management, add new contact type of \"([^\"]*)\"$")
     public void addNewContact(String name) {
-        SeleniumHelper.waitUntilElementVisible(driver, driver.findElement(By.xpath("//input[@type='text' and @aria-label='Name']")));
+        SeleniumHelper.waitUntilElementVisible(driver, By.xpath("//input[@type='text' and @aria-label='Name']"));
         CommonUtil.inputText(driver, "//input[@type='text' and @aria-label='Name']", name);
         CommonUtil.clickBtn(driver, "//button[@type='submit' and @aria-label='Save Button']");
     }

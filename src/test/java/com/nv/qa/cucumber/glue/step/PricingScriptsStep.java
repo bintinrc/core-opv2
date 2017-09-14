@@ -80,7 +80,7 @@ public class PricingScriptsStep extends AbstractSteps
         Assert.assertEquals(expectedValue, pricingScriptsNameFromTable);
     }
 
-    @Given("^op have two default script \\\"([^\\\"]*)\\\" and \\\"([^\\\"]*)\\\"$")
+    @Given("^op have two default script \"([^\"]*)\" and \"([^\"]*)\"$")
     public void createDefaultTwoScriptIfNotExists(String defaultScriptName1, String defaultScriptName2)
     {
         String scriptDescription = "Please don't touch this script. This script created by Cucumber with Selenium for testing purpose.";
@@ -152,7 +152,7 @@ public class PricingScriptsStep extends AbstractSteps
         CommonUtil.clickBtn(getDriver(), "//button[@aria-label='Cancel']");
     }
 
-    @When("^op linking Pricing Scripts \\\"([^\\\"]*)\\\" or \\\"([^\\\"]*)\\\" to shipper \\\"([^\\\"]*)\\\"$")
+    @When("^op linking Pricing Scripts \"([^\"]*)\" or \"([^\"]*)\" to shipper \"([^\"]*)\"$")
     public void linkPricingScriptsToShipper(String defaultScriptName1, String defaultScriptName2, String shipperName)
     {
         shipperLinkedToPricingScripts = shipperName;

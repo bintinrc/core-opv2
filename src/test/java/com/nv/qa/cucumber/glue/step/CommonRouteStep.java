@@ -122,7 +122,7 @@ public class CommonRouteStep extends AbstractSteps
         scenarioStorage.put("createRouteResponse", createRouteResponse);
     }
 
-    @Given("^Operator V1 set route tags \\[([^\\\"]*)\\]$")
+    @Given("^Operator V1 set route tags \\[([^\\\"]*)]$")
     public void setRouteTags(String strTagIds)
     {
         int[] tagIds;

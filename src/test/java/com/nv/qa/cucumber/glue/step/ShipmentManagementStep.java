@@ -171,7 +171,6 @@ public class ShipmentManagementStep {
 //        CommonUtil.clickBtn(driver, shipmentManagementPage.grabXPathFilterDropdown(value));
 
         CommonUtil.pause1s();
-
     }
 
     @Given("^op click edit filter$")

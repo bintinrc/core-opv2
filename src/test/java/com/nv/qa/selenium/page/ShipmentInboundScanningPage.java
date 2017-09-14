@@ -23,7 +23,7 @@ public class ShipmentInboundScanningPage {
     public static final String XPATH_SCAN_INPUT = "//md-card-content[div[h5[text()='Scan Shipment to Inbound']]]/md-input-container/input";
     public static final String XPATH_CHANGE_END_DATE_BUTTON = "//button[@aria-label='Change End Date']";
     public static final String XPATH_SCANNING_SESSION = "//table/tbody/tr";
-    public static final String XPATH_SCANNING_SESSION_NO_CHANGE = XPATH_SCANNING_SESSION + "[@class='ng-scope']";
+    public static final String XPATH_SCANNING_SESSION_NO_CHANGE = XPATH_SCANNING_SESSION;
     public static final String XPATH_SCANNING_SESSION_CHANGE = XPATH_SCANNING_SESSION + "[@class='ng-scope changed']";
     public static final String XPATH_DATE_INPUT = "//input[@class='md-datepicker-input']";
     public static final String XPATH_CHANGE_DATE_BUTTON = "//button[@aria-label='Change Date']";
@@ -73,12 +73,12 @@ public class ShipmentInboundScanningPage {
     }
 
     public void checkSessionScan(String shipmentId) {
-        SeleniumHelper.waitUntilElementVisible(driver, driver.findElement(By.xpath(XPATH_SCANNING_SESSION_NO_CHANGE + "[td[@class='sn ng-binding'][text()='1']][td[@class='shipmentId ng-binding'][text()='" + shipmentId + "']]")));
+        SeleniumHelper.waitUntilElementVisible(driver, By.xpath(XPATH_SCANNING_SESSION_NO_CHANGE + "[td[@class='sn'][text()='1']][td[@class='shipmentId'][text()='" + shipmentId + "']]"));
     }
 
     public void checkEndDateSessionScanChange(List<String> mustCheckId, String endDate) {
         for (String id : mustCheckId) {
-            SeleniumHelper.waitUntilElementVisible(driver, driver.findElement(By.xpath(XPATH_SCANNING_SESSION_CHANGE + "[td[@class='sn ng-binding'][text()='" + id + "']][td[@class='end-date ng-binding'][text()='" + endDate + "']]")));
+            SeleniumHelper.waitUntilElementVisible(driver, By.xpath(XPATH_SCANNING_SESSION_CHANGE + "[td[@class='sn ng-binding'][text()='" + id + "']][td[@class='end-date ng-binding'][text()='" + endDate + "']]"));
         }
     }
 
