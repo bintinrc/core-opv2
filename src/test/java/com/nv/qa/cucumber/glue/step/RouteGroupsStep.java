@@ -11,6 +11,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 
 import java.util.Date;
@@ -57,7 +58,7 @@ public class RouteGroupsStep extends AbstractSteps
         /**
          * Verify the page is redirect to '/#/sg/transactions' after route group is created.
          */
-        Assert.assertTrue("Page not redirect to '/#/sg/transactions'.", getDriver().getCurrentUrl().contains("/#/sg/transactions"));
+        Assert.assertThat("Page not redirect to '/#/sg/transactions'.", getDriver().getCurrentUrl(), Matchers.containsString("/#/sg/transactions"));
     }
 
     @When("^op create new 'route group' on 'Route Groups' using data below:$")

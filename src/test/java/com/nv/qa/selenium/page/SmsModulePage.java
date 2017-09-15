@@ -3,6 +3,7 @@ package com.nv.qa.selenium.page;
 import com.nv.qa.model.SmsCampaignCsv;
 import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -141,7 +142,7 @@ public class SmsModulePage extends SimplePage
         pause10s();
         String actualValue = findElementByXpath("//textarea[@name='preview']").getAttribute("value");
         String expectedValue = "http://qa.nnj.vn";
-        Assert.assertTrue(String.format("The produced sms using ninja url shortener is failed: actual = [%s] expected = [%s]", actualValue, expectedValue), actualValue.contains(expectedValue));
+        Assert.assertThat("The produced sms using ninja url shortener is failed", actualValue, Matchers.containsString(expectedValue));
     }
 
     public void waitForSmsToBeProcessed()
@@ -180,10 +181,10 @@ public class SmsModulePage extends SimplePage
 
         //check the contact number
         String number=  getTextOnTableWithMdVirtualRepeat(1,"to-number", MD_VIRTUAL_REPEAT, false);
-        Assert.assertEquals(contactNumber, number);
+        Assert.assertEquals("Contact Number", contactNumber, number);
 
         //check sms-date on the message field
         String message =  getTextOnTableWithMdVirtualRepeat(1,"message", MD_VIRTUAL_REPEAT, false);
-        Assert.assertTrue("It contain sms-date woth same date", message.contains(smsDate));
+        Assert.assertThat("It contain sms-date woth same date", message, Matchers.containsString(smsDate));
     }
 }

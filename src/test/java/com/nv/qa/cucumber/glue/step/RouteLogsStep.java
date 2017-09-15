@@ -8,6 +8,7 @@ import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -181,8 +182,7 @@ public class RouteLogsStep extends AbstractSteps
     {
         CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
         String tags = routeLogsPage.getRouteTag(String.valueOf(createRouteResponse.getId()));
-        boolean isContainsNewTag = tags.contains(newTag);
-        Assert.assertTrue(String.format("Route does not contains tag '%s'.", newTag), isContainsNewTag);
+        Assert.assertThat(String.format("Route does not contains tag '%s'.", newTag), tags, Matchers.containsString(newTag));
     }
 
     @When("^op delete route on Operator V2$")

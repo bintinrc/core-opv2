@@ -10,6 +10,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -142,7 +143,7 @@ public class ShipmentLinehaulStep{
         }
         else
         {
-            Assert.assertTrue(String.format("Toast message not contains: '%s'", msg), toast.getText().contains(msg));
+            Assert.assertThat(String.format("Toast message not contains: '%s'", msg), toast.getText(), Matchers.containsString(msg));
         }
     }
 
@@ -157,7 +158,7 @@ public class ShipmentLinehaulStep{
         }
         else
         {
-            Assert.assertTrue(String.format("Toast message not contains: '%s'", msg), toast.getText().contains(msg));
+            Assert.assertThat(String.format("Toast message not contains: '%s'", msg), toast.getText(), Matchers.containsString(msg));
         }
 
         shipmentLinehaulPage.clickTab("LINEHAUL DATE");

@@ -3,6 +3,7 @@ package com.nv.qa.selenium.page;
 import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.SeleniumHelper;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -35,7 +36,7 @@ public class LoginPage extends LoadableComponent<LoginPage> {
     @Override
     protected void isLoaded() throws Error {
         String url = driver.getCurrentUrl();
-        Assert.assertTrue("Default Operator Portal URL not loaded.", url.contains(APIEndpoint.OPERATOR_PORTAL_URL));
+        Assert.assertThat("Default Operator Portal URL not loaded.", url, Matchers.containsString(APIEndpoint.OPERATOR_PORTAL_URL));
     }
 
     public void clickLoginButton() throws InterruptedException {
@@ -134,6 +135,6 @@ public class LoginPage extends LoadableComponent<LoginPage> {
     public void backToLoginPage() throws InterruptedException {
         CommonUtil.pause1s();
         String url = driver.getCurrentUrl();
-        Assert.assertTrue("Default Operator Portal URL not loaded.", url.contains(APIEndpoint.OPERATOR_PORTAL_URL));
+        Assert.assertThat("Default Operator Portal URL not loaded.", url, Matchers.containsString(APIEndpoint.OPERATOR_PORTAL_URL));
     }
 }

@@ -9,6 +9,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -137,7 +138,7 @@ public class ShipmentManagementStep {
                 break;
             }
         }
-        Assert.assertTrue("toast message not contains Cancelled", text.contains("Success changed status to Cancelled for Shipment ID " + scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID)));
+        Assert.assertThat("toast message not contains Cancelled", text, Matchers.containsString("Success changed status to Cancelled for Shipment ID " + scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID)));
         CommonUtil.pause(5000);
     }
 
@@ -146,7 +147,7 @@ public class ShipmentManagementStep {
 
         String msg = "Success delete Shipping ID " + scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID);
         WebElement toast = CommonUtil.getToast(driver);
-        Assert.assertTrue("toast message not contains " + msg, toast.getText().contains(msg));
+        Assert.assertThat("toast message not contains " + msg, toast.getText(), Matchers.containsString(msg));
 
         List<ShipmentManagementPage.Shipment> shipments = shipmentManagementPage.getShipmentsFromTable();
         boolean isRemoved = true;
