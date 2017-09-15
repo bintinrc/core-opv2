@@ -3,6 +3,7 @@ package com.nv.qa.selenium.page;
 import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.SeleniumHelper;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -122,7 +123,7 @@ public class MainPage extends LoadableComponent<MainPage>
         String mainDashboard = grabEndURL("All Orders");
         new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until((d)->d.getCurrentUrl().toLowerCase().endsWith(mainDashboard));
         String url = driver.getCurrentUrl().toLowerCase();
-        Assert.assertTrue(url.endsWith(mainDashboard));
+        Assert.assertThat("URL not match.", url, Matchers.endsWith(mainDashboard));
         CommonUtil.pause5s();
     }
 

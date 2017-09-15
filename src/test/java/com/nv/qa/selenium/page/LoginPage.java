@@ -16,30 +16,34 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  *
  * @author Soewandi Wirjawan
  */
-public class LoginPage extends LoadableComponent<LoginPage> {
-
+public class LoginPage extends LoadableComponent<LoginPage>
+{
     private static final String GOOGLE_EXPECTED_URL_1 = "https://accounts.google.com/ServiceLogin";
     private static final String GOOGLE_EXPECTED_URL_2 = "https://accounts.google.com/signin/oauth/identifier";
 
     private final WebDriver driver;
 
-    public LoginPage(WebDriver driver) {
+    public LoginPage(WebDriver driver)
+    {
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
     @Override
-    protected void load() {
+    protected void load()
+    {
         driver.get(APIEndpoint.OPERATOR_PORTAL_URL);
     }
 
     @Override
-    protected void isLoaded() throws Error {
+    protected void isLoaded() throws Error
+    {
         String url = driver.getCurrentUrl();
         Assert.assertThat("Default Operator Portal URL not loaded.", url, Matchers.containsString(APIEndpoint.OPERATOR_PORTAL_URL));
     }
 
-    public void clickLoginButton() throws InterruptedException {
+    public void clickLoginButton() throws InterruptedException
+    {
         driver.findElement(By.xpath("//button[@ng-click='ctrl.login()']")).click();
     }
 
@@ -78,7 +82,8 @@ public class LoginPage extends LoadableComponent<LoginPage> {
         }
     }
 
-    public void enterCredentialWithMethod1(String username, String password) throws InterruptedException {
+    public void enterCredentialWithMethod1(String username, String password) throws InterruptedException
+    {
         driver.findElement(By.xpath("//input[@id='Email'][@name='Email']")).sendKeys(username);
         CommonUtil.pause10ms();
 
@@ -107,32 +112,28 @@ public class LoginPage extends LoadableComponent<LoginPage> {
         CommonUtil.pause100ms();
     }
 
-    public void checkForGoogleSimpleVerification(String location) {
-        if(driver.findElements(By.xpath("//span[text()='Enter the city you usually sign in from']")).size() > 0) {
-            WebElement enterCityButton = driver.findElement(By.xpath(
-                "//span[text()='Enter the city you usually sign in from']/../.."
-            ));
+    public void checkForGoogleSimpleVerification(String location)
+    {
+        if(driver.findElements(By.xpath("//span[text()='Enter the city you usually sign in from']")).size() > 0)
+        {
+            WebElement enterCityButton = driver.findElement(By.xpath("//span[text()='Enter the city you usually sign in from']/../.."));
             enterCityButton.click();
             CommonUtil.pause1s();
 
-
             String txtAnswerXpath = "//input[@id='answer' and @type='text']";
             SeleniumHelper.waitUntilElementVisible(driver, By.xpath(txtAnswerXpath));
-            WebElement txtAnswer = driver.findElement(By.xpath(
-                    txtAnswerXpath
-            ));
+            WebElement txtAnswer = driver.findElement(By.xpath(txtAnswerXpath));
             txtAnswer.clear();
             txtAnswer.sendKeys(location);
 
-            WebElement submitButton = driver.findElement(By.xpath(
-                    "//input[@id='submit' and @type='submit']"
-            ));
+            WebElement submitButton = driver.findElement(By.xpath("//input[@id='submit' and @type='submit']"));
             submitButton.click();
             CommonUtil.pause1s();
         }
     }
 
-    public void backToLoginPage() throws InterruptedException {
+    public void backToLoginPage() throws InterruptedException
+    {
         CommonUtil.pause1s();
         String url = driver.getCurrentUrl();
         Assert.assertThat("Default Operator Portal URL not loaded.", url, Matchers.containsString(APIEndpoint.OPERATOR_PORTAL_URL));
