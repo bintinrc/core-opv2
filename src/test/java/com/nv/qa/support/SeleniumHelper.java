@@ -7,12 +7,12 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -54,7 +54,11 @@ public class SeleniumHelper
         profile.setPreference("browser.download.manager.showWhenStarting", false);
         profile.setPreference("browser.download.folderList", 1);
         //profile.setPreference("browser.download.dir", "/tmp/Downloads"); //-- use with folderList=2
-        WebDriver driver = new FirefoxDriver(profile);
+
+        FirefoxOptions firefoxOptions = new FirefoxOptions();
+        firefoxOptions.setProfile(profile);
+
+        WebDriver driver = new FirefoxDriver(firefoxOptions);
         driver.manage().timeouts().implicitlyWait(APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(APIEndpoint.SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         driver.manage().timeouts().setScriptTimeout(APIEndpoint.SELENIUM_SCRIPT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
@@ -66,11 +70,6 @@ public class SeleniumHelper
     {
         System.setProperty("webdriver.chrome.driver", APIEndpoint.SELENIUM_CHROME_DRIVER);
 
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-        LoggingPreferences logPrefs = new LoggingPreferences();
-        logPrefs.enable(LogType.BROWSER, Level.ALL);
-        capabilities.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
-
         String downloadFilepath = APIEndpoint.SELENIUM_WRITE_PATH;
         HashMap<String, Object> chromePrefs = new HashMap<>();
         chromePrefs.put("profile.default_content_settings.popups", 0);
@@ -81,6 +80,10 @@ public class SeleniumHelper
         options.addArguments("--disable-extensions");
         options.addArguments("--allow-running-insecure-content");
         //options.addArguments("--start-maximized"); Maximize on Mac does not cover entire screen.
+
+        LoggingPreferences logPrefs = new LoggingPreferences();
+        logPrefs.enable(LogType.BROWSER, Level.OFF);
+        options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
 
         if(APIEndpoint.SELENIUM_CHROME_BINARY_PATH!=null && !APIEndpoint.SELENIUM_CHROME_BINARY_PATH.isEmpty())
         {
@@ -104,12 +107,10 @@ public class SeleniumHelper
             }
 
             Proxy seleniumProxy = ClientUtil.createSeleniumProxy(BROWSER_MOB_PROXY);
-            capabilities.setCapability(CapabilityType.PROXY, seleniumProxy);
+            options.setCapability(CapabilityType.PROXY, seleniumProxy);
         }
 
-        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
-
-        WebDriver driver = new ChromeDriver(capabilities);
+        WebDriver driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(APIEndpoint.SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         driver.manage().timeouts().setScriptTimeout(APIEndpoint.SELENIUM_SCRIPT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
