@@ -1,4 +1,4 @@
-@selenium
+@VehicleTypeManagement @selenium
 Feature: vehicle type management
 
   Scenario: op login into operator portal
