@@ -189,7 +189,7 @@ public class ShipmentLinehaulPage {
         return "//md-card-content[div[span[text()='Linehaul ID : " + linehaulId + "']]]";
     }
 
-    public void clickLoadAllShipmentButton() throws Throwable {
+    public void clickLoadAllShipmentButton() {
         CommonUtil.clickBtn(driver, XPATH_LOAD_ALL_SHIPMENT_BUTTON);
         CommonUtil.pause(3000);
     }
