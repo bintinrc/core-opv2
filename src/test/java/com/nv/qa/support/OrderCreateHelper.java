@@ -6,7 +6,8 @@ import com.nv.qa.api.client.order_create.OrderCreateV2Client;
 import com.nv.qa.api.client.order_create.OrderCreateV3Client;
 import com.nv.qa.model.order_creation.authentication.AuthRequest;
 import com.nv.qa.model.order_creation.authentication.AuthResponse;
-import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.text.CharacterPredicates;
+import org.apache.commons.text.RandomStringGenerator;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,7 @@ import java.util.Random;
 public class OrderCreateHelper {
     static final SimpleDateFormat SDF_UNIQUE = new SimpleDateFormat("HHmmssSSS");
     static final SimpleDateFormat SDF_ORDER_REQUEST = new SimpleDateFormat("yyyy-MM-dd");
+    private static final RandomStringGenerator ALPHA_NUMERIC_STRING_GENERATOR = new RandomStringGenerator.Builder().withinRange('0', 'z').filteredBy(CharacterPredicates.LETTERS, CharacterPredicates.DIGITS).build();
 
     private static String CREATE_ORDER_ACCESS_TOKEN = null; //-- refer to qa-shaun@ninjavan.sg (235)
 
@@ -112,7 +114,7 @@ public class OrderCreateHelper {
             } else {
                 length = new Random().nextInt();
             }
-            return RandomStringUtils.randomAlphanumeric(length);
+            return ALPHA_NUMERIC_STRING_GENERATOR.generate(length);
         } else if (word.startsWith("EXISTING_V2_TRACKING_ID")) {
             return EXISTING_V2_TRACKING_ID;
         } else if (word.startsWith("EXISTING_V3_TRACKING_ID")) {

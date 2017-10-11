@@ -19,6 +19,7 @@ dependencies {
 
     compile "io.fastjson:boon:0.34"
     compile "org.apache.commons:commons-lang3:3.6"
+    compile "org.apache.commons:commons-text:1.1"
     compile "commons-beanutils:commons-beanutils:1.9.3"
     compile "ch.qos.logback:logback-classic:1.2.3"
     compile project(":commons")

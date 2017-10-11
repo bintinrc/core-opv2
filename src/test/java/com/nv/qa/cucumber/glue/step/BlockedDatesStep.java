@@ -19,6 +19,8 @@ import java.util.Locale;
 /**
  *
  * @author Soewandi Wirjawan
+ *
+ * Modified by Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
 public class BlockedDatesStep  extends AbstractSteps

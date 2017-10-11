@@ -1,11 +1,9 @@
 @ContactTypeManagement @selenium
 Feature: Contact Type Management
 
-  Scenario: op login into operator portal
-    Given op is in op portal login page
-    When login button is clicked
-    When login as "{operator-portal-uid}" with password "{operator-portal-pwd}"
-    Then op is in main page
+  @LaunchBrowser
+  Scenario: Login to Operator V2
+    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
   Scenario: add contact type (uid:0eef79ec-1d12-4408-8971-5b122ed8c644)
     Given op click navigation Contact Type Management in Fleet
@@ -33,5 +31,5 @@ Feature: Contact Type Management
     When contact type management, delete contact type
     Then contact type management, verify contact type "QA [EDITED]" not existed
 
-  @closeBrowser
-  Scenario: close browser
+  @KillBrowser
+  Scenario: Kill Browser
