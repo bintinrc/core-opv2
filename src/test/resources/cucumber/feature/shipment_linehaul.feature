@@ -1,5 +1,5 @@
-@selenium @shipment
-Feature: shipment linehaul
+@ShipmentLinehaul @selenium @shipment
+Feature: Shipment Linehaul
 
   Scenario: op login into operator portal
     Given op is in op portal login page

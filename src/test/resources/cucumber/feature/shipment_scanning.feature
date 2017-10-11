@@ -1,4 +1,4 @@
-@selenium @shipment
+@ShipmentScanning @selenium @shipment
 Feature: Shipment Scanning
 
   Scenario: op login into operator portal

@@ -1,5 +1,5 @@
-@selenium @shipment
-Feature: shipment management
+@ShipmentManagement @selenium @shipment
+Feature: Shipment Management
 
   Scenario: op login into operator portal
     Given op is in op portal login page

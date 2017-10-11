@@ -1,4 +1,4 @@
-@selenium @reservation
+@Reservation @selenium
 Feature: reservation
 
   @LaunchBrowser
