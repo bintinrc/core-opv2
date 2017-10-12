@@ -56,64 +56,64 @@ Feature: Shipment Linehaul
     Then linehaul deleted
     Then op click edit linhaul filter
 
-#  Scenario: Check linehaul schedule (uid:8b178ed7-6da6-4207-8cb6-f75327533ba2)
-#    Given op click tab LINEHAUL ENTRIES
-#    Given op click create linehaul button
-#    When create new linehaul:
-#      | name      | JKT-AUTO            |
-#      | comment   | created at          |
-#      | hubs      | 30JKB,DOJO,EASTGW   |
-#      | frequency | Weekly              |
-#      | days      | Monday,Friday       |
-#    Then linehaul exist
-#    Then Schedule is right
-#    Then op click tab LINEHAUL ENTRIES
-#    Then op click Load All Selection
-#    When op click delete linehaul button
-#    Then linehaul deleted
-#    Then op click edit linhaul filter
-#
-#  Scenario: Create linehaul on linehaul schedule page (uid:fe37a8e4-b435-45ef-8411-8bd0a37450d0)
-#    Given op click tab LINEHAUL DATE
-#    Given op click create linehaul button
-#    When create new linehaul:
-#      | name      | JKT-AUTO            |
-#      | comment   | created at          |
-#      | hubs      | 30JKB,DOJO,EASTGW   |
-#      | frequency | Weekly              |
-#      | days      | Monday,Friday       |
-#    Given op click tab LINEHAUL ENTRIES
-#    Then linehaul exist
-#    Then Schedule is right
-#    Then op click tab LINEHAUL ENTRIES
-#    Then op click Load All Selection
-#    When op click delete linehaul button
-#    Then linehaul deleted
-#    Then op click edit linhaul filter
-#
-#  Scenario: Edit Linehaul on linehaul schedule page (uid:e24343fb-3ca4-4109-8221-873e88744351)
-#      Given op click tab LINEHAUL DATE
-#      Given op click create linehaul button
-#      When create new linehaul:
-#        | name      | JKT-AUTO            |
-#        | comment   | created at          |
-#        | hubs      | 30JKB,DOJO,EASTGW   |
-#        | frequency | Weekly              |
-#        | days      | Monday,Friday       |
-#      Given op click tab LINEHAUL ENTRIES
-#      Then linehaul exist
-#      Then Schedule is right
-#      When op click edit linehaul button on schedule
-#      When edit linehaul with:
-#        | name      | JKT-AUTO EDITED    |
-#        | comment   | created at         |
-#        | hubs      | 30JKB,EASTGW       |
-#        | frequency | Weekly             |
-#        | days      | Monday,Friday      |
-#      Then linehaul edited
-#      When op click delete linehaul button
-#      Then linehaul deleted
-#    Then op click edit linhaul filter
+  Scenario: Check linehaul schedule (uid:8b178ed7-6da6-4207-8cb6-f75327533ba2)
+    Given op click navigation Linehaul Management in Inter-Hub
+    Given op click create linehaul button
+    When create new linehaul:
+      | name      | JKT-AUTO            |
+      | comment   | created at          |
+      | hubs      | 30JKB,DOJO,EASTGW   |
+      | frequency | Weekly              |
+      | days      | Monday,Friday       |
+    Then linehaul exist
+    Then Schedule is right
+    Then op click tab LINEHAUL ENTRIES
+    Then op click Load All Selection
+    When op click delete linehaul button
+    Then linehaul deleted
+    Then op click edit linhaul filter
+
+  Scenario: Create linehaul on linehaul schedule page (uid:fe37a8e4-b435-45ef-8411-8bd0a37450d0)
+    Given op click tab LINEHAUL DATE
+    Given op click create linehaul button
+    When create new linehaul:
+      | name      | JKT-AUTO            |
+      | comment   | created at          |
+      | hubs      | 30JKB,DOJO,EASTGW   |
+      | frequency | Weekly              |
+      | days      | Monday,Friday       |
+    Given op click tab LINEHAUL ENTRIES
+    Then linehaul exist
+    Then Schedule is right
+    Then op click tab LINEHAUL ENTRIES
+    Then op click Load All Selection
+    When op click delete linehaul button
+    Then linehaul deleted
+    Then op click edit linhaul filter
+
+  Scenario: Edit Linehaul on linehaul schedule page (uid:e24343fb-3ca4-4109-8221-873e88744351)
+      Given op click tab LINEHAUL DATE
+      Given op click create linehaul button
+      When create new linehaul:
+        | name      | JKT-AUTO            |
+        | comment   | created at          |
+        | hubs      | 30JKB,DOJO,EASTGW   |
+        | frequency | Weekly              |
+        | days      | Monday,Friday       |
+      Given op click tab LINEHAUL ENTRIES
+      Then linehaul exist
+      Then Schedule is right
+      When op click edit linehaul button on schedule
+      When edit linehaul with:
+        | name      | JKT-AUTO EDITED    |
+        | comment   | created at         |
+        | hubs      | 30JKB,EASTGW       |
+        | frequency | Weekly             |
+        | days      | Monday,Friday      |
+      Then linehaul edited
+      When op click delete linehaul button
+      Then linehaul deleted
+    Then op click edit linhaul filter
 
   @KillBrowser
   Scenario: Kill Browser
