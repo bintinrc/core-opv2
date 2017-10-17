@@ -2,6 +2,7 @@ package com.nv.qa.selenium.page;
 
 import com.nv.qa.support.CommonUtil;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.text.SimpleDateFormat;
@@ -14,6 +15,7 @@ import java.util.Date;
 public class RouteGroupsPage extends SimplePage
 {
     private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
+    private static final int MAX_WAIT_IN_SECONDS = 120;
 
     private static final String MD_VIRTUAL_REPEAT = "routeGroup in ctrl.routeGroupsTableData";
     public static final String COLUMN_CLASS_NAME = "name";
@@ -96,5 +98,10 @@ public class RouteGroupsPage extends SimplePage
     public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
     {
         clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
+    }
+
+    public void waitUntilRouteGroupPageIsLoaded()
+    {
+        waitUntilInvisibilityOfElementLocated(By.xpath("//div[contains(@class,'message') and text()='Loading route groups...']"), MAX_WAIT_IN_SECONDS);
     }
 }

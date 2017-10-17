@@ -82,6 +82,12 @@ public class RouteGroupsStep extends AbstractSteps
         routeGroupsPage.createRouteGroup(routeGroupName);
     }
 
+    @When("^op wait until 'Route Group' page is loaded$")
+    public void waitUntilRouteGroupIsLoaded()
+    {
+        routeGroupsPage.waitUntilRouteGroupPageIsLoaded();
+    }
+
     @Then("^new 'route group' on 'Route Groups' created successfully$")
     public void verifyNewRouteGroupCreatedSuccessfully()
     {
