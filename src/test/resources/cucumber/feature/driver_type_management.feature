@@ -18,6 +18,7 @@ Feature: driver type management
   Scenario: op edit driver type (uid:3ec5bf32-68e6-406c-bd05-88c920cc187a)
     Given op click navigation Blocked Dates in Shipper Support
     Given op click navigation Driver Type Management in Fleet
+    Then take screenshot with delay 1000ms
     When searching created driver and edit
     Then verify changes of created driver type
 
