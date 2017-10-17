@@ -1,6 +1,7 @@
 package com.nv.qa.selenium.page;
 
 import com.nv.qa.support.CommonUtil;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -149,12 +150,14 @@ public class ShipmentManagementPage {
         CommonUtil.pause1s();
 
         CommonUtil.inputText(driver, XPATH_COMMENT_TEXT_AREA, comment);
-
         CommonUtil.clickBtn(driver, XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
 
         WebElement toast = CommonUtil.getToast(driver);
-        Assert.assertTrue("toast message not contains Shipment xxx created", toast.getText().contains("Shipment") && toast.getText().contains("created"));
-        return toast.getText().split(" ")[1];
+        String toastMessage = toast.getText();
+
+        Assert.assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage, Matchers.allOf(Matchers.containsString("Shipment"), Matchers.containsString("created")));
+        String shipmentId = toastMessage.split(" ")[1];
+        return shipmentId;
     }
 
     public class Shipment {
