@@ -6,7 +6,6 @@ import com.nv.qa.support.SeleniumHelper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,9 +16,9 @@ import java.util.concurrent.TimeUnit;
  * Created by lanangjati
  * on 10/24/16.
  */
-public class ShipmentLinehaulPage {
+public class ShipmentLinehaulPage extends SimplePage {
 
-    private final WebDriver driver;
+    private static final int MAX_WAIT_IN_SECONDS = 120;
 
     private static final String XPATH_CREATE_LINEHAUL_BUTTON = "//button[div[text()='Create Linehaul']]";
     private static final String XPATH_CREATE_LINEHAUL_BUTTON_ONSCHEDULE = "//button[div[text()='create linehaul']]";
@@ -42,8 +41,7 @@ public class ShipmentLinehaulPage {
     public static final String XPATH_EDIT_SEARCH_FILTER_BUTTON = "//button[contains(@aria-label, 'Edit Filter')]";
 
     public ShipmentLinehaulPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
     public void clickCreateLinehaul() {
@@ -196,5 +194,13 @@ public class ShipmentLinehaulPage {
 
     public void clickEditSearchFilterButton() {
         CommonUtil.clickBtn(driver, XPATH_EDIT_SEARCH_FILTER_BUTTON);
+    }
+
+    public void waitUntilLinehaulEntriesIsLoaded() {
+        waitUntilVisibilityOfElementLocated(By.xpath("//button[@aria-label='Load Selection']"), MAX_WAIT_IN_SECONDS);
+    }
+
+    public void waitUntilLinehaulDateTabIsLoaded() {
+        waitUntilInvisibilityOfElementLocated(By.xpath("//md-progress-circular/parent::*[@style='display: inherit;']"), MAX_WAIT_IN_SECONDS);
     }
 }

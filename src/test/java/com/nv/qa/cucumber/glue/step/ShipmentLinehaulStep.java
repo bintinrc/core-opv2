@@ -87,6 +87,18 @@ public class ShipmentLinehaulStep extends AbstractSteps
         linehaulId = toast.getText().split(" ")[1];
     }
 
+    @Then("^op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded$")
+    public void waitUntilLinehaulEntriesTabIsLoaded()
+    {
+        shipmentLinehaulPage.waitUntilLinehaulEntriesIsLoaded();
+    }
+
+    @Then("^op wait until 'Linehaul Date' tab on 'Linehaul Management' page is loaded$")
+    public void waitUntilLinehaulDateTabIsLoaded()
+    {
+        shipmentLinehaulPage.waitUntilLinehaulDateTabIsLoaded();
+    }
+
     @Then("^linehaul exist$")
     public void linehaulExist()
     {

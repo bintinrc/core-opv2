@@ -8,10 +8,11 @@ Feature: Shipment Linehaul
   Scenario: Create Linehaul (uid:3eeaa647-c1a2-40a1-8ee4-da898e7e2e7d)
     Given op click navigation Linehaul Management in Inter-Hub
     Given op click tab LINEHAUL ENTRIES
+    Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
     Given op click create linehaul button
     When create new linehaul:
       | name      | JKT-AUTO            |
-      | comment   | created at          |
+      | comment   | Created at          |
       | hubs      | 30JKB,DOJO,EASTGW   |
       | frequency | Weekly              |
       | days      | Monday,Friday       |
@@ -22,10 +23,11 @@ Feature: Shipment Linehaul
 
   Scenario: Edit Linehaul (uid:85dbd34f-25ea-4ada-accc-884a8098f8e2)
     Given op click tab LINEHAUL ENTRIES
+    Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
     Given op click create linehaul button
     When create new linehaul:
       | name      | JKT-AUTO            |
-      | comment   | created at          |
+      | comment   | Created at          |
       | hubs      | 30JKB,DOJO,EASTGW   |
       | frequency | Weekly              |
       | days      | Monday,Friday       |
@@ -33,7 +35,7 @@ Feature: Shipment Linehaul
     When op click edit action button
     When edit linehaul with:
       | name      | JKT-AUTO EDITED    |
-      | comment   | created at         |
+      | comment   | Created at         |
       | hubs      | 30JKB,EASTGW       |
       | frequency | Weekly             |
       | days      | Monday,Friday      |
@@ -44,10 +46,11 @@ Feature: Shipment Linehaul
 
   Scenario: Delete Linehaul (uid:89bc519c-6f5d-4f99-864a-2dbba4c52c22)
     Given op click tab LINEHAUL ENTRIES
+    Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
     Given op click create linehaul button
     When create new linehaul:
       | name      | JKT-AUTO            |
-      | comment   | created at          |
+      | comment   | Created at          |
       | hubs      | 30JKB,DOJO,EASTGW   |
       | frequency | Weekly              |
       | days      | Monday,Friday       |
@@ -57,17 +60,20 @@ Feature: Shipment Linehaul
     Then op click edit linhaul filter
 
   Scenario: Check linehaul schedule (uid:8b178ed7-6da6-4207-8cb6-f75327533ba2)
+    Given op refresh page
     Given op click navigation Linehaul Management in Inter-Hub
+    Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
     Given op click create linehaul button
     When create new linehaul:
       | name      | JKT-AUTO            |
-      | comment   | created at          |
+      | comment   | Created at          |
       | hubs      | 30JKB,DOJO,EASTGW   |
       | frequency | Weekly              |
       | days      | Monday,Friday       |
     Then linehaul exist
     Then Schedule is right
     Then op click tab LINEHAUL ENTRIES
+    Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
     Then op click Load All Selection
     When op click delete linehaul button
     Then linehaul deleted
@@ -75,17 +81,20 @@ Feature: Shipment Linehaul
 
   Scenario: Create linehaul on linehaul schedule page (uid:fe37a8e4-b435-45ef-8411-8bd0a37450d0)
     Given op click tab LINEHAUL DATE
+    Then op wait until 'Linehaul Date' tab on 'Linehaul Management' page is loaded
     Given op click create linehaul button
     When create new linehaul:
       | name      | JKT-AUTO            |
-      | comment   | created at          |
+      | comment   | Created at          |
       | hubs      | 30JKB,DOJO,EASTGW   |
       | frequency | Weekly              |
       | days      | Monday,Friday       |
     Given op click tab LINEHAUL ENTRIES
+    Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
     Then linehaul exist
     Then Schedule is right
     Then op click tab LINEHAUL ENTRIES
+    Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
     Then op click Load All Selection
     When op click delete linehaul button
     Then linehaul deleted
@@ -93,20 +102,22 @@ Feature: Shipment Linehaul
 
   Scenario: Edit Linehaul on linehaul schedule page (uid:e24343fb-3ca4-4109-8221-873e88744351)
       Given op click tab LINEHAUL DATE
+      Then op wait until 'Linehaul Date' tab on 'Linehaul Management' page is loaded
       Given op click create linehaul button
       When create new linehaul:
         | name      | JKT-AUTO            |
-        | comment   | created at          |
+        | comment   | Created at          |
         | hubs      | 30JKB,DOJO,EASTGW   |
         | frequency | Weekly              |
         | days      | Monday,Friday       |
       Given op click tab LINEHAUL ENTRIES
+      Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
       Then linehaul exist
       Then Schedule is right
       When op click edit linehaul button on schedule
       When edit linehaul with:
         | name      | JKT-AUTO EDITED    |
-        | comment   | created at         |
+        | comment   | Created at         |
         | hubs      | 30JKB,EASTGW       |
         | frequency | Weekly             |
         | days      | Monday,Friday      |

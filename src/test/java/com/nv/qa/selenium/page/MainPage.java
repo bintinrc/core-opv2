@@ -67,9 +67,23 @@ public class MainPage extends LoadableComponent<MainPage>
         CommonUtil.pause1s();
         navElm.click();
 
-        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until((d)->d.getCurrentUrl().toLowerCase().endsWith(urlPart));
-        String url = driver.getCurrentUrl().toLowerCase();
-        Assert.assertTrue(url.endsWith(urlPart));
+        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until((d)->
+        {
+            boolean result;
+            String currentUrl = d.getCurrentUrl();
+            System.out.println(String.format("[INFO] Current URL = [%s] - Expected URL = [%s]", currentUrl, urlPart));
+
+            if(urlPart.equals("linehaul"))
+            {
+                result = currentUrl.contains(urlPart);
+            }
+            else
+            {
+                result = currentUrl.toLowerCase().endsWith(urlPart);
+            }
+
+            return result;
+        });
     }
 
     public void clickNavigation(String parentTitle, String navTitle) throws InterruptedException
@@ -88,7 +102,7 @@ public class MainPage extends LoadableComponent<MainPage>
         }
         else if(navTitle.trim().equalsIgnoreCase("linehaul management"))
         {
-            endURL = "linehaul/entries";
+            endURL = "linehaul";
         }
         else if(navTitle.trim().equalsIgnoreCase("1. Create Route Groups"))
         {

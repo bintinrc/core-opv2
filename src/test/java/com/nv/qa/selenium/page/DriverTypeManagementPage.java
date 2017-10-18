@@ -7,7 +7,6 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -21,13 +20,13 @@ import java.util.List;
 public class DriverTypeManagementPage extends SimplePage
 {
     private static final int MAX_RETRY = 10;
+    private static final int MAX_LOADING_TIMEOUT_IN_SECONDS = 120;
     private static final String DRIVER_TYPES_CSV_FILE_NAME = "driver-types.csv";
     private static final String DRIVER_TYPES_CSV_FILE_LOCATION = APIEndpoint.SELENIUM_WRITE_PATH + DRIVER_TYPES_CSV_FILE_NAME;
 
     public DriverTypeManagementPage(WebDriver driver)
     {
         super(driver);
-        PageFactory.initElements(driver, this);
     }
 
     public void filteredBy(String filterValue, String filterType) throws InterruptedException
@@ -61,7 +60,7 @@ public class DriverTypeManagementPage extends SimplePage
             }
         }
 
-        Assert.assertTrue(filterType + " doesn't contains " + filterValue.toLowerCase(),valid);
+        Assert.assertTrue(filterType + " doesn't contains " + filterValue.toLowerCase(), valid);
     }
 
     public void downloadFile() throws InterruptedException
@@ -104,7 +103,7 @@ public class DriverTypeManagementPage extends SimplePage
         pause1s();
 
         click("//button[@aria-label='Save Button']");
-        pause1s();
+        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular", MAX_LOADING_TIMEOUT_IN_SECONDS);
     }
 
     public void verifyDriverType() throws InterruptedException
@@ -148,7 +147,7 @@ public class DriverTypeManagementPage extends SimplePage
         pause1s();
 
         click("//button[@aria-label='Save Button']");
-        pause1s();
+        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular", MAX_LOADING_TIMEOUT_IN_SECONDS);
     }
 
     public void verifyChangesCreatedDriver()
@@ -170,7 +169,7 @@ public class DriverTypeManagementPage extends SimplePage
             }
         }
 
-        Assert.assertTrue(isFound);
+        Assert.assertTrue("Driver type is not found.", isFound);
     }
 
     public void deletedCreatedDriver() throws InterruptedException
