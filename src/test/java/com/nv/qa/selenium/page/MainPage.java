@@ -21,18 +21,20 @@ import java.util.Map;
 public class MainPage extends LoadableComponent<MainPage>
 {
     private final WebDriver driver;
-    private final Map<String, String> map = new HashMap<String, String>()
+    private static final Map<String, String> MAP_OF_END_URL = new HashMap<>();
+
+    static
     {
-        {
-            put("DP Administration","container.dp-administration.dp-partners");
-            put("Driver Strength","container.driver-strength");
-            put("Driver Type Management","container.driver-type-management");
-            put("Pricing Scripts","container.pricing-scripts");
-            put("Hubs Administration","container.hub-list");
-            put("Blocked Dates","container.blocked-dates");
-            put("Shipment Management","container.shipment-management");
-        }
-    };
+        MAP_OF_END_URL.put("1. Create Route Groups", "transactions/v2");
+        MAP_OF_END_URL.put("2. Route Group Management", "route-group");
+        MAP_OF_END_URL.put("3. Route Engine - Zonal Routing", "zonal-routing");
+        MAP_OF_END_URL.put("4. Route Engine - Bulk Add to Route", "add-parcel-to-route");
+        MAP_OF_END_URL.put("5. Route Engine - Same-Day Route Engine", "same-day-route-engine");
+        MAP_OF_END_URL.put("All Orders", "order");
+        MAP_OF_END_URL.put("DP Company Management", "dp-company");
+        MAP_OF_END_URL.put("Hubs Administration", "hub");
+        MAP_OF_END_URL.put("Linehaul Management", "linehaul");
+    }
 
     public MainPage(WebDriver driver)
     {
@@ -94,42 +96,19 @@ public class MainPage extends LoadableComponent<MainPage>
 
     private String grabEndURL(String navTitle)
     {
-        String endURL = navTitle.toLowerCase().replaceAll(" ", "-");
+        navTitle = navTitle.trim();
+        String endUrl;
 
-        if(navTitle.trim().equalsIgnoreCase("hubs administration"))
+        if(MAP_OF_END_URL.containsKey(navTitle))
         {
-            endURL = "hub";
+            endUrl = MAP_OF_END_URL.get(navTitle);
         }
-        else if(navTitle.trim().equalsIgnoreCase("linehaul management"))
+        else
         {
-            endURL = "linehaul";
-        }
-        else if(navTitle.trim().equalsIgnoreCase("1. Create Route Groups"))
-        {
-            endURL = "transactions/v2";
-        }
-        else if(navTitle.trim().equalsIgnoreCase("2. Route Group Management"))
-        {
-            endURL = "route-group";
-        }
-        else if(navTitle.trim().equalsIgnoreCase("3. Route Engine - Zonal Routing"))
-        {
-            endURL = "zonal-routing";
-        }
-        else if(navTitle.trim().equalsIgnoreCase("4. Route Engine - Bulk Add to Route"))
-        {
-            endURL = "add-parcel-to-route";
-        }
-        else if(navTitle.trim().equalsIgnoreCase("5. Route Engine - Same-Day Route Engine"))
-        {
-            endURL = "same-day-route-engine";
-        }
-        else if (navTitle.trim().equalsIgnoreCase("all orders"))
-        {
-            endURL = "order";
+            endUrl = navTitle.toLowerCase().replaceAll(" ", "-");
         }
 
-        return endURL;
+        return endUrl;
     }
 
     public void dpAdm() throws InterruptedException
