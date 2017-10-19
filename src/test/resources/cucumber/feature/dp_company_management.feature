@@ -14,6 +14,15 @@ Feature: DP Company Management
     When Operator delete the new DP Company
     Then Operator verify the new DP Company is deleted successfully
 
+  Scenario: Operator check all filters on DP Company Management page work fine (uid:0607f541-8d36-4851-a420-fe3ebf36d641)
+    Given op refresh page
+    Given op click navigation DP Company Management in Distribution Points
+    When Operator create new DP Company
+    Then Operator verify the new DP Company is created successfully
+    And Operator check all filters on DP Company Management page work fine
+    When Operator delete the new DP Company
+    Then Operator verify the new DP Company is deleted successfully
+
   Scenario: Operator download and verify DP Company CSV file (uid:7bc46cd1-f8c3-48a5-aa03-bede2a999334)
     Given op refresh page
     Given op click navigation DP Company Management in Distribution Points

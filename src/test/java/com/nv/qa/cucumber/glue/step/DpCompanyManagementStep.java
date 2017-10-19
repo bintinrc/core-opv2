@@ -91,6 +91,13 @@ public class DpCompanyManagementStep extends AbstractSteps
         dpCompanyManagementPage.verifyDpCompanyIsDeletedSuccessfully(dpCompany);
     }
 
+    @Then("^Operator check all filters on DP Company Management page work fine")
+    public void operatorCheckAllFiltersOnDpCompanyManagementPageWork()
+    {
+        DpCompany dpCompany = scenarioStorage.get("dpCompany");
+        dpCompanyManagementPage.verifyAllFiltersWorkFine(dpCompany);
+    }
+
     @When("^Operator download DP Company CSV file$")
     public void operatorDownloadDpCompanyCsvFile()
     {

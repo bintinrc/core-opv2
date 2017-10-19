@@ -131,9 +131,48 @@ public class DpCompanyManagementPage extends SimplePage
         Assert.assertTrue("DP Company still exist in table. Fail to delete DP Company.", isTableEmpty);
     }
 
+    public void verifyAllFiltersWorkFine(DpCompany dpCompany)
+    {
+        searchTableByName(dpCompany.getName());
+        verifyDpCompanyInfoIsCorrect(dpCompany);
+        searchTableByEmail(dpCompany.getEmail());
+        verifyDpCompanyInfoIsCorrect(dpCompany);
+        searchTableByContact(dpCompany.getContact());
+        verifyDpCompanyInfoIsCorrect(dpCompany);
+        searchTableByDropOffWebhookUrl(dpCompany.getDropOffWebhookUrl());
+        verifyDpCompanyInfoIsCorrect(dpCompany);
+        searchTableByCollectWebhookUrl(dpCompany.getCollectWebhookUrl());
+        verifyDpCompanyInfoIsCorrect(dpCompany);
+    }
+
     public void searchTableByName(String name)
     {
-        sendKeys("//th[contains(@class, 'name')]/nv-search-input-filter/md-input-container/div/input", name);
+        searchTable("name", name);
+    }
+
+    public void searchTableByEmail(String email)
+    {
+        searchTable("email", email);
+    }
+
+    public void searchTableByContact(String contactNo)
+    {
+        searchTable("contact-no", contactNo);
+    }
+
+    public void searchTableByDropOffWebhookUrl(String dropOffWebhookUrl)
+    {
+        searchTable("drop-off-webhook-url", dropOffWebhookUrl);
+    }
+
+    public void searchTableByCollectWebhookUrl(String collectWebhookUrl)
+    {
+        searchTable("collect-webhook-url", collectWebhookUrl);
+    }
+
+    private void searchTable(String filterColumnClass, String value)
+    {
+        sendKeys(String.format("//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input", filterColumnClass), value);
         pause100ms();
     }
 
