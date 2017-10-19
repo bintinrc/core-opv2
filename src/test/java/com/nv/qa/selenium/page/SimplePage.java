@@ -2,10 +2,12 @@ package com.nv.qa.selenium.page;
 
 import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
+import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -16,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class SimplePage
 {
     public static final int DEFAULT_MAX_RETRY_FOR_STALE_ELEMENT_REFERENCE = 5;
+    public static final int DEFAULT_MAX_RETRY_FOR_FILE_VERIFICATION = 10;
     protected WebDriver driver;
 
     public SimplePage(WebDriver driver)
@@ -376,6 +379,68 @@ public class SimplePage
     private static WebElement elementIfVisible(WebElement element)
     {
         return element.isDisplayed()? element : null;
+    }
+
+    public void verifyFileDownloadedSuccessfully(String filename, String expectedText)
+    {
+        String pathname = APIEndpoint.SELENIUM_WRITE_PATH + filename;
+        File file;
+        int counter = 0;
+        boolean isFileExists;
+
+        do
+        {
+            file = new File(pathname);
+            isFileExists = file.exists();
+
+            if(!isFileExists)
+            {
+                System.out.println(String.format("[WARN] File '%s' not exists. Retry %dx...", file.getAbsolutePath(), (counter+1)));
+                pause1s();
+            }
+            counter++;
+        }
+        while(!isFileExists && counter<DEFAULT_MAX_RETRY_FOR_FILE_VERIFICATION);
+
+        Assert.assertTrue(String.format("File '%s' not exists.", file.getAbsolutePath()), isFileExists);
+
+        boolean isFileContainsExpectedText = false;
+        StringBuilder fileText;
+        counter = 0;
+
+        do
+        {
+            file = new File(pathname);
+            fileText = new StringBuilder();
+
+            try(BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file))))
+            {
+                String input;
+
+                while((input=br.readLine())!=null)
+                {
+                    fileText.append(input).append(System.lineSeparator());
+                }
+            }
+            catch(IOException ex)
+            {
+                System.out.println(String.format("[WARN] File '%s' failed to read. Cause: %s. Retry %dx...", file.getAbsolutePath(), ex.getMessage(), (counter+1)));
+                pause1s();
+                continue;
+            }
+
+            isFileContainsExpectedText = fileText.toString().contains(expectedText);
+
+            if(!isFileContainsExpectedText)
+            {
+                System.out.println(String.format("[WARN] File '%s' not contains '%s'. Retry %dx...", file.getAbsolutePath(), expectedText, (counter+1)));
+            }
+
+            counter++;
+        }
+        while(!isFileContainsExpectedText && counter<DEFAULT_MAX_RETRY_FOR_FILE_VERIFICATION);
+
+        Assert.assertTrue(String.format("File '%s' not contains [%s]. \nFile Text:\n%s", file.getAbsolutePath(), expectedText, fileText), isFileContainsExpectedText);
     }
 
     public void pause50ms()
