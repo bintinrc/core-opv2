@@ -32,6 +32,7 @@ public class MainPage extends LoadableComponent<MainPage>
         MAP_OF_END_URL.put("5. Route Engine - Same-Day Route Engine", "same-day-route-engine");
         MAP_OF_END_URL.put("All Orders", "order");
         MAP_OF_END_URL.put("DP Company Management", "dp-company");
+        MAP_OF_END_URL.put("DP Vault Management", "dp-station");
         MAP_OF_END_URL.put("Hubs Administration", "hub");
         MAP_OF_END_URL.put("Linehaul Management", "linehaul");
     }
