@@ -5,6 +5,7 @@ import com.nv.qa.model.order_creation.v2.Order;
 import com.nv.qa.selenium.page.TransactionsV2Page;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@ScenarioScoped
 public class TransactionsV2Steps extends AbstractSteps
 {
     @Inject private ScenarioStorage scenarioStorage;

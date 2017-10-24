@@ -2,16 +2,18 @@ package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Inject;
 import com.nv.qa.api.client.operator_portal.OperatorPortalTagManagementClient;
-import com.nv.qa.model.operator_portal.authentication.AuthRequest;
-import com.nv.qa.support.APIEndpoint;
+import com.nv.qa.model.operator_portal.authentication.AuthResponse;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.java.en.Given;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.io.IOException;
 
 /**
+ *
  * @author Daniel Joi Partogi Hutapea
  */
+@ScenarioScoped
 public class CommonTagManagementSteps extends AbstractSteps
 {
     @Inject ScenarioStorage scenarioStorage;
@@ -19,9 +21,9 @@ public class CommonTagManagementSteps extends AbstractSteps
 
 
     @Inject
-    public CommonTagManagementSteps(ScenarioManager scenarioManager)
+    public CommonTagManagementSteps(ScenarioManager scenarioManager, ScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -29,12 +31,8 @@ public class CommonTagManagementSteps extends AbstractSteps
     {
         try
         {
-            AuthRequest operatorAuthRequest = new AuthRequest();
-            operatorAuthRequest.setClientId(APIEndpoint.OPERATOR_V1_CLIENT_ID);
-            operatorAuthRequest.setClientSecret(APIEndpoint.OPERATOR_V1_CLIENT_SECRET);
-
-            operatorPortalTagManagementClient = new OperatorPortalTagManagementClient(APIEndpoint.API_BASE_URL, APIEndpoint.API_BASE_URL+"/auth/login?grant_type=client_credentials");
-            operatorPortalTagManagementClient.login(operatorAuthRequest);
+            AuthResponse operatorAuthResponse = getOperatorAuthToken();
+            operatorPortalTagManagementClient = new OperatorPortalTagManagementClient(getOperatorApiBaseUrl(), getOperatorAuthenticationUrl(), operatorAuthResponse.getAccessToken());
         }
         catch(Exception ex)
         {
@@ -43,7 +41,7 @@ public class CommonTagManagementSteps extends AbstractSteps
     }
 
     @Given("^Operator V2 cleaning Tag Management by calling API endpoint directly$")
-    public void createNewRoute() throws IOException
+    public void cleaningTagManagement() throws IOException
     {
         String tagName = TagManagementSteps.DEFAULT_TAG_NAME;
 

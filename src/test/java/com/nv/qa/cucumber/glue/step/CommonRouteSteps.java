@@ -3,16 +3,16 @@ package com.nv.qa.cucumber.glue.step;
 import com.google.inject.Inject;
 import com.nv.qa.api.client.operator_portal.OperatorPortalRoutingClient;
 import com.nv.qa.constants.NvTimeZone;
-import com.nv.qa.model.operator_portal.authentication.AuthRequest;
+import com.nv.qa.model.operator_portal.authentication.AuthResponse;
 import com.nv.qa.model.operator_portal.routing.CreateRouteRequest;
 import com.nv.qa.model.operator_portal.routing.CreateRouteResponse;
-import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.JsonHelper;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.DataTable;
 import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -22,8 +22,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ *
  * @author Daniel Joi Partogi Hutapea
  */
+@ScenarioScoped
 public class CommonRouteSteps extends AbstractSteps
 {
     private static final SimpleDateFormat CREATED_DATE_SDF = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
@@ -34,9 +36,9 @@ public class CommonRouteSteps extends AbstractSteps
 
 
     @Inject
-    public CommonRouteSteps(ScenarioManager scenarioManager)
+    public CommonRouteSteps(ScenarioManager scenarioManager, ScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -44,12 +46,8 @@ public class CommonRouteSteps extends AbstractSteps
     {
         try
         {
-            AuthRequest operatorAuthRequest = new AuthRequest();
-            operatorAuthRequest.setClientId(APIEndpoint.OPERATOR_V1_CLIENT_ID);
-            operatorAuthRequest.setClientSecret(APIEndpoint.OPERATOR_V1_CLIENT_SECRET);
-
-            operatorPortalRoutingClient = new OperatorPortalRoutingClient(APIEndpoint.API_BASE_URL, APIEndpoint.API_BASE_URL+"/auth/login?grant_type=client_credentials", null, NvTimeZone.ASIA_SINGAPORE);
-            operatorPortalRoutingClient.login(operatorAuthRequest);
+            AuthResponse operatorAuthResponse = getOperatorAuthToken();
+            operatorPortalRoutingClient = new OperatorPortalRoutingClient(getOperatorApiBaseUrl(), getOperatorAuthenticationUrl(), operatorAuthResponse.getAccessToken(), NvTimeZone.ASIA_SINGAPORE);
         }
         catch(Exception ex)
         {

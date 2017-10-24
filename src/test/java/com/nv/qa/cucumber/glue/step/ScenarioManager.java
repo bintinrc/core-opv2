@@ -5,6 +5,7 @@ import com.nv.qa.selenium.page.LoginPage;
 import com.nv.qa.selenium.page.MainPage;
 import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
+import com.nv.qa.support.ScenarioStorage;
 import com.nv.qa.support.SeleniumSharedDriver;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
@@ -37,6 +38,7 @@ public class ScenarioManager
 
     private WebDriver driver;
     private Scenario scenario;
+    private ScenarioStorage scenarioStorage;
 
     public ScenarioManager()
     {
@@ -189,6 +191,16 @@ public class ScenarioManager
     public void writeToScenarioLog(String message)
     {
         getCurrentScenario().write(message);
+    }
+
+    public ScenarioStorage getCurrentScenarioStorage()
+    {
+        return scenarioStorage;
+    }
+
+    public void setCurrentScenarioStorage(ScenarioStorage scenarioStorage)
+    {
+        this.scenarioStorage = scenarioStorage;
     }
 
     public Scenario getCurrentScenario()

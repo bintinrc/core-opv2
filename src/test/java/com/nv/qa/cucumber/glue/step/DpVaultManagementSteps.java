@@ -6,11 +6,13 @@ import com.nv.qa.selenium.page.DpVaultManagementPage;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@ScenarioScoped
 public class DpVaultManagementSteps extends AbstractSteps
 {
     @Inject ScenarioStorage scenarioStorage;

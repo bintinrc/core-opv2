@@ -6,6 +6,7 @@ import com.nv.qa.selenium.page.AddParcelToRoutePage;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 
@@ -13,6 +14,7 @@ import org.openqa.selenium.WebElement;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@ScenarioScoped
 public class AddParcelToRouteSteps extends AbstractSteps
 {
     @Inject private ScenarioStorage scenarioStorage;

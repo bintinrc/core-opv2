@@ -8,7 +8,6 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.HashMap;
@@ -18,9 +17,8 @@ import java.util.Map;
  *
  * @author Soewandi Wirjawan
  */
-public class MainPage extends LoadableComponent<MainPage>
+public class MainPage extends SimplePage
 {
-    private final WebDriver driver;
     private static final Map<String, String> MAP_OF_END_URL = new HashMap<>();
 
     static
@@ -39,20 +37,10 @@ public class MainPage extends LoadableComponent<MainPage>
 
     public MainPage(WebDriver driver)
     {
-        this.driver = driver;
+        super(driver);
     }
 
-    @Override
-    protected void load()
-    {
-    }
-
-    @Override
-    protected void isLoaded() throws Error
-    {
-    }
-
-    public void clickNavigation(String parentTitle, String navTitle, String urlPart) throws  InterruptedException
+    public void clickNavigation(String parentTitle, String navTitle, String urlPart)
     {
         // Ensure no dialog that prevents menu from being clicked.
         driver.navigate().refresh();
@@ -89,7 +77,7 @@ public class MainPage extends LoadableComponent<MainPage>
         });
     }
 
-    public void clickNavigation(String parentTitle, String navTitle) throws InterruptedException
+    public void clickNavigation(String parentTitle, String navTitle)
     {
         final String mainDashboard = grabEndURL(navTitle);
         clickNavigation(parentTitle, navTitle, mainDashboard);
@@ -112,7 +100,7 @@ public class MainPage extends LoadableComponent<MainPage>
         return endUrl;
     }
 
-    public void dpAdm() throws InterruptedException
+    public void dpAdm()
     {
         String mainDashboard = grabEndURL("All Orders");
         new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until((d)->d.getCurrentUrl().toLowerCase().endsWith(mainDashboard));

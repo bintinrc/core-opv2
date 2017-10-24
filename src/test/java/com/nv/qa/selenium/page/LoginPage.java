@@ -42,12 +42,12 @@ public class LoginPage extends LoadableComponent<LoginPage>
         Assert.assertThat("Default Operator Portal URL not loaded.", url, Matchers.containsString(APIEndpoint.OPERATOR_PORTAL_URL));
     }
 
-    public void clickLoginButton() throws InterruptedException
+    public void clickLoginButton()
     {
         driver.findElement(By.xpath("//button[@ng-click='ctrl.login()']")).click();
     }
 
-    public void enterCredential(String username, String password) throws InterruptedException
+    public void enterCredential(String username, String password)
     {
         final StringBuilder googlePageUrlSb = new StringBuilder();
 
@@ -82,7 +82,7 @@ public class LoginPage extends LoadableComponent<LoginPage>
         }
     }
 
-    public void enterCredentialWithMethod1(String username, String password) throws InterruptedException
+    public void enterCredentialWithMethod1(String username, String password)
     {
         driver.findElement(By.xpath("//input[@id='Email'][@name='Email']")).sendKeys(username);
         CommonUtil.pause10ms();
@@ -97,7 +97,7 @@ public class LoginPage extends LoadableComponent<LoginPage>
         CommonUtil.pause10ms();
     }
 
-    public void enterCredentialWithMethod2(String username, String password) throws InterruptedException
+    public void enterCredentialWithMethod2(String username, String password)
     {
         driver.findElement(By.xpath("//input[@id='identifierId'][@name='identifier']")).sendKeys(username);
         CommonUtil.pause100ms();
@@ -132,7 +132,7 @@ public class LoginPage extends LoadableComponent<LoginPage>
         }
     }
 
-    public void backToLoginPage() throws InterruptedException
+    public void backToLoginPage()
     {
         CommonUtil.pause1s();
         String url = driver.getCurrentUrl();

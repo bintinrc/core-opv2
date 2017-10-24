@@ -26,6 +26,7 @@ import java.util.*;
 @ScenarioScoped
 public class CommonShipperSteps extends AbstractSteps
 {
+    private static final int MAX_RETRY = 10;
     private static final SimpleDateFormat CREATED_DATE_SDF = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
     private static final SimpleDateFormat CURRENT_DATE_SDF = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -88,28 +89,57 @@ public class CommonShipperSteps extends AbstractSteps
         List<CreateOrderResponse> listOfCreateOrderResponse = orderCreateV2Client.createOrder(createOrderRequest);
 
         /**
-         * Please give a minute for the server to create the order before retrieving the order above.
-         * Create Order V2 using async when creating an order.
+         * Retry if the order fail to retrieve.
          */
-        CommonUtil.pause3s();
-
         String asyncOrderId = listOfCreateOrderResponse.get(0).getId();
-        Order order = orderCreateV2Client.retrieveOrder(asyncOrderId);
+        int counter = 0;
+        boolean retrievedSuccess;
+        Order order = null;
+        Throwable error = null;
+
+        do
+        {
+            try
+            {
+                CommonUtil.pause200ms();
+                order = orderCreateV2Client.retrieveOrder(asyncOrderId);
+                retrievedSuccess = true;
+            }
+            catch(Throwable ex)
+            {
+                System.out.println(String.format("[WARN] Fail to retrieve order with async ID = '%s'. Retrying %dx...", asyncOrderId, (counter+1)));
+                retrievedSuccess = false;
+            }
+
+            counter++;
+        }
+        while(!retrievedSuccess && counter<MAX_RETRY);
+
+        if(!retrievedSuccess)
+        {
+            throw new RuntimeException(String.format("[WARN] Fail to retrieve order with async ID = '%s' after trying  %d times.", asyncOrderId, MAX_RETRY), error);
+        }
+
         scenarioStorage.put("order", order);
         scenarioStorage.put("orderAsyncId", asyncOrderId);
         saveTrackingId(order.getTracking_id());
     }
 
-    private void saveTrackingId(String trackingId){
+    private void saveTrackingId(String trackingId)
+    {
         List<String> trackingIds = scenarioStorage.get("trackingIds");
-        if(trackingIds== null){
+
+        if(trackingIds==null)
+        {
             trackingIds = new ArrayList<>();
             scenarioStorage.put("trackingIds", trackingIds);
         }
+
         trackingIds.add(trackingId);
     }
 
-    private List<String> getTrackingIds(){
+    private List<String> getTrackingIds()
+    {
         return scenarioStorage.get("trackingIds");
     }
 
@@ -117,14 +147,17 @@ public class CommonShipperSteps extends AbstractSteps
     public void shipperCreateV3Order(List<Map<String, String>> requests) throws Throwable
     {
         orderCreateV3Client = OrderCreateHelper.getVersion3Client();
-        for (Map<String, String> request : requests) {
+
+        for(Map<String, String> request : requests)
+        {
             sendOrderCreateV3Req(request);
         }
 
         CommonUtil.pause1s();
     }
 
-    private String createV3Order(Map<String, String> arg1) throws Throwable {
+    private String createV3Order(Map<String, String> arg1) throws Throwable
+    {
         createOrderRequests.clear();
         com.nv.qa.model.order_creation.v3.CreateOrderRequest x = JsonHelper.mapToObject(arg1, com.nv.qa.model.order_creation.v3.CreateOrderRequest.class);
         //-- fix keywords
@@ -134,7 +167,8 @@ public class CommonShipperSteps extends AbstractSteps
     }
 
     @SuppressWarnings("unchecked")
-    private void sendOrderCreateV3Req(Map<String, String> arg1) throws Throwable {
+    private void sendOrderCreateV3Req(Map<String, String> arg1) throws Throwable
+    {
         String payload = createV3Order(arg1);
         Response r = orderCreateV3Client.getCreateOrderResponse(payload);
         r.then().statusCode(200);
@@ -147,7 +181,9 @@ public class CommonShipperSteps extends AbstractSteps
         Assert.assertEquals("Size", createOrderRequests.size(), createOrderResponses.size());
 
         int idx = 0;
-        for (com.nv.qa.model.order_creation.v3.CreateOrderResponse x : createOrderResponses) {
+
+        for(com.nv.qa.model.order_creation.v3.CreateOrderResponse x : createOrderResponses)
+        {
             Assert.assertNotNull("Async id", x.getId());
             Assert.assertEquals("Status", "SUCCESS", x.getStatus());
             Assert.assertNotNull("Message", x.getMessage());

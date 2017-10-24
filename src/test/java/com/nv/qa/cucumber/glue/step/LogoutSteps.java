@@ -1,31 +1,34 @@
 package com.nv.qa.cucumber.glue.step;
 
+import com.google.inject.Inject;
 import com.nv.qa.selenium.page.LogoutPage;
-import com.nv.qa.support.SeleniumSharedDriver;
-import cucumber.api.java.Before;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.openqa.selenium.WebDriver;
 
 /**
- * Created by sw on 6/30/16.
+ *
+ * @author Soewandi Wirjawan
  */
 @ScenarioScoped
-public class LogoutSteps
+public class LogoutSteps extends AbstractSteps
 {
-
-    private WebDriver driver;
     private LogoutPage logoutPage;
 
-    @Before
-    public void setup() {
-        driver = SeleniumSharedDriver.getInstance().getDriver();
-        logoutPage = new LogoutPage(driver);
+    @Inject
+    public LogoutSteps(ScenarioManager scenarioManager)
+    {
+        super(scenarioManager);
+    }
+
+    @Override
+    public void init()
+    {
+        logoutPage = new LogoutPage(getDriver());
     }
 
     @When("^logout button is clicked$")
-    public void logout() throws InterruptedException {
+    public void logout()
+    {
         logoutPage.logout();
     }
-
 }

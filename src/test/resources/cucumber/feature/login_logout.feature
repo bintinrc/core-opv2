@@ -1,6 +1,9 @@
 @LoginLogout @selenium @saas
 Feature: op login and logout
 
+  @LaunchBrowser
+  Scenario: Launch Browser
+
   Scenario: op login into operator portal (uid:142de4e2-23e8-49da-8ad4-ec887b90f011)
     Given op is in op portal login page
     When login button is clicked
@@ -11,5 +14,5 @@ Feature: op login and logout
     When logout button is clicked
     Then op back in the login page
 
-  @closeBrowser
-  Scenario: close browser
+  @KillBrowser
+  Scenario: Kill Browser

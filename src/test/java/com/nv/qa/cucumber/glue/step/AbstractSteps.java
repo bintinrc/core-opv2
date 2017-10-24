@@ -1,10 +1,17 @@
 package com.nv.qa.cucumber.glue.step;
 
+import com.nv.qa.api.client.operator_portal.OperatorPortalAuthenticationClient;
+import com.nv.qa.constants.NvTimeZone;
+import com.nv.qa.model.operator_portal.authentication.AuthRequest;
+import com.nv.qa.model.operator_portal.authentication.AuthResponse;
+import com.nv.qa.support.APIEndpoint;
 import com.nv.qa.support.CommonUtil;
+import com.nv.qa.support.ScenarioStorage;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -17,11 +24,57 @@ public abstract class AbstractSteps
 
     public AbstractSteps(ScenarioManager scenarioManager)
     {
+        this(scenarioManager, null);
+    }
+
+    public AbstractSteps(ScenarioManager scenarioManager, ScenarioStorage scenarioStorage)
+    {
         this.scenarioManager = scenarioManager;
+
+        if(scenarioStorage!=null)
+        {
+            this.scenarioManager.setCurrentScenarioStorage(scenarioStorage);
+        }
+
         init();
     }
 
     public abstract void init();
+
+    public String getOperatorApiBaseUrl()
+    {
+        return APIEndpoint.API_BASE_URL;
+    }
+
+    public String getOperatorAuthenticationUrl()
+    {
+        return APIEndpoint.API_BASE_URL+"/auth/login?grant_type=client_credentials";
+    }
+
+    public AuthResponse getOperatorAuthToken() throws IOException
+    {
+        ScenarioStorage scenarioStorage = getScenarioManager().getCurrentScenarioStorage();
+
+        if(scenarioStorage==null)
+        {
+            throw new RuntimeException("ScenarioStorage not injected to ScenarioManager.");
+        }
+
+        AuthResponse operatorAuthResponse = scenarioStorage.get("operatorAuthResponse");
+
+        if(operatorAuthResponse==null)
+        {
+            AuthRequest operatorAuthRequest = new AuthRequest();
+            operatorAuthRequest.setClientId(APIEndpoint.OPERATOR_V1_CLIENT_ID);
+            operatorAuthRequest.setClientSecret(APIEndpoint.OPERATOR_V1_CLIENT_SECRET);
+
+            OperatorPortalAuthenticationClient operatorPortalRoutingClient = new OperatorPortalAuthenticationClient(APIEndpoint.API_BASE_URL, APIEndpoint.API_BASE_URL+"/auth/login?grant_type=client_credentials", null, NvTimeZone.ASIA_SINGAPORE);
+            operatorAuthResponse = operatorPortalRoutingClient.login(operatorAuthRequest);
+            scenarioStorage.put("operatorAuthResponse", operatorAuthResponse);
+        }
+
+        return operatorAuthResponse;
+    }
 
     public void takesScreenshot()
     {
@@ -119,5 +172,15 @@ public abstract class AbstractSteps
         {
             ex.printStackTrace();
         }
+    }
+
+    public ScenarioManager getScenarioManager()
+    {
+        return scenarioManager;
+    }
+
+    public ScenarioStorage getScenarioStorage()
+    {
+        return scenarioManager.getCurrentScenarioStorage();
     }
 }
