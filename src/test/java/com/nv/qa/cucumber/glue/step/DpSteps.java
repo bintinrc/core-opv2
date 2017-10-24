@@ -15,9 +15,9 @@ public class DpSteps extends AbstractSteps
     private DpPage dpPage;
 
     @Inject
-    public DpSteps(CommonScenario commonScenario)
+    public DpSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

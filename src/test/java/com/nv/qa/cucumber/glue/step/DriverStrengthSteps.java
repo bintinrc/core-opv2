@@ -16,9 +16,9 @@ public class DriverStrengthSteps extends AbstractSteps
     private DriverStrengthPage dsPage;
 
     @Inject
-    public DriverStrengthSteps(CommonScenario commonScenario)
+    public DriverStrengthSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

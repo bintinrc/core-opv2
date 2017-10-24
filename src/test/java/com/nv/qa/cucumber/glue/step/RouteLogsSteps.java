@@ -28,13 +28,13 @@ public class RouteLogsSteps extends AbstractSteps
 
     @Inject private ScenarioStorage scenarioStorage;
     private RouteLogsPage routeLogsPage;
-    private CommonScenario commonScenario;
+    private ScenarioManager scenarioManager;
 
     @Inject
-    public RouteLogsSteps(CommonScenario commonScenario)
+    public RouteLogsSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
-        this.commonScenario = commonScenario;
+        super(scenarioManager);
+        this.scenarioManager = scenarioManager;
     }
 
     @Override
@@ -90,8 +90,8 @@ public class RouteLogsSteps extends AbstractSteps
                 }
                 catch(Exception ex)
                 {
-                    commonScenario.getCurrentScenario().write(String.format("Alert is not present after %ds.", ALERT_WAIT_TIMEOUT_IN_SECONDS));
-                    commonScenario.getCurrentScenario().write(CommonUtil.getStackTrace(ex));
+                    scenarioManager.getCurrentScenario().write(String.format("Alert is not present after %ds.", ALERT_WAIT_TIMEOUT_IN_SECONDS));
+                    scenarioManager.getCurrentScenario().write(CommonUtil.getStackTrace(ex));
                 }
 
                 pause100ms();

@@ -16,9 +16,9 @@ public class DriverTypeManagementSteps extends AbstractSteps
     private DriverTypeManagementPage dtmPage;
 
     @Inject
-    public DriverTypeManagementSteps(CommonScenario commonScenario)
+    public DriverTypeManagementSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

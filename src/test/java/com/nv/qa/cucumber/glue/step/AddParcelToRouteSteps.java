@@ -19,9 +19,9 @@ public class AddParcelToRouteSteps extends AbstractSteps
     private AddParcelToRoutePage addParcelToRoutePage;
 
     @Inject
-    public AddParcelToRouteSteps(CommonScenario commonScenario)
+    public AddParcelToRouteSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

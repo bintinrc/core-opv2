@@ -19,9 +19,9 @@ public class CommonTagManagementSteps extends AbstractSteps
 
 
     @Inject
-    public CommonTagManagementSteps(CommonScenario commonScenario)
+    public CommonTagManagementSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

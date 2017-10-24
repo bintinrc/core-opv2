@@ -13,11 +13,11 @@ import java.util.Map;
  */
 public abstract class AbstractSteps
 {
-    private CommonScenario commonScenario;
+    private ScenarioManager scenarioManager;
 
-    public AbstractSteps(CommonScenario commonScenario)
+    public AbstractSteps(ScenarioManager scenarioManager)
     {
-        this.commonScenario = commonScenario;
+        this.scenarioManager = scenarioManager;
         init();
     }
 
@@ -26,17 +26,17 @@ public abstract class AbstractSteps
     public void takesScreenshot()
     {
         final byte[] screenshot = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.BYTES);
-        commonScenario.getCurrentScenario().embed(screenshot, "image/png");
+        scenarioManager.getCurrentScenario().embed(screenshot, "image/png");
     }
 
     public void reloadPage()
     {
-        commonScenario.getDriver().navigate().refresh();
+        scenarioManager.getDriver().navigate().refresh();
     }
 
     public void writeToScenarioLog(String message)
     {
-        commonScenario.writeToScenarioLog(message);
+        scenarioManager.writeToScenarioLog(message);
     }
 
     public String replaceParam(String data, Map<String,String> mapOfDynamicVariable)
@@ -46,7 +46,7 @@ public abstract class AbstractSteps
 
     public WebDriver getDriver()
     {
-        return commonScenario.getDriver();
+        return scenarioManager.getDriver();
     }
 
     public void pause50ms()

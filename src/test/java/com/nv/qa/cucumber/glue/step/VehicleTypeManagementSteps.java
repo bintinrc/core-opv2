@@ -19,9 +19,9 @@ import org.openqa.selenium.*;
 public class VehicleTypeManagementSteps extends AbstractSteps
 {
     @Inject
-    public VehicleTypeManagementSteps(CommonScenario commonScenario)
+    public VehicleTypeManagementSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

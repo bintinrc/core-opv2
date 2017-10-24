@@ -34,9 +34,9 @@ public class CommonRouteSteps extends AbstractSteps
 
 
     @Inject
-    public CommonRouteSteps(CommonScenario commonScenario)
+    public CommonRouteSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

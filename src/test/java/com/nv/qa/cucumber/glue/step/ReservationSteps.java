@@ -28,9 +28,9 @@ public class ReservationSteps extends AbstractSteps
     private static String UNRESERVED_DATE = "//div[@ng-repeat='day in week track by $index'][@class='layout-padding layout-column flex nvGreen nv-secondary']";
 
     @Inject
-    public ReservationSteps(CommonScenario commonScenario)
+    public ReservationSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

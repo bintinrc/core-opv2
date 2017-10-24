@@ -31,14 +31,14 @@ import java.util.Date;
  * @author Daniel Joi Partogi Hutapea
  */
 @Singleton
-public class CommonScenario
+public class ScenarioManager
 {
     private static final SimpleDateFormat HTML_PAGE_SOURCE_DATE_SUFFIX_SDF = new SimpleDateFormat("dd-MMM-yyyy_hh-mm-ss");
 
     private WebDriver driver;
     private Scenario scenario;
 
-    public CommonScenario()
+    public ScenarioManager()
     {
     }
 
@@ -79,7 +79,7 @@ public class CommonScenario
     {
         if(scenario.isFailed())
         {
-            WebDriver currentDriver = SeleniumSharedDriver.getInstance().getDriver(); // Don't use getDriver() because some feature files does not use CommonScenario.
+            WebDriver currentDriver = SeleniumSharedDriver.getInstance().getDriver(); // Don't use getDriver() because some feature files does not use ScenarioManager.
             takesScreenshot(currentDriver, scenario);
             printBrowserConsoleLog(currentDriver, scenario);
             printLastPageHtmlSourceToFile(currentDriver, scenario);

@@ -21,9 +21,9 @@ public class OpsRouteSteps extends AbstractSteps
     private String newRouteId;
 
     @Inject
-    public OpsRouteSteps(CommonScenario commonScenario)
+    public OpsRouteSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

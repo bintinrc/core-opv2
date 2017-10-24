@@ -17,9 +17,9 @@ public class DpVaultManagementSteps extends AbstractSteps
     private DpVaultManagementPage dpVaultManagementPage;
 
     @Inject
-    public DpVaultManagementSteps(CommonScenario commonScenario)
+    public DpVaultManagementSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

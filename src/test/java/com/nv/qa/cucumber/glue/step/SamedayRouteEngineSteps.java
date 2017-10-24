@@ -30,9 +30,9 @@ public class SamedayRouteEngineSteps extends AbstractSteps
     private BulkyTrackingClient bulkyTrackingClient;
 
     @Inject
-    public SamedayRouteEngineSteps(CommonScenario commonScenario)
+    public SamedayRouteEngineSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

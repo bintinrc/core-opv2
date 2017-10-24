@@ -31,9 +31,9 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     private String linehaulId = "0";
 
     @Inject
-    public ShipmentLinehaulSteps(CommonScenario commonScenario)
+    public ShipmentLinehaulSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

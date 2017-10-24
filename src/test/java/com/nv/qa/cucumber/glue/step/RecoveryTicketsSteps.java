@@ -23,9 +23,9 @@ public class RecoveryTicketsSteps extends AbstractSteps
     private RecoveryTicketsPage recoveryTicketsPage;
 
     @Inject
-    public RecoveryTicketsSteps(CommonScenario commonScenario)
+    public RecoveryTicketsSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

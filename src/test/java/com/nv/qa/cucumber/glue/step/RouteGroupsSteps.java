@@ -30,9 +30,9 @@ public class RouteGroupsSteps extends AbstractSteps
     private RouteGroupsPage routeGroupsPage;
 
     @Inject
-    public RouteGroupsSteps(CommonScenario commonScenario)
+    public RouteGroupsSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

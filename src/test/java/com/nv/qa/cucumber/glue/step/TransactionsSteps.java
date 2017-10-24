@@ -17,9 +17,9 @@ public class TransactionsSteps extends AbstractSteps
     private TransactionsPage transactionsPage;
 
     @Inject
-    public TransactionsSteps(CommonScenario commonScenario)
+    public TransactionsSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

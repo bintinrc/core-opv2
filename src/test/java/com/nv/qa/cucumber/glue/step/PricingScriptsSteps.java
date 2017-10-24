@@ -27,9 +27,9 @@ public class PricingScriptsSteps extends AbstractSteps
     private String shipperLinkedToPricingScripts;
 
     @Inject
-    public PricingScriptsSteps(CommonScenario commonScenario)
+    public PricingScriptsSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

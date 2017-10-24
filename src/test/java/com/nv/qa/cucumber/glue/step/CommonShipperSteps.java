@@ -38,9 +38,9 @@ public class CommonShipperSteps extends AbstractSteps
     List<com.nv.qa.model.order_creation.v3.CreateOrderResponse> createOrderResponses = new ArrayList<>();
 
     @Inject
-    public CommonShipperSteps(CommonScenario commonScenario)
+    public CommonShipperSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

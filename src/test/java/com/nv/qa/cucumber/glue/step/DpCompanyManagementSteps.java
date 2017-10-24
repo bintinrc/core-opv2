@@ -20,9 +20,9 @@ public class DpCompanyManagementSteps extends AbstractSteps
     private DpCompanyAgentPage dpCompanyAgentPage;
 
     @Inject
-    public DpCompanyManagementSteps(CommonScenario commonScenario)
+    public DpCompanyManagementSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

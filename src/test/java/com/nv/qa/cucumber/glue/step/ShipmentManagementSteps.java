@@ -34,9 +34,9 @@ public class ShipmentManagementSteps extends AbstractSteps
     private String comment = "";
 
     @Inject
-    public ShipmentManagementSteps(CommonScenario commonScenario)
+    public ShipmentManagementSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

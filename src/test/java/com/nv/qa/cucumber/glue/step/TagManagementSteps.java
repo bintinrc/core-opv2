@@ -22,9 +22,9 @@ public class TagManagementSteps extends AbstractSteps
     private TagManagementPage tagManagementPage;
 
     @Inject
-    public TagManagementSteps(CommonScenario commonScenario)
+    public TagManagementSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

@@ -26,8 +26,8 @@ public class SmsModuleSteps extends AbstractSteps
     }
 
     @Inject
-    public SmsModuleSteps(CommonScenario commonScenario, ScenarioStorage scenarioStorage){
-        super(commonScenario);
+    public SmsModuleSteps(ScenarioManager scenarioManager, ScenarioStorage scenarioStorage){
+        super(scenarioManager);
         this.scenarioStorage = scenarioStorage;
     }
 

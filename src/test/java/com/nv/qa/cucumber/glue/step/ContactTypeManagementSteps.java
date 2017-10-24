@@ -19,9 +19,9 @@ import org.openqa.selenium.*;
 public class ContactTypeManagementSteps extends AbstractSteps
 {
     @Inject
-    public ContactTypeManagementSteps(CommonScenario commonScenario)
+    public ContactTypeManagementSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

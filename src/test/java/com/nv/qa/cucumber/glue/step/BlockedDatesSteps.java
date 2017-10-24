@@ -28,9 +28,9 @@ public class BlockedDatesSteps extends AbstractSteps
     private static final SimpleDateFormat MONTH_SDF = new SimpleDateFormat("MMMM", Locale.ENGLISH);
 
     @Inject
-    public BlockedDatesSteps(CommonScenario commonScenario)
+    public BlockedDatesSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override

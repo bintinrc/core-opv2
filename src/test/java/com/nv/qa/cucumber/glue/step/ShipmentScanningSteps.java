@@ -21,9 +21,9 @@ public class ShipmentScanningSteps extends AbstractSteps
     private ShipmentScanningPage scanningPage;
 
     @Inject
-    public ShipmentScanningSteps(CommonScenario commonScenario)
+    public ShipmentScanningSteps(ScenarioManager scenarioManager)
     {
-        super(commonScenario);
+        super(scenarioManager);
     }
 
     @Override
