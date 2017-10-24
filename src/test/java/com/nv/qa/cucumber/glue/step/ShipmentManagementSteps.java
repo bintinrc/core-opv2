@@ -24,7 +24,7 @@ import static com.nv.qa.selenium.page.ShipmentManagementPage.*;
  * Modified by Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class ShipmentManagementStep extends AbstractSteps
+public class ShipmentManagementSteps extends AbstractSteps
 {
     @Inject private ScenarioStorage scenarioStorage;
 
@@ -34,7 +34,7 @@ public class ShipmentManagementStep extends AbstractSteps
     private String comment = "";
 
     @Inject
-    public ShipmentManagementStep(CommonScenario commonScenario)
+    public ShipmentManagementSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

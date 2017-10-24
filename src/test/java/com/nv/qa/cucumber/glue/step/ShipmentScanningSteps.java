@@ -14,14 +14,14 @@ import cucumber.runtime.java.guice.ScenarioScoped;
  * Modified by Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class ShipmentScanningStep extends AbstractSteps
+public class ShipmentScanningSteps extends AbstractSteps
 {
     @Inject private ScenarioStorage scenarioStorage;
 
     private ShipmentScanningPage scanningPage;
 
     @Inject
-    public ShipmentScanningStep(CommonScenario commonScenario)
+    public ShipmentScanningSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

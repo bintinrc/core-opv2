@@ -17,13 +17,13 @@ import java.util.Map;
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class RecoveryTicketsStep extends AbstractSteps
+public class RecoveryTicketsSteps extends AbstractSteps
 {
     @Inject private ScenarioStorage scenarioStorage;
     private RecoveryTicketsPage recoveryTicketsPage;
 
     @Inject
-    public RecoveryTicketsStep(CommonScenario commonScenario)
+    public RecoveryTicketsSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

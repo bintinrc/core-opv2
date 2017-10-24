@@ -21,7 +21,7 @@ import java.util.*;
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class RouteLogsStep extends AbstractSteps
+public class RouteLogsSteps extends AbstractSteps
 {
     private static final int ALERT_WAIT_TIMEOUT_IN_SECONDS = 15;
     private static final int MAX_RETRY = 10;
@@ -31,7 +31,7 @@ public class RouteLogsStep extends AbstractSteps
     private CommonScenario commonScenario;
 
     @Inject
-    public RouteLogsStep(CommonScenario commonScenario)
+    public RouteLogsSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
         this.commonScenario = commonScenario;

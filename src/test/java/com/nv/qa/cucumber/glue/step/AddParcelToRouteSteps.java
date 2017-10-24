@@ -13,13 +13,13 @@ import org.openqa.selenium.WebElement;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class AddParcelToRouteStep extends AbstractSteps
+public class AddParcelToRouteSteps extends AbstractSteps
 {
     @Inject private ScenarioStorage scenarioStorage;
     private AddParcelToRoutePage addParcelToRoutePage;
 
     @Inject
-    public AddParcelToRouteStep(CommonScenario commonScenario)
+    public AddParcelToRouteSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

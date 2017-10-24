@@ -16,10 +16,10 @@ import org.openqa.selenium.*;
  * Modified by Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class ContactTypeManagementStep extends AbstractSteps
+public class ContactTypeManagementSteps extends AbstractSteps
 {
     @Inject
-    public ContactTypeManagementStep(CommonScenario commonScenario)
+    public ContactTypeManagementSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

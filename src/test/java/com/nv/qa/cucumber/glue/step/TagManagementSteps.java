@@ -12,7 +12,7 @@ import org.junit.Assert;
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class TagManagementStep extends AbstractSteps
+public class TagManagementSteps extends AbstractSteps
 {
     public static final String DEFAULT_TAG_NAME = "AAA";
     public static final String EDITED_TAG_NAME = "AAB";
@@ -22,7 +22,7 @@ public class TagManagementStep extends AbstractSteps
     private TagManagementPage tagManagementPage;
 
     @Inject
-    public TagManagementStep(CommonScenario commonScenario)
+    public TagManagementSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

@@ -21,7 +21,7 @@ import java.util.List;
  * Modified by Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class ShipmentInboundScanningStep extends AbstractSteps
+public class ShipmentInboundScanningSteps extends AbstractSteps
 {
     private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
     @Inject private ScenarioStorage scenarioStorage;
@@ -30,7 +30,7 @@ public class ShipmentInboundScanningStep extends AbstractSteps
     private ShipmentInboundScanningPage scanningPage;
 
     @Inject
-    public ShipmentInboundScanningStep(CommonScenario commonScenario)
+    public ShipmentInboundScanningSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

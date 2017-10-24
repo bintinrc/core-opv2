@@ -11,12 +11,12 @@ import cucumber.runtime.java.guice.ScenarioScoped;
  * @author Soewandi Wirjawan
  */
 @ScenarioScoped
-public class DriverStrengthStep extends AbstractSteps
+public class DriverStrengthSteps extends AbstractSteps
 {
     private DriverStrengthPage dsPage;
 
     @Inject
-    public DriverStrengthStep(CommonScenario commonScenario)
+    public DriverStrengthSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

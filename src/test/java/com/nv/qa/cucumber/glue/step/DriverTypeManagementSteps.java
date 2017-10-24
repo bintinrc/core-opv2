@@ -11,12 +11,12 @@ import cucumber.runtime.java.guice.ScenarioScoped;
  * @author Soewandi Wirjawan
  */
 @ScenarioScoped
-public class DriverTypeManagementStep extends AbstractSteps
+public class DriverTypeManagementSteps extends AbstractSteps
 {
     private DriverTypeManagementPage dtmPage;
 
     @Inject
-    public DriverTypeManagementStep(CommonScenario commonScenario)
+    public DriverTypeManagementSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

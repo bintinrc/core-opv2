@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * @author Daniel Joi Partogi Hutapea
  */
-public class CommonRouteStep extends AbstractSteps
+public class CommonRouteSteps extends AbstractSteps
 {
     private static final SimpleDateFormat CREATED_DATE_SDF = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
     private static final SimpleDateFormat ROUTE_DATE_SDF = new SimpleDateFormat("yyyy-MM-dd 16:00:00");
@@ -34,7 +34,7 @@ public class CommonRouteStep extends AbstractSteps
 
 
     @Inject
-    public CommonRouteStep(CommonScenario commonScenario)
+    public CommonRouteSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

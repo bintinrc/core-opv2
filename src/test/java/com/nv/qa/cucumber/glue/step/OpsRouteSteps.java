@@ -14,14 +14,14 @@ import java.util.Random;
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class OpsRouteStep extends AbstractSteps
+public class OpsRouteSteps extends AbstractSteps
 {
     private static final int EDITED_ROW_NUMBER = 1;
     private OpsRoutePage opsRoutePage;
     private String newRouteId;
 
     @Inject
-    public OpsRouteStep(CommonScenario commonScenario)
+    public OpsRouteSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

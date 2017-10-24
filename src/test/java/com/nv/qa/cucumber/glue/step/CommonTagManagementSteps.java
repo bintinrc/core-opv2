@@ -12,14 +12,14 @@ import java.io.IOException;
 /**
  * @author Daniel Joi Partogi Hutapea
  */
-public class CommonTagManagementStep extends AbstractSteps
+public class CommonTagManagementSteps extends AbstractSteps
 {
     @Inject ScenarioStorage scenarioStorage;
     private OperatorPortalTagManagementClient operatorPortalTagManagementClient;
 
 
     @Inject
-    public CommonTagManagementStep(CommonScenario commonScenario)
+    public CommonTagManagementSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }
@@ -45,7 +45,7 @@ public class CommonTagManagementStep extends AbstractSteps
     @Given("^Operator V2 cleaning Tag Management by calling API endpoint directly$")
     public void createNewRoute() throws IOException
     {
-        String tagName = TagManagementStep.DEFAULT_TAG_NAME;
+        String tagName = TagManagementSteps.DEFAULT_TAG_NAME;
 
         try
         {
@@ -56,7 +56,7 @@ public class CommonTagManagementStep extends AbstractSteps
             System.out.println(String.format("[WARN] An error occurred when trying to delete tag with name = '%s'. Error: %s", tagName, ex.getMessage()));
         }
 
-        tagName = TagManagementStep.EDITED_TAG_NAME;
+        tagName = TagManagementSteps.EDITED_TAG_NAME;
 
         try
         {

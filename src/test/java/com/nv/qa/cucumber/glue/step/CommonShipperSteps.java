@@ -24,7 +24,7 @@ import java.util.*;
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class CommonShipperStep extends AbstractSteps
+public class CommonShipperSteps extends AbstractSteps
 {
     private static final SimpleDateFormat CREATED_DATE_SDF = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
     private static final SimpleDateFormat CURRENT_DATE_SDF = new SimpleDateFormat("yyyy-MM-dd");
@@ -38,7 +38,7 @@ public class CommonShipperStep extends AbstractSteps
     List<com.nv.qa.model.order_creation.v3.CreateOrderResponse> createOrderResponses = new ArrayList<>();
 
     @Inject
-    public CommonShipperStep(CommonScenario commonScenario)
+    public CommonShipperSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

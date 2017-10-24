@@ -13,14 +13,14 @@ import cucumber.api.java.en.When;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class DpCompanyManagementStep extends AbstractSteps
+public class DpCompanyManagementSteps extends AbstractSteps
 {
     @Inject ScenarioStorage scenarioStorage;
     private DpCompanyManagementPage dpCompanyManagementPage;
     private DpCompanyAgentPage dpCompanyAgentPage;
 
     @Inject
-    public DpCompanyManagementStep(CommonScenario commonScenario)
+    public DpCompanyManagementSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

@@ -11,7 +11,8 @@ import org.openqa.selenium.WebDriver;
  * Created by sw on 6/30/16.
  */
 @ScenarioScoped
-public class LogoutStep {
+public class LogoutSteps
+{
 
     private WebDriver driver;
     private LogoutPage logoutPage;

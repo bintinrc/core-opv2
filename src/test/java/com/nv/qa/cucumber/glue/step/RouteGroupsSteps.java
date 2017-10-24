@@ -22,7 +22,7 @@ import java.util.Map;
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class RouteGroupsStep extends AbstractSteps
+public class RouteGroupsSteps extends AbstractSteps
 {
     private static final int MAX_RETRY = 10;
 
@@ -30,7 +30,7 @@ public class RouteGroupsStep extends AbstractSteps
     private RouteGroupsPage routeGroupsPage;
 
     @Inject
-    public RouteGroupsStep(CommonScenario commonScenario)
+    public RouteGroupsSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

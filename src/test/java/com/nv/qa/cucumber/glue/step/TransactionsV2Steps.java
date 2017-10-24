@@ -12,13 +12,13 @@ import java.util.List;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class TransactionsV2Step extends AbstractSteps
+public class TransactionsV2Steps extends AbstractSteps
 {
     @Inject private ScenarioStorage scenarioStorage;
     private TransactionsV2Page transactionsPage;
 
     @Inject
-    public TransactionsV2Step(CommonScenario commonScenario)
+    public TransactionsV2Steps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

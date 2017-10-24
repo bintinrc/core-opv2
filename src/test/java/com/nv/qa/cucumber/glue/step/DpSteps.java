@@ -10,12 +10,12 @@ import cucumber.runtime.java.guice.ScenarioScoped;
  * Created by sw on 7/4/16.
  */
 @ScenarioScoped
-public class DpStep extends AbstractSteps
+public class DpSteps extends AbstractSteps
 {
     private DpPage dpPage;
 
     @Inject
-    public DpStep(CommonScenario commonScenario)
+    public DpSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

@@ -11,13 +11,13 @@ import cucumber.api.java.en.When;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class TransactionsStep extends AbstractSteps
+public class TransactionsSteps extends AbstractSteps
 {
     @Inject private ScenarioStorage scenarioStorage;
     private TransactionsPage transactionsPage;
 
     @Inject
-    public TransactionsStep(CommonScenario commonScenario)
+    public TransactionsSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

@@ -13,7 +13,8 @@ import org.openqa.selenium.WebDriver;
  * Created by sw on 6/30/16.
  */
 @ScenarioScoped
-public class MainStep {
+public class MainSteps
+{
 
     private WebDriver driver;
     private MainPage mainPage;

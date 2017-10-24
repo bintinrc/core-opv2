@@ -16,10 +16,10 @@ import org.openqa.selenium.*;
  * Modified by Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class VehicleTypeManagement extends AbstractSteps
+public class VehicleTypeManagementSteps extends AbstractSteps
 {
     @Inject
-    public VehicleTypeManagement(CommonScenario commonScenario)
+    public VehicleTypeManagementSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

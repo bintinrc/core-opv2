@@ -23,14 +23,14 @@ import java.util.*;
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class SamedayRouteEngineStep extends AbstractSteps
+public class SamedayRouteEngineSteps extends AbstractSteps
 {
     @Inject private ScenarioStorage scenarioStorage;
     private SamedayRouteEnginePage samedayRouteEnginePage;
     private BulkyTrackingClient bulkyTrackingClient;
 
     @Inject
-    public SamedayRouteEngineStep(CommonScenario commonScenario)
+    public SamedayRouteEngineSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

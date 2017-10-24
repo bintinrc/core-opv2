@@ -15,7 +15,7 @@ import java.io.File;
  * @author Soewandi Wirjawan
  */
 @ScenarioScoped
-public class HubStep
+public class HubSteps
 {
     private static final int MAX_RETRY = 10;
     private static final String HUBS_CSV_FILE_NAME = "hubs.csv";

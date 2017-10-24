@@ -23,12 +23,12 @@ import java.util.Locale;
  * Modified by Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class BlockedDatesStep  extends AbstractSteps
+public class BlockedDatesSteps extends AbstractSteps
 {
     private static final SimpleDateFormat MONTH_SDF = new SimpleDateFormat("MMMM", Locale.ENGLISH);
 
     @Inject
-    public BlockedDatesStep(CommonScenario commonScenario)
+    public BlockedDatesSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

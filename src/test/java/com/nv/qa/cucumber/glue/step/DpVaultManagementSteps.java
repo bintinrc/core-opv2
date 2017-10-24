@@ -11,13 +11,13 @@ import cucumber.api.java.en.When;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class DpVaultManagementStep extends AbstractSteps
+public class DpVaultManagementSteps extends AbstractSteps
 {
     @Inject ScenarioStorage scenarioStorage;
     private DpVaultManagementPage dpVaultManagementPage;
 
     @Inject
-    public DpVaultManagementStep(CommonScenario commonScenario)
+    public DpVaultManagementSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

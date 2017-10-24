@@ -18,7 +18,7 @@ import java.util.List;
  * @author Soewandi Wirjawan
  */
 @ScenarioScoped
-public class ReservationStep extends AbstractSteps
+public class ReservationSteps extends AbstractSteps
 {
     private int eReservation = 0;
     private int nReservation = 0;
@@ -28,7 +28,7 @@ public class ReservationStep extends AbstractSteps
     private static String UNRESERVED_DATE = "//div[@ng-repeat='day in week track by $index'][@class='layout-padding layout-column flex nvGreen nv-secondary']";
 
     @Inject
-    public ReservationStep(CommonScenario commonScenario)
+    public ReservationSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

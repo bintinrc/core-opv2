@@ -19,7 +19,7 @@ import java.util.Map;
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class PricingScriptsStep extends AbstractSteps
+public class PricingScriptsSteps extends AbstractSteps
 {
     private PricingScriptsPage pricingScriptsPage;
     private String newPricingScriptsName;
@@ -27,7 +27,7 @@ public class PricingScriptsStep extends AbstractSteps
     private String shipperLinkedToPricingScripts;
 
     @Inject
-    public PricingScriptsStep(CommonScenario commonScenario)
+    public PricingScriptsSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }

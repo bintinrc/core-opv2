@@ -15,7 +15,8 @@ import org.openqa.selenium.WebDriver;
  * @author Soewandi Wirjawan
  */
 @ScenarioScoped
-public class LoginStep {
+public class LoginSteps
+{
 
     private WebDriver driver;
     private LoginPage loginPage;

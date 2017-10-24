@@ -24,14 +24,14 @@ import java.util.*;
  * Modified by Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class ShipmentLinehaulStep extends AbstractSteps
+public class ShipmentLinehaulSteps extends AbstractSteps
 {
     private ShipmentLinehaulPage shipmentLinehaulPage;
     private Linehaul linehaul;
     private String linehaulId = "0";
 
     @Inject
-    public ShipmentLinehaulStep(CommonScenario commonScenario)
+    public ShipmentLinehaulSteps(CommonScenario commonScenario)
     {
         super(commonScenario);
     }
