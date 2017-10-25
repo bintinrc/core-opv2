@@ -1,6 +1,6 @@
 package com.nv.qa.selenium.page;
 
-import com.nv.qa.support.APIEndpoint;
+import com.nv.qa.support.TestConstants;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.SeleniumHelper;
 import org.hamcrest.Matchers;
@@ -32,14 +32,14 @@ public class LoginPage extends LoadableComponent<LoginPage>
     @Override
     protected void load()
     {
-        driver.get(APIEndpoint.OPERATOR_PORTAL_URL);
+        driver.get(TestConstants.OPERATOR_PORTAL_URL);
     }
 
     @Override
     protected void isLoaded() throws Error
     {
         String url = driver.getCurrentUrl();
-        Assert.assertThat("Default Operator Portal URL not loaded.", url, Matchers.containsString(APIEndpoint.OPERATOR_PORTAL_URL));
+        Assert.assertThat("Default Operator Portal URL not loaded.", url, Matchers.containsString(TestConstants.OPERATOR_PORTAL_URL));
     }
 
     public void clickLoginButton()
@@ -51,7 +51,7 @@ public class LoginPage extends LoadableComponent<LoginPage>
     {
         final StringBuilder googlePageUrlSb = new StringBuilder();
 
-        WebDriverWait webDriverWait = new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS);
+        WebDriverWait webDriverWait = new WebDriverWait(driver, TestConstants.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS);
         webDriverWait.until((WebDriver d) ->
         {
             String currentUrl = d.getCurrentUrl();
@@ -136,6 +136,6 @@ public class LoginPage extends LoadableComponent<LoginPage>
     {
         CommonUtil.pause1s();
         String url = driver.getCurrentUrl();
-        Assert.assertThat("Default Operator Portal URL not loaded.", url, Matchers.containsString(APIEndpoint.OPERATOR_PORTAL_URL));
+        Assert.assertThat("Default Operator Portal URL not loaded.", url, Matchers.containsString(TestConstants.OPERATOR_PORTAL_URL));
     }
 }

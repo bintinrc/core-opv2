@@ -11,7 +11,7 @@ import java.util.Date;
  *
  * @author Soewandi Wirjawan
  */
-public final class APIEndpoint extends StandardTestConstants
+public final class TestConstants extends StandardTestConstants
 {
     private static final SimpleDateFormat TEMP_FOLDER_DATE_FORMAT = new SimpleDateFormat("dd-MMM-yyyy_hhmmss_SSS");
 
@@ -126,7 +126,7 @@ public final class APIEndpoint extends StandardTestConstants
         }
     }
 
-    private APIEndpoint()
+    private TestConstants()
     {
     }
 }

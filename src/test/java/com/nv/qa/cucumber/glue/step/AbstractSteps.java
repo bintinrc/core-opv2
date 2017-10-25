@@ -7,7 +7,7 @@ import com.nv.qa.integration.model.auth.DriverLoginRequest;
 import com.nv.qa.integration.model.auth.DriverLoginResponse;
 import com.nv.qa.model.operator_portal.authentication.AuthRequest;
 import com.nv.qa.model.operator_portal.authentication.AuthResponse;
-import com.nv.qa.support.APIEndpoint;
+import com.nv.qa.support.TestConstants;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.ScenarioStorage;
 import org.openqa.selenium.OutputType;
@@ -46,12 +46,12 @@ public abstract class AbstractSteps
 
     public String getOperatorApiBaseUrl()
     {
-        return APIEndpoint.API_BASE_URL;
+        return TestConstants.API_BASE_URL;
     }
 
     public String getOperatorAuthenticationUrl()
     {
-        return APIEndpoint.API_BASE_URL+"/auth/login?grant_type=client_credentials";
+        return TestConstants.API_BASE_URL+"/auth/login?grant_type=client_credentials";
     }
 
     public AuthResponse getOperatorAuthToken() throws IOException
@@ -62,10 +62,10 @@ public abstract class AbstractSteps
         if(operatorAuthResponse==null)
         {
             AuthRequest operatorAuthRequest = new AuthRequest();
-            operatorAuthRequest.setClientId(APIEndpoint.OPERATOR_V1_CLIENT_ID);
-            operatorAuthRequest.setClientSecret(APIEndpoint.OPERATOR_V1_CLIENT_SECRET);
+            operatorAuthRequest.setClientId(TestConstants.OPERATOR_V1_CLIENT_ID);
+            operatorAuthRequest.setClientSecret(TestConstants.OPERATOR_V1_CLIENT_SECRET);
 
-            OperatorPortalAuthenticationClient operatorPortalRoutingClient = new OperatorPortalAuthenticationClient(APIEndpoint.API_BASE_URL, APIEndpoint.API_BASE_URL+"/auth/login?grant_type=client_credentials", null, NvTimeZone.ASIA_SINGAPORE);
+            OperatorPortalAuthenticationClient operatorPortalRoutingClient = new OperatorPortalAuthenticationClient(TestConstants.API_BASE_URL, TestConstants.API_BASE_URL+"/auth/login?grant_type=client_credentials", null, NvTimeZone.ASIA_SINGAPORE);
             operatorAuthResponse = operatorPortalRoutingClient.login(operatorAuthRequest);
             scenarioStorage.put("operatorAuthResponse", operatorAuthResponse);
         }
@@ -81,10 +81,10 @@ public abstract class AbstractSteps
         if(driverLoginResponse==null)
         {
             DriverLoginRequest driverLoginRequest = new DriverLoginRequest();
-            driverLoginRequest.setUsername(APIEndpoint.NINJA_DRIVER_USERNAME);
-            driverLoginRequest.setPassword(APIEndpoint.NINJA_DRIVER_PASSWORD);
+            driverLoginRequest.setUsername(TestConstants.NINJA_DRIVER_USERNAME);
+            driverLoginRequest.setPassword(TestConstants.NINJA_DRIVER_PASSWORD);
 
-            DriverClient driverClient = new DriverClient(APIEndpoint.API_BASE_URL);
+            DriverClient driverClient = new DriverClient(TestConstants.API_BASE_URL);
             driverLoginResponse = driverClient.authenticate(driverLoginRequest);
         }
 

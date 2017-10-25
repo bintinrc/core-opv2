@@ -1,6 +1,6 @@
 package com.nv.qa.selenium.page;
 
-import com.nv.qa.support.APIEndpoint;
+import com.nv.qa.support.TestConstants;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.SeleniumHelper;
 import org.hamcrest.Matchers;
@@ -58,7 +58,7 @@ public class MainPage extends SimplePage
         CommonUtil.pause1s();
         navElm.click();
 
-        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until((d)->
+        new WebDriverWait(driver, TestConstants.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until((d)->
         {
             boolean result;
             String currentUrl = d.getCurrentUrl();
@@ -103,7 +103,7 @@ public class MainPage extends SimplePage
     public void dpAdm()
     {
         String mainDashboard = grabEndURL("All Orders");
-        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until((d)->d.getCurrentUrl().toLowerCase().endsWith(mainDashboard));
+        new WebDriverWait(driver, TestConstants.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until((d)->d.getCurrentUrl().toLowerCase().endsWith(mainDashboard));
         String url = driver.getCurrentUrl().toLowerCase();
         Assert.assertThat("URL not match.", url, Matchers.endsWith(mainDashboard));
         CommonUtil.pause5s();
@@ -113,7 +113,7 @@ public class MainPage extends SimplePage
     {
         String previousUrl = driver.getCurrentUrl().toLowerCase();
         driver.navigate().refresh();
-        new WebDriverWait(driver, APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until((d)->d.getCurrentUrl().equalsIgnoreCase(previousUrl));
+        new WebDriverWait(driver, TestConstants.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until((d)->d.getCurrentUrl().equalsIgnoreCase(previousUrl));
         String currentUrl = driver.getCurrentUrl().toLowerCase();
         Assert.assertEquals("Page URL is different after page is refreshed.", previousUrl, currentUrl);
     }

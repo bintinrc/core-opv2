@@ -149,15 +149,15 @@ public class OrderCreateHelper {
 
     public static OrderCreateAuthenticationClient getAuthenticationClient() {
         return new OrderCreateAuthenticationClient(
-                APIEndpoint.API_BASE_URL,
-                APIEndpoint.ORDER_CREATE_BASE_URL
+                TestConstants.API_BASE_URL,
+                TestConstants.ORDER_CREATE_BASE_URL
         );
     }
 
     public static OrderCreateV1Client getVersion1Client(String accessToken) {
         return new OrderCreateV1Client(
-                APIEndpoint.API_BASE_URL,
-                APIEndpoint.ORDER_CREATE_BASE_URL,
+                TestConstants.API_BASE_URL,
+                TestConstants.ORDER_CREATE_BASE_URL,
                 accessToken
         );
     }
@@ -168,8 +168,8 @@ public class OrderCreateHelper {
 
     public static OrderCreateV2Client getVersion2Client(String accessToken) {
         return new OrderCreateV2Client(
-                APIEndpoint.API_BASE_URL,
-                APIEndpoint.ORDER_CREATE_BASE_URL,
+                TestConstants.API_BASE_URL,
+                TestConstants.ORDER_CREATE_BASE_URL,
                 accessToken
         );
     }
@@ -180,8 +180,8 @@ public class OrderCreateHelper {
 
     public static OrderCreateV3Client getVersion3Client(String accessToken) {
         return new OrderCreateV3Client(
-                APIEndpoint.API_BASE_URL,
-                APIEndpoint.ORDER_CREATE_BASE_URL,
+                TestConstants.API_BASE_URL,
+                TestConstants.ORDER_CREATE_BASE_URL,
                 accessToken
         );
     }
@@ -199,8 +199,8 @@ public class OrderCreateHelper {
     public static String getOrderCreateAccessToken() throws IOException {
         if (CREATE_ORDER_ACCESS_TOKEN == null) {
             AuthRequest loginRequest = new AuthRequest(
-                    APIEndpoint.SHIPPER_CLIENT_ID,
-                    APIEndpoint.SHIPPER_CLIENT_SECRET
+                    TestConstants.SHIPPER_CLIENT_ID,
+                    TestConstants.SHIPPER_CLIENT_SECRET
             );
             OrderCreateAuthenticationClient client = getAuthenticationClient();
             AuthResponse resp = client.login(loginRequest);
@@ -210,7 +210,7 @@ public class OrderCreateHelper {
              * I deleted this line below because it called deprecated method
              * that does not have any implementation (all code in this method is commented).
              */
-            //client.refreshShipperAccountCache(APIEndpoint.SHIPPER_ID);
+            //client.refreshShipperAccountCache(TestConstants.SHIPPER_ID);
         }
         return CREATE_ORDER_ACCESS_TOKEN;
     }

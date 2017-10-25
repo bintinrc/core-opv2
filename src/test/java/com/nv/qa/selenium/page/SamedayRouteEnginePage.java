@@ -2,7 +2,7 @@ package com.nv.qa.selenium.page;
 
 
 import com.google.inject.Inject;
-import com.nv.qa.support.APIEndpoint;
+import com.nv.qa.support.TestConstants;
 import com.nv.qa.support.ScenarioStorage;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
@@ -134,18 +134,18 @@ public class SamedayRouteEnginePage extends SimplePage
                 "]/md-dialog-content/div[1]/div[1]/p/b")
                 .getText();
         //clear the downloaded file first
-        File csvFile = new File(APIEndpoint.SELENIUM_WRITE_PATH+"/"+routeName+".csv");
+        File csvFile = new File(TestConstants.SELENIUM_WRITE_PATH+"/"+routeName+".csv");
         if(csvFile.exists()){
             csvFile.delete();
         }
         click("//button[@aria-label='Download CSV']");
         new WebDriverWait(getDriver(), WAIT_TIMEOUT).until((WebDriver driver) -> {
-            File csvFileDownloaded = new File(APIEndpoint.SELENIUM_WRITE_PATH+"/"+routeName+".csv");
+            File csvFileDownloaded = new File(TestConstants.SELENIUM_WRITE_PATH+"/"+routeName+".csv");
             return csvFileDownloaded.exists();
         });
 
         //check the downloaded file
-        List<String> lines = Files.readAllLines(Paths.get(APIEndpoint.SELENIUM_WRITE_PATH+"/"+routeName+".csv"), Charset.defaultCharset());
+        List<String> lines = Files.readAllLines(Paths.get(TestConstants.SELENIUM_WRITE_PATH+"/"+routeName+".csv"), Charset.defaultCharset());
         lines.forEach((String str)->{
             String [] columnData = str.split(",");
             Assert.assertFalse("Shouldn't have break in the exported csv",columnData[1].startsWith("break"));

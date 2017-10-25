@@ -1,6 +1,6 @@
 package com.nv.qa.selenium.page;
 
-import com.nv.qa.support.APIEndpoint;
+import com.nv.qa.support.TestConstants;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.ScenarioHelper;
 import org.junit.Assert;
@@ -22,7 +22,7 @@ public class DriverTypeManagementPage extends SimplePage
     private static final int MAX_RETRY = 10;
     private static final int MAX_LOADING_TIMEOUT_IN_SECONDS = 120;
     private static final String DRIVER_TYPES_CSV_FILE_NAME = "driver-types.csv";
-    private static final String DRIVER_TYPES_CSV_FILE_LOCATION = APIEndpoint.SELENIUM_WRITE_PATH + DRIVER_TYPES_CSV_FILE_NAME;
+    private static final String DRIVER_TYPES_CSV_FILE_LOCATION = TestConstants.SELENIUM_WRITE_PATH + DRIVER_TYPES_CSV_FILE_NAME;
 
     public DriverTypeManagementPage(WebDriver driver)
     {

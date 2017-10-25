@@ -1,6 +1,6 @@
 package com.nv.qa.selenium.page;
 
-import com.nv.qa.support.APIEndpoint;
+import com.nv.qa.support.TestConstants;
 import com.nv.qa.support.DateUtil;
 import com.nv.qa.support.ScenarioHelper;
 import org.junit.Assert;
@@ -39,7 +39,7 @@ public class DriverStrengthPage extends SimplePage
 
     public void verifyDownloadedFile()
     {
-        File f = new File(APIEndpoint.SELENIUM_WRITE_PATH + FILENAME);
+        File f = new File(TestConstants.SELENIUM_WRITE_PATH + FILENAME);
         boolean isFileExisted = f.exists();
 
         if(isFileExisted)

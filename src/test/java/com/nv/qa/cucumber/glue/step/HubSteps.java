@@ -19,7 +19,7 @@ public class HubSteps extends AbstractSteps
 {
     private static final int MAX_RETRY = 10;
     private static final String HUBS_CSV_FILE_NAME = "hubs.csv";
-    private static final String HUBS_CSV_FILE_NAME_LOCATION = APIEndpoint.SELENIUM_WRITE_PATH + HUBS_CSV_FILE_NAME;
+    private static final String HUBS_CSV_FILE_NAME_LOCATION = TestConstants.SELENIUM_WRITE_PATH + HUBS_CSV_FILE_NAME;
 
     @Inject
     public HubSteps(ScenarioManager scenarioManager)

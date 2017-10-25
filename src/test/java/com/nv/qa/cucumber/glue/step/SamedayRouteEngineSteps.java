@@ -5,7 +5,7 @@ import com.nv.qa.integration.client.operator.BulkyTrackingClient;
 import com.nv.qa.integration.model.core.BulkyOrder;
 import com.nv.qa.model.order_creation.v2.Order;
 import com.nv.qa.selenium.page.SamedayRouteEnginePage;
-import com.nv.qa.support.APIEndpoint;
+import com.nv.qa.support.TestConstants;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.DataTable;
@@ -39,7 +39,7 @@ public class SamedayRouteEngineSteps extends AbstractSteps
     public void init()
     {
         samedayRouteEnginePage = new SamedayRouteEnginePage(getDriver());
-        bulkyTrackingClient = new BulkyTrackingClient(APIEndpoint.API_BASE_URL);
+        bulkyTrackingClient = new BulkyTrackingClient(TestConstants.API_BASE_URL);
     }
 
     @When("^op 'Run Route Engine' on Same-Day Route Engine menu using data below:$")
@@ -62,12 +62,17 @@ public class SamedayRouteEngineSteps extends AbstractSteps
         samedayRouteEnginePage.setFleetType1Capacity(fleetType1Capacity);
         samedayRouteEnginePage.selectFleetType1OperatingHoursStart(fleetType1OperatingHoursStart);
         samedayRouteEnginePage.selectFleetType1OperatingHoursEnd(fleetType1OperatingHoursEnd);
-        if(fleetType1BreakingDurationStart!=null){
+
+        if(fleetType1BreakingDurationStart!=null)
+        {
             samedayRouteEnginePage.selectFleetType1BreakDurationStart(fleetType1BreakingDurationStart);
         }
-        if(fleetType1BreakingDurationEnd!=null){
+
+        if(fleetType1BreakingDurationEnd!=null)
+        {
             samedayRouteEnginePage.selectFleetType1BreakDurationEnd(fleetType1BreakingDurationEnd);
         }
+
         takesScreenshot();
         samedayRouteEnginePage.clickRunRouteEngineButton();
         takesScreenshot();
@@ -99,7 +104,8 @@ public class SamedayRouteEngineSteps extends AbstractSteps
     }
 
     @Then("^op create the suggested route")
-    public void createRoute(){
+    public void createRoute()
+    {
         samedayRouteEnginePage.selectDriverOnRouteSettingsPage("OpV2No.1");
         takesScreenshot();
         samedayRouteEnginePage.clickCreate1RoutesButton();
@@ -107,32 +113,40 @@ public class SamedayRouteEngineSteps extends AbstractSteps
     }
 
     @Then("^op open same day route engine waypoint detail dialog")
-    public void openWaypointDetailsDeialog(){
+    public void openWaypointDetailsDeialog()
+    {
         samedayRouteEnginePage.openWaypointDetail();
     }
 
     @Then("^op download same day route engine waypoint detail dialog")
-    public void downloadWaypointDetail(){
-        try {
-            Order order = (Order) scenarioStorage.get("order");
+    public void downloadWaypointDetail()
+    {
+        try
+        {
+            Order order = scenarioStorage.get("order");
             samedayRouteEnginePage.downloadCsvOnWaypointDetails(order.getTracking_id());
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
+        }
+        catch(IOException ex)
+        {
+            System.out.println(ex.getMessage());
         }
     }
 
     @When("^op open unrouted detail dialog")
-    public void openUnroutedDetailDialog(){
+    public void openUnroutedDetailDialog()
+    {
         samedayRouteEnginePage.openUnroutedDetailDialog();
     }
 
     @Then("^op verify the unrouted detail dialog")
-    public void verifyUnroutedDetailDialog(){
+    public void verifyUnroutedDetailDialog()
+    {
         samedayRouteEnginePage.verifyUnroutedDetailDialog();
     }
 
     @When("^op update timeslot on same day route engine")
-    public void updateTimeslot(){
+    public void updateTimeslot()
+    {
         Calendar cal = Calendar.getInstance();
         cal.setTimeZone(TimeZone.getTimeZone(Optional.ofNullable(CommonUtil.getOperatorTimezone(getDriver())).orElse("UTC")));
         cal.add(Calendar.DATE, 1);
@@ -144,18 +158,16 @@ public class SamedayRouteEngineSteps extends AbstractSteps
     }
 
     @Then("^op verify the updated timeslot")
-    public void verifyBulkyOrderTimeslotUpdated(){
+    public void verifyBulkyOrderTimeslotUpdated()
+    {
         String suggestedDate = scenarioStorage.get("new-suggested-date");
-        String AsyncIdString = scenarioStorage.get("orderAsyncId");
+        String asyncIdString = scenarioStorage.get("orderAsyncId");
         String trackingIdsString = scenarioStorage.get("bulky-tracking-id");
         List<String> trackingIds = Arrays.asList(trackingIdsString.split(","));
-        trackingIds.forEach((String trId) -> {
-            BulkyOrder order = bulkyTrackingClient.getBulkyOrderDetail(trId, AsyncIdString);
+        trackingIds.forEach((String trId) ->
+        {
+            BulkyOrder order = bulkyTrackingClient.getBulkyOrderDetail(trId, asyncIdString);
             Assert.assertEquals(suggestedDate,order.getSuggested_timeslot().getDate());
         });
-
-
     }
-
-
 }

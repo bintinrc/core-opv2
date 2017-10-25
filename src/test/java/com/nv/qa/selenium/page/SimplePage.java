@@ -1,6 +1,6 @@
 package com.nv.qa.selenium.page;
 
-import com.nv.qa.support.APIEndpoint;
+import com.nv.qa.support.TestConstants;
 import com.nv.qa.support.CommonUtil;
 import org.junit.Assert;
 import org.openqa.selenium.*;
@@ -404,7 +404,7 @@ public class SimplePage
 
     public String getLatestDownloadedFilename(String filenamePattern)
     {
-        File parentDir = new File(APIEndpoint.SELENIUM_WRITE_PATH);
+        File parentDir = new File(TestConstants.SELENIUM_WRITE_PATH);
         File[] arrayOfFiles = parentDir.listFiles((File dir, String name)->name.startsWith(filenamePattern));
         Arrays.sort(arrayOfFiles, (File f1, File f2) -> Long.valueOf(f2.lastModified()).compareTo(f1.lastModified()));
         return arrayOfFiles[0].getName();
@@ -412,7 +412,7 @@ public class SimplePage
 
     public void verifyFileDownloadedSuccessfully(String filename, String expectedText)
     {
-        String pathname = APIEndpoint.SELENIUM_WRITE_PATH + filename;
+        String pathname = TestConstants.SELENIUM_WRITE_PATH + filename;
         File file;
         int counter = 0;
         boolean isFileExists;
@@ -551,7 +551,7 @@ public class SimplePage
 
     public void resetImplicitTimeout()
     {
-        setImplicitTimeout(APIEndpoint.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS);
+        setImplicitTimeout(TestConstants.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS);
     }
 
     public WebDriver getDriver()

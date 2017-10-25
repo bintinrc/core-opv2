@@ -10,7 +10,7 @@ import com.nv.qa.integration.model.driver.Route;
 import com.nv.qa.integration.model.driver.builder.JobBuilder;
 import com.nv.qa.integration.model.driver.scan.DeliveryRequest;
 import com.nv.qa.model.order_creation.v2.Order;
-import com.nv.qa.support.APIEndpoint;
+import com.nv.qa.support.TestConstants;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -47,7 +47,7 @@ public class CommonDriverSteps extends AbstractSteps
         try
         {
             DriverLoginResponse driverLoginResponse = getDriverAuthToken();
-            driverClient = new DriverClient(APIEndpoint.API_BASE_URL, driverLoginResponse.getAccessToken());
+            driverClient = new DriverClient(TestConstants.API_BASE_URL, driverLoginResponse.getAccessToken());
         }
         catch(Exception ex)
         {
@@ -127,11 +127,11 @@ public class CommonDriverSteps extends AbstractSteps
 
         Assert.assertNotEquals("pickup job found", -1L, deliveryJobId);
 
-        Integer failureReasonId = (APIEndpoint.API_BASE_URL.toLowerCase().contains("/id"))
+        Integer failureReasonId = (TestConstants.API_BASE_URL.toLowerCase().contains("/id"))
                 ? com.nv.qa.integration.model.driver.Order.DEFAULT_FAIL_ID_SG
                 : com.nv.qa.integration.model.driver.Order.DEFAULT_FAIL_ID_SG;
 
-        String failureReasonString = (APIEndpoint.API_BASE_URL.toLowerCase().contains("/id"))
+        String failureReasonString = (TestConstants.API_BASE_URL.toLowerCase().contains("/id"))
                 ? com.nv.qa.integration.model.driver.Order.DEFAULT_FAIL_ID_SG_STRING
                 : com.nv.qa.integration.model.driver.Order.DEFAULT_FAIL_ID_SG_STRING;
 

@@ -47,14 +47,14 @@ public class DpPage extends SimplePage
 
     public void downloadFile(String type) throws InterruptedException
     {
-        CommonUtil.deleteFile(APIEndpoint.SELENIUM_WRITE_PATH + BTN_NAME_FILENAME.get(type));
+        CommonUtil.deleteFile(TestConstants.SELENIUM_WRITE_PATH + BTN_NAME_FILENAME.get(type));
         click("//div[@filename='" + BTN_NAME_FILENAME.get(type) + "']/nv-download-csv-button/div/nv-api-text-button/button");
         CommonUtil.pause1s();
     }
 
     public void verifyDownloadedFile(String type)
     {
-        String pathname = APIEndpoint.SELENIUM_WRITE_PATH + BTN_NAME_FILENAME.get(type);
+        String pathname = TestConstants.SELENIUM_WRITE_PATH + BTN_NAME_FILENAME.get(type);
         int counter = 0;
         boolean isFileExists;
 

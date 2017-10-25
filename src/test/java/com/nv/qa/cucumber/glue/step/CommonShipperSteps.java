@@ -50,10 +50,10 @@ public class CommonShipperSteps extends AbstractSteps
         try
         {
             AuthRequest shipperAuthRequest = new AuthRequest();
-            shipperAuthRequest.setClient_id(APIEndpoint.SHIPPER_V2_CLIENT_ID);
-            shipperAuthRequest.setClient_secret(APIEndpoint.SHIPPER_V2_CLIENT_SECRET);
+            shipperAuthRequest.setClient_id(TestConstants.SHIPPER_V2_CLIENT_ID);
+            shipperAuthRequest.setClient_secret(TestConstants.SHIPPER_V2_CLIENT_SECRET);
 
-            orderCreateV2Client = new OrderCreateV2Client(APIEndpoint.API_BASE_URL, APIEndpoint.ORDER_CREATE_BASE_URL);
+            orderCreateV2Client = new OrderCreateV2Client(TestConstants.API_BASE_URL, TestConstants.ORDER_CREATE_BASE_URL);
             orderCreateV2Client.login(shipperAuthRequest);
         }
         catch(Exception ex)

@@ -3,7 +3,7 @@ package com.nv.qa.cucumber.glue.step;
 import com.google.inject.Singleton;
 import com.nv.qa.selenium.page.LoginPage;
 import com.nv.qa.selenium.page.MainPage;
-import com.nv.qa.support.APIEndpoint;
+import com.nv.qa.support.TestConstants;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.ScenarioStorage;
 import com.nv.qa.support.SeleniumSharedDriver;
@@ -178,7 +178,7 @@ public class ScenarioManager
             String lastPageHtmlSource = currentDriver.getPageSource();
             String htmlPageSourceName = scenarioName.split("\\(uid:")[0].trim().replaceAll(" ", "_")+'_'+HTML_PAGE_SOURCE_DATE_SUFFIX_SDF.format(new Date())+".html";
 
-            File outputFile = new File(APIEndpoint.REPORT_HTML_OUTPUT_DIR, htmlPageSourceName);
+            File outputFile = new File(TestConstants.REPORT_HTML_OUTPUT_DIR, htmlPageSourceName);
             System.out.println(String.format("[INFO] Writing last page HTML source to file '%s'...", outputFile.getAbsolutePath()));
 
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));

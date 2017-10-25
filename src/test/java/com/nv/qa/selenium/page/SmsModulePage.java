@@ -1,7 +1,7 @@
 package com.nv.qa.selenium.page;
 
 import com.nv.qa.model.SmsCampaignCsv;
-import com.nv.qa.support.APIEndpoint;
+import com.nv.qa.support.TestConstants;
 import com.nv.qa.support.CommonUtil;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -28,7 +28,7 @@ public class SmsModulePage extends SimplePage
     private static final String NEW_LINE = "\r\n";
     private static final String SMS_CAMPAIGN_FILE_NAME = "sms_campaign.csv";
     private static final String SMS_CAMPAIGN_HEADER = "tracking_id,name,email,job";
-    private static final String FILE_PATH = APIEndpoint.SELENIUM_WRITE_PATH + SMS_CAMPAIGN_FILE_NAME;
+    private static final String FILE_PATH = TestConstants.SELENIUM_WRITE_PATH + SMS_CAMPAIGN_FILE_NAME;
     private static final int LOADING_TIMEOUT_IN_SECONDS = 30;
     private static final String MD_VIRTUAL_REPEAT = "sms in getTableData()";
     private static Map<String, Object> cache;
