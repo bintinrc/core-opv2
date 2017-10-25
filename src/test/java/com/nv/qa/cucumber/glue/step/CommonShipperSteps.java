@@ -122,6 +122,7 @@ public class CommonShipperSteps extends AbstractSteps
 
         scenarioStorage.put("order", order);
         scenarioStorage.put("orderAsyncId", asyncOrderId);
+        scenarioStorage.put("trackingId", order.getTracking_id());
         saveTrackingId(order.getTracking_id());
     }
 

@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
  */
 public class SeleniumSharedDriver
 {
-    private static SeleniumSharedDriver INSTANCE = new SeleniumSharedDriver();
+    private static SeleniumSharedDriver instance = new SeleniumSharedDriver();
     private WebDriver driver = null;
 
     static
@@ -22,12 +22,17 @@ public class SeleniumSharedDriver
 
     public static SeleniumSharedDriver getInstance()
     {
-        return INSTANCE;
+        return instance;
     }
 
     public WebDriver getDriver()
     {
-        if(driver==null)
+        return getDriver(true);
+    }
+
+    public WebDriver getDriver(boolean createDriverIfNull)
+    {
+        if(driver==null && createDriverIfNull)
         {
             driver = SeleniumHelper.getWebDriver();
         }

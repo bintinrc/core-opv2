@@ -8,6 +8,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -102,6 +103,26 @@ public class SimplePage
     public List<WebElement> findElementsByXpath(String xpathExpression)
     {
         return getDriver().findElements(By.xpath(xpathExpression));
+    }
+
+    public WebElement findElementByXpath(String xpath, WebElement parent)
+    {
+        return findElementBy(By.xpath(xpath), parent);
+    }
+
+    public List<WebElement> findElementsByXpath(String xpath, WebElement parent)
+    {
+        return findElementsBy(By.xpath(xpath), parent);
+    }
+
+    public WebElement findElementBy(By by, WebElement parent)
+    {
+        return parent.findElement(by);
+    }
+
+    public List<WebElement> findElementsBy(By by, WebElement parent)
+    {
+        return parent.findElements(by);
     }
 
     public void closeModal()
@@ -381,6 +402,14 @@ public class SimplePage
         return element.isDisplayed()? element : null;
     }
 
+    public String getLatestDownloadedFilename(String filenamePattern)
+    {
+        File parentDir = new File(APIEndpoint.SELENIUM_WRITE_PATH);
+        File[] arrayOfFiles = parentDir.listFiles((File dir, String name)->name.startsWith(filenamePattern));
+        Arrays.sort(arrayOfFiles, (File f1, File f2) -> Long.valueOf(f2.lastModified()).compareTo(f1.lastModified()));
+        return arrayOfFiles[0].getName();
+    }
+
     public void verifyFileDownloadedSuccessfully(String filename, String expectedText)
     {
         String pathname = APIEndpoint.SELENIUM_WRITE_PATH + filename;
@@ -528,21 +557,5 @@ public class SimplePage
     public WebDriver getDriver()
     {
         return driver;
-    }
-
-    public WebElement findElementByXpath(String xpath, WebElement parent){
-        return this.findElementBy(By.xpath(xpath), parent);
-    }
-
-    public List<WebElement> findElementsByXpath(String xpath, WebElement parent){
-        return this.findElementsBy(By.xpath(xpath), parent);
-    }
-
-    public WebElement findElementBy(By by, WebElement parent){
-        return parent.findElement(by);
-    }
-
-    public List<WebElement> findElementsBy(By by, WebElement parent){
-        return parent.findElements(by);
     }
 }

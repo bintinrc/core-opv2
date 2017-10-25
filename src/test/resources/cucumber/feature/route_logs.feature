@@ -7,7 +7,7 @@ Feature: Route Logs
 
   @ArchiveRoute
   Scenario: Operator 'Edit Details' on Operator V2 - Route Logs menu (uid:d735938c-f87e-47c1-9a6a-61d31850e0cb)
-    Given Operator V1 create new route using data below:
+    Given Operator create new route using data below:
       | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"(Edit Details) This route is created for testing 'Operator V2 - Routing - Route Logs' menu. Ignore this route. Created at {{created_date}}."} |
     Given op click navigation Blocked Dates in Shipper Support
     Given op click navigation Route Logs in Routing
@@ -18,7 +18,7 @@ Feature: Route Logs
 
   @ArchiveRoute
   Scenario: Operator 'Add New Tag' on Operator V2 - Route Logs menu (uid:24ef3b76-c582-42da-b6d8-cf867aeec8e9)
-    Given Operator V1 create new route using data below:
+    Given Operator create new route using data below:
       | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"(Add New Tag) This route is created for testing 'Operator V2 - Routing - Route Logs' menu. Ignore this route. Created at {{created_date}}."} |
     Given op click navigation Blocked Dates in Shipper Support
     Given op click navigation Route Logs in Routing
@@ -28,7 +28,7 @@ Feature: Route Logs
 
   @ArchiveRoute
   Scenario: Operator 'Delete Route' on Operator V2 - Route Logs menu (uid:ff70c3c0-73bc-4cde-9ce7-c340769560cb)
-    Given Operator V1 create new route using data below:
+    Given Operator create new route using data below:
       | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"(Delete Route) This route is created for testing 'Operator V2 - Routing - Route Logs' menu. Ignore this route. Created at {{created_date}}."} |
     Given op click navigation Blocked Dates in Shipper Support
     Given op click navigation Route Logs in Routing
@@ -38,7 +38,7 @@ Feature: Route Logs
 
   @ArchiveRoute
   Scenario: Operator 'Edit Route' on Operator V2 - Route Logs menu (uid:0ea01bbb-0651-4186-84b4-0b3f4a522d3e)
-    Given Operator V1 create new route using data below:
+    Given Operator create new route using data below:
       | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"(Edit Route) This route is created for testing 'Operator V2 - Routing - Route Logs' menu. Ignore this route. Created at {{created_date}}."} |
     Given op click navigation Blocked Dates in Shipper Support
     Given op click navigation Route Logs in Routing

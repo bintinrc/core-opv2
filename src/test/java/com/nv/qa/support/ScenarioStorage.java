@@ -2,7 +2,9 @@ package com.nv.qa.support;
 
 import cucumber.runtime.java.guice.ScenarioScoped;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,6 +25,20 @@ public class ScenarioStorage
     public void put(String key, Object value)
     {
         mapOfData.put(key, value);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void putInList(String key, Object value)
+    {
+        List listOfValue = get(key);
+
+        if(listOfValue==null)
+        {
+            listOfValue = new ArrayList();
+            mapOfData.put(key, listOfValue);
+        }
+
+        listOfValue.add(value);
     }
 
     @SuppressWarnings("unchecked")

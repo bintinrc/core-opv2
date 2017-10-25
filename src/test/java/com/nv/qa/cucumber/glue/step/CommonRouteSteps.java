@@ -102,7 +102,7 @@ public class CommonRouteSteps extends AbstractSteps
         }
     }
 
-    @Given("^Operator V1 create new route using data below:$")
+    @Given("^Operator create new route using data below:$")
     public void createNewRoute(DataTable dataTable) throws IOException
     {
         Calendar currentCalendar = Calendar.getInstance();
@@ -117,10 +117,12 @@ public class CommonRouteSteps extends AbstractSteps
 
         CreateRouteRequest createRouteRequest = JsonHelper.fromJson(createRouteRequestJson, CreateRouteRequest.class);
         CreateRouteResponse createRouteResponse = operatorPortalRoutingClient.createRoute(createRouteRequest);
+        int routeId = createRouteResponse.getId();
         scenarioStorage.put("createRouteResponse", createRouteResponse);
+        scenarioStorage.put("routeId", routeId);
     }
 
-    @Given("^Operator V1 set route tags \\[([^\\\"]*)]$")
+    @Given("^Operator set route tags \\[([^\"]*)]$")
     public void setRouteTags(String strTagIds)
     {
         int[] tagIds;

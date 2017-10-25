@@ -2,6 +2,9 @@ package com.nv.qa.cucumber.glue.step;
 
 import com.nv.qa.api.client.operator_portal.OperatorPortalAuthenticationClient;
 import com.nv.qa.constants.NvTimeZone;
+import com.nv.qa.integration.client.DriverClient;
+import com.nv.qa.integration.model.auth.DriverLoginRequest;
+import com.nv.qa.integration.model.auth.DriverLoginResponse;
 import com.nv.qa.model.operator_portal.authentication.AuthRequest;
 import com.nv.qa.model.operator_portal.authentication.AuthResponse;
 import com.nv.qa.support.APIEndpoint;
@@ -53,13 +56,7 @@ public abstract class AbstractSteps
 
     public AuthResponse getOperatorAuthToken() throws IOException
     {
-        ScenarioStorage scenarioStorage = getScenarioManager().getCurrentScenarioStorage();
-
-        if(scenarioStorage==null)
-        {
-            throw new RuntimeException("ScenarioStorage not injected to ScenarioManager.");
-        }
-
+        ScenarioStorage scenarioStorage = getScenarioStorage();
         AuthResponse operatorAuthResponse = scenarioStorage.get("operatorAuthResponse");
 
         if(operatorAuthResponse==null)
@@ -74,6 +71,24 @@ public abstract class AbstractSteps
         }
 
         return operatorAuthResponse;
+    }
+
+    public DriverLoginResponse getDriverAuthToken()
+    {
+        ScenarioStorage scenarioStorage = getScenarioStorage();
+        DriverLoginResponse driverLoginResponse = scenarioStorage.get("driverLoginResponse");
+
+        if(driverLoginResponse==null)
+        {
+            DriverLoginRequest driverLoginRequest = new DriverLoginRequest();
+            driverLoginRequest.setUsername(APIEndpoint.NINJA_DRIVER_USERNAME);
+            driverLoginRequest.setPassword(APIEndpoint.NINJA_DRIVER_PASSWORD);
+
+            DriverClient driverClient = new DriverClient(APIEndpoint.API_BASE_URL);
+            driverLoginResponse = driverClient.authenticate(driverLoginRequest);
+        }
+
+        return driverLoginResponse;
     }
 
     public void takesScreenshot()
@@ -181,6 +196,13 @@ public abstract class AbstractSteps
 
     public ScenarioStorage getScenarioStorage()
     {
-        return scenarioManager.getCurrentScenarioStorage();
+        ScenarioStorage scenarioStorage = getScenarioManager().getCurrentScenarioStorage();
+
+        if(scenarioStorage==null)
+        {
+            throw new RuntimeException("ScenarioStorage not injected to ScenarioManager.");
+        }
+
+        return scenarioStorage;
     }
 }

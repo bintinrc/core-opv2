@@ -16,10 +16,10 @@ Feature: Add Parcel To Route
     Then new 'route group' on 'Route Groups' created successfully
     Given op click navigation 1. Create Route Groups in Routing
     Given Operator V2 add created Transaction to Route Group
-    Given Operator V1 create new route using data below:
+    Given Operator create new route using data below:
       | createRouteRequest | {"zoneId":16, "hubId":1, "vehicleId":880, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"(Add Parcel to Route) This route is created for testing purpose only. Ignore this route. Created at {{created_date}}."} |
     #Note: Tag ZZZ = 250
-    Given Operator V1 set route tags [250]
+    Given Operator set route tags [250]
     Given op click navigation 4. Route Engine - Bulk Add to Route in Routing
     When Operator V2 choose route group, select tag "ZZZ" and submit
     Then verify parcel added to route

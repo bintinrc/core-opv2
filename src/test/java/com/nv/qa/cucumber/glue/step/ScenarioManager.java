@@ -81,10 +81,18 @@ public class ScenarioManager
     {
         if(scenario.isFailed())
         {
-            WebDriver currentDriver = SeleniumSharedDriver.getInstance().getDriver(); // Don't use getDriver() because some feature files does not use ScenarioManager.
-            takesScreenshot(currentDriver, scenario);
-            printBrowserConsoleLog(currentDriver, scenario);
-            printLastPageHtmlSourceToFile(currentDriver, scenario);
+            WebDriver currentDriver = SeleniumSharedDriver.getInstance().getDriver(false); // Don't use getDriver() because some feature files does not use ScenarioManager.
+
+            if(currentDriver!=null)
+            {
+                takesScreenshot(currentDriver, scenario);
+                printBrowserConsoleLog(currentDriver, scenario);
+                printLastPageHtmlSourceToFile(currentDriver, scenario);
+            }
+            else
+            {
+                System.out.println("[WARN] WebDriver not run.");
+            }
         }
     }
 
