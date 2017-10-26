@@ -48,29 +48,29 @@ public class FailedPickupManagementSteps extends AbstractSteps
         failedPickupManagementPage.verifyCsvFileDownloadedSuccessfully(trackingId);
     }
 
-    @When("^Operator reschedule failed C2C/Return order on next day$")
-    public void operatorRescheduleFailedC2cOrReturnOrderOnNextDay()
+    @When("^Operator reschedule failed pickup C2C/Return order on next day$")
+    public void operatorRescheduleFailedPickupC2cOrReturnOrderOnNextDay()
     {
         String trackingId = scenarioStorage.get("trackingId");
         failedPickupManagementPage.rescheduleNextDay(trackingId);
     }
 
-    @Then("^Operator verify failed C2C/Return order rescheduled on next day successfully$")
-    public void operatorVerifyFailedC2cOrReturnOrderRescheduleOnNextDaySuccessfully()
+    @Then("^Operator verify failed pickup C2C/Return order rescheduled on next day successfully$")
+    public void operatorVerifyFailedPickupC2cOrReturnOrderRescheduleOnNextDaySuccessfully()
     {
         String trackingId = scenarioStorage.get("trackingId");
         failedPickupManagementPage.verifyOrderIsRemovedFromTableAfterReschedule(trackingId);
     }
 
-    @When("^Operator reschedule failed C2C/Return order on next 2 days$")
-    public void operatorRescheduleFailedC2cOrReturnOrderOnNext2Days()
+    @When("^Operator reschedule failed pickup C2C/Return order on next 2 days$")
+    public void operatorRescheduleFailedPickupC2cOrReturnOrderOnNext2Days()
     {
         String trackingId = scenarioStorage.get("trackingId");
         failedPickupManagementPage.rescheduleNext2Days(trackingId);
     }
 
-    @Then("^Operator verify failed C2C/Return order rescheduled on next 2 days successfully$")
-    public void operatorVerifyFailedC2cOrReturnOrderRescheduleOnNext2DaysSuccessfully()
+    @Then("^Operator verify failed pickup C2C/Return order rescheduled on next 2 days successfully$")
+    public void operatorVerifyFailedPickupC2cOrReturnOrderRescheduleOnNext2DaysSuccessfully()
     {
         String trackingId = scenarioStorage.get("trackingId");
         failedPickupManagementPage.verifyOrderIsRemovedFromTableAfterReschedule(trackingId);
