@@ -12,6 +12,7 @@ import com.nv.qa.integration.model.driver.scan.DeliveryRequest;
 import com.nv.qa.model.order_creation.v2.Order;
 import com.nv.qa.support.TestConstants;
 import com.nv.qa.support.ScenarioStorage;
+import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.junit.Assert;
@@ -62,7 +63,7 @@ public class CommonDriverSteps extends AbstractSteps
         scenarioStorage.put(KEY_DRIVER_ROUTES_LIST, routes);
     }
 
-    @When("^Driver try to find his pickup waypoint for C2C/Return order$")
+    @When("^Driver try to find his pickup/delivery waypoint$")
     public void driverTryToFindHisPickupWaypointForC2cOrReturnOrder()
     {
         List<com.nv.qa.integration.model.driver.Route> routes = scenarioStorage.get(KEY_DRIVER_ROUTES_LIST);
@@ -143,6 +144,42 @@ public class CommonDriverSteps extends AbstractSteps
         Job job = new JobBuilder().setAction(Job.ACTION_FAIL)
                 .setId(deliveryJobId)
                 .setMode(Job.MODE_PICKUP)
+                .setStatus(Job.STATUS_PENDING)
+                .setType(Job.TYPE_TRANSACTION)
+                .setOrders(new ArrayList<com.nv.qa.integration.model.driver.Order>(){{add(jobOrder);}}).createJob();
+
+        List<Job> jobs = new ArrayList<>();
+        jobs.add(job);
+
+        DeliveryRequest request = new DeliveryRequest(deliveryWaypointId, jobs).setAsFailV2();
+        driverClient.failedDefaultV2(routeId, deliveryWaypointId, request);
+    }
+
+    @Then("^Driver failed the delivery for created parcel$")
+    public void driverFailedTheDeliveryForCreatedParcel()
+    {
+        int deliveryJobId = scenarioStorage.get(KEY_DELIVERY_JOB_ID);
+        int deliveryWaypointId = scenarioStorage.get(KEY_DELIVERY_WAYPOINT_ID);
+        int routeId = scenarioStorage.get("routeId");
+
+        Assert.assertNotEquals("Delivery Job not found!", -1L, deliveryJobId);
+
+        Integer failureReasonId = (TestConstants.API_BASE_URL.toLowerCase().contains("/id"))
+                ? com.nv.qa.integration.model.driver.Order.DEFAULT_DELIVERY_FAIL_ID_SG
+                : com.nv.qa.integration.model.driver.Order.DEFAULT_DELIVERY_FAIL_ID_SG;
+
+        String failureReasonString = (TestConstants.API_BASE_URL.toLowerCase().contains("/id"))
+                ? com.nv.qa.integration.model.driver.Order.DEFAULT_DELIVERY_FAIL_ID_SG_STRING
+                : com.nv.qa.integration.model.driver.Order.DEFAULT_DELIVERY_FAIL_ID_SG_STRING;
+
+        com.nv.qa.integration.model.driver.Order jobOrder = scenarioStorage.get(KEY_DRIVER_JOB_ORDER);
+        jobOrder.setAction(com.nv.qa.integration.model.driver.Order.ACTION_FAIL);
+        jobOrder.setFailureReasonId(failureReasonId);
+        jobOrder.setFailureReason(failureReasonString);
+
+        Job job = new JobBuilder().setAction(Job.ACTION_FAIL)
+                .setId(deliveryJobId)
+                .setMode(Job.MODE_DELIVERY)
                 .setStatus(Job.STATUS_PENDING)
                 .setType(Job.TYPE_TRANSACTION)
                 .setOrders(new ArrayList<com.nv.qa.integration.model.driver.Order>(){{add(jobOrder);}}).createJob();

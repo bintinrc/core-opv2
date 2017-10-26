@@ -27,8 +27,8 @@ public class FailedPickupManagementSteps extends AbstractSteps
         failedPickupManagementPage = new FailedPickupManagementPage(getDriver());
     }
 
-    @Then("^Operator verify the failed C2C/Return order is listed on Failed Pickup orders list$")
-    public void operatorVerifyTheFailedC2cOrReturnOrderIsListedOnFailedPickupOrderList()
+    @Then("^Operator verify the failed pickup C2C/Return order is listed on Failed Pickup orders list$")
+    public void operatorVerifyTheFailedPickupC2cOrReturnOrderIsListedOnFailedPickupOrderList()
     {
         String trackingId = scenarioStorage.get("trackingId");
         failedPickupManagementPage.verifyTheFailedC2cOrReturnOrderIsListed(trackingId);

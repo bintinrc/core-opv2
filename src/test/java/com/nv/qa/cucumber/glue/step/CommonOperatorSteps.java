@@ -8,6 +8,7 @@ import com.nv.qa.integration.model.core.Transaction;
 import com.nv.qa.model.operator_portal.authentication.AuthResponse;
 import com.nv.qa.model.operator_portal.global_inbound.GlobalInboundRequest;
 import com.nv.qa.model.operator_portal.routing.AddParcelToRouteRequest;
+import com.nv.qa.model.operator_portal.van_inbound.VanInboundRequest;
 import com.nv.qa.model.order_creation.v2.Order;
 import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.JsonHelper;
@@ -88,6 +89,19 @@ public class CommonOperatorSteps extends AbstractSteps
         AddParcelToRouteRequest addParcelToRouteRequest = JsonHelper.fromJson(addParcelToRouteRequestJson, AddParcelToRouteRequest.class);
         operatorPortalRoutingClient.addParcelToRoute(routeId, addParcelToRouteRequest);
         categorizedOrderByTransactionType(addParcelToRouteRequest, order);
+    }
+
+    @When("^Operator Van Inbound  parcel$")
+    public void operatorVanInboundParcel()
+    {
+        String trackingId = scenarioStorage.get("trackingId");
+        int deliveryWaypointId = scenarioStorage.get(CommonDriverSteps.KEY_DELIVERY_WAYPOINT_ID);
+
+        VanInboundRequest vanInboundRequest = new VanInboundRequest();
+        vanInboundRequest.setTrackingId(trackingId);
+        vanInboundRequest.setWaypointId(deliveryWaypointId);
+        vanInboundRequest.setType("VAN_FROM_NINJAVAN");
+        operatorPortalInboundClient.vanInbound(vanInboundRequest);
     }
 
     @When("^Operator start the route$")
