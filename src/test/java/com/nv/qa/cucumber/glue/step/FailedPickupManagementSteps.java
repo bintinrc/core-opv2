@@ -34,15 +34,15 @@ public class FailedPickupManagementSteps extends AbstractSteps
         failedPickupManagementPage.verifyTheFailedC2cOrReturnOrderIsListed(trackingId);
     }
 
-    @When("^Operator download CSV file of failed C2C/Return order on Failed Pickup orders list$")
-    public void operatorDownloadCsvFileOfFailedC2cOrReturnOrderOnFailedPickupOrdersList()
+    @When("^Operator download CSV file of failed pickup C2C/Return order on Failed Pickup orders list$")
+    public void operatorDownloadCsvFileOfFailedPickupC2cOrReturnOrderOnFailedPickupOrdersList()
     {
         String trackingId = scenarioStorage.get("trackingId");
         failedPickupManagementPage.downloadCsvFile(trackingId);
     }
 
-    @Then("^Operator verify CSV file of failed C2C/Return order on Failed Pickup orders list downloaded successfully$")
-    public void operatorVerifyCsvFileOfFailedC2cOrReturnOrderOnFailedPickupOrdersListDownloadedSuccessfully()
+    @Then("^Operator verify CSV file of failed pickup C2C/Return order on Failed Pickup orders list downloaded successfully$")
+    public void operatorVerifyCsvFileOfFailedPickupC2cOrReturnOrderOnFailedPickupOrdersListDownloadedSuccessfully()
     {
         String trackingId = scenarioStorage.get("trackingId");
         failedPickupManagementPage.verifyCsvFileDownloadedSuccessfully(trackingId);

@@ -125,19 +125,19 @@ public class CommonOperatorSteps extends AbstractSteps
         }
     }
 
-    @Then("^Verify order info after failed pickup C2C/Return order rescheduled on next day$")
-    public void verifyOrderInfoAfterFailedPickupC2cOrReturnOrderRescheduledOnNextDay()
+    @Then("^Operator verify order info after failed pickup C2C/Return order rescheduled on next day$")
+    public void operatorVerifyOrderInfoAfterFailedPickupC2cOrReturnOrderRescheduledOnNextDay()
     {
-        verifyOrderInfoAfterFailedPickupC2cOrReturnOrderRescheduled(1);
+        operatorVerifyOrderInfoAfterFailedPickupC2cOrReturnOrderRescheduled(1);
     }
 
-    @Then("^Verify order info after failed pickup C2C/Return order rescheduled on next 2 days$")
-    public void verifyOrderInfoAfterFailedPickupC2cOrReturnOrderRescheduledOnNext2Days()
+    @Then("^Operator verify order info after failed pickup C2C/Return order rescheduled on next 2 days$")
+    public void operatorVerifyOrderInfoAfterFailedPickupC2cOrReturnOrderRescheduledOnNext2Days()
     {
-        verifyOrderInfoAfterFailedPickupC2cOrReturnOrderRescheduled(2);
+        operatorVerifyOrderInfoAfterFailedPickupC2cOrReturnOrderRescheduled(2);
     }
 
-    private void verifyOrderInfoAfterFailedPickupC2cOrReturnOrderRescheduled(int numberOfNextDays)
+    private void operatorVerifyOrderInfoAfterFailedPickupC2cOrReturnOrderRescheduled(int numberOfNextDays)
     {
         Order order = scenarioStorage.get("order");
         int orderId = order.getTransactions().get(0).getOrder_id();

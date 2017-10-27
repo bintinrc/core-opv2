@@ -39,8 +39,8 @@ Feature: Failed Pickup Management
     And Driver failed the C2C/Return order pickup
     And op refresh page
     When op click navigation Failed Pickup Management in Shipper Support
-    And Operator download CSV file of failed C2C/Return order on Failed Pickup orders list
-    Then Operator verify CSV file of failed C2C/Return order on Failed Pickup orders list downloaded successfully
+    And Operator download CSV file of failed pickup C2C/Return order on Failed Pickup orders list
+    Then Operator verify CSV file of failed pickup C2C/Return order on Failed Pickup orders list downloaded successfully
     Examples:
       | Note   | hiptest-uid                              | orderType | fromName                         | fromEmail                                    | toName                           | toEmail                                     |
       | C2C    | uid:821b30e9-26a2-4e52-a6fd-d5f426599751 | C2C       | S-C-{{tracking_ref_no}} Shipper  | shipper.c2c.{{tracking_ref_no}}@test.com     | C-C-{{tracking_ref_no}} Customer | customer.c2c.{{tracking_ref_no}}@test.com   |
@@ -62,7 +62,7 @@ Feature: Failed Pickup Management
     When op click navigation Failed Pickup Management in Shipper Support
     And Operator reschedule failed pickup C2C/Return order on next day
     Then Operator verify failed pickup C2C/Return order rescheduled on next day successfully
-    And Verify order info after failed pickup C2C/Return order rescheduled on next day
+    And Operator verify order info after failed pickup C2C/Return order rescheduled on next day
     Examples:
       | Note   | hiptest-uid                              | orderType | fromName                         | fromEmail                                    | toName                           | toEmail                                     |
       | C2C    | uid:815e700a-68f7-4b89-a9a0-ffbd8c5cbcdb | C2C       | S-C-{{tracking_ref_no}} Shipper  | shipper.c2c.{{tracking_ref_no}}@test.com     | C-C-{{tracking_ref_no}} Customer | customer.c2c.{{tracking_ref_no}}@test.com   |
@@ -84,7 +84,7 @@ Feature: Failed Pickup Management
     When op click navigation Failed Pickup Management in Shipper Support
     And Operator reschedule failed pickup C2C/Return order on next 2 days
     Then Operator verify failed pickup C2C/Return order rescheduled on next 2 days successfully
-    And Verify order info after failed pickup C2C/Return order rescheduled on next 2 days
+    And Operator verify order info after failed pickup C2C/Return order rescheduled on next 2 days
     Examples:
       | Note   | hiptest-uid                              | orderType | fromName                         | fromEmail                                    | toName                           | toEmail                                     |
       | C2C    | uid:bec16db3-4ee0-4334-8a2f-d090a4f681cd | C2C       | S-C-{{tracking_ref_no}} Shipper  | shipper.c2c.{{tracking_ref_no}}@test.com     | C-C-{{tracking_ref_no}} Customer | customer.c2c.{{tracking_ref_no}}@test.com   |

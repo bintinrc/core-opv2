@@ -22,7 +22,7 @@ public class FailedDeliveryManagementPage extends SimplePage
     public static final String COLUMN_CLASS_FAILURE_COMMENTS = "last_attempt_comments";
     public static final String COLUMN_CLASS_FAILURE_REASON = "failure_reason_code";
 
-    public static final String ACTION_BUTTON_RESCHEDULE_NEXT_DAY = "container.failed-pickup-management.reschedule-next-day";
+    public static final String ACTION_BUTTON_RESCHEDULE_NEXT_DAY = "container.failed-delivery-management.reschedule-next-day";
 
     public static final int ACTION_SET_RTS_TO_SELECTED = 1;
     public static final int ACTION_RESCHEDULE_SELECTED = 2;
@@ -50,6 +50,31 @@ public class FailedDeliveryManagementPage extends SimplePage
         Assert.assertEquals("Failure Comments", "RECOVERY", actualFailureReason);
     }
 
+    public void downloadCsvFile(String trackingId)
+    {
+        searchTableByTrackingId(trackingId);
+        checkRow(1);
+        selectAction(ACTION_DOWNLOAD_CSV_FILE);
+    }
+
+    public void verifyCsvFileDownloadedSuccessfully(String trackingId)
+    {
+        verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN), trackingId);
+    }
+
+    public void rescheduleNextDay(String trackingId)
+    {
+        searchTableByTrackingId(trackingId);
+        clickActionButtonOnTable(1, ACTION_BUTTON_RESCHEDULE_NEXT_DAY);
+    }
+
+    public void verifyOrderIsRemovedFromTableAfterReschedule(String trackingId)
+    {
+        searchTableByTrackingId(trackingId);
+        boolean isTableEmpty = isTableEmpty();
+        Assert.assertTrue(String.format("Tracking ID '%s' is still listed on failed order list.", trackingId), isTableEmpty);
+    }
+
     public boolean isTableEmpty()
     {
         WebElement we = findElementByXpath("//h5[text()='No Results Found']");
@@ -58,7 +83,7 @@ public class FailedDeliveryManagementPage extends SimplePage
 
     public void checkRow(int rowIndex)
     {
-        click(String.format("//tr[@md-virtual-repeat='failedPickup in getTableData()'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", rowIndex));
+        click(String.format("//tr[@md-virtual-repeat='failedDelivery in getTableData()'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", rowIndex));
     }
 
     public void selectAction(int actionType)
