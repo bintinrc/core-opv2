@@ -165,7 +165,52 @@ public class CommonOperatorSteps extends AbstractSteps
         String newPickupStartTime = DATE_FORMAT.format(nextDate);
         String newPickupEndTime = DATE_FORMAT.format(nextDate);
 
-        Assert.assertThat("Start Time should be next day.", transactionOfSecondAttempt.getStartTime(), Matchers.startsWith(newPickupStartTime));
-        Assert.assertThat("End Time should be next day.", transactionOfSecondAttempt.getEndTime(), Matchers.startsWith(newPickupEndTime));
+        Assert.assertThat(String.format("Start Time should be next %d day(s).", numberOfNextDays), transactionOfSecondAttempt.getStartTime(), Matchers.startsWith(newPickupStartTime));
+        Assert.assertThat(String.format("End Time should be next %d day(s).", numberOfNextDays), transactionOfSecondAttempt.getEndTime(), Matchers.startsWith(newPickupEndTime));
+    }
+
+    @Then("^Operator verify order info after failed delivery order rescheduled on next day$")
+    public void operatorVerifyOrderInfoAfterFailedDeliveryOrderRescheduledOnNextDay()
+    {
+        operatorVerifyOrderInfoAfterFailedDeliveryOrderRescheduled(1);
+    }
+
+    @Then("^Operator verify order info after failed delivery order rescheduled on next 2 days$")
+    public void operatorVerifyOrderInfoAfterFailedDeliveryOrderRescheduledOnNext2Days()
+    {
+        operatorVerifyOrderInfoAfterFailedDeliveryOrderRescheduled(2);
+    }
+
+    private void operatorVerifyOrderInfoAfterFailedDeliveryOrderRescheduled(int numberOfNextDays)
+    {
+        Order order = scenarioStorage.get("order");
+        int orderId = order.getTransactions().get(0).getOrder_id();
+
+        pause2s(); // Give a few time for a backend to update the order details info.
+        com.nv.qa.integration.model.core.order.operator.Order orderDetails = orderClient.getOrder(orderId);
+        Assert.assertEquals("status", "TRANSIT", orderDetails.getStatus());
+        Assert.assertEquals("granular status", "ENROUTE_TO_SORTING_HUB", orderDetails.getGranularStatus());
+
+        List<Transaction> transactions = orderDetails.getTransactions();
+        List<Transaction> listOfDeliveryTransactions = transactions
+                .stream()
+                .filter((transaction) -> "DELIVERY".equals(transaction.getType()))
+                .collect(Collectors.toList());
+
+        int numberOfExpectedDeliveryTransactions = 2;
+        int numberOfActualDeliveryTransactions = listOfDeliveryTransactions.size();
+        Assert.assertEquals(String.format("Number of delivery transaction should be %d.", numberOfExpectedDeliveryTransactions), numberOfExpectedDeliveryTransactions, numberOfActualDeliveryTransactions);
+        Transaction transactionOfFirstAttempt = listOfDeliveryTransactions.get(0);
+        Transaction transactionOfSecondAttempt = listOfDeliveryTransactions.get(1);
+
+        Assert.assertEquals("First attempt of Delivery Transaction status should be FAIL.", "FAIL", transactionOfFirstAttempt.getStatus());
+        Assert.assertEquals("Second attempt of Delivery Transaction status should be PENDING.", "PENDING", transactionOfSecondAttempt.getStatus());
+
+        Date nextDate = CommonUtil.getNextDate(numberOfNextDays);
+        String newDeliveryStartTime = DATE_FORMAT.format(nextDate);
+        String newDeliveryEndTime = DATE_FORMAT.format(nextDate);
+
+        Assert.assertThat(String.format("Start Time should be next %d day(s).", numberOfNextDays), transactionOfSecondAttempt.getStartTime(), Matchers.startsWith(newDeliveryStartTime));
+        Assert.assertThat(String.format("End Time should be next %d day(s).", numberOfNextDays), transactionOfSecondAttempt.getEndTime(), Matchers.startsWith(newDeliveryEndTime));
     }
 }
