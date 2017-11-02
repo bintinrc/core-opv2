@@ -1,10 +1,12 @@
 package com.nv.qa.selenium.page;
 
+import com.nv.qa.support.CommonUtil;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -66,6 +68,20 @@ public class FailedDeliveryManagementPage extends SimplePage
     {
         searchTableByTrackingId(trackingId);
         clickActionButtonOnTable(1, ACTION_BUTTON_RESCHEDULE_NEXT_DAY);
+    }
+
+    public void rescheduleNext2Days(String trackingId)
+    {
+        searchTableByTrackingId(trackingId);
+        checkRow(1);
+        selectAction(ACTION_RESCHEDULE_SELECTED);
+        setRescheduleDate(CommonUtil.getNextDate(2));
+        click("//button[@aria-label='Reschedule']");
+    }
+
+    public void setRescheduleDate(Date date)
+    {
+        sendKeys("//md-datepicker/div/input", DATE_FORMAT.format(date));
     }
 
     public void verifyOrderIsRemovedFromTableAfterReschedule(String trackingId)

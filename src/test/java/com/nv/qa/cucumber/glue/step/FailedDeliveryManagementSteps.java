@@ -64,4 +64,18 @@ public class FailedDeliveryManagementSteps extends AbstractSteps
         String trackingId = scenarioStorage.get("trackingId");
         failedDeliveryManagementPage.verifyOrderIsRemovedFromTableAfterReschedule(trackingId);
     }
+
+    @When("^Operator reschedule failed delivery order on next 2 days$")
+    public void operatorRescheduleFailedDeliveryOrderOnNext2Days()
+    {
+        String trackingId = scenarioStorage.get("trackingId");
+        failedDeliveryManagementPage.rescheduleNext2Days(trackingId);
+    }
+
+    @Then("^Operator verify failed delivery order rescheduled on next 2 days successfully$")
+    public void operatorVerifyFailedDeliveryOrderRescheduleOnNext2DaysSuccessfully()
+    {
+        String trackingId = scenarioStorage.get("trackingId");
+        failedDeliveryManagementPage.verifyOrderIsRemovedFromTableAfterReschedule(trackingId);
+    }
 }
