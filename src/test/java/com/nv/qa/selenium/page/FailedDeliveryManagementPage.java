@@ -15,6 +15,7 @@ import java.util.Date;
 public class FailedDeliveryManagementPage extends SimplePage
 {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat CREATED_DATE_SDF = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
 
     private static final String MD_VIRTUAL_REPEAT = "failedDelivery in getTableData()";
     private static final String CSV_FILENAME_PATTERN = "failed-delivery-list";
@@ -25,6 +26,7 @@ public class FailedDeliveryManagementPage extends SimplePage
     public static final String COLUMN_CLASS_FAILURE_REASON = "failure_reason_code";
 
     public static final String ACTION_BUTTON_RESCHEDULE_NEXT_DAY = "container.failed-delivery-management.reschedule-next-day";
+    public static final String ACTION_BUTTON_RTS = "commons.return-to-sender";
 
     public static final int ACTION_SET_RTS_TO_SELECTED = 1;
     public static final int ACTION_RESCHEDULE_SELECTED = 2;
@@ -82,6 +84,23 @@ public class FailedDeliveryManagementPage extends SimplePage
     public void setRescheduleDate(Date date)
     {
         sendKeys("//md-datepicker/div/input", DATE_FORMAT.format(date));
+    }
+
+    public void rtsSingleOrderNextDay(String trackingId)
+    {
+        searchTableByTrackingId(trackingId);
+        clickActionButtonOnTable(1, ACTION_BUTTON_RTS);
+        click("//md-select[@placeholder='Reason']");
+        pause50ms();
+        click("//md-option/div[contains(text(), 'Other Reason')]");
+        pause50ms();
+        sendKeys("//input[@aria-label='Description']", String.format("Reason created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
+        sendKeys("//input[@aria-label='Internal Notes']", String.format("Internal notes created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
+        sendKeys("//md-datepicker[@name='commons.model.delivery-date']/div/input", DATE_FORMAT.format(CommonUtil.getNextDate(1)));
+        click("//md-select[@aria-label='Timeslot']");
+        pause50ms();
+        click("//md-option/div[contains(text(), '3PM - 6PM')]");
+        click("//button[@aria-label='Save changes']");
     }
 
     public void verifyOrderIsRemovedFromTableAfterReschedule(String trackingId)

@@ -59,6 +59,11 @@ public final class TestConstants extends StandardTestConstants
     public static final String NINJA_DRIVER_USERNAME;
     public static final String NINJA_DRIVER_PASSWORD;
 
+    public static final String DB_DRIVER;
+    public static final String DB_URL_CORE;
+    public static final String DB_USER;
+    public static final String DB_PASS;
+
     static
     {
         try
@@ -119,6 +124,11 @@ public final class TestConstants extends StandardTestConstants
             NINJA_DRIVER_ID = getPropertyValueAsInteger("ninja-driver-id");
             NINJA_DRIVER_USERNAME = getPropertyValueAsString("ninja-driver-username");
             NINJA_DRIVER_PASSWORD = getPropertyValueAsString("ninja-driver-password");
+
+            DB_DRIVER = getPropertyValueAsString("db-driver");
+            DB_URL_CORE = getPropertyValueAsString("db-url-core");
+            DB_USER = getPropertyValueAsString("db-user");
+            DB_PASS = getPropertyValueAsString("db-pass");
         }
         catch(IOException ex)
         {

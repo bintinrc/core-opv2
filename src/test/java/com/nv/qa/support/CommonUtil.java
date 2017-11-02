@@ -19,6 +19,7 @@ import java.util.*;
 public class CommonUtil
 {
     private static final int MAX_RETRY_ON_STALE_ELEMENT_REFERENCE_EXCEPTION = 10;
+    private static final int MAX_RETRY_ON_RUNTIME_EXCEPTION = 10;
 
     private CommonUtil()
     {
@@ -445,6 +446,56 @@ public class CommonUtil
             else
             {
                 throw new RuntimeException(String.format("StaleElementReferenceException still occurred on method '%s' after trying %d times.", methodName, MAX_RETRY_ON_STALE_ELEMENT_REFERENCE_EXCEPTION), staleElementReferenceException);
+            }
+        }
+    }
+
+    public static void retryIfRuntimeExceptionOccurred(Runnable runnable)
+    {
+        retryIfRuntimeExceptionOccurred(runnable, null);
+    }
+
+    public static void retryIfRuntimeExceptionOccurred(Runnable runnable, String methodName)
+    {
+        RuntimeException runtimeException = null;
+        boolean isRuntimeExceptionOccurred;
+        int counter = 0;
+
+        do
+        {
+            try
+            {
+                runnable.run();
+                isRuntimeExceptionOccurred = false;
+            }
+            catch(RuntimeException ex)
+            {
+                runtimeException = ex;
+                isRuntimeExceptionOccurred = true;
+
+                if(methodName==null)
+                {
+                    System.out.println(String.format("[WARN] RuntimeException is occurred. Retrying %dx...", (counter+1)));
+                }
+                else
+                {
+                    System.out.println(String.format("[WARN] RuntimeException is occurred on method '%s'. Retrying %dx...", methodName, (counter+1)));
+                }
+            }
+
+            counter++;
+        }
+        while(isRuntimeExceptionOccurred && counter<MAX_RETRY_ON_RUNTIME_EXCEPTION);
+
+        if(isRuntimeExceptionOccurred)
+        {
+            if(methodName==null)
+            {
+                throw new RuntimeException(String.format("RuntimeException still occurred after trying  %d times.", MAX_RETRY_ON_STALE_ELEMENT_REFERENCE_EXCEPTION), runtimeException);
+            }
+            else
+            {
+                throw new RuntimeException(String.format("RuntimeException still occurred on method '%s' after trying %d times.", methodName, MAX_RETRY_ON_STALE_ELEMENT_REFERENCE_EXCEPTION), runtimeException);
             }
         }
     }
