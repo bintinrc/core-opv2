@@ -89,7 +89,7 @@ public class FailedPickupManagementPage extends SimplePage
 
     public void checkRow(int rowIndex)
     {
-        click(String.format("//tr[@md-virtual-repeat='failedPickup in getTableData()'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", rowIndex));
+        click(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", MD_VIRTUAL_REPEAT, rowIndex));
     }
 
     public void selectAction(int actionType)

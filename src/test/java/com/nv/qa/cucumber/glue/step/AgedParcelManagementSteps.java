@@ -36,12 +36,26 @@ public class AgedParcelManagementSteps extends AbstractSteps
         agedParcelManagementPage.loadSelection(-1);
     }
 
-    @Then("^Operator verify the aged parcel order is listed on Aged Parcel orders list$")
-    public void operatorVerifyTheAgedParcelOrderIsListedOnAgedParcelOrdersList()
+    @Then("^Operator verify the aged parcel order is listed on Aged Parcels list$")
+    public void operatorVerifyTheAgedParcelOrderIsListedOnAgedParcelsList()
     {
         Order order = scenarioStorage.get("order");
         String trackingId = order.getTracking_id();
-        String shippername = TestConstants.SHIPPER_V2_NAME;
-        agedParcelManagementPage.verifyAgedParcelOrderIsListed(trackingId, shippername);
+        String shipperName = TestConstants.SHIPPER_V2_NAME;
+        agedParcelManagementPage.verifyAgedParcelOrderIsListed(trackingId, shipperName);
+    }
+
+    @When("^Operator download CSV file of aged parcel on Aged Parcels list$")
+    public void operatorDownloadCsvFileOfAgedParcelOnAgedParcelsList()
+    {
+        String trackingId = scenarioStorage.get("trackingId");
+        agedParcelManagementPage.downloadCsvFile(trackingId);
+    }
+
+    @Then("^Operator verify CSV file of aged parcel on Aged Parcels list downloaded successfully$")
+    public void operatorVerifyCsvFileOfAgedParcelOnAgedParcelsListDownloadedSuccessfully()
+    {
+        String trackingId = scenarioStorage.get("trackingId");
+        agedParcelManagementPage.verifyCsvFileDownloadedSuccessfully(trackingId);
     }
 }

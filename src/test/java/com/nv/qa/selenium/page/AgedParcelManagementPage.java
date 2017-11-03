@@ -16,12 +16,12 @@ public class AgedParcelManagementPage extends SimplePage
     private static final SimpleDateFormat CREATED_DATE_SDF = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
 
     private static final String MD_VIRTUAL_REPEAT = "agedParcel in getTableData()";
-    private static final String CSV_FILENAME_PATTERN = "failed-delivery-list";
+    private static final String CSV_FILENAME_PATTERN = "aged-parcel-list";
 
     public static final String COLUMN_CLASS_TRACKING_ID = "tracking_id";
     public static final String COLUMN_CLASS_SHIPPER = "shipper";
 
-    public static final String ACTION_BUTTON_RESCHEDULE_NEXT_DAY = "container.failed-delivery-management.reschedule-next-day";
+    public static final String ACTION_BUTTON_RESCHEDULE_NEXT_DAY = "container.aged-parcel-management.reschedule-next-day";
     public static final String ACTION_BUTTON_RTS = "commons.return-to-sender";
 
     public static final int ACTION_SET_RTS_TO_SELECTED = 1;
@@ -44,6 +44,18 @@ public class AgedParcelManagementPage extends SimplePage
         Assert.assertEquals("Shipper", shipperName, actualShipper);
     }
 
+    public void downloadCsvFile(String trackingId)
+    {
+        searchTableByTrackingId(trackingId);
+        checkRow(1);
+        selectAction(ACTION_DOWNLOAD_CSV_FILE);
+    }
+
+    public void verifyCsvFileDownloadedSuccessfully(String trackingId)
+    {
+        verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN), trackingId);
+    }
+
     public void loadSelection(int agedDays)
     {
         sendKeys("//input[@aria-label='Aged Days']", String.valueOf(agedDays));
@@ -58,7 +70,7 @@ public class AgedParcelManagementPage extends SimplePage
 
     public void checkRow(int rowIndex)
     {
-        click(String.format("//tr[@md-virtual-repeat='failedDelivery in getTableData()'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", rowIndex));
+        click(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", MD_VIRTUAL_REPEAT, rowIndex));
     }
 
     public void selectAction(int actionType)
