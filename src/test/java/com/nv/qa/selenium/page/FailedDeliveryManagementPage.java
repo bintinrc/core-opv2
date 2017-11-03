@@ -77,13 +77,8 @@ public class FailedDeliveryManagementPage extends SimplePage
         searchTableByTrackingId(trackingId);
         checkRow(1);
         selectAction(ACTION_RESCHEDULE_SELECTED);
-        setRescheduleDate(CommonUtil.getNextDate(2));
+        sendKeys("//md-datepicker[@name='commons.model.date']/div/input", DATE_FORMAT.format(CommonUtil.getNextDate(2)));
         click("//button[@aria-label='Reschedule']");
-    }
-
-    public void setRescheduleDate(Date date)
-    {
-        sendKeys("//md-datepicker/div/input", DATE_FORMAT.format(date));
     }
 
     public void rtsSingleOrderNextDay(String trackingId)
@@ -101,6 +96,18 @@ public class FailedDeliveryManagementPage extends SimplePage
         pause50ms();
         click("//md-option/div[contains(text(), '3PM - 6PM')]");
         click("//button[@aria-label='Save changes']");
+    }
+
+    public void rtsSelectedOrderNextDay(String trackingId)
+    {
+        searchTableByTrackingId(trackingId);
+        checkRow(1);
+        selectAction(ACTION_SET_RTS_TO_SELECTED);
+        sendKeys("//md-datepicker[@name='commons.model.delivery-date']/div/input", DATE_FORMAT.format(CommonUtil.getNextDate(1)));
+        click("//md-select[@aria-label='Timeslot']");
+        pause50ms();
+        click("//md-option/div[contains(text(), '3PM - 6PM')]");
+        click("//button[@aria-label='Set Order to RTS']");
     }
 
     public void verifyOrderIsRemovedFromTableAfterReschedule(String trackingId)

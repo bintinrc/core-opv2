@@ -94,23 +94,31 @@ public class CommonOperatorSteps extends AbstractSteps
     }
 
     @When("^Operator Van Inbound  parcel$")
+    @SuppressWarnings("unchecked")
     public void operatorVanInboundParcel()
     {
-        String trackingId = scenarioStorage.get("trackingId");
-        int deliveryWaypointId = scenarioStorage.get(CommonDriverSteps.KEY_DELIVERY_WAYPOINT_ID);
+        CommonUtil.retryIfExpectedExceptionOccurred(()->
+        {
+            String trackingId = scenarioStorage.get("trackingId");
+            int deliveryWaypointId = scenarioStorage.get(CommonDriverSteps.KEY_DELIVERY_WAYPOINT_ID);
 
-        VanInboundRequest vanInboundRequest = new VanInboundRequest();
-        vanInboundRequest.setTrackingId(trackingId);
-        vanInboundRequest.setWaypointId(deliveryWaypointId);
-        vanInboundRequest.setType("VAN_FROM_NINJAVAN");
-        operatorPortalInboundClient.vanInbound(vanInboundRequest);
+            VanInboundRequest vanInboundRequest = new VanInboundRequest();
+            vanInboundRequest.setTrackingId(trackingId);
+            vanInboundRequest.setWaypointId(deliveryWaypointId);
+            vanInboundRequest.setType("VAN_FROM_NINJAVAN");
+            operatorPortalInboundClient.vanInbound(vanInboundRequest);
+        }, "operatorVanInboundParcel", AssertionError.class, RuntimeException.class);
     }
 
     @When("^Operator start the route$")
+    @SuppressWarnings("unchecked")
     public void operatorStartTheRoute()
     {
-        int routeId = scenarioStorage.get("routeId");
-        operatorPortalRoutingClient.startRoute(routeId);
+        CommonUtil.retryIfExpectedExceptionOccurred(()->
+        {
+            int routeId = scenarioStorage.get("routeId");
+            operatorPortalRoutingClient.startRoute(routeId);
+        }, "operatorStartTheRoute", AssertionError.class, RuntimeException.class);
     }
 
     private void categorizedOrderByTransactionType(AddParcelToRouteRequest addParcelToRouteRequest, Order order)

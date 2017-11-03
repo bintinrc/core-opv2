@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URLDecoder;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  *
@@ -18,8 +19,8 @@ import java.util.*;
  */
 public class CommonUtil
 {
-    private static final int MAX_RETRY_ON_STALE_ELEMENT_REFERENCE_EXCEPTION = 10;
-    private static final int MAX_RETRY_ON_RUNTIME_EXCEPTION = 10;
+    private static final int DEFAULT_MAX_RETRY_ON_EXCEPTION = 10;
+    private static final int DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS = 100;
 
     private CommonUtil()
     {
@@ -405,49 +406,10 @@ public class CommonUtil
         retryIfStaleElementReferenceExceptionOccurred(runnable, null);
     }
 
+    @SuppressWarnings("unchecked")
     public static void retryIfStaleElementReferenceExceptionOccurred(Runnable runnable, String methodName)
     {
-        StaleElementReferenceException staleElementReferenceException = null;
-        boolean isStaleElementReferenceExceptionOccurred;
-        int counter = 0;
-
-        do
-        {
-            try
-            {
-                runnable.run();
-                isStaleElementReferenceExceptionOccurred = false;
-            }
-            catch(StaleElementReferenceException ex)
-            {
-                staleElementReferenceException = ex;
-                isStaleElementReferenceExceptionOccurred = true;
-
-                if(methodName==null)
-                {
-                    System.out.println(String.format("[WARN] StaleElementReferenceException is occurred. Retrying %dx...", (counter+1)));
-                }
-                else
-                {
-                    System.out.println(String.format("[WARN] StaleElementReferenceException is occurred on method '%s'. Retrying %dx...", methodName, (counter+1)));
-                }
-            }
-
-            counter++;
-        }
-        while(isStaleElementReferenceExceptionOccurred && counter<MAX_RETRY_ON_STALE_ELEMENT_REFERENCE_EXCEPTION);
-
-        if(isStaleElementReferenceExceptionOccurred)
-        {
-            if(methodName==null)
-            {
-                throw new RuntimeException(String.format("StaleElementReferenceException still occurred after trying  %d times.", MAX_RETRY_ON_STALE_ELEMENT_REFERENCE_EXCEPTION), staleElementReferenceException);
-            }
-            else
-            {
-                throw new RuntimeException(String.format("StaleElementReferenceException still occurred on method '%s' after trying %d times.", methodName, MAX_RETRY_ON_STALE_ELEMENT_REFERENCE_EXCEPTION), staleElementReferenceException);
-            }
-        }
+        retryIfExpectedExceptionOccurred(runnable, methodName, System.out::println, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, DEFAULT_MAX_RETRY_ON_EXCEPTION, StaleElementReferenceException.class);
     }
 
     public static void retryIfRuntimeExceptionOccurred(Runnable runnable)
@@ -455,10 +417,41 @@ public class CommonUtil
         retryIfRuntimeExceptionOccurred(runnable, null);
     }
 
+    @SuppressWarnings("unchecked")
     public static void retryIfRuntimeExceptionOccurred(Runnable runnable, String methodName)
     {
-        RuntimeException runtimeException = null;
-        boolean isRuntimeExceptionOccurred;
+        retryIfExpectedExceptionOccurred(runnable, methodName, System.out::println, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, DEFAULT_MAX_RETRY_ON_EXCEPTION, RuntimeException.class);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void retryIfExpectedExceptionOccurred(Runnable runnable, Class<? extends Throwable> ... expectedExceptionClasses)
+    {
+        retryIfExpectedExceptionOccurred(runnable, null, System.out::println, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, DEFAULT_MAX_RETRY_ON_EXCEPTION, expectedExceptionClasses);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void retryIfExpectedExceptionOccurred(Runnable runnable, long delayInMillis, Class<? extends Throwable> ... expectedExceptionClasses)
+    {
+        retryIfExpectedExceptionOccurred(runnable, null, System.out::println, delayInMillis, DEFAULT_MAX_RETRY_ON_EXCEPTION, expectedExceptionClasses);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void retryIfExpectedExceptionOccurred(Runnable runnable, String methodName, Class<? extends Throwable> ... expectedExceptionClasses)
+    {
+        retryIfExpectedExceptionOccurred(runnable, methodName, System.out::println, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, DEFAULT_MAX_RETRY_ON_EXCEPTION, expectedExceptionClasses);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void retryIfExpectedExceptionOccurred(Runnable runnable, String methodName, long delayInMillis, Class<? extends Throwable> ... expectedExceptionClasses)
+    {
+        retryIfExpectedExceptionOccurred(runnable, methodName, System.out::println, delayInMillis, DEFAULT_MAX_RETRY_ON_EXCEPTION, expectedExceptionClasses);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void retryIfExpectedExceptionOccurred(Runnable runnable, String methodName, Consumer<String> logConsumer, long delayInMillis, int maxRetry, Class<? extends Throwable> ... expectedExceptionClasses)
+    {
+        Throwable actualException = null;
+        boolean isExceptionOccurred;
         int counter = 0;
 
         do
@@ -466,36 +459,54 @@ public class CommonUtil
             try
             {
                 runnable.run();
-                isRuntimeExceptionOccurred = false;
+                isExceptionOccurred = false;
             }
-            catch(RuntimeException ex)
+            catch(Throwable ex)
             {
-                runtimeException = ex;
-                isRuntimeExceptionOccurred = true;
+                actualException = ex;
+                isExceptionOccurred = true;
+                boolean isExpectedExceptionOccurred = false;
 
-                if(methodName==null)
+                for(Class<? extends Throwable> expectedExceptionClass : expectedExceptionClasses)
                 {
-                    System.out.println(String.format("[WARN] RuntimeException is occurred. Retrying %dx...", (counter+1)));
+                    if(expectedExceptionClass.isInstance(ex))
+                    {
+                        isExpectedExceptionOccurred = true;
+                        break;
+                    }
+                }
+
+                if(isExpectedExceptionOccurred)
+                {
+                    if(methodName==null)
+                    {
+                        logConsumer.accept(String.format("[WARN] %s is occurred. Retrying %dx...", ex.getClass(), (counter+1)));
+                    }
+                    else
+                    {
+                        logConsumer.accept(String.format("[WARN] %s is occurred on method '%s'. Retrying %dx...", ex.getClass(), methodName, (counter+1)));
+                    }
                 }
                 else
                 {
-                    System.out.println(String.format("[WARN] RuntimeException is occurred on method '%s'. Retrying %dx...", methodName, (counter+1)));
+                    throw ex;
                 }
             }
 
             counter++;
+            pause(delayInMillis);
         }
-        while(isRuntimeExceptionOccurred && counter<MAX_RETRY_ON_RUNTIME_EXCEPTION);
+        while(isExceptionOccurred && counter<maxRetry);
 
-        if(isRuntimeExceptionOccurred)
+        if(isExceptionOccurred)
         {
             if(methodName==null)
             {
-                throw new RuntimeException(String.format("RuntimeException still occurred after trying  %d times.", MAX_RETRY_ON_STALE_ELEMENT_REFERENCE_EXCEPTION), runtimeException);
+                throw new RuntimeException(String.format("%s still occurred after trying  %d times.", actualException.getClass(), maxRetry), actualException);
             }
             else
             {
-                throw new RuntimeException(String.format("RuntimeException still occurred on method '%s' after trying %d times.", methodName, MAX_RETRY_ON_STALE_ELEMENT_REFERENCE_EXCEPTION), runtimeException);
+                throw new RuntimeException(String.format("%s still occurred on method '%s' after trying %d times.", actualException.getClass(), methodName, maxRetry), actualException);
             }
         }
     }
