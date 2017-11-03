@@ -56,6 +56,12 @@ public class AgedParcelManagementPage extends SimplePage
         verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN), trackingId);
     }
 
+    public void rescheduleNextDay(String trackingId)
+    {
+        searchTableByTrackingId(trackingId);
+        clickActionButtonOnTable(1, ACTION_BUTTON_RESCHEDULE_NEXT_DAY);
+    }
+
     public void loadSelection(int agedDays)
     {
         sendKeys("//input[@aria-label='Aged Days']", String.valueOf(agedDays));

@@ -58,4 +58,11 @@ public class AgedParcelManagementSteps extends AbstractSteps
         String trackingId = scenarioStorage.get("trackingId");
         agedParcelManagementPage.verifyCsvFileDownloadedSuccessfully(trackingId);
     }
+
+    @When("^Operator reschedule aged parcel on next day$")
+    public void operatorRescheduleAgedParcelOnNextDay()
+    {
+        String trackingId = scenarioStorage.get("trackingId");
+        agedParcelManagementPage.rescheduleNextDay(trackingId);
+    }
 }
