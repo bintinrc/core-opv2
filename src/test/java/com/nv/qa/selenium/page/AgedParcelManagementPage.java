@@ -1,5 +1,6 @@
 package com.nv.qa.selenium.page;
 
+import com.nv.qa.support.CommonUtil;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -60,6 +61,15 @@ public class AgedParcelManagementPage extends SimplePage
     {
         searchTableByTrackingId(trackingId);
         clickActionButtonOnTable(1, ACTION_BUTTON_RESCHEDULE_NEXT_DAY);
+    }
+
+    public void rescheduleNext2Days(String trackingId)
+    {
+        searchTableByTrackingId(trackingId);
+        checkRow(1);
+        selectAction(ACTION_RESCHEDULE_SELECTED);
+        sendKeys("//md-datepicker[@name='commons.model.date']/div/input", DATE_FORMAT.format(CommonUtil.getNextDate(2)));
+        click("//button[@aria-label='Reschedule']");
     }
 
     public void loadSelection(int agedDays)

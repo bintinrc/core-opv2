@@ -342,6 +342,12 @@ public class CommonOperatorSteps extends AbstractSteps
         operatorVerifyOrderInfoAfterFailedDeliveryAgedParcelGlobalInboundedAndRescheduled(1);
     }
 
+    @Then("^Operator verify order info after failed delivery aged parcel global inbounded and rescheduled on next 2 days$")
+    public void operatorVerifyOrderInfoAfterFailedDeliveryAgedParcelGlobalInboundedAndRescheduledOnNext2Days()
+    {
+        operatorVerifyOrderInfoAfterFailedDeliveryAgedParcelGlobalInboundedAndRescheduled(2);
+    }
+
     private void operatorVerifyOrderInfoAfterFailedDeliveryAgedParcelGlobalInboundedAndRescheduled(int numberOfNextDays)
     {
         Order order = scenarioStorage.get("order");
