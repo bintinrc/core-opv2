@@ -382,4 +382,50 @@ public class CommonOperatorSteps extends AbstractSteps
         Assert.assertThat(String.format("Start Time should be next %d day(s).", numberOfNextDays), transactionOfSecondAttempt.getStartTime(), Matchers.startsWith(newDeliveryStartTime));
         Assert.assertThat(String.format("End Time should be next %d day(s).", numberOfNextDays), transactionOfSecondAttempt.getEndTime(), Matchers.startsWith(newDeliveryEndTime));
     }
+
+    @Then("^Operator verify order info after failed delivery aged parcel global inbounded and RTS-ed on next day$")
+    public void operatorVerifyOrderInfoAfterFailedDeliveryAgedParcelGlobalInboundedAndRtsedOnNextDay()
+    {
+        Order order = scenarioStorage.get("order");
+        int orderId = order.getTransactions().get(0).getOrder_id();
+
+        String expectedStatus = "TRANSIT";
+        String expectedGranularStatus = "ARRIVED_AT_SORTING_HUB";
+        com.nv.qa.integration.model.core.order.operator.Order orderDetails = getOrderDetails(orderId, expectedStatus, expectedGranularStatus);
+
+        Assert.assertEquals("status", expectedStatus, orderDetails.getStatus());
+        Assert.assertEquals("granular status", expectedGranularStatus, orderDetails.getGranularStatus());
+        Assert.assertTrue("RTS should be true", orderDetails.getRts());
+
+        List<Transaction> transactions = orderDetails.getTransactions();
+        List<Transaction> listOfDeliveryTransactions = transactions
+                .stream()
+                .filter((transaction) -> "DELIVERY".equals(transaction.getType()))
+                .collect(Collectors.toList());
+
+        int numberOfExpectedDeliveryTransactions = 2;
+        int numberOfActualDeliveryTransactions = listOfDeliveryTransactions.size();
+        Assert.assertEquals(String.format("Number of delivery transaction should be %d.", numberOfExpectedDeliveryTransactions), numberOfExpectedDeliveryTransactions, numberOfActualDeliveryTransactions);
+        Transaction transactionOfFirstAttempt = listOfDeliveryTransactions.get(0);
+        Transaction transactionOfSecondAttempt = listOfDeliveryTransactions.get(1);
+
+        Assert.assertEquals("First attempt of Delivery Transaction status should be FAIL.", "FAIL", transactionOfFirstAttempt.getStatus());
+        Assert.assertEquals("Second attempt of Delivery Transaction status should be PENDING.", "PENDING", transactionOfSecondAttempt.getStatus());
+
+        Date nextDate = CommonUtil.getNextDate(1);
+        String newDeliveryStartTime = DATE_FORMAT.format(nextDate)+"T07:00:00Z";
+        String newDeliveryEndTime = DATE_FORMAT.format(nextDate)+"T10:00:00Z";
+
+        Assert.assertThat(String.format("Start Time should be next %d day(s).", 1), transactionOfSecondAttempt.getStartTime(), Matchers.equalTo(newDeliveryStartTime));
+        Assert.assertThat(String.format("End Time should be next %d day(s).", 1), transactionOfSecondAttempt.getEndTime(), Matchers.equalTo(newDeliveryEndTime));
+
+        TransactionEntity transactionEntity = coreJdbc.findTransactionById(transactionOfSecondAttempt.getId());
+        Assert.assertEquals("RTS - Name", order.getFrom_name()+" (RTS)", transactionEntity.getName());
+        Assert.assertEquals("RTS - Email", order.getTo_email(), transactionEntity.getEmail());
+        Assert.assertEquals("RTS - Contact", order.getFrom_contact(), transactionEntity.getContact());
+        Assert.assertEquals("RTS - Address 1", order.getFrom_address1(), transactionEntity.getAddress1());
+        Assert.assertEquals("RTS - Address 2", order.getFrom_address2(), transactionEntity.getAddress2());
+        Assert.assertEquals("RTS - City", order.getFrom_city(), transactionEntity.getCity());
+        Assert.assertEquals("RTS - Country", order.getFrom_country(), transactionEntity.getCountry());
+    }
 }

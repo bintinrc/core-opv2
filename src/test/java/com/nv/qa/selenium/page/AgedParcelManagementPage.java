@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -70,6 +71,23 @@ public class AgedParcelManagementPage extends SimplePage
         selectAction(ACTION_RESCHEDULE_SELECTED);
         sendKeys("//md-datepicker[@name='commons.model.date']/div/input", DATE_FORMAT.format(CommonUtil.getNextDate(2)));
         click("//button[@aria-label='Reschedule']");
+    }
+
+    public void rtsSingleOrderNextDay(String trackingId)
+    {
+        searchTableByTrackingId(trackingId);
+        clickActionButtonOnTable(1, ACTION_BUTTON_RTS);
+        click("//md-select[@placeholder='Reason']");
+        pause50ms();
+        click("//md-option/div[contains(text(), 'Other Reason')]");
+        pause50ms();
+        sendKeys("//input[@aria-label='Description']", String.format("Reason created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
+        sendKeys("//input[@aria-label='Internal Notes']", String.format("Internal notes created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
+        sendKeys("//md-datepicker[@name='commons.model.delivery-date']/div/input", DATE_FORMAT.format(CommonUtil.getNextDate(1)));
+        click("//md-select[@aria-label='Timeslot']");
+        pause50ms();
+        click("//md-option/div[contains(text(), '3PM - 6PM')]");
+        click("//button[@aria-label='Save changes']");
     }
 
     public void loadSelection(int agedDays)
