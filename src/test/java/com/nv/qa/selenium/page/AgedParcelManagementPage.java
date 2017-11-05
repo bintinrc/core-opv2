@@ -90,6 +90,18 @@ public class AgedParcelManagementPage extends SimplePage
         click("//button[@aria-label='Save changes']");
     }
 
+    public void rtsSelectedOrderNextDay(String trackingId)
+    {
+        searchTableByTrackingId(trackingId);
+        checkRow(1);
+        selectAction(ACTION_SET_RTS_TO_SELECTED);
+        sendKeys("//md-datepicker[@name='commons.model.delivery-date']/div/input", DATE_FORMAT.format(CommonUtil.getNextDate(1)));
+        click("//md-select[@aria-label='Timeslot']");
+        pause50ms();
+        click("//md-option/div[contains(text(), '3PM - 6PM')]");
+        click("//button[@aria-label='Set Order to RTS']");
+    }
+
     public void loadSelection(int agedDays)
     {
         sendKeys("//input[@aria-label='Aged Days']", String.valueOf(agedDays));
