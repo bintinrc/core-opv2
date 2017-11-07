@@ -96,7 +96,7 @@ public class CommonOperatorSteps extends AbstractSteps
         String addParcelToRouteRequestJson = CommonUtil.replaceParam(mapOfData.get("addParcelToRouteRequest"), mapOfDynamicVariable);
 
         AddParcelToRouteRequest addParcelToRouteRequest = JsonHelper.fromJson(addParcelToRouteRequestJson, AddParcelToRouteRequest.class);
-        CommonUtil.retryIfExpectedExceptionOccurred(()->operatorPortalRoutingClient.addParcelToRoute(routeId, addParcelToRouteRequest), "operatorAddParcelToRoute", AssertionError.class);
+        CommonUtil.retryIfExpectedExceptionOccurred(()->operatorPortalRoutingClient.addParcelToRoute(routeId, addParcelToRouteRequest), String.format("operatorAddParcelToRoute - [Tracking ID = %s] - [Route ID = %d] - [Type = %s]", trackingId, routeId, addParcelToRouteRequest.getType()), AssertionError.class);
         categorizedOrderByTransactionType(addParcelToRouteRequest, order);
     }
 
