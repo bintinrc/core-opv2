@@ -2,6 +2,7 @@ package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Inject;
 import com.nv.qa.selenium.page.TagManagementPage;
+import com.nv.qa.support.CommonUtil;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -68,12 +69,16 @@ public class TagManagementSteps extends AbstractSteps
     }
 
     @Then("^new tag on Tag Management created successfully$")
+    @SuppressWarnings("unchecked")
     public void verifyNewTagCreatedSuccessfully()
     {
-        reloadPageAndEnableSortByName();
+        CommonUtil.retryIfExpectedExceptionOccurred(()->
+        {
+            reloadPageAndEnableSortByName();
 
-        String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
-        Assert.assertEquals(DEFAULT_TAG_NAME, actualTagName);
+            String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
+            Assert.assertEquals(DEFAULT_TAG_NAME, actualTagName);
+        }, "verifyNewTagCreatedSuccessfully", AssertionError.class);
     }
 
     @When("^op update tag on Tag Management$")
@@ -92,15 +97,19 @@ public class TagManagementSteps extends AbstractSteps
     }
 
     @Then("^tag on Tag Management updated successfully$")
+    @SuppressWarnings("unchecked")
     public void verifyTagUpdatedSuccessfully()
     {
-        reloadPageAndEnableSortByName();
+        CommonUtil.retryIfExpectedExceptionOccurred(()->
+        {
+            reloadPageAndEnableSortByName();
 
-        String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
-        Assert.assertEquals(EDITED_TAG_NAME, actualTagName);
+            String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
+            Assert.assertEquals(EDITED_TAG_NAME, actualTagName);
 
-        String actualTagDescription = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DESCRIPTION);
-        Assert.assertEquals(EDITED_DEFAULT_TAG_DESCRIPTION, actualTagDescription);
+            String actualTagDescription = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DESCRIPTION);
+            Assert.assertEquals(EDITED_DEFAULT_TAG_DESCRIPTION, actualTagDescription);
+        }, "verifyTagUpdatedSuccessfully", AssertionError.class);
     }
 
     @When("^op delete tag on Tag Management$")

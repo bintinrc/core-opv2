@@ -61,16 +61,21 @@ public abstract class AbstractSteps
 
         if(operatorAuthResponse==null)
         {
-            AuthRequest operatorAuthRequest = new AuthRequest();
-            operatorAuthRequest.setClientId(TestConstants.OPERATOR_V1_CLIENT_ID);
-            operatorAuthRequest.setClientSecret(TestConstants.OPERATOR_V1_CLIENT_SECRET);
-
-            OperatorPortalAuthenticationClient operatorPortalRoutingClient = new OperatorPortalAuthenticationClient(TestConstants.API_BASE_URL, TestConstants.API_BASE_URL+"/auth/login?grant_type=client_credentials", null, NvTimeZone.ASIA_SINGAPORE);
-            operatorAuthResponse = operatorPortalRoutingClient.login(operatorAuthRequest);
+            operatorAuthResponse = operatorLogin();
             scenarioStorage.put("operatorAuthResponse", operatorAuthResponse);
         }
 
         return operatorAuthResponse;
+    }
+
+    public AuthResponse operatorLogin() throws IOException
+    {
+        AuthRequest operatorAuthRequest = new AuthRequest();
+        operatorAuthRequest.setClientId(TestConstants.OPERATOR_V1_CLIENT_ID);
+        operatorAuthRequest.setClientSecret(TestConstants.OPERATOR_V1_CLIENT_SECRET);
+
+        OperatorPortalAuthenticationClient operatorPortalRoutingClient = new OperatorPortalAuthenticationClient(getOperatorApiBaseUrl(), getOperatorAuthenticationUrl(), null, NvTimeZone.ASIA_SINGAPORE);
+        return operatorPortalRoutingClient.login(operatorAuthRequest);
     }
 
     public DriverLoginResponse getDriverAuthToken()

@@ -40,6 +40,8 @@ public final class TestConstants extends StandardTestConstants
     public static final String OPERATOR_PORTAL_URL;
     public static final String OPERATOR_PORTAL_UID;
     public static final String OPERATOR_PORTAL_PWD;
+    public static final boolean OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES;
+    public static final String OPERATOR_PORTAL_USER_COOKIE;
 
     public static final String API_BASE_URL;
     public static final String ORDER_CREATE_BASE_URL;
@@ -106,6 +108,8 @@ public final class TestConstants extends StandardTestConstants
             OPERATOR_PORTAL_URL = getPropertyValueAsString("operator-portal-url");
             OPERATOR_PORTAL_UID = getPropertyValueAsString("operator-portal-uid");
             OPERATOR_PORTAL_PWD = getPropertyValueAsString("operator-portal-pwd");
+            OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES = getPropertyValueAsBoolean("operator-portal-force-login-by-injecting-cookies");
+            OPERATOR_PORTAL_USER_COOKIE = getPropertyValueAsString("operator-portal-user-cookie");
 
             API_BASE_URL = getPropertyValueAsString("api-server-base-url");
             ORDER_CREATE_BASE_URL = getPropertyValueAsString("order-create-server-base-url");

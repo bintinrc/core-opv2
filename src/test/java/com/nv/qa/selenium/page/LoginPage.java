@@ -5,12 +5,14 @@ import com.nv.qa.support.CommonUtil;
 import com.nv.qa.support.SeleniumHelper;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  *
@@ -40,6 +42,43 @@ public class LoginPage extends LoadableComponent<LoginPage>
     {
         String url = driver.getCurrentUrl();
         Assert.assertThat("Default Operator Portal URL not loaded.", url, Matchers.containsString(TestConstants.OPERATOR_PORTAL_URL));
+    }
+
+    public void forceLogin(String operatorBearerToken)
+    {
+        System.out.println("[INFO] Force login by injecting cookies to browser.");
+
+        try
+        {
+            String userCookie = URLEncoder.encode(TestConstants.OPERATOR_PORTAL_USER_COOKIE, "UTF-8");
+
+            System.out.println("[INFO] Injecting cookies:");
+            System.out.println("[INFO] ninja_access_token = "+operatorBearerToken);
+            System.out.println("[INFO] user = "+userCookie);
+
+            driver.manage().addCookie(new Cookie("ninja_access_token", operatorBearerToken, ".ninjavan.co", "/", null));
+            driver.manage().addCookie(new Cookie("user", userCookie, ".ninjavan.co", "/", null));
+            ((ChromeDriver) driver).executeScript("window.open()");
+            String currentWindowHandle = driver.getWindowHandle();
+            String newWindowHandle = null;
+
+            for(String windowHandle : driver.getWindowHandles())
+            {
+                if(!windowHandle.equals(currentWindowHandle))
+                {
+                    newWindowHandle = windowHandle;
+                    break;
+                }
+            }
+
+            driver.close();
+            driver.switchTo().window(newWindowHandle);
+            driver.get(TestConstants.OPERATOR_PORTAL_URL);
+        }
+        catch(UnsupportedEncodingException ex)
+        {
+            throw new RuntimeException(ex);
+        }
     }
 
     public void clickLoginButton()

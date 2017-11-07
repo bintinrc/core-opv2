@@ -1,6 +1,7 @@
 package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Singleton;
+import com.nv.qa.model.operator_portal.authentication.AuthResponse;
 import com.nv.qa.selenium.page.LoginPage;
 import com.nv.qa.selenium.page.MainPage;
 import com.nv.qa.support.TestConstants;
@@ -20,10 +21,7 @@ import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -97,13 +95,29 @@ public class ScenarioManager
     }
 
     @Given("^op login into Operator V2 with username \"([^\"]*)\" and password \"([^\"]*)\"$")
-    public void loginToOperatorV2(String username, String password) throws InterruptedException
+    public void loginToOperatorV2(String username, String password) throws InterruptedException, IOException
     {
+        AuthResponse operatorAuthResponse = new AbstractSteps(null, null)
+        {
+            @Override
+            public void init()
+            {
+            }
+        }.operatorLogin();
+
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.get();
-        loginPage.clickLoginButton();
-        loginPage.enterCredential(username, password);
-        //loginPage.checkForGoogleSimpleVerification("Singapore");
+
+        if(TestConstants.OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES)
+        {
+            loginPage.forceLogin(operatorAuthResponse.getAccessToken());
+        }
+        else
+        {
+            loginPage.clickLoginButton();
+            loginPage.enterCredential(username, password);
+            //loginPage.checkForGoogleSimpleVerification("Singapore");
+        }
 
         MainPage mainPage = new MainPage(getDriver());
         mainPage.dpAdm();
