@@ -171,12 +171,12 @@ public class CommonOperatorSteps extends AbstractSteps
     @SuppressWarnings("unchecked")
     public void operatorVerifyOrderInfoAfterGlobalInbound()
     {
+        Order order = scenarioStorage.get("order");
+        int orderId = order.getTransactions().get(0).getOrder_id();
+        String trackingId = order.getTracking_id();
+
         CommonUtil.retryIfExpectedExceptionOccurred(()->
         {
-            Order order = scenarioStorage.get("order");
-            int orderId = order.getTransactions().get(0).getOrder_id();
-            String trackingId = order.getTracking_id();
-
             com.nv.qa.integration.model.core.order.operator.Order orderDetails = orderClient.getOrder(orderId);
             Assert.assertEquals(String.format("Status - [Tracking ID = %s]", trackingId), "TRANSIT", orderDetails.getStatus());
             Assert.assertThat(String.format("Granular Status - [Tracking ID = %s]", trackingId), orderDetails.getGranularStatus(), Matchers.anyOf(Matchers.equalTo("ARRIVED_AT_SORTING_HUB"), Matchers.equalTo("ARRIVED_AT_ORIGIN_HUB")));
@@ -201,7 +201,7 @@ public class CommonOperatorSteps extends AbstractSteps
             {
                 Assert.assertEquals(String.format("Pickup transaction status - [Tracking ID = %s]", trackingId), "SUCCESS", pickupTransaction.getStatus());
             }
-        }, "operatorVerifyOrderInfoAfterGlobalInbound", AssertionError.class, RuntimeException.class);
+        }, String.format("operatorVerifyOrderInfoAfterGlobalInbound - [Tracking ID = %s]", trackingId), AssertionError.class, RuntimeException.class);
     }
 
     @Then("^Operator verify order info after failed pickup C2C/Return order rescheduled on next day$")
