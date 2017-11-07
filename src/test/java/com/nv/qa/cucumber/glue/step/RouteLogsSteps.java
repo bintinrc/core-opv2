@@ -91,7 +91,7 @@ public class RouteLogsSteps extends AbstractSteps
                 catch(Exception ex)
                 {
                     scenarioManager.getCurrentScenario().write(String.format("Alert is not present after %ds.", ALERT_WAIT_TIMEOUT_IN_SECONDS));
-                    scenarioManager.getCurrentScenario().write(CommonUtil.getStackTrace(ex));
+                    scenarioManager.getCurrentScenario().write(CommonUtil.convertExceptionStackTraceToString(ex));
                 }
 
                 pause100ms();
