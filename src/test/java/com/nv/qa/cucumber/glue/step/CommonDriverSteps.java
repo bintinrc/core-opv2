@@ -8,7 +8,6 @@ import com.nv.qa.integration.model.driver.Job;
 import com.nv.qa.integration.model.driver.Route;
 import com.nv.qa.integration.model.driver.builder.JobBuilder;
 import com.nv.qa.integration.model.driver.scan.DeliveryRequest;
-import com.nv.qa.model.order_creation.v2.Order;
 import com.nv.qa.support.TestConstants;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.java.en.Then;
@@ -66,8 +65,7 @@ public class CommonDriverSteps extends AbstractSteps
     public void driverTryToFindHisPickupWaypointForC2cOrReturnOrder()
     {
         List<com.nv.qa.integration.model.driver.Route> routes = scenarioStorage.get(KEY_DRIVER_ROUTES_LIST);
-        Order order = scenarioStorage.get("order");
-        String trackingId = order.getTracking_id();
+        String expectedTrackingId = scenarioStorage.get("trackingId");
         int deliveryWaypointId = -1;
         int deliveryJobId = -1;
         com.nv.qa.integration.model.driver.Order jobOrder = null;
@@ -93,7 +91,7 @@ public class CommonDriverSteps extends AbstractSteps
                         {
                             for(com.nv.qa.integration.model.driver.Order jo : job.getOrders())
                             {
-                                if(jo.getTrackingId().equals(order.getTracking_id()))
+                                if(jo.getTrackingId().equals(expectedTrackingId))
                                 {
                                     found = true;
                                     deliveryWaypointId = wp.getId();
@@ -109,10 +107,10 @@ public class CommonDriverSteps extends AbstractSteps
             i++;
         }
 
-        Assert.assertTrue(String.format("Pickup Waypoint not found on Driver Pick Up. [Tracking ID = %s]", trackingId), found);
-        Assert.assertNotEquals(String.format("Delivery waypoint is not found. [Tracking ID = %s]", trackingId), -1, deliveryWaypointId);
-        Assert.assertNotEquals(String.format("Delivery job is not found. [Tracking ID = %s]", trackingId), -1, deliveryJobId);
-        Assert.assertNotNull(String.format("Job Order is null. [Tracking ID = %s]", trackingId), jobOrder);
+        Assert.assertTrue(String.format("Pickup Waypoint not found on Driver Pick Up. [Tracking ID = %s]", expectedTrackingId), found);
+        Assert.assertNotEquals(String.format("Delivery waypoint is not found. [Tracking ID = %s]", expectedTrackingId), -1, deliveryWaypointId);
+        Assert.assertNotEquals(String.format("Delivery job is not found. [Tracking ID = %s]", expectedTrackingId), -1, deliveryJobId);
+        Assert.assertNotNull(String.format("Job Order is null. [Tracking ID = %s]", expectedTrackingId), jobOrder);
 
         scenarioStorage.put(KEY_DELIVERY_WAYPOINT_ID, deliveryWaypointId);
         scenarioStorage.put(KEY_DELIVERY_JOB_ID, deliveryJobId);

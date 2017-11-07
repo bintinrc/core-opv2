@@ -70,10 +70,10 @@ public class CommonOperatorSteps extends AbstractSteps
     @SuppressWarnings("unchecked")
     public void operatorGlobalInboundParcel(DataTable dataTable) throws IOException
     {
-        Order order = scenarioStorage.get("order");
+        String trackingId = scenarioStorage.get("trackingId");
 
         Map<String,String> mapOfDynamicVariable = new HashMap<>();
-        mapOfDynamicVariable.put("order_tracking_id", order.getTracking_id());
+        mapOfDynamicVariable.put("order_tracking_id", trackingId);
 
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
         String globalInboundRequestJson = CommonUtil.replaceParam(mapOfData.get("globalInboundRequest"), mapOfDynamicVariable);
@@ -86,10 +86,11 @@ public class CommonOperatorSteps extends AbstractSteps
     public void operatorAddParcelToRoute(DataTable dataTable)  throws IOException
     {
         Order order = scenarioStorage.get("order");
+        String trackingId = scenarioStorage.get("trackingId");
         int routeId = scenarioStorage.get("routeId");
 
         Map<String,String> mapOfDynamicVariable = new HashMap<>();
-        mapOfDynamicVariable.put("order_tracking_id", order.getTracking_id());
+        mapOfDynamicVariable.put("order_tracking_id", trackingId);
 
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
         String addParcelToRouteRequestJson = CommonUtil.replaceParam(mapOfData.get("addParcelToRouteRequest"), mapOfDynamicVariable);

@@ -5,6 +5,7 @@ import com.nv.qa.support.CommonUtil;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.*;
@@ -65,7 +66,7 @@ public class SimplePage
             catch(StaleElementReferenceException ex)
             {
                 exception = ex;
-                System.out.println(String.format("[WARNING] Stale element reference exception detected for element (xpath='%s') %d times.", xpathExpression, (i+1)));
+                System.out.println(String.format("[WARN] Stale element reference exception detected for element (xpath='%s') %d times.", xpathExpression, (i+1)));
             }
         }
 
@@ -97,7 +98,32 @@ public class SimplePage
 
     public WebElement findElementByXpath(String xpathExpression)
     {
-        return getDriver().findElement(By.xpath(xpathExpression));
+        return findElementByXpath(xpathExpression, -1);
+    }
+
+    public WebElement findElementByXpath(String xpathExpression, long timeoutInSeconds)
+    {
+        By byXpath = By.xpath(xpathExpression);
+        System.out.println(String.format("[INFO] findElement: Selector = %s; Time Out In Seconds = %d", byXpath, timeoutInSeconds));
+
+        if(timeoutInSeconds>=0)
+        {
+            try
+            {
+                setImplicitTimeout(0);
+                return new WebDriverWait(getDriver(), timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(byXpath));
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                resetImplicitTimeout();
+            }
+        }
+
+        return getDriver().findElement(byXpath);
     }
 
     public List<WebElement> findElementsByXpath(String xpathExpression)

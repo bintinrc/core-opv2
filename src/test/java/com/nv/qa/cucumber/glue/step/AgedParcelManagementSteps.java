@@ -1,7 +1,6 @@
 package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Inject;
-import com.nv.qa.model.order_creation.v2.Order;
 import com.nv.qa.selenium.page.AgedParcelManagementPage;
 import com.nv.qa.support.ScenarioStorage;
 import com.nv.qa.support.TestConstants;
@@ -33,14 +32,14 @@ public class AgedParcelManagementSteps extends AbstractSteps
     public void operatorLoadSelectionOnPageAgedParcelManagement()
     {
         pause2s();
-        agedParcelManagementPage.loadSelection(-1);
+        String trackingId = scenarioStorage.get("trackingId");
+        agedParcelManagementPage.loadSelection(trackingId, -1);
     }
 
     @Then("^Operator verify the aged parcel order is listed on Aged Parcels list$")
     public void operatorVerifyTheAgedParcelOrderIsListedOnAgedParcelsList()
     {
-        Order order = scenarioStorage.get("order");
-        String trackingId = order.getTracking_id();
+        String trackingId = scenarioStorage.get("trackingId");
         String shipperName = TestConstants.SHIPPER_V2_NAME;
         agedParcelManagementPage.verifyAgedParcelOrderIsListed(trackingId, shipperName);
     }

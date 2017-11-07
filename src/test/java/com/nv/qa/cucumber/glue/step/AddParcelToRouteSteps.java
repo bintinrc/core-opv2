@@ -1,7 +1,6 @@
 package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Inject;
-import com.nv.qa.model.order_creation.v2.Order;
 import com.nv.qa.selenium.page.AddParcelToRoutePage;
 import com.nv.qa.support.ScenarioStorage;
 import cucumber.api.java.en.Then;
@@ -52,8 +51,7 @@ public class AddParcelToRouteSteps extends AbstractSteps
     @Then("verify parcel added to route")
     public void verifyParcelAddedToRoute()
     {
-        Order order = scenarioStorage.get("order");
-        String expectedTrackingId = order.getTracking_id();
+        String expectedTrackingId = scenarioStorage.get("trackingId");
         String xpath = String.format("//td[contains(@class, 'tracking_id') and contains(text(), '%s')]", expectedTrackingId);
         takesScreenshot();
         WebElement actualTrackingId = addParcelToRoutePage.findElementByXpath(xpath);
