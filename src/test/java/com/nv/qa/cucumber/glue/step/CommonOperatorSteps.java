@@ -77,7 +77,7 @@ public class CommonOperatorSteps extends AbstractSteps
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
         String globalInboundRequestJson = CommonUtil.replaceParam(mapOfData.get("globalInboundRequest"), mapOfDynamicVariable);
         GlobalInboundRequest globalInboundRequest = JsonHelper.fromJson(globalInboundRequestJson, GlobalInboundRequest.class);
-        operatorPortalInboundClient.globalInbound(globalInboundRequest);
+        CommonUtil.retryIfExpectedExceptionOccurred(()->operatorPortalInboundClient.globalInbound(globalInboundRequest), "operatorGlobalInboundParcel", AssertionError.class);
     }
 
     @Given("^Operator add parcel to the route using data below:$")
