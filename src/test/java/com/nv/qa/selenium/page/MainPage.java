@@ -33,6 +33,7 @@ public class MainPage extends SimplePage
         MAP_OF_END_URL.put("DP Vault Management", "dp-station");
         MAP_OF_END_URL.put("Hubs Administration", "hub");
         MAP_OF_END_URL.put("Linehaul Management", "linehaul");
+        MAP_OF_END_URL.put("Messaging Module", "sms");
     }
 
     public MainPage(WebDriver driver)

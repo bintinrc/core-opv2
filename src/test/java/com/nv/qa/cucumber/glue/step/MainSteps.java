@@ -35,14 +35,6 @@ public class MainSteps extends AbstractSteps
         CommonUtil.pause1s();
     }
 
-
-    @Given("^op click custom navigation ([^\"]*) in ([^\"]*) and url ([^\"]*)$")
-    public void clickNavigationCustomUrl(String navTitle, String parentTitle, String urlPart)
-    {
-        mainPage.clickNavigation(parentTitle, navTitle, urlPart);
-        CommonUtil.pause1s();
-    }
-
     @Then("^op is in main page$")
     public void dpAdm()
     {
