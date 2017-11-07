@@ -2,7 +2,6 @@ package com.nv.qa.cucumber.glue.step;
 
 import com.google.inject.Inject;
 import com.nv.qa.integration.client.DriverClient;
-import com.nv.qa.integration.helper.NvLogger;
 import com.nv.qa.integration.model.auth.DriverLoginResponse;
 import com.nv.qa.integration.model.core.Waypoint;
 import com.nv.qa.integration.model.driver.Job;
@@ -68,6 +67,7 @@ public class CommonDriverSteps extends AbstractSteps
     {
         List<com.nv.qa.integration.model.driver.Route> routes = scenarioStorage.get(KEY_DRIVER_ROUTES_LIST);
         Order order = scenarioStorage.get("order");
+        String trackingId = order.getTracking_id();
         int deliveryWaypointId = -1;
         int deliveryJobId = -1;
         com.nv.qa.integration.model.driver.Order jobOrder = null;
@@ -76,7 +76,7 @@ public class CommonDriverSteps extends AbstractSteps
 
         for(com.nv.qa.integration.model.driver.Route route : routes)
         {
-            NvLogger.info(String.format("iterate route: %d id: %d, from %d routes", i, route.getId(), routes.size()));
+            System.out.println(String.format("[INFO] Iterate route with ID '%d' from %d routes. %dx...", route.getId(), routes.size(), i));
             List<Waypoint> waypoints = route.getWaypoints();
 
             for(Waypoint wp : waypoints)
@@ -109,10 +109,10 @@ public class CommonDriverSteps extends AbstractSteps
             i++;
         }
 
-        Assert.assertTrue("Pickup Waypoint not found on Driver Pick Up", found);
-        Assert.assertNotEquals("Delivery waypoint is found", -1, deliveryWaypointId);
-        Assert.assertNotEquals("Delivery job is found", -1, deliveryJobId);
-        Assert.assertNotNull("Job Order not null", jobOrder);
+        Assert.assertTrue(String.format("Pickup Waypoint not found on Driver Pick Up. [Tracking ID = %s]", trackingId), found);
+        Assert.assertNotEquals(String.format("Delivery waypoint is not found. [Tracking ID = %s]", trackingId), -1, deliveryWaypointId);
+        Assert.assertNotEquals(String.format("Delivery job is not found. [Tracking ID = %s]", trackingId), -1, deliveryJobId);
+        Assert.assertNotNull(String.format("Job Order is null. [Tracking ID = %s]", trackingId), jobOrder);
 
         scenarioStorage.put(KEY_DELIVERY_WAYPOINT_ID, deliveryWaypointId);
         scenarioStorage.put(KEY_DELIVERY_JOB_ID, deliveryJobId);
@@ -126,7 +126,7 @@ public class CommonDriverSteps extends AbstractSteps
         int deliveryWaypointId = scenarioStorage.get(KEY_DELIVERY_WAYPOINT_ID);
         int routeId = scenarioStorage.get("routeId");
 
-        Assert.assertNotEquals("pickup job found", -1L, deliveryJobId);
+        Assert.assertNotEquals(String.format("Pickup job not found. [Route ID = %d]", routeId), -1L, deliveryJobId);
 
         Integer failureReasonId = (TestConstants.API_BASE_URL.toLowerCase().contains("/id"))
                 ? com.nv.qa.integration.model.driver.Order.DEFAULT_FAIL_ID_SG
@@ -162,7 +162,7 @@ public class CommonDriverSteps extends AbstractSteps
         int deliveryWaypointId = scenarioStorage.get(KEY_DELIVERY_WAYPOINT_ID);
         int routeId = scenarioStorage.get("routeId");
 
-        Assert.assertNotEquals("Delivery Job not found!", -1L, deliveryJobId);
+        Assert.assertNotEquals(String.format("Delivery Job not found. [Route ID = %d]", routeId), -1L, deliveryJobId);
 
         Integer failureReasonId = (TestConstants.API_BASE_URL.toLowerCase().contains("/id"))
                 ? com.nv.qa.integration.model.driver.Order.DEFAULT_DELIVERY_FAIL_ID_SG
