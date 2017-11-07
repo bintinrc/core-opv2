@@ -1,6 +1,6 @@
 package com.nv.qa.support;
 
-import com.nv.qa.utils.TestUtils;
+import com.nv.qa.utils.StandardTestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
@@ -14,7 +14,7 @@ import java.util.*;
  *
  * @author Soewandi Wirjawan
  */
-public class CommonUtil extends TestUtils
+public class CommonUtil extends StandardTestUtils
 {
     private static final int DEFAULT_MAX_RETRY_ON_EXCEPTION = 10;
     private static final int DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS = 100;
