@@ -115,8 +115,9 @@ public class SmsModulePage extends SimplePage
         pause100ms();
         click("//nv-icon-text-button[@on-click='ctrl.updatePreview()']");
         pause1s();
-        Assert.assertEquals("Hallo "+name+", your parcel with tracking id "+trackingId+" is ready to be delivered. sms-date: "+smsDate,
-                findElementByXpath("//textarea[@name='preview']").getAttribute("value"));
+        String expectedMessage = "Hallo "+name+", your parcel with tracking id "+trackingId+" is ready to be delivered. sms-date: "+smsDate;
+        String actualMessage = findElementByXpath("//md-input-container[@model='ctrl.messagePreview']/textarea[@name='preview']").getAttribute("value");
+        Assert.assertEquals(expectedMessage, actualMessage);
     }
 
     public void composeSmsWithUrlShortener()

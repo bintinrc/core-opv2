@@ -67,6 +67,7 @@ public class CommonOperatorSteps extends AbstractSteps
     }
 
     @Given("^Operator Global Inbound parcel using data below:")
+    @SuppressWarnings("unchecked")
     public void operatorGlobalInboundParcel(DataTable dataTable) throws IOException
     {
         Order order = scenarioStorage.get("order");
@@ -81,6 +82,7 @@ public class CommonOperatorSteps extends AbstractSteps
     }
 
     @Given("^Operator add parcel to the route using data below:$")
+    @SuppressWarnings("unchecked")
     public void operatorAddParcelToRoute(DataTable dataTable)  throws IOException
     {
         Order order = scenarioStorage.get("order");
@@ -94,7 +96,6 @@ public class CommonOperatorSteps extends AbstractSteps
 
         AddParcelToRouteRequest addParcelToRouteRequest = JsonHelper.fromJson(addParcelToRouteRequestJson, AddParcelToRouteRequest.class);
         CommonUtil.retryIfExpectedExceptionOccurred(()->operatorPortalRoutingClient.addParcelToRoute(routeId, addParcelToRouteRequest), "operatorAddParcelToRoute", AssertionError.class);
-        operatorPortalRoutingClient.addParcelToRoute(routeId, addParcelToRouteRequest);
         categorizedOrderByTransactionType(addParcelToRouteRequest, order);
     }
 
