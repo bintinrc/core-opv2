@@ -78,7 +78,7 @@ public class CommonOperatorSteps extends AbstractSteps
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
         String globalInboundRequestJson = CommonUtil.replaceParam(mapOfData.get("globalInboundRequest"), mapOfDynamicVariable);
         GlobalInboundRequest globalInboundRequest = JsonHelper.fromJson(globalInboundRequestJson, GlobalInboundRequest.class);
-        CommonUtil.retryIfExpectedExceptionOccurred(()->operatorPortalInboundClient.globalInbound(globalInboundRequest), "operatorGlobalInboundParcel", AssertionError.class);
+        CommonUtil.retryIfExpectedExceptionOccurred(()->operatorPortalInboundClient.globalInbound(globalInboundRequest), String.format("operatorGlobalInboundParcel - [Tracking ID = %s]", trackingId), getScenarioManager()::writeToScenarioLog, AssertionError.class);
     }
 
     @Given("^Operator add parcel to the route using data below:$")
@@ -96,7 +96,8 @@ public class CommonOperatorSteps extends AbstractSteps
         String addParcelToRouteRequestJson = CommonUtil.replaceParam(mapOfData.get("addParcelToRouteRequest"), mapOfDynamicVariable);
 
         AddParcelToRouteRequest addParcelToRouteRequest = JsonHelper.fromJson(addParcelToRouteRequestJson, AddParcelToRouteRequest.class);
-        CommonUtil.retryIfExpectedExceptionOccurred(()->operatorPortalRoutingClient.addParcelToRoute(routeId, addParcelToRouteRequest), String.format("operatorAddParcelToRoute - [Tracking ID = %s] - [Route ID = %d] - [Type = %s]", trackingId, routeId, addParcelToRouteRequest.getType()), AssertionError.class);
+        String methodInfo = String.format("operatorAddParcelToRoute - [Tracking ID = %s] - [Route ID = %d] - [Type = %s]", trackingId, routeId, addParcelToRouteRequest.getType());
+        CommonUtil.retryIfExpectedExceptionOccurred(()->operatorPortalRoutingClient.addParcelToRoute(routeId, addParcelToRouteRequest), methodInfo, getScenarioManager()::writeToScenarioLog, AssertionError.class);
         categorizedOrderByTransactionType(addParcelToRouteRequest, order);
     }
 
@@ -104,28 +105,29 @@ public class CommonOperatorSteps extends AbstractSteps
     @SuppressWarnings("unchecked")
     public void operatorVanInboundParcel()
     {
+        String trackingId = scenarioStorage.get("trackingId");
+        int deliveryWaypointId = scenarioStorage.get(CommonDriverSteps.KEY_DELIVERY_WAYPOINT_ID);
+
         CommonUtil.retryIfExpectedExceptionOccurred(()->
         {
-            String trackingId = scenarioStorage.get("trackingId");
-            int deliveryWaypointId = scenarioStorage.get(CommonDriverSteps.KEY_DELIVERY_WAYPOINT_ID);
-
             VanInboundRequest vanInboundRequest = new VanInboundRequest();
             vanInboundRequest.setTrackingId(trackingId);
             vanInboundRequest.setWaypointId(deliveryWaypointId);
             vanInboundRequest.setType("VAN_FROM_NINJAVAN");
             operatorPortalInboundClient.vanInbound(vanInboundRequest);
-        }, "operatorVanInboundParcel", AssertionError.class, RuntimeException.class);
+        }, String.format("operatorVanInboundParcel - [Tracking ID = %s]", trackingId), getScenarioManager()::writeToScenarioLog, AssertionError.class, RuntimeException.class);
     }
 
     @When("^Operator start the route$")
     @SuppressWarnings("unchecked")
     public void operatorStartTheRoute()
     {
+        int routeId = scenarioStorage.get("routeId");
+
         CommonUtil.retryIfExpectedExceptionOccurred(()->
         {
-            int routeId = scenarioStorage.get("routeId");
             operatorPortalRoutingClient.startRoute(routeId);
-        }, "operatorStartTheRoute", AssertionError.class, RuntimeException.class);
+        }, String.format("operatorStartTheRoute - [Route ID = %d]", routeId), getScenarioManager()::writeToScenarioLog, AssertionError.class, RuntimeException.class);
     }
 
     private void categorizedOrderByTransactionType(AddParcelToRouteRequest addParcelToRouteRequest, Order order)
@@ -162,7 +164,7 @@ public class CommonOperatorSteps extends AbstractSteps
                 String errorMessage = String.format("Status and Granular Status of order with ID = '%d' is not matched the expected value.\n[STATUS]\nExpected: %s\nActual  : %s\n\n[GRANULAR STATUS]\nExpected: %s\nActual  : %s", orderId, expectedStatus, actualStatus, expectedGranularStatus, actualGranularStatus);
                 throw new RuntimeException(errorMessage);
             }
-        }, "getOrderDetails");
+        }, String.format("getOrderDetails - [Order ID = %d]", orderId), getScenarioManager()::writeToScenarioLog);
 
         return result.getValue();
     }
@@ -201,7 +203,7 @@ public class CommonOperatorSteps extends AbstractSteps
             {
                 Assert.assertEquals(String.format("Pickup transaction status - [Tracking ID = %s]", trackingId), "SUCCESS", pickupTransaction.getStatus());
             }
-        }, String.format("operatorVerifyOrderInfoAfterGlobalInbound - [Tracking ID = %s]", trackingId), AssertionError.class, RuntimeException.class);
+        }, String.format("operatorVerifyOrderInfoAfterGlobalInbound - [Tracking ID = %s]", trackingId), getScenarioManager()::writeToScenarioLog, AssertionError.class, RuntimeException.class);
     }
 
     @Then("^Operator verify order info after failed pickup C2C/Return order rescheduled on next day$")

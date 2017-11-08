@@ -84,7 +84,7 @@ public class BlockedDatesSteps extends AbstractSteps
                 }
 
                 Assert.assertTrue(isAdded);
-            });
+            }, "verifyAdd", getScenarioManager()::writeToScenarioLog);
         }
     }
 
@@ -134,7 +134,7 @@ public class BlockedDatesSteps extends AbstractSteps
                 }
 
                 Assert.assertFalse(isFound);
-            });
+            }, "verifyRemove", getScenarioManager()::writeToScenarioLog);
         }
     }
 

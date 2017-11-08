@@ -9,6 +9,7 @@ import org.openqa.selenium.interactions.Actions;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  *
@@ -268,6 +269,12 @@ public class CommonUtil extends StandardTestUtils
     public static void retryIfStaleElementReferenceExceptionOccurred(Runnable runnable, String methodName)
     {
         retryIfExpectedExceptionOccurred(runnable, methodName, System.out::println, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, DEFAULT_MAX_RETRY_ON_EXCEPTION, StaleElementReferenceException.class);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void retryIfStaleElementReferenceExceptionOccurred(Runnable runnable, String methodName, Consumer<String> logConsumer)
+    {
+        retryIfExpectedExceptionOccurred(runnable, methodName, logConsumer, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, DEFAULT_MAX_RETRY_ON_EXCEPTION, StaleElementReferenceException.class);
     }
 
     public static Set<Cookie> getCookies(WebDriver driver)

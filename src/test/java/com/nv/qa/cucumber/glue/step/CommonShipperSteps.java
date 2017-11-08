@@ -26,7 +26,6 @@ import java.util.*;
 @ScenarioScoped
 public class CommonShipperSteps extends AbstractSteps
 {
-    private static final int MAX_RETRY = 10;
     private static final SimpleDateFormat CREATED_DATE_SDF = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
     private static final SimpleDateFormat CURRENT_DATE_SDF = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -86,39 +85,14 @@ public class CommonShipperSteps extends AbstractSteps
         }
 
         createOrderRequest.setTracking_ref_no(createOrderRequest.getTracking_ref_no()+suffix);
-        List<CreateOrderResponse> listOfCreateOrderResponse = orderCreateV2Client.createOrder(createOrderRequest);
+        List<CreateOrderResponse> listOfCreateOrderResponse = CommonUtil.retryIfExpectedExceptionOccurred(()->orderCreateV2Client.createOrder(createOrderRequest), "createV2Order", getScenarioManager()::writeToScenarioLog, AssertionError.class, RuntimeException.class);
 
         /**
          * Retry if the order fail to retrieve.
          */
         String asyncOrderId = listOfCreateOrderResponse.get(0).getId();
-        int counter = 0;
-        boolean retrievedSuccess;
-        Order order = null;
-        Throwable error = null;
-
-        do
-        {
-            try
-            {
-                CommonUtil.pause200ms();
-                order = orderCreateV2Client.retrieveOrder(asyncOrderId);
-                retrievedSuccess = true;
-            }
-            catch(Throwable ex)
-            {
-                System.out.println(String.format("[WARN] Fail to retrieve order with async ID = '%s'. Retrying %dx...", asyncOrderId, (counter+1)));
-                retrievedSuccess = false;
-            }
-
-            counter++;
-        }
-        while(!retrievedSuccess && counter<MAX_RETRY);
-
-        if(!retrievedSuccess)
-        {
-            throw new RuntimeException(String.format("[WARN] Fail to retrieve order with async ID = '%s' after trying  %d times.", asyncOrderId, MAX_RETRY), error);
-        }
+        scenarioStorage.put("orderAsyncId", asyncOrderId);
+        Order order = CommonUtil.retryIfExpectedExceptionOccurred(()->orderCreateV2Client.retrieveOrder(asyncOrderId), String.format("createV2Order - retrieve order - [Async ID = %s]", asyncOrderId), getScenarioManager()::writeToScenarioLog, AssertionError.class, RuntimeException.class);
 
         scenarioStorage.put("order", order);
         scenarioStorage.put("orderAsyncId", asyncOrderId);

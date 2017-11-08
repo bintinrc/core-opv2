@@ -78,7 +78,7 @@ public class TagManagementSteps extends AbstractSteps
 
             String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
             Assert.assertEquals(DEFAULT_TAG_NAME, actualTagName);
-        }, "verifyNewTagCreatedSuccessfully", AssertionError.class);
+        }, String.format("verifyNewTagCreatedSuccessfully - [Expected Tag Name = %s]", DEFAULT_TAG_NAME), getScenarioManager()::writeToScenarioLog, AssertionError.class);
     }
 
     @When("^op update tag on Tag Management$")
@@ -109,7 +109,7 @@ public class TagManagementSteps extends AbstractSteps
 
             String actualTagDescription = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DESCRIPTION);
             Assert.assertEquals(EDITED_DEFAULT_TAG_DESCRIPTION, actualTagDescription);
-        }, "verifyTagUpdatedSuccessfully", AssertionError.class);
+        }, "verifyTagUpdatedSuccessfully", getScenarioManager()::writeToScenarioLog, AssertionError.class);
     }
 
     @When("^op delete tag on Tag Management$")
