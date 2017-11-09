@@ -85,14 +85,14 @@ public class CommonShipperSteps extends AbstractSteps
         }
 
         createOrderRequest.setTracking_ref_no(createOrderRequest.getTracking_ref_no()+suffix);
-        List<CreateOrderResponse> listOfCreateOrderResponse = CommonUtil.retryIfExpectedExceptionOccurred(()->orderCreateV2Client.createOrder(createOrderRequest), "createV2Order", getScenarioManager()::writeToScenarioLog, AssertionError.class, RuntimeException.class);
+        List<CreateOrderResponse> listOfCreateOrderResponse = CommonUtil.retryIfAssertionErrorOrRuntimeExceptionOccurred(()->orderCreateV2Client.createOrder(createOrderRequest), "createV2Order", getScenarioManager()::writeToScenarioLog);
 
         /**
          * Retry if the order fail to retrieve.
          */
         String asyncOrderId = listOfCreateOrderResponse.get(0).getId();
         scenarioStorage.put("orderAsyncId", asyncOrderId);
-        Order order = CommonUtil.retryIfExpectedExceptionOccurred(()->orderCreateV2Client.retrieveOrder(asyncOrderId), String.format("createV2Order - retrieve order - [Async ID = %s]", asyncOrderId), getScenarioManager()::writeToScenarioLog, AssertionError.class, RuntimeException.class);
+        Order order = CommonUtil.retryIfAssertionErrorOrRuntimeExceptionOccurred(()->orderCreateV2Client.retrieveOrder(asyncOrderId), String.format("createV2Order - retrieve order - [Async ID = %s]", asyncOrderId), getScenarioManager()::writeToScenarioLog);
 
         scenarioStorage.put("order", order);
         scenarioStorage.put("orderAsyncId", asyncOrderId);
