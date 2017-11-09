@@ -27,7 +27,7 @@ dependencies {
 }
 
 project.ext {
-    cucumberGluePackage = "co.nvqa.operator_v2.cucumber.glue"
+    cucumberGluePackage = "com.nv.qa.cucumber.glue"
 }
 
 apply from: "build-commons.gradle"
