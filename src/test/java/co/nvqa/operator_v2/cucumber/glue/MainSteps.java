@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import com.google.inject.Inject;
 import co.nvqa.operator_v2.selenium.page.MainPage;
-import co.nvqa.operator_v2.support.CommonUtil;
+import co.nvqa.operator_v2.util.TestUtils;
+import com.google.inject.Inject;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -25,14 +25,14 @@ public class MainSteps extends AbstractSteps
     @Override
     public void init()
     {
-        mainPage = new MainPage(getDriver());
+        mainPage = new MainPage(getWebDriver());
     }
 
     @Given("^op click navigation ([^\"]*) in ([^\"]*)$")
     public void clickNavigation(String navTitle, String parentTitle)
     {
         mainPage.clickNavigation(parentTitle, navTitle);
-        CommonUtil.pause1s();
+        TestUtils.pause1s();
     }
 
     @Then("^op is in main page$")

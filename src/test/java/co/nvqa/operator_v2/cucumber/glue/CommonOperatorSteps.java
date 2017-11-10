@@ -1,6 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.operator_v2.support.ScenarioStorage;
+import co.nvqa.operator_v2.util.ScenarioStorage;
+import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import com.nv.qa.api.client.operator_portal.OperatorPortalInboundClient;
 import com.nv.qa.api.client.operator_portal.OperatorPortalRoutingClient;
@@ -13,9 +15,7 @@ import com.nv.qa.model.operator_portal.global_inbound.GlobalInboundRequest;
 import com.nv.qa.model.operator_portal.routing.AddParcelToRouteRequest;
 import com.nv.qa.model.operator_portal.van_inbound.VanInboundRequest;
 import com.nv.qa.model.order_creation.v2.Order;
-import co.nvqa.operator_v2.support.CommonUtil;
 import com.nv.qa.support.JsonHelper;
-import co.nvqa.operator_v2.support.TestConstants;
 import com.nv.qa.utils.AnonymousResult;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
@@ -76,9 +76,9 @@ public class CommonOperatorSteps extends AbstractSteps
         mapOfDynamicVariable.put("order_tracking_id", trackingId);
 
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
-        String globalInboundRequestJson = CommonUtil.replaceParam(mapOfData.get("globalInboundRequest"), mapOfDynamicVariable);
+        String globalInboundRequestJson = TestUtils.replaceParam(mapOfData.get("globalInboundRequest"), mapOfDynamicVariable);
         GlobalInboundRequest globalInboundRequest = JsonHelper.fromJson(globalInboundRequestJson, GlobalInboundRequest.class);
-        CommonUtil.retryIfExpectedExceptionOccurred(()->operatorPortalInboundClient.globalInbound(globalInboundRequest), String.format("operatorGlobalInboundParcel - [Tracking ID = %s]", trackingId), getScenarioManager()::writeToScenarioLog, AssertionError.class);
+        TestUtils.retryIfExpectedExceptionOccurred(()->operatorPortalInboundClient.globalInbound(globalInboundRequest), String.format("operatorGlobalInboundParcel - [Tracking ID = %s]", trackingId), getScenarioManager()::writeToScenarioLog, AssertionError.class);
     }
 
     @Given("^Operator add parcel to the route using data below:$")
@@ -93,11 +93,11 @@ public class CommonOperatorSteps extends AbstractSteps
         mapOfDynamicVariable.put("order_tracking_id", trackingId);
 
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
-        String addParcelToRouteRequestJson = CommonUtil.replaceParam(mapOfData.get("addParcelToRouteRequest"), mapOfDynamicVariable);
+        String addParcelToRouteRequestJson = TestUtils.replaceParam(mapOfData.get("addParcelToRouteRequest"), mapOfDynamicVariable);
 
         AddParcelToRouteRequest addParcelToRouteRequest = JsonHelper.fromJson(addParcelToRouteRequestJson, AddParcelToRouteRequest.class);
         String methodInfo = String.format("operatorAddParcelToRoute - [Tracking ID = %s] - [Route ID = %d] - [Type = %s]", trackingId, routeId, addParcelToRouteRequest.getType());
-        CommonUtil.retryIfExpectedExceptionOccurred(()->operatorPortalRoutingClient.addParcelToRoute(routeId, addParcelToRouteRequest), methodInfo, getScenarioManager()::writeToScenarioLog, AssertionError.class);
+        TestUtils.retryIfExpectedExceptionOccurred(()->operatorPortalRoutingClient.addParcelToRoute(routeId, addParcelToRouteRequest), methodInfo, getScenarioManager()::writeToScenarioLog, AssertionError.class);
         categorizedOrderByTransactionType(addParcelToRouteRequest, order);
     }
 
@@ -108,7 +108,7 @@ public class CommonOperatorSteps extends AbstractSteps
         String trackingId = scenarioStorage.get("trackingId");
         int deliveryWaypointId = scenarioStorage.get(CommonDriverSteps.KEY_DELIVERY_WAYPOINT_ID);
 
-        CommonUtil.retryIfExpectedExceptionOccurred(()->
+        TestUtils.retryIfExpectedExceptionOccurred(()->
         {
             VanInboundRequest vanInboundRequest = new VanInboundRequest();
             vanInboundRequest.setTrackingId(trackingId);
@@ -124,7 +124,7 @@ public class CommonOperatorSteps extends AbstractSteps
     {
         int routeId = scenarioStorage.get("routeId");
 
-        CommonUtil.retryIfExpectedExceptionOccurred(()->
+        TestUtils.retryIfExpectedExceptionOccurred(()->
         {
             operatorPortalRoutingClient.startRoute(routeId);
         }, String.format("operatorStartTheRoute - [Route ID = %d]", routeId), getScenarioManager()::writeToScenarioLog, AssertionError.class, RuntimeException.class);
@@ -149,7 +149,7 @@ public class CommonOperatorSteps extends AbstractSteps
         AnonymousResult<com.nv.qa.integration.model.core.order.operator.Order> result = new AnonymousResult<>();
         pause2s(); // Give a few time for a backend to update the order details info.
 
-        CommonUtil.retryIfRuntimeExceptionOccurred(()->
+        TestUtils.retryIfRuntimeExceptionOccurred(()->
         {
             com.nv.qa.integration.model.core.order.operator.Order order = orderClient.getOrder(orderId);
             String actualStatus = order.getStatus();
@@ -177,7 +177,7 @@ public class CommonOperatorSteps extends AbstractSteps
         int orderId = order.getTransactions().get(0).getOrder_id();
         String trackingId = order.getTracking_id();
 
-        CommonUtil.retryIfExpectedExceptionOccurred(()->
+        TestUtils.retryIfExpectedExceptionOccurred(()->
         {
             com.nv.qa.integration.model.core.order.operator.Order orderDetails = orderClient.getOrder(orderId);
             Assert.assertEquals(String.format("Status - [Tracking ID = %s]", trackingId), "TRANSIT", orderDetails.getStatus());
@@ -246,7 +246,7 @@ public class CommonOperatorSteps extends AbstractSteps
         Assert.assertEquals(String.format("First attempt of Pickup Transaction status should be FAIL. [Tracking ID = %s]", trackingId), "FAIL", transactionOfFirstAttempt.getStatus());
         Assert.assertEquals(String.format("Second attempt of Pickup Transaction status should be PENDING. [Tracking ID = %s]", trackingId), "PENDING", transactionOfSecondAttempt.getStatus());
 
-        Date nextDate = CommonUtil.getNextDate(numberOfNextDays);
+        Date nextDate = TestUtils.getNextDate(numberOfNextDays);
         String newPickupStartTime = DATE_FORMAT.format(nextDate);
         String newPickupEndTime = DATE_FORMAT.format(nextDate);
 
@@ -294,7 +294,7 @@ public class CommonOperatorSteps extends AbstractSteps
         Assert.assertEquals(String.format("First attempt of Delivery Transaction status should be FAIL. [Tracking ID = %s]", trackingId), "FAIL", transactionOfFirstAttempt.getStatus());
         Assert.assertEquals(String.format("Second attempt of Delivery Transaction status should be PENDING. [Tracking ID = %s]", trackingId), "PENDING", transactionOfSecondAttempt.getStatus());
 
-        Date nextDate = CommonUtil.getNextDate(numberOfNextDays);
+        Date nextDate = TestUtils.getNextDate(numberOfNextDays);
         String newDeliveryStartTime = DATE_FORMAT.format(nextDate);
         String newDeliveryEndTime = DATE_FORMAT.format(nextDate);
 
@@ -332,7 +332,7 @@ public class CommonOperatorSteps extends AbstractSteps
         Assert.assertEquals(String.format("First attempt of Delivery Transaction status should be FAIL. [Tracking ID = %s]", trackingId), "FAIL", transactionOfFirstAttempt.getStatus());
         Assert.assertEquals(String.format("Second attempt of Delivery Transaction status should be PENDING. [Tracking ID = %s]", trackingId), "PENDING", transactionOfSecondAttempt.getStatus());
 
-        Date nextDate = CommonUtil.getNextDate(1);
+        Date nextDate = TestUtils.getNextDate(1);
         String newDeliveryStartTime = DATE_FORMAT.format(nextDate)+"T07:00:00Z";
         String newDeliveryEndTime = DATE_FORMAT.format(nextDate)+"T10:00:00Z";
 
@@ -389,7 +389,7 @@ public class CommonOperatorSteps extends AbstractSteps
         Assert.assertEquals(String.format("First attempt of Delivery Transaction status should be FAIL. [Tracking ID = %s]", trackingId), "FAIL", transactionOfFirstAttempt.getStatus());
         Assert.assertEquals(String.format("Second attempt of Delivery Transaction status should be PENDING. [Tracking ID = %s]", trackingId), "PENDING", transactionOfSecondAttempt.getStatus());
 
-        Date nextDate = CommonUtil.getNextDate(numberOfNextDays);
+        Date nextDate = TestUtils.getNextDate(numberOfNextDays);
         String newDeliveryStartTime = DATE_FORMAT.format(nextDate);
         String newDeliveryEndTime = DATE_FORMAT.format(nextDate);
 
@@ -427,7 +427,7 @@ public class CommonOperatorSteps extends AbstractSteps
         Assert.assertEquals(String.format("First attempt of Delivery Transaction status should be FAIL. [Tracking ID = %s]", trackingId), "FAIL", transactionOfFirstAttempt.getStatus());
         Assert.assertEquals(String.format("Second attempt of Delivery Transaction status should be PENDING. [Tracking ID = %s]", trackingId), "PENDING", transactionOfSecondAttempt.getStatus());
 
-        Date nextDate = CommonUtil.getNextDate(1);
+        Date nextDate = TestUtils.getNextDate(1);
         String newDeliveryStartTime = DATE_FORMAT.format(nextDate)+"T07:00:00Z";
         String newDeliveryEndTime = DATE_FORMAT.format(nextDate)+"T10:00:00Z";
 

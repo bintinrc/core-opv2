@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import com.google.inject.Inject;
 import co.nvqa.operator_v2.model.DpVault;
 import co.nvqa.operator_v2.selenium.page.DpVaultManagementPage;
-import co.nvqa.operator_v2.support.ScenarioStorage;
+import co.nvqa.operator_v2.util.ScenarioStorage;
+import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -27,7 +27,7 @@ public class DpVaultManagementSteps extends AbstractSteps
     @Override
     public void init()
     {
-        dpVaultManagementPage = new DpVaultManagementPage(getDriver());
+        dpVaultManagementPage = new DpVaultManagementPage(getWebDriver());
     }
 
     @When("^Operator create new DP Vault using DP \"([^\"]*)\"$")

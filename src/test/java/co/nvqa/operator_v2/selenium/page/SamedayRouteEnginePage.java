@@ -1,9 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
-
+import co.nvqa.operator_v2.util.ScenarioStorage;
+import co.nvqa.operator_v2.util.TestConstants;
 import com.google.inject.Inject;
-import co.nvqa.operator_v2.support.TestConstants;
-import co.nvqa.operator_v2.support.ScenarioStorage;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -15,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-
 /**
  *
  * @author Daniel Joi Partogi Hutapea
@@ -23,14 +21,12 @@ import java.util.List;
 public class SamedayRouteEnginePage extends SimplePage
 {
     private static final int SAVE_BUTTON_LOADING_TIMEOUT_IN_SECONDS = 30;
-    private static final int WAIT_TIMEOUT = 30;
-    @Inject
-    private ScenarioStorage scenarioStorage;
 
+    @Inject private ScenarioStorage scenarioStorage;
 
-    public SamedayRouteEnginePage(WebDriver driver)
+    public SamedayRouteEnginePage(WebDriver webDriver)
     {
-        super(driver);
+        super(webDriver);
     }
 
     public void selectRouteGroup(String routeGroupName)
@@ -102,18 +98,20 @@ public class SamedayRouteEnginePage extends SimplePage
         waitUntilInvisibilityOfElementLocated("//button[@aria-label='Create 1 Route(s)']//md-progress-circular", SAVE_BUTTON_LOADING_TIMEOUT_IN_SECONDS);
     }
 
-    public void setFleetType1Capacity(String capacity){
+    public void setFleetType1Capacity(String capacity)
+    {
         sendKeys("//input[@aria-label='Capacity']", capacity);
-
     }
 
-    public void openWaypointDetail(){
+    public void openWaypointDetail()
+    {
         clickButtonOnTableWithNgRepeat(1, "wps", "wps", "route in ctrl.routeResponse.solution.routes");
-        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'nv-route-detail-dialog')]", WAIT_TIMEOUT);
-        waitUntilVisibilityOfElementLocated("//tr[@md-virtual-repeat='wp in getTableData()']", WAIT_TIMEOUT);
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'nv-route-detail-dialog')]");
+        waitUntilVisibilityOfElementLocated("//tr[@md-virtual-repeat='wp in getTableData()']");
     }
 
-    public void verifyWaypointDetailContent(String trackingId, String routeGroupName ){
+    public void verifyWaypointDetailContent(String trackingId, String routeGroupName)
+    {
         //check the waypoint have correct tracking id
         String trackingIdData =  getTextOnTableWithMdVirtualRepeat(1,"tracking_id","route in ctrl.routeResponse.solution.routes" );
         Assert.assertEquals(trackingId, trackingIdData);
@@ -129,66 +127,82 @@ public class SamedayRouteEnginePage extends SimplePage
         Assert.assertEquals("DELIVERY", getTextOnTableWithMdVirtualRepeat(2, "type", "route in ctrl.routeResponse.solution.routes" ));
     }
 
-    public void downloadCsvOnWaypointDetails(String trackingId) throws IOException {
-        String routeName = "route-detail-"+findElementByXpath("//md-dialog[contains(@class, 'nv-route-detail-dialog')" +
-                "]/md-dialog-content/div[1]/div[1]/p/b")
-                .getText();
-        //clear the downloaded file first
+    public void downloadCsvOnWaypointDetails(String trackingId) throws IOException
+    {
+        String routeName = "route-detail-"+findElementByXpath("//md-dialog[contains(@class, 'nv-route-detail-dialog')]/md-dialog-content/div[1]/div[1]/p/b").getText();
+
+        // Clear the downloaded file first.
         File csvFile = new File(TestConstants.SELENIUM_WRITE_PATH+"/"+routeName+".csv");
-        if(csvFile.exists()){
+
+        if(csvFile.exists())
+        {
             csvFile.delete();
         }
+
         click("//button[@aria-label='Download CSV']");
-        new WebDriverWait(getDriver(), WAIT_TIMEOUT).until((WebDriver driver) -> {
+
+        new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver driver)->
+        {
             File csvFileDownloaded = new File(TestConstants.SELENIUM_WRITE_PATH+"/"+routeName+".csv");
             return csvFileDownloaded.exists();
         });
 
-        //check the downloaded file
+        // Check the downloaded file.
         List<String> lines = Files.readAllLines(Paths.get(TestConstants.SELENIUM_WRITE_PATH+"/"+routeName+".csv"), Charset.defaultCharset());
-        lines.forEach((String str)->{
+
+        lines.forEach((String str)->
+        {
             String [] columnData = str.split(",");
             Assert.assertFalse("Shouldn't have break in the exported csv",columnData[1].startsWith("break"));
         });
-
     }
 
-    public void openUnroutedDetailDialog(){
+    public void openUnroutedDetailDialog()
+    {
         click("//button[@aria-label='View Unrouted Waypoints']");
-        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'nv-unrouted-detail-dialog')]", WAIT_TIMEOUT);
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'nv-unrouted-detail-dialog')]");
         pause3s();
     }
 
-    public void verifyUnroutedDetailDialog(){
-        String unroutedCount = findElementByXpath("//md-dialog[contains(@class, 'nv-unrouted-detail-dialog')]/md-dialog-content/div[1]/div[1]/p/b")
-                .getText();
+    public void verifyUnroutedDetailDialog()
+    {
+        String unroutedCount = findElementByXpath("//md-dialog[contains(@class, 'nv-unrouted-detail-dialog')]/md-dialog-content/div[1]/div[1]/p/b").getText();
         Assert.assertEquals("1",unroutedCount);
     }
 
-    public void changeTheSuggestedDate(String suggestedDate){
+    public void changeTheSuggestedDate(String suggestedDate)
+    {
         findElementByXpath("//md-datepicker[@ng-model='ctrl.suggested_date']//input").clear();
         sendKeys("//md-datepicker[@ng-model='ctrl.suggested_date']//input", suggestedDate);
     }
 
-    public void clickUpdateTimeslotBtn(){
+    public void clickUpdateTimeslotBtn()
+    {
         click("//nv-api-text-button[@on-click='ctrl.onSaveSuggestedRoute()']/button");
         pause50ms();
-        waitUntilInvisibilityOfElementLocated("//nv-api-text-button[@on-click='ctrl.onSaveSuggestedRoute()']//md-progress-circular", WAIT_TIMEOUT);
+        waitUntilInvisibilityOfElementLocated("//nv-api-text-button[@on-click='ctrl.onSaveSuggestedRoute()']//md-progress-circular");
     }
 
-    public String getWaypointTrackingIds(){
+    public String getWaypointTrackingIds()
+    {
         StringBuilder sb = new StringBuilder();
-        int waypointTotal=Integer.valueOf(findElementByXpath("//md-dialog[contains(@class, 'nv-route-detail-dialog')]/md-dialog-content/div[1]/div[2]/p")
-                .getText());
-        for(int i =0; i<waypointTotal; i++){
+        int waypointTotal=Integer.valueOf(findElementByXpath("//md-dialog[contains(@class, 'nv-route-detail-dialog')]/md-dialog-content/div[1]/div[2]/p").getText());
+
+        for(int i=0; i<waypointTotal; i++)
+        {
             String trackingId = getTextOnTableWithMdVirtualRepeat(i+1, "tracking_id","wp in getTableData()");
-            if(!trackingId.equalsIgnoreCase("-")){
+
+            if(!trackingId.equalsIgnoreCase("-"))
+            {
                 sb.append(trackingId);
-                if(i!=waypointTotal-1){
+
+                if(i!=waypointTotal-1)
+                {
                     sb.append(",");
                 }
             }
         }
+
         return sb.toString();
     }
 }

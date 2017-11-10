@@ -1,8 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.support.SeleniumHelper;
-import co.nvqa.operator_v2.support.TestConstants;
-import co.nvqa.operator_v2.support.CommonUtil;
+import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -36,30 +35,30 @@ public class MainPage extends SimplePage
         MAP_OF_END_URL.put("Messaging Module", "sms");
     }
 
-    public MainPage(WebDriver driver)
+    public MainPage(WebDriver webDriver)
     {
-        super(driver);
+        super(webDriver);
     }
 
     public void clickNavigation(String parentTitle, String navTitle, String urlPart)
     {
         // Ensure no dialog that prevents menu from being clicked.
-        driver.navigate().refresh();
-        CommonUtil.pause1s();
-        SeleniumHelper.waitPageLoad(driver);
+        getwebDriver().navigate().refresh();
+        pause1s();
+        TestUtils.waitPageLoad(getwebDriver());
 
         String navElmXpath = "//nv-section-item/button[div='" + navTitle + "']";
-        WebElement navElm = driver.findElement(By.xpath(navElmXpath));
+        WebElement navElm = getwebDriver().findElement(By.xpath(navElmXpath));
 
         if(!navElm.isDisplayed())
         {
-            driver.findElement(By.xpath("//nv-section-header/button[span='" + parentTitle + "']")).click();
+            getwebDriver().findElement(By.xpath("//nv-section-header/button[span='" + parentTitle + "']")).click();
         }
 
-        CommonUtil.pause1s();
+        pause1s();
         navElm.click();
 
-        new WebDriverWait(driver, TestConstants.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until((d)->
+        new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((d)->
         {
             boolean result;
             String currentUrl = d.getCurrentUrl();
@@ -104,18 +103,18 @@ public class MainPage extends SimplePage
     public void dpAdm()
     {
         String mainDashboard = grabEndURL("All Orders");
-        new WebDriverWait(driver, TestConstants.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until((d)->d.getCurrentUrl().toLowerCase().endsWith(mainDashboard));
-        String url = driver.getCurrentUrl().toLowerCase();
+        new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((d)->d.getCurrentUrl().toLowerCase().endsWith(mainDashboard));
+        String url = getwebDriver().getCurrentUrl().toLowerCase();
         Assert.assertThat("URL not match.", url, Matchers.endsWith(mainDashboard));
-        CommonUtil.pause5s();
+        pause5s();
     }
 
     public void refreshPage()
     {
-        String previousUrl = driver.getCurrentUrl().toLowerCase();
-        driver.navigate().refresh();
-        new WebDriverWait(driver, TestConstants.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS).until((d)->d.getCurrentUrl().equalsIgnoreCase(previousUrl));
-        String currentUrl = driver.getCurrentUrl().toLowerCase();
+        String previousUrl = getwebDriver().getCurrentUrl().toLowerCase();
+        getwebDriver().navigate().refresh();
+        new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((d)->d.getCurrentUrl().equalsIgnoreCase(previousUrl));
+        String currentUrl = getwebDriver().getCurrentUrl().toLowerCase();
         Assert.assertEquals("Page URL is different after page is refreshed.", previousUrl, currentUrl);
     }
 }

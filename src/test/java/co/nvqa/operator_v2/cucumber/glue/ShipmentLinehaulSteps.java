@@ -2,8 +2,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.Linehaul;
 import co.nvqa.operator_v2.selenium.page.ShipmentLinehaulPage;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
-import co.nvqa.operator_v2.support.CommonUtil;
 import com.nv.qa.support.JsonHelper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -39,13 +39,13 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     @Override
     public void init()
     {
-        shipmentLinehaulPage = new ShipmentLinehaulPage(getDriver());
+        shipmentLinehaulPage = new ShipmentLinehaulPage(getWebDriver());
     }
 
     @When("^op click create linehaul button$")
     public void createActionButtonClicked()
     {
-        String url = getDriver().getCurrentUrl();
+        String url = getWebDriver().getCurrentUrl();
 
         if(url.endsWith("entries"))
         {
@@ -81,7 +81,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
         shipmentLinehaulPage.clickOnLabelCreate();
         shipmentLinehaulPage.clickCreateButton();
 
-        WebElement toast = CommonUtil.getToast(getDriver());
+        WebElement toast = TestUtils.getToast(getWebDriver());
         Assert.assertTrue("toast message not contain linehaul xxx created", toast.getText().contains("Linehaul") && toast.getText().contains("created"));
 
         linehaulId = toast.getText().split(" ")[1];
@@ -120,7 +120,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
         }
 
         Assert.assertTrue("linehaul not exist", isExist);
-        CommonUtil.pause3s();
+        TestUtils.pause3s();
     }
 
     @Given("^op click tab ([^\"]*)$")
@@ -174,7 +174,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     public void linehaulDeleted()
     {
         String msg = "Success delete Linehaul ID " + linehaulId;
-        WebElement toast = CommonUtil.getToast(getDriver());
+        WebElement toast = TestUtils.getToast(getWebDriver());
 
         if(toast==null)
         {
@@ -190,7 +190,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     public void linehaul_edited()
     {
         String msg = "Linehaul " + linehaulId + " updated";
-        WebElement toast = CommonUtil.getToast(getDriver());
+        WebElement toast = TestUtils.getToast(getWebDriver());
 
         if(toast==null)
         {
@@ -224,7 +224,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
 
         for(String day : linehaul.getDays())
         {
-            Integer dayNumber = CommonUtil.dayToInteger(day);
+            Integer dayNumber = TestUtils.dayToInteger(day);
             Calendar now = Calendar.getInstance();
             Integer todayNumber = now.get(Calendar.DAY_OF_WEEK);
             Integer diffToDayNumber = dayNumber - todayNumber;
@@ -255,6 +255,6 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     public void op_click_edit_filter()
     {
         shipmentLinehaulPage.clickEditSearchFilterButton();
-        CommonUtil.pause1s();
+        TestUtils.pause1s();
     }
 }

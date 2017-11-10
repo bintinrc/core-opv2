@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.AgedParcelManagementPage;
-import co.nvqa.operator_v2.support.ScenarioStorage;
-import co.nvqa.operator_v2.support.TestConstants;
+import co.nvqa.operator_v2.util.ScenarioStorage;
+import co.nvqa.operator_v2.util.TestConstants;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -25,7 +25,7 @@ public class AgedParcelManagementSteps extends AbstractSteps
     @Override
     public void init()
     {
-        agedParcelManagementPage = new AgedParcelManagementPage(getDriver());
+        agedParcelManagementPage = new AgedParcelManagementPage(getWebDriver());
     }
 
     @When("^operator load selection on page Aged Parcel Management$")

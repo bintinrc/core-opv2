@@ -29,7 +29,7 @@ public class OpsRouteSteps extends AbstractSteps
     @Override
     public void init()
     {
-        opsRoutePage = new OpsRoutePage(getDriver());
+        opsRoutePage = new OpsRoutePage(getWebDriver());
     }
 
     @When("^op click edit button on table at Ops Route menu$")

@@ -1,13 +1,12 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.support.TestConstants;
+import co.nvqa.operator_v2.util.SingletonStorage;
+import co.nvqa.operator_v2.util.TestConstants;
 import com.nv.qa.support.DateUtil;
-import co.nvqa.operator_v2.support.ScenarioHelper;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
 
 import java.io.File;
 import java.util.List;
@@ -26,10 +25,9 @@ public class DriverStrengthPage extends SimplePage
     private String driverType;
     private String zone;
 
-    public DriverStrengthPage(WebDriver driver)
+    public DriverStrengthPage(WebDriver webDriver)
     {
-        super(driver);
-        PageFactory.initElements(driver, this);
+        super(webDriver);
     }
 
     public void downloadFile() throws InterruptedException
@@ -85,7 +83,7 @@ public class DriverStrengthPage extends SimplePage
 
     public void searchDriver() throws InterruptedException
     {
-        String driverUsername = "D"+ScenarioHelper.getInstance().getTmpId();
+        String driverUsername = "D"+ SingletonStorage.getInstance().getTmpId();
         click("//button[@aria-label='Load Everything']");
         sendKeys("//th[contains(@class, 'username')]/nv-search-input-filter/md-input-container/div/input", driverUsername);
     }
@@ -104,7 +102,7 @@ public class DriverStrengthPage extends SimplePage
             {
                 if(e.getText().trim().length() > 0)
                 {
-                    if(e.getText().trim().equalsIgnoreCase("Driver " + ScenarioHelper.getInstance().getTmpId()))
+                    if(e.getText().trim().equalsIgnoreCase("Driver " + SingletonStorage.getInstance().getTmpId()))
                     {
                         isFound = true;
                         break;
@@ -130,7 +128,7 @@ public class DriverStrengthPage extends SimplePage
         click("//tr[@md-virtual-repeat='driver in getTableData()']/td[contains(@class, 'actions column-locked-right')]/md-menu/button");
         pause1s();
 
-        String expectedLicensoNo = "D" + ScenarioHelper.getInstance().getTmpId();
+        String expectedLicensoNo = "D" + SingletonStorage.getInstance().getTmpId();
         WebElement licenseNoWe = findElementByXpath("//div[@aria-hidden='false']/md-menu-content/md-menu-item[@class='contact-info-details' and @role='menuitem']/div[2]/div[2]");
         Assert.assertEquals("License No. is not equal.", expectedLicensoNo, licenseNoWe.getText());
         closeModal();
@@ -145,7 +143,7 @@ public class DriverStrengthPage extends SimplePage
     public void enterDefaultValue()
     {
         String tmpId = DateUtil.getTimestamp();
-        ScenarioHelper.getInstance().setTmpId(tmpId);
+        SingletonStorage.getInstance().setTmpId(tmpId);
 
         sendKeys("//input[@type='text'][@aria-label='First Name']", "Driver");
         sendKeys("//input[@type='text'][@aria-label='Last Name']", tmpId);
@@ -193,7 +191,7 @@ public class DriverStrengthPage extends SimplePage
 
     public void verifyNewDriver()
     {
-        String expectedUsername = "D"+ScenarioHelper.getInstance().getTmpId();
+        String expectedUsername = "D"+ SingletonStorage.getInstance().getTmpId();
 
         click("//button[@aria-label='Load Everything']");
         sendKeys("//th[contains(@class, 'username')]/nv-search-input-filter/md-input-container/div/input", expectedUsername);
@@ -204,7 +202,7 @@ public class DriverStrengthPage extends SimplePage
 
     public void searchingNewDriver()
     {
-        String driverUsername = "D"+ScenarioHelper.getInstance().getTmpId();
+        String driverUsername = "D"+ SingletonStorage.getInstance().getTmpId();
         click("//button[@aria-label='Load Everything']");
         sendKeys("//th[contains(@class, 'username')]/nv-search-input-filter/md-input-container/div/input", driverUsername);
     }
@@ -235,7 +233,7 @@ public class DriverStrengthPage extends SimplePage
          * Check first row does not contain deleted driver.
          */
 
-        String expectedDriverName = "Driver "+ScenarioHelper.getInstance().getTmpId();
+        String expectedDriverName = "Driver "+ SingletonStorage.getInstance().getTmpId();
         String actualDriverName = getTextOnTable(1, COLUMN_CLASS_NAME);
         Assert.assertNotEquals(expectedDriverName, actualDriverName);
     }

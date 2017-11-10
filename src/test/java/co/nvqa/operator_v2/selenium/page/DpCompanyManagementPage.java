@@ -11,7 +11,6 @@ import org.openqa.selenium.WebElement;
  */
 public class DpCompanyManagementPage extends SimplePage
 {
-    private static final int MAX_TIMEOUT_IN_SECONDS = 120;
     private static final String MD_VIRTUAL_REPEAT = "company in getTableData()";
     private static final String CSV_FILENAME = "company.csv";
 
@@ -26,22 +25,22 @@ public class DpCompanyManagementPage extends SimplePage
     public static final String ACTION_BUTTON_DELETE = "Delete";
     public static final String ACTION_BUTTON_SEE_VAULT = "See Vault";
 
-    public DpCompanyManagementPage(WebDriver driver)
+    public DpCompanyManagementPage(WebDriver webDriver)
     {
-        super(driver);
+        super(webDriver);
     }
 
     public void addDpCompany(DpCompany dpCompany)
     {
         click("//button[@aria-label='Add Company']");
-        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'dp-company-add')]", MAX_TIMEOUT_IN_SECONDS);
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'dp-company-add')]");
         fillTheFormAndSubmit(dpCompany);
     }
 
     public void editDpCompany(DpCompany dpCompany)
     {
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
-        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'dp-company-edit')]", MAX_TIMEOUT_IN_SECONDS);
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'dp-company-edit')]");
         fillTheFormAndSubmit(dpCompany);
     }
 
@@ -63,7 +62,7 @@ public class DpCompanyManagementPage extends SimplePage
         }
 
         click("//button[@aria-label='Save Button']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular", MAX_TIMEOUT_IN_SECONDS);
+        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular");
     }
 
     public void deleteDpCompany(DpCompany dpCompany)
@@ -186,7 +185,7 @@ public class DpCompanyManagementPage extends SimplePage
     {
         searchTableByName(dpCompany.getName());
         clickActionButtonOnTable(1, ACTION_BUTTON_SEE_VAULT);
-        waitUntilVisibilityOfElementLocated("//button[@aria-label='Add Agent']", MAX_TIMEOUT_IN_SECONDS);
+        waitUntilVisibilityOfElementLocated("//button[@aria-label='Add Agent']");
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)

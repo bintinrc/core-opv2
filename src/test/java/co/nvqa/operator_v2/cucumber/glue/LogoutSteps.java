@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import com.google.inject.Inject;
 import co.nvqa.operator_v2.selenium.page.LogoutPage;
+import com.google.inject.Inject;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -23,7 +23,7 @@ public class LogoutSteps extends AbstractSteps
     @Override
     public void init()
     {
-        logoutPage = new LogoutPage(getDriver());
+        logoutPage = new LogoutPage(getWebDriver());
     }
 
     @When("^logout button is clicked$")

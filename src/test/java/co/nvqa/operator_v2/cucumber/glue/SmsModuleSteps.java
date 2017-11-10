@@ -2,7 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.SmsCampaignCsv;
 import co.nvqa.operator_v2.selenium.page.SmsModulePage;
-import co.nvqa.operator_v2.support.ScenarioStorage;
+import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -32,7 +32,7 @@ public class SmsModuleSteps extends AbstractSteps
     @Override
     public void init()
     {
-        smsModulePage = new SmsModulePage(getDriver());
+        smsModulePage = new SmsModulePage(getWebDriver());
     }
 
     @Then("^op upload sms campaign csv file")

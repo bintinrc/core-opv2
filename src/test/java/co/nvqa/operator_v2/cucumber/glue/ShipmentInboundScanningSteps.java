@@ -2,8 +2,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.ShipmentInboundScanningPage;
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
-import co.nvqa.operator_v2.support.CommonUtil;
-import co.nvqa.operator_v2.support.ScenarioStorage;
+import co.nvqa.operator_v2.util.TestUtils;
+import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -38,16 +38,16 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
     @Override
     public void init()
     {
-        shipmentManagementPage = new ShipmentManagementPage(getDriver());
-        scanningPage = new ShipmentInboundScanningPage(getDriver());
+        shipmentManagementPage = new ShipmentManagementPage(getWebDriver());
+        scanningPage = new ShipmentInboundScanningPage(getWebDriver());
     }
 
     @When("^inbound scanning shipment ([^\"]*) in hub ([^\"]*)$")
     public void inboundScanning(String label, String hub) throws Throwable
     {
         scanningPage.selectHub(hub);
-        CommonUtil.clickBtn(getDriver(), scanningPage.grabXpathButton(label));
-        CommonUtil.clickBtn(getDriver(), scanningPage.grabXpathButton("Start Inbound"));
+        TestUtils.clickBtn(getWebDriver(), scanningPage.grabXpathButton(label));
+        TestUtils.clickBtn(getWebDriver(), scanningPage.grabXpathButton("Start Inbound"));
 
         scanningPage.inputShipmentToInbound(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID));
         scanningPage.checkSessionScan(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID));

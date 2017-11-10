@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.support.ScenarioHelper;
-import co.nvqa.operator_v2.support.TestConstants;
-import co.nvqa.operator_v2.support.CommonUtil;
+import co.nvqa.operator_v2.util.SingletonStorage;
+import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -20,13 +20,12 @@ import java.util.List;
 public class DriverTypeManagementPage extends SimplePage
 {
     private static final int MAX_RETRY = 10;
-    private static final int MAX_LOADING_TIMEOUT_IN_SECONDS = 120;
     private static final String DRIVER_TYPES_CSV_FILE_NAME = "driver-types.csv";
     private static final String DRIVER_TYPES_CSV_FILE_LOCATION = TestConstants.SELENIUM_WRITE_PATH + DRIVER_TYPES_CSV_FILE_NAME;
 
-    public DriverTypeManagementPage(WebDriver driver)
+    public DriverTypeManagementPage(WebDriver webDriver)
     {
-        super(driver);
+        super(webDriver);
     }
 
     public void filteredBy(String filterValue, String filterType) throws InterruptedException
@@ -65,9 +64,9 @@ public class DriverTypeManagementPage extends SimplePage
 
     public void downloadFile() throws InterruptedException
     {
-        CommonUtil.deleteFile(DRIVER_TYPES_CSV_FILE_LOCATION);
+        TestUtils.deleteFile(DRIVER_TYPES_CSV_FILE_LOCATION);
         click(String.format("//div[@filename='%s']/nv-api-text-button/button", DRIVER_TYPES_CSV_FILE_NAME));
-        CommonUtil.pause1s();
+        pause1s();
     }
 
     public void verifyFile() throws InterruptedException
@@ -82,14 +81,14 @@ public class DriverTypeManagementPage extends SimplePage
 
             if(!isFileExists)
             {
-                CommonUtil.pause1s();
+                pause1s();
             }
 
             counter++;
         }
         while(!isFileExists && counter<MAX_RETRY);
 
-        CommonUtil.deleteFile(file);
+        TestUtils.deleteFile(file);
         Assert.assertTrue(DRIVER_TYPES_CSV_FILE_LOCATION + " not exist", isFileExists);
     }
 
@@ -98,12 +97,12 @@ public class DriverTypeManagementPage extends SimplePage
         click("//button[@aria-label='Create Driver Type']");
         pause1s();
 
-        ScenarioHelper.getInstance().setTmpId(String.format("QA Testing %s", new SimpleDateFormat("yyyyMMddHH24mmss").format(new Date())));
-        sendKeys("//input[@type='text'][@aria-label='Name']", ScenarioHelper.getInstance().getTmpId());
+        SingletonStorage.getInstance().setTmpId(String.format("QA Testing %s", new SimpleDateFormat("yyyyMMddHH24mmss").format(new Date())));
+        sendKeys("//input[@type='text'][@aria-label='Name']", SingletonStorage.getInstance().getTmpId());
         pause1s();
 
         click("//button[@aria-label='Save Button']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular", MAX_LOADING_TIMEOUT_IN_SECONDS);
+        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular");
     }
 
     public void verifyDriverType() throws InterruptedException
@@ -119,7 +118,7 @@ public class DriverTypeManagementPage extends SimplePage
 
             for(WebElement td : tds)
             {
-                if(td.getText().equalsIgnoreCase(ScenarioHelper.getInstance().getTmpId()))
+                if(td.getText().equalsIgnoreCase(SingletonStorage.getInstance().getTmpId()))
                 {
                     isFound = true;
                     break;
@@ -132,7 +131,7 @@ public class DriverTypeManagementPage extends SimplePage
 
     public void searchingCreatedDriver() throws InterruptedException
     {
-        sendKeys("//input[@placeholder='Search Driver Types...'][@ng-model='searchText']", ScenarioHelper.getInstance().getTmpId());
+        sendKeys("//input[@placeholder='Search Driver Types...'][@ng-model='searchText']", SingletonStorage.getInstance().getTmpId());
         pause1s();
     }
 
@@ -147,7 +146,7 @@ public class DriverTypeManagementPage extends SimplePage
         pause1s();
 
         click("//button[@aria-label='Save Button']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular", MAX_LOADING_TIMEOUT_IN_SECONDS);
+        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular");
     }
 
     public void verifyChangesCreatedDriver()

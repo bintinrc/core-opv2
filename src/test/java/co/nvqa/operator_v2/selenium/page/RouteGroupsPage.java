@@ -1,8 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.support.CommonUtil;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.text.SimpleDateFormat;
@@ -15,7 +14,6 @@ import java.util.Date;
 public class RouteGroupsPage extends SimplePage
 {
     private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
-    private static final int MAX_WAIT_IN_SECONDS = 120;
 
     private static final String MD_VIRTUAL_REPEAT = "routeGroup in ctrl.routeGroupsTableData";
     public static final String COLUMN_CLASS_NAME = "name";
@@ -23,9 +21,9 @@ public class RouteGroupsPage extends SimplePage
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
     public static final String ACTION_BUTTON_DELETE = "commons.delete";
 
-    public RouteGroupsPage(WebDriver driver)
+    public RouteGroupsPage(WebDriver webDriver)
     {
-        super(driver);
+        super(webDriver);
     }
 
     public void createRouteGroup(String routeGroupName)
@@ -81,7 +79,7 @@ public class RouteGroupsPage extends SimplePage
 
     public void searchTable(String keyword)
     {
-        String dateLabel = DATE_FILTER_SDF.format(CommonUtil.getNextDate(1));
+        String dateLabel = DATE_FILTER_SDF.format(TestUtils.getNextDate(1));
 
         click("//md-datepicker[@ng-model='ctrl.filter.toDate']/button");
         pause1s();
@@ -102,6 +100,6 @@ public class RouteGroupsPage extends SimplePage
 
     public void waitUntilRouteGroupPageIsLoaded()
     {
-        waitUntilInvisibilityOfElementLocated(By.xpath("//div[contains(@class,'message') and text()='Loading route groups...']"), MAX_WAIT_IN_SECONDS);
+        waitUntilInvisibilityOfElementLocated("//div[contains(@class,'message') and text()='Loading route groups...']");
     }
 }

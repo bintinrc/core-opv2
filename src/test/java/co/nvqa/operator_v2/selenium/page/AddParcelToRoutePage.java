@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.support.CommonUtil;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.WebDriver;
 
 import java.text.SimpleDateFormat;
@@ -12,18 +12,17 @@ import java.text.SimpleDateFormat;
 public class AddParcelToRoutePage extends SimplePage
 {
     private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
-    private static final int SUBMIT_BUTTON_LOADING_TIMEOUT_IN_SECONDS = 30;
     public static final String NG_REPEAT = "row in $data";
     public static final String COLUMN_CLASS_TRACKING_ID = "tracking_id";
 
-    public AddParcelToRoutePage(WebDriver driver)
+    public AddParcelToRoutePage(WebDriver webDriver)
     {
-        super(driver);
+        super(webDriver);
     }
 
     public void selectCurrentDate()
     {
-        String dateLabel = DATE_FILTER_SDF.format(CommonUtil.getBeforeDate(1));
+        String dateLabel = DATE_FILTER_SDF.format(TestUtils.getBeforeDate(1));
 
         click("//md-datepicker[@id='commons.model.route-date']/button");
         pause1s();
@@ -49,7 +48,7 @@ public class AddParcelToRoutePage extends SimplePage
     public void clickSubmit()
     {
         click("//button[@aria-label='Submit']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Submit']//md-progress-circular", SUBMIT_BUTTON_LOADING_TIMEOUT_IN_SECONDS);
+        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Submit']//md-progress-circular");
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)

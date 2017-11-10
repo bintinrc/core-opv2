@@ -1,19 +1,18 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.support.CommonUtil;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
 
 /**
- * Created by lanangjati
- * on 9/26/16.
+ *
+ * @author Lanang Jati
+ *
+ * Modified by Daniel Joi Partogi Hutapea
  */
-public class ShipmentScanningPage {
-
-    private final WebDriver driver;
+public class ShipmentScanningPage extends SimplePage
+{
     public static final String XPATH_HUB_DROPDOWN = "//md-select[@name='hub']";
     public static final String XPATH_SHIPMENT_DROPDOWN = "//md-select[@name='shipment']";
     public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
@@ -22,38 +21,41 @@ public class ShipmentScanningPage {
     public static final String XPATH_ORDER_IN_SHIPMENT = "//td[contains(@class, 'tracking-id')]";
     public static final String XPATH_RACK_SECTOR = "//div[contains(@class,'rack-sector-card')]/div/h2[@ng-show='ctrl.rackInfo']";
 
-    public ShipmentScanningPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+    public ShipmentScanningPage(WebDriver webDriver)
+    {
+        super(webDriver);
     }
 
-    public void selectHub(String hubName) {
-        CommonUtil.clickBtn(driver, XPATH_HUB_DROPDOWN);
-        CommonUtil.pause1s();
+    public void selectHub(String hubName)
+    {
+        click(XPATH_HUB_DROPDOWN);
+        pause1s();
         selectDropdownValue(hubName);
-        CommonUtil.pause1s();
+        pause1s();
     }
 
-    public void selectShipment(String shipmentId) {
-        CommonUtil.pause3s();
-        CommonUtil.clickBtn(driver, XPATH_SHIPMENT_DROPDOWN);
-        CommonUtil.pause500ms();
+    public void selectShipment(String shipmentId)
+    {
+        pause3s();
+        click(XPATH_SHIPMENT_DROPDOWN);
+        pause500ms();
         selectDropdownValue(shipmentId);
-        CommonUtil.pause500ms();
-        CommonUtil.clickBtn(driver, XPATH_SELECT_SHIPMENT_BUTTON);
+        pause500ms();
+        click(XPATH_SELECT_SHIPMENT_BUTTON);
     }
 
-    private void selectDropdownValue(String value) {
-        CommonUtil.clickBtn(driver, String.format("//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", value));
+    private void selectDropdownValue(String value)
+    {
+        click(String.format("//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", value));
     }
 
-    public void checkOrderInShipment(String orderId) {
-        String rack = driver.findElement(By.xpath(XPATH_RACK_SECTOR)).getText();
+    public void checkOrderInShipment(String orderId)
+    {
+        String rack = getwebDriver().findElement(By.xpath(XPATH_RACK_SECTOR)).getText();
         Assert.assertTrue("order is " + rack, !rack.equalsIgnoreCase("INVALID") && !rack.equalsIgnoreCase("DUPLICATE"));
 
-        WebElement orderWe = driver.findElement(By.xpath(String.format("//td[contains(@class, 'tracking-id')][contains(text(), '%s')]", orderId)));
+        WebElement orderWe = getwebDriver().findElement(By.xpath(String.format("//td[contains(@class, 'tracking-id')][contains(text(), '%s')]", orderId)));
         boolean orderExist = orderWe!=null;
-
         Assert.assertTrue("order " + orderId + " doesn't exist in shipment", orderExist);
     }
 }

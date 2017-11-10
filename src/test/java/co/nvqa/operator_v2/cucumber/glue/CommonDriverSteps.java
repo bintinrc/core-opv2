@@ -1,5 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.operator_v2.util.ScenarioStorage;
+import co.nvqa.operator_v2.util.TestConstants;
 import com.google.inject.Inject;
 import com.nv.qa.integration.client.DriverClient;
 import com.nv.qa.integration.model.auth.DriverLoginResponse;
@@ -8,8 +10,6 @@ import com.nv.qa.integration.model.driver.Job;
 import com.nv.qa.integration.model.driver.Route;
 import com.nv.qa.integration.model.driver.builder.JobBuilder;
 import com.nv.qa.integration.model.driver.scan.DeliveryRequest;
-import co.nvqa.operator_v2.support.TestConstants;
-import co.nvqa.operator_v2.support.ScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;

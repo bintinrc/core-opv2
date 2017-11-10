@@ -1,16 +1,13 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.support.SeleniumHelper;
-import co.nvqa.operator_v2.support.CommonUtil;
-import co.nvqa.operator_v2.support.ScenarioHelper;
-import co.nvqa.operator_v2.support.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
+import co.nvqa.operator_v2.util.SingletonStorage;
+import co.nvqa.operator_v2.util.TestConstants;
 import com.nv.qa.support.*;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
 
 import java.io.File;
 import java.util.HashMap;
@@ -43,17 +40,16 @@ public class DpPage extends SimplePage
         }
     };
 
-    public DpPage(WebDriver driver)
+    public DpPage(WebDriver webDriver)
     {
-        super(driver);
-        PageFactory.initElements(driver, this);
+        super(webDriver);
     }
 
     public void downloadFile(String type) throws InterruptedException
     {
-        CommonUtil.deleteFile(TestConstants.SELENIUM_WRITE_PATH + BTN_NAME_FILENAME.get(type));
+        TestUtils.deleteFile(TestConstants.SELENIUM_WRITE_PATH + BTN_NAME_FILENAME.get(type));
         click("//div[@filename='" + BTN_NAME_FILENAME.get(type) + "']/nv-download-csv-button/div/nv-api-text-button/button");
-        CommonUtil.pause1s();
+        pause1s();
     }
 
     public void verifyDownloadedFile(String type)
@@ -68,15 +64,15 @@ public class DpPage extends SimplePage
 
             if(!isFileExists)
             {
-                CommonUtil.pause1s();
+                pause1s();
             }
 
             counter++;
         }
         while(!isFileExists && counter<MAX_RETRY);
 
-        CommonUtil.deleteFile(pathname);
-        Assert.assertTrue(pathname + " not exist", isFileExists);
+        TestUtils.deleteFile(pathname);
+        Assert.assertTrue(pathname + " not exist.", isFileExists);
     }
 
     public void search(String type) throws InterruptedException
@@ -108,12 +104,12 @@ public class DpPage extends SimplePage
             columnClass = DP_USER_USERNAME_COL;
         }
 
-        String keywords = String.format(prefix, ScenarioHelper.getInstance().getTmpId());
+        String keywords = String.format(prefix, SingletonStorage.getInstance().getTmpId());
         searchTable(keywords);
         //sendKeys("//input[@placeholder='" + placeHolder + "'][@ng-model='searchText']", keywords);
-        CommonUtil.pause1s();
+        pause1s();
 
-        String expectedValue = String.format(prefix, ScenarioHelper.getInstance().getTmpId());
+        String expectedValue = String.format(prefix, SingletonStorage.getInstance().getTmpId());
         String actualValue = getTextOnTable(ngRepeat, 1, columnClass);
         Assert.assertEquals(expectedValue, actualValue);
     }
@@ -128,37 +124,37 @@ public class DpPage extends SimplePage
         {
             ngRepeat = "dpPartner in $data";
             columnClass = DP_PARTNER_NAME_COL;
-            expectedValue = String.format("Partner %s", ScenarioHelper.getInstance().getTmpId());
+            expectedValue = String.format("Partner %s", SingletonStorage.getInstance().getTmpId());
         }
         else if(type.equals("edit dp-partners"))
         {
             ngRepeat = "dpPartner in $data";
             columnClass = DP_PARTNER_RESTRICTION_COL;
-            expectedValue = String.format("No restrictions enforced. [%s]", ScenarioHelper.getInstance().getTmpId());
+            expectedValue = String.format("No restrictions enforced. [%s]", SingletonStorage.getInstance().getTmpId());
         }
         else if(type.equals("add dps"))
         {
             ngRepeat = "dp in $data";
             columnClass = DP_NAME_COL;
-            expectedValue = String.format("DP %s", ScenarioHelper.getInstance().getTmpId());
+            expectedValue = String.format("DP %s", SingletonStorage.getInstance().getTmpId());
         }
         else if(type.equals("edit dps"))
         {
             ngRepeat = "dp in $data";
             columnClass = DP_DIRECTION_COL;
-            expectedValue = String.format("No directions provided. [%s]", ScenarioHelper.getInstance().getTmpId());
+            expectedValue = String.format("No directions provided. [%s]", SingletonStorage.getInstance().getTmpId());
         }
         else if(type.equals("add dp-users"))
         {
             ngRepeat = "dpUser in $data";
             columnClass = DP_USER_USERNAME_COL;
-            expectedValue = String.format("user%s", ScenarioHelper.getInstance().getTmpId());
+            expectedValue = String.format("user%s", SingletonStorage.getInstance().getTmpId());
         }
         else if(type.equals("edit dp-users"))
         {
             ngRepeat = "dpUser in $data";
             columnClass = DP_USER_CONTACT_NO_COL;
-            expectedValue = String.format("+65 %s", ScenarioHelper.getInstance().getTmpId());
+            expectedValue = String.format("+65 %s", SingletonStorage.getInstance().getTmpId());
         }
 
         searchTable(expectedValue);
@@ -192,7 +188,7 @@ public class DpPage extends SimplePage
         if(type.equals("dp-partners"))
         {
             String tmpId = DateUtil.getTimestamp();
-            ScenarioHelper.getInstance().setTmpId(tmpId);
+            SingletonStorage.getInstance().setTmpId(tmpId);
 
             sendKeys("//input[@type='text'][@aria-label='Partner Name']", String.format("Partner %s", tmpId));
             sendKeys("//input[@type='text'][@aria-label='POC Name']", String.format("Poc %s", tmpId));
@@ -202,9 +198,9 @@ public class DpPage extends SimplePage
         }
         else if(type.equals("dps"))
         {
-            sendKeys("//input[@type='text'][@aria-label='Name']", String.format("DP %s", ScenarioHelper.getInstance().getTmpId()));
-            sendKeys("//input[@type='text'][@aria-label='Shortname']", String.format("DP%s", ScenarioHelper.getInstance().getTmpId()));
-            sendKeys("//input[@type='tel'][@aria-label='Contact No.']", String.format("+65 %s", ScenarioHelper.getInstance().getTmpId()));
+            sendKeys("//input[@type='text'][@aria-label='Name']", String.format("DP %s", SingletonStorage.getInstance().getTmpId()));
+            sendKeys("//input[@type='text'][@aria-label='Shortname']", String.format("DP%s", SingletonStorage.getInstance().getTmpId()));
+            sendKeys("//input[@type='tel'][@aria-label='Contact No.']", String.format("+65 %s", SingletonStorage.getInstance().getTmpId()));
             sendKeys("//div[label[text()='Shipper Account']]//input", "QA\n");
             sendKeys("//input[@type='text'][@aria-label='Address Line 1']", "Jl. Utan Kayu Raya No. 76");
             sendKeys("//input[@type='text'][@aria-label='Address Line 2']", "Rawamangun");
@@ -217,10 +213,10 @@ public class DpPage extends SimplePage
         else if(type.equals("dp-users"))
         {
             sendKeys("//input[@type='text'][@aria-label='First Name']", "User");
-            sendKeys("//input[@type='text'][@aria-label='Last Name']", ScenarioHelper.getInstance().getTmpId());
-            sendKeys("//input[@type='tel'][@aria-label='Contact No.']", String.format("+65 %s", ScenarioHelper.getInstance().getTmpId()));
-            sendKeys("//input[@type='email'][@aria-label='Email']", String.format("%s@poc.co", ScenarioHelper.getInstance().getTmpId()));
-            sendKeys("//input[@type='text'][@aria-label='Username']", String.format("user%s", ScenarioHelper.getInstance().getTmpId()));
+            sendKeys("//input[@type='text'][@aria-label='Last Name']", SingletonStorage.getInstance().getTmpId());
+            sendKeys("//input[@type='tel'][@aria-label='Contact No.']", String.format("+65 %s", SingletonStorage.getInstance().getTmpId()));
+            sendKeys("//input[@type='email'][@aria-label='Email']", String.format("%s@poc.co", SingletonStorage.getInstance().getTmpId()));
+            sendKeys("//input[@type='text'][@aria-label='Username']", String.format("user%s", SingletonStorage.getInstance().getTmpId()));
             sendKeys("//input[@type='password'][@aria-label='Password']", "Ninjitsu89");
         }
 
@@ -242,7 +238,7 @@ public class DpPage extends SimplePage
             columnClass = DP_PARTNER_NAME_COL;
             placeHolder = "Search Distribution Point Partners...";
             textAreaXpath = "//textarea[@name='restrictions'][@aria-label='Restrictions']";
-            editValue = String.format("No restrictions enforced. [%s]", ScenarioHelper.getInstance().getTmpId());
+            editValue = String.format("No restrictions enforced. [%s]", SingletonStorage.getInstance().getTmpId());
         }
         else if(type.equals("dps"))
         {
@@ -251,7 +247,7 @@ public class DpPage extends SimplePage
 
             placeHolder = "Search Distribution Points...";
             textAreaXpath = "//textarea[@name='directions'][@aria-label='Directions']";
-            editValue = String.format("No directions provided. [%s]", ScenarioHelper.getInstance().getTmpId());
+            editValue = String.format("No directions provided. [%s]", SingletonStorage.getInstance().getTmpId());
         }
         else if(type.equals("dp-users"))
         {
@@ -260,7 +256,7 @@ public class DpPage extends SimplePage
 
             placeHolder = "Search Distribution Point Users...";
             textAreaXpath = "//input[@type='tel'][@aria-label='Contact No.']";
-            editValue = String.format("+65 %s", ScenarioHelper.getInstance().getTmpId());
+            editValue = String.format("+65 %s", SingletonStorage.getInstance().getTmpId());
         }
 
         /**
@@ -324,7 +320,7 @@ public class DpPage extends SimplePage
             mainTitle = "Distribution Point Users";
         }
 
-        SeleniumHelper.waitUntilElementVisible(driver, By.xpath(String.format("//h4[text() = '%s']", mainTitle)));
+        waitUntilVisibilityOfElementLocated(String.format("//h4[text() = '%s']", mainTitle));
     }
 
     public void searchTable(String keyword)

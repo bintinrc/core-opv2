@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage;
-import co.nvqa.operator_v2.support.ScenarioStorage;
+import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
 import com.nv.qa.model.order_creation.v2.Order;
 import cucumber.api.DataTable;
@@ -31,7 +31,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
     @Override
     public void init()
     {
-        recoveryTicketsPage = new RecoveryTicketsPage(getDriver());
+        recoveryTicketsPage = new RecoveryTicketsPage(getWebDriver());
     }
 
     @When("^op create new ticket on Recovery Tickets menu with this property below:$")

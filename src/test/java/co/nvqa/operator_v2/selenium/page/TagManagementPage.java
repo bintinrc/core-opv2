@@ -9,7 +9,6 @@ import org.openqa.selenium.WebElement;
  */
 public class TagManagementPage extends SimplePage
 {
-    private static final int LOADING_TIMEOUT_IN_SECONDS = 30;
     private static final String MD_VIRTUAL_REPEAT = "tag in getTableData()";
 
     public static final String COLUMN_CLASS_NO = "column-index";
@@ -19,9 +18,9 @@ public class TagManagementPage extends SimplePage
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
     public static final String ACTION_BUTTON_DELETE = "commons.delete";
 
-    public TagManagementPage(WebDriver driver)
+    public TagManagementPage(WebDriver webDriver)
     {
-        super(driver);
+        super(webDriver);
     }
 
     public void clickTagNameColumnHeader()
@@ -63,18 +62,18 @@ public class TagManagementPage extends SimplePage
     public void clickSubmitOnAddTag()
     {
         click("//button[@aria-label='Save Button']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular", LOADING_TIMEOUT_IN_SECONDS);
+        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular");
     }
 
     public void clickSubmitChangesOnEditTag()
     {
         click("//button[@aria-label='Save Button']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular", LOADING_TIMEOUT_IN_SECONDS);
+        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular");
     }
 
     public void clickDeleteOnConfirmDeleteDialog()
     {
         click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
-        waitUntilVisibilityOfElementLocated("//div[@class='toast-bottom'][contains(text(),'1 Tag Deleted')]", LOADING_TIMEOUT_IN_SECONDS);
+        waitUntilVisibilityOfElementLocated("//div[@class='toast-bottom'][contains(text(),'1 Tag Deleted')]");
     }
 }

@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.support.CommonUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,24 +9,22 @@ import org.openqa.selenium.interactions.Actions;
  *
  * @author Soewandi Wirjawan
  */
-public class LogoutPage
+public class LogoutPage extends SimplePage
 {
-    private final WebDriver driver;
-
-    public LogoutPage(WebDriver driver)
+    public LogoutPage(WebDriver webDriver)
     {
-        this.driver = driver;
+        super(webDriver);
     }
 
     public void logout()
     {
-        WebElement elm = driver.findElement(By.xpath("//span[(contains(@class, 'nv-text-ellipsis nv-p-med name'))]"));
+        WebElement elm = getwebDriver().findElement(By.xpath("//span[(contains(@class, 'nv-text-ellipsis nv-p-med name'))]"));
 
-        Actions acts = new Actions(driver);
+        Actions acts = new Actions(getwebDriver());
         acts.moveToElement(elm).click().perform();
-        CommonUtil.pause1s();
+        pause1s();
 
-        elm = driver.findElement(By.xpath("//button[@class='nv-button flat alternate md-button md-ink-ripple'][@ng-click='logout()']"));
+        elm = getwebDriver().findElement(By.xpath("//button[@class='nv-button flat alternate md-button md-ink-ripple'][@ng-click='logout()']"));
         acts.moveToElement(elm).click().perform();
     }
 }

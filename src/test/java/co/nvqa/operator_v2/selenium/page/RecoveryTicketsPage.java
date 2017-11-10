@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.support.CommonUtil;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Map;
@@ -11,7 +11,6 @@ import java.util.Map;
  */
 public class RecoveryTicketsPage extends SimplePage
 {
-    private static final int SUBMIT_BUTTON_LOADING_TIMEOUT_IN_SECONDS = 30;
     private static final int MAX_RETRY = 10;
     private static final String MD_VIRTUAL_REPEAT = "ticket in getTableData()";
 
@@ -21,9 +20,9 @@ public class RecoveryTicketsPage extends SimplePage
     public static final String TICKET_TYPE_DAMAGED = "DAMAGED";
     public static final String TICKET_TYPE_MISSING = "MISSING";
 
-    public RecoveryTicketsPage(WebDriver driver)
+    public RecoveryTicketsPage(WebDriver webDriver)
     {
-        super(driver);
+        super(webDriver);
     }
 
     public void clickCreateNewTicketButton()
@@ -107,8 +106,8 @@ public class RecoveryTicketsPage extends SimplePage
     public void clickCreateTicketOnCreateNewTicketDialog()
     {
         click("//button[@aria-label='Create Ticket']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Create Ticket']//md-progress-circular", SUBMIT_BUTTON_LOADING_TIMEOUT_IN_SECONDS);
-        CommonUtil.pause1s();
+        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Create Ticket']//md-progress-circular");
+        pause1s();
     }
 
     public void searchTableByTrackingId(String trackingId)
@@ -116,17 +115,17 @@ public class RecoveryTicketsPage extends SimplePage
 
         //-- remove default filters
         click("//button[@aria-label='Clear All Selections']");
-        CommonUtil.pause1s();
+        pause1s();
 
         //-- select tracking id filter
         sendKeys("//input[@placeholder='Select Filter']", "Tracking IDs");
-        CommonUtil.pause1s();
+        pause1s();
         click("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']//span[text()='Tracking IDs']");
 
         //-- fill tracking id by filling it and press ENTER
         sendKeys("//div[@class='main-title']//p[text()='Tracking IDs']/../..//input", trackingId);
         altClick("//div[@class='main-title']//p[text()='Tracking IDs']/../..//input");
-        CommonUtil.pause1s();
+        TestUtils.pause1s();
 
         //-- click load selection
         altClick("//button[@aria-label='Load Selection']");

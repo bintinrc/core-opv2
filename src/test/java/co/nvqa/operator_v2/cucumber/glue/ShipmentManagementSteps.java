@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import com.google.inject.Inject;
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
-import co.nvqa.operator_v2.support.CommonUtil;
-import co.nvqa.operator_v2.support.ScenarioStorage;
+import co.nvqa.operator_v2.util.ScenarioStorage;
+import co.nvqa.operator_v2.util.TestUtils;
+import com.google.inject.Inject;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -25,7 +25,6 @@ import java.util.List;
 public class ShipmentManagementSteps extends AbstractSteps
 {
     @Inject private ScenarioStorage scenarioStorage;
-
     private ShipmentManagementPage shipmentManagementPage;
     private String start = "";
     private String end = "";
@@ -40,7 +39,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     @Override
     public void init()
     {
-        shipmentManagementPage = new ShipmentManagementPage(getDriver());
+        shipmentManagementPage = new ShipmentManagementPage(getWebDriver());
     }
 
     @When("^create Shipment with Start Hub ([^\"]*), End hub ([^\"]*) and comment ([^\"]*)$")
@@ -54,24 +53,24 @@ public class ShipmentManagementSteps extends AbstractSteps
     public void editShipment(String startHub, String endHub, String comment)
     {
         shipmentManagementPage.selectStartHub(startHub);
-        CommonUtil.pause10ms();
+        TestUtils.pause10ms();
         shipmentManagementPage.selectEndHub(endHub);
-        CommonUtil.pause10ms();
-        CommonUtil.inputText(getDriver(), XPATH_COMMENT_TEXT_AREA, comment);
+        TestUtils.pause10ms();
+        TestUtils.inputText(getWebDriver(), ShipmentManagementPage.XPATH_COMMENT_TEXT_AREA, comment);
 
         start = startHub;
         end = endHub;
         this.comment = comment;
 
-        CommonUtil.clickBtn(getDriver(), XPATH_SAVE_CHANGES_BUTTON);
-        CommonUtil.pause1s();
+        TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_SAVE_CHANGES_BUTTON);
+        TestUtils.pause1s();
     }
 
     @Given("^op click Load All Selection$")
     public void listAllShipment()
     {
-        CommonUtil.clickBtn(getDriver(), XPATH_LOAD_ALL_SHIPMENT_BUTTON);
-        CommonUtil.pause(3000);
+        TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_LOAD_ALL_SHIPMENT_BUTTON);
+        TestUtils.pause3s();
     }
 
     @When("^shipment ([^\"]*) action button clicked$")
@@ -88,7 +87,7 @@ public class ShipmentManagementSteps extends AbstractSteps
             }
         }
 
-        CommonUtil.pause(3000);
+        TestUtils.pause(3000);
     }
 
     @Then("^shipment edited$")
@@ -139,8 +138,8 @@ public class ShipmentManagementSteps extends AbstractSteps
     @When("^cancel shipment button clicked$")
     public void clickCancelShipmentButton()
     {
-        CommonUtil.clickBtn(getDriver(), XPATH_CANCEL_SHIPMENT_BUTTON);
-        List<WebElement> toasts = CommonUtil.getToasts(getDriver());
+        TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_CANCEL_SHIPMENT_BUTTON);
+        List<WebElement> toasts = TestUtils.getToasts(getWebDriver());
         String text = "";
 
         for(WebElement toast : toasts)
@@ -152,14 +151,14 @@ public class ShipmentManagementSteps extends AbstractSteps
             }
         }
         Assert.assertThat("toast message not contains Cancelled", text, Matchers.containsString("Success changed status to Cancelled for Shipment ID " + scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID)));
-        CommonUtil.pause(5000);
+        TestUtils.pause(5000);
     }
 
     @Then("^shipment deleted$")
     public void isShipmentDeleted()
     {
         String msg = "Success delete Shipping ID " + scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID);
-        WebElement toast = CommonUtil.getToast(getDriver());
+        WebElement toast = TestUtils.getToast(getWebDriver());
         Assert.assertThat("toast message not contains " + msg, toast.getText(), Matchers.containsString(msg));
 
         List<ShipmentManagementPage.Shipment> shipments = shipmentManagementPage.getShipmentsFromTable();
@@ -183,20 +182,20 @@ public class ShipmentManagementSteps extends AbstractSteps
     {
         shipmentManagementPage.clickAddFilter(filter, value);
 
-        //CommonUtil.clickBtn(getDriver(), shipmentManagementPage.grabXPathFilter(filter));
-        //CommonUtil.pause1s();
-        //CommonUtil.inputText(getDriver(), shipmentManagementPage.grabXPathFilterTF(filter), value);
-        //CommonUtil.pause1s();
-        //CommonUtil.clickBtn(getDriver(), shipmentManagementPage.grabXPathFilterDropdown(value));
+        //TestUtils.clickBtn(getDriver(), shipmentManagementPage.grabXPathFilter(filter));
+        //TestUtils.pause1s();
+        //TestUtils.inputText(getDriver(), shipmentManagementPage.grabXPathFilterTF(filter), value);
+        //TestUtils.pause1s();
+        //TestUtils.clickBtn(getDriver(), shipmentManagementPage.grabXPathFilterDropdown(value));
 
-        CommonUtil.pause1s();
+        TestUtils.pause1s();
     }
 
     @Given("^op click edit filter$")
     public void op_click_edit_filter()
     {
         shipmentManagementPage.clickEditSearchFilterButton();
-        CommonUtil.pause1s();
+        TestUtils.pause1s();
     }
 
     @Then("^shipment scan with source ([^\"]*) in hub ([^\"]*)$")
@@ -214,29 +213,29 @@ public class ShipmentManagementSteps extends AbstractSteps
 
     public void close_scan_modal()
     {
-        CommonUtil.clickBtn(getDriver(), ShipmentManagementPage.XPATH_CLOSE_SCAN_MODAL_BUTTON);
-        CommonUtil.pause1s();
+        TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_CLOSE_SCAN_MODAL_BUTTON);
+        TestUtils.pause1s();
     }
 
     @When("^clear filter$")
     public void clear_filter()
     {
-        if(getDriver().findElement(By.xpath(ShipmentManagementPage.XPATH_CLEAR_FILTER_BUTTON)).isDisplayed())
+        if(getWebDriver().findElement(By.xpath(ShipmentManagementPage.XPATH_CLEAR_FILTER_BUTTON)).isDisplayed())
         {
-            if(getDriver().findElement(By.xpath(ShipmentManagementPage.XPATH_CLEAR_FILTER_VALUE)).isDisplayed())
+            if(getWebDriver().findElement(By.xpath(ShipmentManagementPage.XPATH_CLEAR_FILTER_VALUE)).isDisplayed())
             {
-                List<WebElement> clearValueBtnList = getDriver().findElements(By.xpath(ShipmentManagementPage.XPATH_CLEAR_FILTER_VALUE));
+                List<WebElement> clearValueBtnList = getWebDriver().findElements(By.xpath(ShipmentManagementPage.XPATH_CLEAR_FILTER_VALUE));
 
                 for(WebElement clearBtn : clearValueBtnList)
                 {
                     clearBtn.click();
-                    CommonUtil.pause1s();
+                    TestUtils.pause1s();
                 }
             }
 
-            CommonUtil.clickBtn(getDriver(), ShipmentManagementPage.XPATH_CLEAR_FILTER_BUTTON);
+            TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_CLEAR_FILTER_BUTTON);
         }
 
-        CommonUtil.pause(2000);
+        TestUtils.pause2s();
     }
 }

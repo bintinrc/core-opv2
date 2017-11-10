@@ -1,10 +1,10 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.operator_v2.util.OrderCreateHelper;
+import co.nvqa.operator_v2.util.ScenarioStorage;
+import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
-import co.nvqa.operator_v2.support.CommonUtil;
-import co.nvqa.operator_v2.support.OrderCreateHelper;
-import co.nvqa.operator_v2.support.ScenarioStorage;
-import co.nvqa.operator_v2.support.TestConstants;
 import com.nv.qa.api.client.order_create.OrderCreateV2Client;
 import com.nv.qa.api.client.order_create.OrderCreateV3Client;
 import com.nv.qa.model.order_creation.authentication.AuthRequest;
@@ -33,8 +33,7 @@ public class CommonShipperSteps extends AbstractSteps
     private static final SimpleDateFormat CREATED_DATE_SDF = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
     private static final SimpleDateFormat CURRENT_DATE_SDF = new SimpleDateFormat("yyyy-MM-dd");
 
-    @Inject
-    private ScenarioStorage scenarioStorage;
+    @Inject private ScenarioStorage scenarioStorage;
 
     private OrderCreateV2Client orderCreateV2Client;
     private OrderCreateV3Client orderCreateV3Client;
@@ -71,10 +70,10 @@ public class CommonShipperSteps extends AbstractSteps
         Map<String,String> mapOfDynamicVariable = new HashMap<>();
         mapOfDynamicVariable.put("created_date", CREATED_DATE_SDF.format(new Date()));
         mapOfDynamicVariable.put("cur_date", CURRENT_DATE_SDF.format(new Date()));
-        mapOfDynamicVariable.put("tracking_ref_no", CommonUtil.generateTrackingRefNo());
+        mapOfDynamicVariable.put("tracking_ref_no", TestUtils.generateTrackingRefNo());
 
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
-        String v2OrderRequestJson = CommonUtil.replaceParam(mapOfData.get("v2OrderRequest"), mapOfDynamicVariable);
+        String v2OrderRequestJson = TestUtils.replaceParam(mapOfData.get("v2OrderRequest"), mapOfDynamicVariable);
 
         CreateOrderRequest createOrderRequest = JsonHelper.fromJson(v2OrderRequestJson, CreateOrderRequest.class);
         String suffix = "";
@@ -89,14 +88,14 @@ public class CommonShipperSteps extends AbstractSteps
         }
 
         createOrderRequest.setTracking_ref_no(createOrderRequest.getTracking_ref_no()+suffix);
-        List<CreateOrderResponse> listOfCreateOrderResponse = CommonUtil.retryIfAssertionErrorOrRuntimeExceptionOccurred(()->orderCreateV2Client.createOrder(createOrderRequest), "createV2Order", getScenarioManager()::writeToScenarioLog);
+        List<CreateOrderResponse> listOfCreateOrderResponse = TestUtils.retryIfAssertionErrorOrRuntimeExceptionOccurred(()->orderCreateV2Client.createOrder(createOrderRequest), "createV2Order", getScenarioManager()::writeToScenarioLog);
 
         /**
          * Retry if the order fail to retrieve.
          */
         String asyncOrderId = listOfCreateOrderResponse.get(0).getId();
         scenarioStorage.put("orderAsyncId", asyncOrderId);
-        Order order = CommonUtil.retryIfAssertionErrorOrRuntimeExceptionOccurred(()->orderCreateV2Client.retrieveOrder(asyncOrderId), String.format("createV2Order - retrieve order - [Async ID = %s]", asyncOrderId), getScenarioManager()::writeToScenarioLog);
+        Order order = TestUtils.retryIfAssertionErrorOrRuntimeExceptionOccurred(()->orderCreateV2Client.retrieveOrder(asyncOrderId), String.format("createV2Order - retrieve order - [Async ID = %s]", asyncOrderId), getScenarioManager()::writeToScenarioLog);
 
         scenarioStorage.put("order", order);
         scenarioStorage.put("orderAsyncId", asyncOrderId);
@@ -132,7 +131,7 @@ public class CommonShipperSteps extends AbstractSteps
             sendOrderCreateV3Req(request);
         }
 
-        CommonUtil.pause1s();
+        TestUtils.pause1s();
     }
 
     private String createV3Order(Map<String, String> arg1) throws Throwable

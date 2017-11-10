@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.operator_v2.util.SingletonStorage;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
-import co.nvqa.operator_v2.support.CommonUtil;
-import co.nvqa.operator_v2.support.ScenarioHelper;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -44,39 +44,39 @@ public class BlockedDatesSteps extends AbstractSteps
         /**
          * Set default year of "Blocked Dates" on right panel to current year.
          */
-        WebElement blockedDatesYearWe = getDriver().findElement(By.xpath("//div[contains(@class, 'list')]/md-content[contains(@class, 'list-content')]/div/md-input-container"));
+        WebElement blockedDatesYearWe = getWebDriver().findElement(By.xpath("//div[contains(@class, 'list')]/md-content[contains(@class, 'list-content')]/div/md-input-container"));
         blockedDatesYearWe.click();
 
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        WebElement currentYearOptionWe = getDriver().findElement(By.xpath(String.format("//md-option[@ng-repeat='m in yearList' and @value='%d']", currentYear)));
+        WebElement currentYearOptionWe = getWebDriver().findElement(By.xpath(String.format("//md-option[@ng-repeat='m in yearList' and @value='%d']", currentYear)));
         currentYearOptionWe.click();
 
-        List<WebElement> elm = getDriver().findElements(By.xpath("//div[@ng-repeat='day in week track by $index' and not(contains(@class, 'active')) and not(contains(@class, 'not-same-month'))]"));
+        List<WebElement> elm = getWebDriver().findElements(By.xpath("//div[@ng-repeat='day in week track by $index' and not(contains(@class, 'active')) and not(contains(@class, 'not-same-month'))]"));
 
         if(!elm.isEmpty())
         {
             WebElement day = elm.get(0);
             day.click();
 
-            WebElement yearElm = getDriver().findElement(By.xpath("//md-select[@ng-model='calendar.year']/md-select-value/span/div"));
-            ScenarioHelper.getInstance().setTmpId(yearElm.getText() + "-" + getMonth() + "-" + getDay(day));
-            CommonUtil.clickBtn(getDriver(), "//button[@type='submit'][@aria-label='Save Button']");
+            WebElement yearElm = getWebDriver().findElement(By.xpath("//md-select[@ng-model='calendar.year']/md-select-value/span/div"));
+            SingletonStorage.getInstance().setTmpId(yearElm.getText() + "-" + getMonth() + "-" + getDay(day));
+            TestUtils.clickBtn(getWebDriver(), "//button[@type='submit'][@aria-label='Save Button']");
         }
     }
 
     @Then("^blocked dates verify add$")
     public void verifyAdd()
     {
-        if(ScenarioHelper.getInstance().getTmpId()!=null)
+        if(SingletonStorage.getInstance().getTmpId()!=null)
         {
-            CommonUtil.retryIfStaleElementReferenceExceptionOccurred(() ->
+            TestUtils.retryIfStaleElementReferenceExceptionOccurred(() ->
             {
                 boolean isAdded = false;
-                List<WebElement> els = getDriver().findElements(By.xpath("//md-list-item[@ng-repeat=\"date in calendarListData.dates | nvFilterByYear:year | orderBy\"]/p/span[1]"));
+                List<WebElement> els = getWebDriver().findElements(By.xpath("//md-list-item[@ng-repeat=\"date in calendarListData.dates | nvFilterByYear:year | orderBy\"]/p/span[1]"));
 
                 for(WebElement el : els)
                 {
-                    if(el.getText().contains(ScenarioHelper.getInstance().getTmpId()))
+                    if(el.getText().contains(SingletonStorage.getInstance().getTmpId()))
                     {
                         isAdded = true;
                         break;
@@ -91,19 +91,19 @@ public class BlockedDatesSteps extends AbstractSteps
     @When("^blocked dates remove$")
     public void remove()
     {
-        if (ScenarioHelper.getInstance().getTmpId()!=null)
+        if (SingletonStorage.getInstance().getTmpId()!=null)
         {
             boolean isRemoved = false;
-            List<WebElement> els = getDriver().findElements(By.xpath("//md-list-item[@ng-repeat=\"date in calendarListData.dates | nvFilterByYear:year | orderBy\"]"));
+            List<WebElement> els = getWebDriver().findElements(By.xpath("//md-list-item[@ng-repeat=\"date in calendarListData.dates | nvFilterByYear:year | orderBy\"]"));
 
             for(WebElement el : els)
             {
                 WebElement inner = el.findElement(By.xpath("p/span[1]"));
 
-                if(inner.getText().contains(ScenarioHelper.getInstance().getTmpId()))
+                if(inner.getText().contains(SingletonStorage.getInstance().getTmpId()))
                 {
                     el.findElement(By.xpath("button[@ng-click=\"removeDate(date, $event)\"]")).click();
-                    CommonUtil.clickBtn(getDriver(), "//button[@type='submit'][@aria-label='Save Button']");
+                    TestUtils.clickBtn(getWebDriver(), "//button[@type='submit'][@aria-label='Save Button']");
                     isRemoved = true;
                     break;
                 }
@@ -117,16 +117,16 @@ public class BlockedDatesSteps extends AbstractSteps
     @Then("^blocked dates verify remove$")
     public void verifyRemove()
     {
-        if(ScenarioHelper.getInstance().getTmpId()!=null)
+        if(SingletonStorage.getInstance().getTmpId()!=null)
         {
-            CommonUtil.retryIfStaleElementReferenceExceptionOccurred(() ->
+            TestUtils.retryIfStaleElementReferenceExceptionOccurred(() ->
             {
                 boolean isFound = false;
-                List<WebElement> els = getDriver().findElements(By.xpath("//md-list-item[@ng-repeat=\"date in calendarListData.dates | nvFilterByYear:year | orderBy\"]/p/span[1]"));
+                List<WebElement> els = getWebDriver().findElements(By.xpath("//md-list-item[@ng-repeat=\"date in calendarListData.dates | nvFilterByYear:year | orderBy\"]/p/span[1]"));
 
                 for(WebElement el : els)
                 {
-                    if(el.getText().contains(ScenarioHelper.getInstance().getTmpId()))
+                    if(el.getText().contains(SingletonStorage.getInstance().getTmpId()))
                     {
                         isFound = true;
                         break;
@@ -151,7 +151,7 @@ public class BlockedDatesSteps extends AbstractSteps
 
         try
         {
-            WebElement monthElm = getDriver().findElement(By.xpath("//md-select[@ng-model='calendar.month']/md-select-value/span/div"));
+            WebElement monthElm = getWebDriver().findElement(By.xpath("//md-select[@ng-model='calendar.month']/md-select-value/span/div"));
             Date date = MONTH_SDF.parse(monthElm.getText());
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);

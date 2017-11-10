@@ -1,8 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.support.SeleniumHelper;
-import co.nvqa.operator_v2.support.TestConstants;
-import co.nvqa.operator_v2.support.CommonUtil;
+import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.*;
@@ -23,24 +22,24 @@ public class LoginPage extends LoadableComponent<LoginPage>
     private static final String GOOGLE_EXPECTED_URL_1 = "https://accounts.google.com/ServiceLogin";
     private static final String GOOGLE_EXPECTED_URL_2 = "https://accounts.google.com/signin/oauth/identifier";
 
-    private final WebDriver driver;
+    private final WebDriver webDriver;
 
-    public LoginPage(WebDriver driver)
+    public LoginPage(WebDriver webDriver)
     {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+        this.webDriver = webDriver;
+        PageFactory.initElements(webDriver, this);
     }
 
     @Override
     protected void load()
     {
-        driver.get(TestConstants.OPERATOR_PORTAL_URL);
+        webDriver.get(TestConstants.OPERATOR_PORTAL_URL);
     }
 
     @Override
     protected void isLoaded() throws Error
     {
-        String url = driver.getCurrentUrl();
+        String url = webDriver.getCurrentUrl();
         Assert.assertThat("Default Operator Portal URL not loaded.", url, Matchers.containsString(TestConstants.OPERATOR_PORTAL_URL));
     }
 
@@ -56,13 +55,13 @@ public class LoginPage extends LoadableComponent<LoginPage>
             System.out.println("[INFO] ninja_access_token = "+operatorBearerToken);
             System.out.println("[INFO] user = "+userCookie);
 
-            driver.manage().addCookie(new Cookie("ninja_access_token", operatorBearerToken, ".ninjavan.co", "/", null));
-            driver.manage().addCookie(new Cookie("user", userCookie, ".ninjavan.co", "/", null));
-            ((ChromeDriver) driver).executeScript("window.open()");
-            String currentWindowHandle = driver.getWindowHandle();
+            webDriver.manage().addCookie(new Cookie("ninja_access_token", operatorBearerToken, ".ninjavan.co", "/", null));
+            webDriver.manage().addCookie(new Cookie("user", userCookie, ".ninjavan.co", "/", null));
+            ((ChromeDriver) webDriver).executeScript("window.open()");
+            String currentWindowHandle = webDriver.getWindowHandle();
             String newWindowHandle = null;
 
-            for(String windowHandle : driver.getWindowHandles())
+            for(String windowHandle : webDriver.getWindowHandles())
             {
                 if(!windowHandle.equals(currentWindowHandle))
                 {
@@ -71,9 +70,9 @@ public class LoginPage extends LoadableComponent<LoginPage>
                 }
             }
 
-            driver.close();
-            driver.switchTo().window(newWindowHandle);
-            driver.get(TestConstants.OPERATOR_PORTAL_URL);
+            webDriver.close();
+            webDriver.switchTo().window(newWindowHandle);
+            webDriver.get(TestConstants.OPERATOR_PORTAL_URL);
         }
         catch(UnsupportedEncodingException ex)
         {
@@ -83,14 +82,14 @@ public class LoginPage extends LoadableComponent<LoginPage>
 
     public void clickLoginButton()
     {
-        driver.findElement(By.xpath("//button[@ng-click='ctrl.login()']")).click();
+        webDriver.findElement(By.xpath("//button[@ng-click='ctrl.login()']")).click();
     }
 
     public void enterCredential(String username, String password)
     {
         final StringBuilder googlePageUrlSb = new StringBuilder();
 
-        WebDriverWait webDriverWait = new WebDriverWait(driver, TestConstants.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS);
+        WebDriverWait webDriverWait = new WebDriverWait(webDriver, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS);
         webDriverWait.until((WebDriver d) ->
         {
             String currentUrl = d.getCurrentUrl();
@@ -123,58 +122,58 @@ public class LoginPage extends LoadableComponent<LoginPage>
 
     public void enterCredentialWithMethod1(String username, String password)
     {
-        driver.findElement(By.xpath("//input[@id='Email'][@name='Email']")).sendKeys(username);
-        CommonUtil.pause10ms();
+        webDriver.findElement(By.xpath("//input[@id='Email'][@name='Email']")).sendKeys(username);
+        TestUtils.pause10ms();
 
-        driver.findElement(By.xpath("//input[@id='next'][@name='signIn']")).click();
-        CommonUtil.pause10ms();
+        webDriver.findElement(By.xpath("//input[@id='next'][@name='signIn']")).click();
+        TestUtils.pause10ms();
 
-        driver.findElement(By.xpath("//input[@id='Passwd'][@name='Passwd']")).sendKeys(password);
-        CommonUtil.pause10ms();
+        webDriver.findElement(By.xpath("//input[@id='Passwd'][@name='Passwd']")).sendKeys(password);
+        TestUtils.pause10ms();
 
-        driver.findElement(By.xpath("//input[@id='signIn'][@name='signIn']")).click();
-        CommonUtil.pause10ms();
+        webDriver.findElement(By.xpath("//input[@id='signIn'][@name='signIn']")).click();
+        TestUtils.pause10ms();
     }
 
     public void enterCredentialWithMethod2(String username, String password)
     {
-        driver.findElement(By.xpath("//input[@id='identifierId'][@name='identifier']")).sendKeys(username);
-        CommonUtil.pause100ms();
+        webDriver.findElement(By.xpath("//input[@id='identifierId'][@name='identifier']")).sendKeys(username);
+        TestUtils.pause100ms();
 
-        driver.findElement(By.xpath("//div[@id='identifierNext']")).click();
-        CommonUtil.pause100ms();
+        webDriver.findElement(By.xpath("//div[@id='identifierNext']")).click();
+        TestUtils.pause100ms();
 
-        driver.findElement(By.xpath("//input[@name='password']")).sendKeys(password);
-        CommonUtil.pause100ms();
+        webDriver.findElement(By.xpath("//input[@name='password']")).sendKeys(password);
+        TestUtils.pause100ms();
 
-        driver.findElement(By.xpath("//div[@id='passwordNext']")).click();
-        CommonUtil.pause100ms();
+        webDriver.findElement(By.xpath("//div[@id='passwordNext']")).click();
+        TestUtils.pause100ms();
     }
 
     public void checkForGoogleSimpleVerification(String location)
     {
-        if(driver.findElements(By.xpath("//span[text()='Enter the city you usually sign in from']")).size() > 0)
+        if(webDriver.findElements(By.xpath("//span[text()='Enter the city you usually sign in from']")).size() > 0)
         {
-            WebElement enterCityButton = driver.findElement(By.xpath("//span[text()='Enter the city you usually sign in from']/../.."));
+            WebElement enterCityButton = webDriver.findElement(By.xpath("//span[text()='Enter the city you usually sign in from']/../.."));
             enterCityButton.click();
-            CommonUtil.pause1s();
+            TestUtils.pause1s();
 
             String txtAnswerXpath = "//input[@id='answer' and @type='text']";
-            SeleniumHelper.waitUntilElementVisible(driver, By.xpath(txtAnswerXpath));
-            WebElement txtAnswer = driver.findElement(By.xpath(txtAnswerXpath));
+            TestUtils.waitUntilElementVisible(webDriver, By.xpath(txtAnswerXpath));
+            WebElement txtAnswer = webDriver.findElement(By.xpath(txtAnswerXpath));
             txtAnswer.clear();
             txtAnswer.sendKeys(location);
 
-            WebElement submitButton = driver.findElement(By.xpath("//input[@id='submit' and @type='submit']"));
+            WebElement submitButton = webDriver.findElement(By.xpath("//input[@id='submit' and @type='submit']"));
             submitButton.click();
-            CommonUtil.pause1s();
+            TestUtils.pause1s();
         }
     }
 
     public void backToLoginPage()
     {
-        CommonUtil.pause1s();
-        String url = driver.getCurrentUrl();
+        TestUtils.pause1s();
+        String url = webDriver.getCurrentUrl();
         Assert.assertThat("Default Operator Portal URL not loaded.", url, Matchers.containsString(TestConstants.OPERATOR_PORTAL_URL));
     }
 }

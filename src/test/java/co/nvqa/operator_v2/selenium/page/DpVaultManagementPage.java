@@ -11,7 +11,6 @@ import org.openqa.selenium.WebElement;
  */
 public class DpVaultManagementPage extends SimplePage
 {
-    private static final int MAX_TIMEOUT_IN_SECONDS = 120;
     private static final String MD_VIRTUAL_REPEAT = "station in getTableData()";
     private static final String CSV_FILENAME = "station.csv";
 
@@ -23,15 +22,15 @@ public class DpVaultManagementPage extends SimplePage
     public static final String ACTION_BUTTON_EDIT = "Edit";
     public static final String ACTION_BUTTON_DELETE = "Delete";
 
-    public DpVaultManagementPage(WebDriver driver)
+    public DpVaultManagementPage(WebDriver webDriver)
     {
-        super(driver);
+        super(webDriver);
     }
 
     public void addDpVault(DpVault dpVault)
     {
         click("//button[@aria-label='Add Station']");
-        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'dp-station-add')]", MAX_TIMEOUT_IN_SECONDS);
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'dp-station-add')]");
         fillTheFormAndSubmit(dpVault);
     }
 
@@ -49,7 +48,7 @@ public class DpVaultManagementPage extends SimplePage
         sendKeys("//input[@aria-label='commons.latitude']", String.valueOf(dpVault.getLatitude()));
         sendKeys("//input[@aria-label='commons.longitude']", String.valueOf(dpVault.getLongitude()));
         click("//button[@aria-label='Save Button']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular", MAX_TIMEOUT_IN_SECONDS);
+        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular");
     }
 
     public void deleteDpVault(DpVault dpVault)

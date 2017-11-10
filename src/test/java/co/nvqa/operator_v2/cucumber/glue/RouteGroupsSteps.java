@@ -1,11 +1,11 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import com.google.inject.Inject;
-import com.nv.qa.model.order_creation.v2.Order;
 import co.nvqa.operator_v2.selenium.page.RouteGroupsPage;
 import co.nvqa.operator_v2.selenium.page.TagManagementPage;
-import co.nvqa.operator_v2.support.CommonUtil;
-import co.nvqa.operator_v2.support.ScenarioStorage;
+import co.nvqa.operator_v2.util.ScenarioStorage;
+import co.nvqa.operator_v2.util.TestUtils;
+import com.google.inject.Inject;
+import com.nv.qa.model.order_creation.v2.Order;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -38,7 +38,7 @@ public class RouteGroupsSteps extends AbstractSteps
     @Override
     public void init()
     {
-        routeGroupsPage = new RouteGroupsPage(getDriver());
+        routeGroupsPage = new RouteGroupsPage(getWebDriver());
     }
 
     @Given("^Operator V2 create 'Route Group'$")
@@ -53,12 +53,12 @@ public class RouteGroupsSteps extends AbstractSteps
         String routeGroupName = "RG "+trackingId;
         scenarioStorage.put("routeGroupName", routeGroupName);
         routeGroupsPage.createRouteGroup(routeGroupName);
-        CommonUtil.pause500ms();
+        TestUtils.pause500ms();
 
         /**
          * Verify the page is redirect to '/#/sg/transactions' after route group is created.
          */
-        Assert.assertThat("Page not redirect to '/#/sg/transactions'.", getDriver().getCurrentUrl(), Matchers.containsString("/#/sg/transactions"));
+        Assert.assertThat("Page not redirect to '/#/sg/transactions'.", getWebDriver().getCurrentUrl(), Matchers.containsString("/#/sg/transactions"));
     }
 
     @When("^op create new 'route group' on 'Route Groups' using data below:$")

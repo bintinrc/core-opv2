@@ -1,4 +1,4 @@
-package co.nvqa.operator_v2.support;
+package co.nvqa.operator_v2.util;
 
 import cucumber.runtime.java.guice.ScenarioScoped;
 

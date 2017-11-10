@@ -1,6 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.operator_v2.support.ScenarioStorage;
+import co.nvqa.operator_v2.util.ScenarioStorage;
+import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.nv.qa.api.client.operator_portal.OperatorPortalAuthenticationClient;
 import com.nv.qa.constants.NvTimeZone;
 import com.nv.qa.integration.client.DriverClient;
@@ -8,8 +10,6 @@ import com.nv.qa.integration.model.auth.DriverLoginRequest;
 import com.nv.qa.integration.model.auth.DriverLoginResponse;
 import com.nv.qa.model.operator_portal.authentication.AuthRequest;
 import com.nv.qa.model.operator_portal.authentication.AuthResponse;
-import co.nvqa.operator_v2.support.TestConstants;
-import co.nvqa.operator_v2.support.CommonUtil;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -98,13 +98,13 @@ public abstract class AbstractSteps
 
     public void takesScreenshot()
     {
-        final byte[] screenshot = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.BYTES);
+        final byte[] screenshot = ((TakesScreenshot) getWebDriver()).getScreenshotAs(OutputType.BYTES);
         scenarioManager.getCurrentScenario().embed(screenshot, "image/png");
     }
 
     public void reloadPage()
     {
-        scenarioManager.getDriver().navigate().refresh();
+        scenarioManager.getWebDriver().navigate().refresh();
     }
 
     public void writeToScenarioLog(String message)
@@ -114,12 +114,12 @@ public abstract class AbstractSteps
 
     public String replaceParam(String data, Map<String,String> mapOfDynamicVariable)
     {
-        return CommonUtil.replaceParam(data, mapOfDynamicVariable);
+        return TestUtils.replaceParam(data, mapOfDynamicVariable);
     }
 
-    public WebDriver getDriver()
+    public WebDriver getWebDriver()
     {
-        return scenarioManager.getDriver();
+        return scenarioManager.getWebDriver();
     }
 
     public void pause50ms()

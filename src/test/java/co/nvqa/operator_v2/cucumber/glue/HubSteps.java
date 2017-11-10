@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.operator_v2.util.SingletonStorage;
+import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
-import co.nvqa.operator_v2.support.CommonUtil;
-import co.nvqa.operator_v2.support.ScenarioHelper;
-import co.nvqa.operator_v2.support.TestConstants;
 import com.nv.qa.support.*;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -38,9 +38,9 @@ public class HubSteps extends AbstractSteps
     @When("^hubs administration download button is clicked$")
     public void download()
     {
-        CommonUtil.deleteFile(HUBS_CSV_FILE_NAME_LOCATION);
-        CommonUtil.clickBtn(getDriver(), String.format("//div[@filename='%s']/nv-api-text-button/button", HUBS_CSV_FILE_NAME));
-        CommonUtil.pause1s();
+        TestUtils.deleteFile(HUBS_CSV_FILE_NAME_LOCATION);
+        TestUtils.clickBtn(getWebDriver(), String.format("//div[@filename='%s']/nv-api-text-button/button", HUBS_CSV_FILE_NAME));
+        TestUtils.pause1s();
     }
 
     @Then("^hubs administration file should exist$")
@@ -56,72 +56,72 @@ public class HubSteps extends AbstractSteps
 
             if(!isFileExists)
             {
-                CommonUtil.pause1s();
+                TestUtils.pause1s();
             }
 
             counter++;
         }
         while(!isFileExists && counter<MAX_RETRY);
 
-        CommonUtil.deleteFile(file);
+        TestUtils.deleteFile(file);
         Assert.assertTrue(HUBS_CSV_FILE_NAME_LOCATION + " not exist", isFileExists);
     }
 
     @When("^hubs administration add button is clicked$")
     public void addHub()
     {
-        CommonUtil.clickBtn(getDriver(), "//button[@aria-label='Add Hub']");
+        TestUtils.clickBtn(getWebDriver(), "//button[@aria-label='Add Hub']");
     }
 
     @When("^hubs administration enter default value$")
     public void defaultValue()
     {
         String tmpId = DateUtil.getCurrentTime_HH_MM_SS();
-        ScenarioHelper.getInstance().setTmpId(tmpId);
+        SingletonStorage.getInstance().setTmpId(tmpId);
 
-        CommonUtil.inputText(getDriver(), "//input[@type='text' and @id='hub-name-1']", String.format("Hub %s", tmpId));
-        CommonUtil.inputText(getDriver(), "//input[@type='number' and @id='latitude-1']", "1.2843043");
-        CommonUtil.inputText(getDriver(), "//input[@type='number' and @id='longitude-2']", "103.8095597");
-        CommonUtil.clickBtn(getDriver(), "//button[@type='submit' and @aria-label='Save Button']");
+        TestUtils.inputText(getWebDriver(), "//input[@type='text' and @id='hub-name-1']", String.format("Hub %s", tmpId));
+        TestUtils.inputText(getWebDriver(), "//input[@type='number' and @id='latitude-1']", "1.2843043");
+        TestUtils.inputText(getWebDriver(), "//input[@type='number' and @id='longitude-2']", "103.8095597");
+        TestUtils.clickBtn(getWebDriver(), "//button[@type='submit' and @aria-label='Save Button']");
     }
 
     @Then("^hubs administration verify result ([^\"]*)$")
     public void verify(String type)
     {
-        String expectedValue = String.format("Hub %s", ScenarioHelper.getInstance().getTmpId()) + " [EDITED]";
+        String expectedValue = String.format("Hub %s", SingletonStorage.getInstance().getTmpId()) + " [EDITED]";
 
         if(type.equalsIgnoreCase("add"))
         {
-            expectedValue = String.format("Hub %s", ScenarioHelper.getInstance().getTmpId());
+            expectedValue = String.format("Hub %s", SingletonStorage.getInstance().getTmpId());
         }
 
-        CommonUtil.inputText(getDriver(), "//input[@placeholder='Search Hubs...']", expectedValue);
-        CommonUtil.pause1s();
+        TestUtils.inputText(getWebDriver(), "//input[@placeholder='Search Hubs...']", expectedValue);
+        TestUtils.pause1s();
 
-        WebElement result = CommonUtil.getResultInTable(getDriver(), "//table[@ng-table='ctrl.hubsTableParams']/tbody/tr", expectedValue);
+        WebElement result = TestUtils.getResultInTable(getWebDriver(), "//table[@ng-table='ctrl.hubsTableParams']/tbody/tr", expectedValue);
         Assert.assertTrue(result != null);
     }
 
     @When("^hubs administration searching for hub$")
     public void searchHub()
     {
-        CommonUtil.inputText(getDriver(), "//input[@placeholder='Search Hubs...'][@ng-model='searchText']", String.format("Hub %s", ScenarioHelper.getInstance().getTmpId()));
+        TestUtils.inputText(getWebDriver(), "//input[@placeholder='Search Hubs...'][@ng-model='searchText']", String.format("Hub %s", SingletonStorage.getInstance().getTmpId()));
 
-        String txt = String.format("Hub %s", ScenarioHelper.getInstance().getTmpId());
-        WebElement result = CommonUtil.getResultInTable(getDriver(), "//table[@ng-table='ctrl.hubsTableParams']/tbody/tr", txt);
+        String txt = String.format("Hub %s", SingletonStorage.getInstance().getTmpId());
+        WebElement result = TestUtils.getResultInTable(getWebDriver(), "//table[@ng-table='ctrl.hubsTableParams']/tbody/tr", txt);
         Assert.assertTrue(result != null);
     }
 
     @When("^hubs administration edit button is clicked$")
     public void clickEditHub()
     {
-        WebElement el = CommonUtil.verifySearchingResults(getDriver(), "Search Hubs...", "ctrl.hubsTableParams");
+        WebElement el = TestUtils.verifySearchingResults(getWebDriver(), "Search Hubs...", "ctrl.hubsTableParams");
         WebElement editBtn = el.findElement(By.xpath("//nv-icon-button[@name='Edit']"));
-        CommonUtil.pause100ms();
-        CommonUtil.moveAndClick(getDriver(), editBtn);
+        TestUtils.pause100ms();
+        TestUtils.moveAndClick(getWebDriver(), editBtn);
 
-        String editValue = String.format("Hub %s", ScenarioHelper.getInstance().getTmpId()) + " [EDITED]";
-        CommonUtil.inputText(getDriver(), "//input[@type='text'][@aria-label='Hub Name']", editValue);
-        CommonUtil.clickBtn(getDriver(), "//button[@type='submit'][@aria-label='Save Button']");
+        String editValue = String.format("Hub %s", SingletonStorage.getInstance().getTmpId()) + " [EDITED]";
+        TestUtils.inputText(getWebDriver(), "//input[@type='text'][@aria-label='Hub Name']", editValue);
+        TestUtils.clickBtn(getWebDriver(), "//button[@type='submit'][@aria-label='Save Button']");
     }
 }

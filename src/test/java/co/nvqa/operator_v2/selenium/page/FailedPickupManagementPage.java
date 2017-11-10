@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.support.CommonUtil;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -28,9 +28,9 @@ public class FailedPickupManagementPage extends SimplePage
     public static final int ACTION_RESCHEDULE_SELECTED = 2;
     public static final int ACTION_DOWNLOAD_CSV_FILE = 3;
 
-    public FailedPickupManagementPage(WebDriver driver)
+    public FailedPickupManagementPage(WebDriver webDriver)
     {
-        super(driver);
+        super(webDriver);
     }
 
     public void verifyTheFailedC2cOrReturnOrderIsListed(String trackingId)
@@ -65,7 +65,7 @@ public class FailedPickupManagementPage extends SimplePage
         searchTableByTrackingId(trackingId);
         checkRow(1);
         selectAction(ACTION_RESCHEDULE_SELECTED);
-        setRescheduleDate(CommonUtil.getNextDate(2));
+        setRescheduleDate(TestUtils.getNextDate(2));
         click("//button[@aria-label='Reschedule']");
     }
 

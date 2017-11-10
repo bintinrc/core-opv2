@@ -1,23 +1,23 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.support.CommonUtil;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by lanangjati
- * on 9/6/16.
+ *
+ * @author Lanang Jati
+ *
+ * Modified by Daniel Joi Partogi Hutapea
  */
-public class ShipmentManagementPage {
-
-    private final WebDriver driver;
+public class ShipmentManagementPage extends SimplePage
+{
     public static final String XPATH_CREATE_SHIPMENT_BUTTON = "//nv-table-button[@id='create-shipment-1']/button";
     public static final String XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON = "//nv-table-button[@id='createButton']/button";
     public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[@aria-label='Load Selection']";
@@ -39,14 +39,23 @@ public class ShipmentManagementPage {
     public static final String XPATH_CLEAR_FILTER_BUTTON = "//button[@aria-label='Clear All Selections']";
     public static final String XPATH_CLEAR_FILTER_VALUE = "//button[@aria-label='Clear All']";
 
-    public void clickEditSearchFilterButton() {
-        CommonUtil.clickBtn(driver, XPATH_EDIT_SEARCH_FILTER_BUTTON);
+    public ShipmentManagementPage(WebDriver webDriver)
+    {
+        super(webDriver);
     }
 
-    public List<Shipment> getShipmentsFromTable() {
+    public void clickEditSearchFilterButton()
+    {
+        click(XPATH_EDIT_SEARCH_FILTER_BUTTON);
+    }
+
+    public List<Shipment> getShipmentsFromTable()
+    {
         List<Shipment> shipmentsResult = new ArrayList<>();
-        List<WebElement> shipments = driver.findElements(By.xpath(XPATH_SHIPMENTS_TR));
-        for (WebElement shipment : shipments) {
+        List<WebElement> shipments = getwebDriver().findElements(By.xpath(XPATH_SHIPMENTS_TR));
+
+        for(WebElement shipment : shipments)
+        {
             Shipment sh = new Shipment(shipment);
             shipmentsResult.add(sh);
         }
@@ -54,105 +63,109 @@ public class ShipmentManagementPage {
         return shipmentsResult;
     }
 
-    public Shipment getShipmentFromTable(int index) {
+    public Shipment getShipmentFromTable(int index)
+    {
         return getShipmentsFromTable().get(index);
     }
 
-    public ShipmentManagementPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+    private WebElement grabLineHaul()
+    {
+        return getwebDriver().findElement(By.xpath(XPATH_LINEHAUL_DROPDOWN));
     }
 
-    private WebElement grabLineHaul() {
-        return driver.findElement(By.xpath(XPATH_LINEHAUL_DROPDOWN));
+    private WebElement grabStartHubDiv()
+    {
+        return getwebDriver().findElement(By.xpath(XPATH_START_HUB_DROPDOWN));
     }
 
-    private WebElement grabStartHubDiv() {
-        return driver.findElement(By.xpath(XPATH_START_HUB_DROPDOWN));
+    private WebElement grabEndHubDiv()
+    {
+        return getwebDriver().findElement(By.xpath(XPATH_END_HUB_DROPDOWN));
     }
 
-    private WebElement grabEndHubDiv() {
-        return driver.findElement(By.xpath(XPATH_END_HUB_DROPDOWN));
-    }
-
-    public void selectFirstLineHaul() {
+    public void selectFirstLineHaul()
+    {
         grabLineHaul().click();
-        CommonUtil.pause1s();
-
-        CommonUtil.clickBtn(driver,XPATH_HUB_ACTIVE_DROPDOWN + "[@ng-repeat='l in ctrl.linehauls']");
+        pause1s();
+        click(XPATH_HUB_ACTIVE_DROPDOWN + "[@ng-repeat='l in ctrl.linehauls']");
     }
 
-    public void selectStartHub(String hubName) {
+    public void selectStartHub(String hubName)
+    {
         grabStartHubDiv().click();
-        CommonUtil.pause1s();
-
-        CommonUtil.clickBtn(driver,XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + hubName + "']]");
+        pause1s();
+        click(XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + hubName + "']]");
     }
 
-    public void selectEndHub(String hubName) {
+    public void selectEndHub(String hubName)
+    {
         grabEndHubDiv().click();
-        CommonUtil.pause1s();
-
-        CommonUtil.clickBtn(driver,XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + hubName + "']]");
+        pause1s();
+        click(XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + hubName + "']]");
     }
 
-    public void setupSort(String var1, String var2) {
-        WebElement sort = driver.findElement(By.xpath(XPATH_SORT_DIV));
+    public void setupSort(String var1, String var2)
+    {
+        WebElement sort = getwebDriver().findElement(By.xpath(XPATH_SORT_DIV));
         List<WebElement> sortVars = sort.findElements(By.tagName("md-select"));
 
         sortVars.get(0).click();
-        CommonUtil.pause1s();
-        CommonUtil.clickBtn(driver,XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + var1 + "']]");
+        pause1s();
+        click(XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + var1 + "']]");
 
         sortVars.get(1).click();
-        CommonUtil.pause1s();
-        CommonUtil.clickBtn(driver,XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + var2 + "']]");
-
-        CommonUtil.pause1s();
+        pause1s();
+        click(XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + var2 + "']]");
+        pause1s();
     }
 
-    public void clickAddFilter(String filterLabel, String value) {
-        CommonUtil.clickBtn(driver, "//input[@placeholder='Select Filter']");
-        CommonUtil.clickBtn(driver, grabXPathFilterDropdown(filterLabel));
-        CommonUtil.hoverMouseTo(driver, "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
-        CommonUtil.clickBtn(driver, "//h4[text()='Select Search Filters']");
+    public void clickAddFilter(String filterLabel, String value)
+    {
+        click("//input[@placeholder='Select Filter']");
+        click(grabXPathFilterDropdown(filterLabel));
+        click("//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
+        click("//h4[text()='Select Search Filters']");
 
-        CommonUtil.inputText(driver, String.format("//nv-autocomplete[@item-types='%s']//input[@aria-label='Search or Select...']", filterLabel), value);
-        CommonUtil.clickBtn(driver, String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", value));
-        CommonUtil.hoverMouseTo(driver, "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
-        CommonUtil.clickBtn(driver, "//h4[text()='Select Search Filters']");
+        sendKeys(String.format("//nv-autocomplete[@item-types='%s']//input[@aria-label='Search or Select...']", filterLabel), value);
+        click(String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", value));
+        TestUtils.hoverMouseTo(getwebDriver(), "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
+        click("//h4[text()='Select Search Filters']");
     }
 
-    public String grabXPathFilter(String filterLabel) {
+    public String grabXPathFilter(String filterLabel)
+    {
         return "//nv-filter-box/div[div/p[text()='" + filterLabel + "']]/div/nv-autocomplete";
     }
 
-    public String grabXPathFilterDropdown(String value) {
+    public String grabXPathFilterDropdown(String value)
+    {
         return "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span[text()='" + value + "']";
     }
 
-    public void shipmentScanExist(String source, String hub) {
+    public void shipmentScanExist(String source, String hub)
+    {
         String xpath = XPATH_SHIPMENT_SCAN + "[td[text()='" + source + "']]" + "[td[text()='" + hub + "']]";
-        WebElement scan = driver.findElement(By.xpath(xpath));
+        WebElement scan = getwebDriver().findElement(By.xpath(xpath));
         Assert.assertEquals("shipment(" + source + ") not exist", "tr", scan.getTagName());
     }
 
-    public String createShipment(String startHub, String endHub, String comment) {
-        CommonUtil.clickBtn(driver, XPATH_CREATE_SHIPMENT_BUTTON);
+    public String createShipment(String startHub, String endHub, String comment)
+    {
+        click(XPATH_CREATE_SHIPMENT_BUTTON);
 
         selectFirstLineHaul();
-        CommonUtil.pause1s();
+        pause1s();
 
         selectStartHub(startHub);
-        CommonUtil.pause1s();
+        pause1s();
 
         selectEndHub(endHub);
-        CommonUtil.pause1s();
+        pause1s();
 
-        CommonUtil.inputText(driver, XPATH_COMMENT_TEXT_AREA, comment);
-        CommonUtil.clickBtn(driver, XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
+        sendKeys(XPATH_COMMENT_TEXT_AREA, comment);
+        click(XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
 
-        WebElement toast = CommonUtil.getToast(driver);
+        WebElement toast = TestUtils.getToast(getwebDriver());
         String toastMessage = toast.getText();
 
         Assert.assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage, Matchers.allOf(Matchers.containsString("Shipment"), Matchers.containsString("created")));
@@ -160,18 +173,19 @@ public class ShipmentManagementPage {
         return shipmentId;
     }
 
-    public class Shipment {
-
+    public class Shipment
+    {
+        public final String DELETE_ACTION = "Delete";
         private final WebElement shipment;
+
         private String id;
         private String status;
         private String startHub;
         private String endHub;
         private String comment;
 
-        public final String DELETE_ACTION = "Delete";
-
-        public Shipment(WebElement shipment) {
+        public Shipment(WebElement shipment)
+        {
             this.shipment = shipment;
             this.id = shipment.findElements(By.tagName("td")).get(2).getText().trim();
             this.status = shipment.findElements(By.tagName("td")).get(4).getText().trim();
@@ -180,67 +194,85 @@ public class ShipmentManagementPage {
             this.comment = shipment.findElements(By.tagName("td")).get(10).getText().trim();
         }
 
-        public void clickShipmentActionButton(String actionButton) {
+        public void clickShipmentActionButton(String actionButton)
+        {
             WebElement editAction = grabShipmentAction(actionButton);
-            CommonUtil.moveAndClick(driver, editAction);
+            TestUtils.moveAndClick(getwebDriver(), editAction);
 
-            if (actionButton.equals(DELETE_ACTION)) {
-                CommonUtil.pause1s();
-                CommonUtil.clickBtn(driver, XPATH_DELETE_CONFIRMATION_BUTTON);
+            if (actionButton.equals(DELETE_ACTION))
+            {
+                pause1s();
+                click(XPATH_DELETE_CONFIRMATION_BUTTON);
             }
         }
 
-        public WebElement grabShipmentAction(String action) {
+        public WebElement grabShipmentAction(String action)
+        {
             List<WebElement> actionButtons = shipment.findElements(By.tagName("button"));
-            for (WebElement actionButton : actionButtons) {
-                if (actionButton.getAttribute("aria-label").equalsIgnoreCase(action)) {
+
+            for(WebElement actionButton : actionButtons)
+            {
+                if(actionButton.getAttribute("aria-label").equalsIgnoreCase(action))
+                {
                     return actionButton;
                 }
             }
+
             return null;
         }
 
-        public WebElement getShipment() {
+        public WebElement getShipment()
+        {
             return shipment;
         }
 
-        public String getId() {
+        public String getId()
+        {
             return id;
         }
 
-        public void setId(String id) {
+        public void setId(String id)
+        {
             this.id = id;
         }
 
-        public String getStatus() {
+        public String getStatus()
+        {
             return status;
         }
 
-        public void setStatus(String status) {
+        public void setStatus(String status)
+        {
             this.status = status;
         }
 
-        public String getStartHub() {
+        public String getStartHub()
+        {
             return startHub;
         }
 
-        public void setStartHub(String startHub) {
+        public void setStartHub(String startHub)
+        {
             this.startHub = startHub;
         }
 
-        public String getEndHub() {
+        public String getEndHub()
+        {
             return endHub;
         }
 
-        public void setEndHub(String endHub) {
+        public void setEndHub(String endHub)
+        {
             this.endHub = endHub;
         }
 
-        public String getComment() {
+        public String getComment()
+        {
             return comment;
         }
 
-        public void setComment(String comment) {
+        public void setComment(String comment)
+        {
             this.comment = comment;
         }
     }

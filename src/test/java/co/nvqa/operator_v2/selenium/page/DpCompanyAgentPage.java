@@ -12,7 +12,6 @@ import org.openqa.selenium.WebElement;
  */
 public class DpCompanyAgentPage extends SimplePage
 {
-    private static final int MAX_TIMEOUT_IN_SECONDS = 120;
     private static final String MD_VIRTUAL_REPEAT = "agent in getTableData()";
 
     public static final String COLUMN_CLASS_NAME = "name";
@@ -23,22 +22,22 @@ public class DpCompanyAgentPage extends SimplePage
     public static final String ACTION_BUTTON_EDIT = "Edit";
     public static final String ACTION_BUTTON_DELETE = "Delete";
 
-    public DpCompanyAgentPage(WebDriver driver)
+    public DpCompanyAgentPage(WebDriver webDriver)
     {
-        super(driver);
+        super(webDriver);
     }
 
     public void addDpCompanyAgent(DpCompanyAgent dpCompanyAgent)
     {
         click("//button[@aria-label='Add Agent']");
-        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'dp-agent-add')]", MAX_TIMEOUT_IN_SECONDS);
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'dp-agent-add')]");
         fillTheFormAndSubmit(dpCompanyAgent);
     }
 
     public void editDpCompanyAgent(DpCompanyAgent dpCompanyAgent)
     {
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
-        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'dp-agent-edit')]", MAX_TIMEOUT_IN_SECONDS);
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'dp-agent-edit')]");
         fillTheFormAndSubmit(dpCompanyAgent);
     }
 
@@ -49,7 +48,7 @@ public class DpCompanyAgentPage extends SimplePage
         sendKeys("//input[@aria-label='Contact']", dpCompanyAgent.getContact());
         sendKeys("//input[@aria-label='Unlock Code']", dpCompanyAgent.getUnlockCode());
         click("//button[@aria-label='Save Button']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular", MAX_TIMEOUT_IN_SECONDS);
+        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular");
     }
 
     public void deleteDpCompanyAgent(DpCompanyAgent dpCompanyAgent)
@@ -96,7 +95,7 @@ public class DpCompanyAgentPage extends SimplePage
     public void backToDpCompanyManagementPage(DpCompany dpCompany)
     {
         click(String.format("//button[contains(@aria-label, '%s')]", dpCompany.getName()));
-        waitUntilVisibilityOfElementLocated("//button[@aria-label='Add Company']", MAX_TIMEOUT_IN_SECONDS);
+        waitUntilVisibilityOfElementLocated("//button[@aria-label='Add Company']");
     }
 
     public void searchTableByName(String name)

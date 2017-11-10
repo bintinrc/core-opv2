@@ -1,4 +1,4 @@
-package co.nvqa.operator_v2.support;
+package co.nvqa.operator_v2.util;
 
 import com.nv.qa.utils.StandardTestConstants;
 
@@ -33,6 +33,7 @@ public final class TestConstants extends StandardTestConstants
     public static final int SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS;
     public static final int SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS;
     public static final int SELENIUM_SCRIPT_TIMEOUT_SECONDS;
+    public static final long SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS;
     public static final int SELENIUM_WINDOW_WIDTH;
     public static final int SELENIUM_WINDOW_HEIGHT;
     public static final String SELENIUM_WRITE_PATH;
@@ -96,6 +97,7 @@ public final class TestConstants extends StandardTestConstants
             SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS = getPropertyValueAsInteger("selenium-implicit-wait-timeout-seconds");
             SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS = getPropertyValueAsInteger("selenium-page-load-timeout-seconds");
             SELENIUM_SCRIPT_TIMEOUT_SECONDS = getPropertyValueAsInteger("selenium-script-timeout-seconds");
+            SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS = getPropertyValueAsLong("selenium-default-web-driver-wait-timeout-in-seconds");
             SELENIUM_WINDOW_WIDTH = getPropertyValueAsInteger("selenium-window-width");
             SELENIUM_WINDOW_HEIGHT = getPropertyValueAsInteger("selenium-window-height");
             SELENIUM_WRITE_PATH = getPropertyValueAsString("selenium-write-path") + TEMP_FOLDER_DATE_FORMAT.format(new Date()) + File.separatorChar;

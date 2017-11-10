@@ -1,10 +1,10 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.operator_v2.support.ScenarioStorage;
+import co.nvqa.operator_v2.selenium.page.TransactionsPage;
+import co.nvqa.operator_v2.util.ScenarioStorage;
+import co.nvqa.operator_v2.util.TestConstants;
 import com.google.inject.Inject;
 import com.nv.qa.model.order_creation.v2.Order;
-import co.nvqa.operator_v2.selenium.page.TransactionsPage;
-import co.nvqa.operator_v2.support.TestConstants;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -27,7 +27,7 @@ public class TransactionsSteps extends AbstractSteps
     @Override
     public void init()
     {
-        transactionsPage = new TransactionsPage(getDriver());
+        transactionsPage = new TransactionsPage(getWebDriver());
     }
 
     @When("^Operator V2 add 'Transaction' to 'Route Group'$")

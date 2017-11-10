@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.operator_v2.support.ScenarioStorage;
+import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
 import com.nv.qa.api.client.operator_portal.OperatorPortalTagManagementClient;
 import com.nv.qa.model.operator_portal.authentication.AuthResponse;
@@ -16,8 +16,7 @@ import java.io.IOException;
 @ScenarioScoped
 public class CommonTagManagementSteps extends AbstractSteps
 {
-    @Inject
-    ScenarioStorage scenarioStorage;
+    @Inject ScenarioStorage scenarioStorage;
     private OperatorPortalTagManagementClient operatorPortalTagManagementClient;
 
 

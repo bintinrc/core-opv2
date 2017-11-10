@@ -1,8 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.Linehaul;
-import co.nvqa.operator_v2.support.SeleniumHelper;
-import co.nvqa.operator_v2.support.CommonUtil;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,16 +9,15 @@ import org.openqa.selenium.WebElement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
- * Created by lanangjati
- * on 10/24/16.
+ *
+ * @author Lanang Jati
+ *
+ * Modified by Daniel Joi Partogi Hutapea
  */
-public class ShipmentLinehaulPage extends SimplePage {
-
-    private static final int MAX_WAIT_IN_SECONDS = 120;
-
+public class ShipmentLinehaulPage extends SimplePage
+{
     private static final String XPATH_CREATE_LINEHAUL_BUTTON = "//button[div[text()='Create Linehaul']]";
     private static final String XPATH_CREATE_LINEHAUL_BUTTON_ONSCHEDULE = "//button[div[text()='create linehaul']]";
     private static final String XPATH_DELETE_BUTTON = "//button[@aria-label='Delete']";
@@ -40,121 +38,129 @@ public class ShipmentLinehaulPage extends SimplePage {
     public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[@aria-label='Load Selection']";
     public static final String XPATH_EDIT_SEARCH_FILTER_BUTTON = "//button[contains(@aria-label, 'Edit Filter')]";
 
-    public ShipmentLinehaulPage(WebDriver driver) {
-        super(driver);
+    public ShipmentLinehaulPage(WebDriver webDriver)
+    {
+        super(webDriver);
     }
 
-    public void clickCreateLinehaul() {
-        CommonUtil.clickBtn(driver, XPATH_CREATE_LINEHAUL_BUTTON);
+    public void clickCreateLinehaul()
+    {
+        click(XPATH_CREATE_LINEHAUL_BUTTON);
     }
 
-    public void clickCreateLinehaulOnSchedule() {
-        CommonUtil.clickBtn(driver, XPATH_CREATE_LINEHAUL_BUTTON_ONSCHEDULE);
+    public void clickCreateLinehaulOnSchedule()
+    {
+        click(XPATH_CREATE_LINEHAUL_BUTTON_ONSCHEDULE);
     }
 
-    public void clickAddHubButton() {
-        CommonUtil.clickBtn(driver, XPATH_ADD_HUB_BUTTON);
+    public void clickAddHubButton()
+    {
+        click(XPATH_ADD_HUB_BUTTON);
     }
 
-    public void clickRemoveHubButton() {
-        CommonUtil.clickBtn(driver, XPATH_REMOVE_HUB_BUTTON);
+    public void clickRemoveHubButton()
+    {
+        click(XPATH_REMOVE_HUB_BUTTON);
     }
 
-    public void clickCreateButton() {
-        CommonUtil.clickBtn(driver, XPATH_CREATE_BUTTON);
+    public void clickCreateButton()
+    {
+        click(XPATH_CREATE_BUTTON);
     }
 
-    public void clickSaveChangesButton() {
-        CommonUtil.clickBtn(driver, XPATH_SAVE_CHANGES_BUTTON);
+    public void clickSaveChangesButton()
+    {
+        click(XPATH_SAVE_CHANGES_BUTTON);
     }
 
-    public void clickTab(String nameTab) {
+    public void clickTab(String nameTab)
+    {
         String xpath = XPATH_LINEHAUL_ENTRIES_TAB;
-        if (nameTab.equalsIgnoreCase("LINEHAUL DATE")) {
+
+        if("LINEHAUL DATE".equalsIgnoreCase(nameTab))
+        {
             xpath = XPATH_LINEHAUL_DATE_TAB;
         }
 
-        CommonUtil.clickBtn(driver, xpath);
-        CommonUtil.pause3s();
+        click(xpath);
+        pause3s();
     }
 
-    public void clickOnLabelCreate() {
-        CommonUtil.clickBtn(driver, XPATH_LABEL_CREATE_LINEHAUL);
+    public void clickOnLabelCreate()
+    {
+        click(XPATH_LABEL_CREATE_LINEHAUL);
     }
 
-    public void clickOnLabelEdit() {
-        CommonUtil.clickBtn(driver, XPATH_LABEL_EDIT_LINEHAUL);
+    public void clickOnLabelEdit()
+    {
+        click(XPATH_LABEL_EDIT_LINEHAUL);
     }
 
-    public void search(String value) {
-        CommonUtil.inputText(driver, XPATH_SEARCH, value);
-        CommonUtil.pause500ms();
-
+    public void search(String value)
+    {
+        sendKeys(XPATH_SEARCH, value);
+        pause500ms();
         System.out.println("[INFO] Waiting until 'Loading more results...' disappear.");
-
-        try
-        {
-            //Set implicit wait to 0s to make find element more faster.
-            driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-            SeleniumHelper.waitUntilElementInvisible(driver, By.xpath("//h5[text()='Loading more results...']"));
-            System.out.println("[INFO] 'Loading more results...' is disappeared.");
-        }
-        catch(Exception ex)
-        {
-            System.out.println("[WARN] 'Loading more results...' is still appear. Error: "+ex.getMessage());
-        }
-        finally
-        {
-            //Reset implicit timeout.
-            driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-        }
-
+        waitUntilVisibilityOfElementLocated("//h5[text()='Loading more results...']");
+        System.out.println("[INFO] 'Loading more results...' is disappeared.");
     }
 
-    public void fillLinehaulNameFT(String name) {
-        CommonUtil.retryIfStaleElementReferenceExceptionOccurred(()->CommonUtil.inputText(driver, XPATH_LINEHAUL_NAME_TF, name), "fillLinehaulNameFT");
+    public void fillLinehaulNameFT(String name)
+    {
+        TestUtils.retryIfStaleElementReferenceExceptionOccurred(()-> sendKeys(XPATH_LINEHAUL_NAME_TF, name), "fillLinehaulNameFT");
     }
 
-    public void fillCommentsFT(String comment) {
-        CommonUtil.inputText(driver, XPATH_COMMENT_TF, comment);
+    public void fillCommentsFT(String comment)
+    {
+        sendKeys(XPATH_COMMENT_TF, comment);
     }
 
-    public void fillHubs(List<String> hubs) {
+    public void fillHubs(List<String> hubs)
+    {
+        int hubCount = getwebDriver().findElements(By.xpath(XPATH_REMOVE_HUB_BUTTON)).size();
 
-        int hubCount = driver.findElements(By.xpath(XPATH_REMOVE_HUB_BUTTON)).size();
-
-        for (int i = 0; i < hubCount; i++) {
+        for(int i=0; i<hubCount; i++)
+        {
             clickRemoveHubButton();
         }
 
         int index = 0;
-        for (String hub : hubs) {
+
+        for(String hub : hubs)
+        {
             clickAddHubButton();
-            CommonUtil.chooseValueFromMdContain(driver, "//md-select[@name='select-hub-" + index + "']", hub);
+            TestUtils.chooseValueFromMdContain(getwebDriver(), "//md-select[@name='select-hub-" + index + "']", hub);
             index++;
         }
     }
 
-    public void chooseFrequency(String frequencyValue) {
-        CommonUtil.chooseValueFromMdContain(driver, "//md-select[contains(@name,'select-frequency')]", frequencyValue);
+    public void chooseFrequency(String frequencyValue)
+    {
+        TestUtils.chooseValueFromMdContain(getwebDriver(), "//md-select[contains(@name,'select-frequency')]", frequencyValue);
     }
 
-    public void chooseWorkingDays(List<String> days) {
-        CommonUtil.chooseValuesFromMdContain(driver, "//md-select[contains(@name,'select-days-of-week')]", days);
+    public void chooseWorkingDays(List<String> days)
+    {
+        TestUtils.chooseValuesFromMdContain(getwebDriver(), "//md-select[contains(@name,'select-days-of-week')]", days);
     }
 
-    public List<WebElement> grabListOfLinehaul() {
-        return driver.findElements(By.xpath(XPATH_TABLE_ITEM));
+    public List<WebElement> grabListOfLinehaul()
+    {
+        return getwebDriver().findElements(By.xpath(XPATH_TABLE_ITEM));
     }
 
-    public List<WebElement> grabListOfLinehaulId() {
-        return driver.findElements(By.xpath(XPATH_TABLE_ITEM+"/td[3]"));
+    public List<WebElement> grabListOfLinehaulId()
+    {
+        return getwebDriver().findElements(By.xpath(XPATH_TABLE_ITEM+"/td[3]"));
     }
 
-    public List<Linehaul> grabListofLinehaul() {
+    public List<Linehaul> grabListofLinehaul()
+    {
         List<WebElement> list = grabListOfLinehaul();
         List<Linehaul> result = new ArrayList<>();
-        for (WebElement element : list) {
+
+        for(WebElement element : list)
+        {
             Linehaul linehaul = new Linehaul(element);
             result.add(linehaul);
         }
@@ -162,45 +168,53 @@ public class ShipmentLinehaulPage extends SimplePage {
         return result;
     }
 
-    public void clickDeleteButton() {
-        CommonUtil.clickBtn(driver, XPATH_DELETE_BUTTON);
+    public void clickDeleteButton()
+    {
+        click(XPATH_DELETE_BUTTON);
     }
 
-    public void clickLinhaulScheduleDate(Calendar date) {
-        CommonUtil.chooseValueFromMdContain(driver, XPATH_SCHEDULE_MONTH, CommonUtil.integerToMonth(date.get(Calendar.MONTH)));
-        CommonUtil.pause3s();
-        CommonUtil.chooseValueFromMdContain(driver, XPATH_SCHEDULE_YEAR, String.valueOf(date.get(Calendar.YEAR)));
-        CommonUtil.pause3s();
-
-        CommonUtil.clickBtn(driver, "//div[@tabindex='" + date.get(Calendar.DAY_OF_MONTH) + "']");
+    public void clickLinhaulScheduleDate(Calendar date)
+    {
+        TestUtils.chooseValueFromMdContain(getwebDriver(), XPATH_SCHEDULE_MONTH, TestUtils.integerToMonth(date.get(Calendar.MONTH)));
+        pause3s();
+        TestUtils.chooseValueFromMdContain(getwebDriver(), XPATH_SCHEDULE_YEAR, String.valueOf(date.get(Calendar.YEAR)));
+        pause3s();
+        click("//div[@tabindex='" + date.get(Calendar.DAY_OF_MONTH) + "']");
     }
 
-    public void clickEditLinehaulAtDate(String linehaulId) {
-        CommonUtil.clickBtn(driver, getXpathLinehaulInfoOnSchedule(linehaulId) + "/div/nv-icon-text-button/button[@aria-label='edit linehaul']");
+    public void clickEditLinehaulAtDate(String linehaulId)
+    {
+        click(getXpathLinehaulInfoOnSchedule(linehaulId) + "/div/nv-icon-text-button/button[@aria-label='edit linehaul']");
     }
 
-    public void checkLinehaulAtDate(String linehaulId) {
-        SeleniumHelper.waitUntilElementVisible(driver, By.xpath(getXpathLinehaulInfoOnSchedule(linehaulId)));
+    public void checkLinehaulAtDate(String linehaulId)
+    {
+        waitUntilVisibilityOfElementLocated(getXpathLinehaulInfoOnSchedule(linehaulId));
     }
 
-    private String getXpathLinehaulInfoOnSchedule(String linehaulId) {
+    private String getXpathLinehaulInfoOnSchedule(String linehaulId)
+    {
         return "//md-card-content[div[span[text()='Linehaul ID : " + linehaulId + "']]]";
     }
 
-    public void clickLoadAllShipmentButton() {
-        CommonUtil.clickBtn(driver, XPATH_LOAD_ALL_SHIPMENT_BUTTON);
-        CommonUtil.pause(3000);
+    public void clickLoadAllShipmentButton()
+    {
+        click(XPATH_LOAD_ALL_SHIPMENT_BUTTON);
+        pause3s();
     }
 
-    public void clickEditSearchFilterButton() {
-        CommonUtil.clickBtn(driver, XPATH_EDIT_SEARCH_FILTER_BUTTON);
+    public void clickEditSearchFilterButton()
+    {
+        click(XPATH_EDIT_SEARCH_FILTER_BUTTON);
     }
 
-    public void waitUntilLinehaulEntriesIsLoaded() {
-        waitUntilVisibilityOfElementLocated(By.xpath("//button[@aria-label='Load Selection']"), MAX_WAIT_IN_SECONDS);
+    public void waitUntilLinehaulEntriesIsLoaded()
+    {
+        waitUntilVisibilityOfElementLocated("//button[@aria-label='Load Selection']");
     }
 
-    public void waitUntilLinehaulDateTabIsLoaded() {
-        waitUntilInvisibilityOfElementLocated(By.xpath("//md-progress-circular/parent::*[@style='display: inherit;']"), MAX_WAIT_IN_SECONDS);
+    public void waitUntilLinehaulDateTabIsLoaded()
+    {
+        waitUntilInvisibilityOfElementLocated("//md-progress-circular/parent::*[@style='display: inherit;']");
     }
 }

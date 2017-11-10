@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import com.google.inject.Inject;
 import co.nvqa.operator_v2.selenium.page.LoginPage;
+import com.google.inject.Inject;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -25,7 +25,7 @@ public class LoginSteps extends AbstractSteps
     @Override
     public void init()
     {
-        loginPage = new LoginPage(getDriver());
+        loginPage = new LoginPage(getWebDriver());
     }
 
     @Given("^op is in op portal login page$")

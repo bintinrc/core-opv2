@@ -4,7 +4,7 @@ import co.nvqa.operator_v2.model.DpCompany;
 import co.nvqa.operator_v2.model.DpCompanyAgent;
 import co.nvqa.operator_v2.selenium.page.DpCompanyAgentPage;
 import co.nvqa.operator_v2.selenium.page.DpCompanyManagementPage;
-import co.nvqa.operator_v2.support.ScenarioStorage;
+import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -17,8 +17,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 @ScenarioScoped
 public class DpCompanyManagementSteps extends AbstractSteps
 {
-    @Inject
-    ScenarioStorage scenarioStorage;
+    @Inject ScenarioStorage scenarioStorage;
     private DpCompanyManagementPage dpCompanyManagementPage;
     private DpCompanyAgentPage dpCompanyAgentPage;
 
@@ -31,8 +30,8 @@ public class DpCompanyManagementSteps extends AbstractSteps
     @Override
     public void init()
     {
-        dpCompanyManagementPage = new DpCompanyManagementPage(getDriver());
-        dpCompanyAgentPage = new DpCompanyAgentPage(getDriver());
+        dpCompanyManagementPage = new DpCompanyManagementPage(getWebDriver());
+        dpCompanyAgentPage = new DpCompanyAgentPage(getWebDriver());
     }
 
     @When("^Operator create new DP Company$")

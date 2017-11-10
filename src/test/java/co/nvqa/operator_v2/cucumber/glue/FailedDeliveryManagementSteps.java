@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.operator_v2.selenium.page.FailedDeliveryManagementPage;
+import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
 import com.nv.qa.model.order_creation.v2.Order;
-import co.nvqa.operator_v2.selenium.page.FailedDeliveryManagementPage;
-import co.nvqa.operator_v2.support.ScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
@@ -25,7 +25,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps
     @Override
     public void init()
     {
-        failedDeliveryManagementPage = new FailedDeliveryManagementPage(getDriver());
+        failedDeliveryManagementPage = new FailedDeliveryManagementPage(getWebDriver());
     }
 
     @Then("^Operator verify the failed delivery order is listed on Failed Delivery orders list$")

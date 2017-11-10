@@ -28,9 +28,9 @@ public class RouteLogsPage extends SimplePage
 
     public static final SimpleDateFormat DATE_PICKER_ID_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
 
-    public RouteLogsPage(WebDriver driver)
+    public RouteLogsPage(WebDriver webDriver)
     {
-        super(driver);
+        super(webDriver);
     }
 
     public void selectRouteDateFilter(Date fromDate, Date toDate)

@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.support.SeleniumHelper;
-import org.openqa.selenium.*;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
@@ -26,9 +28,9 @@ public class PricingScriptsPage extends SimplePage
     public static final String SRIPT_DESCRIPTION_TEXT_FIELD = "//input[@type='text'][@aria-label='Description']";
     public static final String CLOSE_BUTTON = "//nv-icon-button[@name='Cancel']";
 
-    public PricingScriptsPage(WebDriver driver)
+    public PricingScriptsPage(WebDriver webDriver)
     {
-        super(driver);
+        super(webDriver);
     }
 
     public void createScript(String scriptName, String description)
@@ -48,11 +50,8 @@ public class PricingScriptsPage extends SimplePage
         }
 
         click(SAVE_CHANGE_BUTTON);
-
-        SeleniumHelper.waitUntilElementVisible(getDriver(), By.xpath("//md-dialog[@aria-label='Dialog']"));
-
+        waitUntilVisibilityOfElementLocated("//md-dialog[@aria-label='Dialog']");
         pause3s();
-
         click(CLOSE_BUTTON);
     }
 
@@ -271,11 +270,11 @@ public class PricingScriptsPage extends SimplePage
 
     private String executeJavascript(String script)
     {
-        String value = "";
+        String value;
 
-        if(getDriver() instanceof JavascriptExecutor)
+        if(getwebDriver() instanceof JavascriptExecutor)
         {
-            JavascriptExecutor javascriptExecutor = (JavascriptExecutor)getDriver();
+            JavascriptExecutor javascriptExecutor = (JavascriptExecutor) getwebDriver();
             value = String.valueOf(javascriptExecutor.executeScript(script));
             pause100ms();
         }

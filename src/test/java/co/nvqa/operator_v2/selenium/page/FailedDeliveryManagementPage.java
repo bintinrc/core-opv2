@@ -19,9 +19,9 @@ public class FailedDeliveryManagementPage extends CommonParcelManagementPage
 
     public static final String ACTION_BUTTON_RESCHEDULE_NEXT_DAY = "container.failed-delivery-management.reschedule-next-day";
 
-    public FailedDeliveryManagementPage(WebDriver driver)
+    public FailedDeliveryManagementPage(WebDriver webDriver)
     {
-        super(driver, MD_VIRTUAL_REPEAT);
+        super(webDriver, MD_VIRTUAL_REPEAT);
     }
 
     public void verifyFailedDeliveryOrderIsListed(String trackingId, String orderType)

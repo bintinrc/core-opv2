@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.support.TestConstants;
-import co.nvqa.operator_v2.support.CommonUtil;
+import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -21,11 +21,11 @@ public class SimplePage
 {
     public static final int DEFAULT_MAX_RETRY_FOR_STALE_ELEMENT_REFERENCE = 5;
     public static final int DEFAULT_MAX_RETRY_FOR_FILE_VERIFICATION = 10;
-    protected WebDriver driver;
+    protected WebDriver webDriver;
 
-    public SimplePage(WebDriver driver)
+    public SimplePage(WebDriver webDriver)
     {
-        this.driver = driver;
+        this.webDriver = webDriver;
     }
 
     public void altClick(String xpath)
@@ -40,10 +40,10 @@ public class SimplePage
         moveAndClick(we);
     }
 
-    public void moveAndClick(WebElement we)
+    public void moveAndClick(WebElement webElement)
     {
-        Actions action = new Actions(getDriver());
-        action.moveToElement(we);
+        Actions action = new Actions(getwebDriver());
+        action.moveToElement(webElement);
         pause300ms();
         action.click();
         action.perform();
@@ -111,7 +111,7 @@ public class SimplePage
             try
             {
                 setImplicitTimeout(0);
-                return new WebDriverWait(getDriver(), timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(byXpath));
+                return new WebDriverWait(getwebDriver(), timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(byXpath));
             }
             catch(Exception ex)
             {
@@ -123,12 +123,12 @@ public class SimplePage
             }
         }
 
-        return getDriver().findElement(byXpath);
+        return getwebDriver().findElement(byXpath);
     }
 
     public List<WebElement> findElementsByXpath(String xpathExpression)
     {
-        return getDriver().findElements(By.xpath(xpathExpression));
+        return getwebDriver().findElements(By.xpath(xpathExpression));
     }
 
     public WebElement findElementByXpath(String xpath, WebElement parent)
@@ -155,12 +155,12 @@ public class SimplePage
     {
         WebElement we = findElementByXpath("//div[(contains(@class, 'nv-text-ellipsis nv-h4'))]");
 
-        Actions actions = new Actions(getDriver());
+        Actions actions = new Actions(getwebDriver());
         actions.moveToElement(we, 5, 5)
                 .click()
                 .build()
                 .perform();
-        CommonUtil.pause100ms();
+        TestUtils.pause100ms();
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass, String mdVirtualRepeat)
@@ -292,7 +292,7 @@ public class SimplePage
         WebElement mdSelectMenu = findElementByXpath(xpathMdSelectMenu);
         mdSelectMenu.click();
         pause500ms();
-        WebElement mdSelectOption = CommonUtil.getElementByXpath(getDriver(), xpathMdSelectOption);
+        WebElement mdSelectOption = TestUtils.getElementByXpath(getwebDriver(), xpathMdSelectOption);
         mdSelectOption.click();
         pause500ms();
     }
@@ -318,6 +318,11 @@ public class SimplePage
         pause200ms();
     }
 
+    public void waitUntilInvisibilityOfElementLocated(String xpath)
+    {
+        waitUntilInvisibilityOfElementLocated(By.xpath(xpath), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS);
+    }
+
     public void waitUntilInvisibilityOfElementLocated(String xpath, long timeoutInSeconds)
     {
         waitUntilInvisibilityOfElementLocated(By.xpath(xpath), timeoutInSeconds);
@@ -331,11 +336,11 @@ public class SimplePage
         {
             setImplicitTimeout(0);
 
-            new WebDriverWait(driver, timeoutInSeconds).until((WebDriver driver) ->
+            new WebDriverWait(getwebDriver(), timeoutInSeconds).until((WebDriver driver) ->
             {
                 try
                 {
-                    boolean isElementDisplayed = findElement(locator, getDriver()).isDisplayed();
+                    boolean isElementDisplayed = findElement(locator, driver).isDisplayed();
                     System.out.println(String.format("[INFO] Wait Until Invisibility Of Element Located: Is element '%s' still displayed? %b", locator, isElementDisplayed));
                     return !isElementDisplayed;
                 }
@@ -370,6 +375,11 @@ public class SimplePage
         }
     }
 
+    public void waitUntilVisibilityOfElementLocated(String xpath)
+    {
+        waitUntilVisibilityOfElementLocated(By.xpath(xpath), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS);
+    }
+
     public void waitUntilVisibilityOfElementLocated(String xpath, long timeoutInSeconds)
     {
         waitUntilVisibilityOfElementLocated(By.xpath(xpath), timeoutInSeconds);
@@ -381,18 +391,32 @@ public class SimplePage
         {
             setImplicitTimeout(0);
 
-            new WebDriverWait(driver, timeoutInSeconds).until((WebDriver driver) ->
+            new WebDriverWait(getwebDriver(), timeoutInSeconds).until((WebDriver wd) ->
             {
                 try
                 {
-                    WebElement webElement = elementIfVisible(findElement(locator, driver));
+                    WebElement webElement = elementIfVisible(findElement(locator, wd));
                     boolean isElementDisplayed = webElement!=null;
                     System.out.println(String.format("[INFO] Wait Until Visibility Of Element Located: Is element '%s' displayed? %b", locator, isElementDisplayed));
                     return webElement;
                 }
+                catch(NoSuchElementException ex)
+                {
+                    /**
+                     * Returns false because the element is not present in DOM.
+                     * The try block checks if the element is present but is invisible.
+                     */
+                    System.out.println(String.format("[INFO] Wait Until Visibility Of Element Located: Is element '%s' displayed? %b (NoSuchElementException)", locator, false));
+                    return false;
+                }
                 catch(StaleElementReferenceException ex)
                 {
-                    return null;
+                    /**
+                     * Returns false because stale element reference implies that element
+                     * is no longer visible.
+                     */
+                    System.out.println(String.format("[INFO] Wait Until Visibility Of Element Located: Is element '%s' displayed? %b (StaleElementReferenceException)", locator, false));
+                    return false;
                 }
             });
         }
@@ -407,11 +431,11 @@ public class SimplePage
         }
     }
 
-    private static WebElement findElement(By by, WebDriver driver)
+    private static WebElement findElement(By by, WebDriver webDriver)
     {
         try
         {
-            return driver.findElement(by);
+            return webDriver.findElement(by);
         }
         catch(NoSuchElementException ex)
         {
@@ -498,6 +522,26 @@ public class SimplePage
         Assert.assertTrue(String.format("File '%s' not contains [%s]. \nFile Text:\n%s", file.getAbsolutePath(), expectedText, fileText), isFileContainsExpectedText);
     }
 
+    public void pause10ms()
+    {
+        pause(10);
+    }
+
+    public void pause20ms()
+    {
+        pause(20);
+    }
+
+    public void pause30ms()
+    {
+        pause(30);
+    }
+
+    public void pause40ms()
+    {
+        pause(40);
+    }
+
     public void pause50ms()
     {
         pause(50);
@@ -572,7 +616,7 @@ public class SimplePage
 
     public void setImplicitTimeout(long seconds)
     {
-        getDriver().manage().timeouts().implicitlyWait(seconds, TimeUnit.SECONDS);
+        getwebDriver().manage().timeouts().implicitlyWait(seconds, TimeUnit.SECONDS);
     }
 
     public void resetImplicitTimeout()
@@ -580,8 +624,8 @@ public class SimplePage
         setImplicitTimeout(TestConstants.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS);
     }
 
-    public WebDriver getDriver()
+    public WebDriver getwebDriver()
     {
-        return driver;
+        return webDriver;
     }
 }

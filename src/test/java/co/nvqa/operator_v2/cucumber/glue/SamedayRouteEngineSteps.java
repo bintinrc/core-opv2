@@ -1,13 +1,13 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.operator_v2.selenium.page.SamedayRouteEnginePage;
+import co.nvqa.operator_v2.util.ScenarioStorage;
+import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import com.nv.qa.integration.client.operator.BulkyTrackingClient;
 import com.nv.qa.integration.model.core.BulkyOrder;
 import com.nv.qa.model.order_creation.v2.Order;
-import co.nvqa.operator_v2.selenium.page.SamedayRouteEnginePage;
-import co.nvqa.operator_v2.support.TestConstants;
-import co.nvqa.operator_v2.support.CommonUtil;
-import co.nvqa.operator_v2.support.ScenarioStorage;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -38,7 +38,7 @@ public class SamedayRouteEngineSteps extends AbstractSteps
     @Override
     public void init()
     {
-        samedayRouteEnginePage = new SamedayRouteEnginePage(getDriver());
+        samedayRouteEnginePage = new SamedayRouteEnginePage(getWebDriver());
         bulkyTrackingClient = new BulkyTrackingClient(TestConstants.API_BASE_URL);
     }
 
@@ -148,7 +148,7 @@ public class SamedayRouteEngineSteps extends AbstractSteps
     public void updateTimeslot()
     {
         Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(TimeZone.getTimeZone(Optional.ofNullable(CommonUtil.getOperatorTimezone(getDriver())).orElse("UTC")));
+        cal.setTimeZone(TimeZone.getTimeZone(Optional.ofNullable(TestUtils.getOperatorTimezone(getWebDriver())).orElse("UTC")));
         cal.add(Calendar.DATE, 1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         scenarioStorage.put("new-suggested-date", sdf.format(cal.getTime()));

@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.operator_v2.selenium.page.TransactionsV2Page;
+import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
 import com.nv.qa.model.order_creation.v2.Order;
-import co.nvqa.operator_v2.selenium.page.TransactionsV2Page;
-import co.nvqa.operator_v2.support.ScenarioStorage;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -28,7 +28,7 @@ public class TransactionsV2Steps extends AbstractSteps
     @Override
     public void init()
     {
-        transactionsPage = new TransactionsV2Page(getDriver());
+        transactionsPage = new TransactionsV2Page(getWebDriver());
     }
 
     @When("^Operator V2 add created Transaction to Route Group$")

@@ -1,13 +1,13 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import com.google.inject.Singleton;
-import com.nv.qa.model.operator_portal.authentication.AuthResponse;
 import co.nvqa.operator_v2.selenium.page.LoginPage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
-import co.nvqa.operator_v2.support.TestConstants;
-import co.nvqa.operator_v2.support.CommonUtil;
-import co.nvqa.operator_v2.support.ScenarioStorage;
-import co.nvqa.operator_v2.support.SeleniumSharedDriver;
+import co.nvqa.operator_v2.util.ScenarioStorage;
+import co.nvqa.operator_v2.util.SeleniumUtils;
+import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
+import com.google.inject.Singleton;
+import com.nv.qa.model.operator_portal.authentication.AuthResponse;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -34,7 +34,7 @@ public class ScenarioManager
 {
     private static final SimpleDateFormat HTML_PAGE_SOURCE_DATE_SUFFIX_SDF = new SimpleDateFormat("dd-MMM-yyyy_hh-mm-ss");
 
-    private WebDriver driver;
+    private WebDriver webDriver;
     private Scenario scenario;
     private ScenarioStorage scenarioStorage;
 
@@ -56,16 +56,15 @@ public class ScenarioManager
     @Before("@LaunchBrowser")
     public void launchBrowser()
     {
-        System.out.println("Launching browser.");
-        driver = SeleniumSharedDriver.getInstance().getDriver();
+        System.out.println("[INFO] Launching browser.");
+        webDriver = SeleniumUtils.createWebDriver();
     }
 
     @After("@KillBrowser")
     public void killBrowser()
     {
-        System.out.println("Kill browser.");
-        SeleniumSharedDriver.getInstance().closeDriver();
-        driver = null;
+        System.out.println("[INFO] Kill browser.");
+        SeleniumUtils.closeWebDriver(webDriver);
     }
 
     /**
@@ -79,13 +78,11 @@ public class ScenarioManager
     {
         if(scenario.isFailed())
         {
-            WebDriver currentDriver = SeleniumSharedDriver.getInstance().getDriver(false); // Don't use getDriver() because some feature files does not use ScenarioManager.
-
-            if(currentDriver!=null)
+            if(webDriver!=null)
             {
-                takesScreenshot(currentDriver, scenario);
-                printBrowserConsoleLog(currentDriver, scenario);
-                printLastPageHtmlSourceToFile(currentDriver, scenario);
+                takesScreenshot(webDriver, scenario);
+                printBrowserConsoleLog(webDriver, scenario);
+                printLastPageHtmlSourceToFile(webDriver, scenario);
             }
             else
             {
@@ -105,7 +102,7 @@ public class ScenarioManager
             }
         }.operatorLogin();
 
-        LoginPage loginPage = new LoginPage(getDriver());
+        LoginPage loginPage = new LoginPage(getWebDriver());
         loginPage.get();
 
         if(TestConstants.OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES)
@@ -119,7 +116,7 @@ public class ScenarioManager
             //loginPage.checkForGoogleSimpleVerification("Singapore");
         }
 
-        MainPage mainPage = new MainPage(getDriver());
+        MainPage mainPage = new MainPage(getWebDriver());
         mainPage.dpAdm();
     }
 
@@ -132,20 +129,20 @@ public class ScenarioManager
     @Then("^take screenshot with delay (\\d+)s$")
     public void takeScreenShotWithDelayInSecond(int delayInSecond)
     {
-        CommonUtil.pause(delayInSecond*1000);
+        TestUtils.pause(delayInSecond*1000);
         takesScreenshot();
     }
 
     @Then("take screenshot with delay (\\d+)ms$")
     public void takeScreenShotWithDelayInMillisecond(int delayInMillisecond)
     {
-        CommonUtil.pause(delayInMillisecond);
+        TestUtils.pause(delayInMillisecond);
         takesScreenshot();
     }
 
     public void takesScreenshot()
     {
-        takesScreenshot(getDriver(), getCurrentScenario());
+        takesScreenshot(getWebDriver(), getCurrentScenario());
     }
 
     private void takesScreenshot(WebDriver currentDriver, Scenario currentScenario)
@@ -157,13 +154,13 @@ public class ScenarioManager
     @When("browser open \"([^\"]*)\"")
     public void browserOpen(String url)
     {
-        getDriver().get(url);
+        getWebDriver().get(url);
     }
 
     @Then("print browser console log")
     public void printBrowserConsoleLog()
     {
-        printBrowserConsoleLog(getDriver(), getCurrentScenario());
+        printBrowserConsoleLog(getWebDriver(), getCurrentScenario());
     }
 
     private void printBrowserConsoleLog(WebDriver currentDriver, Scenario currentScenario)
@@ -179,7 +176,7 @@ public class ScenarioManager
         }
         catch(Exception ex)
         {
-            System.out.println("[WARNING] Failed print browser log. Cause:");
+            System.out.println("[WARN] Failed print browser log. Cause:");
             ex.printStackTrace(System.err);
         }
     }
@@ -230,8 +227,8 @@ public class ScenarioManager
         return scenario;
     }
 
-    public WebDriver getDriver()
+    public WebDriver getWebDriver()
     {
-        return driver;
+        return webDriver;
     }
 }

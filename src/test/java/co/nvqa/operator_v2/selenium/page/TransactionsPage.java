@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.support.CommonUtil;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -9,9 +9,9 @@ import org.openqa.selenium.WebDriver;
  */
 public class TransactionsPage extends SimplePage
 {
-    public TransactionsPage(WebDriver driver)
+    public TransactionsPage(WebDriver webDriver)
     {
-        super(driver);
+        super(webDriver);
     }
 
     public void selectVariable(String routeGroupTemplateName)
@@ -26,14 +26,16 @@ public class TransactionsPage extends SimplePage
         click("//button[@aria-label='Load Selection']");
     }
 
-    public void selectShipperFilter(String shipperId) {
+    public void selectShipperFilter(String shipperId)
+    {
         String xpathExpression = "//div[div[p[text()='Shipper']]]/div/nv-autocomplete/div/label/md-autocomplete/md-autocomplete-wrap";
         click(xpathExpression);
         sendKeysAndEnter(xpathExpression + "/input", shipperId);
     }
 
-    public void searchTrackingId(String trackingId) {
-        CommonUtil.columnSearchTable(getDriver(), "Tracking ID", trackingId);
+    public void searchTrackingId(String trackingId)
+    {
+        TestUtils.columnSearchTable(getwebDriver(), "Tracking ID", trackingId);
     }
 
     public void selectAllShown()
@@ -61,6 +63,5 @@ public class TransactionsPage extends SimplePage
     public void clickAddTransactionsOnAddToRouteGroupDialog()
     {
         click("//button[@aria-label='Save Button']");
-
     }
 }

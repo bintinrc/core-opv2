@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.operator_v2.support.CommonUtil;
-import co.nvqa.operator_v2.support.SeleniumHelper;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -40,7 +39,7 @@ public class ReservationSteps extends AbstractSteps
 
     private void updateNumberOfReservedDate(String desc)
     {
-        List<WebElement> listOfWe = getDriver().findElements(By.xpath(RESERVED_DATE));
+        List<WebElement> listOfWe = getWebDriver().findElements(By.xpath(RESERVED_DATE));
         eReservation = listOfWe.size();
 
         System.out.println(String.format("===== %s =====", desc));
@@ -62,14 +61,14 @@ public class ReservationSteps extends AbstractSteps
     @When("^reservation, input shipper \"([^\"]*)\" and address \"([^\"]*)\"$")
     public void initReservation(String shipper, String address) throws Exception
     {
-        CommonUtil.inputListBox(getDriver(), "Search or Select Shipper", shipper);
+        TestUtils.inputListBox(getWebDriver(), "Search or Select Shipper", shipper);
         takesScreenshot();
-        SeleniumHelper.waitUntilElementVisible(getDriver(), By.xpath("//input[@placeholder='Search or Select Address']"));
+        TestUtils.waitUntilElementVisible(getWebDriver(), By.xpath("//input[@placeholder='Search or Select Address']"));
         takesScreenshot();
 
-        CommonUtil.inputListBox(getDriver(), "Search or Select Address", address);
+        TestUtils.inputListBox(getWebDriver(), "Search or Select Address", address);
         takesScreenshot();
-        SeleniumHelper.waitUntilElementVisible(getDriver(), By.xpath("//nv-calendar[@ng-model='ctrl.createForm.selectedDate']"));
+        TestUtils.waitUntilElementVisible(getWebDriver(), By.xpath("//nv-calendar[@ng-model='ctrl.createForm.selectedDate']"));
         takesScreenshot();
     }
 
@@ -79,7 +78,7 @@ public class ReservationSteps extends AbstractSteps
         initReservation(shipper, address);
         updateNumberOfReservedDate("BEFORE ADD NEW");
 
-        List<WebElement> elms = getDriver().findElements(By.xpath(UNRESERVED_DATE));
+        List<WebElement> elms = getWebDriver().findElements(By.xpath(UNRESERVED_DATE));
         takesScreenshot();
 
         if(!elms.isEmpty())
@@ -87,21 +86,21 @@ public class ReservationSteps extends AbstractSteps
             elms.get(0).click();
             takesScreenshot();
 
-            WebElement btn = getDriver().findElement(By.xpath("//button[@ng-click='ctrl.showCreateReservation()']"));
+            WebElement btn = getWebDriver().findElement(By.xpath("//button[@ng-click='ctrl.showCreateReservation()']"));
             takesScreenshot();
-            ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView();", btn);
-            takesScreenshot();
-
-            CommonUtil.pause1s();
-            btn.click();
-            takesScreenshot();
-            CommonUtil.pause1s();
-            btn.click();
+            ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].scrollIntoView();", btn);
             takesScreenshot();
 
-            getDriver().findElement(By.xpath("//md-select[@ng-model='ctrl.createForm.approxVolume']")).click();
+            TestUtils.pause1s();
+            btn.click();
             takesScreenshot();
-            List<WebElement> vols = getDriver().findElements(By.xpath("//md-option[@ng-repeat='volume in ctrl.volumeOptions']/div"));
+            TestUtils.pause1s();
+            btn.click();
+            takesScreenshot();
+
+            getWebDriver().findElement(By.xpath("//md-select[@ng-model='ctrl.createForm.approxVolume']")).click();
+            takesScreenshot();
+            List<WebElement> vols = getWebDriver().findElements(By.xpath("//md-option[@ng-repeat='volume in ctrl.volumeOptions']/div"));
             takesScreenshot();
 
             for(WebElement v : vols)
@@ -115,12 +114,12 @@ public class ReservationSteps extends AbstractSteps
             }
 
             comments = String.format("This reservation is created by automation test from Operator V2. Created at %s.", new Date().toString());
-            CommonUtil.inputText(getDriver(), "//md-input-container[@form='createForm']/input[@aria-label='Comments']", comments);
+            TestUtils.inputText(getWebDriver(), "//md-input-container[@form='createForm']/input[@aria-label='Comments']", comments);
             takesScreenshot();
 
-            getDriver().findElement(By.xpath("//button[@type='submit' and .//span[text()='Create Reservation']]")).click();
+            getWebDriver().findElement(By.xpath("//button[@type='submit' and .//span[text()='Create Reservation']]")).click();
             takesScreenshot();
-            CommonUtil.pause1s();
+            TestUtils.pause1s();
         }
     }
 
@@ -129,7 +128,7 @@ public class ReservationSteps extends AbstractSteps
     {
         updateNumberOfReservedDate("BEFORE DELETE");
 
-        List<WebElement> elms = getDriver().findElements(By.xpath(RESERVED_DATE));
+        List<WebElement> elms = getWebDriver().findElements(By.xpath(RESERVED_DATE));
         takesScreenshot();
 
         if(!elms.isEmpty())
@@ -137,12 +136,12 @@ public class ReservationSteps extends AbstractSteps
             WebElement el = elms.get(elms.size() - 1).findElement(By.xpath("//nv-icon-button[@name='Delete Reservation']"));
             takesScreenshot();
 
-            Actions action = new Actions(getDriver());
+            Actions action = new Actions(getWebDriver());
             action.moveToElement(el).click().perform();
             takesScreenshot();
-            getDriver().findElement(By.xpath("//button[span[text()='Delete']]")).click();
+            getWebDriver().findElement(By.xpath("//button[span[text()='Delete']]")).click();
             takesScreenshot();
-            CommonUtil.pause1s();
+            TestUtils.pause1s();
         }
     }
 
@@ -151,50 +150,50 @@ public class ReservationSteps extends AbstractSteps
     {
         updateNumberOfReservedDate("BEFORE EDIT");
 
-        List<WebElement> elms = getDriver().findElements(By.xpath(RESERVED_DATE));
+        List<WebElement> elms = getWebDriver().findElements(By.xpath(RESERVED_DATE));
         takesScreenshot();
 
         if(!elms.isEmpty())
         {
             WebElement el = elms.get(elms.size()-1).findElement(By.xpath("//nv-icon-button[@name='Edit Reservation']"));
 
-            Actions action = new Actions(getDriver());
+            Actions action = new Actions(getWebDriver());
             action.moveToElement(el).click().perform();
             takesScreenshot();
 
-            WebElement timeslot = getDriver().findElement(By.xpath("//form[@name='editForm']/div/nv-button-timeslot/div/div/button[@aria-label='12PM-3PM' and .//span[text()='12PM-3PM']]"));
-            ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView();", timeslot);
+            WebElement timeslot = getWebDriver().findElement(By.xpath("//form[@name='editForm']/div/nv-button-timeslot/div/div/button[@aria-label='12PM-3PM' and .//span[text()='12PM-3PM']]"));
+            ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].scrollIntoView();", timeslot);
             takesScreenshot();
 
             comments = String.format("This reservation is updated by automation test from Operator V2. Updated at %s.", new Date().toString());
-            CommonUtil.inputText(getDriver(), "//md-input-container[@form='editForm']/input[@aria-label='Comments']", comments);
+            TestUtils.inputText(getWebDriver(), "//md-input-container[@form='editForm']/input[@aria-label='Comments']", comments);
             takesScreenshot();
-            getDriver().findElement(By.xpath("//button[@type='submit' and .//span[text()='Save changes']]")).click();
+            getWebDriver().findElement(By.xpath("//button[@type='submit' and .//span[text()='Save changes']]")).click();
             takesScreenshot();
-            CommonUtil.pause1s();
+            TestUtils.pause1s();
         }
     }
 
     @Then("^reservation, verify \"([^\"]*)\"")
     public void verify(String type)
     {
-        CommonUtil.pause3s();
+        TestUtils.pause3s();
 
         if(type.equalsIgnoreCase("new"))
         {
-            nReservation = getDriver().findElements(By.xpath(RESERVED_DATE)).size();
+            nReservation = getWebDriver().findElements(By.xpath(RESERVED_DATE)).size();
             Assert.assertEquals(eReservation + 1, nReservation);
         }
 
         if(type.equalsIgnoreCase("edit"))
         {
-            nReservation = getDriver().findElements(By.xpath(RESERVED_DATE)).size();
+            nReservation = getWebDriver().findElements(By.xpath(RESERVED_DATE)).size();
             Assert.assertEquals(eReservation, nReservation);
         }
 
         if (type.equalsIgnoreCase("delete"))
         {
-            nReservation = getDriver().findElements(By.xpath(RESERVED_DATE)).size();
+            nReservation = getWebDriver().findElements(By.xpath(RESERVED_DATE)).size();
             Assert.assertEquals(eReservation - 1, nReservation);
         }
     }

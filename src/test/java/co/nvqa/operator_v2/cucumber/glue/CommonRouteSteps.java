@@ -1,13 +1,13 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.operator_v2.support.ScenarioStorage;
+import co.nvqa.operator_v2.util.ScenarioStorage;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import com.nv.qa.api.client.operator_portal.OperatorPortalRoutingClient;
 import com.nv.qa.constants.NvTimeZone;
 import com.nv.qa.model.operator_portal.authentication.AuthResponse;
 import com.nv.qa.model.operator_portal.routing.CreateRouteRequest;
 import com.nv.qa.model.operator_portal.routing.CreateRouteResponse;
-import co.nvqa.operator_v2.support.CommonUtil;
 import com.nv.qa.support.JsonHelper;
 import cucumber.api.DataTable;
 import cucumber.api.java.After;
@@ -114,7 +114,7 @@ public class CommonRouteSteps extends AbstractSteps
         mapOfDynamicVariable.put("formatted_route_date", ROUTE_DATE_SDF.format(currentCalendar.getTime()));
 
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
-        String createRouteRequestJson = CommonUtil.replaceParam(mapOfData.get("createRouteRequest"), mapOfDynamicVariable);
+        String createRouteRequestJson = TestUtils.replaceParam(mapOfData.get("createRouteRequest"), mapOfDynamicVariable);
 
         CreateRouteRequest createRouteRequest = JsonHelper.fromJson(createRouteRequestJson, CreateRouteRequest.class);
         CreateRouteResponse createRouteResponse = operatorPortalRoutingClient.createRoute(createRouteRequest);

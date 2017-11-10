@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import com.google.inject.Inject;
 import co.nvqa.operator_v2.selenium.page.DriverTypeManagementPage;
+import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -24,7 +24,7 @@ public class DriverTypeManagementSteps extends AbstractSteps
     @Override
     public void init()
     {
-        dtmPage = new DriverTypeManagementPage(getDriver());
+        dtmPage = new DriverTypeManagementPage(getWebDriver());
     }
 
     @When("^driver type management is filtered by ([^\"]*) of ([^\"]*)$")

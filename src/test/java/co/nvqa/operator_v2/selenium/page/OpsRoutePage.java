@@ -12,9 +12,9 @@ public class OpsRoutePage extends SimplePage
     public static final String COLUMN_CLASS_ROUTE_ID = "routeId";
     public static final String ACTION_BUTTON_EDIT = "Edit";
 
-    public OpsRoutePage(WebDriver driver)
+    public OpsRoutePage(WebDriver webDriver)
     {
-        super(driver);
+        super(webDriver);
     }
 
     public void clickEditButton(int rowNumber)

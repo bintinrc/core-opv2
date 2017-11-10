@@ -24,7 +24,7 @@ public class DriverStrengthSteps extends AbstractSteps
     @Override
     public void init()
     {
-        dsPage = new DriverStrengthPage(getDriver());
+        dsPage = new DriverStrengthPage(getWebDriver());
     }
 
     @When("^download driver csv list$")

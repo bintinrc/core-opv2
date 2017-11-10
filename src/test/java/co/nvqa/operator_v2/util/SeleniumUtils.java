@@ -1,0 +1,129 @@
+package co.nvqa.operator_v2.util;
+
+import net.lightbody.bmp.BrowserMobProxy;
+import net.lightbody.bmp.BrowserMobProxyServer;
+import net.lightbody.bmp.client.ClientUtil;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.Proxy;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+
+/**
+ *
+ * @author Daniel Joi Partogi Hutapea
+ */
+public class SeleniumUtils
+{
+    public static BrowserMobProxy BROWSER_MOB_PROXY = null;
+    private static final List<WebDriver> LIST_OF_WEB_DRIVER = new ArrayList<>();
+
+    static
+    {
+        Runtime.getRuntime().addShutdownHook(new Thread(()->
+        {
+            for(WebDriver webDriver : LIST_OF_WEB_DRIVER)
+            {
+                closeWebDriver(webDriver);
+            }
+        }));
+    }
+
+    private SeleniumUtils()
+    {
+    }
+
+    public static WebDriver createWebDriver()
+    {
+        switch (TestConstants.SELENIUM_DRIVER.toUpperCase())
+        {
+            case "CHROME": return getWebDriverChrome();
+            default: return getWebDriverChrome();
+        }
+    }
+
+    public static void closeWebDriver(WebDriver webDriver)
+    {
+        if(webDriver!=null)
+        {
+            System.out.println("[INFO] Closing WebDriver...");
+            webDriver.close();
+            System.out.println("[INFO] WebDriver is closed.");
+
+            System.out.println("[INFO] Quiting WebDriver...");
+            webDriver.quit();
+            System.out.println("[INFO] WebDriver is quite.");
+
+            LIST_OF_WEB_DRIVER.remove(webDriver);
+        }
+    }
+
+    private static WebDriver getWebDriverChrome()
+    {
+        System.setProperty("webdriver.chrome.driver", TestConstants.SELENIUM_CHROME_DRIVER);
+
+        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        LoggingPreferences logPrefs = new LoggingPreferences();
+        logPrefs.enable(LogType.BROWSER, Level.ALL);
+        capabilities.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+
+        String downloadFilepath = TestConstants.SELENIUM_WRITE_PATH;
+        HashMap<String, Object> chromePrefs = new HashMap<>();
+        chromePrefs.put("profile.default_content_settings.popups", 0);
+        chromePrefs.put("download.default_directory", downloadFilepath);
+
+        ChromeOptions options = new ChromeOptions();
+        options.setExperimentalOption("prefs", chromePrefs);
+        options.addArguments("--disable-extensions");
+        options.addArguments("--allow-running-insecure-content");
+        //options.addArguments("--start-maximized"); Maximize on Mac does not cover entire screen.
+
+        if(TestConstants.SELENIUM_CHROME_BINARY_PATH!=null && !TestConstants.SELENIUM_CHROME_BINARY_PATH.isEmpty())
+        {
+            options.setBinary(TestConstants.SELENIUM_CHROME_BINARY_PATH);
+        }
+
+        if(TestConstants.ENABLE_PROXY)
+        {
+            System.out.println("[WARN] Browser Mob Proxy is enabled. Please note enable this feature will make automation run slower. Use this proxy only for investigate an issue.");
+
+            if(BROWSER_MOB_PROXY==null)
+            {
+                System.out.println("[INFO] Starting Browser Mob Proxy Server ...");
+                BROWSER_MOB_PROXY = new BrowserMobProxyServer();
+                BROWSER_MOB_PROXY.start(0);
+                System.out.println(String.format("[INFO] Browser Mob Proxy Server is started at port \"%d\".", BROWSER_MOB_PROXY.getPort()));
+                BROWSER_MOB_PROXY.setReadBandwidthLimit(TestConstants.PROXY_READ_BANDWIDTH_LIMIT_IN_BPS);
+                System.out.println(String.format("[INFO] Set Mob Proxy Server read bandwidth limit to \"%,d\" bytes per seconds.", TestConstants.PROXY_READ_BANDWIDTH_LIMIT_IN_BPS));
+                BROWSER_MOB_PROXY.setWriteBandwidthLimit(TestConstants.PROXY_WRITE_BANDWIDTH_LIMIT_IN_BPS);
+                System.out.println(String.format("[INFO] Set Mob Proxy Server write bandwidth limit to \"%,d\" bytes per seconds.", TestConstants.PROXY_WRITE_BANDWIDTH_LIMIT_IN_BPS));
+            }
+
+            Proxy seleniumProxy = ClientUtil.createSeleniumProxy(BROWSER_MOB_PROXY);
+            capabilities.setCapability(CapabilityType.PROXY, seleniumProxy);
+        }
+
+        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+
+        WebDriver webDriver = new ChromeDriver(capabilities);
+        webDriver.manage().timeouts().implicitlyWait(TestConstants.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        webDriver.manage().timeouts().pageLoadTimeout(TestConstants.SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        webDriver.manage().timeouts().setScriptTimeout(TestConstants.SELENIUM_SCRIPT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        //webDriver.manage().window().maximize(); //This works for IE and Firefox. Chrome does not work. There is a bug submitted for this on ChromeDriver project. Use "ChromeOptions.addArguments("--start-maximized");" instead.
+        webDriver.manage().window().setSize(new Dimension(TestConstants.SELENIUM_WINDOW_WIDTH, TestConstants.SELENIUM_WINDOW_HEIGHT));
+        webDriver.manage().window().setPosition(new Point(0, 0));
+        LIST_OF_WEB_DRIVER.add(webDriver);
+        return webDriver;
+    }
+}

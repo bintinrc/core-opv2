@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import com.google.inject.Inject;
 import co.nvqa.operator_v2.selenium.page.PricingScriptsPage;
-import co.nvqa.operator_v2.support.CommonUtil;
+import co.nvqa.operator_v2.util.TestUtils;
+import com.google.inject.Inject;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -35,7 +35,7 @@ public class PricingScriptsSteps extends AbstractSteps
     @Override
     public void init()
     {
-        pricingScriptsPage = new PricingScriptsPage(getDriver());
+        pricingScriptsPage = new PricingScriptsPage(getWebDriver());
     }
 
     @When("^op create new script on Pricing Scripts$")
@@ -120,36 +120,36 @@ public class PricingScriptsSteps extends AbstractSteps
         String expectedHandlingFee = mapOfData.get("handlingFee");
         String expectedComments = mapOfData.get("comments");
 
-        WebElement totalEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container/label[text()='Grand Total']/following-sibling::div[1]");
+        WebElement totalEl = TestUtils.getElementByXpath(getWebDriver(), "//md-input-container/label[text()='Grand Total']/following-sibling::div[1]");
         String actualTotal = totalEl.getText();
         Assert.assertEquals("Total", expectedTotal, actualTotal);
 
-        /*WebElement gstEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container[label[text()='GST']]/div[@class='readonly ng-binding']");
+        /*WebElement gstEl = TestUtils.getElementByXpath(getDriver(), "//md-input-container[label[text()='GST']]/div[@class='readonly ng-binding']");
         String actualGst = gstEl.getText();
         Assert.assertEquals("GST", expectedGst, actualGst);*/
 
-        WebElement codFeeEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container/label[text()='COD Fee']/following-sibling::div[1]");
+        WebElement codFeeEl = TestUtils.getElementByXpath(getWebDriver(), "//md-input-container/label[text()='COD Fee']/following-sibling::div[1]");
         String actualCodFee = codFeeEl.getText();
         Assert.assertEquals("COD Fee", expectedCodFee, actualCodFee);
 
-        WebElement insuranceFeeEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container/label[text()='Insurance Fee']/following-sibling::div[1]");
+        WebElement insuranceFeeEl = TestUtils.getElementByXpath(getWebDriver(), "//md-input-container/label[text()='Insurance Fee']/following-sibling::div[1]");
         String actualInsuranceFee = insuranceFeeEl.getText();
         Assert.assertEquals("Insurance Fee", expectedInsuranceFee, actualInsuranceFee);
 
-        WebElement deliveryFeeEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container/label[text()='Delivery Fee']/following-sibling::div[1]");
+        WebElement deliveryFeeEl = TestUtils.getElementByXpath(getWebDriver(), "//md-input-container/label[text()='Delivery Fee']/following-sibling::div[1]");
         String actualDeliveryFee = deliveryFeeEl.getText();
         Assert.assertEquals("Delivery Fee", expectedDeliveryFee, actualDeliveryFee);
 
-        WebElement handlingFeeEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container/label[text()='Handling Fee']/following-sibling::div[1]");
+        WebElement handlingFeeEl = TestUtils.getElementByXpath(getWebDriver(), "//md-input-container/label[text()='Handling Fee']/following-sibling::div[1]");
         String actualHandlingFee = handlingFeeEl.getText();
         Assert.assertEquals("Handling Fee", expectedHandlingFee, actualHandlingFee);
 
-        WebElement commentsEl = CommonUtil.getElementByXpath(getDriver(), "//md-input-container/label[text()='Comments']/following-sibling::div[1]");
+        WebElement commentsEl = TestUtils.getElementByXpath(getWebDriver(), "//md-input-container/label[text()='Comments']/following-sibling::div[1]");
         String actualComments = commentsEl.getText();
         Assert.assertEquals("Comments", expectedComments, actualComments);
 
-        CommonUtil.pause1s();
-        CommonUtil.clickBtn(getDriver(), "//button[@aria-label='Cancel']");
+        TestUtils.pause1s();
+        TestUtils.clickBtn(getWebDriver(), "//button[@aria-label='Cancel']");
     }
 
     @When("^op linking Pricing Scripts \"([^\"]*)\" or \"([^\"]*)\" to shipper \"([^\"]*)\"$")
@@ -165,7 +165,7 @@ public class PricingScriptsSteps extends AbstractSteps
         pricingScriptsPage.searchScript(pricingScriptsLinkedToAShipper);
         pricingScriptsPage.clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_SHIPPERS);
         boolean isPricingScriptsContainShipper = pricingScriptsPage.isPricingScriptsContainShipper(shipperLinkedToPricingScripts);
-        CommonUtil.clickBtn(getDriver(), pricingScriptsPage.CLOSE_BUTTON);
+        TestUtils.clickBtn(getWebDriver(), pricingScriptsPage.CLOSE_BUTTON);
         Assert.assertEquals(true, isPricingScriptsContainShipper);
     }
 }

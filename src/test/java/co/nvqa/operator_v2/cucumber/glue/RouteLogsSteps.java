@@ -1,10 +1,10 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage;
-import co.nvqa.operator_v2.support.ScenarioStorage;
+import co.nvqa.operator_v2.util.ScenarioStorage;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import com.nv.qa.model.operator_portal.routing.CreateRouteResponse;
-import co.nvqa.operator_v2.support.CommonUtil;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -40,7 +40,7 @@ public class RouteLogsSteps extends AbstractSteps
     @Override
     public void init()
     {
-        routeLogsPage = new RouteLogsPage(getDriver());
+        routeLogsPage = new RouteLogsPage(getWebDriver());
     }
 
     @When("^op select route date filter and click 'Load Selection'$")
@@ -69,8 +69,8 @@ public class RouteLogsSteps extends AbstractSteps
     @Then("^op redirect to this page '([^\"]*)'$")
     public void verifyLoadWaypointsOfSelectedRoute(String redirectUrl)
     {
-        String primaryWindowHandle = getDriver().getWindowHandle();
-        Set<String> windowHandles = getDriver().getWindowHandles();
+        String primaryWindowHandle = getWebDriver().getWindowHandle();
+        Set<String> windowHandles = getWebDriver().getWindowHandles();
 
         String actualCurrentUrl = null;
 
@@ -78,12 +78,12 @@ public class RouteLogsSteps extends AbstractSteps
         {
             if(!primaryWindowHandle.equals(windowName))
             {
-                getDriver().switchTo().window(windowName);
+                getWebDriver().switchTo().window(windowName);
                 pause3s();
 
                 try
                 {
-                    WebDriverWait webDriverWait = new WebDriverWait(getDriver(), ALERT_WAIT_TIMEOUT_IN_SECONDS);
+                    WebDriverWait webDriverWait = new WebDriverWait(getWebDriver(), ALERT_WAIT_TIMEOUT_IN_SECONDS);
                     Alert alert = webDriverWait.until(ExpectedConditions.alertIsPresent());
                     pause200ms();
                     alert.accept();
@@ -91,14 +91,14 @@ public class RouteLogsSteps extends AbstractSteps
                 catch(Exception ex)
                 {
                     scenarioManager.getCurrentScenario().write(String.format("Alert is not present after %ds.", ALERT_WAIT_TIMEOUT_IN_SECONDS));
-                    scenarioManager.getCurrentScenario().write(CommonUtil.convertExceptionStackTraceToString(ex));
+                    scenarioManager.getCurrentScenario().write(TestUtils.convertExceptionStackTraceToString(ex));
                 }
 
                 pause100ms();
-                actualCurrentUrl = getDriver().getCurrentUrl();
-                getDriver().close();
+                actualCurrentUrl = getWebDriver().getCurrentUrl();
+                getWebDriver().close();
                 pause100ms();
-                getDriver().switchTo().window(primaryWindowHandle);
+                getWebDriver().switchTo().window(primaryWindowHandle);
                 pause500ms();
                 break;
             }

@@ -24,7 +24,7 @@ public class DpSteps extends AbstractSteps
     @Override
     public void init()
     {
-        dpPage = new DpPage(getDriver());
+        dpPage = new DpPage(getWebDriver());
     }
 
     @When("^download button in ([^\"]*) is clicked$")

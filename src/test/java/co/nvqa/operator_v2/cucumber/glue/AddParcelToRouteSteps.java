@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import com.google.inject.Inject;
 import co.nvqa.operator_v2.selenium.page.AddParcelToRoutePage;
-import co.nvqa.operator_v2.support.ScenarioStorage;
+import co.nvqa.operator_v2.util.ScenarioStorage;
+import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -28,7 +28,7 @@ public class AddParcelToRouteSteps extends AbstractSteps
     @Override
     public void init()
     {
-        addParcelToRoutePage = new AddParcelToRoutePage(getDriver());
+        addParcelToRoutePage = new AddParcelToRoutePage(getWebDriver());
     }
 
     @When("^Operator V2 choose route group, select tag \"([^\"]*)\" and submit$")

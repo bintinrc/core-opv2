@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.support.CommonUtil;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
@@ -18,9 +18,9 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
 
     public static final String ACTION_BUTTON_RESCHEDULE_NEXT_DAY = "container.aged-parcel-management.reschedule-next-day";
 
-    public AgedParcelManagementPage(WebDriver driver)
+    public AgedParcelManagementPage(WebDriver webDriver)
     {
-        super(driver, MD_VIRTUAL_REPEAT);
+        super(webDriver, MD_VIRTUAL_REPEAT);
     }
 
     public void verifyAgedParcelOrderIsListed(String trackingId, String shipperName)
@@ -48,7 +48,7 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
     @SuppressWarnings("unchecked")
     public void loadSelection(String trackingId, int agedDays)
     {
-        CommonUtil.retryIfExpectedExceptionOccurred(()->
+        TestUtils.retryIfExpectedExceptionOccurred(()->
         {
             sendKeys("//input[@aria-label='Aged Days']", String.valueOf(agedDays));
             click("//button/div[text()='Load Selection']");

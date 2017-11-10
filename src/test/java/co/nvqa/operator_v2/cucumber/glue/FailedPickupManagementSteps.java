@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.FailedPickupManagementPage;
+import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
-import co.nvqa.operator_v2.support.ScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
@@ -24,7 +24,7 @@ public class FailedPickupManagementSteps extends AbstractSteps
     @Override
     public void init()
     {
-        failedPickupManagementPage = new FailedPickupManagementPage(getDriver());
+        failedPickupManagementPage = new FailedPickupManagementPage(getWebDriver());
     }
 
     @Then("^Operator verify the failed pickup C2C/Return order is listed on Failed Pickup orders list$")

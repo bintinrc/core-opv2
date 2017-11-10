@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import com.google.inject.Inject;
 import co.nvqa.operator_v2.selenium.page.TagManagementPage;
-import co.nvqa.operator_v2.support.CommonUtil;
+import co.nvqa.operator_v2.util.TestUtils;
+import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -31,7 +31,7 @@ public class TagManagementSteps extends AbstractSteps
     @Override
     public void init()
     {
-        tagManagementPage = new TagManagementPage(getDriver());
+        tagManagementPage = new TagManagementPage(getWebDriver());
     }
 
     @When("^op create new tag on Tag Management$")
@@ -72,7 +72,7 @@ public class TagManagementSteps extends AbstractSteps
     @SuppressWarnings("unchecked")
     public void verifyNewTagCreatedSuccessfully()
     {
-        CommonUtil.retryIfExpectedExceptionOccurred(()->
+        TestUtils.retryIfExpectedExceptionOccurred(()->
         {
             reloadPageAndEnableSortByName();
 
@@ -100,7 +100,7 @@ public class TagManagementSteps extends AbstractSteps
     @SuppressWarnings("unchecked")
     public void verifyTagUpdatedSuccessfully()
     {
-        CommonUtil.retryIfExpectedExceptionOccurred(()->
+        TestUtils.retryIfExpectedExceptionOccurred(()->
         {
             reloadPageAndEnableSortByName();
 
