@@ -123,7 +123,7 @@ public class ShipmentManagementPage extends SimplePage
     {
         click("//input[@placeholder='Select Filter']");
         click(grabXPathFilterDropdown(filterLabel));
-        click("//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
+        TestUtils.hoverMouseTo(getwebDriver(), "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
         click("//h4[text()='Select Search Filters']");
 
         sendKeys(String.format("//nv-autocomplete[@item-types='%s']//input[@aria-label='Search or Select...']", filterLabel), value);
