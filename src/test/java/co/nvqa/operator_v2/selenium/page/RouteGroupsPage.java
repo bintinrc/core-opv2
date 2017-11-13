@@ -15,7 +15,7 @@ public class RouteGroupsPage extends SimplePage
 {
     private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
 
-    private static final String MD_VIRTUAL_REPEAT = "routeGroup in ctrl.routeGroupsTableData";
+    private static final String MD_VIRTUAL_REPEAT = "routeGroup in getTableData()";
     public static final String COLUMN_CLASS_NAME = "name";
 
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
@@ -58,7 +58,7 @@ public class RouteGroupsPage extends SimplePage
 
     public void setRouteGroupNameValue(String value)
     {
-        sendKeys("//input[@aria-label='Name']", value);
+        sendKeys("//input[@aria-label='Group Name']", value);
     }
 
     public void setRouteGroupDescriptionValue(String value)
