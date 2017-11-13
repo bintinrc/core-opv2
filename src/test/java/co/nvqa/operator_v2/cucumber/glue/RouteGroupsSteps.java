@@ -93,34 +93,27 @@ public class RouteGroupsSteps extends AbstractSteps
     {
         String routeGroupName = scenarioStorage.get("routeGroupName");
         int counter = 0;
-        String actualName;
+        String actualRouteGroupName;
         boolean retry;
 
         do
         {
             takesScreenshot();
             routeGroupsPage.searchTable(routeGroupName);
-            actualName = routeGroupsPage.getTextOnTable(1, RouteGroupsPage.COLUMN_CLASS_NAME);
+            actualRouteGroupName = routeGroupsPage.getTextOnTable(1, RouteGroupsPage.COLUMN_CLASS_NAME);
 
-            retry = actualName==null && counter++<=MAX_RETRY;
+            retry = (actualRouteGroupName==null||actualRouteGroupName.isEmpty()) && counter++<=MAX_RETRY;
 
             if(retry)
             {
-                writeToScenarioLog(String.format("[INFO] Retrying to load and search Route Group. Retrying %dx ...", counter));
+                writeToScenarioLog(String.format("[INFO] Retrying to load and search Route Group. [Route Group Name = '%s'] Retrying %dx ...", actualRouteGroupName, counter));
                 takesScreenshot();
                 reloadPage();
             }
         }
         while(retry);
 
-        if(actualName!=null)
-        {
-            Assert.assertTrue("Route Group name not matched.", actualName.startsWith(routeGroupName)); //Route Group name is concatenated with description.
-        }
-        else
-        {
-            Assert.fail("Route Group name not found.");
-        }
+        Assert.assertThat("Route Group name not matched.", actualRouteGroupName, Matchers.startsWith(routeGroupName)); //Route Group name is concatenated with description.
     }
 
     @When("^op update 'route group' on 'Route Groups'$")
