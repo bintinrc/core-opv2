@@ -3,12 +3,16 @@ package co.nvqa.operator_v2.cucumber.glue;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Given;
 
+import java.util.Random;
+
 /**
  *
  * @author Daniel Joi Partogi Hutapea
  */
 public class SampleSteps extends AbstractSteps
 {
+    private static final Random random = new Random();
+
     @Inject
     public SampleSteps(ScenarioManager scenarioManager)
     {
@@ -24,14 +28,15 @@ public class SampleSteps extends AbstractSteps
     public void dummyStep(String dummy)
     {
         String scenarioName = getScenarioManager().getCurrentScenario().getName();
+        boolean randomSuccess = random.nextBoolean();
 
-        if("failed".equalsIgnoreCase(dummy))
+        if(randomSuccess)
         {
-            throw new RuntimeException("Dummy failed on scenario: "+scenarioName);
+            System.out.println("[INFO] Dummy success on scenario: "+scenarioName);
         }
         else
         {
-            System.out.println("[INFO] Dummy success on scenario: "+scenarioName);
+            throw new RuntimeException("Dummy failed on scenario: "+scenarioName);
         }
     }
 }
