@@ -22,7 +22,11 @@ import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -78,6 +82,8 @@ public class ScenarioManager
     {
         if(scenario.isFailed())
         {
+            writeFailedScenarioTag(scenario);
+
             if(webDriver!=null)
             {
                 takesScreenshot(webDriver, scenario);
@@ -88,6 +94,41 @@ public class ScenarioManager
             {
                 System.out.println("[WARN] WebDriver not run.");
             }
+        }
+    }
+
+    private void writeFailedScenarioTag(Scenario scenario)
+    {
+        boolean isRunOnBamboo = TestConstants.BAMBOO_BUILD_RESULT_KEY!=null;
+
+        if(isRunOnBamboo)
+        {
+            Collection<String> sourceTagNames = scenario.getSourceTagNames();
+
+            for(String sourceTagName : sourceTagNames)
+            {
+                if(sourceTagName.matches("@[\\w]+#\\d+"))
+                {
+                    File tmpJobFolder = new File(TestConstants.TEMP_DIR, TestConstants.BAMBOO_BUILD_RESULT_KEY);
+                    tmpJobFolder.mkdirs();
+                    File file = new File(tmpJobFolder, "failed-scenario-tag-names.txt");
+
+                    try
+                    {
+                        System.out.println(String.format("[INFO] Writing failed scenario tag name (%s) to '%s' ...", sourceTagName, file.getAbsolutePath()));
+                        Files.write(Paths.get(file.toURI()), (sourceTagName+'\n').getBytes("UTF-8"), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                        System.out.println(String.format("[INFO] Writing failed scenario tag name (%s) to '%s' is done.", sourceTagName, file.getAbsolutePath()));
+                    }
+                    catch(IOException ex)
+                    {
+                        System.out.println(String.format("[ERROR] Writing failed scenario tag name (%s) to '%s' is failed. Cause: %s", sourceTagName, file.getAbsolutePath(), ex.getMessage()));
+                    }
+                }
+            }
+        }
+        else
+        {
+            System.out.println("[WARN] This project is not run on Bamboo. Do not need to write the failed scenario tag names to files.");
         }
     }
 

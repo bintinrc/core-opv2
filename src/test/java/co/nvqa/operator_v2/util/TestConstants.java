@@ -20,8 +20,6 @@ public final class TestConstants extends StandardTestConstants
 
     public static final String REPORT_HTML_OUTPUT_DIR = System.getProperty("REPORT_HTML_OUTPUT_DIR");
 
-    public static final int STEP_DELAY_MILLISECONDS;
-
     public static final boolean ENABLE_PROXY;
     public static final long PROXY_READ_BANDWIDTH_LIMIT_IN_BPS;
     public static final long PROXY_WRITE_BANDWIDTH_LIMIT_IN_BPS;
@@ -73,8 +71,6 @@ public final class TestConstants extends StandardTestConstants
         {
             loadProperties(ENVIRONMENT_SYSTEM_PROPERTY, CONFIGURATION_FILE);
 
-            STEP_DELAY_MILLISECONDS = getPropertyValueAsInteger("step-delay-seconds") * 1000;
-
             ENABLE_PROXY = getPropertyValueAsBoolean("enable-proxy");
             PROXY_READ_BANDWIDTH_LIMIT_IN_BPS = getPropertyValueAsLong("proxy-read-bandwidth-limit-in-bps");
             PROXY_WRITE_BANDWIDTH_LIMIT_IN_BPS = getPropertyValueAsLong("proxy-write-bandwidth-limit-in-bps");
@@ -100,12 +96,7 @@ public final class TestConstants extends StandardTestConstants
             SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS = getPropertyValueAsLong("selenium-default-web-driver-wait-timeout-in-seconds");
             SELENIUM_WINDOW_WIDTH = getPropertyValueAsInteger("selenium-window-width");
             SELENIUM_WINDOW_HEIGHT = getPropertyValueAsInteger("selenium-window-height");
-            SELENIUM_WRITE_PATH = getPropertyValueAsString("selenium-write-path") + TEMP_FOLDER_DATE_FORMAT.format(new Date()) + File.separatorChar;
-
-            {
-                // Ensure directory exist.
-                new File(SELENIUM_WRITE_PATH).mkdirs();
-            }
+            SELENIUM_WRITE_PATH = getPropertyValueAsStringAndCreateDirectory("selenium-write-path", TEMP_FOLDER_DATE_FORMAT.format(new Date())+File.separatorChar);
 
             OPERATOR_PORTAL_URL = getPropertyValueAsString("operator-portal-url");
             OPERATOR_PORTAL_UID = getPropertyValueAsString("operator-portal-uid");
