@@ -11,7 +11,7 @@ Feature: Sample 01
 
   @01Sample#02
   Scenario: Scenario 2 on Sample 1
-    Given dummy "failed"
+    Given dummy "success"
 
   @01Sample#03
   Scenario: Scenario 3 on Sample 1
