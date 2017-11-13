@@ -94,6 +94,8 @@ task runCucumberParallel(dependsOn: ["testClasses"]) {
     doLast {
         def forkCount = 4
 
+        println "[INFOOOO] Build Number: $System.env.bamboo_buildResultKey"
+
         if(project.hasProperty("forkCount"))
         {
             forkCount = project.getProperty("forkCount") as Integer
