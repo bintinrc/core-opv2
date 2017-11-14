@@ -1,10 +1,11 @@
 @TagManagement @selenium
 Feature: Tag Management
 
-  @LaunchBrowser
+  @LaunchBrowser @TagManagement#01
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
+  @TagManagement#01
   Scenario: Operator create, update and delete tag on Tag Management menu. (uid:a49a930e-1fb2-4a0c-8a8f-8bbccc5d87cc)
     Given Operator V2 cleaning Tag Management by calling API endpoint directly
     Given op click navigation Tag Management in Routing
@@ -17,5 +18,5 @@ Feature: Tag Management
 #    When op delete tag on Tag Management
 #    Then tag on Tag Management deleted successfully
 
-  @KillBrowser
+  @KillBrowser @TagManagement#01
   Scenario: Kill Browser

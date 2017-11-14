@@ -1,10 +1,11 @@
 @RouteGroups @selenium
 Feature: Route Groups
 
-  @LaunchBrowser
+  @LaunchBrowser @RouteGroups#01
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
+  @RouteGroups#01
   Scenario: Operator create, update and delete 'route group' on 'Route Groups'. (uid:21c16416-b5c7-40c9-adb1-98c37bdf820f)
     Given op click navigation 2. Route Group Management in Routing
     When op create new 'route group' on 'Route Groups' using data below:
@@ -16,5 +17,5 @@ Feature: Route Groups
     When op delete 'route group' on 'Route Groups'
     Then 'route group' on 'Route Groups' deleted successfully
 
-  @KillBrowser
+  @KillBrowser @RouteGroups#01
   Scenario: Kill Browser

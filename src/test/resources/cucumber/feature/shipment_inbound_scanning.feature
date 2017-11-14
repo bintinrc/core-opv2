@@ -1,10 +1,11 @@
 @ShipmentInboundScanning @selenium @shipment
 Feature: Shipment Inbound Scanning
 
-  @LaunchBrowser
+  @LaunchBrowser @ShipmentInboundScanning#01
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
+  @ShipmentInboundScanning#01
   Scenario: shipment inbound to van (uid:eed4a9d2-45c9-4b77-9b71-f88ff1423f0f)
     Given op click navigation Shipment Management in Inter-Hub
     # Create shipment
@@ -25,6 +26,7 @@ Feature: Shipment Inbound Scanning
     Then op click edit filter
     Then clear filter
 
+  @ShipmentInboundScanning#01
   Scenario: shipment inbound to transit hub (uid:12758688-5e0d-4121-9b27-e11765138648)
     Given op refresh page
     # Search shipment
@@ -45,6 +47,7 @@ Feature: Shipment Inbound Scanning
     Then op click edit filter
     Then clear filter
 
+  @ShipmentInboundScanning#01
   Scenario: shipment inbound to destination hub (uid:595ea161-b4a0-4490-b4c2-e439f2bd6293)
     Given op refresh page
     # Search shipment
@@ -65,6 +68,7 @@ Feature: Shipment Inbound Scanning
     Then op click edit filter
     Then clear filter
 
+  @ShipmentInboundScanning#01
   Scenario: change end date when inbound scanning (uid:6efa9d01-49d8-4515-b924-5805d34d587a)
     # Create order for scan
     Given Create an V3 order with the following attributes:
@@ -94,5 +98,5 @@ Feature: Shipment Inbound Scanning
     Then op click edit filter
     Then clear filter
 
-  @KillBrowser
+  @KillBrowser @ShipmentInboundScanning#01
   Scenario: Kill Browser
