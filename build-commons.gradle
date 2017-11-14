@@ -46,7 +46,8 @@ task showInfo {
 def testOutputResourcesDir = sourceSets.test.output.resourcesDir as String
 def cucumberFeatureDir = "$testOutputResourcesDir/cucumber/feature"
 def cucumberGluePackage = project.ext.cucumberGluePackage
-def bambooBuildResultKey = System.env.bamboo_buildResultKey
+def bambooBuildResultKey = "build-1" //System.env.bamboo_buildResultKey
+def failedScenarioTagNames = ""
 
 /**
  * This variables below will be set on processTestResources.
@@ -55,59 +56,6 @@ def driverName
 def dbUrlQaAutomation
 def dbUser
 def dbPass
-
-ext.getFailedScenarioTagNames = { ->
-    boolean isRunOnBamboo = bambooBuildResultKey!=null
-    List<String> listOfFailedScenarioTagNames = new ArrayList<>()
-
-    if(isRunOnBamboo)
-    {
-        try
-        {
-            groovy.sql.Sql.loadDriver(driverName)
-            Connection conn = DriverManager.getConnection(dbUrlQaAutomation, dbUser, dbPass)
-            println "[GRADLE_INFO] Execute SQL: SELECT * FROM failed_scenarios WHERE bamboo_build_result_key = '$bambooBuildResultKey'"
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM failed_scenarios WHERE bamboo_build_result_key = ?")
-            pstmt.setString(1, bambooBuildResultKey)
-            ResultSet rs = pstmt.executeQuery()
-
-            while(rs.next())
-            {
-                listOfFailedScenarioTagNames.add(rs.getString("scenario_tag_name"))
-            }
-
-            rs.close()
-            pstmt.close()
-
-            String sqlClean = "DELETE FROM failed_scenarios"
-            println "[GRADLE_INFO] Execute SQL: $sqlClean"
-            pstmt = conn.prepareStatement(sqlClean)
-            int affectedRow = pstmt.executeUpdate()
-            println "[GRADLE_INFO] SQL Query Result: $affectedRow row(s) affected"
-
-            pstmt.close()
-            conn.close()
-        }
-        catch(ClassNotFoundException | SQLException ex)
-        {
-            println "[GRADLE_WARN] Failed to load data from database. Cause: ${ex.getMessage()}"
-        }
-    }
-    else
-    {
-        System.out.println("[GRADLE_INFO] This project is not run on Bamboo. No need to read failed scenarios tag name from database.")
-    }
-
-    String failedScenarioTagNames = null
-
-    if(!listOfFailedScenarioTagNames.isEmpty())
-    {
-        failedScenarioTagNames = listOfFailedScenarioTagNames.stream().filter{ tagName->!tagName.isEmpty() }.collect(Collectors.joining(","))
-    }
-
-    println "[GRADLE_INFO] List of Failed Scenarios Tag Name: "+listOfFailedScenarioTagNames
-    return failedScenarioTagNames
-}
 
 processTestResources {
     def environment = "local"
@@ -134,6 +82,60 @@ processTestResources {
     }
 }
 
+task loadFailedScenarioTagNames(dependsOn: ["processTestResources"]) {
+    println "[GRADLE_INFO] Running loadFailedScenarioTagNames ..."
+    boolean isRunOnBamboo = bambooBuildResultKey!=null
+    List<String> listOfFailedScenarioTagNames = new ArrayList<>()
+
+    if(isRunOnBamboo)
+    {
+        try
+        {
+            groovy.sql.Sql.loadDriver(driverName)
+            Connection conn = DriverManager.getConnection(dbUrlQaAutomation, dbUser, dbPass)
+            println "[GRADLE_INFO] Execute SQL: SELECT * FROM failed_scenarios WHERE bamboo_build_result_key = '$bambooBuildResultKey'"
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM failed_scenarios WHERE bamboo_build_result_key = ?")
+            pstmt.setString(1, bambooBuildResultKey)
+            ResultSet rs = pstmt.executeQuery()
+            int counter = 0
+
+            while(rs.next())
+            {
+                listOfFailedScenarioTagNames.add(rs.getString("scenario_tag_name"))
+                counter++
+            }
+
+            println "[GRADLE_INFO] SQL Query Result: $counter row(s) found"
+            rs.close()
+            pstmt.close()
+
+            String sqlClean = "DELETE FROM failed_scenarios"
+            println "[GRADLE_INFO] Execute SQL: $sqlClean"
+            pstmt = conn.prepareStatement(sqlClean)
+            int affectedRow = pstmt.executeUpdate()
+            println "[GRADLE_INFO] SQL Query Result: $affectedRow row(s) affected"
+
+            pstmt.close()
+            conn.close()
+        }
+        catch(ClassNotFoundException | SQLException ex)
+        {
+            println "[GRADLE_WARN] Failed to load data from database. Cause: ${ex.getMessage()}"
+        }
+    }
+    else
+    {
+        System.out.println("[GRADLE_INFO] This project is not run on Bamboo. No need to read failed scenarios tag name from database.")
+    }
+
+    if(!listOfFailedScenarioTagNames.isEmpty())
+    {
+        failedScenarioTagNames = listOfFailedScenarioTagNames.stream().filter{ tagName->!tagName.isEmpty() }.collect(Collectors.joining(","))
+    }
+
+    println "[GRADLE_INFO] List of Failed Scenarios Tag Name: "+listOfFailedScenarioTagNames
+}
+
 /**
  * Execute Cucumber task.
  *
@@ -153,16 +155,17 @@ task runCucumber(dependsOn: ["testClasses"], type: JavaExec) {
             cucumberFeatureDir
     ]
 
-    def failedScenarioTagNames = getFailedScenarioTagNames()
-
     if(failedScenarioTagNames!=null && !failedScenarioTagNames.isEmpty())
     {
         def tags = failedScenarioTagNames
+        println "[GRADLE_INFO] Filter Tags: $tags"
         args "--tags", tags
     }
     else if(project.hasProperty("tags"))
     {
-        args "--tags", project.getProperty("tags")
+        def tags = project.getProperty("tags")
+        println "[GRADLE_INFO] Filter Tags: $tags"
+        args "--tags", tags
     }
 
     systemProperties["REPORT_HTML_OUTPUT_DIR"] = reportHtmlOutputDir
@@ -193,8 +196,6 @@ task runCucumberParallel(dependsOn: ["testClasses"]) {
         println "[GRADLE_INFO] Number of fork: $forkCount"
         def executorService = Executors.newFixedThreadPool(forkCount)
         println "[GRADLE_INFO] Cucumber Feature Directory: $cucumberFeatureDir"
-
-        def failedScenarioTagNames = getFailedScenarioTagNames()
 
         fileTree(dir: cucumberFeatureDir, include: "**/*.feature").each{ featureFile ->
             println "[GRADLE_INFO] Running feature file: $featureFile"
