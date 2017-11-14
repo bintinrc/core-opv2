@@ -46,7 +46,7 @@ task showInfo {
 def testOutputResourcesDir = sourceSets.test.output.resourcesDir as String
 def cucumberFeatureDir = "$testOutputResourcesDir/cucumber/feature"
 def cucumberGluePackage = project.ext.cucumberGluePackage
-def bambooBuildResultKey = "build-1" //System.env.bamboo_buildResultKey
+def bambooBuildResultKey = System.env.bamboo_buildResultKey
 def failedScenarioTagNames = ""
 
 /**
