@@ -62,6 +62,7 @@ public final class TestConstants extends StandardTestConstants
 
     public static final String DB_DRIVER;
     public static final String DB_URL_CORE;
+    public static final String DB_URL_QA_AUTOMATION;
     public static final String DB_USER;
     public static final String DB_PASS;
 
@@ -124,6 +125,7 @@ public final class TestConstants extends StandardTestConstants
 
             DB_DRIVER = getPropertyValueAsString("db-driver");
             DB_URL_CORE = getPropertyValueAsString("db-url-core");
+            DB_URL_QA_AUTOMATION = getPropertyValueAsString("db-url-qa-automation");
             DB_USER = getPropertyValueAsString("db-user");
             DB_PASS = getPropertyValueAsString("db-pass");
         }

@@ -1,11 +1,24 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
-import java.nio.charset.StandardCharsets
-import java.nio.file.Files
-import java.nio.file.Paths
+import java.sql.Connection
+import java.sql.DriverManager
+import java.sql.PreparedStatement
+import java.sql.ResultSet
+import java.sql.SQLException
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "mysql:mysql-connector-java:6.0.6"
+    }
+}
+
+gradle.class.classLoader.addURL(buildscript.configurations.classpath.find { it.name.startsWith('mysql') }.toURI().toURL())
 
 test {
     testLogging {
@@ -33,32 +46,66 @@ task showInfo {
 def testOutputResourcesDir = sourceSets.test.output.resourcesDir as String
 def cucumberFeatureDir = "$testOutputResourcesDir/cucumber/feature"
 def cucumberGluePackage = project.ext.cucumberGluePackage
-String tempDir //This value will be set on processTestResources.
-String bambooBuildResultKey = System.env.bamboo_buildResultKey
+def bambooBuildResultKey = System.env.bamboo_buildResultKey
+
+/**
+ * This variables below will be set on processTestResources.
+ */
+def driverName
+def dbUrlQaAutomation
+def dbUser
+def dbPass
 
 ext.getFailedScenarioTagNames = { ->
-    String failedScenarioTagNames = null
     boolean isRunOnBamboo = bambooBuildResultKey!=null
+    List<String> listOfFailedScenarioTagNames = new ArrayList<>()
 
     if(isRunOnBamboo)
     {
-        File tmpJobFolder = new File(tempDir, bambooBuildResultKey)
-        File file = new File(tmpJobFolder, "failed-scenario-tag-names.txt")
-
-        if(file.exists())
+        try
         {
-            String fileContent = new String(Files.readAllBytes(Paths.get(file.toURI())), StandardCharsets.UTF_8).trim()
-            
-            if(!fileContent.isEmpty())
+            groovy.sql.Sql.loadDriver(driverName)
+            Connection conn = DriverManager.getConnection(dbUrlQaAutomation, dbUser, dbPass)
+            println "[GRADLE_INFO] Execute SQL: SELECT * FROM failed_scenarios WHERE bamboo_build_result_key = '$bambooBuildResultKey'"
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM failed_scenarios WHERE bamboo_build_result_key = ?")
+            pstmt.setString(1, bambooBuildResultKey)
+            ResultSet rs = pstmt.executeQuery()
+
+            while(rs.next())
             {
-                String[] tagNames = fileContent.split("\n")
-                failedScenarioTagNames = Arrays.asList(tagNames).stream().filter{tagName->!tagName.isEmpty()}.collect(Collectors.joining(","))
+                listOfFailedScenarioTagNames.add(rs.getString("scenario_tag_name"))
             }
 
-            file.delete()
+            rs.close()
+            pstmt.close()
+
+            String sqlClean = "DELETE FROM failed_scenarios"
+            println "[GRADLE_INFO] Execute SQL: $sqlClean"
+            pstmt = conn.prepareStatement(sqlClean)
+            int affectedRow = pstmt.executeUpdate()
+            println "[GRADLE_INFO] SQL Query Result: $affectedRow row(s) affected"
+
+            pstmt.close()
+            conn.close()
+        }
+        catch(ClassNotFoundException | SQLException ex)
+        {
+            println "[GRADLE_WARN] Failed to load data from database. Cause: ${ex.getMessage()}"
         }
     }
+    else
+    {
+        System.out.println("[GRADLE_INFO] This project is not run on Bamboo. No need to read failed scenarios tag name from database.")
+    }
 
+    String failedScenarioTagNames = null
+
+    if(!listOfFailedScenarioTagNames.isEmpty())
+    {
+        failedScenarioTagNames = listOfFailedScenarioTagNames.stream().filter{ tagName->!tagName.isEmpty() }.collect(Collectors.joining(","))
+    }
+
+    println "[GRADLE_INFO] List of Failed Scenarios Tag Name: "+listOfFailedScenarioTagNames
     return failedScenarioTagNames
 }
 
@@ -77,7 +124,10 @@ processTestResources {
     properties.load(new FileInputStream(new File(propertiesFileName)))
     def tokens = properties.toSorted()
 
-    tempDir = tokens.get("tmp-dir")
+    driverName = tokens.get("db-driver")
+    dbUrlQaAutomation = tokens.get("db-url-qa-automation")
+    dbUser = tokens.get("db-user")
+    dbPass = tokens.get("db-pass")
 
     filesMatching(["**/*.properties", "**/*.feature"]) {
         filter(ReplaceTokens, tokens: tokens, beginToken: "{", endToken: "}")
@@ -103,7 +153,14 @@ task runCucumber(dependsOn: ["testClasses"], type: JavaExec) {
             cucumberFeatureDir
     ]
 
-    if(project.hasProperty("tags"))
+    def failedScenarioTagNames = getFailedScenarioTagNames()
+
+    if(failedScenarioTagNames!=null && !failedScenarioTagNames.isEmpty())
+    {
+        def tags = failedScenarioTagNames
+        args "--tags", tags
+    }
+    else if(project.hasProperty("tags"))
     {
         args "--tags", project.getProperty("tags")
     }

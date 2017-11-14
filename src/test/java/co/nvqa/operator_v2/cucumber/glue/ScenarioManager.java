@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.util.SeleniumUtils;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Singleton;
+import com.nv.qa.database.QaAutomationJdbc;
 import com.nv.qa.model.operator_portal.authentication.AuthResponse;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
@@ -22,9 +23,6 @@ import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -41,9 +39,11 @@ public class ScenarioManager
     private WebDriver webDriver;
     private Scenario scenario;
     private ScenarioStorage scenarioStorage;
+    private QaAutomationJdbc qaAutomationJdbc;
 
     public ScenarioManager()
     {
+        qaAutomationJdbc = new QaAutomationJdbc(TestConstants.DB_DRIVER, TestConstants.DB_URL_QA_AUTOMATION, TestConstants.DB_USER, TestConstants.DB_PASS);
     }
 
     /**
@@ -109,26 +109,22 @@ public class ScenarioManager
             {
                 if(sourceTagName.matches("@[\\w]+#\\d+"))
                 {
-                    File tmpJobFolder = new File(TestConstants.TEMP_DIR, TestConstants.BAMBOO_BUILD_RESULT_KEY);
-                    tmpJobFolder.mkdirs();
-                    File file = new File(tmpJobFolder, "failed-scenario-tag-names.txt");
-
                     try
                     {
-                        System.out.println(String.format("[INFO] Writing failed scenario tag name (%s) to '%s' ...", sourceTagName, file.getAbsolutePath()));
-                        Files.write(Paths.get(file.toURI()), (sourceTagName+'\n').getBytes("UTF-8"), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-                        System.out.println(String.format("[INFO] Writing failed scenario tag name (%s) to '%s' is done.", sourceTagName, file.getAbsolutePath()));
+                        System.out.println(String.format("[INFO] Writing failed scenario tag name (%s) to database ...", sourceTagName));
+                        qaAutomationJdbc.addFailedScenario(TestConstants.BAMBOO_BUILD_RESULT_KEY, sourceTagName);
+                        System.out.println(String.format("[INFO] Writing failed scenario tag name (%s) to database is done.", sourceTagName));
                     }
-                    catch(IOException ex)
+                    catch(Exception ex)
                     {
-                        System.out.println(String.format("[ERROR] Writing failed scenario tag name (%s) to '%s' is failed. Cause: %s", sourceTagName, file.getAbsolutePath(), ex.getMessage()));
+                        System.out.println(String.format("[ERROR] Writing failed scenario tag name (%s) to database is failed. Cause: %s", sourceTagName, ex.getMessage()));
                     }
                 }
             }
         }
         else
         {
-            System.out.println("[WARN] This project is not run on Bamboo. Do not need to write the failed scenario tag names to files.");
+            System.out.println("[WARN] This project is not run on Bamboo. No need to insert the failed scenarios tag name to database.");
         }
     }
 
