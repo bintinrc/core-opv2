@@ -18,7 +18,7 @@ buildscript {
     }
 }
 
-gradle.class.classLoader.addURL(buildscript.configurations.classpath.find { it.name.startsWith('mysql') }.toURI().toURL())
+gradle.class.classLoader.addURL(buildscript.configurations.classpath.find{ it.name.startsWith('mysql') }.toURI().toURL())
 
 test {
     testLogging {
@@ -130,7 +130,7 @@ task loadFailedScenarioTagNames(dependsOn: ["processTestResources"]) {
 
     if(!listOfFailedScenarioTagNames.isEmpty())
     {
-        failedScenarioTagNames = listOfFailedScenarioTagNames.stream().filter{ tagName->!tagName.isEmpty() }.collect(Collectors.joining(","))
+        failedScenarioTagNames = listOfFailedScenarioTagNames.stream().filter{ tagName->!tagName.isEmpty() }.distinct().collect(Collectors.joining(","))
     }
 
     println "[GRADLE_INFO] List of Failed Scenarios Tag Name: "+listOfFailedScenarioTagNames
