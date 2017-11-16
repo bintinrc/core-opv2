@@ -80,7 +80,7 @@ public class ScenarioManager extends StandardScenarioManager
     {
         if(scenario.isFailed())
         {
-            writeFailedScenarioTag(scenario.getSourceTagNames());
+            writeFailedScenarioTag(scenario.getName(), scenario.getSourceTagNames());
 
             if(webDriver!=null)
             {
