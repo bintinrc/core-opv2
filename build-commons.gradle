@@ -46,6 +46,7 @@ task showInfo {
 def testOutputResourcesDir = sourceSets.test.output.resourcesDir as String
 def cucumberFeatureDir = "$testOutputResourcesDir/cucumber/feature"
 def cucumberGluePackage = project.ext.cucumberGluePackage
+def bambooBuildKey = System.env.bamboo_buildKey
 def bambooBuildResultKey = System.env.bamboo_buildResultKey
 def failedScenarioTagNames = ""
 
@@ -93,8 +94,8 @@ task loadFailedScenarioTagNames(dependsOn: ["processTestResources"]) {
         {
             groovy.sql.Sql.loadDriver(driverName)
             Connection conn = DriverManager.getConnection(dbUrlQaAutomation, dbUser, dbPass)
-            println "[GRADLE_INFO] Execute SQL: SELECT * FROM failed_scenarios WHERE bamboo_build_result_key = '$bambooBuildResultKey'"
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM failed_scenarios WHERE bamboo_build_result_key = ?")
+            println "[GRADLE_INFO] Execute SQL: SELECT scenario_tag_name FROM failed_scenarios WHERE bamboo_build_result_key = '$bambooBuildResultKey'"
+            PreparedStatement pstmt = conn.prepareStatement("SELECT scenario_tag_name FROM failed_scenarios WHERE bamboo_build_result_key = ?")
             pstmt.setString(1, bambooBuildResultKey)
             ResultSet rs = pstmt.executeQuery()
             int counter = 0
@@ -109,9 +110,9 @@ task loadFailedScenarioTagNames(dependsOn: ["processTestResources"]) {
             rs.close()
             pstmt.close()
 
-            String sqlClean = "DELETE FROM failed_scenarios"
-            println "[GRADLE_INFO] Execute SQL: $sqlClean"
-            pstmt = conn.prepareStatement(sqlClean)
+            println "[GRADLE_INFO] Execute SQL: DELETE FROM failed_scenarios WHERE bamboo_build_result_key LIKE '$bambooBuildKey%'"
+            pstmt = conn.prepareStatement("DELETE FROM failed_scenarios WHERE bamboo_build_result_key LIKE ?")
+            pstmt.setString(1, bambooBuildKey+"%")
             int affectedRow = pstmt.executeUpdate()
             println "[GRADLE_INFO] SQL Query Result: $affectedRow row(s) affected"
 
