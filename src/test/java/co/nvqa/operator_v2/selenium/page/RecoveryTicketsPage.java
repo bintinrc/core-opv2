@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.util.TestUtils;
+import com.nv.qa.utils.NvLogger;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Map;
@@ -195,7 +196,7 @@ public class RecoveryTicketsPage extends SimplePage
 
             while(isElementExist("//button[@aria-label='Create Ticket'][@disabled='disabled']") && counter<=MAX_RETRY)
             {
-                System.out.println("[INFO] Button \"Create Ticket\" still disabled. Trying to key in Tracking ID again.");
+                NvLogger.info("Button \"Create Ticket\" still disabled. Trying to key in Tracking ID again.");
                 sendKeys("//input[@aria-label='Tracking ID']", trackingId);
                 pause1s();
                 counter++;

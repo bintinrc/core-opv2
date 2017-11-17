@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.util;
 
+import com.nv.qa.utils.NvLogger;
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
@@ -57,13 +58,13 @@ public class SeleniumUtils
     {
         if(webDriver!=null)
         {
-            System.out.println("[INFO] Closing WebDriver...");
+            NvLogger.info("Closing WebDriver...");
             webDriver.close();
-            System.out.println("[INFO] WebDriver is closed.");
+            NvLogger.info("WebDriver is closed.");
 
-            System.out.println("[INFO] Quiting WebDriver...");
+            NvLogger.info("Quiting WebDriver...");
             webDriver.quit();
-            System.out.println("[INFO] WebDriver is quite.");
+            NvLogger.info("WebDriver is quite.");
 
             LIST_OF_WEB_DRIVER.remove(webDriver);
         }
@@ -96,18 +97,18 @@ public class SeleniumUtils
 
         if(TestConstants.ENABLE_PROXY)
         {
-            System.out.println("[WARN] Browser Mob Proxy is enabled. Please note enable this feature will make automation run slower. Use this proxy only for investigate an issue.");
+            NvLogger.warn("Browser Mob Proxy is enabled. Please note enable this feature will make automation run slower. Use this proxy only for investigate an issue.");
 
             if(BROWSER_MOB_PROXY==null)
             {
-                System.out.println("[INFO] Starting Browser Mob Proxy Server ...");
+                NvLogger.info("Starting Browser Mob Proxy Server ...");
                 BROWSER_MOB_PROXY = new BrowserMobProxyServer();
                 BROWSER_MOB_PROXY.start(0);
-                System.out.println(String.format("[INFO] Browser Mob Proxy Server is started at port \"%d\".", BROWSER_MOB_PROXY.getPort()));
+                NvLogger.infof("Browser Mob Proxy Server is started at port \"%d\".", BROWSER_MOB_PROXY.getPort());
                 BROWSER_MOB_PROXY.setReadBandwidthLimit(TestConstants.PROXY_READ_BANDWIDTH_LIMIT_IN_BPS);
-                System.out.println(String.format("[INFO] Set Mob Proxy Server read bandwidth limit to \"%,d\" bytes per seconds.", TestConstants.PROXY_READ_BANDWIDTH_LIMIT_IN_BPS));
+                NvLogger.infof("Set Mob Proxy Server read bandwidth limit to \"%,d\" bytes per seconds.", TestConstants.PROXY_READ_BANDWIDTH_LIMIT_IN_BPS);
                 BROWSER_MOB_PROXY.setWriteBandwidthLimit(TestConstants.PROXY_WRITE_BANDWIDTH_LIMIT_IN_BPS);
-                System.out.println(String.format("[INFO] Set Mob Proxy Server write bandwidth limit to \"%,d\" bytes per seconds.", TestConstants.PROXY_WRITE_BANDWIDTH_LIMIT_IN_BPS));
+                NvLogger.infof("Set Mob Proxy Server write bandwidth limit to \"%,d\" bytes per seconds.", TestConstants.PROXY_WRITE_BANDWIDTH_LIMIT_IN_BPS);
             }
 
             Proxy seleniumProxy = ClientUtil.createSeleniumProxy(BROWSER_MOB_PROXY);

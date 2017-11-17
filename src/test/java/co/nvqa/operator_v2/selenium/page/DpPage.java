@@ -4,6 +4,7 @@ import co.nvqa.operator_v2.util.TestUtils;
 import co.nvqa.operator_v2.util.SingletonStorage;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.nv.qa.support.*;
+import com.nv.qa.utils.NvLogger;
 import org.junit.Assert;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -368,7 +369,7 @@ public class DpPage extends SimplePage
         }
         catch(NoSuchElementException ex)
         {
-            ex.printStackTrace();
+            NvLogger.warn("Error on method 'getTextOnTable'.", ex);
         }
 
         return text;

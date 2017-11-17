@@ -8,6 +8,7 @@ import com.google.inject.Inject;
 import com.nv.qa.integration.client.operator.BulkyTrackingClient;
 import com.nv.qa.integration.model.core.BulkyOrder;
 import com.nv.qa.model.order_creation.v2.Order;
+import com.nv.qa.utils.NvLogger;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -128,7 +129,7 @@ public class SamedayRouteEngineSteps extends AbstractSteps
         }
         catch(IOException ex)
         {
-            System.out.println(ex.getMessage());
+            NvLogger.warnf("Error on method 'downloadWaypointDetail'. Cause: %s", ex.getMessage());
         }
     }
 

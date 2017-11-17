@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import com.google.inject.Inject;
+import com.nv.qa.utils.NvLogger;
 import cucumber.api.java.en.Given;
 
 import java.util.Random;
@@ -24,15 +25,15 @@ public class SampleSteps extends AbstractSteps
     {
     }
 
-    @Given("^dummy \"([^\"]*)\"$")
-    public void dummyStep(String dummy)
+    @Given("^dummy step$")
+    public void dummyStep()
     {
         String scenarioName = getScenarioManager().getCurrentScenario().getName();
         boolean randomSuccess = random.nextBoolean();
 
         if(randomSuccess)
         {
-            System.out.println("[INFO] Dummy success on scenario: "+scenarioName);
+            NvLogger.info("Dummy success on scenario: "+scenarioName);
         }
         else
         {

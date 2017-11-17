@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.util.ScenarioStorage;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import com.nv.qa.model.order_creation.v2.Order;
+import com.nv.qa.utils.NvLogger;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -163,7 +164,7 @@ public class RouteGroupsSteps extends AbstractSteps
         }
         catch(Exception ex)
         {
-            System.out.println("Failed to delete 'Route Group'.");
+            NvLogger.warn("Failed to delete 'Route Group'.");
         }
     }
 }

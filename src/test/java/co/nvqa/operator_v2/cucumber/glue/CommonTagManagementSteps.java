@@ -4,6 +4,7 @@ import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
 import com.nv.qa.api.client.operator_portal.OperatorPortalTagManagementClient;
 import com.nv.qa.model.operator_portal.authentication.AuthResponse;
+import com.nv.qa.utils.NvLogger;
 import cucumber.api.java.en.Given;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -51,7 +52,7 @@ public class CommonTagManagementSteps extends AbstractSteps
         }
         catch(Exception ex)
         {
-            System.out.println(String.format("[WARN] An error occurred when trying to delete tag with name = '%s'. Error: %s", tagName, ex.getMessage()));
+            NvLogger.warnf("An error occurred when trying to delete tag with name = '%s'. Error: %s", tagName, ex.getMessage());
         }
 
         tagName = TagManagementSteps.EDITED_TAG_NAME;
@@ -62,7 +63,7 @@ public class CommonTagManagementSteps extends AbstractSteps
         }
         catch(Exception ex)
         {
-            System.out.println(String.format("[WARN] An error occurred when trying to delete tag with name = '%s'. Error: %s", tagName, ex.getMessage()));
+            NvLogger.warnf("An error occurred when trying to delete tag with name = '%s'. Error: %s", tagName, ex.getMessage());
         }
     }
 }

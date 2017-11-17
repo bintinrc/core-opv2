@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.util;
 
 import com.nv.qa.support.JsonHelper;
+import com.nv.qa.utils.NvLogger;
 import com.nv.qa.utils.StandardTestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.*;
@@ -217,7 +218,7 @@ public class TestUtils extends StandardTestUtils
         }
         catch(IOException ex)
         {
-            System.out.println("[ERROR] "+ex.getMessage());
+            NvLogger.error("Error on method 'getOperatorTimezone'. Cause: "+ex.getMessage());
         }
 
         return null;

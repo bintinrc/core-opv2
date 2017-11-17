@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.model.SmsCampaignCsv;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.nv.qa.utils.NvLogger;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -50,9 +51,9 @@ public class SmsModulePage extends SimplePage
             createSmsCampaignCsv(data);
             uploadFile();
         }
-        catch(FileNotFoundException e)
+        catch(FileNotFoundException ex)
         {
-            e.printStackTrace();
+            NvLogger.warn("Error on method 'uploadCsvCampaignFile'.", ex);
         }
     }
 

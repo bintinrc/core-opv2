@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.util;
 
+import com.nv.qa.utils.NvLogger;
 import com.nv.qa.utils.StandardTestConstants;
 
 import java.io.File;
@@ -84,11 +85,11 @@ public final class TestConstants extends StandardTestConstants
             if(seleniumChromeBinaryPathTemp==null || seleniumChromeBinaryPathTemp.isEmpty())
             {
                 seleniumChromeBinaryPathTemp = System.getenv("bamboo_capability_system_builder_command_google_chrome");
-                System.out.println("[INFO] Using SELENIUM_CHROME_BINARY_PATH from \"System Environment\" variable. [bamboo_capability_system_builder_command_google_chrome = '"+seleniumChromeBinaryPathTemp+"']");
+                NvLogger.info("Using SELENIUM_CHROME_BINARY_PATH from \"System Environment\" variable. [bamboo_capability_system_builder_command_google_chrome = '"+seleniumChromeBinaryPathTemp+"']");
             }
 
             SELENIUM_CHROME_BINARY_PATH = seleniumChromeBinaryPathTemp;
-            System.out.println("[INFO] Selenium Chrome Binary Path = "+SELENIUM_CHROME_BINARY_PATH);
+            NvLogger.info("Selenium Chrome Binary Path = "+SELENIUM_CHROME_BINARY_PATH);
 
             SELENIUM_INTERACTION_WAIT_MILLISECONDS = getPropertyValueAsInteger("selenium-interaction-wait-seconds") * 1000;
             SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS = getPropertyValueAsInteger("selenium-implicit-wait-timeout-seconds");

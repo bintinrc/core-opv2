@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.Linehaul;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.nv.qa.utils.NvLogger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -100,9 +101,9 @@ public class ShipmentLinehaulPage extends SimplePage
     {
         sendKeys(XPATH_SEARCH, value);
         pause500ms();
-        System.out.println("[INFO] Waiting until 'Loading more results...' disappear.");
+        NvLogger.info("Waiting until 'Loading more results...' disappear.");
         waitUntilVisibilityOfElementLocated("//h5[text()='Loading more results...']");
-        System.out.println("[INFO] 'Loading more results...' is disappeared.");
+        NvLogger.info("'Loading more results...' is disappeared.");
     }
 
     public void fillLinehaulNameFT(String name)

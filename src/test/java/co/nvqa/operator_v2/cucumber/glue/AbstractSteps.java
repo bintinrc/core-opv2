@@ -10,6 +10,7 @@ import com.nv.qa.integration.model.auth.DriverLoginRequest;
 import com.nv.qa.integration.model.auth.DriverLoginResponse;
 import com.nv.qa.model.operator_portal.authentication.AuthRequest;
 import com.nv.qa.model.operator_portal.authentication.AuthResponse;
+import com.nv.qa.utils.NvLogger;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -190,7 +191,7 @@ public abstract class AbstractSteps
         }
         catch(InterruptedException ex)
         {
-            ex.printStackTrace();
+            NvLogger.warn("Error on method 'pause'.", ex);
         }
     }
 

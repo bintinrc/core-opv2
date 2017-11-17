@@ -10,6 +10,7 @@ import com.nv.qa.integration.model.driver.Job;
 import com.nv.qa.integration.model.driver.Route;
 import com.nv.qa.integration.model.driver.builder.JobBuilder;
 import com.nv.qa.integration.model.driver.scan.DeliveryRequest;
+import com.nv.qa.utils.NvLogger;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -74,7 +75,7 @@ public class CommonDriverSteps extends AbstractSteps
 
         for(com.nv.qa.integration.model.driver.Route route : routes)
         {
-            System.out.println(String.format("[INFO] Iterate route with ID '%d' from %d routes. %dx...", route.getId(), routes.size(), i));
+            NvLogger.infof("Iterate route with ID '%d' from %d routes. %dx...", route.getId(), routes.size(), i);
             List<Waypoint> waypoints = route.getWaypoints();
 
             for(Waypoint wp : waypoints)

@@ -6,6 +6,7 @@ import com.nv.qa.api.client.order_create.OrderCreateV2Client;
 import com.nv.qa.api.client.order_create.OrderCreateV3Client;
 import com.nv.qa.model.order_creation.authentication.AuthRequest;
 import com.nv.qa.model.order_creation.authentication.AuthResponse;
+import com.nv.qa.utils.NvLogger;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
 
@@ -87,14 +88,7 @@ public class OrderCreateHelper
         switch(word)
         {
             case "NEW_UNIQUE":
-                try
-                {
-                    Thread.sleep(2); //-- prevent same ref being generated.
-                }
-                catch(InterruptedException ex)
-                {
-                    ex.printStackTrace(System.err);
-                }
+                TestUtils.pause(2); //-- prevent same ref being generated.
                 return SDF_UNIQUE.format(new Date());
             default:
                 return word;

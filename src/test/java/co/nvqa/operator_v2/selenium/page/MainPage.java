@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.nv.qa.utils.NvLogger;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -62,7 +63,7 @@ public class MainPage extends SimplePage
         {
             boolean result;
             String currentUrl = d.getCurrentUrl();
-            System.out.println(String.format("[INFO] Current URL = [%s] - Expected URL = [%s]", currentUrl, urlPart));
+            NvLogger.infof("Current URL = [%s] - Expected URL = [%s]", currentUrl, urlPart);
 
             if(urlPart.equals("linehaul"))
             {

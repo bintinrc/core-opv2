@@ -9,6 +9,7 @@ import com.nv.qa.model.operator_portal.authentication.AuthResponse;
 import com.nv.qa.model.operator_portal.routing.CreateRouteRequest;
 import com.nv.qa.model.operator_portal.routing.CreateRouteResponse;
 import com.nv.qa.support.JsonHelper;
+import com.nv.qa.utils.NvLogger;
 import cucumber.api.DataTable;
 import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
@@ -83,21 +84,19 @@ public class CommonRouteSteps extends AbstractSteps
         {
             try
             {
-                System.out.println("-----------------------------------------------------");
-                System.out.println("DELETING ROUTE");
-                System.out.println("Route : "+routeId);
-                System.out.println("-----------------------------------------------------");
-
+                NvLogger.info("=====================================================");
+                NvLogger.info("DELETING ROUTE");
+                NvLogger.info("Route : "+routeId);
+                NvLogger.info("=====================================================");
                 operatorPortalRoutingClient.deleteRoute(routeId);
             }
             catch(Exception ex)
             {
-                System.out.println("Fail deleting route. Trying to archive route.");
-                System.out.println("-----------------------------------------------------");
-                System.out.println("ARCHIVING ROUTE");
-                System.out.println("Route : "+routeId);
-                System.out.println("-----------------------------------------------------");
-
+                NvLogger.warn("Fail deleting route. Trying to archive route.");
+                NvLogger.warn("=====================================================");
+                NvLogger.warn("ARCHIVING ROUTE");
+                NvLogger.warn("Route : "+routeId);
+                NvLogger.warn("=====================================================");
                 operatorPortalRoutingClient.archiveRoute(routeId);
             }
         }

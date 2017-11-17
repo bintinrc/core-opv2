@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.nv.qa.utils.NvLogger;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -66,7 +67,7 @@ public class SimplePage
             catch(StaleElementReferenceException ex)
             {
                 exception = ex;
-                System.out.println(String.format("[WARN] Stale element reference exception detected for element (xpath='%s') %d times.", xpathExpression, (i+1)));
+                NvLogger.warnf("Stale element reference exception detected for element (xpath='%s') %d times.", xpathExpression, (i+1));
             }
         }
 
@@ -104,7 +105,7 @@ public class SimplePage
     public WebElement findElementByXpath(String xpathExpression, long timeoutInSeconds)
     {
         By byXpath = By.xpath(xpathExpression);
-        System.out.println(String.format("[INFO] findElement: Selector = %s; Time Out In Seconds = %d", byXpath, timeoutInSeconds));
+        NvLogger.infof("findElement: Selector = %s; Time Out In Seconds = %d", byXpath, timeoutInSeconds);
 
         if(timeoutInSeconds>=0)
         {
@@ -341,7 +342,7 @@ public class SimplePage
                 try
                 {
                     boolean isElementDisplayed = findElement(locator, driver).isDisplayed();
-                    System.out.println(String.format("[INFO] Wait Until Invisibility Of Element Located: Is element '%s' still displayed? %b", locator, isElementDisplayed));
+                    NvLogger.infof("Wait Until Invisibility Of Element Located: Is element '%s' still displayed? %b", locator, isElementDisplayed);
                     return !isElementDisplayed;
                 }
                 catch(NoSuchElementException ex)
@@ -350,7 +351,7 @@ public class SimplePage
                      * Returns true because the element is not present in DOM.
                      * The try block checks if the element is present but is invisible.
                      */
-                    System.out.println(String.format("[INFO] Wait Until Invisibility Of Element Located: Is element '%s' still displayed? %b (NoSuchElementException)", locator, false));
+                    NvLogger.infof("Wait Until Invisibility Of Element Located: Is element '%s' still displayed? %b (NoSuchElementException)", locator, false);
                     return true;
                 }
                 catch(StaleElementReferenceException ex)
@@ -359,14 +360,14 @@ public class SimplePage
                      * Returns true because stale element reference implies that element
                      * is no longer visible.
                      */
-                    System.out.println(String.format("[INFO] Wait Until Invisibility Of Element Located: Is element '%s' still displayed? %b (StaleElementReferenceException)", locator, false));
+                    NvLogger.infof("Wait Until Invisibility Of Element Located: Is element '%s' still displayed? %b (StaleElementReferenceException)", locator, false);
                     return true;
                 }
             });
         }
         catch(Exception ex)
         {
-            ex.printStackTrace(System.err);
+            NvLogger.warn("Error on method 'waitUntilInvisibilityOfElementLocated'.", ex);
             throw ex;
         }
         finally
@@ -397,7 +398,7 @@ public class SimplePage
                 {
                     WebElement webElement = elementIfVisible(findElement(locator, wd));
                     boolean isElementDisplayed = webElement!=null;
-                    System.out.println(String.format("[INFO] Wait Until Visibility Of Element Located: Is element '%s' displayed? %b", locator, isElementDisplayed));
+                    NvLogger.infof("Wait Until Visibility Of Element Located: Is element '%s' displayed? %b", locator, isElementDisplayed);
                     return webElement;
                 }
                 catch(NoSuchElementException ex)
@@ -406,7 +407,7 @@ public class SimplePage
                      * Returns false because the element is not present in DOM.
                      * The try block checks if the element is present but is invisible.
                      */
-                    System.out.println(String.format("[INFO] Wait Until Visibility Of Element Located: Is element '%s' displayed? %b (NoSuchElementException)", locator, false));
+                    NvLogger.infof("Wait Until Visibility Of Element Located: Is element '%s' displayed? %b (NoSuchElementException)", locator, false);
                     return false;
                 }
                 catch(StaleElementReferenceException ex)
@@ -415,14 +416,14 @@ public class SimplePage
                      * Returns false because stale element reference implies that element
                      * is no longer visible.
                      */
-                    System.out.println(String.format("[INFO] Wait Until Visibility Of Element Located: Is element '%s' displayed? %b (StaleElementReferenceException)", locator, false));
+                    NvLogger.infof("Wait Until Visibility Of Element Located: Is element '%s' displayed? %b (StaleElementReferenceException)", locator, false);
                     return false;
                 }
             });
         }
         catch(Exception ex)
         {
-            ex.printStackTrace(System.err);
+            NvLogger.warn("Error on method 'waitUntilVisibilityOfElementLocated'.", ex);
             throw ex;
         }
         finally
@@ -474,7 +475,7 @@ public class SimplePage
 
             if(!isFileExists)
             {
-                System.out.println(String.format("[WARN] File '%s' not exists. Retry %dx...", file.getAbsolutePath(), (counter+1)));
+                NvLogger.warnf("File '%s' not exists. Retry %dx...", file.getAbsolutePath(), (counter+1));
                 pause1s();
             }
             counter++;
@@ -503,7 +504,7 @@ public class SimplePage
             }
             catch(IOException ex)
             {
-                System.out.println(String.format("[WARN] File '%s' failed to read. Cause: %s. Retry %dx...", file.getAbsolutePath(), ex.getMessage(), (counter+1)));
+                NvLogger.warnf("File '%s' failed to read. Cause: %s. Retry %dx...", file.getAbsolutePath(), ex.getMessage(), (counter+1));
                 pause1s();
                 continue;
             }
@@ -512,7 +513,7 @@ public class SimplePage
 
             if(!isFileContainsExpectedText)
             {
-                System.out.println(String.format("[WARN] File '%s' not contains '%s'. Retry %dx...", file.getAbsolutePath(), expectedText, (counter+1)));
+                NvLogger.warnf("File '%s' not contains '%s'. Retry %dx...", file.getAbsolutePath(), expectedText, (counter+1));
             }
 
             counter++;
@@ -610,7 +611,7 @@ public class SimplePage
         }
         catch(InterruptedException ex)
         {
-            ex.printStackTrace();
+            NvLogger.warn("Error on method 'pause'.", ex);
         }
     }
 

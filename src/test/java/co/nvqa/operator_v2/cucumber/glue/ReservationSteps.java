@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
+import com.nv.qa.utils.NvLogger;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -42,20 +43,20 @@ public class ReservationSteps extends AbstractSteps
         List<WebElement> listOfWe = getWebDriver().findElements(By.xpath(RESERVED_DATE));
         eReservation = listOfWe.size();
 
-        System.out.println(String.format("===== %s =====", desc));
-        System.out.println("Elements:");
+        NvLogger.infof("===== %s =====", desc);
+        NvLogger.info("Elements:");
 
         for(WebElement we : listOfWe)
         {
             WebElement parentWe = we.findElement(By.xpath("../../.."));
-            System.out.println("Child    : "+we.getAttribute("outerHTML"));
-            System.out.println("Parent   : "+parentWe.getAttribute("outerHTML"));
-            System.out.println("Tab Index: "+we.getAttribute("tabindex"));
+            NvLogger.info("Child    : "+we.getAttribute("outerHTML"));
+            NvLogger.info("Parent   : "+parentWe.getAttribute("outerHTML"));
+            NvLogger.info("Tab Index: "+we.getAttribute("tabindex"));
         }
 
-        System.out.println();
-        System.out.println("Number of Reserved Date: "+eReservation);
-        System.out.println("==========================");
+        NvLogger.info("");
+        NvLogger.info("Number of Reserved Date: "+eReservation);
+        NvLogger.info("==========================");
     }
 
     @When("^reservation, input shipper \"([^\"]*)\" and address \"([^\"]*)\"$")

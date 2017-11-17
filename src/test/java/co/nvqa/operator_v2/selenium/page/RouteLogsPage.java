@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import com.nv.qa.utils.NvLogger;
 import org.junit.Assert;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -112,8 +113,7 @@ public class RouteLogsPage extends SimplePage
             }
             catch(StaleElementReferenceException ex)
             {
-                ex.printStackTrace(System.err);
-                System.out.println("Trying to recover from a stale element: " + ex.getMessage());
+                NvLogger.warn("Trying to recover from a stale element: "+ex.getMessage(), ex);
                 counter++;
             }
         }

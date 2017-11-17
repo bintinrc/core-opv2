@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.nv.qa.utils.NvLogger;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.*;
@@ -45,15 +46,16 @@ public class LoginPage extends LoadableComponent<LoginPage>
 
     public void forceLogin(String operatorBearerToken)
     {
-        System.out.println("[INFO] Force login by injecting cookies to browser.");
+        NvLogger.info("Force login by injecting cookies to browser.");
 
         try
         {
             String userCookie = URLEncoder.encode(TestConstants.OPERATOR_PORTAL_USER_COOKIE, "UTF-8");
 
-            System.out.println("[INFO] Injecting cookies:");
-            System.out.println("[INFO] ninja_access_token = "+operatorBearerToken);
-            System.out.println("[INFO] user = "+userCookie);
+            NvLogger.info("========== INJECTING COOKIES ==========");
+            NvLogger.info("ninja_access_token = "+operatorBearerToken);
+            NvLogger.info("user = "+userCookie);
+            NvLogger.info("=======================================");
 
             webDriver.manage().addCookie(new Cookie("ninja_access_token", operatorBearerToken, ".ninjavan.co", "/", null));
             webDriver.manage().addCookie(new Cookie("user", userCookie, ".ninjavan.co", "/", null));
@@ -97,12 +99,12 @@ public class LoginPage extends LoadableComponent<LoginPage>
             googlePageUrlSb.append(currentUrl);
             boolean isExpectedUrlFound = currentUrl.startsWith(GOOGLE_EXPECTED_URL_1) || currentUrl.startsWith(GOOGLE_EXPECTED_URL_2);
 
-            System.out.println("===== GOOGLE LOGIN PAGE =====");
-            System.out.println("Current URL          : "+currentUrl);
-            System.out.println("Expected URL 1       : "+GOOGLE_EXPECTED_URL_1);
-            System.out.println("Expected URL 2       : "+GOOGLE_EXPECTED_URL_2);
-            System.out.println("Is Expected URL Found: "+isExpectedUrlFound);
-            System.out.println("=============================");
+            NvLogger.info("========== GOOGLE LOGIN PAGE ==========");
+            NvLogger.info("Current URL          : "+currentUrl);
+            NvLogger.info("Expected URL 1       : "+GOOGLE_EXPECTED_URL_1);
+            NvLogger.info("Expected URL 2       : "+GOOGLE_EXPECTED_URL_2);
+            NvLogger.info("Is Expected URL Found: "+isExpectedUrlFound);
+            NvLogger.info("=======================================");
 
             return isExpectedUrlFound;
         });

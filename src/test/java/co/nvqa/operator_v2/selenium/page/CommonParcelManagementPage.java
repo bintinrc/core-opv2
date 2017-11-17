@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.util.TestUtils;
+import com.nv.qa.utils.NvLogger;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -100,7 +101,7 @@ public abstract class CommonParcelManagementPage extends SimplePage
         }
         catch(NoSuchElementException | TimeoutException ex)
         {
-            System.out.println("[WARN] Table is not empty.");
+            NvLogger.warn("Table is not empty.");
         }
 
         return isEmpty;
