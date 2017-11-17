@@ -102,7 +102,7 @@ public class ShipmentLinehaulPage extends SimplePage
         sendKeys(XPATH_SEARCH, value);
         pause500ms();
         NvLogger.info("Waiting until 'Loading more results...' disappear.");
-        waitUntilVisibilityOfElementLocated("//h5[text()='Loading more results...']");
+        waitUntilInvisibilityOfElementLocated("//h5[text()='Loading more results...']");
         NvLogger.info("'Loading more results...' is disappeared.");
     }
 
