@@ -141,7 +141,7 @@ public class SmsModulePage extends SimplePage
     public void verifyThatPreviewUsingShortenedUrl()
     {
         pause10s();
-        String actualValue = findElementByXpath("//textarea[@name='preview']").getAttribute("value");
+        String actualValue = findElementByXpath("(//textarea[@name='preview'])[2]").getAttribute("value");
         String expectedValue = "http://qa.nnj.vn";
         Assert.assertThat("The produced sms using ninja url shortener is failed", actualValue, Matchers.containsString(expectedValue));
     }
@@ -153,7 +153,7 @@ public class SmsModulePage extends SimplePage
 
     public void sendSms()
     {
-        click("//nv-api-text-button[@text='container.sms.send-sms']");
+        click("//nv-api-text-button[@text='container.sms.send-messages']");
         waitUntilVisibilityOfElementLocated("//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
         WebElement successToast = TestUtils.getToast(getwebDriver());
         Assert.assertEquals("Successfully sent 1 SMS", successToast.getText());
