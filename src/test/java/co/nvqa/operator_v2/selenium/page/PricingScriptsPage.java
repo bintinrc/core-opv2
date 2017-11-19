@@ -1,9 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 import java.util.List;
 
@@ -13,6 +10,7 @@ import java.util.List;
  */
 public class PricingScriptsPage extends SimplePage
 {
+    private static final int WAIT_IN_SECONDS = 2;
     private static final String MD_VIRTUAL_REPEAT = "script in getTableData()";
     public static final String COLUMN_CLASS_NAME = "name";
 
@@ -172,17 +170,17 @@ public class PricingScriptsPage extends SimplePage
                  * Check is Shipper already linked to another Pricing Scripts by find "Proceed" button.
                  * Click "Proceed" button if found to override the shipper's Pricing Scripts.
                  */
-//                WebElement proceedBtn = findElementByXpath("//button[div[contains(@class, 'idle ng-binding ng-scope') and text()='Proceed']]");
-//
-//                if(proceedBtn!=null)
-//                {
-//                    proceedBtn.click();
-//                }
+                /*WebElement proceedBtn = findElementByXpath("//button[div[contains(@class, 'idle ng-binding ng-scope') and text()='Proceed']]");
+
+                if(proceedBtn!=null)
+                {
+                    proceedBtn.click();
+                }*/
 
                 /**
                  * Check error element first, if error element not found then linking Pricing Scripts to the Shipper success.
                  */
-                if(isElementExist("//md-dialog[@aria-label='ErrorUnexpected error']/md-dialog-content/h2[text()='Error']"))
+                if(isElementExist("//md-dialog[@aria-label='ErrorUnexpected error']/md-dialog-content/h2[text()='Error']", WAIT_IN_SECONDS))
                 {
                     pause100ms();
                     click("//md-dialog[@aria-label='ErrorUnexpected error']/md-dialog-actions/button/span[text()='Close']");
@@ -211,7 +209,7 @@ public class PricingScriptsPage extends SimplePage
 
         try
         {
-            List<WebElement> elements = findElementsByXpath("//tr[@ng-repeat='shipper in $data']/td");
+            List<WebElement> elements = findElementsByXpath("//tr[@ng-repeat='shipper in $data']/td", WAIT_IN_SECONDS);
 
             for(WebElement element : elements)
             {
@@ -222,7 +220,7 @@ public class PricingScriptsPage extends SimplePage
                 }
             }
         }
-        catch(NoSuchElementException ex)
+        catch(NoSuchElementException | TimeoutException ex)
         {
         }
 
@@ -244,8 +242,7 @@ public class PricingScriptsPage extends SimplePage
     {
         try
         {
-            WebElement element = findElementByXpath(String.format("//tr[@md-virtual-repeat='script in getTableData()'][%d]/td[contains(@class,'actions column-locked-right')]/nv-icon-button[@name='%s']", rowNumber, actionButtonName));
-            element.click();
+            click(String.format("//tr[@md-virtual-repeat='script in getTableData()'][%d]/td[contains(@class,'actions column-locked-right')]/nv-icon-button[@name='%s']", rowNumber, actionButtonName));
             pause1s();
         }
         catch(Exception ex)

@@ -109,13 +109,4 @@ public class MainPage extends SimplePage
         Assert.assertThat("URL not match.", url, Matchers.endsWith(mainDashboard));
         pause5s();
     }
-
-    public void refreshPage()
-    {
-        String previousUrl = getwebDriver().getCurrentUrl().toLowerCase();
-        getwebDriver().navigate().refresh();
-        new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((d)->d.getCurrentUrl().equalsIgnoreCase(previousUrl));
-        String currentUrl = getwebDriver().getCurrentUrl().toLowerCase();
-        Assert.assertEquals("Page URL is different after page is refreshed.", previousUrl, currentUrl);
-    }
 }

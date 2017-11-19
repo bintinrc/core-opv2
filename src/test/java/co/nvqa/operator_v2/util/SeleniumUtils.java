@@ -13,7 +13,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,10 +46,15 @@ public class SeleniumUtils
 
     public static WebDriver createWebDriver()
     {
+        return createWebDriver(TestConstants.ENABLE_PROXY);
+    }
+
+    public static WebDriver createWebDriver(boolean enableProxy)
+    {
         switch (TestConstants.SELENIUM_DRIVER.toUpperCase())
         {
-            case "CHROME": return getWebDriverChrome();
-            default: return getWebDriverChrome();
+            case "CHROME": return getWebDriverChrome(enableProxy);
+            default: return getWebDriverChrome(enableProxy);
         }
     }
 
@@ -70,32 +74,31 @@ public class SeleniumUtils
         }
     }
 
-    private static WebDriver getWebDriverChrome()
+    private static WebDriver getWebDriverChrome(boolean enableProxy)
     {
         System.setProperty("webdriver.chrome.driver", TestConstants.SELENIUM_CHROME_DRIVER);
 
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
         LoggingPreferences logPrefs = new LoggingPreferences();
         logPrefs.enable(LogType.BROWSER, Level.ALL);
-        capabilities.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
 
         String downloadFilepath = TestConstants.SELENIUM_WRITE_PATH;
         HashMap<String, Object> chromePrefs = new HashMap<>();
         chromePrefs.put("profile.default_content_settings.popups", 0);
         chromePrefs.put("download.default_directory", downloadFilepath);
 
-        ChromeOptions options = new ChromeOptions();
-        options.setExperimentalOption("prefs", chromePrefs);
-        options.addArguments("--disable-extensions");
-        options.addArguments("--allow-running-insecure-content");
-        //options.addArguments("--start-maximized"); Maximize on Mac does not cover entire screen.
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+        chromeOptions.setExperimentalOption("prefs", chromePrefs);
+        chromeOptions.addArguments("--disable-extensions");
+        chromeOptions.addArguments("--allow-running-insecure-content");
+        //chromeOptions.addArguments("--start-maximized"); Maximize on Mac does not cover entire screen.
 
         if(TestConstants.SELENIUM_CHROME_BINARY_PATH!=null && !TestConstants.SELENIUM_CHROME_BINARY_PATH.isEmpty())
         {
-            options.setBinary(TestConstants.SELENIUM_CHROME_BINARY_PATH);
+            chromeOptions.setBinary(TestConstants.SELENIUM_CHROME_BINARY_PATH);
         }
 
-        if(TestConstants.ENABLE_PROXY)
+        if(enableProxy)
         {
             NvLogger.warn("Browser Mob Proxy is enabled. Please note enable this feature will make automation run slower. Use this proxy only for investigate an issue.");
 
@@ -112,12 +115,10 @@ public class SeleniumUtils
             }
 
             Proxy seleniumProxy = ClientUtil.createSeleniumProxy(BROWSER_MOB_PROXY);
-            capabilities.setCapability(CapabilityType.PROXY, seleniumProxy);
+            chromeOptions.setCapability(CapabilityType.PROXY, seleniumProxy);
         }
 
-        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
-
-        WebDriver webDriver = new ChromeDriver(capabilities);
+        WebDriver webDriver = new ChromeDriver(chromeOptions);
         webDriver.manage().timeouts().implicitlyWait(TestConstants.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         webDriver.manage().timeouts().pageLoadTimeout(TestConstants.SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         webDriver.manage().timeouts().setScriptTimeout(TestConstants.SELENIUM_SCRIPT_TIMEOUT_SECONDS, TimeUnit.SECONDS);

@@ -129,7 +129,32 @@ public class SimplePage
 
     public List<WebElement> findElementsByXpath(String xpathExpression)
     {
-        return getwebDriver().findElements(By.xpath(xpathExpression));
+        return findElementsByXpath(xpathExpression, -1);
+    }
+
+    public List<WebElement> findElementsByXpath(String xpathExpression, long timeoutInSeconds)
+    {
+        By byXpath = By.xpath(xpathExpression);
+        NvLogger.infof("findElements: Selector = %s; Time Out In Seconds = %d", byXpath, timeoutInSeconds);
+
+        if(timeoutInSeconds>=0)
+        {
+            try
+            {
+                setImplicitTimeout(0);
+                return new WebDriverWait(getwebDriver(), timeoutInSeconds).until(ExpectedConditions.presenceOfAllElementsLocatedBy(byXpath));
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                resetImplicitTimeout();
+            }
+        }
+
+        return getwebDriver().findElements(byXpath);
     }
 
     public WebElement findElementByXpath(String xpath, WebElement parent)
@@ -300,13 +325,18 @@ public class SimplePage
 
     public boolean isElementExist(String xpathExpression)
     {
+        return isElementExist(xpathExpression, -1);
+    }
+
+    public boolean isElementExist(String xpathExpression, long timeoutInSeconds)
+    {
         WebElement we = null;
 
         try
         {
-            we = findElementByXpath(xpathExpression);
+            we = findElementByXpath(xpathExpression, timeoutInSeconds);
         }
-        catch(NoSuchElementException ex)
+        catch(NoSuchElementException | TimeoutException ex)
         {
         }
 
@@ -613,6 +643,17 @@ public class SimplePage
         {
             NvLogger.warn("Error on method 'pause'.", ex);
         }
+    }
+
+    public void refreshPage()
+    {
+        String previousUrl = getwebDriver().getCurrentUrl().toLowerCase();
+
+
+        getwebDriver().navigate().refresh();
+        new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((d)->d.getCurrentUrl().equalsIgnoreCase(previousUrl));
+        String currentUrl = getwebDriver().getCurrentUrl().toLowerCase();
+        Assert.assertEquals("Page URL is different after page is refreshed.", previousUrl, currentUrl);
     }
 
     public void setImplicitTimeout(long seconds)

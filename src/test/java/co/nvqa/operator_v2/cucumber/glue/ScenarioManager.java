@@ -42,6 +42,7 @@ public class ScenarioManager extends StandardScenarioManager
 
     public ScenarioManager()
     {
+        super("@LaunchBrowserWithProxyEnabled");
     }
 
     /**
@@ -60,6 +61,13 @@ public class ScenarioManager extends StandardScenarioManager
     {
         NvLogger.infof("Launching browser.");
         webDriver = SeleniumUtils.createWebDriver();
+    }
+
+    @Before("@LaunchBrowserWithProxyEnabled")
+    public void launchBrowserWithProxyEnabled()
+    {
+        NvLogger.infof("Launching browser.");
+        webDriver = SeleniumUtils.createWebDriver(true);
     }
 
     @After("@KillBrowser")

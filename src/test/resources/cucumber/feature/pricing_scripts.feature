@@ -1,7 +1,7 @@
 @PricingScripts @selenium
 Feature: Pricing Scripts
 
-  @LaunchBrowser @PricingScripts#01 @PricingScripts#02 @PricingScripts#03
+  @LaunchBrowserWithProxyEnabled @PricingScripts#01 @PricingScripts#02 @PricingScripts#03
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
