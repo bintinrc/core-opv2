@@ -1,12 +1,11 @@
-@ShipmentManagement @selenium @shipment
+@ShipmentManagement @selenium @shipment @ShipmentManagement#01
 Feature: Shipment Management
 
-  @LaunchBrowser @ShipmentManagement#01
+  @LaunchBrowser
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
   # create shipment
-  @ShipmentManagement#01
   Scenario: Create Shipment (uid:7a3373f0-67f1-4f1a-b6b2-6447a2621305)
     Given op click navigation Shipment Management in Inter-Hub
     Given op refresh page
@@ -17,7 +16,6 @@ Feature: Shipment Management
     Then op click edit filter
 
   # edit shipment
-  @ShipmentManagement#01
   Scenario: Edit Shipment (uid:5fbdb7d5-0a54-42de-bd8e-960ad26ff43e)
     Given op click navigation Shipment Management in Inter-Hub
     Given op refresh page
@@ -31,7 +29,6 @@ Feature: Shipment Management
     Then op click edit filter
 
   # force success shipment
-  @ShipmentManagement#01
   Scenario: Force Success Shipment (uid:9e106cef-fac4-4283-9b40-634c50ad9413)
     Given op click navigation Shipment Management in Inter-Hub
     Given op refresh page
@@ -46,7 +43,6 @@ Feature: Shipment Management
     Then op click edit filter
 
   # cancel shipment
-  @ShipmentManagement#01
   Scenario: Cancel Shipment (uid:9618d764-8b09-49a3-9cec-07e7d726faee)
     Given op click navigation Shipment Management in Inter-Hub
     Given op refresh page
@@ -60,7 +56,6 @@ Feature: Shipment Management
     Then op click edit filter
 
   # delete shipment
-  @ShipmentManagement#01
   Scenario: Delete Shipment (uid:52e3a21d-29bb-4fd9-82bc-2e161a65565e)
     Given op click navigation Shipment Management in Inter-Hub
     Given op refresh page
@@ -69,5 +64,5 @@ Feature: Shipment Management
     When shipment Delete action button clicked
     Then shipment deleted
 
-  @KillBrowser @ShipmentManagement#01
+  @KillBrowser
   Scenario: Kill Browser

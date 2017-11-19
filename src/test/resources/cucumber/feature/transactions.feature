@@ -1,11 +1,10 @@
-@Transactions @selenium
+@Transactions @selenium @Transactions#01
 Feature: Transactions
 
-  @LaunchBrowser @Transactions#01
+  @LaunchBrowser
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
-  @Transactions#01
   Scenario: Add transaction to Route Group (uid:b6848852-12e6-4cba-bf7c-8444538596c1)
     #Notes: Shipper create sameday parcel with OC V2
     Given Shipper create Order V2 Parcel using data below:
@@ -20,5 +19,5 @@ Feature: Transactions
     Given op click navigation 2. Route Group Management in Routing
     Then Operator V2 clean up 'Route Groups'
 
-  @KillBrowser @Transactions#01
+  @KillBrowser
   Scenario: Kill Browser

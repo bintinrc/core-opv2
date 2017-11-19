@@ -1,11 +1,10 @@
-@ShipmentScanning @selenium @shipment
+@ShipmentScanning @selenium @shipment @ShipmentScanning#01
 Feature: Shipment Scanning
 
-  @LaunchBrowser @ShipmentScanning#01
+  @LaunchBrowser
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
-  @ShipmentScanning#01
   Scenario: scan order to shipment (uid:b776b582-a395-4a02-962a-9785f6945750)
     # Create order for scan
     Given Create an V3 order with the following attributes:
@@ -18,5 +17,5 @@ Feature: Shipment Scanning
     Given op click navigation Shipment Scanning in Inter-Hub
     When scan order to shipment in hub 30JKB
 
-  @KillBrowser @ShipmentScanning#01
+  @KillBrowser
   Scenario: Kill Browser

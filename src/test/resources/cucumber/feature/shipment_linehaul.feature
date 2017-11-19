@@ -1,11 +1,10 @@
-@ShipmentLinehaul @selenium @shipment
+@ShipmentLinehaul @selenium @shipment @ShipmentLinehaul#01
 Feature: Shipment Linehaul
 
-  @LaunchBrowser @ShipmentLinehaul#01
+  @LaunchBrowser
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
-  @ShipmentLinehaul#01
   Scenario: Create Linehaul (uid:3eeaa647-c1a2-40a1-8ee4-da898e7e2e7d)
     Given op click navigation Linehaul Management in Inter-Hub
     Given op click tab LINEHAUL ENTRIES
@@ -22,7 +21,6 @@ Feature: Shipment Linehaul
     Then linehaul deleted
     Then op click edit linhaul filter
 
-  @ShipmentLinehaul#01
   Scenario: Edit Linehaul (uid:85dbd34f-25ea-4ada-accc-884a8098f8e2)
     Given op click tab LINEHAUL ENTRIES
     Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
@@ -46,7 +44,6 @@ Feature: Shipment Linehaul
     Then linehaul deleted
     Then op click edit linhaul filter
 
-  @ShipmentLinehaul#01
   Scenario: Delete Linehaul (uid:89bc519c-6f5d-4f99-864a-2dbba4c52c22)
     Given op click tab LINEHAUL ENTRIES
     Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
@@ -62,7 +59,6 @@ Feature: Shipment Linehaul
     Then linehaul deleted
     Then op click edit linhaul filter
 
-  @ShipmentLinehaul#01
   Scenario: Check linehaul schedule (uid:8b178ed7-6da6-4207-8cb6-f75327533ba2)
     Given op refresh page
     Given op click navigation Linehaul Management in Inter-Hub
@@ -83,7 +79,6 @@ Feature: Shipment Linehaul
     Then linehaul deleted
     Then op click edit linhaul filter
 
-  @ShipmentLinehaul#01
   Scenario: Create linehaul on linehaul schedule page (uid:fe37a8e4-b435-45ef-8411-8bd0a37450d0)
     Given op click tab LINEHAUL DATE
     Then op wait until 'Linehaul Date' tab on 'Linehaul Management' page is loaded
@@ -105,7 +100,6 @@ Feature: Shipment Linehaul
     Then linehaul deleted
     Then op click edit linhaul filter
 
-  @ShipmentLinehaul#01
   Scenario: Edit Linehaul on linehaul schedule page (uid:e24343fb-3ca4-4109-8221-873e88744351)
     Given op click tab LINEHAUL DATE
     Then op wait until 'Linehaul Date' tab on 'Linehaul Management' page is loaded
@@ -132,5 +126,5 @@ Feature: Shipment Linehaul
     Then linehaul deleted
     Then op click edit linhaul filter
 
-  @KillBrowser @ShipmentLinehaul#01
+  @KillBrowser
   Scenario: Kill Browser
