@@ -222,6 +222,7 @@ public class DpPage extends SimplePage
         }
 
         click("//button[@type='submit'][@aria-label='Save Button']");
+        pause3s();
     }
 
 
