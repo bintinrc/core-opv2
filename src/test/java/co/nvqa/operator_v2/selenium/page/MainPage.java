@@ -34,6 +34,7 @@ public class MainPage extends SimplePage
         MAP_OF_END_URL.put("Hubs Administration", "hub");
         MAP_OF_END_URL.put("Linehaul Management", "linehaul");
         MAP_OF_END_URL.put("Messaging Module", "sms");
+        MAP_OF_END_URL.put("Printer Settings", "printers");
     }
 
     public MainPage(WebDriver webDriver)
