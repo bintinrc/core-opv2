@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import com.nv.qa.utils.NvLogger;
+import com.nv.qa.commons.utils.NvLogger;
 import org.junit.Assert;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;

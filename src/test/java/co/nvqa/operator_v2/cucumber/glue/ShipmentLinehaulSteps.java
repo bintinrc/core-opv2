@@ -4,7 +4,7 @@ import co.nvqa.operator_v2.model.Linehaul;
 import co.nvqa.operator_v2.selenium.page.ShipmentLinehaulPage;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
-import com.nv.qa.support.JsonHelper;
+import com.nv.qa.commons.support.JsonHelper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;

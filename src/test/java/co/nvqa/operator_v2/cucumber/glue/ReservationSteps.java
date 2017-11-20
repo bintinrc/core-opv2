@@ -2,7 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
-import com.nv.qa.utils.NvLogger;
+import com.nv.qa.commons.utils.NvLogger;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;

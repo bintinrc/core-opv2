@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import com.google.inject.Inject;
-import com.nv.qa.utils.NvLogger;
+import com.nv.qa.commons.utils.NvLogger;
 import cucumber.api.java.en.Given;
 
 import java.util.Random;
