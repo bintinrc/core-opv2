@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
@@ -48,10 +49,15 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
     @SuppressWarnings("unchecked")
     public void loadSelection(String trackingId, int agedDays)
     {
-        TestUtils.retryIfExpectedExceptionOccurred(()->
+        TestUtils.retryIfRuntimeExceptionOccurred(()->
         {
-            sendKeys("//input[@aria-label='Aged Days']", String.valueOf(agedDays));
-            click("//button/div[text()='Load Selection']");
+            if(!isElementExist(String.format("//button[contains(@aria-label,'%s')]", TestConstants.SHIPPER_V2_NAME), 1))
+            {
+                inputListBox("Search or Select...", TestConstants.SHIPPER_V2_NAME);
+                sendKeys("//input[@aria-label='Aged Days']", String.valueOf(agedDays));
+            }
+
+            clickBtnLoadSelection();
             searchTableByTrackingId(trackingId);
 
             if(isTableEmpty())
@@ -59,6 +65,11 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
                 click("//button[@aria-label='Edit Conditions']");
                 throw new RuntimeException(String.format("Order with tracking ID = '%s' is not listed on table.", trackingId));
             }
-        }, String.format("loadSelection - [Tracking ID = %s]", trackingId), RuntimeException.class);
+        }, String.format("loadSelection - [Tracking ID = %s]", trackingId));
+    }
+
+    private void clickBtnLoadSelection()
+    {
+        clickAndWaitUntilDone("//button[@aria-label='Load Selection']");
     }
 }

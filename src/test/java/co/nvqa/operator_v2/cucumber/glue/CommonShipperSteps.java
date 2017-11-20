@@ -12,11 +12,13 @@ import com.nv.qa.model.order_creation.v2.CreateOrderRequest;
 import com.nv.qa.model.order_creation.v2.CreateOrderResponse;
 import com.nv.qa.model.order_creation.v2.Order;
 import com.nv.qa.commons.support.*;
+import com.nv.qa.commons.utils.StandardTestUtils;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 
 import java.io.IOException;
@@ -67,28 +69,96 @@ public class CommonShipperSteps extends AbstractSteps
     @Given("^Shipper create Order V2 Parcel using data below:$")
     public void shipperCreateV2Order(DataTable dataTable) throws IOException
     {
+        Date currentDate = new Date();
+        String trackingRefNo = TestUtils.generateTrackingRefNo();
+
         Map<String,String> mapOfDynamicVariable = new HashMap<>();
-        mapOfDynamicVariable.put("created_date", CREATED_DATE_SDF.format(new Date()));
-        mapOfDynamicVariable.put("cur_date", CURRENT_DATE_SDF.format(new Date()));
-        mapOfDynamicVariable.put("tracking_ref_no", TestUtils.generateTrackingRefNo());
+        mapOfDynamicVariable.put("created_date", CREATED_DATE_SDF.format(currentDate));
+        mapOfDynamicVariable.put("cur_date", CURRENT_DATE_SDF.format(currentDate));
+        mapOfDynamicVariable.put("tracking_ref_no", trackingRefNo);
 
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
         String v2OrderRequestJson = TestUtils.replaceParam(mapOfData.get("v2OrderRequest"), mapOfDynamicVariable);
 
         CreateOrderRequest createOrderRequest = JsonHelper.fromJson(v2OrderRequestJson, CreateOrderRequest.class);
-        String suffix = "";
+        String suffix = null;
+        String fromEmail = null;
+        String fromName = null;
+        String toEmail = null;
+        String toName = null;
 
-        if("Return".equals(createOrderRequest.getType()))
+        String orderType = createOrderRequest.getType();
+
+        if("Normal".equals(orderType))
         {
-            suffix = "R";
+            suffix = "";
+            fromEmail = String.format("shipper.normal.%s@test.com", trackingRefNo);
+            fromName = String.format("S-N-%s Shipper", trackingRefNo);
+            toEmail = String.format("customer.normal.%s@test.com", trackingRefNo);
+            toName = String.format("C-N-%s Customer", trackingRefNo);
         }
         else if("C2C".equals(createOrderRequest.getType()))
         {
             suffix = "C";
+            fromEmail = String.format("shipper.c2c.%s@test.com", trackingRefNo);
+            fromName = String.format("S-C-%s Shipper", trackingRefNo);
+            toEmail = String.format("customer.c2c.%s@test.com", trackingRefNo);
+            toName = String.format("C-C-%s Customer", trackingRefNo);
+        }
+        else if("Return".equals(orderType))
+        {
+            suffix = "R";
+            fromEmail = String.format("customer.return.%s@test.com", trackingRefNo);
+            fromName = String.format("C-R-%s Customer", trackingRefNo);
+            toEmail = String.format("shipper.return.%s@test.com", trackingRefNo);
+            toName = String.format("S-R-%s Shipper", trackingRefNo);
+        }
+
+        if(createOrderRequest.getFrom_email()==null)
+        {
+            createOrderRequest.setFrom_email(fromEmail);
+        }
+
+        if(createOrderRequest.getFrom_name()==null)
+        {
+            createOrderRequest.setFrom_name(fromName);
+        }
+
+        if(createOrderRequest.getTo_email()==null)
+        {
+            createOrderRequest.setTo_email(toEmail);
+        }
+
+        if(createOrderRequest.getTo_name()==null)
+        {
+            createOrderRequest.setTo_name(toName);
+        }
+
+        if(createOrderRequest.getFrom_contact()==null)
+        {
+            String fromContact = StandardTestUtils.getCountryCallingCode("sg") + "8" + StringUtils.right(trackingRefNo, 5);
+            createOrderRequest.setFrom_contact(fromContact);
+        }
+
+        if(createOrderRequest.getTo_contact()==null)
+        {
+            String toContact = StandardTestUtils.getCountryCallingCode("sg") + "9" + StringUtils.right(trackingRefNo, 5);
+            createOrderRequest.setTo_contact(toContact);
         }
 
         createOrderRequest.setTracking_ref_no(createOrderRequest.getTracking_ref_no()+suffix);
-        List<CreateOrderResponse> listOfCreateOrderResponse = TestUtils.retryIfAssertionErrorOrRuntimeExceptionOccurred(()->orderCreateV2Client.createOrder(createOrderRequest), "createV2Order", getScenarioManager()::writeToScenarioLog);
+
+        List<CreateOrderResponse> listOfCreateOrderResponse = StandardTestUtils.retryIfAssertionErrorOrRuntimeExceptionOccurred(()->
+        {
+            List<CreateOrderResponse> tempList = orderCreateV2Client.createOrder(createOrderRequest);
+
+            if(tempList.get(0).getId()==null)
+            {
+                throw new RuntimeException("Order not created. Async ID is null.");
+            }
+
+            return tempList;
+        }, "createOrderV2");
 
         /**
          * Retry if the order fail to retrieve.
