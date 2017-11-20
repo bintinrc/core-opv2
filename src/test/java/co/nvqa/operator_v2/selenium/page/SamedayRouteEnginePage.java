@@ -1,8 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.util.ScenarioStorage;
 import co.nvqa.operator_v2.util.TestConstants;
-import com.google.inject.Inject;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -20,10 +18,6 @@ import java.util.List;
  */
 public class SamedayRouteEnginePage extends SimplePage
 {
-    private static final int SAVE_BUTTON_LOADING_TIMEOUT_IN_SECONDS = 30;
-
-    @Inject private ScenarioStorage scenarioStorage;
-
     public SamedayRouteEnginePage(WebDriver webDriver)
     {
         super(webDriver);
@@ -52,8 +46,7 @@ public class SamedayRouteEnginePage extends SimplePage
 
     public void clickRunRouteEngineButton()
     {
-        click("//button[@aria-label='Run Route Engine']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Run Route Engine']//md-progress-circular", SAVE_BUTTON_LOADING_TIMEOUT_IN_SECONDS);
+        clickAndWaitUntilDone("//button[@aria-label='Run Route Engine']");
     }
 
     public void selectFleetType1OperatingHoursStart(String operatingHoursStart)
@@ -94,8 +87,7 @@ public class SamedayRouteEnginePage extends SimplePage
 
     public void clickCreate1RoutesButton()
     {
-        click("//button[@aria-label='Create 1 Route(s)']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Create 1 Route(s)']//md-progress-circular", SAVE_BUTTON_LOADING_TIMEOUT_IN_SECONDS);
+        clickAndWaitUntilDone("//button[@aria-label='Create 1 Route(s)']");
     }
 
     public void setFleetType1Capacity(String capacity)
