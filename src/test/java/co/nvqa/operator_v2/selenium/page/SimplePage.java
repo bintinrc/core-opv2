@@ -41,6 +41,12 @@ public class SimplePage
         moveAndClick(we);
     }
 
+    public void clickAndWaitUntilDone(String xpathExpression)
+    {
+        click(xpathExpression);
+        waitUntilInvisibilityOfElementLocated(xpathExpression + "//md-progress-circular");
+    }
+
     public void moveAndClick(WebElement webElement)
     {
         Actions action = new Actions(getwebDriver());
@@ -177,18 +183,6 @@ public class SimplePage
         return parent.findElements(by);
     }
 
-    public void closeModal()
-    {
-        WebElement we = findElementByXpath("//div[(contains(@class, 'nv-text-ellipsis nv-h4'))]");
-
-        Actions actions = new Actions(getwebDriver());
-        actions.moveToElement(we, 5, 5)
-                .click()
-                .build()
-                .perform();
-        TestUtils.pause100ms();
-    }
-
     public String getTextOnTable(int rowNumber, String columnDataClass, String mdVirtualRepeat)
     {
         return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, mdVirtualRepeat);
@@ -302,7 +296,7 @@ public class SimplePage
         }
     }
 
-    public void inputListBox(String placeHolder, String searchValue) throws InterruptedException
+    public void inputListBox(String placeHolder, String searchValue)
     {
         WebElement we = findElementByXpath("//input[@placeholder='" + placeHolder + "']");
         we.clear();
@@ -311,6 +305,18 @@ public class SimplePage
         we.sendKeys(Keys.RETURN);
         pause100ms();
         closeModal();
+    }
+
+    public void closeModal()
+    {
+        WebElement we = findElementByXpath("//div[(contains(@class, 'nv-text-ellipsis nv-h4'))]");
+
+        Actions actions = new Actions(getwebDriver());
+        actions.moveToElement(we, 5, 5)
+                .click()
+                .build()
+                .perform();
+        pause100ms();
     }
 
     public void selectValueFromMdSelectMenu(String xpathMdSelectMenu, String xpathMdSelectOption)
