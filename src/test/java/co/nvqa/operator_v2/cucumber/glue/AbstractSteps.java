@@ -187,6 +187,7 @@ public abstract class AbstractSteps
     {
         try
         {
+            NvLogger.infof("Pause %,dms on Step class.", millis);
             Thread.sleep(millis);
         }
         catch(InterruptedException ex)

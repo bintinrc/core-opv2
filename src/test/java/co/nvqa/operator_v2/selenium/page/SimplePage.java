@@ -637,6 +637,7 @@ public class SimplePage
     {
         try
         {
+            NvLogger.infof("Pause %,dms on Page class.", millis);
             Thread.sleep(millis);
         }
         catch(InterruptedException ex)
