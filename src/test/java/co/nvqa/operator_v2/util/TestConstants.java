@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.util;
 
-import com.nv.qa.utils.NvLogger;
-import com.nv.qa.utils.StandardTestConstants;
+import com.nv.qa.commons.utils.NvLogger;
+import com.nv.qa.commons.utils.StandardTestConstants;
 
 import java.io.File;
 import java.io.IOException;

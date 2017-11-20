@@ -4,7 +4,7 @@ import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
 import com.nv.qa.api.client.operator_portal.OperatorPortalTagManagementClient;
 import com.nv.qa.model.operator_portal.authentication.AuthResponse;
-import com.nv.qa.utils.NvLogger;
+import com.nv.qa.commons.utils.NvLogger;
 import cucumber.api.java.en.Given;
 import cucumber.runtime.java.guice.ScenarioScoped;
 

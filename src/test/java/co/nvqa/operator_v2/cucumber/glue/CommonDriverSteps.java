@@ -10,7 +10,7 @@ import com.nv.qa.integration.model.driver.Job;
 import com.nv.qa.integration.model.driver.Route;
 import com.nv.qa.integration.model.driver.builder.JobBuilder;
 import com.nv.qa.integration.model.driver.scan.DeliveryRequest;
-import com.nv.qa.utils.NvLogger;
+import com.nv.qa.commons.utils.NvLogger;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
