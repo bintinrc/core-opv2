@@ -47,14 +47,74 @@ public class SimplePage
         waitUntilInvisibilityOfElementLocated(xpathExpression + "//md-progress-circular");
     }
 
+    public void clickButtonByAriaLabel(String ariaLabel)
+    {
+        String xpathExpression = String.format("//button[@aria-label='%s']", ariaLabel);
+        WebElement we = findElementByXpath(xpathExpression);
+        moveAndClick(we);
+    }
+
+    public void clickButtonByAriaLabelAndWaitUntilDone(String ariaLabel)
+    {
+        String xpathExpression = String.format("//button[@aria-label='%s']", ariaLabel);
+        WebElement we = findElementByXpath(xpathExpression);
+        moveAndClick(we);
+        waitUntilInvisibilityOfElementLocated(xpathExpression + "/div[contains(@class,'show')]/md-progress-circular");
+    }
+
+    public void clickNvIconTextButtonByName(String name)
+    {
+        String xpathExpression = String.format("//nv-icon-text-button[@name='%s']", name);
+        WebElement we = findElementByXpath(xpathExpression);
+        moveAndClick(we);
+    }
+
+    public void clickNvIconTextButtonByNameAndWaitUntilDone(String name)
+    {
+        String xpathExpression = String.format("//nv-icon-text-button[@name='%s']", name);
+        WebElement we = findElementByXpath(xpathExpression);
+        moveAndClick(we);
+        waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
+    }
+
+    public void clickNvApiTextButtonByName(String name)
+    {
+        String xpathExpression = String.format("//nv-api-text-button[@name='%s']", name);
+        WebElement we = findElementByXpath(xpathExpression);
+        moveAndClick(we);
+    }
+
+    public void clickNvApiTextButtonByNameAndWaitUntilDone(String name)
+    {
+        String xpathExpression = String.format("//nv-api-text-button[@name='%s']", name);
+        WebElement we = findElementByXpath(xpathExpression);
+        moveAndClick(we);
+        waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
+    }
+
+    public void clickNvButtonSaveByName(String name)
+    {
+        String xpathExpression = String.format("//nv-button-save[@name='%s']", name);
+        WebElement we = findElementByXpath(xpathExpression);
+        moveAndClick(we);
+    }
+
+    public void clickNvButtonSaveByNameAndWaitUntilDone(String name)
+    {
+        String xpathExpression = String.format("//nv-button-save[@name='%s']", name);
+        WebElement we = findElementByXpath(xpathExpression);
+        moveAndClick(we);
+        waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'saving')]/md-progress-circular");
+    }
+
     public void moveAndClick(WebElement webElement)
     {
         Actions action = new Actions(getwebDriver());
         action.moveToElement(webElement);
-        pause300ms();
+        pause100ms();
         action.click();
         action.perform();
-        pause300ms();
+        pause100ms();
     }
 
     public void sendKeys(int maxRetryStaleElementReference, String xpathExpression, CharSequence... keysToSend)
@@ -87,20 +147,35 @@ public class SimplePage
     {
         WebElement we = findElementByXpath(xpathExpression);
         we.clear();
-        pause300ms();
+        pause100ms();
         we.sendKeys(keysToSend);
-        pause300ms();
+        pause100ms();
     }
 
     public void sendKeysAndEnter(String xpathExpression, CharSequence... keysToSend)
     {
         WebElement we = findElementByXpath(xpathExpression);
         we.clear();
-        pause300ms();
+        pause100ms();
         we.sendKeys(keysToSend);
         pause100ms();
         we.sendKeys(Keys.RETURN);
-        pause300ms();
+        pause100ms();
+    }
+
+    public void sendKeysById(String id, CharSequence... keysToSend)
+    {
+        sendKeys(String.format("//*[starts-with(@id, '%s')]", id), keysToSend);
+    }
+
+    public void sendKeysByName(String id, CharSequence... keysToSend)
+    {
+        sendKeys(String.format("//*[starts-with(@name, '%s')]", id), keysToSend);
+    }
+
+    public void sendKeysByAriaLabel(String ariaLabel, CharSequence... keysToSend)
+    {
+        sendKeys(String.format("//*[@aria-label='%s']", ariaLabel), keysToSend);
     }
 
     public WebElement findElementByXpath(String xpathExpression)
@@ -435,7 +510,7 @@ public class SimplePage
                     WebElement webElement = elementIfVisible(findElement(locator, wd));
                     boolean isElementDisplayed = webElement!=null;
                     NvLogger.infof("Wait Until Visibility Of Element Located: Is element '%s' displayed? %b", locator, isElementDisplayed);
-                    return webElement;
+                    return isElementDisplayed;
                 }
                 catch(NoSuchElementException ex)
                 {

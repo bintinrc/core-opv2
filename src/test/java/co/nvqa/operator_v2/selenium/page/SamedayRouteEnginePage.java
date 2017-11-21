@@ -46,7 +46,7 @@ public class SamedayRouteEnginePage extends SimplePage
 
     public void clickRunRouteEngineButton()
     {
-        clickAndWaitUntilDone("//button[@aria-label='Run Route Engine']");
+        clickNvApiTextButtonByNameAndWaitUntilDone("Run Route Engine");
     }
 
     public void selectFleetType1OperatingHoursStart(String operatingHoursStart)
@@ -79,7 +79,7 @@ public class SamedayRouteEnginePage extends SimplePage
 
     public void selectDriverOnRouteSettingsPage(String driverName)
     {
-        sendKeys("//input[@aria-label='Search Driver']", driverName);
+        sendKeysByAriaLabel("Search Driver", driverName);
         pause500ms();
         click(String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", driverName));
         pause100ms();
@@ -87,7 +87,7 @@ public class SamedayRouteEnginePage extends SimplePage
 
     public void clickCreate1RoutesButton()
     {
-        clickAndWaitUntilDone("//button[@aria-label='Create 1 Route(s)']");
+        clickNvApiTextButtonByNameAndWaitUntilDone("Create 1 Route(s)");
     }
 
     public void setFleetType1Capacity(String capacity)

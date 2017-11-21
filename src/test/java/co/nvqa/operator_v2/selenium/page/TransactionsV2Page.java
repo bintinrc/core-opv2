@@ -54,9 +54,10 @@ public class TransactionsV2Page extends SimplePage
 
     public void removeFilter(String filterName)
     {
-        if (filterName.contains("time"))
+        if(filterName.contains("time"))
         {
-            if(isElementExist("//div[div[p[text()='" + filterName + "']]]/div/nv-icon-button/button")){
+            if(isElementExist("//div[div[p[text()='" + filterName + "']]]/div/nv-icon-button/button"))
+            {
                 click("//div[div[p[text()='" + filterName + "']]]/div/nv-icon-button/button");
             }
         }
@@ -68,7 +69,7 @@ public class TransactionsV2Page extends SimplePage
 
     public void clickLoadSelectionButton()
     {
-        click("//button[@aria-label='Load Selection']");
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
     }
 
     public void searchByTrackingId(String trackingId)
@@ -82,16 +83,15 @@ public class TransactionsV2Page extends SimplePage
 
     public void selectAllShown()
     {
-        click("//button[@aria-label='Selection']");
+        clickButtonByAriaLabel("Selection");
         pause100ms();
-        click("//button[@aria-label='Select All Shown']");
+        clickButtonByAriaLabel("Select All Shown");
         pause100ms();
     }
 
     public void clickAddToRouteGroupButton()
     {
-        click("//button[@aria-label='Add to Route Group']");
-        pause100ms();
+        clickNvIconTextButtonByNameAndWaitUntilDone("container.transactions.add-to-route-group");
     }
 
     public void selectRouteGroupOnAddToRouteGroupDialog(String routeGroupName)
@@ -104,7 +104,6 @@ public class TransactionsV2Page extends SimplePage
 
     public void clickAddTransactionsOnAddToRouteGroupDialog()
     {
-        click("//button[@aria-label='Save Button']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular");
+        clickNvButtonSaveByNameAndWaitUntilDone("Add Transactions/Reservations");
     }
 }
