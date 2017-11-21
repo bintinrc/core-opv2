@@ -12,8 +12,8 @@ Feature: Aged Parcel Management
     And Operator Global Inbound parcel using data below:
       | globalInboundRequest | {"scan":"{{order_tracking_id}}","type":"SORTING_HUB","hubId":1} |
     Then Operator verify order info after Global Inbound
-    When op refresh page
-    And op click navigation Aged Parcel Management in Shipper Support
+    When Operator refresh page
+    And Operator go to menu Shipper Support -> Aged Parcel Management
     And operator load selection on page Aged Parcel Management
     Then Operator verify the aged parcel order is listed on Aged Parcels list
     Examples:
@@ -29,8 +29,8 @@ Feature: Aged Parcel Management
     And Operator Global Inbound parcel using data below:
       | globalInboundRequest | {"scan":"{{order_tracking_id}}","type":"SORTING_HUB","hubId":1} |
     Then Operator verify order info after Global Inbound
-    When op refresh page
-    And op click navigation Aged Parcel Management in Shipper Support
+    When Operator refresh page
+    And Operator go to menu Shipper Support -> Aged Parcel Management
     And operator load selection on page Aged Parcel Management
     And Operator download CSV file of aged parcel on Aged Parcels list
     Then Operator verify CSV file of aged parcel on Aged Parcels list downloaded successfully
@@ -57,11 +57,11 @@ Feature: Aged Parcel Management
     And Driver failed the delivery for created parcel
     And Operator Global Inbound parcel using data below:
       | globalInboundRequest | {"scan":"{{order_tracking_id}}","type":"SORTING_HUB","hubId":1} |
-    And op refresh page
-    And op click navigation Aged Parcel Management in Shipper Support
+    When Operator refresh page
+    And Operator go to menu Shipper Support -> Aged Parcel Management
     And operator load selection on page Aged Parcel Management
     And Operator reschedule aged parcel on next day
-    And Operator verify order info after failed delivery aged parcel global inbounded and rescheduled on next day
+    Then Operator verify order info after failed delivery aged parcel global inbounded and rescheduled on next day
     Examples:
       | Note   | hiptest-uid                              | orderType |
       | Normal | uid:c0874ed2-c089-4791-97a5-6e2b72b93a1d | Normal    |
@@ -85,11 +85,11 @@ Feature: Aged Parcel Management
     And Driver failed the delivery for created parcel
     And Operator Global Inbound parcel using data below:
       | globalInboundRequest | {"scan":"{{order_tracking_id}}","type":"SORTING_HUB","hubId":1} |
-    And op refresh page
-    And op click navigation Aged Parcel Management in Shipper Support
+    When Operator refresh page
+    And Operator go to menu Shipper Support -> Aged Parcel Management
     And operator load selection on page Aged Parcel Management
     And Operator reschedule aged parcel on next 2 days
-    And Operator verify order info after failed delivery aged parcel global inbounded and rescheduled on next 2 days
+    Then Operator verify order info after failed delivery aged parcel global inbounded and rescheduled on next 2 days
     Examples:
       | Note   | hiptest-uid                              | orderType |
       | Normal | uid:b8163a26-46bc-433f-94e0-f938d043535e | Normal    |
@@ -113,11 +113,11 @@ Feature: Aged Parcel Management
     And Driver failed the delivery for created parcel
     And Operator Global Inbound parcel using data below:
       | globalInboundRequest | {"scan":"{{order_tracking_id}}","type":"SORTING_HUB","hubId":1} |
-    And op refresh page
-    And op click navigation Aged Parcel Management in Shipper Support
+    When Operator refresh page
+    And Operator go to menu Shipper Support -> Aged Parcel Management
     And operator load selection on page Aged Parcel Management
     And Operator RTS aged parcel on next day
-    And Operator verify order info after failed delivery aged parcel global inbounded and RTS-ed on next day
+    Then Operator verify order info after failed delivery aged parcel global inbounded and RTS-ed on next day
     Examples:
       | Note   | hiptest-uid                              | orderType |
       | Normal | uid:a7137a42-3380-4e62-86bb-df034ff60915 | Normal    |
@@ -141,11 +141,11 @@ Feature: Aged Parcel Management
     And Driver failed the delivery for created parcel
     And Operator Global Inbound parcel using data below:
       | globalInboundRequest | {"scan":"{{order_tracking_id}}","type":"SORTING_HUB","hubId":1} |
-    And op refresh page
-    And op click navigation Aged Parcel Management in Shipper Support
+    When Operator refresh page
+    And Operator go to menu Shipper Support -> Aged Parcel Management
     And operator load selection on page Aged Parcel Management
     And Operator RTS aged parcel on next day
-    And Operator verify order info after failed delivery aged parcel global inbounded and RTS-ed on next day
+    Then Operator verify order info after failed delivery aged parcel global inbounded and RTS-ed on next day
     Examples:
       | Note   | hiptest-uid                              | orderType |
       | Normal | uid:701c1c6c-c095-4055-a387-0fe38c38b0bb | Normal    |

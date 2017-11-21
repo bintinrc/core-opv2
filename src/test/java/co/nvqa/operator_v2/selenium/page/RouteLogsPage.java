@@ -53,14 +53,12 @@ public class RouteLogsPage extends SimplePage
 
     public void clickLoadSelection()
     {
-        click("//button[@aria-label='Load Selection']");
-        pause100ms();
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
     }
 
     public void clickEditFilter()
     {
-        click("//button[@aria-label='Edit Filters']");
-        pause100ms();
+        clickNvIconTextButtonByNameAndWaitUntilDone("container.route-logs.edit-filters");
     }
 
     public void clickLoadWaypointsOfSelectedRoutesOnly()
@@ -75,7 +73,7 @@ public class RouteLogsPage extends SimplePage
 
     public void clickCancelOnEditRoutesDialog()
     {
-        click("//button[@aria-label='Cancel']");
+        clickButtonByAriaLabel("Cancel");
     }
 
     public void editAssignedDriver(String newDriverName)
@@ -88,8 +86,7 @@ public class RouteLogsPage extends SimplePage
 
     public void clickSaveButtonOnEditDetailsDialog()
     {
-        click("//button[@aria-label='Save Button']");
-        pause100ms();
+        clickNvButtonSaveByNameAndWaitUntilDone("commons.save-changes");
     }
 
     public void deleteRoute(String routeId)
@@ -107,7 +104,7 @@ public class RouteLogsPage extends SimplePage
         {
             try
             {
-                click("//button[@aria-label='Delete']");
+                clickButtonByAriaLabel("Delete");
                 pause200ms();
                 clicked = true;
             }
