@@ -7,7 +7,7 @@ Feature: Tag Management
 
   Scenario: Operator create, update and delete tag on Tag Management menu. (uid:a49a930e-1fb2-4a0c-8a8f-8bbccc5d87cc)
     Given Operator V2 cleaning Tag Management by calling API endpoint directly
-    Given op click navigation Tag Management in Routing
+    Given Operator go to menu Routing -> Tag Management
     When op create new tag on Tag Management
     Then new tag on Tag Management created successfully
     When op update tag on Tag Management
