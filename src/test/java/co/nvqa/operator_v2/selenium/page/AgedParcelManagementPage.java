@@ -70,6 +70,6 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
 
     private void clickBtnLoadSelection()
     {
-        clickAndWaitUntilDone("//button[@aria-label='Load Selection']");
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
     }
 }

@@ -28,7 +28,7 @@ public class RouteGroupsPage extends SimplePage
 
     public void createRouteGroup(String routeGroupName)
     {
-        click("//button[@aria-label='Create Route Group']");
+        clickNvIconTextButtonByNameAndWaitUntilDone("container.route-group.create-route-group");
         setRouteGroupNameValue(routeGroupName);
         setRouteGroupDescriptionValue(String.format("This Route Group is created by automation test from Operator V2. Created at %s.", new Date().toString()));
         clickCreateRouteGroupAndAddTransactionsOnCreateDialog();
@@ -58,23 +58,22 @@ public class RouteGroupsPage extends SimplePage
 
     public void setRouteGroupNameValue(String value)
     {
-        sendKeys("//input[@aria-label='Group Name']", value);
+        sendKeysById("commons.model.group-name", value);
     }
 
     public void setRouteGroupDescriptionValue(String value)
     {
-        sendKeys("//input[@aria-label='Description']", value);
+        sendKeysById("commons.description", value);
     }
 
     public void clickCreateRouteGroupAndAddTransactionsOnCreateDialog()
     {
-        click("//button[@aria-label='Save Button']");
+        clickNvButtonSaveByNameAndWaitUntilDone("Create Route Group & Add Transactions");
     }
 
     public void clickCreateRouteGroupAndAddTransactionsOnEditDialog()
     {
         clickCreateRouteGroupAndAddTransactionsOnCreateDialog();
-        pause1s();
     }
 
     public void searchTable(String keyword)

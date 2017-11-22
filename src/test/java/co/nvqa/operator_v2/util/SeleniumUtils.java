@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.util;
 
-import com.nv.qa.utils.NvLogger;
+import com.nv.qa.commons.utils.NvLogger;
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;

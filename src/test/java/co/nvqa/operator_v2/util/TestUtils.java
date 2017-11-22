@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.util;
 
-import com.nv.qa.support.JsonHelper;
-import com.nv.qa.utils.NvLogger;
-import com.nv.qa.utils.StandardTestUtils;
+import com.nv.qa.commons.support.JsonHelper;
+import com.nv.qa.commons.utils.NvLogger;
+import com.nv.qa.commons.utils.StandardTestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;

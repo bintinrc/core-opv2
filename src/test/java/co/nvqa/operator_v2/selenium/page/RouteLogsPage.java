@@ -1,10 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import com.nv.qa.utils.NvLogger;
+import com.nv.qa.commons.utils.NvLogger;
 import org.junit.Assert;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,14 +52,12 @@ public class RouteLogsPage extends SimplePage
 
     public void clickLoadSelection()
     {
-        click("//button[@aria-label='Load Selection']");
-        pause100ms();
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
     }
 
     public void clickEditFilter()
     {
-        click("//button[@aria-label='Edit Filters']");
-        pause100ms();
+        clickNvIconTextButtonByNameAndWaitUntilDone("container.route-logs.edit-filters");
     }
 
     public void clickLoadWaypointsOfSelectedRoutesOnly()
@@ -75,7 +72,7 @@ public class RouteLogsPage extends SimplePage
 
     public void clickCancelOnEditRoutesDialog()
     {
-        click("//button[@aria-label='Cancel']");
+        clickButtonByAriaLabel("Cancel");
     }
 
     public void editAssignedDriver(String newDriverName)
@@ -88,8 +85,7 @@ public class RouteLogsPage extends SimplePage
 
     public void clickSaveButtonOnEditDetailsDialog()
     {
-        click("//button[@aria-label='Save Button']");
-        pause100ms();
+        clickNvButtonSaveByNameAndWaitUntilDone("commons.save-changes");
     }
 
     public void deleteRoute(String routeId)
@@ -107,7 +103,7 @@ public class RouteLogsPage extends SimplePage
         {
             try
             {
-                click("//button[@aria-label='Delete']");
+                clickButtonByAriaLabel("Delete");
                 pause200ms();
                 clicked = true;
             }
@@ -117,12 +113,6 @@ public class RouteLogsPage extends SimplePage
                 counter++;
             }
         }
-    }
-
-    public boolean isTableEmpty()
-    {
-        WebElement we = findElementByXpath("//h5[text()='No Results Found']");
-        return we!=null;
     }
 
     public void searchTableByRouteId(String routeId)

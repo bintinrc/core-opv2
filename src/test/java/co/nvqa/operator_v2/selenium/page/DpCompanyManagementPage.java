@@ -146,39 +146,27 @@ public class DpCompanyManagementPage extends SimplePage
 
     public void searchTableByName(String name)
     {
-        searchTable("name", name);
+        searchTableCustom1("name", name);
     }
 
     public void searchTableByEmail(String email)
     {
-        searchTable("email", email);
+        searchTableCustom1("email", email);
     }
 
     public void searchTableByContact(String contactNo)
     {
-        searchTable("contact-no", contactNo);
+        searchTableCustom1("contact-no", contactNo);
     }
 
     public void searchTableByDropOffWebhookUrl(String dropOffWebhookUrl)
     {
-        searchTable("drop-off-webhook-url", dropOffWebhookUrl);
+        searchTableCustom1("drop-off-webhook-url", dropOffWebhookUrl);
     }
 
     public void searchTableByCollectWebhookUrl(String collectWebhookUrl)
     {
-        searchTable("collect-webhook-url", collectWebhookUrl);
-    }
-
-    private void searchTable(String filterColumnClass, String value)
-    {
-        sendKeys(String.format("//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input", filterColumnClass), value);
-        pause100ms();
-    }
-
-    public boolean isTableEmpty()
-    {
-        WebElement we = findElementByXpath("//h5[text()='No Results Found']");
-        return we!=null;
+        searchTableCustom1("collect-webhook-url", collectWebhookUrl);
     }
 
     public void clickSeeVault(DpCompany dpCompany)

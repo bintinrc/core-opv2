@@ -7,7 +7,7 @@ Feature: Shipment Scanning
 
   @PrinterSettings#01
   Scenario: Add Printer Settings (uid:f139cffa-0c34-45c2-8d36-15c43e47063f)
-    Given op click navigation Printer Settings in System Settings
+    Given Operator go to menu System Settings -> Printer Settings
     When op click add Printer button
     Then Add Printer Form on display
     When op create printer setting with details:

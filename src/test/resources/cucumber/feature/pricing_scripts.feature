@@ -7,7 +7,7 @@ Feature: Pricing Scripts
 
   @PricingScripts#01
   Scenario: Operator create, update and delete script on Pricing Scripts menu. (uid:0c1175e7-b5af-474c-b0a8-3b89ea786a59)
-    Given op click navigation Pricing Scripts in Shipper
+    Given Operator go to menu Shipper -> Pricing Scripts
     When op create new script on Pricing Scripts
     Then new script on Pricing Scripts created successfully
     When op update script on Pricing Scripts
@@ -17,7 +17,7 @@ Feature: Pricing Scripts
 
   @PricingScripts#02
   Scenario Outline: Operator do Run Test at selected Pricing Scripts. (<hiptest-uid>)
-    Given op click navigation Pricing Scripts in Shipper
+    Given Operator go to menu Shipper -> Pricing Scripts
     Given op have two default script "Script Cucumber Test 1" and "Script Cucumber Test 2"
     When op click Run Test on Operator V2 Portal using this Script Check below:
       | deliveryType | <deliveryType> |
@@ -46,7 +46,7 @@ Feature: Pricing Scripts
 
   @PricingScripts#03
   Scenario: Operator linking a Pricing Scripts to a Shipper. (uid:0800ac82-a359-4d5f-a666-12b6d3877540)
-    Given op click navigation Pricing Scripts in Shipper
+    Given Operator go to menu Shipper -> Pricing Scripts
     Given op have two default script "Script Cucumber Test 1" and "Script Cucumber Test 2"
     When op linking Pricing Scripts "Script Cucumber Test 1" or "Script Cucumber Test 2" to shipper "Pricing Script Link Shipper"
     Then Pricing Scripts linked to the shipper successfully

@@ -6,7 +6,7 @@ Feature: Shipment Linehaul
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
   Scenario: Create Linehaul (uid:3eeaa647-c1a2-40a1-8ee4-da898e7e2e7d)
-    Given op click navigation Linehaul Management in Inter-Hub
+    Given Operator go to menu Inter-Hub -> Linehaul Management
     Given op click tab LINEHAUL ENTRIES
     Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
     Given op click create linehaul button
@@ -60,8 +60,8 @@ Feature: Shipment Linehaul
     Then op click edit linhaul filter
 
   Scenario: Check linehaul schedule (uid:8b178ed7-6da6-4207-8cb6-f75327533ba2)
-    Given op refresh page
-    Given op click navigation Linehaul Management in Inter-Hub
+    Given Operator refresh page
+    Given Operator go to menu Inter-Hub -> Linehaul Management
     Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
     Given op click create linehaul button
     When create new linehaul:

@@ -11,10 +11,10 @@ Feature: Shipment Scanning
       | Note                 | hiptest-uid                              | type   | pickup_date | pickup_timewindow_id | delivery_date | delivery_timewindow_id | max_delivery_days | parcel_size | parcel_volume | parcel_weight | from_name        | from_contact  | from_email         | from_address1         | from_address2 | from_city | from_country | from_postcode | to_name      | to_contact    | to_email           | to_address1           | to_address2  | to_city | to_country | to_postcode |
       | C2C Nextday          | uid:f2ed4f50-c6f8-4736-902a-c6033dd53063 | C2C    | TODAY       | 1                    | TOMORROW      | 2                      | 1                 | 2           | 9000          | 3000          | Han Solo Exports | 91234567      | jane.doe@gmail.com | 30 Jalan Kilang Barat | Ninja Van HQ  | SG        | SG           | 159363        | James T Kirk | 98765432      | john.doe@gmail.com | 998 Toa Payoh North   | #01-10       | SG      | SG         | 318993      |
     # Create shipment
-    Given op click navigation Shipment Management in Inter-Hub
+    Given Operator go to menu Inter-Hub -> Shipment Management
     When create Shipment with Start Hub 30JKB, End hub DOJO and comment Auto Comment
     # Scan order to shipment
-    Given op click navigation Shipment Scanning in Inter-Hub
+    Given Operator go to menu Inter-Hub -> Shipment Scanning
     When scan order to shipment in hub 30JKB
 
   @KillBrowser

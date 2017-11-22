@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -81,12 +80,6 @@ public class FailedPickupManagementPage extends SimplePage
         Assert.assertTrue(String.format("Tracking ID '%s' is still listed on failed order list.", trackingId), isTableEmpty);
     }
 
-    public boolean isTableEmpty()
-    {
-        WebElement we = findElementByXpath("//h5[text()='No Results Found']");
-        return we!=null;
-    }
-
     public void checkRow(int rowIndex)
     {
         click(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", MD_VIRTUAL_REPEAT, rowIndex));
@@ -106,13 +99,7 @@ public class FailedPickupManagementPage extends SimplePage
 
     public void searchTableByTrackingId(String trackingId)
     {
-        searchTable("tracking_id", trackingId);
-    }
-
-    private void searchTable(String filterColumnClass, String value)
-    {
-        sendKeys(String.format("//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input", filterColumnClass), value);
-        pause100ms();
+        searchTableCustom1("tracking_id", trackingId);
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)
