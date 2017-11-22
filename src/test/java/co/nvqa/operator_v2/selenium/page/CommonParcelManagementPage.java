@@ -1,14 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.util.TestUtils;
-import com.nv.qa.commons.utils.NvLogger;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.NoSuchElementException;
 
 /**
  *
@@ -90,32 +86,9 @@ public abstract class CommonParcelManagementPage extends SimplePage
         }
     }
 
-    public boolean isTableEmpty()
-    {
-        boolean isEmpty = false;
-
-        try
-        {
-            WebElement we = findElementByXpath("//h5[text()='No Results Found']", 1);
-            isEmpty = we!=null;
-        }
-        catch(NoSuchElementException | TimeoutException ex)
-        {
-            NvLogger.warn("Table is not empty.");
-        }
-
-        return isEmpty;
-    }
-
     public void searchTableByTrackingId(String trackingId)
     {
-        searchTable("tracking_id", trackingId);
-    }
-
-    protected void searchTable(String filterColumnClass, String value)
-    {
-        sendKeys(String.format("//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input", filterColumnClass), value);
-        pause100ms();
+        searchTableCustom1("tracking_id", trackingId);
     }
 
     public void checkRow(int rowIndex)

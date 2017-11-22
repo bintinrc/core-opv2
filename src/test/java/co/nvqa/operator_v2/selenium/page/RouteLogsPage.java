@@ -4,7 +4,6 @@ import com.nv.qa.commons.utils.NvLogger;
 import org.junit.Assert;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -114,12 +113,6 @@ public class RouteLogsPage extends SimplePage
                 counter++;
             }
         }
-    }
-
-    public boolean isTableEmpty()
-    {
-        WebElement we = findElementByXpath("//h5[text()='No Results Found']");
-        return we!=null;
     }
 
     public void searchTableByRouteId(String routeId)

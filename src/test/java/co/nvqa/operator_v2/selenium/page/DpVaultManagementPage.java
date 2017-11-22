@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.model.DpVault;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 /**
  *
@@ -111,29 +110,17 @@ public class DpVaultManagementPage extends SimplePage
 
     public void searchTableByName(String name)
     {
-        searchTable("name", name);
+        searchTableCustom1("name", name);
     }
 
     public void searchTableByAddress(String address)
     {
-        searchTable("_address", address);
+        searchTableCustom1("_address", address);
     }
 
     public void searchTableByLatLong(String latLong)
     {
-        searchTable("_latlng", latLong);
-    }
-
-    private void searchTable(String filterColumnClass, String value)
-    {
-        sendKeys(String.format("//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input", filterColumnClass), value);
-        pause100ms();
-    }
-
-    public boolean isTableEmpty()
-    {
-        WebElement we = findElementByXpath("//h5[text()='No Results Found']");
-        return we!=null;
+        searchTableCustom1("_latlng", latLong);
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)

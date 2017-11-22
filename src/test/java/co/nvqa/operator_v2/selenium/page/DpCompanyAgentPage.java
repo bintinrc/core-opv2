@@ -4,7 +4,6 @@ import co.nvqa.operator_v2.model.DpCompany;
 import co.nvqa.operator_v2.model.DpCompanyAgent;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 /**
  *
@@ -29,7 +28,7 @@ public class DpCompanyAgentPage extends SimplePage
 
     public void addDpCompanyAgent(DpCompanyAgent dpCompanyAgent)
     {
-        click("//button[@aria-label='Add Agent']");
+        clickNvIconTextButtonByName("Add Agent");
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'dp-agent-add')]");
         fillTheFormAndSubmit(dpCompanyAgent);
     }
@@ -43,12 +42,11 @@ public class DpCompanyAgentPage extends SimplePage
 
     private void fillTheFormAndSubmit(DpCompanyAgent dpCompanyAgent)
     {
-        sendKeys("//input[@aria-label='Name']", dpCompanyAgent.getName());
-        sendKeys("//input[@aria-label='Email']", dpCompanyAgent.getEmail());
-        sendKeys("//input[@aria-label='Contact']", dpCompanyAgent.getContact());
-        sendKeys("//input[@aria-label='Unlock Code']", dpCompanyAgent.getUnlockCode());
-        click("//button[@aria-label='Save Button']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular");
+        sendKeysById("commons.model.name", dpCompanyAgent.getName());
+        sendKeysById("email", dpCompanyAgent.getEmail());
+        sendKeysById("commons.contact", dpCompanyAgent.getContact());
+        sendKeysById("commons.model.unlockcode", dpCompanyAgent.getUnlockCode());
+        clickNvButtonSaveByNameAndWaitUntilDone("Submit");
     }
 
     public void deleteDpCompanyAgent(DpCompanyAgent dpCompanyAgent)
@@ -95,19 +93,12 @@ public class DpCompanyAgentPage extends SimplePage
     public void backToDpCompanyManagementPage(DpCompany dpCompany)
     {
         click(String.format("//button[contains(@aria-label, '%s')]", dpCompany.getName()));
-        waitUntilVisibilityOfElementLocated("//button[@aria-label='Add Company']");
+        waitUntilVisibilityOfElementLocated("//div[contains(@class,'nv-h4')][text()='DP Company Management']");
     }
 
     public void searchTableByName(String name)
     {
-        sendKeys("//th[contains(@class, 'name')]/nv-search-input-filter/md-input-container/div/input", name);
-        pause100ms();
-    }
-
-    public boolean isTableEmpty()
-    {
-        WebElement we = findElementByXpath("//h5[text()='No Results Found']");
-        return we!=null;
+        searchTableCustom1("name", name);
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)

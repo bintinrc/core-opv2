@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class SimplePage
 {
+    public static final int FAST_WAIT_IN_SECONDS = 2;
     public static final int DEFAULT_MAX_RETRY_FOR_STALE_ELEMENT_REFERENCE = 5;
     public static final int DEFAULT_MAX_RETRY_FOR_FILE_VERIFICATION = 10;
     protected WebDriver webDriver;
@@ -27,6 +28,16 @@ public class SimplePage
     public SimplePage(WebDriver webDriver)
     {
         this.webDriver = webDriver;
+    }
+
+    public void moveAndClick(WebElement webElement)
+    {
+        Actions action = new Actions(getwebDriver());
+        action.moveToElement(webElement);
+        pause100ms();
+        action.click();
+        action.perform();
+        pause100ms();
     }
 
     public void altClick(String xpath)
@@ -49,72 +60,62 @@ public class SimplePage
 
     public void clickButtonByAriaLabel(String ariaLabel)
     {
-        String xpathExpression = String.format("//button[@aria-label='%s']", ariaLabel);
-        WebElement we = findElementByXpath(xpathExpression);
-        moveAndClick(we);
+        click(String.format("//button[@aria-label='%s']", ariaLabel));
     }
 
     public void clickButtonByAriaLabelAndWaitUntilDone(String ariaLabel)
     {
         String xpathExpression = String.format("//button[@aria-label='%s']", ariaLabel);
-        WebElement we = findElementByXpath(xpathExpression);
-        moveAndClick(we);
+        click(xpathExpression);
         waitUntilInvisibilityOfElementLocated(xpathExpression + "/div[contains(@class,'show')]/md-progress-circular");
+    }
+
+    public void clickNvIconButtonByName(String name)
+    {
+        click(String.format("//nv-icon-button[@name='%s']", name));
+    }
+
+    public void clickNvIconButtonByNameAndWaitUntilEnabled(String name)
+    {
+        String xpathExpression = String.format("//nv-icon-button[@name='%s']", name);
+        click(xpathExpression);
+        waitUntilInvisibilityOfElementLocated(xpathExpression + "/button[@disabled='disabled']");
     }
 
     public void clickNvIconTextButtonByName(String name)
     {
-        String xpathExpression = String.format("//nv-icon-text-button[@name='%s']", name);
-        WebElement we = findElementByXpath(xpathExpression);
-        moveAndClick(we);
+        click(String.format("//nv-icon-text-button[@name='%s']", name));
     }
 
     public void clickNvIconTextButtonByNameAndWaitUntilDone(String name)
     {
         String xpathExpression = String.format("//nv-icon-text-button[@name='%s']", name);
-        WebElement we = findElementByXpath(xpathExpression);
-        moveAndClick(we);
+        click(xpathExpression);
         waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
     }
 
     public void clickNvApiTextButtonByName(String name)
     {
-        String xpathExpression = String.format("//nv-api-text-button[@name='%s']", name);
-        WebElement we = findElementByXpath(xpathExpression);
-        moveAndClick(we);
+        click(String.format("//nv-api-text-button[@name='%s']", name));
     }
 
     public void clickNvApiTextButtonByNameAndWaitUntilDone(String name)
     {
         String xpathExpression = String.format("//nv-api-text-button[@name='%s']", name);
-        WebElement we = findElementByXpath(xpathExpression);
-        moveAndClick(we);
+        click(xpathExpression);
         waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
     }
 
     public void clickNvButtonSaveByName(String name)
     {
-        String xpathExpression = String.format("//nv-button-save[@name='%s']", name);
-        WebElement we = findElementByXpath(xpathExpression);
-        moveAndClick(we);
+        click(String.format("//nv-button-save[@name='%s']", name));
     }
 
     public void clickNvButtonSaveByNameAndWaitUntilDone(String name)
     {
         String xpathExpression = String.format("//nv-button-save[@name='%s']", name);
-        WebElement we = findElementByXpath(xpathExpression);
-        moveAndClick(we);
+        click(xpathExpression);
         waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'saving')]/md-progress-circular");
-    }
-
-    public void moveAndClick(WebElement webElement)
-    {
-        Actions action = new Actions(getwebDriver());
-        action.moveToElement(webElement);
-        pause100ms();
-        action.click();
-        action.perform();
-        pause100ms();
     }
 
     public void sendKeys(int maxRetryStaleElementReference, String xpathExpression, CharSequence... keysToSend)
@@ -282,7 +283,7 @@ public class SimplePage
             }
             else
             {
-                we = findElementByXpath(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, '%s')]", mdVirtualRepeat, rowNumber, columnDataClass));
+                we = findElementByXpath(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[starts-with(@class, '%s')]", mdVirtualRepeat, rowNumber, columnDataClass));
             }
 
             text = we.getText().trim();
@@ -298,7 +299,7 @@ public class SimplePage
     {
         try
         {
-            WebElement we = findElementByXpath(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'actions')]//nv-icon-button[@name='%s']", ngRepeat, rowNumber, actionButtonName));
+            WebElement we = findElementByXpath(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[starts-with(@class, 'actions')]//nv-icon-button[@name='%s']", ngRepeat, rowNumber, actionButtonName));
             moveAndClick(we);
         }
         catch(NoSuchElementException ex)
@@ -334,7 +335,7 @@ public class SimplePage
 
         try
         {
-            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[contains(@class, '%s')]", ngRepeat, rowNumber, columnDataClass));
+            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@class, '%s')]", ngRepeat, rowNumber, columnDataClass));
             text = we.getText().trim();
         }
         catch(NoSuchElementException ex)
@@ -348,7 +349,7 @@ public class SimplePage
     {
         try
         {
-            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[contains(@class, 'actions')]//nv-icon-button[@name='%s']", ngRepeat, rowNumber, actionButtonName));
+            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@class, 'actions')]//nv-icon-button[@name='%s']", ngRepeat, rowNumber, actionButtonName));
             moveAndClick(we);
         }
         catch(NoSuchElementException ex)
@@ -361,8 +362,7 @@ public class SimplePage
     {
         try
         {
-            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[contains(@class, '%s')]//button[@aria-label='%s']",
-                    ngRepeat, rowNumber, className, buttonAriaLabel));
+            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@class, '%s')]//button[@aria-label='%s']", ngRepeat, rowNumber, className, buttonAriaLabel));
             moveAndClick(we);
         }
         catch(NoSuchElementException ex)
@@ -430,6 +430,29 @@ public class SimplePage
         pause200ms();
     }
 
+    public void searchTableCustom2(String columnClass, String keywords)
+    {
+        sendKeys(String.format("//th[starts-with(@class, '%s')]/nv-search-input-filter/md-input-container/div/input", columnClass), keywords);
+        pause200ms();
+    }
+
+    public boolean isTableEmpty()
+    {
+        boolean isEmpty = false;
+
+        try
+        {
+            WebElement webElement = findElementByXpath("//h5[text()='No Results Found']", FAST_WAIT_IN_SECONDS);
+            isEmpty = webElement!=null;
+        }
+        catch(TimeoutException ex)
+        {
+            NvLogger.warn("Table is not empty.");
+        }
+
+        return isEmpty;
+    }
+
     public void waitUntilInvisibilityOfElementLocated(String xpath)
     {
         waitUntilInvisibilityOfElementLocated(By.xpath(xpath), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS);
@@ -478,7 +501,7 @@ public class SimplePage
         }
         catch(Exception ex)
         {
-            NvLogger.warn("Error on method 'waitUntilInvisibilityOfElementLocated'.", ex);
+            NvLogger.warnf("Error on method 'waitUntilInvisibilityOfElementLocated'. Cause: %s", ex.getMessage());
             throw ex;
         }
         finally
@@ -487,30 +510,30 @@ public class SimplePage
         }
     }
 
-    public void waitUntilVisibilityOfElementLocated(String xpath)
+    public WebElement waitUntilVisibilityOfElementLocated(String xpath)
     {
-        waitUntilVisibilityOfElementLocated(By.xpath(xpath), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS);
+        return waitUntilVisibilityOfElementLocated(By.xpath(xpath), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS);
     }
 
-    public void waitUntilVisibilityOfElementLocated(String xpath, long timeoutInSeconds)
+    public WebElement waitUntilVisibilityOfElementLocated(String xpath, long timeoutInSeconds)
     {
-        waitUntilVisibilityOfElementLocated(By.xpath(xpath), timeoutInSeconds);
+        return waitUntilVisibilityOfElementLocated(By.xpath(xpath), timeoutInSeconds);
     }
 
-    public void waitUntilVisibilityOfElementLocated(By locator, long timeoutInSeconds)
+    public WebElement waitUntilVisibilityOfElementLocated(By locator, long timeoutInSeconds)
     {
         try
         {
             setImplicitTimeout(0);
 
-            new WebDriverWait(getwebDriver(), timeoutInSeconds).until((WebDriver wd) ->
+            return new WebDriverWait(getwebDriver(), timeoutInSeconds).until((WebDriver wd) ->
             {
                 try
                 {
                     WebElement webElement = elementIfVisible(findElement(locator, wd));
                     boolean isElementDisplayed = webElement!=null;
                     NvLogger.infof("Wait Until Visibility Of Element Located: Is element '%s' displayed? %b", locator, isElementDisplayed);
-                    return isElementDisplayed;
+                    return webElement;
                 }
                 catch(NoSuchElementException ex)
                 {
@@ -519,7 +542,7 @@ public class SimplePage
                      * The try block checks if the element is present but is invisible.
                      */
                     NvLogger.infof("Wait Until Visibility Of Element Located: Is element '%s' displayed? %b (NoSuchElementException)", locator, false);
-                    return false;
+                    return null;
                 }
                 catch(StaleElementReferenceException ex)
                 {
@@ -528,13 +551,13 @@ public class SimplePage
                      * is no longer visible.
                      */
                     NvLogger.infof("Wait Until Visibility Of Element Located: Is element '%s' displayed? %b (StaleElementReferenceException)", locator, false);
-                    return false;
+                    return null;
                 }
             });
         }
         catch(Exception ex)
         {
-            NvLogger.warn("Error on method 'waitUntilVisibilityOfElementLocated'.", ex);
+            NvLogger.warnf("Error on method 'waitUntilVisibilityOfElementLocated'. Cause: %s", ex.getMessage());
             throw ex;
         }
         finally
