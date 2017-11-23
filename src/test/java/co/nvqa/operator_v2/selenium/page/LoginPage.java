@@ -46,16 +46,13 @@ public class LoginPage extends LoadableComponent<LoginPage>
 
     public void forceLogin(String operatorBearerToken)
     {
-        NvLogger.info("Force login by injecting cookies to browser.");
+        NvLogger.info("========== FORCE LOGIN BY INJECTING COOKIES TO BROWSER ==========");
 
         try
         {
             String userCookie = URLEncoder.encode(TestConstants.OPERATOR_PORTAL_USER_COOKIE, "UTF-8");
-
-            NvLogger.info("========== INJECTING COOKIES ==========");
             NvLogger.info("ninja_access_token = "+operatorBearerToken);
             NvLogger.info("user = "+userCookie);
-            NvLogger.info("=======================================");
 
             webDriver.manage().addCookie(new Cookie("ninja_access_token", operatorBearerToken, ".ninjavan.co", "/", null));
             webDriver.manage().addCookie(new Cookie("user", userCookie, ".ninjavan.co", "/", null));
@@ -79,6 +76,10 @@ public class LoginPage extends LoadableComponent<LoginPage>
         catch(UnsupportedEncodingException ex)
         {
             throw new RuntimeException(ex);
+        }
+        finally
+        {
+            NvLogger.info("=================================================================");
         }
     }
 
