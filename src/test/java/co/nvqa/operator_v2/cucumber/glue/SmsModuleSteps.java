@@ -6,12 +6,10 @@ import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.nv.qa.model.order_creation.v2.Order;
-import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
  *
@@ -38,11 +36,10 @@ public class SmsModuleSteps extends AbstractSteps
     @Then("^op upload sms campaign csv file")
     public void uploadSmsCampaignCsv(List<SmsCampaignCsv> data)
     {
-        Order order = scenarioStorage.get("order");
+        String trackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
 
-        if(order != null )
+        if(trackingId!=null)
         {
-            String trackingId = order.getTracking_id();
             data = data.stream().map(smsCampaignCsv ->
             {
                 if("_created_".equalsIgnoreCase(smsCampaignCsv.getTracking_id()))
@@ -71,15 +68,13 @@ public class SmsModuleSteps extends AbstractSteps
     @When("^op compose sms with data : ([^\"]*), ([^\"]*)")
     public void composeSms(String name, String trackingId)
     {
-        Order order = scenarioStorage.get("order");
+        String createdTrackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
 
-        if(order != null)
+        if(createdTrackingId!=null)
         {
-            String nTrackingId = order.getTracking_id();
-
             if("_created_".equalsIgnoreCase(trackingId))
             {
-                trackingId = nTrackingId;
+                trackingId = createdTrackingId;
             }
         }
 
@@ -126,11 +121,11 @@ public class SmsModuleSteps extends AbstractSteps
     @Then("^op verify that sms sent to phone number ([^\"]*) and tracking id ([^\"]*)")
     public void verifyOnTrackingIdValid(String trackingId, String contactNumber)
     {
-        Order order = scenarioStorage.get("order");
+        String createdTrackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
 
-        if(order!=null && "_created_".equalsIgnoreCase(trackingId))
+        if(createdTrackingId!=null && "_created_".equalsIgnoreCase(trackingId))
         {
-            trackingId = order.getTracking_id();
+            trackingId = createdTrackingId;
         }
 
         smsModulePage.searchSmsSentHistory(trackingId);

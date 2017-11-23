@@ -49,26 +49,27 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
         TestUtils.clickBtn(getWebDriver(), scanningPage.grabXpathButton(label));
         TestUtils.clickBtn(getWebDriver(), scanningPage.grabXpathButton("Start Inbound"));
 
-        scanningPage.inputShipmentToInbound(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID));
-        scanningPage.checkSessionScan(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID));
+        scanningPage.inputShipmentToInbound(scenarioStorage.get(KEY_SHIPMENT_ID));
+        scanningPage.checkSessionScan(scenarioStorage.get(KEY_SHIPMENT_ID));
     }
 
     @Then("^inbounded shipment exist$")
     public void inbounded_shipment_exist() throws Throwable
     {
+        String shipmentId = scenarioStorage.get(KEY_SHIPMENT_ID);
         List<ShipmentManagementPage.Shipment> shipmentList = shipmentManagementPage.getShipmentsFromTable();
         boolean isExist = false;
 
         for(ShipmentManagementPage.Shipment shipment : shipmentList)
         {
-            if(shipment.getId().equalsIgnoreCase(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID)))
+            if(shipment.getId().equalsIgnoreCase(shipmentId))
             {
                 isExist = true;
                 break;
             }
         }
 
-        Assert.assertTrue("shipment(" + scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID) + ") not exist", isExist);
+        Assert.assertTrue(String.format("Shipment with ID = '%s' not exist", shipmentId), isExist);
     }
 
     @When("^change end date$")

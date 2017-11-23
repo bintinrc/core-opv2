@@ -7,7 +7,6 @@ import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import com.nv.qa.integration.client.operator.BulkyTrackingClient;
 import com.nv.qa.integration.model.core.BulkyOrder;
-import com.nv.qa.model.order_creation.v2.Order;
 import com.nv.qa.commons.utils.NvLogger;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
@@ -46,6 +45,8 @@ public class SamedayRouteEngineSteps extends AbstractSteps
     @When("^op 'Run Route Engine' on Same-Day Route Engine menu using data below:$")
     public void runRouteEngine(DataTable dataTable)
     {
+        String routeGroupName = scenarioStorage.get(KEY_ROUTE_GROUP_NAME);
+
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
         String hubName = mapOfData.get("hub");
         String routingAlgorithm = mapOfData.get("routingAlgorithm");
@@ -54,8 +55,6 @@ public class SamedayRouteEngineSteps extends AbstractSteps
         String fleetType1BreakingDurationStart = mapOfData.get("fleetType1BreakingDurationStart");
         String fleetType1BreakingDurationEnd = mapOfData.get("fleetType1BreakingDurationEnd");
         String fleetType1Capacity = Optional.ofNullable(mapOfData.get("fleetType1Capacity")).orElse("10");
-
-        String routeGroupName = scenarioStorage.get("routeGroupName");
 
         samedayRouteEnginePage.selectRouteGroup(routeGroupName);
         samedayRouteEnginePage.selectHub(hubName);
@@ -82,6 +81,8 @@ public class SamedayRouteEngineSteps extends AbstractSteps
     @When("^op 'Run Route Engine' without break on Same-Day Route Engine menu using data below:$")
     public void runRouteEngineWithoutBreak(DataTable dataTable)
     {
+        String routeGroupName = scenarioStorage.get(KEY_ROUTE_GROUP_NAME);
+
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
         String hubName = mapOfData.get("hub");
         String routingAlgorithm = mapOfData.get("routingAlgorithm");
@@ -90,8 +91,6 @@ public class SamedayRouteEngineSteps extends AbstractSteps
         String fleetType1BreakingDurationStart = mapOfData.get("fleetType1BreakingDurationStart");
         String fleetType1BreakingDurationEnd = mapOfData.get("fleetType1BreakingDurationEnd");
         String fleetType1Capacity = Optional.ofNullable(mapOfData.get("fleetType1Capacity")).orElse("10");
-
-        String routeGroupName = scenarioStorage.get("routeGroupName");
 
         samedayRouteEnginePage.selectRouteGroup(routeGroupName);
         samedayRouteEnginePage.selectHub(hubName);
@@ -124,8 +123,8 @@ public class SamedayRouteEngineSteps extends AbstractSteps
     {
         try
         {
-            Order order = scenarioStorage.get("order");
-            samedayRouteEnginePage.downloadCsvOnWaypointDetails(order.getTracking_id());
+            String trackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
+            samedayRouteEnginePage.downloadCsvOnWaypointDetails(trackingId);
         }
         catch(IOException ex)
         {
@@ -152,17 +151,18 @@ public class SamedayRouteEngineSteps extends AbstractSteps
         cal.setTimeZone(TimeZone.getTimeZone(Optional.ofNullable(TestUtils.getOperatorTimezone(getWebDriver())).orElse("UTC")));
         cal.add(Calendar.DATE, 1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        scenarioStorage.put("new-suggested-date", sdf.format(cal.getTime()));
-        samedayRouteEnginePage.changeTheSuggestedDate(sdf.format(cal.getTime()));
-        scenarioStorage.put("bulky-tracking-id", samedayRouteEnginePage.getWaypointTrackingIds());
+        String newSuggestedDate = sdf.format(cal.getTime());
+        samedayRouteEnginePage.changeTheSuggestedDate(newSuggestedDate);
         samedayRouteEnginePage.clickUpdateTimeslotBtn();
+        scenarioStorage.put("new-suggested-date", newSuggestedDate);
+        scenarioStorage.put("bulky-tracking-id", samedayRouteEnginePage.getWaypointTrackingIds());
     }
 
     @Then("^op verify the updated timeslot")
     public void verifyBulkyOrderTimeslotUpdated()
     {
+        String asyncIdString = scenarioStorage.get(KEY_CREATED_ORDER_ASYNC_ID);
         String suggestedDate = scenarioStorage.get("new-suggested-date");
-        String asyncIdString = scenarioStorage.get("orderAsyncId");
         String trackingIdsString = scenarioStorage.get("bulky-tracking-id");
         List<String> trackingIds = Arrays.asList(trackingIdsString.split(","));
         trackingIds.forEach((String trId) ->

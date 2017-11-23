@@ -424,6 +424,11 @@ public class SimplePage
         return we!=null;
     }
 
+    public void searchTable(String keyword)
+    {
+        sendKeys("//input[@type='text'][@ng-model='searchText']", keyword);
+    }
+
     public void searchTableCustom1(String columnClass, String keywords)
     {
         sendKeys(String.format("//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input", columnClass), keywords);

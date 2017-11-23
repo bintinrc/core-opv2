@@ -32,8 +32,7 @@ public class CommonRouteSteps extends AbstractSteps
     private static final SimpleDateFormat CREATED_DATE_SDF = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
     private static final SimpleDateFormat ROUTE_DATE_SDF = new SimpleDateFormat("yyyy-MM-dd 16:00:00");
 
-    @Inject
-    ScenarioStorage scenarioStorage;
+    @Inject ScenarioStorage scenarioStorage;
     private OperatorPortalRoutingClient operatorPortalRoutingClient;
 
 
@@ -118,15 +117,15 @@ public class CommonRouteSteps extends AbstractSteps
         CreateRouteRequest createRouteRequest = JsonHelper.fromJson(createRouteRequestJson, CreateRouteRequest.class);
         CreateRouteResponse createRouteResponse = operatorPortalRoutingClient.createRoute(createRouteRequest);
         int routeId = createRouteResponse.getId();
-        scenarioStorage.put("createRouteResponse", createRouteResponse);
-        scenarioStorage.put("routeId", routeId);
+        scenarioStorage.put(KEY_CREATED_ROUTE, createRouteResponse);
+        scenarioStorage.put(KEY_CREATED_ROUTE_ID, routeId);
     }
 
     @Given("^Operator set route tags \\[([^\"]*)]$")
     public void setRouteTags(String strTagIds)
     {
         int[] tagIds;
-        CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
+        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
 
         try
         {
@@ -143,7 +142,7 @@ public class CommonRouteSteps extends AbstractSteps
             throw new RuntimeException("Failed to parsing tag ids.");
         }
 
-        operatorPortalRoutingClient.setRouteTags(createRouteResponse.getId(), tagIds);
+        operatorPortalRoutingClient.setRouteTags(routeId, tagIds);
         pause1s();
     }
 }

@@ -196,7 +196,7 @@ public class TestUtils extends StandardTestUtils
         pause(500);
     }
 
-    public static void inputListBox(WebDriver webDriver, String placeHolder, String searchValue) throws InterruptedException
+    public static void inputListBox(WebDriver webDriver, String placeHolder, String searchValue)
     {
         WebElement el = webDriver.findElement(By.xpath("//input[@placeholder='" + placeHolder + "']"));
         el.clear();

@@ -29,7 +29,7 @@ public class VehicleTypeManagementSteps extends AbstractSteps
     }
 
     @When("^vehicle type management, add vehicle type button is clicked$")
-    public void clickAddContactType() throws Throwable
+    public void clickAddContactType()
     {
         TestUtils.clickBtn(getWebDriver(), "//button[@aria-label='Add Vehicle Type']");
     }
@@ -43,14 +43,14 @@ public class VehicleTypeManagementSteps extends AbstractSteps
     }
 
     @Then("^vehicle type management, verify new vehicle type \"([^\"]*)\" existed$")
-    public void verifyNewContact(String name) throws Throwable
+    public void verifyNewContact(String name)
     {
         TestUtils.inputListBox(getWebDriver(), "Search Vehicle Types...", name);
         verifyVehicle(name);
     }
 
     @Then("^vehicle type management, verify vehicle type \"([^\"]*)\" existed$")
-    public void verifyVehicle(String name) throws Throwable
+    public void verifyVehicle(String name)
     {
         TestUtils.inputListBox(getWebDriver(), "Search Vehicle Types...", name);
         WebElement result = TestUtils.getResultInTable(getWebDriver(), "//table[@ng-table='ctrl.vehicleTypesTableParams']/tbody/tr", name);
@@ -58,7 +58,8 @@ public class VehicleTypeManagementSteps extends AbstractSteps
     }
 
     @When("^vehicle type management, search for \"([^\"]*)\" vehicle type$")
-    public void searchVehicle(String name) throws Throwable {
+    public void searchVehicle(String name)
+    {
         TestUtils.inputListBox(getWebDriver(), "Search Vehicle Types...", name);
     }
 
@@ -67,7 +68,7 @@ public class VehicleTypeManagementSteps extends AbstractSteps
     {
         WebElement el = TestUtils.verifySearchingResults(getWebDriver(), "Search Vehicle Types...", "ctrl.vehicleTypesTableParams");
         WebElement editBtn = el.findElement(By.xpath("//nv-icon-button[@name='Edit']"));
-        TestUtils.pause100ms();
+        pause100ms();
         TestUtils.moveAndClick(getWebDriver(), editBtn);
 
         TestUtils.inputText(getWebDriver(), "//input[@type='text' and @aria-label='Name']", name + " [EDITED]");
@@ -79,14 +80,14 @@ public class VehicleTypeManagementSteps extends AbstractSteps
     {
         WebElement el = TestUtils.verifySearchingResults(getWebDriver(), "Search Vehicle Types...", "ctrl.vehicleTypesTableParams");
         WebElement delBtn = el.findElement(By.xpath("//nv-icon-button[@name='Delete']"));
-        TestUtils.pause100ms();
+        pause100ms();
         TestUtils.moveAndClick(getWebDriver(), delBtn);
-        TestUtils.pause100ms();
+        pause100ms();
         TestUtils.clickBtn(getWebDriver(), "//button[@aria-label='Delete' and .//span='Delete']");
     }
 
     @Then("^vehicle type management, verify vehicle type \"([^\"]*)\" not existed$")
-    public void verifyVehicleNotExisted(String name) throws Throwable
+    public void verifyVehicleNotExisted(String name)
     {
         TestUtils.inputListBox(getWebDriver(), "Search Vehicle Types...", name);
         WebElement result = TestUtils.getResultInTable(getWebDriver(), "//table[@ng-table='ctrl.vehicleTypesTableParams']/tbody/tr", name);

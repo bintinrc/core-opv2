@@ -4,7 +4,6 @@ import co.nvqa.operator_v2.selenium.page.RouteLogsPage;
 import co.nvqa.operator_v2.util.ScenarioStorage;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
-import com.nv.qa.model.operator_portal.routing.CreateRouteResponse;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -58,8 +57,8 @@ public class RouteLogsSteps extends AbstractSteps
     @When("^op click 'Edit Route' and then click 'Load Waypoints of Selected Route\\(s\\) Only'$")
     public void loadWaypointsOfSelectedRoute()
     {
-        CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
-        routeLogsPage.searchAndVerifyRouteExist(String.valueOf(createRouteResponse.getId()));
+        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
+        routeLogsPage.searchAndVerifyRouteExist(String.valueOf(routeId));
         routeLogsPage.clickActionButtonOnTable(1, RouteLogsPage.ACTION_BUTTON_EDIT_ROUTE);
         pause100ms();
         routeLogsPage.clickLoadWaypointsOfSelectedRoutesOnly();
@@ -69,6 +68,8 @@ public class RouteLogsSteps extends AbstractSteps
     @Then("^op redirect to this page '([^\"]*)'$")
     public void verifyLoadWaypointsOfSelectedRoute(String redirectUrl)
     {
+        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
+
         String primaryWindowHandle = getWebDriver().getWindowHandle();
         Set<String> windowHandles = getWebDriver().getWindowHandles();
 
@@ -105,8 +106,7 @@ public class RouteLogsSteps extends AbstractSteps
         }
 
         Map<String,String> mapOfDynamicVariable = new HashMap<>();
-        CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
-        mapOfDynamicVariable.put("route_id", String.valueOf(createRouteResponse.getId()));
+        mapOfDynamicVariable.put("route_id", String.valueOf(routeId));
         String expectedRedirectUrl = replaceParam(redirectUrl, mapOfDynamicVariable);
 
         Assert.assertEquals(String.format("Operator does not redirect to page %s", redirectUrl), expectedRedirectUrl, actualCurrentUrl);
@@ -121,8 +121,8 @@ public class RouteLogsSteps extends AbstractSteps
     @When("^op click 'Edit Details'$")
     public void opClickEditDetails()
     {
-        CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
-        routeLogsPage.searchAndVerifyRouteExist(String.valueOf(createRouteResponse.getId()));
+        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
+        routeLogsPage.searchAndVerifyRouteExist(String.valueOf(routeId));
         routeLogsPage.clickActionButtonOnTable(1, RouteLogsPage.ACTION_BUTTON_EDIT_DETAILS);
         pause100ms();
     }
@@ -137,6 +137,8 @@ public class RouteLogsSteps extends AbstractSteps
     @Then("^route's driver must be changed to '([^\"]*)' in table list$")
     public void verifyRouteDriverIsChanged(String newDriverName)
     {
+        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
+
         boolean loadSelectionButtonIsVisible;
         int counter = 1;
 
@@ -164,8 +166,7 @@ public class RouteLogsSteps extends AbstractSteps
         while(!loadSelectionButtonIsVisible && counter<=MAX_RETRY);
 
         routeLogsPage.clickLoadSelection();
-        CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
-        routeLogsPage.searchAndVerifyRouteExist(String.valueOf(createRouteResponse.getId()));
+        routeLogsPage.searchAndVerifyRouteExist(String.valueOf(routeId));
         String actualDriverName = routeLogsPage.getTextOnTable(1, RouteLogsPage.COLUMN_CLASS_DATA_DRIVER_NAME);
         Assert.assertEquals("Driver is not change.", newDriverName, actualDriverName);
     }
@@ -173,30 +174,30 @@ public class RouteLogsSteps extends AbstractSteps
     @When("^op add tag '([^\"]*)'$")
     public void opAddNewTagToRoute(String newTag)
     {
-        CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
-        routeLogsPage.selectTag(String.valueOf(createRouteResponse.getId()), newTag);
+        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
+        routeLogsPage.selectTag(String.valueOf(routeId), newTag);
     }
 
     @Then("route's tag must contain '([^\"]*)'")
     public void verifyNewTagAddedToRoute(String newTag)
     {
-        CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
-        String tags = routeLogsPage.getRouteTag(String.valueOf(createRouteResponse.getId()));
+        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
+        String tags = routeLogsPage.getRouteTag(String.valueOf(routeId));
         Assert.assertThat(String.format("Route does not contains tag '%s'.", newTag), tags, Matchers.containsString(newTag));
     }
 
     @When("^op delete route on Operator V2$")
     public void opDeleteDeleteRoute()
     {
-        CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
-        routeLogsPage.deleteRoute(String.valueOf(createRouteResponse.getId()));
+        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
+        routeLogsPage.deleteRoute(String.valueOf(routeId));
     }
 
     @Then("^route must be deleted successfully$")
     public void verifyRouteDeletedSuccessfully()
     {
-        CreateRouteResponse createRouteResponse = scenarioStorage.get("createRouteResponse");
-        routeLogsPage.searchTableByRouteId(String.valueOf(createRouteResponse.getId()));
+        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
+        routeLogsPage.searchTableByRouteId(String.valueOf(routeId));
         boolean isTableEmpty = routeLogsPage.isTableEmpty();
         Assert.assertTrue("Route still exist in table. Fail to delete route.", isTableEmpty);
         scenarioStorage.put("routeDeleted", true);

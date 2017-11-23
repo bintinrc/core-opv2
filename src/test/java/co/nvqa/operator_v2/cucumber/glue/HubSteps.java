@@ -40,7 +40,7 @@ public class HubSteps extends AbstractSteps
     {
         TestUtils.deleteFile(HUBS_CSV_FILE_NAME_LOCATION);
         TestUtils.clickBtn(getWebDriver(), String.format("//div[@filename='%s']/nv-api-text-button/button", HUBS_CSV_FILE_NAME));
-        TestUtils.pause1s();
+        pause1s();
     }
 
     @Then("^hubs administration file should exist$")
@@ -56,7 +56,7 @@ public class HubSteps extends AbstractSteps
 
             if(!isFileExists)
             {
-                TestUtils.pause1s();
+                pause1s();
             }
 
             counter++;
@@ -96,7 +96,7 @@ public class HubSteps extends AbstractSteps
         }
 
         TestUtils.inputText(getWebDriver(), "//input[@placeholder='Search Hubs...']", expectedValue);
-        TestUtils.pause1s();
+        pause1s();
 
         WebElement result = TestUtils.getResultInTable(getWebDriver(), "//table[@ng-table='ctrl.hubsTableParams']/tbody/tr", expectedValue);
         Assert.assertTrue(result != null);
@@ -117,7 +117,7 @@ public class HubSteps extends AbstractSteps
     {
         WebElement el = TestUtils.verifySearchingResults(getWebDriver(), "Search Hubs...", "ctrl.hubsTableParams");
         WebElement editBtn = el.findElement(By.xpath("//nv-icon-button[@name='Edit']"));
-        TestUtils.pause100ms();
+        pause100ms();
         TestUtils.moveAndClick(getWebDriver(), editBtn);
 
         String editValue = String.format("Hub %s", SingletonStorage.getInstance().getTmpId()) + " [EDITED]";

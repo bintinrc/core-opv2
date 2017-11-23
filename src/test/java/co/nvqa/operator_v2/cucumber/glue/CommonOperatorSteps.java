@@ -70,7 +70,7 @@ public class CommonOperatorSteps extends AbstractSteps
     @SuppressWarnings("unchecked")
     public void operatorGlobalInboundParcel(DataTable dataTable) throws IOException
     {
-        String trackingId = scenarioStorage.get("trackingId");
+        String trackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
 
         Map<String,String> mapOfDynamicVariable = new HashMap<>();
         mapOfDynamicVariable.put("order_tracking_id", trackingId);
@@ -85,9 +85,9 @@ public class CommonOperatorSteps extends AbstractSteps
     @SuppressWarnings("unchecked")
     public void operatorAddParcelToRoute(DataTable dataTable)  throws IOException
     {
-        Order order = scenarioStorage.get("order");
-        String trackingId = scenarioStorage.get("trackingId");
-        int routeId = scenarioStorage.get("routeId");
+        Order order = scenarioStorage.get(KEY_CREATED_ORDER);
+        String trackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
+        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
 
         Map<String,String> mapOfDynamicVariable = new HashMap<>();
         mapOfDynamicVariable.put("order_tracking_id", trackingId);
@@ -102,32 +102,27 @@ public class CommonOperatorSteps extends AbstractSteps
     }
 
     @When("^Operator Van Inbound  parcel$")
-    @SuppressWarnings("unchecked")
     public void operatorVanInboundParcel()
     {
-        String trackingId = scenarioStorage.get("trackingId");
+        String trackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
         int deliveryWaypointId = scenarioStorage.get(CommonDriverSteps.KEY_DELIVERY_WAYPOINT_ID);
 
-        TestUtils.retryIfExpectedExceptionOccurred(()->
+        TestUtils.retryIfAssertionErrorOrRuntimeExceptionOccurred(()->
         {
             VanInboundRequest vanInboundRequest = new VanInboundRequest();
             vanInboundRequest.setTrackingId(trackingId);
             vanInboundRequest.setWaypointId(deliveryWaypointId);
             vanInboundRequest.setType("VAN_FROM_NINJAVAN");
             operatorPortalInboundClient.vanInbound(vanInboundRequest);
-        }, String.format("operatorVanInboundParcel - [Tracking ID = %s]", trackingId), getScenarioManager()::writeToScenarioLog, AssertionError.class, RuntimeException.class);
+        }, String.format("operatorVanInboundParcel - [Tracking ID = %s]", trackingId), getScenarioManager()::writeToScenarioLog);
     }
 
     @When("^Operator start the route$")
-    @SuppressWarnings("unchecked")
     public void operatorStartTheRoute()
     {
-        int routeId = scenarioStorage.get("routeId");
+        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
 
-        TestUtils.retryIfExpectedExceptionOccurred(()->
-        {
-            operatorPortalRoutingClient.startRoute(routeId);
-        }, String.format("operatorStartTheRoute - [Route ID = %d]", routeId), getScenarioManager()::writeToScenarioLog, AssertionError.class, RuntimeException.class);
+        TestUtils.retryIfAssertionErrorOrRuntimeExceptionOccurred(()->operatorPortalRoutingClient.startRoute(routeId), String.format("operatorStartTheRoute - [Route ID = %d]", routeId), getScenarioManager()::writeToScenarioLog);
     }
 
     private void categorizedOrderByTransactionType(AddParcelToRouteRequest addParcelToRouteRequest, Order order)
@@ -136,11 +131,11 @@ public class CommonOperatorSteps extends AbstractSteps
 
         if("PP".equalsIgnoreCase(transactionType))
         {
-            scenarioStorage.putInList("ppOrders", order);
+            scenarioStorage.putInList(KEY_LIST_OF_PP_ORDER, order);
         }
         else if("DD".equalsIgnoreCase(transactionType))
         {
-            scenarioStorage.putInList("ddOrders", order);
+            scenarioStorage.putInList(KEY_LIST_OF_DD_ORDER, order);
         }
     }
 
@@ -170,14 +165,13 @@ public class CommonOperatorSteps extends AbstractSteps
     }
 
     @Then("^Operator verify order info after Global Inbound$")
-    @SuppressWarnings("unchecked")
     public void operatorVerifyOrderInfoAfterGlobalInbound()
     {
-        Order order = scenarioStorage.get("order");
+        Order order = scenarioStorage.get(KEY_CREATED_ORDER);
         int orderId = order.getTransactions().get(0).getOrder_id();
         String trackingId = order.getTracking_id();
 
-        TestUtils.retryIfExpectedExceptionOccurred(()->
+        TestUtils.retryIfAssertionErrorOrRuntimeExceptionOccurred(()->
         {
             com.nv.qa.integration.model.core.order.operator.Order orderDetails = orderClient.getOrder(orderId);
             Assert.assertEquals(String.format("Status - [Tracking ID = %s]", trackingId), "TRANSIT", orderDetails.getStatus());
@@ -203,7 +197,7 @@ public class CommonOperatorSteps extends AbstractSteps
             {
                 Assert.assertEquals(String.format("Pickup transaction status - [Tracking ID = %s]", trackingId), "SUCCESS", pickupTransaction.getStatus());
             }
-        }, String.format("operatorVerifyOrderInfoAfterGlobalInbound - [Tracking ID = %s]", trackingId), getScenarioManager()::writeToScenarioLog, AssertionError.class, RuntimeException.class);
+        }, String.format("operatorVerifyOrderInfoAfterGlobalInbound - [Tracking ID = %s]", trackingId), getScenarioManager()::writeToScenarioLog);
     }
 
     @Then("^Operator verify order info after failed pickup C2C/Return order rescheduled on next day$")
@@ -220,7 +214,7 @@ public class CommonOperatorSteps extends AbstractSteps
 
     private void operatorVerifyOrderInfoAfterFailedPickupC2cOrReturnOrderRescheduled(int numberOfNextDays)
     {
-        Order order = scenarioStorage.get("order");
+        Order order = scenarioStorage.get(KEY_CREATED_ORDER);
         int orderId = order.getTransactions().get(0).getOrder_id();
         String trackingId = order.getTracking_id();
 
@@ -268,7 +262,7 @@ public class CommonOperatorSteps extends AbstractSteps
 
     private void operatorVerifyOrderInfoAfterFailedDeliveryOrderRescheduled(int numberOfNextDays)
     {
-        Order order = scenarioStorage.get("order");
+        Order order = scenarioStorage.get(KEY_CREATED_ORDER);
         int orderId = order.getTransactions().get(0).getOrder_id();
         String trackingId = order.getTracking_id();
 
@@ -305,7 +299,7 @@ public class CommonOperatorSteps extends AbstractSteps
     @Then("^Operator verify order info after failed delivery order RTS-ed on next day$")
     public void operatorVerifyOrderInfoAfterFailedDeliveryOrderRtsedOnNextDay()
     {
-        Order order = scenarioStorage.get("order");
+        Order order = scenarioStorage.get(KEY_CREATED_ORDER);
         int orderId = order.getTransactions().get(0).getOrder_id();
         String trackingId = order.getTracking_id();
 
@@ -363,7 +357,7 @@ public class CommonOperatorSteps extends AbstractSteps
 
     private void operatorVerifyOrderInfoAfterFailedDeliveryAgedParcelGlobalInboundedAndRescheduled(int numberOfNextDays)
     {
-        Order order = scenarioStorage.get("order");
+        Order order = scenarioStorage.get(KEY_CREATED_ORDER);
         int orderId = order.getTransactions().get(0).getOrder_id();
         String trackingId = order.getTracking_id();
 
@@ -400,7 +394,7 @@ public class CommonOperatorSteps extends AbstractSteps
     @Then("^Operator verify order info after failed delivery aged parcel global inbounded and RTS-ed on next day$")
     public void operatorVerifyOrderInfoAfterFailedDeliveryAgedParcelGlobalInboundedAndRtsedOnNextDay()
     {
-        Order order = scenarioStorage.get("order");
+        Order order = scenarioStorage.get(KEY_CREATED_ORDER);
         int orderId = order.getTransactions().get(0).getOrder_id();
         String trackingId = order.getTracking_id();
 

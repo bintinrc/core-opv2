@@ -120,7 +120,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
         }
 
         Assert.assertTrue("linehaul not exist", isExist);
-        TestUtils.pause3s();
+        pause3s();
     }
 
     @Given("^op click tab ([^\"]*)$")
@@ -255,6 +255,6 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     public void op_click_edit_filter()
     {
         shipmentLinehaulPage.clickEditSearchFilterButton();
-        TestUtils.pause1s();
+        pause1s();
     }
 }

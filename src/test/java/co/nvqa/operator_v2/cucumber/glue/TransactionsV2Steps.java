@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.operator_v2.selenium.page.TransactionsV2Page;
 import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
-import com.nv.qa.model.order_creation.v2.Order;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -34,11 +33,8 @@ public class TransactionsV2Steps extends AbstractSteps
     @When("^Operator V2 add created Transaction to Route Group$")
     public void addCreatedTransactionToRouteGroup()
     {
-
-        Order order = scenarioStorage.get("order");
-        String expectedTrackingId = order.getTracking_id();
-
-        String routeGroupName = scenarioStorage.get("routeGroupName");
+        String expectedTrackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
+        String routeGroupName = scenarioStorage.get(KEY_ROUTE_GROUP_NAME);
 
         transactionsPage.removeFilter("Start Datetime");
         transactionsPage.removeFilter("End Datetime");
@@ -59,9 +55,11 @@ public class TransactionsV2Steps extends AbstractSteps
     @When("^Operator V2 add created Transactions to Route Group$")
     public void addCreatedTransactionsToRouteGroup()
     {
-        List<String> trackingIds = scenarioStorage.get("trackingIds");
-        trackingIds.forEach((String trackingId) ->{
-            String routeGroupName = scenarioStorage.get("routeGroupName");
+        List<String> trackingIds = scenarioStorage.get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        String routeGroupName = scenarioStorage.get(KEY_ROUTE_GROUP_NAME);
+
+        trackingIds.forEach((String trackingId)->
+        {
             transactionsPage.removeFilter("Start Datetime");
             transactionsPage.removeFilter("End Datetime");
             transactionsPage.setCreationTimeFilter();

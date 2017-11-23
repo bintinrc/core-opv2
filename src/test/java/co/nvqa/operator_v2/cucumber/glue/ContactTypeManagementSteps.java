@@ -68,7 +68,7 @@ public class ContactTypeManagementSteps extends AbstractSteps
     {
         WebElement el = TestUtils.verifySearchingResults(getWebDriver(), "Search Contact Types...", "ctrl.contactTypesTableParams");
         WebElement editBtn = el.findElement(By.xpath("//nv-icon-button[@name='Edit']"));
-        TestUtils.pause100ms();
+        pause100ms();
         TestUtils.moveAndClick(getWebDriver(), editBtn);
 
         TestUtils.inputText(getWebDriver(), "//input[@type='text' and @aria-label='Name']", name + " [EDITED]");
@@ -80,9 +80,9 @@ public class ContactTypeManagementSteps extends AbstractSteps
     {
         WebElement el = TestUtils.verifySearchingResults(getWebDriver(), "Search Contact Types...", "ctrl.contactTypesTableParams");
         WebElement delBtn = el.findElement(By.xpath("//nv-icon-button[@name='Delete']"));
-        TestUtils.pause100ms();
+        pause100ms();
         TestUtils.moveAndClick(getWebDriver(), delBtn);
-        TestUtils.pause100ms();
+        pause100ms();
         TestUtils.clickBtn(getWebDriver(), "//button[@aria-label='Delete' and .//span='Delete']");
     }
 

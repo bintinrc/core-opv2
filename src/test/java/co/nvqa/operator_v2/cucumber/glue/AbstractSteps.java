@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.util.ScenarioStorage;
+import co.nvqa.operator_v2.util.ScenarioStorageKeys;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.nv.qa.api.client.operator_portal.OperatorPortalAuthenticationClient;
@@ -22,7 +23,7 @@ import java.util.Map;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public abstract class AbstractSteps
+public abstract class AbstractSteps implements ScenarioStorageKeys
 {
     private ScenarioManager scenarioManager;
 
@@ -58,12 +59,12 @@ public abstract class AbstractSteps
     public AuthResponse getOperatorAuthToken() throws IOException
     {
         ScenarioStorage scenarioStorage = getScenarioStorage();
-        AuthResponse operatorAuthResponse = scenarioStorage.get("operatorAuthResponse");
+        AuthResponse operatorAuthResponse = scenarioStorage.get(KEY_OPERATOR_AUTH_RESPONSE);
 
         if(operatorAuthResponse==null)
         {
             operatorAuthResponse = operatorLogin();
-            scenarioStorage.put("operatorAuthResponse", operatorAuthResponse);
+            scenarioStorage.put(KEY_OPERATOR_AUTH_RESPONSE, operatorAuthResponse);
         }
 
         return operatorAuthResponse;
@@ -82,7 +83,7 @@ public abstract class AbstractSteps
     public DriverLoginResponse getDriverAuthToken()
     {
         ScenarioStorage scenarioStorage = getScenarioStorage();
-        DriverLoginResponse driverLoginResponse = scenarioStorage.get("driverLoginResponse");
+        DriverLoginResponse driverLoginResponse = scenarioStorage.get(KEY_DRIVER_LOGIN_RESPONSE);
 
         if(driverLoginResponse==null)
         {
@@ -121,6 +122,11 @@ public abstract class AbstractSteps
     public WebDriver getWebDriver()
     {
         return scenarioManager.getWebDriver();
+    }
+
+    public void pause10ms()
+    {
+        pause(10);
     }
 
     public void pause50ms()

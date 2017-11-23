@@ -46,16 +46,16 @@ public class ShipmentManagementSteps extends AbstractSteps
     public void createShipment(String startHub, String endHub, String comment)
     {
         String id = shipmentManagementPage.createShipment(startHub, endHub, comment);
-        scenarioStorage.put(ScenarioStorage.KEY_SHIPMENT_ID, id);
+        scenarioStorage.put(KEY_SHIPMENT_ID, id);
     }
 
     @When("^edit Shipment with Start Hub ([^\"]*), End hub ([^\"]*) and comment ([^\"]*)$")
     public void editShipment(String startHub, String endHub, String comment)
     {
         shipmentManagementPage.selectStartHub(startHub);
-        TestUtils.pause10ms();
+        pause10ms();
         shipmentManagementPage.selectEndHub(endHub);
-        TestUtils.pause10ms();
+        pause10ms();
         TestUtils.inputText(getWebDriver(), ShipmentManagementPage.XPATH_COMMENT_TEXT_AREA, comment);
 
         start = startHub;
@@ -63,14 +63,14 @@ public class ShipmentManagementSteps extends AbstractSteps
         this.comment = comment;
 
         TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_SAVE_CHANGES_BUTTON);
-        TestUtils.pause1s();
+        pause1s();
     }
 
     @Given("^op click Load All Selection$")
     public void listAllShipment()
     {
         TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_LOAD_ALL_SHIPMENT_BUTTON);
-        TestUtils.pause3s();
+        pause3s();
     }
 
     @When("^shipment ([^\"]*) action button clicked$")
@@ -80,19 +80,20 @@ public class ShipmentManagementSteps extends AbstractSteps
 
         for(ShipmentManagementPage.Shipment shipment : shipments)
         {
-            if(shipment.getId().equals(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID)))
+            if(shipment.getId().equals(scenarioStorage.get(KEY_SHIPMENT_ID)))
             {
                 shipment.clickShipmentActionButton(actionButton);
                 break;
             }
         }
 
-        TestUtils.pause(3000);
+        pause3s();
     }
 
     @Then("^shipment edited$")
     public void shipmentEdited()
     {
+        String shipmentId = scenarioStorage.get(KEY_SHIPMENT_ID);
         List<ShipmentManagementPage.Shipment> shipments =shipmentManagementPage.getShipmentsFromTable();
         String startHub = "";
         String endHub = "";
@@ -102,7 +103,7 @@ public class ShipmentManagementSteps extends AbstractSteps
         {
             String spId = shipment.getId();
 
-            if(spId.equals(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID)))
+            if(spId.equals(shipmentId))
             {
                 startHub = shipment.getStartHub();
                 endHub = shipment.getEndHub();
@@ -118,6 +119,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     @Then("^shipment status is ([^\"]*)$")
     public void checkStatus(String status)
     {
+        int shipmentId = scenarioStorage.get(KEY_SHIPMENT_ID);
         List<ShipmentManagementPage.Shipment> shipments =shipmentManagementPage.getShipmentsFromTable();
         String actualStat = "";
 
@@ -125,19 +127,20 @@ public class ShipmentManagementSteps extends AbstractSteps
         {
             String spId = shipment.getId();
 
-            if(spId.equals(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID)))
+            if(spId.equals(shipmentId))
             {
                 actualStat = shipment.getStatus();
                 break;
             }
         }
 
-        Assert.assertEquals("Shipment " + scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID) + " status", status, actualStat);
+        Assert.assertEquals("Shipment " + scenarioStorage.get(KEY_SHIPMENT_ID) + " status", status, actualStat);
     }
 
     @When("^cancel shipment button clicked$")
     public void clickCancelShipmentButton()
     {
+        String shipmentId = scenarioStorage.get(KEY_SHIPMENT_ID);
         TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_CANCEL_SHIPMENT_BUTTON);
         List<WebElement> toasts = TestUtils.getToasts(getWebDriver());
         String text = "";
@@ -145,19 +148,20 @@ public class ShipmentManagementSteps extends AbstractSteps
         for(WebElement toast : toasts)
         {
             text = toast.getText();
-            if(text.contains("Success changed status to Cancelled for Shipment ID " + scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID)))
+            if(text.contains("Success changed status to Cancelled for Shipment ID " + shipmentId))
             {
                 break;
             }
         }
-        Assert.assertThat("toast message not contains Cancelled", text, Matchers.containsString("Success changed status to Cancelled for Shipment ID " + scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID)));
-        TestUtils.pause(5000);
+        Assert.assertThat("toast message not contains Cancelled", text, Matchers.containsString("Success changed status to Cancelled for Shipment ID " + shipmentId));
+        pause5s();
     }
 
     @Then("^shipment deleted$")
     public void isShipmentDeleted()
     {
-        String msg = "Success delete Shipping ID " + scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID);
+        String shipmentId = scenarioStorage.get(KEY_SHIPMENT_ID);
+        String msg = "Success delete Shipping ID " + shipmentId;
         WebElement toast = TestUtils.getToast(getWebDriver());
         Assert.assertThat("toast message not contains " + msg, toast.getText(), Matchers.containsString(msg));
 
@@ -168,7 +172,7 @@ public class ShipmentManagementSteps extends AbstractSteps
         {
             String spId = shipment.getId();
 
-            if(spId.equals(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID)))
+            if(spId.equals(shipmentId))
             {
                 isRemoved = false;
             }
@@ -183,19 +187,19 @@ public class ShipmentManagementSteps extends AbstractSteps
         shipmentManagementPage.clickAddFilter(filter, value);
 
         //TestUtils.clickBtn(getDriver(), shipmentManagementPage.grabXPathFilter(filter));
-        //TestUtils.pause1s();
+        //pause1s();
         //TestUtils.inputText(getDriver(), shipmentManagementPage.grabXPathFilterTF(filter), value);
-        //TestUtils.pause1s();
+        //pause1s();
         //TestUtils.clickBtn(getDriver(), shipmentManagementPage.grabXPathFilterDropdown(value));
 
-        TestUtils.pause1s();
+        pause1s();
     }
 
     @Given("^op click edit filter$")
     public void op_click_edit_filter()
     {
         shipmentManagementPage.clickEditSearchFilterButton();
-        TestUtils.pause1s();
+        pause1s();
     }
 
     @Then("^shipment scan with source ([^\"]*) in hub ([^\"]*)$")
@@ -207,18 +211,18 @@ public class ShipmentManagementSteps extends AbstractSteps
         }
         finally
         {
-            close_scan_modal();
+            closeScanModal();
         }
     }
 
-    public void close_scan_modal()
+    private void closeScanModal()
     {
         TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_CLOSE_SCAN_MODAL_BUTTON);
-        TestUtils.pause1s();
+        pause1s();
     }
 
     @When("^clear filter$")
-    public void clear_filter()
+    public void clearFilter()
     {
         if(getWebDriver().findElement(By.xpath(ShipmentManagementPage.XPATH_CLEAR_FILTER_BUTTON)).isDisplayed())
         {
@@ -229,13 +233,13 @@ public class ShipmentManagementSteps extends AbstractSteps
                 for(WebElement clearBtn : clearValueBtnList)
                 {
                     clearBtn.click();
-                    TestUtils.pause1s();
+                    pause1s();
                 }
             }
 
             TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_CLEAR_FILTER_BUTTON);
         }
 
-        TestUtils.pause2s();
+        pause2s();
     }
 }

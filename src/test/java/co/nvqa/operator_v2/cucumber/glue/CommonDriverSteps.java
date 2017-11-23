@@ -27,11 +27,6 @@ import java.util.List;
 @ScenarioScoped
 public class CommonDriverSteps extends AbstractSteps
 {
-    public static final String KEY_DELIVERY_JOB_ID = "key-driver-delivery-job-id";
-    public static final String KEY_DELIVERY_WAYPOINT_ID = "key-driver-delivery-waypoint-id";
-    public static final String KEY_DRIVER_ROUTES_LIST = "key-driver-routes-list";
-    public static final String KEY_DRIVER_JOB_ORDER = "key-driver-job-order";
-
     @Inject ScenarioStorage scenarioStorage;
     private DriverClient driverClient;
 
@@ -66,8 +61,8 @@ public class CommonDriverSteps extends AbstractSteps
     @When("^Driver try to find his pickup/delivery waypoint$")
     public void driverTryToFindHisPickupWaypointForC2cOrReturnOrder()
     {
+        String expectedTrackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
         List<com.nv.qa.integration.model.driver.Route> routes = scenarioStorage.get(KEY_DRIVER_ROUTES_LIST);
-        String expectedTrackingId = scenarioStorage.get("trackingId");
         int deliveryWaypointId = -1;
         int deliveryJobId = -1;
         com.nv.qa.integration.model.driver.Order jobOrder = null;
@@ -124,7 +119,7 @@ public class CommonDriverSteps extends AbstractSteps
     {
         int deliveryJobId = scenarioStorage.get(KEY_DELIVERY_JOB_ID);
         int deliveryWaypointId = scenarioStorage.get(KEY_DELIVERY_WAYPOINT_ID);
-        int routeId = scenarioStorage.get("routeId");
+        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
 
         Assert.assertNotEquals(String.format("Pickup job not found. [Route ID = %d]", routeId), -1L, deliveryJobId);
 
@@ -160,7 +155,7 @@ public class CommonDriverSteps extends AbstractSteps
     {
         int deliveryJobId = scenarioStorage.get(KEY_DELIVERY_JOB_ID);
         int deliveryWaypointId = scenarioStorage.get(KEY_DELIVERY_WAYPOINT_ID);
-        int routeId = scenarioStorage.get("routeId");
+        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
 
         Assert.assertNotEquals(String.format("Delivery Job not found. [Route ID = %d]", routeId), -1L, deliveryJobId);
 
@@ -195,10 +190,10 @@ public class CommonDriverSteps extends AbstractSteps
     @Then("^Driver deliver created parcel successfully$")
     public void driverDeliverParcelSuccessfully()
     {
-        Order order = scenarioStorage.get("order");
+        Order order = scenarioStorage.get(KEY_CREATED_ORDER);
         int deliveryJobId = scenarioStorage.get(KEY_DELIVERY_JOB_ID);
         int deliveryWaypointId = scenarioStorage.get(KEY_DELIVERY_WAYPOINT_ID);
-        int routeId = scenarioStorage.get("routeId");
+        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
 
         String name = order.getTo_name();
 

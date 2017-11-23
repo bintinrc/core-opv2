@@ -126,7 +126,7 @@ public class RecoveryTicketsPage extends SimplePage
         //-- fill tracking id by filling it and press ENTER
         sendKeys("//div[@class='main-title']//p[text()='Tracking IDs']/../..//input", trackingId);
         altClick("//div[@class='main-title']//p[text()='Tracking IDs']/../..//input");
-        TestUtils.pause1s();
+        pause1s();
 
         //-- click load selection
         altClick("//button[@aria-label='Load Selection']");

@@ -92,10 +92,10 @@ public class ReservationSteps extends AbstractSteps
             ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].scrollIntoView();", btn);
             takesScreenshot();
 
-            TestUtils.pause1s();
+            pause1s();
             btn.click();
             takesScreenshot();
-            TestUtils.pause1s();
+            pause1s();
             btn.click();
             takesScreenshot();
 
@@ -120,7 +120,7 @@ public class ReservationSteps extends AbstractSteps
 
             getWebDriver().findElement(By.xpath("//button[@type='submit' and .//span[text()='Create Reservation']]")).click();
             takesScreenshot();
-            TestUtils.pause1s();
+            pause1s();
         }
     }
 
@@ -142,7 +142,7 @@ public class ReservationSteps extends AbstractSteps
             takesScreenshot();
             getWebDriver().findElement(By.xpath("//button[span[text()='Delete']]")).click();
             takesScreenshot();
-            TestUtils.pause1s();
+            pause1s();
         }
     }
 
@@ -171,14 +171,14 @@ public class ReservationSteps extends AbstractSteps
             takesScreenshot();
             getWebDriver().findElement(By.xpath("//button[@type='submit' and .//span[text()='Save changes']]")).click();
             takesScreenshot();
-            TestUtils.pause1s();
+            pause1s();
         }
     }
 
     @Then("^reservation, verify \"([^\"]*)\"")
     public void verify(String type)
     {
-        TestUtils.pause3s();
+        pause3s();
 
         if(type.equalsIgnoreCase("new"))
         {

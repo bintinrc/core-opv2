@@ -34,9 +34,11 @@ public class ShipmentScanningSteps extends AbstractSteps
     @When("^scan order to shipment in hub ([^\"]*)$")
     public void scanOrderToShipment(String hub)
     {
+        String trackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
+        String shipmentId = scenarioStorage.get(KEY_SHIPMENT_ID);
         shipmentScanningPage.selectHub(hub);
-        shipmentScanningPage.selectShipment(scenarioStorage.get(ScenarioStorage.KEY_SHIPMENT_ID));
-        TestUtils.inputText(getWebDriver(), ShipmentScanningPage.XPATH_BARCODE_SCAN, scenarioStorage.get(ScenarioStorage.KEY_TRACKING_ID) + "\n");
-        shipmentScanningPage.checkOrderInShipment(scenarioStorage.get(ScenarioStorage.KEY_TRACKING_ID));
+        shipmentScanningPage.selectShipment(shipmentId);
+        TestUtils.inputText(getWebDriver(), ShipmentScanningPage.XPATH_BARCODE_SCAN, trackingId + "\n");
+        shipmentScanningPage.checkOrderInShipment(trackingId);
     }
 }

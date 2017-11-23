@@ -69,16 +69,15 @@ public class TagManagementSteps extends AbstractSteps
     }
 
     @Then("^new tag on Tag Management created successfully$")
-    @SuppressWarnings("unchecked")
     public void verifyNewTagCreatedSuccessfully()
     {
-        TestUtils.retryIfExpectedExceptionOccurred(()->
+        TestUtils.retryIfAssertionErrorOccurred(()->
         {
             reloadPageAndEnableSortByName();
 
             String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
             Assert.assertEquals(DEFAULT_TAG_NAME, actualTagName);
-        }, String.format("verifyNewTagCreatedSuccessfully - [Expected Tag Name = %s]", DEFAULT_TAG_NAME), getScenarioManager()::writeToScenarioLog, AssertionError.class);
+        }, String.format("verifyNewTagCreatedSuccessfully - [Expected Tag Name = %s]", DEFAULT_TAG_NAME), getScenarioManager()::writeToScenarioLog);
     }
 
     @When("^op update tag on Tag Management$")
@@ -97,10 +96,9 @@ public class TagManagementSteps extends AbstractSteps
     }
 
     @Then("^tag on Tag Management updated successfully$")
-    @SuppressWarnings("unchecked")
     public void verifyTagUpdatedSuccessfully()
     {
-        TestUtils.retryIfExpectedExceptionOccurred(()->
+        TestUtils.retryIfAssertionErrorOccurred(()->
         {
             reloadPageAndEnableSortByName();
 
@@ -109,7 +107,7 @@ public class TagManagementSteps extends AbstractSteps
 
             String actualTagDescription = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DESCRIPTION);
             Assert.assertEquals(EDITED_DEFAULT_TAG_DESCRIPTION, actualTagDescription);
-        }, "verifyTagUpdatedSuccessfully", getScenarioManager()::writeToScenarioLog, AssertionError.class);
+        }, "verifyTagUpdatedSuccessfully", getScenarioManager()::writeToScenarioLog);
     }
 
     @When("^op delete tag on Tag Management$")

@@ -185,31 +185,22 @@ public class CommonShipperSteps extends AbstractSteps
          * Retry if the order fail to retrieve.
          */
         String asyncOrderId = listOfCreateOrderResponse.get(0).getId();
-        scenarioStorage.put("orderAsyncId", asyncOrderId);
+        scenarioStorage.put(KEY_CREATED_ORDER_ASYNC_ID, asyncOrderId);
         Order order = TestUtils.retryIfAssertionErrorOrRuntimeExceptionOccurred(()->orderCreateV2Client.retrieveOrder(asyncOrderId), String.format("createV2Order - retrieve order - [Async ID = %s]", asyncOrderId), getScenarioManager()::writeToScenarioLog);
 
-        scenarioStorage.put("order", order);
-        scenarioStorage.put("orderAsyncId", asyncOrderId);
-        scenarioStorage.put("trackingId", order.getTracking_id());
+        scenarioStorage.put(KEY_CREATED_ORDER, order);
+        scenarioStorage.put(KEY_CREATED_ORDER_TRACKING_ID, order.getTracking_id());
         saveTrackingId(order.getTracking_id());
     }
 
     private void saveTrackingId(String trackingId)
     {
-        List<String> trackingIds = scenarioStorage.get("trackingIds");
-
-        if(trackingIds==null)
-        {
-            trackingIds = new ArrayList<>();
-            scenarioStorage.put("trackingIds", trackingIds);
-        }
-
-        trackingIds.add(trackingId);
+        scenarioStorage.putInList(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID, trackingId);
     }
 
     private List<String> getTrackingIds()
     {
-        return scenarioStorage.get("trackingIds");
+        return scenarioStorage.get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
     }
 
     @Given("^Create an V3 order with the following attributes:$")
@@ -222,7 +213,7 @@ public class CommonShipperSteps extends AbstractSteps
             sendOrderCreateV3Req(request);
         }
 
-        TestUtils.pause1s();
+        pause1s();
     }
 
     private String createV3Order(Map<String, String> arg1) throws Throwable
@@ -260,7 +251,7 @@ public class CommonShipperSteps extends AbstractSteps
             Assert.assertNotNull("Tracking ID", x.getTrackingId());
             Assert.assertEquals("Tracking id length", 18, x.getTrackingId().length());
 
-            scenarioStorage.put(ScenarioStorage.KEY_TRACKING_ID, x.getTrackingId());
+            scenarioStorage.put(KEY_CREATED_ORDER_TRACKING_ID, x.getTrackingId());
         }
     }
 }

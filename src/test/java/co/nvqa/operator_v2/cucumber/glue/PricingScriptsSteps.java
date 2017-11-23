@@ -148,7 +148,7 @@ public class PricingScriptsSteps extends AbstractSteps
         String actualComments = commentsEl.getText();
         Assert.assertEquals("Comments", expectedComments, actualComments);
 
-        TestUtils.pause1s();
+        pause1s();
         TestUtils.clickBtn(getWebDriver(), "//button[@aria-label='Cancel']");
     }
 
