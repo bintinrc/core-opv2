@@ -124,7 +124,7 @@ public class SeleniumUtils
         webDriver.manage().timeouts().setScriptTimeout(TestConstants.SELENIUM_SCRIPT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         //webDriver.manage().window().maximize(); //This works for IE and Firefox. Chrome does not work. There is a bug submitted for this on ChromeDriver project. Use "ChromeOptions.addArguments("--start-maximized");" instead.
         webDriver.manage().window().setSize(new Dimension(TestConstants.SELENIUM_WINDOW_WIDTH, TestConstants.SELENIUM_WINDOW_HEIGHT));
-        webDriver.manage().window().setPosition(new Point(0, 0));
+        webDriver.manage().window().setPosition(new Point(TestConstants.SELENIUM_WINDOW_POSITION_X, TestConstants.SELENIUM_WINDOW_POSITION_Y));
         LIST_OF_WEB_DRIVER.add(webDriver);
         return webDriver;
     }

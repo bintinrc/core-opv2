@@ -35,6 +35,8 @@ public final class TestConstants extends StandardTestConstants
     public static final long SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS;
     public static final int SELENIUM_WINDOW_WIDTH;
     public static final int SELENIUM_WINDOW_HEIGHT;
+    public static final int SELENIUM_WINDOW_POSITION_X;
+    public static final int SELENIUM_WINDOW_POSITION_Y;
     public static final String SELENIUM_WRITE_PATH;
 
     public static final String OPERATOR_PORTAL_URL;
@@ -98,6 +100,8 @@ public final class TestConstants extends StandardTestConstants
             SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS = getPropertyValueAsLong("selenium-default-web-driver-wait-timeout-in-seconds");
             SELENIUM_WINDOW_WIDTH = getPropertyValueAsInteger("selenium-window-width");
             SELENIUM_WINDOW_HEIGHT = getPropertyValueAsInteger("selenium-window-height");
+            SELENIUM_WINDOW_POSITION_X = getPropertyValueAsInteger("selenium-window-position-x");
+            SELENIUM_WINDOW_POSITION_Y = getPropertyValueAsInteger("selenium-window-position-y");
             SELENIUM_WRITE_PATH = getPropertyValueAsStringAndCreateDirectory("selenium-write-path", TEMP_FOLDER_DATE_FORMAT.format(new Date())+File.separatorChar);
 
             OPERATOR_PORTAL_URL = getPropertyValueAsString("operator-portal-url");

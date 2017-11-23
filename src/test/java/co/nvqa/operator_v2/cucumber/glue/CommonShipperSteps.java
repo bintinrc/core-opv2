@@ -13,6 +13,7 @@ import com.nv.qa.model.order_creation.v2.CreateOrderResponse;
 import com.nv.qa.model.order_creation.v2.Order;
 import com.nv.qa.commons.support.*;
 import com.nv.qa.commons.utils.StandardTestUtils;
+import com.nv.qa.model.order_creation.v2.Parcel;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -146,13 +147,33 @@ public class CommonShipperSteps extends AbstractSteps
             createOrderRequest.setTo_contact(toContact);
         }
 
-        createOrderRequest.setTracking_ref_no(createOrderRequest.getTracking_ref_no()+suffix);
+        if(createOrderRequest.getTracking_ref_no()==null)
+        {
+            createOrderRequest.setTracking_ref_no(trackingRefNo+suffix);
+        }
+
+        if(createOrderRequest.getShipper_order_ref_no()==null)
+        {
+            createOrderRequest.setShipper_order_ref_no(trackingRefNo+suffix);
+        }
+
+        if(createOrderRequest.getParcels()==null)
+        {
+            Parcel parcel = new Parcel();
+            parcel.setParcel_size_id(TestUtils.randomInt(0, 4));
+            parcel.setVolume(TestUtils.randomInt(1, 5));
+            parcel.setWeight(Double.valueOf(TestUtils.randomInt(4, 10)));
+
+            List<Parcel> listOfParcels = new ArrayList<>();
+            listOfParcels.add(parcel);
+            createOrderRequest.setParcels(listOfParcels);
+        }
 
         List<CreateOrderResponse> listOfCreateOrderResponse = StandardTestUtils.retryIfAssertionErrorOrRuntimeExceptionOccurred(()->
         {
             List<CreateOrderResponse> tempList = orderCreateV2Client.createOrder(createOrderRequest);
 
-            if(tempList.get(0).getId()==null)
+            if(tempList.isEmpty() || tempList.get(0).getId()==null)
             {
                 throw new RuntimeException("Order not created. Async ID is null.");
             }

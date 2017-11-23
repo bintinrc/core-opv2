@@ -11,6 +11,7 @@ import com.nv.qa.integration.model.driver.Route;
 import com.nv.qa.integration.model.driver.builder.JobBuilder;
 import com.nv.qa.integration.model.driver.scan.DeliveryRequest;
 import com.nv.qa.commons.utils.NvLogger;
+import com.nv.qa.model.order_creation.v2.Order;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -176,7 +177,8 @@ public class CommonDriverSteps extends AbstractSteps
         jobOrder.setFailureReasonId(failureReasonId);
         jobOrder.setFailureReason(failureReasonString);
 
-        Job job = new JobBuilder().setAction(Job.ACTION_FAIL)
+        Job job = new JobBuilder()
+                .setAction(Job.ACTION_FAIL)
                 .setId(deliveryJobId)
                 .setMode(Job.MODE_DELIVERY)
                 .setStatus(Job.STATUS_PENDING)
@@ -188,5 +190,35 @@ public class CommonDriverSteps extends AbstractSteps
 
         DeliveryRequest request = new DeliveryRequest(deliveryWaypointId, jobs).setAsFailV2();
         driverClient.failedDefaultV2(routeId, deliveryWaypointId, request);
+    }
+
+    @Then("^Driver deliver created parcel successfully$")
+    public void driverDeliverParcelSuccessfully()
+    {
+        Order order = scenarioStorage.get("order");
+        int deliveryJobId = scenarioStorage.get(KEY_DELIVERY_JOB_ID);
+        int deliveryWaypointId = scenarioStorage.get(KEY_DELIVERY_WAYPOINT_ID);
+        int routeId = scenarioStorage.get("routeId");
+
+        String name = order.getTo_name();
+
+        com.nv.qa.integration.model.driver.Order jobOrder = scenarioStorage.get(KEY_DRIVER_JOB_ORDER);
+        jobOrder.setAction(com.nv.qa.integration.model.driver.Order.ACTION_SUCCESS);
+
+        Job job = new JobBuilder()
+                .setAction(Job.ACTION_SUCCESS)
+                .setId(deliveryJobId)
+                .setMode(Job.MODE_DELIVERY)
+                .setStatus(Job.STATUS_PENDING)
+                .setType(Job.TYPE_TRANSACTION)
+                .setOrders(new ArrayList<com.nv.qa.integration.model.driver.Order>(){{add(jobOrder);}}).createJob();
+
+        List<Job> jobs = new ArrayList<>();
+        jobs.add(job);
+
+        DeliveryRequest request = new DeliveryRequest(deliveryWaypointId, jobs).setAsDefaultV2();
+        request.setName(name);
+
+        driverClient.deliverV2(routeId, deliveryWaypointId, request);
     }
 }
