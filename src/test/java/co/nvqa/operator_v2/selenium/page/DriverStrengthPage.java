@@ -30,7 +30,7 @@ public class DriverStrengthPage extends SimplePage
         super(webDriver);
     }
 
-    public void downloadFile() throws InterruptedException
+    public void downloadFile()
     {
         click("//button[@filename='" + FILENAME + "']");
     }
@@ -48,7 +48,7 @@ public class DriverStrengthPage extends SimplePage
         Assert.assertTrue(isFileExisted);
     }
 
-    public void filteredBy(String type) throws InterruptedException
+    public void filteredBy(String type)
     {
         String filterKey = null;
 
@@ -81,7 +81,7 @@ public class DriverStrengthPage extends SimplePage
         }
     }
 
-    public void searchDriver() throws InterruptedException
+    public void searchDriver()
     {
         String driverUsername = "D"+ SingletonStorage.getInstance().getTmpId();
         click("//button[@aria-label='Load Everything']");
@@ -114,7 +114,7 @@ public class DriverStrengthPage extends SimplePage
         Assert.assertTrue(isFound);
     }
 
-    public void changeComingStatus() throws InterruptedException
+    public void changeComingStatus()
     {
         WebElement firstDriver = findElementsByXpath("//tr[@md-virtual-repeat='driver in getTableData()']").get(0);
         String before = getComingStatusState(firstDriver);
@@ -123,7 +123,7 @@ public class DriverStrengthPage extends SimplePage
         Assert.assertTrue(!before.equals(after));
     }
 
-    public void clickViewContactButton() throws InterruptedException
+    public void clickViewContactButton()
     {
         click("//tr[@md-virtual-repeat='driver in getTableData()']/td[contains(@class, 'actions column-locked-right')]/md-menu/button");
         pause1s();
@@ -238,7 +238,7 @@ public class DriverStrengthPage extends SimplePage
         Assert.assertNotEquals(expectedDriverName, actualDriverName);
     }
 
-    private void changeComingStatusState(WebElement el) throws InterruptedException
+    private void changeComingStatusState(WebElement el)
     {
         pause1s();
         el.findElement(By.xpath("//td[contains(@class, 'availability')]/nv-toggle-button/button")).click();

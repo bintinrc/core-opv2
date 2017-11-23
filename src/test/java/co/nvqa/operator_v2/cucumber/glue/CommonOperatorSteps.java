@@ -66,7 +66,7 @@ public class CommonOperatorSteps extends AbstractSteps
         }
     }
 
-    @Given("^Operator Global Inbound parcel using data below:")
+    @Given("^Operator Global Inbound parcel using data below:$")
     @SuppressWarnings("unchecked")
     public void operatorGlobalInboundParcel(DataTable dataTable) throws IOException
     {

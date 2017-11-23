@@ -28,43 +28,43 @@ public class DriverTypeManagementSteps extends AbstractSteps
     }
 
     @When("^driver type management is filtered by ([^\"]*) of ([^\"]*)$")
-    public void filteredBy(String filterValue, String filterType) throws InterruptedException
+    public void filteredBy(String filterValue, String filterType)
     {
         dtmPage.filteredBy(filterValue, filterType);
     }
 
     @When("^download driver type management file$")
-    public void downloadFile() throws InterruptedException
+    public void downloadFile()
     {
         dtmPage.downloadFile();
     }
 
     @Then("^driver type management file should exist$")
-    public void verifyFile() throws InterruptedException
+    public void verifyFile()
     {
         dtmPage.verifyFile();
     }
 
     @When("^create driver type button is clicked$")
-    public void clickDriverTypeButton() throws InterruptedException
+    public void clickDriverTypeButton()
     {
         dtmPage.clickDriverTypeButton();
     }
 
     @Then("^created driver type should exist$")
-    public void verifyDriverType() throws InterruptedException
+    public void verifyDriverType()
     {
         dtmPage.verifyDriverType();
     }
 
     @When("^searching created driver$")
-    public void searchingCreatedDriver() throws InterruptedException
+    public void searchingCreatedDriver()
     {
         dtmPage.searchingCreatedDriver();
     }
 
     @When("^searching created driver and edit$")
-    public void searchingCreatedDriverAndEdit() throws InterruptedException
+    public void searchingCreatedDriverAndEdit()
     {
         dtmPage.searchingCreatedDriverEdit();
     }
@@ -76,7 +76,7 @@ public class DriverTypeManagementSteps extends AbstractSteps
     }
 
     @When("^created driver is deleted$")
-    public void deletedCreatedDriver() throws InterruptedException
+    public void deletedCreatedDriver()
     {
         dtmPage.deletedCreatedDriver();
     }

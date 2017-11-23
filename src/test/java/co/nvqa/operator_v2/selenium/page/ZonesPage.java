@@ -111,7 +111,7 @@ public class ZonesPage extends SimplePage
 
         String expectedLatLong = zone.getLatitude()+", "+zone.getLongitude();
         String actualLatLong = getTextOnTable(1, COLUMN_CLASS_LAT_LONG);
-        Assert.assertEquals("ZONE Lat/Long", expectedLatLong, actualLatLong);
+        Assert.assertEquals("Zone Lat/Long", expectedLatLong, actualLatLong);
 
         String actualDescription = getTextOnTable(1, COLUMN_CLASS_DESCRIPTION);
         Assert.assertEquals("Zone Description", zone.getDescription(), actualDescription);

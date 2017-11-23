@@ -103,7 +103,7 @@ public class SamedayRouteEngineSteps extends AbstractSteps
         takesScreenshot();
     }
 
-    @Then("^op create the suggested route")
+    @Then("^op create the suggested route$")
     public void createRoute()
     {
         samedayRouteEnginePage.selectDriverOnRouteSettingsPage("OpV2No.1");
@@ -112,13 +112,13 @@ public class SamedayRouteEngineSteps extends AbstractSteps
         takesScreenshot();
     }
 
-    @Then("^op open same day route engine waypoint detail dialog")
+    @Then("^op open same day route engine waypoint detail dialog$")
     public void openWaypointDetailsDeialog()
     {
         samedayRouteEnginePage.openWaypointDetail();
     }
 
-    @Then("^op download same day route engine waypoint detail dialog")
+    @Then("^op download same day route engine waypoint detail dialog$")
     public void downloadWaypointDetail()
     {
         try
@@ -132,19 +132,19 @@ public class SamedayRouteEngineSteps extends AbstractSteps
         }
     }
 
-    @When("^op open unrouted detail dialog")
+    @When("^op open unrouted detail dialog$")
     public void openUnroutedDetailDialog()
     {
         samedayRouteEnginePage.openUnroutedDetailDialog();
     }
 
-    @Then("^op verify the unrouted detail dialog")
+    @Then("^op verify the unrouted detail dialog$")
     public void verifyUnroutedDetailDialog()
     {
         samedayRouteEnginePage.verifyUnroutedDetailDialog();
     }
 
-    @When("^op update timeslot on same day route engine")
+    @When("^op update timeslot on same day route engine$")
     public void updateTimeslot()
     {
         Calendar cal = Calendar.getInstance();
@@ -158,7 +158,7 @@ public class SamedayRouteEngineSteps extends AbstractSteps
         scenarioStorage.put("bulky-tracking-id", samedayRouteEnginePage.getWaypointTrackingIds());
     }
 
-    @Then("^op verify the updated timeslot")
+    @Then("^op verify the updated timeslot$")
     public void verifyBulkyOrderTimeslotUpdated()
     {
         String asyncIdString = scenarioStorage.get(KEY_CREATED_ORDER_ASYNC_ID);

@@ -46,7 +46,7 @@ public class DpPage extends SimplePage
         super(webDriver);
     }
 
-    public void downloadFile(String type) throws InterruptedException
+    public void downloadFile(String type)
     {
         TestUtils.deleteFile(TestConstants.SELENIUM_WRITE_PATH + BTN_NAME_FILENAME.get(type));
         click("//div[@filename='" + BTN_NAME_FILENAME.get(type) + "']/nv-download-csv-button/div/nv-api-text-button/button");
@@ -76,7 +76,7 @@ public class DpPage extends SimplePage
         Assert.assertTrue(pathname + " not exist.", isFileExists);
     }
 
-    public void search(String type) throws InterruptedException
+    public void search(String type)
     {
         String placeHolder = null;
         String prefix = null;
@@ -164,7 +164,7 @@ public class DpPage extends SimplePage
         Assert.assertEquals(expectedValue, actualValue);
     }
 
-    public void clickAddBtn(String type) throws InterruptedException
+    public void clickAddBtn(String type)
     {
         String btnXpath = null;
 
@@ -184,7 +184,7 @@ public class DpPage extends SimplePage
         click(btnXpath);
     }
 
-    public void enterDefaultValue(String type) throws InterruptedException
+    public void enterDefaultValue(String type)
     {
         if(type.equals("dp-partners"))
         {
@@ -226,7 +226,7 @@ public class DpPage extends SimplePage
     }
 
 
-    public void clickEditBtn(String type) throws InterruptedException
+    public void clickEditBtn(String type)
     {
         String ngRepeat = null;
         String columnClass = null;
@@ -292,7 +292,7 @@ public class DpPage extends SimplePage
         pause3s();
     }
 
-    public void clickViewBtn(String type) throws InterruptedException
+    public void clickViewBtn(String type)
     {
         if(type.equals("dps"))
         {
@@ -306,7 +306,7 @@ public class DpPage extends SimplePage
         pause100ms();
     }
 
-    public void verifyPage(String type) throws InterruptedException
+    public void verifyPage(String type)
     {
         String mainTitle = null;
 

@@ -33,7 +33,7 @@ public class SmsModuleSteps extends AbstractSteps
         smsModulePage = new SmsModulePage(getWebDriver());
     }
 
-    @Then("^op upload sms campaign csv file")
+    @Then("^op upload sms campaign csv file$")
     public void uploadSmsCampaignCsv(List<SmsCampaignCsv> data)
     {
         String trackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
@@ -53,19 +53,19 @@ public class SmsModuleSteps extends AbstractSteps
         smsModulePage.uploadCsvCampaignFile(data);
     }
 
-    @When("^op continue on invalid dialog")
+    @When("^op continue on invalid dialog$")
     public void onPartialErrorContinue()
     {
         smsModulePage.continueOnCsvUploadFailure();
     }
 
-    @Then("^op verify sms module page resetted")
+    @Then("^op verify sms module page resetted$")
     public void onSmsModulePageResetted()
     {
         smsModulePage.verifyThatPageReset();
     }
 
-    @When("^op compose sms with data : ([^\"]*), ([^\"]*)")
+    @When("^op compose sms with data : ([^\"]*), ([^\"]*)$")
     public void composeSms(String name, String trackingId)
     {
         String createdTrackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
@@ -81,25 +81,25 @@ public class SmsModuleSteps extends AbstractSteps
         smsModulePage.composeSms(name, trackingId);
     }
 
-    @Then("^op compose sms using url shortener")
+    @Then("^op compose sms using url shortener$")
     public void composeSmsWithUrlShortener()
     {
         smsModulePage.composeSmsWithUrlShortener();
     }
 
-    @Then("^op verify sms preview using shortened url")
+    @Then("^op verify sms preview using shortened url$")
     public void verifyPreviewUsingShortenedUrl()
     {
         smsModulePage.verifyThatPreviewUsingShortenedUrl();
     }
 
-    @When("^op send sms")
+    @When("^op send sms$")
     public void sendSms()
     {
         smsModulePage.sendSms();
     }
 
-    @Then("^op wait for sms to be processed")
+    @Then("^op wait for sms to be processed$")
     public void waitForSmsToBeProcessed()
     {
         smsModulePage.waitForSmsToBeProcessed();
@@ -111,14 +111,14 @@ public class SmsModuleSteps extends AbstractSteps
         smsModulePage.searchSmsSentHistory(trackingId);
     }
 
-    @Then("^op verify that tracking id ([^\"]*) is invalid")
+    @Then("^op verify that tracking id ([^\"]*) is invalid$")
     public void verifyOnTrackingIdInvalid(String trackingId)
     {
         smsModulePage.searchSmsSentHistory(trackingId);
         smsModulePage.verifySmsHistoryTrackingIdInvalid(trackingId);
     }
 
-    @Then("^op verify that sms sent to phone number ([^\"]*) and tracking id ([^\"]*)")
+    @Then("^op verify that sms sent to phone number ([^\"]*) and tracking id ([^\"]*)$")
     public void verifyOnTrackingIdValid(String trackingId, String contactNumber)
     {
         String createdTrackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);

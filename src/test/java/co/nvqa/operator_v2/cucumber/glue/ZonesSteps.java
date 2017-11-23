@@ -80,7 +80,7 @@ public class ZonesSteps extends AbstractSteps
         zonesPage.verifyZoneIsUpdatedSuccessfully(zoneEdited);
     }
 
-    @When("^Operator delete the new Zone")
+    @When("^Operator delete the new Zone$")
     public void operatorDeleteTheNewZone()
     {
         Zone zone = scenarioStorage.containsKey("zoneEdited") ? scenarioStorage.get("zoneEdited") : scenarioStorage.get("zone");
@@ -94,7 +94,7 @@ public class ZonesSteps extends AbstractSteps
         zonesPage.verifyZoneIsDeletedSuccessfully(zone);
     }
 
-    @Then("^Operator check all filters on Zones page work fine")
+    @Then("^Operator check all filters on Zones page work fine$")
     public void operatorCheckAllFiltersOnZonesPageWork()
     {
         Zone zone = scenarioStorage.get("zone");

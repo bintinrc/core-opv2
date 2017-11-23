@@ -28,7 +28,7 @@ public class DriverStrengthSteps extends AbstractSteps
     }
 
     @When("^download driver csv list$")
-    public void downloadFile() throws InterruptedException
+    public void downloadFile()
     {
         dsPage.downloadFile();
     }
@@ -40,7 +40,7 @@ public class DriverStrengthSteps extends AbstractSteps
     }
 
     @When("^in driver strength driver strength is filtered by ([^\"]*)$")
-    public void filteredBy(String type) throws InterruptedException
+    public void filteredBy(String type)
     {
         dsPage.filteredBy(type);
     }
@@ -52,25 +52,25 @@ public class DriverStrengthSteps extends AbstractSteps
     }
 
     @When("^in driver strength searching driver$")
-    public void searchDriver() throws InterruptedException
+    public void searchDriver()
     {
         dsPage.searchDriver();
     }
 
     @Then("^in driver strength verifying driver$")
-    public void verifyDriver() throws InterruptedException
+    public void verifyDriver()
     {
         dsPage.verifyDriver();
     }
 
     @When("^in driver strength driver coming status is changed$")
-    public void changeComingStatus() throws InterruptedException
+    public void changeComingStatus()
     {
         dsPage.changeComingStatus();
     }
 
     @When("^in driver strength clicking on view contact button$")
-    public void clickViewContactButton() throws InterruptedException
+    public void clickViewContactButton()
     {
         dsPage.clickViewContactButton();
     }

@@ -60,7 +60,7 @@ public class ReservationSteps extends AbstractSteps
     }
 
     @When("^reservation, input shipper \"([^\"]*)\" and address \"([^\"]*)\"$")
-    public void initReservation(String shipper, String address) throws Exception
+    public void initReservation(String shipper, String address)
     {
         TestUtils.inputListBox(getWebDriver(), "Search or Select Shipper", shipper);
         takesScreenshot();
@@ -74,7 +74,7 @@ public class ReservationSteps extends AbstractSteps
     }
 
     @When("^reservation, create input shipper \"([^\"]*)\" and address \"([^\"]*)\" with volume \"([^\"]*)\"$")
-    public void addShipperAndAddress(String shipper, String address, String volume) throws Exception
+    public void addShipperAndAddress(String shipper, String address, String volume)
     {
         initReservation(shipper, address);
         updateNumberOfReservedDate("BEFORE ADD NEW");
@@ -146,7 +146,7 @@ public class ReservationSteps extends AbstractSteps
         }
     }
 
-    @When("^reservation, edit")
+    @When("^reservation, edit$")
     public void edit()
     {
         updateNumberOfReservedDate("BEFORE EDIT");
