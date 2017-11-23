@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
-import co.nvqa.operator_v2.model.Zone;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
@@ -105,6 +104,7 @@ public class RouteCashInboundPage extends SimplePage
             searchTable(routeCashInboundCod.getReceiptNumber());
             isTableEmpty = isTableEmpty();
         }
+
         Assert.assertTrue("Table should be empty.", isTableEmpty);
     }
 
@@ -134,7 +134,7 @@ public class RouteCashInboundPage extends SimplePage
 
     public boolean isTableEmpty()
     {
-        return !isElementExist(String.format("//tr[@ng-repeat='%s']", NG_REPEAT), FAST_WAIT_IN_SECONDS);
+        return isElementExist("//div[text()='None available. Add a new COD?']", FAST_WAIT_IN_SECONDS) || !isElementExist(String.format("//tr[@ng-repeat='%s']", NG_REPEAT), FAST_WAIT_IN_SECONDS);
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)
