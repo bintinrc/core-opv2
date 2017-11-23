@@ -1,5 +1,5 @@
-@SmsModule @selenium @SmsModule#01
-Feature: SMS Module
+@MessagingModule @selenium @MessagingModule#01
+Feature: Messaging Module
 
   @LaunchBrowser
   Scenario: Login to Operator V2

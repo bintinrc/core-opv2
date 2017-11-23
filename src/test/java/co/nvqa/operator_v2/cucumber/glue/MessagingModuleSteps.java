@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.SmsCampaignCsv;
-import co.nvqa.operator_v2.selenium.page.SmsModulePage;
+import co.nvqa.operator_v2.selenium.page.MessagingModulePage;
 import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
@@ -16,13 +16,13 @@ import java.util.stream.Collectors;
  * @author Rizaq Pratama
  */
 @ScenarioScoped
-public class SmsModuleSteps extends AbstractSteps
+public class MessagingModuleSteps extends AbstractSteps
 {
     @Inject private ScenarioStorage scenarioStorage;
-    private SmsModulePage smsModulePage;
+    private MessagingModulePage messagingModulePage;
 
     @Inject
-    public SmsModuleSteps(ScenarioManager scenarioManager)
+    public MessagingModuleSteps(ScenarioManager scenarioManager)
     {
         super(scenarioManager);
     }
@@ -30,7 +30,7 @@ public class SmsModuleSteps extends AbstractSteps
     @Override
     public void init()
     {
-        smsModulePage = new SmsModulePage(getWebDriver());
+        messagingModulePage = new MessagingModulePage(getWebDriver());
     }
 
     @Then("^op upload sms campaign csv file$")
@@ -50,19 +50,19 @@ public class SmsModuleSteps extends AbstractSteps
             }).collect(Collectors.toList());
         }
 
-        smsModulePage.uploadCsvCampaignFile(data);
+        messagingModulePage.uploadCsvCampaignFile(data);
     }
 
     @When("^op continue on invalid dialog$")
     public void onPartialErrorContinue()
     {
-        smsModulePage.continueOnCsvUploadFailure();
+        messagingModulePage.continueOnCsvUploadFailure();
     }
 
     @Then("^op verify sms module page resetted$")
     public void onSmsModulePageResetted()
     {
-        smsModulePage.verifyThatPageReset();
+        messagingModulePage.verifyThatPageReset();
     }
 
     @When("^op compose sms with data : ([^\"]*), ([^\"]*)$")
@@ -78,44 +78,44 @@ public class SmsModuleSteps extends AbstractSteps
             }
         }
 
-        smsModulePage.composeSms(name, trackingId);
+        messagingModulePage.composeSms(name, trackingId);
     }
 
     @Then("^op compose sms using url shortener$")
     public void composeSmsWithUrlShortener()
     {
-        smsModulePage.composeSmsWithUrlShortener();
+        messagingModulePage.composeSmsWithUrlShortener();
     }
 
     @Then("^op verify sms preview using shortened url$")
     public void verifyPreviewUsingShortenedUrl()
     {
-        smsModulePage.verifyThatPreviewUsingShortenedUrl();
+        messagingModulePage.verifyThatPreviewUsingShortenedUrl();
     }
 
     @When("^op send sms$")
     public void sendSms()
     {
-        smsModulePage.sendSms();
+        messagingModulePage.sendSms();
     }
 
     @Then("^op wait for sms to be processed$")
     public void waitForSmsToBeProcessed()
     {
-        smsModulePage.waitForSmsToBeProcessed();
+        messagingModulePage.waitForSmsToBeProcessed();
     }
 
     @When("^op search sms sent history for tracking id ([^\"]*)$")
     public void searchHistory(String trackingId)
     {
-        smsModulePage.searchSmsSentHistory(trackingId);
+        messagingModulePage.searchSmsSentHistory(trackingId);
     }
 
     @Then("^op verify that tracking id ([^\"]*) is invalid$")
     public void verifyOnTrackingIdInvalid(String trackingId)
     {
-        smsModulePage.searchSmsSentHistory(trackingId);
-        smsModulePage.verifySmsHistoryTrackingIdInvalid(trackingId);
+        messagingModulePage.searchSmsSentHistory(trackingId);
+        messagingModulePage.verifySmsHistoryTrackingIdInvalid(trackingId);
     }
 
     @Then("^op verify that sms sent to phone number ([^\"]*) and tracking id ([^\"]*)$")
@@ -128,7 +128,7 @@ public class SmsModuleSteps extends AbstractSteps
             trackingId = createdTrackingId;
         }
 
-        smsModulePage.searchSmsSentHistory(trackingId);
-        smsModulePage.verifySmsHistoryTrackingIdValid(trackingId, contactNumber);
+        messagingModulePage.searchSmsSentHistory(trackingId);
+        messagingModulePage.verifySmsHistoryTrackingIdValid(trackingId, contactNumber);
     }
 }
