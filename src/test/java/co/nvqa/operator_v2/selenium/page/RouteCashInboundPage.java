@@ -14,7 +14,7 @@ public class RouteCashInboundPage extends SimplePage
 {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("###,###.00");
     private static final String NG_REPEAT = "cod in $data";
-    private static final String CSV_FILENAME = "zones.csv";
+    private static final String CSV_FILENAME = "cods.csv";
     private static final String XPATH_OF_TOAST_ERROR_MESSAGE = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()=\"Cannot read property 'filter' of null\"]";
 
     public static final String COLUMN_CLASS_ROUTE_ID = "route-id";
@@ -106,6 +106,16 @@ public class RouteCashInboundPage extends SimplePage
         }
 
         Assert.assertTrue("Table should be empty.", isTableEmpty);
+    }
+
+    public void downloadCsvFile()
+    {
+        clickNvApiTextButtonByName("Download CSV File");
+    }
+
+    public void verifyCsvFileDownloadedSuccessfully(RouteCashInboundCod routeCashInboundCod)
+    {
+        verifyFileDownloadedSuccessfully(CSV_FILENAME, routeCashInboundCod.getReceiptNumber());
     }
 
     public void clickButtonFetchCod()

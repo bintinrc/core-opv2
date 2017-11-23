@@ -108,8 +108,8 @@ public class ZonesSteps extends AbstractSteps
         zonesPage.downloadCsvFile(zone);
     }
 
-    @When("^Operator verify Zone CSV file downloaded successfully$")
-    public void operatorVerifyZoneCsvFileDownloadSuccessfully()
+    @Then("^Operator verify Zone CSV file is downloaded successfully$")
+    public void operatorVerifyZoneCsvFileIsDownloadSuccessfully()
     {
         Zone zone = scenarioStorage.get("zone");
         zonesPage.verifyCsvFileDownloadedSuccessfully(zone);

@@ -33,7 +33,7 @@ Feature: Zones
     When Operator create new Zone using Hub "30JKB"
     Then Operator verify the new Zone is created successfully
     When Operator download Zone CSV file
-    Then Operator verify Zone CSV file downloaded successfully
+    Then Operator verify Zone CSV file is downloaded successfully
     When Operator refresh page
     When Operator delete the new Zone
     Then Operator verify the new Zone is deleted successfully

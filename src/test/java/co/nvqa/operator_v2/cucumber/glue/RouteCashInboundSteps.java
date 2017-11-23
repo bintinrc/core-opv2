@@ -97,4 +97,17 @@ public class RouteCashInboundSteps extends AbstractSteps
         RouteCashInboundCod routeCashInboundCod = scenarioStorage.containsKey("routeCashInboundCodEdited") ? scenarioStorage.get("routeCashInboundCodEdited") : scenarioStorage.get("routeCashInboundCod");
         routeCashInboundPage.verifyCodIsDeletedSuccessfully(routeCashInboundCod);
     }
+
+    @When("^Operator download COD CSV file on Route Cash Inbound page$")
+    public void operatorDownloadCodCsvFile()
+    {
+        routeCashInboundPage.downloadCsvFile();
+    }
+
+    @Then("^Operator verify COD CSV file on Route Cash Inbound page is downloaded successfully$")
+    public void operatorVerifyCodCsvFileIsDownloadSuccessfully()
+    {
+        RouteCashInboundCod routeCashInboundCod = scenarioStorage.get("routeCashInboundCod");
+        routeCashInboundPage.verifyCsvFileDownloadedSuccessfully(routeCashInboundCod);
+    }
 }
