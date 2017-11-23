@@ -113,6 +113,7 @@ public class PrinterSettingsPage extends SimplePage {
     public void deletePrinterSettingWithName(String name) {
         clickActionButtonInRecord(NAME, name, "Delete");
         clickAndWaitUntilDone(CONFIRM_DELETE_BUTTON);
+        pause1s();
     }
 
     public void clickEditPrinterSettingWithName(String name) {
