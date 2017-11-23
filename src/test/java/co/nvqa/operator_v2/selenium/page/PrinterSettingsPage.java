@@ -12,8 +12,14 @@ public class PrinterSettingsPage extends SimplePage {
     private static final String PRINTER_IP_ADDRESS_TEXT_FIELD = "//input[@aria-label='IP Address']";
     private static final String PRINTER_VERSION_TEXT_FIELD = "//input[@aria-label='Version']";
     private static final String PRINTER_DEFAULT_SWITCH = "//md-switch[@aria-label='Is Default Printer?']";
-    private static final String SUBMIT_BUTTON = "//nv-button-save[@name='Submit']";
+    private static final String SUBMIT_BUTTON = "//nv-button-save/button[@aria-label='Save Button']";
     private static final String NG_REPEAT_TABLE = "printer in $data";
+    private static final String CONFIRM_DELETE_BUTTON = "//md-dialog/md-dialog-actions/button[@aria-label='Delete']";
+
+    private static final String NAME = "name";
+    private static final String IP_ADDRESS = "ip";
+    private static final String VERSION = "version";
+    private static final String DEFAULT = "default";
 
     public PrinterSettingsPage(WebDriver webDriver) {
         super(webDriver);
@@ -55,30 +61,74 @@ public class PrinterSettingsPage extends SimplePage {
         clickAndWaitUntilDone(SUBMIT_BUTTON);
     }
 
-    public void printerSettingWithNameOnDisplay(String name) {
+    private boolean isPrinterSettingsDisplayed(String detailName, String value) {
         int size = findElementsByXpath(String.format("//tr[@ng-repeat='%s']", NG_REPEAT_TABLE)).size();
         boolean exist = false;
 
         for (int i = 1; i <= size; i++){
-            String actualName = getTextOnTableWithNgRepeat(i, "name", NG_REPEAT_TABLE);
-            if (actualName.equals(name)) {
+            String actualName = getTextOnTableWithNgRepeat(i, detailName, NG_REPEAT_TABLE);
+            if (actualName.equals(value)) {
                 exist = true;
                 break;
             }
         }
 
-        Assert.assertTrue(String.format("New printer setting with name %s doesn't exist", name), exist);
+        return exist;
+    }
+
+    public void printerSettingWithNameOnDisplay(String name) {
+        boolean isExist = isPrinterSettingsDisplayed("name", name);
+        Assert.assertTrue(String.format("New printer setting with name %s doesn't exist", name), isExist);
+    }
+
+    public void printerSettingWithIPOnDisplay(String ip) {
+        boolean isExist = isPrinterSettingsDisplayed("ip_address", ip);
+        Assert.assertTrue(String.format("New printer setting with IP %s doesn't exist", ip), isExist);
+    }
+
+    public void printerSettingWithVersionOnDisplay(String version) {
+        boolean isExist = isPrinterSettingsDisplayed("version", version);
+        Assert.assertTrue(String.format("New printer setting with IP %s doesn't exist", version), isExist);
+    }
+
+    public void printerSettingWithNameNotDisplayed(String name) {
+        boolean isExist = isPrinterSettingsDisplayed("name", name);
+        Assert.assertFalse(String.format("New printer setting with name %s exist", name), isExist);
+    }
+
+    private void clickActionButtonInRecord(String rowName, String rowValue, String buttonAriaLabel) {
+        int size = findElementsByXpath(String.format("//tr[@ng-repeat='%s']", NG_REPEAT_TABLE)).size();
+        int i;
+        for (i = 1 ; i <= size; i++){
+            String actualName = getTextOnTableWithNgRepeat(i, rowName, NG_REPEAT_TABLE);
+            if (actualName.equals(rowValue)) {
+                clickButtonOnTableWithNgRepeat(i, "action", buttonAriaLabel, NG_REPEAT_TABLE);
+                break;
+            }
+        }
+
+        Assert.assertTrue(String.format("Printer setting with %s is %s not exist", rowName, rowValue), i <= size);
     }
 
     public void deletePrinterSettingWithName(String name) {
-        int size = findElementsByXpath(String.format("//tr[@ng-repeat='%s']", NG_REPEAT_TABLE)).size();
+        clickActionButtonInRecord(NAME, name, "Delete");
+        clickAndWaitUntilDone(CONFIRM_DELETE_BUTTON);
+        pause1s();
+    }
 
-        for (int i = 1; i <= size; i++){
-            String actualName = getTextOnTableWithNgRepeat(i, "name", NG_REPEAT_TABLE);
-            if (actualName.equals(name)) {
-                clickButtonOnTableWithNgRepeat(i, "action", "Delete", NG_REPEAT_TABLE);
-                break;
-            }
+    public void clickEditPrinterSettingWithName(String name) {
+        clickActionButtonInRecord(NAME, name, "Edit");
+    }
+
+    public void editDetails(String rowDetail, String value) {
+        if (rowDetail.equalsIgnoreCase(NAME)) {
+            fillPrinterName(value);
+        } else if (rowDetail.equalsIgnoreCase(IP_ADDRESS)) {
+            fillPrinterIp(value);
+        } else if (rowDetail.equalsIgnoreCase(VERSION)) {
+            fillPrinterVersion(value);
+        } else if (rowDetail.equalsIgnoreCase(DEFAULT)) {
+            switchToDefaultPrinter(value);
         }
     }
 }

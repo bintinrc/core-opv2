@@ -1,23 +1,23 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.PrinterSettingsPage;
-import co.nvqa.operator_v2.selenium.page.RouteGroupsPage;
-import co.nvqa.operator_v2.util.ScenarioStorage;
-import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
-import cucumber.api.PendingException;
-import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @ScenarioScoped
 public class PrinterSettingsSteps extends AbstractSteps {
 
+    private static final String NAME = "name";
+    private static final String IP_ADDRESS = "ip";
+    private static final String VERSION = "version";
+    private static final String DEFAULT = "default";
     private PrinterSettingsPage printerSettingsPage;
-    private Map<String, String> details;
+    private Map<String, String> details = new HashMap<>();
 
     @Inject
     public PrinterSettingsSteps(ScenarioManager scenarioManager) {
@@ -42,21 +42,45 @@ public class PrinterSettingsSteps extends AbstractSteps {
 
     @When("^op create printer setting with details:$")
     public void opCreatePrinterSettingWithDetails(Map<String, String> details) throws Throwable {
-        this.details = details;
-        printerSettingsPage.fillPrinterName(details.get("name"));
-        printerSettingsPage.fillPrinterIp(details.get("ip"));
-        printerSettingsPage.fillPrinterVersion(details.get("version"));
-        printerSettingsPage.switchToDefaultPrinter(details.get("default"));
+        this.details.putAll(details);
+        printerSettingsPage.fillPrinterName(details.get(NAME));
+        printerSettingsPage.fillPrinterIp(details.get(IP_ADDRESS));
+        printerSettingsPage.fillPrinterVersion(details.get(VERSION));
+        printerSettingsPage.switchToDefaultPrinter(details.get(DEFAULT));
         printerSettingsPage.clickSubmitButton();
     }
 
     @Then("^printer setting added$")
     public void printerSettingAdded() throws Throwable {
-        printerSettingsPage.printerSettingWithNameOnDisplay(details.get("name"));
+        printerSettingsPage.printerSettingWithNameOnDisplay(details.get(NAME));
     }
 
-    @When("^op delete printer settings$")
-    public void opDeletePrinterSettings() throws Throwable {
-        printerSettingsPage.deletePrinterSettingWithName(details.get("name"));
+    @When("^op delete printer settings \"([^\"]*)\"$")
+    public void opDeletePrinterSettings(String name) throws Throwable {
+        printerSettingsPage.deletePrinterSettingWithName(name);
+    }
+
+    @Then("^printer setting deleted$")
+    public void printerSettingDeleted() throws Throwable {
+        printerSettingsPage.printerSettingWithNameNotDisplayed(details.get(NAME));
+    }
+
+     @Then("^printer setting \"([^\"]*)\" edited$")
+    public void printerSettingEdited(String detail) throws Throwable {
+        if (detail.equalsIgnoreCase(NAME)) {
+            printerSettingsPage.printerSettingWithNameOnDisplay(details.get(NAME));
+        } else if (detail.equalsIgnoreCase(IP_ADDRESS)) {
+            printerSettingsPage.printerSettingWithIPOnDisplay(details.get(IP_ADDRESS));
+        } else if (detail.equalsIgnoreCase(VERSION)) {
+            printerSettingsPage.printerSettingWithVersionOnDisplay(details.get(VERSION));
+        }
+    }
+
+    @When("^op edit \"([^\"]*)\" with \"([^\"]*)\" in Printer Settings \"([^\"]*)\"$")
+    public void opEditWithInPrinterSettings(String detail, String value, String name) throws Throwable {
+        printerSettingsPage.clickEditPrinterSettingWithName(name);
+        printerSettingsPage.editDetails(detail, value);
+        printerSettingsPage.clickSubmitButton();
+        this.details.put(detail, value);
     }
 }
