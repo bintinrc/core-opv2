@@ -44,29 +44,36 @@ public class PrinterSettingsSteps extends AbstractSteps {
     public void opCreatePrinterSettingWithDetails(Map<String, String> details) throws Throwable {
         this.details.putAll(details);
         printerSettingsPage.fillPrinterName(details.get(NAME));
+        pause300ms();
         printerSettingsPage.fillPrinterIp(details.get(IP_ADDRESS));
+        pause300ms();
         printerSettingsPage.fillPrinterVersion(details.get(VERSION));
+        pause300ms();
         printerSettingsPage.switchToDefaultPrinter(details.get(DEFAULT));
         printerSettingsPage.clickSubmitButton();
     }
 
     @Then("^printer setting added$")
     public void printerSettingAdded() throws Throwable {
+        printerSettingsPage.searchPrinterSettings(details.get(NAME));
         printerSettingsPage.printerSettingWithNameOnDisplay(details.get(NAME));
     }
 
-    @When("^op delete printer settings \"([^\"]*)\"$")
-    public void opDeletePrinterSettings(String name) throws Throwable {
-        printerSettingsPage.deletePrinterSettingWithName(name);
+    @When("^op delete printer settings$")
+    public void opDeletePrinterSettings() throws Throwable {
+        printerSettingsPage.searchPrinterSettings(details.get(NAME));
+        printerSettingsPage.deletePrinterSettingWithName(details.get(NAME));
     }
 
     @Then("^printer setting deleted$")
     public void printerSettingDeleted() throws Throwable {
+        printerSettingsPage.searchPrinterSettings(details.get(NAME));
         printerSettingsPage.printerSettingWithNameNotDisplayed(details.get(NAME));
     }
 
      @Then("^printer setting \"([^\"]*)\" edited$")
     public void printerSettingEdited(String detail) throws Throwable {
+        printerSettingsPage.searchPrinterSettings(details.get(NAME));
         if (detail.equalsIgnoreCase(NAME)) {
             printerSettingsPage.printerSettingWithNameOnDisplay(details.get(NAME));
         } else if (detail.equalsIgnoreCase(IP_ADDRESS)) {

@@ -15,6 +15,7 @@ public class PrinterSettingsPage extends SimplePage {
     private static final String SUBMIT_BUTTON = "//nv-button-save/button[@aria-label='Save Button']";
     private static final String NG_REPEAT_TABLE = "printer in $data";
     private static final String CONFIRM_DELETE_BUTTON = "//md-dialog/md-dialog-actions/button[@aria-label='Delete']";
+    private static final String SEARCH_TEXT_FIELD = "//md-input-container[contains(@class,'search')]/input";
 
     private static final String NAME = "name";
     private static final String IP_ADDRESS = "ip";
@@ -76,6 +77,10 @@ public class PrinterSettingsPage extends SimplePage {
         return exist;
     }
 
+    public void searchPrinterSettings(String value) {
+        sendKeys(SEARCH_TEXT_FIELD, value);
+    }
+
     public void printerSettingWithNameOnDisplay(String name) {
         boolean isExist = isPrinterSettingsDisplayed("name", name);
         Assert.assertTrue(String.format("New printer setting with name %s doesn't exist", name), isExist);
@@ -130,5 +135,6 @@ public class PrinterSettingsPage extends SimplePage {
         } else if (rowDetail.equalsIgnoreCase(DEFAULT)) {
             switchToDefaultPrinter(value);
         }
+        pause1s();
     }
 }
