@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.Map;
+
 public class PrinterSettingsPage extends SimplePage {
 
     private static final String ADD_PRINTER_BUTTON = "//button[@aria-label='Add Printer']";
@@ -62,16 +64,13 @@ public class PrinterSettingsPage extends SimplePage {
         clickAndWaitUntilDone(SUBMIT_BUTTON);
     }
 
-    private boolean isPrinterSettingsDisplayed(String detailName, String value) {
-        int size = findElementsByXpath(String.format("//tr[@ng-repeat='%s']", NG_REPEAT_TABLE)).size();
+    private boolean isPrinterSettingsDisplayed(String value) {
+        searchPrinterSettings(value);
         boolean exist = false;
 
-        for (int i = 1; i <= size; i++){
-            String actualName = getTextOnTableWithNgRepeat(i, detailName, NG_REPEAT_TABLE);
-            if (actualName.equals(value)) {
-                exist = true;
-                break;
-            }
+        String actualName = getTextOnTableWithNgRepeat(1, NAME, NG_REPEAT_TABLE);
+        if (actualName != null && actualName.equals(value)) {
+            exist = true;
         }
 
         return exist;
@@ -79,50 +78,43 @@ public class PrinterSettingsPage extends SimplePage {
 
     public void searchPrinterSettings(String value) {
         sendKeys(SEARCH_TEXT_FIELD, value);
+        pause200ms();
     }
 
     public void printerSettingWithNameOnDisplay(String name) {
-        boolean isExist = isPrinterSettingsDisplayed("name", name);
+        boolean isExist = isPrinterSettingsDisplayed(name);
         Assert.assertTrue(String.format("New printer setting with name %s doesn't exist", name), isExist);
     }
 
-    public void printerSettingWithIPOnDisplay(String ip) {
-        boolean isExist = isPrinterSettingsDisplayed("ip_address", ip);
-        Assert.assertTrue(String.format("New printer setting with IP %s doesn't exist", ip), isExist);
-    }
+    public void checkPrinterSettingInfo(int index, Map<String, String> details) {
+        String actualName = getTextOnTableWithNgRepeat(index, NAME, NG_REPEAT_TABLE);
+        String actualIp = getTextOnTableWithNgRepeat(index, IP_ADDRESS, NG_REPEAT_TABLE);
+        String actualVersion = getTextOnTableWithNgRepeat(index, VERSION, NG_REPEAT_TABLE);
 
-    public void printerSettingWithVersionOnDisplay(String version) {
-        boolean isExist = isPrinterSettingsDisplayed("version", version);
-        Assert.assertTrue(String.format("New printer setting with IP %s doesn't exist", version), isExist);
+        Assert.assertEquals("printer setting name wrong", details.get(NAME), actualName);
+        Assert.assertEquals("printer setting ip wrong", details.get(IP_ADDRESS), actualIp);
+        Assert.assertEquals("printer setting version wrong", details.get(VERSION), actualVersion);
     }
 
     public void printerSettingWithNameNotDisplayed(String name) {
-        boolean isExist = isPrinterSettingsDisplayed("name", name);
+        boolean isExist = isPrinterSettingsDisplayed(name);
         Assert.assertFalse(String.format("New printer setting with name %s exist", name), isExist);
     }
 
-    private void clickActionButtonInRecord(String rowName, String rowValue, String buttonAriaLabel) {
-        int size = findElementsByXpath(String.format("//tr[@ng-repeat='%s']", NG_REPEAT_TABLE)).size();
-        int i;
-        for (i = 1 ; i <= size; i++){
-            String actualName = getTextOnTableWithNgRepeat(i, rowName, NG_REPEAT_TABLE);
-            if (actualName.equals(rowValue)) {
-                clickButtonOnTableWithNgRepeat(i, "action", buttonAriaLabel, NG_REPEAT_TABLE);
-                break;
-            }
-        }
-
-        Assert.assertTrue(String.format("Printer setting with %s is %s not exist", rowName, rowValue), i <= size);
+    private void clickActionButtonInFirstRecord(String buttonAriaLabel) {
+        clickButtonOnTableWithNgRepeat(1, "action", buttonAriaLabel, NG_REPEAT_TABLE);
     }
 
     public void deletePrinterSettingWithName(String name) {
-        clickActionButtonInRecord(NAME, name, "Delete");
+        searchPrinterSettings(name);
+        clickActionButtonInFirstRecord("Delete");
         clickAndWaitUntilDone(CONFIRM_DELETE_BUTTON);
         pause1s();
     }
 
     public void clickEditPrinterSettingWithName(String name) {
-        clickActionButtonInRecord(NAME, name, "Edit");
+        searchPrinterSettings(name);
+        clickActionButtonInFirstRecord("Edit");
     }
 
     public void editDetails(String rowDetail, String value) {

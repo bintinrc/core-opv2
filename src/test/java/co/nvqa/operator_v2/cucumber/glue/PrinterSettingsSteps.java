@@ -55,8 +55,8 @@ public class PrinterSettingsSteps extends AbstractSteps {
 
     @Then("^printer setting added$")
     public void printerSettingAdded() throws Throwable {
-        printerSettingsPage.searchPrinterSettings(details.get(NAME));
         printerSettingsPage.printerSettingWithNameOnDisplay(details.get(NAME));
+        printerSettingsPage.checkPrinterSettingInfo(1, details);
     }
 
     @When("^op delete printer settings$")
@@ -67,20 +67,13 @@ public class PrinterSettingsSteps extends AbstractSteps {
 
     @Then("^printer setting deleted$")
     public void printerSettingDeleted() throws Throwable {
-        printerSettingsPage.searchPrinterSettings(details.get(NAME));
         printerSettingsPage.printerSettingWithNameNotDisplayed(details.get(NAME));
     }
 
-     @Then("^printer setting \"([^\"]*)\" edited$")
-    public void printerSettingEdited(String detail) throws Throwable {
-        printerSettingsPage.searchPrinterSettings(details.get(NAME));
-        if (detail.equalsIgnoreCase(NAME)) {
-            printerSettingsPage.printerSettingWithNameOnDisplay(details.get(NAME));
-        } else if (detail.equalsIgnoreCase(IP_ADDRESS)) {
-            printerSettingsPage.printerSettingWithIPOnDisplay(details.get(IP_ADDRESS));
-        } else if (detail.equalsIgnoreCase(VERSION)) {
-            printerSettingsPage.printerSettingWithVersionOnDisplay(details.get(VERSION));
-        }
+     @Then("^printer setting edited$")
+    public void printerSettingEdited() throws Throwable {
+        printerSettingsPage.printerSettingWithNameOnDisplay(details.get(NAME));
+        printerSettingsPage.checkPrinterSettingInfo(1, details);
     }
 
     @When("^op edit \"([^\"]*)\" with \"([^\"]*)\" in Printer Settings \"([^\"]*)\"$")
