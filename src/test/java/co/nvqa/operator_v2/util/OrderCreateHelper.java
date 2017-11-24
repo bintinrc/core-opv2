@@ -6,7 +6,6 @@ import com.nv.qa.api.client.order_create.OrderCreateV2Client;
 import com.nv.qa.api.client.order_create.OrderCreateV3Client;
 import com.nv.qa.model.order_creation.authentication.AuthRequest;
 import com.nv.qa.model.order_creation.authentication.AuthResponse;
-import com.nv.qa.commons.utils.NvLogger;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
 
@@ -186,7 +185,7 @@ public class OrderCreateHelper
         return new OrderCreateV1Client(TestConstants.API_BASE_URL, TestConstants.ORDER_CREATE_BASE_URL, accessToken);
     }
 
-    public static OrderCreateV1Client getVersion1Client() throws IOException
+    public static OrderCreateV1Client getVersion1Client()
     {
         return getVersion1Client(getOrderCreateAccessToken());
     }
@@ -196,7 +195,7 @@ public class OrderCreateHelper
         return new OrderCreateV2Client(TestConstants.API_BASE_URL, TestConstants.ORDER_CREATE_BASE_URL, accessToken);
     }
 
-    public static OrderCreateV2Client getVersion2Client() throws IOException
+    public static OrderCreateV2Client getVersion2Client()
     {
         return getVersion2Client(getOrderCreateAccessToken());
     }
@@ -206,7 +205,7 @@ public class OrderCreateHelper
         return new OrderCreateV3Client(TestConstants.API_BASE_URL, TestConstants.ORDER_CREATE_BASE_URL, accessToken);
     }
 
-    public static OrderCreateV3Client getVersion3Client() throws IOException
+    public static OrderCreateV3Client getVersion3Client()
     {
         return getVersion3Client(getOrderCreateAccessToken());
     }
@@ -216,22 +215,29 @@ public class OrderCreateHelper
      *
      * @return
      */
-    public static String getOrderCreateAccessToken() throws IOException
+    public static String getOrderCreateAccessToken()
     {
-        if(CREATE_ORDER_ACCESS_TOKEN==null)
+        try
         {
-            AuthRequest loginRequest = new AuthRequest(TestConstants.SHIPPER_CLIENT_ID, TestConstants.SHIPPER_CLIENT_SECRET);
-            OrderCreateAuthenticationClient client = getAuthenticationClient();
-            AuthResponse resp = client.login(loginRequest);
-            CREATE_ORDER_ACCESS_TOKEN = resp.getAccess_token();
+            if(CREATE_ORDER_ACCESS_TOKEN==null)
+            {
+                AuthRequest loginRequest = new AuthRequest(TestConstants.SHIPPER_CLIENT_ID, TestConstants.SHIPPER_CLIENT_SECRET);
+                OrderCreateAuthenticationClient client = getAuthenticationClient();
+                AuthResponse resp = client.login(loginRequest);
+                CREATE_ORDER_ACCESS_TOKEN = resp.getAccess_token();
 
-            /**
-             * I deleted this line below because it called deprecated method
-             * that does not have any implementation (all code in this method is commented).
-             */
-            //client.refreshShipperAccountCache(TestConstants.SHIPPER_ID);
+                /**
+                 * I deleted this line below because it called deprecated method
+                 * that does not have any implementation (all code in this method is commented).
+                 */
+                //client.refreshShipperAccountCache(TestConstants.SHIPPER_ID);
+            }
+
+            return CREATE_ORDER_ACCESS_TOKEN;
         }
-
-        return CREATE_ORDER_ACCESS_TOKEN;
+        catch(IOException ex)
+        {
+            throw new RuntimeException("Error on method 'getOrderCreateAccessToken'.", ex);
+        }
     }
 }

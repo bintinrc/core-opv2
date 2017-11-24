@@ -204,7 +204,7 @@ public class CommonShipperSteps extends AbstractSteps
     }
 
     @Given("^Create an V3 order with the following attributes:$")
-    public void shipperCreateV3Order(List<Map<String, String>> requests) throws Throwable
+    public void shipperCreateV3Order(List<Map<String, String>> requests)
     {
         orderCreateV3Client = OrderCreateHelper.getVersion3Client();
 
@@ -216,7 +216,7 @@ public class CommonShipperSteps extends AbstractSteps
         pause1s();
     }
 
-    private String createV3Order(Map<String, String> arg1) throws Throwable
+    private String createV3Order(Map<String, String> arg1)
     {
         createOrderRequests.clear();
         com.nv.qa.model.order_creation.v3.CreateOrderRequest x = JsonHelper.mapToObject(arg1, com.nv.qa.model.order_creation.v3.CreateOrderRequest.class);
@@ -227,7 +227,7 @@ public class CommonShipperSteps extends AbstractSteps
     }
 
     @SuppressWarnings("unchecked")
-    private void sendOrderCreateV3Req(Map<String, String> arg1) throws Throwable
+    private void sendOrderCreateV3Req(Map<String, String> arg1)
     {
         String payload = createV3Order(arg1);
         Response r = orderCreateV3Client.getCreateOrderResponse(payload);
