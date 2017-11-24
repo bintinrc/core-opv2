@@ -16,7 +16,6 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -56,7 +55,7 @@ public abstract class AbstractSteps implements ScenarioStorageKeys
         return TestConstants.API_BASE_URL+"/auth/login?grant_type=client_credentials";
     }
 
-    public AuthResponse getOperatorAuthToken() throws IOException
+    public AuthResponse getOperatorAuthToken()
     {
         ScenarioStorage scenarioStorage = getScenarioStorage();
         AuthResponse operatorAuthResponse = scenarioStorage.get(KEY_OPERATOR_AUTH_RESPONSE);
@@ -70,7 +69,7 @@ public abstract class AbstractSteps implements ScenarioStorageKeys
         return operatorAuthResponse;
     }
 
-    public AuthResponse operatorLogin() throws IOException
+    public AuthResponse operatorLogin()
     {
         AuthRequest operatorAuthRequest = new AuthRequest();
         operatorAuthRequest.setClientId(TestConstants.OPERATOR_V1_CLIENT_ID);

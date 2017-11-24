@@ -104,7 +104,7 @@ public class ScenarioManager extends StandardScenarioManager
     }
 
     @Given("^op login into Operator V2 with username \"([^\"]*)\" and password \"([^\"]*)\"$")
-    public void loginToOperatorV2(String username, String password) throws InterruptedException, IOException
+    public void loginToOperatorV2(String username, String password)
     {
         AuthResponse operatorAuthResponse = new AbstractSteps(null, null)
         {

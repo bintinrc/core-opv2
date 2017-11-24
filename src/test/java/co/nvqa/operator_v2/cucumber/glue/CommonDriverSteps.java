@@ -40,15 +40,8 @@ public class CommonDriverSteps extends AbstractSteps
     @Override
     public void init()
     {
-        try
-        {
-            DriverLoginResponse driverLoginResponse = getDriverAuthToken();
-            driverClient = new DriverClient(TestConstants.API_BASE_URL, driverLoginResponse.getAccessToken());
-        }
-        catch(Exception ex)
-        {
-            throw new RuntimeException(ex);
-        }
+        DriverLoginResponse driverLoginResponse = getDriverAuthToken();
+        driverClient = new DriverClient(TestConstants.API_BASE_URL, driverLoginResponse.getAccessToken());
     }
 
     @When("^Driver collect all his routes$")

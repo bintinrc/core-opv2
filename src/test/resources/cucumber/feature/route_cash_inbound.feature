@@ -1,5 +1,5 @@
 @RouteCashInbound @selenium
-Feature: Zones
+Feature: Route Cash Inbound
 
   @LaunchBrowser @RouteCashInbound#01 @RouteCashInbound#02
   Scenario: Login to Operator V2

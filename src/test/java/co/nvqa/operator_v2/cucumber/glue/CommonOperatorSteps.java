@@ -52,18 +52,11 @@ public class CommonOperatorSteps extends AbstractSteps
     @Override
     public void init()
     {
-        try
-        {
-            AuthResponse operatorAuthResponse = getOperatorAuthToken();
-            operatorPortalInboundClient = new OperatorPortalInboundClient(getOperatorApiBaseUrl(), getOperatorAuthenticationUrl(), operatorAuthResponse.getAccessToken());
-            operatorPortalRoutingClient = new OperatorPortalRoutingClient(getOperatorApiBaseUrl(), getOperatorAuthenticationUrl(), operatorAuthResponse.getAccessToken());
-            orderClient = new OrderClient(getOperatorApiBaseUrl(), getOperatorAuthenticationUrl(), operatorAuthResponse.getAccessToken());
-            coreJdbc = new CoreJdbc(TestConstants.DB_DRIVER, TestConstants.DB_URL_CORE, TestConstants.DB_USER, TestConstants.DB_PASS);
-        }
-        catch(Exception ex)
-        {
-            throw new RuntimeException(ex);
-        }
+        AuthResponse operatorAuthResponse = getOperatorAuthToken();
+        operatorPortalInboundClient = new OperatorPortalInboundClient(getOperatorApiBaseUrl(), getOperatorAuthenticationUrl(), operatorAuthResponse.getAccessToken());
+        operatorPortalRoutingClient = new OperatorPortalRoutingClient(getOperatorApiBaseUrl(), getOperatorAuthenticationUrl(), operatorAuthResponse.getAccessToken());
+        orderClient = new OrderClient(getOperatorApiBaseUrl(), getOperatorAuthenticationUrl(), operatorAuthResponse.getAccessToken());
+        coreJdbc = new CoreJdbc(TestConstants.DB_DRIVER, TestConstants.DB_URL_CORE, TestConstants.DB_USER, TestConstants.DB_PASS);
     }
 
     @Given("^Operator Global Inbound parcel using data below:$")
