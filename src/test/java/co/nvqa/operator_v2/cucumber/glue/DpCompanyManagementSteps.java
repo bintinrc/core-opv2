@@ -93,7 +93,7 @@ public class DpCompanyManagementSteps extends AbstractSteps
         dpCompanyManagementPage.verifyDpCompanyIsDeletedSuccessfully(dpCompany);
     }
 
-    @Then("^Operator check all filters on DP Company Management page work fine")
+    @Then("^Operator check all filters on DP Company Management page work fine$")
     public void operatorCheckAllFiltersOnDpCompanyManagementPageWork()
     {
         DpCompany dpCompany = scenarioStorage.get("dpCompany");

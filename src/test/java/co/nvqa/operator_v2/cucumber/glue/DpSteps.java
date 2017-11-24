@@ -28,7 +28,7 @@ public class DpSteps extends AbstractSteps
     }
 
     @When("^download button in ([^\"]*) is clicked$")
-    public void downloadFile(String type) throws InterruptedException
+    public void downloadFile(String type)
     {
         dpPage.downloadFile(type);
     }
@@ -40,19 +40,19 @@ public class DpSteps extends AbstractSteps
     }
 
     @When("^searching for ([^\"]*)$")
-    public void search(String type) throws InterruptedException
+    public void search(String type)
     {
         dpPage.search(type);
     }
 
     @When("^add ([^\"]*) button is clicked$")
-    public void clickAddBtn(String type) throws InterruptedException
+    public void clickAddBtn(String type)
     {
         dpPage.clickAddBtn(type);
     }
 
     @When("^enter default value of ([^\"]*)$")
-    public void enterDefaultValue(String type) throws InterruptedException
+    public void enterDefaultValue(String type)
     {
         dpPage.enterDefaultValue(type);
     }
@@ -64,19 +64,19 @@ public class DpSteps extends AbstractSteps
     }
 
     @When("^edit ([^\"]*) button is clicked$")
-    public void clickEditBtn(String type) throws InterruptedException
+    public void clickEditBtn(String type)
     {
         dpPage.clickEditBtn(type);
     }
 
     @When("^view ([^\"]*) button is clicked$")
-    public void clickViewBtn(String type) throws InterruptedException
+    public void clickViewBtn(String type)
     {
         dpPage.clickViewBtn(type);
     }
 
     @Then("^verify page ([^\"]*)$")
-    public void verifyPage(String type) throws InterruptedException
+    public void verifyPage(String type)
     {
         dpPage.verifyPage(type);
     }

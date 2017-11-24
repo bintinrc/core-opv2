@@ -178,7 +178,7 @@ public class RouteLogsSteps extends AbstractSteps
         routeLogsPage.selectTag(String.valueOf(routeId), newTag);
     }
 
-    @Then("route's tag must contain '([^\"]*)'")
+    @Then("^route's tag must contain '([^\"]*)'$")
     public void verifyNewTagAddedToRoute(String newTag)
     {
         int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);

@@ -28,7 +28,7 @@ public class DriverTypeManagementPage extends SimplePage
         super(webDriver);
     }
 
-    public void filteredBy(String filterValue, String filterType) throws InterruptedException
+    public void filteredBy(String filterValue, String filterType)
     {
         click("//button[@aria-label='" + filterValue + "']");
         pause1s();
@@ -62,14 +62,14 @@ public class DriverTypeManagementPage extends SimplePage
         Assert.assertTrue(filterType + " doesn't contains " + filterValue.toLowerCase(), valid);
     }
 
-    public void downloadFile() throws InterruptedException
+    public void downloadFile()
     {
         TestUtils.deleteFile(DRIVER_TYPES_CSV_FILE_LOCATION);
         click(String.format("//div[@filename='%s']/nv-api-text-button/button", DRIVER_TYPES_CSV_FILE_NAME));
         pause1s();
     }
 
-    public void verifyFile() throws InterruptedException
+    public void verifyFile()
     {
         File file = new File(DRIVER_TYPES_CSV_FILE_LOCATION);
         int counter = 0;
@@ -92,7 +92,7 @@ public class DriverTypeManagementPage extends SimplePage
         Assert.assertTrue(DRIVER_TYPES_CSV_FILE_LOCATION + " not exist", isFileExists);
     }
 
-    public void clickDriverTypeButton() throws InterruptedException
+    public void clickDriverTypeButton()
     {
         click("//button[@aria-label='Create Driver Type']");
         pause1s();
@@ -105,7 +105,7 @@ public class DriverTypeManagementPage extends SimplePage
         waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular");
     }
 
-    public void verifyDriverType() throws InterruptedException
+    public void verifyDriverType()
     {
         searchingCreatedDriver();
         boolean isFound = false;
@@ -129,13 +129,13 @@ public class DriverTypeManagementPage extends SimplePage
         Assert.assertTrue(isFound);
     }
 
-    public void searchingCreatedDriver() throws InterruptedException
+    public void searchingCreatedDriver()
     {
         sendKeys("//input[@placeholder='Search Driver Types...'][@ng-model='searchText']", SingletonStorage.getInstance().getTmpId());
         pause1s();
     }
 
-    public void searchingCreatedDriverEdit() throws InterruptedException
+    public void searchingCreatedDriverEdit()
     {
         searchingCreatedDriver();
 
@@ -171,7 +171,7 @@ public class DriverTypeManagementPage extends SimplePage
         Assert.assertTrue("Driver type is not found.", isFound);
     }
 
-    public void deletedCreatedDriver() throws InterruptedException
+    public void deletedCreatedDriver()
     {
         click("//tr[@md-virtual-repeat='driverTypeProp in ctrl.tableData']/td[9]/nv-icon-button[2]");
         pause1s();

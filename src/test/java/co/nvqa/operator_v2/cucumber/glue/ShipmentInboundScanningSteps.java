@@ -43,7 +43,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
     }
 
     @When("^inbound scanning shipment ([^\"]*) in hub ([^\"]*)$")
-    public void inboundScanning(String label, String hub) throws Throwable
+    public void inboundScanning(String label, String hub)
     {
         scanningPage.selectHub(hub);
         TestUtils.clickBtn(getWebDriver(), scanningPage.grabXpathButton(label));
@@ -54,7 +54,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
     }
 
     @Then("^inbounded shipment exist$")
-    public void inbounded_shipment_exist() throws Throwable
+    public void inbounded_shipment_exist()
     {
         String shipmentId = scenarioStorage.get(KEY_SHIPMENT_ID);
         List<ShipmentManagementPage.Shipment> shipmentList = shipmentManagementPage.getShipmentsFromTable();

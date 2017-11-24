@@ -48,7 +48,7 @@ public class AddParcelToRouteSteps extends AbstractSteps
         takesScreenshot();
     }
 
-    @Then("verify parcel added to route")
+    @Then("^verify parcel added to route$")
     public void verifyParcelAddedToRoute()
     {
         String expectedTrackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);

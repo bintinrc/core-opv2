@@ -57,7 +57,7 @@ public class DpVaultManagementSteps extends AbstractSteps
         dpVaultManagementPage.verifyDpCompanyIsCreatedSuccessfully(dpVault);
     }
 
-    @When("^Operator delete the new DP Vault")
+    @When("^Operator delete the new DP Vault$")
     public void operatorDeleteDpVault()
     {
         DpVault dpVault = scenarioStorage.get("dpVault");
@@ -71,7 +71,7 @@ public class DpVaultManagementSteps extends AbstractSteps
         dpVaultManagementPage.verifyDpVaultIsDeletedSuccessfully(dpVault);
     }
 
-    @Then("^Operator check all filters on DP Vault Management page work fine")
+    @Then("^Operator check all filters on DP Vault Management page work fine$")
     public void operatorCheckAllFiltersOnDpVaultManagementPageWork()
     {
         DpVault dpVault = scenarioStorage.get("dpVault");

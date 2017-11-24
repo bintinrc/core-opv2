@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Rizaq Pratama
  */
-public class SmsModulePage extends SimplePage
+public class MessagingModulePage extends SimplePage
 {
     private static final String COMMA = ",";
     private static final String NEW_LINE = "\r\n";
@@ -34,11 +34,11 @@ public class SmsModulePage extends SimplePage
     private static Map<String, Object> cache;
     private SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD hh:ss");
 
-    public SmsModulePage(WebDriver webDriver)
+    public MessagingModulePage(WebDriver webDriver)
     {
         super(webDriver);
 
-        if(cache== null)
+        if(cache==null)
         {
             cache = new ConcurrentHashMap<>();
         }
