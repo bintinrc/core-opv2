@@ -11,7 +11,6 @@ import com.nv.qa.integration.model.auth.DriverLoginRequest;
 import com.nv.qa.integration.model.auth.DriverLoginResponse;
 import com.nv.qa.model.operator_portal.authentication.AuthRequest;
 import com.nv.qa.model.operator_portal.authentication.AuthResponse;
-import com.nv.qa.commons.utils.NvLogger;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -190,15 +189,7 @@ public abstract class AbstractSteps implements ScenarioStorageKeys
 
     public void pause(long millis)
     {
-        try
-        {
-            NvLogger.infof("Pause %,dms on Step class.", millis);
-            Thread.sleep(millis);
-        }
-        catch(InterruptedException ex)
-        {
-            NvLogger.warn("Error on method 'pause'.", ex);
-        }
+        TestUtils.pause(millis);
     }
 
     public ScenarioManager getScenarioManager()

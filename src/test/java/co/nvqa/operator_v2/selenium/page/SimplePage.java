@@ -744,15 +744,7 @@ public class SimplePage
 
     public void pause(long millis)
     {
-        try
-        {
-            NvLogger.infof("Pause %,dms on Page class.", millis);
-            Thread.sleep(millis);
-        }
-        catch(InterruptedException ex)
-        {
-            NvLogger.warn("Error on method 'pause'.", ex);
-        }
+        TestUtils.pause(millis);
     }
 
     public void refreshPage()
