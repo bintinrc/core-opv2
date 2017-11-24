@@ -36,12 +36,12 @@ public class PrinterSettingsSteps extends AbstractSteps {
     }
 
     @Then("^Add Printer Form on display$")
-    public void addPrinterFormOnDisplay() throws Throwable {
+    public void addPrinterFormOnDisplay() {
         printerSettingsPage.addPrinterModalOnDisplay();
     }
 
     @When("^op create printer setting with details:$")
-    public void opCreatePrinterSettingWithDetails(Map<String, String> details) throws Throwable {
+    public void opCreatePrinterSettingWithDetails(Map<String, String> details) {
         this.details.putAll(details);
         printerSettingsPage.fillPrinterName(details.get(NAME));
         pause300ms();
@@ -54,30 +54,30 @@ public class PrinterSettingsSteps extends AbstractSteps {
     }
 
     @Then("^printer setting added$")
-    public void printerSettingAdded() throws Throwable {
+    public void printerSettingAdded() {
         printerSettingsPage.printerSettingWithNameOnDisplay(details.get(NAME));
         printerSettingsPage.checkPrinterSettingInfo(1, details);
     }
 
     @When("^op delete printer settings$")
-    public void opDeletePrinterSettings() throws Throwable {
+    public void opDeletePrinterSettings() {
         printerSettingsPage.searchPrinterSettings(details.get(NAME));
         printerSettingsPage.deletePrinterSettingWithName(details.get(NAME));
     }
 
     @Then("^printer setting deleted$")
-    public void printerSettingDeleted() throws Throwable {
+    public void printerSettingDeleted() {
         printerSettingsPage.printerSettingWithNameNotDisplayed(details.get(NAME));
     }
 
      @Then("^printer setting edited$")
-    public void printerSettingEdited() throws Throwable {
+    public void printerSettingEdited() {
         printerSettingsPage.printerSettingWithNameOnDisplay(details.get(NAME));
         printerSettingsPage.checkPrinterSettingInfo(1, details);
     }
 
     @When("^op edit \"([^\"]*)\" with \"([^\"]*)\" in Printer Settings \"([^\"]*)\"$")
-    public void opEditWithInPrinterSettings(String detail, String value, String name) throws Throwable {
+    public void opEditWithInPrinterSettings(String detail, String value, String name) {
         printerSettingsPage.clickEditPrinterSettingWithName(name);
         printerSettingsPage.editDetails(detail, value);
         printerSettingsPage.clickSubmitButton();
