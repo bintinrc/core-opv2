@@ -1,8 +1,12 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
+import co.nvqa.operator_v2.util.TestUtils;
+import com.nv.qa.commons.utils.NvLogger;
 import org.junit.Assert;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.text.DecimalFormat;
 
@@ -15,7 +19,8 @@ public class RouteCashInboundPage extends SimplePage
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("###,###.00");
     private static final String NG_REPEAT = "cod in $data";
     private static final String CSV_FILENAME = "cods.csv";
-    private static final String XPATH_OF_TOAST_ERROR_MESSAGE = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()=\"Cannot read property 'filter' of null\"]";
+    private static final String XPATH_OF_TOAST_ERROR_MESSAGE = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-bottom']/strong[4]";
+    private static final String XPATH_OF_TOAST_ERROR_CANNOT_READ_PROPERTY = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()=\"Cannot read property 'filter' of null\"]";
 
     public static final String COLUMN_CLASS_ROUTE_ID = "route-id";
     public static final String COLUMN_CLASS_AMOUNT_COLLECTED = "amountCollected";
@@ -34,15 +39,41 @@ public class RouteCashInboundPage extends SimplePage
         clickNvIconTextButtonByName("Add COD");
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'cod-add')]");
         fillTheFormAndSubmit(routeCashInboundCod);
-        waitUntilInvisibilityOfElementLocated(XPATH_OF_TOAST_ERROR_MESSAGE);
+        closeToastErrorDialog();
     }
 
     public void editCod(RouteCashInboundCod routeCashInboundCodOld, RouteCashInboundCod routeCashInboundCodEdited)
     {
-        searchAndVerifyTableIsNotEmpty(routeCashInboundCodOld);
-        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
-        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'cod-edit')]");
-        fillTheFormAndSubmit(routeCashInboundCodEdited);
+        TestUtils.retryIfRuntimeExceptionOccurred(()->
+        {
+            searchAndVerifyTableIsNotEmpty(routeCashInboundCodOld);
+            clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+            waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'cod-edit')]");
+            fillTheFormAndSubmit(routeCashInboundCodEdited);
+
+            try
+            {
+                WebElement toastErrorMessageWe = waitUntilVisibilityOfElementLocated(XPATH_OF_TOAST_ERROR_MESSAGE, FAST_WAIT_IN_SECONDS);
+                String toastErrorMessage = toastErrorMessageWe.getText();
+                NvLogger.warnf("Error when submitting COD on Route Cash Inbound page. Cause: %s", toastErrorMessage);
+                closeToastErrorDialog();
+                closeModal();
+
+                /**
+                 * If toast error message found, that's means updated the zone is failed.
+                 * Throw runtime exception so the code will retry again until success or max retry is reached.
+                 */
+                throw new RuntimeException(toastErrorMessage);
+            }
+            catch(TimeoutException ex)
+            {
+                /**
+                 * If TimeoutException occurred that means the toast error message is not found
+                 * and that means zone is updated successfully.
+                 */
+                NvLogger.infof("Expected exception occurred. Cause: %s", ex.getMessage());
+            }
+        });
     }
 
     public void fillTheFormAndSubmit(RouteCashInboundCod routeCashInboundCod)
@@ -142,9 +173,32 @@ public class RouteCashInboundPage extends SimplePage
         Assert.assertTrue("Table should not be empty.", !isTableEmpty);
     }
 
+    public void closeToastErrorDialog()
+    {
+        String xpathOfToastCloseButton = "//div[@id='toast-container']//button/i[@class='material-icons'][text()='close']";
+
+        while(isElementExistFast(xpathOfToastCloseButton))
+        {
+            NvLogger.info("Close toast error dialog.");
+            TestUtils.retryIfStaleElementReferenceExceptionOccurred(()->
+            {
+                try
+                {
+                    WebElement webElement = findElementByXpathFast(xpathOfToastCloseButton);
+                    webElement.click();
+                }
+                catch(TimeoutException ex)
+                {
+                    NvLogger.warn("Close button of Toast error message dialog is disappear.");
+                }
+            }, "closeToastErrorDialog");
+            pause30ms();
+        }
+    }
+
     public boolean isTableEmpty()
     {
-        return isElementExist("//div[text()='None available. Add a new COD?']", FAST_WAIT_IN_SECONDS) || !isElementExist(String.format("//tr[@ng-repeat='%s']", NG_REPEAT), FAST_WAIT_IN_SECONDS);
+        return isElementExistFast("//div[text()='None available. Add a new COD?']") || !isElementExistFast(String.format("//tr[@ng-repeat='%s']", NG_REPEAT));
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)

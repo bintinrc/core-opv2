@@ -184,6 +184,11 @@ public class SimplePage
         return findElementByXpath(xpathExpression, -1);
     }
 
+    public WebElement findElementByXpathFast(String xpathExpression)
+    {
+        return findElementByXpath(xpathExpression, FAST_WAIT_IN_SECONDS);
+    }
+
     public WebElement findElementByXpath(String xpathExpression, long timeoutInSeconds)
     {
         By byXpath = By.xpath(xpathExpression);
@@ -212,6 +217,11 @@ public class SimplePage
     public List<WebElement> findElementsByXpath(String xpathExpression)
     {
         return findElementsByXpath(xpathExpression, -1);
+    }
+
+    public List<WebElement> findElementsByXpathFast(String xpathExpression)
+    {
+        return findElementsByXpath(xpathExpression, FAST_WAIT_IN_SECONDS);
     }
 
     public List<WebElement> findElementsByXpath(String xpathExpression, long timeoutInSeconds)
@@ -407,6 +417,11 @@ public class SimplePage
     public boolean isElementExist(String xpathExpression)
     {
         return isElementExist(xpathExpression, -1);
+    }
+
+    public boolean isElementExistFast(String xpathExpression)
+    {
+        return isElementExist(xpathExpression, FAST_WAIT_IN_SECONDS);
     }
 
     public boolean isElementExist(String xpathExpression, long timeoutInSeconds)

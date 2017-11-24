@@ -19,6 +19,7 @@ import java.util.Map;
  */
 public class MainPage extends SimplePage
 {
+    private static final String XPATH_OF_TOAST_WELCOME_DASHBOARD = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-bottom'][text()='Welcome to your operator dashboard.']";
     private static final Map<String, String> MAP_OF_END_URL = new HashMap<>();
 
     static
@@ -109,6 +110,8 @@ public class MainPage extends SimplePage
         new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((d)->d.getCurrentUrl().toLowerCase().endsWith(mainDashboard));
         String url = getwebDriver().getCurrentUrl().toLowerCase();
         Assert.assertThat("URL not match.", url, Matchers.endsWith(mainDashboard));
-        pause5s();
+        pause50ms();
+        NvLogger.infof("Waiting until Welcome message toast disappear.");
+        waitUntilInvisibilityOfElementLocated(XPATH_OF_TOAST_WELCOME_DASHBOARD);
     }
 }

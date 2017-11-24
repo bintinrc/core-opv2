@@ -51,7 +51,7 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
     {
         TestUtils.retryIfRuntimeExceptionOccurred(()->
         {
-            if(!isElementExist(String.format("//button[contains(@aria-label,'%s')]", TestConstants.SHIPPER_V2_NAME), 1))
+            if(!isElementExistFast(String.format("//button[contains(@aria-label,'%s')]", TestConstants.SHIPPER_V2_NAME)))
             {
                 inputListBox("Search or Select...", TestConstants.SHIPPER_V2_NAME);
                 sendKeys("//input[@aria-label='Aged Days']", String.valueOf(agedDays));

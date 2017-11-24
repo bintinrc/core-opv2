@@ -10,7 +10,6 @@ import java.util.List;
  */
 public class PricingScriptsPage extends SimplePage
 {
-    private static final int WAIT_IN_SECONDS = 2;
     private static final String MD_VIRTUAL_REPEAT = "script in getTableData()";
     public static final String COLUMN_CLASS_NAME = "name";
 
@@ -180,7 +179,7 @@ public class PricingScriptsPage extends SimplePage
                 /**
                  * Check error element first, if error element not found then linking Pricing Scripts to the Shipper success.
                  */
-                if(isElementExist("//md-dialog[@aria-label='ErrorUnexpected error']/md-dialog-content/h2[text()='Error']", WAIT_IN_SECONDS))
+                if(isElementExistFast("//md-dialog[@aria-label='ErrorUnexpected error']/md-dialog-content/h2[text()='Error']"))
                 {
                     pause100ms();
                     click("//md-dialog[@aria-label='ErrorUnexpected error']/md-dialog-actions/button/span[text()='Close']");
@@ -209,7 +208,7 @@ public class PricingScriptsPage extends SimplePage
 
         try
         {
-            List<WebElement> elements = findElementsByXpath("//tr[@ng-repeat='shipper in $data']/td", WAIT_IN_SECONDS);
+            List<WebElement> elements = findElementsByXpathFast("//tr[@ng-repeat='shipper in $data']/td");
 
             for(WebElement element : elements)
             {
