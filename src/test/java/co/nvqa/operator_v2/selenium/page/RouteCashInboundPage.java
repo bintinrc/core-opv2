@@ -90,6 +90,12 @@ public class RouteCashInboundPage extends SimplePage
         verifyCodInfoIsCorrect(routeCashInboundCod);
     }
 
+    public void verifyFilterWorkFine(RouteCashInboundCod routeCashInboundCod)
+    {
+        searchAndVerifyTableIsNotEmpty(routeCashInboundCod);
+        verifyCodInfoIsCorrect(routeCashInboundCod);
+    }
+
     public void verifyCodIsUpdatedSuccessfully(RouteCashInboundCod routeCashInboundCod)
     {
         searchAndVerifyTableIsNotEmpty(routeCashInboundCod);

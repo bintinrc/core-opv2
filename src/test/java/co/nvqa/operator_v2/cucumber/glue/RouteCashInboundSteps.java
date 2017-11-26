@@ -59,6 +59,13 @@ public class RouteCashInboundSteps extends AbstractSteps
         routeCashInboundPage.verifyNewCodIsCreatedSuccessfully(routeCashInboundCod);
     }
 
+    @Then("^Operator check filter on Route Cash Inbound page work fine$")
+    public void operatorCheckFilterOnRouteCashInboundPageWork()
+    {
+        RouteCashInboundCod routeCashInboundCod = scenarioStorage.get("routeCashInboundCod");
+        routeCashInboundPage.verifyFilterWorkFine(routeCashInboundCod);
+    }
+
     @When("^Operator update the new COD on Route Cash Inbound page$")
     public void operatorUpdateTheNewCod()
     {
