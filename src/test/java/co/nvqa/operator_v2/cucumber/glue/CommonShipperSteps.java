@@ -70,8 +70,8 @@ public class CommonShipperSteps extends AbstractSteps
     @Given("^Shipper create Order V2 Parcel using data below:$")
     public void shipperCreateV2Order(DataTable dataTable) throws IOException
     {
-        Date currentDate = new Date();
         String trackingRefNo = TestUtils.generateTrackingRefNo();
+        Date currentDate = new Date();
 
         Map<String,String> mapOfDynamicVariable = new HashMap<>();
         mapOfDynamicVariable.put("created_date", CREATED_DATE_SDF.format(currentDate));

@@ -124,11 +124,11 @@ public class CommonOperatorSteps extends AbstractSteps
 
         if("PP".equalsIgnoreCase(transactionType))
         {
-            scenarioStorage.putInList(KEY_LIST_OF_PP_ORDER, order);
+            scenarioStorage.putInList(KEY_LIST_OF_CREATED_PP_ORDER, order);
         }
         else if("DD".equalsIgnoreCase(transactionType))
         {
-            scenarioStorage.putInList(KEY_LIST_OF_DD_ORDER, order);
+            scenarioStorage.putInList(KEY_LIST_OF_CREATED_DD_ORDER, order);
         }
     }
 
