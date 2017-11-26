@@ -615,7 +615,7 @@ public class SimplePage
         return arrayOfFiles[0].getName();
     }
 
-    public void verifyFileDownloadedSuccessfully(String filename, String expectedText)
+    public void verifyFileDownloadedSuccessfully(String filename)
     {
         String pathname = TestConstants.SELENIUM_WRITE_PATH + filename;
         File file;
@@ -637,10 +637,17 @@ public class SimplePage
         while(!isFileExists && counter<DEFAULT_MAX_RETRY_FOR_FILE_VERIFICATION);
 
         Assert.assertTrue(String.format("File '%s' not exists.", file.getAbsolutePath()), isFileExists);
+    }
 
+    public void verifyFileDownloadedSuccessfully(String filename, String expectedText)
+    {
+        verifyFileDownloadedSuccessfully(filename);
+
+        String pathname = TestConstants.SELENIUM_WRITE_PATH + filename;
+        File file;
         boolean isFileContainsExpectedText = false;
         StringBuilder fileText;
-        counter = 0;
+        int counter = 0;
 
         do
         {

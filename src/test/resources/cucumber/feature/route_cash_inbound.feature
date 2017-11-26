@@ -12,7 +12,7 @@ Feature: Route Cash Inbound
     And Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "scan":"{{order_tracking_id}}", "type":"SORTING_HUB", "hubId":{hub-id} } |
     And Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"This route is created for testing purpose only. Ignore this route. Created at {{created_date}} by feature @FailedDeliveryManagement." } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"This route is created for testing purpose only. Ignore this route. Created at {{created_date}} by feature @RouteCashInbound." } |
     And Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "trackingId":"{{order_tracking_id}}", "type":"DD" } |
     And Driver collect all his routes
@@ -35,7 +35,7 @@ Feature: Route Cash Inbound
     And Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "scan":"{{order_tracking_id}}", "type":"SORTING_HUB", "hubId":{hub-id} } |
     And Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"This route is created for testing purpose only. Ignore this route. Created at {{created_date}} by feature @FailedDeliveryManagement." } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"This route is created for testing purpose only. Ignore this route. Created at {{created_date}} by feature @RouteCashInbound." } |
     And Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "trackingId":"{{order_tracking_id}}", "type":"DD" } |
     And Driver collect all his routes
