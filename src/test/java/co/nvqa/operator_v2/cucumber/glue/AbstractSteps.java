@@ -15,6 +15,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 /**
@@ -23,6 +24,9 @@ import java.util.Map;
  */
 public abstract class AbstractSteps implements ScenarioStorageKeys
 {
+    public static final SimpleDateFormat CURRENT_DATE_SDF = new SimpleDateFormat("yyyy-MM-dd");
+    public static final SimpleDateFormat CREATED_DATE_SDF = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
+
     private ScenarioManager scenarioManager;
 
     public AbstractSteps(ScenarioManager scenarioManager)

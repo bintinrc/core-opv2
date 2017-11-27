@@ -7,12 +7,12 @@ import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import com.nv.qa.api.client.order_create.OrderCreateV2Client;
 import com.nv.qa.api.client.order_create.OrderCreateV3Client;
+import com.nv.qa.commons.support.JsonHelper;
+import com.nv.qa.commons.utils.StandardTestUtils;
 import com.nv.qa.model.order_creation.authentication.AuthRequest;
 import com.nv.qa.model.order_creation.v2.CreateOrderRequest;
 import com.nv.qa.model.order_creation.v2.CreateOrderResponse;
 import com.nv.qa.model.order_creation.v2.Order;
-import com.nv.qa.commons.support.*;
-import com.nv.qa.commons.utils.StandardTestUtils;
 import com.nv.qa.model.order_creation.v2.Parcel;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
@@ -23,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -33,9 +32,6 @@ import java.util.*;
 @ScenarioScoped
 public class CommonShipperSteps extends AbstractSteps
 {
-    private static final SimpleDateFormat CREATED_DATE_SDF = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
-    private static final SimpleDateFormat CURRENT_DATE_SDF = new SimpleDateFormat("yyyy-MM-dd");
-
     @Inject private ScenarioStorage scenarioStorage;
 
     private OrderCreateV2Client orderCreateV2Client;

@@ -29,7 +29,6 @@ import java.util.Map;
 @ScenarioScoped
 public class CommonRouteSteps extends AbstractSteps
 {
-    private static final SimpleDateFormat CREATED_DATE_SDF = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
     private static final SimpleDateFormat ROUTE_DATE_SDF = new SimpleDateFormat("yyyy-MM-dd 16:00:00");
 
     @Inject ScenarioStorage scenarioStorage;
