@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.LoginPage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
+import co.nvqa.operator_v2.selenium.page.ProfilePage;
 import co.nvqa.operator_v2.util.ScenarioStorage;
 import co.nvqa.operator_v2.util.SeleniumUtils;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -10,15 +11,14 @@ import com.google.inject.Singleton;
 import com.nv.qa.model.operator_portal.authentication.AuthResponse;
 import com.nv.qa.commons.utils.NvLogger;
 import com.nv.qa.commons.utils.StandardScenarioManager;
+import cucumber.api.PendingException;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
@@ -130,6 +130,14 @@ public class ScenarioManager extends StandardScenarioManager
 
         MainPage mainPage = new MainPage(getWebDriver());
         mainPage.dpAdm();
+    }
+
+    @Given("^op go to Operator V2 ([^\"]*)$")
+    public void opGoToOperatorV2Country(String country) {
+        ProfilePage profilePage = new ProfilePage(webDriver);
+        profilePage.clickProfileButton();
+        profilePage.changeCountry(country);
+        profilePage.currentCountryIs(country);
     }
 
     @Then("^take screenshot$")
