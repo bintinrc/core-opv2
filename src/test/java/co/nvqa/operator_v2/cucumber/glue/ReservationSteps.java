@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import com.nv.qa.commons.utils.NvLogger;
+import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -28,9 +29,9 @@ public class ReservationSteps extends AbstractSteps
     private static String UNRESERVED_DATE = "//div[@ng-repeat='day in week track by $index'][@class='layout-padding layout-column flex nvGreen nv-secondary']";
 
     @Inject
-    public ReservationSteps(ScenarioManager scenarioManager)
+    public ReservationSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override

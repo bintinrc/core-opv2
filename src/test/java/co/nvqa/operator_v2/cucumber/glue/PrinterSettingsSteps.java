@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.PrinterSettingsPage;
 import com.google.inject.Inject;
+import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -20,8 +21,8 @@ public class PrinterSettingsSteps extends AbstractSteps {
     private Map<String, String> details = new HashMap<>();
 
     @Inject
-    public PrinterSettingsSteps(ScenarioManager scenarioManager) {
-        super(scenarioManager);
+    public PrinterSettingsSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage) {
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override

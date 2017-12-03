@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage;
-import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
+import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -13,13 +13,12 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 @ScenarioScoped
 public class RouteCleaningReportSteps extends AbstractSteps
 {
-    @Inject ScenarioStorage scenarioStorage;
     private RouteCleaningReportPage routeCleaningReportPage;
 
     @Inject
-    public RouteCleaningReportSteps(ScenarioManager scenarioManager)
+    public RouteCleaningReportSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override

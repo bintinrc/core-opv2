@@ -7,16 +7,17 @@ Feature: Failed Pickup Management
 
   @ArchiveRoute @FailedPickupManagement#01
   Scenario Outline: Operator find failed pickup C2C/Return order on Failed Pickup orders list (<hiptest-uid>)
-    Given Shipper create Order V2 Parcel using data below:
-      | v2OrderRequest | {"from_postcode":"159363","from_address1":"30 Jalan Kilang Barat","from_address2":"Ninja Van HQ","from_city":"SG","from_state":"SG","from_country":"SG","to_postcode":"318993","to_address1":"998 Toa Payoh North","to_address2":"#01-10","to_city":"SG","to_state":"SG","to_country":"SG","delivery_date":"{{cur_date}}","pickup_date":"{{cur_date}}","pickup_reach_by":"{{cur_date}} 15:00:00","delivery_reach_by":"{{cur_date}} 17:00:00","weekend":true,"staging":false,"pickup_timewindow_id":1,"delivery_timewindow_id":2,"max_delivery_days":1,"instruction":"This order is created for testing purpose only. Ignore this order. Created at {{created_date}} by feature @FailedPickupManagement.","tracking_ref_no":"{{tracking_ref_no}}","shipper_order_ref_no":"{{tracking_ref_no}}","type":"<orderType>","parcels":[{"parcel_size_id":0,"volume":1,"weight":4}]} |
-    And Operator create new route using data below:
-      | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"This route is created for testing purpose only. Ignore this route. Created at {{created_date}} by feature @FailedPickupManagement."} |
-    And Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | {"trackingId":"{{order_tracking_id}}", "type":"PP"} |
-    And Operator start the route
-    And Driver collect all his routes
-    And Driver try to find his pickup/delivery waypoint
-    And Driver failed the C2C/Return order pickup
+    Given API Shipper create Order V2 Parcel using data below:
+      | generateFromAndTo | RANDOM |
+      | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}" } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator start the route
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Driver failed the C2C/Return order pickup
     And Operator refresh page
     When Operator go to menu Shipper Support -> Failed Pickup Management
     Then Operator verify the failed pickup C2C/Return order is listed on Failed Pickup orders list
@@ -27,16 +28,17 @@ Feature: Failed Pickup Management
 
   @ArchiveRoute @FailedPickupManagement#02
   Scenario Outline: Operator download and verify CSV file of failed pickup C2C/Return order on Failed Pickup orders list (<hiptest-uid>)
-    Given Shipper create Order V2 Parcel using data below:
-      | v2OrderRequest | {"from_postcode":"159363","from_address1":"30 Jalan Kilang Barat","from_address2":"Ninja Van HQ","from_city":"SG","from_state":"SG","from_country":"SG","to_postcode":"318993","to_address1":"998 Toa Payoh North","to_address2":"#01-10","to_city":"SG","to_state":"SG","to_country":"SG","delivery_date":"{{cur_date}}","pickup_date":"{{cur_date}}","pickup_reach_by":"{{cur_date}} 15:00:00","delivery_reach_by":"{{cur_date}} 17:00:00","weekend":true,"staging":false,"pickup_timewindow_id":1,"delivery_timewindow_id":2,"max_delivery_days":1,"instruction":"This order is created for testing purpose only. Ignore this order. Created at {{created_date}} by feature @FailedPickupManagement.","tracking_ref_no":"{{tracking_ref_no}}","shipper_order_ref_no":"{{tracking_ref_no}}","type":"<orderType>","parcels":[{"parcel_size_id":0,"volume":1,"weight":4}]} |
-    And Operator create new route using data below:
-      | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"This route is created for testing purpose only. Ignore this route. Created at {{created_date}} by feature @FailedPickupManagement."} |
-    And Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | {"trackingId":"{{order_tracking_id}}", "type":"PP"} |
-    And Operator start the route
-    And Driver collect all his routes
-    And Driver try to find his pickup/delivery waypoint
-    And Driver failed the C2C/Return order pickup
+    Given API Shipper create Order V2 Parcel using data below:
+      | generateFromAndTo | RANDOM |
+      | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}" } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator start the route
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Driver failed the C2C/Return order pickup
     And Operator refresh page
     When Operator go to menu Shipper Support -> Failed Pickup Management
     And Operator download CSV file of failed pickup C2C/Return order on Failed Pickup orders list
@@ -48,21 +50,22 @@ Feature: Failed Pickup Management
 
   @ArchiveRoute @FailedPickupManagement#03
   Scenario Outline: Operator reschedule failed pickup C2C/Return order on next day (<hiptest-uid>)
-    Given Shipper create Order V2 Parcel using data below:
-      | v2OrderRequest | {"from_postcode":"159363","from_address1":"30 Jalan Kilang Barat","from_address2":"Ninja Van HQ","from_city":"SG","from_state":"SG","from_country":"SG","to_postcode":"318993","to_address1":"998 Toa Payoh North","to_address2":"#01-10","to_city":"SG","to_state":"SG","to_country":"SG","delivery_date":"{{cur_date}}","pickup_date":"{{cur_date}}","pickup_reach_by":"{{cur_date}} 15:00:00","delivery_reach_by":"{{cur_date}} 17:00:00","weekend":true,"staging":false,"pickup_timewindow_id":1,"delivery_timewindow_id":2,"max_delivery_days":1,"instruction":"This order is created for testing purpose only. Ignore this order. Created at {{created_date}} by feature @FailedPickupManagement.","tracking_ref_no":"{{tracking_ref_no}}","shipper_order_ref_no":"{{tracking_ref_no}}","type":"<orderType>","parcels":[{"parcel_size_id":0,"volume":1,"weight":4}]} |
-    And Operator create new route using data below:
-      | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"This route is created for testing purpose only. Ignore this route. Created at {{created_date}} by feature @FailedPickupManagement."} |
-    And Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | {"trackingId":"{{order_tracking_id}}", "type":"PP"} |
-    And Operator start the route
-    And Driver collect all his routes
-    And Driver try to find his pickup/delivery waypoint
-    And Driver failed the C2C/Return order pickup
+    Given API Shipper create Order V2 Parcel using data below:
+      | generateFromAndTo | RANDOM |
+      | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}" } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator start the route
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Driver failed the C2C/Return order pickup
     And Operator refresh page
     When Operator go to menu Shipper Support -> Failed Pickup Management
     And Operator reschedule failed pickup C2C/Return order on next day
     Then Operator verify failed pickup C2C/Return order rescheduled on next day successfully
-    And Operator verify order info after failed pickup C2C/Return order rescheduled on next day
+    And API Operator verify order info after failed pickup C2C/Return order rescheduled on next day
     Examples:
       | Note   | hiptest-uid                              | orderType |
       | C2C    | uid:815e700a-68f7-4b89-a9a0-ffbd8c5cbcdb | C2C       |
@@ -70,21 +73,22 @@ Feature: Failed Pickup Management
 
   @ArchiveRoute @FailedPickupManagement#04
   Scenario Outline: Operator reschedule failed pickup C2C/Return order on specific date (<hiptest-uid>)
-    Given Shipper create Order V2 Parcel using data below:
-      | v2OrderRequest | {"from_postcode":"159363","from_address1":"30 Jalan Kilang Barat","from_address2":"Ninja Van HQ","from_city":"SG","from_state":"SG","from_country":"SG","to_postcode":"318993","to_address1":"998 Toa Payoh North","to_address2":"#01-10","to_city":"SG","to_state":"SG","to_country":"SG","delivery_date":"{{cur_date}}","pickup_date":"{{cur_date}}","pickup_reach_by":"{{cur_date}} 15:00:00","delivery_reach_by":"{{cur_date}} 17:00:00","weekend":true,"staging":false,"pickup_timewindow_id":1,"delivery_timewindow_id":2,"max_delivery_days":1,"instruction":"This order is created for testing purpose only. Ignore this order. Created at {{created_date}} by feature @FailedPickupManagement.","tracking_ref_no":"{{tracking_ref_no}}","shipper_order_ref_no":"{{tracking_ref_no}}","type":"<orderType>","parcels":[{"parcel_size_id":0,"volume":1,"weight":4}]} |
-    And Operator create new route using data below:
-      | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"This route is created for testing purpose only. Ignore this route. Created at {{created_date}} by feature @FailedPickupManagement."} |
-    And Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | {"trackingId":"{{order_tracking_id}}", "type":"PP"} |
-    And Operator start the route
-    And Driver collect all his routes
-    And Driver try to find his pickup/delivery waypoint
-    And Driver failed the C2C/Return order pickup
+    Given API Shipper create Order V2 Parcel using data below:
+      | generateFromAndTo | RANDOM |
+      | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}" } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator start the route
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Driver failed the C2C/Return order pickup
     And Operator refresh page
     When Operator go to menu Shipper Support -> Failed Pickup Management
     And Operator reschedule failed pickup C2C/Return order on next 2 days
     Then Operator verify failed pickup C2C/Return order rescheduled on next 2 days successfully
-    And Operator verify order info after failed pickup C2C/Return order rescheduled on next 2 days
+    And API Operator verify order info after failed pickup C2C/Return order rescheduled on next 2 days
     Examples:
       | Note   | hiptest-uid                              | orderType |
       | C2C    | uid:bec16db3-4ee0-4334-8a2f-d090a4f681cd | C2C       |

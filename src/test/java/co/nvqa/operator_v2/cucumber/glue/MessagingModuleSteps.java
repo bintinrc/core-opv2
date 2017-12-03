@@ -2,8 +2,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.SmsCampaignCsv;
 import co.nvqa.operator_v2.selenium.page.MessagingModulePage;
-import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
+import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -18,13 +18,12 @@ import java.util.stream.Collectors;
 @ScenarioScoped
 public class MessagingModuleSteps extends AbstractSteps
 {
-    @Inject private ScenarioStorage scenarioStorage;
     private MessagingModulePage messagingModulePage;
 
     @Inject
-    public MessagingModuleSteps(ScenarioManager scenarioManager)
+    public MessagingModuleSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -36,7 +35,7 @@ public class MessagingModuleSteps extends AbstractSteps
     @Then("^op upload sms campaign csv file$")
     public void uploadSmsCampaignCsv(List<SmsCampaignCsv> data)
     {
-        String trackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
+        String trackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
 
         if(trackingId!=null)
         {
@@ -68,7 +67,7 @@ public class MessagingModuleSteps extends AbstractSteps
     @When("^op compose sms with data : ([^\"]*), ([^\"]*)$")
     public void composeSms(String name, String trackingId)
     {
-        String createdTrackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
+        String createdTrackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
 
         if(createdTrackingId!=null)
         {
@@ -121,7 +120,7 @@ public class MessagingModuleSteps extends AbstractSteps
     @Then("^op verify that sms sent to phone number ([^\"]*) and tracking id ([^\"]*)$")
     public void verifyOnTrackingIdValid(String trackingId, String contactNumber)
     {
-        String createdTrackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
+        String createdTrackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
 
         if(createdTrackingId!=null && "_created_".equalsIgnoreCase(trackingId))
         {

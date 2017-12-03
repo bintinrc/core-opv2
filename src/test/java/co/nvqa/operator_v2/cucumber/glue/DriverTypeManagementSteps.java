@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.DriverTypeManagementPage;
 import com.google.inject.Inject;
+import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -16,9 +17,9 @@ public class DriverTypeManagementSteps extends AbstractSteps
     private DriverTypeManagementPage dtmPage;
 
     @Inject
-    public DriverTypeManagementSteps(ScenarioManager scenarioManager)
+    public DriverTypeManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override

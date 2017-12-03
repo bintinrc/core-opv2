@@ -2,8 +2,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.DpVault;
 import co.nvqa.operator_v2.selenium.page.DpVaultManagementPage;
-import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
+import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -15,13 +15,12 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 @ScenarioScoped
 public class DpVaultManagementSteps extends AbstractSteps
 {
-    @Inject ScenarioStorage scenarioStorage;
     private DpVaultManagementPage dpVaultManagementPage;
 
     @Inject
-    public DpVaultManagementSteps(ScenarioManager scenarioManager)
+    public DpVaultManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -47,34 +46,34 @@ public class DpVaultManagementSteps extends AbstractSteps
         dpVault.setLongitude(Double.parseDouble("103."+uniqueCode));
 
         dpVaultManagementPage.addDpVault(dpVault);
-        scenarioStorage.put("dpVault", dpVault);
+        getScenarioStorage().put("dpVault", dpVault);
     }
 
     @Then("^Operator verify the new DP Vault is created successfully$")
     public void operatorVerifyDpVaultIsCreatedSuccessfully()
     {
-        DpVault dpVault = scenarioStorage.get("dpVault");
+        DpVault dpVault = getScenarioStorage().get("dpVault");
         dpVaultManagementPage.verifyDpCompanyIsCreatedSuccessfully(dpVault);
     }
 
     @When("^Operator delete the new DP Vault$")
     public void operatorDeleteDpVault()
     {
-        DpVault dpVault = scenarioStorage.get("dpVault");
+        DpVault dpVault = getScenarioStorage().get("dpVault");
         dpVaultManagementPage.deleteDpVault(dpVault);
     }
 
     @Then("^Operator verify the new DP Vault is deleted successfully$")
     public void operatorVerifyDpVaultIsDeletedSuccessfully()
     {
-        DpVault dpVault = scenarioStorage.get("dpVault");
+        DpVault dpVault = getScenarioStorage().get("dpVault");
         dpVaultManagementPage.verifyDpVaultIsDeletedSuccessfully(dpVault);
     }
 
     @Then("^Operator check all filters on DP Vault Management page work fine$")
     public void operatorCheckAllFiltersOnDpVaultManagementPageWork()
     {
-        DpVault dpVault = scenarioStorage.get("dpVault");
+        DpVault dpVault = getScenarioStorage().get("dpVault");
         dpVaultManagementPage.verifyAllFiltersWorkFine(dpVault);
     }
 
@@ -87,7 +86,7 @@ public class DpVaultManagementSteps extends AbstractSteps
     @When("^Operator verify DP Vault CSV file downloaded successfully$")
     public void operatorVerifyDpVaultCsvFileDownloadSuccessfully()
     {
-        DpVault dpVault = scenarioStorage.get("dpVault");
+        DpVault dpVault = getScenarioStorage().get("dpVault");
         dpVaultManagementPage.verifyCsvFileDownloadedSuccessfully(dpVault);
     }
 }

@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.AddParcelToRoutePage;
-import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
+import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -16,13 +16,12 @@ import org.openqa.selenium.WebElement;
 @ScenarioScoped
 public class AddParcelToRouteSteps extends AbstractSteps
 {
-    @Inject private ScenarioStorage scenarioStorage;
     private AddParcelToRoutePage addParcelToRoutePage;
 
     @Inject
-    public AddParcelToRouteSteps(ScenarioManager scenarioManager)
+    public AddParcelToRouteSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -34,7 +33,7 @@ public class AddParcelToRouteSteps extends AbstractSteps
     @When("^Operator V2 choose route group, select tag \"([^\"]*)\" and submit$")
     public void submitOnAddParcelToRoute(String tag)
     {
-        String routeGroupName = scenarioStorage.get(KEY_ROUTE_GROUP_NAME);
+        String routeGroupName = getScenarioStorage().get(KEY_ROUTE_GROUP_NAME);
         takesScreenshot();
         addParcelToRoutePage.selectCurrentDate();
         takesScreenshot();
@@ -51,7 +50,7 @@ public class AddParcelToRouteSteps extends AbstractSteps
     @Then("^verify parcel added to route$")
     public void verifyParcelAddedToRoute()
     {
-        String expectedTrackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
+        String expectedTrackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
         String xpath = String.format("//td[contains(@class, 'tracking_id') and contains(text(), '%s')]", expectedTrackingId);
         takesScreenshot();
         WebElement actualTrackingId = addParcelToRoutePage.findElementByXpath(xpath);

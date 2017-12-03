@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.ShipmentScanningPage;
-import co.nvqa.operator_v2.util.ScenarioStorage;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
+import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -16,13 +16,12 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 @ScenarioScoped
 public class ShipmentScanningSteps extends AbstractSteps
 {
-    @Inject private ScenarioStorage scenarioStorage;
     private ShipmentScanningPage shipmentScanningPage;
 
     @Inject
-    public ShipmentScanningSteps(ScenarioManager scenarioManager)
+    public ShipmentScanningSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -34,8 +33,8 @@ public class ShipmentScanningSteps extends AbstractSteps
     @When("^scan order to shipment in hub ([^\"]*)$")
     public void scanOrderToShipment(String hub)
     {
-        String trackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
-        String shipmentId = scenarioStorage.get(KEY_SHIPMENT_ID);
+        String trackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
+        String shipmentId = getScenarioStorage().get(KEY_SHIPMENT_ID);
         shipmentScanningPage.selectHub(hub);
         shipmentScanningPage.selectShipment(shipmentId);
         TestUtils.inputText(getWebDriver(), ShipmentScanningPage.XPATH_BARCODE_SCAN, trackingId + "\n");

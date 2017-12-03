@@ -7,8 +7,8 @@ Feature: Route Logs
 
   @ArchiveRoute @RouteLogs#01
   Scenario: Operator 'Edit Details' on Operator V2 - Route Logs menu (uid:d735938c-f87e-47c1-9a6a-61d31850e0cb)
-    Given Operator create new route using data below:
-      | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"(Edit Details) This route is created for testing 'Operator V2 - Routing - Route Logs' menu. Ignore this route. Created at {{created_date}} by feature @RouteLogs."} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}" } |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When op select route date filter and click 'Load Selection'
@@ -18,8 +18,8 @@ Feature: Route Logs
 
   @ArchiveRoute @RouteLogs#02
   Scenario: Operator 'Add New Tag' on Operator V2 - Route Logs menu (uid:24ef3b76-c582-42da-b6d8-cf867aeec8e9)
-    Given Operator create new route using data below:
-      | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"(Add New Tag) This route is created for testing 'Operator V2 - Routing - Route Logs' menu. Ignore this route. Created at {{created_date}} by feature @RouteLogs."} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}" } |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When op select route date filter and click 'Load Selection'
@@ -28,8 +28,8 @@ Feature: Route Logs
 
   @ArchiveRoute @RouteLogs#03
   Scenario: Operator 'Delete Route' on Operator V2 - Route Logs menu (uid:ff70c3c0-73bc-4cde-9ce7-c340769560cb)
-    Given Operator create new route using data below:
-      | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"(Delete Route) This route is created for testing 'Operator V2 - Routing - Route Logs' menu. Ignore this route. Created at {{created_date}} by feature @RouteLogs."} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}" } |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When op select route date filter and click 'Load Selection'
@@ -38,8 +38,8 @@ Feature: Route Logs
 
   @ArchiveRoute @RouteLogs#04
   Scenario: Operator 'Edit Route' on Operator V2 - Route Logs menu (uid:0ea01bbb-0651-4186-84b4-0b3f4a522d3e)
-    Given Operator create new route using data below:
-      | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"(Edit Route) This route is created for testing 'Operator V2 - Routing - Route Logs' menu. Ignore this route. Created at {{created_date}} by feature @RouteLogs."} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}" } |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When op select route date filter and click 'Load Selection'

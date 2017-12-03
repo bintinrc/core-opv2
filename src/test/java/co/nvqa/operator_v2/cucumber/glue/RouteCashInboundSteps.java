@@ -2,8 +2,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.selenium.page.RouteCashInboundPage;
-import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
+import com.nv.qa.commons.utils.StandardScenarioStorage;
 import com.nv.qa.model.order_creation.v2.Order;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -17,13 +17,12 @@ import org.junit.Assert;
 @ScenarioScoped
 public class RouteCashInboundSteps extends AbstractSteps
 {
-    @Inject ScenarioStorage scenarioStorage;
     private RouteCashInboundPage routeCashInboundPage;
 
     @Inject
-    public RouteCashInboundSteps(ScenarioManager scenarioManager)
+    public RouteCashInboundSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -35,8 +34,8 @@ public class RouteCashInboundSteps extends AbstractSteps
     @When("^Operator create new COD on Route Cash Inbound page$")
     public void operatorCreateNewCod()
     {
-        Order order = scenarioStorage.get(KEY_CREATED_ORDER);
-        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
+        Order order = getScenarioStorage().get(KEY_CREATED_ORDER);
+        int routeId = getScenarioStorage().get(KEY_CREATED_ROUTE_ID);
 
         Double codGoods = order.getCod_goods();
         Assert.assertNotNull("COD Goods should not be null.", codGoods);
@@ -49,27 +48,27 @@ public class RouteCashInboundSteps extends AbstractSteps
         routeCashInboundCod.setReceiptNumber(receiptNumber);
 
         routeCashInboundPage.addCod(routeCashInboundCod);
-        scenarioStorage.put("routeCashInboundCod", routeCashInboundCod);
+        getScenarioStorage().put("routeCashInboundCod", routeCashInboundCod);
     }
 
     @Then("^Operator verify the new COD on Route Cash Inbound page is created successfully$")
     public void operatorVerifyTheNewCodIsCreatedSuccessfully()
     {
-        RouteCashInboundCod routeCashInboundCod = scenarioStorage.get("routeCashInboundCod");
+        RouteCashInboundCod routeCashInboundCod = getScenarioStorage().get("routeCashInboundCod");
         routeCashInboundPage.verifyNewCodIsCreatedSuccessfully(routeCashInboundCod);
     }
 
     @Then("^Operator check filter on Route Cash Inbound page work fine$")
     public void operatorCheckFilterOnRouteCashInboundPageWork()
     {
-        RouteCashInboundCod routeCashInboundCod = scenarioStorage.get("routeCashInboundCod");
+        RouteCashInboundCod routeCashInboundCod = getScenarioStorage().get("routeCashInboundCod");
         routeCashInboundPage.verifyFilterWorkFine(routeCashInboundCod);
     }
 
     @When("^Operator update the new COD on Route Cash Inbound page$")
     public void operatorUpdateTheNewCod()
     {
-        RouteCashInboundCod routeCashInboundCod = scenarioStorage.get("routeCashInboundCod");
+        RouteCashInboundCod routeCashInboundCod = getScenarioStorage().get("routeCashInboundCod");
 
         Double oldAmountCollected = routeCashInboundCod.getAmountCollected();
         Double newAmountCollected = oldAmountCollected+(oldAmountCollected.intValue()/2);
@@ -81,27 +80,27 @@ public class RouteCashInboundSteps extends AbstractSteps
 
 
         routeCashInboundPage.editCod(routeCashInboundCod, routeCashInboundCodEdited);
-        scenarioStorage.put("routeCashInboundCodEdited", routeCashInboundCodEdited);
+        getScenarioStorage().put("routeCashInboundCodEdited", routeCashInboundCodEdited);
     }
 
     @Then("^Operator verify the new COD on Route Cash Inbound page is updated successfully$")
     public void operatorVerifyTheNewZoneIsUpdatedSuccessfully()
     {
-        RouteCashInboundCod routeCashInboundCodEdited = scenarioStorage.get("routeCashInboundCodEdited");
+        RouteCashInboundCod routeCashInboundCodEdited = getScenarioStorage().get("routeCashInboundCodEdited");
         routeCashInboundPage.verifyCodIsUpdatedSuccessfully(routeCashInboundCodEdited);
     }
 
     @When("^Operator delete the new COD on Route Cash Inbound page$")
     public void operatorDeleteTheNewZone()
     {
-        RouteCashInboundCod routeCashInboundCod = scenarioStorage.containsKey("routeCashInboundCodEdited") ? scenarioStorage.get("routeCashInboundCodEdited") : scenarioStorage.get("routeCashInboundCod");
+        RouteCashInboundCod routeCashInboundCod = getScenarioStorage().containsKey("routeCashInboundCodEdited") ? getScenarioStorage().get("routeCashInboundCodEdited") : getScenarioStorage().get("routeCashInboundCod");
         routeCashInboundPage.deleteCod(routeCashInboundCod);
     }
 
     @Then("^Operator verify the new COD on Route Cash Inbound page is deleted successfully$")
     public void operatorVerifyTheNewCodIsDeletedSuccessfully()
     {
-        RouteCashInboundCod routeCashInboundCod = scenarioStorage.containsKey("routeCashInboundCodEdited") ? scenarioStorage.get("routeCashInboundCodEdited") : scenarioStorage.get("routeCashInboundCod");
+        RouteCashInboundCod routeCashInboundCod = getScenarioStorage().containsKey("routeCashInboundCodEdited") ? getScenarioStorage().get("routeCashInboundCodEdited") : getScenarioStorage().get("routeCashInboundCod");
         routeCashInboundPage.verifyCodIsDeletedSuccessfully(routeCashInboundCod);
     }
 
@@ -114,7 +113,7 @@ public class RouteCashInboundSteps extends AbstractSteps
     @Then("^Operator verify COD CSV file on Route Cash Inbound page is downloaded successfully$")
     public void operatorVerifyCodCsvFileIsDownloadSuccessfully()
     {
-        RouteCashInboundCod routeCashInboundCod = scenarioStorage.get("routeCashInboundCod");
+        RouteCashInboundCod routeCashInboundCod = getScenarioStorage().get("routeCashInboundCod");
         routeCashInboundPage.verifyCsvFileDownloadedSuccessfully(routeCashInboundCod);
     }
 }

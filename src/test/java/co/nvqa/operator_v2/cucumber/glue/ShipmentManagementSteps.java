@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
-import co.nvqa.operator_v2.util.ScenarioStorage;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
+import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -24,16 +24,15 @@ import java.util.List;
 @ScenarioScoped
 public class ShipmentManagementSteps extends AbstractSteps
 {
-    @Inject private ScenarioStorage scenarioStorage;
     private ShipmentManagementPage shipmentManagementPage;
     private String start = "";
     private String end = "";
     private String comment = "";
 
     @Inject
-    public ShipmentManagementSteps(ScenarioManager scenarioManager)
+    public ShipmentManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -46,7 +45,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     public void createShipment(String startHub, String endHub, String comment)
     {
         String id = shipmentManagementPage.createShipment(startHub, endHub, comment);
-        scenarioStorage.put(KEY_SHIPMENT_ID, id);
+        getScenarioStorage().put(KEY_SHIPMENT_ID, id);
     }
 
     @When("^edit Shipment with Start Hub ([^\"]*), End hub ([^\"]*) and comment ([^\"]*)$")
@@ -80,7 +79,7 @@ public class ShipmentManagementSteps extends AbstractSteps
 
         for(ShipmentManagementPage.Shipment shipment : shipments)
         {
-            if(shipment.getId().equals(scenarioStorage.get(KEY_SHIPMENT_ID)))
+            if(shipment.getId().equals(getScenarioStorage().get(KEY_SHIPMENT_ID)))
             {
                 shipment.clickShipmentActionButton(actionButton);
                 break;
@@ -93,7 +92,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     @Then("^shipment edited$")
     public void shipmentEdited()
     {
-        String shipmentId = scenarioStorage.get(KEY_SHIPMENT_ID);
+        String shipmentId = getScenarioStorage().get(KEY_SHIPMENT_ID);
         List<ShipmentManagementPage.Shipment> shipments =shipmentManagementPage.getShipmentsFromTable();
         String startHub = "";
         String endHub = "";
@@ -119,7 +118,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     @Then("^shipment status is ([^\"]*)$")
     public void checkStatus(String status)
     {
-        int shipmentId = scenarioStorage.get(KEY_SHIPMENT_ID);
+        int shipmentId = getScenarioStorage().get(KEY_SHIPMENT_ID);
         List<ShipmentManagementPage.Shipment> shipments =shipmentManagementPage.getShipmentsFromTable();
         String actualStat = "";
 
@@ -134,13 +133,13 @@ public class ShipmentManagementSteps extends AbstractSteps
             }
         }
 
-        Assert.assertEquals("Shipment " + scenarioStorage.get(KEY_SHIPMENT_ID) + " status", status, actualStat);
+        Assert.assertEquals("Shipment " + getScenarioStorage().get(KEY_SHIPMENT_ID) + " status", status, actualStat);
     }
 
     @When("^cancel shipment button clicked$")
     public void clickCancelShipmentButton()
     {
-        String shipmentId = scenarioStorage.get(KEY_SHIPMENT_ID);
+        String shipmentId = getScenarioStorage().get(KEY_SHIPMENT_ID);
         TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_CANCEL_SHIPMENT_BUTTON);
         List<WebElement> toasts = TestUtils.getToasts(getWebDriver());
         String text = "";
@@ -160,7 +159,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     @Then("^shipment deleted$")
     public void isShipmentDeleted()
     {
-        String shipmentId = scenarioStorage.get(KEY_SHIPMENT_ID);
+        String shipmentId = getScenarioStorage().get(KEY_SHIPMENT_ID);
         String msg = "Success delete Shipping ID " + shipmentId;
         WebElement toast = TestUtils.getToast(getWebDriver());
         Assert.assertThat("toast message not contains " + msg, toast.getText(), Matchers.containsString(msg));

@@ -19,8 +19,6 @@ public final class TestConstants extends StandardTestConstants
     private static final String CONFIGURATION_FILE = "config.properties";
     private static final String ENVIRONMENT_SYSTEM_PROPERTY = "environment";
 
-    public static final String REPORT_HTML_OUTPUT_DIR = System.getProperty("REPORT_HTML_OUTPUT_DIR");
-
     public static final boolean ENABLE_PROXY;
     public static final long PROXY_READ_BANDWIDTH_LIMIT_IN_BPS;
     public static final long PROXY_WRITE_BANDWIDTH_LIMIT_IN_BPS;
@@ -45,29 +43,19 @@ public final class TestConstants extends StandardTestConstants
     public static final boolean OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES;
     public static final String OPERATOR_PORTAL_USER_COOKIE;
 
-    public static final String API_BASE_URL;
     public static final String ORDER_CREATE_BASE_URL;
-    public static final int SHIPPER_ID;
-    public static final String SHIPPER_CLIENT_ID;
-    public static final String SHIPPER_CLIENT_SECRET;
+    public static final int SHIPPER_V3_ID;
+    public static final String SHIPPER_V3_CLIENT_ID;
+    public static final String SHIPPER_V3_CLIENT_SECRET;
 
     public static final int SHIPPER_V2_ID;
     public static final String SHIPPER_V2_NAME;
     public static final String SHIPPER_V2_CLIENT_ID;
     public static final String SHIPPER_V2_CLIENT_SECRET;
 
-    public static final String OPERATOR_V1_CLIENT_ID;
-    public static final String OPERATOR_V1_CLIENT_SECRET;
-
     public static final int NINJA_DRIVER_ID;
     public static final String NINJA_DRIVER_USERNAME;
     public static final String NINJA_DRIVER_PASSWORD;
-
-    public static final String DB_DRIVER;
-    public static final String DB_URL_CORE;
-    public static final String DB_URL_QA_AUTOMATION;
-    public static final String DB_USER;
-    public static final String DB_PASS;
 
     static
     {
@@ -112,27 +100,18 @@ public final class TestConstants extends StandardTestConstants
 
             API_BASE_URL = getPropertyValueAsString("api-server-base-url");
             ORDER_CREATE_BASE_URL = getPropertyValueAsString("order-create-server-base-url");
-            SHIPPER_ID = getPropertyValueAsInteger("shipper-v3-id");
-            SHIPPER_CLIENT_ID = getPropertyValueAsString("shipper-client-id");
-            SHIPPER_CLIENT_SECRET = getPropertyValueAsString("shipper-client-secret");
+            SHIPPER_V3_ID = getPropertyValueAsInteger("shipper-v3-id");
+            SHIPPER_V3_CLIENT_ID = getPropertyValueAsString("shipper-v3-client-id");
+            SHIPPER_V3_CLIENT_SECRET = getPropertyValueAsString("shipper-v3-client-secret");
 
             SHIPPER_V2_ID = getPropertyValueAsInteger("shipper-v2-id");
             SHIPPER_V2_NAME = getPropertyValueAsString("shipper-v2-name");
             SHIPPER_V2_CLIENT_ID = getPropertyValueAsString("shipper-v2-client-id");
             SHIPPER_V2_CLIENT_SECRET = getPropertyValueAsString("shipper-v2-client-secret");
 
-            OPERATOR_V1_CLIENT_ID = getPropertyValueAsString("operator-v1-client-id");
-            OPERATOR_V1_CLIENT_SECRET = getPropertyValueAsString("operator-v1-client-secret");
-
             NINJA_DRIVER_ID = getPropertyValueAsInteger("ninja-driver-id");
             NINJA_DRIVER_USERNAME = getPropertyValueAsString("ninja-driver-username");
             NINJA_DRIVER_PASSWORD = getPropertyValueAsString("ninja-driver-password");
-
-            DB_DRIVER = getPropertyValueAsString("db-driver");
-            DB_URL_CORE = getPropertyValueAsString("db-url-core");
-            DB_URL_QA_AUTOMATION = getPropertyValueAsString("db-url-qa-automation");
-            DB_USER = getPropertyValueAsString("db-user");
-            DB_PASS = getPropertyValueAsString("db-pass");
         }
         catch(IOException ex)
         {

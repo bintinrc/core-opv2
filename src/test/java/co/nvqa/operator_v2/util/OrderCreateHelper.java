@@ -221,7 +221,7 @@ public class OrderCreateHelper
         {
             if(CREATE_ORDER_ACCESS_TOKEN==null)
             {
-                AuthRequest loginRequest = new AuthRequest(TestConstants.SHIPPER_CLIENT_ID, TestConstants.SHIPPER_CLIENT_SECRET);
+                AuthRequest loginRequest = new AuthRequest(TestConstants.SHIPPER_V3_CLIENT_ID, TestConstants.SHIPPER_V3_CLIENT_SECRET);
                 OrderCreateAuthenticationClient client = getAuthenticationClient();
                 AuthResponse resp = client.login(loginRequest);
                 CREATE_ORDER_ACCESS_TOKEN = resp.getAccess_token();

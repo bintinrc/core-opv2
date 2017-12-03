@@ -3,8 +3,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.operator_v2.selenium.page.ShipmentInboundScanningPage;
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
 import co.nvqa.operator_v2.util.TestUtils;
-import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
+import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -24,15 +24,14 @@ import java.util.List;
 public class ShipmentInboundScanningSteps extends AbstractSteps
 {
     private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
-    @Inject private ScenarioStorage scenarioStorage;
 
     private ShipmentManagementPage shipmentManagementPage;
     private ShipmentInboundScanningPage scanningPage;
 
     @Inject
-    public ShipmentInboundScanningSteps(ScenarioManager scenarioManager)
+    public ShipmentInboundScanningSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -49,14 +48,14 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
         TestUtils.clickBtn(getWebDriver(), scanningPage.grabXpathButton(label));
         TestUtils.clickBtn(getWebDriver(), scanningPage.grabXpathButton("Start Inbound"));
 
-        scanningPage.inputShipmentToInbound(scenarioStorage.get(KEY_SHIPMENT_ID));
-        scanningPage.checkSessionScan(scenarioStorage.get(KEY_SHIPMENT_ID));
+        scanningPage.inputShipmentToInbound(getScenarioStorage().get(KEY_SHIPMENT_ID));
+        scanningPage.checkSessionScan(getScenarioStorage().get(KEY_SHIPMENT_ID));
     }
 
     @Then("^inbounded shipment exist$")
     public void inbounded_shipment_exist()
     {
-        String shipmentId = scenarioStorage.get(KEY_SHIPMENT_ID);
+        String shipmentId = getScenarioStorage().get(KEY_SHIPMENT_ID);
         List<ShipmentManagementPage.Shipment> shipmentList = shipmentManagementPage.getShipmentsFromTable();
         boolean isExist = false;
 

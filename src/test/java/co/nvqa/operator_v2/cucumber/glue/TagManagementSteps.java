@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.operator_v2.selenium.page.TagManagementPage;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
+import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -23,9 +24,9 @@ public class TagManagementSteps extends AbstractSteps
     private TagManagementPage tagManagementPage;
 
     @Inject
-    public TagManagementSteps(ScenarioManager scenarioManager)
+    public TagManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -77,7 +78,7 @@ public class TagManagementSteps extends AbstractSteps
 
             String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
             Assert.assertEquals(DEFAULT_TAG_NAME, actualTagName);
-        }, String.format("verifyNewTagCreatedSuccessfully - [Expected Tag Name = %s]", DEFAULT_TAG_NAME), getScenarioManager()::writeToScenarioLog);
+        }, String.format("verifyNewTagCreatedSuccessfully - [Expected Tag Name = %s]", DEFAULT_TAG_NAME), getScenarioManager()::writeToCurrentScenarioLog);
     }
 
     @When("^op update tag on Tag Management$")
@@ -107,7 +108,7 @@ public class TagManagementSteps extends AbstractSteps
 
             String actualTagDescription = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DESCRIPTION);
             Assert.assertEquals(EDITED_DEFAULT_TAG_DESCRIPTION, actualTagDescription);
-        }, "verifyTagUpdatedSuccessfully", getScenarioManager()::writeToScenarioLog);
+        }, "verifyTagUpdatedSuccessfully", getScenarioManager()::writeToCurrentScenarioLog);
     }
 
     @When("^op delete tag on Tag Management$")

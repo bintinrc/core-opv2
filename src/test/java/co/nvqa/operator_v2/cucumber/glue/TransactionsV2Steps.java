@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.TransactionsV2Page;
-import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
+import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -15,13 +15,12 @@ import java.util.List;
 @ScenarioScoped
 public class TransactionsV2Steps extends AbstractSteps
 {
-    @Inject private ScenarioStorage scenarioStorage;
     private TransactionsV2Page transactionsPage;
 
     @Inject
-    public TransactionsV2Steps(ScenarioManager scenarioManager)
+    public TransactionsV2Steps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -33,8 +32,8 @@ public class TransactionsV2Steps extends AbstractSteps
     @When("^Operator V2 add created Transaction to Route Group$")
     public void addCreatedTransactionToRouteGroup()
     {
-        String expectedTrackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
-        String routeGroupName = scenarioStorage.get(KEY_ROUTE_GROUP_NAME);
+        String expectedTrackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
+        String routeGroupName = getScenarioStorage().get(KEY_ROUTE_GROUP_NAME);
 
         transactionsPage.removeFilter("Start Datetime");
         transactionsPage.removeFilter("End Datetime");
@@ -55,8 +54,8 @@ public class TransactionsV2Steps extends AbstractSteps
     @When("^Operator V2 add created Transactions to Route Group$")
     public void addCreatedTransactionsToRouteGroup()
     {
-        List<String> trackingIds = scenarioStorage.get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-        String routeGroupName = scenarioStorage.get(KEY_ROUTE_GROUP_NAME);
+        List<String> trackingIds = getScenarioStorage().get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        String routeGroupName = getScenarioStorage().get(KEY_ROUTE_GROUP_NAME);
 
         trackingIds.forEach((String trackingId)->
         {

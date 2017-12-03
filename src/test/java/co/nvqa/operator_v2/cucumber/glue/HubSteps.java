@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import com.nv.qa.commons.support.*;
+import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -25,9 +26,9 @@ public class HubSteps extends AbstractSteps
     private static final String HUBS_CSV_FILE_NAME_LOCATION = TestConstants.SELENIUM_WRITE_PATH + HUBS_CSV_FILE_NAME;
 
     @Inject
-    public HubSteps(ScenarioManager scenarioManager)
+    public HubSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override

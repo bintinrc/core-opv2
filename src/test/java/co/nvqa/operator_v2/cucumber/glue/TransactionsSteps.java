@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.TransactionsPage;
-import co.nvqa.operator_v2.util.ScenarioStorage;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.inject.Inject;
+import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -14,13 +14,12 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 @ScenarioScoped
 public class TransactionsSteps extends AbstractSteps
 {
-    @Inject private ScenarioStorage scenarioStorage;
     private TransactionsPage transactionsPage;
 
     @Inject
-    public TransactionsSteps(ScenarioManager scenarioManager)
+    public TransactionsSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -32,9 +31,9 @@ public class TransactionsSteps extends AbstractSteps
     @When("^Operator V2 add 'Transaction' to 'Route Group'$")
     public void addTransactionToRouteGroup()
     {
-        String trackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
-        String routeGroupName = scenarioStorage.get(KEY_ROUTE_GROUP_NAME);
-        String routeGroupTemplateName = scenarioStorage.get("routeGroupTemplateName");
+        String trackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
+        String routeGroupName = getScenarioStorage().get(KEY_ROUTE_GROUP_NAME);
+        String routeGroupTemplateName = getScenarioStorage().get("routeGroupTemplateName");
 
         //transactionsPage.selectVariable(routeGroupTemplateName);
         transactionsPage.selectShipperFilter(TestConstants.SHIPPER_V2_CLIENT_ID);
