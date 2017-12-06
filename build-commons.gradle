@@ -313,7 +313,7 @@ task runCucumberParallel(dependsOn: ["testClasses"]) {
         if(isErrorOccurred)
         {
             def prettyFailedExecuteFeature = failedExecuteFeature.stream().sorted().distinct().collect(Collectors.joining("\n"))
-            throw new org.gradle.api.GradleException("There is an error occurred when running multiple feature files. Failed feature:\n$prettyFailedExecuteFeature")
+            throw new org.gradle.api.GradleException("An error has occurred when running multiple feature files. Failed feature(s):\n$prettyFailedExecuteFeature")
         }
     }
 }
