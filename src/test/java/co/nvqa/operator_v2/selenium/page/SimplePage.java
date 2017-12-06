@@ -152,20 +152,20 @@ public class SimplePage
     {
         WebElement we = findElementByXpath(xpathExpression);
         we.clear();
-        pause100ms();
+        pause200ms();
         we.sendKeys(keysToSend);
-        pause100ms();
+        pause200ms();
     }
 
     public void sendKeysAndEnter(String xpathExpression, CharSequence... keysToSend)
     {
         WebElement we = findElementByXpath(xpathExpression);
         we.clear();
-        pause100ms();
+        pause200ms();
         we.sendKeys(keysToSend);
-        pause100ms();
+        pause200ms();
         we.sendKeys(Keys.RETURN);
-        pause100ms();
+        pause200ms();
     }
 
     public void sendKeysById(String id, CharSequence... keysToSend)

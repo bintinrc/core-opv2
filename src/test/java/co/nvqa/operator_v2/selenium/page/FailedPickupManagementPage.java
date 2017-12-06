@@ -71,6 +71,7 @@ public class FailedPickupManagementPage extends SimplePage
     public void setRescheduleDate(Date date)
     {
         sendKeys("//md-datepicker/div/input", DATE_FORMAT.format(date));
+        click("//div[@label='commons.model.date']/label"); // To make sure date is change on Angular.
     }
 
     public void verifyOrderIsRemovedFromTableAfterReschedule(String trackingId)

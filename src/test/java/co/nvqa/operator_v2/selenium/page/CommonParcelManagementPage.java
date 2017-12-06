@@ -38,6 +38,7 @@ public abstract class CommonParcelManagementPage extends SimplePage
         checkRow(1);
         selectAction(ACTION_RESCHEDULE_SELECTED);
         sendKeys("//md-datepicker[@name='commons.model.date']/div/input", MD_DATEPICKER_DATE_FORMAT.format(TestUtils.getNextDate(2)));
+        click("//div[@label='commons.model.date']/label"); // To make sure date is change on Angular.
         click("//button[@aria-label='Reschedule']");
     }
 
