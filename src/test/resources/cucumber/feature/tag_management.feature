@@ -1,7 +1,7 @@
-@TagManagement @selenium @TagManagement#01
+@TagManagement @selenium
 Feature: Tag Management
 
-  @LaunchBrowser
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
@@ -17,5 +17,5 @@ Feature: Tag Management
 #    When op delete tag on Tag Management
 #    Then tag on Tag Management deleted successfully
 
-  @KillBrowser
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

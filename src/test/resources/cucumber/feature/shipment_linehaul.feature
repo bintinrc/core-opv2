@@ -1,4 +1,4 @@
-@ShipmentLinehaul @selenium @shipment @ShipmentLinehaul#01
+@ShipmentLinehaul @selenium @shipment @ShouldAlwaysRun
 Feature: Shipment Linehaul
 
   @LaunchBrowser

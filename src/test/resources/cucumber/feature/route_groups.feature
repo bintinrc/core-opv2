@@ -1,7 +1,7 @@
-@RouteGroups @selenium @RouteGroups#01
+@RouteGroups @selenium
 Feature: Route Groups
 
-  @LaunchBrowser
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
@@ -16,5 +16,5 @@ Feature: Route Groups
     When op delete 'route group' on 'Route Groups'
     Then 'route group' on 'Route Groups' deleted successfully
 
-  @KillBrowser
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

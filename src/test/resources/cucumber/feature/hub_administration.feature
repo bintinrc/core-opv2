@@ -1,4 +1,4 @@
-@HubAdministration @selenium @saas @HubAdministration#01
+@HubAdministration @selenium @saas @ShouldAlwaysRun
 Feature: Hubs Administration
 
   @LaunchBrowser

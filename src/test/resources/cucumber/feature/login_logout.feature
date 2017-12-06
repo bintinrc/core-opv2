@@ -1,4 +1,4 @@
-@LoginLogout @selenium @saas @LoginLogout#01
+@LoginLogout @selenium @saas @ShouldAlwaysRun
 Feature: op login and logout
 
   @LaunchBrowser

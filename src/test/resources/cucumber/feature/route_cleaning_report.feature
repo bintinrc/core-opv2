@@ -1,11 +1,11 @@
 @RouteCleaningReport @selenium
 Feature: Route Cleaning Report
 
-  @LaunchBrowser @RouteCleaningReport#01
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
-  @ArchiveRoute @RouteCleaningReport#01
+  @ArchiveRoute
   Scenario: Operator download Excel report on Route Cleaning Report successfully (uid:860479ee-1308-41ef-bd2f-1e14ab841e8b)
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
@@ -28,5 +28,5 @@ Feature: Route Cleaning Report
     When Operator download Excel report on Route Cleaning Report page
     Then Operator download Excel report on Route Cleaning Report page successfully
 
-  @KillBrowser @RouteCleaningReport#01
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

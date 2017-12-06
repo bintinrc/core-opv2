@@ -1,4 +1,4 @@
-@BlockedDates @selenium @saas @BlockedDates#01
+@BlockedDates @selenium @saas @ShouldAlwaysRun
 Feature: Blocked Dates
 
   @LaunchBrowser

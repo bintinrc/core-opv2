@@ -1,11 +1,10 @@
 @RecoveryTickets @selenium
 Feature: Recovery Tickets
 
-  @LaunchBrowser @RecoveryTickets#01 @RecoveryTickets#02
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
-  @RecoveryTickets#01
   Scenario: Create damage ticket on Recovery Tickets menu (uid:43d733f5-61e2-4877-82c2-ae1ac3220a2b)
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
@@ -25,7 +24,6 @@ Feature: Recovery Tickets
       | orderOutcome       | PENDING                   |
     Then verify ticket is created successfully
 
-  @RecoveryTickets#02
   Scenario: Create missing ticket on Recovery Tickets menu (uid:dc66d575-0700-44c8-a4bc-2787a5616e64)
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
@@ -42,5 +40,5 @@ Feature: Recovery Tickets
       | shipperZendeskId   | 1                         |
     Then verify ticket is created successfully
 
-  @KillBrowser @RecoveryTickets#01 @RecoveryTickets#02
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

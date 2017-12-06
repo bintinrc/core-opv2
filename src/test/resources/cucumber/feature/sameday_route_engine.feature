@@ -1,11 +1,10 @@
 @SamedayRouteEngine @selenium
 Feature: Sameday Route Engine
 
-  @LaunchBrowser @SamedayRouteEngine#01 @SamedayRouteEngine#02 @SamedayRouteEngine#03 @SamedayRouteEngine#04 @SamedayRouteEngine#05
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
-  @SamedayRouteEngine#01
   Scenario: Add sameday parcel to route (uid:24baa07a-b688-4586-8a90-e5154031b1f1)
     #Notes: Shipper create sameday parcel with OC V2
     Given API Shipper create Order V2 Parcel using data below:
@@ -32,7 +31,6 @@ Feature: Sameday Route Engine
     Given Operator go to menu Routing -> 2. Route Group Management
     Then Operator V2 clean up 'Route Groups'
 
-  @SamedayRouteEngine#02
   Scenario: Add bulky parcel to route (uid:477e2e7a-76e7-40e7-8355-866783b2faaa)
     Given Operator refresh page
     #Notes: Shipper create C2C Bulky parcel with OC V2
@@ -61,7 +59,6 @@ Feature: Sameday Route Engine
     Given Operator go to menu Routing -> 2. Route Group Management
     Then Operator V2 clean up 'Route Groups'
 
-  @SamedayRouteEngine#03
   Scenario: Download same day route engine csv export (uid:5247e84e-d36d-4ddd-96db-63b5fddfee77)
     Given Operator refresh page
     #Notes: Shipper create C2C Bulky parcel with OC V2
@@ -94,7 +91,6 @@ Feature: Sameday Route Engine
     Then op download same day route engine waypoint detail dialog
     Then Operator V2 clean up 'Route Groups'
 
-  @SamedayRouteEngine#04
   Scenario: Check unrouted detail (uid:6b5fa949-deba-41c1-b9e1-0c77e605832b)
     Given Operator refresh page
     #Notes: Shipper create C2C Bulky parcel with OC V2
@@ -124,7 +120,6 @@ Feature: Sameday Route Engine
     Then op verify the unrouted detail dialog
     Then Operator V2 clean up 'Route Groups'
 
-  @SamedayRouteEngine#05
   Scenario: Update timeslot for bulky parcels (uid:154a1482-33e2-4fff-9a99-ed6a96b289be)
     Given Operator refresh page
     #Notes: Shipper create C2C Bulky parcel with OC V2
@@ -154,5 +149,5 @@ Feature: Sameday Route Engine
     Then op verify the updated timeslot
     Then Operator V2 clean up 'Route Groups'
 
-  @KillBrowser @SamedayRouteEngine#01 @SamedayRouteEngine#02 @SamedayRouteEngine#03 @SamedayRouteEngine#04 @SamedayRouteEngine#05
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

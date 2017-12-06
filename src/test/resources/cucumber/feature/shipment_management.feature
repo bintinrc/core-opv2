@@ -1,4 +1,4 @@
-@ShipmentManagement @selenium @shipment @ShipmentManagement#01
+@ShipmentManagement @selenium @shipment @ShouldAlwaysRun
 Feature: Shipment Management
 
   @LaunchBrowser

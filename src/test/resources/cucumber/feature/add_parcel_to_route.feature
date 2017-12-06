@@ -1,7 +1,7 @@
-@AddParcelToRoute @selenium @AddParcelToRoute#01
+@AddParcelToRoute @selenium
 Feature: Add Parcel To Route
 
-  @LaunchBrowser
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
@@ -27,5 +27,5 @@ Feature: Add Parcel To Route
     Given Operator go to menu Routing -> 2. Route Group Management
     Then Operator V2 clean up 'Route Groups'
 
-  @KillBrowser
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

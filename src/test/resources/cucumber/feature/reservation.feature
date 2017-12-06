@@ -1,4 +1,4 @@
-@Reservation @selenium @Reservation#01
+@Reservation @selenium @ShouldAlwaysRun
 Feature: Reservation
 
   @LaunchBrowser

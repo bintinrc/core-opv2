@@ -1,11 +1,10 @@
 @PrinterSettings @selenium
 Feature: Shipment Scanning
 
-  @LaunchBrowser @PrinterSettings#01 @PrinterSettings#02 @PrinterSettings#03
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
-  @PrinterSettings#01
   Scenario: Add Printer Settings (uid:f139cffa-0c34-45c2-8d36-15c43e47063f)
     Given Operator go to menu System Settings -> Printer Settings
     When op click add Printer button
@@ -19,7 +18,6 @@ Feature: Shipment Scanning
     When op delete printer settings
     Then printer setting deleted
 
-  @PrinterSettings#02
   Scenario: Delete Printer Settings (uid:4228809e-130b-40d6-93ea-258a8182700a)
     Given op click navigation Printer Settings in System Settings
     When op click add Printer button
@@ -33,7 +31,6 @@ Feature: Shipment Scanning
     When op delete printer settings
     Then printer setting deleted
 
-  @PrinterSettings#03
   Scenario Outline: Edit Printer Setting (<hiptest-uid>)
     Given op click navigation Printer Settings in System Settings
     When op click add Printer button
@@ -55,5 +52,5 @@ Feature: Shipment Scanning
     | Edit Version    | uid:70800e26-83ef-4342-a996-679f099d2a93 | Automation Printer Ver Edit    | version     | 4                         |
 
 
-  @KillBrowser @PrinterSettings#01 @PrinterSettings#02 @PrinterSettings#03
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

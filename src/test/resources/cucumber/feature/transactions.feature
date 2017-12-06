@@ -1,7 +1,7 @@
-@Transactions @selenium @Transactions#01
+@Transactions @selenium
 Feature: Transactions
 
-  @LaunchBrowser
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
@@ -20,5 +20,5 @@ Feature: Transactions
     Given Operator go to menu Routing -> 2. Route Group Management
     Then Operator V2 clean up 'Route Groups'
 
-  @KillBrowser
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
