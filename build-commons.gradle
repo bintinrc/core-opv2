@@ -48,7 +48,7 @@ def cucumberFeatureDir = "$testOutputResourcesDir/cucumber/feature"
 def cucumberGluePackage = project.ext.cucumberGluePackage
 def bambooBuildKey = System.env.bamboo_buildKey
 def bambooBuildResultKey = System.env.bamboo_buildResultKey
-def failedScenarioTagNames = ""
+def listOfFailedFeatures = new ArrayList<String>()
 
 /**
  * This variables below will be set on processTestResources.
@@ -86,7 +86,6 @@ processTestResources {
 task loadFailedScenarioTagNames(dependsOn: ["processTestResources"]) {
     println "[GRADLE_INFO] Running loadFailedScenarioTagNames ..."
     boolean isRunOnBamboo = bambooBuildResultKey!=null
-    List<String> listOfFailedScenarioTagNames = new ArrayList<>()
 
     if(isRunOnBamboo)
     {
@@ -94,15 +93,15 @@ task loadFailedScenarioTagNames(dependsOn: ["processTestResources"]) {
         {
             groovy.sql.Sql.loadDriver(driverName)
             Connection conn = DriverManager.getConnection(dbUrlQaAutomation, dbUser, dbPass)
-            println "[GRADLE_INFO] Execute SQL: SELECT scenario_tag_name FROM failed_scenarios WHERE bamboo_build_result_key = '$bambooBuildResultKey'"
-            PreparedStatement pstmt = conn.prepareStatement("SELECT scenario_tag_name FROM failed_scenarios WHERE bamboo_build_result_key = ?")
+            println "[GRADLE_INFO] Execute SQL: SELECT scenario_tag_name FROM failed_scenarios_2 WHERE bamboo_build_result_key = '$bambooBuildResultKey'"
+            PreparedStatement pstmt = conn.prepareStatement("SELECT failed_feature_file FROM failed_scenarios_2 WHERE bamboo_build_result_key = ?")
             pstmt.setString(1, bambooBuildResultKey)
             ResultSet rs = pstmt.executeQuery()
             int counter = 0
 
             while(rs.next())
             {
-                listOfFailedScenarioTagNames.add(rs.getString("scenario_tag_name"))
+                listOfFailedFeatures.add(rs.getString("failed_feature_file"))
                 counter++
             }
 
@@ -110,8 +109,8 @@ task loadFailedScenarioTagNames(dependsOn: ["processTestResources"]) {
             rs.close()
             pstmt.close()
 
-            println "[GRADLE_INFO] Execute SQL: DELETE FROM failed_scenarios WHERE bamboo_build_result_key LIKE '$bambooBuildKey%'"
-            pstmt = conn.prepareStatement("DELETE FROM failed_scenarios WHERE bamboo_build_result_key LIKE ?")
+            println "[GRADLE_INFO] Execute SQL: DELETE FROM failed_scenarios_2 WHERE bamboo_build_result_key LIKE '$bambooBuildKey%'"
+            pstmt = conn.prepareStatement("DELETE FROM failed_scenarios_2 WHERE bamboo_build_result_key LIKE ?")
             pstmt.setString(1, bambooBuildKey+"%")
             int affectedRow = pstmt.executeUpdate()
             println "[GRADLE_INFO] SQL Query Result: $affectedRow row(s) affected"
@@ -128,13 +127,6 @@ task loadFailedScenarioTagNames(dependsOn: ["processTestResources"]) {
     {
         System.out.println("[GRADLE_INFO] This project is not run on Bamboo. No need to read failed scenarios tag name from database.")
     }
-
-    if(!listOfFailedScenarioTagNames.isEmpty())
-    {
-        failedScenarioTagNames = listOfFailedScenarioTagNames.stream().filter{ tagName->!tagName.isEmpty() }.distinct().collect(Collectors.joining(","))
-    }
-
-    println "[GRADLE_INFO] List of Failed Scenarios Tag Name: "+listOfFailedScenarioTagNames
 }
 
 /**
@@ -149,25 +141,32 @@ task runCucumber(dependsOn: ["testClasses"], type: JavaExec) {
     args = [
             "--plugin", "pretty",
             "--plugin", "html:$reportHtmlOutputDir",
-            "--plugin", "json:build/reports/cucumber-junit/cucumber.json",
             "--plugin", "junit:build/reports/cucumber-junit/cucumber.xml",
+            "--plugin", "com.nv.qa.commons.cucumber.formatter.FailedReporter:build/reports/cucumber-failed-reporter/failed.txt",
             "--monochrome",
-            "--glue", cucumberGluePackage,
-            cucumberFeatureDir
+            "--glue", cucumberGluePackage
     ]
 
-    if(failedScenarioTagNames!=null && !failedScenarioTagNames.isEmpty())
+    if(listOfFailedFeatures.isEmpty())
     {
-        def tags = failedScenarioTagNames
-        println "[GRADLE_INFO] Filter Tags: $tags"
-        args "--tags", tags
+        if(project.hasProperty("tags"))
+        {
+            def tags = project.getProperty("tags")
+            args "--tags", tags
+        }
+
+        args cucumberFeatureDir
     }
-    else if(project.hasProperty("tags"))
+    else
     {
-        def tags = project.getProperty("tags")
-        println "[GRADLE_INFO] Filter Tags: $tags"
-        args "--tags", tags
+        listOfFailedFeatures.each { failedFeature ->
+            def featureFilePath = "$cucumberFeatureDir/$failedFeature"
+            args featureFilePath
+        }
     }
+
+    def argsInfo = args.toString().replace("[--", "[\n  --").replaceAll(", --", ",\n  --").replace(", $cucumberFeatureDir", ",\n  $cucumberFeatureDir").replace("]", "\n]")
+    println "[GRADLE_INFO] JavaExec args on runCucumber:\n$argsInfo"
 
     systemProperties["REPORT_HTML_OUTPUT_DIR"] = reportHtmlOutputDir
 
@@ -187,6 +186,8 @@ task runCucumber(dependsOn: ["testClasses"], type: JavaExec) {
  */
 task runCucumberParallel(dependsOn: ["testClasses"]) {
     doLast {
+        def isErrorOccurred = false
+        def failedExecuteFeature = []
         def forkCount = 4
 
         if(project.hasProperty("forkCount"))
@@ -199,55 +200,108 @@ task runCucumberParallel(dependsOn: ["testClasses"]) {
         println "[GRADLE_INFO] Cucumber Feature Directory: $cucumberFeatureDir"
 
         fileTree(dir: cucumberFeatureDir, include: "**/*.feature").each{ featureFile ->
-            println "[GRADLE_INFO] Running feature file: $featureFile"
+            def failedFeatureLine = ""
+            def isShouldRunThisFeatureFile = false
 
-            executorService.execute(new Runnable()
+            if(listOfFailedFeatures.isEmpty())
             {
-                @Override
-                void run()
+                isShouldRunThisFeatureFile = true
+            }
+            else
+            {
+                def shortFeatureFile = ""
+                def index = featureFile.getAbsolutePath().indexOf(cucumberFeatureDir as String)
+
+                if(index!=-1)
                 {
-                    def reportFileName = featureFile.absolutePath.substring(cucumberFeatureDir.length()+1).replaceAll("/", "-")
-                    def reportHtmlOutputDir = "build/reports/cucumber-junit/htmloutput/${reportFileName}"
+                    shortFeatureFile = featureFile.getAbsolutePath().substring(index+cucumberFeatureDir.length()+1)
+                }
 
-                    javaexec {
-                        main = "cucumber.api.cli.Main"
-                        classpath = sourceSets.test.runtimeClasspath
-                        args = [
-                                "--plugin", "pretty",
-                                "--plugin", "html:$reportHtmlOutputDir",
-                                "--plugin", "junit:build/reports/cucumber-junit/cucumber-${reportFileName}.xml",
-                                "--monochrome",
-                                "--glue", cucumberGluePackage,
-                                featureFile
-                        ]
+                for(String failedFeature : listOfFailedFeatures)
+                {
+                    def failedFeatureWithoutLine = failedFeature.split(":")[0]
 
-                        if(failedScenarioTagNames!=null && !failedScenarioTagNames.isEmpty())
-                        {
-                            def tags = failedScenarioTagNames
-                            args "--tags", tags
-                        }
-                        else if(project.hasProperty("tags"))
-                        {
-                            def tags = project.getProperty("tags")
-                            args "--tags", tags
-                        }
-
-                        systemProperties["REPORT_HTML_OUTPUT_DIR"] = reportHtmlOutputDir
-
-                        if(project.hasProperty("environment"))
-                        {
-                            def environment = project.getProperty("environment")
-                            systemProperties["environment"] = environment
-                        }
-
-                        /**
-                         * Add all value from gradle arguments start with -D to System properties.
-                         */
-                        systemProperties System.properties
-
+                    if(failedFeatureWithoutLine.equals(shortFeatureFile))
+                    {
+                        failedFeatureLine = failedFeature.split(":", 2)[1]
+                        isShouldRunThisFeatureFile = true
+                        break
                     }
                 }
-            })
+            }
+
+            def featureFileToBerun = "$featureFile"
+
+            if(isShouldRunThisFeatureFile)
+            {
+                if(!failedFeatureLine.isEmpty())
+                {
+                    featureFileToBerun += ":$failedFeatureLine"
+                }
+
+                println "[GRADLE_INFO] Running feature file: $featureFileToBerun"
+
+                executorService.execute(new Runnable()
+                {
+                    @Override
+                    void run()
+                    {
+                        def reportFileName = featureFile.getAbsolutePath().substring(cucumberFeatureDir.length()+1).replaceAll("/", "-")
+                        def reportHtmlOutputDir = "build/reports/cucumber-junit/htmloutput/${reportFileName}"
+
+                        try
+                        {
+                            javaexec {
+                                main = "cucumber.api.cli.Main"
+                                classpath = sourceSets.test.runtimeClasspath
+                                args = [
+                                        "--plugin", "pretty",
+                                        "--plugin", "html:$reportHtmlOutputDir",
+                                        "--plugin", "junit:build/reports/cucumber-junit/cucumber-${reportFileName}.xml",
+                                        "--plugin", "com.nv.qa.commons.cucumber.formatter.FailedReporter:build/reports/cucumber-failed-reporter/failed-${reportFileName}.txt",
+                                        "--monochrome",
+                                        "--glue", cucumberGluePackage
+                                ]
+
+                                if(listOfFailedFeatures.isEmpty())
+                                {
+                                    if(project.hasProperty("tags"))
+                                    {
+                                        def tags = project.getProperty("tags")
+                                        args "--tags", tags
+                                    }
+                                }
+
+                                args featureFileToBerun
+                                println "[GRADLE_INFO] JavaExec args on runCucumberParallel: "+args
+
+                                systemProperties["REPORT_HTML_OUTPUT_DIR"] = reportHtmlOutputDir
+
+                                if(project.hasProperty("environment"))
+                                {
+                                    def environment = project.getProperty("environment")
+                                    systemProperties["environment"] = environment
+                                }
+
+                                /**
+                                 * Add all value from gradle arguments start with -D to System properties.
+                                 */
+                                systemProperties System.properties
+                            }
+                        }
+                        catch(org.gradle.process.internal.ExecException ex)
+                        {
+                            isErrorOccurred = true
+                            failedExecuteFeature.add(featureFile.getAbsolutePath())
+                            throw ex
+                        }
+                    }
+                })
+            }
+            else
+            {
+                println "[GRADLE_INFO] Should not re-run feature file: $featureFileToBerun"
+            }
         }
 
         println "[GRADLE_INFO] Shutting down ExecutorService ..."
@@ -255,5 +309,11 @@ task runCucumberParallel(dependsOn: ["testClasses"]) {
         println "[GRADLE_INFO] Await termination ..."
         executorService.awaitTermination(1, TimeUnit.HOURS)
         println "[GRADLE_INFO] ExecutionService is done."
+
+        if(isErrorOccurred)
+        {
+            def prettyFailedExecuteFeature = failedExecuteFeature.stream().sorted().distinct().collect(Collectors.joining("\n"))
+            throw new org.gradle.api.GradleException("There is an error occurred when running multiple feature files. Failed feature:\n$prettyFailedExecuteFeature")
+        }
     }
 }

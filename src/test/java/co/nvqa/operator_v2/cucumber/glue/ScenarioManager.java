@@ -6,14 +6,9 @@ import co.nvqa.operator_v2.util.SeleniumUtils;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Singleton;
-import com.nv.qa.api.client.operator_portal.OperatorPortalAuthenticationClient;
-import com.nv.qa.commons.constants.NvTimeZone;
 import com.nv.qa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
 import com.nv.qa.commons.utils.NvLogger;
 import com.nv.qa.commons.utils.StandardScenarioManager;
-import com.nv.qa.commons.utils.StandardTestConstants;
-import com.nv.qa.model.operator_portal.authentication.AuthRequest;
-import com.nv.qa.model.operator_portal.authentication.AuthResponse;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -40,9 +35,6 @@ public class ScenarioManager extends StandardScenarioManager
 
     public ScenarioManager()
     {
-        addIgnoredScenarioTagName("@LaunchBrowser");
-        addIgnoredScenarioTagName("@KillBrowser");
-        addIgnoredScenarioTagName("@LaunchBrowserWithProxyEnabled");
     }
 
     /**
@@ -53,6 +45,7 @@ public class ScenarioManager extends StandardScenarioManager
     @Before
     public void before(Scenario scenario)
     {
+        TestConstants.init();
         setCurrentScenario(scenario);
     }
 
@@ -88,8 +81,6 @@ public class ScenarioManager extends StandardScenarioManager
     {
         if(scenario.isFailed())
         {
-            writeFailedScenarioTag(scenario.getName(), scenario.getSourceTagNames());
-
             if(getWebDriver()!=null)
             {
                 takesScreenshot(getWebDriver(), scenario);

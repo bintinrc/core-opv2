@@ -26,19 +26,39 @@ public class SampleSteps extends AbstractSteps
     {
     }
 
-    @Given("^dummy step$")
-    public void dummyStep()
+    @Given("^step \"([^\"]*)\"$")
+    public void stepSuccessOrFailed(String status)
+    {
+        String scenarioName = getScenarioManager().getCurrentScenario().getName();
+        boolean randomSuccess = random.nextBoolean();
+
+        if("success".equalsIgnoreCase(status))
+        {
+            System.out.println("[INFO] Step SUCCESS on scenario: "+scenarioName);
+        }
+        else if("failed".equalsIgnoreCase(status))
+        {
+            throw new RuntimeException("Step FAILED on scenario: "+scenarioName);
+        }
+        else
+        {
+            randomStep();
+        }
+    }
+
+    @Given("^random step$")
+    public void randomStep()
     {
         String scenarioName = getScenarioManager().getCurrentScenario().getName();
         boolean randomSuccess = random.nextBoolean();
 
         if(randomSuccess)
         {
-            NvLogger.info("Dummy success on scenario: "+scenarioName);
+            NvLogger.info("Step SUCCESS on scenario: "+scenarioName);
         }
         else
         {
-            throw new RuntimeException("Dummy failed on scenario: "+scenarioName);
+            throw new RuntimeException("Step FAILED on scenario: "+scenarioName);
         }
     }
 }
