@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.util.SingletonStorage;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.nv.qa.commons.support.DateUtil;
+import com.nv.qa.commons.utils.NvLogger;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -17,9 +18,9 @@ import java.util.List;
  */
 public class DriverStrengthPage extends SimplePage
 {
-    public static final String COLUMN_CLASS_NAME = "name";
+    public static final String COLUMN_CLASS_USERNAME = "username";
     public static final String COLUMN_CLASS_DRIVER_TYPE = "driver-type";
-    public static final String COLUMN_CLASS_ZONE = "zone-preferences-zone-id ";
+    public static final String COLUMN_CLASS_ZONE = "zone-preferences-zone-id";
 
     private final static String FILENAME = "drivers.csv";
     private String driverType;
@@ -50,16 +51,16 @@ public class DriverStrengthPage extends SimplePage
 
     public void filteredBy(String type)
     {
-        String filterKey = null;
+        String filterKey;
 
-        if(type.equals("zone"))
+        if("zone".equals(type))
         {
-            filterKey = zone != null ? zone : "z-out of zone";
+            filterKey = zone!=null ? zone : "z-out of zone";
             sendKeys("//th[contains(@class, 'zone-preferences-zone-id')]/nv-search-input-filter/md-input-container/div/input", filterKey);
         }
-        else if(type.equals("driver-type"))
+        else if("driver-type".equals(type))
         {
-            filterKey = driverType != null ? driverType : "Ops";
+            filterKey = driverType!=null ? driverType : "Ops";
             sendKeys("//th[contains(@class, 'driver-type')]/nv-search-input-filter/md-input-container/div/input", filterKey);
         }
 
@@ -76,15 +77,16 @@ public class DriverStrengthPage extends SimplePage
             driverType = getTextOnTable(1, COLUMN_CLASS_DRIVER_TYPE);
             zone = getTextOnTable(1, COLUMN_CLASS_ZONE);
         }
-        catch(Exception e)
+        catch(Exception ex)
         {
+            NvLogger.warn("An error occurred when getting 'Driver Type' and 'Zone' from table.");
         }
     }
 
     public void searchDriver()
     {
         String driverUsername = "D"+ SingletonStorage.getInstance().getTmpId();
-        click("//button[@aria-label='Load Everything']");
+        clickNvIconTextButtonByNameAndWaitUntilDone("container.driver-strength.load-everything");
         sendKeys("//th[contains(@class, 'username')]/nv-search-input-filter/md-input-container/div/input", driverUsername);
     }
 
@@ -136,7 +138,7 @@ public class DriverStrengthPage extends SimplePage
 
     public void clickAddNewDriver()
     {
-        click("//button[@aria-label='Add New Driver']");
+        clickNvIconTextButtonByName("Add New Driver");
         pause1s();
     }
 
@@ -153,20 +155,20 @@ public class DriverStrengthPage extends SimplePage
         /**
          * Add vehicle.
          */
-        click("//button[@aria-label='Add More Vehicles']");
+        clickButtonByAriaLabel("Add More Vehicles");
         sendKeys("//input[@type='text'][@aria-label='License Number']", "D"+tmpId);
         sendKeys("//input[@type='number'][@aria-label='Vehicle Capacity']", "100");
 
         /**
          * Add contact.
          */
-        click("//button[@aria-label='Add More Contacts']");
+        clickButtonByAriaLabel("Add More Contacts");
         sendKeys("//input[@type='text'][@aria-label='Contact']", "D"+tmpId+"@NV.CO");
 
         /**
          * Add zone.
          */
-        click("//button[@aria-label='Add More Zones']");
+        clickButtonByAriaLabel("Add More Zones");
         sendKeys("//input[@type='number'][@aria-label='Min']", "1");
         sendKeys("//input[@type='number'][@aria-label='Max']", "1");
         sendKeys("//input[@type='number'][@aria-label='Cost']", "1");
@@ -185,25 +187,24 @@ public class DriverStrengthPage extends SimplePage
         /**
          * Save.
          */
-        click("//button[@aria-label='Save Button']");
-        pause5s();
+        clickNvButtonSaveByNameAndWaitUntilDone("Submit");
     }
 
     public void verifyNewDriver()
     {
         String expectedUsername = "D"+ SingletonStorage.getInstance().getTmpId();
 
-        click("//button[@aria-label='Load Everything']");
+        clickNvIconTextButtonByNameAndWaitUntilDone("container.driver-strength.load-everything");
         sendKeys("//th[contains(@class, 'username')]/nv-search-input-filter/md-input-container/div/input", expectedUsername);
 
-        String actualName = getTextOnTable(1, COLUMN_CLASS_NAME);
-        Assert.assertEquals(expectedUsername, actualName);
+        String actualUsername = getTextOnTable(1, COLUMN_CLASS_USERNAME);
+        Assert.assertEquals(expectedUsername, actualUsername);
     }
 
     public void searchingNewDriver()
     {
         String driverUsername = "D"+ SingletonStorage.getInstance().getTmpId();
-        click("//button[@aria-label='Load Everything']");
+        clickNvIconTextButtonByNameAndWaitUntilDone("container.driver-strength.load-everything");
         sendKeys("//th[contains(@class, 'username')]/nv-search-input-filter/md-input-container/div/input", driverUsername);
     }
 
@@ -213,7 +214,7 @@ public class DriverStrengthPage extends SimplePage
         pause1s();
         sendKeys("//textarea[@aria-label='Comments']", "This driver is created by \"Automation Test\" for testing purpose. [EDITED]");
         sendKeys("//input[@type='number'][@aria-label='Vehicle Capacity']", "1000");
-        click("//button[@aria-label='Save Button']");
+        clickNvButtonSaveByNameAndWaitUntilDone("Submit");
         pause1s();
         closeModal();
     }
@@ -233,9 +234,9 @@ public class DriverStrengthPage extends SimplePage
          * Check first row does not contain deleted driver.
          */
 
-        String expectedDriverName = "Driver "+ SingletonStorage.getInstance().getTmpId();
-        String actualDriverName = getTextOnTable(1, COLUMN_CLASS_NAME);
-        Assert.assertNotEquals(expectedDriverName, actualDriverName);
+        String expectedDriverUsername = "D"+ SingletonStorage.getInstance().getTmpId();
+        String actualDriverUsername = getTextOnTable(1, COLUMN_CLASS_USERNAME);
+        Assert.assertNotEquals(expectedDriverUsername, actualDriverUsername);
     }
 
     private void changeComingStatusState(WebElement el)
