@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.nv.qa.commons.utils.NvLogger;
+import com.nv.qa.commons.utils.NvTestRuntimeException;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -615,7 +616,16 @@ public class SimplePage
     {
         File parentDir = new File(TestConstants.SELENIUM_WRITE_PATH);
         File[] arrayOfFiles = parentDir.listFiles((File dir, String name)->name.startsWith(filenamePattern));
-        Arrays.sort(arrayOfFiles, (File f1, File f2) -> Long.valueOf(f2.lastModified()).compareTo(f1.lastModified()));
+
+        if(arrayOfFiles.length==0)
+        {
+            throw new NvTestRuntimeException(String.format("There is no file with name starts with '%s' on folder '%s'.", filenamePattern, parentDir));
+        }
+        else if(arrayOfFiles.length>1)
+        {
+            Arrays.sort(arrayOfFiles, (File f1, File f2) -> Long.valueOf(f2.lastModified()).compareTo(f1.lastModified()));
+        }
+
         return arrayOfFiles[0].getName();
     }
 
