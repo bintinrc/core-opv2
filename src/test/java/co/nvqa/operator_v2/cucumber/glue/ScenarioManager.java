@@ -45,7 +45,6 @@ public class ScenarioManager extends StandardScenarioManager
     @Before
     public void before(Scenario scenario)
     {
-        TestConstants.init();
         setCurrentScenario(scenario);
     }
 

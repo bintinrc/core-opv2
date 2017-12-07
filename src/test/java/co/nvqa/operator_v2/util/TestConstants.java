@@ -122,10 +122,4 @@ public final class TestConstants extends StandardTestConstants
     private TestConstants()
     {
     }
-
-    public static void init()
-    {
-        // No-op. Call this method on method with tag @Before to make sure
-        // static block at TestConstants on each project is called.
-    }
 }
