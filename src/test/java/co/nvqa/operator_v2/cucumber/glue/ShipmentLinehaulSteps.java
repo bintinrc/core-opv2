@@ -27,6 +27,8 @@ import java.util.*;
 @ScenarioScoped
 public class ShipmentLinehaulSteps extends AbstractSteps
 {
+    private static final SimpleDateFormat CREATED_DATE_SDF = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
+
     private ShipmentLinehaulPage shipmentLinehaulPage;
     private Linehaul linehaul;
     private String linehaulId = "0";
@@ -163,7 +165,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     private void fillLinehaulForm(Map<String, String> arg1) throws IOException
     {
         linehaul = JsonHelper.mapToObject(arg1, Linehaul.class);
-        linehaul.setComment(linehaul.getComment() + " " + new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        linehaul.setComment(linehaul.getComment() + " " + CREATED_DATE_SDF.format(new Date()));
         shipmentLinehaulPage.fillLinehaulNameFT(linehaul.getName());
         shipmentLinehaulPage.fillCommentsFT(linehaul.getComment());
         shipmentLinehaulPage.fillHubs(linehaul.getHubs());

@@ -71,7 +71,7 @@ public class ShipmentLinehaulPage extends SimplePage
 
     public void clickSaveChangesButton()
     {
-        click(XPATH_SAVE_CHANGES_BUTTON);
+        clickNvApiTextButtonByNameAndWaitUntilDone("container.shipment-management.save-changes");
     }
 
     public void clickTab(String nameTab)
