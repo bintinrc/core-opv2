@@ -1,4 +1,4 @@
-@FailedDeliveryManagement @selenium
+@OperatorV2 @FailedDeliveryManagement
 Feature: Failed Delivery Management
 
   @LaunchBrowser @ShouldAlwaysRun

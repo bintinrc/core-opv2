@@ -1,4 +1,4 @@
-@FailedPickupManagement @selenium
+@OperatorV2 @FailedPickupManagement
 Feature: Failed Pickup Management
 
   @LaunchBrowser @ShouldAlwaysRun

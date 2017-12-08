@@ -1,4 +1,4 @@
-@RecoveryTickets @selenium
+@OperatorV2 @RecoveryTickets
 Feature: Recovery Tickets
 
   @LaunchBrowser @ShouldAlwaysRun

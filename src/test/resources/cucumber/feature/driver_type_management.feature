@@ -1,4 +1,4 @@
-@DriverTypeManagement @selenium @saas
+@OperatorV2 @DriverTypeManagement
 Feature: Driver Type Management
 
   @LaunchBrowser @ShouldAlwaysRun

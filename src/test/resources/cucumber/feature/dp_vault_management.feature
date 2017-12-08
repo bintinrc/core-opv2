@@ -1,4 +1,4 @@
-@DpVaultManagement @selenium
+@OperatorV2 @DpVaultManagement
 Feature: DP Vault Management
 
   @LaunchBrowser @ShouldAlwaysRun

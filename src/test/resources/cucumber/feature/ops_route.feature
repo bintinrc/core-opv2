@@ -1,4 +1,4 @@
-@OpsRoute @selenium
+@OperatorV2 @OpsRoute
 Feature: Ops Route
 
   @LaunchBrowser @ShouldAlwaysRun

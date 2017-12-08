@@ -1,4 +1,4 @@
-@Transactions @selenium
+@OperatorV2 @Transactions
 Feature: Transactions
 
   @LaunchBrowser @ShouldAlwaysRun

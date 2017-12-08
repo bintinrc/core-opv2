@@ -1,4 +1,4 @@
-@VehicleTypeManagement @selenium @ShouldAlwaysRun
+@OperatorV2 @VehicleTypeManagement @ShouldAlwaysRun
 Feature: Vehicle type management
 
   @LaunchBrowser

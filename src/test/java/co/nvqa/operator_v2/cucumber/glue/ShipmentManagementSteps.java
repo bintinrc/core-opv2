@@ -45,41 +45,41 @@ public class ShipmentManagementSteps extends AbstractSteps
     public void createShipment(String startHub, String endHub, String comment)
     {
         String id = shipmentManagementPage.createShipment(startHub, endHub, comment);
-        getScenarioStorage().put(KEY_SHIPMENT_ID, id);
+        put(KEY_SHIPMENT_ID, id);
     }
 
     @When("^edit Shipment with Start Hub ([^\"]*), End hub ([^\"]*) and comment ([^\"]*)$")
-    public void editShipment(String startHub, String endHub, String comment)
+    public void editShipment(String startHub, String endHub, String newComment)
     {
         shipmentManagementPage.selectStartHub(startHub);
-        pause10ms();
+        pause200ms();
         shipmentManagementPage.selectEndHub(endHub);
-        pause10ms();
-        TestUtils.inputText(getWebDriver(), ShipmentManagementPage.XPATH_COMMENT_TEXT_AREA, comment);
+        pause200ms();
+        shipmentManagementPage.fillFieldComments(newComment);
+        pause200ms();
+        shipmentManagementPage.clickButtonSaveChangesOnEditShipmentDialog();
+        pause200ms();
 
         start = startHub;
         end = endHub;
-        this.comment = comment;
-
-        TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_SAVE_CHANGES_BUTTON);
-        pause1s();
+        comment = newComment;
     }
 
     @Given("^op click Load All Selection$")
     public void listAllShipment()
     {
-        TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_LOAD_ALL_SHIPMENT_BUTTON);
-        pause3s();
+        shipmentManagementPage.clickButtonLoadSelection();
     }
 
     @When("^shipment ([^\"]*) action button clicked$")
     public void clickActionButton(String actionButton)
     {
-        List<ShipmentManagementPage.Shipment> shipments =shipmentManagementPage.getShipmentsFromTable();
+        String shipmentId = get(KEY_SHIPMENT_ID);
+        List<ShipmentManagementPage.Shipment> shipments = shipmentManagementPage.getShipmentsFromTable();
 
         for(ShipmentManagementPage.Shipment shipment : shipments)
         {
-            if(shipment.getId().equals(getScenarioStorage().get(KEY_SHIPMENT_ID)))
+            if(shipment.getId().equals(shipmentId))
             {
                 shipment.clickShipmentActionButton(actionButton);
                 break;
@@ -92,8 +92,8 @@ public class ShipmentManagementSteps extends AbstractSteps
     @Then("^shipment edited$")
     public void shipmentEdited()
     {
-        String shipmentId = getScenarioStorage().get(KEY_SHIPMENT_ID);
-        List<ShipmentManagementPage.Shipment> shipments =shipmentManagementPage.getShipmentsFromTable();
+        String shipmentId = get(KEY_SHIPMENT_ID);
+        List<ShipmentManagementPage.Shipment> shipments = shipmentManagementPage.getShipmentsFromTable();
         String startHub = "";
         String endHub = "";
         String komen = "";
@@ -118,8 +118,8 @@ public class ShipmentManagementSteps extends AbstractSteps
     @Then("^shipment status is ([^\"]*)$")
     public void checkStatus(String status)
     {
-        int shipmentId = getScenarioStorage().get(KEY_SHIPMENT_ID);
-        List<ShipmentManagementPage.Shipment> shipments =shipmentManagementPage.getShipmentsFromTable();
+        String shipmentId = get(KEY_SHIPMENT_ID);
+        List<ShipmentManagementPage.Shipment> shipments = shipmentManagementPage.getShipmentsFromTable();
         String actualStat = "";
 
         for(ShipmentManagementPage.Shipment shipment : shipments)
@@ -133,13 +133,13 @@ public class ShipmentManagementSteps extends AbstractSteps
             }
         }
 
-        Assert.assertEquals("Shipment " + getScenarioStorage().get(KEY_SHIPMENT_ID) + " status", status, actualStat);
+        Assert.assertEquals("Shipment " + shipmentId + " status", status, actualStat);
     }
 
     @When("^cancel shipment button clicked$")
     public void clickCancelShipmentButton()
     {
-        String shipmentId = getScenarioStorage().get(KEY_SHIPMENT_ID);
+        String shipmentId = get(KEY_SHIPMENT_ID);
         TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_CANCEL_SHIPMENT_BUTTON);
         List<WebElement> toasts = TestUtils.getToasts(getWebDriver());
         String text = "";
@@ -152,14 +152,15 @@ public class ShipmentManagementSteps extends AbstractSteps
                 break;
             }
         }
-        Assert.assertThat("toast message not contains Cancelled", text, Matchers.containsString("Success changed status to Cancelled for Shipment ID " + shipmentId));
+
+        Assert.assertThat("Toast message not contains Cancelled", text, Matchers.containsString("Success changed status to Cancelled for Shipment ID " + shipmentId));
         pause5s();
     }
 
     @Then("^shipment deleted$")
     public void isShipmentDeleted()
     {
-        String shipmentId = getScenarioStorage().get(KEY_SHIPMENT_ID);
+        String shipmentId = get(KEY_SHIPMENT_ID);
         String msg = "Success delete Shipping ID " + shipmentId;
         WebElement toast = TestUtils.getToast(getWebDriver());
         Assert.assertThat("toast message not contains " + msg, toast.getText(), Matchers.containsString(msg));
@@ -177,7 +178,7 @@ public class ShipmentManagementSteps extends AbstractSteps
             }
         }
 
-        Assert.assertTrue("is Shipment removed", isRemoved);
+        Assert.assertTrue("Shipment is not removed.", isRemoved);
     }
 
     @When("^filter ([^\"]*) is ([^\"]*)$")

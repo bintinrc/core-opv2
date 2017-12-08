@@ -1,4 +1,4 @@
-@RouteLogs @selenium
+@OperatorV2 @RouteLogs
 Feature: Route Logs
 
   @LaunchBrowser @ShouldAlwaysRun

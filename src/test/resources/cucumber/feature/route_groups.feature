@@ -1,4 +1,4 @@
-@RouteGroups @selenium
+@OperatorV2 @RouteGroups
 Feature: Route Groups
 
   @LaunchBrowser @ShouldAlwaysRun

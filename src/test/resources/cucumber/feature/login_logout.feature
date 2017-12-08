@@ -1,4 +1,4 @@
-@LoginLogout @selenium @saas @ShouldAlwaysRun
+@OperatorV2 @LoginLogout @ShouldAlwaysRun
 Feature: op login and logout
 
   @LaunchBrowser

@@ -49,6 +49,16 @@ public class ShipmentManagementPage extends SimplePage
         click(XPATH_EDIT_SEARCH_FILTER_BUTTON);
     }
 
+    public void clickButtonLoadSelection()
+    {
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
+    }
+
+    public void clickButtonSaveChangesOnEditShipmentDialog()
+    {
+        clickNvIconTextButtonByNameAndWaitUntilDone("Save Changes");
+    }
+
     public List<Shipment> getShipmentsFromTable()
     {
         List<Shipment> shipmentsResult = new ArrayList<>();
@@ -104,6 +114,11 @@ public class ShipmentManagementPage extends SimplePage
         click(XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + hubName + "']]");
     }
 
+    public void fillFieldComments(String comments)
+    {
+        sendKeys(XPATH_COMMENT_TEXT_AREA, comments);
+    }
+
     public void setupSort(String var1, String var2)
     {
         WebElement sort = getwebDriver().findElement(By.xpath(XPATH_SORT_DIV));
@@ -154,18 +169,18 @@ public class ShipmentManagementPage extends SimplePage
         click(XPATH_CREATE_SHIPMENT_BUTTON);
 
         selectFirstLineHaul();
-        pause1s();
+        pause200ms();
 
         selectStartHub(startHub);
-        pause1s();
+        pause200ms();
 
         selectEndHub(endHub);
-        pause1s();
+        pause200ms();
 
-        sendKeys(XPATH_COMMENT_TEXT_AREA, comment);
+        fillFieldComments(comment);
         click(XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
 
-        WebElement toast = TestUtils.getToast(getwebDriver());
+        WebElement toast = getToast();
         String toastMessage = toast.getText();
 
         Assert.assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage, Matchers.allOf(Matchers.containsString("Shipment"), Matchers.containsString("created")));

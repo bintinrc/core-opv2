@@ -1,4 +1,4 @@
-@AgedParcelManagement @selenium
+@OperatorV2 @AgedParcelManagement
 Feature: Aged Parcel Management
 
   @LaunchBrowser @ShouldAlwaysRun

@@ -1,4 +1,4 @@
-@TagManagement @selenium
+@OperatorV2 @TagManagement
 Feature: Tag Management
 
   @LaunchBrowser @ShouldAlwaysRun

@@ -1,4 +1,4 @@
-@AddParcelToRoute @selenium
+@OperatorV2 @AddParcelToRoute
 Feature: Add Parcel To Route
 
   @LaunchBrowser @ShouldAlwaysRun

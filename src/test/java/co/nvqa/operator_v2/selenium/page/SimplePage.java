@@ -189,6 +189,13 @@ public class SimplePage
         sendKeys(String.format("//*[@aria-label='%s']", ariaLabel), keysToSend);
     }
 
+    public WebElement getToast()
+    {
+        String xpath = "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div";
+        waitUntilVisibilityOfElementLocated(xpath);
+        return findElementByXpath(xpath);
+    }
+
     public WebElement findElementByXpath(String xpathExpression)
     {
         return findElementByXpath(xpathExpression, -1);

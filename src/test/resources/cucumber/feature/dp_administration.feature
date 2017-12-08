@@ -1,4 +1,4 @@
-@DpAdministration @selenium @ShouldAlwaysRun
+@OperatorV2 @DpAdministration @ShouldAlwaysRun
 Feature: dp administration
 
   @LaunchBrowser

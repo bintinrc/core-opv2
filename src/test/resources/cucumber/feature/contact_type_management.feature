@@ -1,4 +1,4 @@
-@ContactTypeManagement @selenium @ShouldAlwaysRun
+@OperatorV2 @ContactTypeManagement @ShouldAlwaysRun
 Feature: Contact Type Management
 
   @LaunchBrowser

@@ -1,4 +1,4 @@
-@MessagingModule @selenium @ShouldAlwaysRun
+@OperatorV2 @MessagingModule @ShouldAlwaysRun
 Feature: Messaging Module
 
   @LaunchBrowser

@@ -1,4 +1,4 @@
-@PrinterSettings @selenium
+@OperatorV2 @PrinterSettings
 Feature: Shipment Scanning
 
   @LaunchBrowser @ShouldAlwaysRun

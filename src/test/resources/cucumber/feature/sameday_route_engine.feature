@@ -1,4 +1,4 @@
-@SamedayRouteEngine @selenium
+@OperatorV2 @SamedayRouteEngine
 Feature: Sameday Route Engine
 
   @LaunchBrowser @ShouldAlwaysRun

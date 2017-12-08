@@ -1,4 +1,4 @@
-@RouteCashInbound @selenium
+@OperatorV2 @RouteCashInbound
 Feature: Route Cash Inbound
 
   @LaunchBrowser @ShouldAlwaysRun

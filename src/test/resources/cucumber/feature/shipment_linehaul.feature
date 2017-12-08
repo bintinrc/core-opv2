@@ -1,7 +1,7 @@
-@ShipmentLinehaul @selenium @shipment @ShouldAlwaysRun
+@OperatorV2 @ShipmentLinehaul
 Feature: Shipment Linehaul
 
-  @LaunchBrowser
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
@@ -135,5 +135,5 @@ Feature: Shipment Linehaul
     Then linehaul deleted
     Then op click edit linhaul filter
 
-  @KillBrowser
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

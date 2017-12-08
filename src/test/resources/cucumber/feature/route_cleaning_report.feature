@@ -1,4 +1,4 @@
-@RouteCleaningReport @selenium
+@OperatorV2 @RouteCleaningReport
 Feature: Route Cleaning Report
 
   @LaunchBrowser @ShouldAlwaysRun

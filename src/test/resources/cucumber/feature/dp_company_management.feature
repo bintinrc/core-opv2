@@ -1,4 +1,4 @@
-@DpCompanyManagement @selenium
+@OperatorV2 @DpCompanyManagement
 Feature: DP Company Management
 
   @LaunchBrowser @ShouldAlwaysRun

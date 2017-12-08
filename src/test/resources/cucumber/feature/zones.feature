@@ -1,4 +1,4 @@
-@Zones @selenium
+@OperatorV2 @Zones
 Feature: Zones
 
   @LaunchBrowser @ShouldAlwaysRun

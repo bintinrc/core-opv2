@@ -1,4 +1,4 @@
-@ShipmentInboundScanning @selenium @shipment @ShouldAlwaysRun
+@OperatorV2 @ShipmentInboundScanning @ShouldAlwaysRun
 Feature: Shipment Inbound Scanning
 
   @LaunchBrowser
