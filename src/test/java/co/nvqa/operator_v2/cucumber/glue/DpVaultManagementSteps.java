@@ -33,6 +33,7 @@ public class DpVaultManagementSteps extends AbstractSteps
     public void operatorCreateDpVault(String dpName)
     {
         String uniqueCode = generateDateUniqueString();
+        long uniqueCoordinate = System.currentTimeMillis();
 
         DpVault dpVault = new DpVault();
         dpVault.setName(String.format("DP Station #%s", uniqueCode));
@@ -42,8 +43,8 @@ public class DpVaultManagementSteps extends AbstractSteps
         dpVault.setAddress2(String.format("OG Orchard #%s", uniqueCode));
         dpVault.setCity("SG");
         dpVault.setCountry("SG");
-        dpVault.setLatitude(Double.parseDouble("1."+uniqueCode));
-        dpVault.setLongitude(Double.parseDouble("103."+uniqueCode));
+        dpVault.setLatitude(Double.parseDouble("1."+uniqueCoordinate));
+        dpVault.setLongitude(Double.parseDouble("103."+uniqueCoordinate));
 
         dpVaultManagementPage.addDpVault(dpVault);
         getScenarioStorage().put("dpVault", dpVault);

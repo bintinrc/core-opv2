@@ -1,7 +1,7 @@
-@HubAdministration @selenium @saas @ShouldAlwaysRun
+@HubsAdministration @selenium @saas
 Feature: Hubs Administration
 
-  @LaunchBrowser
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
@@ -11,20 +11,29 @@ Feature: Hubs Administration
     Then hubs administration file should exist
 
   Scenario: add hub (uid:c753d5ed-1026-408e-9c71-0e5b8f4e7aa3)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Hubs -> Hubs Administration
     When hubs administration add button is clicked
     When hubs administration enter default value
     Then hubs administration verify result add
 
   Scenario: search hub (uid:94222294-3788-453b-90c4-86f9bd751641)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Hubs -> Hubs Administration
+    When hubs administration add button is clicked
+    When hubs administration enter default value
+    Then hubs administration verify result add
     When hubs administration searching for hub
 
   Scenario: edit hub (uid:aca32744-d848-4506-a5f0-b2736dc19987)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Hubs -> Hubs Administration
+    When hubs administration add button is clicked
+    When hubs administration enter default value
+    Then hubs administration verify result add
     When hubs administration searching for hub
     When hubs administration edit button is clicked
     Then hubs administration verify result edit
 
-  @KillBrowser
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

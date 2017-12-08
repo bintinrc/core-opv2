@@ -35,13 +35,14 @@ public class ZonesSteps extends AbstractSteps
     public void operatorCreateZone(String hubName)
     {
         String uniqueCode = generateDateUniqueString();
+        long uniqueCoordinate = System.currentTimeMillis();
 
         Zone zone = new Zone();
         zone.setName("ZONE-"+uniqueCode);
         zone.setShortName("Z-"+uniqueCode);
         zone.setHubName(hubName);
-        zone.setLatitude(Double.parseDouble("1."+uniqueCode));
-        zone.setLongitude(Double.parseDouble("103."+uniqueCode));
+        zone.setLatitude(Double.parseDouble("1."+uniqueCoordinate));
+        zone.setLongitude(Double.parseDouble("103."+uniqueCoordinate));
         zone.setDescription(String.format("This zone is created by Operator V2 automation test. Created at %s.", new Date()));
 
         zonesPage.addZone(zone);
