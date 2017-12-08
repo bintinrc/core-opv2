@@ -34,7 +34,7 @@ public class ZonesSteps extends AbstractSteps
     @When("^Operator create new Zone using Hub \"([^\"]*)\"$")
     public void operatorCreateZone(String hubName)
     {
-        String uniqueCode = String.valueOf(System.currentTimeMillis());
+        String uniqueCode = generateDateUniqueString();
 
         Zone zone = new Zone();
         zone.setName("ZONE-"+uniqueCode);

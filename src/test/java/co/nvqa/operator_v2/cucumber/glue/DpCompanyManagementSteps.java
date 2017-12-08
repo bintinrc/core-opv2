@@ -36,7 +36,7 @@ public class DpCompanyManagementSteps extends AbstractSteps
     @When("^Operator create new DP Company$")
     public void operatorCreateDpCompany()
     {
-        String uniqueCode = String.valueOf(System.currentTimeMillis());
+        String uniqueCode = generateDateUniqueString();
         DpCompany dpCompany = new DpCompany();
         dpCompany.setName(String.format("DP Company #%s", uniqueCode));
         dpCompany.setEmail(String.format("dp.company.%s@test.co", uniqueCode));
@@ -118,7 +118,7 @@ public class DpCompanyManagementSteps extends AbstractSteps
         DpCompany dpCompany = getScenarioStorage().get("dpCompany");
         dpCompanyManagementPage.clickSeeVault(dpCompany);
 
-        String uniqueCode = String.valueOf(System.currentTimeMillis());
+        String uniqueCode = generateDateUniqueString();
         DpCompanyAgent dpCompanyAgent = new DpCompanyAgent();
         dpCompanyAgent.setName(String.format("DP Company Agent #%s", uniqueCode));
         dpCompanyAgent.setEmail(String.format("dp.company.agent.%s@test.co", uniqueCode));

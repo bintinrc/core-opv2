@@ -123,6 +123,11 @@ public class SimplePage
         waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'saving')]/md-progress-circular");
     }
 
+    public void clickButtonOnMdDialogByAriaLabel(String ariaLabel)
+    {
+        click(String.format("//md-dialog//button[@aria-label='%s']", ariaLabel));
+    }
+
     public void sendKeys(int maxRetryStaleElementReference, String xpathExpression, CharSequence... keysToSend)
     {
         boolean success = false;

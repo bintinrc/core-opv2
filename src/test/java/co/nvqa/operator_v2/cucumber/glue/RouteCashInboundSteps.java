@@ -40,7 +40,7 @@ public class RouteCashInboundSteps extends AbstractSteps
         Double codGoods = order.getCod_goods();
         Assert.assertNotNull("COD Goods should not be null.", codGoods);
         Double amountCollected = codGoods-(codGoods.intValue()/2);
-        String receiptNumber = "#"+routeId+"-"+System.currentTimeMillis();
+        String receiptNumber = "#"+routeId+"-"+generateDateUniqueString();
 
         RouteCashInboundCod routeCashInboundCod = new RouteCashInboundCod();
         routeCashInboundCod.setRouteId(routeId);

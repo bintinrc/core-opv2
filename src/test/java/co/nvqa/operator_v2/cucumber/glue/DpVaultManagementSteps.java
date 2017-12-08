@@ -32,7 +32,7 @@ public class DpVaultManagementSteps extends AbstractSteps
     @When("^Operator create new DP Vault using DP \"([^\"]*)\"$")
     public void operatorCreateDpVault(String dpName)
     {
-        String uniqueCode = String.valueOf(System.currentTimeMillis());
+        String uniqueCode = generateDateUniqueString();
 
         DpVault dpVault = new DpVault();
         dpVault.setName(String.format("DP Station #%s", uniqueCode));

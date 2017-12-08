@@ -1,16 +1,11 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.util.SingletonStorage;
-import co.nvqa.operator_v2.util.TestConstants;
-import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,9 +14,13 @@ import java.util.List;
  */
 public class DriverTypeManagementPage extends SimplePage
 {
-    private static final int MAX_RETRY = 10;
-    private static final String DRIVER_TYPES_CSV_FILE_NAME = "driver-types.csv";
-    private static final String DRIVER_TYPES_CSV_FILE_LOCATION = TestConstants.SELENIUM_WRITE_PATH + DRIVER_TYPES_CSV_FILE_NAME;
+    private static final String MD_VIRTUAL_REPEAT = "driverTypeProp in ctrl.tableData";
+    private static final String XPATH_OF_TR_MD_VIRTUAL_REPEAT = String.format("//tr[@md-virtual-repeat='%s']", MD_VIRTUAL_REPEAT);
+    private static final String CSV_FILENAME_PATTERN = "driver-types";
+    private static final String COLUMN_CLASS_NAME = "name";
+
+    private static final String ACTION_BUTTON_EDIT = "Edit";
+    private static final String ACTION_BUTTON_DELETE = "Delete";
 
     public DriverTypeManagementPage(WebDriver webDriver)
     {
@@ -30,10 +29,10 @@ public class DriverTypeManagementPage extends SimplePage
 
     public void filteredBy(String filterValue, String filterType)
     {
-        click("//button[@aria-label='" + filterValue + "']");
+        clickButtonByAriaLabel(filterValue);
         pause1s();
 
-        // get counter
+        // Get counter.
         WebElement el = findElementByXpath("//ng-pluralize[@class='nv-p-med count']");
         String counter = el.getText().split(" ")[0];
 
@@ -43,10 +42,10 @@ public class DriverTypeManagementPage extends SimplePage
         }
 
         String[] tokens = filterType.toLowerCase().split(" ");
-        String className = tokens.length == 2 ? tokens[0] + "-" + tokens[1] : tokens[0];
+        String className = tokens.length==2 ? tokens[0]+"-"+tokens[1] : tokens[0];
 
         boolean valid = true;
-        List<WebElement> elm = findElementsByXpath("//tr[@md-virtual-repeat='driverTypeProp in ctrl.tableData']");
+        List<WebElement> elm = findElementsByXpath(XPATH_OF_TR_MD_VIRTUAL_REPEAT);
 
         for(WebElement e : elm)
         {
@@ -64,95 +63,55 @@ public class DriverTypeManagementPage extends SimplePage
 
     public void downloadFile()
     {
-        TestUtils.deleteFile(DRIVER_TYPES_CSV_FILE_LOCATION);
-        click(String.format("//div[@filename='%s']/nv-api-text-button/button", DRIVER_TYPES_CSV_FILE_NAME));
-        pause1s();
+        clickNvApiTextButtonByName("Download CSV File");
     }
 
     public void verifyFile()
     {
-        File file = new File(DRIVER_TYPES_CSV_FILE_LOCATION);
-        int counter = 0;
-        boolean isFileExists;
-
-        do
-        {
-            isFileExists = file.exists();
-
-            if(!isFileExists)
-            {
-                pause1s();
-            }
-
-            counter++;
-        }
-        while(!isFileExists && counter<MAX_RETRY);
-
-        TestUtils.deleteFile(file);
-        Assert.assertTrue(DRIVER_TYPES_CSV_FILE_LOCATION + " not exist", isFileExists);
+        verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN));
     }
 
-    public void clickDriverTypeButton()
+    public void createDriverType(String driverTypeName)
     {
-        click("//button[@aria-label='Create Driver Type']");
+        clickButtonByAriaLabel("Create Driver Type");
         pause1s();
 
-        SingletonStorage.getInstance().setTmpId(String.format("QA Testing %s", new SimpleDateFormat("yyyyMMddHH24mmss").format(new Date())));
-        sendKeys("//input[@type='text'][@aria-label='Name']", SingletonStorage.getInstance().getTmpId());
+        sendKeysByAriaLabel("Name", driverTypeName);
         pause1s();
 
-        click("//button[@aria-label='Save Button']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular");
+        clickNvButtonSaveByName("Submit");
     }
 
-    public void verifyDriverType()
+    public void verifyDriverType(String expectedDriverTypeName)
     {
-        searchingCreatedDriver();
-        boolean isFound = false;
-
-        List<WebElement> elm = findElementsByXpath("//tr[@md-virtual-repeat='driverTypeProp in ctrl.tableData']");
-
-        for(WebElement e : elm)
-        {
-            List<WebElement> tds = e.findElements(By.tagName("td"));
-
-            for(WebElement td : tds)
-            {
-                if(td.getText().equalsIgnoreCase(SingletonStorage.getInstance().getTmpId()))
-                {
-                    isFound = true;
-                    break;
-                }
-            }
-        }
-
-        Assert.assertTrue(isFound);
+        searchingCreatedDriver(expectedDriverTypeName);
+        String actualDriverTypeName = getTextOnTable(1, COLUMN_CLASS_NAME);
+        Assert.assertEquals("Driver Type Name", expectedDriverTypeName, actualDriverTypeName);
     }
 
-    public void searchingCreatedDriver()
+    public void searchingCreatedDriver(String driverTypeName)
     {
-        sendKeys("//input[@placeholder='Search Driver Types...'][@ng-model='searchText']", SingletonStorage.getInstance().getTmpId());
+        searchTable(driverTypeName);
         pause1s();
     }
 
-    public void searchingCreatedDriverEdit()
+    public void searchingCreatedDriverEdit(String driverTypeName)
     {
-        searchingCreatedDriver();
+        searchingCreatedDriver(driverTypeName);
 
-        click("//tr[@md-virtual-repeat='driverTypeProp in ctrl.tableData']/td[9]/nv-icon-button[1]");
+        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
         pause1s();
 
-        click("//button[@class='button-group-button md-button md-nvBlue-theme md-ink-ripple'][@aria-label='C2C + Return Pick Up']");
+        clickButtonOnMdDialogByAriaLabel("C2C + Return Pick Up");
         pause1s();
 
-        click("//button[@aria-label='Save Button']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular");
+        clickNvButtonSaveByNameAndWaitUntilDone("Submit Changes");
     }
 
     public void verifyChangesCreatedDriver()
     {
         boolean isFound = false;
-        List<WebElement> elm = findElementsByXpath("//tr[@md-virtual-repeat='driverTypeProp in ctrl.tableData']");
+        List<WebElement> elm = findElementsByXpath(XPATH_OF_TR_MD_VIRTUAL_REPEAT);
 
         for(WebElement e : elm)
         {
@@ -173,16 +132,32 @@ public class DriverTypeManagementPage extends SimplePage
 
     public void deletedCreatedDriver()
     {
-        click("//tr[@md-virtual-repeat='driverTypeProp in ctrl.tableData']/td[9]/nv-icon-button[2]");
+        clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
         pause1s();
 
-        click("//md-dialog[@aria-label='Confirm deleteAre you ...']/md-dialog-actions/button[2]");
+        clickButtonOnMdDialogByAriaLabel("Delete");
         pause1s();
     }
 
     public void createdDriverShouldNotExist()
     {
-        List<WebElement> elm = findElementsByXpath("//tr[@md-virtual-repeat='driverTypeProp in ctrl.tableData']");
-        Assert.assertTrue(elm.size() == 0);
+        try
+        {
+            findElementsByXpathFast(XPATH_OF_TR_MD_VIRTUAL_REPEAT);
+            Assert.fail("Driver still exists on table.");
+        }
+        catch(TimeoutException ex)
+        {
+        }
+    }
+
+    public String getTextOnTable(int rowNumber, String columnDataClass)
+    {
+        return getTextOnTable(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
+    }
+
+    public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
+    {
+        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
     }
 }
