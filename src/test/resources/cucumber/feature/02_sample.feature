@@ -1,19 +1,22 @@
-@01Sample @Dummy
+@02Sample @Dummy
 Feature: Sample 02
 
-  @ShouldAlwaysRun
+  @LaunchBrowserDummy @ShouldAlwaysRun
   Scenario: Launch Browser
     Given step "SUCCESS"
 
-  Scenario: Scenario 1 on Sample 2 <orderType>
+  @02Sample#01
+  Scenario: Scenario 1 on Sample 2
     Given random step
 
-  Scenario: Scenario 2 on Sample 2 <orderType>
+  @02Sample#02
+  Scenario: Scenario 2 on Sample 2
     Given random step
 
-  Scenario: Scenario 3 on Sample 2 <orderType>
+  @02Sample#03
+  Scenario: Scenario 3 on Sample 2
     Given random step
 
-  @ShouldAlwaysRun
+  @KillBrowserDummy @ShouldAlwaysRun
   Scenario: Kill Browser
     Given step "SUCCESS"
