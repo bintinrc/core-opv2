@@ -144,13 +144,13 @@ public class SimplePage
             catch(StaleElementReferenceException ex)
             {
                 exception = ex;
-                NvLogger.warnf("Stale element reference exception detected for element (xpath='%s') %d times.", xpathExpression, (i+1));
+                NvLogger.warnf("StaleElementReferenceException detected for element with XPath = [%s] %d times.", xpathExpression, (i+1));
             }
         }
 
         if(!success)
         {
-            throw new RuntimeException(String.format("Retrying 'stale element reference exception' reach maximum retry. Max retry = %d.", maxRetryStaleElementReference), exception);
+            throw new RuntimeException(String.format("Retrying 'StaleElementReferenceException' reach maximum retry. Max retry = %d.", maxRetryStaleElementReference), exception);
         }
     }
 
@@ -209,7 +209,7 @@ public class SimplePage
     public WebElement findElementByXpath(String xpathExpression, long timeoutInSeconds)
     {
         By byXpath = By.xpath(xpathExpression);
-        NvLogger.infof("findElement: Selector = %s; Time Out In Seconds = %d", byXpath, timeoutInSeconds);
+        NvLogger.infof("findElementByXpath: Selector = [%s] Timeout In Seconds = [%ds]", byXpath, timeoutInSeconds);
 
         if(timeoutInSeconds>=0)
         {
@@ -217,10 +217,6 @@ public class SimplePage
             {
                 setImplicitTimeout(0);
                 return new WebDriverWait(getwebDriver(), timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(byXpath));
-            }
-            catch(Exception ex)
-            {
-                throw ex;
             }
             finally
             {
@@ -244,7 +240,7 @@ public class SimplePage
     public List<WebElement> findElementsByXpath(String xpathExpression, long timeoutInSeconds)
     {
         By byXpath = By.xpath(xpathExpression);
-        NvLogger.infof("findElements: Selector = %s; Time Out In Seconds = %d", byXpath, timeoutInSeconds);
+        NvLogger.infof("findElementsByXpath: Selector = [%s] Timeout In Seconds = [%ds]", byXpath, timeoutInSeconds);
 
         if(timeoutInSeconds>=0)
         {
@@ -252,10 +248,6 @@ public class SimplePage
             {
                 setImplicitTimeout(0);
                 return new WebDriverWait(getwebDriver(), timeoutInSeconds).until(ExpectedConditions.presenceOfAllElementsLocatedBy(byXpath));
-            }
-            catch(Exception ex)
-            {
-                throw ex;
             }
             finally
             {
@@ -342,17 +334,17 @@ public class SimplePage
      * @param buttonAriaLabel
      * @param ngRepeat
      */
-    public void clickButtonOnTableWithMdVirtualRepeat(int rowNumber, String columnClassName, String buttonAriaLabel,  String ngRepeat)
+    public void clickButtonOnTableWithMdVirtualRepeat(int rowNumber, String columnClassName, String buttonAriaLabel, String ngRepeat)
     {
         try
         {
-            WebElement we = findElementByXpath(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, '%s')" +
-                    "]//button[@aria-label='%s']", ngRepeat, rowNumber, columnClassName, buttonAriaLabel));
+            String xpath = String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, '%s')]//button[@aria-label='%s']", ngRepeat, rowNumber, columnClassName, buttonAriaLabel);
+            WebElement we = findElementByXpath(xpath);
             moveAndClick(we);
         }
         catch(NoSuchElementException ex)
         {
-            throw new RuntimeException("Cannot find action button on table.", ex);
+            throw new NvTestRuntimeException("Cannot find action button on table.", ex);
         }
     }
 
@@ -389,18 +381,20 @@ public class SimplePage
     {
         try
         {
-            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@class, '%s')]//button[@aria-label='%s']", ngRepeat, rowNumber, className, buttonAriaLabel));
+            String xpath = String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@class, '%s')]//button[@aria-label='%s']", ngRepeat, rowNumber, className, buttonAriaLabel);
+            WebElement we = findElementByXpath(xpath);
             moveAndClick(we);
         }
         catch(NoSuchElementException ex)
         {
-            throw new RuntimeException("Cannot find action button on table.", ex);
+            throw new NvTestRuntimeException("Cannot find action button on table.", ex);
         }
     }
 
     public void inputListBox(String placeHolder, String searchValue)
     {
-        WebElement we = findElementByXpath("//input[@placeholder='" + placeHolder + "']");
+        String xpath = String.format("//input[@placeholder='%s']", placeHolder);
+        WebElement we = findElementByXpath(xpath);
         we.clear();
         we.sendKeys(searchValue);
         pause1s();
@@ -425,10 +419,10 @@ public class SimplePage
     {
         WebElement mdSelectMenu = findElementByXpath(xpathMdSelectMenu);
         mdSelectMenu.click();
-        pause500ms();
-        WebElement mdSelectOption = TestUtils.getElementByXpath(getwebDriver(), xpathMdSelectOption);
+        pause300ms();
+        WebElement mdSelectOption = findElementByXpath(xpathMdSelectOption);
         mdSelectOption.click();
-        pause500ms();
+        pause300ms();
     }
 
     public boolean isElementExist(String xpathExpression)
@@ -513,7 +507,7 @@ public class SimplePage
                 try
                 {
                     boolean isElementDisplayed = findElement(locator, driver).isDisplayed();
-                    NvLogger.infof("Wait Until Invisibility Of Element Located: Is element '%s' still displayed? %b", locator, isElementDisplayed);
+                    NvLogger.infof("waitUntilInvisibilityOfElementLocated: Is element [%s] still displayed: %b", locator, isElementDisplayed);
                     return !isElementDisplayed;
                 }
                 catch(NoSuchElementException ex)
@@ -522,7 +516,7 @@ public class SimplePage
                      * Returns true because the element is not present in DOM.
                      * The try block checks if the element is present but is invisible.
                      */
-                    NvLogger.infof("Wait Until Invisibility Of Element Located: Is element '%s' still displayed? %b (NoSuchElementException)", locator, false);
+                    NvLogger.infof("waitUntilInvisibilityOfElementLocated: Is element [%s] still displayed: %b (NoSuchElementException)", locator, false);
                     return true;
                 }
                 catch(StaleElementReferenceException ex)
@@ -531,7 +525,7 @@ public class SimplePage
                      * Returns true because stale element reference implies that element
                      * is no longer visible.
                      */
-                    NvLogger.infof("Wait Until Invisibility Of Element Located: Is element '%s' still displayed? %b (StaleElementReferenceException)", locator, false);
+                    NvLogger.infof("waitUntilInvisibilityOfElementLocated: Is element [%s] still displayed: %b (StaleElementReferenceException)", locator, false);
                     return true;
                 }
             });
@@ -569,7 +563,7 @@ public class SimplePage
                 {
                     WebElement webElement = elementIfVisible(findElement(locator, wd));
                     boolean isElementDisplayed = webElement!=null;
-                    NvLogger.infof("Wait Until Visibility Of Element Located: Is element '%s' displayed? %b", locator, isElementDisplayed);
+                    NvLogger.infof("waitUntilVisibilityOfElementLocated: Is element [%s] displayed: %b", locator, isElementDisplayed);
                     return webElement;
                 }
                 catch(NoSuchElementException ex)
@@ -578,7 +572,7 @@ public class SimplePage
                      * Returns false because the element is not present in DOM.
                      * The try block checks if the element is present but is invisible.
                      */
-                    NvLogger.infof("Wait Until Visibility Of Element Located: Is element '%s' displayed? %b (NoSuchElementException)", locator, false);
+                    NvLogger.infof("waitUntilVisibilityOfElementLocated: Is element [%s] displayed: %b (NoSuchElementException)", locator, false);
                     return null;
                 }
                 catch(StaleElementReferenceException ex)
@@ -587,7 +581,7 @@ public class SimplePage
                      * Returns false because stale element reference implies that element
                      * is no longer visible.
                      */
-                    NvLogger.infof("Wait Until Visibility Of Element Located: Is element '%s' displayed? %b (StaleElementReferenceException)", locator, false);
+                    NvLogger.infof("waitUntilVisibilityOfElementLocated: Is element [%s] displayed: %b (StaleElementReferenceException)", locator, false);
                     return null;
                 }
             });
@@ -605,18 +599,7 @@ public class SimplePage
 
     private static WebElement findElement(By by, WebDriver webDriver)
     {
-        try
-        {
-            return webDriver.findElement(by);
-        }
-        catch(NoSuchElementException ex)
-        {
-            throw ex;
-        }
-        catch(WebDriverException ex)
-        {
-            throw ex;
-        }
+        return webDriver.findElement(by);
     }
 
     private static WebElement elementIfVisible(WebElement element)
@@ -629,13 +612,13 @@ public class SimplePage
         File parentDir = new File(TestConstants.SELENIUM_WRITE_PATH);
         File[] arrayOfFiles = parentDir.listFiles((File dir, String name)->name.startsWith(filenamePattern));
 
-        if(arrayOfFiles.length==0)
+        if(arrayOfFiles==null || arrayOfFiles.length==0)
         {
             throw new NvTestRuntimeException(String.format("There is no file with name starts with '%s' on folder '%s'.", filenamePattern, parentDir));
         }
         else if(arrayOfFiles.length>1)
         {
-            Arrays.sort(arrayOfFiles, (File f1, File f2) -> Long.valueOf(f2.lastModified()).compareTo(f1.lastModified()));
+            Arrays.sort(arrayOfFiles, (File f1, File f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
         }
 
         return arrayOfFiles[0].getName();
@@ -708,6 +691,24 @@ public class SimplePage
         while(!isFileContainsExpectedText && counter<DEFAULT_MAX_RETRY_FOR_FILE_VERIFICATION);
 
         Assert.assertTrue(String.format("File '%s' not contains [%s]. \nFile Text:\n%s", file.getAbsolutePath(), expectedText, fileText), isFileContainsExpectedText);
+    }
+
+    public void waitUntilPageLoaded()
+    {
+        waitUntilPageLoaded(TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS);
+    }
+
+    public void waitUntilPageLoaded(long timeoutInSeconds)
+    {
+        try
+        {
+            setImplicitTimeout(0);
+            new WebDriverWait(getwebDriver(), timeoutInSeconds).until((WebDriver wd) -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+        }
+        finally
+        {
+            resetImplicitTimeout();
+        }
     }
 
     public void pause10ms()
@@ -798,8 +799,6 @@ public class SimplePage
     public void refreshPage()
     {
         String previousUrl = getwebDriver().getCurrentUrl().toLowerCase();
-
-
         getwebDriver().navigate().refresh();
         new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((d)->d.getCurrentUrl().equalsIgnoreCase(previousUrl));
         String currentUrl = getwebDriver().getCurrentUrl().toLowerCase();

@@ -1,11 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.util.TestConstants;
-import co.nvqa.operator_v2.util.TestUtils;
 import com.nv.qa.commons.utils.NvLogger;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -32,6 +30,7 @@ public class MainPage extends SimplePage
         MAP_OF_END_URL.put("All Orders", "order");
         MAP_OF_END_URL.put("DP Company Management", "dp-company");
         MAP_OF_END_URL.put("DP Vault Management", "dp-station");
+        MAP_OF_END_URL.put("Driver Report", "driver-reports");
         MAP_OF_END_URL.put("Hubs Administration", "hub");
         MAP_OF_END_URL.put("Linehaul Management", "linehaul");
         MAP_OF_END_URL.put("Messaging Module", "sms");
@@ -49,14 +48,14 @@ public class MainPage extends SimplePage
         // Ensure no dialog that prevents menu from being clicked.
         getwebDriver().navigate().refresh();
         pause1s();
-        TestUtils.waitPageLoad(getwebDriver());
+        waitUntilPageLoaded();
 
-        String navElmXpath = "//nv-section-item/button[div='" + navTitle + "']";
-        WebElement navElm = getwebDriver().findElement(By.xpath(navElmXpath));
+        String navElmXpath = String.format("//nv-section-item/button[div='%s']", navTitle);
+        WebElement navElm = findElementByXpath(navElmXpath);
 
         if(!navElm.isDisplayed())
         {
-            getwebDriver().findElement(By.xpath("//nv-section-header/button[span='" + parentTitle + "']")).click();
+            click(String.format("//nv-section-header/button[span='%s']", parentTitle));
         }
 
         pause1s();
@@ -68,7 +67,7 @@ public class MainPage extends SimplePage
             String currentUrl = d.getCurrentUrl();
             NvLogger.infof("Current URL = [%s] - Expected URL = [%s]", currentUrl, urlPart);
 
-            if(urlPart.equals("linehaul"))
+            if("linehaul".equals(urlPart))
             {
                 result = currentUrl.contains(urlPart);
             }
