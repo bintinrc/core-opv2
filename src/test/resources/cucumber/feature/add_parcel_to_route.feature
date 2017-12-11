@@ -18,7 +18,7 @@ Feature: Add Parcel To Route
     Given Operator go to menu Routing -> 1. Create Route Groups
     Given Operator V2 add created Transaction to Route Group
     Given API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":16, "hubId":1, "vehicleId":880, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}" } |
+      | createRouteRequest | { "zoneId":16, "hubId":1, "vehicleId":880, "driverId":{ninja-driver-id} } |
     #Note: Tag ZZZ = 250
     Given Operator set tags of the new created route to [250]
     Given Operator go to menu Routing -> 4. Route Engine - Bulk Add to Route

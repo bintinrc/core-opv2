@@ -1,12 +1,12 @@
-@OperatorV2 @RouteCleaningReport
-Feature: Route Cleaning Report
+@OperatorV2 @RouteCashInbound
+Feature: Route Cash Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
   @ArchiveRoute
-  Scenario: Operator download Excel report on Route Cleaning Report successfully (uid:860479ee-1308-41ef-bd2f-1e14ab841e8b)
+  Scenario: Operator generate CSV on Driver Report page
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"Normal", "cod_goods":235, "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
@@ -21,12 +21,7 @@ Feature: Route Cleaning Report
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully
-    Given Operator go to menu Fleet -> Route Cash Inbound
-    When Operator create new COD on Route Cash Inbound page
-    Then Operator verify the new COD on Route Cash Inbound page is created successfully
-    Given Operator go to menu Recovery -> Route Cleaning Report
-    When Operator download Excel report on Route Cleaning Report page
-    Then Operator download Excel report on Route Cleaning Report page successfully
+    Given Operator go to menu Fleet -> Driver Report
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
