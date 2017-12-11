@@ -144,7 +144,7 @@ public class SimplePage
             catch(StaleElementReferenceException ex)
             {
                 exception = ex;
-                NvLogger.warnf("StaleElementReferenceException detected for element with XPath = [%s] %d times.", xpathExpression, (i+1));
+                NvLogger.warnf("StaleElementReferenceException detected for element with XPath = { %s } %d times.", xpathExpression, (i+1));
             }
         }
 
@@ -209,7 +209,7 @@ public class SimplePage
     public WebElement findElementByXpath(String xpathExpression, long timeoutInSeconds)
     {
         By byXpath = By.xpath(xpathExpression);
-        NvLogger.infof("findElementByXpath: Selector = [%s] Timeout In Seconds = [%ds]", byXpath, timeoutInSeconds);
+        NvLogger.infof("findElementByXpath: Selector = { %s } - Timeout In Seconds = [%ds]", byXpath, timeoutInSeconds);
 
         if(timeoutInSeconds>=0)
         {
@@ -240,7 +240,7 @@ public class SimplePage
     public List<WebElement> findElementsByXpath(String xpathExpression, long timeoutInSeconds)
     {
         By byXpath = By.xpath(xpathExpression);
-        NvLogger.infof("findElementsByXpath: Selector = [%s] Timeout In Seconds = [%ds]", byXpath, timeoutInSeconds);
+        NvLogger.infof("findElementsByXpath: Selector = { %s } - Timeout In Seconds = [%ds]", byXpath, timeoutInSeconds);
 
         if(timeoutInSeconds>=0)
         {
@@ -368,7 +368,8 @@ public class SimplePage
     {
         try
         {
-            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@class, 'actions')]//nv-icon-button[@name='%s']", ngRepeat, rowNumber, actionButtonName));
+            String xpath = String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@class, 'actions')]//nv-icon-button[@name='%s']", ngRepeat, rowNumber, actionButtonName);
+            WebElement we = findElementByXpath(xpath);
             moveAndClick(we);
         }
         catch(NoSuchElementException ex)
@@ -507,7 +508,7 @@ public class SimplePage
                 try
                 {
                     boolean isElementDisplayed = findElement(locator, driver).isDisplayed();
-                    NvLogger.infof("waitUntilInvisibilityOfElementLocated: Is element [%s] still displayed: %b", locator, isElementDisplayed);
+                    NvLogger.infof("waitUntilInvisibilityOfElementLocated: Is element { %s } still displayed: %b", locator, isElementDisplayed);
                     return !isElementDisplayed;
                 }
                 catch(NoSuchElementException ex)
@@ -516,7 +517,7 @@ public class SimplePage
                      * Returns true because the element is not present in DOM.
                      * The try block checks if the element is present but is invisible.
                      */
-                    NvLogger.infof("waitUntilInvisibilityOfElementLocated: Is element [%s] still displayed: %b (NoSuchElementException)", locator, false);
+                    NvLogger.infof("waitUntilInvisibilityOfElementLocated: Is element { %s } still displayed: %b (NoSuchElementException)", locator, false);
                     return true;
                 }
                 catch(StaleElementReferenceException ex)
@@ -525,7 +526,7 @@ public class SimplePage
                      * Returns true because stale element reference implies that element
                      * is no longer visible.
                      */
-                    NvLogger.infof("waitUntilInvisibilityOfElementLocated: Is element [%s] still displayed: %b (StaleElementReferenceException)", locator, false);
+                    NvLogger.infof("waitUntilInvisibilityOfElementLocated: Is element { %s } still displayed: %b (StaleElementReferenceException)", locator, false);
                     return true;
                 }
             });
@@ -563,7 +564,7 @@ public class SimplePage
                 {
                     WebElement webElement = elementIfVisible(findElement(locator, wd));
                     boolean isElementDisplayed = webElement!=null;
-                    NvLogger.infof("waitUntilVisibilityOfElementLocated: Is element [%s] displayed: %b", locator, isElementDisplayed);
+                    NvLogger.infof("waitUntilVisibilityOfElementLocated: Is element { %s } displayed: %b", locator, isElementDisplayed);
                     return webElement;
                 }
                 catch(NoSuchElementException ex)
@@ -572,7 +573,7 @@ public class SimplePage
                      * Returns false because the element is not present in DOM.
                      * The try block checks if the element is present but is invisible.
                      */
-                    NvLogger.infof("waitUntilVisibilityOfElementLocated: Is element [%s] displayed: %b (NoSuchElementException)", locator, false);
+                    NvLogger.infof("waitUntilVisibilityOfElementLocated: Is element { %s } displayed: %b (NoSuchElementException)", locator, false);
                     return null;
                 }
                 catch(StaleElementReferenceException ex)
@@ -581,7 +582,7 @@ public class SimplePage
                      * Returns false because stale element reference implies that element
                      * is no longer visible.
                      */
-                    NvLogger.infof("waitUntilVisibilityOfElementLocated: Is element [%s] displayed: %b (StaleElementReferenceException)", locator, false);
+                    NvLogger.infof("waitUntilVisibilityOfElementLocated: Is element { %s } displayed: %b (StaleElementReferenceException)", locator, false);
                     return null;
                 }
             });

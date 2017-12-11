@@ -1,8 +1,11 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import com.nv.qa.commons.utils.NvTestRuntimeException;
+import org.junit.Assert;
 import org.openqa.selenium.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -17,6 +20,7 @@ public class PricingScriptsPage extends SimplePage
     public static final String ACTION_BUTTON_EDIT = "edit script";
     public static final String ACTION_BUTTON_SHIPPERS = "link shippers";
     public static final String ACTION_BUTTON_DELETE = "delete";
+
     public static final String WRITE_SCRIPT_TAB = "//md-tab-item[span[text()='Write Script']]";
     public static final String SCRIPT_INFO_TAB = "//md-tab-item[span[text()='Script Info']]";
     public static final String SAVE_CHANGE_BUTTON = "//nv-api-text-button[@name='commons.save-changes']";
@@ -37,7 +41,7 @@ public class PricingScriptsPage extends SimplePage
 
     public void createScript(String scriptName, String description, String script)
     {
-        click("//button[@aria-label='Create Script']");
+        clickButtonByAriaLabel("Create Script");
         sendKeys(SRIPT_NAME_TEXT_FIELD, scriptName);
         sendKeys(SRIPT_DESCRIPTION_TEXT_FIELD, description);
 
@@ -46,10 +50,9 @@ public class PricingScriptsPage extends SimplePage
             updateAceEditorValue(script);
         }
 
-        click(SAVE_CHANGE_BUTTON);
-        waitUntilVisibilityOfElementLocated("//md-dialog[@aria-label='Dialog']");
-        pause3s();
-        click(CLOSE_BUTTON);
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'pricing-script-linked-shippers-dialog')]"); // Wait until Link Shippers dialog appear.
+        clickNvIconButtonByName("Cancel");
     }
 
     public String createDefaultScriptIfNotExists(String scriptName, String scriptDescription, String script)
@@ -74,7 +77,7 @@ public class PricingScriptsPage extends SimplePage
 
         if(pricingScriptsId==null)
         {
-            throw new RuntimeException("Failed to create script if not exists.");
+            throw new NvTestRuntimeException("Failed to create script if not exists.");
         }
 
         pause1s();
@@ -89,8 +92,7 @@ public class PricingScriptsPage extends SimplePage
 
     public void updateScript(int rowNumber, String newScriptName, String newDescription, String newScript)
     {
-        clickActionButton(rowNumber, PricingScriptsPage.ACTION_BUTTON_EDIT);
-        pause1s();
+        openEditDialogAndWaitUntilLoadingIsDone();
         click(SCRIPT_INFO_TAB);
         sendKeys(SRIPT_NAME_TEXT_FIELD, newScriptName);
         sendKeys(SRIPT_DESCRIPTION_TEXT_FIELD, newDescription);
@@ -109,16 +111,15 @@ public class PricingScriptsPage extends SimplePage
                 updateAceEditorValue(newScript);
             }
         }
-        click(SAVE_CHANGE_BUTTON);
+
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
     }
 
-    public void searchAndDeleteScript(int rowNumber, String scriptName)
+    public void searchAndDeleteScript(String scriptName)
     {
         searchScript(scriptName);
-        clickActionButton(rowNumber, PricingScriptsPage.ACTION_BUTTON_EDIT);
-        pause1s();
-        click(DELETE_SCRIPT_BUTTON);
-        pause1s();
+        openEditDialogAndWaitUntilLoadingIsDone();
+        clickNvApiTextButtonByNameAndWaitUntilDone("container.pricing-scripts.delete-script");
     }
 
     public void searchScript(String scriptName)
@@ -127,19 +128,21 @@ public class PricingScriptsPage extends SimplePage
         pause1s();
     }
 
+    public void openEditDialogAndWaitUntilLoadingIsDone()
+    {
+        clickActionButton(1, ACTION_BUTTON_EDIT);
+        waitUntilVisibilityOfElementLocated(SCRIPT_INFO_TAB); // Wait until Edit dialog is loaded.
+    }
+
     public void simulateRunTest(String deliveryType, String orderType, String timeslotType, String size, String weight, String insuredValue, String codValue)
     {
-        clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_EDIT);
+        openEditDialogAndWaitUntilLoadingIsDone();
         selectValueFromMdSelectMenu("//md-input-container[@label='container.pricing-scripts.description-delivery-type']", String.format("//md-option[@value='%s']", deliveryType));
         selectValueFromMdSelectMenu("//md-input-container[@label='container.pricing-scripts.description-order-type']", String.format("//md-option[@value='%s']", orderType));
         selectValueFromMdSelectMenu("//md-input-container[@label='container.pricing-scripts.description-time-slot-type']", String.format("//md-option[@value='%s']", timeslotType));
         selectValueFromMdSelectMenu("//md-input-container[@label='commons.size']", String.format("//md-option[@value='%s']", size));
-        sendKeys("//input[@aria-label='commons.weight']", weight);
-        //click("//input[@aria-label='Insured Value']");
-        //sendKeys("//input[@aria-label='Insured Value']", insuredValue);
-        //click("//input[@aria-label='COD Value']");
-        //sendKeys("//input[@aria-label='COD Value']", codValue);
-        click("//button[@aria-label='Run Check']");
+        sendKeysById("commons.weight", weight);
+        clickNvApiTextButtonByNameAndWaitUntilDone("container.pricing-scripts.run-check");
     }
 
     public String linkPricingScriptsToShipper(String defaultScriptName1, String defaultScriptName2, String shipperName)
@@ -151,7 +154,7 @@ public class PricingScriptsPage extends SimplePage
         {
             pricingScriptsLinkedToAShipper = script;
             searchScript(pricingScriptsLinkedToAShipper);
-            clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_SHIPPERS);
+            clickActionButton(1, ACTION_BUTTON_SHIPPERS);
             pause1s();
 
             /**
@@ -160,10 +163,10 @@ public class PricingScriptsPage extends SimplePage
              */
             if(!isPricingScriptsContainShipper(shipperName))
             {
-                sendKeys("//input[@aria-label='Search or Select...']", shipperName);
+                sendKeysByAriaLabel("Search or Select...", shipperName);
                 pause1s();
                 click(String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", shipperName));
-                click("//button[@aria-label='Save changes']");
+                clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
 
                 /**
                  * Check is Shipper already linked to another Pricing Scripts by find "Proceed" button.
@@ -184,7 +187,7 @@ public class PricingScriptsPage extends SimplePage
                     pause100ms();
                     click("//md-dialog[@aria-label='ErrorUnexpected error']/md-dialog-actions/button/span[text()='Close']");
                     pause100ms();
-                    throw new RuntimeException("Failed to linking Pricing Scripts to the Shipper.");
+                    throw new NvTestRuntimeException("Failed to linking Pricing Scripts to the Shipper.");
                 }
 
                 break;
@@ -195,7 +198,7 @@ public class PricingScriptsPage extends SimplePage
                  * Shipper already linked to this Pricing Scripts.
                  * Click "Discard Changes".
                  */
-                click(CLOSE_BUTTON);
+                clickButtonClose();
             }
         }
 
@@ -226,10 +229,59 @@ public class PricingScriptsPage extends SimplePage
         return isFound;
     }
 
+    public void verifyCostAndComments(Map<String,String> mapOfData)
+    {
+        String expectedTotal = mapOfData.get("total");
+        String expectedGst = mapOfData.get("gst");
+        String expectedCodFee = mapOfData.get("codFee");
+        String expectedInsuranceFee = mapOfData.get("insuranceFee");
+        String expectedDeliveryFee = mapOfData.get("deliveryFee");
+        String expectedHandlingFee = mapOfData.get("handlingFee");
+        String expectedComments = mapOfData.get("comments");
+
+        WebElement totalEl = findElementByXpath("//md-input-container/label[text()='Grand Total']/following-sibling::div[1]");
+        String actualTotal = totalEl.getText();
+        Assert.assertEquals("Total", expectedTotal, actualTotal);
+
+        /*WebElement gstEl = findElementByXpath("//md-input-container[label[text()='GST']]/div[@class='readonly ng-binding']");
+        String actualGst = gstEl.getText();
+        Assert.assertEquals("GST", expectedGst, actualGst);*/
+
+        WebElement codFeeEl = findElementByXpath("//md-input-container/label[text()='COD Fee']/following-sibling::div[1]");
+        String actualCodFee = codFeeEl.getText();
+        Assert.assertEquals("COD Fee", expectedCodFee, actualCodFee);
+
+        WebElement insuranceFeeEl = findElementByXpath("//md-input-container/label[text()='Insurance Fee']/following-sibling::div[1]");
+        String actualInsuranceFee = insuranceFeeEl.getText();
+        Assert.assertEquals("Insurance Fee", expectedInsuranceFee, actualInsuranceFee);
+
+        WebElement deliveryFeeEl = findElementByXpath("//md-input-container/label[text()='Delivery Fee']/following-sibling::div[1]");
+        String actualDeliveryFee = deliveryFeeEl.getText();
+        Assert.assertEquals("Delivery Fee", expectedDeliveryFee, actualDeliveryFee);
+
+        WebElement handlingFeeEl = findElementByXpath("//md-input-container/label[text()='Handling Fee']/following-sibling::div[1]");
+        String actualHandlingFee = handlingFeeEl.getText();
+        Assert.assertEquals("Handling Fee", expectedHandlingFee, actualHandlingFee);
+
+        WebElement commentsEl = findElementByXpath("//md-input-container/label[text()='Comments']/following-sibling::div[1]");
+        String actualComments = commentsEl.getText();
+        Assert.assertEquals("Comments", expectedComments, actualComments);
+    }
+
+    public void clickButtonCancel()
+    {
+        clickButtonByAriaLabel("Cancel");
+    }
+
+    public void clickButtonClose()
+    {
+        clickNvIconButtonByName("Cancel");
+    }
+
     public String searchAndGetTextOnTable(String filter, int rowNumber, String columnDataTitle)
     {
         searchScript(filter);
-        return getTextOnTable(1, columnDataTitle);
+        return getTextOnTable(rowNumber, columnDataTitle);
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)
@@ -239,15 +291,7 @@ public class PricingScriptsPage extends SimplePage
 
     public void clickActionButton(int rowNumber, String actionButtonName)
     {
-        try
-        {
-            click(String.format("//tr[@md-virtual-repeat='script in getTableData()'][%d]/td[contains(@class,'actions column-locked-right')]/nv-icon-button[@name='%s']", rowNumber, actionButtonName));
-            pause1s();
-        }
-        catch(Exception ex)
-        {
-            throw new RuntimeException("Cannot find action button.", ex);
-        }
+        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
     }
 
     private void updateAceEditorValue(String script)
