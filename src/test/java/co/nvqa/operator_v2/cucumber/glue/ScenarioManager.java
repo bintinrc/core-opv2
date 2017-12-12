@@ -1,14 +1,14 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
+import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.utils.StandardScenarioManager;
 import co.nvqa.operator_v2.selenium.page.LoginPage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
 import co.nvqa.operator_v2.util.SeleniumUtils;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Singleton;
-import com.nv.qa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
-import com.nv.qa.commons.utils.NvLogger;
-import com.nv.qa.commons.utils.StandardScenarioManager;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -119,7 +119,7 @@ public class ScenarioManager extends StandardScenarioManager
         }
 
         MainPage mainPage = new MainPage(getWebDriver());
-        mainPage.dpAdm();
+        mainPage.verifyTheMainPageIsLoaded();
     }
 
     @Then("^take screenshot$")

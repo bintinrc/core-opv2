@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import com.google.inject.Inject;
-import com.nv.qa.commons.utils.NvLogger;
-import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.Given;
 
 import java.util.Random;

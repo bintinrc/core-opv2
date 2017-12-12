@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.operator_v2.util.SingletonStorage;
 import co.nvqa.operator_v2.util.TestConstants;
-import com.nv.qa.commons.support.DateUtil;
-import com.nv.qa.commons.utils.NvLogger;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -38,7 +38,7 @@ public class DriverStrengthPage extends SimplePage
 
     public void verifyDownloadedFile()
     {
-        File f = new File(TestConstants.SELENIUM_WRITE_PATH + FILENAME);
+        File f = new File(TestConstants.TEMP_DIR + FILENAME);
         boolean isFileExisted = f.exists();
 
         if(isFileExisted)

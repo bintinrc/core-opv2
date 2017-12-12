@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.DpPage;
 import com.google.inject.Inject;
-import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;

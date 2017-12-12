@@ -1,13 +1,14 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.cucumber.glue.StandardApiShipperSteps;
+import co.nvqa.commons.support.JsonHelper;
+import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.commons_legacy.client.order_create.OrderCreateV3Client;
+import co.nvqa.commons_legacy.model.order_creation.v3.CreateOrderRequest;
+import co.nvqa.commons_legacy.model.order_creation.v3.CreateOrderResponse;
 import co.nvqa.operator_v2.util.OrderCreateHelper;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.inject.Inject;
-import com.nv.qa.api.client.order_create.OrderCreateV3Client;
-import com.nv.qa.commons.cucumber.glue.StandardApiShipperSteps;
-import com.nv.qa.commons.support.JsonHelper;
-import com.nv.qa.commons.utils.StandardScenarioStorage;
-import com.nv.qa.model.order_creation.v3.CreateOrderRequest;
 import cucumber.api.java.en.Given;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import io.restassured.http.ContentType;
@@ -27,7 +28,7 @@ public class ApiShipperExtSteps extends StandardApiShipperSteps<ScenarioManager>
 {
     private OrderCreateV3Client orderCreateV3Client;
     List<CreateOrderRequest> createOrderRequests = new ArrayList<>();
-    List<com.nv.qa.model.order_creation.v3.CreateOrderResponse> createOrderResponses = new ArrayList<>();
+    List<CreateOrderResponse> createOrderResponses = new ArrayList<>();
 
     @Inject
     public ApiShipperExtSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
@@ -56,7 +57,7 @@ public class ApiShipperExtSteps extends StandardApiShipperSteps<ScenarioManager>
     private String createV3Order(Map<String, String> arg1)
     {
         createOrderRequests.clear();
-        com.nv.qa.model.order_creation.v3.CreateOrderRequest x = JsonHelper.mapToObject(arg1, com.nv.qa.model.order_creation.v3.CreateOrderRequest.class);
+        CreateOrderRequest x = JsonHelper.mapToObject(arg1, CreateOrderRequest.class);
         //-- fix keywords
         OrderCreateHelper.populateRequest(x);
         createOrderRequests.add(x);
@@ -73,13 +74,13 @@ public class ApiShipperExtSteps extends StandardApiShipperSteps<ScenarioManager>
         String json = r.then().extract().body().asString();
         Assert.assertNotNull("Response json not null", json);
 
-        createOrderResponses = JsonHelper.fromJsonCollection(json, List.class, com.nv.qa.model.order_creation.v3.CreateOrderResponse.class);
+        createOrderResponses = JsonHelper.fromJsonCollection(json, List.class, CreateOrderResponse.class);
         Assert.assertNotNull("Response pojo not null", createOrderResponses);
         Assert.assertEquals("Size", createOrderRequests.size(), createOrderResponses.size());
 
         int idx = 0;
 
-        for(com.nv.qa.model.order_creation.v3.CreateOrderResponse x : createOrderResponses)
+        for(CreateOrderResponse x : createOrderResponses)
         {
             Assert.assertNotNull("Async id", x.getId());
             Assert.assertEquals("Status", "SUCCESS", x.getStatus());

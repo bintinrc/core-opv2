@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import com.nv.qa.commons.utils.NvTestRuntimeException;
+import co.nvqa.commons.utils.NvTestRuntimeException;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 

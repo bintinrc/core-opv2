@@ -4,7 +4,6 @@ import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -13,8 +12,6 @@ import java.util.Date;
  */
 public class FailedPickupManagementPage extends SimplePage
 {
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-
     private static final String MD_VIRTUAL_REPEAT = "failedPickup in getTableData()";
     private static final String CSV_FILENAME_PATTERN = "failed-pickup-list";
 
@@ -70,7 +67,7 @@ public class FailedPickupManagementPage extends SimplePage
 
     public void setRescheduleDate(Date date)
     {
-        sendKeys("//md-datepicker/div/input", DATE_FORMAT.format(date));
+        sendKeys("//md-datepicker/div/input", MD_DATEPICKER_SDF.format(date));
         click("//div[@label='commons.model.date']/label"); // To make sure date is change on Angular.
     }
 

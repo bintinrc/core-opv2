@@ -1,11 +1,14 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
-import com.nv.qa.commons.utils.NvLogger;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.LoadableComponent;

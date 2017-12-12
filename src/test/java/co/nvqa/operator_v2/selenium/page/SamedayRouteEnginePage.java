@@ -124,7 +124,7 @@ public class SamedayRouteEnginePage extends SimplePage
         String routeName = "route-detail-"+findElementByXpath("//md-dialog[contains(@class, 'nv-route-detail-dialog')]/md-dialog-content/div[1]/div[1]/p/b").getText();
 
         // Clear the downloaded file first.
-        File csvFile = new File(TestConstants.SELENIUM_WRITE_PATH+"/"+routeName+".csv");
+        File csvFile = new File(TestConstants.TEMP_DIR+"/"+routeName+".csv");
 
         if(csvFile.exists())
         {
@@ -135,12 +135,12 @@ public class SamedayRouteEnginePage extends SimplePage
 
         new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver driver)->
         {
-            File csvFileDownloaded = new File(TestConstants.SELENIUM_WRITE_PATH+"/"+routeName+".csv");
+            File csvFileDownloaded = new File(TestConstants.TEMP_DIR+"/"+routeName+".csv");
             return csvFileDownloaded.exists();
         });
 
         // Check the downloaded file.
-        List<String> lines = Files.readAllLines(Paths.get(TestConstants.SELENIUM_WRITE_PATH+"/"+routeName+".csv"), Charset.defaultCharset());
+        List<String> lines = Files.readAllLines(Paths.get(TestConstants.TEMP_DIR+"/"+routeName+".csv"), Charset.defaultCharset());
 
         lines.forEach((String str)->
         {

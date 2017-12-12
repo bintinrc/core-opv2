@@ -1,10 +1,10 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.commons_legacy.model.order_creation.v2.Order;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.selenium.page.RouteCashInboundPage;
 import com.google.inject.Inject;
-import com.nv.qa.commons.utils.StandardScenarioStorage;
-import com.nv.qa.model.order_creation.v2.Order;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;

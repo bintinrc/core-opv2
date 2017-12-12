@@ -1,12 +1,10 @@
 package co.nvqa.operator_v2.util;
 
-import com.nv.qa.commons.utils.NvLogger;
-import com.nv.qa.commons.utils.StandardTestConstants;
+import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.utils.StandardTestConstants;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  *
@@ -26,7 +24,6 @@ public final class TestConstants extends StandardTestConstants
     public static final String SELENIUM_DRIVER;
     public static final String SELENIUM_CHROME_DRIVER;
     public static final String SELENIUM_CHROME_BINARY_PATH;
-    public static final int SELENIUM_INTERACTION_WAIT_MILLISECONDS;
     public static final int SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS;
     public static final int SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS;
     public static final int SELENIUM_SCRIPT_TIMEOUT_SECONDS;
@@ -35,7 +32,6 @@ public final class TestConstants extends StandardTestConstants
     public static final int SELENIUM_WINDOW_HEIGHT;
     public static final int SELENIUM_WINDOW_POSITION_X;
     public static final int SELENIUM_WINDOW_POSITION_Y;
-    public static final String SELENIUM_WRITE_PATH;
 
     public static final String OPERATOR_PORTAL_URL;
     public static final String OPERATOR_PORTAL_UID;
@@ -43,7 +39,6 @@ public final class TestConstants extends StandardTestConstants
     public static final boolean OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES;
     public static final String OPERATOR_PORTAL_USER_COOKIE;
 
-    public static final String ORDER_CREATE_BASE_URL;
     public static final int SHIPPER_V3_ID;
     public static final String SHIPPER_V3_CLIENT_ID;
     public static final String SHIPPER_V3_CLIENT_SECRET;
@@ -81,7 +76,6 @@ public final class TestConstants extends StandardTestConstants
             SELENIUM_CHROME_BINARY_PATH = seleniumChromeBinaryPathTemp;
             NvLogger.info("Selenium Chrome Binary Path = "+SELENIUM_CHROME_BINARY_PATH);
 
-            SELENIUM_INTERACTION_WAIT_MILLISECONDS = getPropertyValueAsInteger("selenium-interaction-wait-seconds") * 1000;
             SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS = getPropertyValueAsInteger("selenium-implicit-wait-timeout-seconds");
             SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS = getPropertyValueAsInteger("selenium-page-load-timeout-seconds");
             SELENIUM_SCRIPT_TIMEOUT_SECONDS = getPropertyValueAsInteger("selenium-script-timeout-seconds");
@@ -90,16 +84,16 @@ public final class TestConstants extends StandardTestConstants
             SELENIUM_WINDOW_HEIGHT = getPropertyValueAsInteger("selenium-window-height");
             SELENIUM_WINDOW_POSITION_X = getPropertyValueAsInteger("selenium-window-position-x");
             SELENIUM_WINDOW_POSITION_Y = getPropertyValueAsInteger("selenium-window-position-y");
-            SELENIUM_WRITE_PATH = getPropertyValueAsStringAndCreateDirectory("selenium-write-path", TEMP_FOLDER_DATE_FORMAT.format(new Date())+File.separatorChar);
 
             OPERATOR_PORTAL_URL = getPropertyValueAsString("operator-portal-url");
             OPERATOR_PORTAL_UID = getPropertyValueAsString("operator-portal-uid");
             OPERATOR_PORTAL_PWD = getPropertyValueAsString("operator-portal-pwd");
+
             OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES = getPropertyValueAsBoolean("operator-portal-force-login-by-injecting-cookies");
             OPERATOR_PORTAL_USER_COOKIE = getPropertyValueAsString("operator-portal-user-cookie");
 
-            API_BASE_URL = getPropertyValueAsString("api-server-base-url");
-            ORDER_CREATE_BASE_URL = getPropertyValueAsString("order-create-server-base-url");
+            API_BASE_URL = getPropertyValueAsString("api-base-url");
+
             SHIPPER_V3_ID = getPropertyValueAsInteger("shipper-v3-id");
             SHIPPER_V3_CLIENT_ID = getPropertyValueAsString("shipper-v3-client-id");
             SHIPPER_V3_CLIENT_SECRET = getPropertyValueAsString("shipper-v3-client-secret");

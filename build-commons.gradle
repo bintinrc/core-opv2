@@ -142,7 +142,7 @@ task runCucumber(dependsOn: ["testClasses"], type: JavaExec) {
             "--plugin", "pretty",
             "--plugin", "html:$reportHtmlOutputDir",
             "--plugin", "junit:build/reports/cucumber-junit/cucumber.xml",
-            "--plugin", "com.nv.qa.commons.cucumber.formatter.FailedReporter:build/reports/cucumber-failed-reporter/failed.txt",
+            "--plugin", "co.nvqa.commons.cucumber.formatter.FailedReporter:build/reports/cucumber-failed-reporter/failed.txt",
             "--monochrome",
             "--glue", cucumberGluePackage
     ]
@@ -258,7 +258,7 @@ task runCucumberParallel(dependsOn: ["testClasses"]) {
                                         "--plugin", "pretty",
                                         "--plugin", "html:$reportHtmlOutputDir",
                                         "--plugin", "junit:build/reports/cucumber-junit/cucumber-${reportFileName}.xml",
-                                        "--plugin", "com.nv.qa.commons.cucumber.formatter.FailedReporter:build/reports/cucumber-failed-reporter/failed-${reportFileName}.txt",
+                                        "--plugin", "co.nvqa.commons.cucumber.formatter.FailedReporter:build/reports/cucumber-failed-reporter/failed-${reportFileName}.txt",
                                         "--monochrome",
                                         "--glue", cucumberGluePackage
                                 ]

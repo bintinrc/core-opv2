@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
-import com.nv.qa.commons.utils.NvLogger;
-import com.nv.qa.commons.utils.NvTestRuntimeException;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class SimplePage
 {
     public static final SimpleDateFormat CREATED_DATE_SDF = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
-    public static final SimpleDateFormat MD_DATEPICKER_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    public static final SimpleDateFormat MD_DATEPICKER_SDF = new SimpleDateFormat("yyyy-MM-dd");
 
     public static final int FAST_WAIT_IN_SECONDS = 2;
     public static final int DEFAULT_MAX_RETRY_FOR_STALE_ELEMENT_REFERENCE = 5;
@@ -187,6 +188,12 @@ public class SimplePage
     public void sendKeysByAriaLabel(String ariaLabel, CharSequence... keysToSend)
     {
         sendKeys(String.format("//*[@aria-label='%s']", ariaLabel), keysToSend);
+    }
+
+    public void setMdDatepicker(String ngModel, Date date)
+    {
+        sendKeys(String.format("//md-datepicker[@ng-model='%s']/div/input", ngModel), MD_DATEPICKER_SDF.format(date));
+        click(String.format("//md-datepicker[@ng-model='%s']/parent::*", ngModel));
     }
 
     public WebElement getToast()
@@ -610,7 +617,7 @@ public class SimplePage
 
     public String getLatestDownloadedFilename(String filenamePattern)
     {
-        File parentDir = new File(TestConstants.SELENIUM_WRITE_PATH);
+        File parentDir = new File(TestConstants.TEMP_DIR);
         File[] arrayOfFiles = parentDir.listFiles((File dir, String name)->name.startsWith(filenamePattern));
 
         if(arrayOfFiles==null || arrayOfFiles.length==0)
@@ -627,7 +634,7 @@ public class SimplePage
 
     public void verifyFileDownloadedSuccessfully(String filename)
     {
-        String pathname = TestConstants.SELENIUM_WRITE_PATH + filename;
+        String pathname = TestConstants.TEMP_DIR + filename;
         File file;
         int counter = 0;
         boolean isFileExists;
@@ -653,7 +660,7 @@ public class SimplePage
     {
         verifyFileDownloadedSuccessfully(filename);
 
-        String pathname = TestConstants.SELENIUM_WRITE_PATH + filename;
+        String pathname = TestConstants.TEMP_DIR + filename;
         File file;
         boolean isFileContainsExpectedText = false;
         StringBuilder fileText;
@@ -801,9 +808,26 @@ public class SimplePage
     {
         String previousUrl = getwebDriver().getCurrentUrl().toLowerCase();
         getwebDriver().navigate().refresh();
-        new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((d)->d.getCurrentUrl().equalsIgnoreCase(previousUrl));
-        String currentUrl = getwebDriver().getCurrentUrl().toLowerCase();
-        Assert.assertEquals("Page URL is different after page is refreshed.", previousUrl, currentUrl);
+
+        new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver wd) ->
+        {
+            boolean result;
+            String currentUrl = wd.getCurrentUrl();
+            NvLogger.infof("refreshPage: Current URL = [%s] - Expected URL = [%s]", currentUrl, previousUrl);
+
+            if(previousUrl.contains("linehaul"))
+            {
+                result = currentUrl.contains("linehaul");
+            }
+            else
+            {
+                result = currentUrl.equalsIgnoreCase(previousUrl);
+            }
+
+            return result;
+        });
+
+        waitUntilPageLoaded();
     }
 
     public void setImplicitTimeout(long seconds)

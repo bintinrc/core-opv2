@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.operator_v2.model.SmsCampaignCsv;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
-import com.nv.qa.commons.utils.NvLogger;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -29,7 +29,7 @@ public class MessagingModulePage extends SimplePage
     private static final String NEW_LINE = "\r\n";
     private static final String SMS_CAMPAIGN_FILE_NAME = "sms_campaign.csv";
     private static final String SMS_CAMPAIGN_HEADER = "tracking_id,name,email,job";
-    private static final String FILE_PATH = TestConstants.SELENIUM_WRITE_PATH + SMS_CAMPAIGN_FILE_NAME;
+    private static final String FILE_PATH = TestConstants.TEMP_DIR + SMS_CAMPAIGN_FILE_NAME;
     private static final String MD_VIRTUAL_REPEAT = "sms in getTableData()";
     private static Map<String, Object> cache;
     private SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD hh:ss");

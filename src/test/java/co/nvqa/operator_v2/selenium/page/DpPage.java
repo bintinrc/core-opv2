@@ -1,10 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.util.TestUtils;
+import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.operator_v2.util.SingletonStorage;
 import co.nvqa.operator_v2.util.TestConstants;
-import com.nv.qa.commons.support.*;
-import com.nv.qa.commons.utils.NvLogger;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -48,14 +48,14 @@ public class DpPage extends SimplePage
 
     public void downloadFile(String type)
     {
-        TestUtils.deleteFile(TestConstants.SELENIUM_WRITE_PATH + BTN_NAME_FILENAME.get(type));
+        TestUtils.deleteFile(TestConstants.TEMP_DIR + BTN_NAME_FILENAME.get(type));
         click("//div[@filename='" + BTN_NAME_FILENAME.get(type) + "']/nv-download-csv-button/div/nv-api-text-button/button");
         pause1s();
     }
 
     public void verifyDownloadedFile(String type)
     {
-        String pathname = TestConstants.SELENIUM_WRITE_PATH + BTN_NAME_FILENAME.get(type);
+        String pathname = TestConstants.TEMP_DIR + BTN_NAME_FILENAME.get(type);
         int counter = 0;
         boolean isFileExists;
 

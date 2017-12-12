@@ -1,9 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.operator_v2.util.TestConstants;
-import com.nv.qa.commons.utils.NvLogger;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -43,49 +41,6 @@ public class MainPage extends SimplePage
         super(webDriver);
     }
 
-    public void clickNavigation(String parentTitle, String navTitle, String urlPart)
-    {
-        // Ensure no dialog that prevents menu from being clicked.
-        getwebDriver().navigate().refresh();
-        pause1s();
-        waitUntilPageLoaded();
-
-        String navElmXpath = String.format("//nv-section-item/button[div='%s']", navTitle);
-        WebElement navElm = findElementByXpath(navElmXpath);
-
-        if(!navElm.isDisplayed())
-        {
-            click(String.format("//nv-section-header/button[span='%s']", parentTitle));
-        }
-
-        pause1s();
-        navElm.click();
-
-        new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((d)->
-        {
-            boolean result;
-            String currentUrl = d.getCurrentUrl();
-            NvLogger.infof("Current URL = [%s] - Expected URL = [%s]", currentUrl, urlPart);
-
-            if("linehaul".equals(urlPart))
-            {
-                result = currentUrl.contains(urlPart);
-            }
-            else
-            {
-                result = currentUrl.toLowerCase().endsWith(urlPart);
-            }
-
-            return result;
-        });
-    }
-
-    public void clickNavigation(String parentTitle, String navTitle)
-    {
-        final String mainDashboard = grabEndURL(navTitle);
-        clickNavigation(parentTitle, navTitle, mainDashboard);
-    }
-
     private String grabEndURL(String navTitle)
     {
         navTitle = navTitle.trim();
@@ -103,14 +58,75 @@ public class MainPage extends SimplePage
         return endUrl;
     }
 
-    public void dpAdm()
+    public void verifyTheMainPageIsLoaded()
     {
         String mainDashboard = grabEndURL("All Orders");
-        new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((d)->d.getCurrentUrl().toLowerCase().endsWith(mainDashboard));
-        String url = getwebDriver().getCurrentUrl().toLowerCase();
-        Assert.assertThat("URL not match.", url, Matchers.endsWith(mainDashboard));
-        pause50ms();
+
+        new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver wd) ->
+        {
+            String currentUrl = wd.getCurrentUrl();
+            NvLogger.infof("verifyTheMainPageIsLoaded: Current URL = [%s] - Expected URL Ends With = [%s]", currentUrl, mainDashboard);
+            return currentUrl.endsWith(mainDashboard);
+        });
+
+        waitUntilPageLoaded();
         NvLogger.infof("Waiting until Welcome message toast disappear.");
         waitUntilInvisibilityOfElementLocated(XPATH_OF_TOAST_WELCOME_DASHBOARD);
+    }
+
+    public void clickNavigation(String parentTitle, String navTitle)
+    {
+        String mainDashboard = grabEndURL(navTitle);
+        clickNavigation(parentTitle, navTitle, mainDashboard);
+    }
+
+    public void clickNavigation(String parentTitle, String navTitle, String urlPart)
+    {
+        String childNavXpath = String.format("//nv-section-item/button[div='%s']", navTitle);
+        String parentNavXpath = String.format("//nv-section-header/button[span='%s']", parentTitle);
+
+        for(int i=0; i<2; i++)
+        {
+            WebElement childNavWe = findElementByXpath(childNavXpath);
+
+            if(!childNavWe.isDisplayed())
+            {
+                click(parentNavXpath);
+            }
+
+            pause100ms();
+
+            if(childNavWe.isDisplayed())
+            {
+                childNavWe.click();
+                break;
+            }
+            else
+            {
+                // Ensure no dialog that prevents menu from being clicked.
+                getwebDriver().navigate().refresh();
+                refreshPage();
+            }
+        }
+
+        new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver wd)->
+        {
+            boolean result;
+            String currentUrl = wd.getCurrentUrl();
+            NvLogger.infof("clickNavigation: Current URL = [%s] - Expected URL Ends With = [%s]", currentUrl, urlPart);
+
+            if("linehaul".equals(urlPart))
+            {
+                result = currentUrl.contains(urlPart);
+            }
+            else
+            {
+                result = currentUrl.endsWith(urlPart);
+            }
+
+            return result;
+        });
+
+        waitUntilPageLoaded();
     }
 }

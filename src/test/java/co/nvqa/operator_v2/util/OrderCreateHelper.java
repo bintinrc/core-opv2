@@ -1,11 +1,11 @@
 package co.nvqa.operator_v2.util;
 
-import com.nv.qa.api.client.order_create.OrderCreateAuthenticationClient;
-import com.nv.qa.api.client.order_create.OrderCreateV1Client;
-import com.nv.qa.api.client.order_create.OrderCreateV2Client;
-import com.nv.qa.api.client.order_create.OrderCreateV3Client;
-import com.nv.qa.model.order_creation.authentication.AuthRequest;
-import com.nv.qa.model.order_creation.authentication.AuthResponse;
+import co.nvqa.commons_legacy.client.order_create.OrderCreateAuthenticationClient;
+import co.nvqa.commons_legacy.client.order_create.OrderCreateV1Client;
+import co.nvqa.commons_legacy.client.order_create.OrderCreateV2Client;
+import co.nvqa.commons_legacy.client.order_create.OrderCreateV3Client;
+import co.nvqa.commons_legacy.model.order_creation.authentication.AuthRequest;
+import co.nvqa.commons_legacy.model.order_creation.authentication.AuthResponse;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
 
@@ -152,14 +152,14 @@ public class OrderCreateHelper
         }
     }
 
-    public static void populateRequest(com.nv.qa.model.order_creation.v1.CreateOrderRequest req)
+    public static void populateRequest(co.nvqa.commons_legacy.model.order_creation.v1.CreateOrderRequest req)
     {
         req.setPickup_date(getDateString(req.getPickup_date()));
         req.setDelivery_date(getDateString(req.getDelivery_date()));
         req.setShipper_order_ref_no(getShipperRef(req.getShipper_order_ref_no()));
     }
 
-    public static void populateRequest(com.nv.qa.model.order_creation.v2.CreateOrderRequest req)
+    public static void populateRequest(co.nvqa.commons_legacy.model.order_creation.v2.CreateOrderRequest req)
     {
         req.setPickup_date(getDateString(req.getPickup_date()));
         req.setDelivery_date(getDateString(req.getDelivery_date()));
@@ -167,7 +167,7 @@ public class OrderCreateHelper
         req.setTracking_ref_no(getStringRequestedTrackingId(req.getTracking_ref_no()));
     }
 
-    public static void populateRequest(com.nv.qa.model.order_creation.v3.CreateOrderRequest req)
+    public static void populateRequest(co.nvqa.commons_legacy.model.order_creation.v3.CreateOrderRequest req)
     {
         req.setPickupDate(getDateString(req.getPickupDate()));
         req.setDeliveryDate(getDateString(req.getDeliveryDate()));
@@ -177,12 +177,12 @@ public class OrderCreateHelper
 
     public static OrderCreateAuthenticationClient getAuthenticationClient()
     {
-        return new OrderCreateAuthenticationClient( TestConstants.API_BASE_URL, TestConstants.ORDER_CREATE_BASE_URL);
+        return new OrderCreateAuthenticationClient(TestConstants.API_BASE_URL, TestConstants.API_BASE_URL);
     }
 
     public static OrderCreateV1Client getVersion1Client(String accessToken)
     {
-        return new OrderCreateV1Client(TestConstants.API_BASE_URL, TestConstants.ORDER_CREATE_BASE_URL, accessToken);
+        return new OrderCreateV1Client(TestConstants.API_BASE_URL, TestConstants.API_BASE_URL, accessToken);
     }
 
     public static OrderCreateV1Client getVersion1Client()
@@ -192,7 +192,7 @@ public class OrderCreateHelper
 
     public static OrderCreateV2Client getVersion2Client(String accessToken)
     {
-        return new OrderCreateV2Client(TestConstants.API_BASE_URL, TestConstants.ORDER_CREATE_BASE_URL, accessToken);
+        return new OrderCreateV2Client(TestConstants.API_BASE_URL, TestConstants.API_BASE_URL, accessToken);
     }
 
     public static OrderCreateV2Client getVersion2Client()
@@ -202,7 +202,7 @@ public class OrderCreateHelper
 
     public static OrderCreateV3Client getVersion3Client(String accessToken)
     {
-        return new OrderCreateV3Client(TestConstants.API_BASE_URL, TestConstants.ORDER_CREATE_BASE_URL, accessToken);
+        return new OrderCreateV3Client(TestConstants.API_BASE_URL, TestConstants.API_BASE_URL, accessToken);
     }
 
     public static OrderCreateV3Client getVersion3Client()

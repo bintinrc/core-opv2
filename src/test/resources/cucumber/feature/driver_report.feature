@@ -9,7 +9,7 @@ Feature: Route Cash Inbound
   Scenario: Operator generate CSV on Driver Report page
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
-      | v2OrderRequest    | { "type":"Normal", "cod_goods":235, "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
     And API Operator create new route using data below:
@@ -22,6 +22,8 @@ Feature: Route Cash Inbound
     And API Operator start the route
     And API Driver deliver the created parcel successfully
     Given Operator go to menu Fleet -> Driver Report
+    When Operator set the filter date to current date
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

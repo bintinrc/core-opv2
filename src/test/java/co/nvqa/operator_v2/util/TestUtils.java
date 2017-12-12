@@ -1,18 +1,17 @@
 package co.nvqa.operator_v2.util;
 
-import com.nv.qa.commons.support.JsonHelper;
-import com.nv.qa.commons.utils.NvLogger;
-import com.nv.qa.commons.utils.StandardTestUtils;
+import co.nvqa.commons.support.JsonHelper;
+import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.utils.StandardTestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.*;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 

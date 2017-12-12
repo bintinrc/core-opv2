@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
-import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;

@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import com.google.inject.Inject;
-import com.nv.qa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
-import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.DataTable;
 import cucumber.api.java.After;
 import cucumber.api.java.en.Given;

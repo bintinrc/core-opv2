@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
-import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -13,7 +13,10 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *

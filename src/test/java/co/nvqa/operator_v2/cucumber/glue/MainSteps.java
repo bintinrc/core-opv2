@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
 import com.google.inject.Inject;
-import com.nv.qa.commons.utils.StandardScenarioStorage;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -32,7 +32,6 @@ public class MainSteps extends AbstractSteps
     public void opClickNavigation(String childMenuName, String parentMenuName)
     {
         mainPage.clickNavigation(parentMenuName, childMenuName);
-        pause1s();
     }
 
     @Given("^Operator go to menu \"([^\"]*)\" -> \"([^\"]*)\"$")
@@ -50,7 +49,7 @@ public class MainSteps extends AbstractSteps
     @Then("^op is in main page$")
     public void opIsInMainPage()
     {
-        mainPage.dpAdm();
+        mainPage.verifyTheMainPageIsLoaded();
     }
 
     @Given("^op refresh page$")

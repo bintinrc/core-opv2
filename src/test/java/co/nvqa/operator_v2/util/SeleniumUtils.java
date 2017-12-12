@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.util;
 
-import com.nv.qa.commons.utils.NvLogger;
+import co.nvqa.commons.utils.NvLogger;
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
@@ -81,7 +81,7 @@ public class SeleniumUtils
         LoggingPreferences logPrefs = new LoggingPreferences();
         logPrefs.enable(LogType.BROWSER, Level.ALL);
 
-        String downloadFilepath = TestConstants.SELENIUM_WRITE_PATH;
+        String downloadFilepath = TestConstants.TEMP_DIR;
         HashMap<String, Object> chromePrefs = new HashMap<>();
         chromePrefs.put("profile.default_content_settings.popups", 0);
         chromePrefs.put("download.default_directory", downloadFilepath);
