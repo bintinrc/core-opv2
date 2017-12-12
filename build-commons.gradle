@@ -83,8 +83,8 @@ processTestResources {
     }
 }
 
-task loadFailedScenarioTagNames(dependsOn: ["processTestResources"]) {
-    println "[GRADLE_INFO] Running loadFailedScenarioTagNames ..."
+task loadFailedScenarios(dependsOn: ["processTestResources"]) {
+    println "[GRADLE_INFO] Running loadFailedScenarios ..."
     boolean isRunOnBamboo = bambooBuildResultKey!=null
 
     if(isRunOnBamboo)
@@ -93,8 +93,8 @@ task loadFailedScenarioTagNames(dependsOn: ["processTestResources"]) {
         {
             groovy.sql.Sql.loadDriver(driverName)
             Connection conn = DriverManager.getConnection(dbUrlQaAutomation, dbUser, dbPass)
-            println "[GRADLE_INFO] Execute SQL: SELECT scenario_tag_name FROM failed_scenarios_2 WHERE bamboo_build_result_key = '$bambooBuildResultKey'"
-            PreparedStatement pstmt = conn.prepareStatement("SELECT failed_feature_file FROM failed_scenarios_2 WHERE bamboo_build_result_key = ?")
+            println "[GRADLE_INFO] Execute SQL: SELECT failed_feature_file FROM failed_scenarios WHERE bamboo_build_result_key = '$bambooBuildResultKey'"
+            PreparedStatement pstmt = conn.prepareStatement("SELECT failed_feature_file FROM failed_scenarios WHERE bamboo_build_result_key = ?")
             pstmt.setString(1, bambooBuildResultKey)
             ResultSet rs = pstmt.executeQuery()
             int counter = 0
@@ -109,8 +109,8 @@ task loadFailedScenarioTagNames(dependsOn: ["processTestResources"]) {
             rs.close()
             pstmt.close()
 
-            println "[GRADLE_INFO] Execute SQL: DELETE FROM failed_scenarios_2 WHERE bamboo_build_result_key LIKE '$bambooBuildKey%'"
-            pstmt = conn.prepareStatement("DELETE FROM failed_scenarios_2 WHERE bamboo_build_result_key LIKE ?")
+            println "[GRADLE_INFO] Execute SQL: DELETE FROM failed_scenarios WHERE bamboo_build_result_key LIKE '$bambooBuildKey%'"
+            pstmt = conn.prepareStatement("DELETE FROM failed_scenarios WHERE bamboo_build_result_key LIKE ?")
             pstmt.setString(1, bambooBuildKey+"%")
             int affectedRow = pstmt.executeUpdate()
             println "[GRADLE_INFO] SQL Query Result: $affectedRow row(s) affected"
@@ -125,7 +125,7 @@ task loadFailedScenarioTagNames(dependsOn: ["processTestResources"]) {
     }
     else
     {
-        System.out.println("[GRADLE_INFO] This project is not run on Bamboo. No need to read failed scenarios tag name from database.")
+        System.out.println("[GRADLE_INFO] This project is not run on Bamboo. No need to read the failed scenarios from database.")
     }
 }
 
