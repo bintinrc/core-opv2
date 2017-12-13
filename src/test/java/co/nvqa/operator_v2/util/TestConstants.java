@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.util;
 
-import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.StandardTestConstants;
 
 /**

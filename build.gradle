@@ -9,18 +9,15 @@ repositories {
 }
 
 dependencies {
-    testCompile "info.cukes:cucumber-java:1.2.5"
-    testCompile "info.cukes:cucumber-junit:1.2.5"
-    testCompile "info.cukes:cucumber-guice:1.2.5"
-    testCompile "com.google.inject:guice:4.1.0"
-    testCompile "org.seleniumhq.selenium:selenium-java:3.7.1"
-    testCompile "net.lightbody.bmp:browsermob-core:2.1.5"
+    compile "org.seleniumhq.selenium:selenium-java:3.8.1"
+    compile "net.lightbody.bmp:browsermob-core:2.1.5"
 
     compile "org.apache.commons:commons-lang3:3.7"
     compile "org.apache.commons:commons-text:1.1"
-    compile "commons-beanutils:commons-beanutils:1.9.3"
+
     compile "ch.qos.logback:logback-classic:1.2.3"
     compile "mysql:mysql-connector-java:6.0.6"
+
     compile project(":commons")
 }
 
