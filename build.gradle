@@ -28,4 +28,4 @@ project.ext {
     cucumberGluePackage = "co.nvqa.operator_v2.cucumber.glue"
 }
 
-apply from: "build-commons.gradle"
+apply from: "commons/build-commons.gradle"
