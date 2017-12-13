@@ -42,6 +42,7 @@ public final class TestConstants extends StandardTestConstants
     public static final String SHIPPER_V2_CLIENT_SECRET;
 
     public static final int NINJA_DRIVER_ID;
+    public static final String NINJA_DRIVER_NAME;
     public static final String NINJA_DRIVER_USERNAME;
     public static final String NINJA_DRIVER_PASSWORD;
 
@@ -84,6 +85,7 @@ public final class TestConstants extends StandardTestConstants
         SHIPPER_V2_CLIENT_SECRET = getPropertyValueAsString("shipper-v2-client-secret");
 
         NINJA_DRIVER_ID = getPropertyValueAsInteger("ninja-driver-id");
+        NINJA_DRIVER_NAME = getPropertyValueAsString("ninja-driver-name");
         NINJA_DRIVER_USERNAME = getPropertyValueAsString("ninja-driver-username");
         NINJA_DRIVER_PASSWORD = getPropertyValueAsString("ninja-driver-password");
     }

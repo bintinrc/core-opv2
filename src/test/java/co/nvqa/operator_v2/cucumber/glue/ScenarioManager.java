@@ -96,19 +96,19 @@ public class ScenarioManager extends StandardScenarioManager
     @Given("^op login into Operator V2 with username \"([^\"]*)\" and password \"([^\"]*)\"$")
     public void loginToOperatorV2(String username, String password)
     {
-        String operatorAccessToken = new StandardApiOperatorPortalSteps<ScenarioManager>(null, null)
-        {
-            @Override
-            public void init()
-            {
-            }
-        }.getOperatorAccessToken();
-
         LoginPage loginPage = new LoginPage(getWebDriver());
-        loginPage.get();
+        loginPage.loadPage();
 
         if(TestConstants.OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES)
         {
+            String operatorAccessToken = new StandardApiOperatorPortalSteps<ScenarioManager>(null, null)
+            {
+                @Override
+                public void init()
+                {
+                }
+            }.getOperatorAccessToken();
+
             loginPage.forceLogin(operatorAccessToken);
         }
         else

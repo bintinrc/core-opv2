@@ -32,7 +32,7 @@ public class LoginSteps extends AbstractSteps
     @Given("^op is in op portal login page$")
     public void loginPage()
     {
-        loginPage.get();
+        loginPage.loadPage();
     }
 
     @When("^login button is clicked$")

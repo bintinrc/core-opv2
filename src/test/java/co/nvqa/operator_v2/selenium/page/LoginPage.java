@@ -1,50 +1,40 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 
 /**
  *
  * @author Soewandi Wirjawan
  */
-public class LoginPage extends LoadableComponent<LoginPage>
+public class LoginPage extends SimplePage
 {
     private static final String GOOGLE_EXPECTED_URL_1 = "https://accounts.google.com/ServiceLogin";
     private static final String GOOGLE_EXPECTED_URL_2 = "https://accounts.google.com/signin/oauth/identifier";
 
-    private final WebDriver webDriver;
-
     public LoginPage(WebDriver webDriver)
     {
-        this.webDriver = webDriver;
-        PageFactory.initElements(webDriver, this);
+        super(webDriver);
     }
 
-    @Override
-    protected void load()
+    public void loadPage()
     {
-        webDriver.get(TestConstants.OPERATOR_PORTAL_URL);
-    }
-
-    @Override
-    protected void isLoaded() throws Error
-    {
-        String url = webDriver.getCurrentUrl();
-        Assert.assertThat("Default Operator Portal URL not loaded.", url, Matchers.containsString(TestConstants.OPERATOR_PORTAL_URL));
+        getwebDriver().get(TestConstants.OPERATOR_PORTAL_URL);
+        waitUntilPageLoaded();
     }
 
     public void forceLogin(String operatorBearerToken)
@@ -57,13 +47,13 @@ public class LoginPage extends LoadableComponent<LoginPage>
             NvLogger.info("ninja_access_token = "+operatorBearerToken);
             NvLogger.info("user = "+userCookie);
 
-            webDriver.manage().addCookie(new Cookie("ninja_access_token", operatorBearerToken, ".ninjavan.co", "/", null));
-            webDriver.manage().addCookie(new Cookie("user", userCookie, ".ninjavan.co", "/", null));
-            ((ChromeDriver) webDriver).executeScript("window.open()");
-            String currentWindowHandle = webDriver.getWindowHandle();
+            getwebDriver().manage().addCookie(new Cookie("ninja_access_token", operatorBearerToken, ".ninjavan.co", "/", null));
+            getwebDriver().manage().addCookie(new Cookie("user", userCookie, ".ninjavan.co", "/", null));
+            ((ChromeDriver) getwebDriver()).executeScript("window.open()");
+            String currentWindowHandle = getwebDriver().getWindowHandle();
             String newWindowHandle = null;
 
-            for(String windowHandle : webDriver.getWindowHandles())
+            for(String windowHandle : getwebDriver().getWindowHandles())
             {
                 if(!windowHandle.equals(currentWindowHandle))
                 {
@@ -72,13 +62,13 @@ public class LoginPage extends LoadableComponent<LoginPage>
                 }
             }
 
-            webDriver.close();
-            webDriver.switchTo().window(newWindowHandle);
-            webDriver.get(TestConstants.OPERATOR_PORTAL_URL);
+            getwebDriver().close();
+            getwebDriver().switchTo().window(newWindowHandle);
+            getwebDriver().get(TestConstants.OPERATOR_PORTAL_URL);
         }
         catch(UnsupportedEncodingException ex)
         {
-            throw new RuntimeException(ex);
+            throw new NvTestRuntimeException(ex);
         }
         finally
         {
@@ -88,7 +78,8 @@ public class LoginPage extends LoadableComponent<LoginPage>
 
     public void clickLoginButton()
     {
-        webDriver.findElement(By.xpath("//button[@ng-click='ctrl.login()']")).click();
+        click("//button[@ng-click='ctrl.login()']");
+        waitUntilPageLoaded();
     }
 
     public void enterCredential(String username, String password)
@@ -128,58 +119,44 @@ public class LoginPage extends LoadableComponent<LoginPage>
 
     public void enterCredentialWithMethod1(String username, String password)
     {
-        webDriver.findElement(By.xpath("//input[@id='Email'][@name='Email']")).sendKeys(username);
-        TestUtils.pause10ms();
-
-        webDriver.findElement(By.xpath("//input[@id='next'][@name='signIn']")).click();
-        TestUtils.pause10ms();
-
-        webDriver.findElement(By.xpath("//input[@id='Passwd'][@name='Passwd']")).sendKeys(password);
-        TestUtils.pause10ms();
-
-        webDriver.findElement(By.xpath("//input[@id='signIn'][@name='signIn']")).click();
-        TestUtils.pause10ms();
+        sendKeys("//input[@id='Email'][@name='Email']", username);
+        click("//input[@id='next'][@name='signIn']");
+        sendKeys("//input[@id='Passwd'][@name='Passwd']", password);
+        click("//input[@id='signIn'][@name='signIn']");
     }
 
+    @SuppressWarnings("unchecked")
     public void enterCredentialWithMethod2(String username, String password)
     {
-        webDriver.findElement(By.xpath("//input[@id='identifierId'][@name='identifier']")).sendKeys(username);
-        TestUtils.pause100ms();
-
-        webDriver.findElement(By.xpath("//div[@id='identifierNext']")).click();
-        TestUtils.pause100ms();
-
-        webDriver.findElement(By.xpath("//input[@name='password']")).sendKeys(password);
-        TestUtils.pause100ms();
-
-        webDriver.findElement(By.xpath("//div[@id='passwordNext']")).click();
-        TestUtils.pause100ms();
+        sendKeys("//input[@id='identifierId'][@name='identifier']", username);
+        click("//div[@id='identifierNext']");
+        pause10ms();
+        TestUtils.retryIfExpectedExceptionOccurred(()->sendKeys("//input[@name='password']", password), InvalidElementStateException.class);
+        click("//div[@id='passwordNext']");
     }
 
     public void checkForGoogleSimpleVerification(String location)
     {
-        if(webDriver.findElements(By.xpath("//span[text()='Enter the city you usually sign in from']")).size() > 0)
+        List<WebElement> listOfWebElements = findElementsByXpath("//span[text()='Enter the city you usually sign in from']");
+
+        if(!listOfWebElements.isEmpty())
         {
-            WebElement enterCityButton = webDriver.findElement(By.xpath("//span[text()='Enter the city you usually sign in from']/../.."));
-            enterCityButton.click();
-            TestUtils.pause1s();
+            click("//span[text()='Enter the city you usually sign in from']/../..");
+            pause1s();
 
-            String txtAnswerXpath = "//input[@id='answer' and @type='text']";
-            TestUtils.waitUntilElementVisible(webDriver, By.xpath(txtAnswerXpath));
-            WebElement txtAnswer = webDriver.findElement(By.xpath(txtAnswerXpath));
-            txtAnswer.clear();
-            txtAnswer.sendKeys(location);
+            WebElement txtAnswerWe = waitUntilVisibilityOfElementLocated("//input[@id='answer' and @type='text']");
+            txtAnswerWe.clear();
+            txtAnswerWe.sendKeys(location);
 
-            WebElement submitButton = webDriver.findElement(By.xpath("//input[@id='submit' and @type='submit']"));
-            submitButton.click();
-            TestUtils.pause1s();
+            click("//input[@id='submit' and @type='submit']");
+            pause1s();
         }
     }
 
     public void backToLoginPage()
     {
-        TestUtils.pause1s();
-        String url = webDriver.getCurrentUrl();
-        Assert.assertThat("Default Operator Portal URL not loaded.", url, Matchers.containsString(TestConstants.OPERATOR_PORTAL_URL));
+        pause1s();
+        String currentUrl = getwebDriver().getCurrentUrl();
+        Assert.assertThat("Default Operator Portal URL not loaded.", currentUrl, Matchers.containsString(TestConstants.OPERATOR_PORTAL_URL));
     }
 }

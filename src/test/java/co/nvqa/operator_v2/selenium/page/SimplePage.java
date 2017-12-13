@@ -711,7 +711,12 @@ public class SimplePage
         try
         {
             setImplicitTimeout(0);
-            new WebDriverWait(getwebDriver(), timeoutInSeconds).until((WebDriver wd) -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+            new WebDriverWait(getwebDriver(), timeoutInSeconds).until((WebDriver wd) ->
+            {
+                String state = String.valueOf(((JavascriptExecutor) wd).executeScript("return document.readyState"));
+                NvLogger.infof("Waiting until document.readyState = complete. Current state: %s", state);
+                return "complete".equals(state);
+            });
         }
         finally
         {
