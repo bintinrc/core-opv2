@@ -2,14 +2,22 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.util.TestConstants;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Date;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -19,7 +27,8 @@ import java.util.zip.ZipFile;
  */
 public class DriverReportPage extends SimplePage
 {
-    private static final String GENERATE_CSV_FILENAME = "driversalaries.zip";
+    private static final String GENERATED_CSV_FILENAME = "driversalaries.zip";
+    private static final String GENERATED_EXCEL_FILENAME_PATTERN = "DriverRouteXLReport";
 
     public DriverReportPage(WebDriver webDriver)
     {
@@ -45,11 +54,11 @@ public class DriverReportPage extends SimplePage
 
     public void verifyTheGeneratedCsvIsCorrect(String driverName, long expectedRouteId)
     {
-        verifyFileDownloadedSuccessfully(GENERATE_CSV_FILENAME);
+        verifyFileDownloadedSuccessfully(GENERATED_CSV_FILENAME);
 
-        String driverReportFilename = driverName+".csv";
         boolean expectedRouteIdFound = false;
-        String generatedCsvReportFilename = TestConstants.TEMP_DIR + GENERATE_CSV_FILENAME;
+        String driverReportFilename = driverName+".csv";
+        String generatedCsvReportFilename = TestConstants.TEMP_DIR + GENERATED_CSV_FILENAME;
 
         try(ZipFile zipFile = new ZipFile(generatedCsvReportFilename))
         {
@@ -67,7 +76,7 @@ public class DriverReportPage extends SimplePage
 
                         if(temp.length>1)
                         {
-                            String routeId = temp[1];
+                            String routeId = temp[1]; // Route ID is at column index 1.
 
                             if(String.format("\"%d\"", expectedRouteId).equals(routeId))
                             {
@@ -90,6 +99,62 @@ public class DriverReportPage extends SimplePage
         }
 
         String assertionErrorInfo = String.format("ZipEntry with name = '%s' on file = '%s' does not contain Route with ID = '%d'.", driverReportFilename, generatedCsvReportFilename, expectedRouteId);
+        Assert.assertTrue(assertionErrorInfo, expectedRouteIdFound);
+    }
+
+    public void clickButtonGenerateDriverRouteExcelReport()
+    {
+        clickNvApiTextButtonByNameAndWaitUntilDone("container.driver-reports.generate-excel");
+        waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']//div[contains(text(), 'Attempting to download')]");
+        waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']//div[contains(text(), 'Downloading')]");
+    }
+
+    public void verifyTheGeneratedExcelIsCorrect(String driverName, long expectedRouteId)
+    {
+        String latestExcelFilename = getLatestDownloadedFilename(GENERATED_EXCEL_FILENAME_PATTERN);
+        verifyFileDownloadedSuccessfully(latestExcelFilename);
+
+        boolean expectedRouteIdFound = false;
+        String generatedExcelReportFilename = TestConstants.TEMP_DIR + latestExcelFilename;
+
+        try
+        {
+            Workbook workbook = new HSSFWorkbook(new FileInputStream(generatedExcelReportFilename));
+            Optional<Sheet> optionalSheet = StreamSupport.stream(workbook.spliterator(), false).filter((sheet->sheet.getSheetName().equals(driverName))).findFirst();
+
+            if(optionalSheet.isPresent())
+            {
+                Sheet sheet = optionalSheet.get();
+                int physicalNumberOfRows = sheet.getPhysicalNumberOfRows();
+
+                /**
+                 * Sheet that contains Route ID is start from row index 5.
+                 */
+                for(int i=5; i<physicalNumberOfRows; i++)
+                {
+                    Row row = sheet.getRow(i);
+                    Cell cell = row.getCell(1); // Route ID is at column index 1.
+                    String actualRouteId = String.valueOf((int) cell.getNumericCellValue());
+
+                    if(String.valueOf(expectedRouteId).equals(actualRouteId))
+                    {
+                        expectedRouteIdFound = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                String listOfSheetName = StreamSupport.stream(workbook.spliterator(), false).map(entry->entry.getSheetName()).collect(Collectors.joining("\n- ", "- ", ""));
+                throw new NvTestRuntimeException(String.format("There is no Sheet with name = '%s' is found on file '%s'.\nList of Sheet name on file '%s':\n%s", driverName, generatedExcelReportFilename, generatedExcelReportFilename, listOfSheetName));
+            }
+        }
+        catch(IOException ex)
+        {
+            throw new NvTestRuntimeException(ex);
+        }
+
+        String assertionErrorInfo = String.format("Sheet with name = '%s' on file = '%s' does not contain Route with ID = '%d'.", driverName, generatedExcelReportFilename, expectedRouteId);
         Assert.assertTrue(assertionErrorInfo, expectedRouteIdFound);
     }
 }
