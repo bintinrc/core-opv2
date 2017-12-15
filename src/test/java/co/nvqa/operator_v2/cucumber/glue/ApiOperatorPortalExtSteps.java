@@ -32,7 +32,7 @@ public class ApiOperatorPortalExtSteps extends StandardApiOperatorPortalSteps<Sc
 
         try
         {
-            getOperatorPortalTagManagementClient().deleteTag(tagName);
+            getRouteClient().deleteTag(tagName);
         }
         catch(RuntimeException ex)
         {
@@ -43,7 +43,7 @@ public class ApiOperatorPortalExtSteps extends StandardApiOperatorPortalSteps<Sc
 
         try
         {
-            getOperatorPortalTagManagementClient().deleteTag(tagName);
+            getRouteClient().deleteTag(tagName);
         }
         catch(RuntimeException ex)
         {
