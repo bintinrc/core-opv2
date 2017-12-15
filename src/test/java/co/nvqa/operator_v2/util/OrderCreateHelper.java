@@ -1,15 +1,13 @@
 package co.nvqa.operator_v2.util;
 
-import co.nvqa.commons_legacy.client.order_create.OrderCreateAuthenticationClient;
-import co.nvqa.commons_legacy.client.order_create.OrderCreateV1Client;
-import co.nvqa.commons_legacy.client.order_create.OrderCreateV2Client;
-import co.nvqa.commons_legacy.client.order_create.OrderCreateV3Client;
-import co.nvqa.commons_legacy.model.order_creation.authentication.AuthRequest;
-import co.nvqa.commons_legacy.model.order_creation.authentication.AuthResponse;
+import co.nvqa.commons.client.auth.AuthClient;
+import co.nvqa.commons.client.order_create.OrderCreateClientV3;
+import co.nvqa.commons.model.auth.AuthResponse;
+import co.nvqa.commons.model.auth.ClientCredentialsAuth;
+import co.nvqa.commons.model.order_create.v3.OrderRequestV3;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -152,62 +150,17 @@ public class OrderCreateHelper
         }
     }
 
-    public static void populateRequest(co.nvqa.commons_legacy.model.order_creation.v1.CreateOrderRequest req)
+    public static void populateRequest(OrderRequestV3 orderRequestV3)
     {
-        req.setPickup_date(getDateString(req.getPickup_date()));
-        req.setDelivery_date(getDateString(req.getDelivery_date()));
-        req.setShipper_order_ref_no(getShipperRef(req.getShipper_order_ref_no()));
+        orderRequestV3.setPickupDate(getDateString(orderRequestV3.getPickupDate()));
+        orderRequestV3.setDeliveryDate(getDateString(orderRequestV3.getDeliveryDate()));
+        orderRequestV3.setOrderRefNo(getShipperRef(orderRequestV3.getOrderRefNo()));
+        orderRequestV3.setRequestedTrackingId(getRequestedTrackingId(orderRequestV3.getRequestedTrackingId()));
     }
 
-    public static void populateRequest(co.nvqa.commons_legacy.model.order_creation.v2.CreateOrderRequest req)
+    public static OrderCreateClientV3 getOrderCreateClientV3()
     {
-        req.setPickup_date(getDateString(req.getPickup_date()));
-        req.setDelivery_date(getDateString(req.getDelivery_date()));
-        req.setShipper_order_ref_no(getShipperRef(req.getShipper_order_ref_no()));
-        req.setTracking_ref_no(getStringRequestedTrackingId(req.getTracking_ref_no()));
-    }
-
-    public static void populateRequest(co.nvqa.commons_legacy.model.order_creation.v3.CreateOrderRequest req)
-    {
-        req.setPickupDate(getDateString(req.getPickupDate()));
-        req.setDeliveryDate(getDateString(req.getDeliveryDate()));
-        req.setOrderRefNo(getShipperRef(req.getOrderRefNo()));
-        req.setRequestedTrackingId(getRequestedTrackingId(req.getRequestedTrackingId()));
-    }
-
-    public static OrderCreateAuthenticationClient getAuthenticationClient()
-    {
-        return new OrderCreateAuthenticationClient(TestConstants.API_BASE_URL, TestConstants.API_BASE_URL);
-    }
-
-    public static OrderCreateV1Client getVersion1Client(String accessToken)
-    {
-        return new OrderCreateV1Client(TestConstants.API_BASE_URL, TestConstants.API_BASE_URL, accessToken);
-    }
-
-    public static OrderCreateV1Client getVersion1Client()
-    {
-        return getVersion1Client(getOrderCreateAccessToken());
-    }
-
-    public static OrderCreateV2Client getVersion2Client(String accessToken)
-    {
-        return new OrderCreateV2Client(TestConstants.API_BASE_URL, TestConstants.API_BASE_URL, accessToken);
-    }
-
-    public static OrderCreateV2Client getVersion2Client()
-    {
-        return getVersion2Client(getOrderCreateAccessToken());
-    }
-
-    public static OrderCreateV3Client getVersion3Client(String accessToken)
-    {
-        return new OrderCreateV3Client(TestConstants.API_BASE_URL, TestConstants.API_BASE_URL, accessToken);
-    }
-
-    public static OrderCreateV3Client getVersion3Client()
-    {
-        return getVersion3Client(getOrderCreateAccessToken());
+        return new OrderCreateClientV3(TestConstants.API_BASE_URL, getShipperAccessToken());
     }
 
     /**
@@ -215,29 +168,16 @@ public class OrderCreateHelper
      *
      * @return
      */
-    public static String getOrderCreateAccessToken()
+    public static String getShipperAccessToken()
     {
-        try
+        if(CREATE_ORDER_ACCESS_TOKEN==null)
         {
-            if(CREATE_ORDER_ACCESS_TOKEN==null)
-            {
-                AuthRequest loginRequest = new AuthRequest(TestConstants.SHIPPER_V3_CLIENT_ID, TestConstants.SHIPPER_V3_CLIENT_SECRET);
-                OrderCreateAuthenticationClient client = getAuthenticationClient();
-                AuthResponse resp = client.login(loginRequest);
-                CREATE_ORDER_ACCESS_TOKEN = resp.getAccess_token();
-
-                /**
-                 * I deleted this line below because it called deprecated method
-                 * that does not have any implementation (all code in this method is commented).
-                 */
-                //client.refreshShipperAccountCache(TestConstants.SHIPPER_ID);
-            }
-
-            return CREATE_ORDER_ACCESS_TOKEN;
+            ClientCredentialsAuth clientCredentialsAuth = new ClientCredentialsAuth(TestConstants.SHIPPER_V3_CLIENT_ID, TestConstants.SHIPPER_V3_CLIENT_SECRET);
+            AuthClient authClient = new AuthClient(TestConstants.API_BASE_URL);
+            AuthResponse authResponse = authClient.authenticate(clientCredentialsAuth);
+            CREATE_ORDER_ACCESS_TOKEN = authResponse.getAccessToken();
         }
-        catch(IOException ex)
-        {
-            throw new RuntimeException("Error on method 'getOrderCreateAccessToken'.", ex);
-        }
+
+        return CREATE_ORDER_ACCESS_TOKEN;
     }
 }

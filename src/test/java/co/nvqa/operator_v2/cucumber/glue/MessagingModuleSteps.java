@@ -35,7 +35,7 @@ public class MessagingModuleSteps extends AbstractSteps
     @Then("^op upload sms campaign csv file$")
     public void uploadSmsCampaignCsv(List<SmsCampaignCsv> data)
     {
-        String trackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
 
         if(trackingId!=null)
         {
@@ -67,7 +67,7 @@ public class MessagingModuleSteps extends AbstractSteps
     @When("^op compose sms with data : ([^\"]*), ([^\"]*)$")
     public void composeSms(String name, String trackingId)
     {
-        String createdTrackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
+        String createdTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
 
         if(createdTrackingId!=null)
         {
@@ -120,7 +120,7 @@ public class MessagingModuleSteps extends AbstractSteps
     @Then("^op verify that sms sent to phone number ([^\"]*) and tracking id ([^\"]*)$")
     public void verifyOnTrackingIdValid(String trackingId, String contactNumber)
     {
-        String createdTrackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
+        String createdTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
 
         if(createdTrackingId!=null && "_created_".equalsIgnoreCase(trackingId))
         {

@@ -33,8 +33,8 @@ public class ShipmentScanningSteps extends AbstractSteps
     @When("^scan order to shipment in hub ([^\"]*)$")
     public void scanOrderToShipment(String hub)
     {
-        String trackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
-        String shipmentId = getScenarioStorage().get(KEY_SHIPMENT_ID);
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        String shipmentId = get(KEY_SHIPMENT_ID);
         shipmentScanningPage.selectHub(hub);
         shipmentScanningPage.selectShipment(shipmentId);
         TestUtils.inputText(getWebDriver(), ShipmentScanningPage.XPATH_BARCODE_SCAN, trackingId + "\n");

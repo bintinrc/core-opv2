@@ -46,20 +46,20 @@ public class ZonesSteps extends AbstractSteps
         zone.setDescription(String.format("This zone is created by Operator V2 automation test. Created at %s.", new Date()));
 
         zonesPage.addZone(zone);
-        getScenarioStorage().put("zone", zone);
+        put("zone", zone);
     }
 
     @Then("^Operator verify the new Zone is created successfully$")
     public void operatorVerifyTheNewZoneIsCreatedSuccessfully()
     {
-        Zone zone = getScenarioStorage().get("zone");
+        Zone zone = get("zone");
         zonesPage.verifyNewZoneIsCreatedSuccessfully(zone);
     }
 
     @When("^Operator update the new Zone$")
     public void operatorUpdateTheNewZone()
     {
-        Zone zone = getScenarioStorage().get("zone");
+        Zone zone = get("zone");
 
         Zone zoneEdited = new Zone();
         zoneEdited.setName(zone.getName()+"-EDITED");
@@ -69,49 +69,49 @@ public class ZonesSteps extends AbstractSteps
         zoneEdited.setHubName(zone.getHubName());
         zoneEdited.setDescription(zone.getDescription()+" [EDITED]");
 
-        getScenarioStorage().put("zoneEdited", zoneEdited);
+        put("zoneEdited", zoneEdited);
         zonesPage.editZone(zone, zoneEdited);
     }
 
     @Then("^Operator verify the new Zone is updated successfully$")
     public void operatorVerifyTheNewZoneIsUpdatedSuccessfully()
     {
-        Zone zoneEdited = getScenarioStorage().get("zoneEdited");
+        Zone zoneEdited = get("zoneEdited");
         zonesPage.verifyZoneIsUpdatedSuccessfully(zoneEdited);
     }
 
     @When("^Operator delete the new Zone$")
     public void operatorDeleteTheNewZone()
     {
-        Zone zone = getScenarioStorage().containsKey("zoneEdited") ? getScenarioStorage().get("zoneEdited") : getScenarioStorage().get("zone");
+        Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get("zone");
         zonesPage.deleteZone(zone);
     }
 
     @Then("^Operator verify the new Zone is deleted successfully$")
     public void operatorVerifyTheNewZoneIsDeletedSuccessfully()
     {
-        Zone zone = getScenarioStorage().containsKey("zoneEdited") ? getScenarioStorage().get("zoneEdited") : getScenarioStorage().get("zone");
+        Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get("zone");
         zonesPage.verifyZoneIsDeletedSuccessfully(zone);
     }
 
     @Then("^Operator check all filters on Zones page work fine$")
     public void operatorCheckAllFiltersOnZonesPageWork()
     {
-        Zone zone = getScenarioStorage().get("zone");
+        Zone zone = get("zone");
         zonesPage.verifyAllFiltersWorkFine(zone);
     }
 
     @When("^Operator download Zone CSV file$")
     public void operatorDownloadZoneCsvFile()
     {
-        Zone zone = getScenarioStorage().get("zone");
+        Zone zone = get("zone");
         zonesPage.downloadCsvFile(zone);
     }
 
     @Then("^Operator verify Zone CSV file is downloaded successfully$")
     public void operatorVerifyZoneCsvFileIsDownloadSuccessfully()
     {
-        Zone zone = getScenarioStorage().get("zone");
+        Zone zone = get("zone");
         zonesPage.verifyCsvFileDownloadedSuccessfully(zone);
     }
 }

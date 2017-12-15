@@ -48,14 +48,14 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
         TestUtils.clickBtn(getWebDriver(), scanningPage.grabXpathButton(label));
         TestUtils.clickBtn(getWebDriver(), scanningPage.grabXpathButton("Start Inbound"));
 
-        scanningPage.inputShipmentToInbound(getScenarioStorage().get(KEY_SHIPMENT_ID));
-        scanningPage.checkSessionScan(getScenarioStorage().get(KEY_SHIPMENT_ID));
+        scanningPage.inputShipmentToInbound(get(KEY_SHIPMENT_ID));
+        scanningPage.checkSessionScan(get(KEY_SHIPMENT_ID));
     }
 
     @Then("^inbounded shipment exist$")
     public void inbounded_shipment_exist()
     {
-        String shipmentId = getScenarioStorage().get(KEY_SHIPMENT_ID);
+        String shipmentId = get(KEY_SHIPMENT_ID);
         List<ShipmentManagementPage.Shipment> shipmentList = shipmentManagementPage.getShipmentsFromTable();
         boolean isExist = false;
 

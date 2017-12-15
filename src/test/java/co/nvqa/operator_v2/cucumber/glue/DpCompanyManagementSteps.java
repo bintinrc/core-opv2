@@ -45,20 +45,20 @@ public class DpCompanyManagementSteps extends AbstractSteps
         dpCompany.setCollectWebhookUrl(String.format("https://www.collectwebhook-%s.co", uniqueCode));
         dpCompany.setIntegrated(Boolean.FALSE);
         dpCompanyManagementPage.addDpCompany(dpCompany);
-        getScenarioStorage().put("dpCompany", dpCompany);
+        put("dpCompany", dpCompany);
     }
 
     @Then("^Operator verify the new DP Company is created successfully$")
     public void operatorVerifyDpCompanyIsCreatedSuccessfully()
     {
-        DpCompany dpCompany = getScenarioStorage().get("dpCompany");
+        DpCompany dpCompany = get("dpCompany");
         dpCompanyManagementPage.verifyDpCompanyIsCreatedSuccessfully(dpCompany);
     }
 
     @When("^Operator update the new DP Company$")
     public void operatorUpdateDpCompany()
     {
-        DpCompany dpCompany = getScenarioStorage().get("dpCompany");
+        DpCompany dpCompany = get("dpCompany");
 
         DpCompany dpCompanyEdited = new DpCompany();
         dpCompanyEdited.setName(dpCompany.getName()+" [EDITED]");
@@ -68,34 +68,34 @@ public class DpCompanyManagementSteps extends AbstractSteps
         dpCompanyEdited.setCollectWebhookUrl(dpCompany.getCollectWebhookUrl()+".sg");
         dpCompanyEdited.setIntegrated(Boolean.TRUE);
         dpCompanyManagementPage.editDpCompany(dpCompanyEdited);
-        getScenarioStorage().put("dpCompanyEdited", dpCompanyEdited);
+        put("dpCompanyEdited", dpCompanyEdited);
     }
 
     @Then("^Operator verify the new DP Company is updated successfully$")
     public void operatorVerifyDpCompanyIsUpdatedSuccessfully()
     {
-        DpCompany dpCompanyEdited = getScenarioStorage().get("dpCompanyEdited");
+        DpCompany dpCompanyEdited = get("dpCompanyEdited");
         dpCompanyManagementPage.verifyDpCompanyIsUpdatedSuccessfully(dpCompanyEdited);
     }
 
     @When("^Operator delete the new DP Company$")
     public void operatorDeleteDpCompany()
     {
-        DpCompany dpCompany = getScenarioStorage().get("dpCompany");
+        DpCompany dpCompany = get("dpCompany");
         dpCompanyManagementPage.deleteDpCompany(dpCompany);
     }
 
     @Then("^Operator verify the new DP Company is deleted successfully$")
     public void operatorVerifyDpCompanyIsDeletedSuccessfully()
     {
-        DpCompany dpCompany = getScenarioStorage().get("dpCompany");
+        DpCompany dpCompany = get("dpCompany");
         dpCompanyManagementPage.verifyDpCompanyIsDeletedSuccessfully(dpCompany);
     }
 
     @Then("^Operator check all filters on DP Company Management page work fine$")
     public void operatorCheckAllFiltersOnDpCompanyManagementPageWork()
     {
-        DpCompany dpCompany = getScenarioStorage().get("dpCompany");
+        DpCompany dpCompany = get("dpCompany");
         dpCompanyManagementPage.verifyAllFiltersWorkFine(dpCompany);
     }
 
@@ -108,14 +108,14 @@ public class DpCompanyManagementSteps extends AbstractSteps
     @When("^Operator verify DP Company CSV file downloaded successfully$")
     public void operatorVerifyDpCompanyCsvFileDownloadSuccessfully()
     {
-        DpCompany dpCompany = getScenarioStorage().get("dpCompany");
+        DpCompany dpCompany = get("dpCompany");
         dpCompanyManagementPage.verifyCsvFileDownloadedSuccessfully(dpCompany);
     }
 
     @When("^Operator create new Agent for the new DP Company$")
     public void operatorCreateNewAgentForTheNewDpCompany()
     {
-        DpCompany dpCompany = getScenarioStorage().get("dpCompany");
+        DpCompany dpCompany = get("dpCompany");
         dpCompanyManagementPage.clickSeeVault(dpCompany);
 
         String uniqueCode = generateDateUniqueString();
@@ -126,20 +126,20 @@ public class DpCompanyManagementSteps extends AbstractSteps
         dpCompanyAgent.setUnlockCode(uniqueCode);
         dpCompanyAgentPage.addDpCompanyAgent(dpCompanyAgent);
 
-        getScenarioStorage().put("dpCompanyAgent", dpCompanyAgent);
+        put("dpCompanyAgent", dpCompanyAgent);
     }
 
     @Then("^Operator verify the new Agent for the new DP Company is created successfully$")
     public void operatorVerifyTheNewAgentForTheNewDpCompanyIsCreatedSuccessfully()
     {
-        DpCompanyAgent dpCompanyAgent = getScenarioStorage().get("dpCompanyAgent");
+        DpCompanyAgent dpCompanyAgent = get("dpCompanyAgent");
         dpCompanyAgentPage.verifyDpCompanyAgentIsCreatedSuccessfully(dpCompanyAgent);
     }
 
     @When("^Operator update the new Agent for the new DP Company$")
     public void operatorUpdateTheNewAgentForTheNewDpCompany()
     {
-        DpCompanyAgent dpCompanyAgent = getScenarioStorage().get("dpCompanyAgent");
+        DpCompanyAgent dpCompanyAgent = get("dpCompanyAgent");
 
         DpCompanyAgent dpCompanyAgentEdited = new DpCompanyAgent();
         dpCompanyAgentEdited.setName(dpCompanyAgent.getName()+" [EDITED]");
@@ -148,34 +148,34 @@ public class DpCompanyManagementSteps extends AbstractSteps
         dpCompanyAgentEdited.setUnlockCode(dpCompanyAgent.getUnlockCode()+"1");
         dpCompanyAgentPage.editDpCompanyAgent(dpCompanyAgentEdited);
 
-        getScenarioStorage().put("dpCompanyAgentEdited", dpCompanyAgentEdited);
+        put("dpCompanyAgentEdited", dpCompanyAgentEdited);
     }
 
     @Then("^Operator verify the new Agent for the new DP Company is updated successfully$")
     public void operatorVerifyTheNewAgentForTheNewDpCompanyIsUpdatedSuccessfully()
     {
-        DpCompanyAgent dpCompanyAgentEdited = getScenarioStorage().get("dpCompanyAgentEdited");
+        DpCompanyAgent dpCompanyAgentEdited = get("dpCompanyAgentEdited");
         dpCompanyAgentPage.verifyDpCompanyAgentIsUpdatedSuccessfully(dpCompanyAgentEdited);
     }
 
     @When("^Operator delete the new Agent for the new DP Company$")
     public void operatorDeleteTheNewAgentForTheNewDpCompany()
     {
-        DpCompanyAgent dpCompanyAgent = getScenarioStorage().get("dpCompanyAgent");
+        DpCompanyAgent dpCompanyAgent = get("dpCompanyAgent");
         dpCompanyAgentPage.deleteDpCompanyAgent(dpCompanyAgent);
     }
 
     @Then("^Operator verify the new Agent for the new DP Company is deleted successfully$")
     public void operatorVerifyTheNewAgentForTheNewDpCompanyIsDeletedSuccessfully()
     {
-        DpCompanyAgent dpCompanyAgent = getScenarioStorage().get("dpCompanyAgent");
+        DpCompanyAgent dpCompanyAgent = get("dpCompanyAgent");
         dpCompanyAgentPage.verifyDpCompanyAgentIsDeletedSuccessfully(dpCompanyAgent);
     }
 
     @When("^Operator back to DP Company Management page$")
     public void operatorBackToDpCompanyManagementPage()
     {
-        DpCompany dpCompany = getScenarioStorage().get("dpCompany");
+        DpCompany dpCompany = get("dpCompany");
         dpCompanyAgentPage.backToDpCompanyManagementPage(dpCompany);
     }
 }

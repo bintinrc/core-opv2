@@ -33,7 +33,7 @@ public class AddParcelToRouteSteps extends AbstractSteps
     @When("^Operator V2 choose route group, select tag \"([^\"]*)\" and submit$")
     public void submitOnAddParcelToRoute(String tag)
     {
-        String routeGroupName = getScenarioStorage().get(KEY_ROUTE_GROUP_NAME);
+        String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
         takesScreenshot();
         addParcelToRoutePage.selectCurrentDate();
         takesScreenshot();
@@ -50,7 +50,7 @@ public class AddParcelToRouteSteps extends AbstractSteps
     @Then("^verify parcel added to route$")
     public void verifyParcelAddedToRoute()
     {
-        String expectedTrackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
+        String expectedTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         String xpath = String.format("//td[contains(@class, 'tracking_id') and contains(text(), '%s')]", expectedTrackingId);
         takesScreenshot();
         WebElement actualTrackingId = addParcelToRoutePage.findElementByXpath(xpath);

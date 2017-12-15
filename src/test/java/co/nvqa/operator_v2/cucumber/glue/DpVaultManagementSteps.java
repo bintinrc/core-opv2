@@ -47,34 +47,34 @@ public class DpVaultManagementSteps extends AbstractSteps
         dpVault.setLongitude(Double.parseDouble("103."+uniqueCoordinate));
 
         dpVaultManagementPage.addDpVault(dpVault);
-        getScenarioStorage().put("dpVault", dpVault);
+        put("dpVault", dpVault);
     }
 
     @Then("^Operator verify the new DP Vault is created successfully$")
     public void operatorVerifyDpVaultIsCreatedSuccessfully()
     {
-        DpVault dpVault = getScenarioStorage().get("dpVault");
+        DpVault dpVault = get("dpVault");
         dpVaultManagementPage.verifyDpCompanyIsCreatedSuccessfully(dpVault);
     }
 
     @When("^Operator delete the new DP Vault$")
     public void operatorDeleteDpVault()
     {
-        DpVault dpVault = getScenarioStorage().get("dpVault");
+        DpVault dpVault = get("dpVault");
         dpVaultManagementPage.deleteDpVault(dpVault);
     }
 
     @Then("^Operator verify the new DP Vault is deleted successfully$")
     public void operatorVerifyDpVaultIsDeletedSuccessfully()
     {
-        DpVault dpVault = getScenarioStorage().get("dpVault");
+        DpVault dpVault = get("dpVault");
         dpVaultManagementPage.verifyDpVaultIsDeletedSuccessfully(dpVault);
     }
 
     @Then("^Operator check all filters on DP Vault Management page work fine$")
     public void operatorCheckAllFiltersOnDpVaultManagementPageWork()
     {
-        DpVault dpVault = getScenarioStorage().get("dpVault");
+        DpVault dpVault = get("dpVault");
         dpVaultManagementPage.verifyAllFiltersWorkFine(dpVault);
     }
 
@@ -87,7 +87,7 @@ public class DpVaultManagementSteps extends AbstractSteps
     @When("^Operator verify DP Vault CSV file downloaded successfully$")
     public void operatorVerifyDpVaultCsvFileDownloadSuccessfully()
     {
-        DpVault dpVault = getScenarioStorage().get("dpVault");
+        DpVault dpVault = get("dpVault");
         dpVaultManagementPage.verifyCsvFileDownloadedSuccessfully(dpVault);
     }
 }

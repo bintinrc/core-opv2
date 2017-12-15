@@ -35,16 +35,16 @@ public class RecoveryTicketsSteps extends AbstractSteps
     @When("^op create new ticket on Recovery Tickets menu with this property below:$")
     public void createNewTicket(DataTable dataTable)
     {
-        String trackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         Map<String,String> mapOfTicketParam = dataTable.asMap(String.class, String.class);
         recoveryTicketsPage.createTicket(trackingId, mapOfTicketParam);
-        getScenarioStorage().put("mapOfTicketData", mapOfTicketParam);
+        put("mapOfTicketData", mapOfTicketParam);
     }
 
     @Then("^verify ticket is created successfully$")
     public void verifyTicketIsCreateSuccessfully()
     {
-        String trackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         boolean isTicketCreated = recoveryTicketsPage.verifyTicketIsExist(trackingId);
         Assert.assertTrue(String.format("Ticket '%s' does not created.", trackingId), isTicketCreated);
     }

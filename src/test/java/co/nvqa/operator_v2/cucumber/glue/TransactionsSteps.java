@@ -31,9 +31,9 @@ public class TransactionsSteps extends AbstractSteps
     @When("^Operator V2 add 'Transaction' to 'Route Group'$")
     public void addTransactionToRouteGroup()
     {
-        String trackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
-        String routeGroupName = getScenarioStorage().get(KEY_ROUTE_GROUP_NAME);
-        String routeGroupTemplateName = getScenarioStorage().get("routeGroupTemplateName");
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
+        String routeGroupTemplateName = get("routeGroupTemplateName");
 
         //transactionsPage.selectVariable(routeGroupTemplateName);
         transactionsPage.selectShipperFilter(TestConstants.SHIPPER_V2_CLIENT_ID);

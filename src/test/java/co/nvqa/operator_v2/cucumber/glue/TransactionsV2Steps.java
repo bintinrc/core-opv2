@@ -32,8 +32,8 @@ public class TransactionsV2Steps extends AbstractSteps
     @When("^Operator V2 add created Transaction to Route Group$")
     public void addCreatedTransactionToRouteGroup()
     {
-        String expectedTrackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
-        String routeGroupName = getScenarioStorage().get(KEY_ROUTE_GROUP_NAME);
+        String expectedTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
 
         transactionsPage.removeFilter("Start Datetime");
         transactionsPage.removeFilter("End Datetime");
@@ -54,8 +54,8 @@ public class TransactionsV2Steps extends AbstractSteps
     @When("^Operator V2 add created Transactions to Route Group$")
     public void addCreatedTransactionsToRouteGroup()
     {
-        List<String> trackingIds = getScenarioStorage().get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-        String routeGroupName = getScenarioStorage().get(KEY_ROUTE_GROUP_NAME);
+        List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
 
         trackingIds.forEach((String trackingId)->
         {
