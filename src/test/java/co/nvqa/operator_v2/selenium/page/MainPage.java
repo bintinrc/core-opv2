@@ -71,7 +71,7 @@ public class MainPage extends SimplePage
 
         waitUntilPageLoaded();
         NvLogger.infof("Waiting until Welcome message toast disappear.");
-        waitUntilInvisibilityOfElementLocated(XPATH_OF_TOAST_WELCOME_DASHBOARD);
+        waitUntilInvisibilityOfElementLocated(XPATH_OF_TOAST_WELCOME_DASHBOARD, TestConstants.VERY_LONG_WAIT_FOR_TOAST);
     }
 
     public void clickNavigation(String parentTitle, String navTitle)

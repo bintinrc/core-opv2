@@ -399,6 +399,32 @@ public class SimplePage
         }
     }
 
+    public void selectValueFromNvAutocomplete(String searchTextAttribute, String value)
+    {
+        String xpath = String.format("//nv-autocomplete[@search-text='%s']//input", searchTextAttribute);
+        WebElement we = findElementByXpath(xpath);
+        we.sendKeys(value);
+        pause1s();
+        we.sendKeys(Keys.RETURN);
+        pause100ms();
+    }
+
+    public void selectValueFromMdSelect(String mdSelectNgModel, String value)
+    {
+        click(String.format("//md-select[@ng-model='%s']", mdSelectNgModel));
+        click(String.format("//div[@aria-hidden='false']//md-option[@value='%s']", value));
+    }
+
+    public void selectValueFromMdSelectMenu(String xpathMdSelectMenu, String xpathMdSelectOption)
+    {
+        WebElement mdSelectMenu = findElementByXpath(xpathMdSelectMenu);
+        mdSelectMenu.click();
+        pause300ms();
+        WebElement mdSelectOption = findElementByXpath(xpathMdSelectOption);
+        mdSelectOption.click();
+        pause300ms();
+    }
+
     public void inputListBox(String placeHolder, String searchValue)
     {
         String xpath = String.format("//input[@placeholder='%s']", placeHolder);
@@ -421,16 +447,6 @@ public class SimplePage
                 .build()
                 .perform();
         pause100ms();
-    }
-
-    public void selectValueFromMdSelectMenu(String xpathMdSelectMenu, String xpathMdSelectOption)
-    {
-        WebElement mdSelectMenu = findElementByXpath(xpathMdSelectMenu);
-        mdSelectMenu.click();
-        pause300ms();
-        WebElement mdSelectOption = findElementByXpath(xpathMdSelectOption);
-        mdSelectOption.click();
-        pause300ms();
     }
 
     public boolean isElementExist(String xpathExpression)

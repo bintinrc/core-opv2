@@ -47,6 +47,8 @@ public final class TestConstants extends StandardTestConstants
     public static final String NINJA_DRIVER_USERNAME;
     public static final String NINJA_DRIVER_PASSWORD;
 
+    public static final int VERY_LONG_WAIT_FOR_TOAST = 90;
+
     static
     {
         loadProperties(ENVIRONMENT_SYSTEM_PROPERTY, CONFIGURATION_FILE);
