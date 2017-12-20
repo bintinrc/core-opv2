@@ -57,7 +57,7 @@ public class RouteLogsSteps extends AbstractSteps
     @When("^op click 'Edit Route' and then click 'Load Waypoints of Selected Route\\(s\\) Only'$")
     public void loadWaypointsOfSelectedRoute()
     {
-        int routeId = get(KEY_CREATED_ROUTE_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
         routeLogsPage.searchAndVerifyRouteExist(String.valueOf(routeId));
         routeLogsPage.clickActionButtonOnTable(1, RouteLogsPage.ACTION_BUTTON_EDIT_ROUTE);
         pause100ms();
@@ -68,7 +68,7 @@ public class RouteLogsSteps extends AbstractSteps
     @Then("^op redirect to this page '([^\"]*)'$")
     public void verifyLoadWaypointsOfSelectedRoute(String redirectUrl)
     {
-        int routeId = get(KEY_CREATED_ROUTE_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
 
         String primaryWindowHandle = getWebDriver().getWindowHandle();
         Set<String> windowHandles = getWebDriver().getWindowHandles();
@@ -121,7 +121,7 @@ public class RouteLogsSteps extends AbstractSteps
     @When("^op click 'Edit Details'$")
     public void opClickEditDetails()
     {
-        int routeId = get(KEY_CREATED_ROUTE_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
         routeLogsPage.searchAndVerifyRouteExist(String.valueOf(routeId));
         routeLogsPage.clickActionButtonOnTable(1, RouteLogsPage.ACTION_BUTTON_EDIT_DETAILS);
         pause100ms();
@@ -137,7 +137,7 @@ public class RouteLogsSteps extends AbstractSteps
     @Then("^route's driver must be changed to '([^\"]*)' in table list$")
     public void verifyRouteDriverIsChanged(String newDriverName)
     {
-        int routeId = get(KEY_CREATED_ROUTE_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
 
         boolean loadSelectionButtonIsVisible;
         int counter = 1;
@@ -174,14 +174,14 @@ public class RouteLogsSteps extends AbstractSteps
     @When("^op add tag '([^\"]*)'$")
     public void opAddNewTagToRoute(String newTag)
     {
-        int routeId = get(KEY_CREATED_ROUTE_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
         routeLogsPage.selectTag(String.valueOf(routeId), newTag);
     }
 
     @Then("^route's tag must contain '([^\"]*)'$")
     public void verifyNewTagAddedToRoute(String newTag)
     {
-        int routeId = get(KEY_CREATED_ROUTE_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
         String tags = routeLogsPage.getRouteTag(String.valueOf(routeId));
         Assert.assertThat(String.format("Route does not contains tag '%s'.", newTag), tags, Matchers.containsString(newTag));
     }
@@ -189,14 +189,14 @@ public class RouteLogsSteps extends AbstractSteps
     @When("^op delete route on Operator V2$")
     public void opDeleteDeleteRoute()
     {
-        int routeId = get(KEY_CREATED_ROUTE_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
         routeLogsPage.deleteRoute(String.valueOf(routeId));
     }
 
     @Then("^route must be deleted successfully$")
     public void verifyRouteDeletedSuccessfully()
     {
-        int routeId = get(KEY_CREATED_ROUTE_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
         routeLogsPage.searchTableByRouteId(String.valueOf(routeId));
         boolean isTableEmpty = routeLogsPage.isTableEmpty();
         put(KEY_ROUTE_IS_ALREADY_DELETED, true);

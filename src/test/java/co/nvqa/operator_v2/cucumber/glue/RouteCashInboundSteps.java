@@ -35,7 +35,7 @@ public class RouteCashInboundSteps extends AbstractSteps
     public void operatorCreateNewCod()
     {
         OrderRequestV2 orderV2 = get(KEY_CREATED_ORDER);
-        int routeId = get(KEY_CREATED_ROUTE_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
 
         Double codGoods = orderV2.getCodGoods();
         Assert.assertNotNull("COD Goods should not be null.", codGoods);
