@@ -106,7 +106,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     public void linehaulExist()
     {
         shipmentLinehaulPage.clickTab("LINEHAUL ENTRIES");
-        shipmentLinehaulPage.clickLoadAllShipmentButton();
+        shipmentLinehaulPage.clickButtonLoadSelection();
         shipmentLinehaulPage.search(linehaulId);
         List<WebElement> list = shipmentLinehaulPage.grabListOfLinehaulId();
         boolean isExist = false;
@@ -259,5 +259,11 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     {
         shipmentLinehaulPage.clickEditSearchFilterButton();
         pause1s();
+    }
+
+    @When("^Operator click \"Load All Selection\" on Linehaul Management page$")
+    public void operatorClickLoadAllSelectionOnLinehaulManagementPage()
+    {
+        shipmentLinehaulPage.clickButtonLoadSelection();
     }
 }

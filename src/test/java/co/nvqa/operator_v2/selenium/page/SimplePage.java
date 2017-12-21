@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
+import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
@@ -199,8 +200,14 @@ public class SimplePage
     public WebElement getToast()
     {
         String xpath = "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div";
+        return waitUntilVisibilityOfElementLocated(xpath);
+    }
+
+    public List<WebElement> getToasts()
+    {
+        String xpath = "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div";
         waitUntilVisibilityOfElementLocated(xpath);
-        return findElementByXpath(xpath);
+        return findElementsByXpath(xpath);
     }
 
     public WebElement findElementByXpath(String xpathExpression)
@@ -738,6 +745,11 @@ public class SimplePage
         {
             resetImplicitTimeout();
         }
+    }
+
+    public String getCurrentMethodName()
+    {
+        return StandardTestUtils.getCurrentMethodName();
     }
 
     public void pause10ms()

@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -47,6 +48,7 @@ public class ShipmentManagementPage extends SimplePage
     public void clickEditSearchFilterButton()
     {
         click(XPATH_EDIT_SEARCH_FILTER_BUTTON);
+        pause1s();
     }
 
     public void clickButtonLoadSelection()
@@ -54,15 +56,17 @@ public class ShipmentManagementPage extends SimplePage
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
     }
 
-    public void clickButtonSaveChangesOnEditShipmentDialog()
+    public void clickButtonSaveChangesOnEditShipmentDialog(String shipmentId)
     {
         clickNvIconTextButtonByNameAndWaitUntilDone("Save Changes");
+        pause1s();
+        waitUntilInvisibilityOfElementLocated(String.format("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s updated']", shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
     }
 
     public List<Shipment> getShipmentsFromTable()
     {
         List<Shipment> shipmentsResult = new ArrayList<>();
-        List<WebElement> shipments = getwebDriver().findElements(By.xpath(XPATH_SHIPMENTS_TR));
+        List<WebElement> shipments = findElementsByXpath(XPATH_SHIPMENTS_TR);
 
         for(WebElement shipment : shipments)
         {
@@ -80,17 +84,17 @@ public class ShipmentManagementPage extends SimplePage
 
     private WebElement grabLineHaul()
     {
-        return getwebDriver().findElement(By.xpath(XPATH_LINEHAUL_DROPDOWN));
+        return findElementByXpath(XPATH_LINEHAUL_DROPDOWN);
     }
 
     private WebElement grabStartHubDiv()
     {
-        return getwebDriver().findElement(By.xpath(XPATH_START_HUB_DROPDOWN));
+        return findElementByXpath(XPATH_START_HUB_DROPDOWN);
     }
 
     private WebElement grabEndHubDiv()
     {
-        return getwebDriver().findElement(By.xpath(XPATH_END_HUB_DROPDOWN));
+        return findElementByXpath(XPATH_END_HUB_DROPDOWN);
     }
 
     public void selectFirstLineHaul()
@@ -105,6 +109,7 @@ public class ShipmentManagementPage extends SimplePage
         grabStartHubDiv().click();
         pause1s();
         click(XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + hubName + "']]");
+        pause200ms();
     }
 
     public void selectEndHub(String hubName)
@@ -112,16 +117,18 @@ public class ShipmentManagementPage extends SimplePage
         grabEndHubDiv().click();
         pause1s();
         click(XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + hubName + "']]");
+        pause200ms();
     }
 
     public void fillFieldComments(String comments)
     {
         sendKeys(XPATH_COMMENT_TEXT_AREA, comments);
+        pause200ms();
     }
 
     public void setupSort(String var1, String var2)
     {
-        WebElement sort = getwebDriver().findElement(By.xpath(XPATH_SORT_DIV));
+        WebElement sort = findElementByXpath(XPATH_SORT_DIV);
         List<WebElement> sortVars = sort.findElements(By.tagName("md-select"));
 
         sortVars.get(0).click();
@@ -145,6 +152,8 @@ public class ShipmentManagementPage extends SimplePage
         click(String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", value));
         TestUtils.hoverMouseTo(getwebDriver(), "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
         click("//h4[text()='Select Search Filters']");
+
+        pause1s();
     }
 
     public String grabXPathFilter(String filterLabel)
@@ -160,7 +169,7 @@ public class ShipmentManagementPage extends SimplePage
     public void shipmentScanExist(String source, String hub)
     {
         String xpath = XPATH_SHIPMENT_SCAN + "[td[text()='" + source + "']]" + "[td[text()='" + hub + "']]";
-        WebElement scan = getwebDriver().findElement(By.xpath(xpath));
+        WebElement scan = findElementByXpath(xpath);
         Assert.assertEquals("shipment(" + source + ") not exist", "tr", scan.getTagName());
     }
 
@@ -185,13 +194,179 @@ public class ShipmentManagementPage extends SimplePage
 
         Assert.assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage, Matchers.allOf(Matchers.containsString("Shipment"), Matchers.containsString("created")));
         String shipmentId = toastMessage.split(" ")[1];
+        waitUntilInvisibilityOfElementLocated(String.format("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s created']", shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
+
         return shipmentId;
+    }
+
+    public void clickActionButton(String shipmentId, String actionButton)
+    {
+        List<Shipment> shipments = getShipmentsFromTable();
+
+        for(Shipment shipment : shipments)
+        {
+            if(shipment.getId().equals(shipmentId))
+            {
+                shipment.clickShipmentActionButton(actionButton);
+                break;
+            }
+        }
+
+        pause200ms();
+    }
+
+    public void waitUntilForceToastDisappear(String shipmentId)
+    {
+        waitUntilInvisibilityOfElementLocated(String.format("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Success changed status to Force Success for Shipment ID %s']", shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
+    }
+
+    public void clickCancelShipmentButton(String shipmentId)
+    {
+        click(XPATH_CANCEL_SHIPMENT_BUTTON);
+        List<WebElement> toasts = getToasts();
+        String actualToastText = "";
+
+        for(WebElement toast : toasts)
+        {
+            actualToastText = toast.getText();
+
+            if(actualToastText.contains("Success changed status to Cancelled for Shipment ID " + shipmentId))
+            {
+                break;
+            }
+        }
+
+        Assert.assertThat("Toast message not contains Cancelled", actualToastText, Matchers.containsString("Success changed status to Cancelled for Shipment ID " + shipmentId));
+        waitUntilInvisibilityOfElementLocated(String.format("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Success changed status to Cancelled for Shipment ID %s']", shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
+    }
+
+    public void verifyShipmentUpdatedSuccessfully(String shipmentId, String expectedStartHub, String expectedEndHub, String expectedComment)
+    {
+        List<Shipment> shipments = getShipmentsFromTable();
+        String actualStartHub = "";
+        String actualEndHub = "";
+        String actualComment = "";
+
+        for(Shipment shipment : shipments)
+        {
+            String spId = shipment.getId();
+
+            if(spId.equals(shipmentId))
+            {
+                actualStartHub = shipment.getStartHub();
+                actualEndHub = shipment.getEndHub();
+                actualComment = shipment.getComment();
+            }
+        }
+
+        Assert.assertEquals("Start Hub value", expectedStartHub, actualStartHub);
+        Assert.assertEquals("End Hub value", expectedEndHub, actualEndHub);
+        Assert.assertEquals("Comment value", expectedComment, actualComment);
+    }
+
+    public void verifyShipmentDeletedSuccessfully(String shipmentId)
+    {
+        WebElement toastWe = getToast();
+        String expectedMessage = String.format("Success delete Shipping ID %s", shipmentId);
+        String toastText = toastWe.getText();
+        Assert.assertThat(String.format("Toast message does not contain '%s'.", expectedMessage), toastText, Matchers.containsString(expectedMessage));
+        waitUntilInvisibilityOfElementLocated(String.format("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='%s']", expectedMessage), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
+
+        List<Shipment> shipments = getShipmentsFromTable();
+        boolean isRemoved = true;
+
+        for(Shipment shipment : shipments)
+        {
+            String spId = shipment.getId();
+
+            if(spId.equals(shipmentId))
+            {
+                isRemoved = false;
+            }
+        }
+
+        Assert.assertTrue("Shipment is not removed.", isRemoved);
+    }
+
+    public void verifyInboundedShipmentExist(String shipmentId)
+    {
+        TestUtils.retryIfAssertionErrorOccurred(()->
+        {
+            try
+            {
+                List<Shipment> shipmentList = getShipmentsFromTable();
+                boolean isExist = false;
+
+                for(ShipmentManagementPage.Shipment shipment : shipmentList)
+                {
+                    if(shipment.getId().equalsIgnoreCase(shipmentId))
+                    {
+                        isExist = true;
+                        break;
+                    }
+                }
+
+                Assert.assertTrue(String.format("Shipment with ID = '%s' not exist", shipmentId), isExist);
+            }
+            catch(AssertionError ex)
+            {
+                clickEditSearchFilterButton();
+                clickButtonLoadSelection();
+                throw ex;
+            }
+        }, getCurrentMethodName());
+    }
+
+    public void checkStatus(String shipmentId, String expectedStatus)
+    {
+        List<Shipment> shipments = getShipmentsFromTable();
+        String actualStat = "";
+
+        for(Shipment shipment : shipments)
+        {
+            String spId = shipment.getId();
+
+            if(spId.equals(shipmentId))
+            {
+                actualStat = shipment.getStatus();
+                break;
+            }
+        }
+
+        Assert.assertEquals("Shipment " + shipmentId + " status", expectedStatus, actualStat);
+    }
+
+    public void clearAllFilters()
+    {
+        if(findElementByXpath(XPATH_CLEAR_FILTER_BUTTON).isDisplayed())
+        {
+            if(findElementByXpath(XPATH_CLEAR_FILTER_VALUE).isDisplayed())
+            {
+                List<WebElement> clearValueBtnList = findElementsByXpath(XPATH_CLEAR_FILTER_VALUE);
+
+                for(WebElement clearBtn : clearValueBtnList)
+                {
+                    clearBtn.click();
+                    pause1s();
+                }
+            }
+
+            click(XPATH_CLEAR_FILTER_BUTTON);
+        }
+
+        pause2s();
+    }
+
+    public void closeScanModal()
+    {
+        click(XPATH_CLOSE_SCAN_MODAL_BUTTON);
+        pause1s();
     }
 
     public class Shipment
     {
         public final String DELETE_ACTION = "Delete";
-        private final WebElement shipment;
+        private final WebElement shipmentWe;
 
         private String id;
         private String status;
@@ -199,22 +374,23 @@ public class ShipmentManagementPage extends SimplePage
         private String endHub;
         private String comment;
 
-        public Shipment(WebElement shipment)
+        public Shipment(WebElement shipmentWe)
         {
-            this.shipment = shipment;
-            this.id = shipment.findElements(By.tagName("td")).get(2).getText().trim();
-            this.status = shipment.findElements(By.tagName("td")).get(4).getText().trim();
-            this.startHub = shipment.findElements(By.tagName("td")).get(5).getText().trim();
-            this.endHub = shipment.findElements(By.tagName("td")).get(8).getText().trim();
-            this.comment = shipment.findElements(By.tagName("td")).get(10).getText().trim();
+            List<WebElement> listOfElements = shipmentWe.findElements(By.tagName("td"));
+            this.shipmentWe = shipmentWe;
+            this.id = listOfElements.get(2).getText().trim();
+            this.status = listOfElements.get(4).getText().trim();
+            this.startHub = listOfElements.get(5).getText().trim();
+            this.endHub = listOfElements.get(8).getText().trim();
+            this.comment = listOfElements.get(10).getText().trim();
         }
 
         public void clickShipmentActionButton(String actionButton)
         {
             WebElement editAction = grabShipmentAction(actionButton);
-            TestUtils.moveAndClick(getwebDriver(), editAction);
+            moveAndClick(editAction);
 
-            if (actionButton.equals(DELETE_ACTION))
+            if(actionButton.equals(DELETE_ACTION))
             {
                 pause1s();
                 click(XPATH_DELETE_CONFIRMATION_BUTTON);
@@ -223,7 +399,7 @@ public class ShipmentManagementPage extends SimplePage
 
         public WebElement grabShipmentAction(String action)
         {
-            List<WebElement> actionButtons = shipment.findElements(By.tagName("button"));
+            List<WebElement> actionButtons = shipmentWe.findElements(By.tagName("button"));
 
             for(WebElement actionButton : actionButtons)
             {
@@ -238,7 +414,7 @@ public class ShipmentManagementPage extends SimplePage
 
         public WebElement getShipment()
         {
-            return shipment;
+            return shipmentWe;
         }
 
         public String getId()

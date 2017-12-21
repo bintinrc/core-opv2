@@ -79,7 +79,7 @@ Feature: Shipment Linehaul
     Then Schedule is right
     Then op click tab LINEHAUL ENTRIES
     Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
-    Then op click Load All Selection
+    When Operator click "Load All Selection" on Linehaul Management page
     When op click delete linehaul button
     Then linehaul deleted
     Then op click edit linhaul filter
@@ -102,7 +102,7 @@ Feature: Shipment Linehaul
     Then Schedule is right
     Then op click tab LINEHAUL ENTRIES
     Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
-    Then op click Load All Selection
+    When Operator click "Load All Selection" on Linehaul Management page
     When op click delete linehaul button
     Then linehaul deleted
     Then op click edit linhaul filter

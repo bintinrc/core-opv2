@@ -1,11 +1,11 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -19,9 +19,9 @@ public class ShipmentInboundScanningPage extends SimplePage
     public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
     public static final String XPATH_SCAN_INPUT = "//md-card-content[div[h5[text()='Scan Shipment to Inbound']]]/md-input-container/input";
     public static final String XPATH_CHANGE_END_DATE_BUTTON = "//button[@aria-label='Change End Date']";
-    public static final String XPATH_SCANNING_SESSION = "//table/tbody/tr";
+    public static final String XPATH_SCANNING_SESSION = "//table/tbody/tr[contains(@ng-repeat,'log in ctrl.scans')]";
     public static final String XPATH_SCANNING_SESSION_NO_CHANGE = XPATH_SCANNING_SESSION;
-    public static final String XPATH_SCANNING_SESSION_CHANGE = XPATH_SCANNING_SESSION + "[@class='ng-scope changed']";
+    public static final String XPATH_SCANNING_SESSION_CHANGE = XPATH_SCANNING_SESSION + "[contains(@class,'changed')]";
     public static final String XPATH_DATE_INPUT = "//input[@class='md-datepicker-input']";
     public static final String XPATH_CHANGE_DATE_BUTTON = "//button[@aria-label='Change Date']";
 
@@ -37,6 +37,16 @@ public class ShipmentInboundScanningPage extends SimplePage
         selectDropdownValue(hubName);
     }
 
+    public void inboundScanning(String shipmentId, String label, String hub)
+    {
+        selectHub(hub);
+        click(grabXpathButton(label));
+        click(grabXpathButton("Start Inbound"));
+
+        inputShipmentToInbound(shipmentId);
+        checkSessionScan(shipmentId);
+    }
+
     private void selectDropdownValue(String value)
     {
         click(XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()=' " + value + " ']]");
@@ -49,14 +59,8 @@ public class ShipmentInboundScanningPage extends SimplePage
 
     public List<String> grabSessionIdNotChangedScan()
     {
-        List<String> result = new ArrayList<>();
-        List<WebElement> scans = getwebDriver().findElements(By.xpath(XPATH_SCANNING_SESSION_NO_CHANGE + "/td[@class='sn ng-binding']"));
-
-        for(WebElement scan : scans)
-        {
-            result.add(scan.getText());
-        }
-
+        List<WebElement> scans = findElementsByXpath(XPATH_SCANNING_SESSION_NO_CHANGE + "/td[contains(@class,'sn')]");
+        List<String> result = scans.stream().map(WebElement::getText).collect(Collectors.toList());
         return result;
     }
 
@@ -72,24 +76,26 @@ public class ShipmentInboundScanningPage extends SimplePage
 
     public void inputShipmentToInbound(String shipmentId)
     {
-        sendKeys(XPATH_SCAN_INPUT, shipmentId + "\n");
+        sendKeysAndEnter(XPATH_SCAN_INPUT, shipmentId);
     }
 
     public void checkSessionScan(String shipmentId)
     {
-        waitUntilVisibilityOfElementLocated(XPATH_SCANNING_SESSION_NO_CHANGE + "[td[@class='sn'][text()='1']][td[@class='shipmentId'][text()='" + shipmentId + "']]");
+        waitUntilVisibilityOfElementLocated(XPATH_SCANNING_SESSION_NO_CHANGE + String.format("[td[contains(@class,'sn')][text()='1']][td[@class='shipmentId'][text()='%s']]", shipmentId));
     }
 
-    public void checkEndDateSessionScanChange(List<String> mustCheckId, String endDate)
+    public void checkEndDateSessionScanChange(List<String> mustCheckId, Date endDate)
     {
-        for(String id : mustCheckId)
+        String formattedEndDate = MD_DATEPICKER_SDF.format(endDate);
+
+        for(String shipmentId : mustCheckId)
         {
-            waitUntilVisibilityOfElementLocated(XPATH_SCANNING_SESSION_CHANGE + "[td[@class='sn ng-binding'][text()='" + id + "']][td[@class='end-date ng-binding'][text()='" + endDate + "']]");
+            waitUntilVisibilityOfElementLocated(XPATH_SCANNING_SESSION_CHANGE + String.format("[td[contains(@class,'sn')][text()='%s']][td[contains(@class,'end-date')][text()='%s']]", shipmentId, formattedEndDate));
         }
     }
 
-    public void inputEndDate(String newDate)
+    public void inputEndDate(Date date)
     {
-        sendKeys(XPATH_DATE_INPUT, newDate);
+        setMdDatepicker("ctrl.date", date);
     }
 }

@@ -2,16 +2,12 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.ShipmentInboundScanningPage;
-import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
-import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.junit.Assert;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,9 +19,6 @@ import java.util.List;
 @ScenarioScoped
 public class ShipmentInboundScanningSteps extends AbstractSteps
 {
-    private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
-
-    private ShipmentManagementPage shipmentManagementPage;
     private ShipmentInboundScanningPage scanningPage;
 
     @Inject
@@ -37,50 +30,24 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
     @Override
     public void init()
     {
-        shipmentManagementPage = new ShipmentManagementPage(getWebDriver());
         scanningPage = new ShipmentInboundScanningPage(getWebDriver());
     }
 
-    @When("^inbound scanning shipment ([^\"]*) in hub ([^\"]*)$")
+    @When("^Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page$")
     public void inboundScanning(String label, String hub)
     {
-        scanningPage.selectHub(hub);
-        TestUtils.clickBtn(getWebDriver(), scanningPage.grabXpathButton(label));
-        TestUtils.clickBtn(getWebDriver(), scanningPage.grabXpathButton("Start Inbound"));
-
-        scanningPage.inputShipmentToInbound(get(KEY_SHIPMENT_ID));
-        scanningPage.checkSessionScan(get(KEY_SHIPMENT_ID));
-    }
-
-    @Then("^inbounded shipment exist$")
-    public void inbounded_shipment_exist()
-    {
         String shipmentId = get(KEY_SHIPMENT_ID);
-        List<ShipmentManagementPage.Shipment> shipmentList = shipmentManagementPage.getShipmentsFromTable();
-        boolean isExist = false;
-
-        for(ShipmentManagementPage.Shipment shipment : shipmentList)
-        {
-            if(shipment.getId().equalsIgnoreCase(shipmentId))
-            {
-                isExist = true;
-                break;
-            }
-        }
-
-        Assert.assertTrue(String.format("Shipment with ID = '%s' not exist", shipmentId), isExist);
+        scanningPage.inboundScanning(shipmentId, label, hub);
     }
 
-    @When("^change end date$")
-    public void click_change_end_date_button()
+    @When("^Operator change End Date on Shipment Inbound Scanning page$")
+    public void clickChangeEndDateButton()
     {
-        Calendar now = Calendar.getInstance();
-        now.add(Calendar.DATE, 2);
+        Date next2DaysDate = TestUtils.getNextDate(2);
         List<String> mustCheckId = scanningPage.grabSessionIdNotChangedScan();
         scanningPage.clickEditEndDate();
-        String today = DATE_FORMATTER.format(now.getTime());
-        scanningPage.inputEndDate(today);
+        scanningPage.inputEndDate(next2DaysDate);
         scanningPage.clickChangeDateButton();
-        scanningPage.checkEndDateSessionScanChange(mustCheckId, today);
+        scanningPage.checkEndDateSessionScanChange(mustCheckId, next2DaysDate);
     }
 }

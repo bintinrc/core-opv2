@@ -44,6 +44,11 @@ public class ShipmentScanningPage extends SimplePage
         click(XPATH_SELECT_SHIPMENT_BUTTON);
     }
 
+    public void scanBarcode(String trackingId)
+    {
+        sendKeysAndEnter(XPATH_BARCODE_SCAN, trackingId);
+    }
+
     private void selectDropdownValue(String value)
     {
         click(String.format("//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", value));
