@@ -364,11 +364,21 @@ public class SimplePage
 
     public String getTextOnTableWithNgRepeat(int rowNumber, String columnDataClass, String ngRepeat)
     {
+        return getTextOnTableWithNgRepeat(rowNumber, "class", columnDataClass, ngRepeat);
+    }
+
+    public String getTextOnTableWithNgRepeatUsingDataTitleText(int rowNumber, String columnDataTitleText, String ngRepeat)
+    {
+        return getTextOnTableWithNgRepeat(rowNumber, "data-title", columnDataTitleText, ngRepeat);
+    }
+
+    public String getTextOnTableWithNgRepeat(int rowNumber, String columnAttributeName, String attributeValue, String ngRepeat)
+    {
         String text = null;
 
         try
         {
-            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@class, '%s')]", ngRepeat, rowNumber, columnDataClass));
+            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@%s, \"%s\")]", ngRepeat, rowNumber, columnAttributeName, attributeValue));
             text = we.getText().trim();
         }
         catch(NoSuchElementException ex)
