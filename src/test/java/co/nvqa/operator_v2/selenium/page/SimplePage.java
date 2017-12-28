@@ -762,6 +762,11 @@ public class SimplePage
         return StandardTestUtils.getCurrentMethodName();
     }
 
+    public String generateDateUniqueString()
+    {
+        return StandardTestUtils.generateDateUniqueString();
+    }
+
     public void pause10ms()
     {
         pause(10);

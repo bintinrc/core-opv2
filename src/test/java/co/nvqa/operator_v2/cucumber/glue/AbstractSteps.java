@@ -2,13 +2,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.StandardSteps;
 import co.nvqa.commons.utils.StandardScenarioStorage;
-import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.util.ScenarioStorageKeys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-
-import java.util.Map;
 
 /**
  *
@@ -32,11 +29,6 @@ public abstract class AbstractSteps extends StandardSteps<ScenarioManager> imple
     public void reloadPage()
     {
         getScenarioManager().getWebDriver().navigate().refresh();
-    }
-
-    public String replaceParam(String data, Map<String,String> mapOfDynamicVariable)
-    {
-        return StandardTestUtils.replaceParam(data, mapOfDynamicVariable);
     }
 
     public void writeToCurrentScenarioLog(String message)

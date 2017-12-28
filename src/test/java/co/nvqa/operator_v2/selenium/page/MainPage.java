@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -32,6 +33,7 @@ public class MainPage extends SimplePage
         MAP_OF_END_URL.put("Hubs Administration", "hub");
         MAP_OF_END_URL.put("Linehaul Management", "linehaul");
         MAP_OF_END_URL.put("Messaging Module", "sms");
+        MAP_OF_END_URL.put("Order Creation V2", "create-combine");
         MAP_OF_END_URL.put("Printer Settings", "printers");
         MAP_OF_END_URL.put("Route Cash Inbound", "cod");
     }
@@ -96,12 +98,22 @@ public class MainPage extends SimplePage
 
             pause100ms();
 
+            boolean refreshPage = true;
+
             if(childNavWe.isDisplayed())
             {
-                childNavWe.click();
-                break;
+                try
+                {
+                    childNavWe.click();
+                    refreshPage = false;
+                    break;
+                }
+                catch(WebDriverException ex)
+                {
+                }
             }
-            else
+
+            if(refreshPage)
             {
                 // Ensure no dialog that prevents menu from being clicked.
                 getwebDriver().navigate().refresh();
