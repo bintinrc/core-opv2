@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.ChangeDeliveryTimings;
+import co.nvqa.operator_v2.model.Timeslot;
 import co.nvqa.operator_v2.selenium.page.ChangeDeliveryTimingsPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -40,9 +41,14 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
     }
 
     @Then("^Operator uploads the CSV file$")
-    public void operatorUploadsCSVFile(List<ChangeDeliveryTimings> data) {
+    public void operatorUploadsCSVFile(List<ChangeDeliveryTimings> data, List<Timeslot> time) {
         //assume only 1 row
         put("trackingID", data.get(0).getTracking_id());
+        put("start_date", data.get(0).getStart_date());
+        put("start_time", time.get(0).getStartTime());
+        put("end_date", data.get(0).getEnd_date());
+        put("end_time", time.get(0).getEndTime());
+        put("timewindow", data.get(0).getTimewindow());
         changeDeliveryTimingsPage.uploadCsvCampaignFile(data);
     }
 
@@ -60,7 +66,10 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
 
     @Then("^Operator switch tab and verify the delivery time$")
     public void switchTab() {
-        changeDeliveryTimingsPage.switchTabAndVerify();
+        String start_date = get("start_date" + "start_time");
+        String end_date = get("end_date" + "end_time");
+        changeDeliveryTimingsPage.switchTab();
+        changeDeliveryTimingsPage.verifyDateRange(start_date, end_date);
     }
 
 }

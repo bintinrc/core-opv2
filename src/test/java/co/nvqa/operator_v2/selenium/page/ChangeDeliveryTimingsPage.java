@@ -12,6 +12,8 @@ import org.openqa.selenium.WebElement;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,14 +22,16 @@ import java.util.List;
 
 public class ChangeDeliveryTimingsPage extends SimplePage {
 
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     private static final String CSV_FILENAME = "sample_csv.csv";
     private static final String COMMA = ",";
     private static final String NEW_LINE = "\r\n";
     private static final String CSV_CHANGING_FILE_NAME = "test_csv.csv";
     private static final String FILE_PATH = TestConstants.TEMP_DIR + CSV_CHANGING_FILE_NAME;
     private static final String CSV_CAMPAIGN_HEADER = "tracking_id,start_date,end_date,timewindow";
-    private static final String NG_REPEAT = "success";
-    private static final String COLUMN_DATA_TITLE_TEXT = "Message";
+    private static final String NG_REPEAT = "success in $data";
+    private static final String COLUMN_DATA_TITLE_TEXT = "'commons.tracking-id' | translate";
 
     public ChangeDeliveryTimingsPage(WebDriver webDriver) {
         super(webDriver);
@@ -89,7 +93,6 @@ public class ChangeDeliveryTimingsPage extends SimplePage {
 
     public void verifyDeliveryTimeChanged(String trackingID)
     {
-        searchTable(trackingID);
         String actualRes = getTextOnTableWithNgRepeatUsingDataTitleText(1, COLUMN_DATA_TITLE_TEXT, NG_REPEAT);
         Assert.assertEquals("Tracking ID is not existed on the success table",trackingID,actualRes);
     }
@@ -97,12 +100,21 @@ public class ChangeDeliveryTimingsPage extends SimplePage {
     public void enterTrackingID(String trackingID) {
         WebElement input = getwebDriver().findElement(By.id("searchTerm"));
         input.sendKeys(trackingID);
-        clickNvIconButtonByName("commons.search");
+        clickNvApiTextButtonByName("commons.search");
     }
 
-    public void switchTabAndVerify() {
+    public void switchTab() {
         getwebDriver().findElement(By.cssSelector("body")).sendKeys(Keys.CONTROL+"/t");
         getwebDriver().switchTo().defaultContent();
+    }
+
+    public void verifyDateRange(String date_start, String end_date) {
+        String datestart = getwebDriver().findElement(By.xpath("//div[label/text()='Start Date / Time']/p")).getText();
+        String enddate = getwebDriver().findElement(By.xpath("//div[label/text()='End Date / Time']/p")).getText();
+        Date dateStart = sdf.parse(datestart);
+        Date dateEnd = sdf.parse(enddate);
+        Assert.assertEquals("Start Date does not match", date_start, dateStart);
+        Assert.assertEquals("End Date does not match", end_date, dateEnd);
     }
 
 }
