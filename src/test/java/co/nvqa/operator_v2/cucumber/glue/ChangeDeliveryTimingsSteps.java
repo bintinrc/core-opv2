@@ -41,13 +41,15 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
     }
 
     @Then("^Operator uploads the CSV file$")
-    public void operatorUploadsCSVFile(List<ChangeDeliveryTimings> data, List<Timeslot> time) {
+    public void operatorUploadsCSVFile(List<ChangeDeliveryTimings> data) {
         //assume only 1 row
         put("trackingID", data.get(0).getTracking_id());
         put("start_date", data.get(0).getStart_date());
-        put("start_time", time.get(0).getStartTime());
         put("end_date", data.get(0).getEnd_date());
-        put("end_time", time.get(0).getEndTime());
+        Timeslot tslot = new Timeslot(data.get(0).getTimewindow());
+        put("start_time", tslot.getStartTime());
+        put("end_time", tslot.getEndTime());
+        put("timewindow", data.get(0).getTimewindow());
         put("timewindow", data.get(0).getTimewindow());
         changeDeliveryTimingsPage.uploadCsvCampaignFile(data);
     }
@@ -66,10 +68,11 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
 
     @Then("^Operator switch tab and verify the delivery time$")
     public void switchTab() {
-        String start_date = get("start_date" + "start_time");
-        String end_date = get("end_date" + "end_time");
+        String start_date = ((String)get("start_date")).concat(" ").concat(get("start_time"));
+        String end_date = ((String)get("end_date")).concat(" ").concat(get("end_time"));
         changeDeliveryTimingsPage.switchTab();
         changeDeliveryTimingsPage.verifyDateRange(start_date, end_date);
+        changeDeliveryTimingsPage.closeTab();
     }
 
 }

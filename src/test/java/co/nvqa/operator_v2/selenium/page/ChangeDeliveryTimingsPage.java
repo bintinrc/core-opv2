@@ -12,7 +12,9 @@ import org.openqa.selenium.WebElement;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,8 +23,6 @@ import java.util.List;
  */
 
 public class ChangeDeliveryTimingsPage extends SimplePage {
-
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final String CSV_FILENAME = "sample_csv.csv";
     private static final String COMMA = ",";
@@ -104,17 +104,27 @@ public class ChangeDeliveryTimingsPage extends SimplePage {
     }
 
     public void switchTab() {
+        ArrayList<String> tabs = new ArrayList<String>(getwebDriver().getWindowHandles());
         getwebDriver().findElement(By.cssSelector("body")).sendKeys(Keys.CONTROL+"/t");
-        getwebDriver().switchTo().defaultContent();
+        getwebDriver().switchTo().window(tabs.get(1));
     }
 
     public void verifyDateRange(String date_start, String end_date) {
-        String datestart = getwebDriver().findElement(By.xpath("//div[label/text()='Start Date / Time']/p")).getText();
-        String enddate = getwebDriver().findElement(By.xpath("//div[label/text()='End Date / Time']/p")).getText();
-        Date dateStart = sdf.parse(datestart);
-        Date dateEnd = sdf.parse(enddate);
-        Assert.assertEquals("Start Date does not match", date_start, dateStart);
-        Assert.assertEquals("End Date does not match", end_date, dateEnd);
+
+        pause5s();
+
+        String datestart = getwebDriver().findElement(By.xpath("//div[@id='delivery-details']//div[label/text()='Start Date / Time']/p")).getText();
+        String enddate = getwebDriver().findElement(By.xpath("//div[@id='delivery-details']//div[label/text()='End Date / Time']/p")).getText();
+
+        Assert.assertEquals("Start Date does not match", date_start, datestart);
+        Assert.assertEquals("End Date does not match", end_date, enddate);
+    }
+
+    public void closeTab() {
+        pause5s();
+        ArrayList<String> tabs = new ArrayList<String>(getwebDriver().getWindowHandles());
+        getwebDriver().findElement(By.cssSelector("body")).sendKeys(Keys.COMMAND+"w");
+        getwebDriver().switchTo().window(tabs.get(0));
     }
 
 }
