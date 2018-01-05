@@ -20,46 +20,57 @@ Feature: Change Delivery Timings
     Given Operator go to menu Order -> All Orders
     When Operator entering the tracking ID
     Then Operator switch tab and verify the delivery time
-#
-#  Scenario: Operator uploads the CSV file with invalid Tracking ID
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given Operator go to menu Shipper Support -> Change Delivery Timings
-#    When Operator uploads the CSV file
-#      | Tracking Id        | Start Date | End Date | Timewindow ID |
-#      | SOMETHINGBORROW    | 12/28/17   | 12/29/17 | -1            |
-#    Then Operator verify the tracking ID is invalid
-#
-#  Scenario: Operator uploads the CSV file with invalid order state
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given Operator go to menu Shipper Support -> Change Delivery Timings
-#    When Operator uploads the CSV file
-#      | Tracking Id        | Start Date | End Date | Timewindow ID |
-#      | NVSGTSTESBPJ121206 | 12/28/17   | 12/29/17 | 0             |
-#    Then Operator verify the state order of the Tracking ID is invalid
-#
-#  Scenario: Operator uploads the CSV file with one of the date is empty
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given Operator go to menu Shipper Support -> Change Delivery Timings
-#    When Operator uploads the CSV file
-#      | Tracking Id        | Start Date | End Date | Timewindow ID |
-#      | NVSGTSTESBPJ121204 |            | 12/29/17 | -1            |
-#    Then Operator verify the start and end date is not indicated correctly
-#
-#  Scenario: Operator uploads the CSV file with start date is later than end date
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given Operator go to menu Shipper Support -> Change Delivery Timings
-#    When Operator uploads the CSV file
-#      | Tracking Id        | Start Date | End Date | Timewindow ID |
-#      | NVSGTSTESBPJ121204 | 12/30/17   | 12/28/17 | -1            |
-#    Then Operator verify that start date is later than end date
-#
-#  Scenario: Operator uploads the CSV file with both date empty
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given Operator go to menu Shipper Support -> Change Delivery Timings
-#    When Operator uploads the CSV file
-#      | Tracking Id        | Start Date | End Date | Timewindow ID |
-#      | NVSGTSTESBPJ121206 |            |          | 0             |
-#    Then Operator verify system using current date
+
+  Scenario: Operator uploads the CSV file with null timewindow id
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper Support -> Change Delivery Timings
+    When Operator uploads the CSV file
+      | tracking_id        | start_date | end_date   | timewindow |
+      | NVSGTSTESB14121702 | 2017-12-29 | 2017-12-30 | null       |
+    Then Operator verify that the Delivery Time Updated
+    Given Operator go to menu Order -> All Orders
+    When Operator entering the tracking ID
+    Then Operator switch tab and verify the delivery time
+
+  Scenario: Operator uploads the CSV file with invalid Tracking ID
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper Support -> Change Delivery Timings
+    When Operator uploads the CSV file
+      | tracking_id        | start_date | end_date   | timewindow |
+      | SOMETHINGBORROW    | 2017-12-29 | 2017-12-30 | -1         |
+    Then Operator verify the tracking ID is invalid
+
+  Scenario: Operator uploads the CSV file with invalid order state
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper Support -> Change Delivery Timings
+    When Operator uploads the CSV file
+      | tracking_id        | start_date | end_date   | timewindow |
+      | NVSGTSTESBPJ121206 | 2017-12-29 | 2017-12-30 | 0          |
+    Then Operator verify the state order of the Tracking ID is invalid
+
+  Scenario: Operator uploads the CSV file with one of the date is empty
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper Support -> Change Delivery Timings
+    When Operator uploads the CSV file
+      | tracking_id        | start_date | end_date   | timewindow |
+      | NVSGTSTESBPJ121204 |            | 2017-12-29 | -1         |
+    Then Operator verify the start and end date is not indicated correctly
+
+  Scenario: Operator uploads the CSV file with start date is later than end date
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper Support -> Change Delivery Timings
+    When Operator uploads the CSV file
+      | tracking_id        | start_date | end_date   | timewindow |
+      | NVSGTSTESBPJ121204 | 2017-12-29 | 2017-12-30 | -1         |
+    Then Operator verify that start date is later than end date
+
+  Scenario: Operator uploads the CSV file with both date empty
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper Support -> Change Delivery Timings
+    When Operator uploads the CSV file
+      | tracking_id        | start_date | end_date | timewindow |
+      | NVSGTSTESBPJ121206 |            |          | 0          |
+    Then Operator verify system using current date
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
