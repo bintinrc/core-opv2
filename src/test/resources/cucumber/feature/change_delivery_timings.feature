@@ -26,7 +26,7 @@ Feature: Change Delivery Timings
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file
       | tracking_id        | start_date | end_date   | timewindow |
-      | NVSGTSTESB14121702 | 2017-12-29 | 2017-12-30 | null       |
+      | NVSGTSTESB14121701 | 2018-01-29 | 2018-01-30 ||
     Then Operator verify that the Delivery Time Updated
     Given Operator go to menu Order -> All Orders
     When Operator entering the tracking ID
@@ -53,7 +53,7 @@ Feature: Change Delivery Timings
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file
       | tracking_id        | start_date | end_date   | timewindow |
-      | NVSGTSTESBPJ121204 |            | 2017-12-29 | -1         |
+      | NVSGTSTESB14121702 || 2017-12-29 | -1         |
     Then Operator verify the start and end date is not indicated correctly
 
   Scenario: Operator uploads the CSV file with start date is later than end date
@@ -61,7 +61,7 @@ Feature: Change Delivery Timings
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file
       | tracking_id        | start_date | end_date   | timewindow |
-      | NVSGTSTESBPJ121204 | 2017-12-29 | 2017-12-30 | -1         |
+      | NVSGTSTESB14121702 | 2017-12-31 | 2017-12-30 | -1         |
     Then Operator verify that start date is later than end date
 
   Scenario: Operator uploads the CSV file with both date empty
@@ -69,7 +69,10 @@ Feature: Change Delivery Timings
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file
       | tracking_id        | start_date | end_date | timewindow |
-      | NVSGTSTESBPJ121206 |            |          | 0          |
+      | NVSGTSTESB14121702 ||| 0          |
+    Then Operator verify that the Delivery Time Updated
+    Given Operator go to menu Order -> All Orders
+    When Operator entering the tracking ID
     Then Operator verify system using current date
 
   @KillBrowser @ShouldAlwaysRun

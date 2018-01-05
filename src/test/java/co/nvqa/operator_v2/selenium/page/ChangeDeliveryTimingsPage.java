@@ -4,10 +4,7 @@ import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.operator_v2.model.ChangeDeliveryTimings;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -73,7 +70,12 @@ public class ChangeDeliveryTimingsPage extends SimplePage {
             sb.append(row.getTracking_id()).append(COMMA);
             sb.append(row.getStart_date()).append(COMMA);
             sb.append(row.getEnd_date()).append(COMMA);
-            sb.append(row.getTimewindow()).append(COMMA);
+            if (row.getTimewindow()!=null) {
+                sb.append(row.getTimewindow()).append(COMMA);
+            } else {
+                sb.append(COMMA);
+            }
+
             CSVData.append(sb.toString()).append(NEW_LINE);
         });
 
@@ -103,9 +105,8 @@ public class ChangeDeliveryTimingsPage extends SimplePage {
     }
 
     public void switchTab() {
-        ArrayList<String> tabs = new ArrayList<String>(getwebDriver().getWindowHandles());
-        getwebDriver().findElement(By.cssSelector("body")).sendKeys(Keys.CONTROL+"/t");
-        getwebDriver().switchTo().window(tabs.get(1));
+        ArrayList<String> tabs = new ArrayList<>(getwebDriver().getWindowHandles());
+        getwebDriver().switchTo().window(tabs.get(tabs.size()-1));
     }
 
     public void verifyDateRange(String date_start, String end_date, boolean isTimewindowNull) {
@@ -124,14 +125,10 @@ public class ChangeDeliveryTimingsPage extends SimplePage {
     }
 
     public void closeTab() {
-        pause5s();
         ArrayList<String> tabs = new ArrayList<String>(getwebDriver().getWindowHandles());
-        String os = System.getProperty("os.name").toLowerCase();
-        if (os.contains("mac")) {
-            getwebDriver().findElement(By.cssSelector("body")).sendKeys(Keys.COMMAND+"w");
-        } else {
-            getwebDriver().findElement(By.cssSelector("body")).sendKeys(Keys.CONTROL+"w");
-        }
+        getwebDriver().findElement(By.cssSelector("body")).sendKeys(Keys.COMMAND+"1");
+        getwebDriver().findElement(By.cssSelector("body")).sendKeys(Keys.CONTROL+"1");
+        getwebDriver().close();
         getwebDriver().switchTo().window(tabs.get(0));
     }
 
@@ -142,7 +139,7 @@ public class ChangeDeliveryTimingsPage extends SimplePage {
 
     public void invalidStateOrderVerif() {
         String actualMes = getTextOnTableWithNgRepeatUsingDataTitleText(1, ERROR_COLUMN_DATA, NG_REPEAT_ERROR);
-        Assert.assertEquals("Tracking ID is valid","INVALID_STATE",actualMes.substring(0,15));
+        Assert.assertEquals("Tracking ID is valid","INVALID_STATE",actualMes.substring(0,13));
     }
 
     public void dateIndicatedIncorectlyVerif() {
@@ -162,8 +159,8 @@ public class ChangeDeliveryTimingsPage extends SimplePage {
         String timeend = getwebDriver().findElement(By.xpath("//div[@id='delivery-details']//div[label/text()='End Date / Time']/p")).getText();
 
         if(isDateEmpty){
-            timestart = timestart.substring(12,19);
-            timeend = timeend.substring(12,19);
+            timestart = timestart.substring(11,19);
+            timeend = timeend.substring(11,19);
         }
         Assert.assertEquals("Start Date does not match", date_start, timestart);
         Assert.assertEquals("End Date does not match", end_date, timeend);

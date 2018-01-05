@@ -46,10 +46,17 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
         put("trackingID", data.get(0).getTracking_id());
         put("start_date", data.get(0).getStart_date());
         put("end_date", data.get(0).getEnd_date());
-        Timeslot tslot = new Timeslot(data.get(0).getTimewindow());
-        put("start_time", tslot.getStartTime());
-        put("end_time", tslot.getEndTime());
-        put("timewindow", data.get(0).getTimewindow());
+        if (data.get(0).getTimewindow() != null ) {
+            Timeslot tslot = new Timeslot(data.get(0).getTimewindow());
+            put("start_time", tslot.getStartTime());
+            put("end_time", tslot.getEndTime());
+            put("timewindow", data.get(0).getTimewindow());
+            if (data.get(0).getEnd_date().equalsIgnoreCase("") && data.get(0).getStart_date().equalsIgnoreCase("")) {
+                put("isDateEmpty", true);
+            }
+        } else {
+            put("isTimewindowNull", true);
+        }
         changeDeliveryTimingsPage.uploadCsvCampaignFile(data);
     }
 
@@ -67,11 +74,15 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
 
     @Then("^Operator switch tab and verify the delivery time$")
     public void switchTab() {
-        String start_date = ((String)get("start_date")).concat(" ").concat(get("start_time")).trim();
-        String end_date = ((String)get("end_date")).concat(" ").concat(get("end_time")).trim();
+        pause2s();
+        String start_date = ((String) get("start_date")).concat(" ")
+                .concat(get("start_time") != null ? get("start_time") : "").trim();
+        String end_date = ((String) get("end_date")).concat(" ")
+                .concat(get("end_time") != null ? get("end_time") : "").trim();
         boolean isTimewindowNull = get("isTimewindowNull", false);
         changeDeliveryTimingsPage.switchTab();
         changeDeliveryTimingsPage.verifyDateRange(start_date, end_date, isTimewindowNull);
+        pause2s();
         changeDeliveryTimingsPage.closeTab();
     }
 
@@ -97,10 +108,13 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
 
     @Then("^Operator verify system using current date$")
     public void dateIsEmpty() {
-        String start_date = ((String)get("start_date")).concat(" ").concat(get("start_time")).trim();
-        String end_date = ((String)get("end_date")).concat(" ").concat(get("end_time")).trim();
-        boolean isDateNull = get("isTimewindowNull", false);
-        changeDeliveryTimingsPage.dateEmpty(start_date, end_date, isDateNull);
+        String start_date = ((String) get("start_date")).concat(" ").concat(get("start_time")!=null ?get("start_time"): "").trim();
+        String end_date = ((String) get("end_date")).concat(" ").concat(get("end_time")!=null ?get("end_time"): "").trim();
+        boolean isDateEmpty = get("isDateEmpty", false);
+        changeDeliveryTimingsPage.switchTab();
+        changeDeliveryTimingsPage.dateEmpty(start_date, end_date, isDateEmpty);
+        pause2s();
+        changeDeliveryTimingsPage.closeTab();
     }
 
 }
