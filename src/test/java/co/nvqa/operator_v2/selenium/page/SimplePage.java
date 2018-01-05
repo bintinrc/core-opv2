@@ -113,6 +113,18 @@ public class SimplePage
         waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
     }
 
+    public void clickNvApiIconButtonByName(String name)
+    {
+        click(String.format("//nv-api-icon-button[@name='%s']", name));
+    }
+
+    public void clickNvApiIconButtonByNameAndWaitUntilDone(String name)
+    {
+        String xpathExpression = String.format("//nv-api-icon-button[@name='%s']", name);
+        click(xpathExpression);
+        waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'waiting')]/md-progress-circular");
+    }
+
     public void clickNvButtonSaveByName(String name)
     {
         click(String.format("//nv-button-save[@name='%s']", name));
@@ -189,6 +201,35 @@ public class SimplePage
     public void sendKeysByAriaLabel(String ariaLabel, CharSequence... keysToSend)
     {
         sendKeys(String.format("//*[@aria-label='%s']", ariaLabel), keysToSend);
+    }
+
+    public String getText(String xpathExpression)
+    {
+        String text = null;
+
+        try
+        {
+            WebElement webElement = findElementByXpath(xpathExpression);
+            text = webElement.getText();
+        }
+        catch(RuntimeException ex)
+        {
+            NvLogger.warnf("Failed to get text from element with XPath = { %s }.", xpathExpression);
+        }
+
+        return text;
+    }
+
+    public String getTrimmedText(String xpathExpression)
+    {
+        String text = getText(xpathExpression);
+
+        if(text!=null)
+        {
+            text = text.trim();
+        }
+
+        return text;
     }
 
     public void setMdDatepicker(String ngModel, Date date)

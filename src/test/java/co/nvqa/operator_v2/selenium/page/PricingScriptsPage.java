@@ -239,32 +239,25 @@ public class PricingScriptsPage extends SimplePage
         String expectedHandlingFee = mapOfData.get("handlingFee");
         String expectedComments = mapOfData.get("comments");
 
-        WebElement totalEl = findElementByXpath("//md-input-container/label[text()='Grand Total']/following-sibling::div[1]");
-        String actualTotal = totalEl.getText();
+        String actualTotal = getText("//md-input-container/label[text()='Grand Total']/following-sibling::div[1]");
         Assert.assertEquals("Total", expectedTotal, actualTotal);
 
-        /*WebElement gstEl = findElementByXpath("//md-input-container[label[text()='GST']]/div[@class='readonly ng-binding']");
-        String actualGst = gstEl.getText();
+        /*String actualGst = getText("//md-input-container[label[text()='GST']]/div[@class='readonly ng-binding']");
         Assert.assertEquals("GST", expectedGst, actualGst);*/
 
-        WebElement codFeeEl = findElementByXpath("//md-input-container/label[text()='COD Fee']/following-sibling::div[1]");
-        String actualCodFee = codFeeEl.getText();
+        String actualCodFee = getText("//md-input-container/label[text()='COD Fee']/following-sibling::div[1]");
         Assert.assertEquals("COD Fee", expectedCodFee, actualCodFee);
 
-        WebElement insuranceFeeEl = findElementByXpath("//md-input-container/label[text()='Insurance Fee']/following-sibling::div[1]");
-        String actualInsuranceFee = insuranceFeeEl.getText();
+        String actualInsuranceFee = getText("//md-input-container/label[text()='Insurance Fee']/following-sibling::div[1]");
         Assert.assertEquals("Insurance Fee", expectedInsuranceFee, actualInsuranceFee);
 
-        WebElement deliveryFeeEl = findElementByXpath("//md-input-container/label[text()='Delivery Fee']/following-sibling::div[1]");
-        String actualDeliveryFee = deliveryFeeEl.getText();
+        String actualDeliveryFee = getText("//md-input-container/label[text()='Delivery Fee']/following-sibling::div[1]");
         Assert.assertEquals("Delivery Fee", expectedDeliveryFee, actualDeliveryFee);
 
-        WebElement handlingFeeEl = findElementByXpath("//md-input-container/label[text()='Handling Fee']/following-sibling::div[1]");
-        String actualHandlingFee = handlingFeeEl.getText();
+        String actualHandlingFee = getText("//md-input-container/label[text()='Handling Fee']/following-sibling::div[1]");
         Assert.assertEquals("Handling Fee", expectedHandlingFee, actualHandlingFee);
 
-        WebElement commentsEl = findElementByXpath("//md-input-container/label[text()='Comments']/following-sibling::div[1]");
-        String actualComments = commentsEl.getText();
+        String actualComments = getText("//md-input-container/label[text()='Comments']/following-sibling::div[1]");
         Assert.assertEquals("Comments", expectedComments, actualComments);
     }
 

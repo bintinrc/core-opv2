@@ -57,7 +57,7 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
                 sendKeys("//input[@aria-label='Aged Days']", String.valueOf(agedDays));
             }
 
-            clickBtnLoadSelection();
+            clickButtonLoadSelection();
             searchTableByTrackingId(trackingId);
 
             if(isTableEmpty())
@@ -68,7 +68,7 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
         }, String.format("loadSelection - [Tracking ID = %s]", trackingId));
     }
 
-    private void clickBtnLoadSelection()
+    private void clickButtonLoadSelection()
     {
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
     }

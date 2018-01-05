@@ -131,8 +131,8 @@ public class DriverStrengthPage extends SimplePage
         pause1s();
 
         String expectedLicensoNo = "D" + SingletonStorage.getInstance().getTmpId();
-        WebElement licenseNoWe = findElementByXpath("//div[@aria-hidden='false']/md-menu-content/md-menu-item[@class='contact-info-details' and @role='menuitem']/div[2]/div[2]");
-        Assert.assertEquals("License No. is not equal.", expectedLicensoNo, licenseNoWe.getText());
+        String actualLicenseNo = getText("//div[@aria-hidden='false']/md-menu-content/md-menu-item[@class='contact-info-details' and @role='menuitem']/div[2]/div[2]");
+        Assert.assertEquals("License No. is not equal.", expectedLicensoNo, actualLicenseNo);
         closeModal();
     }
 
