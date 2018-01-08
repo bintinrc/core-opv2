@@ -142,7 +142,7 @@ public class RouteLogsPage extends SimplePage
     public String getRouteTag(String routeId)
     {
         searchAndVerifyRouteExist(routeId);
-        return findElementByXpath(SELECT_TAG_XPATH).getText();
+        return getText(SELECT_TAG_XPATH);
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)

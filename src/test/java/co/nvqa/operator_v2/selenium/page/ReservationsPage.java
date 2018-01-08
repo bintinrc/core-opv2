@@ -59,7 +59,7 @@ public class ReservationsPage extends SimplePage
         boolean isCurrentDateCellLabeledAsReserved = isElementExist(getCurrentDateCellXpath()+"//div[text()='Reserved']");
         Assert.assertTrue(String.format("Reservation is not created. Label 'Reserved' is not found at the calendar on date %d.", getCurrentDateNumber()), isCurrentDateCellLabeledAsReserved);
 
-        String actualTimeslotTextOnCalendar = findElementByXpath(getCurrentDateCellXpath()+"//span[@class='reservation-calendar-item-time']").getText();
+        String actualTimeslotTextOnCalendar = getText(getCurrentDateCellXpath()+"//span[@class='reservation-calendar-item-time']");
         Assert.assertEquals("Reservation is not created correctly. Timeslot does not change.", expectedTimeslotTextOnCalendar.trim(), actualTimeslotTextOnCalendar.trim());
     }
 
@@ -80,7 +80,7 @@ public class ReservationsPage extends SimplePage
         boolean isCurrentDateCellLabeledAsReserved = isElementExist(getCurrentDateCellXpath()+"//div[text()='Reserved']");
         Assert.assertTrue(String.format("Reservation is not updated. Label 'Reserved' is not found at the calendar on date %d.", getCurrentDateNumber()), isCurrentDateCellLabeledAsReserved);
 
-        String actualTimeslotTextOnCalendar = findElementByXpath(getCurrentDateCellXpath()+"//span[@class='reservation-calendar-item-time']").getText();
+        String actualTimeslotTextOnCalendar = getText(getCurrentDateCellXpath()+"//span[@class='reservation-calendar-item-time']");
         Assert.assertEquals("Reservation is not updated. Timeslot does not change.", expectedTimeslotTextOnCalendar.trim(), actualTimeslotTextOnCalendar.trim());
     }
 

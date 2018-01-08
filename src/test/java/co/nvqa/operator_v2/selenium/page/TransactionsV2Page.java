@@ -67,7 +67,7 @@ public class TransactionsV2Page extends SimplePage
         }
     }
 
-    public void clickLoadSelectionButton()
+    public void clickButtonLoadSelection()
     {
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
     }

@@ -111,7 +111,7 @@ public class SamedayRouteEnginePage extends SimplePage
         String trackingIdData2= getTextOnTableWithMdVirtualRepeat(2,"tracking_id","route in ctrl.routeResponse.solution.routes" );
         Assert.assertEquals(trackingId, trackingIdData2);
         //check the number of waypoint
-        String waypointTotal= findElementByXpath("//md-dialog[contains(@class, 'nv-route-detail-dialog')]/md-dialog-content/div[1]/div[2]/p").getText();
+        String waypointTotal= getText("//md-dialog[contains(@class, 'nv-route-detail-dialog')]/md-dialog-content/div[1]/div[2]/p");
         Assert.assertEquals(2, waypointTotal);
 
         //check waypoint is pickup and delivery
@@ -121,7 +121,7 @@ public class SamedayRouteEnginePage extends SimplePage
 
     public void downloadCsvOnWaypointDetails(String trackingId) throws IOException
     {
-        String routeName = "route-detail-"+findElementByXpath("//md-dialog[contains(@class, 'nv-route-detail-dialog')]/md-dialog-content/div[1]/div[1]/p/b").getText();
+        String routeName = "route-detail-"+getText("//md-dialog[contains(@class, 'nv-route-detail-dialog')]/md-dialog-content/div[1]/div[1]/p/b");
 
         // Clear the downloaded file first.
         File csvFile = new File(TestConstants.TEMP_DIR+"/"+routeName+".csv");
@@ -158,8 +158,8 @@ public class SamedayRouteEnginePage extends SimplePage
 
     public void verifyUnroutedDetailDialog()
     {
-        String unroutedCount = findElementByXpath("//md-dialog[contains(@class, 'nv-unrouted-detail-dialog')]/md-dialog-content/div[1]/div[1]/p/b").getText();
-        Assert.assertEquals("1",unroutedCount);
+        String unroutedCount = getText("//md-dialog[contains(@class, 'nv-unrouted-detail-dialog')]/md-dialog-content/div[1]/div[1]/p/b");
+        Assert.assertEquals("1", unroutedCount);
     }
 
     public void changeTheSuggestedDate(String suggestedDate)
@@ -178,7 +178,7 @@ public class SamedayRouteEnginePage extends SimplePage
     public String getWaypointTrackingIds()
     {
         StringBuilder sb = new StringBuilder();
-        int waypointTotal=Integer.valueOf(findElementByXpath("//md-dialog[contains(@class, 'nv-route-detail-dialog')]/md-dialog-content/div[1]/div[2]/p").getText());
+        int waypointTotal=Integer.valueOf(getText("//md-dialog[contains(@class, 'nv-route-detail-dialog')]/md-dialog-content/div[1]/div[2]/p"));
 
         for(int i=0; i<waypointTotal; i++)
         {

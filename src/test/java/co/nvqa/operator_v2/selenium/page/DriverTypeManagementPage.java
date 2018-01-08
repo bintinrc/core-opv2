@@ -33,8 +33,7 @@ public class DriverTypeManagementPage extends SimplePage
         pause1s();
 
         // Get counter.
-        WebElement el = findElementByXpath("//ng-pluralize[@class='nv-p-med count']");
-        String counter = el.getText().split(" ")[0];
+        String counter = getText("//ng-pluralize[@class='nv-p-med count']").split(" ")[0];
 
         if(Integer.parseInt(counter)==0)
         {

@@ -56,7 +56,7 @@ public class ShipmentScanningPage extends SimplePage
 
     public void checkOrderInShipment(String orderId)
     {
-        String rack = getwebDriver().findElement(By.xpath(XPATH_RACK_SECTOR)).getText();
+        String rack = getText(XPATH_RACK_SECTOR);
         Assert.assertTrue("order is " + rack, !rack.equalsIgnoreCase("INVALID") && !rack.equalsIgnoreCase("DUPLICATE"));
 
         WebElement orderWe = getwebDriver().findElement(By.xpath(String.format("//td[contains(@class, 'tracking-id')][contains(text(), '%s')]", orderId)));

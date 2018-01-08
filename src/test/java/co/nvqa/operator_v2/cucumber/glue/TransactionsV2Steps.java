@@ -38,7 +38,7 @@ public class TransactionsV2Steps extends AbstractSteps
         transactionsPage.removeFilter("Start Datetime");
         transactionsPage.removeFilter("End Datetime");
         transactionsPage.setCreationTimeFilter();
-        transactionsPage.clickLoadSelectionButton();
+        transactionsPage.clickButtonLoadSelection();
         transactionsPage.searchByTrackingId(expectedTrackingId);
         transactionsPage.selectAllShown();
         transactionsPage.clickAddToRouteGroupButton();
@@ -62,7 +62,7 @@ public class TransactionsV2Steps extends AbstractSteps
             transactionsPage.removeFilter("Start Datetime");
             transactionsPage.removeFilter("End Datetime");
             transactionsPage.setCreationTimeFilter();
-            transactionsPage.clickLoadSelectionButton();
+            transactionsPage.clickButtonLoadSelection();
             transactionsPage.searchByTrackingId(trackingId);
             transactionsPage.selectAllShown();
             transactionsPage.clickAddToRouteGroupButton();

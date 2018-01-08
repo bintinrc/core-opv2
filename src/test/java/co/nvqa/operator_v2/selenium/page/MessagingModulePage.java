@@ -105,10 +105,10 @@ public class MessagingModulePage extends SimplePage
         String smsDate = sdf.format(new Date());
         cache.put("sms-date", smsDate);
         //check the uploaded file name is correct
-        WebElement uploadedFileNameElement = findElementByXpath("//div[contains(@class,'uploaded-info')]//div[1]/p/b");
-        Assert.assertEquals(SMS_CAMPAIGN_FILE_NAME, uploadedFileNameElement.getText());
-        WebElement totalRecords = findElementByXpath("//div[contains(@class,'uploaded-info')]//div[2]/p/b");
-        Assert.assertEquals("1", totalRecords.getText());
+        String uploadedFileName = getText("//div[contains(@class,'uploaded-info')]//div[1]/p/b");
+        Assert.assertEquals(SMS_CAMPAIGN_FILE_NAME, uploadedFileName);
+        String totalRecords = getText("//div[contains(@class,'uploaded-info')]//div[2]/p/b");
+        Assert.assertEquals("1", totalRecords);
         //entry the template
         String template = "Hallo {{name}}, your parcel with tracking id {{tracking_id}} is ready to be delivered. sms-date: "+smsDate;
         sendKeys("//textarea[@name='message']", template);
@@ -124,10 +124,10 @@ public class MessagingModulePage extends SimplePage
     {
         waitUntilVisibilityOfElementLocated("//md-card[contains(@class,'sms-editor')]");
         //check the uploaded file name is correct
-        WebElement uploadedFileNameElement = findElementByXpath("//div[contains(@class,'uploaded-info')]//div[1]/p/b");
-        Assert.assertEquals(SMS_CAMPAIGN_FILE_NAME, uploadedFileNameElement.getText());
-        WebElement totalRecords = findElementByXpath("//div[contains(@class,'uploaded-info')]//div[2]/p/b");
-        Assert.assertEquals("1", totalRecords.getText());
+        String uploadedFileName = getText("//div[contains(@class,'uploaded-info')]//div[1]/p/b");
+        Assert.assertEquals(SMS_CAMPAIGN_FILE_NAME, uploadedFileName);
+        String totalRecords = getText("//div[contains(@class,'uploaded-info')]//div[2]/p/b");
+        Assert.assertEquals("1", totalRecords);
         //entry the template
         String template = "email : {{email}}";
         sendKeys("//textarea[@name='message']", template);
