@@ -36,6 +36,7 @@ public class MainPage extends SimplePage
         MAP_OF_END_URL.put("Order Creation V2", "create-combine");
         MAP_OF_END_URL.put("Printer Settings", "printers");
         MAP_OF_END_URL.put("Route Cash Inbound", "cod");
+        MAP_OF_END_URL.put("Third Party Shippers", "third-party-shipper");
     }
 
     public MainPage(WebDriver webDriver)
