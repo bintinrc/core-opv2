@@ -43,7 +43,7 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
         changeDeliveryTimingsPage.csvSampleDownloadSuccessful();
     }
 
-    @Then("^Operator uploads the CSV file$")
+    @Then("^Operator uploads the CSV file of Change Delivery Timings page$")
     public void operatorUploadsCSVFile(List<ChangeDeliveryTimings> data) {
         //assume only 1 row
         put("trackingID", data.get(0).getTracking_id());
@@ -63,7 +63,7 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
         changeDeliveryTimingsPage.uploadCsvCampaignFile(data);
     }
 
-    @Then("^Operator verify that the Delivery Time Updated$")
+    @Then("^Operator verify that the Delivery Time Updated on Change Delivery Timings page$")
     public void verifyDeliveryTimeUpdate() {
         String trackingID = get("trackingID");
         changeDeliveryTimingsPage.verifyDeliveryTimeChanged(trackingID);
@@ -89,22 +89,22 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
         changeDeliveryTimingsPage.closeTab();
     }
 
-    @Then("^Operator verify the tracking ID is invalid$")
+    @Then("^Operator verify the tracking ID is invalid on Change Delivery Timings page$")
     public void invalidTrackingIDVerification() {
         changeDeliveryTimingsPage.invalidTrackingIDVerif();
     }
 
-    @Then("^Operator verify the state order of the Tracking ID is invalid$")
+    @Then("^Operator verify the state order of the Tracking ID is invalid on Change Delivery Timings page$")
     public void invalidStateOrderVerification() {
         changeDeliveryTimingsPage.invalidStateOrderVerif();
     }
 
-    @Then("^Operator verify the start and end date is not indicated correctly$")
+    @Then("^Operator verify the start and end date is not indicated correctly on Change Delivery Timings page$")
     public void dateNotIndicateCorrectlyVerification() {
         changeDeliveryTimingsPage.dateIndicatedIncorectlyVerif();
     }
 
-    @Then("^Operator verify that start date is later than end date$")
+    @Then("^Operator verify that start date is later than end date on Change Delivery Timings page$")
     public void startDateLaterVerification() {
         changeDeliveryTimingsPage.startDateLaterVerif();
     }
