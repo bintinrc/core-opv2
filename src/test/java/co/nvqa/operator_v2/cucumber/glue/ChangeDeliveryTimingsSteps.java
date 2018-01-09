@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.ChangeDeliveryTimings;
 import co.nvqa.operator_v2.model.Timeslot;
+import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.ChangeDeliveryTimingsPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -19,6 +20,7 @@ import java.util.List;
 public class ChangeDeliveryTimingsSteps extends AbstractSteps {
 
     private ChangeDeliveryTimingsPage changeDeliveryTimingsPage;
+    private AllOrdersPage allOrdersPage;
 
     @Inject
     public ChangeDeliveryTimingsSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage) {
@@ -28,14 +30,15 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
     @Override
     public void init() {
         changeDeliveryTimingsPage = new ChangeDeliveryTimingsPage(getWebDriver());
+        allOrdersPage = new AllOrdersPage(getWebDriver());
     }
 
-    @When("^Operator click on Download Sample CSV File Button$")
+    @When("^Operator click on Download Button for Sample CSV File of Change Delivery Timings' sample$")
     public void operatorClickOnDownloadSampleCSVFile() {
         changeDeliveryTimingsPage.downloadSampleCSVFile();
     }
 
-    @Then("^verify the csv file sample$")
+    @Then("^Operator verify CSV file of Change Delivery Timings' sample$")
     public void verifyTheCSVFileSample() {
         changeDeliveryTimingsPage.csvSampleDownloadSuccessful();
     }
@@ -68,8 +71,8 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
 
     @When("^Operator entering the tracking ID")
     public void enterTrackingID() {
-        String trackingID = get("trackingID");
-        changeDeliveryTimingsPage.enterTrackingID(trackingID);
+        String trackingId = get("trackingID");
+        allOrdersPage.enterTrackingId(trackingId);
     }
 
     @Then("^Operator switch tab and verify the delivery time$")
