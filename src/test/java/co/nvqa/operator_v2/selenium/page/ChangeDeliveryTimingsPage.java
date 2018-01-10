@@ -1,18 +1,16 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.operator_v2.model.ChangeDeliveryTimings;
+import co.nvqa.commons.utils.NvTestRuntimeException;
+import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.util.TestUtils;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,45 +40,46 @@ public class ChangeDeliveryTimingsPage extends SimplePage {
         verifyFileDownloadedSuccessfully(CSV_FILENAME);
     }
 
-    public void uploadCsvCampaignFile(List<ChangeDeliveryTimings> listOfChangeDeliveryTimings) {
-        try {
-            File csvResultFile = createDeliveryTimingChanging(listOfChangeDeliveryTimings);
-            clickNvIconTextButtonByName("Upload CSV");
-            waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'file-select')]");
-            sendKeysByAriaLabel("Choose", csvResultFile.getAbsolutePath());
-            pause3s();
-            clickNvButtonSaveByNameAndWaitUntilDone("Upload CSV");
-        }
-        catch(FileNotFoundException ex) {
-            NvLogger.warn("Error on method 'uploadCsvCampaignFile'.", ex);
-        }
+    public void uploadCsvCampaignFile(List<ChangeDeliveryTiming> listOfChangeDeliveryTimings) {
+        File csvResultFile = createDeliveryTimingChanging(listOfChangeDeliveryTimings);
+        clickNvIconTextButtonByName("Upload CSV");
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'file-select')]");
+        sendKeysByAriaLabel("Choose", csvResultFile.getAbsolutePath());
+        clickNvButtonSaveByNameAndWaitUntilDone("Upload CSV");
+        waitUntilVisibilityOfElementLocated("//div[@id='toast-container']//div[contains(text(), 'Delivery Time Updated')]");
+        waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']//div[contains(text(), 'Delivery Time Updated')]");
     }
 
-    private File createDeliveryTimingChanging(List<ChangeDeliveryTimings> listOfChangeDeliveryTimings) throws FileNotFoundException
-    {
+    private File createDeliveryTimingChanging(List<ChangeDeliveryTiming> listOfChangeDeliveryTimings) {
         File csvResultFile = TestUtils.createFileOnTempFolder(String.format("change-delivery-timings_%s.csv", generateDateUniqueString()));
-        StringBuilder csvData = new StringBuilder();
 
-        listOfChangeDeliveryTimings.stream().forEach((row)-> {
-            StringBuilder sb = new StringBuilder();
-            sb.append(row.getTracking_id()).append(COMMA);
-            sb.append(row.getStart_date()).append(COMMA);
-            sb.append(row.getEnd_date()).append(COMMA);
+        try {
+            StringBuilder csvData = new StringBuilder();
 
-            if (row.getTimewindow()!=null) {
-                sb.append(row.getTimewindow()).append(COMMA);
-            }
-            else {
-                sb.append(COMMA);
-            }
+            listOfChangeDeliveryTimings.stream().forEach((row)-> {
+                StringBuilder sb = new StringBuilder();
+                sb.append(row.getTrackingId()).append(COMMA);
+                sb.append(row.getStartDate()).append(COMMA);
+                sb.append(row.getEndDate()).append(COMMA);
 
-            csvData.append(sb.toString()).append(System.lineSeparator());
-        });
+                if(row.getTimewindow()!=null) {
+                    sb.append(row.getTimewindow()).append(COMMA);
+                }
+                else {
+                    sb.append(COMMA);
+                }
 
-        PrintWriter pw = new PrintWriter(new FileOutputStream(csvResultFile));
-        pw.println(CSV_CAMPAIGN_HEADER);
-        pw.print(csvData.toString());
-        pw.close();
+                csvData.append(sb.toString()).append(System.lineSeparator());
+            });
+
+            PrintWriter pw = new PrintWriter(new FileOutputStream(csvResultFile));
+            pw.println(CSV_CAMPAIGN_HEADER);
+            pw.print(csvData.toString());
+            pw.close();
+        }
+        catch(IOException ex) {
+            throw new NvTestRuntimeException(ex);
+        }
 
         return csvResultFile;
     }
@@ -90,34 +89,6 @@ public class ChangeDeliveryTimingsPage extends SimplePage {
         Assert.assertEquals("Tracking ID is not existed on the success table.", trackingId, actualRes);
     }
 
-    public void switchTab() {
-        ArrayList<String> tabs = new ArrayList<>(getwebDriver().getWindowHandles());
-        getwebDriver().switchTo().window(tabs.get(tabs.size()-1));
-    }
-
-    public void verifyDateRange(String startDate, String endDate, boolean isTimewindowNull) {
-        pause5s();
-
-        String actualStartDate = getText("//div[@id='delivery-details']//div[label/text()='Start Date / Time']/p");
-        String actualEndDate = getText("//div[@id='delivery-details']//div[label/text()='End Date / Time']/p");
-
-        if(isTimewindowNull) {
-            actualStartDate = actualStartDate.substring(0, 10);
-            actualEndDate = actualEndDate.substring(0, 10);
-        }
-
-        Assert.assertEquals("Start Date does not match.", startDate, actualStartDate);
-        Assert.assertEquals("End Date does not match.", endDate, actualEndDate);
-    }
-
-    public void closeTab() {
-        ArrayList<String> tabs = new ArrayList<String>(getwebDriver().getWindowHandles());
-        getwebDriver().findElement(By.cssSelector("body")).sendKeys(Keys.COMMAND+"1");
-        getwebDriver().findElement(By.cssSelector("body")).sendKeys(Keys.CONTROL+"1");
-        getwebDriver().close();
-        getwebDriver().switchTo().window(tabs.get(0));
-    }
-
     public void invalidTrackingIdVerification() {
         String actualMessage = getTextOnTableWithNgRepeatUsingDataTitleText(1, ERROR_COLUMN_DATA, NG_REPEAT_ERROR);
         Assert.assertEquals("Tracking ID is valid.","INVALID_TRACKING_ID", actualMessage);
@@ -125,31 +96,16 @@ public class ChangeDeliveryTimingsPage extends SimplePage {
 
     public void invalidStateOrderVerification() {
         String actualMessage = getTextOnTableWithNgRepeatUsingDataTitleText(1, ERROR_COLUMN_DATA, NG_REPEAT_ERROR);
-        Assert.assertEquals("Tracking ID is valid.","INVALID_STATE", actualMessage.substring(0, 13));
+        Assert.assertThat("Tracking ID is valid.", actualMessage, Matchers.startsWith("INVALID_STATE"));
     }
 
     public void dateIndicatedIncorectlyVerification() {
         String actualMessage = getTextOnTableWithNgRepeatUsingDataTitleText(1, ERROR_COLUMN_DATA, NG_REPEAT_ERROR);
-        Assert.assertEquals("Tracking ID is valid.","Start and End Date not indicated correctly", actualMessage);
+        Assert.assertEquals("Tracking ID is valid.", "Start and End Date not indicated correctly", actualMessage);
     }
 
     public void startDateLaterVerification() {
         String actualMessage = getTextOnTableWithNgRepeatUsingDataTitleText(1, ERROR_COLUMN_DATA, NG_REPEAT_ERROR);
         Assert.assertEquals("Tracking ID is valid.","Start Date is later than End Date", actualMessage);
-    }
-
-    public void dateEmpty(String startDate, String endDate, boolean isDateEmpty) {
-        pause5s();
-
-        String actualStartTime = getText("//div[@id='delivery-details']//div[label/text()='Start Date / Time']/p");
-        String actualEndTime = getText("//div[@id='delivery-details']//div[label/text()='End Date / Time']/p");
-
-        if(isDateEmpty) {
-            actualStartTime = actualStartTime.substring(11, 19);
-            actualEndTime = actualEndTime.substring(11, 19);
-        }
-
-        Assert.assertEquals("Start Date does not match.", startDate, actualStartTime);
-        Assert.assertEquals("End Date does not match.", endDate, actualEndTime);
     }
 }

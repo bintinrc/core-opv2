@@ -1,16 +1,19 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.utils.StandardScenarioStorage;
-import co.nvqa.operator_v2.model.ChangeDeliveryTimings;
-import co.nvqa.operator_v2.model.Timeslot;
+import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.ChangeDeliveryTimingsPage;
+import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -19,7 +22,6 @@ import java.util.List;
 
 @ScenarioScoped
 public class ChangeDeliveryTimingsSteps extends AbstractSteps {
-
     private ChangeDeliveryTimingsPage changeDeliveryTimingsPage;
     private AllOrdersPage allOrdersPage;
 
@@ -44,50 +46,44 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
         changeDeliveryTimingsPage.csvSampleDownloadSuccessful();
     }
 
-    @Then("^Operator uploads the CSV file of Change Delivery Timings page$")
-    public void operatorUploadsCSVFile(List<ChangeDeliveryTimings> data) {
-        //assume only 1 row
-        put("trackingID", data.get(0).getTracking_id());
-        put("start_date", data.get(0).getStart_date());
-        put("end_date", data.get(0).getEnd_date());
-        if (data.get(0).getTimewindow() != null ) {
-            Timeslot tslot = new Timeslot(data.get(0).getTimewindow());
-            put("start_time", tslot.getStartTime());
-            put("end_time", tslot.getEndTime());
-            put("timewindow", data.get(0).getTimewindow());
-            if (data.get(0).getEnd_date().equalsIgnoreCase("") && data.get(0).getStart_date().equalsIgnoreCase("")) {
-                put("isDateEmpty", true);
-            }
-        } else {
-            put("isTimewindowNull", true);
+    @Then("^Operator uploads the CSV file on Change Delivery Timings page using data below:$")
+    public void operatorUploadsTheCsvFileOnChangeDeliveryTimingsPageUsingDataBelow(DataTable dataTable) {
+        Map<String,String> mapOfDynamicVariable = new HashMap<>();
+        mapOfDynamicVariable.put("tracking_id", get(KEY_CREATED_ORDER_TRACKING_ID));
+        Map<String,String> mapOfData = replaceParamAndGetAsMap(dataTable, mapOfDynamicVariable);
+
+        String trackingId = mapOfData.get("tracking_id");
+        String startDate = mapOfData.get("start_date");
+        String endDate = mapOfData.get("end_date");
+        String timewindowAsString = mapOfData.get("timewindow");
+
+        ChangeDeliveryTiming changeDeliveryTiming = new ChangeDeliveryTiming();
+        changeDeliveryTiming.setTrackingId(trackingId);
+        changeDeliveryTiming.setStartDate(startDate);
+        changeDeliveryTiming.setEndDate(endDate);
+
+        if(!isBlank(timewindowAsString)) {
+            int timewindow = Integer.parseInt(timewindowAsString);
+            changeDeliveryTiming.setTimewindow(timewindow);
         }
-        changeDeliveryTimingsPage.uploadCsvCampaignFile(data);
+
+        List<ChangeDeliveryTiming> listOfChangeDeliveryTimings = new ArrayList<>();
+        listOfChangeDeliveryTimings.add(changeDeliveryTiming);
+
+        changeDeliveryTimingsPage.uploadCsvCampaignFile(listOfChangeDeliveryTimings);
+        put("changeDeliveryTiming", changeDeliveryTiming);
     }
 
     @Then("^Operator verify that the Delivery Time Updated on Change Delivery Timings page$")
     public void verifyDeliveryTimeUpdate() {
-        String trackingID = get("trackingID");
-        changeDeliveryTimingsPage.verifyDeliveryTimeChanged(trackingID);
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        changeDeliveryTimingsPage.verifyDeliveryTimeChanged(trackingId);
     }
 
-    @When("^Operator entering the tracking ID")
-    public void enterTrackingID() {
-        String trackingId = get("trackingID");
-        allOrdersPage.enterTrackingId(trackingId);
-    }
-
-    @Then("^Operator switch tab and verify the delivery time$")
-    public void switchTab() {
-        pause2s();
-        String start_date = ((String) get("start_date")).concat(" ")
-                .concat(get("start_time") != null ? get("start_time") : "").trim();
-        String end_date = ((String) get("end_date")).concat(" ")
-                .concat(get("end_time") != null ? get("end_time") : "").trim();
-        boolean isTimewindowNull = get("isTimewindowNull", false);
-        changeDeliveryTimingsPage.switchTab();
-        changeDeliveryTimingsPage.verifyDateRange(start_date, end_date, isTimewindowNull);
-        pause2s();
-        changeDeliveryTimingsPage.closeTab();
+    @Then("^Operator verify that the Delivery Time is updated on All Orders page$")
+    public void operatorVerifyThatTheDeliveryTimeIsUpdatedOnAllOrdersPage() {
+        ChangeDeliveryTiming changeDeliveryTiming = get("changeDeliveryTiming");
+        allOrdersPage.verifyDeliveryTimingIsUpdatedSuccessfully(changeDeliveryTiming);
     }
 
     @Then("^Operator verify the tracking ID is invalid on Change Delivery Timings page$")
@@ -108,16 +104,5 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
     @Then("^Operator verify that start date is later than end date on Change Delivery Timings page$")
     public void startDateLaterVerification() {
         changeDeliveryTimingsPage.startDateLaterVerification();
-    }
-
-    @Then("^Operator verify system using current date$")
-    public void dateIsEmpty() {
-        String start_date = ((String) get("start_date")).concat(" ").concat(get("start_time")!=null ?get("start_time"): "").trim();
-        String end_date = ((String) get("end_date")).concat(" ").concat(get("end_time")!=null ?get("end_time"): "").trim();
-        boolean isDateEmpty = get("isDateEmpty", false);
-        changeDeliveryTimingsPage.switchTab();
-        changeDeliveryTimingsPage.dateEmpty(start_date, end_date, isDateEmpty);
-        pause2s();
-        changeDeliveryTimingsPage.closeTab();
     }
 }

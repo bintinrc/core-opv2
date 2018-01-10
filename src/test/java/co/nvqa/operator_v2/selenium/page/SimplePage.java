@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.utils.ListOfDateFormat;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.StandardTestUtils;
@@ -12,7 +13,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -22,11 +22,8 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class SimplePage
+public class SimplePage implements ListOfDateFormat
 {
-    public static final SimpleDateFormat CREATED_DATE_SDF = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
-    public static final SimpleDateFormat MD_DATEPICKER_SDF = new SimpleDateFormat("yyyy-MM-dd");
-
     public static final int FAST_WAIT_IN_SECONDS = 2;
     public static final int DEFAULT_MAX_RETRY_FOR_STALE_ELEMENT_REFERENCE = 5;
     public static final int DEFAULT_MAX_RETRY_FOR_FILE_VERIFICATION = 10;
@@ -35,6 +32,11 @@ public class SimplePage
     public SimplePage(WebDriver webDriver)
     {
         this.webDriver = webDriver;
+    }
+
+    public boolean isBlank(String str)
+    {
+        return StandardTestUtils.isBlank(str);
     }
 
     public void moveAndClick(WebElement webElement)
