@@ -2,10 +2,13 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.operator_v2.model.ChangeDeliveryTimings;
-import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
  * @author Tristania Siagian
  */
 
@@ -20,9 +24,6 @@ public class ChangeDeliveryTimingsPage extends SimplePage {
 
     private static final String CSV_FILENAME = "sample_csv.csv";
     private static final String COMMA = ",";
-    private static final String NEW_LINE = "\r\n";
-    private static final String CSV_CHANGING_FILE_NAME = "test_csv.csv";
-    private static final String FILE_PATH = TestConstants.TEMP_DIR + CSV_CHANGING_FILE_NAME;
     private static final String CSV_CAMPAIGN_HEADER = "tracking_id,start_date,end_date,timewindow";
     private static final String NG_REPEAT = "success in $data";
     private static final String NG_REPEAT_ERROR = "error in $data";
@@ -41,67 +42,52 @@ public class ChangeDeliveryTimingsPage extends SimplePage {
         verifyFileDownloadedSuccessfully(CSV_FILENAME);
     }
 
-    public void uploadCsvCampaignFile(List<ChangeDeliveryTimings> data) {
-        try
-        {
-            createDeliveryTimingChanging(data);
-            additionalStep();
+    public void uploadCsvCampaignFile(List<ChangeDeliveryTimings> listOfChangeDeliveryTimings) {
+        try {
+            File csvResultFile = createDeliveryTimingChanging(listOfChangeDeliveryTimings);
+            clickNvIconTextButtonByName("Upload CSV");
+            waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'file-select')]");
+            sendKeysByAriaLabel("Choose", csvResultFile.getAbsolutePath());
+            pause3s();
+            clickNvButtonSaveByNameAndWaitUntilDone("Upload CSV");
         }
-        catch(FileNotFoundException ex)
-        {
+        catch(FileNotFoundException ex) {
             NvLogger.warn("Error on method 'uploadCsvCampaignFile'.", ex);
         }
     }
 
-    private void additionalStep() {
-        clickNvIconTextButtonByName("Upload CSV");
-        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'file-select')]");
-        uploadFile();
-        clickAndWaitUntilDone("//md-dialog-actions/*/button[contains(@class, 'md-nvGreen-theme')]");
-    }
-
-    private void createDeliveryTimingChanging(List<ChangeDeliveryTimings> data) throws FileNotFoundException
+    private File createDeliveryTimingChanging(List<ChangeDeliveryTimings> listOfChangeDeliveryTimings) throws FileNotFoundException
     {
-        StringBuilder CSVData = new StringBuilder();
+        File csvResultFile = TestUtils.createFileOnTempFolder(String.format("change-delivery-timings_%s.csv", generateDateUniqueString()));
+        StringBuilder csvData = new StringBuilder();
 
-        data.stream().forEach((row)->
-        {
+        listOfChangeDeliveryTimings.stream().forEach((row)-> {
             StringBuilder sb = new StringBuilder();
             sb.append(row.getTracking_id()).append(COMMA);
             sb.append(row.getStart_date()).append(COMMA);
             sb.append(row.getEnd_date()).append(COMMA);
+
             if (row.getTimewindow()!=null) {
                 sb.append(row.getTimewindow()).append(COMMA);
-            } else {
+            }
+            else {
                 sb.append(COMMA);
             }
 
-            CSVData.append(sb.toString()).append(NEW_LINE);
+            csvData.append(sb.toString()).append(System.lineSeparator());
         });
 
-        PrintWriter pw = new PrintWriter(new FileOutputStream(FILE_PATH));
+        PrintWriter pw = new PrintWriter(new FileOutputStream(csvResultFile));
         pw.println(CSV_CAMPAIGN_HEADER);
-        pw.print(CSVData.toString());
+        pw.print(csvData.toString());
         pw.close();
+
+        return csvResultFile;
     }
 
-    private void uploadFile()
-    {
-        WebElement inputElement = getwebDriver().findElement(By.xpath("//input[@type='file']"));
-        inputElement.sendKeys(FILE_PATH);
-        pause3s();
-    }
-
-    public void verifyDeliveryTimeChanged(String trackingID)
-    {
+    public void verifyDeliveryTimeChanged(String trackingId) {
         String actualRes = getTextOnTableWithNgRepeatUsingDataTitleText(1, COLUMN_DATA_TITLE_TEXT, NG_REPEAT);
-        Assert.assertEquals("Tracking ID is not existed on the success table",trackingID,actualRes);
-    }
-
-    public void enterTrackingID(String trackingID) {
-        WebElement input = getwebDriver().findElement(By.id("searchTerm"));
-        input.sendKeys(trackingID);
-        clickNvApiTextButtonByName("commons.search");
+        Assert.assertEquals("Tracking ID is not existed on the success table.", trackingId, actualRes);
     }
 
     public void switchTab() {
@@ -109,19 +95,19 @@ public class ChangeDeliveryTimingsPage extends SimplePage {
         getwebDriver().switchTo().window(tabs.get(tabs.size()-1));
     }
 
-    public void verifyDateRange(String date_start, String end_date, boolean isTimewindowNull) {
-
+    public void verifyDateRange(String startDate, String endDate, boolean isTimewindowNull) {
         pause5s();
 
-        String datestart = getwebDriver().findElement(By.xpath("//div[@id='delivery-details']//div[label/text()='Start Date / Time']/p")).getText();
-        String enddate = getwebDriver().findElement(By.xpath("//div[@id='delivery-details']//div[label/text()='End Date / Time']/p")).getText();
+        String actualStartDate = getText("//div[@id='delivery-details']//div[label/text()='Start Date / Time']/p");
+        String actualEndDate = getText("//div[@id='delivery-details']//div[label/text()='End Date / Time']/p");
 
-        if(isTimewindowNull){
-            datestart = datestart.substring(0,10);
-            enddate = enddate.substring(0,10);
+        if(isTimewindowNull) {
+            actualStartDate = actualStartDate.substring(0, 10);
+            actualEndDate = actualEndDate.substring(0, 10);
         }
-        Assert.assertEquals("Start Date does not match", date_start, datestart);
-        Assert.assertEquals("End Date does not match", end_date, enddate);
+
+        Assert.assertEquals("Start Date does not match.", startDate, actualStartDate);
+        Assert.assertEquals("End Date does not match.", endDate, actualEndDate);
     }
 
     public void closeTab() {
@@ -132,38 +118,38 @@ public class ChangeDeliveryTimingsPage extends SimplePage {
         getwebDriver().switchTo().window(tabs.get(0));
     }
 
-    public void invalidTrackingIDVerif() {
-        String actualMes = getTextOnTableWithNgRepeatUsingDataTitleText(1, ERROR_COLUMN_DATA, NG_REPEAT_ERROR);
-        Assert.assertEquals("Tracking ID is valid","INVALID_TRACKING_ID",actualMes);
+    public void invalidTrackingIdVerification() {
+        String actualMessage = getTextOnTableWithNgRepeatUsingDataTitleText(1, ERROR_COLUMN_DATA, NG_REPEAT_ERROR);
+        Assert.assertEquals("Tracking ID is valid.","INVALID_TRACKING_ID", actualMessage);
     }
 
-    public void invalidStateOrderVerif() {
-        String actualMes = getTextOnTableWithNgRepeatUsingDataTitleText(1, ERROR_COLUMN_DATA, NG_REPEAT_ERROR);
-        Assert.assertEquals("Tracking ID is valid","INVALID_STATE",actualMes.substring(0,13));
+    public void invalidStateOrderVerification() {
+        String actualMessage = getTextOnTableWithNgRepeatUsingDataTitleText(1, ERROR_COLUMN_DATA, NG_REPEAT_ERROR);
+        Assert.assertEquals("Tracking ID is valid.","INVALID_STATE", actualMessage.substring(0, 13));
     }
 
-    public void dateIndicatedIncorectlyVerif() {
-        String actualMes = getTextOnTableWithNgRepeatUsingDataTitleText(1, ERROR_COLUMN_DATA, NG_REPEAT_ERROR);
-        Assert.assertEquals("Tracking ID is valid","Start and End Date not indicated correctly",actualMes);
+    public void dateIndicatedIncorectlyVerification() {
+        String actualMessage = getTextOnTableWithNgRepeatUsingDataTitleText(1, ERROR_COLUMN_DATA, NG_REPEAT_ERROR);
+        Assert.assertEquals("Tracking ID is valid.","Start and End Date not indicated correctly", actualMessage);
     }
 
-    public void startDateLaterVerif() {
-        String actualMes = getTextOnTableWithNgRepeatUsingDataTitleText(1, ERROR_COLUMN_DATA, NG_REPEAT_ERROR);
-        Assert.assertEquals("Tracking ID is valid","Start Date is later than End Date",actualMes);
+    public void startDateLaterVerification() {
+        String actualMessage = getTextOnTableWithNgRepeatUsingDataTitleText(1, ERROR_COLUMN_DATA, NG_REPEAT_ERROR);
+        Assert.assertEquals("Tracking ID is valid.","Start Date is later than End Date", actualMessage);
     }
 
-    public void dateEmpty(String date_start, String end_date, boolean isDateEmpty) {
+    public void dateEmpty(String startDate, String endDate, boolean isDateEmpty) {
         pause5s();
 
-        String timestart = getwebDriver().findElement(By.xpath("//div[@id='delivery-details']//div[label/text()='Start Date / Time']/p")).getText();
-        String timeend = getwebDriver().findElement(By.xpath("//div[@id='delivery-details']//div[label/text()='End Date / Time']/p")).getText();
+        String actualStartTime = getText("//div[@id='delivery-details']//div[label/text()='Start Date / Time']/p");
+        String actualEndTime = getText("//div[@id='delivery-details']//div[label/text()='End Date / Time']/p");
 
-        if(isDateEmpty){
-            timestart = timestart.substring(11,19);
-            timeend = timeend.substring(11,19);
+        if(isDateEmpty) {
+            actualStartTime = actualStartTime.substring(11, 19);
+            actualEndTime = actualEndTime.substring(11, 19);
         }
-        Assert.assertEquals("Start Date does not match", date_start, timestart);
-        Assert.assertEquals("End Date does not match", end_date, timeend);
-    }
 
+        Assert.assertEquals("Start Date does not match.", startDate, actualStartTime);
+        Assert.assertEquals("End Date does not match.", endDate, actualEndTime);
+    }
 }

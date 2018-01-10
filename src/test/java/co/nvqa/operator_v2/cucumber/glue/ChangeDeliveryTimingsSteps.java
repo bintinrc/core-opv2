@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 /**
+ *
  * @author Tristania Siagian
  */
 
@@ -90,23 +91,23 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
     }
 
     @Then("^Operator verify the tracking ID is invalid on Change Delivery Timings page$")
-    public void invalidTrackingIDVerification() {
-        changeDeliveryTimingsPage.invalidTrackingIDVerif();
+    public void invalidTrackingIdVerification() {
+        changeDeliveryTimingsPage.invalidTrackingIdVerification();
     }
 
     @Then("^Operator verify the state order of the Tracking ID is invalid on Change Delivery Timings page$")
     public void invalidStateOrderVerification() {
-        changeDeliveryTimingsPage.invalidStateOrderVerif();
+        changeDeliveryTimingsPage.invalidStateOrderVerification();
     }
 
     @Then("^Operator verify the start and end date is not indicated correctly on Change Delivery Timings page$")
     public void dateNotIndicateCorrectlyVerification() {
-        changeDeliveryTimingsPage.dateIndicatedIncorectlyVerif();
+        changeDeliveryTimingsPage.dateIndicatedIncorectlyVerification();
     }
 
     @Then("^Operator verify that start date is later than end date on Change Delivery Timings page$")
     public void startDateLaterVerification() {
-        changeDeliveryTimingsPage.startDateLaterVerif();
+        changeDeliveryTimingsPage.startDateLaterVerification();
     }
 
     @Then("^Operator verify system using current date$")
@@ -119,5 +120,4 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
         pause2s();
         changeDeliveryTimingsPage.closeTab();
     }
-
 }
