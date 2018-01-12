@@ -20,9 +20,9 @@ Feature: DP Tagging
     Then Operator verify the order(s) is tagged to DP successfully
     Examples:
       | Note   | hiptest-uid                              | orderType |
-      | Normal | uid:8a1ccb26-2942-414e-b95c-9af308fce884 | Normal    |
-      | C2C    | uid:161bd183-ed16-4a6a-96dc-b436ac03b68a | C2C       |
-      | Return | uid:06ff2483-15ab-4943-8935-ce18e11d78c8 | Return    |
+      | Normal | uid:c798aa53-3cab-4d3b-80e8-23849cfda6c5 | Normal    |
+      | C2C    | uid:192326b0-9a43-4017-91c7-e8312d6f58ce | C2C       |
+      | Return | uid:c9fcc03b-99cc-41ee-91d0-ae2e46e74774 | Return    |
 
   Scenario: Operator tagged multiple order to DP (uid:d3342895-66f9-4e9e-bfb7-7bc369d94b55)
     Given Operator go to menu Shipper Support -> Blocked Dates
