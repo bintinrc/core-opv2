@@ -522,6 +522,16 @@ public class SimplePage implements ListOfDateFormat
         pause100ms();
     }
 
+    public void selectValueFromMdAutocomplete(String placeholder, String value)
+    {
+        String xpath = String.format("//md-autocomplete[@placeholder='%s']//input", placeholder);
+        WebElement we = findElementByXpath(xpath);
+        we.sendKeys(value);
+        pause1s();
+        we.sendKeys(Keys.RETURN);
+        pause100ms();
+    }
+
     public void selectValueFromMdSelect(String mdSelectNgModel, String value)
     {
         click(String.format("//md-select[@ng-model='%s']", mdSelectNgModel));
