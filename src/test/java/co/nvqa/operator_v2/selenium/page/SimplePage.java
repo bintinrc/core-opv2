@@ -240,6 +240,26 @@ public class SimplePage implements ListOfDateFormat
         click(String.format("//md-datepicker[@ng-model='%s']/parent::*", ngModel));
     }
 
+    public void waitUntilInvisibilityOfToast(String containsMessage)
+    {
+        waitUntilInvisibilityOfToast(containsMessage, true);
+    }
+
+    public void waitUntilInvisibilityOfToast(String containsMessage, boolean waitUntilElementVisibleFirst)
+    {
+        if(waitUntilElementVisibleFirst)
+        {
+            waitUntilVisibilityOfElementLocated(String.format("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage));
+        }
+
+        waitUntilInvisibilityOfElementLocated(String.format("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage));
+    }
+
+    public void waitUntilVisibilityOfToast(String containsMessage)
+    {
+        waitUntilVisibilityOfElementLocated(String.format("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage));
+    }
+
     public WebElement getToast()
     {
         String xpath = "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div";

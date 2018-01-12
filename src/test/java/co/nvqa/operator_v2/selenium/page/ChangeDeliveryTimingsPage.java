@@ -46,8 +46,7 @@ public class ChangeDeliveryTimingsPage extends SimplePage {
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'file-select')]");
         sendKeysByAriaLabel("Choose", csvResultFile.getAbsolutePath());
         clickNvButtonSaveByNameAndWaitUntilDone("Upload CSV");
-        waitUntilVisibilityOfElementLocated("//div[@id='toast-container']//div[contains(text(), 'Delivery Time Updated')]");
-        waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']//div[contains(text(), 'Delivery Time Updated')]");
+        waitUntilInvisibilityOfToast("Delivery Time Updated");
     }
 
     private File createDeliveryTimingChanging(List<ChangeDeliveryTiming> listOfChangeDeliveryTimings) {

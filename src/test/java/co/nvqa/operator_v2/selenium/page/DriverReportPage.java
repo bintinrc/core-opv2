@@ -48,8 +48,8 @@ public class DriverReportPage extends SimplePage
     public void clickButtonGenerateCsv()
     {
         clickNvApiTextButtonByNameAndWaitUntilDone("container.driver-reports.generate-csv");
-        waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']//div[contains(text(), 'Attempting to download')]");
-        waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']//div[contains(text(), 'Downloading')]");
+        waitUntilInvisibilityOfToast("Attempting to download");
+        waitUntilInvisibilityOfToast("Downloading");
     }
 
     public void verifyTheGeneratedCsvIsCorrect(String driverName, long expectedRouteId)
@@ -105,8 +105,8 @@ public class DriverReportPage extends SimplePage
     public void clickButtonGenerateDriverRouteExcelReport()
     {
         clickNvApiTextButtonByNameAndWaitUntilDone("container.driver-reports.generate-excel");
-        waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']//div[contains(text(), 'Attempting to download')]");
-        waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']//div[contains(text(), 'Downloading')]");
+        waitUntilInvisibilityOfToast("Attempting to download");
+        waitUntilInvisibilityOfToast("Downloading");
     }
 
     public void verifyTheGeneratedExcelIsCorrect(String driverName, long expectedRouteId)

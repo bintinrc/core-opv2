@@ -47,6 +47,8 @@ public final class TestConstants extends StandardTestConstants
     public static final String NINJA_DRIVER_USERNAME;
     public static final String NINJA_DRIVER_PASSWORD;
 
+    public static final Long DP_ID;
+
     public static final int VERY_LONG_WAIT_FOR_TOAST = 90;
 
     static
@@ -92,6 +94,8 @@ public final class TestConstants extends StandardTestConstants
         NINJA_DRIVER_NAME = getPropertyValueAsString("ninja-driver-name");
         NINJA_DRIVER_USERNAME = getPropertyValueAsString("ninja-driver-username");
         NINJA_DRIVER_PASSWORD = getPropertyValueAsString("ninja-driver-password");
+
+        DP_ID = getPropertyValueAsLong("dp-id");
     }
 
     private TestConstants()
