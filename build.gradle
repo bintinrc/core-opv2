@@ -17,6 +17,9 @@ dependencies {
 
     testCompile "org.apache.poi:poi-ooxml:3.17"
 
+    testCompile "com.google.zxing:core:3.3.1"
+    testCompile "com.google.zxing:javase:3.3.1"
+
     testCompile project(":commons")
 }
 

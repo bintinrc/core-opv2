@@ -313,7 +313,7 @@ public class PricingScriptsPage extends SimplePage
         }
         else
         {
-            throw new RuntimeException("Cannot execute Javascript.");
+            throw new NvTestRuntimeException("WebDriver is not instance of JavascriptExecutor. Cannot execute method executeScript.");
         }
 
         return value;

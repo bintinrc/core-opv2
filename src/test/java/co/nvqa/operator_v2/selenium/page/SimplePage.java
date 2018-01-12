@@ -12,8 +12,11 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -232,6 +235,36 @@ public class SimplePage implements ListOfDateFormat
         }
 
         return text;
+    }
+
+    public File saveCanvasAsPngFile(String canvasXpathExpression)
+    {
+        File fileResult;
+
+        if(getwebDriver() instanceof JavascriptExecutor)
+        {
+            try
+            {
+                JavascriptExecutor javascriptExecutor = (JavascriptExecutor) getwebDriver();
+                WebElement canvasWe = findElementByXpath(canvasXpathExpression);
+                String imageAsStringBase64 = (String) javascriptExecutor.executeScript("return arguments[0].toDataURL('image/png');", canvasWe);
+                imageAsStringBase64 = imageAsStringBase64.split(",")[1]; //Remove Base64 prefix: data:image/png;base64,
+                byte[] imageAsArrayOfByte = Base64.getDecoder().decode(imageAsStringBase64);
+                BufferedImage imageAsBufferedImage = ImageIO.read(new ByteArrayInputStream(imageAsArrayOfByte));
+                fileResult = TestUtils.createFileOnTempFolder("canvas-image_"+generateDateUniqueString()+".png");
+                ImageIO.write(imageAsBufferedImage, "PNG", fileResult);
+            }
+            catch(IOException ex)
+            {
+                throw new NvTestRuntimeException(ex);
+            }
+        }
+        else
+        {
+            throw new NvTestRuntimeException("WebDriver is not instance of JavascriptExecutor. Cannot execute method executeScript.");
+        }
+
+        return fileResult;
     }
 
     public void setMdDatepicker(String ngModel, Date date)
