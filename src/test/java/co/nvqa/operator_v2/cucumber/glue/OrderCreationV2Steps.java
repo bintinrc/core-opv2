@@ -6,11 +6,11 @@ import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.OrderCreationV2Template;
 import co.nvqa.operator_v2.selenium.page.OrderCreationV2Page;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.inject.Inject;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-import javax.inject.Inject;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;

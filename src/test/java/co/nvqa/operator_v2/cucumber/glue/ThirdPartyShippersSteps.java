@@ -3,11 +3,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.ThirdPartyShipper;
 import co.nvqa.operator_v2.selenium.page.ThirdPartyShippersPage;
+import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.apache.commons.lang3.StringUtils;
-
-import javax.inject.Inject;
 
 /**
  *

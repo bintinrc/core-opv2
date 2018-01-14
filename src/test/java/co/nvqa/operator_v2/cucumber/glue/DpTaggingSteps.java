@@ -3,10 +3,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.DpTagging;
 import co.nvqa.operator_v2.selenium.page.DpTaggingPage;
+import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
