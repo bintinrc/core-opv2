@@ -30,7 +30,7 @@ public class UserManagementPage extends SimplePage {
     public void createUser(UserManagement userManagement) {
         clickNvIconTextButtonByName("Add User");
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'user-add')]");
-        fillTheForm(userManagement);
+        fillTheForm(userManagement, true);
         clickNvApiTextButtonByNameAndWaitUntilDone("Add User");
     }
 
@@ -52,27 +52,25 @@ public class UserManagementPage extends SimplePage {
         clickNvApiTextButtonByNameAndWaitUntilDone("Load Selected Users");
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'user-edit')]");
-        fillTheForm(userManagementEdited);
+        click("//tbody//tr[1]//button[@aria-label='Remove']");
+        fillTheForm(userManagementEdited, false);
         clickNvApiTextButtonByNameAndWaitUntilDone("Save Changes");
     }
 
-    public void fillTheForm(UserManagement userManagement)
-    {
-        sendKeysById("first-name", userManagement.getFirstName());
-        sendKeysById("last-name", userManagement.getLastName());
-        sendKeysById("email", userManagement.getEmail());
+    public void fillTheForm(UserManagement userManagement, boolean isCreate) {
+
+        if(isCreate) {
+            sendKeysById("first-name", userManagement.getFirstName());
+            sendKeysById("last-name", userManagement.getLastName());
+            sendKeysById("email", userManagement.getEmail());
+        }
         selectValueFromMdAutocomplete("Search Role To Add", userManagement.getRoles());
+
     }
 
     public void verifyEditedUserOnUserManagement(UserManagement userManagement) {
         sendKeys("//input[@type='text'][@ng-model='ctrl.keyword']", userManagement.getLastName());
         clickNvApiTextButtonByNameAndWaitUntilDone("Load Selected Users");
-        String actualGrantType = getTextOnTable(1, COLUMN_DATA_TITLE_GRANT_TYPE);
-        Assert.assertEquals("Different Result Returned",userManagement.getGrantType(), actualGrantType);
-        String actualFirstName = getTextOnTable(1, COLUMN_DATA_TITLE_FIRST_NAME);
-        Assert.assertEquals("Different Result Returned",userManagement.getFirstName(), actualFirstName);
-        String actualLastName = getTextOnTable(1, COLUMN_DATA_TITLE_LAST_NAME);
-        Assert.assertEquals("Different Result Returned",userManagement.getLastName(), actualLastName);
         String actualRole = getTextOnTable(1, COLUMN_DATA_TITLE_ROLE);
         Assert.assertTrue("Different Result Returned", actualRole.contains(userManagement.getRoles()));
     }

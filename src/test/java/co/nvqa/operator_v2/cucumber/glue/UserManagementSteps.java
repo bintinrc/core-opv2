@@ -53,10 +53,8 @@ public class UserManagementSteps extends AbstractSteps {
         UserManagement userManagement = get("userManagement");
 
         UserManagement userManagementEdited = new UserManagement();
-        userManagementEdited.setGrantType(userManagement.getGrantType());
-        userManagementEdited.setFirstName(userManagement.getFirstName());
-        userManagementEdited.setLastName(userManagement.getLastName()+"EDITED");
-        userManagementEdited.setEmail(userManagement.getEmail());
+
+        userManagementEdited.setLastName(userManagement.getLastName());
         userManagementEdited.setRoles("QA_TEAM");
         put("userManagementEdited", userManagementEdited);
         userManagementPage.editUser(userManagement, userManagementEdited);
