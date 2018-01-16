@@ -9,13 +9,13 @@ import java.text.SimpleDateFormat;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class AddParcelToRoutePage extends SimplePage
+public class BulkAddToRoutePage extends SimplePage
 {
     private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
     public static final String NG_REPEAT = "row in $data";
     public static final String COLUMN_CLASS_TRACKING_ID = "tracking_id";
 
-    public AddParcelToRoutePage(WebDriver webDriver)
+    public BulkAddToRoutePage(WebDriver webDriver)
     {
         super(webDriver);
     }
@@ -47,8 +47,7 @@ public class AddParcelToRoutePage extends SimplePage
 
     public void clickSubmit()
     {
-        click("//button[@aria-label='Submit']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Submit']//md-progress-circular");
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.submit");
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)

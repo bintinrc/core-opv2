@@ -9,11 +9,11 @@ import java.text.SimpleDateFormat;
 /**
  * @author Daniel Joi Partogi Hutapea
  */
-public class TransactionsV2Page extends SimplePage
+public class CreateRouteGroupsPage extends SimplePage
 {
     private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
 
-    public TransactionsV2Page(WebDriver webDriver)
+    public CreateRouteGroupsPage(WebDriver webDriver)
     {
         super(webDriver);
     }

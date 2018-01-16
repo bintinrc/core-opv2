@@ -2,7 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.StandardScenarioStorage;
-import co.nvqa.operator_v2.selenium.page.RouteGroupsPage;
+import co.nvqa.operator_v2.selenium.page.RouteGroupManagementPage;
 import co.nvqa.operator_v2.selenium.page.TagManagementPage;
 import com.google.inject.Inject;
 import cucumber.api.DataTable;
@@ -21,13 +21,13 @@ import java.util.Map;
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class RouteGroupsSteps extends AbstractSteps
+public class RouteGroupManagementSteps extends AbstractSteps
 {
     private static final int MAX_RETRY = 10;
-    private RouteGroupsPage routeGroupsPage;
+    private RouteGroupManagementPage routeGroupManagementPage;
 
     @Inject
-    public RouteGroupsSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public RouteGroupManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
         super(scenarioManager, scenarioStorage);
     }
@@ -35,7 +35,7 @@ public class RouteGroupsSteps extends AbstractSteps
     @Override
     public void init()
     {
-        routeGroupsPage = new RouteGroupsPage(getWebDriver());
+        routeGroupManagementPage = new RouteGroupManagementPage(getWebDriver());
     }
 
     @Given("^Operator V2 create 'Route Group'$")
@@ -48,7 +48,7 @@ public class RouteGroupsSteps extends AbstractSteps
          */
         String routeGroupName = "RG "+trackingId;
         put(KEY_ROUTE_GROUP_NAME, routeGroupName);
-        routeGroupsPage.createRouteGroup(routeGroupName);
+        routeGroupManagementPage.createRouteGroup(routeGroupName);
         pause500ms();
 
         /**
@@ -57,7 +57,7 @@ public class RouteGroupsSteps extends AbstractSteps
         Assert.assertThat("Page not redirect to '/#/sg/transactions'.", getWebDriver().getCurrentUrl(), Matchers.containsString("/#/sg/transactions"));
     }
 
-    @When("^op create new 'route group' on 'Route Groups' using data below:$")
+    @When("^Operator create new 'route group' on 'Route Groups' using data below:$")
     public void createNewRouteGroup(DataTable dataTable)
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
@@ -75,17 +75,17 @@ public class RouteGroupsSteps extends AbstractSteps
             routeGroupName = "RG "+trackingId;
         }
 
-        routeGroupsPage.createRouteGroup(routeGroupName);
+        routeGroupManagementPage.createRouteGroup(routeGroupName);
         put(KEY_ROUTE_GROUP_NAME, routeGroupName);
     }
 
-    @When("^op wait until 'Route Group' page is loaded$")
+    @When("^Operator wait until 'Route Group' page is loaded$")
     public void waitUntilRouteGroupIsLoaded()
     {
-        routeGroupsPage.waitUntilRouteGroupPageIsLoaded();
+        routeGroupManagementPage.waitUntilRouteGroupPageIsLoaded();
     }
 
-    @Then("^new 'route group' on 'Route Groups' created successfully$")
+    @Then("^Operator verify new 'route group' on 'Route Groups' created successfully$")
     public void verifyNewRouteGroupCreatedSuccessfully()
     {
         String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
@@ -96,8 +96,8 @@ public class RouteGroupsSteps extends AbstractSteps
         do
         {
             takesScreenshot();
-            routeGroupsPage.searchTable(routeGroupName);
-            actualRouteGroupName = routeGroupsPage.getTextOnTable(1, RouteGroupsPage.COLUMN_CLASS_NAME);
+            routeGroupManagementPage.searchTable(routeGroupName);
+            actualRouteGroupName = routeGroupManagementPage.getTextOnTable(1, RouteGroupManagementPage.COLUMN_CLASS_NAME);
 
             retry = (actualRouteGroupName==null||actualRouteGroupName.isEmpty()) && counter++<=MAX_RETRY;
 
@@ -113,40 +113,40 @@ public class RouteGroupsSteps extends AbstractSteps
         Assert.assertThat("Route Group name not matched.", actualRouteGroupName, Matchers.startsWith(routeGroupName)); //Route Group name is concatenated with description.
     }
 
-    @When("^op update 'route group' on 'Route Groups'$")
+    @When("^Operator update 'route group' on 'Route Group Management'$")
     public void updateRouteGroup()
     {
         String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
         String oldRouteGroupName = routeGroupName;
         routeGroupName += " [EDITED]";
-        routeGroupsPage.editRouteGroup(oldRouteGroupName, routeGroupName);
+        routeGroupManagementPage.editRouteGroup(oldRouteGroupName, routeGroupName);
         put(KEY_ROUTE_GROUP_NAME, routeGroupName);
     }
 
-    @Then("^'route group' on 'Route Groups' updated successfully$")
+    @Then("^Operator verify 'route group' on 'Route Group Management' updated successfully$")
     public void verifyRouteGroupUpdatedSuccessfully()
     {
         String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
-        routeGroupsPage.searchTable(routeGroupName);
-        String actualName = routeGroupsPage.getTextOnTable(1, RouteGroupsPage.COLUMN_CLASS_NAME);
+        routeGroupManagementPage.searchTable(routeGroupName);
+        String actualName = routeGroupManagementPage.getTextOnTable(1, RouteGroupManagementPage.COLUMN_CLASS_NAME);
         Assert.assertTrue("Route Group name not matched.", actualName.startsWith(routeGroupName)); //Route Group name is concatenated with description.
     }
 
-    @When("^op delete 'route group' on 'Route Groups'$")
+    @When("^Operator delete 'route group' on 'Route Group Management'$")
     public void deleteRouteGroup()
     {
         String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
-        routeGroupsPage.deleteRouteGroup(routeGroupName);
+        routeGroupManagementPage.deleteRouteGroup(routeGroupName);
     }
 
-    @Then("^'route group' on 'Route Groups' deleted successfully$")
+    @Then("^Operator verify 'route group' on 'Route Group Management' deleted successfully$")
     public void verifyRouteGroupDeletedSuccessfully()
     {
         /**
          * Check the route group does not exists in table.
          */
         String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
-        String actualName = routeGroupsPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
+        String actualName = routeGroupManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
         Assert.assertNotEquals(routeGroupName, actualName);
     }
 
@@ -156,7 +156,7 @@ public class RouteGroupsSteps extends AbstractSteps
         try
         {
             String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
-            routeGroupsPage.deleteRouteGroup(routeGroupName);
+            routeGroupManagementPage.deleteRouteGroup(routeGroupName);
         }
         catch(Exception ex)
         {

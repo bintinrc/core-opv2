@@ -28,39 +28,27 @@ public class MainSteps extends AbstractSteps
         mainPage = new MainPage(getWebDriver());
     }
 
-    @Given("^op click navigation ([^\"]*) in ([^\"]*)$")
-    public void opClickNavigation(String childMenuName, String parentMenuName)
-    {
-        mainPage.clickNavigation(parentMenuName, childMenuName);
-    }
-
     @Given("^Operator go to menu \"([^\"]*)\" -> \"([^\"]*)\"$")
     public void operatorGoToMenu(String parentMenuName, String childMenuName)
     {
-        opClickNavigation(childMenuName, parentMenuName);
+        mainPage.clickNavigation(parentMenuName, childMenuName);
     }
 
     @Given("^Operator go to menu ([^\"]*) -> ([^\"]*)$")
     public void operatorGoToMenuWithoutQuote(String parentMenuName, String childMenuName)
     {
-        opClickNavigation(childMenuName, parentMenuName);
+        operatorGoToMenu(parentMenuName, childMenuName);
     }
 
-    @Then("^op is in main page$")
-    public void opIsInMainPage()
+    @Then("^Operator verify he is in main page$")
+    public void operatorVerifyHeIsInMainPage()
     {
         mainPage.verifyTheMainPageIsLoaded();
-    }
-
-    @Given("^op refresh page$")
-    public void opRefreshPage()
-    {
-        mainPage.refreshPage();
     }
 
     @Given("^Operator refresh page$")
     public void operatorRefreshPage()
     {
-        opRefreshPage();
+        mainPage.refreshPage();
     }
 }

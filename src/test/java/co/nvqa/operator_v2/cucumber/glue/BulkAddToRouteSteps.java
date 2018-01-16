@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.utils.StandardScenarioStorage;
-import co.nvqa.operator_v2.selenium.page.AddParcelToRoutePage;
+import co.nvqa.operator_v2.selenium.page.BulkAddToRoutePage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -14,12 +14,12 @@ import org.openqa.selenium.WebElement;
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class AddParcelToRouteSteps extends AbstractSteps
+public class BulkAddToRouteSteps extends AbstractSteps
 {
-    private AddParcelToRoutePage addParcelToRoutePage;
+    private BulkAddToRoutePage bulkAddToRoutePage;
 
     @Inject
-    public AddParcelToRouteSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public BulkAddToRouteSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
         super(scenarioManager, scenarioStorage);
     }
@@ -27,33 +27,33 @@ public class AddParcelToRouteSteps extends AbstractSteps
     @Override
     public void init()
     {
-        addParcelToRoutePage = new AddParcelToRoutePage(getWebDriver());
+        bulkAddToRoutePage = new BulkAddToRoutePage(getWebDriver());
     }
 
-    @When("^Operator V2 choose route group, select tag \"([^\"]*)\" and submit$")
+    @When("^Operator choose route group, select tag \"([^\"]*)\" and submit$")
     public void submitOnAddParcelToRoute(String tag)
     {
         String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
         takesScreenshot();
-        addParcelToRoutePage.selectCurrentDate();
+        bulkAddToRoutePage.selectCurrentDate();
         takesScreenshot();
-        addParcelToRoutePage.selectRouteGroup(routeGroupName);
+        bulkAddToRoutePage.selectRouteGroup(routeGroupName);
         takesScreenshot();
-        addParcelToRoutePage.selectTag("FLT"); //Unselect tag FLT. Tag FLT is default tag on this page.
+        bulkAddToRoutePage.selectTag("FLT"); //Unselect tag FLT. Tag FLT is default tag on this page.
         takesScreenshot();
-        addParcelToRoutePage.selectTag(tag);
+        bulkAddToRoutePage.selectTag(tag);
         takesScreenshot();
-        addParcelToRoutePage.clickSubmit();
+        bulkAddToRoutePage.clickSubmit();
         takesScreenshot();
     }
 
-    @Then("^verify parcel added to route$")
+    @Then("^Operator verify parcel added to route$")
     public void verifyParcelAddedToRoute()
     {
         String expectedTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         String xpath = String.format("//td[contains(@class, 'tracking_id') and contains(text(), '%s')]", expectedTrackingId);
         takesScreenshot();
-        WebElement actualTrackingId = addParcelToRoutePage.findElementByXpath(xpath);
+        WebElement actualTrackingId = bulkAddToRoutePage.findElementByXpath(xpath);
         Assert.assertEquals("Order did not added to route.", expectedTrackingId, actualTrackingId.getText());
     }
 }
