@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 /**
  *

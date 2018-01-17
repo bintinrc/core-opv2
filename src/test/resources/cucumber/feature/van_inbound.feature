@@ -19,31 +19,31 @@ Feature: Van Inbound
     When Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
-    Then Operator verify the van inbound process is succeed
+#    Then Operator verify the van inbound process is succeed
     When Operator go to menu Inbounding -> Van Inbound
     And Operator click on start route after van inbounding
     And Operator go to menu Routing -> Route Logs
     Then Operator verify the route is started after van inbounding
 
-  @ArchiveRoute
-  Scenario: Operator van inbounds the created order with invalid tracking ID
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":2, "hubId":1, "vehicleId":1, "driverId":1608 } |
-    When Operator go to menu Inbounding -> Van Inbound
-    And Operator fill the route ID on Van Inbound Page then click enter
-    And Operator fill the invalid tracking ID INVALID_TRACKING_ID on Van Inbound Page
-    Then Operator verify the tracking ID INVALID_TRACKING_ID that has been input on Van Inbound Page is invalid
-
-  @ArchiveRoute
-  Scenario: Operator van inbounds the created order with empty tracking ID
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":2, "hubId":1, "vehicleId":1, "driverId":1608 } |
-    When Operator go to menu Inbounding -> Van Inbound
-    And Operator fill the route ID on Van Inbound Page then click enter
-    And Operator fill the empty tracking ID on Van Inbound Page
-    Then Operator verify the tracking ID that has been input on Van Inbound Page is empty
+#  @ArchiveRoute
+#  Scenario: Operator van inbounds the created order with invalid tracking ID
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given API Operator create new route using data below:
+#      | createRouteRequest | { "zoneId":2, "hubId":1, "vehicleId":1, "driverId":1608 } |
+#    When Operator go to menu Inbounding -> Van Inbound
+#    And Operator fill the route ID on Van Inbound Page then click enter
+#    And Operator fill the invalid tracking ID INVALID_TRACKING_ID on Van Inbound Page
+#    Then Operator verify the tracking ID INVALID_TRACKING_ID that has been input on Van Inbound Page is invalid
+#
+#  @ArchiveRoute
+#  Scenario: Operator van inbounds the created order with empty tracking ID
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given API Operator create new route using data below:
+#      | createRouteRequest | { "zoneId":2, "hubId":1, "vehicleId":1, "driverId":1608 } |
+#    When Operator go to menu Inbounding -> Van Inbound
+#    And Operator fill the route ID on Van Inbound Page then click enter
+#    And Operator fill the empty tracking ID on Van Inbound Page
+#    Then Operator verify the tracking ID that has been input on Van Inbound Page is empty
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
