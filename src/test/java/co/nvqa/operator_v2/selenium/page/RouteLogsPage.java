@@ -1,12 +1,15 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
 
 /**
  *
@@ -158,5 +161,72 @@ public class RouteLogsPage extends SimplePage
     public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
     {
         clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
+    }
+
+    public void loadAndGoToRouteDetails(String routeId) {
+        clickLoadSelection();
+        sendKeys("//md-input-container/div/input[contains(@class, 'ng-touched')]", routeId);
+        findElementByXpath(String.format("//tr[@md-virtual-repeat='route in getTableData()']//td[starts-with(@class, 'id')]/a[text()='%s']", routeId)).click();
+    }
+
+    public void switchToNewOpenedWindow(String mainWindowHandle)
+    {
+        Set<String> windowHandles = TestUtils.retryIfRuntimeExceptionOccurred(()->
+        {
+            pause100ms();
+            Set<String> windowHandlesTemp = getwebDriver().getWindowHandles();
+
+            if(windowHandlesTemp.size()<=1)
+            {
+                throw new RuntimeException("WebDriver only contains 1 Window.");
+            }
+
+            return windowHandlesTemp;
+        });
+
+        String newOpenedWindowHandle = null;
+
+        for(String windowHandle : windowHandles)
+        {
+            if(!windowHandle.equals(mainWindowHandle))
+            {
+                newOpenedWindowHandle = windowHandle; // Do not break, because we need to get the latest one.
+            }
+        }
+
+        getwebDriver().switchTo().window(newOpenedWindowHandle);
+    }
+
+    public void closeAllWindowsAcceptTheMainWindow(String mainWindowHandle)
+    {
+        Set<String> windowHandles = getwebDriver().getWindowHandles();
+
+        for(String windowHandle : windowHandles)
+        {
+            if(!windowHandle.equals(mainWindowHandle))
+            {
+                getwebDriver().switchTo().window(windowHandle);
+                getwebDriver().close();
+            }
+        }
+
+        getwebDriver().switchTo().window(mainWindowHandle);
+    }
+
+    public void verifyRouteIsStarted(String routeId, String trackingId) {
+        String mainWindowHandle = getwebDriver().getWindowHandle();
+
+        try {
+            loadAndGoToRouteDetails(routeId);
+            switchToNewOpenedWindow(mainWindowHandle);
+
+            String actualStatus = getTextOnTableWithMdVirtualRepeat(1,"status", "waypoint in getTableData()", false);
+            Assert.assertEquals("Status is not changed/undefined","Pending", actualStatus);
+            String actualTrackingId = getTextOnTableWithMdVirtualRepeat(1, "tracking-ids", "waypoint in getTableData()", false);
+            Assert.assertEquals("Tracking ID is not found",trackingId, actualTrackingId);
+        }
+        finally {
+            closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
+        }
     }
 }

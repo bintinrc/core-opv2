@@ -4,6 +4,7 @@ import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.Set;
 
@@ -134,5 +135,21 @@ public class AllOrdersPage extends SimplePage
         }
 
         return (date + " " + time).trim();
+    }
+
+    public void verifyInboundIsSucceed(String trackingId) {
+        String mainWindowHandle = getwebDriver().getWindowHandle();
+
+        try {
+            searchTrackingId(trackingId);
+            switchToNewOpenedWindow(mainWindowHandle);
+            waitUntilVisibilityOfElementLocated("//div[text()='Edit Order']");
+
+            WebElement actualLatestEvent = findElementByXpath("//div[3]/p");
+            Assert.assertTrue("Different Result Returned", actualLatestEvent.toString().contains("Van Inbound Scan"));
+        }
+        finally {
+            closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
+        }
     }
 }
