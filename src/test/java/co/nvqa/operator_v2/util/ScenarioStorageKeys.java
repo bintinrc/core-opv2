@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.util;
 
-import com.nv.qa.commons.utils.StandardScenarioStorageKeys;
+import co.nvqa.commons.utils.StandardScenarioStorageKeys;
 
 /**
  * @author Daniel Joi Partogi Hutapea

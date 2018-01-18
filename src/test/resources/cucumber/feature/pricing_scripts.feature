@@ -1,25 +1,24 @@
-@PricingScripts @selenium
+@OperatorV2Disabled @PricingScripts
 Feature: Pricing Scripts
 
-  @LaunchBrowserWithProxyEnabled @PricingScripts#01 @PricingScripts#02 @PricingScripts#03
+  @LaunchBrowserWithProxyEnabled @ShouldAlwaysRun
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
-  @PricingScripts#01
   Scenario: Operator create, update and delete script on Pricing Scripts menu. (uid:0c1175e7-b5af-474c-b0a8-3b89ea786a59)
     Given Operator go to menu Shipper -> Pricing Scripts
-    When op create new script on Pricing Scripts
-    Then new script on Pricing Scripts created successfully
-    When op update script on Pricing Scripts
-    Then script on Pricing Scripts updated successfully
-    When op delete script on Pricing Scripts
-    Then script on Pricing Scripts deleted successfully
+    When Operator create new script on Pricing Scripts page
+    Then Operator verify the new script on Pricing Scripts is created successfully
+    When Operator update script on Pricing Scripts page
+    Then Operator verify the script on Pricing Scripts page is updated successfully
+    When Operator delete script on Pricing Scripts page
+    Then Operator verify the script on Pricing Scripts page is deleted successfully
 
-  @PricingScripts#02
   Scenario Outline: Operator do Run Test at selected Pricing Scripts. (<hiptest-uid>)
+    Given Operator refresh page
     Given Operator go to menu Shipper -> Pricing Scripts
-    Given op have two default script "Script Cucumber Test 1" and "Script Cucumber Test 2"
-    When op click Run Test on Operator V2 Portal using this Script Check below:
+    Given Operator have two default script "Script Cucumber Test 1" and "Script Cucumber Test 2"
+    When Operator click Run Test on Operator V2 Portal using this Script Check below:
       | deliveryType | <deliveryType> |
       | orderType    | <orderType>    |
       | timeslotType | <timeslotType> |
@@ -27,7 +26,7 @@ Feature: Pricing Scripts
       | weight       | 2              |
       | insuredValue | <insurance>    |
       | codValue     | <cod>          |
-    Then op will find the price result:
+    Then Operator will find the price result:
       | deliveryFee  | SGD <deliveryFee> |
       | codFee       | SGD <cod>         |
       | insuranceFee | SGD <insurance>   |
@@ -44,12 +43,12 @@ Feature: Pricing Scripts
       | RETURN - NEXT_DAY - TIMESLOT - L   | uid:0aee7e86-0a1a-4065-b08a-9c466b65c8be | RETURN    | NEXT_DAY     | TIMESLOT     | L    | 24.61  | 12          | 0         | 0   |
       | RETURN - STANDARD - TIMESLOT - M   | uid:23cd797e-1225-4a56-857f-3a54df98e804 | RETURN    | STANDARD     | TIMESLOT     | M    | 23.968 | 11.4        | 0         | 0   |
 
-  @PricingScripts#03
   Scenario: Operator linking a Pricing Scripts to a Shipper. (uid:0800ac82-a359-4d5f-a666-12b6d3877540)
+    Given Operator refresh page
     Given Operator go to menu Shipper -> Pricing Scripts
-    Given op have two default script "Script Cucumber Test 1" and "Script Cucumber Test 2"
-    When op linking Pricing Scripts "Script Cucumber Test 1" or "Script Cucumber Test 2" to shipper "Pricing Script Link Shipper"
-    Then Pricing Scripts linked to the shipper successfully
+    Given Operator have two default script "Script Cucumber Test 1" and "Script Cucumber Test 2"
+    When Operator linking Pricing Scripts "Script Cucumber Test 1" or "Script Cucumber Test 2" to shipper "Pricing Script Link Shipper"
+    Then Operator verify the script is linked to the shipper successfully
 
-  @KillBrowser @PricingScripts#01 @PricingScripts#02 @PricingScripts#03
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

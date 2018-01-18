@@ -1,35 +1,52 @@
-@VehicleTypeManagement @selenium @VehicleTypeManagement#01
-Feature: Vehicle type management
+@OperatorV2 @VehicleTypeManagement @Current
+Feature: Vehicle Type Management
 
-  @LaunchBrowser
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
-  Scenario: add vehicle type (uid:2926a8ff-45f5-4df2-b04d-efc5bab48796)
+  Scenario: Operator create new vehicle type (uid:2926a8ff-45f5-4df2-b04d-efc5bab48796)
     Given Operator go to menu Fleet -> Vehicle Type Management
-    When vehicle type management, add vehicle type button is clicked
-    When vehicle type management, add new vehicle type of "QA"
-    Then vehicle type management, verify new vehicle type "QA" existed
+    When Operator create new Vehicle Type
+    Then verify vehicle type
+    When operator delete the vehicle type name
+    Then operator verify vehicle type name is deleted
 
-  Scenario: search vehicle type (uid:71753ae9-ac12-4d17-917c-6c5bad435d66)
+  Scenario: Operator search vehicle type (uid:71753ae9-ac12-4d17-917c-6c5bad435d66)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Vehicle Type Management
-    When vehicle type management, search for "QA" vehicle type
-    Then vehicle type management, verify vehicle type "QA" existed
+    When Operator create new Vehicle Type
+    Then verify vehicle type
+    When operator delete the vehicle type name
+    Then operator verify vehicle type name is deleted
 
-  Scenario: edit vehicle type (uid:6687b26f-84ad-4e0f-bc46-a84a54b0c156)
+  Scenario: Operator edit vehicle type (uid:6687b26f-84ad-4e0f-bc46-a84a54b0c156)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Vehicle Type Management
-    When vehicle type management, search for "QA" vehicle type
-    When vehicle type management, edit vehicle type of "QA"
-    Then vehicle type management, verify vehicle type "QA [EDITED]" existed
+    When Operator create new Vehicle Type
+    Then verify vehicle type
+    When operator edit the vehicle type name
+    Then verify the edited vehicle type name is existed
+    When operator delete the vehicle type name
+    Then operator verify vehicle type name is deleted
 
-  Scenario: delete vehicle type (uid:ca337865-701b-4573-b5bc-643cc68724fb)
+  Scenario: Operator delete vehicle type (uid:ca337865-701b-4573-b5bc-643cc68724fb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Vehicle Type Management
-    When vehicle type management, search for "QA [EDITED]" vehicle type
-    When vehicle type management, delete vechile type
-    Then vehicle type management, verify vehicle type "QA [EDITED]" not existed
+    When Operator create new Vehicle Type
+    Then verify vehicle type
+    When operator delete the vehicle type name
+    Then operator verify vehicle type name is deleted
 
-  @KillBrowser
+  Scenario: Operator download and verify CSV file of vehicle type on Vehicle Type Management page (uid:c8156f4a-07c7-4cb2-821e-3ba3a9ea962b)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Fleet -> Vehicle Type Management
+    When Operator create new Vehicle Type
+    Then verify vehicle type
+    When operator click on download CSV file button
+    Then verify the csv file
+    When operator delete the vehicle type name
+    Then operator verify vehicle type name is deleted
+
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.util.SingletonStorage;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
@@ -28,9 +29,9 @@ public class BlockedDatesSteps extends AbstractSteps
     private static final SimpleDateFormat MONTH_SDF = new SimpleDateFormat("MMMM", Locale.ENGLISH);
 
     @Inject
-    public BlockedDatesSteps(ScenarioManager scenarioManager)
+    public BlockedDatesSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -84,7 +85,7 @@ public class BlockedDatesSteps extends AbstractSteps
                 }
 
                 Assert.assertTrue(isAdded);
-            }, "verifyAdd", getScenarioManager()::writeToScenarioLog);
+            }, getCurrentMethodName(), getScenarioManager()::writeToCurrentScenarioLog);
         }
     }
 
@@ -111,7 +112,6 @@ public class BlockedDatesSteps extends AbstractSteps
 
             Assert.assertTrue(isRemoved);
         }
-
     }
 
     @Then("^blocked dates verify remove$")
@@ -134,7 +134,7 @@ public class BlockedDatesSteps extends AbstractSteps
                 }
 
                 Assert.assertFalse(isFound);
-            }, "verifyRemove", getScenarioManager()::writeToScenarioLog);
+            }, getCurrentMethodName(), getScenarioManager()::writeToCurrentScenarioLog);
         }
     }
 

@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.DpPage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
@@ -16,9 +17,9 @@ public class DpSteps extends AbstractSteps
     private DpPage dpPage;
 
     @Inject
-    public DpSteps(ScenarioManager scenarioManager)
+    public DpSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override

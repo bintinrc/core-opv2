@@ -37,7 +37,8 @@ public abstract class CommonParcelManagementPage extends SimplePage
         searchTableByTrackingId(trackingId);
         checkRow(1);
         selectAction(ACTION_RESCHEDULE_SELECTED);
-        sendKeys("//md-datepicker[@name='commons.model.date']/div/input", MD_DATEPICKER_DATE_FORMAT.format(TestUtils.getNextDate(2)));
+        sendKeys("//md-datepicker[@name='commons.model.date']/div/input", MD_DATEPICKER_SDF.format(TestUtils.getNextDate(2)));
+        click("//div[@label='commons.model.date']/label"); // To make sure date is change on Angular.
         click("//button[@aria-label='Reschedule']");
     }
 
@@ -51,7 +52,7 @@ public abstract class CommonParcelManagementPage extends SimplePage
         pause50ms();
         sendKeys("//input[@aria-label='Description']", String.format("Reason created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
         sendKeys("//input[@aria-label='Internal Notes']", String.format("Internal notes created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
-        sendKeys("//md-datepicker[@name='commons.model.delivery-date']/div/input", MD_DATEPICKER_DATE_FORMAT.format(TestUtils.getNextDate(1)));
+        sendKeys("//md-datepicker[@name='commons.model.delivery-date']/div/input", MD_DATEPICKER_SDF.format(TestUtils.getNextDate(1)));
         click("//md-select[@aria-label='Timeslot']");
         pause50ms();
         click("//md-option/div[contains(text(), '3PM - 6PM')]");
@@ -63,7 +64,7 @@ public abstract class CommonParcelManagementPage extends SimplePage
         searchTableByTrackingId(trackingId);
         checkRow(1);
         selectAction(ACTION_SET_RTS_TO_SELECTED);
-        sendKeys("//md-datepicker[@name='commons.model.delivery-date']/div/input", MD_DATEPICKER_DATE_FORMAT.format(TestUtils.getNextDate(1)));
+        sendKeys("//md-datepicker[@name='commons.model.delivery-date']/div/input", MD_DATEPICKER_SDF.format(TestUtils.getNextDate(1)));
         click("//md-select[@aria-label='Timeslot']");
         pause50ms();
         click("//md-option/div[contains(text(), '3PM - 6PM')]");

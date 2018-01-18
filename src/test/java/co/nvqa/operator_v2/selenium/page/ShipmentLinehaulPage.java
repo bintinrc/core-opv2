@@ -1,9 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.operator_v2.model.Linehaul;
 import co.nvqa.operator_v2.util.TestUtils;
-import com.nv.qa.commons.utils.NvLogger;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -71,7 +70,7 @@ public class ShipmentLinehaulPage extends SimplePage
 
     public void clickSaveChangesButton()
     {
-        click(XPATH_SAVE_CHANGES_BUTTON);
+        clickNvApiTextButtonByNameAndWaitUntilDone("container.shipment-management.save-changes");
     }
 
     public void clickTab(String nameTab)
@@ -118,7 +117,7 @@ public class ShipmentLinehaulPage extends SimplePage
 
     public void fillHubs(List<String> hubs)
     {
-        int hubCount = getwebDriver().findElements(By.xpath(XPATH_REMOVE_HUB_BUTTON)).size();
+        int hubCount = findElementsByXpath(XPATH_REMOVE_HUB_BUTTON).size();
 
         for(int i=0; i<hubCount; i++)
         {
@@ -147,12 +146,12 @@ public class ShipmentLinehaulPage extends SimplePage
 
     public List<WebElement> grabListOfLinehaul()
     {
-        return getwebDriver().findElements(By.xpath(XPATH_TABLE_ITEM));
+        return findElementsByXpath(XPATH_TABLE_ITEM);
     }
 
     public List<WebElement> grabListOfLinehaulId()
     {
-        return getwebDriver().findElements(By.xpath(XPATH_TABLE_ITEM+"/td[3]"));
+        return findElementsByXpath(XPATH_TABLE_ITEM+"/td[3]");
     }
 
     public List<Linehaul> grabListofLinehaul()
@@ -198,10 +197,9 @@ public class ShipmentLinehaulPage extends SimplePage
         return "//md-card-content[div[span[text()='Linehaul ID : " + linehaulId + "']]]";
     }
 
-    public void clickLoadAllShipmentButton()
+    public void clickButtonLoadSelection()
     {
-        click(XPATH_LOAD_ALL_SHIPMENT_BUTTON);
-        pause3s();
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
     }
 
     public void clickEditSearchFilterButton()

@@ -1,96 +1,96 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.operator_v2.util.TestUtils;
+import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.operator_v2.selenium.page.VehicleTypeManagementPage;
 import com.google.inject.Inject;
+import cucumber.api.java.After;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.junit.Assert;
-import org.openqa.selenium.*;
 
 /**
  *
- * @author Soewandi Wirjawan
- *
- * Modified by Daniel Joi Partogi Hutapea
+ * @author Tristania Siagian
  */
 @ScenarioScoped
 public class VehicleTypeManagementSteps extends AbstractSteps
 {
+    private VehicleTypeManagementPage vehicleTypeManagementPage;
+
     @Inject
-    public VehicleTypeManagementSteps(ScenarioManager scenarioManager)
+    public VehicleTypeManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
     public void init()
     {
+        vehicleTypeManagementPage = new VehicleTypeManagementPage(getWebDriver());
     }
 
-    @When("^vehicle type management, add vehicle type button is clicked$")
-    public void clickAddContactType()
+    @When("^Operator create new Vehicle Type$")
+    public void operatorCreateNewVehicleType()
     {
-        TestUtils.clickBtn(getWebDriver(), "//button[@aria-label='Add Vehicle Type']");
+        String vehicleTypeName = "VT-"+generateDateUniqueString();
+        vehicleTypeManagementPage.addNewVehicleType(vehicleTypeName);
+        put("vehicleTypeName", vehicleTypeName);
+
     }
 
-    @When("^vehicle type management, add new vehicle type of \"([^\"]*)\"$")
-    public void addNewVehicle(String name)
+    @Then("^verify vehicle type$")
+    public void verifyNewVehicleIsCreated()
     {
-        TestUtils.waitUntilElementVisible(getWebDriver(), By.xpath("//input[@type='text' and @aria-label='Name']"));
-        TestUtils.inputText(getWebDriver(), "//input[@type='text' and @aria-label='Name']", name);
-        TestUtils.clickBtn(getWebDriver(), "//button[@type='submit' and @aria-label='Save Button']");
+        String Name = get("vehicleTypeName");
+        vehicleTypeManagementPage.verifyVehicleType(Name);
     }
 
-    @Then("^vehicle type management, verify new vehicle type \"([^\"]*)\" existed$")
-    public void verifyNewContact(String name)
+    @When("^operator edit the vehicle type name$")
+    public void editVehicleType()
     {
-        TestUtils.inputListBox(getWebDriver(), "Search Vehicle Types...", name);
-        verifyVehicle(name);
+        String oldName = get("vehicleTypeName");
+        String newName = oldName+" [EDITED]";
+        vehicleTypeManagementPage.editVehicleType(oldName, newName);
+        put("vehicleTypeNameEdited", newName);
     }
 
-    @Then("^vehicle type management, verify vehicle type \"([^\"]*)\" existed$")
-    public void verifyVehicle(String name)
+    @Then("^verify the edited vehicle type name is existed$")
+    public void verifEditedVehicleType()
     {
-        TestUtils.inputListBox(getWebDriver(), "Search Vehicle Types...", name);
-        WebElement result = TestUtils.getResultInTable(getWebDriver(), "//table[@ng-table='ctrl.vehicleTypesTableParams']/tbody/tr", name);
-        Assert.assertTrue(result != null);
+        String Name = get("vehicleTypeNameEdited");
+        vehicleTypeManagementPage.verifyVehicleType(Name);
     }
 
-    @When("^vehicle type management, search for \"([^\"]*)\" vehicle type$")
-    public void searchVehicle(String name)
+    @When("^operator delete the vehicle type name$")
+    public void deleteVehicleTypeName()
     {
-        TestUtils.inputListBox(getWebDriver(), "Search Vehicle Types...", name);
+        String vehicleTypeName = containsKey("vehicleTypeNameEdited") ? get("vehicleTypeNameEdited") : get("vehicleTypeName");
+        vehicleTypeManagementPage.deleteVehicleType(vehicleTypeName);
     }
 
-    @When("^vehicle type management, edit vehicle type of \"([^\"]*)\"$")
-    public void editButtonIsClicked(String name)
+    @Then("^operator verify vehicle type name is deleted$")
+    public void operatorVerifyVehicleTypeNameIsDeleted()
     {
-        WebElement el = TestUtils.verifySearchingResults(getWebDriver(), "Search Vehicle Types...", "ctrl.vehicleTypesTableParams");
-        WebElement editBtn = el.findElement(By.xpath("//nv-icon-button[@name='Edit']"));
-        pause100ms();
-        TestUtils.moveAndClick(getWebDriver(), editBtn);
-
-        TestUtils.inputText(getWebDriver(), "//input[@type='text' and @aria-label='Name']", name + " [EDITED]");
-        TestUtils.clickBtn(getWebDriver(), "//button[@type='submit' and @aria-label='Save Button']");
+        String vehicleTypeName = containsKey("vehicleTypeNameEdited") ? get("vehicleTypeNameEdited") : get("vehicleTypeName");
+        vehicleTypeManagementPage.verifyVehicleTypeNotExist(vehicleTypeName);
     }
 
-    @When("^vehicle type management, delete vechile type$")
-    public void deleteVehicle()
+    @When("^operator click on download CSV file button$")
+    public void downloadCSVFile()
     {
-        WebElement el = TestUtils.verifySearchingResults(getWebDriver(), "Search Vehicle Types...", "ctrl.vehicleTypesTableParams");
-        WebElement delBtn = el.findElement(By.xpath("//nv-icon-button[@name='Delete']"));
-        pause100ms();
-        TestUtils.moveAndClick(getWebDriver(), delBtn);
-        pause100ms();
-        TestUtils.clickBtn(getWebDriver(), "//button[@aria-label='Delete' and .//span='Delete']");
+        vehicleTypeManagementPage.csvDownload();
     }
 
-    @Then("^vehicle type management, verify vehicle type \"([^\"]*)\" not existed$")
-    public void verifyVehicleNotExisted(String name)
+    @Then("^verify the csv file$")
+    public void verifCSVFile()
     {
-        TestUtils.inputListBox(getWebDriver(), "Search Vehicle Types...", name);
-        WebElement result = TestUtils.getResultInTable(getWebDriver(), "//table[@ng-table='ctrl.vehicleTypesTableParams']/tbody/tr", name);
-        Assert.assertTrue(result == null);
+        String vehicleTypeName = containsKey("vehicleTypeNameEdited") ? get("vehicleTypeNameEdited") : get("vehicleTypeName");
+        vehicleTypeManagementPage.csvDownloadSuccessful(vehicleTypeName);
+    }
+
+    @After("@DeleteAfterDone")
+    public void deleteAfterDone()
+    {
+        deleteVehicleTypeName();
     }
 }

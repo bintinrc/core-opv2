@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.PricingScriptsPage;
-import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
@@ -9,7 +9,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.junit.Assert;
-import org.openqa.selenium.WebElement;
 
 import java.util.Date;
 import java.util.Map;
@@ -27,9 +26,9 @@ public class PricingScriptsSteps extends AbstractSteps
     private String shipperLinkedToPricingScripts;
 
     @Inject
-    public PricingScriptsSteps(ScenarioManager scenarioManager)
+    public PricingScriptsSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -38,52 +37,52 @@ public class PricingScriptsSteps extends AbstractSteps
         pricingScriptsPage = new PricingScriptsPage(getWebDriver());
     }
 
-    @When("^op create new script on Pricing Scripts$")
-    public void createNewScript()
+    @When("^Operator create new script on Pricing Scripts page$")
+    public void operatorCreateNewScriptOnPricingScriptsPage()
     {
-        newPricingScriptsName = "Cucumber Script #"+new Date().getTime();
-        pricingScriptsPage.createScript(newPricingScriptsName, "Create by Cucumber with Selenium.");
+        newPricingScriptsName = "Dummy Script #"+generateDateUniqueString();
+        pricingScriptsPage.createScript(newPricingScriptsName, String.format("This 'Pricing Script' is created by Operator V2 automation test. Created at %s.", new Date()));
     }
 
-    @Then("^new script on Pricing Scripts created successfully$")
-    public void verifyNewPricingScriptsCreatedSuccessfully()
+    @Then("^Operator verify the new script on Pricing Scripts is created successfully$")
+    public void operatorVerifyTheNewScriptOnPricingScriptsIsCreatedSuccessfully()
     {
         String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, PricingScriptsPage.COLUMN_CLASS_NAME);
         Assert.assertEquals(newPricingScriptsName, pricingScriptsNameFromTable);
     }
 
-    @When("^op update script on Pricing Scripts$")
-    public void updateScript()
+    @When("^Operator update script on Pricing Scripts page$")
+    public void operatorUpdateScriptOnPricingScriptsPage()
     {
         newPricingScriptsName += " [EDITED]";
-        pricingScriptsPage.updateScript(1, newPricingScriptsName, "Create by Cucumber with Selenium. [EDITED]");
+        pricingScriptsPage.updateScript(1, newPricingScriptsName, String.format("This 'Pricing Script' is modified by Operator V2 automation test. Modified at %s.", new Date()));
     }
 
-    @Then("^script on Pricing Scripts updated successfully$")
-    public void verifyPricingScriptsUpdatedSuccessfully()
+    @Then("^Operator verify the script on Pricing Scripts page is updated successfully$")
+    public void operatorVerifyTheScriptOnPricingScriptsPageIsUpdatedSuccessfully()
     {
         String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, PricingScriptsPage.COLUMN_CLASS_NAME);
         Assert.assertEquals(newPricingScriptsName, pricingScriptsNameFromTable);
     }
 
-    @When("^op delete script on Pricing Scripts$")
-    public void deleteScript()
+    @When("^Operator delete script on Pricing Scripts page$")
+    public void operatorDeleteScriptOnPricingScriptsPage()
     {
-        pricingScriptsPage.searchAndDeleteScript(1, newPricingScriptsName);
+        pricingScriptsPage.searchAndDeleteScript(newPricingScriptsName);
     }
 
-    @Then("^script on Pricing Scripts deleted successfully$")
-    public void verifyPricingScriptsDeletedSuccessfully()
+    @Then("^Operator verify the script on Pricing Scripts page is deleted successfully$")
+    public void operatorVerifyTheScriptOnPricingScriptsPageIsDeletedSuccessfully()
     {
         String expectedValue = "";
         String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, PricingScriptsPage.COLUMN_CLASS_NAME);
         Assert.assertEquals(expectedValue, pricingScriptsNameFromTable);
     }
 
-    @Given("^op have two default script \"([^\"]*)\" and \"([^\"]*)\"$")
+    @Given("^Operator have two default script \"([^\"]*)\" and \"([^\"]*)\"$")
     public void createDefaultTwoScriptIfNotExists(String defaultScriptName1, String defaultScriptName2)
     {
-        String scriptDescription = "Please don't touch this script. This script created by Cucumber with Selenium for testing purpose.";
+        String scriptDescription = "Please don't touch this script. This script is created by Operator V2 automation test.";
         String script1 = "function getDefaultPrice() {\\n    return 0.2;\\n}";
         String script1Id = pricingScriptsPage.createDefaultScriptIfNotExists(defaultScriptName1, scriptDescription, script1);
 
@@ -93,7 +92,7 @@ public class PricingScriptsSteps extends AbstractSteps
         pricingScriptsPage.createDefaultScriptIfNotExists(defaultScriptName2, scriptDescription, script2);
     }
 
-    @When("^op click Run Test on Operator V2 Portal using this Script Check below:$")
+    @When("^Operator click Run Test on Operator V2 Portal using this Script Check below:$")
     public void simulateRunTest(DataTable dataTable)
     {
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
@@ -108,64 +107,29 @@ public class PricingScriptsSteps extends AbstractSteps
         pause1s();
     }
 
-    @Then("^op will find the price result:$")
+    @Then("^Operator will find the price result:$")
     public void verifyCostAndComments(DataTable dataTable)
     {
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
-        String expectedTotal = mapOfData.get("total");
-        String expectedGst = mapOfData.get("gst");
-        String expectedCodFee = mapOfData.get("codFee");
-        String expectedInsuranceFee = mapOfData.get("insuranceFee");
-        String expectedDeliveryFee = mapOfData.get("deliveryFee");
-        String expectedHandlingFee = mapOfData.get("handlingFee");
-        String expectedComments = mapOfData.get("comments");
-
-        WebElement totalEl = TestUtils.getElementByXpath(getWebDriver(), "//md-input-container/label[text()='Grand Total']/following-sibling::div[1]");
-        String actualTotal = totalEl.getText();
-        Assert.assertEquals("Total", expectedTotal, actualTotal);
-
-        /*WebElement gstEl = TestUtils.getElementByXpath(getDriver(), "//md-input-container[label[text()='GST']]/div[@class='readonly ng-binding']");
-        String actualGst = gstEl.getText();
-        Assert.assertEquals("GST", expectedGst, actualGst);*/
-
-        WebElement codFeeEl = TestUtils.getElementByXpath(getWebDriver(), "//md-input-container/label[text()='COD Fee']/following-sibling::div[1]");
-        String actualCodFee = codFeeEl.getText();
-        Assert.assertEquals("COD Fee", expectedCodFee, actualCodFee);
-
-        WebElement insuranceFeeEl = TestUtils.getElementByXpath(getWebDriver(), "//md-input-container/label[text()='Insurance Fee']/following-sibling::div[1]");
-        String actualInsuranceFee = insuranceFeeEl.getText();
-        Assert.assertEquals("Insurance Fee", expectedInsuranceFee, actualInsuranceFee);
-
-        WebElement deliveryFeeEl = TestUtils.getElementByXpath(getWebDriver(), "//md-input-container/label[text()='Delivery Fee']/following-sibling::div[1]");
-        String actualDeliveryFee = deliveryFeeEl.getText();
-        Assert.assertEquals("Delivery Fee", expectedDeliveryFee, actualDeliveryFee);
-
-        WebElement handlingFeeEl = TestUtils.getElementByXpath(getWebDriver(), "//md-input-container/label[text()='Handling Fee']/following-sibling::div[1]");
-        String actualHandlingFee = handlingFeeEl.getText();
-        Assert.assertEquals("Handling Fee", expectedHandlingFee, actualHandlingFee);
-
-        WebElement commentsEl = TestUtils.getElementByXpath(getWebDriver(), "//md-input-container/label[text()='Comments']/following-sibling::div[1]");
-        String actualComments = commentsEl.getText();
-        Assert.assertEquals("Comments", expectedComments, actualComments);
-
-        pause1s();
-        TestUtils.clickBtn(getWebDriver(), "//button[@aria-label='Cancel']");
+        pricingScriptsPage.verifyCostAndComments(mapOfData);
+        pause500ms();
+        pricingScriptsPage.clickButtonCancel();
     }
 
-    @When("^op linking Pricing Scripts \"([^\"]*)\" or \"([^\"]*)\" to shipper \"([^\"]*)\"$")
+    @When("^Operator linking Pricing Scripts \"([^\"]*)\" or \"([^\"]*)\" to shipper \"([^\"]*)\"$")
     public void linkPricingScriptsToShipper(String defaultScriptName1, String defaultScriptName2, String shipperName)
     {
         shipperLinkedToPricingScripts = shipperName;
         pricingScriptsLinkedToAShipper = pricingScriptsPage.linkPricingScriptsToShipper(defaultScriptName1, defaultScriptName2, shipperName);
     }
 
-    @Then("^Pricing Scripts linked to the shipper successfully$")
-    public void verifyPricingScriptsLinkedToShipperSuccessfully()
+    @Then("^Operator verify the script is linked to the shipper successfully$")
+    public void operatorVerifyTheScriptIsLinkedToTheShipperSuccessfully()
     {
         pricingScriptsPage.searchScript(pricingScriptsLinkedToAShipper);
         pricingScriptsPage.clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_SHIPPERS);
         boolean isPricingScriptsContainShipper = pricingScriptsPage.isPricingScriptsContainShipper(shipperLinkedToPricingScripts);
-        TestUtils.clickBtn(getWebDriver(), pricingScriptsPage.CLOSE_BUTTON);
-        Assert.assertEquals(true, isPricingScriptsContainShipper);
+        pricingScriptsPage.clickButtonClose();
+        Assert.assertEquals("Pricing Scripts not contain the expected shipper.", true, isPricingScriptsContainShipper);
     }
 }

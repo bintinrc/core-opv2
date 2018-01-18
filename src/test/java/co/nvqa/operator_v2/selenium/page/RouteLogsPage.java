@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import com.nv.qa.commons.utils.NvLogger;
+import co.nvqa.commons.utils.NvLogger;
 import org.junit.Assert;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -142,7 +142,7 @@ public class RouteLogsPage extends SimplePage
     public String getRouteTag(String routeId)
     {
         searchAndVerifyRouteExist(routeId);
-        return findElementByXpath(SELECT_TAG_XPATH).getText();
+        return getText(SELECT_TAG_XPATH);
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)

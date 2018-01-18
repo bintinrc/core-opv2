@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.util.TestUtils;
-import com.nv.qa.commons.utils.NvLogger;
 import org.junit.Assert;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -162,8 +162,8 @@ public class RouteCashInboundPage extends SimplePage
 
     public void searchAndVerifyTableIsNotEmpty(RouteCashInboundCod routeCashInboundCod)
     {
-        sendKeys("//md-datepicker[@md-placeholder='From Date']/div/input", MD_DATEPICKER_DATE_FORMAT.format(TestUtils.getNextDate(0)));
-        sendKeys("//md-datepicker[@md-placeholder='To Date']/div/input", MD_DATEPICKER_DATE_FORMAT.format(TestUtils.getNextDate(1)));
+        sendKeys("//md-datepicker[@md-placeholder='From Date']/div/input", MD_DATEPICKER_SDF.format(TestUtils.getNextDate(0)));
+        sendKeys("//md-datepicker[@md-placeholder='To Date']/div/input", MD_DATEPICKER_SDF.format(TestUtils.getNextDate(1)));
         clickButtonFetchCod();
 
         /**

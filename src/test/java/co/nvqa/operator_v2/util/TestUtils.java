@@ -1,18 +1,27 @@
 package co.nvqa.operator_v2.util;
 
-import com.nv.qa.commons.support.JsonHelper;
-import com.nv.qa.commons.utils.NvLogger;
-import com.nv.qa.commons.utils.StandardTestUtils;
+import co.nvqa.commons.support.JsonHelper;
+import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.utils.NvTestRuntimeException;
+import co.nvqa.commons.utils.StandardTestUtils;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.Result;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
 import org.junit.Assert;
 import org.openqa.selenium.*;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -256,6 +265,50 @@ public class TestUtils extends StandardTestUtils
             case 10: return "November";
             case 11: return "December";
             default: return null;
+        }
+    }
+
+    public static String getStartTime(int timewindow)
+    {
+        switch(timewindow)
+        {
+            case -3: return "18:00:00";
+            case -2: return "09:00:00";
+            case -1: return "09:00:00";
+            case 0: return "09:00:00";
+            case 1: return "12:00:00";
+            case 2: return "15:00:00";
+            case 3: return "18:00:00";
+            default: return "09:00:00";
+        }
+    }
+
+    public static String getEndTime(int timewindow)
+    {
+        switch(timewindow)
+        {
+            case -3: return "22:00:00";
+            case -2: return "18:00:00";
+            case -1: return "22:00:00";
+            case 0: return "12:00:00";
+            case 1: return "15:00:00";
+            case 2: return "18:00:00";
+            case 3: return "22:00:00";
+            default: return "09:00:00";
+        }
+    }
+
+    public static String getTextFromQrCodeImage(File qrCodeFile)
+    {
+        try
+        {
+            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(ImageIO.read(new FileInputStream(qrCodeFile)))));
+            Result qrCodeResult = new MultiFormatReader().decode(binaryBitmap);
+            return qrCodeResult.getText();
+        }
+        catch(IOException|NotFoundException ex)
+        {
+            throw new NvTestRuntimeException(ex);
         }
     }
 

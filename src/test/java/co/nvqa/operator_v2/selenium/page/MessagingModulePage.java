@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.operator_v2.model.SmsCampaignCsv;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
-import com.nv.qa.commons.utils.NvLogger;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -29,7 +29,7 @@ public class MessagingModulePage extends SimplePage
     private static final String NEW_LINE = "\r\n";
     private static final String SMS_CAMPAIGN_FILE_NAME = "sms_campaign.csv";
     private static final String SMS_CAMPAIGN_HEADER = "tracking_id,name,email,job";
-    private static final String FILE_PATH = TestConstants.SELENIUM_WRITE_PATH + SMS_CAMPAIGN_FILE_NAME;
+    private static final String FILE_PATH = TestConstants.TEMP_DIR + SMS_CAMPAIGN_FILE_NAME;
     private static final String MD_VIRTUAL_REPEAT = "sms in getTableData()";
     private static Map<String, Object> cache;
     private SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD hh:ss");
@@ -105,10 +105,10 @@ public class MessagingModulePage extends SimplePage
         String smsDate = sdf.format(new Date());
         cache.put("sms-date", smsDate);
         //check the uploaded file name is correct
-        WebElement uploadedFileNameElement = findElementByXpath("//div[contains(@class,'uploaded-info')]//div[1]/p/b");
-        Assert.assertEquals(SMS_CAMPAIGN_FILE_NAME, uploadedFileNameElement.getText());
-        WebElement totalRecords = findElementByXpath("//div[contains(@class,'uploaded-info')]//div[2]/p/b");
-        Assert.assertEquals("1", totalRecords.getText());
+        String uploadedFileName = getText("//div[contains(@class,'uploaded-info')]//div[1]/p/b");
+        Assert.assertEquals(SMS_CAMPAIGN_FILE_NAME, uploadedFileName);
+        String totalRecords = getText("//div[contains(@class,'uploaded-info')]//div[2]/p/b");
+        Assert.assertEquals("1", totalRecords);
         //entry the template
         String template = "Hallo {{name}}, your parcel with tracking id {{tracking_id}} is ready to be delivered. sms-date: "+smsDate;
         sendKeys("//textarea[@name='message']", template);
@@ -124,10 +124,10 @@ public class MessagingModulePage extends SimplePage
     {
         waitUntilVisibilityOfElementLocated("//md-card[contains(@class,'sms-editor')]");
         //check the uploaded file name is correct
-        WebElement uploadedFileNameElement = findElementByXpath("//div[contains(@class,'uploaded-info')]//div[1]/p/b");
-        Assert.assertEquals(SMS_CAMPAIGN_FILE_NAME, uploadedFileNameElement.getText());
-        WebElement totalRecords = findElementByXpath("//div[contains(@class,'uploaded-info')]//div[2]/p/b");
-        Assert.assertEquals("1", totalRecords.getText());
+        String uploadedFileName = getText("//div[contains(@class,'uploaded-info')]//div[1]/p/b");
+        Assert.assertEquals(SMS_CAMPAIGN_FILE_NAME, uploadedFileName);
+        String totalRecords = getText("//div[contains(@class,'uploaded-info')]//div[2]/p/b");
+        Assert.assertEquals("1", totalRecords);
         //entry the template
         String template = "email : {{email}}";
         sendKeys("//textarea[@name='message']", template);

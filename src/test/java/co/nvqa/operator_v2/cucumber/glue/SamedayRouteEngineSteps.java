@@ -1,13 +1,16 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.client.auth.AuthClient;
+import co.nvqa.commons.client.core.BulkyTrackingClient;
+import co.nvqa.commons.model.auth.AuthResponse;
+import co.nvqa.commons.model.auth.ClientCredentialsAuth;
+import co.nvqa.commons.model.core.bukly.BulkyOrder;
+import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.SamedayRouteEnginePage;
-import co.nvqa.operator_v2.util.ScenarioStorage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
-import com.nv.qa.integration.client.operator.BulkyTrackingClient;
-import com.nv.qa.integration.model.core.BulkyOrder;
-import com.nv.qa.commons.utils.NvLogger;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -25,27 +28,50 @@ import java.util.*;
 @ScenarioScoped
 public class SamedayRouteEngineSteps extends AbstractSteps
 {
-    @Inject private ScenarioStorage scenarioStorage;
     private SamedayRouteEnginePage samedayRouteEnginePage;
     private BulkyTrackingClient bulkyTrackingClient;
 
     @Inject
-    public SamedayRouteEngineSteps(ScenarioManager scenarioManager)
+    public SamedayRouteEngineSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
     public void init()
     {
         samedayRouteEnginePage = new SamedayRouteEnginePage(getWebDriver());
-        bulkyTrackingClient = new BulkyTrackingClient(TestConstants.API_BASE_URL);
+    }
+
+    public String getOperatorAccessToken()
+    {
+        String operatorAccessToken = get(KEY_OPERATOR_ACCESS_TOKEN);
+
+        if(operatorAccessToken==null)
+        {
+            ClientCredentialsAuth clientCredentialsAuth = new ClientCredentialsAuth(TestConstants.OPERATOR_CLIENT_ID, TestConstants.OPERATOR_CLIENT_SECRET);
+
+            AuthClient authClient = new AuthClient(TestConstants.API_BASE_URL);
+            AuthResponse authResponse = authClient.authenticate(clientCredentialsAuth);
+            operatorAccessToken = authResponse.getAccessToken();
+        }
+
+        return operatorAccessToken;
+    }
+
+    public BulkyTrackingClient getBulkyTrackingClient()
+    {
+        if(bulkyTrackingClient==null)
+        {
+            bulkyTrackingClient = new BulkyTrackingClient(TestConstants.API_BASE_URL, getOperatorAccessToken());
+        }
+        return bulkyTrackingClient;
     }
 
     @When("^op 'Run Route Engine' on Same-Day Route Engine menu using data below:$")
     public void runRouteEngine(DataTable dataTable)
     {
-        String routeGroupName = scenarioStorage.get(KEY_ROUTE_GROUP_NAME);
+        String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
 
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
         String hubName = mapOfData.get("hub");
@@ -81,7 +107,7 @@ public class SamedayRouteEngineSteps extends AbstractSteps
     @When("^op 'Run Route Engine' without break on Same-Day Route Engine menu using data below:$")
     public void runRouteEngineWithoutBreak(DataTable dataTable)
     {
-        String routeGroupName = scenarioStorage.get(KEY_ROUTE_GROUP_NAME);
+        String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
 
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
         String hubName = mapOfData.get("hub");
@@ -123,7 +149,7 @@ public class SamedayRouteEngineSteps extends AbstractSteps
     {
         try
         {
-            String trackingId = scenarioStorage.get(KEY_CREATED_ORDER_TRACKING_ID);
+            String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
             samedayRouteEnginePage.downloadCsvOnWaypointDetails(trackingId);
         }
         catch(IOException ex)
@@ -154,21 +180,21 @@ public class SamedayRouteEngineSteps extends AbstractSteps
         String newSuggestedDate = sdf.format(cal.getTime());
         samedayRouteEnginePage.changeTheSuggestedDate(newSuggestedDate);
         samedayRouteEnginePage.clickUpdateTimeslotBtn();
-        scenarioStorage.put("new-suggested-date", newSuggestedDate);
-        scenarioStorage.put("bulky-tracking-id", samedayRouteEnginePage.getWaypointTrackingIds());
+        put("new-suggested-date", newSuggestedDate);
+        put("bulky-tracking-id", samedayRouteEnginePage.getWaypointTrackingIds());
     }
 
     @Then("^op verify the updated timeslot$")
     public void verifyBulkyOrderTimeslotUpdated()
     {
-        String asyncIdString = scenarioStorage.get(KEY_CREATED_ORDER_ASYNC_ID);
-        String suggestedDate = scenarioStorage.get("new-suggested-date");
-        String trackingIdsString = scenarioStorage.get("bulky-tracking-id");
+        String asyncIdString = get(KEY_CREATED_ORDER_ASYNC_ID);
+        String suggestedDate = get("new-suggested-date");
+        String trackingIdsString = get("bulky-tracking-id");
         List<String> trackingIds = Arrays.asList(trackingIdsString.split(","));
         trackingIds.forEach((String trId) ->
         {
-            BulkyOrder order = bulkyTrackingClient.getBulkyOrderDetail(trId, asyncIdString);
-            Assert.assertEquals(suggestedDate,order.getSuggested_timeslot().getDate());
+            BulkyOrder order = getBulkyTrackingClient().getBulkyOrderDetail(trId, asyncIdString);
+            Assert.assertEquals(suggestedDate,order.getSuggestedTimeslot().getDate());
         });
     }
 }

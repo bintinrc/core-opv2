@@ -1,7 +1,7 @@
-@DriverTypeManagement @selenium @saas @DriverTypeManagement#01
-Feature: driver type management
+@OperatorV2 @DriverTypeManagement
+Feature: Driver Type Management
 
-  @LaunchBrowser
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
@@ -11,16 +11,33 @@ Feature: driver type management
     Then driver type management file should exist
 
   Scenario: op create driver type (uid:ea2463ad-5215-44e5-b566-064ffb81c42c)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Driver Type Management
     When create driver type button is clicked
     Then created driver type should exist
+    When searching created driver
+    When created driver is deleted
+    Then the created driver should not exist
 
   Scenario: op edit driver type (uid:3ec5bf32-68e6-406c-bd05-88c920cc187a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Driver Type Management
-    Then take screenshot with delay 1000ms
+    When create driver type button is clicked
+    Then created driver type should exist
     When searching created driver and edit
     Then verify changes of created driver type
+    When searching created driver
+    When created driver is deleted
+    Then the created driver should not exist
+
+  Scenario: op delete driver type (uid:82959c45-2b6d-4899-98aa-02e88f59793e)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Fleet -> Driver Type Management
+    When create driver type button is clicked
+    Then created driver type should exist
+    When searching created driver
+    When created driver is deleted
+    Then the created driver should not exist
 
   Scenario: op filter driver type management by delivery date (uid:6389d609-4c56-4856-8204-0246bce0f3d0)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -127,12 +144,5 @@ Feature: driver type management
     Given Operator go to menu Fleet -> Driver Type Management
     When driver type management is filtered by 6PM TO 10PM of Timeslot
 
-  Scenario: op delete driver type (uid:82959c45-2b6d-4899-98aa-02e88f59793e)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When searching created driver
-    When created driver is deleted
-    Then the created driver should not exist
-
-  @KillBrowser
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

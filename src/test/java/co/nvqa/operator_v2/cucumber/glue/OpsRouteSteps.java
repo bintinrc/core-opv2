@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.OpsRoutePage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
@@ -21,9 +22,9 @@ public class OpsRouteSteps extends AbstractSteps
     private String newRouteId;
 
     @Inject
-    public OpsRouteSteps(ScenarioManager scenarioManager)
+    public OpsRouteSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override

@@ -1,5 +1,5 @@
-@DpAdministration @selenium @DpAdministration#01
-Feature: dp administration
+@OperatorV2 @DpAdministration @ShouldAlwaysRun
+Feature: DP Administration
 
   @LaunchBrowser
   Scenario: Login to Operator V2

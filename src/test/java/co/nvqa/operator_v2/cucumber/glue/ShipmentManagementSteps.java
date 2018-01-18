@@ -1,19 +1,12 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
-import co.nvqa.operator_v2.util.ScenarioStorage;
-import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-
-import java.util.List;
 
 /**
  *
@@ -24,16 +17,15 @@ import java.util.List;
 @ScenarioScoped
 public class ShipmentManagementSteps extends AbstractSteps
 {
-    @Inject private ScenarioStorage scenarioStorage;
     private ShipmentManagementPage shipmentManagementPage;
     private String start = "";
     private String end = "";
     private String comment = "";
 
     @Inject
-    public ShipmentManagementSteps(ScenarioManager scenarioManager)
+    public ShipmentManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -42,168 +34,87 @@ public class ShipmentManagementSteps extends AbstractSteps
         shipmentManagementPage = new ShipmentManagementPage(getWebDriver());
     }
 
-    @When("^create Shipment with Start Hub ([^\"]*), End hub ([^\"]*) and comment ([^\"]*)$")
+    @When("^Operator create Shipment with Start Hub ([^\"]*), End hub ([^\"]*) and comment ([^\"]*)$")
     public void createShipment(String startHub, String endHub, String comment)
     {
         String id = shipmentManagementPage.createShipment(startHub, endHub, comment);
-        scenarioStorage.put(KEY_SHIPMENT_ID, id);
+        put(KEY_SHIPMENT_ID, id);
     }
 
-    @When("^edit Shipment with Start Hub ([^\"]*), End hub ([^\"]*) and comment ([^\"]*)$")
-    public void editShipment(String startHub, String endHub, String comment)
+    @When("^Operator click \"Load All Selection\" on Shipment Management page$")
+    public void listAllShipment()
     {
+        shipmentManagementPage.clickButtonLoadSelection();
+    }
+
+    @When("^Operator click ([^\"]*) button on Shipment Management page$")
+    public void clickActionButton(String actionButton)
+    {
+        String shipmentId = get(KEY_SHIPMENT_ID);
+        shipmentManagementPage.clickActionButton(shipmentId, actionButton);
+
+        if("Force".equals(actionButton))
+        {
+            shipmentManagementPage.waitUntilForceToastDisappear(shipmentId);
+        }
+    }
+
+    @When("^Operator edit Shipment with Start Hub ([^\"]*), End hub ([^\"]*) and comment ([^\"]*)$")
+    public void editShipment(String startHub, String endHub, String newComment)
+    {
+        String shipmentId = get(KEY_SHIPMENT_ID);
         shipmentManagementPage.selectStartHub(startHub);
-        pause10ms();
         shipmentManagementPage.selectEndHub(endHub);
-        pause10ms();
-        TestUtils.inputText(getWebDriver(), ShipmentManagementPage.XPATH_COMMENT_TEXT_AREA, comment);
+        shipmentManagementPage.fillFieldComments(newComment);
+        shipmentManagementPage.clickButtonSaveChangesOnEditShipmentDialog(shipmentId);
 
         start = startHub;
         end = endHub;
-        this.comment = comment;
-
-        TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_SAVE_CHANGES_BUTTON);
-        pause1s();
+        comment = newComment;
     }
 
-    @Given("^op click Load All Selection$")
-    public void listAllShipment()
-    {
-        TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_LOAD_ALL_SHIPMENT_BUTTON);
-        pause3s();
-    }
-
-    @When("^shipment ([^\"]*) action button clicked$")
-    public void clickActionButton(String actionButton)
-    {
-        List<ShipmentManagementPage.Shipment> shipments =shipmentManagementPage.getShipmentsFromTable();
-
-        for(ShipmentManagementPage.Shipment shipment : shipments)
-        {
-            if(shipment.getId().equals(scenarioStorage.get(KEY_SHIPMENT_ID)))
-            {
-                shipment.clickShipmentActionButton(actionButton);
-                break;
-            }
-        }
-
-        pause3s();
-    }
-
-    @Then("^shipment edited$")
+    @Then("^Operator verify the shipment is edited successfully$")
     public void shipmentEdited()
     {
-        String shipmentId = scenarioStorage.get(KEY_SHIPMENT_ID);
-        List<ShipmentManagementPage.Shipment> shipments =shipmentManagementPage.getShipmentsFromTable();
-        String startHub = "";
-        String endHub = "";
-        String komen = "";
-
-        for (ShipmentManagementPage.Shipment shipment : shipments)
-        {
-            String spId = shipment.getId();
-
-            if(spId.equals(shipmentId))
-            {
-                startHub = shipment.getStartHub();
-                endHub = shipment.getEndHub();
-                komen = shipment.getComment();
-            }
-        }
-
-        Assert.assertEquals("start hub value", start, startHub);
-        Assert.assertEquals("end hub value", end, endHub);
-        Assert.assertEquals("comment value", comment, komen);
+        String shipmentId = get(KEY_SHIPMENT_ID);
+        shipmentManagementPage.verifyShipmentUpdatedSuccessfully(shipmentId, start, end, comment);
     }
 
-    @Then("^shipment status is ([^\"]*)$")
-    public void checkStatus(String status)
+    @Then("^Operator verify the shipment status is ([^\"]*)$")
+    public void checkStatus(String expectedStatus)
     {
-        int shipmentId = scenarioStorage.get(KEY_SHIPMENT_ID);
-        List<ShipmentManagementPage.Shipment> shipments =shipmentManagementPage.getShipmentsFromTable();
-        String actualStat = "";
-
-        for(ShipmentManagementPage.Shipment shipment : shipments)
-        {
-            String spId = shipment.getId();
-
-            if(spId.equals(shipmentId))
-            {
-                actualStat = shipment.getStatus();
-                break;
-            }
-        }
-
-        Assert.assertEquals("Shipment " + scenarioStorage.get(KEY_SHIPMENT_ID) + " status", status, actualStat);
+        String shipmentId = get(KEY_SHIPMENT_ID);
+        shipmentManagementPage.checkStatus(shipmentId, expectedStatus);
     }
 
-    @When("^cancel shipment button clicked$")
+    @When("^Operator click \"Cancel Shipment\" button on Shipment Management page$")
     public void clickCancelShipmentButton()
     {
-        String shipmentId = scenarioStorage.get(KEY_SHIPMENT_ID);
-        TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_CANCEL_SHIPMENT_BUTTON);
-        List<WebElement> toasts = TestUtils.getToasts(getWebDriver());
-        String text = "";
-
-        for(WebElement toast : toasts)
-        {
-            text = toast.getText();
-            if(text.contains("Success changed status to Cancelled for Shipment ID " + shipmentId))
-            {
-                break;
-            }
-        }
-        Assert.assertThat("toast message not contains Cancelled", text, Matchers.containsString("Success changed status to Cancelled for Shipment ID " + shipmentId));
-        pause5s();
+        String shipmentId = get(KEY_SHIPMENT_ID);
+        shipmentManagementPage.clickCancelShipmentButton(shipmentId);
     }
 
-    @Then("^shipment deleted$")
+    @Then("^Operator verify the Shipment is deleted successfully$")
     public void isShipmentDeleted()
     {
-        String shipmentId = scenarioStorage.get(KEY_SHIPMENT_ID);
-        String msg = "Success delete Shipping ID " + shipmentId;
-        WebElement toast = TestUtils.getToast(getWebDriver());
-        Assert.assertThat("toast message not contains " + msg, toast.getText(), Matchers.containsString(msg));
-
-        List<ShipmentManagementPage.Shipment> shipments = shipmentManagementPage.getShipmentsFromTable();
-        boolean isRemoved = true;
-
-        for(ShipmentManagementPage.Shipment shipment : shipments)
-        {
-            String spId = shipment.getId();
-
-            if(spId.equals(shipmentId))
-            {
-                isRemoved = false;
-            }
-        }
-
-        Assert.assertTrue("is Shipment removed", isRemoved);
+        String shipmentId = get(KEY_SHIPMENT_ID);
+        shipmentManagementPage.verifyShipmentDeletedSuccessfully(shipmentId);
     }
 
-    @When("^filter ([^\"]*) is ([^\"]*)$")
+    @When("^Operator filter ([^\"]*) = ([^\"]*) on Shipment Management page$")
     public void fillSearchFilter(String filter, String value)
     {
         shipmentManagementPage.clickAddFilter(filter, value);
-
-        //TestUtils.clickBtn(getDriver(), shipmentManagementPage.grabXPathFilter(filter));
-        //pause1s();
-        //TestUtils.inputText(getDriver(), shipmentManagementPage.grabXPathFilterTF(filter), value);
-        //pause1s();
-        //TestUtils.clickBtn(getDriver(), shipmentManagementPage.grabXPathFilterDropdown(value));
-
-        pause1s();
     }
 
-    @Given("^op click edit filter$")
-    public void op_click_edit_filter()
+    @Given("^Operator click Edit filter on Shipment Management page$")
+    public void operatorClickEditFilterOnShipmentManagementPage()
     {
         shipmentManagementPage.clickEditSearchFilterButton();
-        pause1s();
     }
 
-    @Then("^shipment scan with source ([^\"]*) in hub ([^\"]*)$")
-    public void shipment_scan_with_source_VAN_INBOUND_in_hub_JKB(String source, String hub)
+    @Then("^Operator scan Shipment with source ([^\"]*) in hub ([^\"]*) on Shipment Management page$")
+    public void operatorScanShipmentWithSourceInHubOnShipmentManagementPage(String source, String hub)
     {
         try
         {
@@ -211,35 +122,20 @@ public class ShipmentManagementSteps extends AbstractSteps
         }
         finally
         {
-            closeScanModal();
+            shipmentManagementPage.closeScanModal();
         }
     }
 
-    private void closeScanModal()
+    @Then("^Operator verify inbounded Shipment exist on Shipment Management page$")
+    public void operatorVerifyInboundedShipmentExistOnShipmentManagementPage()
     {
-        TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_CLOSE_SCAN_MODAL_BUTTON);
-        pause1s();
+        String shipmentId = get(KEY_SHIPMENT_ID);
+        shipmentManagementPage.verifyInboundedShipmentExist(shipmentId);
     }
 
-    @When("^clear filter$")
-    public void clearFilter()
+    @When("^Operator clear all filters on Shipment Management page$")
+    public void operatorClearAllFiltersOnShipmentManagementPage()
     {
-        if(getWebDriver().findElement(By.xpath(ShipmentManagementPage.XPATH_CLEAR_FILTER_BUTTON)).isDisplayed())
-        {
-            if(getWebDriver().findElement(By.xpath(ShipmentManagementPage.XPATH_CLEAR_FILTER_VALUE)).isDisplayed())
-            {
-                List<WebElement> clearValueBtnList = getWebDriver().findElements(By.xpath(ShipmentManagementPage.XPATH_CLEAR_FILTER_VALUE));
-
-                for(WebElement clearBtn : clearValueBtnList)
-                {
-                    clearBtn.click();
-                    pause1s();
-                }
-            }
-
-            TestUtils.clickBtn(getWebDriver(), ShipmentManagementPage.XPATH_CLEAR_FILTER_BUTTON);
-        }
-
-        pause2s();
+        shipmentManagementPage.clearAllFilters();
     }
 }

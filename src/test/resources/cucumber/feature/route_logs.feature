@@ -1,14 +1,14 @@
-@RouteLogs @selenium
+@OperatorV2 @RouteLogs
 Feature: Route Logs
 
-  @LaunchBrowser @RouteLogs#01 @RouteLogs#02 @RouteLogs#03 @RouteLogs#04
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
-  @ArchiveRoute @RouteLogs#01
+  @ArchiveRoute
   Scenario: Operator 'Edit Details' on Operator V2 - Route Logs menu (uid:d735938c-f87e-47c1-9a6a-61d31850e0cb)
-    Given Operator create new route using data below:
-      | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"(Edit Details) This route is created for testing 'Operator V2 - Routing - Route Logs' menu. Ignore this route. Created at {{created_date}} by feature @RouteLogs."} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When op select route date filter and click 'Load Selection'
@@ -16,30 +16,30 @@ Feature: Route Logs
     When op edit 'Assigned Driver' to driver 'OpV2 No.2' and edit 'Comments'
     Then route's driver must be changed to 'OpV2 No.2' in table list
 
-  @ArchiveRoute @RouteLogs#02
+  @ArchiveRoute
   Scenario: Operator 'Add New Tag' on Operator V2 - Route Logs menu (uid:24ef3b76-c582-42da-b6d8-cf867aeec8e9)
-    Given Operator create new route using data below:
-      | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"(Add New Tag) This route is created for testing 'Operator V2 - Routing - Route Logs' menu. Ignore this route. Created at {{created_date}} by feature @RouteLogs."} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When op select route date filter and click 'Load Selection'
     When op add tag 'CDS'
     Then route's tag must contain 'CDS'
 
-  @ArchiveRoute @RouteLogs#03
+  @ArchiveRoute
   Scenario: Operator 'Delete Route' on Operator V2 - Route Logs menu (uid:ff70c3c0-73bc-4cde-9ce7-c340769560cb)
-    Given Operator create new route using data below:
-      | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"(Delete Route) This route is created for testing 'Operator V2 - Routing - Route Logs' menu. Ignore this route. Created at {{created_date}} by feature @RouteLogs."} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When op select route date filter and click 'Load Selection'
     When op delete route on Operator V2
     Then route must be deleted successfully
 
-  @ArchiveRoute @RouteLogs#04
+  @ArchiveRoute
   Scenario: Operator 'Edit Route' on Operator V2 - Route Logs menu (uid:0ea01bbb-0651-4186-84b4-0b3f4a522d3e)
-    Given Operator create new route using data below:
-      | createRouteRequest | {"zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}", "comments":"(Edit Route) This route is created for testing 'Operator V2 - Routing - Route Logs' menu. Ignore this route. Created at {{created_date}} by feature @RouteLogs."} |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When op select route date filter and click 'Load Selection'
@@ -47,5 +47,5 @@ Feature: Route Logs
 #    Then op redirect to this page 'https://operator-qa.ninjavan.co/sg/ng#/zonal_routing_edit?fetch_unrouted_waypoints=false&to_cluster=true&id={{route_id}}'
 #    Then op close Edit Routes dialog
 
-  @KillBrowser @RouteLogs#01 @RouteLogs#02 @RouteLogs#03 @RouteLogs#04
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

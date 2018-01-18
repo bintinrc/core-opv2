@@ -30,50 +30,50 @@ public class TagManagementPage extends SimplePage
         pause200ms();
     }
 
-    public String getTextOnTable(int rowNumber, String columnDataClass)
-    {
-        return getTextOnTable(rowNumber, columnDataClass, "tag in getTableData()");
-    }
-
-    public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
-    {
-        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
-        pause200ms();
-    }
-
     public void clickCreateTag()
     {
-        click("//button[@aria-label='Create Tag']");
-        pause200ms();
+        clickNvIconTextButtonByName("container.tag-management.create-tag");
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'tag-management-add')]");
     }
 
     public void setTagNameValue(String value)
     {
-        sendKeys("//input[@aria-label='Tag Name']", value);
+        sendKeysById("tag-name", value);
         pause100ms();
     }
 
     public void setDescriptionValue(String value)
     {
-        sendKeys("//textarea[@aria-label='Description']", value);
+        sendKeysById("description", value);
         pause100ms();
     }
 
     public void clickSubmitOnAddTag()
     {
-        click("//button[@aria-label='Save Button']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular");
+        clickNvButtonSaveByNameAndWaitUntilDone("Submit");
+        waitUntilInvisibilityOfToast("1 Tag Created");
     }
 
     public void clickSubmitChangesOnEditTag()
     {
-        click("//button[@aria-label='Save Button']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular");
+        clickNvButtonSaveByNameAndWaitUntilDone("Submit Changes");
+        waitUntilInvisibilityOfToast("1 Tag Updated");
     }
 
     public void clickDeleteOnConfirmDeleteDialog()
     {
         click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
         waitUntilVisibilityOfElementLocated("//div[@class='toast-bottom'][contains(text(),'1 Tag Deleted')]");
+    }
+
+    public String getTextOnTable(int rowNumber, String columnDataClass)
+    {
+        return getTextOnTable(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
+    }
+
+    public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
+    {
+        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
+        pause200ms();
     }
 }

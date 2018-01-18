@@ -1,10 +1,11 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.support.JsonHelper;
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.Linehaul;
 import co.nvqa.operator_v2.selenium.page.ShipmentLinehaulPage;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
-import com.nv.qa.commons.support.JsonHelper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -26,14 +27,16 @@ import java.util.*;
 @ScenarioScoped
 public class ShipmentLinehaulSteps extends AbstractSteps
 {
+    private static final SimpleDateFormat CREATED_DATE_SDF = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
+
     private ShipmentLinehaulPage shipmentLinehaulPage;
     private Linehaul linehaul;
     private String linehaulId = "0";
 
     @Inject
-    public ShipmentLinehaulSteps(ScenarioManager scenarioManager)
+    public ShipmentLinehaulSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -103,7 +106,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     public void linehaulExist()
     {
         shipmentLinehaulPage.clickTab("LINEHAUL ENTRIES");
-        shipmentLinehaulPage.clickLoadAllShipmentButton();
+        shipmentLinehaulPage.clickButtonLoadSelection();
         shipmentLinehaulPage.search(linehaulId);
         List<WebElement> list = shipmentLinehaulPage.grabListOfLinehaulId();
         boolean isExist = false;
@@ -162,7 +165,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     private void fillLinehaulForm(Map<String, String> arg1) throws IOException
     {
         linehaul = JsonHelper.mapToObject(arg1, Linehaul.class);
-        linehaul.setComment(linehaul.getComment() + " " + new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        linehaul.setComment(linehaul.getComment() + " " + CREATED_DATE_SDF.format(new Date()));
         shipmentLinehaulPage.fillLinehaulNameFT(linehaul.getName());
         shipmentLinehaulPage.fillCommentsFT(linehaul.getComment());
         shipmentLinehaulPage.fillHubs(linehaul.getHubs());
@@ -256,5 +259,11 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     {
         shipmentLinehaulPage.clickEditSearchFilterButton();
         pause1s();
+    }
+
+    @When("^Operator click \"Load All Selection\" on Linehaul Management page$")
+    public void operatorClickLoadAllSelectionOnLinehaulManagementPage()
+    {
+        shipmentLinehaulPage.clickButtonLoadSelection();
     }
 }

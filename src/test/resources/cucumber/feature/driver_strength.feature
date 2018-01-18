@@ -1,4 +1,4 @@
-@DriverStrength @selenium @saas @DriverStrength#01
+@OperatorV2 @DriverStrength @ShouldAlwaysRun
 Feature: Driver Strength
 
   @LaunchBrowser

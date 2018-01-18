@@ -1,12 +1,14 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.junit.Assert;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 /**
  *
@@ -18,9 +20,9 @@ import org.openqa.selenium.*;
 public class ContactTypeManagementSteps extends AbstractSteps
 {
     @Inject
-    public ContactTypeManagementSteps(ScenarioManager scenarioManager)
+    public ContactTypeManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override

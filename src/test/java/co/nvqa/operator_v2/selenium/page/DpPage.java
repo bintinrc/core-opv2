@@ -1,12 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.util.TestUtils;
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.util.SingletonStorage;
 import co.nvqa.operator_v2.util.TestConstants;
-import com.nv.qa.commons.support.*;
-import com.nv.qa.commons.utils.NvLogger;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -48,14 +46,14 @@ public class DpPage extends SimplePage
 
     public void downloadFile(String type)
     {
-        TestUtils.deleteFile(TestConstants.SELENIUM_WRITE_PATH + BTN_NAME_FILENAME.get(type));
+        TestUtils.deleteFile(TestConstants.TEMP_DIR + BTN_NAME_FILENAME.get(type));
         click("//div[@filename='" + BTN_NAME_FILENAME.get(type) + "']/nv-download-csv-button/div/nv-api-text-button/button");
         pause1s();
     }
 
     public void verifyDownloadedFile(String type)
     {
-        String pathname = TestConstants.SELENIUM_WRITE_PATH + BTN_NAME_FILENAME.get(type);
+        String pathname = TestConstants.TEMP_DIR + BTN_NAME_FILENAME.get(type);
         int counter = 0;
         boolean isFileExists;
 
@@ -360,19 +358,8 @@ public class DpPage extends SimplePage
      */
     public String getTextOnTable(String ngRepeat, int rowNumber, String dataTitleText)
     {
-        String text = null;
-
-        try
-        {
-            //-- e.g.: //tr[@ng-repeat='dpPartner in $data'][1]/td[@data-title-text='Restrictions']
-            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[@data-title-text='%s']", ngRepeat, rowNumber, dataTitleText));
-            text = we.getText().trim();
-        }
-        catch(NoSuchElementException ex)
-        {
-            NvLogger.warn("Error on method 'getTextOnTable'.", ex);
-        }
-
-        return text;
+        //-- e.g.: //tr[@ng-repeat='dpPartner in $data'][1]/td[@data-title-text='Restrictions']
+        WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[@data-title-text='%s']", ngRepeat, rowNumber, dataTitleText));
+        return we.getText().trim();
     }
 }

@@ -1,7 +1,7 @@
-@OpsRoute @selenium @OpsRoute#01
+@OperatorV2 @OpsRoute
 Feature: Ops Route
 
-  @LaunchBrowser
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
@@ -10,5 +10,5 @@ Feature: Ops Route
     When op click edit button on table at Ops Route menu
     Then ops route id must be changed
 
-  @KillBrowser
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

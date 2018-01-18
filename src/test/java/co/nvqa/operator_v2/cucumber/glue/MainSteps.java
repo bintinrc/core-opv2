@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Given;
@@ -16,9 +17,9 @@ public class MainSteps extends AbstractSteps
     private MainPage mainPage;
 
     @Inject
-    public MainSteps(ScenarioManager scenarioManager)
+    public MainSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -27,40 +28,27 @@ public class MainSteps extends AbstractSteps
         mainPage = new MainPage(getWebDriver());
     }
 
-    @Given("^op click navigation ([^\"]*) in ([^\"]*)$")
-    public void opClickNavigation(String childMenuName, String parentMenuName)
-    {
-        mainPage.clickNavigation(parentMenuName, childMenuName);
-        pause1s();
-    }
-
     @Given("^Operator go to menu \"([^\"]*)\" -> \"([^\"]*)\"$")
     public void operatorGoToMenu(String parentMenuName, String childMenuName)
     {
-        opClickNavigation(childMenuName, parentMenuName);
+        mainPage.clickNavigation(parentMenuName, childMenuName);
     }
 
     @Given("^Operator go to menu ([^\"]*) -> ([^\"]*)$")
     public void operatorGoToMenuWithoutQuote(String parentMenuName, String childMenuName)
     {
-        opClickNavigation(childMenuName, parentMenuName);
+        operatorGoToMenu(parentMenuName, childMenuName);
     }
 
-    @Then("^op is in main page$")
-    public void opIsInMainPage()
+    @Then("^Operator verify he is in main page$")
+    public void operatorVerifyHeIsInMainPage()
     {
-        mainPage.dpAdm();
-    }
-
-    @Given("^op refresh page$")
-    public void opRefreshPage()
-    {
-        mainPage.refreshPage();
+        mainPage.verifyTheMainPageIsLoaded();
     }
 
     @Given("^Operator refresh page$")
     public void operatorRefreshPage()
     {
-        opRefreshPage();
+        mainPage.refreshPage();
     }
 }

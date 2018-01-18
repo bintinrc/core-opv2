@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.DriverTypeManagementPage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
@@ -16,9 +17,9 @@ public class DriverTypeManagementSteps extends AbstractSteps
     private DriverTypeManagementPage dtmPage;
 
     @Inject
-    public DriverTypeManagementSteps(ScenarioManager scenarioManager)
+    public DriverTypeManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -46,27 +47,33 @@ public class DriverTypeManagementSteps extends AbstractSteps
     }
 
     @When("^create driver type button is clicked$")
-    public void clickDriverTypeButton()
+    public void createDriverType()
     {
-        dtmPage.clickDriverTypeButton();
+        String uniqueCode = generateDateUniqueString();
+        String driverTypeName = "DT-"+uniqueCode;
+        put("driverTypeName", driverTypeName);
+        dtmPage.createDriverType(driverTypeName);
     }
 
     @Then("^created driver type should exist$")
     public void verifyDriverType()
     {
-        dtmPage.verifyDriverType();
+        String driverTypeName = get("driverTypeName");
+        dtmPage.verifyDriverType(driverTypeName);
     }
 
     @When("^searching created driver$")
     public void searchingCreatedDriver()
     {
-        dtmPage.searchingCreatedDriver();
+        String driverTypeName = get("driverTypeName");
+        dtmPage.searchingCreatedDriver(driverTypeName);
     }
 
     @When("^searching created driver and edit$")
     public void searchingCreatedDriverAndEdit()
     {
-        dtmPage.searchingCreatedDriverEdit();
+        String driverTypeName = get("driverTypeName");
+        dtmPage.searchingCreatedDriverEdit(driverTypeName);
     }
 
     @Then("^verify changes of created driver type$")

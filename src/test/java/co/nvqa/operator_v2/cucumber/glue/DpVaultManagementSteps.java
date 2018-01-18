@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.DpVault;
 import co.nvqa.operator_v2.selenium.page.DpVaultManagementPage;
-import co.nvqa.operator_v2.util.ScenarioStorage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -15,13 +15,12 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 @ScenarioScoped
 public class DpVaultManagementSteps extends AbstractSteps
 {
-    @Inject ScenarioStorage scenarioStorage;
     private DpVaultManagementPage dpVaultManagementPage;
 
     @Inject
-    public DpVaultManagementSteps(ScenarioManager scenarioManager)
+    public DpVaultManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -33,7 +32,8 @@ public class DpVaultManagementSteps extends AbstractSteps
     @When("^Operator create new DP Vault using DP \"([^\"]*)\"$")
     public void operatorCreateDpVault(String dpName)
     {
-        String uniqueCode = String.valueOf(System.currentTimeMillis());
+        String uniqueCode = generateDateUniqueString();
+        long uniqueCoordinate = System.currentTimeMillis();
 
         DpVault dpVault = new DpVault();
         dpVault.setName(String.format("DP Station #%s", uniqueCode));
@@ -43,38 +43,38 @@ public class DpVaultManagementSteps extends AbstractSteps
         dpVault.setAddress2(String.format("OG Orchard #%s", uniqueCode));
         dpVault.setCity("SG");
         dpVault.setCountry("SG");
-        dpVault.setLatitude(Double.parseDouble("1."+uniqueCode));
-        dpVault.setLongitude(Double.parseDouble("103."+uniqueCode));
+        dpVault.setLatitude(Double.parseDouble("1."+uniqueCoordinate));
+        dpVault.setLongitude(Double.parseDouble("103."+uniqueCoordinate));
 
         dpVaultManagementPage.addDpVault(dpVault);
-        scenarioStorage.put("dpVault", dpVault);
+        put("dpVault", dpVault);
     }
 
     @Then("^Operator verify the new DP Vault is created successfully$")
     public void operatorVerifyDpVaultIsCreatedSuccessfully()
     {
-        DpVault dpVault = scenarioStorage.get("dpVault");
+        DpVault dpVault = get("dpVault");
         dpVaultManagementPage.verifyDpCompanyIsCreatedSuccessfully(dpVault);
     }
 
     @When("^Operator delete the new DP Vault$")
     public void operatorDeleteDpVault()
     {
-        DpVault dpVault = scenarioStorage.get("dpVault");
+        DpVault dpVault = get("dpVault");
         dpVaultManagementPage.deleteDpVault(dpVault);
     }
 
     @Then("^Operator verify the new DP Vault is deleted successfully$")
     public void operatorVerifyDpVaultIsDeletedSuccessfully()
     {
-        DpVault dpVault = scenarioStorage.get("dpVault");
+        DpVault dpVault = get("dpVault");
         dpVaultManagementPage.verifyDpVaultIsDeletedSuccessfully(dpVault);
     }
 
     @Then("^Operator check all filters on DP Vault Management page work fine$")
     public void operatorCheckAllFiltersOnDpVaultManagementPageWork()
     {
-        DpVault dpVault = scenarioStorage.get("dpVault");
+        DpVault dpVault = get("dpVault");
         dpVaultManagementPage.verifyAllFiltersWorkFine(dpVault);
     }
 
@@ -87,7 +87,7 @@ public class DpVaultManagementSteps extends AbstractSteps
     @When("^Operator verify DP Vault CSV file downloaded successfully$")
     public void operatorVerifyDpVaultCsvFileDownloadSuccessfully()
     {
-        DpVault dpVault = scenarioStorage.get("dpVault");
+        DpVault dpVault = get("dpVault");
         dpVaultManagementPage.verifyCsvFileDownloadedSuccessfully(dpVault);
     }
 }

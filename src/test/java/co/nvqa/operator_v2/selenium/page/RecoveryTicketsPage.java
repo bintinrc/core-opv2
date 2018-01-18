@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.util.TestUtils;
-import com.nv.qa.commons.utils.NvLogger;
+import co.nvqa.commons.utils.NvLogger;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Map;

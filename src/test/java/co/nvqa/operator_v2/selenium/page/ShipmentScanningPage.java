@@ -44,6 +44,11 @@ public class ShipmentScanningPage extends SimplePage
         click(XPATH_SELECT_SHIPMENT_BUTTON);
     }
 
+    public void scanBarcode(String trackingId)
+    {
+        sendKeysAndEnter(XPATH_BARCODE_SCAN, trackingId);
+    }
+
     private void selectDropdownValue(String value)
     {
         click(String.format("//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", value));
@@ -51,7 +56,7 @@ public class ShipmentScanningPage extends SimplePage
 
     public void checkOrderInShipment(String orderId)
     {
-        String rack = getwebDriver().findElement(By.xpath(XPATH_RACK_SECTOR)).getText();
+        String rack = getText(XPATH_RACK_SECTOR);
         Assert.assertTrue("order is " + rack, !rack.equalsIgnoreCase("INVALID") && !rack.equalsIgnoreCase("DUPLICATE"));
 
         WebElement orderWe = getwebDriver().findElement(By.xpath(String.format("//td[contains(@class, 'tracking-id')][contains(text(), '%s')]", orderId)));

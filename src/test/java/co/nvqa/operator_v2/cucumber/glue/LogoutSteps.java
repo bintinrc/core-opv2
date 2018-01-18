@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.LogoutPage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.When;
@@ -15,9 +16,9 @@ public class LogoutSteps extends AbstractSteps
     private LogoutPage logoutPage;
 
     @Inject
-    public LogoutSteps(ScenarioManager scenarioManager)
+    public LogoutSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -26,7 +27,7 @@ public class LogoutSteps extends AbstractSteps
         logoutPage = new LogoutPage(getWebDriver());
     }
 
-    @When("^logout button is clicked$")
+    @When("^Operator click logout button$")
     public void logout()
     {
         logoutPage.logout();

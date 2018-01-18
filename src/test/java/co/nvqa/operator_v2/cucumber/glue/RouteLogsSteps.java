@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage;
-import co.nvqa.operator_v2.util.ScenarioStorage;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
@@ -13,7 +13,10 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -25,15 +28,12 @@ public class RouteLogsSteps extends AbstractSteps
     private static final int ALERT_WAIT_TIMEOUT_IN_SECONDS = 15;
     private static final int MAX_RETRY = 10;
 
-    @Inject private ScenarioStorage scenarioStorage;
     private RouteLogsPage routeLogsPage;
-    private ScenarioManager scenarioManager;
 
     @Inject
-    public RouteLogsSteps(ScenarioManager scenarioManager)
+    public RouteLogsSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager);
-        this.scenarioManager = scenarioManager;
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class RouteLogsSteps extends AbstractSteps
     @When("^op click 'Edit Route' and then click 'Load Waypoints of Selected Route\\(s\\) Only'$")
     public void loadWaypointsOfSelectedRoute()
     {
-        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
         routeLogsPage.searchAndVerifyRouteExist(String.valueOf(routeId));
         routeLogsPage.clickActionButtonOnTable(1, RouteLogsPage.ACTION_BUTTON_EDIT_ROUTE);
         pause100ms();
@@ -68,7 +68,7 @@ public class RouteLogsSteps extends AbstractSteps
     @Then("^op redirect to this page '([^\"]*)'$")
     public void verifyLoadWaypointsOfSelectedRoute(String redirectUrl)
     {
-        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
 
         String primaryWindowHandle = getWebDriver().getWindowHandle();
         Set<String> windowHandles = getWebDriver().getWindowHandles();
@@ -91,8 +91,8 @@ public class RouteLogsSteps extends AbstractSteps
                 }
                 catch(Exception ex)
                 {
-                    scenarioManager.getCurrentScenario().write(String.format("Alert is not present after %ds.", ALERT_WAIT_TIMEOUT_IN_SECONDS));
-                    scenarioManager.getCurrentScenario().write(TestUtils.convertExceptionStackTraceToString(ex));
+                    getScenarioManager().writeToCurrentScenarioLog(String.format("Alert is not present after %ds.", ALERT_WAIT_TIMEOUT_IN_SECONDS));
+                    getScenarioManager().writeToCurrentScenarioLog(TestUtils.convertExceptionStackTraceToString(ex));
                 }
 
                 pause100ms();
@@ -121,7 +121,7 @@ public class RouteLogsSteps extends AbstractSteps
     @When("^op click 'Edit Details'$")
     public void opClickEditDetails()
     {
-        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
         routeLogsPage.searchAndVerifyRouteExist(String.valueOf(routeId));
         routeLogsPage.clickActionButtonOnTable(1, RouteLogsPage.ACTION_BUTTON_EDIT_DETAILS);
         pause100ms();
@@ -137,7 +137,7 @@ public class RouteLogsSteps extends AbstractSteps
     @Then("^route's driver must be changed to '([^\"]*)' in table list$")
     public void verifyRouteDriverIsChanged(String newDriverName)
     {
-        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
 
         boolean loadSelectionButtonIsVisible;
         int counter = 1;
@@ -158,7 +158,7 @@ public class RouteLogsSteps extends AbstractSteps
             }
 
             takesScreenshot();
-            writeToScenarioLog(String.format("%s Trying to click 'Edit Filter' button x%d.", level, counter++));
+            writeToCurrentScenarioLog(String.format("%s Trying to click 'Edit Filter' button x%d.", level, counter++));
 
             routeLogsPage.clickEditFilter();
             loadSelectionButtonIsVisible = routeLogsPage.isLoadSelectionVisible();
@@ -174,14 +174,14 @@ public class RouteLogsSteps extends AbstractSteps
     @When("^op add tag '([^\"]*)'$")
     public void opAddNewTagToRoute(String newTag)
     {
-        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
         routeLogsPage.selectTag(String.valueOf(routeId), newTag);
     }
 
     @Then("^route's tag must contain '([^\"]*)'$")
     public void verifyNewTagAddedToRoute(String newTag)
     {
-        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
         String tags = routeLogsPage.getRouteTag(String.valueOf(routeId));
         Assert.assertThat(String.format("Route does not contains tag '%s'.", newTag), tags, Matchers.containsString(newTag));
     }
@@ -189,17 +189,17 @@ public class RouteLogsSteps extends AbstractSteps
     @When("^op delete route on Operator V2$")
     public void opDeleteDeleteRoute()
     {
-        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
         routeLogsPage.deleteRoute(String.valueOf(routeId));
     }
 
     @Then("^route must be deleted successfully$")
     public void verifyRouteDeletedSuccessfully()
     {
-        int routeId = scenarioStorage.get(KEY_CREATED_ROUTE_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
         routeLogsPage.searchTableByRouteId(String.valueOf(routeId));
         boolean isTableEmpty = routeLogsPage.isTableEmpty();
+        put(KEY_ROUTE_IS_ALREADY_DELETED, true);
         Assert.assertTrue("Route still exist in table. Fail to delete route.", isTableEmpty);
-        scenarioStorage.put("routeDeleted", true);
     }
 }
