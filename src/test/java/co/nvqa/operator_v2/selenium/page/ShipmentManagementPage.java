@@ -33,6 +33,7 @@ public class ShipmentManagementPage extends SimplePage
     public static final String XPATH_LABEL_EDIT_SHIPMENT = "//h4[text()='Edit Shipment']";
     public static final String XPATH_SORT_DIV = "//div[div[span[text()='Sort by']]]";
     public static final String XPATH_DELETE_CONFIRMATION_BUTTON = "//button[span[text()='Delete']]";
+    public static final String XPATH_FORCE_SUCCESS_CONFIRMATION_BUTTON = "//button[span[text()='Confirm']]";
     public static final String XPATH_CANCEL_SHIPMENT_BUTTON = "//button[div[text()='Cancel Shipment']]";
     public static final String XPATH_DISCARD_CHANGE_BUTTON = "//button[h5[text()='Discard Changes']]";
     public static final String XPATH_SHIPMENT_SCAN = "//div[contains(@class,'table-shipment-scan-container')]/table/tbody/tr";
@@ -366,6 +367,7 @@ public class ShipmentManagementPage extends SimplePage
     public class Shipment
     {
         public final String DELETE_ACTION = "Delete";
+        public final String FORCE_ACTION = "Force";
         private final WebElement shipmentWe;
 
         private String id;
@@ -394,6 +396,11 @@ public class ShipmentManagementPage extends SimplePage
             {
                 pause1s();
                 click(XPATH_DELETE_CONFIRMATION_BUTTON);
+                pause2s();
+            } else if (actionButton.equals(FORCE_ACTION))
+            {
+                pause1s();
+                click(XPATH_FORCE_SUCCESS_CONFIRMATION_BUTTON);
             }
         }
 
