@@ -1,12 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.operator_v2.util.SingletonStorage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
