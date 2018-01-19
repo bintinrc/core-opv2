@@ -13,6 +13,10 @@ import java.util.Set;
  */
 public class AllOrdersPage extends SimplePage
 {
+    private static final String NG_REPEAT = "event in getTableData()";
+
+    public static final String COLUMN_CLASS_NAME = "name";
+
     public AllOrdersPage(WebDriver webDriver)
     {
         super(webDriver);
@@ -136,20 +140,28 @@ public class AllOrdersPage extends SimplePage
         return (date + " " + time).trim();
     }
 
-    public void verifyInboundIsSucceed(String trackingId) {
+    public void verifyInboundIsSucceed(String trackingId)
+    {
         String mainWindowHandle = getwebDriver().getWindowHandle();
 
-        try {
+        try
+        {
             searchTrackingId(trackingId);
             switchToNewOpenedWindow(mainWindowHandle);
             waitUntilVisibilityOfElementLocated("//div[text()='Edit Order']");
 
             pause3s();
-            String actualLatestEvent = getTextOnTableWithNgRepeat(1, "name", "event in getTableData()");
+            String actualLatestEvent = getTextOnTable(1, COLUMN_CLASS_NAME);
             Assert.assertTrue("Different Result Returned", actualLatestEvent.contains("Van Inbound Scan"));
         }
-        finally {
+        finally
+        {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
+    }
+
+    public String getTextOnTable(int rowNumber, String columnDataClass)
+    {
+        return getTextOnTableWithNgRepeat(rowNumber, columnDataClass, NG_REPEAT);
     }
 }

@@ -13,7 +13,7 @@ Feature: Van Inbound
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":1 } |
     And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":2, "hubId":1, "vehicleId":1, "driverId":1608 } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Inbounding -> Van Inbound
@@ -32,7 +32,7 @@ Feature: Van Inbound
   Scenario: Operator van inbounds the created order with invalid tracking ID (uid:b91adc47-ea7d-412f-8166-175f0816809f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":2, "hubId":1, "vehicleId":1, "driverId":1608 } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the invalid tracking ID INVALID_TRACKING_ID on Van Inbound Page
@@ -42,7 +42,7 @@ Feature: Van Inbound
   Scenario: Operator van inbounds the created order with empty tracking ID (uid:485bf214-d45a-45b2-9696-179c9d5afe3d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":2, "hubId":1, "vehicleId":1, "driverId":1608 } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the empty tracking ID on Van Inbound Page

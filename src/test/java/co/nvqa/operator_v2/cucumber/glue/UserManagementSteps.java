@@ -12,10 +12,8 @@ import cucumber.runtime.java.guice.ScenarioScoped;
  *
  * @author Tristania Siagian
  */
-
 @ScenarioScoped
 public class UserManagementSteps extends AbstractSteps {
-
     private UserManagementPage userManagementPage;
 
     @Inject
@@ -53,9 +51,9 @@ public class UserManagementSteps extends AbstractSteps {
         UserManagement userManagement = get("userManagement");
 
         UserManagement userManagementEdited = new UserManagement();
-
         userManagementEdited.setLastName(userManagement.getLastName());
         userManagementEdited.setRoles("QA_TEAM");
+
         put("userManagementEdited", userManagementEdited);
         userManagementPage.editUser(userManagement, userManagementEdited);
     }

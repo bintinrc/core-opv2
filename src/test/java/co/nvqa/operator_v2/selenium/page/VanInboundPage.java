@@ -8,9 +8,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Tristania Siagian
  */
-
 public class VanInboundPage extends SimplePage {
-
     public VanInboundPage(WebDriver webDriver) {
         super(webDriver);
     }
@@ -26,8 +24,8 @@ public class VanInboundPage extends SimplePage {
     }
 
     public void verifyVanInboundSucceed() {
-        String actualMessage = findElementByXpath("//div[contains(@class,\"status-box\")]/h1").getText();
-        Assert.assertEquals("Tracking ID is invalid","SUCCESS", actualMessage);
+        String actualMessage = getText("//div[contains(@class,\"status-box\")]/h1");
+        Assert.assertEquals("Tracking ID is invalid", "SUCCESS", actualMessage);
     }
 
     public void startRoute(String trackingId) {
@@ -40,11 +38,11 @@ public class VanInboundPage extends SimplePage {
 
     public void verifyInvalidTrackingId(String trackingId) {
         String expectedTrackingId = findElementByXpath("//tr[@ng-repeat='trackingId in ctrl.invalidTrackingIds track by $index'][1]/td").getText().trim();
-        Assert.assertEquals("Tracking ID is valid",trackingId, expectedTrackingId);
+        Assert.assertEquals("Tracking ID is valid", trackingId, expectedTrackingId);
     }
 
     public void verifyTrackingIdEmpty() {
-        String actualMessage = findElementByXpath("//div[contains(@class,\"status-box\")]/h1").getText();
+        String actualMessage = getText("//div[contains(@class,\"status-box\")]/h1");
         Assert.assertEquals("Tracking ID is invalid","EMPTY", actualMessage);
     }
 }

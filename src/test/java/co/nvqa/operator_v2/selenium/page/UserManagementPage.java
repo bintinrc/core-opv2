@@ -13,7 +13,6 @@ import java.util.List;
  *
  * @author Tristania Siagian
  */
-
 public class UserManagementPage extends SimplePage {
     private static final String NG_REPEAT = "user in $data";
     private static final String COLUMN_DATA_TITLE_GRANT_TYPE = "ctrl.table.grantType";
@@ -58,7 +57,6 @@ public class UserManagementPage extends SimplePage {
     }
 
     public void fillTheForm(UserManagement userManagement, boolean isCreate) {
-
         if(isCreate) {
             sendKeysById("first-name", userManagement.getFirstName());
             sendKeysById("last-name", userManagement.getLastName());
@@ -85,27 +83,25 @@ public class UserManagementPage extends SimplePage {
     }
 
     public void verifyGrantType(UserManagement userManagement) {
-        List<WebElement> grantTyperows = findElementsByXpath("//td[@data-title='ctrl.table.grantType']");
+        List<WebElement> grantTypeRows = findElementsByXpath("//td[@data-title='ctrl.table.grantType']");
         List<String> grantType = new ArrayList<>();
 
-        int count= 0;
-        for (WebElement we: grantTyperows) {
+        int count = 0;
+        for(WebElement we: grantTypeRows) {
             if(count==10) {
                 break;
             }
             grantType.add(we.getText());
-            Assert.assertEquals("Different Result Returned",userManagement.getGrantType(),we.getText());
+            Assert.assertEquals("Different Result Returned.", userManagement.getGrantType(), we.getText());
             count+=1;
         }
-
     }
 
     public String getTextOnTable(int rowNumber, String columnDataTitleText) {
         return getTextOnTableWithNgRepeatUsingDataTitleText(rowNumber, columnDataTitleText, NG_REPEAT);
     }
 
-    public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
-    {
+    public void clickActionButtonOnTable(int rowNumber, String actionButtonName) {
         clickActionButtonOnTableWithNgRepeat(rowNumber, actionButtonName, NG_REPEAT);
     }
 }
