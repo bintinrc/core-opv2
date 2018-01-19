@@ -4,7 +4,6 @@ import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.util.Set;
 
@@ -145,8 +144,9 @@ public class AllOrdersPage extends SimplePage
             switchToNewOpenedWindow(mainWindowHandle);
             waitUntilVisibilityOfElementLocated("//div[text()='Edit Order']");
 
-            WebElement actualLatestEvent = findElementByXpath("//div[3]/p");
-            Assert.assertTrue("Different Result Returned", actualLatestEvent.toString().contains("Van Inbound Scan"));
+            pause3s();
+            String actualLatestEvent = getTextOnTableWithNgRepeat(1, "name", "event in getTableData()");
+            Assert.assertTrue("Different Result Returned", actualLatestEvent.contains("Van Inbound Scan"));
         }
         finally {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);

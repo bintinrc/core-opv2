@@ -47,8 +47,12 @@ public class VanInboundSteps extends AbstractSteps {
 
     @Then("^Operator verify the van inbound process is succeed$")
     public void verifyVanInboundSucceed() {
-        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         vanInboundPage.verifyVanInboundSucceed();
+    }
+
+    @Then("^Operator verify order scan updated$")
+    public void verifyOrderScanUpdated(){
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         allOrdersPage.verifyInboundIsSucceed(trackingId);
     }
 

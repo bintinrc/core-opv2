@@ -1,15 +1,12 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Set;
 
 /**
  *
@@ -23,6 +20,7 @@ public class RouteLogsPage extends SimplePage
     public static final String COLUMN_CLASS_FILTER_ROUTE_ID = "id";
     public static final String COLUMN_CLASS_DATA_ROUTE_ID = "id";
     public static final String COLUMN_CLASS_DATA_DRIVER_NAME = "_driver-name ";
+    public static final String COLUMN_CLASS_STATUS = "status";
 
     public static final String ACTION_BUTTON_EDIT_ROUTE = "container.route-logs.edit-route";
     public static final String ACTION_BUTTON_EDIT_DETAILS = "container.route-logs.edit-details";
@@ -148,6 +146,14 @@ public class RouteLogsPage extends SimplePage
         return getText(SELECT_TAG_XPATH);
     }
 
+    public void loadAndVerifyRoute(String routeId)
+    {
+        clickLoadSelection();
+        searchTableByRouteId(routeId);
+        String actualRouteStatus = getTextOnTable(1, COLUMN_CLASS_STATUS);
+        Assert.assertEquals("Track is not routed.","IN_PROGRESS", actualRouteStatus);
+    }
+
     public String getTextOnTable(int rowNumber, String columnDataClass)
     {
         return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
@@ -161,13 +167,5 @@ public class RouteLogsPage extends SimplePage
     public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
     {
         clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
-    }
-
-    public void loadAndVerifyRoute(String routeId) {
-        clickLoadSelection();
-        sendKeys("//md-input-container/div/input[contains(@class, 'ng-touched')]", routeId);
-
-        String actualRouteStatus = getTextOnTableWithMdVirtualRepeat(0,"status", "route in getTableData()", false);
-        Assert.assertEquals("Track is not routed","IN_PROGRESS", actualRouteStatus);
     }
 }

@@ -6,7 +6,7 @@ Feature: Van Inbound
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
   @ArchiveRoute
-  Scenario: Operator van inbounds the created order with valid tracking ID
+  Scenario: Operator van inbounds the created order with valid tracking ID (uid:dbb54d2b-a9a4-4975-b9db-456680953a54)
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
@@ -19,31 +19,34 @@ Feature: Van Inbound
     When Operator go to menu Inbounding -> Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator fill the tracking ID on Van Inbound Page then click enter
-#    Then Operator verify the van inbound process is succeed
+    Then Operator verify the van inbound process is succeed
+    When Operator go to menu Order -> All Orders
+    Then Operator verify order scan updated
     When Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
     And Operator click on start route after van inbounding
     And Operator go to menu Routing -> Route Logs
     Then Operator verify the route is started after van inbounding
 
-#  @ArchiveRoute
-#  Scenario: Operator van inbounds the created order with invalid tracking ID
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given API Operator create new route using data below:
-#      | createRouteRequest | { "zoneId":2, "hubId":1, "vehicleId":1, "driverId":1608 } |
-#    When Operator go to menu Inbounding -> Van Inbound
-#    And Operator fill the route ID on Van Inbound Page then click enter
-#    And Operator fill the invalid tracking ID INVALID_TRACKING_ID on Van Inbound Page
-#    Then Operator verify the tracking ID INVALID_TRACKING_ID that has been input on Van Inbound Page is invalid
-#
-#  @ArchiveRoute
-#  Scenario: Operator van inbounds the created order with empty tracking ID
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given API Operator create new route using data below:
-#      | createRouteRequest | { "zoneId":2, "hubId":1, "vehicleId":1, "driverId":1608 } |
-#    When Operator go to menu Inbounding -> Van Inbound
-#    And Operator fill the route ID on Van Inbound Page then click enter
-#    And Operator fill the empty tracking ID on Van Inbound Page
-#    Then Operator verify the tracking ID that has been input on Van Inbound Page is empty
+  @ArchiveRoute
+  Scenario: Operator van inbounds the created order with invalid tracking ID (uid:b91adc47-ea7d-412f-8166-175f0816809f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":2, "hubId":1, "vehicleId":1, "driverId":1608 } |
+    When Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator fill the invalid tracking ID INVALID_TRACKING_ID on Van Inbound Page
+    Then Operator verify the tracking ID INVALID_TRACKING_ID that has been input on Van Inbound Page is invalid
+
+  @ArchiveRoute
+  Scenario: Operator van inbounds the created order with empty tracking ID (uid:485bf214-d45a-45b2-9696-179c9d5afe3d)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":2, "hubId":1, "vehicleId":1, "driverId":1608 } |
+    When Operator go to menu Inbounding -> Van Inbound
+    And Operator fill the route ID on Van Inbound Page then click enter
+    And Operator fill the empty tracking ID on Van Inbound Page
+    Then Operator verify the tracking ID that has been input on Van Inbound Page is empty
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

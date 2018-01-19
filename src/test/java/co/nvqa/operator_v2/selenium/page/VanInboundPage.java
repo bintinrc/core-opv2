@@ -33,10 +33,9 @@ public class VanInboundPage extends SimplePage {
     public void startRoute(String trackingId) {
         sendKeysById("tracking-id-scan", trackingId);
         pause1s();
-        //clickNvApiTextButtonByNameAndWaitUntilDone("container.van-inbound.route-start");
-        findElementByXpath("//nv-api-text-button[@name='container.van-inbound.route-start']/button").click();
+        clickButtonByAriaLabelAndWaitUntilDone("Route Start");
         waitUntilVisibilityOfElementLocated("//md-dialog-content[contains( @class, 'md-dialog-content')]");
-        click("//md-dialog-actions/button[contains( @class, 'md-nvGreen-theme')]");
+        clickButtonOnMdDialogByAriaLabel("Close");
     }
 
     public void verifyInvalidTrackingId(String trackingId) {
