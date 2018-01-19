@@ -1,4 +1,4 @@
-@OperatorV2 @PricingScriptsDisabled
+@OperatorV2Disabled @PricingScripts
 Feature: Pricing Scripts
 
   @LaunchBrowserWithProxyEnabled @ShouldAlwaysRun

@@ -58,7 +58,7 @@ public class ApiShipperExtSteps extends StandardApiShipperSteps<ScenarioManager>
     private OrderRequestV3 createV3Order(Map<String, String> arg1)
     {
         listOfOrderRequestV3.clear();
-        OrderRequestV3 orderRequestV3 = JsonHelper.mapToObject(arg1, OrderRequestV3.class);
+        OrderRequestV3 orderRequestV3 = JsonHelper.mapToObject(JsonHelper.getDefaultSnakeCaseMapper(), arg1, OrderRequestV3.class);
         OrderCreateHelper.populateRequest(orderRequestV3);
         listOfOrderRequestV3.add(orderRequestV3);
         return orderRequestV3;
@@ -74,7 +74,7 @@ public class ApiShipperExtSteps extends StandardApiShipperSteps<ScenarioManager>
         String json = response.then().extract().body().asString();
         Assert.assertNotNull("Response json not null", json);
 
-        listOfAsyncResponseV3 = JsonHelper.fromJsonCollection(json, List.class, AsyncResponse.class);
+        listOfAsyncResponseV3 = JsonHelper.fromJsonCollection(JsonHelper.getDefaultSnakeCaseMapper(), json, List.class, AsyncResponse.class);
         Assert.assertNotNull("Response POJO not null", listOfAsyncResponseV3);
         Assert.assertEquals("Size", listOfOrderRequestV3.size(), listOfAsyncResponseV3.size());
 

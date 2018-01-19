@@ -19,7 +19,7 @@ Feature: Shipment Scanning
     Then printer setting deleted
 
   Scenario: Delete Printer Settings (uid:4228809e-130b-40d6-93ea-258a8182700a)
-    Given op click navigation Printer Settings in System Settings
+    Given Operator go to menu System Settings -> Printer Settings
     When op click add Printer button
     Then Add Printer Form on display
     When op create printer setting with details:
@@ -32,7 +32,7 @@ Feature: Shipment Scanning
     Then printer setting deleted
 
   Scenario Outline: Edit Printer Setting (<hiptest-uid>)
-    Given op click navigation Printer Settings in System Settings
+    Given Operator go to menu System Settings -> Printer Settings
     When op click add Printer button
     Then Add Printer Form on display
     When op create printer setting with details:

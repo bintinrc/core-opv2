@@ -27,7 +27,7 @@ public class LogoutSteps extends AbstractSteps
         logoutPage = new LogoutPage(getWebDriver());
     }
 
-    @When("^logout button is clicked$")
+    @When("^Operator click logout button$")
     public void logout()
     {
         logoutPage.logout();

@@ -11,12 +11,12 @@ Feature: Sameday Route Engine
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     Given Operator go to menu Routing -> 2. Route Group Management
-    Then op wait until 'Route Group' page is loaded
-    When op create new 'route group' on 'Route Groups' using data below:
+    Then Operator wait until 'Route Group' page is loaded
+    When Operator create new 'route group' on 'Route Groups' using data below:
       | generateName | false |
     When Operator go to menu Routing -> 2. Route Group Management
-    Then op wait until 'Route Group' page is loaded
-    Then new 'route group' on 'Route Groups' created successfully
+    Then Operator wait until 'Route Group' page is loaded
+    Then Operator verify new 'route group' on 'Route Groups' created successfully
     Given Operator go to menu Routing -> 1. Create Route Groups
     Given Operator V2 add created Transaction to Route Group
     Given Operator go to menu Routing -> 5. Route Engine - Same-Day Route Engine
@@ -34,16 +34,16 @@ Feature: Sameday Route Engine
   Scenario: Add bulky parcel to route (uid:477e2e7a-76e7-40e7-8355-866783b2faaa)
     Given Operator refresh page
     #Notes: Shipper create C2C Bulky parcel with OC V2
-    Given Shipper create Order V2 Parcel using data below:
+    Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"C2C", "parcels":[{ "parcel_size_id":0, "volume":1, "weight":4, "bulky_job":{ "installation_required":true, "flight_of_stairs":1, "sku":"AUTOMATA1" }}], "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     Given Operator go to menu Routing -> 2. Route Group Management
-    Then op wait until 'Route Group' page is loaded
-    When op create new 'route group' on 'Route Groups' using data below:
+    Then Operator wait until 'Route Group' page is loaded
+    When Operator create new 'route group' on 'Route Groups' using data below:
       | generateName | false |
     When Operator go to menu Routing -> 2. Route Group Management
-    Then op wait until 'Route Group' page is loaded
-    Then new 'route group' on 'Route Groups' created successfully
+    Then Operator wait until 'Route Group' page is loaded
+    Then Operator verify new 'route group' on 'Route Groups' created successfully
     Given Operator go to menu Routing -> 1. Create Route Groups
     Given Operator V2 add created Transaction to Route Group
     Given Operator go to menu Routing -> 5. Route Engine - Same-Day Route Engine
@@ -70,12 +70,12 @@ Feature: Sameday Route Engine
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"C2C", "parcels":[{ "parcel_size_id":0, "volume":1, "weight":4, "bulky_job":{ "installation_required":true, "flight_of_stairs":1, "sku":"AUTOMATA1" }}], "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 23:15:00", "delivery_reach_by":"{{cur_date}} 23:30:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     Given Operator go to menu Routing -> 2. Route Group Management
-    Then op wait until 'Route Group' page is loaded
-    When op create new 'route group' on 'Route Groups' using data below:
+    Then Operator wait until 'Route Group' page is loaded
+    When Operator create new 'route group' on 'Route Groups' using data below:
       | generateName | false |
     When Operator go to menu Routing -> 2. Route Group Management
-    Then op wait until 'Route Group' page is loaded
-    Then new 'route group' on 'Route Groups' created successfully
+    Then Operator wait until 'Route Group' page is loaded
+    Then Operator verify new 'route group' on 'Route Groups' created successfully
     Given Operator go to menu Routing -> 1. Create Route Groups
     Given Operator V2 add created Transactions to Route Group
     Given Operator go to menu Routing -> 5. Route Engine - Same-Day Route Engine
@@ -102,11 +102,11 @@ Feature: Sameday Route Engine
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"C2C", "parcels":[{ "parcel_size_id":0, "volume":1, "weight":4, "bulky_job":{ "installation_required":true, "flight_of_stairs":1, "sku":"AUTOMATA1" }}], "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 23:15:00", "delivery_reach_by":"{{cur_date}} 23:30:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     Given Operator go to menu Routing -> 2. Route Group Management
-    When op create new 'route group' on 'Route Groups' using data below:
+    When Operator create new 'route group' on 'Route Groups' using data below:
       | generateName | false |
     When Operator go to menu Routing -> 2. Route Group Management
-    Then op wait until 'Route Group' page is loaded
-    Then new 'route group' on 'Route Groups' created successfully
+    Then Operator wait until 'Route Group' page is loaded
+    Then Operator verify new 'route group' on 'Route Groups' created successfully
     Given Operator go to menu Routing -> 1. Create Route Groups
     Given Operator V2 add created Transactions to Route Group
     Given Operator go to menu Routing -> 5. Route Engine - Same-Day Route Engine
@@ -127,12 +127,12 @@ Feature: Sameday Route Engine
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"C2C", "parcels":[{ "parcel_size_id":0, "volume":1, "weight":4, "bulky_job":{ "installation_required":true, "flight_of_stairs":1, "sku":"AUTOMATA1" }}], "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     Given Operator go to menu Routing -> 2. Route Group Management
-    Then op wait until 'Route Group' page is loaded
-    When op create new 'route group' on 'Route Groups' using data below:
+    Then Operator wait until 'Route Group' page is loaded
+    When Operator create new 'route group' on 'Route Groups' using data below:
       | generateName | false |
     When Operator go to menu Routing -> 2. Route Group Management
-    Then op wait until 'Route Group' page is loaded
-    Then new 'route group' on 'Route Groups' created successfully
+    Then Operator wait until 'Route Group' page is loaded
+    Then Operator verify new 'route group' on 'Route Groups' created successfully
     Given Operator go to menu Routing -> 1. Create Route Groups
     Given Operator V2 add created Transactions to Route Group
     Given Operator go to menu Routing -> 5. Route Engine - Same-Day Route Engine

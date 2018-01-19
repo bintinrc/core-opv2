@@ -29,26 +29,26 @@ public class LoginSteps extends AbstractSteps
         loginPage = new LoginPage(getWebDriver());
     }
 
-    @Given("^op is in op portal login page$")
+    @Given("^Operator is in Operator Portal V2 login page$")
     public void loginPage()
     {
         loginPage.loadPage();
     }
 
-    @When("^login button is clicked$")
-    public void clickLoginButton() throws InterruptedException
+    @When("^Operator click login button$")
+    public void clickLoginButton()
     {
         loginPage.clickLoginButton();
     }
 
-    @When("^login as \"([^\"]*)\" with password \"([^\"]*)\"$")
-    public void enterCredential(String username, String password) throws InterruptedException
+    @When("^Operator login as \"([^\"]*)\" with password \"([^\"]*)\"$")
+    public void enterCredential(String username, String password)
     {
         loginPage.enterCredential(username, password);
     }
 
-    @Then("^op back in the login page$")
-    public void backTologinPage() throws InterruptedException
+    @Then("^Operator back in the login page$")
+    public void backTologinPage()
     {
         loginPage.backToLoginPage();
     }

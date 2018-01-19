@@ -1,5 +1,5 @@
 @OperatorV2 @DpAdministration @ShouldAlwaysRun
-Feature: dp administration
+Feature: DP Administration
 
   @LaunchBrowser
   Scenario: Login to Operator V2

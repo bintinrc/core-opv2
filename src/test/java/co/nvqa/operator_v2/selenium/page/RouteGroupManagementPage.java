@@ -11,7 +11,7 @@ import java.util.Date;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class RouteGroupsPage extends SimplePage
+public class RouteGroupManagementPage extends SimplePage
 {
     private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
 
@@ -21,7 +21,7 @@ public class RouteGroupsPage extends SimplePage
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
     public static final String ACTION_BUTTON_DELETE = "commons.delete";
 
-    public RouteGroupsPage(WebDriver webDriver)
+    public RouteGroupManagementPage(WebDriver webDriver)
     {
         super(webDriver);
     }
@@ -38,7 +38,7 @@ public class RouteGroupsPage extends SimplePage
     {
         searchTable(filterRouteGroupName);
         pause100ms();
-        String actualName = getTextOnTable(1, RouteGroupsPage.COLUMN_CLASS_NAME);
+        String actualName = getTextOnTable(1, RouteGroupManagementPage.COLUMN_CLASS_NAME);
         Assert.assertTrue("Route Group name not matched.", actualName.startsWith(filterRouteGroupName)); //Route Group name is concatenated with description.
 
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
