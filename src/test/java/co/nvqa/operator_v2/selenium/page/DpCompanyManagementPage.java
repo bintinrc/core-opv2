@@ -35,6 +35,7 @@ public class DpCompanyManagementPage extends SimplePage
         click("//button[@aria-label='Add Company']");
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'dp-company-add')]");
         fillTheFormAndSubmit(dpCompany);
+        waitUntilInvisibilityOfToast("Created Successfully");
     }
 
     public void editDpCompany(DpCompany dpCompany)
@@ -42,6 +43,7 @@ public class DpCompanyManagementPage extends SimplePage
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'dp-company-edit')]");
         fillTheFormAndSubmit(dpCompany);
+        waitUntilInvisibilityOfToast("Updated Successfully");
     }
 
     private void fillTheFormAndSubmit(DpCompany dpCompany)
@@ -71,6 +73,7 @@ public class DpCompanyManagementPage extends SimplePage
         clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
         pause100ms();
         click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
+        waitUntilInvisibilityOfToast("Deleted Successfully");
     }
 
     public void downloadCsvFile()
