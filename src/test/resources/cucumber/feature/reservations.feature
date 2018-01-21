@@ -1,4 +1,4 @@
-@OperatorV2 @Reservations
+@OperatorV2Disabled @Reservations
 Feature: Reservations
 
   @LaunchBrowser @ShouldAlwaysRun
