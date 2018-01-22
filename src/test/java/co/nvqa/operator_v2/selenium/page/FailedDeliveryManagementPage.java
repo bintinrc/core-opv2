@@ -38,7 +38,7 @@ public class FailedDeliveryManagementPage extends CommonParcelManagementPage
         Assert.assertEquals("Failure Comments", "Package is defective - Damaged", actualFailureComments);
 
         String actualFailureReason = getTextOnTable(1, COLUMN_CLASS_FAILURE_REASON);
-        Assert.assertEquals("Failure Comments", "RECOVERY", actualFailureReason);
+        Assert.assertEquals("Failure Comments", "NA", actualFailureReason);
     }
 
     public void verifyCsvFileDownloadedSuccessfully(String trackingId)
