@@ -32,7 +32,7 @@ Feature: Sameday Route Engine
     Then Operator V2 clean up 'Route Groups'
 
   Scenario: Add bulky parcel to route (uid:477e2e7a-76e7-40e7-8355-866783b2faaa)
-    Given Operator refresh page
+    Given Operator go to menu Shipper Support -> Blocked Dates
     #Notes: Shipper create C2C Bulky parcel with OC V2
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
@@ -60,7 +60,7 @@ Feature: Sameday Route Engine
     Then Operator V2 clean up 'Route Groups'
 
   Scenario: Download same day route engine csv export (uid:5247e84e-d36d-4ddd-96db-63b5fddfee77)
-    Given Operator refresh page
+    Given Operator go to menu Shipper Support -> Blocked Dates
     #Notes: Shipper create C2C Bulky parcel with OC V2
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
@@ -92,7 +92,7 @@ Feature: Sameday Route Engine
     Then Operator V2 clean up 'Route Groups'
 
   Scenario: Check unrouted detail (uid:6b5fa949-deba-41c1-b9e1-0c77e605832b)
-    Given Operator refresh page
+    Given Operator go to menu Shipper Support -> Blocked Dates
     #Notes: Shipper create C2C Bulky parcel with OC V2
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
@@ -121,7 +121,7 @@ Feature: Sameday Route Engine
     Then Operator V2 clean up 'Route Groups'
 
   Scenario: Update timeslot for bulky parcels (uid:154a1482-33e2-4fff-9a99-ed6a96b289be)
-    Given Operator refresh page
+    Given Operator go to menu Shipper Support -> Blocked Dates
     #Notes: Shipper create C2C Bulky parcel with OC V2
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |

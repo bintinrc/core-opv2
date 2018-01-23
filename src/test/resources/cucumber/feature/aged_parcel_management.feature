@@ -9,12 +9,12 @@ Feature: Aged Parcel Management
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
-    And API Operator Global Inbound parcel using data below:
+    When API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
     Then API Operator verify order info after Global Inbound
-    When Operator refresh page
-    And Operator go to menu Shipper Support -> Aged Parcel Management
-    And operator load selection on page Aged Parcel Management
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper Support -> Aged Parcel Management
+    When operator load selection on page Aged Parcel Management
     Then Operator verify the aged parcel order is listed on Aged Parcels list
     Examples:
       | Note   | hiptest-uid                              | orderType |
@@ -26,13 +26,13 @@ Feature: Aged Parcel Management
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
-    And API Operator Global Inbound parcel using data below:
+    When API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
     Then API Operator verify order info after Global Inbound
-    When Operator refresh page
-    And Operator go to menu Shipper Support -> Aged Parcel Management
-    And operator load selection on page Aged Parcel Management
-    And Operator download CSV file of aged parcel on Aged Parcels list
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper Support -> Aged Parcel Management
+    When operator load selection on page Aged Parcel Management
+    When Operator download CSV file of aged parcel on Aged Parcels list
     Then Operator verify CSV file of aged parcel on Aged Parcels list downloaded successfully
     Examples:
       | Note   | hiptest-uid                              | orderType |
@@ -45,23 +45,23 @@ Feature: Aged Parcel Management
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
-    And API Operator Global Inbound parcel using data below:
+    Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
-    And API Operator create new route using data below:
+    Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
+    Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Operator start the route
-    And API Driver failed the delivery of the created parcel
-    And API Operator Global Inbound parcel using data below:
+    Given API Driver collect all his routes
+    Given API Driver get pickup/delivery waypoint of the created order
+    Given API Operator Van Inbound parcel
+    Given API Operator start the route
+    Given API Driver failed the delivery of the created parcel
+    Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
-    When Operator refresh page
-    And Operator go to menu Shipper Support -> Aged Parcel Management
-    And operator load selection on page Aged Parcel Management
-    And Operator reschedule aged parcel on next day
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Shipper Support -> Aged Parcel Management
+    When operator load selection on page Aged Parcel Management
+    When Operator reschedule aged parcel on next day
     Then API Operator verify order info after failed delivery aged parcel global inbounded and rescheduled on next day
     Examples:
       | Note   | hiptest-uid                              | orderType |
@@ -74,23 +74,23 @@ Feature: Aged Parcel Management
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
-    And API Operator Global Inbound parcel using data below:
+    Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
-    And API Operator create new route using data below:
+    Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
+    Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Operator start the route
-    And API Driver failed the delivery of the created parcel
-    And API Operator Global Inbound parcel using data below:
+    Given API Driver collect all his routes
+    Given API Driver get pickup/delivery waypoint of the created order
+    Given API Operator Van Inbound parcel
+    Given API Operator start the route
+    Given API Driver failed the delivery of the created parcel
+    Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
-    When Operator refresh page
-    And Operator go to menu Shipper Support -> Aged Parcel Management
-    And operator load selection on page Aged Parcel Management
-    And Operator reschedule aged parcel on next 2 days
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper Support -> Aged Parcel Management
+    When operator load selection on page Aged Parcel Management
+    When Operator reschedule aged parcel on next 2 days
     Then API Operator verify order info after failed delivery aged parcel global inbounded and rescheduled on next 2 days
     Examples:
       | Note   | hiptest-uid                              | orderType |
@@ -103,23 +103,23 @@ Feature: Aged Parcel Management
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
-    And API Operator Global Inbound parcel using data below:
+    Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
-    And API Operator create new route using data below:
+    Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
+    Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Operator start the route
-    And API Driver failed the delivery of the created parcel
-    And API Operator Global Inbound parcel using data below:
+    Given API Driver collect all his routes
+    Given API Driver get pickup/delivery waypoint of the created order
+    Given API Operator Van Inbound parcel
+    Given API Operator start the route
+    Given API Driver failed the delivery of the created parcel
+    Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
-    When Operator refresh page
-    And Operator go to menu Shipper Support -> Aged Parcel Management
-    And operator load selection on page Aged Parcel Management
-    And Operator RTS aged parcel on next day
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper Support -> Aged Parcel Management
+    When operator load selection on page Aged Parcel Management
+    When Operator RTS aged parcel on next day
     Then API Operator verify order info after failed delivery aged parcel global inbounded and RTS-ed on next day
     Examples:
       | Note   | hiptest-uid                              | orderType |
@@ -132,23 +132,23 @@ Feature: Aged Parcel Management
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
-    And API Operator Global Inbound parcel using data below:
+    Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
-    And API Operator create new route using data below:
+    Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
+    Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    And API Driver collect all his routes
-    And API Driver get pickup/delivery waypoint of the created order
-    And API Operator Van Inbound parcel
-    And API Operator start the route
-    And API Driver failed the delivery of the created parcel
-    And API Operator Global Inbound parcel using data below:
+    Given API Driver collect all his routes
+    Given API Driver get pickup/delivery waypoint of the created order
+    Given API Operator Van Inbound parcel
+    Given API Operator start the route
+    Given API Driver failed the delivery of the created parcel
+    Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
-    When Operator refresh page
-    And Operator go to menu Shipper Support -> Aged Parcel Management
-    And operator load selection on page Aged Parcel Management
-    And Operator RTS aged parcel on next day
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper Support -> Aged Parcel Management
+    When operator load selection on page Aged Parcel Management
+    When Operator RTS aged parcel on next day
     Then API Operator verify order info after failed delivery aged parcel global inbounded and RTS-ed on next day
     Examples:
       | Note   | hiptest-uid                              | orderType |
