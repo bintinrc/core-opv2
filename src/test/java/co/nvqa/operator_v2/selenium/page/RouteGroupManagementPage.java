@@ -43,7 +43,8 @@ public class RouteGroupManagementPage extends SimplePage
 
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
         setRouteGroupNameValue(newRouteGroupName);
-        clickCreateRouteGroupAndAddTransactionsOnEditDialog();
+        clickNvButtonSaveByName("container.route-group.dialogs.save-changes");
+        waitUntilInvisibilityOfToast("Route Group Updated");
     }
 
     public void deleteRouteGroup(String filterRouteGroupName)
@@ -53,7 +54,7 @@ public class RouteGroupManagementPage extends SimplePage
         clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
         pause100ms();
         click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
-        pause1s();
+        waitUntilInvisibilityOfToast("Route Group Deleted");
     }
 
     public void setRouteGroupNameValue(String value)
@@ -69,11 +70,6 @@ public class RouteGroupManagementPage extends SimplePage
     public void clickCreateRouteGroupAndAddTransactionsOnCreateDialog()
     {
         clickNvButtonSaveByNameAndWaitUntilDone("Create Route Group & Add Transactions");
-    }
-
-    public void clickCreateRouteGroupAndAddTransactionsOnEditDialog()
-    {
-        clickCreateRouteGroupAndAddTransactionsOnCreateDialog();
     }
 
     public void searchTable(String keyword)
