@@ -17,10 +17,8 @@ import java.util.List;
  *
  * @author Tristania Siagian
  */
-
 public class ChangeDeliveryTimingsPage extends SimplePage {
-
-    private static final String CSV_FILENAME = "sample_csv.csv";
+    private static final String CSV_FILENAME_PATTERN = "sample_csv";
     private static final String COMMA = ",";
     private static final String CSV_CAMPAIGN_HEADER = "tracking_id,start_date,end_date,timewindow";
     private static final String NG_REPEAT = "success in $data";
@@ -37,7 +35,7 @@ public class ChangeDeliveryTimingsPage extends SimplePage {
     }
 
     public void csvSampleDownloadSuccessful() {
-        verifyFileDownloadedSuccessfully(CSV_FILENAME);
+        verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN));
     }
 
     public void uploadCsvCampaignFile(List<ChangeDeliveryTiming> listOfChangeDeliveryTimings) {
