@@ -68,7 +68,7 @@ public class OrderCreationV2Page extends SimplePage
         String orderRefNo = getTextOnTable(1, COLUMN_CLASS_ORDER_REF_NO);
 
         Assert.assertEquals("Status", "SUCCESS", status);
-        Assert.assertEquals("Message", "Order Creation Successful.", message);
+        Assert.assertEquals("Message", "-", message);
         Assert.assertThat("Tracking ID", trackingId, Matchers.endsWith(orderCreationV2Template.getOrderNo()));
         Assert.assertEquals("Order Ref No", orderCreationV2Template.getShipperOrderNo(), orderRefNo);
     }
