@@ -85,9 +85,10 @@ public class ShipmentLinehaulSteps extends AbstractSteps
         shipmentLinehaulPage.clickCreateButton();
 
         WebElement toast = TestUtils.getToast(getWebDriver());
-        Assert.assertTrue("toast message not contain linehaul xxx created", toast.getText().contains("Linehaul") && toast.getText().contains("created"));
-
+        String toastMessage = toast.getText();
+        Assert.assertTrue("Toast message does not contain: linehaul <LINEHAUL_ID> created", toastMessage.contains("Linehaul") && toastMessage.contains("created"));
         linehaulId = toast.getText().split(" ")[1];
+        shipmentLinehaulPage.waitUntilInvisibilityOfToast("created", false);
     }
 
     @Then("^op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded$")
@@ -186,6 +187,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
         else
         {
             Assert.assertThat(String.format("Toast message not contains: '%s'", msg), toast.getText(), Matchers.containsString(msg));
+            shipmentLinehaulPage.waitUntilInvisibilityOfToast("Success delete Linehaul ID", false);
         }
     }
 
@@ -202,6 +204,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
         else
         {
             Assert.assertThat(String.format("Toast message not contains: '%s'", msg), toast.getText(), Matchers.containsString(msg));
+            shipmentLinehaulPage.waitUntilInvisibilityOfToast("updated");
         }
 
         shipmentLinehaulPage.clickTab("LINEHAUL DATE");
