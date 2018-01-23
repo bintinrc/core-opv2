@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
  */
 public class RouteCleaningReportPage extends SimplePage
 {
-    private static final String EXCEL_FILENAME = "route-cleaning-report.xls";
+    private static final String EXCEL_FILENAME_PATTERN = "route-cleaning-report";
 
     public RouteCleaningReportPage(WebDriver webDriver)
     {
@@ -24,6 +24,6 @@ public class RouteCleaningReportPage extends SimplePage
     {
         waitUntilInvisibilityOfElementLocated("//div[text()='Attempting to download route-cleaning-report.xls...']");
         waitUntilInvisibilityOfElementLocated("//div[text='Downloading route-cleaning-report.xls...']");
-        verifyFileDownloadedSuccessfully(EXCEL_FILENAME);
+        verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(EXCEL_FILENAME_PATTERN));
     }
 }
