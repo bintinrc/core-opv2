@@ -46,6 +46,7 @@ public abstract class CommonParcelManagementPage extends SimplePage
     {
         searchTableByTrackingId(trackingId);
         clickActionButtonOnTable(1, ACTION_BUTTON_RTS);
+        pause1s();
         selectValueFromMdSelectById("commons.reason", "Other Reason");
         sendKeysByAriaLabel("Description", String.format("Reason created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
         sendKeysByAriaLabel("Internal Notes", String.format("Internal notes created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
