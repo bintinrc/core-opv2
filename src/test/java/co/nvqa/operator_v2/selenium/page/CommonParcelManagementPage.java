@@ -37,26 +37,22 @@ public abstract class CommonParcelManagementPage extends SimplePage
         searchTableByTrackingId(trackingId);
         checkRow(1);
         selectAction(ACTION_RESCHEDULE_SELECTED);
-        sendKeys("//md-datepicker[@name='commons.model.date']/div/input", MD_DATEPICKER_SDF.format(TestUtils.getNextDate(2)));
-        click("//div[@label='commons.model.date']/label"); // To make sure date is change on Angular.
-        click("//button[@aria-label='Reschedule']");
+        setMdDatepickerById("commons.model.date", TestUtils.getNextDate(2));
+        clickNvIconTextButtonByNameAndWaitUntilDone("commons.reschedule");
+        waitUntilInvisibilityOfToast("Order Rescheduling Success");
     }
 
     public void rtsSingleOrderNextDay(String trackingId)
     {
         searchTableByTrackingId(trackingId);
         clickActionButtonOnTable(1, ACTION_BUTTON_RTS);
-        click("//md-select[@placeholder='Reason']");
-        pause50ms();
-        click("//md-option/div[contains(text(), 'Other Reason')]");
-        pause50ms();
-        sendKeys("//input[@aria-label='Description']", String.format("Reason created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
-        sendKeys("//input[@aria-label='Internal Notes']", String.format("Internal notes created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
-        sendKeys("//md-datepicker[@name='commons.model.delivery-date']/div/input", MD_DATEPICKER_SDF.format(TestUtils.getNextDate(1)));
-        click("//md-select[@aria-label='Timeslot']");
-        pause50ms();
-        click("//md-option/div[contains(text(), '3PM - 6PM')]");
-        click("//button[@aria-label='Save changes']");
+        selectValueFromMdSelectById("commons.reason", "Other Reason");
+        sendKeysByAriaLabel("Description", String.format("Reason created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
+        sendKeysByAriaLabel("Internal Notes", String.format("Internal notes created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
+        setMdDatepickerById("commons.model.delivery-date", TestUtils.getNextDate(1));
+        selectValueFromMdSelectById("commons.timeslot", "3PM - 6PM");
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
+        waitUntilInvisibilityOfToast("RTS-ed");
     }
 
     public void rtsSelectedOrderNextDay(String trackingId)
@@ -64,11 +60,10 @@ public abstract class CommonParcelManagementPage extends SimplePage
         searchTableByTrackingId(trackingId);
         checkRow(1);
         selectAction(ACTION_SET_RTS_TO_SELECTED);
-        sendKeys("//md-datepicker[@name='commons.model.delivery-date']/div/input", MD_DATEPICKER_SDF.format(TestUtils.getNextDate(1)));
-        click("//md-select[@aria-label='Timeslot']");
-        pause50ms();
-        click("//md-option/div[contains(text(), '3PM - 6PM')]");
-        click("//button[@aria-label='Set Order to RTS']");
+        setMdDatepickerById("commons.model.delivery-date", TestUtils.getNextDate(1));
+        selectValueFromMdSelectById("commons.timeslot", "3PM - 6PM");
+        clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.set-order-to-rts");
+        waitUntilInvisibilityOfToast("Set Selected to Return to Sender");
     }
 
     public void selectAction(int actionType)
@@ -77,9 +72,9 @@ public abstract class CommonParcelManagementPage extends SimplePage
 
         switch(actionType)
         {
-            case ACTION_SET_RTS_TO_SELECTED: click("//button[@aria-label='Set RTS to Selected']"); break;
-            case ACTION_RESCHEDULE_SELECTED: click("//button[@aria-label='Reschedule Selected']"); break;
-            case ACTION_DOWNLOAD_CSV_FILE: click("//button[@aria-label='Download CSV File']"); break;
+            case ACTION_SET_RTS_TO_SELECTED: clickButtonByAriaLabel("Set RTS to Selected"); break;
+            case ACTION_RESCHEDULE_SELECTED: clickButtonByAriaLabel("Reschedule Selected"); break;
+            case ACTION_DOWNLOAD_CSV_FILE: clickButtonByAriaLabel("Download CSV File"); break;
         }
     }
 

@@ -273,6 +273,12 @@ public class SimplePage implements ListOfDateFormat
         click(String.format("//md-datepicker[@ng-model='%s']/parent::*", ngModel));
     }
 
+    public void setMdDatepickerById(String mdPickerId, Date date)
+    {
+        sendKeys(String.format("//md-datepicker[@id='%s']/div/input", mdPickerId), MD_DATEPICKER_SDF.format(date));
+        click(String.format("//md-datepicker[@id='%s']/parent::*", mdPickerId));
+    }
+
     public void waitUntilInvisibilityOfToast(String containsMessage)
     {
         waitUntilInvisibilityOfToast(containsMessage, true);
@@ -535,7 +541,17 @@ public class SimplePage implements ListOfDateFormat
     public void selectValueFromMdSelect(String mdSelectNgModel, String value)
     {
         click(String.format("//md-select[@ng-model='%s']", mdSelectNgModel));
+        pause100ms();
         click(String.format("//div[@aria-hidden='false']//md-option[@value='%s']", value));
+        pause50ms();
+    }
+
+    public void selectValueFromMdSelectById(String mdSelectId, String value)
+    {
+        click(String.format("//md-select[starts-with(@id, '%s')]", mdSelectId));
+        pause100ms();
+        click(String.format("//div[@aria-hidden='false']//md-option[@value='%s' or contains(./div/text(), '%s')]", value, value));
+        pause50ms();
     }
 
     public void selectValueFromMdSelectMenu(String xpathMdSelectMenu, String xpathMdSelectOption)

@@ -14,7 +14,7 @@ Feature: Aged Parcel Management
     Then API Operator verify order info after Global Inbound
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper Support -> Aged Parcel Management
-    When operator load selection on page Aged Parcel Management
+    When Operator load selection on page Aged Parcel Management
     Then Operator verify the aged parcel order is listed on Aged Parcels list
     Examples:
       | Note   | hiptest-uid                              | orderType |
@@ -31,7 +31,7 @@ Feature: Aged Parcel Management
     Then API Operator verify order info after Global Inbound
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper Support -> Aged Parcel Management
-    When operator load selection on page Aged Parcel Management
+    When Operator load selection on page Aged Parcel Management
     When Operator download CSV file of aged parcel on Aged Parcels list
     Then Operator verify CSV file of aged parcel on Aged Parcels list downloaded successfully
     Examples:
@@ -60,7 +60,7 @@ Feature: Aged Parcel Management
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Shipper Support -> Aged Parcel Management
-    When operator load selection on page Aged Parcel Management
+    When Operator load selection on page Aged Parcel Management
     When Operator reschedule aged parcel on next day
     Then API Operator verify order info after failed delivery aged parcel global inbounded and rescheduled on next day
     Examples:
@@ -89,7 +89,7 @@ Feature: Aged Parcel Management
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper Support -> Aged Parcel Management
-    When operator load selection on page Aged Parcel Management
+    When Operator load selection on page Aged Parcel Management
     When Operator reschedule aged parcel on next 2 days
     Then API Operator verify order info after failed delivery aged parcel global inbounded and rescheduled on next 2 days
     Examples:
@@ -118,7 +118,7 @@ Feature: Aged Parcel Management
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper Support -> Aged Parcel Management
-    When operator load selection on page Aged Parcel Management
+    When Operator load selection on page Aged Parcel Management
     When Operator RTS aged parcel on next day
     Then API Operator verify order info after failed delivery aged parcel global inbounded and RTS-ed on next day
     Examples:
@@ -147,8 +147,8 @@ Feature: Aged Parcel Management
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper Support -> Aged Parcel Management
-    When operator load selection on page Aged Parcel Management
-    When Operator RTS aged parcel on next day
+    When Operator load selection on page Aged Parcel Management
+    When Operator RTS selected aged parcel on next day
     Then API Operator verify order info after failed delivery aged parcel global inbounded and RTS-ed on next day
     Examples:
       | Note   | hiptest-uid                              | orderType |

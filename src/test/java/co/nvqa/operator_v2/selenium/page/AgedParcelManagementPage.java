@@ -44,17 +44,18 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
     {
         searchTableByTrackingId(trackingId);
         clickActionButtonOnTable(1, ACTION_BUTTON_RESCHEDULE_NEXT_DAY);
+        waitUntilInvisibilityOfToast("Reschedule");
     }
 
     @SuppressWarnings("unchecked")
-    public void loadSelection(String trackingId, int agedDays)
+    public void loadSelection(String shipperName, String trackingId, int agedDays)
     {
         TestUtils.retryIfRuntimeExceptionOccurred(()->
         {
             if(!isElementExistFast(String.format("//button[contains(@aria-label,'%s')]", TestConstants.SHIPPER_V2_NAME)))
             {
-                inputListBox("Search or Select...", TestConstants.SHIPPER_V2_NAME);
-                sendKeys("//input[@aria-label='Aged Days']", String.valueOf(agedDays));
+                selectValueFromMdAutocomplete("Search or Select...", shipperName);
+                sendKeysByAriaLabel("Aged Days", String.valueOf(agedDays));
             }
 
             clickButtonLoadSelection();
@@ -62,10 +63,10 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
 
             if(isTableEmpty())
             {
-                click("//button[@aria-label='Edit Conditions']");
+                clickButtonByAriaLabel("Edit Conditions");
                 throw new RuntimeException(String.format("Order with tracking ID = '%s' is not listed on table.", trackingId));
             }
-        }, String.format("loadSelection - [Tracking ID = %s]", trackingId));
+        }, String.format("%s - [Tracking ID = %s]", getCurrentMethodName(), trackingId));
     }
 
     private void clickButtonLoadSelection()

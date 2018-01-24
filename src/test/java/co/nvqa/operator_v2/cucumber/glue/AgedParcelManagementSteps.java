@@ -27,12 +27,13 @@ public class AgedParcelManagementSteps extends AbstractSteps
         agedParcelManagementPage = new AgedParcelManagementPage(getWebDriver());
     }
 
-    @When("^operator load selection on page Aged Parcel Management$")
+    @When("^Operator load selection on page Aged Parcel Management$")
     public void operatorLoadSelectionOnPageAgedParcelManagement()
     {
         pause2s();
+        String shipperName = TestConstants.SHIPPER_V2_NAME;
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        agedParcelManagementPage.loadSelection(trackingId, -1);
+        agedParcelManagementPage.loadSelection(shipperName, trackingId, -1);
     }
 
     @Then("^Operator verify the aged parcel order is listed on Aged Parcels list$")
