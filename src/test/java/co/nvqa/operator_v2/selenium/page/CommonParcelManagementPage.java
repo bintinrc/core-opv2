@@ -46,7 +46,7 @@ public abstract class CommonParcelManagementPage extends SimplePage
     {
         searchTableByTrackingId(trackingId);
         clickActionButtonOnTable(1, ACTION_BUTTON_RTS);
-        pause1s();
+        pause500ms(); // To make sure the reasons is loaded
         selectValueFromMdSelectById("commons.reason", "Other Reason");
         sendKeysByAriaLabel("Description", String.format("Reason created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
         sendKeysByAriaLabel("Internal Notes", String.format("Internal notes created by OpV2 automation on %s.", CREATED_DATE_SDF.format(new Date())));
@@ -77,6 +77,8 @@ public abstract class CommonParcelManagementPage extends SimplePage
             case ACTION_RESCHEDULE_SELECTED: clickButtonByAriaLabel("Reschedule Selected"); break;
             case ACTION_DOWNLOAD_CSV_FILE: clickButtonByAriaLabel("Download CSV File"); break;
         }
+
+        pause500ms();
     }
 
     public void searchTableByTrackingId(String trackingId)
