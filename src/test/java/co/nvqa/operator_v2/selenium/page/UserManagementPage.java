@@ -69,6 +69,7 @@ public class UserManagementPage extends SimplePage {
     public void verifyEditedUserOnUserManagement(UserManagement userManagement) {
         sendKeys("//input[@type='text'][@ng-model='ctrl.keyword']", userManagement.getLastName());
         clickNvApiTextButtonByNameAndWaitUntilDone("Load Selected Users");
+        pause500ms();
         String actualRole = getTextOnTable(1, COLUMN_DATA_TITLE_ROLE);
         Assert.assertThat("Different Roles Returned", actualRole, Matchers.containsString(userManagement.getRoles()));
     }
