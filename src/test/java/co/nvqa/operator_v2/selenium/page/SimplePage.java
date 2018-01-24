@@ -542,7 +542,7 @@ public class SimplePage implements ListOfDateFormat
     {
         click(String.format("//md-select[@ng-model='%s']", mdSelectNgModel));
         pause100ms();
-        click(String.format("//div[@aria-hidden='false']//md-option[@value='%s']", value));
+        click(String.format("//div[@aria-hidden='false']//md-option[contains(@value,'%s')]", value));
         pause50ms();
     }
 
@@ -550,7 +550,7 @@ public class SimplePage implements ListOfDateFormat
     {
         click(String.format("//md-select[starts-with(@id, '%s')]", mdSelectId));
         pause100ms();
-        click(String.format("//div[@aria-hidden='false']//md-option[@value='%s' or contains(./div/text(), '%s')]", value, value));
+        click(String.format("//div[@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value));
         pause50ms();
     }
 
