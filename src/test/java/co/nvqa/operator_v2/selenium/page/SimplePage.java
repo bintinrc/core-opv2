@@ -267,16 +267,16 @@ public class SimplePage implements ListOfDateFormat
         return fileResult;
     }
 
-    public void setMdDatepicker(String ngModel, Date date)
+    public void setMdDatepicker(String mdDatepickerNgModel, Date date)
     {
-        sendKeys(String.format("//md-datepicker[@ng-model='%s']/div/input", ngModel), MD_DATEPICKER_SDF.format(date));
-        click(String.format("//md-datepicker[@ng-model='%s']/parent::*", ngModel));
+        sendKeys(String.format("//md-datepicker[@ng-model='%s']/div/input", mdDatepickerNgModel), MD_DATEPICKER_SDF.format(date));
+        click(String.format("//md-datepicker[@ng-model='%s']/parent::*", mdDatepickerNgModel));
     }
 
-    public void setMdDatepickerById(String mdPickerId, Date date)
+    public void setMdDatepickerById(String mdDatepickerId, Date date)
     {
-        sendKeys(String.format("//md-datepicker[@id='%s']/div/input", mdPickerId), MD_DATEPICKER_SDF.format(date));
-        click(String.format("//md-datepicker[@id='%s']/parent::*", mdPickerId));
+        sendKeys(String.format("//md-datepicker[@id='%s']/div/input", mdDatepickerId), MD_DATEPICKER_SDF.format(date));
+        click(String.format("//md-datepicker[@id='%s']/parent::*", mdDatepickerId));
     }
 
     public void waitUntilInvisibilityOfToast(String containsMessage)

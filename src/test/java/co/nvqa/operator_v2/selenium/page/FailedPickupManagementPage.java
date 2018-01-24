@@ -67,8 +67,7 @@ public class FailedPickupManagementPage extends SimplePage
 
     public void setRescheduleDate(Date date)
     {
-        sendKeys("//md-datepicker/div/input", MD_DATEPICKER_SDF.format(date));
-        click("//div[@label='commons.model.date']/label"); // To make sure date is change on Angular.
+        setMdDatepickerById("commons.model.date", date);
     }
 
     public void verifyOrderIsRemovedFromTableAfterReschedule(String trackingId)
@@ -89,10 +88,12 @@ public class FailedPickupManagementPage extends SimplePage
 
         switch(actionType)
         {
-            case ACTION_CANCEL_SELECTED: click("//button[@aria-label='Cancel Selected']"); break;
-            case ACTION_RESCHEDULE_SELECTED: click("//button[@aria-label='Reschedule Selected']"); break;
-            case ACTION_DOWNLOAD_CSV_FILE: click("//button[@aria-label='Download CSV File']"); break;
+            case ACTION_CANCEL_SELECTED: clickButtonByAriaLabel("Cancel Selected"); break;
+            case ACTION_RESCHEDULE_SELECTED: clickButtonByAriaLabel("Reschedule Selected"); break;
+            case ACTION_DOWNLOAD_CSV_FILE: clickButtonByAriaLabel("Download CSV File"); break;
         }
+
+        pause500ms();
     }
 
     public void searchTableByTrackingId(String trackingId)
