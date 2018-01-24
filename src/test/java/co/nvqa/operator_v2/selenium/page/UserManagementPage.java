@@ -64,6 +64,7 @@ public class UserManagementPage extends SimplePage {
             sendKeysById("email", userManagement.getEmail());
         }
         selectValueFromMdAutocomplete("Search Role To Add", userManagement.getRoles());
+        pause(20_000);
     }
 
     public void verifyEditedUserOnUserManagement(UserManagement userManagement) {
