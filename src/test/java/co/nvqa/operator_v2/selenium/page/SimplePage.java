@@ -177,20 +177,20 @@ public class SimplePage implements ListOfDateFormat
     {
         WebElement we = findElementByXpath(xpathExpression);
         we.clear();
-        pause200ms();
+        pause300ms();
         we.sendKeys(keysToSend);
-        pause200ms();
+        pause300ms();
     }
 
     public void sendKeysAndEnter(String xpathExpression, CharSequence... keysToSend)
     {
         WebElement we = findElementByXpath(xpathExpression);
         we.clear();
-        pause200ms();
+        pause300ms();
         we.sendKeys(keysToSend);
-        pause200ms();
+        pause300ms();
         we.sendKeys(Keys.RETURN);
-        pause200ms();
+        pause300ms();
     }
 
     public void sendKeysById(String id, CharSequence... keysToSend)
