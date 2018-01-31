@@ -136,6 +136,13 @@ public class ApiOperatorPortalSteps extends StandardApiOperatorPortalSteps<Scena
         super.apiOperatorVerifyOrderInfoAfterGlobalInbound();
     }
 
+    @Given("^API Operator get order details$")
+    @Override
+    public void apiOperatorGetOrderDetails()
+    {
+        super.apiOperatorGetOrderDetails();
+    }
+
     @Given("^API Operator verify order info after Van Inbound$")
     @Override
     public void apiOperatorVerifyOrderInfoAfterVanInbound()
