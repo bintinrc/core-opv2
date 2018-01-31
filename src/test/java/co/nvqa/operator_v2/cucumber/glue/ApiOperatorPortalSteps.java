@@ -80,6 +80,13 @@ public class ApiOperatorPortalSteps extends StandardApiOperatorPortalSteps<Scena
         super.apiOperatorGlobalInboundParcelUsingDataBelow(dataTable);
     }
 
+    @Given("^API Operator Outbound Scan parcel using data below:$")
+    @Override
+    public void apiOperatorOutboundParcelUsingDataBelow(DataTable dataTable)
+    {
+        super.apiOperatorOutboundParcelUsingDataBelow(dataTable);
+    }
+
     @Given("^API Operator Global Inbound multiple parcels using data below:$")
     @Override
     public void apiOperatorGlobalInboundMultipleParcelsUsingDataBelow(DataTable dataTable)

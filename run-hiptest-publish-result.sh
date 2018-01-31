@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # reload RVM & hiptest-publisher
-source ~/.rvm/scripts/rvm
+#source ~/.rvm/scripts/rvm
 
 hiptest-publisher \
   --config-file hiptest-publisher.config \

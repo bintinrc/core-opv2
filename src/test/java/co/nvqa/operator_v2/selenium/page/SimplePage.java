@@ -195,17 +195,27 @@ public class SimplePage implements ListOfDateFormat
 
     public void sendKeysById(String id, CharSequence... keysToSend)
     {
-        sendKeys(String.format("//*[starts-with(@id, '%s')]", id), keysToSend);
+        sendKeys(String.format("//*[self::input or self::textarea][starts-with(@id, '%s')]", id), keysToSend);
     }
 
-    public void sendKeysByName(String id, CharSequence... keysToSend)
+    public void sendKeysByIdAlt(String id, CharSequence... keysToSend)
     {
-        sendKeys(String.format("//*[starts-with(@name, '%s')]", id), keysToSend);
+        sendKeys(String.format("//*[self::input or self::textarea][starts-with(@id, '%s')][@aria-hidden='false']", id), keysToSend);
+    }
+
+    public void sendKeysByName(String name, CharSequence... keysToSend)
+    {
+        sendKeys(String.format("//*[self::input or self::textarea][starts-with(@name, '%s')]", name), keysToSend);
     }
 
     public void sendKeysByAriaLabel(String ariaLabel, CharSequence... keysToSend)
     {
         sendKeys(String.format("//*[@aria-label='%s']", ariaLabel), keysToSend);
+    }
+
+    public void sendKeysAndEnterById(String id, CharSequence... keysToSend)
+    {
+        sendKeysAndEnter(String.format("//input[starts-with(@id, '%s')]", id), keysToSend);
     }
 
     public String getText(String xpathExpression)
