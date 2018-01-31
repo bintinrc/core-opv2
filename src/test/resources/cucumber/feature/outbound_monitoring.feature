@@ -62,7 +62,7 @@ Feature: Outbound Monitoring
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator Outbound Scan parcel using data below:
-      | outboundRequest | { "trackingId":"{{trackingId}}", "hubId":{hub-id} } |
+      | outboundRequest | { "hubId":{hub-id} } |
     And API Operator start the route
     And API Driver deliver the created parcel successfully
     Given Operator go to menu New Features -> Outbound Monitoring
