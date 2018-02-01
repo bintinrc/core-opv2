@@ -37,5 +37,22 @@ Feature: All Orders
       | C2C    | uid:7257ec3c-1efc-405f-bc7a-b2effc1362f0 | C2C       |
       | Return | uid:85546b4d-7586-4658-a4e1-02b3406099cb | Return    |
 
+  Scenario: Operator find multiple orders with CSV on All Orders page (uid:932287da-cf04-471e-b056-e3c44c233677)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create multiple Order V2 Parcel using data below:
+      | numberOfOrder     | 3       |
+      | generateFromAndTo | RANDOM |
+      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    When API Operator get order details
+    When Operator go to menu Order -> All Orders
+    When Operator find multiple orders by uploading CSV on All Orders page
+    Then Operator verify all orders in CSV is found on All Orders page with correct info
+
+  Scenario: Operator uploads CSV that contains invalid Tracking ID on All Orders page (uid:db38db19-9d75-46cb-a1ec-339576a14f74)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Order -> All Orders
+    When Operator uploads CSV that contains invalid Tracking ID on All Orders page
+    Then Operator verify that the page failed to find the orders inside the CSV that contains invalid Tracking IDS on All Orders page
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

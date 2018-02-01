@@ -3,13 +3,19 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
+import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
+import java.io.File;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -122,6 +128,83 @@ public class AllOrdersPage extends SimplePage
         verifyFileDownloadedSuccessfully(SAMPLE_CSV_FILENAME, "NVSGNINJA000000001\nNVSGNINJA000000002\nNVSGNINJA000000003");
     }
 
+    public void findOrdersWithCsv(List<String> listOfTrackingId)
+    {
+        clickNvIconTextButtonByName("container.order.list.find-orders-with-csv");
+        waitUntilVisibilityOfElementLocated("//md-dialog//h2[text()='Find Orders with CSV']");
+
+        String csvContents = listOfTrackingId.stream().collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
+        File csvFile = createFile(String.format("find-orders-with-csv_%s.csv", generateDateUniqueString()), csvContents);
+
+        sendKeysByAriaLabel("Choose", csvFile.getAbsolutePath());
+        waitUntilVisibilityOfElementLocated(String.format("//span[contains(text(), '%s')]", csvFile.getName()));
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.upload");
+    }
+
+    public void verifyAllOrdersInCsvIsFoundWithCorrectInfo(List<OrderRequestV2> listOfOrderRequestV2, List<Order> listOfOrderDetails)
+    {
+        pause100ms();
+        String toastTopText = getToastTopText();
+        Assert.assertEquals("Toast message is different.", "Matches with file shown in table", toastTopText);
+        waitUntilInvisibilityOfToast("Matches with file shown in table", false);
+
+        for(OrderRequestV2 orderRequestV2 : listOfOrderRequestV2)
+        {
+            String createdOrderTrackingId = orderRequestV2.getTrackingId();
+            Optional<Order> matchedOrderDetailsOptional = listOfOrderDetails.stream().filter(o -> o.getTrackingId().equals(createdOrderTrackingId)).findFirst();
+
+            if(matchedOrderDetailsOptional.isPresent())
+            {
+                Order matchedOrderDetails = matchedOrderDetailsOptional.get();
+                verifyOrderInfoOnTableOrderIsCorrect(orderRequestV2, matchedOrderDetails);
+            }
+            else
+            {
+                throw new NvTestRuntimeException(String.format("Order details for Tracking ID = '%s' not found.", createdOrderTrackingId));
+            }
+        }
+    }
+
+    public void verifyInvalidTrackingIdsIsFailedToFind(List<String> listOfInvalidTrackingId)
+    {
+        List<WebElement> listOfWe = findElementsByXpath("//div[@ng-repeat='error in ctrl.payload.errors track by $index']");
+        List<String> listOfActualInvalidTrackingId = listOfWe.stream().map(we -> we.getText().split("\\.")[1].trim()).collect(Collectors.toList());
+        Assert.assertThat("Expected Tracking ID not found.", listOfActualInvalidTrackingId, Matchers.hasItems(listOfInvalidTrackingId.toArray(new String[]{})));
+    }
+
+    public void verifyOrderInfoOnTableOrderIsCorrect(OrderRequestV2 orderRequestV2, Order order)
+    {
+        String trackingId = orderRequestV2.getTrackingId();
+        filterTableOrderByTrackingId(trackingId);
+
+        String actualTrackingId = getTextOnTableOrder(1, COLUMN_CLASS_TRACKING_ID_ON_TABLE_ORDER);
+        String actualFromName = getTextOnTableOrder(1, COLUMN_CLASS_FROM_NAME_ON_TABLE_ORDER);
+        String actualFromContact = getTextOnTableOrder(1, COLUMN_CLASS_FROM_CONTACT_ON_TABLE_ORDER);
+        String actualFromAddress = getTextOnTableOrder(1, COLUMN_CLASS_FROM_ADDRESS_ON_TABLE_ORDER);
+        String actualFromPostcode = getTextOnTableOrder(1, COLUMN_CLASS_FROM_POSTCODE_ON_TABLE_ORDER);
+        String actualToName = getTextOnTableOrder(1, COLUMN_CLASS_TO_NAME_ON_TABLE_ORDER);
+        String actualToContact = getTextOnTableOrder(1, COLUMN_CLASS_TO_CONTACT_ON_TABLE_ORDER);
+        String actualToAddress = getTextOnTableOrder(1, COLUMN_CLASS_TO_ADDRESS_ON_TABLE_ORDER);
+        String actualToPostcode = getTextOnTableOrder(1, COLUMN_CLASS_TO_POSTCODE_ON_TABLE_ORDER);
+        String actualGranularStatus = getTextOnTableOrder(1, COLUMN_CLASS_GRANULAR_STATUS_ON_TABLE_ORDER);
+
+        Assert.assertEquals("Tracking ID", trackingId, actualTrackingId);
+
+        Assert.assertEquals("From Name", orderRequestV2.getFromName(), actualFromName);
+        Assert.assertEquals("From Contact", orderRequestV2.getFromContact(), actualFromContact);
+        Assert.assertThat("From Address", actualFromAddress, Matchers.containsString(orderRequestV2.getFromAddress1()));
+        Assert.assertThat("From Address", actualFromAddress, Matchers.containsString(orderRequestV2.getFromAddress2()));
+        Assert.assertEquals("From Postcode", orderRequestV2.getFromPostcode(), actualFromPostcode);
+
+        Assert.assertEquals("To Name", orderRequestV2.getToName(), actualToName);
+        Assert.assertEquals("To Contact", orderRequestV2.getToContact(), actualToContact);
+        Assert.assertThat("To Address", actualToAddress, Matchers.containsString(orderRequestV2.getToAddress1()));
+        Assert.assertThat("To Address", actualToAddress, Matchers.containsString(orderRequestV2.getToAddress2()));
+        Assert.assertEquals("To Postcode", orderRequestV2.getToPostcode(), actualToPostcode);
+
+        Assert.assertThat("Granular Status", actualGranularStatus, Matchers.equalToIgnoringCase(order.getGranularStatus().replaceFirst("_", " ")));
+    }
+
     public void verifyOrderInfoIsCorrect(OrderRequestV2 orderRequestV2, Order order)
     {
         String mainWindowHandle = getwebDriver().getWindowHandle();
@@ -187,39 +270,6 @@ public class AllOrdersPage extends SimplePage
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
-    }
-
-    public void verifyOrderInfoOnTableOrderIsCorrect(OrderRequestV2 orderRequestV2, Order order)
-    {
-        String trackingId = orderRequestV2.getTrackingId();
-        filterTableOrderByTrackingId(trackingId);
-
-        String actualTrackingId = getTextOnTableOrder(1, COLUMN_CLASS_TRACKING_ID_ON_TABLE_ORDER);
-        String actualFromName = getTextOnTableOrder(1, COLUMN_CLASS_FROM_NAME_ON_TABLE_ORDER);
-        String actualFromContact = getTextOnTableOrder(1, COLUMN_CLASS_FROM_CONTACT_ON_TABLE_ORDER);
-        String actualFromAddress = getTextOnTableOrder(1, COLUMN_CLASS_FROM_ADDRESS_ON_TABLE_ORDER);
-        String actualFromPostcode = getTextOnTableOrder(1, COLUMN_CLASS_FROM_POSTCODE_ON_TABLE_ORDER);
-        String actualToName = getTextOnTableOrder(1, COLUMN_CLASS_TO_NAME_ON_TABLE_ORDER);
-        String actualToContact = getTextOnTableOrder(1, COLUMN_CLASS_TO_CONTACT_ON_TABLE_ORDER);
-        String actualToAddress = getTextOnTableOrder(1, COLUMN_CLASS_TO_ADDRESS_ON_TABLE_ORDER);
-        String actualToPostcode = getTextOnTableOrder(1, COLUMN_CLASS_TO_POSTCODE_ON_TABLE_ORDER);
-        String actualGranularStatus = getTextOnTableOrder(1, COLUMN_CLASS_GRANULAR_STATUS_ON_TABLE_ORDER);
-
-        Assert.assertEquals("Tracking ID", trackingId, actualTrackingId);
-
-        Assert.assertEquals("From Name", orderRequestV2.getFromName(), actualFromName);
-        Assert.assertEquals("From Contact", orderRequestV2.getFromContact(), actualFromContact);
-        Assert.assertThat("From Address", actualFromAddress, Matchers.containsString(orderRequestV2.getFromAddress1()));
-        Assert.assertThat("From Address", actualFromAddress, Matchers.containsString(orderRequestV2.getFromAddress2()));
-        Assert.assertEquals("From Postcode", orderRequestV2.getFromPostcode(), actualFromPostcode);
-
-        Assert.assertEquals("To Name", orderRequestV2.getToName(), actualToName);
-        Assert.assertEquals("To Contact", orderRequestV2.getToContact(), actualToContact);
-        Assert.assertThat("To Address", actualToAddress, Matchers.containsString(orderRequestV2.getToAddress1()));
-        Assert.assertThat("To Address", actualToAddress, Matchers.containsString(orderRequestV2.getToAddress2()));
-        Assert.assertEquals("To Postcode", orderRequestV2.getToPostcode(), actualToPostcode);
-
-        Assert.assertThat("Granular Status", actualGranularStatus, Matchers.equalToIgnoringCase(order.getGranularStatus().replaceFirst("_", " ")));
     }
 
     public void verifyDeliveryTimingIsUpdatedSuccessfully(ChangeDeliveryTiming changeDeliveryTiming)
@@ -330,8 +380,6 @@ public class AllOrdersPage extends SimplePage
         pause100ms();
         getwebDriver().switchTo().window(mainWindowHandle); // Force selenium to go back to the last active tab/window if new tab/window is opened.
         waitUntilInvisibilityOfElementLocated(searchButtonXpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
-
-//        clickNvApiTextButtonByNameAndWaitUntilDone("commons.search");
     }
 
     public void filterTableOrderByTrackingId(String trackingId)

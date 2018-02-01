@@ -37,6 +37,16 @@ public class SimplePage implements ListOfDateFormat
         this.webDriver = webDriver;
     }
 
+    public File createFile(String filename, StringBuilder contents)
+    {
+        return TestUtils.createFile(filename, contents);
+    }
+
+    public File createFile(String filename, String contents)
+    {
+        return TestUtils.createFile(filename, contents);
+    }
+
     public boolean isBlank(String str)
     {
         return StandardTestUtils.isBlank(str);
@@ -320,6 +330,29 @@ public class SimplePage implements ListOfDateFormat
         String xpath = "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div";
         waitUntilVisibilityOfElementLocated(xpath);
         return findElementsByXpath(xpath);
+    }
+
+    public WebElement getToastTop()
+    {
+        String xpath = "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div";
+        return waitUntilVisibilityOfElementLocated(xpath);
+    }
+
+    public String getToastTopText()
+    {
+        String text = null;
+
+        try
+        {
+            WebElement webElement = getToastTop();
+            text = webElement.getText();
+        }
+        catch(RuntimeException ex)
+        {
+            NvLogger.warn("Failed to get text from element Toast Top.");
+        }
+
+        return text;
     }
 
     public WebElement findElementByXpath(String xpathExpression)
