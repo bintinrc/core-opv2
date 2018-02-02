@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
  */
 public class AllOrdersPage extends SimplePage
 {
+    protected static final int ACTION_MANUALLY_COMPLETE_SELECTED = 1;
+
     private static final String SAMPLE_CSV_FILENAME = "find-orders-with-csv.csv";
 
     private static final String MD_VIRTUAL_REPEAT_TABLE_ORDER = "order in getTableData()";
@@ -37,9 +39,7 @@ public class AllOrdersPage extends SimplePage
     public static final String COLUMN_CLASS_TO_POSTCODE_ON_TABLE_ORDER = "to-postcode";
     public static final String COLUMN_CLASS_GRANULAR_STATUS_ON_TABLE_ORDER = "_granular-status";
 
-
-    private static final String NG_REPEAT_TABLE_EVENT = "event in getTableData()";
-    public static final String COLUMN_CLASS_NAME_ON_TABLE_EVENT = "name";
+    private EditOrderPage editOrderPage;
 
     public enum Category
     {
@@ -111,9 +111,10 @@ public class AllOrdersPage extends SimplePage
         }
     }
 
-    public AllOrdersPage(WebDriver webDriver)
+    public AllOrdersPage(WebDriver webDriver, EditOrderPage editOrderPage)
     {
         super(webDriver);
+        this.editOrderPage = editOrderPage;
     }
 
     public void downloadSampleCsvFile()
@@ -214,57 +215,36 @@ public class AllOrdersPage extends SimplePage
         try
         {
             switchToNewOpenedWindow(mainWindowHandle);
-            waitUntilInvisibilityOfLoadingOrder();
+            editOrderPage.waitUntilInvisibilityOfLoadingOrder();
+            editOrderPage.verifyOrderInfoIsCorrect(orderRequestV2, order);
+        }
+        finally
+        {
+            closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
+        }
+    }
 
-            String actualTrackingId = getText("//label[text()='Tracking ID']/following-sibling::h3");
-            String actualStatus = getText("//label[text()='Status']/following-sibling::p");
-            String actualGranularStatus = getText("//label[text()='Granular']/following-sibling::p");
-            String actualShipperId = getText("//label[text()='Shipper ID']/following-sibling::p");
-            String actualOrderType = getText("//label[text()='Order Type']/following-sibling::p");
-            String actualSize = getText("//label[text()='Size']/following-sibling::p");
-            String actualWeight = getText("//label[text()='Weight']/following-sibling::p");
+    public void forceSuccessSingleOrder(String trackingId)
+    {
+        filterTableOrderByTrackingId(trackingId);
+        selectAllShown("ctrl.ordersTableParam");
+        selectAction(ACTION_MANUALLY_COMPLETE_SELECTED);
+        waitUntilVisibilityOfElementLocated("//md-dialog//div[contains(text(), \"Proceed to set the order status to 'Completed'?\")]");
+        clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.complete-order");
+        waitUntilInvisibilityOfToast("The order has been completed");
+    }
 
-            Assert.assertEquals("Tracking ID", expectedTrackingId, actualTrackingId);
-            Assert.assertThat("Status", actualStatus, Matchers.equalToIgnoringCase(order.getStatus()));
-            Assert.assertThat("Granular Status", actualGranularStatus, Matchers.equalToIgnoringCase(order.getGranularStatus().replaceFirst("_", " ")));
-            Assert.assertThat("Shipper ID", actualShipperId, Matchers.containsString(String.valueOf(orderRequestV2.getShipperId())));
-            Assert.assertEquals("Order Type", orderRequestV2.getType(), actualOrderType);
-            Assert.assertEquals("Size", order.getParcelSize(), actualSize);
-            Assert.assertEquals("Weight", order.getWeight()+" kg", actualWeight);
+    public void verifyOrderIsForceSuccessedSuccessfully(OrderRequestV2 orderRequestV2)
+    {
+        String mainWindowHandle = getwebDriver().getWindowHandle();
+        String trackingId = orderRequestV2.getTrackingId();
+        specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, trackingId);
 
-            /**
-             * Pickup
-             */
-            String actualPickupStatus = getText("//div[h5[text()='Pickup']]/following-sibling::div/h5[contains(text(), Status)]").split(":")[1].trim();
-            String actualFromName = getText("//div[@id='pickup-details']/div[2]/div/div/div/div/div/h5");
-            String actualFromEmail = getText("//div[@id='pickup-details']/div[2]/div/div/div[2]/div/span");
-            String actualFromContact = getText("//div[@id='pickup-details']/div[2]/div/div/div[2]/div[2]/span");
-            String actualFromAddress = getText("//div[@id='pickup-details']/div[2]/div/div/div[2]/div[3]/span");
-
-            Transaction pickupTransaction = order.getTransactions().get(0);
-            Assert.assertEquals("Pickup Status", pickupTransaction.getStatus(), actualPickupStatus);
-            Assert.assertEquals("From Name", orderRequestV2.getFromName(), actualFromName);
-            Assert.assertEquals("From Email", orderRequestV2.getFromEmail(), actualFromEmail);
-            Assert.assertEquals("From Contact", orderRequestV2.getFromContact(), actualFromContact);
-            Assert.assertThat("From Address", actualFromAddress, Matchers.containsString(orderRequestV2.getFromAddress1()));
-            Assert.assertThat("From Address", actualFromAddress, Matchers.containsString(orderRequestV2.getFromAddress2()));
-
-            /**
-             * Delivery
-             */
-            String actualDeliveryStatus = getText("//div[h5[text()='Delivery']]/following-sibling::div/h5[contains(text(), Status)]").split(":")[1].trim();
-            String actualToName = getText("//div[@id='delivery-details']/div[2]/div/div/div/div/div/h5");
-            String actualToEmail = getText("//div[@id='delivery-details']/div[2]/div/div/div[2]/div/span");
-            String actualToContact = getText("//div[@id='delivery-details']/div[2]/div/div/div[2]/div[2]/span");
-            String actualToAddress = getText("//div[@id='delivery-details']/div[2]/div/div/div[2]/div[3]/span");
-
-            Transaction deliveryTransaction = order.getTransactions().get(1);
-            Assert.assertEquals("Delivery Status", deliveryTransaction.getStatus(), actualDeliveryStatus);
-            Assert.assertEquals("To Name", orderRequestV2.getToName(), actualToName);
-            Assert.assertEquals("To Email", orderRequestV2.getToEmail(), actualToEmail);
-            Assert.assertEquals("To Contact", orderRequestV2.getToContact(), actualToContact);
-            Assert.assertThat("To Address", actualToAddress, Matchers.containsString(orderRequestV2.getToAddress1()));
-            Assert.assertThat("To Address", actualToAddress, Matchers.containsString(orderRequestV2.getToAddress2()));
+        try
+        {
+            switchToNewOpenedWindow(mainWindowHandle);
+            editOrderPage.waitUntilInvisibilityOfLoadingOrder();
+            editOrderPage.verifyOrderIsForceSuccessedSuccessfully(orderRequestV2);
         }
         finally
         {
@@ -280,7 +260,7 @@ public class AllOrdersPage extends SimplePage
         {
             searchTrackingId(changeDeliveryTiming.getTrackingId());
             switchToNewOpenedWindow(mainWindowHandle);
-            waitUntilInvisibilityOfLoadingOrder();
+            editOrderPage.waitUntilInvisibilityOfLoadingOrder();
 
             String actualStartDate = getText("//div[@id='delivery-details']//div[label/text()='Start Date / Time']/p");
             String actualEndDate = getText("//div[@id='delivery-details']//div[label/text()='End Date / Time']/p");
@@ -348,16 +328,25 @@ public class AllOrdersPage extends SimplePage
         {
             searchTrackingId(trackingId);
             switchToNewOpenedWindow(mainWindowHandle);
-            waitUntilVisibilityOfElementLocated("//div[text()='Edit Order']");
-
-            pause3s();
-            String actualLatestEvent = getTextOnTableEvent(1, COLUMN_CLASS_NAME_ON_TABLE_EVENT);
-            Assert.assertTrue("Different Result Returned", actualLatestEvent.contains("Van Inbound Scan"));
+            editOrderPage.waitUntilInvisibilityOfLoadingOrder();
+            editOrderPage.verifyInboundIsSucceed();
         }
         finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
+    }
+
+    public void selectAction(int actionType)
+    {
+        click("//span[text()='Apply Action']");
+
+        switch(actionType)
+        {
+            case ACTION_MANUALLY_COMPLETE_SELECTED: clickButtonByAriaLabel("Manually Complete Selected"); break;
+        }
+
+        pause500ms();
     }
 
     public void searchTrackingId(String trackingId)
@@ -431,19 +420,8 @@ public class AllOrdersPage extends SimplePage
         getwebDriver().switchTo().window(mainWindowHandle);
     }
 
-    public void waitUntilInvisibilityOfLoadingOrder()
-    {
-        waitUntilInvisibilityOfElementLocated("//md-content[@loading-message='Loading order...']/div[contains(@class, 'loading')]");
-        pause100ms();
-    }
-
     public String getTextOnTableOrder(int rowNumber, String columnDataClass)
     {
         return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT_TABLE_ORDER);
-    }
-
-    public String getTextOnTableEvent(int rowNumber, String columnDataClass)
-    {
-        return getTextOnTableWithNgRepeat(rowNumber, columnDataClass, NG_REPEAT_TABLE_EVENT);
     }
 }

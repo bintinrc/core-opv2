@@ -54,5 +54,19 @@ Feature: All Orders
     When Operator uploads CSV that contains invalid Tracking ID on All Orders page
     Then Operator verify that the page failed to find the orders inside the CSV that contains invalid Tracking IDS on All Orders page
 
+    Scenario: Operator Force Success single order on All Orders page (uid:59c20f59-9583-4b91-819b-f73f47c765c9)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create Order V2 Parcel using data below:
+      | generateFromAndTo | RANDOM |
+      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    When API Operator get order details
+    When Operator go to menu Order -> All Orders
+    When Operator find multiple orders by uploading CSV on All Orders page
+    Then Operator verify all orders in CSV is found on All Orders page with correct info
+    When Operator Force Success single order on All Orders page
+    When Operator refresh page
+    Then Operator verify the order is Force Successed successfully
+    Then API Operator verify order info after Force Successed
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

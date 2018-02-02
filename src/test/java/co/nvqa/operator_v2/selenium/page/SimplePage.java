@@ -27,6 +27,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class SimplePage implements ListOfDateFormat
 {
+    public static final int WAIT_1_SECOND = 1;
+    public static final int WAIT_2_SECONDS = 2;
+    public static final int WAIT_3_SECONDS = 3;
+    public static final int WAIT_4_SECONDS = 4;
+    public static final int WAIT_5_SECONDS = 5;
     public static final int FAST_WAIT_IN_SECONDS = 2;
     public static final int DEFAULT_MAX_RETRY_FOR_STALE_ELEMENT_REFERENCE = 5;
     public static final int DEFAULT_MAX_RETRY_FOR_FILE_VERIFICATION = 10;
@@ -641,6 +646,31 @@ public class SimplePage implements ListOfDateFormat
         return isElementExist(xpathExpression, FAST_WAIT_IN_SECONDS);
     }
 
+    public boolean isElementExistWait1Second(String xpathExpression)
+    {
+        return isElementExist(xpathExpression, WAIT_1_SECOND);
+    }
+
+    public boolean isElementExistWait2Seconds(String xpathExpression)
+    {
+        return isElementExist(xpathExpression, WAIT_2_SECONDS);
+    }
+
+    public boolean isElementExistWait3Seconds(String xpathExpression)
+    {
+        return isElementExist(xpathExpression, WAIT_3_SECONDS);
+    }
+
+    public boolean isElementExistWait4Seconds(String xpathExpression)
+    {
+        return isElementExist(xpathExpression, WAIT_4_SECONDS);
+    }
+
+    public boolean isElementExistWait5Seconds(String xpathExpression)
+    {
+        return isElementExist(xpathExpression, WAIT_5_SECONDS);
+    }
+
     public boolean isElementExist(String xpathExpression, long timeoutInSeconds)
     {
         WebElement we = null;
@@ -673,6 +703,16 @@ public class SimplePage implements ListOfDateFormat
         pause200ms();
     }
 
+    public void clearSearchTableCustom1(String columnClass)
+    {
+        String xpathExpression = String.format("//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/button[@aria-hidden='true']", columnClass);
+
+        if(isElementExistWait1Second(xpathExpression))
+        {
+            click(xpathExpression);
+        }
+    }
+
     public boolean isTableEmpty()
     {
         boolean isEmpty = false;
@@ -688,6 +728,14 @@ public class SimplePage implements ListOfDateFormat
         }
 
         return isEmpty;
+    }
+
+    public void selectAllShown(String nvTableParam)
+    {
+        click(String.format("//nv-table[@param='%s']//button[@aria-label='Selection']", nvTableParam));
+        pause100ms();
+        clickButtonByAriaLabel("Select All Shown");
+        pause100ms();
     }
 
     public void waitUntilInvisibilityOfElementLocated(String xpath)

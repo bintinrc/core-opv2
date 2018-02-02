@@ -4,6 +4,7 @@ import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.ChangeDeliveryTimingsPage;
+import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import com.google.inject.Inject;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
@@ -22,7 +23,9 @@ import java.util.Map;
 
 @ScenarioScoped
 public class ChangeDeliveryTimingsSteps extends AbstractSteps {
+
     private ChangeDeliveryTimingsPage changeDeliveryTimingsPage;
+    private EditOrderPage editOrderPage;
     private AllOrdersPage allOrdersPage;
 
     @Inject
@@ -33,7 +36,8 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
     @Override
     public void init() {
         changeDeliveryTimingsPage = new ChangeDeliveryTimingsPage(getWebDriver());
-        allOrdersPage = new AllOrdersPage(getWebDriver());
+        editOrderPage = new EditOrderPage(getWebDriver());
+        allOrdersPage = new AllOrdersPage(getWebDriver(), editOrderPage);
     }
 
     @When("^Operator click on Download Button for Sample CSV File of Change Delivery Timings' sample$")

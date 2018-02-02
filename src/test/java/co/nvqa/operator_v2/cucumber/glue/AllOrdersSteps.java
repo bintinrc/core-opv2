@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
+import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import com.google.inject.Inject;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class AllOrdersSteps extends AbstractSteps
 {
     private AllOrdersPage allOrdersPage;
+    private EditOrderPage editOrderPage;
 
     @Inject
     public AllOrdersSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
@@ -30,7 +32,8 @@ public class AllOrdersSteps extends AbstractSteps
     @Override
     public void init()
     {
-        allOrdersPage = new AllOrdersPage(getWebDriver());
+        editOrderPage = new EditOrderPage(getWebDriver());
+        allOrdersPage = new AllOrdersPage(getWebDriver(), editOrderPage);
     }
 
     @When("^Operator download sample CSV file for \"Find Orders with CSV\" on All Orders page$")
@@ -122,5 +125,19 @@ public class AllOrdersSteps extends AbstractSteps
     {
         List<String> listOfInvalidTrackingId = get("listOfInvalidTrackingId");
         allOrdersPage.verifyInvalidTrackingIdsIsFailedToFind(listOfInvalidTrackingId);
+    }
+
+    @When("^Operator Force Success single order on All Orders page$")
+    public void operatorForceSuccessSingleOrderOnAllOrdersPage()
+    {
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        allOrdersPage.forceSuccessSingleOrder(trackingId);
+    }
+
+    @Then("^Operator verify the order is Force Successed successfully$")
+    public void operatorVerifyTheOrderIsForceSuccessedSuccessfully()
+    {
+        OrderRequestV2 orderRequestV2 = get(KEY_CREATED_ORDER);
+        allOrdersPage.verifyOrderIsForceSuccessedSuccessfully(orderRequestV2);
     }
 }

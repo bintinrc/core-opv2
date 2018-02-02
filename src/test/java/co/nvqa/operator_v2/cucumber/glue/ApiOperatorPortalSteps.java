@@ -73,6 +73,13 @@ public class ApiOperatorPortalSteps extends StandardApiOperatorPortalSteps<Scena
         super.apiOperatorAddReservationPickUpToTheRoute();
     }
 
+    @Given("^API Operator pulled out parcel from route$")
+    @Override
+    public void apiOperatorPulledOutParcelFromRoute()
+    {
+        super.apiOperatorPulledOutParcelFromRoute();
+    }
+
     @Given("^API Operator Global Inbound parcel using data below:$")
     @Override
     public void apiOperatorGlobalInboundParcelUsingDataBelow(DataTable dataTable)
@@ -162,6 +169,13 @@ public class ApiOperatorPortalSteps extends StandardApiOperatorPortalSteps<Scena
     public void apiOperatorVerifyOrderInfoAfterDelivery(String expectedDeliveryStatus)
     {
         super.apiOperatorVerifyOrderInfoAfterDelivery(expectedDeliveryStatus);
+    }
+
+    @Given("^API Operator verify order info after Force Successed$")
+    @Override
+    public void apiOperatorVerifyOrderInfoAfterForceSuccessed()
+    {
+        super.apiOperatorVerifyOrderInfoAfterForceSuccessed();
     }
 
     @Given("^API Operator assign delivery waypoint of an order to DP with ID = \"([^\"]*)\"$")

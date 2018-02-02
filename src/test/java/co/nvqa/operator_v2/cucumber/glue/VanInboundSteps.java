@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
+import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage;
 import co.nvqa.operator_v2.selenium.page.VanInboundPage;
 import com.google.inject.Inject;
@@ -16,6 +17,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 @ScenarioScoped
 public class VanInboundSteps extends AbstractSteps {
     private VanInboundPage vanInboundPage;
+    private EditOrderPage editOrderPage;
     private AllOrdersPage allOrdersPage;
     private RouteLogsPage routeLogsPage;
 
@@ -27,7 +29,8 @@ public class VanInboundSteps extends AbstractSteps {
     @Override
     public void init() {
         vanInboundPage = new VanInboundPage(getWebDriver());
-        allOrdersPage = new AllOrdersPage(getWebDriver());
+        editOrderPage = new EditOrderPage(getWebDriver());
+        allOrdersPage = new AllOrdersPage(getWebDriver(), editOrderPage);
         routeLogsPage = new RouteLogsPage(getWebDriver());
     }
 
