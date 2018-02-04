@@ -68,5 +68,41 @@ Feature: All Orders
     Then Operator verify the order is Force Successed successfully
     Then API Operator verify order info after Force Successed
 
+#  @ArchiveRoute
+#  Scenario: Operator RTS failed delivery order on All Orders page
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given API Shipper create Order V2 Parcel using data below:
+#      | generateFromAndTo | RANDOM |
+#      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
+#    Given API Operator Global Inbound parcel using data below:
+#      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+#    Given API Operator create new route using data below:
+#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+#    Given API Operator add parcel to the route using data below:
+#      | addParcelToRouteRequest | { "type":"DD" } |
+#    Given API Driver collect all his routes
+#    Given API Driver get pickup/delivery waypoint of the created order
+#    Given API Operator Van Inbound parcel
+#    Given API Operator start the route
+#    Given API Driver failed the delivery of the created parcel
+#    Given API Operator Global Inbound parcel using data below:
+#      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+#    When Operator go to menu Order -> All Orders
+#    When Operator find multiple orders by uploading CSV on All Orders page
+#    Then Operator verify all orders in CSV is found on All Orders page with correct info
+#    When Operator RTS single order on All Orders page
+
+  Scenario: Operator print Waybill for single order on All Orders page and verify the downloaded PDF contains correct info (uid:9f09610b-5abf-4bc8-bfea-aad8693158bf)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create Order V2 Parcel using data below:
+      | generateFromAndTo | RANDOM |
+      | v2OrderRequest    | { "type":"Normal", "cod_goods": 12.3, "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    When API Operator get order details
+    When Operator go to menu Order -> All Orders
+    When Operator find multiple orders by uploading CSV on All Orders page
+    Then Operator verify all orders in CSV is found on All Orders page with correct info
+    When Operator print Waybill for single order on All Orders page
+    Then Operator verify the printed waybill for single order on All Orders page contains correct info
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

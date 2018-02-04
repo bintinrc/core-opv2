@@ -140,4 +140,25 @@ public class AllOrdersSteps extends AbstractSteps
         OrderRequestV2 orderRequestV2 = get(KEY_CREATED_ORDER);
         allOrdersPage.verifyOrderIsForceSuccessedSuccessfully(orderRequestV2);
     }
+
+    @When("^Operator RTS single order on All Orders page$")
+    public void operatorRtsSingleOrderOnAllOrdersPage()
+    {
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        allOrdersPage.rtsSingleOrder(trackingId);
+    }
+
+    @When("Operator print Waybill for single order on All Orders page")
+    public void operatorPrintWaybillForSingleOrderOnAllOrdersPage()
+    {
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        allOrdersPage.printWaybill(trackingId);
+    }
+
+    @Then("^Operator verify the printed waybill for single order on All Orders page contains correct info$")
+    public void operatorVerifyThePrintedWaybillForSingleOrderOnAllOrdersPageContainsCorrectInfo()
+    {
+        OrderRequestV2 orderRequestV2 = get(KEY_CREATED_ORDER);
+        allOrdersPage.verifyWaybillContentsIsCorrect(orderRequestV2);
+    }
 }

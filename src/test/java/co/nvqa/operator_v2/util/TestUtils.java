@@ -300,9 +300,14 @@ public class TestUtils extends StandardTestUtils
 
     public static String getTextFromQrCodeImage(File qrCodeFile)
     {
+        return getTextFromBarcodeImage(qrCodeFile);
+    }
+
+    public static String getTextFromBarcodeImage(File barcodeFile)
+    {
         try
         {
-            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(ImageIO.read(new FileInputStream(qrCodeFile)))));
+            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(ImageIO.read(new FileInputStream(barcodeFile)))));
             Result qrCodeResult = new MultiFormatReader().decode(binaryBitmap);
             return qrCodeResult.getText();
         }

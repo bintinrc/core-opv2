@@ -1,10 +1,12 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.AirwayBill;
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
 import co.nvqa.commons.utils.NvTestRuntimeException;
+import co.nvqa.commons.utils.PdfUtils;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
+import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 public class AllOrdersPage extends SimplePage
 {
     protected static final int ACTION_MANUALLY_COMPLETE_SELECTED = 1;
+    protected static final int ACTION_SET_RTS_TO_SELECTED = 2;
 
     private static final String SAMPLE_CSV_FILENAME = "find-orders-with-csv.csv";
 
@@ -38,6 +41,8 @@ public class AllOrdersPage extends SimplePage
     public static final String COLUMN_CLASS_TO_ADDRESS_ON_TABLE_ORDER = "_to-address";
     public static final String COLUMN_CLASS_TO_POSTCODE_ON_TABLE_ORDER = "to-postcode";
     public static final String COLUMN_CLASS_GRANULAR_STATUS_ON_TABLE_ORDER = "_granular-status";
+
+    public static final String ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER = "container.order.list.print-waybill";
 
     private EditOrderPage editOrderPage;
 
@@ -252,6 +257,53 @@ public class AllOrdersPage extends SimplePage
         }
     }
 
+    public void rtsSingleOrder(String trackingId)
+    {
+        filterTableOrderByTrackingId(trackingId);
+        selectAllShown("ctrl.ordersTableParam");
+        selectAction(ACTION_SET_RTS_TO_SELECTED);
+    }
+
+    public void printWaybill(String trackingId)
+    {
+        filterTableOrderByTrackingId(trackingId);
+        clickActionButtonOnTable(1, ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER);
+        waitUntilInvisibilityOfToast("Attempting to download");
+        waitUntilInvisibilityOfToast("Downloading");
+    }
+
+    public void verifyWaybillContentsIsCorrect(OrderRequestV2 orderRequestV2)
+    {
+        String trackingId = orderRequestV2.getTrackingId();
+        String latestFilenameOfDownloadedPdf = getLatestDownloadedFilename("awb_"+trackingId);
+        verifyFileDownloadedSuccessfully(latestFilenameOfDownloadedPdf);
+        AirwayBill airwayBill = PdfUtils.getOrderInfoFromAirwayBill(TestConstants.TEMP_DIR + latestFilenameOfDownloadedPdf, 0);
+
+        Assert.assertEquals("Tracking ID", trackingId, airwayBill.getTrackingId());
+
+        Assert.assertEquals("From Name", orderRequestV2.getFromName(), airwayBill.getFromName());
+        Assert.assertEquals("From Contact", orderRequestV2.getFromContact(), airwayBill.getFromContact());
+        Assert.assertThat("From Address", airwayBill.getFromAddress(), Matchers.containsString(orderRequestV2.getFromAddress1()));
+        Assert.assertThat("From Address", airwayBill.getFromAddress(), Matchers.containsString(orderRequestV2.getFromAddress2()));
+        Assert.assertThat("Postcode In From Address", airwayBill.getFromAddress(), Matchers.containsString(orderRequestV2.getFromPostcode()));
+
+        Assert.assertEquals("To Name", orderRequestV2.getToName(), airwayBill.getToName());
+        Assert.assertEquals("To Contact", orderRequestV2.getToContact(), airwayBill.getToContact());
+        Assert.assertThat("To Address", airwayBill.getToAddress(), Matchers.containsString(orderRequestV2.getToAddress1()));
+        Assert.assertThat("To Address", airwayBill.getToAddress(), Matchers.containsString(orderRequestV2.getToAddress2()));
+        Assert.assertThat("Postcode In To Address", airwayBill.getToAddress(), Matchers.containsString(orderRequestV2.getToPostcode()));
+
+        Assert.assertEquals("COD", orderRequestV2.getCodGoods(), airwayBill.getCod());
+        Assert.assertEquals("Comments", orderRequestV2.getInstruction(), airwayBill.getComments());
+        TestUtils.getTextFromQrCodeImage(airwayBill.getTrackingIdQrCodeFile());
+
+        String actualQrCodeTrackingId = TestUtils.getTextFromQrCodeImage(airwayBill.getTrackingIdQrCodeFile());
+        Assert.assertEquals("Tracking ID - QR Code", trackingId, actualQrCodeTrackingId);
+
+        String actualBarcodeTrackingId = TestUtils.getTextFromQrCodeImage(airwayBill.getTrackingIdBarcodeFile());
+        Assert.assertEquals("Tracking ID - Barcode 128", trackingId, actualBarcodeTrackingId);
+    }
+
     public void verifyDeliveryTimingIsUpdatedSuccessfully(ChangeDeliveryTiming changeDeliveryTiming)
     {
         String mainWindowHandle = getwebDriver().getWindowHandle();
@@ -343,6 +395,7 @@ public class AllOrdersPage extends SimplePage
 
         switch(actionType)
         {
+            case ACTION_SET_RTS_TO_SELECTED: clickButtonByAriaLabel("Set RTS to Selected"); break;
             case ACTION_MANUALLY_COMPLETE_SELECTED: clickButtonByAriaLabel("Manually Complete Selected"); break;
         }
 
@@ -423,5 +476,10 @@ public class AllOrdersPage extends SimplePage
     public String getTextOnTableOrder(int rowNumber, String columnDataClass)
     {
         return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT_TABLE_ORDER);
+    }
+
+    public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
+    {
+        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT_TABLE_ORDER);
     }
 }
