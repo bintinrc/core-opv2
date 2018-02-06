@@ -20,6 +20,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 /**
  *
@@ -33,6 +34,13 @@ public class SimplePage implements ListOfDateFormat
     public static final int WAIT_4_SECONDS = 4;
     public static final int WAIT_5_SECONDS = 5;
     public static final int FAST_WAIT_IN_SECONDS = 2;
+
+    public static final int WAIT_1000_MILLISECOND = 1000;
+    public static final int WAIT_2000_MILLISECONDS = 2000;
+    public static final int WAIT_3000_MILLISECONDS = 3000;
+    public static final int WAIT_4000_MILLISECONDS = 4000;
+    public static final int WAIT_5000_MILLISECONDS = 5000;
+
     public static final int DEFAULT_MAX_RETRY_FOR_STALE_ELEMENT_REFERENCE = 5;
     public static final int DEFAULT_MAX_RETRY_FOR_FILE_VERIFICATION = 10;
     protected WebDriver webDriver;
@@ -40,6 +48,16 @@ public class SimplePage implements ListOfDateFormat
     public SimplePage(WebDriver webDriver)
     {
         this.webDriver = webDriver;
+    }
+
+    public String getParcelSizeAsString(int parcelSizeId)
+    {
+        return StandardTestUtils.getParcelSizeAsString(parcelSizeId);
+    }
+
+    public String getParcelSizeAsLongString(int parcelSizeId)
+    {
+        return StandardTestUtils.getParcelSizeAsLongString(parcelSizeId);
     }
 
     public File createFile(String filename, StringBuilder contents)
@@ -75,6 +93,13 @@ public class SimplePage implements ListOfDateFormat
 
     public void click(String xpathExpression)
     {
+        WebElement we = findElementByXpath(xpathExpression);
+        moveAndClick(we);
+    }
+
+    public void clickf(String xpathExpression, Object... args)
+    {
+        xpathExpression = String.format(xpathExpression, args);
         WebElement we = findElementByXpath(xpathExpression);
         moveAndClick(we);
     }
@@ -736,6 +761,61 @@ public class SimplePage implements ListOfDateFormat
         pause100ms();
         clickButtonByAriaLabel("Select All Shown");
         pause100ms();
+    }
+
+    public void wait1sUntil(Supplier<Boolean> supplier)
+    {
+        StandardTestUtils.waitUntil(supplier, WAIT_1000_MILLISECOND);
+    }
+
+    public void wait1sUntil(Supplier<Boolean> supplier, String timeoutMessage)
+    {
+        StandardTestUtils.waitUntil(supplier, WAIT_1000_MILLISECOND);
+    }
+
+    public void wait2sUntil(Supplier<Boolean> supplier)
+    {
+        waitUntil(supplier, WAIT_2000_MILLISECONDS);
+    }
+
+    public void wait2sUntil(Supplier<Boolean> supplier, String timeoutMessage)
+    {
+        StandardTestUtils.waitUntil(supplier, WAIT_2000_MILLISECONDS);
+    }
+
+    public void wait3sUntil(Supplier<Boolean> supplier)
+    {
+        waitUntil(supplier, WAIT_3000_MILLISECONDS);
+    }
+
+    public void wait3sUntil(Supplier<Boolean> supplier, String timeoutMessage)
+    {
+        StandardTestUtils.waitUntil(supplier, WAIT_3000_MILLISECONDS);
+    }
+
+    public void wait4sUntil(Supplier<Boolean> supplier)
+    {
+        waitUntil(supplier, WAIT_4000_MILLISECONDS);
+    }
+
+    public void wait4sUntil(Supplier<Boolean> supplier, String timeoutMessage)
+    {
+        StandardTestUtils.waitUntil(supplier, WAIT_4000_MILLISECONDS);
+    }
+
+    public void wait5sUntil(Supplier<Boolean> supplier)
+    {
+        waitUntil(supplier, WAIT_5000_MILLISECONDS);
+    }
+
+    public void wait5sUntil(Supplier<Boolean> supplier, String timeoutMessage)
+    {
+        StandardTestUtils.waitUntil(supplier, WAIT_5000_MILLISECONDS);
+    }
+
+    public void waitUntil(Supplier<Boolean> supplier, long timeoutInMillis)
+    {
+        StandardTestUtils.waitUntil(supplier, timeoutInMillis);
     }
 
     public void waitUntilInvisibilityOfElementLocated(String xpath)

@@ -116,6 +116,11 @@ public class AllOrdersPage extends SimplePage
         }
     }
 
+    public AllOrdersPage(WebDriver webDriver)
+    {
+        this(webDriver, new EditOrderPage(webDriver));
+    }
+
     public AllOrdersPage(WebDriver webDriver, EditOrderPage editOrderPage)
     {
         super(webDriver);
@@ -214,12 +219,13 @@ public class AllOrdersPage extends SimplePage
     public void verifyOrderInfoIsCorrect(OrderRequestV2 orderRequestV2, Order order)
     {
         String mainWindowHandle = getwebDriver().getWindowHandle();
+        Long orderId = TestUtils.getOrderId(orderRequestV2);
         String expectedTrackingId = orderRequestV2.getTrackingId();
         specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, expectedTrackingId);
 
         try
         {
-            switchToNewOpenedWindow(mainWindowHandle);
+            switchToEditOrderWindow(orderId);
             editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyOrderInfoIsCorrect(orderRequestV2, order);
         }
@@ -242,12 +248,13 @@ public class AllOrdersPage extends SimplePage
     public void verifyOrderIsForceSuccessedSuccessfully(OrderRequestV2 orderRequestV2)
     {
         String mainWindowHandle = getwebDriver().getWindowHandle();
+        Long orderId = TestUtils.getOrderId(orderRequestV2);
         String trackingId = orderRequestV2.getTrackingId();
         specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, trackingId);
 
         try
         {
-            switchToNewOpenedWindow(mainWindowHandle);
+            switchToEditOrderWindow(orderId);
             editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyOrderIsForceSuccessedSuccessfully(orderRequestV2);
         }
@@ -416,9 +423,9 @@ public class AllOrdersPage extends SimplePage
         selectValueFromMdSelectById("search-logic", searchLogic.getValue());
         sendKeysById("searchTerm", searchTerm);
 
-
         String searchButtonXpathExpression = String.format("//nv-api-text-button[@name='%s']", "commons.search");
         click(searchButtonXpathExpression);
+        waitUntilNewWindowOrTabOpened();
         pause100ms();
         getwebDriver().switchTo().window(mainWindowHandle); // Force selenium to go back to the last active tab/window if new tab/window is opened.
         waitUntilInvisibilityOfElementLocated(searchButtonXpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
@@ -427,6 +434,37 @@ public class AllOrdersPage extends SimplePage
     public void filterTableOrderByTrackingId(String trackingId)
     {
         searchTableCustom1("tracking-id", trackingId);
+    }
+
+    public void waitUntilNewWindowOrTabOpened()
+    {
+        wait5sUntil(()->getwebDriver().getWindowHandles().size()>1, "Window handles size is < 1.");
+    }
+
+    public void switchToEditOrderWindow(Long orderId)
+    {
+        waitUntilNewWindowOrTabOpened();
+        String currentWindowHandle = getwebDriver().getWindowHandle();
+        Set<String> windowHandles = getwebDriver().getWindowHandles();
+        boolean editOrderFound = false;
+
+        for(String windowHandle : windowHandles)
+        {
+            getwebDriver().switchTo().window(windowHandle);
+            String currentWindowUrl = getwebDriver().getCurrentUrl();
+
+            if(currentWindowUrl.endsWith(String.valueOf("order/"+orderId)))
+            {
+                editOrderFound = true;
+                break;
+            }
+        }
+
+        if(!editOrderFound)
+        {
+            getwebDriver().switchTo().window(currentWindowHandle);
+            throw new NvTestRuntimeException(String.format("Edit Order's window for Order with ID = '%d' not found.", orderId));
+        }
     }
 
     public void switchToNewOpenedWindow(String mainWindowHandle)

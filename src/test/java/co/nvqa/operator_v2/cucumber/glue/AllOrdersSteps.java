@@ -4,7 +4,6 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
-import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import com.google.inject.Inject;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
@@ -21,7 +20,6 @@ import java.util.Map;
 public class AllOrdersSteps extends AbstractSteps
 {
     private AllOrdersPage allOrdersPage;
-    private EditOrderPage editOrderPage;
 
     @Inject
     public AllOrdersSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
@@ -32,8 +30,16 @@ public class AllOrdersSteps extends AbstractSteps
     @Override
     public void init()
     {
-        editOrderPage = new EditOrderPage(getWebDriver());
-        allOrdersPage = new AllOrdersPage(getWebDriver(), editOrderPage);
+        allOrdersPage = new AllOrdersPage(getWebDriver());
+    }
+
+    @When("^Operator switch to Edit Order's window$")
+    public void operatorSwitchToEditOrderWindow()
+    {
+        Long orderId = get(KEY_CREATED_ORDER_ID);
+        String mainWindowHandle = allOrdersPage.getwebDriver().getWindowHandle();
+        allOrdersPage.switchToEditOrderWindow(orderId);
+        put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
     }
 
     @When("^Operator download sample CSV file for \"Find Orders with CSV\" on All Orders page$")
@@ -56,7 +62,18 @@ public class AllOrdersSteps extends AbstractSteps
         AllOrdersPage.Category category = AllOrdersPage.Category.findByValue(mapOfData.get("category"));
         AllOrdersPage.SearchLogic searchLogic = AllOrdersPage.SearchLogic.findByValue(mapOfData.get("searchLogic"));
         String searchTerm = mapOfData.get("searchTerm");
+
+        /**
+         * Replace searchTerm value to value on ScenarioStorage.
+         */
+        if(containsKey(searchTerm))
+        {
+            searchTerm = get(searchTerm);
+        }
+
+        String mainWindowHandle = allOrdersPage.getwebDriver().getWindowHandle();
         allOrdersPage.specificSearch(category, searchLogic, searchTerm);
+        put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
     }
 
     @When("^Operator filter the result table by Tracking ID on All Orders page and verify order info is correct$")

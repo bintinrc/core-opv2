@@ -3,9 +3,12 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
+import co.nvqa.commons.model.order_create.v2.Parcel;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
+
+import java.text.DecimalFormat;
 
 /**
  *
@@ -13,12 +16,48 @@ import org.openqa.selenium.WebDriver;
  */
 public class EditOrderPage extends SimplePage
 {
+    private static final DecimalFormat NO_TRAILING_ZERO_DF = new DecimalFormat("###,###.##");
     private static final String NG_REPEAT_TABLE_EVENT = "event in getTableData()";
     public static final String COLUMN_CLASS_NAME_ON_TABLE_EVENT = "name";
 
     public EditOrderPage(WebDriver webDriver)
     {
         super(webDriver);
+    }
+
+    public void clickMenu(String parentMenuName, String childMenuName)
+    {
+        clickf("//md-menu-bar/md-menu/button[contains(text(), '%s')]", parentMenuName);
+        waitUntilVisibilityOfElementLocated("//div[@aria-hidden='false']/md-menu-content");
+        clickf("//div[@aria-hidden='false']/md-menu-content/md-menu-item/button/span[contains(text(), '%s')]", childMenuName);
+    }
+
+    public void editOrderDetails(OrderRequestV2 orderRequestV2)
+    {
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'order-edit-details')]//nv-api-text-button[@name='commons.save-changes']");
+        Parcel parcel = orderRequestV2.getParcels().get(0);
+        selectValueFromMdSelectById("parcel-size", getParcelSizeAsString(parcel.getParcelSizeId()));
+        sendKeysByIdAlt("weight", String.valueOf(parcel.getWeight()));
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
+    }
+
+    public void verifyEditOrderDetailsIsSuccess(OrderRequestV2 orderRequestV2, Order order)
+    {
+        Parcel expectedParcel = orderRequestV2.getParcels().get(0);
+
+        String actualSize = getSize();
+        String actualWeight = getWeight();
+
+        Assert.assertEquals("Order - Size", getParcelSizeAsLongString(expectedParcel.getParcelSizeId()), actualSize);
+        Assert.assertEquals("Order - Weight", NO_TRAILING_ZERO_DF.format(expectedParcel.getWeight())+" kg", actualWeight);
+
+        Assert.assertEquals("Order Details - Size", order.getParcelSize(), getSize());
+        Assert.assertEquals("Order Details - Weight", NO_TRAILING_ZERO_DF.format(order.getWeight())+" kg", getWeight());
+    }
+
+    public void editCashCollectionDetails()
+    {
+
     }
 
     public void verifyInboundIsSucceed()
@@ -127,6 +166,20 @@ public class EditOrderPage extends SimplePage
     public String getWeight()
     {
         return getText("//label[text()='Weight']/following-sibling::p");
+    }
+
+    public Double getCashOnDelivery()
+    {
+        Double cod = null;
+        String actualText = getText("//label[text()='Cash on Delivery']/following-sibling::p");
+
+        if(!actualText.contains("-"))
+        {
+            String temp = actualText.substring(2); //Remove currency text (e.g. SGD)
+            cod = Double.parseDouble(temp);
+        }
+
+        return cod;
     }
 
     public String getPickupStatus()
