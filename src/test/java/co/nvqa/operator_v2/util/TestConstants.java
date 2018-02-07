@@ -35,31 +35,31 @@ public final class TestConstants extends CommonSeleniumTestConstants
 
     static
     {
-        OPERATOR_PORTAL_URL = getPropertyValueAsString("operator-portal-url");
-        OPERATOR_PORTAL_UID = getPropertyValueAsString("operator-portal-uid");
-        OPERATOR_PORTAL_PWD = getPropertyValueAsString("operator-portal-pwd");
+        OPERATOR_PORTAL_URL = getString("operator-portal-url");
+        OPERATOR_PORTAL_UID = getString("operator-portal-uid");
+        OPERATOR_PORTAL_PWD = getString("operator-portal-pwd");
 
-        OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES = getPropertyValueAsBoolean("operator-portal-force-login-by-injecting-cookies");
-        OPERATOR_PORTAL_USER_COOKIE = getPropertyValueAsString("operator-portal-user-cookie");
+        OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES = getBoolean("operator-portal-force-login-by-injecting-cookies");
+        OPERATOR_PORTAL_USER_COOKIE = getString("operator-portal-user-cookie");
 
-        API_BASE_URL = getPropertyValueAsString("api-base-url");
+        API_BASE_URL = getString("api-base-url");
 
-        SHIPPER_V2_ID = getPropertyValueAsLong("shipper-v2-id");
-        SHIPPER_V2_NAME = getPropertyValueAsString("shipper-v2-name");
-        SHIPPER_V2_CLIENT_ID = getPropertyValueAsString("shipper-v2-client-id");
-        SHIPPER_V2_CLIENT_SECRET = getPropertyValueAsString("shipper-v2-client-secret");
+        SHIPPER_V2_ID = getLong("shipper-v2-id");
+        SHIPPER_V2_NAME = getString("shipper-v2-name");
+        SHIPPER_V2_CLIENT_ID = getString("shipper-v2-client-id");
+        SHIPPER_V2_CLIENT_SECRET = getString("shipper-v2-client-secret");
 
-        SHIPPER_V3_ID = getPropertyValueAsLong("shipper-v3-id");
-        SHIPPER_V3_NAME = getPropertyValueAsString("shipper-v3-name");
-        SHIPPER_V3_CLIENT_ID = getPropertyValueAsString("shipper-v3-client-id");
-        SHIPPER_V3_CLIENT_SECRET = getPropertyValueAsString("shipper-v3-client-secret");
+        SHIPPER_V3_ID = getLong("shipper-v3-id");
+        SHIPPER_V3_NAME = getString("shipper-v3-name");
+        SHIPPER_V3_CLIENT_ID = getString("shipper-v3-client-id");
+        SHIPPER_V3_CLIENT_SECRET = getString("shipper-v3-client-secret");
 
-        NINJA_DRIVER_ID = getPropertyValueAsLong("ninja-driver-id");
-        NINJA_DRIVER_NAME = getPropertyValueAsString("ninja-driver-name");
-        NINJA_DRIVER_USERNAME = getPropertyValueAsString("ninja-driver-username");
-        NINJA_DRIVER_PASSWORD = getPropertyValueAsString("ninja-driver-password");
+        NINJA_DRIVER_ID = getLong("ninja-driver-id");
+        NINJA_DRIVER_NAME = getString("ninja-driver-name");
+        NINJA_DRIVER_USERNAME = getString("ninja-driver-username");
+        NINJA_DRIVER_PASSWORD = getString("ninja-driver-password");
 
-        DP_ID = getPropertyValueAsLong("dp-id");
+        DP_ID = getLong("dp-id");
     }
 
     private TestConstants()
