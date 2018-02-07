@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class OpsRoutePage extends SimplePage
+public class OpsRoutePage extends OperatorV2SimplePage
 {
     public static final String NG_REPEAT = "opsRoute in $data";
     public static final String COLUMN_CLASS_ROUTE_ID = "routeId";

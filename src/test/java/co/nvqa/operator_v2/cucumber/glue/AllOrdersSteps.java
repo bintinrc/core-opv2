@@ -37,7 +37,7 @@ public class AllOrdersSteps extends AbstractSteps
     public void operatorSwitchToEditOrderWindow()
     {
         Long orderId = get(KEY_CREATED_ORDER_ID);
-        String mainWindowHandle = allOrdersPage.getwebDriver().getWindowHandle();
+        String mainWindowHandle = allOrdersPage.getWebDriver().getWindowHandle();
         allOrdersPage.switchToEditOrderWindow(orderId);
         put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
     }
@@ -71,7 +71,7 @@ public class AllOrdersSteps extends AbstractSteps
             searchTerm = get(searchTerm);
         }
 
-        String mainWindowHandle = allOrdersPage.getwebDriver().getWindowHandle();
+        String mainWindowHandle = allOrdersPage.getWebDriver().getWindowHandle();
         allOrdersPage.specificSearch(category, searchLogic, searchTerm);
         put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
     }

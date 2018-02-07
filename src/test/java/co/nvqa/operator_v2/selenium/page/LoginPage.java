@@ -21,7 +21,7 @@ import java.util.List;
  *
  * @author Soewandi Wirjawan
  */
-public class LoginPage extends SimplePage
+public class LoginPage extends OperatorV2SimplePage
 {
     private static final String GOOGLE_EXPECTED_URL_1 = "https://accounts.google.com/ServiceLogin";
     private static final String GOOGLE_EXPECTED_URL_2 = "https://accounts.google.com/signin/oauth/identifier";
@@ -33,7 +33,7 @@ public class LoginPage extends SimplePage
 
     public void loadPage()
     {
-        getwebDriver().get(TestConstants.OPERATOR_PORTAL_URL);
+        getWebDriver().get(TestConstants.OPERATOR_PORTAL_URL);
         waitUntilPageLoaded();
     }
 
@@ -47,13 +47,13 @@ public class LoginPage extends SimplePage
             NvLogger.info("ninja_access_token = "+operatorBearerToken);
             NvLogger.info("user = "+userCookie);
 
-            getwebDriver().manage().addCookie(new Cookie("ninja_access_token", operatorBearerToken, ".ninjavan.co", "/", null));
-            getwebDriver().manage().addCookie(new Cookie("user", userCookie, ".ninjavan.co", "/", null));
-            ((ChromeDriver) getwebDriver()).executeScript("window.open()");
-            String currentWindowHandle = getwebDriver().getWindowHandle();
+            getWebDriver().manage().addCookie(new Cookie("ninja_access_token", operatorBearerToken, ".ninjavan.co", "/", null));
+            getWebDriver().manage().addCookie(new Cookie("user", userCookie, ".ninjavan.co", "/", null));
+            ((ChromeDriver) getWebDriver()).executeScript("window.open()");
+            String currentWindowHandle = getWebDriver().getWindowHandle();
             String newWindowHandle = null;
 
-            for(String windowHandle : getwebDriver().getWindowHandles())
+            for(String windowHandle : getWebDriver().getWindowHandles())
             {
                 if(!windowHandle.equals(currentWindowHandle))
                 {
@@ -62,9 +62,9 @@ public class LoginPage extends SimplePage
                 }
             }
 
-            getwebDriver().close();
-            getwebDriver().switchTo().window(newWindowHandle);
-            getwebDriver().get(TestConstants.OPERATOR_PORTAL_URL);
+            getWebDriver().close();
+            getWebDriver().switchTo().window(newWindowHandle);
+            getWebDriver().get(TestConstants.OPERATOR_PORTAL_URL);
         }
         catch(UnsupportedEncodingException ex)
         {
@@ -156,7 +156,7 @@ public class LoginPage extends SimplePage
     public void backToLoginPage()
     {
         pause1s();
-        String currentUrl = getwebDriver().getCurrentUrl();
+        String currentUrl = getWebDriver().getCurrentUrl();
         Assert.assertThat("Default Operator Portal URL not loaded.", currentUrl, Matchers.containsString(TestConstants.OPERATOR_PORTAL_URL));
     }
 }

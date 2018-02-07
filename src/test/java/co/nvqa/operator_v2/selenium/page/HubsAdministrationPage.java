@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class HubsAdministrationPage extends SimplePage
+public class HubsAdministrationPage extends OperatorV2SimplePage
 {
     private static final String NG_REPEAT = "hub in $data";
     private static final String CSV_FILENAME = "hubs.csv";

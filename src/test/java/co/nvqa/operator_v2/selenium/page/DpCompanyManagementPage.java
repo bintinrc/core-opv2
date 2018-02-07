@@ -9,7 +9,7 @@ import org.openqa.selenium.WebElement;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class DpCompanyManagementPage extends SimplePage
+public class DpCompanyManagementPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "company in getTableData()";
     private static final String CSV_FILENAME = "company.csv";

@@ -1,11 +1,11 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.common_selenium.util.CommonSeleniumScenarioManager;
+import co.nvqa.common_selenium.util.SeleniumUtils;
 import co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
 import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.commons.utils.StandardScenarioManager;
 import co.nvqa.operator_v2.selenium.page.LoginPage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
-import co.nvqa.operator_v2.util.SeleniumUtils;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Singleton;
@@ -15,24 +15,14 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.logging.LogEntries;
-import org.openqa.selenium.logging.LogEntry;
-import org.openqa.selenium.logging.LogType;
-
-import java.util.Date;
 
 /**
  *
  * @author Daniel Joi Partogi Hutapea
  */
 @Singleton
-public class ScenarioManager extends StandardScenarioManager
+public class ScenarioManager extends CommonSeleniumScenarioManager
 {
-    private WebDriver webDriver;
-
     public ScenarioManager()
     {
     }
@@ -52,21 +42,21 @@ public class ScenarioManager extends StandardScenarioManager
     public void launchBrowser()
     {
         NvLogger.infof("Launching browser.");
-        webDriver = SeleniumUtils.createWebDriver();
+        setWebDriver(SeleniumUtils.createWebDriver());
     }
 
     @Before("@LaunchBrowserWithProxyEnabled")
     public void launchBrowserWithProxyEnabled()
     {
         NvLogger.infof("Launching browser.");
-        webDriver = SeleniumUtils.createWebDriver(true);
+        setWebDriver(SeleniumUtils.createWebDriver(true));
     }
 
     @After("@KillBrowser")
     public void killBrowser()
     {
         NvLogger.infof("Kill browser.");
-        SeleniumUtils.closeWebDriver(webDriver);
+        SeleniumUtils.closeWebDriver(getWebDriver());
     }
 
     /**
@@ -76,21 +66,10 @@ public class ScenarioManager extends StandardScenarioManager
      * @param scenario
      */
     @After
+    @Override
     public void teardown(Scenario scenario)
     {
-        if(scenario.isFailed())
-        {
-            if(getWebDriver()!=null)
-            {
-                takesScreenshot(getWebDriver(), scenario);
-                printBrowserConsoleLog(getWebDriver(), scenario);
-                printLastHtmlOrXmlPageSourceToFile(scenario, getWebDriver().getPageSource(), "HTML");
-            }
-            else
-            {
-                NvLogger.warnf("WebDriver not run.");
-            }
-        }
+        super.teardown(scenario);
     }
 
     @Given("^op login into Operator V2 with username \"([^\"]*)\" and password \"([^\"]*)\"$")
@@ -142,17 +121,6 @@ public class ScenarioManager extends StandardScenarioManager
         takesScreenshot();
     }
 
-    public void takesScreenshot()
-    {
-        takesScreenshot(getWebDriver(), getCurrentScenario());
-    }
-
-    private void takesScreenshot(WebDriver currentDriver, Scenario currentScenario)
-    {
-        final byte[] screenshot = ((TakesScreenshot) currentDriver).getScreenshotAs(OutputType.BYTES);
-        currentScenario.embed(screenshot, "image/png");
-    }
-
     @When("browser open \"([^\"]*)\"")
     public void browserOpen(String url)
     {
@@ -163,27 +131,5 @@ public class ScenarioManager extends StandardScenarioManager
     public void printBrowserConsoleLog()
     {
         printBrowserConsoleLog(getWebDriver(), getCurrentScenario());
-    }
-
-    private void printBrowserConsoleLog(WebDriver currentDriver, Scenario currentScenario)
-    {
-        try
-        {
-            LogEntries logEntries = currentDriver.manage().logs().get(LogType.BROWSER);
-
-            for(LogEntry entry : logEntries)
-            {
-                currentScenario.write(new Date(entry.getTimestamp())+" [" + entry.getLevel() + "] "+entry.getMessage());
-            }
-        }
-        catch(Exception ex)
-        {
-            NvLogger.warnf("Failed print browser log. Cause: %s", ex.getMessage());
-        }
-    }
-
-    public WebDriver getWebDriver()
-    {
-        return webDriver;
     }
 }

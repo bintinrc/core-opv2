@@ -15,7 +15,7 @@ import java.util.Calendar;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class ReservationsPage extends SimplePage
+public class ReservationsPage extends OperatorV2SimplePage
 {
     public ReservationsPage(WebDriver webDriver)
     {
@@ -67,7 +67,7 @@ public class ReservationsPage extends SimplePage
     {
         String editBtnXpath = getCurrentDateCellXpath()+"//nv-icon-button[@name='Edit Reservation']";
         WebElement editBtnWe = findElementByXpath(editBtnXpath);
-        Actions action = new Actions(getwebDriver());
+        Actions action = new Actions(getWebDriver());
         action.moveToElement(editBtnWe).pause(100).click().pause(100).perform();
         pause1s(); // Delay for sliding animation.
         click(String.format("//form[@name='editForm']//button[@aria-label='%s']", newTimeslot));
@@ -88,7 +88,7 @@ public class ReservationsPage extends SimplePage
     {
         String deleteBtnXpath = getCurrentDateCellXpath()+"//nv-icon-button[@name='Delete Reservation']";
         WebElement deleteBtnWe = findElementByXpath(deleteBtnXpath);
-        Actions action = new Actions(getwebDriver());
+        Actions action = new Actions(getWebDriver());
         action.moveToElement(deleteBtnWe).pause(100).click().pause(100).perform();
         pause1s(); // Delay for sliding animation.
         clickButtonOnMdDialogByAriaLabel("Delete");

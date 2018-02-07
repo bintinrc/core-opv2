@@ -10,7 +10,7 @@ import java.io.File;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class QrCodePrintingPage extends SimplePage
+public class QrCodePrintingPage extends OperatorV2SimplePage
 {
     public QrCodePrintingPage(WebDriver webDriver)
     {

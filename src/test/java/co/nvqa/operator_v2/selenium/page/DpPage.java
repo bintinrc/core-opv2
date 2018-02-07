@@ -16,7 +16,7 @@ import java.util.Map;
  *
  * @author Soewandi Wirjawan
  */
-public class DpPage extends SimplePage
+public class DpPage extends OperatorV2SimplePage
 {
     private static final int MAX_RETRY = 10;
 

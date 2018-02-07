@@ -9,7 +9,7 @@ import org.openqa.selenium.interactions.Actions;
  *
  * @author Soewandi Wirjawan
  */
-public class LogoutPage extends SimplePage
+public class LogoutPage extends OperatorV2SimplePage
 {
     public LogoutPage(WebDriver webDriver)
     {
@@ -18,13 +18,13 @@ public class LogoutPage extends SimplePage
 
     public void logout()
     {
-        WebElement elm = getwebDriver().findElement(By.xpath("//span[(contains(@class, 'nv-text-ellipsis nv-p-med name'))]"));
+        WebElement elm = getWebDriver().findElement(By.xpath("//span[(contains(@class, 'nv-text-ellipsis nv-p-med name'))]"));
 
-        Actions acts = new Actions(getwebDriver());
+        Actions acts = new Actions(getWebDriver());
         acts.moveToElement(elm).click().perform();
         pause1s();
 
-        elm = getwebDriver().findElement(By.xpath("//button[@class='nv-button flat alternate md-button md-ink-ripple'][@ng-click='logout()']"));
+        elm = getWebDriver().findElement(By.xpath("//button[@class='nv-button flat alternate md-button md-ink-ripple'][@ng-click='logout()']"));
         acts.moveToElement(elm).click().perform();
     }
 }

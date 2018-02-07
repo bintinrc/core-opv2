@@ -9,18 +9,15 @@ repositories {
 }
 
 dependencies {
-    testCompile "org.seleniumhq.selenium:selenium-java:3.8.1"
-    testCompile "net.lightbody.bmp:browsermob-core:2.1.5"
+    testCompile project(":commons")
+    testCompile project(":common-selenium")
 
     testCompile "ch.qos.logback:logback-classic:1.2.3"
-    testCompile "mysql:mysql-connector-java:6.0.6"
 
     testCompile "org.apache.poi:poi-ooxml:3.17"
 
     testCompile "com.google.zxing:core:3.3.1"
     testCompile "com.google.zxing:javase:3.3.1"
-
-    testCompile project(":commons")
 }
 
 project.ext {

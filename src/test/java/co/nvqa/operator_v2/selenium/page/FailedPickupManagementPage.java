@@ -10,7 +10,7 @@ import java.util.Date;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class FailedPickupManagementPage extends SimplePage
+public class FailedPickupManagementPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "failedPickup in getTableData()";
     private static final String CSV_FILENAME_PATTERN = "failed-pickup-list";

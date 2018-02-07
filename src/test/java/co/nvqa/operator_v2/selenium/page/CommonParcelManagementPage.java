@@ -9,7 +9,7 @@ import java.util.Date;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public abstract class CommonParcelManagementPage extends SimplePage
+public abstract class CommonParcelManagementPage extends OperatorV2SimplePage
 {
     protected static final int ACTION_SET_RTS_TO_SELECTED = 1;
     protected static final int ACTION_RESCHEDULE_SELECTED = 2;

@@ -16,7 +16,7 @@ import java.io.PrintWriter;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class OrderCreationV2Page extends SimplePage
+public class OrderCreationV2Page extends OperatorV2SimplePage
 {
     private static final String NG_REPEAT = "row in $data";
     private static final String CSV_FILENAME_PATTERN = "sample_csv";

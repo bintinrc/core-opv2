@@ -10,7 +10,7 @@ import java.io.File;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class NinjaHubProvisioningPage extends SimplePage
+public class NinjaHubProvisioningPage extends OperatorV2SimplePage
 {
     public NinjaHubProvisioningPage(WebDriver webDriver)
     {

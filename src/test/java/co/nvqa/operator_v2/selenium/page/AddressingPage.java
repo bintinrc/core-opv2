@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Tristania Siagian
  */
-public class AddressingPage extends SimplePage {
+public class AddressingPage extends OperatorV2SimplePage {
 
     public AddressingPage(WebDriver webDriver) {
         super(webDriver);

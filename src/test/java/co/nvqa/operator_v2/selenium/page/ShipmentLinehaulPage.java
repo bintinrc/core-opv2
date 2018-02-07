@@ -16,7 +16,7 @@ import java.util.List;
  *
  * Modified by Daniel Joi Partogi Hutapea
  */
-public class ShipmentLinehaulPage extends SimplePage
+public class ShipmentLinehaulPage extends OperatorV2SimplePage
 {
     private static final String XPATH_CREATE_LINEHAUL_BUTTON = "//button[div[text()='Create Linehaul']]";
     private static final String XPATH_CREATE_LINEHAUL_BUTTON_ONSCHEDULE = "//button[div[text()='create linehaul']]";
@@ -129,19 +129,19 @@ public class ShipmentLinehaulPage extends SimplePage
         for(String hub : hubs)
         {
             clickAddHubButton();
-            TestUtils.chooseValueFromMdContain(getwebDriver(), "//md-select[@name='select-hub-" + index + "']", hub);
+            TestUtils.chooseValueFromMdContain(getWebDriver(), "//md-select[@name='select-hub-" + index + "']", hub);
             index++;
         }
     }
 
     public void chooseFrequency(String frequencyValue)
     {
-        TestUtils.chooseValueFromMdContain(getwebDriver(), "//md-select[contains(@name,'select-frequency')]", frequencyValue);
+        TestUtils.chooseValueFromMdContain(getWebDriver(), "//md-select[contains(@name,'select-frequency')]", frequencyValue);
     }
 
     public void chooseWorkingDays(List<String> days)
     {
-        TestUtils.chooseValuesFromMdContain(getwebDriver(), "//md-select[contains(@name,'select-days-of-week')]", days);
+        TestUtils.chooseValuesFromMdContain(getWebDriver(), "//md-select[contains(@name,'select-days-of-week')]", days);
     }
 
     public List<WebElement> grabListOfLinehaul()
@@ -175,9 +175,9 @@ public class ShipmentLinehaulPage extends SimplePage
 
     public void clickLinhaulScheduleDate(Calendar date)
     {
-        TestUtils.chooseValueFromMdContain(getwebDriver(), XPATH_SCHEDULE_MONTH, TestUtils.integerToMonth(date.get(Calendar.MONTH)));
+        TestUtils.chooseValueFromMdContain(getWebDriver(), XPATH_SCHEDULE_MONTH, TestUtils.integerToMonth(date.get(Calendar.MONTH)));
         pause3s();
-        TestUtils.chooseValueFromMdContain(getwebDriver(), XPATH_SCHEDULE_YEAR, String.valueOf(date.get(Calendar.YEAR)));
+        TestUtils.chooseValueFromMdContain(getWebDriver(), XPATH_SCHEDULE_YEAR, String.valueOf(date.get(Calendar.YEAR)));
         pause3s();
         click("//div[@tabindex='" + date.get(Calendar.DAY_OF_MONTH) + "']");
     }

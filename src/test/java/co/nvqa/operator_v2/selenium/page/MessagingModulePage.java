@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Rizaq Pratama
  */
-public class MessagingModulePage extends SimplePage
+public class MessagingModulePage extends OperatorV2SimplePage
 {
     private static final String COMMA = ",";
     private static final String NEW_LINE = "\r\n";
@@ -79,7 +79,7 @@ public class MessagingModulePage extends SimplePage
 
     private void uploadFile()
     {
-        WebElement inputElement = getwebDriver().findElement(By.xpath("//input[@type='file']"));
+        WebElement inputElement = getWebDriver().findElement(By.xpath("//input[@type='file']"));
         inputElement.sendKeys(FILE_PATH);
         pause3s();
     }
@@ -155,7 +155,7 @@ public class MessagingModulePage extends SimplePage
     {
         click("//nv-api-text-button[@text='container.sms.send-messages']");
         waitUntilVisibilityOfElementLocated("//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
-        WebElement successToast = TestUtils.getToast(getwebDriver());
+        WebElement successToast = TestUtils.getToast(getWebDriver());
         Assert.assertEquals("Successfully sent 1 SMS", successToast.getText());
     }
 
@@ -168,7 +168,7 @@ public class MessagingModulePage extends SimplePage
     public void verifySmsHistoryTrackingIdInvalid(String trackingId)
     {
         waitUntilVisibilityOfElementLocated("//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
-        WebElement failedToast = TestUtils.getToast(getwebDriver());
+        WebElement failedToast = TestUtils.getToast(getWebDriver());
         Assert.assertEquals("Order with trackingId "+trackingId+" not found!", failedToast.getText());
     }
 

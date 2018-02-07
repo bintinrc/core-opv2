@@ -11,7 +11,7 @@ import java.util.Date;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class RouteGroupManagementPage extends SimplePage
+public class RouteGroupManagementPage extends OperatorV2SimplePage
 {
     private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
 

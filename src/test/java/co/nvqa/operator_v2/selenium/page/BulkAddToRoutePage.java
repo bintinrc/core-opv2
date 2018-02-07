@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class BulkAddToRoutePage extends SimplePage
+public class BulkAddToRoutePage extends OperatorV2SimplePage
 {
     private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
     public static final String NG_REPEAT = "row in $data";

@@ -6,7 +6,8 @@ import org.openqa.selenium.WebElement;
 
 import java.util.Map;
 
-public class PrinterSettingsPage extends SimplePage {
+public class PrinterSettingsPage extends OperatorV2SimplePage
+{
 
     private static final String ADD_PRINTER_BUTTON = "//button[@aria-label='Add Printer']";
     private static final String ADD_PRINTER_MODAL = "//md-dialog[md-toolbar[@title='Add Printer']]";

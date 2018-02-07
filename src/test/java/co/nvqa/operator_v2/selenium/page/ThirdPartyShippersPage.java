@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class ThirdPartyShippersPage extends SimplePage
+public class ThirdPartyShippersPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "shipper in getTableData()";
     private static final String CSV_FILENAME = "third-party-shipper.csv";

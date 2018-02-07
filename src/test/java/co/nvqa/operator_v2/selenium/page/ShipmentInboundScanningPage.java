@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  *
  * Modified by Daniel Joi Partogi Hutapea
  */
-public class ShipmentInboundScanningPage extends SimplePage
+public class ShipmentInboundScanningPage extends OperatorV2SimplePage
 {
     public static final String XPATH_HUB_DROPDOWN = "//md-select[md-select-value[span[text()='Inbound Hub']]]";
     public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";

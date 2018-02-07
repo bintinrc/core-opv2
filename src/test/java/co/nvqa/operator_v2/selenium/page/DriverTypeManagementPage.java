@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author Soewandi Wirjawan
  */
-public class DriverTypeManagementPage extends SimplePage
+public class DriverTypeManagementPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "driverTypeProp in ctrl.tableData";
     private static final String XPATH_OF_TR_MD_VIRTUAL_REPEAT = String.format("//tr[@md-virtual-repeat='%s']", MD_VIRTUAL_REPEAT);

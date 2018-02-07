@@ -25,7 +25,7 @@ import java.util.zip.ZipFile;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class DriverReportPage extends SimplePage
+public class DriverReportPage extends OperatorV2SimplePage
 {
     private static final String GENERATED_CSV_FILENAME = "driversalaries.zip";
     private static final String GENERATED_EXCEL_FILENAME_PATTERN = "DriverRouteXLReport";

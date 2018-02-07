@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class SamedayRouteEnginePage extends SimplePage
+public class SamedayRouteEnginePage extends OperatorV2SimplePage
 {
     public SamedayRouteEnginePage(WebDriver webDriver)
     {
@@ -133,7 +133,7 @@ public class SamedayRouteEnginePage extends SimplePage
 
         click("//button[@aria-label='Download CSV']");
 
-        new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver driver)->
+        new WebDriverWait(getWebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver driver)->
         {
             File csvFileDownloaded = new File(TestConstants.TEMP_DIR+"/"+routeName+".csv");
             return csvFileDownloaded.exists();

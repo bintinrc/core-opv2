@@ -17,7 +17,7 @@ import java.util.List;
  *
  * Modified by Daniel Joi Partogi Hutapea
  */
-public class ShipmentManagementPage extends SimplePage
+public class ShipmentManagementPage extends OperatorV2SimplePage
 {
     public static final String XPATH_CREATE_SHIPMENT_BUTTON = "//nv-table-button[@id='create-shipment-1']/button";
     public static final String XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON = "//nv-table-button[@id='createButton']/button";
@@ -146,12 +146,12 @@ public class ShipmentManagementPage extends SimplePage
     {
         click("//input[@placeholder='Select Filter']");
         click(grabXPathFilterDropdown(filterLabel));
-        TestUtils.hoverMouseTo(getwebDriver(), "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
+        TestUtils.hoverMouseTo(getWebDriver(), "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
         click("//h4[text()='Select Search Filters']");
 
         sendKeys(String.format("//nv-autocomplete[@item-types='%s']//input[@aria-label='Search or Select...']", filterLabel), value);
         click(String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", value));
-        TestUtils.hoverMouseTo(getwebDriver(), "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
+        TestUtils.hoverMouseTo(getWebDriver(), "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
         click("//h4[text()='Select Search Filters']");
 
         pause1s();

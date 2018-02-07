@@ -8,7 +8,8 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Tristania Siagian
  */
-public class VanInboundPage extends SimplePage {
+public class VanInboundPage extends OperatorV2SimplePage
+{
     public VanInboundPage(WebDriver webDriver) {
         super(webDriver);
     }

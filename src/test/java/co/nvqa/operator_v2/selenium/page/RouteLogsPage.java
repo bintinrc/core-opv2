@@ -12,7 +12,7 @@ import java.util.Date;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class RouteLogsPage extends SimplePage
+public class RouteLogsPage extends OperatorV2SimplePage
 {
     private static final int MAX_RETRY = 10;
     private static final String MD_VIRTUAL_REPEAT = "route in getTableData()";

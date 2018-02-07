@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class PricingScriptsPage extends SimplePage
+public class PricingScriptsPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "script in getTableData()";
     public static final String COLUMN_CLASS_NAME = "name";
@@ -305,9 +305,9 @@ public class PricingScriptsPage extends SimplePage
     {
         String value;
 
-        if(getwebDriver() instanceof JavascriptExecutor)
+        if(getWebDriver() instanceof JavascriptExecutor)
         {
-            JavascriptExecutor javascriptExecutor = (JavascriptExecutor) getwebDriver();
+            JavascriptExecutor javascriptExecutor = (JavascriptExecutor) getWebDriver();
             value = String.valueOf(javascriptExecutor.executeScript(script));
             pause100ms();
         }

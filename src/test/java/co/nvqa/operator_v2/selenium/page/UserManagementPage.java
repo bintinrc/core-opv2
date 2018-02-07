@@ -14,7 +14,8 @@ import java.util.List;
  *
  * @author Tristania Siagian
  */
-public class UserManagementPage extends SimplePage {
+public class UserManagementPage extends OperatorV2SimplePage
+{
     private static final String NG_REPEAT = "user in $data";
     private static final String COLUMN_DATA_TITLE_GRANT_TYPE = "ctrl.table.grantType";
     private static final String COLUMN_DATA_TITLE_FIRST_NAME = "ctrl.table.firstName";

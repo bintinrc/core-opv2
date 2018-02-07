@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class DpVaultManagementPage extends SimplePage
+public class DpVaultManagementPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "station in getTableData()";
     private static final String CSV_FILENAME = "station.csv";

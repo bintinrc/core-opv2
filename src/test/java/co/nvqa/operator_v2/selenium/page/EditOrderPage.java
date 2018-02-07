@@ -14,7 +14,7 @@ import java.text.DecimalFormat;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class EditOrderPage extends SimplePage
+public class EditOrderPage extends OperatorV2SimplePage
 {
     private static final DecimalFormat NO_TRAILING_ZERO_DF = new DecimalFormat("###,###.##");
     private static final String NG_REPEAT_TABLE_EVENT = "event in getTableData()";

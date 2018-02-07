@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Soewandi Wirjawan
  */
-public class DriverStrengthPage extends SimplePage
+public class DriverStrengthPage extends OperatorV2SimplePage
 {
     public static final String COLUMN_CLASS_USERNAME = "username";
     public static final String COLUMN_CLASS_DRIVER_TYPE = "driver-type";

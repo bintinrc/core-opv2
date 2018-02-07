@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  *
  * @author Tristania Siagian
  */
-public class AllOrdersPage extends SimplePage
+public class AllOrdersPage extends OperatorV2SimplePage
 {
     protected static final int ACTION_MANUALLY_COMPLETE_SELECTED = 1;
     protected static final int ACTION_SET_RTS_TO_SELECTED = 2;
@@ -218,7 +218,7 @@ public class AllOrdersPage extends SimplePage
 
     public void verifyOrderInfoIsCorrect(OrderRequestV2 orderRequestV2, Order order)
     {
-        String mainWindowHandle = getwebDriver().getWindowHandle();
+        String mainWindowHandle = getWebDriver().getWindowHandle();
         Long orderId = TestUtils.getOrderId(orderRequestV2);
         String expectedTrackingId = orderRequestV2.getTrackingId();
         specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, expectedTrackingId);
@@ -247,7 +247,7 @@ public class AllOrdersPage extends SimplePage
 
     public void verifyOrderIsForceSuccessedSuccessfully(OrderRequestV2 orderRequestV2)
     {
-        String mainWindowHandle = getwebDriver().getWindowHandle();
+        String mainWindowHandle = getWebDriver().getWindowHandle();
         Long orderId = TestUtils.getOrderId(orderRequestV2);
         String trackingId = orderRequestV2.getTrackingId();
         specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, trackingId);
@@ -313,7 +313,7 @@ public class AllOrdersPage extends SimplePage
 
     public void verifyDeliveryTimingIsUpdatedSuccessfully(ChangeDeliveryTiming changeDeliveryTiming)
     {
-        String mainWindowHandle = getwebDriver().getWindowHandle();
+        String mainWindowHandle = getWebDriver().getWindowHandle();
 
         try
         {
@@ -381,7 +381,7 @@ public class AllOrdersPage extends SimplePage
 
     public void verifyInboundIsSucceed(String trackingId)
     {
-        String mainWindowHandle = getwebDriver().getWindowHandle();
+        String mainWindowHandle = getWebDriver().getWindowHandle();
 
         try
         {
@@ -417,7 +417,7 @@ public class AllOrdersPage extends SimplePage
 
     public void specificSearch(Category category, SearchLogic searchLogic, String searchTerm)
     {
-        String mainWindowHandle = getwebDriver().getWindowHandle();
+        String mainWindowHandle = getWebDriver().getWindowHandle();
 
         selectValueFromMdSelectById("category", category.getValue());
         selectValueFromMdSelectById("search-logic", searchLogic.getValue());
@@ -427,7 +427,7 @@ public class AllOrdersPage extends SimplePage
         click(searchButtonXpathExpression);
         waitUntilNewWindowOrTabOpened();
         pause100ms();
-        getwebDriver().switchTo().window(mainWindowHandle); // Force selenium to go back to the last active tab/window if new tab/window is opened.
+        getWebDriver().switchTo().window(mainWindowHandle); // Force selenium to go back to the last active tab/window if new tab/window is opened.
         waitUntilInvisibilityOfElementLocated(searchButtonXpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
     }
 
@@ -438,20 +438,20 @@ public class AllOrdersPage extends SimplePage
 
     public void waitUntilNewWindowOrTabOpened()
     {
-        wait5sUntil(()->getwebDriver().getWindowHandles().size()>1, "Window handles size is < 1.");
+        wait5sUntil(()->getWebDriver().getWindowHandles().size()>1, "Window handles size is < 1.");
     }
 
     public void switchToEditOrderWindow(Long orderId)
     {
         waitUntilNewWindowOrTabOpened();
-        String currentWindowHandle = getwebDriver().getWindowHandle();
-        Set<String> windowHandles = getwebDriver().getWindowHandles();
+        String currentWindowHandle = getWebDriver().getWindowHandle();
+        Set<String> windowHandles = getWebDriver().getWindowHandles();
         boolean editOrderFound = false;
 
         for(String windowHandle : windowHandles)
         {
-            getwebDriver().switchTo().window(windowHandle);
-            String currentWindowUrl = getwebDriver().getCurrentUrl();
+            getWebDriver().switchTo().window(windowHandle);
+            String currentWindowUrl = getWebDriver().getCurrentUrl();
 
             if(currentWindowUrl.endsWith(String.valueOf("order/"+orderId)))
             {
@@ -462,7 +462,7 @@ public class AllOrdersPage extends SimplePage
 
         if(!editOrderFound)
         {
-            getwebDriver().switchTo().window(currentWindowHandle);
+            getWebDriver().switchTo().window(currentWindowHandle);
             throw new NvTestRuntimeException(String.format("Edit Order's window for Order with ID = '%d' not found.", orderId));
         }
     }
@@ -472,7 +472,7 @@ public class AllOrdersPage extends SimplePage
         Set<String> windowHandles = TestUtils.retryIfRuntimeExceptionOccurred(()->
         {
             pause100ms();
-            Set<String> windowHandlesTemp = getwebDriver().getWindowHandles();
+            Set<String> windowHandlesTemp = getWebDriver().getWindowHandles();
 
             if(windowHandlesTemp.size()<=1)
             {
@@ -492,23 +492,23 @@ public class AllOrdersPage extends SimplePage
             }
         }
 
-        getwebDriver().switchTo().window(newOpenedWindowHandle);
+        getWebDriver().switchTo().window(newOpenedWindowHandle);
     }
 
     public void closeAllWindowsAcceptTheMainWindow(String mainWindowHandle)
     {
-        Set<String> windowHandles = getwebDriver().getWindowHandles();
+        Set<String> windowHandles = getWebDriver().getWindowHandles();
 
         for(String windowHandle : windowHandles)
         {
             if(!windowHandle.equals(mainWindowHandle))
             {
-                getwebDriver().switchTo().window(windowHandle);
-                getwebDriver().close();
+                getWebDriver().switchTo().window(windowHandle);
+                getWebDriver().close();
             }
         }
 
-        getwebDriver().switchTo().window(mainWindowHandle);
+        getWebDriver().switchTo().window(mainWindowHandle);
     }
 
     public String getTextOnTableOrder(int rowNumber, String columnDataClass)

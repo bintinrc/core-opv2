@@ -11,7 +11,7 @@ import org.openqa.selenium.WebElement;
  *
  * Modified by Daniel Joi Partogi Hutapea
  */
-public class ShipmentScanningPage extends SimplePage
+public class ShipmentScanningPage extends OperatorV2SimplePage
 {
     public static final String XPATH_HUB_DROPDOWN = "//md-select[@name='hub']";
     public static final String XPATH_SHIPMENT_DROPDOWN = "//md-select[@name='shipment']";
@@ -59,7 +59,7 @@ public class ShipmentScanningPage extends SimplePage
         String rack = getText(XPATH_RACK_SECTOR);
         Assert.assertTrue("order is " + rack, !rack.equalsIgnoreCase("INVALID") && !rack.equalsIgnoreCase("DUPLICATE"));
 
-        WebElement orderWe = getwebDriver().findElement(By.xpath(String.format("//td[contains(@class, 'tracking-id')][contains(text(), '%s')]", orderId)));
+        WebElement orderWe = getWebDriver().findElement(By.xpath(String.format("//td[contains(@class, 'tracking-id')][contains(text(), '%s')]", orderId)));
         boolean orderExist = orderWe!=null;
         Assert.assertTrue("order " + orderId + " doesn't exist in shipment", orderExist);
     }

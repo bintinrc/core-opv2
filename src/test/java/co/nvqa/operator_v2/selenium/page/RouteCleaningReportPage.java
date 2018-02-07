@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class RouteCleaningReportPage extends SimplePage
+public class RouteCleaningReportPage extends OperatorV2SimplePage
 {
     private static final String EXCEL_FILENAME_PATTERN = "route-cleaning-report";
 

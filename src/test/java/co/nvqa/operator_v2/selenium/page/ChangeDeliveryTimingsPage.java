@@ -17,7 +17,8 @@ import java.util.List;
  *
  * @author Tristania Siagian
  */
-public class ChangeDeliveryTimingsPage extends SimplePage {
+public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage
+{
     private static final String CSV_FILENAME_PATTERN = "sample_csv";
     private static final String COMMA = ",";
     private static final String CSV_CAMPAIGN_HEADER = "tracking_id,start_date,end_date,timewindow";

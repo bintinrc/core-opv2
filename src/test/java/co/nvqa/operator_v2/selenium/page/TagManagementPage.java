@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class TagManagementPage extends SimplePage
+public class TagManagementPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "tag in getTableData()";
 

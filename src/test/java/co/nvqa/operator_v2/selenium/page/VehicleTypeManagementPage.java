@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Tristania Siagian
  */
-public class VehicleTypeManagementPage extends SimplePage
+public class VehicleTypeManagementPage extends OperatorV2SimplePage
 {
     private static final String NG_REPEAT = "vehicleType in $data";
     private static final String CSV_FILENAME = "vehicle_types.csv";

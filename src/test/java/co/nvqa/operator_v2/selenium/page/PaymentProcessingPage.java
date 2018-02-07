@@ -2,7 +2,8 @@ package co.nvqa.operator_v2.selenium.page;
 
 import org.openqa.selenium.WebDriver;
 
-public class PaymentProcessingPage extends SimplePage {
+public class PaymentProcessingPage extends OperatorV2SimplePage
+{
 
     private static final String ADD_FILTER_INPUT = "//md-autocomplete-wrap/input[@aria-label='Select Filter']";
 

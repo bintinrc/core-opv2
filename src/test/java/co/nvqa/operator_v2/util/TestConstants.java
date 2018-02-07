@@ -1,31 +1,13 @@
 package co.nvqa.operator_v2.util;
 
-import co.nvqa.commons.utils.StandardTestConstants;
+import co.nvqa.common_selenium.util.CommonSeleniumTestConstants;
 
 /**
  *
  * @author Soewandi Wirjawan
  */
-public final class TestConstants extends StandardTestConstants
+public final class TestConstants extends CommonSeleniumTestConstants
 {
-    private static final String ENVIRONMENT_SYSTEM_PROPERTY = "environment";
-    private static final String CONFIGURATION_FILE = "config.properties";
-
-    public static final boolean ENABLE_PROXY;
-    public static final long PROXY_READ_BANDWIDTH_LIMIT_IN_BPS;
-    public static final long PROXY_WRITE_BANDWIDTH_LIMIT_IN_BPS;
-
-    public static final String SELENIUM_DRIVER;
-    public static final String SELENIUM_CHROME_DRIVER;
-    public static final int SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS;
-    public static final int SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS;
-    public static final int SELENIUM_SCRIPT_TIMEOUT_SECONDS;
-    public static final long SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS;
-    public static final int SELENIUM_WINDOW_WIDTH;
-    public static final int SELENIUM_WINDOW_HEIGHT;
-    public static final int SELENIUM_WINDOW_POSITION_X;
-    public static final int SELENIUM_WINDOW_POSITION_Y;
-
     public static final String OPERATOR_PORTAL_URL;
     public static final String OPERATOR_PORTAL_UID;
     public static final String OPERATOR_PORTAL_PWD;
@@ -53,24 +35,6 @@ public final class TestConstants extends StandardTestConstants
 
     static
     {
-        loadProperties(ENVIRONMENT_SYSTEM_PROPERTY, CONFIGURATION_FILE);
-
-        ENABLE_PROXY = getPropertyValueAsBoolean("enable-proxy");
-        PROXY_READ_BANDWIDTH_LIMIT_IN_BPS = getPropertyValueAsLong("proxy-read-bandwidth-limit-in-bps");
-        PROXY_WRITE_BANDWIDTH_LIMIT_IN_BPS = getPropertyValueAsLong("proxy-write-bandwidth-limit-in-bps");
-
-        SELENIUM_DRIVER = getPropertyValueAsString("selenium-driver");
-        SELENIUM_CHROME_DRIVER = getPropertyValueAsString("selenium-chrome-driver-location");
-
-        SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS = getPropertyValueAsInteger("selenium-implicit-wait-timeout-seconds");
-        SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS = getPropertyValueAsInteger("selenium-page-load-timeout-seconds");
-        SELENIUM_SCRIPT_TIMEOUT_SECONDS = getPropertyValueAsInteger("selenium-script-timeout-seconds");
-        SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS = getPropertyValueAsLong("selenium-default-web-driver-wait-timeout-in-seconds");
-        SELENIUM_WINDOW_WIDTH = getPropertyValueAsInteger("selenium-window-width");
-        SELENIUM_WINDOW_HEIGHT = getPropertyValueAsInteger("selenium-window-height");
-        SELENIUM_WINDOW_POSITION_X = getPropertyValueAsInteger("selenium-window-position-x");
-        SELENIUM_WINDOW_POSITION_Y = getPropertyValueAsInteger("selenium-window-position-y");
-
         OPERATOR_PORTAL_URL = getPropertyValueAsString("operator-portal-url");
         OPERATOR_PORTAL_UID = getPropertyValueAsString("operator-portal-uid");
         OPERATOR_PORTAL_PWD = getPropertyValueAsString("operator-portal-pwd");

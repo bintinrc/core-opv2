@@ -14,7 +14,7 @@ import java.text.DecimalFormat;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class RouteCashInboundPage extends SimplePage
+public class RouteCashInboundPage extends OperatorV2SimplePage
 {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("###,###.00");
     private static final String NG_REPEAT = "cod in $data";

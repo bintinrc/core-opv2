@@ -12,7 +12,7 @@ import org.openqa.selenium.WebElement;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class ZonesPage extends SimplePage
+public class ZonesPage extends OperatorV2SimplePage
 {
     private static final String NG_REPEAT = "zone in getTableData()";
     private static final String CSV_FILENAME = "zones.csv";

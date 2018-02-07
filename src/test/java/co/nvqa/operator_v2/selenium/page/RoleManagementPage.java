@@ -8,7 +8,8 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Tristania Siagian
  */
-public class RoleManagementPage extends SimplePage {
+public class RoleManagementPage extends OperatorV2SimplePage
+{
 
     private static final String NG_REPEAT = "role in $data";
 

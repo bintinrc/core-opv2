@@ -11,7 +11,7 @@ import java.util.Date;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class ShipperPickupsPage extends SimplePage
+public class ShipperPickupsPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "data in getTableData()";
 

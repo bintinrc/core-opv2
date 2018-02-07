@@ -9,7 +9,7 @@ import java.util.Map;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class RecoveryTicketsPage extends SimplePage
+public class RecoveryTicketsPage extends OperatorV2SimplePage
 {
     private static final int MAX_RETRY = 10;
     private static final String MD_VIRTUAL_REPEAT = "ticket in getTableData()";

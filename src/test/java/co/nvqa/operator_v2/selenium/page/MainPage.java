@@ -14,7 +14,7 @@ import java.util.Map;
  *
  * @author Soewandi Wirjawan
  */
-public class MainPage extends SimplePage
+public class MainPage extends OperatorV2SimplePage
 {
     private static final String XPATH_OF_TOAST_WELCOME_DASHBOARD = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-bottom'][text()='Welcome to your operator dashboard.']";
     private static final Map<String, String> MAP_OF_END_URL = new HashMap<>();
@@ -65,7 +65,7 @@ public class MainPage extends SimplePage
     {
         String mainDashboard = grabEndURL("All Orders");
 
-        new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver wd) ->
+        new WebDriverWait(getWebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver wd) ->
         {
             String currentUrl = wd.getCurrentUrl();
             NvLogger.infof("verifyTheMainPageIsLoaded: Current URL = [%s] - Expected URL Ends With = [%s]", currentUrl, mainDashboard);
@@ -117,12 +117,12 @@ public class MainPage extends SimplePage
             if(refreshPage)
             {
                 // Ensure no dialog that prevents menu from being clicked.
-                getwebDriver().navigate().refresh();
+                getWebDriver().navigate().refresh();
                 refreshPage();
             }
         }
 
-        new WebDriverWait(getwebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver wd)->
+        new WebDriverWait(getWebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver wd)->
         {
             boolean result;
             String currentUrl = wd.getCurrentUrl();
