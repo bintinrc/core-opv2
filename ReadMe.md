@@ -49,3 +49,8 @@ To fix language level issue after JIdea import:
 For cucumber file structure:
 Feature file: src/test/resources/cucumber/feature/<MODULE NAME>
 Glue file: src/test/java/com/nv/qa/cucumber/glue/<MODULE NAME>
+
+
+NOTES:
+
+- Sameday Route Engine - Bulky: The shipper you use on these scenarios should have an SKU mapping.
