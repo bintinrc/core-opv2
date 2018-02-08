@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.common_selenium.util.CommonSeleniumScenarioManager;
+import co.nvqa.common_selenium.cucumber.glue.CommonSeleniumScenarioManager;
 import co.nvqa.common_selenium.util.SeleniumUtils;
 import co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
 import co.nvqa.commons.utils.NvLogger;
