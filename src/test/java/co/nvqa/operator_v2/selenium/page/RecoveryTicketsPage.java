@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.utils.NvLogger;
+import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Map;
@@ -111,8 +112,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     }
 
     public void searchTableByTrackingId(String trackingId)
-    {//button[@aria-label='Clear All']
-
+    {
         //-- remove default filters
         click("//button[@aria-label='Clear All Selections']");
         pause1s();
@@ -221,5 +221,21 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
         boolean isExist = trackingId.equals(actualTrackingId);
         return isExist;
+    }
+
+    public void enterTrackingId(String trackingId)
+    {
+        waitUntilVisibilityOfElementLocated("//nv-api-text-button[@name='commons.load-selection']");
+        selectValueFromMdAutocomplete("Select Filter", "Tracking IDs");
+        sendKeysAndEnterByAriaLabel("Type in here..", trackingId);
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
+        pause1s();
+    }
+
+    public void verifyTicketIsMade(String trackingId)
+    {
+        pause1s();
+        String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
+        Assert.assertEquals("Ticket with this tracking ID is not created", trackingId, actualTrackingId);
     }
 }

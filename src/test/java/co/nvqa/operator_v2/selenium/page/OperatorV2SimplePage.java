@@ -105,6 +105,11 @@ public class OperatorV2SimplePage extends SimplePage
         click(String.format("//md-dialog//button[@aria-label='%s']", ariaLabel));
     }
 
+    public void sendKeysAndEnterByAriaLabel(String ariaLabel, CharSequence... keysToSend)
+    {
+        sendKeysAndEnter(String.format("//*[@aria-label='%s']", ariaLabel), keysToSend);
+    }
+
     public void setMdDatepicker(String mdDatepickerNgModel, Date date)
     {
         sendKeys(String.format("//md-datepicker[@ng-model='%s']/div/input", mdDatepickerNgModel), MD_DATEPICKER_SDF.format(date));
