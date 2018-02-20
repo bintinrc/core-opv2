@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.ShipperPickupsPage;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
@@ -36,7 +37,8 @@ public class ShipperPickupsSteps extends AbstractSteps
     public void operatorSetFilterReservationDateToCurrentDateAndClickLoadSelectionOnShipperPickupsPage()
     {
         Date currentDate = new Date();
-        shipperPickupsPage.filterReservationDate(currentDate, currentDate);
+        Date nextDayDate = TestUtils.getNextDate(1);
+        shipperPickupsPage.filterReservationDate(currentDate, nextDayDate);
         shipperPickupsPage.clickButtonLoadSelection();
     }
 
