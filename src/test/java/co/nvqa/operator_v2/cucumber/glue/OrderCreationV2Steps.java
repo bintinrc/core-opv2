@@ -147,13 +147,13 @@ public class OrderCreationV2Steps extends AbstractSteps
     public void operatorVerifyOrderV2IsCreatedSuccessfullyOnOrderCreationV2Page()
     {
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
-        orderCreationV2Page.verifyOrderIsCreatedSuccessfully(orderCreationV2Template);
+        orderCreationV2Page.verifyOrderV2IsCreatedSuccessfully(orderCreationV2Template);
     }
 
     @Then("^Operator verify order V3 is created successfully on Order Creation V2 page$")
     public void operatorVerifyOrderV3IsCreatedSuccessfullyOnOrderCreationV2Page()
     {
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
-        orderCreationV2Page.verifyOrderIsCreatedSuccessfully(orderCreationV2Template);
+        orderCreationV2Page.verifyOrderV3IsCreatedSuccessfully(orderCreationV2Template);
     }
 }

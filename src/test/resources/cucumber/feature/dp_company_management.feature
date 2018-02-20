@@ -1,4 +1,4 @@
-@OperatorV2 @DpCompanyManagement
+@OperatorV2Disabled @DpCompanyManagement
 Feature: DP Company Management
 
   @LaunchBrowser @ShouldAlwaysRun

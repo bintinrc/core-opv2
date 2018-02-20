@@ -60,7 +60,17 @@ public class OrderCreationV2Page extends OperatorV2SimplePage
         clickNvButtonSaveByNameAndWaitUntilDone("Submit");
     }
 
-    public void verifyOrderIsCreatedSuccessfully(OrderCreationV2Template orderCreationV2Template)
+    public void verifyOrderV2IsCreatedSuccessfully(OrderCreationV2Template orderCreationV2Template)
+    {
+        verifyOrderIsCreatedSuccessfully("-", false, null, "-");
+    }
+
+    public void verifyOrderV3IsCreatedSuccessfully(OrderCreationV2Template orderCreationV2Template)
+    {
+        verifyOrderIsCreatedSuccessfully("Order Creation Successful.", true, orderCreationV2Template.getOrderNo(), orderCreationV2Template.getShipperOrderNo());
+    }
+
+    private void verifyOrderIsCreatedSuccessfully(String expectedMessage, boolean validateTrackingId, String expectedTrackingIdEndsWith, String expectedOrderRefNo)
     {
         String status = getTextOnTable(1, COLUMN_CLASS_STATUS);
         String message = getTextOnTable(1, COLUMN_CLASS_MESSAGE);
@@ -68,9 +78,14 @@ public class OrderCreationV2Page extends OperatorV2SimplePage
         String orderRefNo = getTextOnTable(1, COLUMN_CLASS_ORDER_REF_NO);
 
         Assert.assertEquals("Status", "SUCCESS", status);
-        Assert.assertEquals("Message", "-", message);
-        Assert.assertThat("Tracking ID", trackingId, Matchers.endsWith(orderCreationV2Template.getOrderNo()));
-        Assert.assertEquals("Order Ref No", orderCreationV2Template.getShipperOrderNo(), orderRefNo);
+        Assert.assertEquals("Message", expectedMessage, message);
+
+        if(validateTrackingId)
+        {
+            Assert.assertThat("Tracking ID", trackingId, Matchers.endsWith(expectedTrackingIdEndsWith)); // Tracking ID not displayed when using V2.
+        }
+
+        Assert.assertEquals("Order Ref No", expectedOrderRefNo, orderRefNo);
     }
 
     public void verifyOrderIsNotCreated()
@@ -78,7 +93,6 @@ public class OrderCreationV2Page extends OperatorV2SimplePage
         String status = getTextOnTable(1, COLUMN_CLASS_STATUS);
         String message = getTextOnTable(1, COLUMN_CLASS_MESSAGE);
         String trackingId = getTextOnTable(1, COLUMN_CLASS_TRACKING_ID);
-        String orderRefNo = getTextOnTable(1, COLUMN_CLASS_ORDER_REF_NO);
 
         Assert.assertEquals("Status", "FAIL", status);
         Assert.assertThat("Message", message, Matchers.startsWith("Invalid requested tracking ID"));

@@ -1,4 +1,4 @@
-@OperatorV2 @DpVaultManagement
+@OperatorV2Disabled @DpVaultManagement
 Feature: DP Vault Management
 
   @LaunchBrowser @ShouldAlwaysRun
