@@ -1,4 +1,4 @@
-@OperatorV2 @SamedayRouteEngine
+@OperatorV2Disabled @SamedayRouteEngine
 Feature: Sameday Route Engine
 
   @LaunchBrowser @ShouldAlwaysRun

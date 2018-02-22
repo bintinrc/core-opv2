@@ -1,5 +1,5 @@
 @OperatorV2 @PrinterSettings
-Feature: Shipment Scanning
+Feature: Printer Settings
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator V2
