@@ -80,6 +80,20 @@ public class ApiOperatorPortalSteps extends StandardApiOperatorPortalSteps<Scena
         super.apiOperatorPulledOutParcelFromRoute();
     }
 
+    @Given("^API Operator verify order is pulled out from route$")
+    @Override
+    public void apiOperatorVerifyOrderIsPulledOutFromRoute()
+    {
+        super.apiOperatorVerifyOrderIsPulledOutFromRoute();
+    }
+
+    @Given("^API Operator verify multiple orders is pulled out from route$")
+    @Override
+    public void apiOperatorVerifyMultipleOrdersIsPulledOutFromRoute()
+    {
+        super.apiOperatorVerifyMultipleOrdersIsPulledOutFromRoute();
+    }
+
     @Given("^API Operator Global Inbound parcel using data below:$")
     @Override
     public void apiOperatorGlobalInboundParcelUsingDataBelow(DataTable dataTable)

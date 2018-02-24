@@ -391,7 +391,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clearSearchTableCustom1(String columnClass)
     {
-        String xpathExpression = String.format("//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/button[@aria-hidden='true']", columnClass);
+        String xpathExpression = String.format("//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/button[@aria-hidden='false']", columnClass);
 
         if(isElementExistWait1Second(xpathExpression))
         {

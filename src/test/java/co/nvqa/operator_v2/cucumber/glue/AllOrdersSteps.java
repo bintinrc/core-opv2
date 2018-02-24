@@ -12,6 +12,7 @@ import cucumber.api.java.en.When;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -163,6 +164,14 @@ public class AllOrdersSteps extends AbstractSteps
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         allOrdersPage.rtsSingleOrderNextDay(trackingId);
+    }
+
+    @When("^Operator pull out multiple orders from route on All Orders page$")
+    public void operatorPullOutMultipleOrdersFromRouteOnAllOrdersPage()
+    {
+        List<OrderRequestV2> orders = get(KEY_LIST_OF_CREATED_ORDER);
+        List<String> listOfTrackingIds = orders.stream().map(OrderRequestV2::getTrackingId).collect(Collectors.toList());
+        allOrdersPage.pullOutFromRoute(listOfTrackingIds);
     }
 
     @When("Operator print Waybill for single order on All Orders page")

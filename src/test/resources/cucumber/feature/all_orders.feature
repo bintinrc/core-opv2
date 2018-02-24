@@ -94,6 +94,25 @@ Feature: All Orders
     When Operator RTS single order on next day on All Orders page
     Then API Operator verify order info after failed delivery aged parcel global inbounded and RTS-ed on next day
 
+  Scenario: Operator pull out multiple orders from route on All Orders page (uid:ec25528a-5be8-4026-9680-731a066f95cb)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create multiple Order V2 Parcel using data below:
+      | numberOfOrder     | 3       |
+      | generateFromAndTo | RANDOM |
+      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    Given API Operator Global Inbound multiple parcels using data below:
+      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}" } |
+    Given API Operator add multiple parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When API Operator get order details
+    When Operator go to menu Order -> All Orders
+    When Operator find multiple orders by uploading CSV on All Orders page
+    Then Operator verify all orders in CSV is found on All Orders page with correct info
+    When Operator pull out multiple orders from route on All Orders page
+    Then API Operator verify multiple orders is pulled out from route
+
   Scenario: Operator print Waybill for single order on All Orders page and verify the downloaded PDF contains correct info (uid:9f09610b-5abf-4bc8-bfea-aad8693158bf)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:

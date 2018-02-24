@@ -25,8 +25,9 @@ import java.util.stream.Collectors;
  */
 public class AllOrdersPage extends OperatorV2SimplePage
 {
-    protected static final int ACTION_MANUALLY_COMPLETE_SELECTED = 1;
-    protected static final int ACTION_SET_RTS_TO_SELECTED = 2;
+    protected static final int ACTION_SET_RTS_TO_SELECTED = 1;
+    protected static final int ACTION_MANUALLY_COMPLETE_SELECTED = 2;
+    protected static final int ACTION_PULL_FROM_ROUTE = 3;
 
     private static final String SAMPLE_CSV_FILENAME = "find-orders-with-csv.csv";
 
@@ -213,7 +214,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         Assert.assertThat("To Address", actualToAddress, Matchers.containsString(orderRequestV2.getToAddress2()));
         Assert.assertEquals("To Postcode", orderRequestV2.getToPostcode(), actualToPostcode);
 
-        Assert.assertThat("Granular Status", actualGranularStatus, Matchers.equalToIgnoringCase(order.getGranularStatus().replaceFirst("_", " ")));
+        Assert.assertThat("Granular Status", actualGranularStatus, Matchers.equalToIgnoringCase(order.getGranularStatus().replaceAll("_", " ")));
     }
 
     public void verifyOrderInfoIsCorrect(OrderRequestV2 orderRequestV2, Order order)
@@ -272,6 +273,20 @@ public class AllOrdersPage extends OperatorV2SimplePage
         setMdDatepickerById("commons.model.delivery-date", TestUtils.getNextDate(1));
         selectValueFromMdSelectById("commons.timeslot", "3PM - 6PM");
         clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.set-order-to-rts");
+        waitUntilInvisibilityOfToast("updated");
+    }
+
+    public void pullOutFromRoute(List<String> listOfExpectedTrackingId)
+    {
+        clearFilterTableOrderByTrackingId();
+        selectAllShown("ctrl.ordersTableParam");
+        selectAction(ACTION_PULL_FROM_ROUTE);
+
+        List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='processedTransactionData in ctrl.processedTransactionsData']/td[@ng-if='ctrl.settings.showTrackingId']");
+        List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
+
+        Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+        clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.pull-orders-from-routes");
         waitUntilInvisibilityOfToast("updated");
     }
 
@@ -408,6 +423,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         {
             case ACTION_SET_RTS_TO_SELECTED: clickButtonByAriaLabel("Set RTS to Selected"); break;
             case ACTION_MANUALLY_COMPLETE_SELECTED: clickButtonByAriaLabel("Manually Complete Selected"); break;
+            case ACTION_PULL_FROM_ROUTE: clickButtonByAriaLabel("Pull Selected from Route"); break;
         }
 
         pause500ms();
@@ -438,6 +454,11 @@ public class AllOrdersPage extends OperatorV2SimplePage
     public void filterTableOrderByTrackingId(String trackingId)
     {
         searchTableCustom1("tracking-id", trackingId);
+    }
+
+    public void clearFilterTableOrderByTrackingId()
+    {
+        clearSearchTableCustom1("tracking-id");
     }
 
     public void waitUntilNewWindowOrTabOpened()
