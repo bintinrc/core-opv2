@@ -174,6 +174,15 @@ public class AllOrdersSteps extends AbstractSteps
         allOrdersPage.pullOutFromRoute(listOfTrackingIds);
     }
 
+    @When("^Operator add multiple orders to route on All Orders page$")
+    public void operatorAddMultipleOrdersToRouteOnAllOrdersPage()
+    {
+        List<OrderRequestV2> orders = get(KEY_LIST_OF_CREATED_ORDER);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
+        List<String> listOfTrackingIds = orders.stream().map(OrderRequestV2::getTrackingId).collect(Collectors.toList());
+        allOrdersPage.addToRoute(listOfTrackingIds, routeId);
+    }
+
     @When("Operator print Waybill for single order on All Orders page")
     public void operatorPrintWaybillForSingleOrderOnAllOrdersPage()
     {

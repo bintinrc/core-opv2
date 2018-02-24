@@ -28,6 +28,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     protected static final int ACTION_SET_RTS_TO_SELECTED = 1;
     protected static final int ACTION_MANUALLY_COMPLETE_SELECTED = 2;
     protected static final int ACTION_PULL_FROM_ROUTE = 3;
+    protected static final int ACTION_ADD_TO_ROUTE = 4;
 
     private static final String SAMPLE_CSV_FILENAME = "find-orders-with-csv.csv";
 
@@ -284,9 +285,25 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='processedTransactionData in ctrl.processedTransactionsData']/td[@ng-if='ctrl.settings.showTrackingId']");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
-
         Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+
         clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.pull-orders-from-routes");
+        waitUntilInvisibilityOfToast("updated");
+    }
+
+    public void addToRoute(List<String> listOfExpectedTrackingId, long routeId)
+    {
+        clearFilterTableOrderByTrackingId();
+        selectAllShown("ctrl.ordersTableParam");
+        selectAction(ACTION_ADD_TO_ROUTE);
+
+        List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='order in ctrl.formData.orders']/td[1]");
+        List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
+        Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+
+        clickNvIconTextButtonByName("container.order.edit.set-to-all");
+        sendKeysById("container.order.edit.route", String.valueOf(routeId));
+        clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.add-selected-to-routes");
         waitUntilInvisibilityOfToast("updated");
     }
 
@@ -424,6 +441,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
             case ACTION_SET_RTS_TO_SELECTED: clickButtonByAriaLabel("Set RTS to Selected"); break;
             case ACTION_MANUALLY_COMPLETE_SELECTED: clickButtonByAriaLabel("Manually Complete Selected"); break;
             case ACTION_PULL_FROM_ROUTE: clickButtonByAriaLabel("Pull Selected from Route"); break;
+            case ACTION_ADD_TO_ROUTE: clickButtonByAriaLabel("Add Selected to Route"); break;
         }
 
         pause500ms();

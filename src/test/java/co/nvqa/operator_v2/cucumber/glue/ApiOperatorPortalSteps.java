@@ -129,6 +129,20 @@ public class ApiOperatorPortalSteps extends StandardApiOperatorPortalSteps<Scena
         super.apiOperatorAddMultipleParcelToTheRouteUsingDataBelow(dataTable);
     }
 
+    @Given("^API Operator verify delivery order is added to route$")
+    @Override
+    public void apiOperatorVerifyDeliveryOrderIsAddedToRoute()
+    {
+        super.apiOperatorVerifyDeliveryOrderIsAddedToRoute();
+    }
+
+    @Given("^API Operator verify multiple delivery orders is added to route$")
+    @Override
+    public void apiOperatorVerifyMultipleDeliveryOrdersIsAddedToRoute()
+    {
+        super.apiOperatorVerifyMultipleDeliveryOrdersIsAddedToRoute();
+    }
+
     @Given("^API Operator Van Inbound parcel$")
     @Override
     public void apiOperatorVanInboundParcel()
