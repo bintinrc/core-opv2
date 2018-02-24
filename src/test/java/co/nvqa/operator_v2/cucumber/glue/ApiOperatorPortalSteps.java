@@ -206,6 +206,20 @@ public class ApiOperatorPortalSteps extends StandardApiOperatorPortalSteps<Scena
         super.apiOperatorVerifyOrderInfoAfterForceSuccessed();
     }
 
+    @Given("^API Operator verify order info after Canceled$")
+    @Override
+    public void apiOperatorVerifyOrderInfoAfterCanceled()
+    {
+        super.apiOperatorVerifyOrderInfoAfterCanceled();
+    }
+
+    @Given("^API Operator verify multiple orders info after Canceled$")
+    @Override
+    public void apiOperatorVerifyMultipleOrdersInfoAfterCanceled()
+    {
+        super.apiOperatorVerifyMultipleOrdersInfoAfterCanceled();
+    }
+
     @Given("^API Operator assign delivery waypoint of an order to DP with ID = \"([^\"]*)\"$")
     @Override
     public void apiOperatorAssignDeliveryWaypointOfAnOrderToDpWithId(String dpIdAsString)

@@ -14,6 +14,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -26,9 +27,10 @@ import java.util.stream.Collectors;
 public class AllOrdersPage extends OperatorV2SimplePage
 {
     protected static final int ACTION_SET_RTS_TO_SELECTED = 1;
-    protected static final int ACTION_MANUALLY_COMPLETE_SELECTED = 2;
-    protected static final int ACTION_PULL_FROM_ROUTE = 3;
-    protected static final int ACTION_ADD_TO_ROUTE = 4;
+    protected static final int ACTION_CANCEL_SELECTED = 2;
+    protected static final int ACTION_MANUALLY_COMPLETE_SELECTED = 3;
+    protected static final int ACTION_PULL_FROM_ROUTE = 4;
+    protected static final int ACTION_ADD_TO_ROUTE = 5;
 
     private static final String SAMPLE_CSV_FILENAME = "find-orders-with-csv.csv";
 
@@ -277,6 +279,21 @@ public class AllOrdersPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast("updated");
     }
 
+    public void cancelSelected(List<String> listOfExpectedTrackingId)
+    {
+        clearFilterTableOrderByTrackingId();
+        selectAllShown("ctrl.ordersTableParam");
+        selectAction(ACTION_CANCEL_SELECTED);
+
+        List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='order in ctrl.orders']/td[1]");
+        List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
+        Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+
+        sendKeysById("container.order.edit.cancellation-reason", String.format("This order is canceled by automation to test 'Cancel Selected' feature on All Orders page. Canceled at %s.", CREATED_DATE_SDF.format(new Date())));
+        clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-orders");
+        waitUntilInvisibilityOfToast("updated");
+    }
+
     public void pullOutFromRoute(List<String> listOfExpectedTrackingId)
     {
         clearFilterTableOrderByTrackingId();
@@ -439,6 +456,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         switch(actionType)
         {
             case ACTION_SET_RTS_TO_SELECTED: clickButtonByAriaLabel("Set RTS to Selected"); break;
+            case ACTION_CANCEL_SELECTED: clickButtonByAriaLabel("Cancel Selected"); break;
             case ACTION_MANUALLY_COMPLETE_SELECTED: clickButtonByAriaLabel("Manually Complete Selected"); break;
             case ACTION_PULL_FROM_ROUTE: clickButtonByAriaLabel("Pull Selected from Route"); break;
             case ACTION_ADD_TO_ROUTE: clickButtonByAriaLabel("Add Selected to Route"); break;

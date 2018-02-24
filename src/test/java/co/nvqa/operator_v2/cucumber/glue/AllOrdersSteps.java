@@ -166,6 +166,14 @@ public class AllOrdersSteps extends AbstractSteps
         allOrdersPage.rtsSingleOrderNextDay(trackingId);
     }
 
+    @When("^Operator cancel multiple orders on All Orders page$")
+    public void operatorCancelMultipleOrdersOnAllOrdersPage()
+    {
+        List<OrderRequestV2> orders = get(KEY_LIST_OF_CREATED_ORDER);
+        List<String> listOfTrackingIds = orders.stream().map(OrderRequestV2::getTrackingId).collect(Collectors.toList());
+        allOrdersPage.cancelSelected(listOfTrackingIds);
+    }
+
     @When("^Operator pull out multiple orders from route on All Orders page$")
     public void operatorPullOutMultipleOrdersFromRouteOnAllOrdersPage()
     {

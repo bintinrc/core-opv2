@@ -94,6 +94,19 @@ Feature: All Orders
     When Operator RTS single order on next day on All Orders page
     Then API Operator verify order info after failed delivery aged parcel global inbounded and RTS-ed on next day
 
+  Scenario: Operator cancel multiple orders on All Orders page (uid:bd32337b-e3f7-4241-9cf4-5d847de48df9)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create multiple Order V2 Parcel using data below:
+      | numberOfOrder     | 3       |
+      | generateFromAndTo | RANDOM |
+      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    When API Operator get order details
+    When Operator go to menu Order -> All Orders
+    When Operator find multiple orders by uploading CSV on All Orders page
+    Then Operator verify all orders in CSV is found on All Orders page with correct info
+    When Operator cancel multiple orders on All Orders page
+    Then API Operator verify multiple orders info after Canceled
+
   Scenario: Operator pull out multiple orders from route on All Orders page (uid:ec25528a-5be8-4026-9680-731a066f95cb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple Order V2 Parcel using data below:
@@ -113,6 +126,7 @@ Feature: All Orders
     When Operator pull out multiple orders from route on All Orders page
     Then API Operator verify multiple orders is pulled out from route
 
+  @ArchiveRoute
   Scenario: Operator add multiple orders to route on All Orders page (uid:c8d93bf5-a2d9-40bf-9346-9278299d3bd3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple Order V2 Parcel using data below:
