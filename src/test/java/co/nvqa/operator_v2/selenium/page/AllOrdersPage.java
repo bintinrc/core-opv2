@@ -264,11 +264,15 @@ public class AllOrdersPage extends OperatorV2SimplePage
         }
     }
 
-    public void rtsSingleOrder(String trackingId)
+    public void rtsSingleOrderNextDay(String trackingId)
     {
         filterTableOrderByTrackingId(trackingId);
         selectAllShown("ctrl.ordersTableParam");
         selectAction(ACTION_SET_RTS_TO_SELECTED);
+        setMdDatepickerById("commons.model.delivery-date", TestUtils.getNextDate(1));
+        selectValueFromMdSelectById("commons.timeslot", "3PM - 6PM");
+        clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.set-order-to-rts");
+        waitUntilInvisibilityOfToast("updated");
     }
 
     public void printWaybill(String trackingId)

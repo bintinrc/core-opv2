@@ -158,11 +158,11 @@ public class AllOrdersSteps extends AbstractSteps
         allOrdersPage.verifyOrderIsForceSuccessedSuccessfully(orderRequestV2);
     }
 
-    @When("^Operator RTS single order on All Orders page$")
-    public void operatorRtsSingleOrderOnAllOrdersPage()
+    @When("^Operator RTS single order on next day on All Orders page$")
+    public void operatorRtsSingleOrderOnNextDayOnAllOrdersPage()
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        allOrdersPage.rtsSingleOrder(trackingId);
+        allOrdersPage.rtsSingleOrderNextDay(trackingId);
     }
 
     @When("Operator print Waybill for single order on All Orders page")
