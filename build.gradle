@@ -15,9 +15,6 @@ dependencies {
     testCompile "ch.qos.logback:logback-classic:1.2.3"
 
     testCompile "org.apache.poi:poi-ooxml:3.17"
-
-    testCompile "com.google.zxing:core:3.3.1"
-    testCompile "com.google.zxing:javase:3.3.1"
 }
 
 project.ext {
