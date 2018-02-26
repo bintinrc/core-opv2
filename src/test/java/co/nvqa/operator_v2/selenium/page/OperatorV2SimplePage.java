@@ -326,8 +326,23 @@ public class OperatorV2SimplePage extends SimplePage
     {
         click(String.format("//md-select[@ng-model='%s']", mdSelectNgModel));
         pause100ms();
-        click(String.format("//div[@aria-hidden='false']//md-option[contains(@value,'%s')]", value));
+        click(String.format("//div[@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value));
         pause50ms();
+    }
+
+    public void selectMultipleValuesFromMdSelect(String mdSelectNgModel, String... values)
+    {
+        click(String.format("//md-select[@ng-model='%s']", mdSelectNgModel));
+        pause100ms();
+
+        for(String value : values)
+        {
+            click(String.format("//div[@aria-hidden='false']//md-option[contains(@value,'%s')]", value));
+            pause30ms();
+        }
+
+        Actions actions = new Actions(getWebDriver());
+        actions.sendKeys(Keys.ESCAPE).build().perform();
     }
 
     public void selectValueFromMdSelectById(String mdSelectId, String value)

@@ -27,6 +27,7 @@ public class MainPage extends OperatorV2SimplePage
         MAP_OF_END_URL.put("4. Route Engine - Bulk Add to Route", "add-parcel-to-route");
         MAP_OF_END_URL.put("5. Route Engine - Same-Day Route Engine", "same-day-route-engine");
         MAP_OF_END_URL.put("All Orders", "order");
+        MAP_OF_END_URL.put("All Shippers", "shippers");
         MAP_OF_END_URL.put("DP Company Management", "dp-company");
         MAP_OF_END_URL.put("DP Vault Management", "dp-station");
         MAP_OF_END_URL.put("Driver Report", "driver-reports");
