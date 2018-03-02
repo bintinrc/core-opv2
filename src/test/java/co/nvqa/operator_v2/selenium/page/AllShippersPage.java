@@ -1,13 +1,29 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.shipper.v2.Shipper;
+import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
  *
- * @author Tristania Siagian
+ * @author Daniel Joi Partogi Hutapea
  */
 public class AllShippersPage extends OperatorV2SimplePage
 {
+    private static final String MD_VIRTUAL_REPEAT = "shipper in getTableData()";
+
+    public static final String COLUMN_CLASS_ID = "id";
+    public static final String COLUMN_CLASS_NAME = "name";
+    public static final String COLUMN_CLASS_EMAIL = "email";
+    public static final String COLUMN_CLASS_INDUSTRY = "_industry";
+    public static final String COLUMN_CLASS_LIAISON_EMAIL = "liaison_email";
+    public static final String COLUMN_CLASS_CONTACT = "contact";
+    public static final String COLUMN_CLASS_SALES_PERSON = "sales_person";
+    public static final String COLUMN_CLASS_PRICING_TEMPLATE_NAME = "_template_name";
+    public static final String COLUMN_CLASS_STATUS = "_status";
+
+    public static final String ACTION_BUTTON_EDIT = "commons.edit";
+
     private CreateEditShipperPage createEditShipperPage;
 
     public AllShippersPage(WebDriver webDriver)
@@ -16,9 +32,61 @@ public class AllShippersPage extends OperatorV2SimplePage
         createEditShipperPage = new CreateEditShipperPage(webDriver);
     }
 
-    public void createNewShipperV4()
+    public void waitUntilPageLoaded()
     {
+        super.waitUntilPageLoaded();
+        waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading shippers...']");
+    }
+
+    public void createNewShipperV4(Shipper shipper)
+    {
+        waitUntilPageLoaded();
         clickNvIconTextButtonByName("container.shippers.create-shipper");
-        createEditShipperPage.createNewShipperV4();
+        createEditShipperPage.createNewShipperV4(shipper);
+    }
+
+    public void verifyNewShipperV4IsCreatedSuccessfully(Shipper shipper)
+    {
+        clearCache();
+        refreshPage();
+        waitUntilPageLoaded();
+        searchTableByName(shipper.getName());
+        Long actualId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_ID));
+        String actualName = getTextOnTable(1, COLUMN_CLASS_NAME);
+        String actualEmail = getTextOnTable(1, COLUMN_CLASS_EMAIL);
+        String actualIndustry = getTextOnTable(1, COLUMN_CLASS_INDUSTRY);
+        String actualLiaisonEmail = getTextOnTable(1, COLUMN_CLASS_LIAISON_EMAIL);
+        String actualContact = getTextOnTable(1, COLUMN_CLASS_CONTACT);
+        String actualSalesPerson = getTextOnTable(1, COLUMN_CLASS_SALES_PERSON);
+        String actualPricingTemplateName = getTextOnTable(1, COLUMN_CLASS_PRICING_TEMPLATE_NAME);
+        String actualStatus = getTextOnTable(1, COLUMN_CLASS_STATUS);
+
+        shipper.setId(actualId);
+
+        Assert.assertEquals("Name", shipper.getName(), actualName);
+        Assert.assertEquals("Email", shipper.getEmail(), actualEmail);
+        Assert.assertEquals("Industry", shipper.getIndustryName(), actualIndustry);
+        Assert.assertEquals("Liaison Email", shipper.getLiaisonEmail(), actualLiaisonEmail);
+        Assert.assertEquals("Contact", shipper.getContact(), actualContact);
+        Assert.assertEquals("Sales Person", shipper.getSalesPerson().split("-")[0], actualSalesPerson);
+        Assert.assertEquals("Pricing Template Name", "-", actualPricingTemplateName);
+        Assert.assertEquals("Status", shipper.getStatus(), actualStatus);
+
+        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+    }
+
+    public void searchTableByName(String name)
+    {
+        searchTableCustom1("name", name);
+    }
+
+    public String getTextOnTable(int rowNumber, String columnDataClass)
+    {
+        return getTextOnTable(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
+    }
+
+    public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
+    {
+        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
     }
 }

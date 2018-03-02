@@ -145,7 +145,7 @@ public class DriverReportPage extends OperatorV2SimplePage
             }
             else
             {
-                String listOfSheetName = StreamSupport.stream(workbook.spliterator(), false).map(entry->entry.getSheetName()).collect(Collectors.joining("\n- ", "- ", ""));
+                String listOfSheetName = StreamSupport.stream(workbook.spliterator(), false).map(Sheet::getSheetName).collect(Collectors.joining("\n- ", "- ", ""));
                 throw new NvTestRuntimeException(String.format("There is no Sheet with name = '%s' is found on file '%s'.\nList of Sheet name on file '%s':\n%s", driverName, generatedExcelReportFilename, generatedExcelReportFilename, listOfSheetName));
             }
         }

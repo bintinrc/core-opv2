@@ -16,6 +16,8 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
+import java.util.Collection;
+
 /**
  *
  * @author Daniel Joi Partogi Hutapea
@@ -39,10 +41,13 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
     }
 
     @Before("@LaunchBrowser")
-    public void launchBrowser()
+    public void launchBrowser(Scenario scenario)
     {
+        Collection<String> sourceTagNames = scenario.getSourceTagNames();
+        boolean enableProxy = sourceTagNames.contains("@EnableProxy");
+        boolean enableClearCache = sourceTagNames.contains("@EnableClearCache");
         NvLogger.infof("Launching browser.");
-        setWebDriver(SeleniumUtils.createWebDriver());
+        setWebDriver(SeleniumUtils.createWebDriver(enableProxy, enableClearCache));
     }
 
     @Before("@LaunchBrowserWithProxyEnabled")

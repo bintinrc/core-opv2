@@ -50,7 +50,7 @@ Feature: Change Delivery Timings
       | timewindow  | -1                  |
     Then Operator verify the tracking ID is invalid on Change Delivery Timings page
 
-  @ArchiveRoute
+  @ArchiveRouteViaDb
   Scenario: Operator uploads the CSV file on Change Delivery Timings page with invalid order state (uid:fbbabed4-94df-4f0b-95b4-f668836ba0fe)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:

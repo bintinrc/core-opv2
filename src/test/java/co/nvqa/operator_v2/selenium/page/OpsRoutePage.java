@@ -44,7 +44,6 @@ public class OpsRoutePage extends OperatorV2SimplePage
 
     public String getRouteIdAtRow(int editedRouteRowNumber)
     {
-        String routeId = getTextOnTableWithNgRepeat(editedRouteRowNumber, COLUMN_CLASS_ROUTE_ID, NG_REPEAT);
-        return routeId;
+        return getTextOnTableWithNgRepeat(editedRouteRowNumber, COLUMN_CLASS_ROUTE_ID, NG_REPEAT);
     }
 }

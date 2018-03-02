@@ -54,7 +54,7 @@ public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage
         try {
             StringBuilder csvData = new StringBuilder();
 
-            listOfChangeDeliveryTimings.stream().forEach((row)-> {
+            listOfChangeDeliveryTimings.forEach((row)-> {
                 StringBuilder sb = new StringBuilder();
                 sb.append(row.getTrackingId()).append(COMMA);
                 sb.append(row.getStartDate()).append(COMMA);

@@ -5,7 +5,7 @@ Feature: Route Cash Inbound
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
-  @ArchiveRoute
+  @ArchiveRouteViaDb
   Scenario: Operator create, update and delete COD on Route Cash Inbound page (uid:2ca1458d-ecfe-44b2-a7b0-f86d4930d7fd)
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
@@ -29,7 +29,7 @@ Feature: Route Cash Inbound
     When Operator delete the new COD on Route Cash Inbound page
     Then Operator verify the new COD on Route Cash Inbound page is deleted successfully
 
-  @ArchiveRoute
+  @ArchiveRouteViaDb
   Scenario: Operator check filter on Route Cash Inbound page work fine (uid:69e6fef7-d78f-4b24-85b7-a9c820ec4bbf)
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
@@ -52,7 +52,7 @@ Feature: Route Cash Inbound
     When Operator delete the new COD on Route Cash Inbound page
     Then Operator verify the new COD on Route Cash Inbound page is deleted successfully
 
-  @ArchiveRoute
+  @ArchiveRouteViaDb
   Scenario: Operator download and verify Zone CSV file on Route Cash Inbound page (uid:41707a8b-96dc-42ed-97e1-1fedd4daa649)
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
