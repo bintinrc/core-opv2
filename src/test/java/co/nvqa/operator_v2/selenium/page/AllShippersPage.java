@@ -38,30 +38,36 @@ public class AllShippersPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading shippers...']");
     }
 
-    public void createNewShipperV4(Shipper shipper)
+    public void createNewShipper(Shipper shipper)
     {
         waitUntilPageLoaded();
         clickNvIconTextButtonByName("container.shippers.create-shipper");
-        createEditShipperPage.createNewShipperV4(shipper);
+        createEditShipperPage.createNewShipper(shipper);
     }
 
-    public void verifyNewShipperV4IsCreatedSuccessfully(Shipper shipper)
+    public void verifyNewShipperIsCreatedSuccessfully(Shipper shipper)
+    {
+        verifyShipperInfoIsCorrect(shipper.getName(), shipper);
+    }
+
+    public void verifyShipperInfoIsCorrect(String shipperNameKeyword, Shipper shipper)
     {
         clearCache();
         refreshPage();
         waitUntilPageLoaded();
-        searchTableByName(shipper.getName());
-        Long actualId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_ID));
+        searchTableByName(shipperNameKeyword);
+        Assert.assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
+
+        Long actualLegacyId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_ID));
         String actualName = getTextOnTable(1, COLUMN_CLASS_NAME);
         String actualEmail = getTextOnTable(1, COLUMN_CLASS_EMAIL);
         String actualIndustry = getTextOnTable(1, COLUMN_CLASS_INDUSTRY);
         String actualLiaisonEmail = getTextOnTable(1, COLUMN_CLASS_LIAISON_EMAIL);
         String actualContact = getTextOnTable(1, COLUMN_CLASS_CONTACT);
         String actualSalesPerson = getTextOnTable(1, COLUMN_CLASS_SALES_PERSON);
-        String actualPricingTemplateName = getTextOnTable(1, COLUMN_CLASS_PRICING_TEMPLATE_NAME);
         String actualStatus = getTextOnTable(1, COLUMN_CLASS_STATUS);
 
-        shipper.setId(actualId);
+        shipper.setLegacyId(actualLegacyId);
 
         Assert.assertEquals("Name", shipper.getName(), actualName);
         Assert.assertEquals("Email", shipper.getEmail(), actualEmail);
@@ -69,10 +75,32 @@ public class AllShippersPage extends OperatorV2SimplePage
         Assert.assertEquals("Liaison Email", shipper.getLiaisonEmail(), actualLiaisonEmail);
         Assert.assertEquals("Contact", shipper.getContact(), actualContact);
         Assert.assertEquals("Sales Person", shipper.getSalesPerson().split("-")[0], actualSalesPerson);
-        Assert.assertEquals("Pricing Template Name", "-", actualPricingTemplateName);
-        Assert.assertEquals("Status", shipper.getStatus(), actualStatus);
+        Assert.assertEquals("Expected Status = Inactive", convertBooleanToString(shipper.getActive(), "Active", "Inactive"), actualStatus);
 
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        createEditShipperPage.verifyNewShipperIsCreatedSuccessfully(shipper);
+    }
+
+    public void updateShipper(Shipper oldShipper, Shipper updatedShipper)
+    {
+        searchTableByName(oldShipper.getName());
+        Assert.assertFalse("Table is empty. Cannot update shipper with Legacy ID = "+oldShipper.getLegacyId(), isTableEmpty());
+        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        createEditShipperPage.updateShipper(updatedShipper);
+    }
+
+    public void verifyShipperIsUpdatedSuccessfully(Shipper oldShipper, Shipper shipper)
+    {
+        verifyShipperInfoIsCorrect(oldShipper.getName(), shipper);
+    }
+
+    public void verifyShipperIsDeletedSuccessfully(Shipper shipper)
+    {
+        clearCache();
+        refreshPage();
+        waitUntilPageLoaded();
+        searchTableByName(shipper.getName());
+        Assert.assertTrue("Table should be empty.", isTableEmpty());
     }
 
     public void searchTableByName(String name)

@@ -255,6 +255,13 @@ public class ApiOperatorPortalSteps extends StandardApiOperatorPortalSteps<Scena
         super.apiOperatorEnableOrDisableAutoReservationForShipperWithSpecificIdAndChangeShipperDefaultAddressToTheNewAddress(enableAutoReservation, shipperIdAsString);
     }
 
+    @Given("^API Operator reload shipper's cache$")
+    @Override
+    public void apiOperatorReloadShipperCache()
+    {
+        super.apiOperatorReloadShipperCache();
+    }
+
     @Given("^API Operator update DNR ID of Delivery Transaction to \"(-?\\d+)\"$")
     @Override
     public void apiOperatorUpdateDnrIdOfDeliveryTransaction(int expectedDnrId)

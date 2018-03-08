@@ -86,4 +86,11 @@ public class DatabaseSteps extends StandardDatabaseSteps<ScenarioManager>
     {
         super.dbOperatorFindWaypointIdAndOneTimePasswordOfAnOrderFromDatabase();
     }
+
+    @Given("^DB Operator soft delete shipper by Legacy ID$")
+    @Override
+    public void dbOperatorSoftDeleteShipperWithLegacyId()
+    {
+        super.dbOperatorSoftDeleteShipperWithLegacyId();
+    }
 }

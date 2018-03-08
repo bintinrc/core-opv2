@@ -126,10 +126,10 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         clickActionButtonOnTable(1, ACTION_BUTTON_DETAILS);
         waitUntilVisibilityOfElementLocated("//md-dialog-content//h5[text()='Details']");
 
-        String actualShipperName = getTrimmedText("//md-input-container[@id='field-shipper-name']/div");
-        String actualShipperId = getTrimmedText("//md-input-container[@id='field-shipper-id']/div");
-        String actualReservationId = getTrimmedText("//md-input-container[@id='field-reservation-id']/div");
-        String actualPickupAddress = getTrimmedText("//md-input-container[@id='field-pickup-address']/div");
+        String actualShipperName = getTextTrimmed("//md-input-container[@id='field-shipper-name']/div");
+        String actualShipperId = getTextTrimmed("//md-input-container[@id='field-shipper-id']/div");
+        String actualReservationId = getTextTrimmed("//md-input-container[@id='field-reservation-id']/div");
+        String actualPickupAddress = getTextTrimmed("//md-input-container[@id='field-pickup-address']/div");
 
         Assert.assertEquals("Shipper Name", shipperName, actualShipperName);
         Assert.assertEquals("Shipper ID", shipperId, actualShipperId);

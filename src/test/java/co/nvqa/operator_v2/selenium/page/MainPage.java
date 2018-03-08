@@ -67,12 +67,12 @@ public class MainPage extends OperatorV2SimplePage
     {
         String mainDashboard = grabEndURL("All Orders");
 
-        new WebDriverWait(getWebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver wd) ->
+        waitUntil(()->
         {
-            String currentUrl = wd.getCurrentUrl();
+            String currentUrl = getCurrentUrl();
             NvLogger.infof("verifyTheMainPageIsLoaded: Current URL = [%s] - Expected URL Ends With = [%s]", currentUrl, mainDashboard);
             return currentUrl.endsWith(mainDashboard);
-        });
+        }, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
         waitUntilPageLoaded();
         NvLogger.infof("Waiting until Welcome message toast disappear.");
@@ -124,10 +124,10 @@ public class MainPage extends OperatorV2SimplePage
             }
         }
 
-        new WebDriverWait(getWebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver wd)->
+        waitUntil(()->
         {
             boolean result;
-            String currentUrl = wd.getCurrentUrl();
+            String currentUrl = getCurrentUrl();
             NvLogger.infof("clickNavigation: Current URL = [%s] - Expected URL Ends With = [%s]", currentUrl, urlPart);
 
             if("linehaul".equals(urlPart))
@@ -140,7 +140,7 @@ public class MainPage extends OperatorV2SimplePage
             }
 
             return result;
-        });
+        }, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
         waitUntilPageLoaded();
     }

@@ -54,7 +54,7 @@ public class RouteGroupManagementSteps extends AbstractSteps
         /**
          * Verify the page is redirect to '/#/sg/transactions' after route group is created.
          */
-        Assert.assertThat("Page not redirect to '/#/sg/transactions'.", getWebDriver().getCurrentUrl(), Matchers.containsString("/#/sg/transactions"));
+        Assert.assertThat("Page not redirect to '/#/sg/transactions'.", getCurrentUrl(), Matchers.containsString("/#/sg/transactions"));
     }
 
     @When("^Operator create new 'route group' on 'Route Groups' using data below:$")

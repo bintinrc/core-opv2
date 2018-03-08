@@ -48,7 +48,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     @When("^op click create linehaul button$")
     public void createActionButtonClicked()
     {
-        String url = getWebDriver().getCurrentUrl();
+        String url = getCurrentUrl();
 
         if(url.endsWith("entries"))
         {

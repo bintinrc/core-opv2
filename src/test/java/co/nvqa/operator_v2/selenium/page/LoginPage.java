@@ -86,10 +86,9 @@ public class LoginPage extends OperatorV2SimplePage
     {
         final StringBuilder googlePageUrlSb = new StringBuilder();
 
-        WebDriverWait webDriverWait = new WebDriverWait(webDriver, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS);
-        webDriverWait.until((WebDriver d) ->
+        waitUntil(()->
         {
-            String currentUrl = d.getCurrentUrl();
+            String currentUrl = getCurrentUrl();
             googlePageUrlSb.setLength(0);
             googlePageUrlSb.append(currentUrl);
             boolean isExpectedUrlFound = currentUrl.startsWith(GOOGLE_EXPECTED_URL_1) || currentUrl.startsWith(GOOGLE_EXPECTED_URL_2);
@@ -102,7 +101,7 @@ public class LoginPage extends OperatorV2SimplePage
             NvLogger.info("=======================================");
 
             return isExpectedUrlFound;
-        });
+        }, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
 
         String googlePageUrl = googlePageUrlSb.toString();
@@ -156,7 +155,7 @@ public class LoginPage extends OperatorV2SimplePage
     public void backToLoginPage()
     {
         pause1s();
-        String currentUrl = getWebDriver().getCurrentUrl();
+        String currentUrl = getCurrentUrl();
         Assert.assertThat("Default Operator Portal URL not loaded.", currentUrl, Matchers.containsString(TestConstants.OPERATOR_PORTAL_URL));
     }
 }

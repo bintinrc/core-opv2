@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -302,14 +303,36 @@ public class OperatorV2SimplePage extends SimplePage
         }
     }
 
+    public void clickToggleButton(String divModel, String buttonAriaLabel)
+    {
+        clickf("//div[@model='%s']//button[@aria-label='%s']", divModel, buttonAriaLabel);
+    }
+
+    public String getToggleButtonValue(String divModel)
+    {
+        return getText(String.format("//div[@model='%s']//button[contains(@class,'raised')]/span", divModel));
+    }
+
     public void selectValueFromNvAutocomplete(String searchTextAttribute, String value)
     {
         String xpath = String.format("//nv-autocomplete[@search-text='%s']//input", searchTextAttribute);
         WebElement we = findElementByXpath(xpath);
+
+        if(!we.getAttribute("value").isEmpty())
+        {
+            we.clear();
+            pause200ms();
+        }
+
         we.sendKeys(value);
         pause1s();
         we.sendKeys(Keys.RETURN);
         pause100ms();
+    }
+
+    public String getNvAutocompleteValue(String searchTextAttribute)
+    {
+        return getValue(String.format("//nv-autocomplete[@search-text='%s']//input", searchTextAttribute));
     }
 
     public void selectValueFromMdAutocomplete(String placeholder, String value)
@@ -328,6 +351,14 @@ public class OperatorV2SimplePage extends SimplePage
         pause100ms();
         click(String.format("//div[@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value));
         pause50ms();
+    }
+
+    public void selectMultipleValuesFromMdSelect(String mdSelectNgModel, List<String> listOfValues)
+    {
+        if(listOfValues!=null && !listOfValues.isEmpty())
+        {
+            selectMultipleValuesFromMdSelect(mdSelectNgModel, listOfValues.toArray(new String[]{}));
+        }
     }
 
     public void selectMultipleValuesFromMdSelect(String mdSelectNgModel, String... values)
@@ -361,6 +392,47 @@ public class OperatorV2SimplePage extends SimplePage
         WebElement mdSelectOption = findElementByXpath(xpathMdSelectOption);
         mdSelectOption.click();
         pause300ms();
+    }
+
+    public String getMdSelectValue(String mdSelectNgModel)
+    {
+        return getText(String.format("//md-select[@ng-model='%s']/md-select-value/span/div[@class='md-text']", mdSelectNgModel));
+    }
+
+    public String getMdSelectValueTrimmed(String mdSelectNgModel)
+    {
+        String value = getMdSelectValue(mdSelectNgModel);
+
+        if(value!=null)
+        {
+            value = value.trim();
+        }
+
+        return value;
+    }
+
+    public List<String> getMdSelectMultipleValues(String mdSelectNgModel)
+    {
+        List<WebElement> listOfWe = findElementsByXpath(String.format("//md-select[@ng-model='%s']/md-select-value/span/div[@class='md-text']", mdSelectNgModel));
+
+        if(listOfWe!=null)
+        {
+            return listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
+        }
+
+        return null;
+    }
+
+    public List<String> getMdSelectMultipleValuesTrimmed(String mdSelectNgModel)
+    {
+        List<WebElement> listOfWe = findElementsByXpath(String.format("//md-select[@ng-model='%s']/md-select-value/span/div[@class='md-text']", mdSelectNgModel));
+
+        if(listOfWe!=null)
+        {
+            return listOfWe.stream().map(this::getTextTrimmed).collect(Collectors.toList());
+        }
+
+        return null;
     }
 
     public void inputListBox(String placeHolder, String searchValue)
@@ -451,13 +523,13 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void refreshPage()
     {
-        String previousUrl = getWebDriver().getCurrentUrl().toLowerCase();
+        String previousUrl = getCurrentUrl().toLowerCase();
         getWebDriver().navigate().refresh();
 
-        new WebDriverWait(getWebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver wd) ->
+        waitUntil(()->
         {
             boolean result;
-            String currentUrl = wd.getCurrentUrl();
+            String currentUrl = getCurrentUrl();
             NvLogger.infof("refreshPage: Current URL = [%s] - Expected URL = [%s]", currentUrl, previousUrl);
 
             if(previousUrl.contains("linehaul"))
@@ -470,7 +542,7 @@ public class OperatorV2SimplePage extends SimplePage
             }
 
             return result;
-        });
+        }, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
         waitUntilPageLoaded();
     }

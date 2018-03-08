@@ -96,7 +96,7 @@ public class RouteLogsSteps extends AbstractSteps
                 }
 
                 pause100ms();
-                actualCurrentUrl = getWebDriver().getCurrentUrl();
+                actualCurrentUrl = getCurrentUrl();
                 getWebDriver().close();
                 pause100ms();
                 getWebDriver().switchTo().window(primaryWindowHandle);

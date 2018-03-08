@@ -512,7 +512,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         for(String windowHandle : windowHandles)
         {
             getWebDriver().switchTo().window(windowHandle);
-            String currentWindowUrl = getWebDriver().getCurrentUrl();
+            String currentWindowUrl = getCurrentUrl();
 
             if(currentWindowUrl.endsWith(String.valueOf("order/"+orderId)))
             {
