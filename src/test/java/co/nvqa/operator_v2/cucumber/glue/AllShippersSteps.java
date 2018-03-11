@@ -1,10 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
-import co.nvqa.commons.model.shipper.v2.DistributionPoint;
-import co.nvqa.commons.model.shipper.v2.OrderCreate;
-import co.nvqa.commons.model.shipper.v2.Pricing;
-import co.nvqa.commons.model.shipper.v2.Shipper;
+import co.nvqa.commons.model.shipper.v2.*;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import com.google.inject.Inject;
@@ -15,6 +13,7 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,6 +37,12 @@ public class AllShippersSteps extends AbstractSteps
     public void init()
     {
         allShippersPage = new AllShippersPage(getWebDriver());
+    }
+
+    @When("Operator clear browser cache and reload All Shipper page")
+    public void operatorClearBrowserCacheAndReloadAllShipperPage()
+    {
+        allShippersPage.clearBrowserCacheAndReloadPage();
     }
 
     @When("^Operator create new Shipper with basic settings using data below:$")
@@ -188,6 +193,209 @@ public class AllShippersSteps extends AbstractSteps
         Shipper shipper = get(KEY_CREATED_SHIPPER);
         Shipper oldShipper = get(KEY_UPDATED_SHIPPER);
         allShippersPage.verifyShipperIsUpdatedSuccessfully(oldShipper, shipper);
+    }
+
+    @When("^Operator update Shipper's Label Printer settings$")
+    public void operatorUpdateShipperLabelPrinterSettings()
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+
+        LabelPrinter labelPrinter = new LabelPrinter();
+        labelPrinter.setPrinterIp("127.0.0.1");
+        labelPrinter.setShowShipperDetails(true);
+        shipper.setLabelPrinter(labelPrinter);
+
+        allShippersPage.updateShipperLabelPrinterSettings(shipper);
+    }
+
+    @Then("^Operator verify Shipper's Label Printer settings is updated successfully$")
+    public void operatorVerifyShipperLabelPrinterSettingsIsUpdatedSuccessfully()
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+        allShippersPage.verifyShipperLabelPrinterSettingsIsUpdatedSuccessfuly(shipper);
+    }
+
+    @When("^Operator update Shipper's Returns settings$")
+    public void operatorUpdateShipperReturnsSettings()
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+
+        String dateUniqueString = generateDateUniqueString();
+        Address returnAddress = generateRandomAddress();
+
+        Return returnSettings = new Return();
+        returnSettings.setName("Return #"+dateUniqueString);
+        returnSettings.setContact(generatePhoneNumber(dateUniqueString));
+        returnSettings.setEmail("return."+dateUniqueString+"@automation.co");
+        returnSettings.setAddress1(returnAddress.getAddress1());
+        returnSettings.setAddress2(returnAddress.getAddress2());
+        returnSettings.setCity(returnAddress.getCity());
+        returnSettings.setPostcode(returnAddress.getPostcode());
+        returnSettings.setLastReturnNumber(dateUniqueString);
+        shipper.setReturns(returnSettings);
+
+        allShippersPage.updateShipperReturnsSettings(shipper);
+    }
+
+    @Then("^Operator verify Shipper's Returns settings is updated successfully$")
+    public void operatorVerifyShipperReturnsSettingsIsUpdatedSuccessfully()
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+        allShippersPage.verifyShipperReturnsSettingsIsUpdatedSuccessfuly(shipper);
+    }
+
+    @When("^Operator update Shipper's Distribution Point settings$")
+    public void operatorUpdateShipperDistributionPointSettings()
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+
+        String dateUniqueString = generateDateUniqueString();
+
+        DistributionPoint distributionPoint = new DistributionPoint();
+        distributionPoint.setVaultIsIntegrated(true);
+        distributionPoint.setVaultCollectCustomerNricCode(true);
+        distributionPoint.setAllowReturnsOnDpms(true);
+        distributionPoint.setDpmsLogoUrl("https://dpmslogo"+dateUniqueString+".com");
+        distributionPoint.setAllowReturnsOnVault(true);
+        distributionPoint.setVaultLogoUrl("https://vaultlogo"+dateUniqueString+".com");
+        distributionPoint.setAllowReturnsOnShipperLite(true);
+        distributionPoint.setShipperLiteLogoUrl("https://shipperlitelogo"+dateUniqueString+".com");
+        shipper.setDistributionPoints(distributionPoint);
+
+        allShippersPage.updateShipperDistributionPointSettings(shipper);
+    }
+
+    @Then("^Operator verify Shipper's Distribution Point settings is updated successfully$")
+    public void operatorVerifyShipperDistributionPointSettingsIsUpdatedSuccessfully()
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+        allShippersPage.verifyShipperDistributionPointSettingsIsUpdatedSuccessfuly(shipper);
+    }
+
+    @When("^Operator update Shipper's Qoo10 settings$")
+    public void operatorUpdateShipperQoo10Settings()
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+
+        String dateUniqueString = generateDateUniqueString();
+
+        Qoo10 qoo10 = new Qoo10();
+        qoo10.setUsername("qoo10"+dateUniqueString);
+        qoo10.setPassword(dateUniqueString);
+        shipper.setQoo10(qoo10);
+
+        allShippersPage.updateShipperQoo10Settings(shipper);
+    }
+
+    @Then("^Operator verify Shipper's Qoo10 settings is updated successfully$")
+    public void operatorVerifyShipperQoo10SettingsIsUpdatedSuccessfully()
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+        allShippersPage.verifyShipperQoo10SettingsIsUpdatedSuccessfuly(shipper);
+    }
+
+    @When("^Operator update Shipper's Shopify settings$")
+    public void operatorUpdateShipperShopifySettings()
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+
+        String dateUniqueString = generateDateUniqueString();
+
+        Shopify shopify = new Shopify();
+        shopify.setMaxDeliveryDays(randomLong(0, 3));
+        shopify.setDdOffset(1L);
+        shopify.setDdTimewindowId(2L);
+        shopify.setBaseUri(String.format("https://www.shopify%s.com", dateUniqueString));
+        shopify.setApiKey(dateUniqueString+"1");
+        shopify.setPassword(dateUniqueString+"2");
+        shopify.setShippingCodes(Arrays.asList(dateUniqueString+"3"));
+        shopify.setShippingCodeFilterEnabled(true);
+        shipper.setShopify(shopify);
+
+        allShippersPage.updateShipperShopifySettings(shipper);
+    }
+
+    @Then("^Operator verify Shipper's Shopify settings is updated successfully$")
+    public void operatorVerifyShipperShopifySettingsIsUpdatedSuccessfully()
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+        allShippersPage.verifyShipperShopifySettingsIsUpdatedSuccessfuly(shipper);
+    }
+
+    @When("^Operator update Shipper's Magento settings$")
+    public void operatorUpdateShipperMagentoSettings()
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+
+        String dateUniqueString = generateDateUniqueString();
+
+        Magento magento = new Magento();
+        magento.setUsername("magento"+dateUniqueString);
+        magento.setPassword(dateUniqueString);
+        magento.setSoapApiUrl(String.format("https://www.magento%s.com", dateUniqueString));
+        shipper.setMagento(magento);
+
+        allShippersPage.updateShipperMagentoSettings(shipper);
+    }
+
+    @Then("^Operator verify Shipper's Magento settings is updated successfully$")
+    public void operatorVerifyShipperMagentoSettingsIsUpdatedSuccessfully()
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+        allShippersPage.verifyShipperMagentoSettingsIsUpdatedSuccessfuly(shipper);
+    }
+
+    @When("^Operator enable Auto Reservation for Shipper and change Shipper default Address to the new Address using data below:$")
+    public void operatorEnableAutoReservationForShipperAndChangeShipperDefaultAddressToTheNewAddressUsingDataBelow(DataTable dataTable)
+    {
+        Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
+        String reservationDays = mapOfData.get("reservationDays");
+        String autoReservationReadyTime = mapOfData.get("autoReservationReadyTime");
+        String autoReservationLatestTime = mapOfData.get("autoReservationLatestTime");
+        String autoReservationCutoffTime = mapOfData.get("autoReservationCutoffTime");
+        String autoReservationApproxVolume = mapOfData.get("autoReservationApproxVolume");
+        String allowedTypes = mapOfData.get("allowedTypes");
+
+        List<Long> listOfReservationDays;
+
+        if(reservationDays==null || reservationDays.isEmpty())
+        {
+            listOfReservationDays = new ArrayList<>();
+        }
+        else
+        {
+            listOfReservationDays = Stream.of(reservationDays.split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+        }
+
+        List<String> listOfAllowedTypes;
+
+        if(allowedTypes==null || allowedTypes.isEmpty())
+        {
+            listOfAllowedTypes = new ArrayList<>();
+        }
+        else
+        {
+            listOfAllowedTypes = Stream.of(allowedTypes.split(",")).map(String::trim).collect(Collectors.toList());
+        }
+
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+        Address createdAddress = AddressFactory.getRandomAddress();
+        String unique = generateDateUniqueString();
+        createdAddress.setName(String.format("Dummy Address #%s", unique));
+        createdAddress.setEmail(String.format("dummy.address.%s@gmail.com", unique));
+        createdAddress.setAddress2(createdAddress.getAddress2()+" #"+unique);
+
+        Reservation reservation = new Reservation();
+        reservation.setAutoReservationEnabled(true);
+        reservation.setDays(listOfReservationDays);
+        reservation.setAutoReservationReadyTime(autoReservationReadyTime);
+        reservation.setAutoReservationLatestTime(autoReservationLatestTime);
+        reservation.setAutoReservationCutoffTime(autoReservationCutoffTime);
+        reservation.setAutoReservationApproxVolume(autoReservationApproxVolume);
+        reservation.setAllowedTypes(listOfAllowedTypes);
+
+        allShippersPage.enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(shipper, createdAddress, reservation);
+        put(KEY_CREATED_ADDRESS, createdAddress);
     }
 
     @Then("^Operator verify the shipper is deleted successfully$")

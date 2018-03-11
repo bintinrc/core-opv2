@@ -1,5 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.core.Address;
+import co.nvqa.commons.model.shipper.v2.Reservation;
+import co.nvqa.commons.model.shipper.v2.Return;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
@@ -38,6 +41,13 @@ public class AllShippersPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading shippers...']");
     }
 
+    public void clearBrowserCacheAndReloadPage()
+    {
+        clearCache();
+        refreshPage();
+        waitUntilPageLoaded();
+    }
+
     public void createNewShipper(Shipper shipper)
     {
         waitUntilPageLoaded();
@@ -52,9 +62,6 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void verifyShipperInfoIsCorrect(String shipperNameKeyword, Shipper shipper)
     {
-        clearCache();
-        refreshPage();
-        waitUntilPageLoaded();
         searchTableByName(shipperNameKeyword);
         Assert.assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
 
@@ -83,9 +90,7 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void updateShipper(Shipper oldShipper, Shipper updatedShipper)
     {
-        searchTableByName(oldShipper.getName());
-        Assert.assertFalse("Table is empty. Cannot update shipper with Legacy ID = "+oldShipper.getLegacyId(), isTableEmpty());
-        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        searchTableByNameAndGoToEditPage(oldShipper);
         createEditShipperPage.updateShipper(updatedShipper);
     }
 
@@ -96,11 +101,93 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void verifyShipperIsDeletedSuccessfully(Shipper shipper)
     {
-        clearCache();
-        refreshPage();
-        waitUntilPageLoaded();
         searchTableByName(shipper.getName());
         Assert.assertTrue("Table should be empty.", isTableEmpty());
+    }
+
+    public void enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(Shipper shipper, Address address, Reservation reservation)
+    {
+        searchTableByNameAndGoToEditPage(shipper);
+        createEditShipperPage.enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(shipper, address, reservation);
+    }
+
+    public void updateShipperLabelPrinterSettings(Shipper shipper)
+    {
+        searchTableByNameAndGoToEditPage(shipper);
+        createEditShipperPage.updateShipperLabelPrinterSettings(shipper);
+    }
+
+    public void verifyShipperLabelPrinterSettingsIsUpdatedSuccessfuly(Shipper shipper)
+    {
+        searchTableByNameAndGoToEditPage(shipper);
+        createEditShipperPage.verifyShipperLabelPrinterSettingsIsUpdatedSuccessfuly(shipper);
+    }
+
+    public void updateShipperDistributionPointSettings(Shipper shipper)
+    {
+        searchTableByNameAndGoToEditPage(shipper);
+        createEditShipperPage.updateShipperDistributionPointSettings(shipper);
+    }
+
+    public void verifyShipperDistributionPointSettingsIsUpdatedSuccessfuly(Shipper shipper)
+    {
+        searchTableByNameAndGoToEditPage(shipper);
+        createEditShipperPage.verifyShipperDistributionPointSettingsIsUpdatedSuccessfuly(shipper);
+    }
+
+    public void updateShipperReturnsSettings(Shipper shipper)
+    {
+        searchTableByNameAndGoToEditPage(shipper);
+        createEditShipperPage.updateShipperReturnsSettings(shipper);
+    }
+
+    public void verifyShipperReturnsSettingsIsUpdatedSuccessfuly(Shipper shipper)
+    {
+        searchTableByNameAndGoToEditPage(shipper);
+        createEditShipperPage.verifyShipperReturnsSettingsIsUpdatedSuccessfuly(shipper);
+    }
+
+    public void updateShipperQoo10Settings(Shipper shipper)
+    {
+        searchTableByNameAndGoToEditPage(shipper);
+        createEditShipperPage.updateShipperQoo10Settings(shipper);
+    }
+
+    public void verifyShipperQoo10SettingsIsUpdatedSuccessfuly(Shipper shipper)
+    {
+        searchTableByNameAndGoToEditPage(shipper);
+        createEditShipperPage.verifyShipperQoo10SettingsIsUpdatedSuccessfuly(shipper);
+    }
+
+    public void updateShipperShopifySettings(Shipper shipper)
+    {
+        searchTableByNameAndGoToEditPage(shipper);
+        createEditShipperPage.updateShipperShopifySettings(shipper);
+    }
+
+    public void verifyShipperShopifySettingsIsUpdatedSuccessfuly(Shipper shipper)
+    {
+        searchTableByNameAndGoToEditPage(shipper);
+        createEditShipperPage.verifyShipperShopifySettingsIsUpdatedSuccessfuly(shipper);
+    }
+
+    public void updateShipperMagentoSettings(Shipper shipper)
+    {
+        searchTableByNameAndGoToEditPage(shipper);
+        createEditShipperPage.updateShipperMagentoSettings(shipper);
+    }
+
+    public void verifyShipperMagentoSettingsIsUpdatedSuccessfuly(Shipper shipper)
+    {
+        searchTableByNameAndGoToEditPage(shipper);
+        createEditShipperPage.verifyShipperMagentoSettingsIsUpdatedSuccessfuly(shipper);
+    }
+
+    public void searchTableByNameAndGoToEditPage(Shipper shipper)
+    {
+        searchTableByName(shipper.getName());
+        Assert.assertFalse("Table is empty. Cannot enable Auto-Reservation for shipper with Legacy ID = "+shipper.getLegacyId(), isTableEmpty());
+        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
     }
 
     public void searchTableByName(String name)

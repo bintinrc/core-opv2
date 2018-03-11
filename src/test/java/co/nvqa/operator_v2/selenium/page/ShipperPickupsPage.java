@@ -85,6 +85,10 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         String actualApproxVolume = getTextOnTable(1, COLUMN_CLASS_APPROX_VOLUME);
         String actualComments = getTextOnTable(1, COLUMN_CLASS_COMMENTS);
 
+        // Remove multiple [SPACE] chars from String value.
+        actualPickupAddress = actualPickupAddress.trim().replaceAll("\\s+", " ");
+        pickupAddress = pickupAddress.trim().replaceAll("\\s+", " ");
+
         Assert.assertThat("Shipper Name", actualShipperNameAndContact, Matchers.startsWith(shipperName));
         Assert.assertThat("Pickup Address", actualPickupAddress, Matchers.startsWith(pickupAddress));
 

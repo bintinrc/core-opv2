@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Address;
+import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.OrderCreationV2Template;
@@ -60,8 +61,27 @@ public class OrderCreationV2Steps extends AbstractSteps
     }
 
     @When("^Operator create order V2 by uploading CSV on Order Creation V2 page using data below:$")
-    public void operatorCreateOrderByUploadingCsvOnOrderCreationV2PageUsingDataBelow(DataTable dataTable)
+    public void operatorCreateOrderV2ByUploadingCsvOnOrderCreationV2PageUsingDataBelow(DataTable dataTable)
     {
+        operatorCreateOrderByUploadingCsvOnOrderCreationV2PageUsingDataBelow(dataTable);
+    }
+
+    @When("^Operator create order V3 by uploading CSV on Order Creation V2 page using data below:$")
+    public void operatorCreateOrderV3ByUploadingCsvOnOrderCreationV2PageUsingDataBelow(DataTable dataTable)
+    {
+        operatorCreateOrderByUploadingCsvOnOrderCreationV2PageUsingDataBelow(dataTable);
+    }
+
+    private void operatorCreateOrderByUploadingCsvOnOrderCreationV2PageUsingDataBelow(DataTable dataTable)
+    {
+        Long shipperV2OrV3Id = null;
+
+        if(containsKey(KEY_CREATED_SHIPPER))
+        {
+            shipperV2OrV3Id = this.<Shipper>get(KEY_CREATED_SHIPPER).getLegacyId();
+        }
+
+
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
         String orderCreationV2TemplateAsJsonString = mapOfData.get("orderCreationV2Template");
 
@@ -70,6 +90,7 @@ public class OrderCreationV2Steps extends AbstractSteps
 
         Map<String,String> mapOfDynamicVariable = new HashMap<>();
         mapOfDynamicVariable.put("cur_date", CURRENT_DATE_SDF.format(currentDate));
+        mapOfDynamicVariable.put("shipper_id", String.valueOf(shipperV2OrV3Id));
 
         orderCreationV2TemplateAsJsonString = replaceParam(orderCreationV2TemplateAsJsonString, mapOfDynamicVariable);
         OrderCreationV2Template order = JsonHelper.fromJson(JsonHelper.getDefaultSnakeCaseMapper(), orderCreationV2TemplateAsJsonString, OrderCreationV2Template.class);

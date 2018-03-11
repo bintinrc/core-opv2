@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Reservation;
+import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.ShipperPickupsPage;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -77,6 +78,11 @@ public class ShipperPickupsSteps extends AbstractSteps
         String priorityLevel = mapOfData.get("priorityLevel");
         String approxVolume = mapOfData.get("approxVolume");
         String comments = mapOfData.get("comments");
+
+        if("GET_FROM_CREATED_SHIPPER".equalsIgnoreCase(shipperName))
+        {
+            shipperName = this.<Shipper>get(KEY_CREATED_SHIPPER).getName();
+        }
 
         if("GET_FROM_CREATED_ROUTE".equals(routeId))
         {

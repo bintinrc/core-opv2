@@ -18,6 +18,11 @@ import java.util.stream.Collectors;
  */
 public class OperatorV2SimplePage extends SimplePage
 {
+    public enum XpathTextMode
+    {
+        EXACT, CONTAINS
+    }
+
     public OperatorV2SimplePage(WebDriver webDriver)
     {
         super(webDriver);
@@ -349,26 +354,44 @@ public class OperatorV2SimplePage extends SimplePage
     {
         click(String.format("//md-select[@ng-model='%s']", mdSelectNgModel));
         pause100ms();
-        click(String.format("//div[@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value));
+        click(String.format("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value));
         pause50ms();
     }
 
     public void selectMultipleValuesFromMdSelect(String mdSelectNgModel, List<String> listOfValues)
     {
+        selectMultipleValuesFromMdSelect(mdSelectNgModel, XpathTextMode.CONTAINS, listOfValues);
+    }
+
+    public void selectMultipleValuesFromMdSelect(String mdSelectNgModel, XpathTextMode xpathTextMode, List<String> listOfValues)
+    {
         if(listOfValues!=null && !listOfValues.isEmpty())
         {
-            selectMultipleValuesFromMdSelect(mdSelectNgModel, listOfValues.toArray(new String[]{}));
+            selectMultipleValuesFromMdSelect(mdSelectNgModel, xpathTextMode, listOfValues.toArray(new String[]{}));
         }
     }
 
     public void selectMultipleValuesFromMdSelect(String mdSelectNgModel, String... values)
+    {
+        selectMultipleValuesFromMdSelect(mdSelectNgModel, XpathTextMode.CONTAINS, values);
+    }
+
+    public void selectMultipleValuesFromMdSelect(String mdSelectNgModel, XpathTextMode xpathTextMode, String... values)
     {
         click(String.format("//md-select[@ng-model='%s']", mdSelectNgModel));
         pause100ms();
 
         for(String value : values)
         {
-            click(String.format("//div[@aria-hidden='false']//md-option[contains(@value,'%s')]", value));
+            if(xpathTextMode==XpathTextMode.EXACT)
+            {
+                click(String.format("//div[@aria-hidden='false']//md-option[@value='%s']", value));
+            }
+            else
+            {
+                click(String.format("//div[@aria-hidden='false']//md-option[contains(@value,'%s')]", value));
+            }
+
             pause30ms();
         }
 
