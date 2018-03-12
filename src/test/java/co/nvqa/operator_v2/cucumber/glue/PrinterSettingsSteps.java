@@ -1,24 +1,23 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.operator_v2.model.PrinterSettings;
 import co.nvqa.operator_v2.selenium.page.PrinterSettingsPage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @ScenarioScoped
 public class PrinterSettingsSteps extends AbstractSteps {
 
     private static final String NAME = "name";
-    private static final String IP_ADDRESS = "ip";
+    private static final String IP_ADDRESS = "ipAddress";
     private static final String VERSION = "version";
-    private static final String DEFAULT = "default";
+    private static final String IS_DEFAULT_PRINTER = "isDefaultPrinter";
     private PrinterSettingsPage printerSettingsPage;
-    private Map<String, String> details = new HashMap<>();
 
     @Inject
     public PrinterSettingsSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage) {
@@ -30,57 +29,79 @@ public class PrinterSettingsSteps extends AbstractSteps {
         this.printerSettingsPage = new PrinterSettingsPage(getWebDriver());
     }
 
-    @When("^op click add Printer button$")
+    @When("^Operator click Add Printer button$")
     public void opClickAddPrinterButton() {
         printerSettingsPage.clickAddPrinterButtons();
     }
 
-    @Then("^Add Printer Form on display$")
-    public void addPrinterFormOnDisplay() {
-        printerSettingsPage.addPrinterModalOnDisplay();
+    @Then("^Operator verify Add Printer form is displayed$")
+    public void operatorVerifyAddPrinterFormIsDisplayed() {
+        printerSettingsPage.verifyAddPrinterFormIsDisplayed();
     }
 
-    @When("^op create printer setting with details:$")
-    public void opCreatePrinterSettingWithDetails(Map<String, String> details) {
-        this.details.putAll(details);
-        printerSettingsPage.fillPrinterName(details.get(NAME));
-        pause300ms();
-        printerSettingsPage.fillPrinterIp(details.get(IP_ADDRESS));
-        pause300ms();
-        printerSettingsPage.fillPrinterVersion(details.get(VERSION));
-        pause300ms();
-        printerSettingsPage.switchToDefaultPrinter(details.get(DEFAULT));
+    @When("^Operator create Printer Settings with details:$")
+    public void operatorCreatePrinterSettingsWithDetails(Map<String, String> mapOfData) {
+        String name = mapOfData.get(NAME);
+        String ipAddress = mapOfData.get(IP_ADDRESS);
+        String version = mapOfData.get(VERSION);
+        Boolean isDefaultPrinter = Boolean.parseBoolean(mapOfData.get(IS_DEFAULT_PRINTER));
+        String dateUniqueString = generateDateUniqueString();
+
+        if("GENERATED".equalsIgnoreCase(name))
+        {
+            name = "Printer "+dateUniqueString;
+        }
+
+        PrinterSettings printerSettings = new PrinterSettings();
+        printerSettings.setName(name);
+        printerSettings.setIpAddress(ipAddress);
+        printerSettings.setVersion(version);
+        printerSettings.setDefaultPrinter(isDefaultPrinter);
+        printerSettingsPage.addPrinter(printerSettings);
+
+        put("printerSettings", printerSettings);
+    }
+
+    @Then("^Operator verify Printer Settings is added successfully$")
+    public void operatorVerifyPrinterSettingsIsAddedSuccessfully() {
+        PrinterSettings printerSettings = get("printerSettings");
+        printerSettingsPage.printerSettingWithNameOnDisplay(printerSettings.getName());
+        printerSettingsPage.checkPrinterSettingInfo(1, printerSettings);
+    }
+
+    @When("^Operator delete Printer Settings$")
+    public void operatorDeletePrinterSettings() {
+        PrinterSettings printerSettings = get("printerSettings");
+        printerSettingsPage.searchPrinterSettings(printerSettings.getName());
+        printerSettingsPage.deletePrinterSettingWithName(printerSettings.getName());
+    }
+
+    @Then("^Operator verify Printer Settings is deleted successfully$")
+    public void operatorVerifyPrinterSettingsIsDeletedSuccessfuly() {
+        PrinterSettings printerSettings = get("printerSettings");
+        printerSettingsPage.printerSettingWithNameNotDisplayed(printerSettings.getName());
+    }
+
+    @When("^Operator set \"([^\"]*)\" = \"([^\"]*)\" for Printer Settings with name = \"([^\"]*)\"$")
+    public void operatorEditPrinterSettings(String configName, String configValue, String printerSettingsName) {
+        PrinterSettings printerSettings = get("printerSettings");
+
+        printerSettingsPage.clickEditPrinterSettingWithName(printerSettingsName);
+        printerSettingsPage.editDetails(configName, configValue);
         printerSettingsPage.clickSubmitButton();
+
+        switch(configName)
+        {
+            case NAME: printerSettings.setName(configValue); break;
+            case IP_ADDRESS: printerSettings.setIpAddress(configValue); break;
+            case VERSION: printerSettings.setVersion(configValue); break;
+        }
     }
 
-    @Then("^printer setting added$")
-    public void printerSettingAdded() {
-        printerSettingsPage.printerSettingWithNameOnDisplay(details.get(NAME));
-        printerSettingsPage.checkPrinterSettingInfo(1, details);
-    }
-
-    @When("^op delete printer settings$")
-    public void opDeletePrinterSettings() {
-        printerSettingsPage.searchPrinterSettings(details.get(NAME));
-        printerSettingsPage.deletePrinterSettingWithName(details.get(NAME));
-    }
-
-    @Then("^printer setting deleted$")
-    public void printerSettingDeleted() {
-        printerSettingsPage.printerSettingWithNameNotDisplayed(details.get(NAME));
-    }
-
-     @Then("^printer setting edited$")
-    public void printerSettingEdited() {
-        printerSettingsPage.printerSettingWithNameOnDisplay(details.get(NAME));
-        printerSettingsPage.checkPrinterSettingInfo(1, details);
-    }
-
-    @When("^op edit \"([^\"]*)\" with \"([^\"]*)\" in Printer Settings \"([^\"]*)\"$")
-    public void opEditWithInPrinterSettings(String detail, String value, String name) {
-        printerSettingsPage.clickEditPrinterSettingWithName(name);
-        printerSettingsPage.editDetails(detail, value);
-        printerSettingsPage.clickSubmitButton();
-        this.details.put(detail, value);
+    @Then("^Operator verify Printer Settings is edited successfully$")
+    public void operatorVerifyPrinterSettingsIsEditedSuccessfully() {
+        PrinterSettings printerSettings = get("printerSettings");
+        printerSettingsPage.printerSettingWithNameOnDisplay(printerSettings.getName());
+        printerSettingsPage.checkPrinterSettingInfo(1, printerSettings);
     }
 }
