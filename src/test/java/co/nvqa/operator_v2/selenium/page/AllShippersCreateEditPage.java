@@ -21,30 +21,15 @@ import java.util.stream.Stream;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class CreateEditShipperPage extends OperatorV2SimplePage
+public class AllShippersCreateEditPage extends OperatorV2SimplePage
 {
     private static final String NG_REPEAT_TABLE_ADDRESS = "address in getTableData()";
 
     public static final String ACTION_BUTTON_SET_AS_DEFAULT = "Set as Default";
 
-    public CreateEditShipperPage(WebDriver webDriver)
+    public AllShippersCreateEditPage(WebDriver webDriver)
     {
         super(webDriver);
-    }
-
-    public void waitUntilPageLoaded(String expectedUrlEndsWith)
-    {
-        super.waitUntilPageLoaded();
-        final String expectedUrlContains = "shippers/create";
-
-        waitUntil(()->
-        {
-            String currentUrl = getCurrentUrl();
-            NvLogger.infof("CreateEditShipperPage.waitUntilPageLoaded: Current URL = [%s] - Expected URL contains = [%s]", currentUrl, expectedUrlEndsWith);
-            return currentUrl.endsWith(expectedUrlEndsWith);
-        }, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS, String.format("Current URL does not contain '%s'.", expectedUrlEndsWith));
-
-        waitUntilInvisibilityOfElementLocated("//tab-content[@aria-hidden='false']//md-content[@ng-if='ctrl.state.loading === true']//md-progress-circular");
     }
 
     public void createNewShipper(Shipper shipper)
@@ -334,7 +319,7 @@ public class CreateEditShipperPage extends OperatorV2SimplePage
         backToShipperList();
     }
 
-    public void verifyShipperLabelPrinterSettingsIsUpdatedSuccessfuly(Shipper shipper)
+    public void verifyShipperLabelPrinterSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
         click("//tab-item[contains(text(), 'Basic Settings')]");
@@ -375,7 +360,7 @@ public class CreateEditShipperPage extends OperatorV2SimplePage
         backToShipperList();
     }
 
-    public void verifyShipperDistributionPointSettingsIsUpdatedSuccessfuly(Shipper shipper)
+    public void verifyShipperDistributionPointSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
         click("//tab-item[contains(text(), 'More Settings')]");
@@ -430,7 +415,7 @@ public class CreateEditShipperPage extends OperatorV2SimplePage
         backToShipperList();
     }
 
-    public void verifyShipperReturnsSettingsIsUpdatedSuccessfuly(Shipper shipper)
+    public void verifyShipperReturnsSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
         click("//tab-item[contains(text(), 'More Settings')]");
@@ -473,7 +458,7 @@ public class CreateEditShipperPage extends OperatorV2SimplePage
         backToShipperList();
     }
 
-    public void verifyShipperQoo10SettingsIsUpdatedSuccessfuly(Shipper shipper)
+    public void verifyShipperQoo10SettingsIsUpdatedSuccessfully(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
         click("//tab-item[contains(text(), 'Integrations')]");
@@ -510,7 +495,7 @@ public class CreateEditShipperPage extends OperatorV2SimplePage
         backToShipperList();
     }
 
-    public void verifyShipperShopifySettingsIsUpdatedSuccessfuly(Shipper shipper)
+    public void verifyShipperShopifySettingsIsUpdatedSuccessfully(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
         click("//tab-item[contains(text(), 'Integrations')]");
@@ -554,7 +539,7 @@ public class CreateEditShipperPage extends OperatorV2SimplePage
         backToShipperList();
     }
 
-    public void verifyShipperMagentoSettingsIsUpdatedSuccessfuly(Shipper shipper)
+    public void verifyShipperMagentoSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
         click("//tab-item[contains(text(), 'Integrations')]");
@@ -603,5 +588,19 @@ public class CreateEditShipperPage extends OperatorV2SimplePage
         {
             throw new RuntimeException("Cannot find action button on table.", ex);
         }
+    }
+
+    public void waitUntilPageLoaded(String expectedUrlEndsWith)
+    {
+        super.waitUntilPageLoaded();
+
+        waitUntil(()->
+        {
+            String currentUrl = getCurrentUrl();
+            NvLogger.infof("AllShippersCreateEditPage.waitUntilPageLoaded: Current URL = [%s] - Expected URL contains = [%s]", currentUrl, expectedUrlEndsWith);
+            return currentUrl.endsWith(expectedUrlEndsWith);
+        }, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS, String.format("Current URL does not contain '%s'.", expectedUrlEndsWith));
+
+        waitUntilInvisibilityOfElementLocated("//tab-content[@aria-hidden='false']//md-content[@ng-if='ctrl.state.loading === true']//md-progress-circular");
     }
 }

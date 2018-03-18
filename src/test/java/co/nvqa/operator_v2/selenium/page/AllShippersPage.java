@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.shipper.v2.Reservation;
-import co.nvqa.commons.model.shipper.v2.Return;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
@@ -27,12 +26,12 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
 
-    private CreateEditShipperPage createEditShipperPage;
+    private AllShippersCreateEditPage allShippersCreateEditPage;
 
     public AllShippersPage(WebDriver webDriver)
     {
         super(webDriver);
-        createEditShipperPage = new CreateEditShipperPage(webDriver);
+        allShippersCreateEditPage = new AllShippersCreateEditPage(webDriver);
     }
 
     public void waitUntilPageLoaded()
@@ -52,7 +51,7 @@ public class AllShippersPage extends OperatorV2SimplePage
     {
         waitUntilPageLoaded();
         clickNvIconTextButtonByName("container.shippers.create-shipper");
-        createEditShipperPage.createNewShipper(shipper);
+        allShippersCreateEditPage.createNewShipper(shipper);
     }
 
     public void verifyNewShipperIsCreatedSuccessfully(Shipper shipper)
@@ -85,13 +84,13 @@ public class AllShippersPage extends OperatorV2SimplePage
         Assert.assertEquals("Expected Status = Inactive", convertBooleanToString(shipper.getActive(), "Active", "Inactive"), actualStatus);
 
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
-        createEditShipperPage.verifyNewShipperIsCreatedSuccessfully(shipper);
+        allShippersCreateEditPage.verifyNewShipperIsCreatedSuccessfully(shipper);
     }
 
     public void updateShipper(Shipper oldShipper, Shipper updatedShipper)
     {
         searchTableByNameAndGoToEditPage(oldShipper);
-        createEditShipperPage.updateShipper(updatedShipper);
+        allShippersCreateEditPage.updateShipper(updatedShipper);
     }
 
     public void verifyShipperIsUpdatedSuccessfully(Shipper oldShipper, Shipper shipper)
@@ -108,79 +107,79 @@ public class AllShippersPage extends OperatorV2SimplePage
     public void enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(Shipper shipper, Address address, Reservation reservation)
     {
         searchTableByNameAndGoToEditPage(shipper);
-        createEditShipperPage.enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(shipper, address, reservation);
+        allShippersCreateEditPage.enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(shipper, address, reservation);
     }
 
     public void updateShipperLabelPrinterSettings(Shipper shipper)
     {
         searchTableByNameAndGoToEditPage(shipper);
-        createEditShipperPage.updateShipperLabelPrinterSettings(shipper);
+        allShippersCreateEditPage.updateShipperLabelPrinterSettings(shipper);
     }
 
     public void verifyShipperLabelPrinterSettingsIsUpdatedSuccessfuly(Shipper shipper)
     {
         searchTableByNameAndGoToEditPage(shipper);
-        createEditShipperPage.verifyShipperLabelPrinterSettingsIsUpdatedSuccessfuly(shipper);
+        allShippersCreateEditPage.verifyShipperLabelPrinterSettingsIsUpdatedSuccessfully(shipper);
     }
 
     public void updateShipperDistributionPointSettings(Shipper shipper)
     {
         searchTableByNameAndGoToEditPage(shipper);
-        createEditShipperPage.updateShipperDistributionPointSettings(shipper);
+        allShippersCreateEditPage.updateShipperDistributionPointSettings(shipper);
     }
 
     public void verifyShipperDistributionPointSettingsIsUpdatedSuccessfuly(Shipper shipper)
     {
         searchTableByNameAndGoToEditPage(shipper);
-        createEditShipperPage.verifyShipperDistributionPointSettingsIsUpdatedSuccessfuly(shipper);
+        allShippersCreateEditPage.verifyShipperDistributionPointSettingsIsUpdatedSuccessfully(shipper);
     }
 
     public void updateShipperReturnsSettings(Shipper shipper)
     {
         searchTableByNameAndGoToEditPage(shipper);
-        createEditShipperPage.updateShipperReturnsSettings(shipper);
+        allShippersCreateEditPage.updateShipperReturnsSettings(shipper);
     }
 
     public void verifyShipperReturnsSettingsIsUpdatedSuccessfuly(Shipper shipper)
     {
         searchTableByNameAndGoToEditPage(shipper);
-        createEditShipperPage.verifyShipperReturnsSettingsIsUpdatedSuccessfuly(shipper);
+        allShippersCreateEditPage.verifyShipperReturnsSettingsIsUpdatedSuccessfully(shipper);
     }
 
     public void updateShipperQoo10Settings(Shipper shipper)
     {
         searchTableByNameAndGoToEditPage(shipper);
-        createEditShipperPage.updateShipperQoo10Settings(shipper);
+        allShippersCreateEditPage.updateShipperQoo10Settings(shipper);
     }
 
     public void verifyShipperQoo10SettingsIsUpdatedSuccessfuly(Shipper shipper)
     {
         searchTableByNameAndGoToEditPage(shipper);
-        createEditShipperPage.verifyShipperQoo10SettingsIsUpdatedSuccessfuly(shipper);
+        allShippersCreateEditPage.verifyShipperQoo10SettingsIsUpdatedSuccessfully(shipper);
     }
 
     public void updateShipperShopifySettings(Shipper shipper)
     {
         searchTableByNameAndGoToEditPage(shipper);
-        createEditShipperPage.updateShipperShopifySettings(shipper);
+        allShippersCreateEditPage.updateShipperShopifySettings(shipper);
     }
 
     public void verifyShipperShopifySettingsIsUpdatedSuccessfuly(Shipper shipper)
     {
         searchTableByNameAndGoToEditPage(shipper);
-        createEditShipperPage.verifyShipperShopifySettingsIsUpdatedSuccessfuly(shipper);
+        allShippersCreateEditPage.verifyShipperShopifySettingsIsUpdatedSuccessfully(shipper);
     }
 
     public void updateShipperMagentoSettings(Shipper shipper)
     {
         searchTableByNameAndGoToEditPage(shipper);
-        createEditShipperPage.updateShipperMagentoSettings(shipper);
+        allShippersCreateEditPage.updateShipperMagentoSettings(shipper);
     }
 
     public void verifyShipperMagentoSettingsIsUpdatedSuccessfuly(Shipper shipper)
     {
         searchTableByNameAndGoToEditPage(shipper);
-        createEditShipperPage.verifyShipperMagentoSettingsIsUpdatedSuccessfuly(shipper);
+        allShippersCreateEditPage.verifyShipperMagentoSettingsIsUpdatedSuccessfully(shipper);
     }
 
     public void searchTableByNameAndGoToEditPage(Shipper shipper)

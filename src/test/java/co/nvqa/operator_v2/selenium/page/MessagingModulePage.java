@@ -181,11 +181,11 @@ public class MessagingModulePage extends OperatorV2SimplePage
         Assert.assertEquals("Tracking id: "+trackingId, trackingIdElement.getText());
 
         //check the contact number
-        String number=  getTextOnTableWithMdVirtualRepeat(1,"to-number", MD_VIRTUAL_REPEAT, false);
+        String number=  getTextOnTableWithMdVirtualRepeat(1,"to-number", MD_VIRTUAL_REPEAT);
         Assert.assertEquals("Contact Number", contactNumber, number);
 
         //check sms-date on the message field
-        String message =  getTextOnTableWithMdVirtualRepeat(1,"message", MD_VIRTUAL_REPEAT, false);
+        String message =  getTextOnTableWithMdVirtualRepeat(1,"message", MD_VIRTUAL_REPEAT);
         Assert.assertThat("It contain sms-date woth same date", message, Matchers.containsString(smsDate));
     }
 }

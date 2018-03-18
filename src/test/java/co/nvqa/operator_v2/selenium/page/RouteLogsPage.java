@@ -124,7 +124,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
     public void searchAndVerifyRouteExist(String routeId)
     {
         searchTableByRouteId(routeId);
-        String actualRouteId = getTextOnTable(1, COLUMN_CLASS_DATA_ROUTE_ID, true);
+        String actualRouteId = getTextOnTable(1, COLUMN_CLASS_DATA_ROUTE_ID, XpathTextMode.EXACT);
         Assert.assertEquals("Route ID nof found in table.", routeId, actualRouteId);
         pause200ms();
     }
@@ -159,9 +159,9 @@ public class RouteLogsPage extends OperatorV2SimplePage
         return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
     }
 
-    public String getTextOnTable(int rowNumber, String columnDataClass, boolean classMustExact)
+    public String getTextOnTable(int rowNumber, String columnDataClass, XpathTextMode xpathTextMode)
     {
-        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT, classMustExact);
+        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT, xpathTextMode);
     }
 
     public void clickActionButtonOnTable(int rowNumber, String actionButtonName)

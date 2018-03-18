@@ -279,7 +279,7 @@ public class PricingScriptsPage extends OperatorV2SimplePage
 
     public String getTextOnTable(int rowNumber, String columnDataClass)
     {
-        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT, true);
+        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT, XpathTextMode.STARTS_WITH);
     }
 
     public void clickActionButton(int rowNumber, String actionButtonName)

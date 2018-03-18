@@ -10,8 +10,6 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -49,7 +47,7 @@ public class LoginPage extends OperatorV2SimplePage
 
             getWebDriver().manage().addCookie(new Cookie("ninja_access_token", operatorBearerToken, ".ninjavan.co", "/", null));
             getWebDriver().manage().addCookie(new Cookie("user", userCookie, ".ninjavan.co", "/", null));
-            ((ChromeDriver) getWebDriver()).executeScript("window.open()");
+            executeScript("window.open()");
             String currentWindowHandle = getWebDriver().getWindowHandle();
             String newWindowHandle = null;
 
