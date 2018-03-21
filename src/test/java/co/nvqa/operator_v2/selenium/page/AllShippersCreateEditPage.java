@@ -61,7 +61,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         // Shipper Details
         sendKeysById("Shipper Name", shipper.getName());
         sendKeysById("Short Name", shipper.getShortName());
-        sendKeysById("Shipper Contact", shipper.getContact());
+        sendKeysById("shipper-contact", shipper.getContact());
 
         if(isCreateForm)
         {
@@ -93,8 +93,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
             {
                 String generatedPrefix = generateUpperCaseAlphaNumericString(5);
                 orderCreate.setPrefix(generatedPrefix);
-                sendKeysById("Prefix", generatedPrefix);
-                click("//label[@for='Prefix']");
+                sendKeysById("shipper-prefix", generatedPrefix);
+                click("//label[@for='shipper-prefix']");
                 pause500ms();
                 boolean isPrefixAlreadyUsed = isElementExistWait3Seconds("//div[text()='Prefix already used']");
 
@@ -145,8 +145,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         // Shipper Details
         String actualShipperName = getInputValueById("Shipper Name");
         String actualShipperShortName = getInputValueById("Short Name");
-        String actualShipperContact = getInputValueById("Shipper Contact");
-        String actualShipperEmail = getInputValueById("Shipper Email");
+        String actualShipperContact = getInputValueById("shipper-contact");
+        String actualShipperEmail = getInputValueById("container.shippers.shipper-email", XpathTextMode.STARTS_WITH);
 
         Assert.assertEquals("Shipper Name", shipper.getName(), actualShipperName);
         Assert.assertEquals("Shipper Short Name", shipper.getShortName(), actualShipperShortName);
@@ -170,7 +170,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         String actualOcVersion = getMdSelectValueTrimmed("ctrl.data.basic.ocVersion");
         String availableService = getAttribute("//md-select[@ng-model='ctrl.data.basic.selectedOcServices']", "aria-label");
         String actualTrackingType = getMdSelectValue("ctrl.data.basic.trackingType");
-        String actualPrefix = getInputValueById("Prefix");
+        String actualPrefix = getInputValueById("shipper-prefix");
 
         List<String> listOfActualServices;
 

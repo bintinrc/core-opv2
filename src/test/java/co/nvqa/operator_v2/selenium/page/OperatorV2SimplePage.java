@@ -17,11 +17,6 @@ import java.util.stream.Collectors;
  */
 public class OperatorV2SimplePage extends SimplePage
 {
-    public enum XpathTextMode
-    {
-        EXACT, CONTAINS, STARTS_WITH
-    }
-
     public OperatorV2SimplePage(WebDriver webDriver)
     {
         super(webDriver);
