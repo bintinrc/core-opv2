@@ -52,7 +52,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     private void fillBasicSettingsForm(Shipper shipper)
     {
         boolean isCreateForm = getCurrentUrl().endsWith("shippers/create");
-
         String shipperStatusAriaLabel = convertBooleanToString(shipper.getActive(), "Active", "Disabled");
 
         clickToggleButton("ctrl.data.basic.status", shipperStatusAriaLabel);

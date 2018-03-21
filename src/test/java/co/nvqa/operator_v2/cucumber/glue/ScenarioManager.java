@@ -6,6 +6,7 @@ import co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.operator_v2.selenium.page.LoginPage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
+import co.nvqa.operator_v2.selenium.page.OperatorV2SimplePage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Singleton;
@@ -15,6 +16,8 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import java.util.Collection;
 
@@ -75,6 +78,25 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
     public void teardown(Scenario scenario)
     {
         super.teardown(scenario);
+    }
+
+    @After("@ResetWindow")
+    public void resetWindow()
+    {
+        NvLogger.info("Reset window.");
+        getWebDriver().get(TestConstants.OPERATOR_PORTAL_URL);
+        OperatorV2SimplePage operatorV2SimplePage = new OperatorV2SimplePage(getWebDriver());
+
+        try
+        {
+            String leaveBtnXpath = "//md-dialog[@aria-label='Leaving PageYou have ...']//button[@aria-label='Leave']";
+            WebElement webElement = operatorV2SimplePage.findElementByFast(By.xpath(leaveBtnXpath));
+            webElement.click();
+            operatorV2SimplePage.waitUntilInvisibilityOfToast("sidenav-main-menu");
+        }
+        catch(Exception ex)
+        {
+        }
     }
 
     @Given("^op login into Operator V2 with username \"([^\"]*)\" and password \"([^\"]*)\"$")

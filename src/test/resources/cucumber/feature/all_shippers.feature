@@ -5,6 +5,7 @@ Feature: All Shippers
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
+  @ResetWindow
   Scenario Outline: Operator create new Shipper with basic settings (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -35,6 +36,7 @@ Feature: All Shippers
       | Shipper V3 | uid:1b9953fd-60e8-4599-a5c2-b66d6fb37fcd | true            | Normal      | v3        | 1DAY, 2DAY, 3DAY                   | Fixed         | true       | false             | false     | false               | false                | true                         |
       | Shipper V4 | uid:dfbe7350-2c9d-40d3-96c4-428f5842a511 | true            | Normal      | v4        | 3DAY                               | Fixed         | false      | true              | true      | false               | false                | false                        |
 
+  @ResetWindow
   Scenario Outline: Operator create new Shipper with basic settings and then update the basic settings (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -68,6 +70,7 @@ Feature: All Shippers
       | Shipper V3 | uid:fd5a8ad9-48ed-4d95-a6d9-c36daad021f1 | true            | Normal      | v3        | 1DAY, 2DAY, 3DAY                   | Fixed         | true       | false             | false     | false               | false                | true                         |
       | Shipper V4 | uid:7fc77afb-999d-4257-b20e-e1540aebf820 | true            | Normal      | v4        | 3DAY                               | Fixed         | false      | true              | true      | false               | false                | false                        |
 
+  @ResetWindow
   Scenario: Operator create new Shipper with basic settings and then update the Label Printer settings (uid:5f4793bb-04d8-496d-9e92-aeb863a0149d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -96,6 +99,7 @@ Feature: All Shippers
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the shipper is deleted successfully
 
+  @ResetWindow
   Scenario: Operator create new Shipper with basic settings and then update the Returns settings (uid:3390ffc7-f6b1-4cce-af8d-787bae1d2fac)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -124,6 +128,7 @@ Feature: All Shippers
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the shipper is deleted successfully
 
+  @ResetWindow
   Scenario: Operator create new Shipper with basic settings and then update the Distribution Point settings (uid:d13bf02a-cae8-43be-939f-1380aee1acfb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -152,6 +157,7 @@ Feature: All Shippers
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the shipper is deleted successfully
 
+  @ResetWindow
   Scenario: Operator create new Shipper with basic settings and then update the Qoo10 settings (uid:45827cde-6d96-4fbc-b04d-b759ae670722)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -180,6 +186,7 @@ Feature: All Shippers
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the shipper is deleted successfully
 
+  @ResetWindow
   Scenario: Operator create new Shipper with basic settings and then update the Shopify settings (uid:d20c7d44-cd01-44a4-8e19-07e86465168d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -208,6 +215,7 @@ Feature: All Shippers
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the shipper is deleted successfully
 
+  @ResetWindow
   Scenario: Operator create new Shipper with basic settings and then update the Magento settings (uid:a32a3f0f-c48b-4c46-8739-40c4b9ff80ad)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -236,6 +244,7 @@ Feature: All Shippers
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the shipper is deleted successfully
 
+  @ResetWindow
   Scenario: Operator enable Auto Reservation for Shipper, create order V2 and verify the reservation is created (uid:93ec816b-e633-4248-8660-ee2a21cd8040)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -278,6 +287,7 @@ Feature: All Shippers
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the shipper is deleted successfully
 
+  @ResetWindow
   Scenario: Operator enable Auto Reservation for Shipper, create order V3 and verify the reservation is created (uid:98f402db-42a2-42cd-b575-c8498d6c7e5a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers

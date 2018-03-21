@@ -6,7 +6,6 @@ import co.nvqa.commons.model.shipper.v2.*;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import com.google.inject.Inject;
-import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.apache.commons.lang3.SerializationUtils;
@@ -46,9 +45,8 @@ public class AllShippersSteps extends AbstractSteps
     }
 
     @When("^Operator create new Shipper with basic settings using data below:$")
-    public void operatorCreateNewShipperWithBasicSettingsUsingDataBelow(DataTable dataTable)
+    public void operatorCreateNewShipperWithBasicSettingsUsingDataBelow(Map<String,String> mapOfData)
     {
-        Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
         Boolean isShipperActive = Boolean.parseBoolean(mapOfData.get("isShipperActive"));
         String shipperType = mapOfData.get("shipperType");
         String ocVersion = mapOfData.get("ocVersion");
@@ -346,9 +344,8 @@ public class AllShippersSteps extends AbstractSteps
     }
 
     @When("^Operator enable Auto Reservation for Shipper and change Shipper default Address to the new Address using data below:$")
-    public void operatorEnableAutoReservationForShipperAndChangeShipperDefaultAddressToTheNewAddressUsingDataBelow(DataTable dataTable)
+    public void operatorEnableAutoReservationForShipperAndChangeShipperDefaultAddressToTheNewAddressUsingDataBelow(Map<String,String> mapOfData)
     {
-        Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
         String reservationDays = mapOfData.get("reservationDays");
         String autoReservationReadyTime = mapOfData.get("autoReservationReadyTime");
         String autoReservationLatestTime = mapOfData.get("autoReservationLatestTime");
