@@ -1,4 +1,4 @@
-@OperatorV2Disabled @PricingScriptsV2
+@OperatorV2 @PricingScriptsV2
 Feature: Pricing Scripts V2
 
   @LaunchBrowser @ShouldAlwaysRun
