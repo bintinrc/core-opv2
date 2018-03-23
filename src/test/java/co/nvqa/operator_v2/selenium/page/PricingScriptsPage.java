@@ -2,7 +2,11 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import org.junit.Assert;
-import org.openqa.selenium.*;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;

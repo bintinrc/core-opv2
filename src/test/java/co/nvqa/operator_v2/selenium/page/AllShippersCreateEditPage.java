@@ -1,7 +1,16 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Address;
-import co.nvqa.commons.model.shipper.v2.*;
+import co.nvqa.commons.model.shipper.v2.DistributionPoint;
+import co.nvqa.commons.model.shipper.v2.LabelPrinter;
+import co.nvqa.commons.model.shipper.v2.Magento;
+import co.nvqa.commons.model.shipper.v2.OrderCreate;
+import co.nvqa.commons.model.shipper.v2.Pricing;
+import co.nvqa.commons.model.shipper.v2.Qoo10;
+import co.nvqa.commons.model.shipper.v2.Reservation;
+import co.nvqa.commons.model.shipper.v2.Return;
+import co.nvqa.commons.model.shipper.v2.Shipper;
+import co.nvqa.commons.model.shipper.v2.Shopify;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.util.TestConstants;

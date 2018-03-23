@@ -2,7 +2,16 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
-import co.nvqa.commons.model.shipper.v2.*;
+import co.nvqa.commons.model.shipper.v2.DistributionPoint;
+import co.nvqa.commons.model.shipper.v2.LabelPrinter;
+import co.nvqa.commons.model.shipper.v2.Magento;
+import co.nvqa.commons.model.shipper.v2.OrderCreate;
+import co.nvqa.commons.model.shipper.v2.Pricing;
+import co.nvqa.commons.model.shipper.v2.Qoo10;
+import co.nvqa.commons.model.shipper.v2.Reservation;
+import co.nvqa.commons.model.shipper.v2.Return;
+import co.nvqa.commons.model.shipper.v2.Shipper;
+import co.nvqa.commons.model.shipper.v2.Shopify;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import com.google.inject.Inject;
