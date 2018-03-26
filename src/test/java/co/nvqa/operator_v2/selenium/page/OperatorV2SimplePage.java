@@ -488,6 +488,14 @@ public class OperatorV2SimplePage extends SimplePage
         pause50ms();
     }
 
+    public void selectValueFromMdSelectByIdContains(String mdSelectId, String value)
+    {
+        click(String.format("//md-select[contains(@id, '%s')]", mdSelectId));
+        pause100ms();
+        click(String.format("//div[@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value));
+        pause50ms();
+    }
+
     public void selectValueFromMdSelectMenu(String xpathMdSelectMenu, String xpathMdSelectOption)
     {
         WebElement mdSelectMenu = findElementByXpath(xpathMdSelectMenu);

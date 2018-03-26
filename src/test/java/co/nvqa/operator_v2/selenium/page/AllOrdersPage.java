@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.AirwayBill;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
+import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.PdfUtils;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
@@ -475,13 +476,23 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         String mainWindowHandle = getWebDriver().getWindowHandle();
 
-        selectValueFromMdSelectById("category", category.getValue());
-        selectValueFromMdSelectById("search-logic", searchLogic.getValue());
-        sendKeysById("searchTerm", searchTerm);
+        selectValueFromMdSelectByIdContains("category", category.getValue());
+        selectValueFromMdSelectByIdContains("search-logic", searchLogic.getValue());
+        sendKeysById("fl-input", searchTerm);
+        pause2s(); // Wait until the page finished matching the tracking ID.
+        String matchedTrackingIdXpathExpression = String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope//span[text()='%s']", searchTerm);
+        String searchButtonXpathExpression = "//nv-api-text-button[@name='commons.search']";
 
-        String searchButtonXpathExpression = String.format("//nv-api-text-button[@name='%s']", "commons.search");
-        click(searchButtonXpathExpression);
-        waitUntilNewWindowOrTabOpened();
+        if(isElementExistFast(matchedTrackingIdXpathExpression))
+        {
+            click(matchedTrackingIdXpathExpression);
+            waitUntilNewWindowOrTabOpened();
+        }
+        else
+        {
+            click(searchButtonXpathExpression);
+        }
+
         pause100ms();
         getWebDriver().switchTo().window(mainWindowHandle); // Force selenium to go back to the last active tab/window if new tab/window is opened.
         waitUntilInvisibilityOfElementLocated(searchButtonXpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
@@ -499,6 +510,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     public void waitUntilNewWindowOrTabOpened()
     {
+        NvLogger.info("Wait until new window or tab opened.");
         wait5sUntil(()->getWebDriver().getWindowHandles().size()>1, "Window handles size is < 1.");
     }
 
