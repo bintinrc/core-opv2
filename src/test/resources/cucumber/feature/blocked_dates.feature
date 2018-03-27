@@ -19,3 +19,4 @@ Feature: Blocked Dates
 
   @KillBrowser
   Scenario: Kill Browser
+    Given no-op

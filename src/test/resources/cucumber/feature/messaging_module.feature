@@ -54,3 +54,4 @@ Feature: Messaging Module
 
   @KillBrowser
   Scenario: Kill Browser
+    Given no-op

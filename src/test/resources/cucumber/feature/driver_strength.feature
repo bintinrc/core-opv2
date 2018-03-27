@@ -56,3 +56,4 @@ Feature: Driver Strength
 
   @KillBrowser
   Scenario: Kill Browser
+    Given no-op

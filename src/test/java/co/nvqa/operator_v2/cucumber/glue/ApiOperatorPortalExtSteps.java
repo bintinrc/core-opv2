@@ -1,18 +1,18 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
+import co.nvqa.commons.cucumber.glue2.AbstractApiOperatorPortalSteps;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Given;
-
-import java.io.IOException;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class ApiOperatorPortalExtSteps extends StandardApiOperatorPortalSteps<ScenarioManager>
+@ScenarioScoped
+public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<ScenarioManager>
 {
     @Inject
     public ApiOperatorPortalExtSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
@@ -26,7 +26,7 @@ public class ApiOperatorPortalExtSteps extends StandardApiOperatorPortalSteps<Sc
     }
 
     @Given("^Operator V2 cleaning Tag Management by calling API endpoint directly$")
-    public void cleaningTagManagement() throws IOException
+    public void cleaningTagManagement()
     {
         String tagName = TagManagementSteps.DEFAULT_TAG_NAME;
 

@@ -151,3 +151,4 @@ Feature: Sameday Route Engine
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

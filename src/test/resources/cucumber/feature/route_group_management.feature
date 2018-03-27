@@ -18,3 +18,4 @@ Feature: Route Groups
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

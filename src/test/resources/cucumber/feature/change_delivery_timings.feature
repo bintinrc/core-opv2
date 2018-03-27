@@ -117,3 +117,4 @@ Feature: Change Delivery Timings
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

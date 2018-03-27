@@ -38,3 +38,4 @@ Feature: Edit Order
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

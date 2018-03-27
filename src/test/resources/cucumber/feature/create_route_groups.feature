@@ -22,3 +22,4 @@ Feature: Transactions
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

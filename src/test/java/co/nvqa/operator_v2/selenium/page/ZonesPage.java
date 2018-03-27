@@ -32,8 +32,15 @@ public class ZonesPage extends OperatorV2SimplePage
         super(webDriver);
     }
 
+    public void waitUntilPageLoaded()
+    {
+        super.waitUntilPageLoaded();
+        waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading zones...']");
+    }
+
     public void addZone(Zone zone)
     {
+        waitUntilPageLoaded();
         clickNvIconTextButtonByName("Add Zone");
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'zone-form')]");
         fillTheForm(zone);
@@ -42,6 +49,7 @@ public class ZonesPage extends OperatorV2SimplePage
 
     public void editZone(Zone zoneOld, Zone zoneEdited)
     {
+        waitUntilPageLoaded();
         searchTableByNameAndRetryIfTableIsEmpty(zoneOld.getName());
 
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
@@ -119,6 +127,8 @@ public class ZonesPage extends OperatorV2SimplePage
 
     public void deleteZone(Zone zone)
     {
+        waitUntilPageLoaded();
+
         TestUtils.retryIfRuntimeExceptionOccurred(()->
         {
             searchTableByNameAndRetryIfTableIsEmpty(zone.getName());
@@ -204,6 +214,7 @@ public class ZonesPage extends OperatorV2SimplePage
     private void clickRefreshCache()
     {
         clickNvIconButtonByNameAndWaitUntilEnabled("commons.refresh");
+        waitUntilInvisibilityOfToast("Zones cache refreshed!");
     }
 
     public void searchTableByNameAndRetryIfTableIsEmpty(String name)

@@ -5,11 +5,13 @@ import co.nvqa.operator_v2.selenium.page.FailedPickupManagementPage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@ScenarioScoped
 public class FailedPickupManagementSteps extends AbstractSteps
 {
     private FailedPickupManagementPage failedPickupManagementPage;

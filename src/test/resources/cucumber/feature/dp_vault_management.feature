@@ -36,3 +36,4 @@ Feature: DP Vault Management
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

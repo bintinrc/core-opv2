@@ -16,3 +16,4 @@ Feature: Login and Logout
 
   @KillBrowser
   Scenario: Kill Browser
+    Given no-op

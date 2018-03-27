@@ -166,3 +166,4 @@ Feature: Failed Delivery Management
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

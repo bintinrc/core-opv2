@@ -42,3 +42,4 @@ Feature: Recovery Tickets
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

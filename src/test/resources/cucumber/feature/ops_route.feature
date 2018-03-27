@@ -12,3 +12,4 @@ Feature: Ops Route
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

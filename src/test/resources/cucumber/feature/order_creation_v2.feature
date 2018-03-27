@@ -41,3 +41,4 @@ Feature: Order Creation V2
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

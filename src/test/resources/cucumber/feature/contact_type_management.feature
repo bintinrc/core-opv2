@@ -33,3 +33,4 @@ Feature: Contact Type Management
 
   @KillBrowser
   Scenario: Kill Browser
+    Given no-op

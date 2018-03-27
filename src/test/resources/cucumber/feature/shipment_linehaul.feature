@@ -137,3 +137,4 @@ Feature: Shipment Linehaul
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

@@ -51,3 +51,4 @@ Feature: Third Party Shippers
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

@@ -17,6 +17,7 @@ import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -31,6 +32,7 @@ import java.util.stream.Stream;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@ScenarioScoped
 public class AllShippersSteps extends AbstractSteps
 {
     private AllShippersPage allShippersPage;

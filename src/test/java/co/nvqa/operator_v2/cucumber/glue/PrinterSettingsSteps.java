@@ -10,6 +10,10 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.util.Map;
 
+/**
+ *
+ * @author Lanang Jati
+ */
 @ScenarioScoped
 public class PrinterSettingsSteps extends AbstractSteps {
 

@@ -29,3 +29,4 @@ Feature: Add Parcel To Route
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

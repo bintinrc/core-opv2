@@ -8,12 +8,14 @@ import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.SerializationUtils;
 
 /**
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@ScenarioScoped
 public class EditOrderSteps extends AbstractSteps
 {
     private EditOrderPage editOrderPage;

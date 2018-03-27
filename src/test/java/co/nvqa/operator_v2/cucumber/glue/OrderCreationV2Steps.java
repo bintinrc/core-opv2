@@ -11,6 +11,7 @@ import com.google.inject.Inject;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import java.util.Map;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@ScenarioScoped
 public class OrderCreationV2Steps extends AbstractSteps
 {
     private OrderCreationV2Page orderCreationV2Page;

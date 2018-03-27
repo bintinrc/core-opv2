@@ -84,3 +84,4 @@ Feature: Shipment Inbound Scanning
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

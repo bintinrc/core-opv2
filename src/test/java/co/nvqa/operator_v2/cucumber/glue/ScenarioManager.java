@@ -2,13 +2,17 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common_selenium.cucumber.glue.CommonSeleniumScenarioManager;
 import co.nvqa.common_selenium.util.SeleniumUtils;
-import co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
+import co.nvqa.commons.cucumber.glue2.StandardApiOperatorPortalSteps;
 import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.commons.utils.StandardScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.page.LoginPage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
 import co.nvqa.operator_v2.selenium.page.OperatorV2SimplePage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
@@ -28,6 +32,9 @@ import java.util.Collection;
 @Singleton
 public class ScenarioManager extends CommonSeleniumScenarioManager
 {
+    @Inject private Provider<StandardScenarioStorage> providerOfScenarioStorage;
+    @Inject private Provider<StandardApiOperatorPortalSteps> providerOfStandardApiOperatorPortalSteps;
+
     public ScenarioManager()
     {
     }
@@ -41,6 +48,12 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
     public void before(Scenario scenario)
     {
         setCurrentScenario(scenario);
+
+        providerOfScenarioStorage.get().put(StandardScenarioStorageKeys.KEY_SHIPPER_CLIENT_ID, TestConstants.SHIPPER_V2_CLIENT_ID);
+        providerOfScenarioStorage.get().put(StandardScenarioStorageKeys.KEY_SHIPPER_CLIENT_SECRET, TestConstants.SHIPPER_V2_CLIENT_SECRET);
+
+        providerOfScenarioStorage.get().put(StandardScenarioStorageKeys.KEY_NINJA_DRIVER_USERNAME, TestConstants.NINJA_DRIVER_USERNAME);
+        providerOfScenarioStorage.get().put(StandardScenarioStorageKeys.KEY_NINJA_DRIVER_PASSWORD, TestConstants.NINJA_DRIVER_PASSWORD);
     }
 
     @Before("@LaunchBrowser")
@@ -107,14 +120,7 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
 
         if(TestConstants.OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES)
         {
-            String operatorAccessToken = new StandardApiOperatorPortalSteps<ScenarioManager>(null, null)
-            {
-                @Override
-                public void init()
-                {
-                }
-            }.getOperatorAccessToken();
-
+            String operatorAccessToken = providerOfStandardApiOperatorPortalSteps.get().getOperatorAccessToken();
             loginPage.forceLogin(operatorAccessToken);
         }
         else

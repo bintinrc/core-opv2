@@ -36,3 +36,4 @@ Feature: DP Tagging
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

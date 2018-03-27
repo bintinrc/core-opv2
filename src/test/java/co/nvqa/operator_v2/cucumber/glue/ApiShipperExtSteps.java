@@ -2,13 +2,12 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.client.order_create.OrderCreateClientV3;
 import co.nvqa.commons.constants.HttpConstants;
-import co.nvqa.commons.cucumber.glue.StandardApiShipperSteps;
+import co.nvqa.commons.cucumber.glue.StandardSteps;
 import co.nvqa.commons.model.order_create.v3.AsyncResponse;
 import co.nvqa.commons.model.order_create.v3.OrderRequestV3;
 import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.util.OrderCreateHelper;
-import co.nvqa.operator_v2.util.TestConstants;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Given;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -25,7 +24,7 @@ import java.util.Map;
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class ApiShipperExtSteps extends StandardApiShipperSteps<ScenarioManager>
+public class ApiShipperExtSteps extends StandardSteps<ScenarioManager>
 {
     private OrderCreateClientV3 orderCreateClientV3;
     List<OrderRequestV3> listOfOrderRequestV3 = new ArrayList<>();
@@ -34,7 +33,7 @@ public class ApiShipperExtSteps extends StandardApiShipperSteps<ScenarioManager>
     @Inject
     public ApiShipperExtSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
-        super(scenarioManager, scenarioStorage, TestConstants.SHIPPER_V2_CLIENT_ID, TestConstants.SHIPPER_V2_CLIENT_SECRET);
+        super(scenarioManager, scenarioStorage);
     }
 
     @Override

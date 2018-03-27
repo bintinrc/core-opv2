@@ -16,3 +16,4 @@ Feature: Shipment Scanning
 
   @KillBrowser
   Scenario: Kill Browser
+    Given no-op

@@ -37,3 +37,4 @@ Feature: Hubs Administration
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

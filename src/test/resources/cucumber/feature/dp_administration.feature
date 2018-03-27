@@ -121,3 +121,4 @@ Feature: DP Administration
 
   @KillBrowser
   Scenario: Kill Browser
+    Given no-op

@@ -12,3 +12,4 @@ Feature: QR Code Printing
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op
