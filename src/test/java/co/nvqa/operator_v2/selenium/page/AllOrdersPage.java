@@ -7,6 +7,7 @@ import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.PdfUtils;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
+import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.hamcrest.Matchers;
@@ -130,6 +131,12 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         super(webDriver);
         this.editOrderPage = editOrderPage;
+    }
+
+    public void waitUntilPageLoaded()
+    {
+        super.waitUntilPageLoaded();
+        waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading...']");
     }
 
     public void downloadSampleCsvFile()
@@ -450,6 +457,25 @@ public class AllOrdersPage extends OperatorV2SimplePage
         }
     }
 
+    public void verifyOrderInfoAfterGlobalInbound(OrderRequestV2 orderRequestV2, GlobalInboundParams globalInboundParams, Double expectedOrderCost)
+    {
+        String mainWindowHandle = getWebDriver().getWindowHandle();
+        Long orderId = TestUtils.getOrderId(orderRequestV2);
+        String trackingId = orderRequestV2.getTrackingId();
+        specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, trackingId);
+
+        try
+        {
+            switchToEditOrderWindow(orderId);
+            editOrderPage.waitUntilInvisibilityOfLoadingOrder();
+            editOrderPage.verifyOrderIsGlobalInboundedSuccessfully(orderRequestV2, globalInboundParams, expectedOrderCost);
+        }
+        finally
+        {
+            closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
+        }
+    }
+
     public void selectAction(int actionType)
     {
         click("//span[text()='Apply Action']");
@@ -475,6 +501,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     public void specificSearch(Category category, SearchLogic searchLogic, String searchTerm)
     {
         String mainWindowHandle = getWebDriver().getWindowHandle();
+        waitUntilPageLoaded();
 
         selectValueFromMdSelectByIdContains("category", category.getValue());
         selectValueFromMdSelectByIdContains("search-logic", searchLogic.getValue());

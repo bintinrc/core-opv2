@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
 import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import com.google.inject.Inject;
 import cucumber.api.DataTable;
@@ -193,7 +194,7 @@ public class AllOrdersSteps extends AbstractSteps
         allOrdersPage.addToRoute(listOfTrackingIds, routeId);
     }
 
-    @When("Operator print Waybill for single order on All Orders page")
+    @When("^Operator print Waybill for single order on All Orders page$")
     public void operatorPrintWaybillForSingleOrderOnAllOrdersPage()
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
@@ -205,5 +206,14 @@ public class AllOrdersSteps extends AbstractSteps
     {
         OrderRequestV2 orderRequestV2 = get(KEY_CREATED_ORDER);
         allOrdersPage.verifyWaybillContentsIsCorrect(orderRequestV2);
+    }
+
+    @Then("^Operator verify order info after Global Inbound$")
+    public void operatorVerifyOrderInfoAfterGlobalInbound()
+    {
+        OrderRequestV2 orderRequestV2 = get(KEY_CREATED_ORDER);
+        GlobalInboundParams globalInboundParams = get(KEY_GLOBAL_INBOUND_PARAMS);
+        Double currentOrderCost = get(KEY_CURRENT_ORDER_COST);
+        allOrdersPage.verifyOrderInfoAfterGlobalInbound(orderRequestV2, globalInboundParams, currentOrderCost);
     }
 }

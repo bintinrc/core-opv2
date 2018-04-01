@@ -110,6 +110,21 @@ public class OperatorV2SimplePage extends SimplePage
         click(String.format("//md-dialog//button[@aria-label='%s']", ariaLabel));
     }
 
+    public void clear(String xpathExpression)
+    {
+        WebElement we = findElementByXpath(xpathExpression);
+        we.clear();
+        pause100ms();
+    }
+
+    public void clearf(String xpathExpression, Object... args)
+    {
+        xpathExpression = String.format(xpathExpression, args);
+        WebElement we = findElementByXpath(xpathExpression);
+        we.clear();
+        pause100ms();
+    }
+
     public void sendKeysByIdCustom1(String id, CharSequence... keysToSend)
     {
         String xpathExpression = String.format("//*[self::input or self::textarea][starts-with(@id, '%s')]", id);
