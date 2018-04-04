@@ -434,6 +434,23 @@ public class OperatorV2SimplePage extends SimplePage
         pause100ms();
     }
 
+    public void selectValueFromNvAutocompleteByItemTypes(String itemTypes, String value)
+    {
+        String xpathExpression = String.format("//nv-autocomplete[@item-types='%s']//input", itemTypes);
+        WebElement we = findElementByXpath(xpathExpression);
+
+        if(!we.getAttribute("value").isEmpty())
+        {
+            we.clear();
+            pause200ms();
+        }
+
+        we.sendKeys(value);
+        pause1s();
+        we.sendKeys(Keys.RETURN);
+        pause100ms();
+    }
+
     public String getNvAutocompleteValue(String searchTextAttribute)
     {
         return getValue(String.format("//nv-autocomplete[@search-text='%s']//input", searchTextAttribute));
