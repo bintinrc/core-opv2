@@ -535,36 +535,9 @@ public class AllOrdersPage extends OperatorV2SimplePage
         clearSearchTableCustom1("tracking-id");
     }
 
-    public void waitUntilNewWindowOrTabOpened()
-    {
-        NvLogger.info("Wait until new window or tab opened.");
-        wait5sUntil(()->getWebDriver().getWindowHandles().size()>1, "Window handles size is < 1.");
-    }
-
     public void switchToEditOrderWindow(Long orderId)
     {
-        waitUntilNewWindowOrTabOpened();
-        String currentWindowHandle = getWebDriver().getWindowHandle();
-        Set<String> windowHandles = getWebDriver().getWindowHandles();
-        boolean editOrderFound = false;
-
-        for(String windowHandle : windowHandles)
-        {
-            getWebDriver().switchTo().window(windowHandle);
-            String currentWindowUrl = getCurrentUrl();
-
-            if(currentWindowUrl.endsWith(String.valueOf("order/"+orderId)))
-            {
-                editOrderFound = true;
-                break;
-            }
-        }
-
-        if(!editOrderFound)
-        {
-            getWebDriver().switchTo().window(currentWindowHandle);
-            throw new NvTestRuntimeException(String.format("Edit Order's window for Order with ID = '%d' not found.", orderId));
-        }
+        switchToOtherWindow("order/"+orderId);
     }
 
     public void switchToNewOpenedWindow(String mainWindowHandle)
@@ -593,22 +566,6 @@ public class AllOrdersPage extends OperatorV2SimplePage
         }
 
         getWebDriver().switchTo().window(newOpenedWindowHandle);
-    }
-
-    public void closeAllWindowsAcceptTheMainWindow(String mainWindowHandle)
-    {
-        Set<String> windowHandles = getWebDriver().getWindowHandles();
-
-        for(String windowHandle : windowHandles)
-        {
-            if(!windowHandle.equals(mainWindowHandle))
-            {
-                getWebDriver().switchTo().window(windowHandle);
-                getWebDriver().close();
-            }
-        }
-
-        getWebDriver().switchTo().window(mainWindowHandle);
     }
 
     public String getTextOnTableOrder(int rowNumber, String columnDataClass)

@@ -14,6 +14,7 @@ import org.openqa.selenium.interactions.Actions;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -689,5 +690,53 @@ public class OperatorV2SimplePage extends SimplePage
         }, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
         waitUntilPageLoaded();
+    }
+
+    public void waitUntilNewWindowOrTabOpened()
+    {
+        NvLogger.info("Wait until new window or tab opened.");
+        wait5sUntil(()->getWebDriver().getWindowHandles().size()>1, "Window handles size is < 1.");
+    }
+
+    public void switchToOtherWindow(String expectedUrlEndWith)
+    {
+        waitUntilNewWindowOrTabOpened();
+        String currentWindowHandle = getWebDriver().getWindowHandle();
+        Set<String> windowHandles = getWebDriver().getWindowHandles();
+        boolean windowFound = false;
+
+        for(String windowHandle : windowHandles)
+        {
+            getWebDriver().switchTo().window(windowHandle);
+            String currentWindowUrl = getCurrentUrl();
+
+            if(currentWindowUrl.endsWith(expectedUrlEndWith))
+            {
+                windowFound = true;
+                break;
+            }
+        }
+
+        if(!windowFound)
+        {
+            getWebDriver().switchTo().window(currentWindowHandle);
+            throw new NvTestRuntimeException(String.format("Window with URL end with '%s' not found.", expectedUrlEndWith));
+        }
+    }
+
+    public void closeAllWindowsAcceptTheMainWindow(String mainWindowHandle)
+    {
+        Set<String> windowHandles = getWebDriver().getWindowHandles();
+
+        for(String windowHandle : windowHandles)
+        {
+            if(!windowHandle.equals(mainWindowHandle))
+            {
+                getWebDriver().switchTo().window(windowHandle);
+                getWebDriver().close();
+            }
+        }
+
+        getWebDriver().switchTo().window(mainWindowHandle);
     }
 }
