@@ -5,6 +5,7 @@ Feature: Route Manifest
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
+  @ArchiveRouteViaDb
   Scenario: Operator is able to load routes manifest and verify 1 delivery is success (uid:de99c52c-060c-4951-906f-a489754abafc)
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
@@ -31,6 +32,7 @@ Feature: Route Manifest
     Then Operator verify the created route is exist and has correct info
     Then Operator verify 1 delivery success at Route Manifest
 
+  @ArchiveRouteViaDb
   Scenario: Operator is able to load routes manifest and verify 1 delivery is failed (uid:0139c8ab-cd38-4389-b0e0-0546504cd5a1)
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |

@@ -5,6 +5,7 @@ Feature: Route Monitoring
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
+  @ArchiveRouteViaDb
   Scenario: Operator is able to load routes according to filters (uid:bff81d2d-1c2a-4da6-a0e7-469a6882cd4a)
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
