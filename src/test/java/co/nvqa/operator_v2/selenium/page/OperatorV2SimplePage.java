@@ -222,16 +222,32 @@ public class OperatorV2SimplePage extends SimplePage
 
     public String getToastTopText()
     {
+        return getToastText("//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
+    }
+
+    public WebElement getToastBottom()
+    {
+        String xpathExpression = "//div[@id='toast-container']/div/div/div/div[@class='toast-bottom']";
+        return waitUntilVisibilityOfElementLocated(xpathExpression);
+    }
+
+    public String getToastBottomText()
+    {
+        return getToastText("//div[@id='toast-container']/div/div/div/div[@class='toast-bottom']");
+    }
+
+    public String getToastText(String toastXpathExpression)
+    {
         String text = null;
 
         try
         {
-            WebElement webElement = getToastTop();
+            WebElement webElement = waitUntilVisibilityOfElementLocated(toastXpathExpression);
             text = webElement.getText();
         }
         catch(RuntimeException ex)
         {
-            NvLogger.warn("Failed to get text from element Toast Top.");
+            NvLogger.warn("Failed to get text from element Toast.");
         }
 
         return text;
@@ -418,26 +434,24 @@ public class OperatorV2SimplePage extends SimplePage
         return getText(String.format("//div[@model='%s']//button[contains(@class,'raised')]/span", divModel));
     }
 
-    public void selectValueFromNvAutocomplete(String searchTextAttribute, String value)
+    public void selectValueFromNvAutocomplete(String searchText, String value)
     {
-        String xpathExpression = String.format("//nv-autocomplete[@search-text='%s']//input", searchTextAttribute);
-        WebElement we = findElementByXpath(xpathExpression);
-
-        if(!we.getAttribute("value").isEmpty())
-        {
-            we.clear();
-            pause200ms();
-        }
-
-        we.sendKeys(value);
-        pause1s();
-        we.sendKeys(Keys.RETURN);
-        pause100ms();
+        selectValueFromNvAutocompleteBy("search-text", searchText, value);
     }
 
     public void selectValueFromNvAutocompleteByItemTypes(String itemTypes, String value)
     {
-        String xpathExpression = String.format("//nv-autocomplete[@item-types='%s']//input", itemTypes);
+        selectValueFromNvAutocompleteBy("item-types", itemTypes, value);
+    }
+
+    public void selectValueFromNvAutocompleteByPossibleOptions(String possibleOptions, String value)
+    {
+        selectValueFromNvAutocompleteBy("possible-options", possibleOptions, value);
+    }
+
+    private void selectValueFromNvAutocompleteBy(String nvAutocompleteAttribute, String nvAutocompleteAttributeValue, String value)
+    {
+        String xpathExpression = String.format("//nv-autocomplete[@%s='%s']//input", nvAutocompleteAttribute, nvAutocompleteAttributeValue);
         WebElement we = findElementByXpath(xpathExpression);
 
         if(!we.getAttribute("value").isEmpty())
@@ -449,7 +463,7 @@ public class OperatorV2SimplePage extends SimplePage
         we.sendKeys(value);
         pause1s();
         we.sendKeys(Keys.RETURN);
-        pause100ms();
+        pause200ms();
     }
 
     public String getNvAutocompleteValue(String searchTextAttribute)
@@ -502,15 +516,57 @@ public class OperatorV2SimplePage extends SimplePage
         {
             switch(xpathTextMode)
             {
-                case EXACT: click(String.format("//div[@aria-hidden='false']//md-option[@value='%s']", value)); break;
-                default   :click(String.format("//div[@aria-hidden='false']//md-option[contains(@value,'%s')]", value));
+                case EXACT   : click(String.format("//div[@aria-hidden='false']//md-option[@value='%s']", value)); break;
+                case CONTAINS: click(String.format("//div[@aria-hidden='false']//md-option[contains(@value,'%s')]", value)); break;
+                default      : click(String.format("//div[@aria-hidden='false']//md-option[contains(@value,'%s')]", value));
             }
 
-            pause30ms();
+            pause40ms();
         }
 
         Actions actions = new Actions(getWebDriver());
         actions.sendKeys(Keys.ESCAPE).build().perform();
+        pause300ms();
+    }
+
+    public void selectMultipleValuesFromMdSelectById(String mdSelectId, List<String> listOfValues)
+    {
+        selectMultipleValuesFromMdSelectById(mdSelectId, XpathTextMode.CONTAINS, listOfValues);
+    }
+
+    public void selectMultipleValuesFromMdSelectById(String mdSelectId, XpathTextMode xpathTextMode, List<String> listOfValues)
+    {
+        if(listOfValues!=null && !listOfValues.isEmpty())
+        {
+            selectMultipleValuesFromMdSelectById(mdSelectId, xpathTextMode, listOfValues.toArray(new String[]{}));
+        }
+    }
+
+    public void selectMultipleValuesFromMdSelectById(String mdSelectId, String... values)
+    {
+        selectMultipleValuesFromMdSelectById(mdSelectId, XpathTextMode.CONTAINS, values);
+    }
+
+    public void selectMultipleValuesFromMdSelectById(String mdSelectId, XpathTextMode xpathTextMode, String... values)
+    {
+        click(String.format("//md-select[starts-with(@id, '%s')]", mdSelectId));
+        pause100ms();
+
+        for(String value : values)
+        {
+            switch(xpathTextMode)
+            {
+                case EXACT   : click(String.format("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[@value='%s' or ./div/text()='%s']", value)); break;
+                case CONTAINS: click(String.format("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value)); break;
+                default      : click(String.format("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value)); break;
+            }
+
+            pause40ms();
+        }
+
+        Actions actions = new Actions(getWebDriver());
+        actions.sendKeys(Keys.ESCAPE).build().perform();
+        pause300ms();
     }
 
     public void selectValueFromMdSelectById(String mdSelectId, String value)
