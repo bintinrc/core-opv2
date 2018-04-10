@@ -10,8 +10,6 @@ import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
-import java.text.DecimalFormat;
-
 /**
  *
  * @author Daniel Joi Partogi Hutapea
@@ -76,7 +74,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         Assert.assertThat("Shipper ID", getShipperId(), Matchers.containsString(String.valueOf(orderRequestV2.getShipperId())));
         Assert.assertEquals("Order Type", orderRequestV2.getType(), getOrderType());
         Assert.assertEquals("Size", order.getParcelSize(), getSize());
-        Assert.assertEquals("Weight", order.getWeight(), getWeight());
+        Assert.assertEquals("Weight", order.getWeight(), getWeight(), 0.0);
 
         Transaction pickupTransaction = order.getTransactions().get(0);
         Assert.assertEquals("Pickup Status", pickupTransaction.getStatus(), getPickupStatus());
