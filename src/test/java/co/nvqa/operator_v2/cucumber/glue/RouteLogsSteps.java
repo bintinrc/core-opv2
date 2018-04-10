@@ -17,9 +17,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -75,16 +77,74 @@ public class RouteLogsSteps extends AbstractSteps
             createRouteParams.setNinjaDriverName(ninjaDriverName);
             createRouteParams.setVehicleName(vehicleName);
             createRouteParams.setComments(comments);
-            long createdRouteId = routeLogsPage.createNewRoute(createRouteParams);
+            routeLogsPage.createNewRoute(createRouteParams);
 
-            Route route = new Route();
-            route.setId(createdRouteId);
-            route.setComments(comments);
+            Route createdRoute = createRouteParams.getCreatedRoute();
+            Long createdRouteId = createdRoute.getId();
+            writeToCurrentScenarioLogf("Created Route: %d", createdRouteId);
 
-            put("createRouteParams", createRouteParams);
-            put(KEY_CREATED_ROUTE, route);
+            put(KEY_CREATE_ROUTE_PARAMS, createRouteParams);
+            put(KEY_CREATED_ROUTE, createdRoute);
             put(KEY_CREATED_ROUTE_ID, createdRouteId);
             putInList(KEY_LIST_OF_ARCHIVED_ROUTE_IDS, createdRouteId);
+        }
+        catch(ParseException ex)
+        {
+            throw new NvTestRuntimeException("Failed to parse date.", ex);
+        }
+    }
+
+    @When("^Operator create multiple routes using data below:$")
+    public void operatorCreateMultipleRoutesUsingDataBelow(Map<String,String> mapOfData)
+    {
+        try
+        {
+            String scenarioName = getScenarioManager().getCurrentScenario().getName();
+            String createdDate = CREATED_DATE_SDF.format(new Date());
+
+            int numberOfRoute = Integer.parseInt(mapOfData.get("numberOfRoute"));
+            Date routeDate = YYYY_MM_DD_SDF.parse(mapOfData.get("routeDate"));
+
+            String routeTags = mapOfData.get("routeTags").replaceAll("\\[", "").replaceAll("]", "");
+            String[] tags = Stream.of(routeTags.split(",")).map(String::trim).toArray(String[]::new);
+
+            String zoneName = mapOfData.get("zoneName");
+            String hubName = mapOfData.get("hubName");
+            String ninjaDriverName = mapOfData.get("ninjaDriverName");
+            String vehicleName = mapOfData.get("vehicleName");
+            List<CreateRouteParams> listOfCreateRouteParams = new ArrayList<>();
+
+            for(int i=0; i<numberOfRoute; i++)
+            {
+                String comments = String.format("This route (#%d) is created from OpV2 for testing purpose only. Ignore this route. Created at %s by scenario \"%s\".", (i+1), createdDate, scenarioName);
+
+                CreateRouteParams createRouteParams = new CreateRouteParams();
+                createRouteParams.setRouteDate(routeDate);
+                createRouteParams.setRouteTags(tags);
+                createRouteParams.setZoneName(zoneName);
+                createRouteParams.setHubName(hubName);
+                createRouteParams.setNinjaDriverName(ninjaDriverName);
+                createRouteParams.setVehicleName(vehicleName);
+                createRouteParams.setComments(comments);
+                listOfCreateRouteParams.add(createRouteParams);
+            }
+
+            routeLogsPage.createMultipleRoute(listOfCreateRouteParams);
+            int counter = 1;
+
+            for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
+            {
+                Route createdRoute = createRouteParams.getCreatedRoute();
+                Long createdRouteId = createdRoute.getId();
+
+                put(KEY_CREATE_ROUTE_PARAMS, createRouteParams);
+                put(KEY_CREATED_ROUTE, createdRoute);
+                put(KEY_CREATED_ROUTE_ID, createdRouteId);
+                putInList(KEY_LIST_OF_ARCHIVED_ROUTE_IDS, createdRouteId);
+                writeToCurrentScenarioLogf("Created Route #%d: %d", counter++, createdRouteId);
+            }
+
+            put(KEY_LIST_OF_CREATE_ROUTE_PARAMS, listOfCreateRouteParams);
         }
         catch(ParseException ex)
         {
@@ -95,9 +155,19 @@ public class RouteLogsSteps extends AbstractSteps
     @Then("^Operator verify the new route is created successfully$")
     public void operatorVerifyTheNewRouteIsCreatedSuccessfully()
     {
-        CreateRouteParams createRouteParams = get("createRouteParams");
-        Route route = get(KEY_CREATED_ROUTE);
-        routeLogsPage.verifyNewRouteIsCreatedSuccessfully(createRouteParams, route);
+        CreateRouteParams createRouteParams = get(KEY_CREATE_ROUTE_PARAMS);
+        routeLogsPage.verifyNewRouteIsCreatedSuccessfully(createRouteParams);
+    }
+
+    @Then("^Operator verify multiple routes is created successfully$")
+    public void operatorVerifyMultipleRoutesIsCreatedSuccessfully()
+    {
+        List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
+
+        for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
+        {
+            routeLogsPage.verifyNewRouteIsCreatedSuccessfully(createRouteParams);
+        }
     }
 
     @When("^Operator select route date filter and click 'Load Selection'$")

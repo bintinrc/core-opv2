@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -45,7 +46,13 @@ public class RouteLogsPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading data...']");
     }
 
-    public long createNewRoute(CreateRouteParams createRouteParams)
+    /**
+     * This method will create object Route and put it to CreateRouteParams
+     * if the route is created successfully.
+     *
+     * @param createRouteParams
+     */
+    public void createNewRoute(CreateRouteParams createRouteParams)
     {
         waitUntilPageLoaded();
         selectRouteDateFilter(createRouteParams.getRouteDate(), createRouteParams.getRouteDate());
@@ -61,7 +68,6 @@ public class RouteLogsPage extends OperatorV2SimplePage
         clickNvButtonSaveByNameAndWaitUntilDone("Create Route(s)");
 
         String toastBottomText = getToastBottomText();
-        long routeId;
 
         if(toastBottomText==null)
         {
@@ -70,16 +76,88 @@ public class RouteLogsPage extends OperatorV2SimplePage
         else
         {
             String routeIdAsString = toastBottomText.split("Route")[1].trim();
-            routeId = Long.parseLong(routeIdAsString);
+            long routeId = Long.parseLong(routeIdAsString);
+
+            Route createdRoute = new Route();
+            createdRoute.setId(routeId);
+            createdRoute.setComments(createRouteParams.getComments());
+            createRouteParams.setCreatedRoute(createdRoute);
         }
 
         waitUntilInvisibilityOfToast("1 Route(s) Created");
-        return routeId;
     }
 
-    public void verifyNewRouteIsCreatedSuccessfully(CreateRouteParams createRouteParams, Route route)
+    /**
+     * This method will create object Route and put it to CreateRouteParams
+     * if the route is created successfully.
+     *
+     * @param listOfCreateRouteParams
+     */
+    public void createMultipleRoute(List<CreateRouteParams> listOfCreateRouteParams)
     {
-        searchTableByRouteIdUntilFoundAndPasswordIsNotEmpty(route.getId());
+        waitUntilPageLoaded();
+
+        if(listOfCreateRouteParams==null || listOfCreateRouteParams.isEmpty())
+        {
+            throw new NvTestRuntimeException("List of CreateRouteParams should not be empty.");
+        }
+
+        CreateRouteParams createRouteParams = listOfCreateRouteParams.get(0);
+
+        selectRouteDateFilter(createRouteParams.getRouteDate(), createRouteParams.getRouteDate());
+        clickLoadSelection();
+        clickNvIconTextButtonByName("Create Route");
+        setMdDatepickerById("commons.model.route-date", createRouteParams.getRouteDate());
+        selectMultipleValuesFromMdSelectById("commons.model.route-tags", createRouteParams.getRouteTags());
+        selectValueFromNvAutocompleteByPossibleOptions("zonesSelectionOptions", createRouteParams.getZoneName());
+        selectValueFromNvAutocompleteByPossibleOptions("hubsSelectionOptions", createRouteParams.getHubName());
+        selectValueFromNvAutocompleteByPossibleOptions("driversSelectionOptions", createRouteParams.getNinjaDriverName().replaceAll(" ", ""));
+        selectValueFromNvAutocompleteByPossibleOptions("vehiclesSelectionOptions", createRouteParams.getVehicleName());
+
+        int listOfCreateRouteParamsSize = listOfCreateRouteParams.size();
+
+        for(int i=1; i<listOfCreateRouteParamsSize; i++)
+        {
+            clickNvIconTextButtonByName("container.route-logs.duplicate-above");
+        }
+
+        for(int i=0; i<listOfCreateRouteParamsSize; i++)
+        {
+            sendKeys(String.format("(//textarea[@id='comments'])[%d]", (i+1)), listOfCreateRouteParams.get(i).getComments());
+        }
+
+        clickNvButtonSaveByNameAndWaitUntilDone("Create Route(s)");
+        String toastBottomText = getToastBottomText();
+
+        if(toastBottomText==null)
+        {
+            throw new NvTestRuntimeException("Failed to create new Route.");
+        }
+        else
+        {
+            String[] listOfRouteIdAsString = toastBottomText.split("\\n");
+            int sizeOfListOfRouteIdAsString = listOfRouteIdAsString.length;
+
+            for(int i=0; i<sizeOfListOfRouteIdAsString; i++)
+            {
+                String routeIdAsString = listOfRouteIdAsString[i].split("Route")[1].trim();
+                Long routeId = Long.parseLong(routeIdAsString);
+
+                Route createdRoute = new Route();
+                createdRoute.setId(routeId);
+                createdRoute.setComments(createRouteParams.getComments());
+                listOfCreateRouteParams.get(i).setCreatedRoute(createdRoute);
+            }
+        }
+
+        waitUntilInvisibilityOfToast("Route(s) Created");
+    }
+
+    public void verifyNewRouteIsCreatedSuccessfully(CreateRouteParams createRouteParams)
+    {
+        Route createdRoute = createRouteParams.getCreatedRoute();
+        Long createdRouteId = createdRoute.getId();
+        searchTableByRouteIdUntilFoundAndPasswordIsNotEmpty(createdRouteId);
 
         String actualRouteDate = getTextOnTable(1, COLUMN_CLASS_DATA_ROUTE_DATE);
         String actualRouteId = getTextOnTable(1, COLUMN_CLASS_DATA_ROUTE_ID, XpathTextMode.EXACT);
@@ -89,10 +167,10 @@ public class RouteLogsPage extends OperatorV2SimplePage
         String actualZoneName = getTextOnTable(1, COLUMN_CLASS_DATA_ZONE_NAME);
         String actualComments = getTextOnTable(1, COLUMN_CLASS_DATA_COMMENTS);
 
-        route.setRoutePassword(actualRoutePassword);
+        createdRoute.setRoutePassword(actualRoutePassword);
 
         Assert.assertEquals("Route Date", YYYY_MM_DD_SDF.format(createRouteParams.getRouteDate()), actualRouteDate);
-        Assert.assertEquals("Route ID", String.valueOf(route.getId()), actualRouteId);
+        Assert.assertEquals("Route ID", String.valueOf(createdRouteId), actualRouteId);
         Assert.assertEquals("Driver Name", createRouteParams.getNinjaDriverName(), actualDriverName);
         Assert.assertEquals("Hub Name", createRouteParams.getHubName(), actualHubName);
         Assert.assertEquals("Zone Name", createRouteParams.getZoneName(), actualZoneName);

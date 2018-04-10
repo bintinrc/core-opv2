@@ -1,5 +1,7 @@
 package co.nvqa.operator_v2.model;
 
+import co.nvqa.commons.model.core.route.Route;
+
 import java.util.Date;
 
 /**
@@ -15,6 +17,7 @@ public class CreateRouteParams
     private String ninjaDriverName;
     private String vehicleName;
     private String comments;
+    private Route createdRoute;
 
     public CreateRouteParams()
     {
@@ -88,5 +91,15 @@ public class CreateRouteParams
     public void setComments(String comments)
     {
         this.comments = comments;
+    }
+
+    public Route getCreatedRoute()
+    {
+        return createdRoute;
+    }
+
+    public void setCreatedRoute(Route createdRoute)
+    {
+        this.createdRoute = createdRoute;
     }
 }

@@ -5,7 +5,7 @@ Feature: Route Logs
   Scenario: Login to Operator V2
     Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
 
-  @ArchiveRouteViaDb
+  @ArchiveAndDeleteRouteViaDb
   Scenario: Operator create new route from page Route Logs (uid:fe58af45-de7f-4dff-aced-8bf7521666e3)
     Given Operator go to menu Routing -> Route Logs
     When Operator create new route using data below:
@@ -16,6 +16,19 @@ Feature: Route Logs
       | ninjaDriverName | {ninja-driver-name}       |
       | vehicleName     | {vehicle-name}            |
     Then Operator verify the new route is created successfully
+
+  @ArchiveAndDeleteRouteViaDb
+  Scenario: Operator create multiple route from page Route Logs
+    Given Operator go to menu Routing -> Route Logs
+    When Operator create multiple routes using data below:
+      | numberOfRoute   | 2                         |
+      | routeDate       | {current-date-yyyy-MM-dd} |
+      | routeTags       | [FLT]                     |
+      | zoneName        | {zone-name}               |
+      | hubName         | {hub-name}                |
+      | ninjaDriverName | {ninja-driver-name}       |
+      | vehicleName     | {vehicle-name}            |
+    Then Operator verify multiple routes is created successfully
 
   @ArchiveRouteViaDb
   Scenario: Operator 'Edit Details' on Operator V2 - Route Logs menu (uid:d735938c-f87e-47c1-9a6a-61d31850e0cb)
