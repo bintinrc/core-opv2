@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.AirwayBill;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
-import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.PdfUtils;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
@@ -494,8 +493,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     public void searchTrackingId(String trackingId)
     {
-        sendKeysById("searchTerm", trackingId);
-        clickNvApiTextButtonByName("commons.search");
+        specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, trackingId);
     }
 
     public void specificSearch(Category category, SearchLogic searchLogic, String searchTerm)

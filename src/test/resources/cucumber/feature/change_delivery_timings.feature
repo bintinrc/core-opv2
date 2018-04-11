@@ -17,10 +17,10 @@ Feature: Change Delivery Timings
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
-      | tracking_id | {{tracking_id}} |
-      | start_date  | {{cur_date}}    |
-      | end_date    | {{next_day}}    |
-      | timewindow  | 0               |
+      | trackingId | {{tracking_id}} |
+      | startDate  | {{cur_date}}    |
+      | endDate    | {{next_day}}    |
+      | timewindow | 0               |
     Then Operator verify that the Delivery Time Updated on Change Delivery Timings page
     Given Operator go to menu Order -> All Orders
     Then Operator verify that the Delivery Time is updated on All Orders page
@@ -32,10 +32,10 @@ Feature: Change Delivery Timings
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
-      | tracking_id | {{tracking_id}} |
-      | start_date  | {{cur_date}}    |
-      | end_date    | {{next_day}}    |
-      | timewindow  |                 |
+      | trackingId | {{tracking_id}} |
+      | startDate  | {{cur_date}}    |
+      | endDate    | {{next_day}}    |
+      | timewindow |                 |
     Then Operator verify that the Delivery Time Updated on Change Delivery Timings page
     Given Operator go to menu Order -> All Orders
     Then Operator verify that the Delivery Time is updated on All Orders page
@@ -44,10 +44,10 @@ Feature: Change Delivery Timings
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
-      | tracking_id | INVALID_TRACKING_ID |
-      | start_date  | {{cur_date}}        |
-      | end_date    | {{next_day}}        |
-      | timewindow  | -1                  |
+      | trackingId | INVALID_TRACKING_ID |
+      | startDate  | {{cur_date}}        |
+      | endDate    | {{next_day}}        |
+      | timewindow | -1                  |
     Then Operator verify the tracking ID is invalid on Change Delivery Timings page
 
   @ArchiveRouteViaDb
@@ -68,10 +68,10 @@ Feature: Change Delivery Timings
     And API Operator start the route
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
-      | tracking_id | {{tracking_id}} |
-      | start_date  | {{cur_date}}    |
-      | end_date    | {{next_day}}    |
-      | timewindow  | 0               |
+      | trackingId | {{tracking_id}} |
+      | startDate  | {{cur_date}}    |
+      | endDate    | {{next_day}}    |
+      | timewindow | 0               |
     Then Operator verify the state order of the Tracking ID is invalid on Change Delivery Timings page
 
   Scenario: Operator uploads the CSV file on Change Delivery Timings page with one of the date is empty (uid:58bd63ca-d461-47a6-a377-11dac88bbb8f)
@@ -81,10 +81,10 @@ Feature: Change Delivery Timings
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
-      | tracking_id | {{tracking_id}} |
-      | start_date  |                 |
-      | end_date    | {{cur_date}}    |
-      | timewindow  | -1              |
+      | trackingId | {{tracking_id}} |
+      | startDate  |                 |
+      | endDate    | {{cur_date}}    |
+      | timewindow | -1              |
     Then Operator verify the start and end date is not indicated correctly on Change Delivery Timings page
 
   Scenario: Operator uploads the CSV file on Change Delivery Timings page with start date is later than end date (uid:5b96c619-4a16-4490-8a29-c3274315eb64)
@@ -94,10 +94,10 @@ Feature: Change Delivery Timings
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
-      | tracking_id | {{tracking_id}} |
-      | start_date  | {{next_day}}    |
-      | end_date    | {{cur_date}}    |
-      | timewindow  | -1              |
+      | trackingId | {{tracking_id}} |
+      | startDate  | {{next_day}}    |
+      | endDate    | {{cur_date}}    |
+      | timewindow | -1              |
     Then Operator verify that start date is later than end date on Change Delivery Timings page
 
   Scenario: Operator uploads the CSV file on Change Delivery Timings page with both date empty (uid:7966f797-eb34-4ffc-ad44-499159cec435)
@@ -107,10 +107,10 @@ Feature: Change Delivery Timings
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
-      | tracking_id | {{tracking_id}} |
-      | start_date  |                 |
-      | end_date    |                 |
-      | timewindow  | 0               |
+      | trackingId | {{tracking_id}} |
+      | startDate  |                 |
+      | endDate    |                 |
+      | timewindow | 0               |
     Then Operator verify that the Delivery Time Updated on Change Delivery Timings page
     Given Operator go to menu Order -> All Orders
     Then Operator verify that the Delivery Time is updated on All Orders page
