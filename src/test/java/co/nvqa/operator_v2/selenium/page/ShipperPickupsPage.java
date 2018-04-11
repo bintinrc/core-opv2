@@ -60,6 +60,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         String pickupAddress = buildPickupAddress(address);
         searchTableByPickupAddress(pickupAddress);
         clickActionButtonOnTable(1, ACTION_BUTTON_ROUTE_EDIT);
+        pause2s();
 
         Assert.assertNotNull("Route ID should not be null.", routeId);
         selectValueFromNvAutocomplete("ctrl.data.textRoute", String.valueOf(routeId));
