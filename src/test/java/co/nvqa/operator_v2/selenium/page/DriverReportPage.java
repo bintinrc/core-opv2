@@ -48,7 +48,8 @@ public class DriverReportPage extends OperatorV2SimplePage
     public void clickButtonGenerateCsv()
     {
         clickNvApiTextButtonByNameAndWaitUntilDone("container.driver-reports.generate-csv");
-        waitUntilInvisibilityOfToast("Attempting to download");
+        pause1s();
+        waitUntilInvisibilityOfToast("Attempting to download", false);
         waitUntilInvisibilityOfToast("Downloading");
     }
 
@@ -105,7 +106,8 @@ public class DriverReportPage extends OperatorV2SimplePage
     public void clickButtonGenerateDriverRouteExcelReport()
     {
         clickNvApiTextButtonByNameAndWaitUntilDone("container.driver-reports.generate-excel");
-        waitUntilInvisibilityOfToast("Attempting to download");
+        pause1s();
+        waitUntilInvisibilityOfToast("Attempting to download", false);
         waitUntilInvisibilityOfToast("Downloading");
     }
 
