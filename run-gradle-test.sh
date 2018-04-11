@@ -1,4 +1,5 @@
 #! /bin/sh
+set -o errexit
 
 # make sure Xvfb is running in background with screen id 1
 export DISPLAY=:1
@@ -14,7 +15,6 @@ _term() {
 trap _term SIGTERM
 
 echo "Doing some initial work...";
-set -o errexit
 gradle --no-daemon clean runCucumberParallel -PforkCount=4 -Penvironment=qa -Ptags=@TagManagement &
 
 child=$!
