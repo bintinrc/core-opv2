@@ -9,7 +9,7 @@ export DBUS_SESSION_BUS_ADDRESS=/dev/null
 
 _term() {
   echo "Caught SIGTERM signal!"
-  kill -TERM "$child" 2>/dev/null
+  kill -9 "$child" 2>/dev/null
 }
 
 trap _term SIGTERM
