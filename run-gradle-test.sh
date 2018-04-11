@@ -15,7 +15,7 @@ trap _term SIGTERM
 
 echo "Doing some initial work...";
 set -o errexit
-gradle --no-daemon clean runCucumberParallel -PforkCount=4 -Penvironment=qa -Ptags=@OperatorV2 &
+gradle --no-daemon clean runCucumberParallel -PforkCount=4 -Penvironment=qa -Ptags=@TagManagement &
 
 child=$!
 echo "Wait until Gradle done..."
