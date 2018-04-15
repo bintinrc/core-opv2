@@ -424,6 +424,17 @@ public class OperatorV2SimplePage extends SimplePage
         }
     }
 
+    public void checkRowWithMdVirtualRepeat(int rowNumber, String mdVirtualRepeat)
+    {
+        WebElement mdCheckboxWe = findElementByXpath(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", mdVirtualRepeat, rowNumber));
+        String ariaChecked = getAttribute(mdCheckboxWe, "aria-checked");
+
+        if("false".equalsIgnoreCase(ariaChecked))
+        {
+            mdCheckboxWe.click();
+        }
+    }
+
     public void clickToggleButton(String divModel, String buttonAriaLabel)
     {
         clickf("//div[@model='%s']//button[@aria-label='%s']", divModel, buttonAriaLabel);
@@ -561,7 +572,7 @@ public class OperatorV2SimplePage extends SimplePage
                 default      : click(String.format("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value)); break;
             }
 
-            pause40ms();
+            pause100ms();
         }
 
         Actions actions = new Actions(getWebDriver());

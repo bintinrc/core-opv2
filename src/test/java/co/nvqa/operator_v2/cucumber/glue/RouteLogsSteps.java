@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.CreateRouteParams;
+import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
@@ -140,6 +141,8 @@ public class RouteLogsSteps extends AbstractSteps
                 put(KEY_CREATE_ROUTE_PARAMS, createRouteParams);
                 put(KEY_CREATED_ROUTE, createdRoute);
                 put(KEY_CREATED_ROUTE_ID, createdRouteId);
+                putInList(KEY_LIST_OF_CREATED_ROUTE, createdRoute);
+                putInList(KEY_LIST_OF_CREATED_ROUTE_ID, createdRouteId);
                 putInList(KEY_LIST_OF_ARCHIVED_ROUTE_IDS, createdRouteId);
                 writeToCurrentScenarioLogf("Created Route #%d: %d", counter++, createdRouteId);
             }
@@ -168,6 +171,165 @@ public class RouteLogsSteps extends AbstractSteps
         {
             routeLogsPage.verifyNewRouteIsCreatedSuccessfully(createRouteParams);
         }
+    }
+
+    @When("^Operator bulk edit details multiple routes using data below:$")
+    public void operatorBulkEditDetailsMultipleRoutesUsingDataBelow(Map<String,String> mapOfData)
+    {
+        try
+        {
+            List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
+
+            Date routeDate = YYYY_MM_DD_SDF.parse(mapOfData.get("routeDate"));
+
+            String routeTags = mapOfData.get("routeTags").replaceAll("\\[", "").replaceAll("]", "");
+            String[] tags = Stream.of(routeTags.split(",")).map(String::trim).toArray(String[]::new);
+
+            String zoneName = mapOfData.get("zoneName");
+            String hubName = mapOfData.get("hubName");
+            String ninjaDriverName = mapOfData.get("ninjaDriverName");
+            String vehicleName = mapOfData.get("vehicleName");
+
+            for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
+            {
+                createRouteParams.setRouteDate(routeDate);
+                createRouteParams.setRouteTags(tags);
+                createRouteParams.setZoneName(zoneName);
+                createRouteParams.setHubName(hubName);
+                createRouteParams.setNinjaDriverName(ninjaDriverName);
+                createRouteParams.setVehicleName(vehicleName);
+            }
+
+            routeLogsPage.bulkEditDetails(listOfCreateRouteParams);
+        }
+        catch(ParseException ex)
+        {
+            throw new NvTestRuntimeException("Failed to parse date.", ex);
+        }
+    }
+
+    @Then("^Operator verify multiple routes is bulk edited successfully$")
+    public void operatorVerifyMultipleRoutesIsBulkEditedSuccessfully$()
+    {
+        List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
+
+        for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
+        {
+            routeLogsPage.verifyRouteIsFoundAndInfoIsCorrect(createRouteParams);
+        }
+    }
+
+    @When("^Operator edit driver type of multiple routes using data below:$")
+    public void operatorEditDriverTypeOfMultipleRoutesUsingDataBelow(Map<String,String> mapOfData)
+    {
+        List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
+
+        long driverTypeId = Long.parseLong(mapOfData.get("driverTypeId"));
+        String driverTypeName = mapOfData.get("driverTypeName");
+
+        DriverTypeParams driverTypeParams = new DriverTypeParams();
+        driverTypeParams.setDriverTypeId(driverTypeId);
+        driverTypeParams.setDriverTypeName(driverTypeName);
+
+        routeLogsPage.editDriverTypesOfSelectedRoute(listOfCreateRouteParams, driverTypeParams);
+        put(KEY_DRIVER_TYPE_PARAMS, driverTypeParams);
+    }
+
+    @When("^Operator merge transactions of multiple routes$")
+    public void operatorMergeTransactionsOfMultipleRoutes()
+    {
+        List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
+        routeLogsPage.mergeTransactionsOfMultipleRoutes(listOfCreateRouteParams);
+    }
+
+    @Then("^Operator verify transactions of multiple routes is merged successfully$")
+    public void operatorVerifyTransactionsOfMultipleRoutesIsMergedSuccessfully()
+    {
+        List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
+        routeLogsPage.verifyTransactionsOfMultipleRoutesIsMergedSuccessfully(listOfCreateRouteParams);
+    }
+
+    @When("^Operator optimise multiple routes$")
+    public void operatorOptimiseMultipleRoutes()
+    {
+        List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
+        routeLogsPage.optimiseMultipleRoutes(listOfCreateRouteParams);
+    }
+
+    @Then("^Operator verify multiple routes is optimised successfully$")
+    public void operatorVerifyMultipleRoutesIsOptimisedSuccessfully()
+    {
+        List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
+        routeLogsPage.verifyMultipleRoutesIsOptimisedSuccessfully(listOfCreateRouteParams);
+    }
+
+    @When("^Operator print passwords of multiple routes$")
+    public void operatorPrintPasswordsOfMultipleRoutes()
+    {
+        List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
+        routeLogsPage.printPasswordsOfSelectedRoutes(listOfCreateRouteParams);
+    }
+
+    @Then("^Operator verify printed passwords of selected routes info is correct$")
+    public void operatorVerifyPrintedPasswordsOfSelectedRoutesInfoIsCorrect()
+    {
+        List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
+        routeLogsPage.verifyPrintedPasswordsOfSelectedRoutesInfoIsCorrect(listOfCreateRouteParams);
+    }
+
+    @When("^Operator print multiple routes$")
+    public void operatorPrintMultipleRoutes()
+    {
+        List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
+        routeLogsPage.printMultipleRoutes(listOfCreateRouteParams);
+    }
+
+    @When("^Operator verify multiple routes is printed successfully$")
+    public void operatorVerifyMultipleRoutesIsPrintedSuccessfully()
+    {
+        routeLogsPage.verifyMultipleRoutesIsPrintedSuccessfully();
+    }
+
+    @When("^Operator archive multiple routes$")
+    public void operatorArchiveMultipleRoutes()
+    {
+        List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
+        routeLogsPage.archiveMultipleRoutes(listOfCreateRouteParams);
+    }
+
+    @Then("^Operator verify multiple routes is archived successfully$")
+    public void operatorVerifyMultipleRoutesIsArchivedSuccessfully()
+    {
+        List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
+        routeLogsPage.verifyMultipleRoutesIsArchivedSuccessfully(listOfCreateRouteParams);
+    }
+
+    @When("^Operator unarchive multiple routes$")
+    public void operatorUnarchiveMultipleRoutes()
+    {
+        List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
+        routeLogsPage.unarchiveMultipleRoutes(listOfCreateRouteParams);
+    }
+
+    @Then("^Operator verify multiple routes is unarchived successfully$")
+    public void operatorVerifyMultipleRoutesIsUnarchivedSuccessfully()
+    {
+        List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
+        routeLogsPage.verifyMultipleRoutesIsUnarchivedSuccessfully(listOfCreateRouteParams);
+    }
+
+    @When("^Operator delete multiple routes$")
+    public void operatorDeleteMultipleRoutes()
+    {
+        List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
+        routeLogsPage.deleteMultipleRoutes(listOfCreateRouteParams);
+    }
+
+    @Then("^Operator verify multiple routes is deleted successfully$")
+    public void operatorVerifyMultipleRoutesIsDeletedSuccessfully()
+    {
+        List<CreateRouteParams> listOfCreateRouteParams = get(KEY_LIST_OF_CREATE_ROUTE_PARAMS);
+        routeLogsPage.verifyMultipleRoutesIsDeletedSuccessfully(listOfCreateRouteParams);
     }
 
     @When("^Operator select route date filter and click 'Load Selection'$")

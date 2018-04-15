@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.AirwayBill;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
+import co.nvqa.commons.model.pdf.AirwayBill;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.PdfUtils;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
@@ -362,7 +362,6 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         Assert.assertEquals("COD", orderRequestV2.getCodGoods(), airwayBill.getCod());
         Assert.assertEquals("Comments", orderRequestV2.getInstruction(), airwayBill.getComments());
-        TestUtils.getTextFromQrCodeImage(airwayBill.getTrackingIdQrCodeFile());
 
         String actualQrCodeTrackingId = TestUtils.getTextFromQrCodeImage(airwayBill.getTrackingIdQrCodeFile());
         Assert.assertEquals("Tracking ID - QR Code", trackingId, actualQrCodeTrackingId);
