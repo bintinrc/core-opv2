@@ -40,7 +40,7 @@ Feature: All Orders
   Scenario: Operator find multiple orders with CSV on All Orders page (uid:932287da-cf04-471e-b056-e3c44c233677)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple Order V2 Parcel using data below:
-      | numberOfOrder     | 3       |
+      | numberOfOrder     | 3      |
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     When API Operator get order details
@@ -110,7 +110,7 @@ Feature: All Orders
   Scenario: Operator pull out multiple orders from route on All Orders page (uid:ec25528a-5be8-4026-9680-731a066f95cb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple Order V2 Parcel using data below:
-      | numberOfOrder     | 3       |
+      | numberOfOrder     | 3      |
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     Given API Operator Global Inbound multiple parcels using data below:
@@ -130,7 +130,7 @@ Feature: All Orders
   Scenario: Operator add multiple orders to route on All Orders page (uid:c8d93bf5-a2d9-40bf-9346-9278299d3bd3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple Order V2 Parcel using data below:
-      | numberOfOrder     | 3       |
+      | numberOfOrder     | 3      |
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     Given API Operator Global Inbound multiple parcels using data below:

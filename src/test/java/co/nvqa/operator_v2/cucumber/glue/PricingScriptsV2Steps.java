@@ -4,7 +4,6 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.pricing.Script;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.utils.StandardScenarioStorage;
-import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
@@ -230,8 +229,8 @@ public class PricingScriptsV2Steps extends AbstractSteps
         script.setName(name);
         script.setSource(source);
         script.setActiveParameters(listOfActiveParameters);
-        script.setVersionEffectiveStartDate(StandardTestUtils.getBeforeDate(1));
-        script.setVersionEffectiveEndDate(StandardTestUtils.getNextDate(1));
+        script.setVersionEffectiveStartDate(getBeforeDate(1));
+        script.setVersionEffectiveEndDate(getNextDate(1));
 
         VerifyDraftParams verifyDraftParams = new VerifyDraftParams();
         verifyDraftParams.setStartWeight(startWeight);

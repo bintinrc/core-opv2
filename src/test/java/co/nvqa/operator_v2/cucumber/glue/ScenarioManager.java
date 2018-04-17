@@ -97,18 +97,19 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
     public void resetWindow()
     {
         NvLogger.info("Reset window.");
-        getWebDriver().get(TestConstants.OPERATOR_PORTAL_URL);
-        OperatorV2SimplePage operatorV2SimplePage = new OperatorV2SimplePage(getWebDriver());
 
         try
         {
+            getWebDriver().get(TestConstants.OPERATOR_PORTAL_URL);
+            OperatorV2SimplePage operatorV2SimplePage = new OperatorV2SimplePage(getWebDriver());
             String leaveBtnXpath = "//md-dialog[@aria-label='Leaving PageYou have ...']//button[@aria-label='Leave']";
             WebElement webElement = operatorV2SimplePage.findElementByFast(By.xpath(leaveBtnXpath));
             webElement.click();
             operatorV2SimplePage.waitUntilInvisibilityOfToast("sidenav-main-menu");
         }
-        catch(Exception ex)
+        catch(Throwable th)
         {
+            NvLogger.warn("Failed to 'Reset Window'.", th);
         }
     }
 
