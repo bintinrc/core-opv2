@@ -16,7 +16,7 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage
     private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
 
     private static final String MD_VIRTUAL_REPEAT = "routeGroup in getTableData()";
-    public static final String COLUMN_CLASS_NAME = "name";
+    public static final String COLUMN_CLASS_DATA_NAME = "name";
 
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
     public static final String ACTION_BUTTON_DELETE = "commons.delete";
@@ -38,7 +38,7 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage
     {
         searchTable(filterRouteGroupName);
         pause100ms();
-        String actualName = getTextOnTable(1, RouteGroupManagementPage.COLUMN_CLASS_NAME);
+        String actualName = getTextOnTable(1, RouteGroupManagementPage.COLUMN_CLASS_DATA_NAME);
         Assert.assertTrue("Route Group name not matched.", actualName.startsWith(filterRouteGroupName)); //Route Group name is concatenated with description.
 
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);

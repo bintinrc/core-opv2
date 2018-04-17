@@ -13,8 +13,8 @@ public class HubsAdministrationPage extends OperatorV2SimplePage
     private static final String NG_REPEAT = "hub in $data";
     private static final String CSV_FILENAME = "hubs.csv";
 
-    public static final String COLUMN_CLASS_NAME = "name";
-    public static final String COLUMN_CLASS_LAT_LONG = "latlng";
+    public static final String COLUMN_CLASS_DATA_NAME = "name";
+    public static final String COLUMN_CLASS_DATA_LAT_LONG = "latlng";
 
     private static final String ACTION_BUTTON_EDIT = "Edit";
 
@@ -61,11 +61,11 @@ public class HubsAdministrationPage extends OperatorV2SimplePage
     {
         searchTableByName(hubsAdministration);
 
-        String actualName = getTextOnTable(1, COLUMN_CLASS_NAME);
+        String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
         Assert.assertEquals("Hub Name", hubsAdministration.getName(), actualName);
 
         String expectedLatLong = "("+hubsAdministration.getLatitude()+", "+hubsAdministration.getLongitude()+")";
-        String actualLatLong = getTextOnTable(1, COLUMN_CLASS_LAT_LONG);
+        String actualLatLong = getTextOnTable(1, COLUMN_CLASS_DATA_LAT_LONG);
         Assert.assertEquals("Hub Lat/Long", expectedLatLong, actualLatLong);
     }
 

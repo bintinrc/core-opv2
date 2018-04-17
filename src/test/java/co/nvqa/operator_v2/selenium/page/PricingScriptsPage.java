@@ -18,7 +18,7 @@ import java.util.Map;
 public class PricingScriptsPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "script in getTableData()";
-    public static final String COLUMN_CLASS_NAME = "name";
+    public static final String COLUMN_CLASS_DATA_NAME = "name";
 
     public static final String ACTION_BUTTON_CODE = "code";
     public static final String ACTION_BUTTON_EDIT = "edit script";

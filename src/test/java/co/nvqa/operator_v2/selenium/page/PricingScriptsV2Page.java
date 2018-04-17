@@ -24,15 +24,15 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
     private TimeBoundedScriptsPage timeBoundedScriptsPage;
 
     private static final String MD_VIRTUAL_REPEAT_TABLE_DRAFTS = "script in getTableData()";
-    public static final String COLUMN_CLASS_ID_ON_TABLE_DRAFTS = "id";
-    public static final String COLUMN_CLASS_NAME_ON_TABLE_DRAFTS = "name";
-    public static final String COLUMN_CLASS_DESCRIPTION_ON_TABLE_DRAFTS = "description";
+    public static final String COLUMN_CLASS_DATA_ID_ON_TABLE_DRAFTS = "id";
+    public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE_DRAFTS = "name";
+    public static final String COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE_DRAFTS = "description";
     public static final String ACTION_BUTTON_EDIT_ON_TABLE_DRAFTS = "container.pricing-scripts.edit-script";
 
     private static final String MD_VIRTUAL_REPEAT_TABLE_ACTIVE_SCRIPTS = "script in getTableData()";
-    public static final String COLUMN_CLASS_ID_ON_TABLE_ACTIVE_SCRIPTS = "id";
-    public static final String COLUMN_CLASS_NAME_ON_TABLE_ACTIVE_SCRIPTS = "name";
-    public static final String COLUMN_CLASS_DESCRIPTION_ON_TABLE_ACTIVE_SCRIPTS = "description";
+    public static final String COLUMN_CLASS_DATA_ID_ON_TABLE_ACTIVE_SCRIPTS = "id";
+    public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE_ACTIVE_SCRIPTS = "name";
+    public static final String COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE_ACTIVE_SCRIPTS = "description";
     public static final String ACTION_BUTTON_EDIT_ON_TABLE_ACTIVE_SCRIPTS = "container.pricing-scripts.edit-script";
     public static final String ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS = "container.pricing-scripts.link-shippers";
     public static final String ACTION_BUTTON_MANAGE_TIME_BOUNDED_SCRIPTS_ON_TABLE_ACTIVE_SCRIPTS = "container.pricing-scripts.manage-time-bounded-scripts";
@@ -59,12 +59,12 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
         searchTableDraftsByScriptName(script.getName());
         wait10sUntil(()->!isTableEmpty(), "Drafts table is empty. New script failed to created.");
 
-        String actualId = getTextOnTableDrafts(1, COLUMN_CLASS_ID_ON_TABLE_DRAFTS);
+        String actualId = getTextOnTableDrafts(1, COLUMN_CLASS_DATA_ID_ON_TABLE_DRAFTS);
         Assert.assertNotNull("Script ID is empty. Script is not created.", actualId);
         script.setId(Long.parseLong(actualId));
 
-        String actualScriptName = getTextOnTableDrafts(1, COLUMN_CLASS_NAME_ON_TABLE_DRAFTS);
-        String actualDescription = getTextOnTableDrafts(1, COLUMN_CLASS_DESCRIPTION_ON_TABLE_DRAFTS);
+        String actualScriptName = getTextOnTableDrafts(1, COLUMN_CLASS_DATA_NAME_ON_TABLE_DRAFTS);
+        String actualDescription = getTextOnTableDrafts(1, COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE_DRAFTS);
 
         Assert.assertEquals("Script Name", script.getName(), actualScriptName);
         Assert.assertEquals("Script Description", script.getDescription(), actualDescription);
@@ -118,9 +118,9 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
         searchTableActiveScriptsByScriptName(script.getName());
         wait10sUntil(()->!isTableEmpty(), "Active Scripts table is empty. Draft Script failed to release.");
 
-        String actualId = getTextOnTableActiveScripts(1, COLUMN_CLASS_ID_ON_TABLE_DRAFTS);
-        String actualScriptName = getTextOnTableActiveScripts(1, COLUMN_CLASS_NAME_ON_TABLE_DRAFTS);
-        String actualDescription = getTextOnTableActiveScripts(1, COLUMN_CLASS_DESCRIPTION_ON_TABLE_DRAFTS);
+        String actualId = getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_ID_ON_TABLE_DRAFTS);
+        String actualScriptName = getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_NAME_ON_TABLE_DRAFTS);
+        String actualDescription = getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE_DRAFTS);
 
         Assert.assertEquals("Script ID", String.valueOf(script.getId()), actualId);
         Assert.assertEquals("Script Name", script.getName(), actualScriptName);

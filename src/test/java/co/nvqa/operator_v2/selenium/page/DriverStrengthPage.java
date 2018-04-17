@@ -18,9 +18,9 @@ import java.util.List;
  */
 public class DriverStrengthPage extends OperatorV2SimplePage
 {
-    public static final String COLUMN_CLASS_USERNAME = "username";
-    public static final String COLUMN_CLASS_DRIVER_TYPE = "driver-type";
-    public static final String COLUMN_CLASS_ZONE = "zone-preferences-zone-id";
+    public static final String COLUMN_CLASS_DATA_USERNAME = "username";
+    public static final String COLUMN_CLASS_DATA_DRIVER_TYPE = "driver-type";
+    public static final String COLUMN_CLASS_DATA_ZONE = "zone-preferences-zone-id";
 
     private final static String FILENAME = "drivers.csv";
     private String driverType;
@@ -74,8 +74,8 @@ public class DriverStrengthPage extends OperatorV2SimplePage
         try
         {
             pause100ms();
-            driverType = getTextOnTable(1, COLUMN_CLASS_DRIVER_TYPE);
-            zone = getTextOnTable(1, COLUMN_CLASS_ZONE);
+            driverType = getTextOnTable(1, COLUMN_CLASS_DATA_DRIVER_TYPE);
+            zone = getTextOnTable(1, COLUMN_CLASS_DATA_ZONE);
         }
         catch(Exception ex)
         {
@@ -197,7 +197,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage
         clickNvIconTextButtonByNameAndWaitUntilDone("container.driver-strength.load-everything");
         sendKeys("//th[contains(@class, 'username')]/nv-search-input-filter/md-input-container/div/input", expectedUsername);
 
-        String actualUsername = getTextOnTable(1, COLUMN_CLASS_USERNAME);
+        String actualUsername = getTextOnTable(1, COLUMN_CLASS_DATA_USERNAME);
         Assert.assertEquals(expectedUsername, actualUsername);
     }
 
@@ -235,7 +235,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage
          */
 
         String expectedDriverUsername = "D"+ SingletonStorage.getInstance().getTmpId();
-        String actualDriverUsername = getTextOnTable(1, COLUMN_CLASS_USERNAME);
+        String actualDriverUsername = getTextOnTable(1, COLUMN_CLASS_DATA_USERNAME);
         Assert.assertNotEquals(expectedDriverUsername, actualDriverUsername);
     }
 

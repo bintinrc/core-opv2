@@ -13,10 +13,10 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
     private static final String MD_VIRTUAL_REPEAT = "shipper in getTableData()";
     private static final String CSV_FILENAME = "third-party-shipper.csv";
 
-    public static final String COLUMN_CLASS_ID = "id";
-    public static final String COLUMN_CLASS_CODE = "code";
-    public static final String COLUMN_CLASS_NAME = "name";
-    public static final String COLUMN_CLASS_URL = "url";
+    public static final String COLUMN_CLASS_DATA_ID = "id";
+    public static final String COLUMN_CLASS_DATA_CODE = "code";
+    public static final String COLUMN_CLASS_DATA_NAME = "name";
+    public static final String COLUMN_CLASS_DATA_URL = "url";
 
     public static final String ACTION_BUTTON_EDIT = "Edit";
     public static final String ACTION_BUTTON_DELETE = "Delete";
@@ -69,7 +69,7 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
     {
         if(thirdPartyShipper.getId()==null)
         {
-            String idAsString = getTextOnTable(1, COLUMN_CLASS_ID);
+            String idAsString = getTextOnTable(1, COLUMN_CLASS_DATA_ID);
 
             try
             {
@@ -82,17 +82,17 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
         }
         else
         {
-            String actualId = getTextOnTable(1, COLUMN_CLASS_ID);
+            String actualId = getTextOnTable(1, COLUMN_CLASS_DATA_ID);
             Assert.assertEquals("Third Party Shipper - Code", String.valueOf(thirdPartyShipper.getId()), actualId);
         }
 
-        String actualCode = getTextOnTable(1, COLUMN_CLASS_CODE);
+        String actualCode = getTextOnTable(1, COLUMN_CLASS_DATA_CODE);
         Assert.assertEquals("Third Party Shipper - Code", thirdPartyShipper.getCode(), actualCode);
 
-        String actualName = getTextOnTable(1, COLUMN_CLASS_NAME);
+        String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
         Assert.assertEquals("Third Party Shipper - Name", thirdPartyShipper.getName(), actualName);
 
-        String actualUrl = getTextOnTable(1, COLUMN_CLASS_URL);
+        String actualUrl = getTextOnTable(1, COLUMN_CLASS_DATA_URL);
         Assert.assertEquals("Third Party Shipper - URL", thirdPartyShipper.getUrl(), actualUrl);
     }
 

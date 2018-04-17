@@ -97,7 +97,7 @@ public class RouteGroupManagementSteps extends AbstractSteps
         {
             takesScreenshot();
             routeGroupManagementPage.searchTable(routeGroupName);
-            actualRouteGroupName = routeGroupManagementPage.getTextOnTable(1, RouteGroupManagementPage.COLUMN_CLASS_NAME);
+            actualRouteGroupName = routeGroupManagementPage.getTextOnTable(1, RouteGroupManagementPage.COLUMN_CLASS_DATA_NAME);
 
             retry = (actualRouteGroupName==null||actualRouteGroupName.isEmpty()) && counter++<=MAX_RETRY;
 
@@ -128,7 +128,7 @@ public class RouteGroupManagementSteps extends AbstractSteps
     {
         String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
         routeGroupManagementPage.searchTable(routeGroupName);
-        String actualName = routeGroupManagementPage.getTextOnTable(1, RouteGroupManagementPage.COLUMN_CLASS_NAME);
+        String actualName = routeGroupManagementPage.getTextOnTable(1, RouteGroupManagementPage.COLUMN_CLASS_DATA_NAME);
         Assert.assertTrue("Route Group name not matched.", actualName.startsWith(routeGroupName)); //Route Group name is concatenated with description.
     }
 
@@ -146,7 +146,7 @@ public class RouteGroupManagementSteps extends AbstractSteps
          * Check the route group does not exists in table.
          */
         String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
-        String actualName = routeGroupManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_TAG_NAME);
+        String actualName = routeGroupManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
         Assert.assertNotEquals(routeGroupName, actualName);
     }
 

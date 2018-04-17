@@ -14,9 +14,9 @@ import org.openqa.selenium.WebDriver;
 public class TimeBoundedScriptsPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT_TABLE = "script in getTableData()";
-    public static final String COLUMN_CLASS_NAME_ON_TABLE = "name";
-    public static final String COLUMN_CLASS_STATUS_ON_TABLE = "status";
-    public static final String COLUMN_CLASS_DURATION_ON_TABLE = "duration";
+    public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE = "name";
+    public static final String COLUMN_CLASS_DATA_STATUS_ON_TABLE = "status";
+    public static final String COLUMN_CLASS_DATA_DURATION_ON_TABLE = "duration";
 
     private TimeBoundedScriptsCreateEditPage timeBoundedScriptsCreateEditPage;
 
@@ -38,9 +38,9 @@ public class TimeBoundedScriptsPage extends OperatorV2SimplePage
         waitUntilPageLoaded(String.format("pricing-scripts-v2/%s/time-bounded", parentScript.getId()));
         String actualParentScriptName = getText("//h4[text()='Script Information']/following-sibling::div/div/label[text()='Name']/following-sibling::span");
 
-        String actualChildScriptName1 = getTextOnTable(1, COLUMN_CLASS_NAME_ON_TABLE);
-        String actualChildScriptStatus1 = getTextOnTable(1, COLUMN_CLASS_STATUS_ON_TABLE);
-        String actualChildScriptDuration1 = getTextOnTable(1, COLUMN_CLASS_DURATION_ON_TABLE);
+        String actualChildScriptName1 = getTextOnTable(1, COLUMN_CLASS_DATA_NAME_ON_TABLE);
+        String actualChildScriptStatus1 = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS_ON_TABLE);
+        String actualChildScriptDuration1 = getTextOnTable(1, COLUMN_CLASS_DATA_DURATION_ON_TABLE);
 
         String expectedDuration = YYYY_MM_DD_SDF.format(script.getVersionEffectiveStartDate())+" - "+YYYY_MM_DD_SDF.format(script.getVersionEffectiveEndDate());
 

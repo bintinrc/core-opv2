@@ -14,15 +14,15 @@ public class AllShippersPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "shipper in getTableData()";
 
-    public static final String COLUMN_CLASS_ID = "id";
-    public static final String COLUMN_CLASS_NAME = "name";
-    public static final String COLUMN_CLASS_EMAIL = "email";
-    public static final String COLUMN_CLASS_INDUSTRY = "_industry";
-    public static final String COLUMN_CLASS_LIAISON_EMAIL = "liaison_email";
-    public static final String COLUMN_CLASS_CONTACT = "contact";
-    public static final String COLUMN_CLASS_SALES_PERSON = "sales_person";
-    public static final String COLUMN_CLASS_PRICING_TEMPLATE_NAME = "_template_name";
-    public static final String COLUMN_CLASS_STATUS = "_status";
+    public static final String COLUMN_CLASS_DATA_ID = "id";
+    public static final String COLUMN_CLASS_DATA_NAME = "name";
+    public static final String COLUMN_CLASS_DATA_EMAIL = "email";
+    public static final String COLUMN_CLASS_DATA_INDUSTRY = "_industry";
+    public static final String COLUMN_CLASS_DATA_LIAISON_EMAIL = "liaison_email";
+    public static final String COLUMN_CLASS_DATA_CONTACT = "contact";
+    public static final String COLUMN_CLASS_DATA_SALES_PERSON = "sales_person";
+    public static final String COLUMN_CLASS_DATA_PRICING_TEMPLATE_NAME = "_template_name";
+    public static final String COLUMN_CLASS_DATA_STATUS = "_status";
 
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
 
@@ -64,14 +64,14 @@ public class AllShippersPage extends OperatorV2SimplePage
         searchTableByName(shipperNameKeyword);
         Assert.assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
 
-        Long actualLegacyId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_ID));
-        String actualName = getTextOnTable(1, COLUMN_CLASS_NAME);
-        String actualEmail = getTextOnTable(1, COLUMN_CLASS_EMAIL);
-        String actualIndustry = getTextOnTable(1, COLUMN_CLASS_INDUSTRY);
-        String actualLiaisonEmail = getTextOnTable(1, COLUMN_CLASS_LIAISON_EMAIL);
-        String actualContact = getTextOnTable(1, COLUMN_CLASS_CONTACT);
-        String actualSalesPerson = getTextOnTable(1, COLUMN_CLASS_SALES_PERSON);
-        String actualStatus = getTextOnTable(1, COLUMN_CLASS_STATUS);
+        Long actualLegacyId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_DATA_ID));
+        String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
+        String actualEmail = getTextOnTable(1, COLUMN_CLASS_DATA_EMAIL);
+        String actualIndustry = getTextOnTable(1, COLUMN_CLASS_DATA_INDUSTRY);
+        String actualLiaisonEmail = getTextOnTable(1, COLUMN_CLASS_DATA_LIAISON_EMAIL);
+        String actualContact = getTextOnTable(1, COLUMN_CLASS_DATA_CONTACT);
+        String actualSalesPerson = getTextOnTable(1, COLUMN_CLASS_DATA_SALES_PERSON);
+        String actualStatus = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
 
         shipper.setLegacyId(actualLegacyId);
 

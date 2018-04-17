@@ -22,9 +22,9 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
     private static final String XPATH_OF_TOAST_ERROR_MESSAGE = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-bottom']/strong[4]";
     private static final String XPATH_OF_TOAST_ERROR_CANNOT_READ_PROPERTY = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()=\"Cannot read property 'filter' of null\"]";
 
-    public static final String COLUMN_CLASS_ROUTE_ID = "route-id";
-    public static final String COLUMN_CLASS_AMOUNT_COLLECTED = "amountCollected";
-    public static final String COLUMN_CLASS_RECEIPT_NO = "receiptNo";
+    public static final String COLUMN_CLASS_DATA_ROUTE_ID = "route-id";
+    public static final String COLUMN_CLASS_DATA_AMOUNT_COLLECTED = "amountCollected";
+    public static final String COLUMN_CLASS_DATA_RECEIPT_NO = "receiptNo";
 
     public static final String ACTION_BUTTON_EDIT = "Edit";
     public static final String ACTION_BUTTON_DELETE = "Delete";
@@ -104,14 +104,14 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
 
     public void verifyCodInfoIsCorrect(RouteCashInboundCod routeCashInboundCod)
     {
-        String actualRouteId = getTextOnTable(1, COLUMN_CLASS_ROUTE_ID);
+        String actualRouteId = getTextOnTable(1, COLUMN_CLASS_DATA_ROUTE_ID);
         Assert.assertEquals("Route Cash Inbound - COD - Route ID", String.valueOf(routeCashInboundCod.getRouteId()), actualRouteId);
 
         String expectedAmountCollected = "S$"+DECIMAL_FORMAT.format(routeCashInboundCod.getAmountCollected());
-        String actualAmountCollected = getTextOnTable(1, COLUMN_CLASS_AMOUNT_COLLECTED);
+        String actualAmountCollected = getTextOnTable(1, COLUMN_CLASS_DATA_AMOUNT_COLLECTED);
         Assert.assertEquals("Route Cash Inbound - COD - Amount Collected", expectedAmountCollected, actualAmountCollected);
 
-        String actualReceiptNumber = getTextOnTable(1, COLUMN_CLASS_RECEIPT_NO);
+        String actualReceiptNumber = getTextOnTable(1, COLUMN_CLASS_DATA_RECEIPT_NO);
         Assert.assertEquals("Route Cash Inbound - COD - Receipt Number", routeCashInboundCod.getReceiptNumber(), actualReceiptNumber);
     }
 

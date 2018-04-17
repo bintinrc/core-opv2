@@ -17,7 +17,7 @@ import org.openqa.selenium.WebDriver;
 public class EditOrderPage extends OperatorV2SimplePage
 {
     private static final String NG_REPEAT_TABLE_EVENT = "event in getTableData()";
-    public static final String COLUMN_CLASS_NAME_ON_TABLE_EVENT = "name";
+    public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE_EVENT = "name";
 
     public EditOrderPage(WebDriver webDriver)
     {
@@ -60,7 +60,7 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public void verifyInboundIsSucceed()
     {
-        String actualLatestEvent = getTextOnTableEvent(1, COLUMN_CLASS_NAME_ON_TABLE_EVENT);
+        String actualLatestEvent = getTextOnTableEvent(1, COLUMN_CLASS_DATA_NAME_ON_TABLE_EVENT);
         Assert.assertTrue("Different Result Returned", actualLatestEvent.contains("Van Inbound Scan"));
     }
 

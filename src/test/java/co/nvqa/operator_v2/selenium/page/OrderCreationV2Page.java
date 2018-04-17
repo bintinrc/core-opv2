@@ -21,10 +21,10 @@ public class OrderCreationV2Page extends OperatorV2SimplePage
     private static final String NG_REPEAT = "row in $data";
     private static final String CSV_FILENAME_PATTERN = "sample_csv";
 
-    public static final String COLUMN_CLASS_STATUS = "status";
-    public static final String COLUMN_CLASS_MESSAGE = "message";
-    public static final String COLUMN_CLASS_TRACKING_ID = "tracking_id";
-    public static final String COLUMN_CLASS_ORDER_REF_NO = "order_ref_no";
+    public static final String COLUMN_CLASS_DATA_STATUS = "status";
+    public static final String COLUMN_CLASS_DATA_MESSAGE = "message";
+    public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking_id";
+    public static final String COLUMN_CLASS_DATA_ORDER_REF_NO = "order_ref_no";
 
     public OrderCreationV2Page(WebDriver webDriver)
     {
@@ -72,10 +72,10 @@ public class OrderCreationV2Page extends OperatorV2SimplePage
 
     private void verifyOrderIsCreatedSuccessfully(String expectedMessage, boolean validateTrackingId, String expectedTrackingIdEndsWith, String expectedOrderRefNo)
     {
-        String status = getTextOnTable(1, COLUMN_CLASS_STATUS);
-        String message = getTextOnTable(1, COLUMN_CLASS_MESSAGE);
-        String trackingId = getTextOnTable(1, COLUMN_CLASS_TRACKING_ID);
-        String orderRefNo = getTextOnTable(1, COLUMN_CLASS_ORDER_REF_NO);
+        String status = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
+        String message = getTextOnTable(1, COLUMN_CLASS_DATA_MESSAGE);
+        String trackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
+        String orderRefNo = getTextOnTable(1, COLUMN_CLASS_DATA_ORDER_REF_NO);
 
         Assert.assertEquals("Status", "SUCCESS", status);
         Assert.assertEquals("Message", expectedMessage, message);
@@ -90,9 +90,9 @@ public class OrderCreationV2Page extends OperatorV2SimplePage
 
     public void verifyOrderIsNotCreated()
     {
-        String status = getTextOnTable(1, COLUMN_CLASS_STATUS);
-        String message = getTextOnTable(1, COLUMN_CLASS_MESSAGE);
-        String trackingId = getTextOnTable(1, COLUMN_CLASS_TRACKING_ID);
+        String status = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
+        String message = getTextOnTable(1, COLUMN_CLASS_DATA_MESSAGE);
+        String trackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
 
         Assert.assertEquals("Status", "FAIL", status);
         Assert.assertThat("Message", message, Matchers.startsWith("Invalid requested tracking ID"));

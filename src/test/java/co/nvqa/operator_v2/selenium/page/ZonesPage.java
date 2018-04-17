@@ -18,11 +18,11 @@ public class ZonesPage extends OperatorV2SimplePage
     private static final String CSV_FILENAME = "zones.csv";
     private static final String XPATH_OF_TOAST_ERROR_MESSAGE = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-bottom']/strong[4]";
 
-    public static final String COLUMN_CLASS_SHORT_NAME = "short_name";
-    public static final String COLUMN_CLASS_NAME = "name";
-    public static final String COLUMN_CLASS_HUB_NAME = "hub-name";
-    public static final String COLUMN_CLASS_LAT_LONG = "lat-lng";
-    public static final String COLUMN_CLASS_DESCRIPTION = "description";
+    public static final String COLUMN_CLASS_DATA_SHORT_NAME = "short_name";
+    public static final String COLUMN_CLASS_DATA_NAME = "name";
+    public static final String COLUMN_CLASS_DATA_HUB_NAME = "hub-name";
+    public static final String COLUMN_CLASS_DATA_LAT_LONG = "lat-lng";
+    public static final String COLUMN_CLASS_DATA_DESCRIPTION = "description";
 
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
     public static final String ACTION_BUTTON_DELETE = "commons.delete";
@@ -108,20 +108,20 @@ public class ZonesPage extends OperatorV2SimplePage
 
     private void verifyZoneInfoIsCorrect(Zone zone)
     {
-        String actualShortName = getTextOnTable(1, COLUMN_CLASS_SHORT_NAME);
+        String actualShortName = getTextOnTable(1, COLUMN_CLASS_DATA_SHORT_NAME);
         Assert.assertEquals("Zone Short Name", zone.getShortName(), actualShortName);
 
-        String actualName = getTextOnTable(1, COLUMN_CLASS_NAME);
+        String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
         Assert.assertEquals("Zone Name", zone.getName(), actualName);
 
-        String actualHubName = getTextOnTable(1, COLUMN_CLASS_HUB_NAME);
+        String actualHubName = getTextOnTable(1, COLUMN_CLASS_DATA_HUB_NAME);
         Assert.assertEquals("Zone Hub Name", zone.getHubName(), actualHubName);
 
         String expectedLatLong = zone.getLatitude()+", "+zone.getLongitude();
-        String actualLatLong = getTextOnTable(1, COLUMN_CLASS_LAT_LONG);
+        String actualLatLong = getTextOnTable(1, COLUMN_CLASS_DATA_LAT_LONG);
         Assert.assertEquals("Zone Lat/Long", expectedLatLong, actualLatLong);
 
-        String actualDescription = getTextOnTable(1, COLUMN_CLASS_DESCRIPTION);
+        String actualDescription = getTextOnTable(1, COLUMN_CLASS_DATA_DESCRIPTION);
         Assert.assertEquals("Zone Description", zone.getDescription(), actualDescription);
     }
 

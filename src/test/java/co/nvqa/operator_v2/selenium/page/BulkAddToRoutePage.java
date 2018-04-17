@@ -13,7 +13,7 @@ public class BulkAddToRoutePage extends OperatorV2SimplePage
 {
     private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
     public static final String NG_REPEAT = "row in $data";
-    public static final String COLUMN_CLASS_TRACKING_ID = "tracking_id";
+    public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking_id";
 
     public BulkAddToRoutePage(WebDriver webDriver)
     {

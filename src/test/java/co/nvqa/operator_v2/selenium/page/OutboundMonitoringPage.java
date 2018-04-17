@@ -10,9 +10,9 @@ import org.openqa.selenium.WebDriver;
 public class OutboundMonitoringPage extends OperatorV2SimplePage {
 
     private static final String COLUMN_CLASS_FILTER_ROUTE_ID = "id";
-    private static final String COLUMN_CLASS_ID = "route-id";
-    private  static final String COLUMN_CLASS_STATUS = "outbound-status";
-    private  static final String COLUMN_CLASS_COMMENT = "comments";
+    private static final String COLUMN_CLASS_DATA_ID = "route-id";
+    private  static final String COLUMN_CLASS_DATA_STATUS = "outbound-status";
+    private  static final String COLUMN_CLASS_DATA_COMMENT = "comments";
 
     private static final String MD_VIRTUAL_REPEAT_NAME = "data in getTableData()";
 
@@ -29,17 +29,17 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage {
     }
 
     public void verifyRouteIdExists(String routeId) {
-        String actualRouteId = getTextOnTableWithMdVirtualRepeat(1, COLUMN_CLASS_ID, MD_VIRTUAL_REPEAT_NAME);
+        String actualRouteId = getTextOnTableWithMdVirtualRepeat(1, COLUMN_CLASS_DATA_ID, MD_VIRTUAL_REPEAT_NAME);
         Assert.assertEquals("Route ID is not found.",routeId, actualRouteId);
     }
 
     public void verifyStatusInProgress() {
-        String actualStatus = getTextOnTableWithMdVirtualRepeat(1, COLUMN_CLASS_STATUS, MD_VIRTUAL_REPEAT_NAME);
+        String actualStatus = getTextOnTableWithMdVirtualRepeat(1, COLUMN_CLASS_DATA_STATUS, MD_VIRTUAL_REPEAT_NAME);
         Assert.assertEquals("Route ID is not found.","In Progress", actualStatus);
     }
 
     public void verifyStatusComplete() {
-        String actualStatus = getTextOnTableWithMdVirtualRepeat(1, COLUMN_CLASS_STATUS, MD_VIRTUAL_REPEAT_NAME);
+        String actualStatus = getTextOnTableWithMdVirtualRepeat(1, COLUMN_CLASS_DATA_STATUS, MD_VIRTUAL_REPEAT_NAME);
         Assert.assertEquals("Route ID is not found.","Complete", actualStatus);
     }
 
@@ -48,7 +48,7 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage {
     }
 
     public void verifyStatusMarked() {
-        String actualStatus = getTextOnTableWithMdVirtualRepeat(1, COLUMN_CLASS_STATUS, MD_VIRTUAL_REPEAT_NAME);
+        String actualStatus = getTextOnTableWithMdVirtualRepeat(1, COLUMN_CLASS_DATA_STATUS, MD_VIRTUAL_REPEAT_NAME);
         Assert.assertEquals("Route ID is not marked.","Marked", actualStatus);
     }
 
@@ -60,7 +60,7 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage {
     }
 
     public void verifyCommentIsRight() {
-        String actualComment = getTextOnTableWithMdVirtualRepeat(1, COLUMN_CLASS_COMMENT, MD_VIRTUAL_REPEAT_NAME);
+        String actualComment = getTextOnTableWithMdVirtualRepeat(1, COLUMN_CLASS_DATA_COMMENT, MD_VIRTUAL_REPEAT_NAME);
         Assert.assertEquals("Comment is different.","This comment is for test purpose.", actualComment);
     }
 

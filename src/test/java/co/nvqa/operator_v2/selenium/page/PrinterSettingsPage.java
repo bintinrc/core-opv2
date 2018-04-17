@@ -18,10 +18,10 @@ public class PrinterSettingsPage extends OperatorV2SimplePage {
     private static final String CONFIRM_DELETE_BUTTON = "//md-dialog/md-dialog-actions/button[@aria-label='Delete']";
     private static final String SEARCH_TEXT_FIELD = "//md-input-container[contains(@class,'search')]/input";
 
-    public static final String COLUMN_CLASS_NAME = "name";
-    public static final String COLUMN_CLASS_IP_ADDRESS = "ip_address";
-    public static final String COLUMN_CLASS_VERSION = "version";
-    public static final String COLUMN_CLASS_IS_DEFAULT = "is_default";
+    public static final String COLUMN_CLASS_DATA_NAME = "name";
+    public static final String COLUMN_CLASS_DATA_IP_ADDRESS = "ip_address";
+    public static final String COLUMN_CLASS_DATA_VERSION = "version";
+    public static final String COLUMN_CLASS_DATA_IS_DEFAULT = "is_default";
 
     private static final String NAME = "name";
     private static final String IP_ADDRESS = "ipAddress";
@@ -66,9 +66,9 @@ public class PrinterSettingsPage extends OperatorV2SimplePage {
     }
 
     public void checkPrinterSettingInfo(int index, PrinterSettings printerSettings) {
-        String actualName = getTextOnTable(index, COLUMN_CLASS_NAME);
-        String actualIpAddress = getTextOnTable(index, COLUMN_CLASS_IP_ADDRESS);
-        String actualVersion = getTextOnTable(index, COLUMN_CLASS_VERSION);
+        String actualName = getTextOnTable(index, COLUMN_CLASS_DATA_NAME);
+        String actualIpAddress = getTextOnTable(index, COLUMN_CLASS_DATA_IP_ADDRESS);
+        String actualVersion = getTextOnTable(index, COLUMN_CLASS_DATA_VERSION);
 
         Assert.assertEquals("Printer Setting name is incorrect.", printerSettings.getName(), actualName);
         Assert.assertEquals("Printer Setting IP Address is incorrect.", printerSettings.getIpAddress(), actualIpAddress);

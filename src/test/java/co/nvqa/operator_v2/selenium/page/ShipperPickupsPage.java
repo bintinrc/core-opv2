@@ -15,13 +15,13 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "data in getTableData()";
 
-    public static final String COLUMN_CLASS_SHIPPER_NAME_AND_CONTACT = "name";
-    public static final String COLUMN_CLASS_ROUTE_ID = "route-id";
-    public static final String COLUMN_CLASS_DRIVER_NAME = "driver-name";
-    public static final String COLUMN_CLASS_PRIORITY_LEVEL = "priority-level";
-    public static final String COLUMN_CLASS_PICKUP_ADDRESS = "pickup-address";
-    public static final String COLUMN_CLASS_APPROX_VOLUME = "approx-volume";
-    public static final String COLUMN_CLASS_COMMENTS = "comments";
+    public static final String COLUMN_CLASS_DATA_SHIPPER_NAME_AND_CONTACT = "name";
+    public static final String COLUMN_CLASS_DATA_ROUTE_ID = "route-id";
+    public static final String COLUMN_CLASS_DATA_DRIVER_NAME = "driver-name";
+    public static final String COLUMN_CLASS_DATA_PRIORITY_LEVEL = "priority-level";
+    public static final String COLUMN_CLASS_DATA_PICKUP_ADDRESS = "pickup-address";
+    public static final String COLUMN_CLASS_DATA_APPROX_VOLUME = "approx-volume";
+    public static final String COLUMN_CLASS_DATA_COMMENTS = "comments";
 
     public static final String ACTION_BUTTON_ROUTE_EDIT = "Route Edit";
     public static final String ACTION_BUTTON_DETAILS = "Details";
@@ -78,13 +78,13 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         String pickupAddress = buildPickupAddress(address);
         searchTableByPickupAddress(pickupAddress);
 
-        String actualShipperNameAndContact = getTextOnTable(1, COLUMN_CLASS_SHIPPER_NAME_AND_CONTACT);
-        String actualPickupAddress = getTextOnTable(1, COLUMN_CLASS_PICKUP_ADDRESS);
-        String actualRouteId = getTextOnTable(1, COLUMN_CLASS_ROUTE_ID);
-        String actualDriverName = getTextOnTable(1, COLUMN_CLASS_DRIVER_NAME);
-        String actualPriorityLevel = getTextOnTable(1, COLUMN_CLASS_PRIORITY_LEVEL);
-        String actualApproxVolume = getTextOnTable(1, COLUMN_CLASS_APPROX_VOLUME);
-        String actualComments = getTextOnTable(1, COLUMN_CLASS_COMMENTS);
+        String actualShipperNameAndContact = getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER_NAME_AND_CONTACT);
+        String actualPickupAddress = getTextOnTable(1, COLUMN_CLASS_DATA_PICKUP_ADDRESS);
+        String actualRouteId = getTextOnTable(1, COLUMN_CLASS_DATA_ROUTE_ID);
+        String actualDriverName = getTextOnTable(1, COLUMN_CLASS_DATA_DRIVER_NAME);
+        String actualPriorityLevel = getTextOnTable(1, COLUMN_CLASS_DATA_PRIORITY_LEVEL);
+        String actualApproxVolume = getTextOnTable(1, COLUMN_CLASS_DATA_APPROX_VOLUME);
+        String actualComments = getTextOnTable(1, COLUMN_CLASS_DATA_COMMENTS);
 
         // Remove multiple [SPACE] chars from String value.
         actualPickupAddress = actualPickupAddress.trim().replaceAll("\\s+", " ");

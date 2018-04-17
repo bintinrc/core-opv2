@@ -13,10 +13,10 @@ public class DpVaultManagementPage extends OperatorV2SimplePage
     private static final String MD_VIRTUAL_REPEAT = "station in getTableData()";
     private static final String CSV_FILENAME = "station.csv";
 
-    public static final String COLUMN_CLASS_NAME = "name";
-    public static final String COLUMN_CLASS_ADDRESS = "_address";
-    public static final String COLUMN_CLASS_LAT_LONG = "_latlng";
-    public static final String COLUMN_CLASS_DP_NAME = "_distribution-point";
+    public static final String COLUMN_CLASS_DATA_NAME = "name";
+    public static final String COLUMN_CLASS_DATA_ADDRESS = "_address";
+    public static final String COLUMN_CLASS_DATA_LAT_LONG = "_latlng";
+    public static final String COLUMN_CLASS_DATA_DP_NAME = "_distribution-point";
 
     public static final String ACTION_BUTTON_EDIT = "Edit";
     public static final String ACTION_BUTTON_DELETE = "Delete";
@@ -76,18 +76,18 @@ public class DpVaultManagementPage extends OperatorV2SimplePage
 
     private void verifyDpVaultInfoIsCorrect(DpVault dpVault)
     {
-        String actualName = getTextOnTable(1, COLUMN_CLASS_NAME);
+        String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
         Assert.assertEquals("DP Vault Name", dpVault.getName(), actualName);
 
         String expectedAddress = dpVault.getAddress1()+' '+dpVault.getAddress2()+' '+dpVault.getCity()+' '+dpVault.getCountry();
-        String actualAddress = getTextOnTable(1, COLUMN_CLASS_ADDRESS);
+        String actualAddress = getTextOnTable(1, COLUMN_CLASS_DATA_ADDRESS);
         Assert.assertEquals("DP Vault Address", expectedAddress, actualAddress);
 
         String expectedLatLong = "("+dpVault.getLatitude()+", "+dpVault.getLongitude()+')';
-        String actualLatLong = getTextOnTable(1, COLUMN_CLASS_LAT_LONG);
+        String actualLatLong = getTextOnTable(1, COLUMN_CLASS_DATA_LAT_LONG);
         Assert.assertEquals("DP Vault Lat/Long", expectedLatLong, actualLatLong);
 
-        String actualDpName = getTextOnTable(1, COLUMN_CLASS_DP_NAME);
+        String actualDpName = getTextOnTable(1, COLUMN_CLASS_DATA_DP_NAME);
         Assert.assertEquals("DP Vault DP Name", dpVault.getDpName(), actualDpName);
     }
 

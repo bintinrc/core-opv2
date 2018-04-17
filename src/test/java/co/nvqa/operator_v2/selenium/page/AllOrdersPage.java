@@ -36,16 +36,16 @@ public class AllOrdersPage extends OperatorV2SimplePage
     private static final String SAMPLE_CSV_FILENAME = "find-orders-with-csv.csv";
 
     private static final String MD_VIRTUAL_REPEAT_TABLE_ORDER = "order in getTableData()";
-    public static final String COLUMN_CLASS_TRACKING_ID_ON_TABLE_ORDER = "tracking-id";
-    public static final String COLUMN_CLASS_FROM_NAME_ON_TABLE_ORDER = "from-name";
-    public static final String COLUMN_CLASS_FROM_CONTACT_ON_TABLE_ORDER = "from-contact";
-    public static final String COLUMN_CLASS_FROM_ADDRESS_ON_TABLE_ORDER = "_from-address";
-    public static final String COLUMN_CLASS_FROM_POSTCODE_ON_TABLE_ORDER = "from-postcode";
-    public static final String COLUMN_CLASS_TO_NAME_ON_TABLE_ORDER = "to-name";
-    public static final String COLUMN_CLASS_TO_CONTACT_ON_TABLE_ORDER = "to-contact";
-    public static final String COLUMN_CLASS_TO_ADDRESS_ON_TABLE_ORDER = "_to-address";
-    public static final String COLUMN_CLASS_TO_POSTCODE_ON_TABLE_ORDER = "to-postcode";
-    public static final String COLUMN_CLASS_GRANULAR_STATUS_ON_TABLE_ORDER = "_granular-status";
+    public static final String COLUMN_CLASS_DATA_TRACKING_ID_ON_TABLE_ORDER = "tracking-id";
+    public static final String COLUMN_CLASS_DATA_FROM_NAME_ON_TABLE_ORDER = "from-name";
+    public static final String COLUMN_CLASS_DATA_FROM_CONTACT_ON_TABLE_ORDER = "from-contact";
+    public static final String COLUMN_CLASS_DATA_FROM_ADDRESS_ON_TABLE_ORDER = "_from-address";
+    public static final String COLUMN_CLASS_DATA_FROM_POSTCODE_ON_TABLE_ORDER = "from-postcode";
+    public static final String COLUMN_CLASS_DATA_TO_NAME_ON_TABLE_ORDER = "to-name";
+    public static final String COLUMN_CLASS_DATA_TO_CONTACT_ON_TABLE_ORDER = "to-contact";
+    public static final String COLUMN_CLASS_DATA_TO_ADDRESS_ON_TABLE_ORDER = "_to-address";
+    public static final String COLUMN_CLASS_DATA_TO_POSTCODE_ON_TABLE_ORDER = "to-postcode";
+    public static final String COLUMN_CLASS_DATA_GRANULAR_STATUS_ON_TABLE_ORDER = "_granular-status";
 
     public static final String ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER = "container.order.list.print-waybill";
 
@@ -199,16 +199,16 @@ public class AllOrdersPage extends OperatorV2SimplePage
         String trackingId = orderRequestV2.getTrackingId();
         filterTableOrderByTrackingId(trackingId);
 
-        String actualTrackingId = getTextOnTableOrder(1, COLUMN_CLASS_TRACKING_ID_ON_TABLE_ORDER);
-        String actualFromName = getTextOnTableOrder(1, COLUMN_CLASS_FROM_NAME_ON_TABLE_ORDER);
-        String actualFromContact = getTextOnTableOrder(1, COLUMN_CLASS_FROM_CONTACT_ON_TABLE_ORDER);
-        String actualFromAddress = getTextOnTableOrder(1, COLUMN_CLASS_FROM_ADDRESS_ON_TABLE_ORDER);
-        String actualFromPostcode = getTextOnTableOrder(1, COLUMN_CLASS_FROM_POSTCODE_ON_TABLE_ORDER);
-        String actualToName = getTextOnTableOrder(1, COLUMN_CLASS_TO_NAME_ON_TABLE_ORDER);
-        String actualToContact = getTextOnTableOrder(1, COLUMN_CLASS_TO_CONTACT_ON_TABLE_ORDER);
-        String actualToAddress = getTextOnTableOrder(1, COLUMN_CLASS_TO_ADDRESS_ON_TABLE_ORDER);
-        String actualToPostcode = getTextOnTableOrder(1, COLUMN_CLASS_TO_POSTCODE_ON_TABLE_ORDER);
-        String actualGranularStatus = getTextOnTableOrder(1, COLUMN_CLASS_GRANULAR_STATUS_ON_TABLE_ORDER);
+        String actualTrackingId = getTextOnTableOrder(1, COLUMN_CLASS_DATA_TRACKING_ID_ON_TABLE_ORDER);
+        String actualFromName = getTextOnTableOrder(1, COLUMN_CLASS_DATA_FROM_NAME_ON_TABLE_ORDER);
+        String actualFromContact = getTextOnTableOrder(1, COLUMN_CLASS_DATA_FROM_CONTACT_ON_TABLE_ORDER);
+        String actualFromAddress = getTextOnTableOrder(1, COLUMN_CLASS_DATA_FROM_ADDRESS_ON_TABLE_ORDER);
+        String actualFromPostcode = getTextOnTableOrder(1, COLUMN_CLASS_DATA_FROM_POSTCODE_ON_TABLE_ORDER);
+        String actualToName = getTextOnTableOrder(1, COLUMN_CLASS_DATA_TO_NAME_ON_TABLE_ORDER);
+        String actualToContact = getTextOnTableOrder(1, COLUMN_CLASS_DATA_TO_CONTACT_ON_TABLE_ORDER);
+        String actualToAddress = getTextOnTableOrder(1, COLUMN_CLASS_DATA_TO_ADDRESS_ON_TABLE_ORDER);
+        String actualToPostcode = getTextOnTableOrder(1, COLUMN_CLASS_DATA_TO_POSTCODE_ON_TABLE_ORDER);
+        String actualGranularStatus = getTextOnTableOrder(1, COLUMN_CLASS_DATA_GRANULAR_STATUS_ON_TABLE_ORDER);
 
         Assert.assertEquals("Tracking ID", trackingId, actualTrackingId);
 
