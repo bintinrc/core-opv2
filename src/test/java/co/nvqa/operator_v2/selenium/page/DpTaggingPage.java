@@ -106,7 +106,7 @@ public class DpTaggingPage extends OperatorV2SimplePage
     {
         clickNvIconTextButtonByName("check-all");
         clickNvApiTextButtonByNameAndWaitUntilDone("container.dp-tagging.assign-all");
-        waitUntilInvisibilityOfToast("Success assign");
+        waitUntilInvisibilityOfToast("tagged successfully");
     }
 
     public void verifyTheOrdersIsTaggedToDpSuccessfully(List<DpTagging> listOfDpTagging)
