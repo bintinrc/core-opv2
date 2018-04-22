@@ -16,8 +16,8 @@ import org.openqa.selenium.WebDriver;
 public class RouteMonitoringPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "route in getTableData()";
-    public static final String COLUMN_ROUTE_ID = "id";
-    public static final String COLUMN_HUB_NAME = "hub-name";
+    public static final String COLUMN_CLASS_DATA_ROUTE_ID = "id";
+    public static final String COLUMN_CLASS_DATA_HUB_NAME = "hub-name";
     public static final String ACTION_BUTTON_VIEW_ROUTE_MANIFEST = "container.route-monitoring.view-route-manifest";
 
     private RouteManifestPage routeManifestPage;
@@ -58,8 +58,8 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
     public void verifyRouteIsExistAndHasCorrectInfo(long routeId, RouteMonitoringFilters routeMonitoringFilters)
     {
         searchTableByRouteIdUntilFound(routeId);
-        String actualRouteId = getTextOnTable(1, COLUMN_ROUTE_ID);
-        String actualInboundHub = getTextOnTable(1, COLUMN_HUB_NAME);
+        String actualRouteId = getTextOnTable(1, COLUMN_CLASS_DATA_ROUTE_ID);
+        String actualInboundHub = getTextOnTable(1, COLUMN_CLASS_DATA_HUB_NAME);
 
         Assert.assertEquals("Route ID", String.valueOf(routeId), actualRouteId);
         Assert.assertThat("Hub", actualInboundHub, Matchers.isOneOf(routeMonitoringFilters.getHubs()));
