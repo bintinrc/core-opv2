@@ -6,6 +6,7 @@ import co.nvqa.commons.model.shipper.v2.DistributionPoint;
 import co.nvqa.commons.model.shipper.v2.LabelPrinter;
 import co.nvqa.commons.model.shipper.v2.Magento;
 import co.nvqa.commons.model.shipper.v2.OrderCreate;
+import co.nvqa.commons.model.shipper.v2.Pickup;
 import co.nvqa.commons.model.shipper.v2.Pricing;
 import co.nvqa.commons.model.shipper.v2.Qoo10;
 import co.nvqa.commons.model.shipper.v2.Reservation;
@@ -140,6 +141,11 @@ public class AllShippersSteps extends AbstractSteps
         // Industry & Sales
         shipper.setIndustryName(industryName);
         shipper.setSalesPerson(salesPerson);
+
+        Pickup pickupSettings = new Pickup();
+        pickupSettings.setDefaultStartTime("09:00");
+        pickupSettings.setDefaultEndTime("22:00");
+        shipper.setPickup(pickupSettings);
 
         allShippersPage.createNewShipper(shipper);
         put(KEY_CREATED_SHIPPER, shipper);

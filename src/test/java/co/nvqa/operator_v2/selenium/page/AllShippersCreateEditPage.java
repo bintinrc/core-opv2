@@ -5,6 +5,7 @@ import co.nvqa.commons.model.shipper.v2.DistributionPoint;
 import co.nvqa.commons.model.shipper.v2.LabelPrinter;
 import co.nvqa.commons.model.shipper.v2.Magento;
 import co.nvqa.commons.model.shipper.v2.OrderCreate;
+import co.nvqa.commons.model.shipper.v2.Pickup;
 import co.nvqa.commons.model.shipper.v2.Pricing;
 import co.nvqa.commons.model.shipper.v2.Qoo10;
 import co.nvqa.commons.model.shipper.v2.Reservation;
@@ -138,6 +139,16 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         {
             selectValueFromNvAutocomplete("ctrl.view.salesPerson.searchText", shipper.getSalesPerson());
         }
+
+        clickTabItem("More Settings");
+        Pickup pickupSettings = shipper.getPickup();
+
+        String startTimeFormatted = convertTimeFrom24sHourTo12HoursAmPm(pickupSettings.getDefaultStartTime());
+        String endTimeFormatted = convertTimeFrom24sHourTo12HoursAmPm(pickupSettings.getDefaultEndTime());
+        String defaultPickupTimeSelector = startTimeFormatted+" - "+endTimeFormatted;
+        selectValueFromMdSelectByIdContains("commons.select", defaultPickupTimeSelector);
+
+        clickTabItem("Basic Settings");
     }
 
     public void verifyNewShipperIsCreatedSuccessfully(Shipper shipper)
@@ -243,7 +254,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(Shipper shipper, Address address, Reservation reservation)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
-        click("//tab-item[contains(text(), 'More Settings')]");
+        clickTabItem("More Settings");
         addAddress(address);
         setAsDefaultAddress(address);
         setAutoReservation(reservation);
@@ -316,7 +327,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void updateShipperLabelPrinterSettings(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
-        click("//tab-item[contains(text(), 'Basic Settings')]");
+        clickTabItem("Basic Settings");
 
         LabelPrinter labelPrinter = shipper.getLabelPrinter();
         sendKeysById("Printer IP", labelPrinter.getPrinterIp());
@@ -330,7 +341,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void verifyShipperLabelPrinterSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
-        click("//tab-item[contains(text(), 'Basic Settings')]");
+        clickTabItem("Basic Settings");
 
         LabelPrinter labelPrinter = shipper.getLabelPrinter();
 
@@ -346,7 +357,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void updateShipperDistributionPointSettings(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
-        click("//tab-item[contains(text(), 'More Settings')]");
+        clickTabItem("More Settings");
 
         DistributionPoint distributionPoint = shipper.getDistributionPoints();
 
@@ -371,7 +382,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void verifyShipperDistributionPointSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
-        click("//tab-item[contains(text(), 'More Settings')]");
+        clickTabItem("More Settings");
 
         DistributionPoint distributionPoint = shipper.getDistributionPoints();
 
@@ -405,7 +416,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void updateShipperReturnsSettings(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
-        click("//tab-item[contains(text(), 'More Settings')]");
+        clickTabItem("More Settings");
 
         Return returnSettings = shipper.getReturns();
 
@@ -426,7 +437,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void verifyShipperReturnsSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
-        click("//tab-item[contains(text(), 'More Settings')]");
+        clickTabItem("More Settings");
 
         Return returnSettings = shipper.getReturns();
 
@@ -454,7 +465,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void updateShipperQoo10Settings(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
-        click("//tab-item[contains(text(), 'Integrations')]");
+        clickTabItem("Integrations");
 
         Qoo10 qoo10 = shipper.getQoo10();
 
@@ -469,7 +480,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void verifyShipperQoo10SettingsIsUpdatedSuccessfully(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
-        click("//tab-item[contains(text(), 'Integrations')]");
+        clickTabItem("Integrations");
 
         Qoo10 qoo10 = shipper.getQoo10();
 
@@ -485,7 +496,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void updateShipperShopifySettings(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
-        click("//tab-item[contains(text(), 'Integrations')]");
+        clickTabItem("Integrations");
 
         Shopify shopify = shipper.getShopify();
 
@@ -506,7 +517,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void verifyShipperShopifySettingsIsUpdatedSuccessfully(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
-        click("//tab-item[contains(text(), 'Integrations')]");
+        clickTabItem("Integrations");
 
         Shopify shopify = shipper.getShopify();
 
@@ -534,7 +545,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void updateShipperMagentoSettings(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
-        click("//tab-item[contains(text(), 'Integrations')]");
+        clickTabItem("Integrations");
 
         Magento magento = shipper.getMagento();
 
@@ -550,7 +561,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void verifyShipperMagentoSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
-        click("//tab-item[contains(text(), 'Integrations')]");
+        clickTabItem("Integrations");
 
         Magento magento = shipper.getMagento();
 

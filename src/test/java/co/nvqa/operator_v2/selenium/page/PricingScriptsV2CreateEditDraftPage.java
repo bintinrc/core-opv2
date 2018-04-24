@@ -39,14 +39,14 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
 
     private void setScriptInfo(Script script)
     {
-        changeTab("Script Info");
+        clickTabItem("Script Info");
         sendKeysToMdInputContainerByModel("ctrl.data.script.name", script.getName());
         sendKeysToMdInputContainerByModel("ctrl.data.script.description", script.getDescription());
     }
 
     private void setWriteScript(Script script)
     {
-        changeTab("Write Script");
+        clickTabItem("Write Script");
         activateParameters(script.getActiveParameters());
         updateAceEditorValue(script.getSource());
         clickNvApiTextButtonByNameAndWaitUntilDone("container.pricing-scripts.check-syntax");
@@ -86,7 +86,7 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
     {
         waitUntilPageLoaded("pricing-scripts-v2/"+script.getId());
         waitUntilVisibilityOfElementLocated("//p[text()='No errors found. You may proceed to verify or save the draft.']");
-        changeTab("Check Script");
+        clickTabItem("Check Script");
 
         selectValueFromMdSelectById("container.pricing-scripts.description-delivery-type", runCheckParams.getDeliveryType());
         selectValueFromMdSelectById("container.pricing-scripts.description-order-type", runCheckParams.getOrderType());

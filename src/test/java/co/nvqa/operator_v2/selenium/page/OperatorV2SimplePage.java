@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.common_selenium.page.SimplePage;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
+import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -157,9 +158,9 @@ public class OperatorV2SimplePage extends SimplePage
         click(String.format("//md-datepicker[@id='%s']/parent::*", mdDatepickerId));
     }
 
-    public void changeTab(String tabName)
+    public void clickTabItem(String tabItemText)
     {
-        clickf("//tab-item[contains(text(), '%s')]", tabName);
+        clickf("//tab-item[contains(text(), '%s')]", tabItemText);
     }
 
     public void waitUntilVisibilityOfToast(String containsMessage)
@@ -805,5 +806,10 @@ public class OperatorV2SimplePage extends SimplePage
         }
 
         getWebDriver().switchTo().window(mainWindowHandle);
+    }
+
+    public String convertTimeFrom24sHourTo12HoursAmPm(String the24HourTime)
+    {
+        return StandardTestUtils.convertTimeFrom24sHourTo12HoursAmPm(the24HourTime);
     }
 }

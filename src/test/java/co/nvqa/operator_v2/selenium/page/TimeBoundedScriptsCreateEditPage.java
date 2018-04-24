@@ -32,7 +32,7 @@ public class TimeBoundedScriptsCreateEditPage extends OperatorV2SimplePage
 
     public void setTimeBoundedScriptInfo(Script script)
     {
-        changeTab(" Time-Bounded Script Info ");
+        clickTabItem(" Time-Bounded Script Info ");
         sendKeysToMdInputContainerByModel("ctrl.data.script.name", script.getName());
         setMdDatepicker("ctrl.data.script.start_date", script.getVersionEffectiveStartDate());
         setMdDatepicker("ctrl.data.script.end_date", script.getVersionEffectiveEndDate());
@@ -40,7 +40,7 @@ public class TimeBoundedScriptsCreateEditPage extends OperatorV2SimplePage
 
     private void setWriteScript(Script script)
     {
-        changeTab("Write Script");
+        clickTabItem("Write Script");
         activateParameters(script.getActiveParameters());
         updateAceEditorValue(script.getSource());
         clickNvApiTextButtonByNameAndWaitUntilDone("container.pricing-scripts.check-syntax");

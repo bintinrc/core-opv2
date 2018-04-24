@@ -55,7 +55,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
 
     public void verifyTheNewScriptIsCreatedOnDrafts(Script script)
     {
-        changeTab(TAB_DRAFTS);
+        clickTabItem(TAB_DRAFTS);
         searchTableDraftsByScriptName(script.getName());
         wait10sUntil(()->!isTableEmpty(), "Drafts table is empty. New script failed to created.");
 
@@ -78,7 +78,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
 
     public void verifyDraftScriptIsDeleted(Script script)
     {
-        changeTab(TAB_DRAFTS);
+        clickTabItem(TAB_DRAFTS);
         searchTableDraftsByScriptName(script.getName());
         Assert.assertTrue("Drafts Table is not empty. The Draft Script is not deleted successfully.", isTableEmpty());
     }
@@ -106,7 +106,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
 
     public void goToEditDraftScript(Script script)
     {
-        changeTab(TAB_DRAFTS);
+        clickTabItem(TAB_DRAFTS);
         searchTableDraftsByScriptName(script.getName());
         wait10sUntil(()->!isTableEmpty(), "Drafts Table is empty. Cannot delete script.");
         clickActionButtonOnTableDrafts(1, ACTION_BUTTON_EDIT_ON_TABLE_DRAFTS);
@@ -114,7 +114,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
 
     public void verifyDraftScriptIsReleased(Script script)
     {
-        changeTab(TAB_ACTIVE_SCRIPTS);
+        clickTabItem(TAB_ACTIVE_SCRIPTS);
         searchTableActiveScriptsByScriptName(script.getName());
         wait10sUntil(()->!isTableEmpty(), "Active Scripts table is empty. Draft Script failed to release.");
 
@@ -132,7 +132,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
         String scriptName = script.getName();
         String shipperName = shipper.getName();
 
-        changeTab(TAB_ACTIVE_SCRIPTS);
+        clickTabItem(TAB_ACTIVE_SCRIPTS);
         searchTableActiveScriptsByScriptName(scriptName);
         wait10sUntil(()->!isTableEmpty(), "Active Scripts table is empty. Script not found.");
         clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS);
@@ -150,7 +150,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
         String scriptName = script.getName();
         String shipperName = shipper.getName();
 
-        changeTab(TAB_ACTIVE_SCRIPTS);
+        clickTabItem(TAB_ACTIVE_SCRIPTS);
         searchTableActiveScriptsByScriptName(scriptName);
         wait10sUntil(()->!isTableEmpty(), "Active Scripts table is empty. Script not found.");
         clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS);
@@ -170,14 +170,14 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
 
     public void verifyActiveScriptIsDeleted(Script script)
     {
-        changeTab(TAB_ACTIVE_SCRIPTS);
+        clickTabItem(TAB_ACTIVE_SCRIPTS);
         searchTableActiveScriptsByScriptName(script.getName());
         Assert.assertTrue("Active Scripts Table is not empty. The Active Script is not deleted successfully.", isTableEmpty());
     }
 
     public void goToEditActiveScript(Script script)
     {
-        changeTab(TAB_ACTIVE_SCRIPTS);
+        clickTabItem(TAB_ACTIVE_SCRIPTS);
         searchTableActiveScriptsByScriptName(script.getName());
         wait10sUntil(()->!isTableEmpty(), "Active Scripts Table is empty. Cannot delete script.");
         clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE_ACTIVE_SCRIPTS);
@@ -185,7 +185,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
 
     public void goToManageTimeBoundedScript(Script script)
     {
-        changeTab(TAB_ACTIVE_SCRIPTS);
+        clickTabItem(TAB_ACTIVE_SCRIPTS);
         searchTableActiveScriptsByScriptName(script.getName());
         wait10sUntil(()->!isTableEmpty(), "Active Scripts Table is empty. Cannot create child for selected Script.");
         clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_MANAGE_TIME_BOUNDED_SCRIPTS_ON_TABLE_ACTIVE_SCRIPTS);
@@ -216,11 +216,11 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
         timeBoundedScriptsPage.verifyTimeBoundedScriptIsDeleted(parentScript, script);
     }
 
-    public void changeTab(String tabName)
+    public void clickTabItem(String tabItemText)
     {
-        clickf("//tab-item[contains(text(), '%s')]", tabName);
+        super.clickTabItem(tabItemText);
 
-        switch(tabName)
+        switch(tabItemText)
         {
             case TAB_DRAFTS: waitUntilPageLoaded("pricing-scripts-v2/drafts"); break;
             case TAB_ACTIVE_SCRIPTS: waitUntilPageLoaded("pricing-scripts-v2/active-scripts"); break;
