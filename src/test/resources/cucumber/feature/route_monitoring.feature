@@ -2,8 +2,8 @@
 Feature: Route Monitoring
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @ArchiveRouteViaDb
   Scenario: Operator is able to load routes according to filters (uid:bff81d2d-1c2a-4da6-a0e7-469a6882cd4a)

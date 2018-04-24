@@ -2,8 +2,8 @@
 Feature: Change Delivery Timings
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator download and verify CSV file of Change Delivery Timings' sample (uid:9e4e2241-3488-43ea-abd4-a22480d313dd)
     Given Operator go to menu Shipper Support -> Change Delivery Timings

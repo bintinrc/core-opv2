@@ -2,8 +2,8 @@
 Feature: Shipper Pickups
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator find Normal Reservation created by Auto-Reservation on Shipper Pickups page (uid:97e650a6-f7f9-4a49-8a6f-216cf5f80f51)
     Given API Operator create new shipper address using data below:

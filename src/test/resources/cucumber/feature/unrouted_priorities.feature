@@ -2,8 +2,8 @@
 Feature: Unrouted Priorities
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Order with delivery date is today should be listed on page Unrouted Priorities (uid:a0dc5a79-a32f-49b2-88e2-2c6cddcbf6ba)
     Given API Shipper create Order V2 Parcel using data below:

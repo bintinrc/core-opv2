@@ -2,8 +2,8 @@
 Feature: Route Cash Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @ArchiveRouteViaDb
   Scenario: Operator create, update and delete COD on Route Cash Inbound page (uid:2ca1458d-ecfe-44b2-a7b0-f86d4930d7fd)

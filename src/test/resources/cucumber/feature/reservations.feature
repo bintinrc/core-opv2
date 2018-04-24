@@ -2,8 +2,8 @@
 Feature: Reservations
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator create new Reservation (uid:b2a5084c-16f9-42ce-9203-131574e5f3d2)
     Given API Operator create new shipper address using data below:

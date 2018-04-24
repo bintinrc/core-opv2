@@ -2,8 +2,8 @@
 Feature: Failed Delivery Management
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @ArchiveRouteViaDb
   Scenario Outline: Operator find failed delivery order on Failed Delivery orders list (<hiptest-uid>)

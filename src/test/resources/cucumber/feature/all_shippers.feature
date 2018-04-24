@@ -2,8 +2,8 @@
 Feature: All Shippers
 
   @LaunchBrowser @EnableClearCache @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @ResetWindow
   Scenario Outline: Operator create new Shipper with basic settings (<hiptest-uid>)

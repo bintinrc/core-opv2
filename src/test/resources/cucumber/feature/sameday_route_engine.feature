@@ -2,8 +2,8 @@
 Feature: Sameday Route Engine
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Add sameday parcel to route (uid:24baa07a-b688-4586-8a90-e5154031b1f1)
     #Notes: Shipper create sameday parcel with OC V2

@@ -2,8 +2,8 @@
 Feature: Recovery Tickets Scanning
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario Outline: Operator creates new <Note> ticket (<hiptest-uid>)
     Given API Shipper create Order V2 Parcel using data below:

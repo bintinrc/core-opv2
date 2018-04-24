@@ -2,8 +2,8 @@
 Feature: Printer Settings
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Add Printer Settings (uid:f139cffa-0c34-45c2-8d36-15c43e47063f)
     Given Operator go to menu System Settings -> Printer Settings

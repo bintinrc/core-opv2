@@ -2,8 +2,8 @@
 Feature: Role Management
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator adds new role in role management page (uid:2e77cf93-2ca9-4e8c-bd1c-cd84ffbd3f1c)
     Given Operator go to menu Access Control -> Role Management

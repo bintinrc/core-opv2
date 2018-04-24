@@ -135,6 +135,12 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
         mainPage.verifyTheMainPageIsLoaded();
     }
 
+    @Given("^Operator login with username = \"([^\"]*)\" and password = \"([^\"]*)\"$")
+    public void newLoginToOperatorV2(String username, String password)
+    {
+        loginToOperatorV2(username, password);
+    }
+
     @Then("^take screenshot$")
     public void takeScreenShot()
     {

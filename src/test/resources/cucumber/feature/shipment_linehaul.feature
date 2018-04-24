@@ -2,8 +2,8 @@
 Feature: Shipment Linehaul
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Create Linehaul (uid:3eeaa647-c1a2-40a1-8ee4-da898e7e2e7d)
     Given Operator go to menu Inter-Hub -> Linehaul Management

@@ -2,8 +2,8 @@
 Feature: DP Administration
 
   @LaunchBrowser
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   # download dp partner
   Scenario: op download dp partner csv list (uid:7554e32c-4b13-4693-8f0f-51faf3cc940b)

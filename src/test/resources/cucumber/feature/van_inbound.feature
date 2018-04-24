@@ -2,8 +2,8 @@
 Feature: Van Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @ArchiveRouteViaDb
   Scenario: Operator van inbounds the created order with valid tracking ID (uid:dbb54d2b-a9a4-4975-b9db-456680953a54)

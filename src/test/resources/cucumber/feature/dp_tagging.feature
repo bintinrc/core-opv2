@@ -2,8 +2,8 @@
 Feature: DP Tagging
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator verify invalid DP Tagging CSV is not uploaded successfully (uid:754b9a0d-67c0-4012-bb7a-ec786e24bed3)
     Given Operator go to menu Distribution Points -> DP Tagging

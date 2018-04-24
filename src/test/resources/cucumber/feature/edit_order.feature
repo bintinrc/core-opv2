@@ -2,8 +2,8 @@
 Feature: Edit Order
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator Edit Order Details on Edit Order page
     Given Operator go to menu Shipper Support -> Blocked Dates

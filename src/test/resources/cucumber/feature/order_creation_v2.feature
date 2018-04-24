@@ -2,8 +2,8 @@
 Feature: Order Creation V2
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator download and verify Sample CSV file on Order Creation V2 page (uid:d378cebc-8a7a-4aae-b92d-d4559f56ebca)
     Given Operator go to menu Order -> Order Creation V2

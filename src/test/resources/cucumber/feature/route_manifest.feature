@@ -2,8 +2,8 @@
 Feature: Route Manifest
 
   @LaunchBrowser @EnableClearCache @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @ArchiveRouteViaDb
   Scenario: Operator is able to load routes manifest and verify 1 delivery is success (uid:de99c52c-060c-4951-906f-a489754abafc)

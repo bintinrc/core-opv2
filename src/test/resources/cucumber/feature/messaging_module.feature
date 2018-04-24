@@ -2,8 +2,8 @@
 Feature: Messaging Module
 
   @LaunchBrowser
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator send sms valid data (uid:553ecbc6-44b4-41b4-86b3-4a864a3fede5)
     Given API Shipper create Order V2 Parcel using data below:

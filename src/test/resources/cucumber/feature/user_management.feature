@@ -2,8 +2,8 @@
 Feature: User Management
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator adding new user on User Management page (uid:f8eae1ec-35d2-4c99-929e-837aa8c0912e)
     Given Operator go to menu Access Control -> User Management

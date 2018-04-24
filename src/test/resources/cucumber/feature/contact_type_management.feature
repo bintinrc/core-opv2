@@ -1,9 +1,9 @@
-@OperatorV2 @ContactTypeManagement @ShouldAlwaysRun
+@OperatorV2 @ContactTypeManagement
 Feature: Contact Type Management
 
-  @LaunchBrowser
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  @LaunchBrowser @ShouldAlwaysRun
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator should be able to create a new Contact Type on page Contact Type Management (uid:0eef79ec-1d12-4408-8971-5b122ed8c644)
     Given Operator go to menu Fleet -> Contact Type Management
