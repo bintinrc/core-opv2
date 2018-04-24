@@ -14,6 +14,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class EditOrderPage extends OperatorV2SimplePage
 {
     private static final String NG_REPEAT_TABLE_EVENT = "event in getTableData()";
@@ -52,10 +53,6 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         Assert.assertEquals("Order Details - Size", order.getParcelSize(), getSize());
         Assert.assertEquals("Order Details - Weight", expectedParcel.getWeight(), getWeight());
-    }
-
-    public void editCashCollectionDetails()
-    {
     }
 
     public void verifyInboundIsSucceed()
@@ -105,9 +102,7 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public void verifyPickupAndDeliveryInfo(OrderRequestV2 orderRequestV2)
     {
-        /**
-         * Pickup
-         */
+        // Pickup
         Assert.assertEquals("From Name", orderRequestV2.getFromName(), getFromName());
         Assert.assertEquals("From Email", orderRequestV2.getFromEmail(), getFromEmail());
         Assert.assertEquals("From Contact", orderRequestV2.getFromContact(), getFromContact());
@@ -115,9 +110,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         Assert.assertThat("From Address", fromAddress, Matchers.containsString(orderRequestV2.getFromAddress1()));
         Assert.assertThat("From Address", fromAddress, Matchers.containsString(orderRequestV2.getFromAddress2()));
 
-        /**
-         * Delivery
-         */
+        // Delivery
         Assert.assertEquals("To Name", orderRequestV2.getToName(), getToName());
         Assert.assertEquals("To Email", orderRequestV2.getToEmail(), getToEmail());
         Assert.assertEquals("To Contact", orderRequestV2.getToContact(), getToContact());

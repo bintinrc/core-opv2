@@ -21,6 +21,7 @@ import java.util.List;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class RouteLogsPage extends OperatorV2SimplePage
 {
     private static final int ACTION_BULK_EDIT_DETAILS = 1;
@@ -66,7 +67,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
      * This method will create object Route and put it to CreateRouteParams
      * if the route is created successfully.
      *
-     * @param createRouteParams
+     * @param createRouteParams The object of CreateRouteParams.
      */
     public void createNewRoute(CreateRouteParams createRouteParams)
     {
@@ -107,7 +108,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
      * This method will create object Route and put it to CreateRouteParams
      * if the route is created successfully.
      *
-     * @param listOfCreateRouteParams
+     * @param listOfCreateRouteParams The object of List<CreateRouteParams>.
      */
     public void createMultipleRoute(List<CreateRouteParams> listOfCreateRouteParams)
     {

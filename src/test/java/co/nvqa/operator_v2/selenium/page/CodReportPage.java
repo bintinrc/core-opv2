@@ -14,6 +14,7 @@ import java.util.List;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class CodReportPage extends OperatorV2SimplePage
 {
     private static final String CSV_FILENAME_PATTERN = "cod-report";

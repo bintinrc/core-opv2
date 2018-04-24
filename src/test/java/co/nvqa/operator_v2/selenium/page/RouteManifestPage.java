@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class RouteManifestPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "waypoint in getTableData()";

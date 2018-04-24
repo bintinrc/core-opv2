@@ -25,6 +25,7 @@ import java.util.zip.ZipFile;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class DriverReportPage extends OperatorV2SimplePage
 {
     private static final String GENERATED_CSV_FILENAME = "driversalaries.zip";
@@ -90,7 +91,7 @@ public class DriverReportPage extends OperatorV2SimplePage
             }
             else
             {
-                String listOfZipEntry = zipFile.stream().map(entry->entry.getName()).collect(Collectors.joining("\n- ", "- ", ""));
+                String listOfZipEntry = zipFile.stream().map(ZipEntry::getName).collect(Collectors.joining("\n- ", "- ", ""));
                 throw new NvTestRuntimeException(String.format("There is no ZipEntry with name = '%s' is found on file '%s'.\nList of ZipEntry on file '%s':\n%s", driverReportFilename, generatedCsvReportFilename, generatedCsvReportFilename, listOfZipEntry));
             }
         }
@@ -129,9 +130,7 @@ public class DriverReportPage extends OperatorV2SimplePage
                 Sheet sheet = optionalSheet.get();
                 int physicalNumberOfRows = sheet.getPhysicalNumberOfRows();
 
-                /**
-                 * Sheet that contains Route ID is start from row index 5.
-                 */
+                // Sheet that contains Route ID is start from row index 5.
                 for(int i=5; i<physicalNumberOfRows; i++)
                 {
                     Row row = sheet.getRow(i);

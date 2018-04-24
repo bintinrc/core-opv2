@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.operator_v2.model.ThirdPartyShipper;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
@@ -8,6 +9,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class ThirdPartyShippersPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "shipper in getTableData()";
@@ -78,6 +80,7 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
             }
             catch(NullPointerException | NumberFormatException ex)
             {
+                NvLogger.warn("Failed to parse ID to Integer.", ex);
             }
         }
         else

@@ -16,6 +16,7 @@ import java.util.List;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class SamedayRouteEnginePage extends OperatorV2SimplePage
 {
     public SamedayRouteEnginePage(WebDriver webDriver)

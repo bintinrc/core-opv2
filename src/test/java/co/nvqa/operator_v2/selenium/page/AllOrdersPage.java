@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
  *
  * @author Tristania Siagian
  */
+@SuppressWarnings("WeakerAccess")
 public class AllOrdersPage extends OperatorV2SimplePage
 {
     protected static final int ACTION_SET_RTS_TO_SELECTED = 1;

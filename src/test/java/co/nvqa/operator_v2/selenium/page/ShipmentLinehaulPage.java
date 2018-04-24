@@ -16,6 +16,7 @@ import java.util.List;
  *
  * Modified by Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class ShipmentLinehaulPage extends OperatorV2SimplePage
 {
     private static final String XPATH_CREATE_LINEHAUL_BUTTON = "//button[div[text()='Create Linehaul']]";
@@ -28,14 +29,14 @@ public class ShipmentLinehaulPage extends OperatorV2SimplePage
     private static final String XPATH_LABEL_CREATE_LINEHAUL = "//h4[text()='Create Linehaul']";
     private static final String XPATH_LABEL_EDIT_LINEHAUL = "//h4[text()='Edit Linehaul']";
     private static final String XPATH_CREATE_BUTTON = "//button[@aria-label='Create']";
-    private static final String XPATH_SAVE_CHANGES_BUTTON = "//button[@aria-label='Save Changes']";
+    //private static final String XPATH_SAVE_CHANGES_BUTTON = "//button[@aria-label='Save Changes']";
     private static final String XPATH_SEARCH = "//th[@nv-table-filter='id']//input[@id='id']";
     private static final String XPATH_TABLE_ITEM = "//tr[@md-virtual-repeat='linehaul in getTableData()']";
     private static final String XPATH_LINEHAUL_ENTRIES_TAB = "//md-tab-item/span[text()='Linehaul Entries']";
     private static final String XPATH_LINEHAUL_DATE_TAB = "//md-tab-item/span[text()='Linehaul Date']";
     private static final String XPATH_SCHEDULE_MONTH = "//md-select[contains(@aria-label,'Month:')]";
     private static final String XPATH_SCHEDULE_YEAR = "//md-select[contains(@aria-label,'Year:')]";
-    public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[@aria-label='Load Selection']";
+    //public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[@aria-label='Load Selection']";
     public static final String XPATH_EDIT_SEARCH_FILTER_BUTTON = "//button[contains(@aria-label, 'Edit Filter')]";
 
     public ShipmentLinehaulPage(WebDriver webDriver)

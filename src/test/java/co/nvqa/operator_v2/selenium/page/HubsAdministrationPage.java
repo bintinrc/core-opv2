@@ -11,6 +11,7 @@ import java.util.Optional;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class HubsAdministrationPage extends OperatorV2SimplePage
 {
     private static final String NG_REPEAT = "hub in $data";
@@ -86,7 +87,7 @@ public class HubsAdministrationPage extends OperatorV2SimplePage
 
         if(actualLatLong!=null && actualLatLong.contains("("))
         {
-            actualLatLong = actualLatLong.replaceAll("\\(|\\)", "");
+            actualLatLong = actualLatLong.replaceAll("[()]", "");
 
             String[] temp = actualLatLong.split(", ");
             actualLatitude = parseDouble(temp[0].trim());

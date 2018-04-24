@@ -5,6 +5,11 @@ import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+/**
+ *
+ * @author Lanang Jati
+ */
+@SuppressWarnings("WeakerAccess")
 public class PrinterSettingsPage extends OperatorV2SimplePage {
 
     private static final String ADD_PRINTER_BUTTON = "//button[@aria-label='Add Printer']";
@@ -21,7 +26,6 @@ public class PrinterSettingsPage extends OperatorV2SimplePage {
     public static final String COLUMN_CLASS_DATA_NAME = "name";
     public static final String COLUMN_CLASS_DATA_IP_ADDRESS = "ip_address";
     public static final String COLUMN_CLASS_DATA_VERSION = "version";
-    public static final String COLUMN_CLASS_DATA_IS_DEFAULT = "is_default";
 
     private static final String NAME = "name";
     private static final String IP_ADDRESS = "ipAddress";

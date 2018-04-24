@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Tristania Siagian
  */
+@SuppressWarnings("WeakerAccess")
 public class OutboundMonitoringPage extends OperatorV2SimplePage {
 
     private static final String COLUMN_CLASS_FILTER_ROUTE_ID = "id";

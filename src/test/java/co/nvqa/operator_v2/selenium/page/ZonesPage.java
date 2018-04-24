@@ -12,6 +12,7 @@ import org.openqa.selenium.WebElement;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class ZonesPage extends OperatorV2SimplePage
 {
     private static final String NG_REPEAT = "zone in getTableData()";
@@ -67,17 +68,17 @@ public class ZonesPage extends OperatorV2SimplePage
                 NvLogger.warnf("Error when updating Zone. Cause: %s", toastErrorMessage);
                 waitUntilInvisibilityOfElementLocated(XPATH_OF_TOAST_ERROR_MESSAGE);
 
-                /**
-                 * If toast error message found, that's means updated the zone is failed.
-                 * Throw runtime exception so the code will retry again until success or max retry is reached.
+                /*
+                  If toast error message found, that's means updated the zone is failed.
+                  Throw runtime exception so the code will retry again until success or max retry is reached.
                  */
                 throw new RuntimeException(toastErrorMessage);
             }
             catch(TimeoutException ex)
             {
-                /**
-                 * If TimeoutException occurred that means the toast error message is not found
-                 * and that means zone is updated successfully.
+                /*
+                  If TimeoutException occurred that means the toast error message is not found
+                  and that means zone is updated successfully.
                  */
                 NvLogger.infof("Expected exception occurred. Cause: %s", ex.getMessage());
             }
@@ -144,17 +145,17 @@ public class ZonesPage extends OperatorV2SimplePage
                 NvLogger.warnf("Error when deleting Zone. Cause: %s", toastErrorMessage);
                 waitUntilInvisibilityOfElementLocated(XPATH_OF_TOAST_ERROR_MESSAGE);
 
-                /**
-                 * If toast error message found, that's means deleted the zone is failed.
-                 * Throw runtime exception so the code will retry again until success or max retry is reached.
+                /*
+                  If toast error message found, that's means deleted the zone is failed.
+                  Throw runtime exception so the code will retry again until success or max retry is reached.
                  */
                 throw new RuntimeException(toastErrorMessage);
             }
             catch(TimeoutException ex)
             {
-                /**
-                 * If TimeoutException occurred that means the toast error message is not found
-                 * and that means zone is deleted successfully.
+                /*
+                  If TimeoutException occurred that means the toast error message is not found
+                  and that means zone is deleted successfully.
                  */
                 NvLogger.infof("Expected exception occurred. Cause: %s", ex.getMessage());
             }

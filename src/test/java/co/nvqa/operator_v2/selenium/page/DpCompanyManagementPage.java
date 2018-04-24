@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class DpCompanyManagementPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "company in getTableData()";

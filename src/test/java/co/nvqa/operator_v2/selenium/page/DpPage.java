@@ -16,6 +16,7 @@ import java.util.Map;
  *
  * @author Soewandi Wirjawan
  */
+@SuppressWarnings("WeakerAccess")
 public class DpPage extends OperatorV2SimplePage
 {
     private static final int MAX_RETRY = 10;

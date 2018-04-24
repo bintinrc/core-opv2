@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Tristania Siagian
  */
+@SuppressWarnings("WeakerAccess")
 public class AddressingPage extends OperatorV2SimplePage {
 
     public AddressingPage(WebDriver webDriver) {

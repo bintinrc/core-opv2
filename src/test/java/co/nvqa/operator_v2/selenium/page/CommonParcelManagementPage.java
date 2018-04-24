@@ -9,6 +9,7 @@ import java.util.Date;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class CommonParcelManagementPage extends OperatorV2SimplePage
 {
     protected static final int ACTION_SET_RTS_TO_SELECTED = 1;

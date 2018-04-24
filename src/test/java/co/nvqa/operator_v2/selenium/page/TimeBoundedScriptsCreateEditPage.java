@@ -13,6 +13,7 @@ import java.util.List;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class TimeBoundedScriptsCreateEditPage extends OperatorV2SimplePage
 {
     protected static final int ACTION_DELETE = 3;
@@ -104,9 +105,9 @@ public class TimeBoundedScriptsCreateEditPage extends OperatorV2SimplePage
 
     private void updateAceEditorValue(String script)
     {
-        /**
-         * editor.setValue(str, -1) // Moves cursor to the start.
-         * editor.setValue(str, 1) // Moves cursor to the end.
+        /*
+          editor.setValue(str, -1) // Moves cursor to the start.
+          editor.setValue(str, 1) // Moves cursor to the end.
          */
         executeScript(String.format("window.ace.edit('ace-editor').setValue('%s', 1);", script));
     }

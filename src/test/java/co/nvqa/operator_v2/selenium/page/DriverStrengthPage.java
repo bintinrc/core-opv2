@@ -16,6 +16,7 @@ import java.util.List;
  *
  * @author Soewandi Wirjawan
  */
+@SuppressWarnings("WeakerAccess")
 public class DriverStrengthPage extends OperatorV2SimplePage
 {
     public static final String COLUMN_CLASS_DATA_USERNAME = "username";
@@ -36,6 +37,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage
         click("//button[@filename='" + FILENAME + "']");
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void verifyDownloadedFile()
     {
         File f = new File(TestConstants.TEMP_DIR + FILENAME);
@@ -152,41 +154,28 @@ public class DriverStrengthPage extends OperatorV2SimplePage
         sendKeys("//input[@type='text'][@aria-label='Driver License Number']", "D"+tmpId);
         sendKeys("//input[@type='number'][@aria-label='COD Limit']", "100");
 
-        /**
-         * Add vehicle.
-         */
+        // Add vehicle.
         clickButtonByAriaLabel("Add More Vehicles");
         sendKeys("//input[@type='text'][@aria-label='License Number']", "D"+tmpId);
         sendKeys("//input[@type='number'][@aria-label='Vehicle Capacity']", "100");
 
-        /**
-         * Add contact.
-         */
+        // Add contact.
         clickButtonByAriaLabel("Add More Contacts");
         sendKeys("//input[@type='text'][@aria-label='Contact']", "D"+tmpId+"@NV.CO");
 
-        /**
-         * Add zone.
-         */
+        // Add zone.
         clickButtonByAriaLabel("Add More Zones");
         sendKeys("//input[@type='number'][@aria-label='Min']", "1");
         sendKeys("//input[@type='number'][@aria-label='Max']", "1");
         sendKeys("//input[@type='number'][@aria-label='Cost']", "1");
 
-        /**
-         * Username + password.
-         */
+        // Username + password.
         sendKeys("//input[@type='text'][@aria-label='Username']", "D"+tmpId);
         sendKeys("//input[@type='text'][@aria-label='Password']", "D00"+tmpId);
 
-        /**
-         * Comments.
-         */
+        // Comments.
         sendKeys("//textarea[@aria-label='Comments']", "This driver is created by \"Automation Test\" for testing purpose.");
 
-        /**
-         * Save.
-         */
         clickNvButtonSaveByNameAndWaitUntilDone("Submit");
     }
 
@@ -230,10 +219,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage
 
     public void createdDriverShouldNotExist()
     {
-        /**
-         * Check first row does not contain deleted driver.
-         */
-
+        // Check first row does not contain deleted driver.
         String expectedDriverUsername = "D"+ SingletonStorage.getInstance().getTmpId();
         String actualDriverUsername = getTextOnTable(1, COLUMN_CLASS_DATA_USERNAME);
         Assert.assertNotEquals(expectedDriverUsername, actualDriverUsername);

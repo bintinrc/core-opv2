@@ -10,6 +10,7 @@ import java.util.Optional;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class ContactTypeManagementPage extends OperatorV2SimplePage
 {
     private static final String NG_REPEAT = "contactType in $data";

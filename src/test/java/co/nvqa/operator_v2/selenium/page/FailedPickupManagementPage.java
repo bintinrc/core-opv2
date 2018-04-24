@@ -10,6 +10,7 @@ import java.util.Date;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class FailedPickupManagementPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "failedPickup in getTableData()";

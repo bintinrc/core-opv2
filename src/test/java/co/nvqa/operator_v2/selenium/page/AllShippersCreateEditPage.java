@@ -31,6 +31,7 @@ import java.util.stream.Stream;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class AllShippersCreateEditPage extends OperatorV2SimplePage
 {
     private static final String NG_REPEAT_TABLE_ADDRESS = "address in getTableData()";

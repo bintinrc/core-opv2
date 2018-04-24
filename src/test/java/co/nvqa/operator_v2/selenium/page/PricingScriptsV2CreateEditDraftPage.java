@@ -16,6 +16,7 @@ import java.util.List;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
 {
     private DecimalFormat RUN_CHECK_RESULT_DF = new DecimalFormat("###.###");
@@ -172,9 +173,9 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
 
     private void updateAceEditorValue(String script)
     {
-        /**
-         * editor.setValue(str, -1) // Moves cursor to the start.
-         * editor.setValue(str, 1) // Moves cursor to the end.
+        /*
+          editor.setValue(str, -1) // Moves cursor to the start.
+          editor.setValue(str, 1) // Moves cursor to the end.
          */
         executeScript(String.format("window.ace.edit('ace-editor').setValue('%s', 1);", script));
     }

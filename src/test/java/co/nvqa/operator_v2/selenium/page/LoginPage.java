@@ -19,6 +19,7 @@ import java.util.List;
  *
  * @author Soewandi Wirjawan
  */
+@SuppressWarnings("WeakerAccess")
 public class LoginPage extends OperatorV2SimplePage
 {
     private static final String GOOGLE_EXPECTED_URL_1 = "https://accounts.google.com/ServiceLogin";

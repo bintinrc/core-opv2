@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Tristania Siagian
  */
+@SuppressWarnings("WeakerAccess")
 public class RoleManagementPage extends OperatorV2SimplePage {
 
     private static final String NG_REPEAT = "role in $data";

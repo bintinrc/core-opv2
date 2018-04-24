@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.utils.NvLogger;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
@@ -147,6 +148,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
         }
         catch(TimeoutException ex)
         {
+            NvLogger.warn("Failed to get element.", ex);
         }
     }
 

@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class OperatorV2SimplePage extends SimplePage
 {
     public OperatorV2SimplePage(WebDriver webDriver)
@@ -301,6 +302,7 @@ public class OperatorV2SimplePage extends SimplePage
         }
         catch(NoSuchElementException ex)
         {
+            NvLogger.warn("Failed to find element by XPath.");
         }
 
         return text;
@@ -352,10 +354,10 @@ public class OperatorV2SimplePage extends SimplePage
 
     /**
      *
-     * @param rowNumber
-     * @param columnClassName
-     * @param buttonAriaLabel
-     * @param ngRepeat
+     * @param rowNumber The row number.
+     * @param columnClassName The column's class name.
+     * @param buttonAriaLabel The button's aria label.
+     * @param ngRepeat Ng-Repeat used in the tag.
      */
     public void clickButtonOnTableWithMdVirtualRepeat(int rowNumber, String columnClassName, String buttonAriaLabel, String ngRepeat)
     {
@@ -392,6 +394,7 @@ public class OperatorV2SimplePage extends SimplePage
         }
         catch(NoSuchElementException ex)
         {
+            NvLogger.warn("Failed to getTextOnTableWithNgRepeat.");
         }
 
         return text;

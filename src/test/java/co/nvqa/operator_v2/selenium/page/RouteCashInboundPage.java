@@ -14,13 +14,14 @@ import java.text.DecimalFormat;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class RouteCashInboundPage extends OperatorV2SimplePage
 {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("###,###.00");
     private static final String NG_REPEAT = "cod in $data";
     private static final String CSV_FILENAME = "cods.csv";
     private static final String XPATH_OF_TOAST_ERROR_MESSAGE = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-bottom']/strong[4]";
-    private static final String XPATH_OF_TOAST_ERROR_CANNOT_READ_PROPERTY = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()=\"Cannot read property 'filter' of null\"]";
+    //private static final String XPATH_OF_TOAST_ERROR_CANNOT_READ_PROPERTY = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()=\"Cannot read property 'filter' of null\"]";
 
     public static final String COLUMN_CLASS_DATA_ROUTE_ID = "route-id";
     public static final String COLUMN_CLASS_DATA_AMOUNT_COLLECTED = "amountCollected";
@@ -59,17 +60,17 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
                 closeToastErrorDialog();
                 closeModal();
 
-                /**
-                 * If toast error message found, that's means updated the zone is failed.
-                 * Throw runtime exception so the code will retry again until success or max retry is reached.
+                /*
+                  If toast error message found, that's means updated the zone is failed.
+                  Throw runtime exception so the code will retry again until success or max retry is reached.
                  */
                 throw new RuntimeException(toastErrorMessage);
             }
             catch(TimeoutException ex)
             {
-                /**
-                 * If TimeoutException occurred that means the toast error message is not found
-                 * and that means zone is updated successfully.
+                /*
+                  If TimeoutException occurred that means the toast error message is not found
+                  and that means zone is updated successfully.
                  */
                 NvLogger.infof("Expected exception occurred. Cause: %s", ex.getMessage());
             }
@@ -127,16 +128,16 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
     {
         clickButtonFetchCod();
 
-        /**
-         * First attempt to check after button 'Fetch COD' is clicked.
+        /*
+          First attempt to check after button 'Fetch COD' is clicked.
          */
         boolean isTableEmpty = isTableEmpty();
 
         if(!isTableEmpty)
         {
-            /**
-             * If the table is not empty, then filter table by receiptNo
-             * and re-verify that the table is empty.
+            /*
+              If the table is not empty, then filter table by receiptNo
+              and re-verify that the table is empty.
              */
             searchTable(routeCashInboundCod.getReceiptNumber());
             isTableEmpty = isTableEmpty();
@@ -166,15 +167,15 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
         sendKeys("//md-datepicker[@md-placeholder='To Date']/div/input", MD_DATEPICKER_SDF.format(TestUtils.getNextDate(1)));
         clickButtonFetchCod();
 
-        /**
-         * First attempt to check after button 'Fetch COD' is clicked.
+        /*
+          First attempt to check after button 'Fetch COD' is clicked.
          */
         boolean isTableEmpty = isTableEmpty();
         Assert.assertTrue("Table should not be empty.", !isTableEmpty);
 
-        /**
-         * If the table is not empty, then filter table by receiptNo
-         * and re-verify that the table is not empty.
+        /*
+          If the table is not empty, then filter table by receiptNo
+          and re-verify that the table is not empty.
          */
         searchTable(routeCashInboundCod.getReceiptNumber());
         isTableEmpty = isTableEmpty();

@@ -18,6 +18,7 @@ import java.util.List;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class DpTaggingPage extends OperatorV2SimplePage
 {
     private static final String NG_REPEAT = "order in ctrl.uploadDeliveryResults";

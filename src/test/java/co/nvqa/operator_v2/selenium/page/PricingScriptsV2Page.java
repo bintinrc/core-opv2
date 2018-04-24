@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class PricingScriptsV2Page extends OperatorV2SimplePage
 {
     private PricingScriptsV2CreateEditDraftPage pricingScriptsV2CreateEditDraftPage;

@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Tristania Siagian
  */
+@SuppressWarnings("WeakerAccess")
 public class RecoveryTicketsScanningPage extends OperatorV2SimplePage {
     public static final String NG_REPEAT = "ticket in ctrl.tickets track by $index";
 

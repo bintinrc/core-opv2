@@ -13,6 +13,7 @@ import java.util.Map;
  *
  * @author Soewandi Wirjawan
  */
+@SuppressWarnings("WeakerAccess")
 public class MainPage extends OperatorV2SimplePage
 {
     private static final String XPATH_OF_TOAST_WELCOME_DASHBOARD = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-bottom'][text()='Welcome to your operator dashboard.']";
@@ -100,7 +101,6 @@ public class MainPage extends OperatorV2SimplePage
             }
 
             pause100ms();
-
             boolean refreshPage = true;
 
             if(childNavWe.isDisplayed())
@@ -109,10 +109,10 @@ public class MainPage extends OperatorV2SimplePage
                 {
                     childNavWe.click();
                     refreshPage = false;
-                    break;
                 }
                 catch(WebDriverException ex)
                 {
+                    NvLogger.warn("Failed to click nav child.", ex);
                 }
             }
 
@@ -121,6 +121,10 @@ public class MainPage extends OperatorV2SimplePage
                 // Ensure no dialog that prevents menu from being clicked.
                 getWebDriver().navigate().refresh();
                 refreshPage();
+            }
+            else
+            {
+                break;
             }
         }
 

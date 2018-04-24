@@ -61,7 +61,7 @@ public class MessagingModulePage extends OperatorV2SimplePage
     {
         StringBuilder smsCampaignData = new StringBuilder();
 
-        data.stream().forEach((row)->
+        data.forEach((row)->
         {
             StringBuilder sb = new StringBuilder();
             sb.append(row.getTracking_id()).append(COMMA);

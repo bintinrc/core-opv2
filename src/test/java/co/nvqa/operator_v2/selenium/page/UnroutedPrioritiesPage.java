@@ -14,6 +14,7 @@ import java.util.Date;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class UnroutedPrioritiesPage extends OperatorV2SimplePage
 {
     private static final SimpleDateFormat TRANSACTION_END_DATE_SDF = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

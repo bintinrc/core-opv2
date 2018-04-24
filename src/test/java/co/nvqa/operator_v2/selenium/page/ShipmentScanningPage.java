@@ -11,14 +11,15 @@ import org.openqa.selenium.WebElement;
  *
  * Modified by Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class ShipmentScanningPage extends OperatorV2SimplePage
 {
     public static final String XPATH_HUB_DROPDOWN = "//md-select[@name='hub']";
     public static final String XPATH_SHIPMENT_DROPDOWN = "//md-select[@name='shipment']";
-    public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
+    //public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
     public static final String XPATH_SELECT_SHIPMENT_BUTTON = "//button[@aria-label='Select Shipment']";
     public static final String XPATH_BARCODE_SCAN = "//input[@id='scan_barcode_input']";
-    public static final String XPATH_ORDER_IN_SHIPMENT = "//td[contains(@class, 'tracking-id')]";
+    //public static final String XPATH_ORDER_IN_SHIPMENT = "//td[contains(@class, 'tracking-id')]";
     public static final String XPATH_RACK_SECTOR = "//div[contains(@class,'rack-sector-card')]/div/h2[@ng-show='ctrl.rackInfo']";
 
     public ShipmentScanningPage(WebDriver webDriver)

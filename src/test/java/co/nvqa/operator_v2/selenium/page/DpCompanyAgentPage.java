@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class DpCompanyAgentPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "agent in getTableData()";

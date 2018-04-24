@@ -61,8 +61,6 @@ public class GlobalInboundPage extends OperatorV2SimplePage
             {
                 clickNvIconTextButtonByName("container.global-inbound.manual");
             }
-
-            return;
         }
         else
         {

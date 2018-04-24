@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class OpsRoutePage extends OperatorV2SimplePage
 {
     public static final String NG_REPEAT = "opsRoute in $data";
