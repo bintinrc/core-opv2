@@ -12,7 +12,7 @@ public class VehicleTypeManagementPage extends OperatorV2SimplePage
     private static final String NG_REPEAT = "vehicleType in $data";
     private static final String CSV_FILENAME = "vehicle_types.csv";
 
-    private static final String COLUMN_DATA_TITLE_TEXT_NAME = "'commons.name' | translate";
+    private static final String COLUMN_DATA_TITLE_NAME = "'commons.name' | translate";
     private static final String ACTION_BUTTON_EDIT = "Edit";
     private static final String ACTION_BUTTON_DEL = "Delete";
 
@@ -32,7 +32,7 @@ public class VehicleTypeManagementPage extends OperatorV2SimplePage
     public void verifyVehicleType(String expectedVehicleTypeName)
     {
         searchTable(expectedVehicleTypeName);
-        String actualVehicleTypeName = getTextOnTable(1, COLUMN_DATA_TITLE_TEXT_NAME);
+        String actualVehicleTypeName = getTextOnTable(1, COLUMN_DATA_TITLE_NAME);
         Assert.assertEquals("Different Result Returned",expectedVehicleTypeName,actualVehicleTypeName);
     }
 
@@ -76,9 +76,9 @@ public class VehicleTypeManagementPage extends OperatorV2SimplePage
         return !isElementExistFast(String.format("//tr[@ng-repeat='%s'][1]", NG_REPEAT));
     }
 
-    public String getTextOnTable(int rowNumber, String columnDataTitleText)
+    public String getTextOnTable(int rowNumber, String columnDataTitle)
     {
-        return getTextOnTableWithNgRepeatUsingDataTitleText(rowNumber, columnDataTitleText, NG_REPEAT);
+        return getTextOnTableWithNgRepeatUsingDataTitle(rowNumber, columnDataTitle, NG_REPEAT);
     }
 
     public void clickActionButtonOnTable(int rowNumber, String actionButtonName)

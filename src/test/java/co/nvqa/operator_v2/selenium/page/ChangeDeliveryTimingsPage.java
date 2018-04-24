@@ -24,8 +24,8 @@ public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage
     private static final String CSV_CAMPAIGN_HEADER = "tracking_id,start_date,end_date,timewindow";
     private static final String NG_REPEAT = "success in $data";
     private static final String NG_REPEAT_ERROR = "error in $data";
-    private static final String COLUMN_DATA_TITLE_TEXT = "'commons.tracking-id' | translate";
-    private static final String ERROR_COLUMN_DATA = "'container.change-delivery-timings.header-message' | translate";
+    private static final String COLUMN_DATA_TITLE_TRACKING_ID = "'commons.tracking-id' | translate";
+    private static final String COLUMN_DATA_TITLE_ERROR = "'container.change-delivery-timings.header-message' | translate";
 
     public ChangeDeliveryTimingsPage(WebDriver webDriver) {
         super(webDriver);
@@ -83,27 +83,27 @@ public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage
     }
 
     public void verifyDeliveryTimeChanged(String trackingId) {
-        String actualRes = getTextOnTableWithNgRepeatUsingDataTitleText(1, COLUMN_DATA_TITLE_TEXT, NG_REPEAT);
+        String actualRes = getTextOnTableWithNgRepeatUsingDataTitle(1, COLUMN_DATA_TITLE_TRACKING_ID, NG_REPEAT);
         Assert.assertEquals("Tracking ID is not existed on the success table.", trackingId, actualRes);
     }
 
     public void invalidTrackingIdVerification() {
-        String actualMessage = getTextOnTableWithNgRepeatUsingDataTitleText(1, ERROR_COLUMN_DATA, NG_REPEAT_ERROR);
+        String actualMessage = getTextOnTableWithNgRepeatUsingDataTitle(1, COLUMN_DATA_TITLE_ERROR, NG_REPEAT_ERROR);
         Assert.assertEquals("Tracking ID is valid.","INVALID_TRACKING_ID", actualMessage);
     }
 
     public void invalidStateOrderVerification() {
-        String actualMessage = getTextOnTableWithNgRepeatUsingDataTitleText(1, ERROR_COLUMN_DATA, NG_REPEAT_ERROR);
+        String actualMessage = getTextOnTableWithNgRepeatUsingDataTitle(1, COLUMN_DATA_TITLE_ERROR, NG_REPEAT_ERROR);
         Assert.assertThat("Tracking ID is valid.", actualMessage, Matchers.startsWith("INVALID_STATE"));
     }
 
     public void dateIndicatedIncorectlyVerification() {
-        String actualMessage = getTextOnTableWithNgRepeatUsingDataTitleText(1, ERROR_COLUMN_DATA, NG_REPEAT_ERROR);
+        String actualMessage = getTextOnTableWithNgRepeatUsingDataTitle(1, COLUMN_DATA_TITLE_ERROR, NG_REPEAT_ERROR);
         Assert.assertEquals("Tracking ID is valid.", "Start and End Date not indicated correctly", actualMessage);
     }
 
     public void startDateLaterVerification() {
-        String actualMessage = getTextOnTableWithNgRepeatUsingDataTitleText(1, ERROR_COLUMN_DATA, NG_REPEAT_ERROR);
+        String actualMessage = getTextOnTableWithNgRepeatUsingDataTitle(1, COLUMN_DATA_TITLE_ERROR, NG_REPEAT_ERROR);
         Assert.assertEquals("Tracking ID is valid.","Start Date is later than End Date", actualMessage);
     }
 }

@@ -57,6 +57,7 @@ public class HubsAdministrationPage extends OperatorV2SimplePage
     public void updateHub(String searchHubsKeyword, HubsAdministration hubsAdministration)
     {
         searchTable(searchHubsKeyword);
+        Assert.assertFalse(String.format("Table is empty. Hub with keywords = '%s' not found.", searchHubsKeyword), isTableEmpty());
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
 
         Optional.ofNullable(hubsAdministration.getName()).ifPresent(value -> sendKeysById("container.hub-list.hub-name", value));
@@ -71,6 +72,7 @@ public class HubsAdministrationPage extends OperatorV2SimplePage
     public HubsAdministration searchHub(String searchHubsKeyword)
     {
         searchTable(searchHubsKeyword);
+        Assert.assertFalse(String.format("Table is empty. Hub with keywords = '%s' not found.", searchHubsKeyword), isTableEmpty());
 
         String id = getTextOnTable(1, COLUMN_CLASS_DATA_ID);
         String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
@@ -107,6 +109,7 @@ public class HubsAdministrationPage extends OperatorV2SimplePage
     {
         HubsAdministration actualHubsAdministration = searchHub(hubsAdministration.getName());
 
+        hubsAdministration.setId(actualHubsAdministration.getId());
         Assert.assertEquals("Hub Name", hubsAdministration.getName(), actualHubsAdministration.getName());
         Assert.assertEquals("Display Name", hubsAdministration.getDisplayName(), actualHubsAdministration.getDisplayName());
         Assert.assertThat("City", actualHubsAdministration.getCity(), Matchers.equalToIgnoringCase(hubsAdministration.getCity()));

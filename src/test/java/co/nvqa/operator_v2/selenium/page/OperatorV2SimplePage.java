@@ -375,9 +375,9 @@ public class OperatorV2SimplePage extends SimplePage
         return getTextOnTableWithNgRepeat(rowNumber, "class", columnDataClass, ngRepeat);
     }
 
-    public String getTextOnTableWithNgRepeatUsingDataTitleText(int rowNumber, String columnDataTitleText, String ngRepeat)
+    public String getTextOnTableWithNgRepeatUsingDataTitle(int rowNumber, String columnDataTitle, String ngRepeat)
     {
-        return getTextOnTableWithNgRepeat(rowNumber, "data-title", columnDataTitleText, ngRepeat);
+        return getTextOnTableWithNgRepeat(rowNumber, "data-title", columnDataTitle, ngRepeat);
     }
 
     public String getTextOnTableWithNgRepeat(int rowNumber, String columnAttributeName, String attributeValue, String ngRepeat)

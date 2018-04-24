@@ -13,7 +13,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -63,8 +63,8 @@ public class HubsAdministrationSteps extends AbstractSteps
         return result;
     }
 
-    @When("^Operator create new Hub on page Hub Administration using data below:$")
-    public void operatorCreateNewHubOnPageHubAdministrationUsingDataBelow(Map<String,String> mapOfData)
+    @When("^Operator create new Hub on page Hubs Administration using data below:$")
+    public void operatorCreateNewHubOnPageHubsAdministrationUsingDataBelow(Map<String,String> mapOfData)
     {
         String name = mapOfData.get("name");
         String displayName = mapOfData.get("displayName");
@@ -116,7 +116,7 @@ public class HubsAdministrationSteps extends AbstractSteps
         hubsAdministration.setLongitude(Double.parseDouble(longitude));
         hubsAdministrationPage.createNewHub(hubsAdministration);
 
-        Map<String,String> mapOfInfo = new HashMap<>();
+        Map<String,String> mapOfInfo = new LinkedHashMap<>();
         mapOfInfo.put("Hub Name", hubsAdministration.getName());
         mapOfInfo.put("Hub Display Name", hubsAdministration.getDisplayName());
         writeToCurrentScenarioLogf(generateHtmlTableInfo(mapOfInfo));
@@ -125,21 +125,21 @@ public class HubsAdministrationSteps extends AbstractSteps
         putInList(KEY_LIST_OF_HUBS_ADMINISTRATION, hubsAdministration);
     }
 
-    @Then("^Operator verify a new Hub is created successfully on page Hub Administration$")
-    public void operatorVerifyANewHubIsCreatedSuccessfullyOnPageHubAdministration()
+    @Then("^Operator verify a new Hub is created successfully on page Hubs Administration$")
+    public void operatorVerifyANewHubIsCreatedSuccessfullyOnPageHubsAdministration()
     {
         HubsAdministration hubsAdministration = get(KEY_HUBS_ADMINISTRATION);
         hubsAdministrationPage.verifyHubIsExistAndDataIsCorrect(hubsAdministration);
 
-        Map<String,String> mapOfInfo = new HashMap<>();
+        Map<String,String> mapOfInfo = new LinkedHashMap<>();
         mapOfInfo.put("Hub ID", String.valueOf(hubsAdministration.getId()));
         mapOfInfo.put("Hub Name", hubsAdministration.getName());
         mapOfInfo.put("Hub Display Name", hubsAdministration.getDisplayName());
         writeToCurrentScenarioLogf(generateHtmlTableInfo(mapOfInfo));
     }
 
-    @When("^Operator update Hub on page Hub Administration using data below:$")
-    public void operatorUpdateHubOnPageHubAdministrationUsingDataBelow(Map<String,String> mapOfData)
+    @When("^Operator update Hub on page Hubs Administration using data below:$")
+    public void operatorUpdateHubOnPageHubsAdministrationUsingDataBelow(Map<String,String> mapOfData)
     {
         HubsAdministration hubsAdministration = get(KEY_HUBS_ADMINISTRATION);
 
@@ -204,17 +204,23 @@ public class HubsAdministrationSteps extends AbstractSteps
         hubsAdministration.setLongitude(Double.parseDouble(longitude));
 
         hubsAdministrationPage.updateHub(searchHubsKeyword, hubsAdministration);
+
+        Map<String,String> mapOfInfo = new LinkedHashMap<>();
+        mapOfInfo.put("Hub ID", String.valueOf(hubsAdministration.getId()));
+        mapOfInfo.put("Hub Name", hubsAdministration.getName());
+        mapOfInfo.put("Hub Display Name", hubsAdministration.getDisplayName());
+        writeToCurrentScenarioLogf(generateHtmlTableInfo(mapOfInfo));
     }
 
-    @Then("^Operator verify Hub is updated successfully on page Hub Administration$")
-    public void operatorVerifyHubIsUpdatedSuccessfullyOnPageHubAdministration()
+    @Then("^Operator verify Hub is updated successfully on page Hubs Administration$")
+    public void operatorVerifyHubIsUpdatedSuccessfullyOnPageHubsAdministration()
     {
         HubsAdministration hubsAdministration = get(KEY_HUBS_ADMINISTRATION);
         hubsAdministrationPage.verifyHubIsExistAndDataIsCorrect(hubsAdministration);
     }
 
-    @When("^Operator search Hub on page Hub Administration using data below:$")
-    public void operatorSearchHubOnPageHubAdministrationUsingDataBelow(Map<String,String> mapOfData)
+    @When("^Operator search Hub on page Hubs Administration using data below:$")
+    public void operatorSearchHubOnPageHubsAdministrationUsingDataBelow(Map<String,String> mapOfData)
     {
         HubsAdministration hubsAdministration = get(KEY_HUBS_ADMINISTRATION);
         String searchHubsKeyword = getFromCreatedHubName(mapOfData.get("searchHubsKeyword"), hubsAdministration);
@@ -223,8 +229,8 @@ public class HubsAdministrationSteps extends AbstractSteps
         put("searchHubsKeyword", searchHubsKeyword);
     }
 
-    @Then("^Operator verify Hub is found and contains correct info$")
-    public void operatorVerifyHubIsFoundAndContainsCorrectInfo()
+    @Then("^Operator verify Hub is found on page Hubs Administration and contains correct info$")
+    public void operatorVerifyHubIsFoundOnPageHubsAdministrationAndContainsCorrectInfo()
     {
         String searchHubsKeyword = get("searchHubsKeyword");
         HubsAdministration expectedHubsAdministration = get(KEY_HUBS_ADMINISTRATION);
@@ -239,14 +245,14 @@ public class HubsAdministrationSteps extends AbstractSteps
         Assert.assertEquals("Longitude", expectedHubsAdministration.getLongitude(), actualHubsAdministration.getLongitude());
     }
 
-    @When("^Operator download Hub CSV file on page Hub Administration$")
-    public void operatorDownloadHubCsvFileOnPageHubAdministration()
+    @When("^Operator download Hub CSV file on page Hubs Administration$")
+    public void operatorDownloadHubCsvFileOnPageHubsAdministration()
     {
         hubsAdministrationPage.downloadCsvFile();
     }
 
-    @Then("^Operator verify Hub CSV file is downloaded successfully and contains correct info$")
-    public void operatorVerifyHubCsvFileIsDownloadedSuccessfullyAndContainsCorrectInfo()
+    @Then("^Operator verify Hub CSV file is downloaded successfully on page Hubs Administration and contains correct info$")
+    public void operatorVerifyHubCsvFileIsDownloadedSuccessfullyOnPageHubsAdministrationAndContainsCorrectInfo()
     {
         HubsAdministration hubsAdministration = get(KEY_HUBS_ADMINISTRATION);
         hubsAdministrationPage.verifyCsvFileDownloadedSuccessfullyAndContainsCorrectInfo(hubsAdministration);

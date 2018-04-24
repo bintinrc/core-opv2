@@ -14,8 +14,8 @@ import java.util.List;
  *
  * @author Tristania Siagian
  */
-public class UserManagementPage extends OperatorV2SimplePage
-{
+public class UserManagementPage extends OperatorV2SimplePage {
+
     private static final String NG_REPEAT = "user in $data";
     private static final String COLUMN_DATA_TITLE_GRANT_TYPE = "ctrl.table.grantType";
     private static final String COLUMN_DATA_TITLE_FIRST_NAME = "ctrl.table.firstName";
@@ -100,8 +100,8 @@ public class UserManagementPage extends OperatorV2SimplePage
         }
     }
 
-    public String getTextOnTable(int rowNumber, String columnDataTitleText) {
-        return getTextOnTableWithNgRepeatUsingDataTitleText(rowNumber, columnDataTitleText, NG_REPEAT);
+    public String getTextOnTable(int rowNumber, String columnDataTitle) {
+        return getTextOnTableWithNgRepeatUsingDataTitle(rowNumber, columnDataTitle, NG_REPEAT);
     }
 
     public void clickActionButtonOnTable(int rowNumber, String actionButtonName) {

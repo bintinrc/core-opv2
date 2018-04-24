@@ -8,8 +8,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Tristania Siagian
  */
-public class RoleManagementPage extends OperatorV2SimplePage
-{
+public class RoleManagementPage extends OperatorV2SimplePage {
 
     private static final String NG_REPEAT = "role in $data";
 
@@ -64,7 +63,7 @@ public class RoleManagementPage extends OperatorV2SimplePage
         refreshPage();
     }
 
-    public String getTextOnTable(int rowNumber, String columnDataTitleText) {
-        return getTextOnTableWithNgRepeatUsingDataTitleText(rowNumber, columnDataTitleText, NG_REPEAT);
+    public String getTextOnTable(int rowNumber, String columnDataTitle) {
+        return getTextOnTableWithNgRepeatUsingDataTitle(rowNumber, columnDataTitle, NG_REPEAT);
     }
 }
