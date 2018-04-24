@@ -36,8 +36,8 @@ public class OpsRouteSteps extends AbstractSteps
     @When("^op click edit button on table at Ops Route menu$")
     public void editOpsRoute()
     {
-        /**
-         * Generate random number.
+        /*
+          Generate random number.
          */
         Random random = new Random();
         int randomNumber = random.nextInt(99999);

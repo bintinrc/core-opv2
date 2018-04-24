@@ -432,11 +432,11 @@ public class RouteLogsSteps extends AbstractSteps
         boolean loadSelectionButtonIsVisible;
         int counter = 1;
 
-        /**
-         * Sometimes button "Edit Filter" is not clicked correctly
-         * and it makes "Load Selection" button does not appear.
-         * So we need to click that "Edit Filter" button over and over until
-         * "Load Selection" button is appear.
+        /*
+          Sometimes button "Edit Filter" is not clicked correctly
+          and it makes "Load Selection" button does not appear.
+          So we need to click that "Edit Filter" button over and over until
+          "Load Selection" button is appear.
          */
         do
         {

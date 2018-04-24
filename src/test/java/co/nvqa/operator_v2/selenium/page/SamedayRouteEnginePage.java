@@ -113,7 +113,7 @@ public class SamedayRouteEnginePage extends OperatorV2SimplePage
         Assert.assertEquals(trackingId, trackingIdData2);
         //check the number of waypoint
         String waypointTotal= getText("//md-dialog[contains(@class, 'nv-route-detail-dialog')]/md-dialog-content/div[1]/div[2]/p");
-        Assert.assertEquals(2, waypointTotal);
+        Assert.assertEquals(String.valueOf(2), waypointTotal);
 
         //check waypoint is pickup and delivery
         Assert.assertEquals("PICKUP", getTextOnTableWithMdVirtualRepeat(1, "type", "route in ctrl.routeResponse.solution.routes"));

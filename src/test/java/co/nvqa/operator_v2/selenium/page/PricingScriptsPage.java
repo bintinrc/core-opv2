@@ -108,9 +108,9 @@ public class PricingScriptsPage extends OperatorV2SimplePage
             click(WRITE_SCRIPT_TAB);
             String oldScript = getAceEditorValue().replaceAll(System.lineSeparator(), "\\\\n"); // Replace all "CrLf" to "\n".
 
-            /**
-             * Updating script using the same code makes Angular Ace Editor two ways data binding not works.
-             * Refer to this JIRA NV-2830.
+            /*
+              Updating script using the same code makes Angular Ace Editor two ways data binding not works.
+              Refer to this JIRA NV-2830.
              */
             if(!oldScript.equals(newScript))
             {

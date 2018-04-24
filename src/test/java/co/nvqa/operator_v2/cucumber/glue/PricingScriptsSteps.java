@@ -130,6 +130,6 @@ public class PricingScriptsSteps extends AbstractSteps
         pricingScriptsPage.clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_SHIPPERS);
         boolean isPricingScriptsContainShipper = pricingScriptsPage.isPricingScriptsContainShipper(shipperLinkedToPricingScripts);
         pricingScriptsPage.clickButtonClose();
-        Assert.assertEquals("Pricing Scripts not contain the expected shipper.", true, isPricingScriptsContainShipper);
+        Assert.assertTrue("Pricing Scripts not contain the expected shipper.", isPricingScriptsContainShipper);
     }
 }

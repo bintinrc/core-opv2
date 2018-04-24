@@ -27,8 +27,8 @@ import java.util.Map;
 public class ApiShipperExtSteps extends StandardSteps<ScenarioManager>
 {
     private OrderCreateClientV3 orderCreateClientV3;
-    List<OrderRequestV3> listOfOrderRequestV3 = new ArrayList<>();
-    List<AsyncResponse> listOfAsyncResponseV3 = new ArrayList<>();
+    private List<OrderRequestV3> listOfOrderRequestV3 = new ArrayList<>();
+    private List<AsyncResponse> listOfAsyncResponseV3 = new ArrayList<>();
 
     @Inject
     public ApiShipperExtSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)

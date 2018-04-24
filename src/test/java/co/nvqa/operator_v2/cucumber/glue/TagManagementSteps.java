@@ -38,11 +38,11 @@ public class TagManagementSteps extends AbstractSteps
     @When("^op create new tag on Tag Management$")
     public void createNewTag()
     {
-        /**
-         * Check is tag name already exists. If tag is exists, delete that tag first.
-         * Check twice:
-         * 1. DEFAULT_TAG_NAME = AAA
-         * 2. EDITED_TAG_NAME = AAB
+        /*
+          Check is tag name already exists. If tag is exists, delete that tag first.
+          Check twice:
+          1. DEFAULT_TAG_NAME = AAA
+          2. EDITED_TAG_NAME = AAB
          */
         tagManagementPage.clickTagNameColumnHeader();
 
@@ -84,8 +84,8 @@ public class TagManagementSteps extends AbstractSteps
     @When("^op update tag on Tag Management$")
     public void updateTag()
     {
-        /**
-         * Check first row is tag DEFAULT_TAG_NAME.
+        /*
+          Check first row is tag DEFAULT_TAG_NAME.
          */
         String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
         Assert.assertEquals(DEFAULT_TAG_NAME, actualTagName);
@@ -116,8 +116,8 @@ public class TagManagementSteps extends AbstractSteps
     {
         reloadPageAndEnableSortByName();
 
-        /**
-         * Check first row is tag EDITED_TAG_NAME.
+        /*
+          Check first row is tag EDITED_TAG_NAME.
          */
         String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
         Assert.assertEquals(EDITED_TAG_NAME, actualTagName);
@@ -131,8 +131,8 @@ public class TagManagementSteps extends AbstractSteps
     @Then("^tag on Tag Management deleted successfully$")
     public void verifyTagDeletedSuccessfully()
     {
-        /**
-         * Check first row does not contain tag EDITED_TAG_NAME.
+        /*
+          Check first row does not contain tag EDITED_TAG_NAME.
          */
         String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
         Assert.assertNotEquals(EDITED_TAG_NAME, actualTagName);

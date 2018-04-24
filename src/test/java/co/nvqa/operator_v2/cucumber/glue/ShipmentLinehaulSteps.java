@@ -167,7 +167,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
         shipmentLinehaulPage.clickSaveChangesButton();
     }
 
-    private void fillLinehaulForm(Map<String, String> arg1) throws IOException
+    private void fillLinehaulForm(Map<String, String> arg1)
     {
         linehaul = JsonHelper.mapToObject(arg1, Linehaul.class);
         linehaul.setComment(linehaul.getComment() + " " + CREATED_DATE_SDF.format(new Date()));

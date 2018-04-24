@@ -413,8 +413,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
             }
             else
             {
-                /**
-                 * If date is empty, check only the start/end time.
+                /*
+                  If date is empty, check only the start/end time.
                  */
                 String actualStartTime = actualStartDate.substring(11, 19);
                 String actualEndTime = actualEndDate.substring(11, 19);

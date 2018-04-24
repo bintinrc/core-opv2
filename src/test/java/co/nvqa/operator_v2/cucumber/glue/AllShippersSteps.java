@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -323,7 +324,7 @@ public class AllShippersSteps extends AbstractSteps
         shopify.setBaseUri(String.format("https://www.shopify%s.com", dateUniqueString));
         shopify.setApiKey(dateUniqueString+"1");
         shopify.setPassword(dateUniqueString+"2");
-        shopify.setShippingCodes(Arrays.asList(dateUniqueString+"3"));
+        shopify.setShippingCodes(Collections.singletonList(dateUniqueString + "3"));
         shopify.setShippingCodeFilterEnabled(true);
         shipper.setShopify(shopify);
 

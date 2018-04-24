@@ -260,8 +260,8 @@ public class DpPage extends OperatorV2SimplePage
             editValue = String.format("+65 %s", SingletonStorage.getInstance().getTmpId());
         }
 
-        /**
-         * Verify searching results.
+        /*
+          Verify searching results.
          */
         String expectedValue = findElementByXpath("//input[@placeholder='" + placeHolder + "'][@ng-model='searchText']").getAttribute("value");
         String actualValue = getTextOnTable(ngRepeat, 1, columnClass);
@@ -273,11 +273,11 @@ public class DpPage extends OperatorV2SimplePage
 
         if(type.equals("dp-users"))
         {
-            /**
-             * Since 9 January 2017, we cannot change DP User password from edit dialog.
-             *
-             * Password:
-             * Please contact it-support if you want to change the password.
+            /*
+              Since 9 January 2017, we cannot change DP User password from edit dialog.
+
+              Password:
+              Please contact it-support if you want to change the password.
              */
             //sendKeys("//input[@type='password'][@aria-label='Password']", "Ninjitsu89");
         }

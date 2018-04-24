@@ -43,16 +43,16 @@ public class RouteGroupManagementSteps extends AbstractSteps
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
 
-        /**
-         * Create new Route Group.
+        /*
+          Create new Route Group.
          */
         String routeGroupName = "RG "+trackingId;
         put(KEY_ROUTE_GROUP_NAME, routeGroupName);
         routeGroupManagementPage.createRouteGroup(routeGroupName);
         pause500ms();
 
-        /**
-         * Verify the page is redirect to '/#/sg/transactions' after route group is created.
+        /*
+          Verify the page is redirect to '/#/sg/transactions' after route group is created.
          */
         Assert.assertThat("Page not redirect to '/#/sg/transactions'.", getCurrentUrl(), Matchers.containsString("/#/sg/transactions"));
     }
@@ -142,8 +142,8 @@ public class RouteGroupManagementSteps extends AbstractSteps
     @Then("^Operator verify 'route group' on 'Route Group Management' deleted successfully$")
     public void verifyRouteGroupDeletedSuccessfully()
     {
-        /**
-         * Check the route group does not exists in table.
+        /*
+          Check the route group does not exists in table.
          */
         String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
         String actualName = routeGroupManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);

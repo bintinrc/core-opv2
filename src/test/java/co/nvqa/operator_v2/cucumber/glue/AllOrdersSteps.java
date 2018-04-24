@@ -67,8 +67,8 @@ public class AllOrdersSteps extends AbstractSteps
         AllOrdersPage.SearchLogic searchLogic = AllOrdersPage.SearchLogic.findByValue(mapOfData.get("searchLogic"));
         String searchTerm = mapOfData.get("searchTerm");
 
-        /**
-         * Replace searchTerm value to value on ScenarioStorage.
+        /*
+          Replace searchTerm value to value on ScenarioStorage.
          */
         if(containsKey(searchTerm))
         {

@@ -42,8 +42,8 @@ public class BlockedDatesSteps extends AbstractSteps
     @When("^blocked dates add$")
     public void add()
     {
-        /**
-         * Set default year of "Blocked Dates" on right panel to current year.
+        /*
+          Set default year of "Blocked Dates" on right panel to current year.
          */
         WebElement blockedDatesYearWe = getWebDriver().findElement(By.xpath("//div[contains(@class, 'list')]/md-content[contains(@class, 'list-content')]/div/md-input-container"));
         blockedDatesYearWe.click();

@@ -125,7 +125,7 @@ public class TestUtils extends CommonSeleniumTestUtils
     {
         String txt = webDriver.findElement(By.xpath("//input[@placeholder='" + placeHolder + "'][@ng-model='searchText']")).getAttribute("value");
         WebElement result = getResultInTable(webDriver, "//table[@ng-table='" + ngTable + "']/tbody/tr", txt);
-        Assert.assertTrue(result != null);
+        Assert.assertNotNull(result);
         return result;
     }
 
