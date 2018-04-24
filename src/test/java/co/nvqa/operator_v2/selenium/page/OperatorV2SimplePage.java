@@ -736,8 +736,10 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void refreshPage()
     {
+        acceptAlertDialogIfAppear();
         String previousUrl = getCurrentUrl().toLowerCase();
         getWebDriver().navigate().refresh();
+        acceptAlertDialogIfAppear();
 
         waitUntil(()->
         {

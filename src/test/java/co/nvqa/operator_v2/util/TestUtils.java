@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.util;
 
+import co.nvqa.common_selenium.util.CommonSeleniumTestUtils;
 import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.commons.utils.StandardTestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -25,7 +25,7 @@ import java.util.function.Consumer;
  *
  * @author Soewandi Wirjawan
  */
-public class TestUtils extends StandardTestUtils
+public class TestUtils extends CommonSeleniumTestUtils
 {
     private static final int DEFAULT_MAX_RETRY_ON_EXCEPTION = 10;
     private static final int DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS = 100;
