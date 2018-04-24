@@ -169,7 +169,7 @@ public class PricingScriptsPage extends OperatorV2SimplePage
             {
                 sendKeysByAriaLabel("Search or Select...", shipperName);
                 pause1s();
-                click(String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", shipperName));
+                clickf("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", shipperName);
                 clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
 
                 /**

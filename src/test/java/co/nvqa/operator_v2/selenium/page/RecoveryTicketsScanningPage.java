@@ -90,9 +90,9 @@ public class RecoveryTicketsScanningPage extends OperatorV2SimplePage {
     }
 
     public void selectFromCombobox(String ariaLabel, String selectedValue) {
-        click(String.format("//md-select[contains(@aria-label, '%s')]", ariaLabel));
+        clickf("//md-select[contains(@aria-label, '%s')]", ariaLabel);
         pause100ms();
-        click(String.format("//md-option/div[normalize-space(text())='%s']", selectedValue));
+        clickf("//md-option/div[normalize-space(text())='%s']", selectedValue);
         pause50ms();
     }
 

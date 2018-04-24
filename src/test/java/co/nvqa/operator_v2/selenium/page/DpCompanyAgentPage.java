@@ -92,7 +92,7 @@ public class DpCompanyAgentPage extends OperatorV2SimplePage
 
     public void backToDpCompanyManagementPage(DpCompany dpCompany)
     {
-        click(String.format("//button[contains(@aria-label, '%s')]", dpCompany.getName()));
+        clickf("//button[contains(@aria-label, '%s')]", dpCompany.getName());
         waitUntilVisibilityOfElementLocated("//div[contains(@class,'nv-h4')][text()='DP Company Management']");
     }
 

@@ -88,7 +88,7 @@ public abstract class CommonParcelManagementPage extends OperatorV2SimplePage
 
     public void checkRow(int rowIndex)
     {
-        click(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", mdVirtualRepeat, rowIndex));
+        clickf("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", mdVirtualRepeat, rowIndex);
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)

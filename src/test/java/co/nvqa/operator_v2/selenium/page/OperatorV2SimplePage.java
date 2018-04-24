@@ -37,7 +37,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickButtonByAriaLabel(String ariaLabel)
     {
-        click(String.format("//button[@aria-label='%s']", ariaLabel));
+        clickf("//button[@aria-label='%s']", ariaLabel);
     }
 
     public void clickButtonByAriaLabelAndWaitUntilDone(String ariaLabel)
@@ -49,7 +49,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickNvIconButtonByName(String name)
     {
-        click(String.format("//nv-icon-button[@name='%s']", name));
+        clickf("//nv-icon-button[@name='%s']", name);
     }
 
     public void clickNvIconButtonByNameAndWaitUntilEnabled(String name)
@@ -61,7 +61,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickNvIconTextButtonByName(String name)
     {
-        click(String.format("//nv-icon-text-button[@name='%s']", name));
+        clickf("//nv-icon-text-button[@name='%s']", name);
     }
 
     public void clickNvIconTextButtonByNameAndWaitUntilDone(String name)
@@ -73,7 +73,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickNvApiTextButtonByName(String name)
     {
-        click(String.format("//nv-api-text-button[@name='%s']", name));
+        clickf("//nv-api-text-button[@name='%s']", name);
     }
 
     public void clickNvApiTextButtonByNameAndWaitUntilDone(String name)
@@ -85,7 +85,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickNvApiIconButtonByName(String name)
     {
-        click(String.format("//nv-api-icon-button[@name='%s']", name));
+        clickf("//nv-api-icon-button[@name='%s']", name);
     }
 
     public void clickNvApiIconButtonByNameAndWaitUntilDone(String name)
@@ -97,7 +97,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickNvButtonSaveByName(String name)
     {
-        click(String.format("//nv-button-save[@name='%s']", name));
+        clickf("//nv-button-save[@name='%s']", name);
     }
 
     public void clickNvButtonSaveByNameAndWaitUntilDone(String name)
@@ -109,7 +109,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickButtonOnMdDialogByAriaLabel(String ariaLabel)
     {
-        click(String.format("//md-dialog//button[@aria-label='%s']", ariaLabel));
+        clickf("//md-dialog//button[@aria-label='%s']", ariaLabel);
     }
 
     public void clear(String xpathExpression)
@@ -149,13 +149,13 @@ public class OperatorV2SimplePage extends SimplePage
     public void setMdDatepicker(String mdDatepickerNgModel, Date date)
     {
         sendKeys(String.format("//md-datepicker[@ng-model='%s']/div/input", mdDatepickerNgModel), MD_DATEPICKER_SDF.format(date));
-        click(String.format("//md-datepicker[@ng-model='%s']/parent::*", mdDatepickerNgModel));
+        clickf("//md-datepicker[@ng-model='%s']/parent::*", mdDatepickerNgModel);
     }
 
     public void setMdDatepickerById(String mdDatepickerId, Date date)
     {
         sendKeys(String.format("//md-datepicker[@id='%s']/div/input", mdDatepickerId), MD_DATEPICKER_SDF.format(date));
-        click(String.format("//md-datepicker[@id='%s']/parent::*", mdDatepickerId));
+        clickf("//md-datepicker[@id='%s']/parent::*", mdDatepickerId);
     }
 
     public void clickTabItem(String tabItemText)
@@ -495,9 +495,9 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void selectValueFromMdSelect(String mdSelectNgModel, String value)
     {
-        click(String.format("//md-select[@ng-model='%s']", mdSelectNgModel));
+        clickf("//md-select[@ng-model='%s']", mdSelectNgModel);
         pause100ms();
-        click(String.format("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value));
+        clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value);
         pause50ms();
     }
 
@@ -521,16 +521,16 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void selectMultipleValuesFromMdSelect(String mdSelectNgModel, XpathTextMode xpathTextMode, String... values)
     {
-        click(String.format("//md-select[@ng-model='%s']", mdSelectNgModel));
+        clickf("//md-select[@ng-model='%s']", mdSelectNgModel);
         pause100ms();
 
         for(String value : values)
         {
             switch(xpathTextMode)
             {
-                case EXACT   : click(String.format("//div[@aria-hidden='false']//md-option[@value='%s']", value)); break;
-                case CONTAINS: click(String.format("//div[@aria-hidden='false']//md-option[contains(@value,'%s')]", value)); break;
-                default      : click(String.format("//div[@aria-hidden='false']//md-option[contains(@value,'%s')]", value));
+                case EXACT   : clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[@value='%s']", value); break;
+                case CONTAINS: clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s')]", value); break;
+                default      : clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s')]", value);
             }
 
             pause40ms();
@@ -561,16 +561,16 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void selectMultipleValuesFromMdSelectById(String mdSelectId, XpathTextMode xpathTextMode, String... values)
     {
-        click(String.format("//md-select[starts-with(@id, '%s')]", mdSelectId));
+        clickf("//md-select[starts-with(@id, '%s')]", mdSelectId);
         pause100ms();
 
         for(String value : values)
         {
             switch(xpathTextMode)
             {
-                case EXACT   : click(String.format("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[@value='%s' or ./div/text()='%s']", value)); break;
-                case CONTAINS: click(String.format("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value)); break;
-                default      : click(String.format("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value)); break;
+                case EXACT   : clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[@value='%s' or ./div/text()='%s']", value); break;
+                case CONTAINS: clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value); break;
+                default      : clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value); break;
             }
 
             pause100ms();
@@ -583,17 +583,17 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void selectValueFromMdSelectById(String mdSelectId, String value)
     {
-        click(String.format("//md-select[starts-with(@id, '%s')]", mdSelectId));
+        clickf("//md-select[starts-with(@id, '%s')]", mdSelectId);
         pause100ms();
-        click(String.format("//div[@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value));
+        clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value);
         pause50ms();
     }
 
     public void selectValueFromMdSelectByIdContains(String mdSelectId, String value)
     {
-        click(String.format("//md-select[contains(@id, '%s')]", mdSelectId));
+        clickf("//md-select[contains(@id, '%s')]", mdSelectId);
         pause100ms();
-        click(String.format("//div[@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value));
+        clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value);
         pause50ms();
     }
 
@@ -718,7 +718,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void selectAllShown(String nvTableParam)
     {
-        click(String.format("//nv-table[@param='%s']//button[@aria-label='Selection']", nvTableParam));
+        clickf("//nv-table[@param='%s']//button[@aria-label='Selection']", nvTableParam);
         pause100ms();
         clickButtonByAriaLabel("Select All Shown");
         pause100ms();

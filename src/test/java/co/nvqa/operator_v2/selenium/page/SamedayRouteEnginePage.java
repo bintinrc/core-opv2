@@ -27,21 +27,21 @@ public class SamedayRouteEnginePage extends OperatorV2SimplePage
     {
         click("//md-select[@aria-label='Select Route Group']");
         pause100ms();
-        click(String.format("//md-option/div[contains(text(), '%s')]", routeGroupName));
+        clickf("//md-option/div[contains(text(), '%s')]", routeGroupName);
     }
 
     public void selectRoutingAlgorithm(String routingAlgorithm)
     {
         click("//md-select[@aria-label='Routing Algorithm']");
         pause100ms();
-        click(String.format("//md-option/div[contains(text(), '%s')]", routingAlgorithm));
+        clickf("//md-option/div[contains(text(), '%s')]", routingAlgorithm);
     }
 
     public void selectHub(String hubName)
     {
         click("//md-select[@aria-label='Hub']");
         pause100ms();
-        click(String.format("//md-option/div[contains(text(), '%s')]", hubName));
+        clickf("//md-option/div[contains(text(), '%s')]", hubName);
     }
 
     public void clickRunRouteEngineButton()
@@ -53,35 +53,35 @@ public class SamedayRouteEnginePage extends OperatorV2SimplePage
     {
         click("//md-select[contains(@aria-label,'Operating Start')]");
         pause100ms();
-        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", operatingHoursStart));
+        clickf("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", operatingHoursStart);
     }
 
     public void selectFleetType1OperatingHoursEnd(String operatingHoursTo)
     {
         click("//md-select[contains(@aria-label,'Operating End')]");
         pause100ms();
-        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", operatingHoursTo));
+        clickf("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", operatingHoursTo);
     }
 
     public void selectFleetType1BreakDurationStart(String breakDurationStart)
     {
         click("//md-select[contains(@aria-label,'Break Start')]");
         pause100ms();
-        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", breakDurationStart));
+        clickf("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", breakDurationStart);
     }
 
     public void selectFleetType1BreakDurationEnd(String breakDurationEnd)
     {
         click("//md-select[contains(@aria-label,'Break End')]");
         pause100ms();
-        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", breakDurationEnd));
+        clickf("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", breakDurationEnd);
     }
 
     public void selectDriverOnRouteSettingsPage(String driverName)
     {
         sendKeysByAriaLabel("Search Driver", driverName);
         pause500ms();
-        click(String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", driverName));
+        clickf("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", driverName);
         pause100ms();
     }
 

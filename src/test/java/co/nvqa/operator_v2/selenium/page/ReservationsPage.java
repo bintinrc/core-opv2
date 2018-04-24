@@ -47,7 +47,7 @@ public class ReservationsPage extends OperatorV2SimplePage
         click(getCurrentDateCellXpath());
         clickButtonByAriaLabel("Create Reservations");
         pause1s(); // Delay for sliding animation.
-        click(String.format("//form[@name='createForm']//button[@aria-label='%s']", timeslot));
+        clickf("//form[@name='createForm']//button[@aria-label='%s']", timeslot);
         selectValueFromMdSelect("ctrl.createForm.approxVolume", reservation.getApproxVolume());
         sendKeys("//md-input-container[@form='createForm']//input[@aria-label='Comments']", reservation.getComments());
         clickNvButtonSaveByNameAndWaitUntilDone("Create Reservation");
@@ -70,7 +70,7 @@ public class ReservationsPage extends OperatorV2SimplePage
         Actions action = new Actions(getWebDriver());
         action.moveToElement(editBtnWe).pause(100).click().pause(100).perform();
         pause1s(); // Delay for sliding animation.
-        click(String.format("//form[@name='editForm']//button[@aria-label='%s']", newTimeslot));
+        clickf("//form[@name='editForm']//button[@aria-label='%s']", newTimeslot);
         clickNvButtonSaveByNameAndWaitUntilDone("Save changes");
         waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Reservations updated']", TestConstants.VERY_LONG_WAIT_FOR_TOAST);
     }

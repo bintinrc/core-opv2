@@ -98,7 +98,7 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
     {
         click("//md-select[@aria-label='Route Group']");
         pause100ms();
-        click(String.format("//md-option/div[contains(text(), '%s')]", routeGroupName));
+        clickf("//md-option/div[contains(text(), '%s')]", routeGroupName);
         pause100ms();
     }
 

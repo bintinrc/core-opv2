@@ -38,7 +38,7 @@ public class DpVaultManagementPage extends OperatorV2SimplePage
         sendKeys("//input[@aria-label='Name']", dpVault.getName());
         sendKeys("//input[@aria-label='commons.model.appVersion']", String.valueOf(dpVault.getAppVersion()));
         sendKeys("//input[@aria-label='Distribution Point']", dpVault.getDpName());
-        click(String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", dpVault.getDpName()));
+        clickf("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", dpVault.getDpName());
         sendKeys("//input[@aria-label='Address 1']", dpVault.getAddress1());
         sendKeys("//input[@aria-label='Address 2']", dpVault.getAddress2());
         sendKeys("(//input[@aria-label='City'])[1]", dpVault.getCity());
@@ -46,7 +46,7 @@ public class DpVaultManagementPage extends OperatorV2SimplePage
         sendKeys("(//input[@aria-label='City'])[2]", dpVault.getCity());
         sendKeys("//input[@aria-label='commons.latitude']", String.valueOf(dpVault.getLatitude()));
         sendKeys("//input[@aria-label='commons.longitude']", String.valueOf(dpVault.getLongitude()));
-        click("//button[@aria-label='Save Button']");
+        clickButtonByAriaLabel("Save Button");
         waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular");
     }
 

@@ -457,7 +457,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
     {
         sendKeys("//div/label[text()='Assigned Driver']/following-sibling::nv-autocomplete//input", newDriverName);
         pause1s();
-        click(String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", newDriverName));
+        clickf("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", newDriverName);
         pause100ms();
     }
 
@@ -553,7 +553,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
         searchAndVerifyRouteExist(routeId);
         click(SELECT_TAG_XPATH);
         pause100ms();
-        click(String.format("//div[contains(@class,'md-select-menu-container') and @aria-hidden='false']/md-select-menu/md-content/md-option/div[@class='md-text' and contains(text(), '%s')]", newTag));
+        clickf("//div[contains(@class,'md-select-menu-container') and @aria-hidden='false']/md-select-menu/md-content/md-option/div[@class='md-text' and contains(text(), '%s')]", newTag);
         pause100ms();
         click("//nv-table-description/div/div/span[text()='Showing']"); //Click on random element to close 'Select Tag' dialog.
         pause200ms();

@@ -51,7 +51,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage
 
     private void selectDropdownValue(String value)
     {
-        click(String.format("//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", value));
+        clickf("//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", value);
     }
 
     public void checkOrderInShipment(String orderId)
