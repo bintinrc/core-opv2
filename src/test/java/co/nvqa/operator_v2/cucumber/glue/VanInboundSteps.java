@@ -63,7 +63,7 @@ public class VanInboundSteps extends AbstractSteps {
     @Then("^Operator verify the route is started after van inbounding$")
     public void verifyRouteIsStarted() {
         long routeId = get(KEY_CREATED_ROUTE_ID);
-        routeLogsPage.loadAndVerifyRoute(String.valueOf(routeId));
+        routeLogsPage.loadAndVerifyRoute(routeId);
     }
 
     @And("^Operator fill the invalid tracking ID ([^\"]*) on Van Inbound Page$")

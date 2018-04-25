@@ -5,12 +5,15 @@ import co.nvqa.operator_v2.selenium.page.NinjaHubProvisioningPage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.io.File;
 
 /**
+ *
  * @author Daniel Joi Partogi Hutapea
  */
+@ScenarioScoped
 public class NinjaHubProvisioningSteps extends AbstractSteps
 {
     private NinjaHubProvisioningPage ninjaHubProvisioningPage;

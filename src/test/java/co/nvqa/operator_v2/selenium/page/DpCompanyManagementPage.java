@@ -9,17 +9,18 @@ import org.openqa.selenium.WebElement;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class DpCompanyManagementPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "company in getTableData()";
     private static final String CSV_FILENAME = "company.csv";
 
-    public static final String COLUMN_CLASS_NAME = "name";
-    public static final String COLUMN_CLASS_EMAIL = "email";
-    public static final String COLUMN_CLASS_CONTACT_NO = "contact-no";
-    public static final String COLUMN_CLASS_DROP_OFF_WEBHOOK_URL = "drop-off-webhook-url";
-    public static final String COLUMN_CLASS_COLLECT_WEBHOOK_URL = "collect-webhook-url";
-    public static final String COLUMN_CLASS_INTEGRATED = "is-integrated-with-ninjavan";
+    public static final String COLUMN_CLASS_DATA_NAME = "name";
+    public static final String COLUMN_CLASS_DATA_EMAIL = "email";
+    public static final String COLUMN_CLASS_DATA_CONTACT_NO = "contact-no";
+    public static final String COLUMN_CLASS_DATA_DROP_OFF_WEBHOOK_URL = "drop-off-webhook-url";
+    public static final String COLUMN_CLASS_DATA_COLLECT_WEBHOOK_URL = "collect-webhook-url";
+    public static final String COLUMN_CLASS_DATA_INTEGRATED = "is-integrated-with-ninjavan";
 
     public static final String ACTION_BUTTON_EDIT = "Edit";
     public static final String ACTION_BUTTON_DELETE = "Delete";
@@ -106,23 +107,23 @@ public class DpCompanyManagementPage extends OperatorV2SimplePage
 
     private void verifyDpCompanyInfoIsCorrect(DpCompany dpCompany)
     {
-        String actualName = getTextOnTable(1, COLUMN_CLASS_NAME);
+        String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
         Assert.assertEquals("DP Company Name", dpCompany.getName(), actualName);
 
-        String actualEmail = getTextOnTable(1, COLUMN_CLASS_EMAIL);
+        String actualEmail = getTextOnTable(1, COLUMN_CLASS_DATA_EMAIL);
         Assert.assertEquals("DP Company Email", dpCompany.getEmail(), actualEmail);
 
-        String actualContact = getTextOnTable(1, COLUMN_CLASS_CONTACT_NO);
+        String actualContact = getTextOnTable(1, COLUMN_CLASS_DATA_CONTACT_NO);
         Assert.assertEquals("DP Company Contact", dpCompany.getContact(), actualContact);
 
-        String actualDropOffWebhookUrl = getTextOnTable(1, COLUMN_CLASS_DROP_OFF_WEBHOOK_URL);
+        String actualDropOffWebhookUrl = getTextOnTable(1, COLUMN_CLASS_DATA_DROP_OFF_WEBHOOK_URL);
         Assert.assertEquals("DP Company Drop Off Webhook URL", dpCompany.getDropOffWebhookUrl(), actualDropOffWebhookUrl);
 
-        String actualCollectWebhookUrl = getTextOnTable(1, COLUMN_CLASS_COLLECT_WEBHOOK_URL);
+        String actualCollectWebhookUrl = getTextOnTable(1, COLUMN_CLASS_DATA_COLLECT_WEBHOOK_URL);
         Assert.assertEquals("DP Company Collect Webhook URL", dpCompany.getCollectWebhookUrl(), actualCollectWebhookUrl);
 
         String expectedIntegrated = getIntegratedAsString(dpCompany.isIntegrated());
-        String actualIntegrated = getTextOnTable(1, COLUMN_CLASS_INTEGRATED);
+        String actualIntegrated = getTextOnTable(1, COLUMN_CLASS_DATA_INTEGRATED);
         Assert.assertEquals("DP Company Integrated", expectedIntegrated, actualIntegrated);
     }
 

@@ -16,15 +16,16 @@ import java.io.PrintWriter;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class OrderCreationV2Page extends OperatorV2SimplePage
 {
     private static final String NG_REPEAT = "row in $data";
     private static final String CSV_FILENAME_PATTERN = "sample_csv";
 
-    public static final String COLUMN_CLASS_STATUS = "status";
-    public static final String COLUMN_CLASS_MESSAGE = "message";
-    public static final String COLUMN_CLASS_TRACKING_ID = "tracking_id";
-    public static final String COLUMN_CLASS_ORDER_REF_NO = "order_ref_no";
+    public static final String COLUMN_CLASS_DATA_STATUS = "status";
+    public static final String COLUMN_CLASS_DATA_MESSAGE = "message";
+    public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking_id";
+    public static final String COLUMN_CLASS_DATA_ORDER_REF_NO = "order_ref_no";
 
     public OrderCreationV2Page(WebDriver webDriver)
     {
@@ -60,25 +61,39 @@ public class OrderCreationV2Page extends OperatorV2SimplePage
         clickNvButtonSaveByNameAndWaitUntilDone("Submit");
     }
 
-    public void verifyOrderIsCreatedSuccessfully(OrderCreationV2Template orderCreationV2Template)
+    public void verifyOrderV2IsCreatedSuccessfully(OrderCreationV2Template orderCreationV2Template)
     {
-        String status = getTextOnTable(1, COLUMN_CLASS_STATUS);
-        String message = getTextOnTable(1, COLUMN_CLASS_MESSAGE);
-        String trackingId = getTextOnTable(1, COLUMN_CLASS_TRACKING_ID);
-        String orderRefNo = getTextOnTable(1, COLUMN_CLASS_ORDER_REF_NO);
+        verifyOrderIsCreatedSuccessfully("-", false, null, "-");
+    }
+
+    public void verifyOrderV3IsCreatedSuccessfully(OrderCreationV2Template orderCreationV2Template)
+    {
+        verifyOrderIsCreatedSuccessfully("Order Creation Successful.", true, orderCreationV2Template.getOrderNo(), orderCreationV2Template.getShipperOrderNo());
+    }
+
+    private void verifyOrderIsCreatedSuccessfully(String expectedMessage, boolean validateTrackingId, String expectedTrackingIdEndsWith, String expectedOrderRefNo)
+    {
+        String status = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
+        String message = getTextOnTable(1, COLUMN_CLASS_DATA_MESSAGE);
+        String trackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
+        String orderRefNo = getTextOnTable(1, COLUMN_CLASS_DATA_ORDER_REF_NO);
 
         Assert.assertEquals("Status", "SUCCESS", status);
-        Assert.assertEquals("Message", "-", message);
-        Assert.assertThat("Tracking ID", trackingId, Matchers.endsWith(orderCreationV2Template.getOrderNo()));
-        Assert.assertEquals("Order Ref No", orderCreationV2Template.getShipperOrderNo(), orderRefNo);
+        Assert.assertEquals("Message", expectedMessage, message);
+
+        if(validateTrackingId)
+        {
+            Assert.assertThat("Tracking ID", trackingId, Matchers.endsWith(expectedTrackingIdEndsWith)); // Tracking ID not displayed when using V2.
+        }
+
+        Assert.assertEquals("Order Ref No", expectedOrderRefNo, orderRefNo);
     }
 
     public void verifyOrderIsNotCreated()
     {
-        String status = getTextOnTable(1, COLUMN_CLASS_STATUS);
-        String message = getTextOnTable(1, COLUMN_CLASS_MESSAGE);
-        String trackingId = getTextOnTable(1, COLUMN_CLASS_TRACKING_ID);
-        String orderRefNo = getTextOnTable(1, COLUMN_CLASS_ORDER_REF_NO);
+        String status = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
+        String message = getTextOnTable(1, COLUMN_CLASS_DATA_MESSAGE);
+        String trackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
 
         Assert.assertEquals("Status", "FAIL", status);
         Assert.assertThat("Message", message, Matchers.startsWith("Invalid requested tracking ID"));

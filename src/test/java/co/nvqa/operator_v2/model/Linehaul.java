@@ -14,6 +14,7 @@ import java.util.List;
  *
  * Modified by Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class Linehaul
 {
     public static final String XPATH_DELETE_CONFIRMATION_BUTTON = "//button[span[text()='Delete']]";
@@ -23,8 +24,8 @@ public class Linehaul
     private String comment;
     private String frequency;
     private String id;
-    private List<String> hubs = new ArrayList<>();
-    private List<String> days = new ArrayList<>();
+    private final List<String> hubs = new ArrayList<>();
+    private final List<String> days = new ArrayList<>();
 
     public Linehaul()
     {

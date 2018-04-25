@@ -3,8 +3,12 @@ package co.nvqa.operator_v2.selenium.page;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
-public class ProfilePage extends OperatorV2SimplePage
-{
+/**
+ *
+ * @author Lanang Jati
+ */
+@SuppressWarnings("WeakerAccess")
+public class ProfilePage extends OperatorV2SimplePage {
 
     private static final String PROFILE_BUTTON = "//button[@aria-label=\"Profile\"]";
     private static final String COUNTRY_BUTTON = "//md-select[@ng-model='domain.current']/md-select-value/span/div/div/span";

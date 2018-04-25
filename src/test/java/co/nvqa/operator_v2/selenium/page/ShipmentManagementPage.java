@@ -17,12 +17,13 @@ import java.util.List;
  *
  * Modified by Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class ShipmentManagementPage extends OperatorV2SimplePage
 {
     public static final String XPATH_CREATE_SHIPMENT_BUTTON = "//nv-table-button[@id='create-shipment-1']/button";
     public static final String XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON = "//nv-table-button[@id='createButton']/button";
-    public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[@aria-label='Load Selection']";
-    public static final String XPATH_SAVE_CHANGES_BUTTON = "//button[div[text()='Save Changes']]";
+    //public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[@aria-label='Load Selection']";
+    //public static final String XPATH_SAVE_CHANGES_BUTTON = "//button[div[text()='Save Changes']]";
     public static final String XPATH_LINEHAUL_DROPDOWN = "//div[p[text()='Select Linehaul']]/md-select";
     public static final String XPATH_START_HUB_DROPDOWN = "//div[p[text()='Start Hub']]/md-select";
     public static final String XPATH_END_HUB_DROPDOWN = "//div[p[text()='End Hub']]/md-select";
@@ -30,12 +31,12 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     public static final String XPATH_COMMENT_TEXT_AREA = "//textarea[@id=\"comment\"]";
     public static final String XPATH_SHIPMENTS_TR = "//tr[@md-virtual-repeat='shipment in getTableData()']";
     public static final String XPATH_EDIT_SEARCH_FILTER_BUTTON = "//button[contains(@aria-label, 'Edit Filter')]";
-    public static final String XPATH_LABEL_EDIT_SHIPMENT = "//h4[text()='Edit Shipment']";
+    //public static final String XPATH_LABEL_EDIT_SHIPMENT = "//h4[text()='Edit Shipment']";
     public static final String XPATH_SORT_DIV = "//div[div[span[text()='Sort by']]]";
     public static final String XPATH_DELETE_CONFIRMATION_BUTTON = "//button[span[text()='Delete']]";
     public static final String XPATH_FORCE_SUCCESS_CONFIRMATION_BUTTON = "//button[span[text()='Confirm']]";
     public static final String XPATH_CANCEL_SHIPMENT_BUTTON = "//button[div[text()='Cancel Shipment']]";
-    public static final String XPATH_DISCARD_CHANGE_BUTTON = "//button[h5[text()='Discard Changes']]";
+    //public static final String XPATH_DISCARD_CHANGE_BUTTON = "//button[h5[text()='Discard Changes']]";
     public static final String XPATH_SHIPMENT_SCAN = "//div[contains(@class,'table-shipment-scan-container')]/table/tbody/tr";
     public static final String XPATH_CLOSE_SCAN_MODAL_BUTTON = "//button[@aria-label='Cancel']";
     public static final String XPATH_CLEAR_FILTER_BUTTON = "//button[@aria-label='Clear All Selections']";
@@ -150,7 +151,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         click("//h4[text()='Select Search Filters']");
 
         sendKeys(String.format("//nv-autocomplete[@item-types='%s']//input[@aria-label='Search or Select...']", filterLabel), value);
-        click(String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", value));
+        clickf("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", value);
         TestUtils.hoverMouseTo(getWebDriver(), "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
         click("//h4[text()='Select Search Filters']");
 

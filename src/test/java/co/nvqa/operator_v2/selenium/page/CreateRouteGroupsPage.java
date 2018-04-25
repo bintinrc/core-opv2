@@ -22,8 +22,8 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
     {
         String dateLabel = DATE_FILTER_SDF.format(TestUtils.getNextDate(1));
 
-        /**
-         * Set fromHour & fromMinute of Creation Time.
+        /*
+          Set fromHour & fromMinute of Creation Time.
          */
         click("//md-input-container[@model='container.fromHour']");
         pause500ms();
@@ -34,8 +34,8 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
         click("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), ' 00 ')]");
         pause500ms();
 
-        /**
-         * Set toHour & toMinute of Creation Time.
+        /*
+          Set toHour & toMinute of Creation Time.
          */
         click("//md-input-container[@model='container.toHour']");
         pause500ms();
@@ -98,7 +98,7 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
     {
         click("//md-select[@aria-label='Route Group']");
         pause100ms();
-        click(String.format("//md-option/div[contains(text(), '%s')]", routeGroupName));
+        clickf("//md-option/div[contains(text(), '%s')]", routeGroupName);
         pause100ms();
     }
 

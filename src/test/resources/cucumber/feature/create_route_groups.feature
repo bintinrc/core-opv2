@@ -2,8 +2,8 @@
 Feature: Transactions
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Add transaction to Route Group (uid:b6848852-12e6-4cba-bf7c-8444538596c1)
     #Notes: Shipper create sameday parcel with OC V2
@@ -22,3 +22,4 @@ Feature: Transactions
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

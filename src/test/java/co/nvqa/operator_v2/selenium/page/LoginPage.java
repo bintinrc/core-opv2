@@ -10,8 +10,6 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -21,6 +19,7 @@ import java.util.List;
  *
  * @author Soewandi Wirjawan
  */
+@SuppressWarnings("WeakerAccess")
 public class LoginPage extends OperatorV2SimplePage
 {
     private static final String GOOGLE_EXPECTED_URL_1 = "https://accounts.google.com/ServiceLogin";
@@ -49,7 +48,7 @@ public class LoginPage extends OperatorV2SimplePage
 
             getWebDriver().manage().addCookie(new Cookie("ninja_access_token", operatorBearerToken, ".ninjavan.co", "/", null));
             getWebDriver().manage().addCookie(new Cookie("user", userCookie, ".ninjavan.co", "/", null));
-            ((ChromeDriver) getWebDriver()).executeScript("window.open()");
+            executeScript("window.open()");
             String currentWindowHandle = getWebDriver().getWindowHandle();
             String newWindowHandle = null;
 
@@ -86,10 +85,9 @@ public class LoginPage extends OperatorV2SimplePage
     {
         final StringBuilder googlePageUrlSb = new StringBuilder();
 
-        WebDriverWait webDriverWait = new WebDriverWait(webDriver, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS);
-        webDriverWait.until((WebDriver d) ->
+        waitUntil(()->
         {
-            String currentUrl = d.getCurrentUrl();
+            String currentUrl = getCurrentUrl();
             googlePageUrlSb.setLength(0);
             googlePageUrlSb.append(currentUrl);
             boolean isExpectedUrlFound = currentUrl.startsWith(GOOGLE_EXPECTED_URL_1) || currentUrl.startsWith(GOOGLE_EXPECTED_URL_2);
@@ -102,7 +100,7 @@ public class LoginPage extends OperatorV2SimplePage
             NvLogger.info("=======================================");
 
             return isExpectedUrlFound;
-        });
+        }, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
 
         String googlePageUrl = googlePageUrlSb.toString();
@@ -156,7 +154,7 @@ public class LoginPage extends OperatorV2SimplePage
     public void backToLoginPage()
     {
         pause1s();
-        String currentUrl = getWebDriver().getCurrentUrl();
+        String currentUrl = getCurrentUrl();
         Assert.assertThat("Default Operator Portal URL not loaded.", currentUrl, Matchers.containsString(TestConstants.OPERATOR_PORTAL_URL));
     }
 }

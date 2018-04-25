@@ -8,15 +8,16 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class DpVaultManagementPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "station in getTableData()";
     private static final String CSV_FILENAME = "station.csv";
 
-    public static final String COLUMN_CLASS_NAME = "name";
-    public static final String COLUMN_CLASS_ADDRESS = "_address";
-    public static final String COLUMN_CLASS_LAT_LONG = "_latlng";
-    public static final String COLUMN_CLASS_DP_NAME = "_distribution-point";
+    public static final String COLUMN_CLASS_DATA_NAME = "name";
+    public static final String COLUMN_CLASS_DATA_ADDRESS = "_address";
+    public static final String COLUMN_CLASS_DATA_LAT_LONG = "_latlng";
+    public static final String COLUMN_CLASS_DATA_DP_NAME = "_distribution-point";
 
     public static final String ACTION_BUTTON_EDIT = "Edit";
     public static final String ACTION_BUTTON_DELETE = "Delete";
@@ -38,7 +39,7 @@ public class DpVaultManagementPage extends OperatorV2SimplePage
         sendKeys("//input[@aria-label='Name']", dpVault.getName());
         sendKeys("//input[@aria-label='commons.model.appVersion']", String.valueOf(dpVault.getAppVersion()));
         sendKeys("//input[@aria-label='Distribution Point']", dpVault.getDpName());
-        click(String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", dpVault.getDpName()));
+        clickf("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", dpVault.getDpName());
         sendKeys("//input[@aria-label='Address 1']", dpVault.getAddress1());
         sendKeys("//input[@aria-label='Address 2']", dpVault.getAddress2());
         sendKeys("(//input[@aria-label='City'])[1]", dpVault.getCity());
@@ -46,7 +47,7 @@ public class DpVaultManagementPage extends OperatorV2SimplePage
         sendKeys("(//input[@aria-label='City'])[2]", dpVault.getCity());
         sendKeys("//input[@aria-label='commons.latitude']", String.valueOf(dpVault.getLatitude()));
         sendKeys("//input[@aria-label='commons.longitude']", String.valueOf(dpVault.getLongitude()));
-        click("//button[@aria-label='Save Button']");
+        clickButtonByAriaLabel("Save Button");
         waitUntilInvisibilityOfElementLocated("//button[@aria-label='Save Button']//md-progress-circular");
     }
 
@@ -76,18 +77,18 @@ public class DpVaultManagementPage extends OperatorV2SimplePage
 
     private void verifyDpVaultInfoIsCorrect(DpVault dpVault)
     {
-        String actualName = getTextOnTable(1, COLUMN_CLASS_NAME);
+        String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
         Assert.assertEquals("DP Vault Name", dpVault.getName(), actualName);
 
         String expectedAddress = dpVault.getAddress1()+' '+dpVault.getAddress2()+' '+dpVault.getCity()+' '+dpVault.getCountry();
-        String actualAddress = getTextOnTable(1, COLUMN_CLASS_ADDRESS);
+        String actualAddress = getTextOnTable(1, COLUMN_CLASS_DATA_ADDRESS);
         Assert.assertEquals("DP Vault Address", expectedAddress, actualAddress);
 
         String expectedLatLong = "("+dpVault.getLatitude()+", "+dpVault.getLongitude()+')';
-        String actualLatLong = getTextOnTable(1, COLUMN_CLASS_LAT_LONG);
+        String actualLatLong = getTextOnTable(1, COLUMN_CLASS_DATA_LAT_LONG);
         Assert.assertEquals("DP Vault Lat/Long", expectedLatLong, actualLatLong);
 
-        String actualDpName = getTextOnTable(1, COLUMN_CLASS_DP_NAME);
+        String actualDpName = getTextOnTable(1, COLUMN_CLASS_DATA_DP_NAME);
         Assert.assertEquals("DP Vault DP Name", dpVault.getDpName(), actualDpName);
     }
 

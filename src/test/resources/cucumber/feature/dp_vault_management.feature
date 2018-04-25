@@ -1,9 +1,9 @@
-@OperatorV2 @DpVaultManagement
+@OperatorV2Disabled @DpVaultManagement
 Feature: DP Vault Management
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator create, update and delete DP Vault (uid:73a1d6e2-9265-4031-bcae-fd615a3c1fad)
     Given Operator go to menu "Distribution Points" -> "DP Vault Management"
@@ -36,3 +36,4 @@ Feature: DP Vault Management
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

@@ -10,13 +10,14 @@ import java.util.Date;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class FailedPickupManagementPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "failedPickup in getTableData()";
     private static final String CSV_FILENAME_PATTERN = "failed-pickup-list";
 
-    public static final String COLUMN_CLASS_TRACKING_ID = "tracking_id";
-    public static final String COLUMN_CLASS_FAILURE_COMMENTS = "last_attempt_comments";
+    public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking_id";
+    public static final String COLUMN_CLASS_DATA_FAILURE_COMMENTS = "last_attempt_comments";
 
     public static final String ACTION_BUTTON_RESCHEDULE_NEXT_DAY = "container.failed-pickup-management.reschedule-next-day";
 
@@ -32,9 +33,9 @@ public class FailedPickupManagementPage extends OperatorV2SimplePage
     public void verifyTheFailedC2cOrReturnOrderIsListed(String trackingId)
     {
         searchTableByTrackingId(trackingId);
-        String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_TRACKING_ID);
+        String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
         Assert.assertEquals("Tracking ID", trackingId, actualTrackingId);
-        String actualFailureComments = getTextOnTable(1, COLUMN_CLASS_FAILURE_COMMENTS);
+        String actualFailureComments = getTextOnTable(1, COLUMN_CLASS_DATA_FAILURE_COMMENTS);
         Assert.assertEquals("Failure Comments", "Rejected - damaged items", actualFailureComments);
     }
 
@@ -79,7 +80,7 @@ public class FailedPickupManagementPage extends OperatorV2SimplePage
 
     public void checkRow(int rowIndex)
     {
-        click(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", MD_VIRTUAL_REPEAT, rowIndex));
+        clickf("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", MD_VIRTUAL_REPEAT, rowIndex);
     }
 
     public void selectAction(int actionType)

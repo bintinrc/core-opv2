@@ -11,9 +11,9 @@ public class TagManagementPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "tag in getTableData()";
 
-    public static final String COLUMN_CLASS_NO = "column-index";
-    public static final String COLUMN_CLASS_TAG_NAME = "name";
-    public static final String COLUMN_CLASS_DESCRIPTION = "description";
+    //public static final String COLUMN_CLASS_DATA_NO = "column-index";
+    public static final String COLUMN_CLASS_DATA_TAG_NAME = "name";
+    public static final String COLUMN_CLASS_DATA_DESCRIPTION = "description";
 
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
     public static final String ACTION_BUTTON_DELETE = "commons.delete";

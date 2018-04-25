@@ -2,8 +2,8 @@
 Feature: Driver Strength
 
   @LaunchBrowser
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   # add new
   Scenario: op add new driver (uid:b7a6c2b2-66c0-4e7d-890c-b0099cef4b5a)
@@ -56,3 +56,4 @@ Feature: Driver Strength
 
   @KillBrowser
   Scenario: Kill Browser
+    Given no-op

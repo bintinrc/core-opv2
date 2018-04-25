@@ -6,11 +6,13 @@ import co.nvqa.operator_v2.util.TestConstants;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@ScenarioScoped
 public class AgedParcelManagementSteps extends AbstractSteps
 {
     private AgedParcelManagementPage agedParcelManagementPage;

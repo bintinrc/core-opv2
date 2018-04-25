@@ -2,8 +2,8 @@
 Feature: Zones
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator create, update and delete Zone (uid:54bc8b8b-ceea-4a5e-b29d-2745c60272cd)
     Given Operator go to menu "Routing" -> "Zones"
@@ -37,3 +37,4 @@ Feature: Zones
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

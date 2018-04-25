@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Tristania Siagian
  */
+@SuppressWarnings("WeakerAccess")
 public class RecoveryTicketsScanningPage extends OperatorV2SimplePage {
     public static final String NG_REPEAT = "ticket in ctrl.tickets track by $index";
 
@@ -92,9 +93,9 @@ public class RecoveryTicketsScanningPage extends OperatorV2SimplePage {
     }
 
     public void selectFromCombobox(String ariaLabel, String selectedValue) {
-        click(String.format("//md-select[contains(@aria-label, '%s')]", ariaLabel));
+        clickf("//md-select[contains(@aria-label, '%s')]", ariaLabel);
         pause100ms();
-        click(String.format("//md-option/div[normalize-space(text())='%s']", selectedValue));
+        clickf("//md-option/div[normalize-space(text())='%s']", selectedValue);
         pause50ms();
     }
 

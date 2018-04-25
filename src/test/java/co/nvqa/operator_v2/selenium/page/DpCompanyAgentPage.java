@@ -9,14 +9,15 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class DpCompanyAgentPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "agent in getTableData()";
 
-    public static final String COLUMN_CLASS_NAME = "name";
-    public static final String COLUMN_CLASS_EMAIL = "email";
-    public static final String COLUMN_CLASS_CONTACT_NO = "contact-no";
-    public static final String COLUMN_CLASS_UNLOCK_CODE = "unlock-code";
+    public static final String COLUMN_CLASS_DATA_NAME = "name";
+    public static final String COLUMN_CLASS_DATA_EMAIL = "email";
+    public static final String COLUMN_CLASS_DATA_CONTACT_NO = "contact-no";
+    public static final String COLUMN_CLASS_DATA_UNLOCK_CODE = "unlock-code";
 
     public static final String ACTION_BUTTON_EDIT = "Edit";
     public static final String ACTION_BUTTON_DELETE = "Delete";
@@ -70,16 +71,16 @@ public class DpCompanyAgentPage extends OperatorV2SimplePage
 
     private void verifyDpCompanyInfoIsCorrect(DpCompanyAgent dpCompanyAgent)
     {
-        String actualName = getTextOnTable(1, COLUMN_CLASS_NAME);
+        String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
         Assert.assertEquals("DP Company Agent Name", dpCompanyAgent.getName(), actualName);
 
-        String actualEmail = getTextOnTable(1, COLUMN_CLASS_EMAIL);
+        String actualEmail = getTextOnTable(1, COLUMN_CLASS_DATA_EMAIL);
         Assert.assertEquals("DP Company Agent Email", dpCompanyAgent.getEmail(), actualEmail);
 
-        String actualContact = getTextOnTable(1, COLUMN_CLASS_CONTACT_NO);
+        String actualContact = getTextOnTable(1, COLUMN_CLASS_DATA_CONTACT_NO);
         Assert.assertEquals("DP Company Agent Contact", dpCompanyAgent.getContact(), actualContact);
 
-        String actualUnlockCode = getTextOnTable(1, COLUMN_CLASS_UNLOCK_CODE);
+        String actualUnlockCode = getTextOnTable(1, COLUMN_CLASS_DATA_UNLOCK_CODE);
         Assert.assertEquals("DP Company Agent Unlock Code", dpCompanyAgent.getUnlockCode(), actualUnlockCode);
     }
 
@@ -92,7 +93,7 @@ public class DpCompanyAgentPage extends OperatorV2SimplePage
 
     public void backToDpCompanyManagementPage(DpCompany dpCompany)
     {
-        click(String.format("//button[contains(@aria-label, '%s')]", dpCompany.getName()));
+        clickf("//button[contains(@aria-label, '%s')]", dpCompany.getName());
         waitUntilVisibilityOfElementLocated("//div[contains(@class,'nv-h4')][text()='DP Company Management']");
     }
 

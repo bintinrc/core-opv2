@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.selenium.page.DpTaggingPage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@ScenarioScoped
 public class DpTaggingSteps extends AbstractSteps
 {
     private DpTaggingPage dpTaggingPage;

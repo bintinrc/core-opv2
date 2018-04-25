@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.utils.NvTestRuntimeException;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
@@ -10,12 +11,12 @@ import java.util.Map;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class RecoveryTicketsPage extends OperatorV2SimplePage
 {
     private static final int MAX_RETRY = 10;
     private static final String MD_VIRTUAL_REPEAT = "ticket in getTableData()";
 
-    public static final String COLUMN_CLASS_FILTER_TRACKING_ID = "tracking-id";
     public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking-id";
 
     public static final String TICKET_TYPE_DAMAGED = "DAMAGED";
@@ -33,9 +34,9 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void selectFromCombobox(String ariaLabel, String selectedValue)
     {
-        click(String.format("//md-select[contains(@aria-label, '%s')]", ariaLabel));
+        clickf("//md-select[contains(@aria-label, '%s')]", ariaLabel);
         pause100ms();
-        click(String.format("//md-option/div[normalize-space(text())='%s']", selectedValue));
+        clickf("//md-option/div[normalize-space(text())='%s']", selectedValue);
         pause50ms();
     }
 
@@ -185,10 +186,10 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         {
             setImplicitTimeout(0);
 
-            /**
-             * Sometimes tracking ID textbox does not call the backend to verify the Tracking ID.
-             * To fix it, we need key in the tracking ID over and over until the textbox call the backend
-             * and enable the "Create Ticket" button.
+            /*
+              Sometimes tracking ID textbox does not call the backend to verify the Tracking ID.
+              To fix it, we need key in the tracking ID over and over until the textbox call the backend
+              and enable the "Create Ticket" button.
              */
 
             int counter = 0;
@@ -202,9 +203,9 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
             }
 
         }
-        catch (Exception ex)
+        catch(Exception ex)
         {
-            throw ex;
+            throw new NvTestRuntimeException(ex);
         }
         finally
         {
@@ -219,8 +220,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         searchTableByTrackingId(trackingId);
         pause3s();
         String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
-        boolean isExist = trackingId.equals(actualTrackingId);
-        return isExist;
+        return trackingId.equals(actualTrackingId);
     }
 
     public void enterTrackingId(String trackingId)

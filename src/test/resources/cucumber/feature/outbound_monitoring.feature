@@ -2,10 +2,10 @@
 Feature: Outbound Monitoring
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRoute
+  @ArchiveRouteViaDb
   Scenario: Operator's searching the outbound data on Outbound Monitoring page (uid:19cba029-d587-4911-9269-b9b4beb4b529)
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |
@@ -25,7 +25,7 @@ Feature: Outbound Monitoring
     And Operator search on Route ID Header Table on Outbound Monitoring Page
     Then Operator verify the route ID is exist on Outbound Monitoring Page
 
-  @ArchiveRoute
+  @ArchiveRouteViaDb
   Scenario: Operator verifies the In Progress Outbound Status on Outbound Monitoring Page (uid:7974395f-d4c7-4a18-bec7-a203136377df)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
@@ -46,7 +46,7 @@ Feature: Outbound Monitoring
     And Operator search on Route ID Header Table on Outbound Monitoring Page
     Then Operator verify the In Progress Outbound Status on Outbound Monitoring Page
 
-  @ArchiveRoute
+  @ArchiveRouteViaDb
   Scenario: Operator verifies the Complete Outbound Status on Outbound Monitoring Page (uid:85004aba-947b-43eb-9b31-ab69015dae02)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
@@ -70,7 +70,7 @@ Feature: Outbound Monitoring
     And Operator search on Route ID Header Table on Outbound Monitoring Page
     Then Operator verify the Complete Outbound Status on Outbound Monitoring Page
 
-  @ArchiveRoute
+  @ArchiveRouteViaDb
   Scenario: Operator clicks on Flag Icon to mark route ID on Outbound Monitoring Page (uid:ae918b82-457e-47fe-a269-7c7cb6733b54)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
@@ -92,7 +92,7 @@ Feature: Outbound Monitoring
     And Operator click on flag icon on chosen route ID on Outbound Monitoring Page
     Then Operator verifies the Outbound status on the chosen route ID is changed
 
-  @ArchiveRoute
+  @ArchiveRouteViaDb
   Scenario: Operator adding comment on the Outbound Monitoring Page (uid:ee8738f0-95b2-4419-8865-0e2f3b5be7bd)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
@@ -115,7 +115,7 @@ Feature: Outbound Monitoring
     Then Operator verifies the comment table on the chosen route ID is changed
 
 #TO DO : after the page is migrated to OpV2
-#  @ArchiveRoute
+#  @ArchiveRouteViaDb
 #  Scenario: Operator pull out order on Outbound Monitoring Page
 #    Given Operator go to menu Shipper Support -> Blocked Dates
 #    Given API Shipper create Order V2 Parcel using data below:
@@ -137,7 +137,7 @@ Feature: Outbound Monitoring
 #    And Operator search on Route ID Header Table on Outbound Monitoring Page
 #    Then Operator verifies the Total Parcel in Route is changed on Outbound Monitoring Page
 
-#  @ArchiveRoute
+#  @ArchiveRouteViaDb
 #  Scenario: Operator fail pull out order on Outbound Monitoring Page due to van inbounded order
 #    Given Operator go to menu Shipper Support -> Blocked Dates
 #    Given API Shipper create Order V2 Parcel using data below:
@@ -162,3 +162,4 @@ Feature: Outbound Monitoring
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

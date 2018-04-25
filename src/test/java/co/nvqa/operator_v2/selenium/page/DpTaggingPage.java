@@ -18,12 +18,13 @@ import java.util.List;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class DpTaggingPage extends OperatorV2SimplePage
 {
     private static final String NG_REPEAT = "order in ctrl.uploadDeliveryResults";
 
-    public static final String COLUMN_CLASS_TRACKING_ID = "tracking-id";
-    public static final String COLUMN_CLASS_CURRENT_DP_ID = "current-dp-id";
+    public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking-id";
+    public static final String COLUMN_CLASS_DATA_CURRENT_DP_ID = "current-dp-id";
 
     public DpTaggingPage(WebDriver webDriver)
     {
@@ -50,7 +51,7 @@ public class DpTaggingPage extends OperatorV2SimplePage
 
         for(int i=0; i<rowCount; i++)
         {
-            listOfTrackingIdsOnTable.add(getTextOnTable(i+1, COLUMN_CLASS_TRACKING_ID));
+            listOfTrackingIdsOnTable.add(getTextOnTable(i+1, COLUMN_CLASS_DATA_TRACKING_ID));
         }
 
         for(DpTagging dpTagging : listOfDpTagging)
@@ -106,7 +107,7 @@ public class DpTaggingPage extends OperatorV2SimplePage
     {
         clickNvIconTextButtonByName("check-all");
         clickNvApiTextButtonByNameAndWaitUntilDone("container.dp-tagging.assign-all");
-        waitUntilInvisibilityOfToast("Success assign");
+        waitUntilInvisibilityOfToast("tagged successfully");
     }
 
     public void verifyTheOrdersIsTaggedToDpSuccessfully(List<DpTagging> listOfDpTagging)
@@ -115,8 +116,8 @@ public class DpTaggingPage extends OperatorV2SimplePage
 
         for(DpTagging dpTagging : listOfDpTagging)
         {
-            String trackingId = getTextOnTable(rowIndex, COLUMN_CLASS_TRACKING_ID);
-            String currentDpId = getTextOnTable(rowIndex, COLUMN_CLASS_CURRENT_DP_ID);
+            String trackingId = getTextOnTable(rowIndex, COLUMN_CLASS_DATA_TRACKING_ID);
+            String currentDpId = getTextOnTable(rowIndex, COLUMN_CLASS_DATA_CURRENT_DP_ID);
 
             Assert.assertEquals("Tracking ID", dpTagging.getTrackingId(), trackingId);
             Assert.assertEquals("Current DP ID", String.valueOf(dpTagging.getDpId()), currentDpId);

@@ -19,7 +19,6 @@ import java.util.Map;
  *
  * @author Tristania Siagian
  */
-
 @ScenarioScoped
 public class ChangeDeliveryTimingsSteps extends AbstractSteps {
 
@@ -53,9 +52,9 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
         mapOfDynamicVariable.put("tracking_id", get(KEY_CREATED_ORDER_TRACKING_ID));
         Map<String,String> mapOfData = replaceParamAndGetAsMap(dataTable, mapOfDynamicVariable);
 
-        String trackingId = mapOfData.get("tracking_id");
-        String startDate = mapOfData.get("start_date");
-        String endDate = mapOfData.get("end_date");
+        String trackingId = mapOfData.get("trackingId");
+        String startDate = mapOfData.get("startDate");
+        String endDate = mapOfData.get("endDate");
         String timewindowAsString = mapOfData.get("timewindow");
 
         ChangeDeliveryTiming changeDeliveryTiming = new ChangeDeliveryTiming();

@@ -4,10 +4,15 @@ import co.nvqa.common_selenium.cucumber.glue.CommonSeleniumScenarioManager;
 import co.nvqa.common_selenium.util.SeleniumUtils;
 import co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
 import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.commons.utils.StandardScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.page.LoginPage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
+import co.nvqa.operator_v2.selenium.page.OperatorV2SimplePage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
@@ -15,6 +20,10 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import java.util.Collection;
 
 /**
  *
@@ -23,6 +32,9 @@ import cucumber.api.java.en.When;
 @Singleton
 public class ScenarioManager extends CommonSeleniumScenarioManager
 {
+    @Inject private Provider<StandardScenarioStorage> providerOfScenarioStorage;
+    @Inject private Provider<StandardApiOperatorPortalSteps> providerOfStandardApiOperatorPortalSteps;
+
     public ScenarioManager()
     {
     }
@@ -30,19 +42,28 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
     /**
      * Inject object Scenario each time the scenario is running.
      *
-     * @param scenario
+     * @param scenario The current running scenario.
      */
     @Before
     public void before(Scenario scenario)
     {
         setCurrentScenario(scenario);
+
+        providerOfScenarioStorage.get().put(StandardScenarioStorageKeys.KEY_SHIPPER_CLIENT_ID, TestConstants.SHIPPER_V2_CLIENT_ID);
+        providerOfScenarioStorage.get().put(StandardScenarioStorageKeys.KEY_SHIPPER_CLIENT_SECRET, TestConstants.SHIPPER_V2_CLIENT_SECRET);
+
+        providerOfScenarioStorage.get().put(StandardScenarioStorageKeys.KEY_NINJA_DRIVER_USERNAME, TestConstants.NINJA_DRIVER_USERNAME);
+        providerOfScenarioStorage.get().put(StandardScenarioStorageKeys.KEY_NINJA_DRIVER_PASSWORD, TestConstants.NINJA_DRIVER_PASSWORD);
     }
 
     @Before("@LaunchBrowser")
-    public void launchBrowser()
+    public void launchBrowser(Scenario scenario)
     {
+        Collection<String> sourceTagNames = scenario.getSourceTagNames();
+        boolean enableProxy = sourceTagNames.contains("@EnableProxy");
+        boolean enableClearCache = sourceTagNames.contains("@EnableClearCache");
         NvLogger.infof("Launching browser.");
-        setWebDriver(SeleniumUtils.createWebDriver());
+        setWebDriver(SeleniumUtils.createWebDriver(enableProxy, enableClearCache));
     }
 
     @Before("@LaunchBrowserWithProxyEnabled")
@@ -63,13 +84,36 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
      * Save screenshot and print "browser console log" if scenario failed.
      * You can find screenshot image at './build/report/cucumber-junit/htmloutput/index.html'.
      *
-     * @param scenario
+     * @param scenario The current running scenario.
      */
+    @SuppressWarnings("EmptyMethod")
     @After
     @Override
     public void teardown(Scenario scenario)
     {
         super.teardown(scenario);
+    }
+
+    @After("@ResetWindow")
+    public void resetWindow()
+    {
+        NvLogger.info("Reset window.");
+
+        try
+        {
+            TestUtils.acceptAlertDialogIfAppear(getWebDriver());
+            getWebDriver().get(TestConstants.OPERATOR_PORTAL_URL);
+            TestUtils.acceptAlertDialogIfAppear(getWebDriver());
+            OperatorV2SimplePage operatorV2SimplePage = new OperatorV2SimplePage(getWebDriver());
+            String leaveBtnXpath = "//md-dialog[@aria-label='Leaving PageYou have ...']//button[@aria-label='Leave']";
+            WebElement webElement = operatorV2SimplePage.findElementByFast(By.xpath(leaveBtnXpath));
+            webElement.click();
+            operatorV2SimplePage.waitUntilInvisibilityOfToast("sidenav-main-menu");
+        }
+        catch(Throwable th)
+        {
+            NvLogger.warn("Failed to 'Reset Window'.", th);
+        }
     }
 
     @Given("^op login into Operator V2 with username \"([^\"]*)\" and password \"([^\"]*)\"$")
@@ -80,14 +124,7 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
 
         if(TestConstants.OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES)
         {
-            String operatorAccessToken = new StandardApiOperatorPortalSteps<ScenarioManager>(null, null)
-            {
-                @Override
-                public void init()
-                {
-                }
-            }.getOperatorAccessToken();
-
+            String operatorAccessToken = providerOfStandardApiOperatorPortalSteps.get().getOperatorAccessToken();
             loginPage.forceLogin(operatorAccessToken);
         }
         else
@@ -99,6 +136,12 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
 
         MainPage mainPage = new MainPage(getWebDriver());
         mainPage.verifyTheMainPageIsLoaded();
+    }
+
+    @Given("^Operator login with username = \"([^\"]*)\" and password = \"([^\"]*)\"$")
+    public void newLoginToOperatorV2(String username, String password)
+    {
+        loginToOperatorV2(username, password);
     }
 
     @Then("^take screenshot$")

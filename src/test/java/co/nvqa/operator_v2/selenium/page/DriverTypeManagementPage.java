@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.utils.NvLogger;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
@@ -12,12 +13,13 @@ import java.util.List;
  *
  * @author Soewandi Wirjawan
  */
+@SuppressWarnings("WeakerAccess")
 public class DriverTypeManagementPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "driverTypeProp in ctrl.tableData";
     private static final String XPATH_OF_TR_MD_VIRTUAL_REPEAT = String.format("//tr[@md-virtual-repeat='%s']", MD_VIRTUAL_REPEAT);
     private static final String CSV_FILENAME_PATTERN = "driver-types";
-    private static final String COLUMN_CLASS_NAME = "name";
+    private static final String COLUMN_CLASS_DATA_NAME = "name";
 
     private static final String ACTION_BUTTON_EDIT = "Edit";
     private static final String ACTION_BUTTON_DELETE = "Delete";
@@ -84,7 +86,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
     public void verifyDriverType(String expectedDriverTypeName)
     {
         searchingCreatedDriver(expectedDriverTypeName);
-        String actualDriverTypeName = getTextOnTable(1, COLUMN_CLASS_NAME);
+        String actualDriverTypeName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
         Assert.assertEquals("Driver Type Name", expectedDriverTypeName, actualDriverTypeName);
     }
 
@@ -147,6 +149,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
         }
         catch(TimeoutException ex)
         {
+            NvLogger.warn("Failed to get element.", ex);
         }
     }
 

@@ -2,8 +2,8 @@
 Feature: Order Creation V2
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator download and verify Sample CSV file on Order Creation V2 page (uid:d378cebc-8a7a-4aae-b92d-d4559f56ebca)
     Given Operator go to menu Order -> Order Creation V2
@@ -30,7 +30,7 @@ Feature: Order Creation V2
   Scenario Outline: Operator create order V3 on Order Creation V2 (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Order -> Order Creation V2
-    When Operator create order V2 by uploading CSV on Order Creation V2 page using data below:
+    When Operator create order V3 by uploading CSV on Order Creation V2 page using data below:
       | orderCreationV2Template | { "shipper_id":{shipper-v3-id}, "order_type":"<orderType>", "parcel_size":1, "weight":2, "length":3, "width":5, "height":7, "delivery_date":"{{cur_date}}", "delivery_timewindow_id":1, "max_delivery_days":3, "pickup_date":"{{cur_date}}", "pickup_timewindow_id":1 } |
     Then Operator verify order V3 is created successfully on Order Creation V2 page
     Examples:
@@ -41,3 +41,4 @@ Feature: Order Creation V2
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

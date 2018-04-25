@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
  *
  * Modified by Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class ShipmentInboundScanningPage extends OperatorV2SimplePage
 {
     public static final String XPATH_HUB_DROPDOWN = "//md-select[md-select-value[span[text()='Inbound Hub']]]";
@@ -22,7 +23,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
     public static final String XPATH_SCANNING_SESSION = "//table/tbody/tr[contains(@ng-repeat,'log in ctrl.scans')]";
     public static final String XPATH_SCANNING_SESSION_NO_CHANGE = XPATH_SCANNING_SESSION;
     public static final String XPATH_SCANNING_SESSION_CHANGE = XPATH_SCANNING_SESSION + "[contains(@class,'changed')]";
-    public static final String XPATH_DATE_INPUT = "//input[@class='md-datepicker-input']";
+    //public static final String XPATH_DATE_INPUT = "//input[@class='md-datepicker-input']";
     public static final String XPATH_CHANGE_DATE_BUTTON = "//button[@aria-label='Change Date']";
 
     public ShipmentInboundScanningPage(WebDriver webDriver)
@@ -60,8 +61,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
     public List<String> grabSessionIdNotChangedScan()
     {
         List<WebElement> scans = findElementsByXpath(XPATH_SCANNING_SESSION_NO_CHANGE + "/td[contains(@class,'sn')]");
-        List<String> result = scans.stream().map(WebElement::getText).collect(Collectors.toList());
-        return result;
+        return scans.stream().map(WebElement::getText).collect(Collectors.toList());
     }
 
     public void clickEditEndDate()

@@ -1,9 +1,9 @@
-@OperatorV2 @ShipmentManagement
+@OperatorV2Disabled @ShipmentManagement
 Feature: Shipment Management
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Create Shipment (uid:7a3373f0-67f1-4f1a-b6b2-6447a2621305)
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -56,3 +56,4 @@ Feature: Shipment Management
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

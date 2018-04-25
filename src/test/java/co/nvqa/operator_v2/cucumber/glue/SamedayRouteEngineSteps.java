@@ -19,12 +19,18 @@ import org.junit.Assert;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.TimeZone;
 
 /**
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 @ScenarioScoped
 public class SamedayRouteEngineSteps extends AbstractSteps
 {
@@ -114,8 +120,8 @@ public class SamedayRouteEngineSteps extends AbstractSteps
         String routingAlgorithm = mapOfData.get("routingAlgorithm");
         String fleetType1OperatingHoursStart = mapOfData.get("fleetType1OperatingHoursStart");
         String fleetType1OperatingHoursEnd = mapOfData.get("fleetType1OperatingHoursEnd");
-        String fleetType1BreakingDurationStart = mapOfData.get("fleetType1BreakingDurationStart");
-        String fleetType1BreakingDurationEnd = mapOfData.get("fleetType1BreakingDurationEnd");
+        //String fleetType1BreakingDurationStart = mapOfData.get("fleetType1BreakingDurationStart");
+        //String fleetType1BreakingDurationEnd = mapOfData.get("fleetType1BreakingDurationEnd");
         String fleetType1Capacity = Optional.ofNullable(mapOfData.get("fleetType1Capacity")).orElse("10");
 
         samedayRouteEnginePage.selectRouteGroup(routeGroupName);

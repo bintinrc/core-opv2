@@ -1,13 +1,16 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.model.PrinterSettings;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.Map;
-
-public class PrinterSettingsPage extends OperatorV2SimplePage
-{
+/**
+ *
+ * @author Lanang Jati
+ */
+@SuppressWarnings("WeakerAccess")
+public class PrinterSettingsPage extends OperatorV2SimplePage {
 
     private static final String ADD_PRINTER_BUTTON = "//button[@aria-label='Add Printer']";
     private static final String ADD_PRINTER_MODAL = "//md-dialog[md-toolbar[@title='Add Printer']]";
@@ -20,8 +23,12 @@ public class PrinterSettingsPage extends OperatorV2SimplePage
     private static final String CONFIRM_DELETE_BUTTON = "//md-dialog/md-dialog-actions/button[@aria-label='Delete']";
     private static final String SEARCH_TEXT_FIELD = "//md-input-container[contains(@class,'search')]/input";
 
+    public static final String COLUMN_CLASS_DATA_NAME = "name";
+    public static final String COLUMN_CLASS_DATA_IP_ADDRESS = "ip_address";
+    public static final String COLUMN_CLASS_DATA_VERSION = "version";
+
     private static final String NAME = "name";
-    private static final String IP_ADDRESS = "ip";
+    private static final String IP_ADDRESS = "ipAddress";
     private static final String VERSION = "version";
     private static final String DEFAULT = "default";
 
@@ -34,52 +41,27 @@ public class PrinterSettingsPage extends OperatorV2SimplePage
         pause1s();
     }
 
-    public void addPrinterModalOnDisplay() {
+    public void verifyAddPrinterFormIsDisplayed() {
         WebElement modal = findElementByXpath(ADD_PRINTER_MODAL);
         Assert.assertTrue("Add Printer Label not Shown", modal.isDisplayed());
     }
 
-    public void fillPrinterName(String name) {
-        sendKeys(PRINTER_NAME_TEXT_FIELD, name);
+    public void addPrinter(PrinterSettings printerSettings) {
+        fillPrinterName(printerSettings.getName());
+        fillPrinterIpAddress(printerSettings.getIpAddress());
+        fillPrinterVersion(printerSettings.getVersion());
+        switchToDefaultPrinter(printerSettings.isDefaultPrinter());
+        clickSubmitButton();
     }
 
-    public void fillPrinterIp(String ip) {
-        sendKeys(PRINTER_IP_ADDRESS_TEXT_FIELD, ip);
-    }
-
-    public void fillPrinterVersion(String ver) {
-        sendKeys(PRINTER_VERSION_TEXT_FIELD, ver);
-    }
-
-    public void switchToDefaultPrinter(String isDefault) {
+    public void switchToDefaultPrinter(boolean isDefault) {
         WebElement element = findElementByXpath(PRINTER_DEFAULT_SWITCH);
-        String checked = element.getAttribute("aria-checked");
-        if (!checked.equalsIgnoreCase(isDefault)) {
+        boolean isChecked = Boolean.parseBoolean(element.getAttribute("aria-checked"));
+
+        if (isDefault!=isChecked) {
             element.click();
             pause300ms();
         }
-
-    }
-
-    public void clickSubmitButton() {
-        clickAndWaitUntilDone(SUBMIT_BUTTON);
-    }
-
-    private boolean isPrinterSettingsDisplayed(String value) {
-        searchPrinterSettings(value);
-        boolean exist = false;
-
-        String actualName = getTextOnTableWithNgRepeat(1, NAME, NG_REPEAT_TABLE);
-        if (actualName != null && actualName.equals(value)) {
-            exist = true;
-        }
-
-        return exist;
-    }
-
-    public void searchPrinterSettings(String value) {
-        sendKeys(SEARCH_TEXT_FIELD, value);
-        pause200ms();
     }
 
     public void printerSettingWithNameOnDisplay(String name) {
@@ -87,23 +69,19 @@ public class PrinterSettingsPage extends OperatorV2SimplePage
         Assert.assertTrue(String.format("New printer setting with name %s doesn't exist", name), isExist);
     }
 
-    public void checkPrinterSettingInfo(int index, Map<String, String> details) {
-        String actualName = getTextOnTableWithNgRepeat(index, NAME, NG_REPEAT_TABLE);
-        String actualIp = getTextOnTableWithNgRepeat(index, IP_ADDRESS, NG_REPEAT_TABLE);
-        String actualVersion = getTextOnTableWithNgRepeat(index, VERSION, NG_REPEAT_TABLE);
+    public void checkPrinterSettingInfo(int index, PrinterSettings printerSettings) {
+        String actualName = getTextOnTable(index, COLUMN_CLASS_DATA_NAME);
+        String actualIpAddress = getTextOnTable(index, COLUMN_CLASS_DATA_IP_ADDRESS);
+        String actualVersion = getTextOnTable(index, COLUMN_CLASS_DATA_VERSION);
 
-        Assert.assertEquals("printer setting name wrong", details.get(NAME), actualName);
-        Assert.assertEquals("printer setting ip wrong", details.get(IP_ADDRESS), actualIp);
-        Assert.assertEquals("printer setting version wrong", details.get(VERSION), actualVersion);
+        Assert.assertEquals("Printer Setting name is incorrect.", printerSettings.getName(), actualName);
+        Assert.assertEquals("Printer Setting IP Address is incorrect.", printerSettings.getIpAddress(), actualIpAddress);
+        Assert.assertEquals("Printer Setting version is incorrect.", printerSettings.getVersion(), actualVersion);
     }
 
     public void printerSettingWithNameNotDisplayed(String name) {
         boolean isExist = isPrinterSettingsDisplayed(name);
-        Assert.assertFalse(String.format("New printer setting with name %s exist", name), isExist);
-    }
-
-    private void clickActionButtonInFirstRecord(String buttonAriaLabel) {
-        clickButtonOnTableWithNgRepeat(1, "action", buttonAriaLabel, NG_REPEAT_TABLE);
+        Assert.assertFalse(String.format("Printer Setting with name '%s' still exist.", name), isExist);
     }
 
     public void deletePrinterSettingWithName(String name) {
@@ -122,12 +100,50 @@ public class PrinterSettingsPage extends OperatorV2SimplePage
         if (rowDetail.equalsIgnoreCase(NAME)) {
             fillPrinterName(value);
         } else if (rowDetail.equalsIgnoreCase(IP_ADDRESS)) {
-            fillPrinterIp(value);
+            fillPrinterIpAddress(value);
         } else if (rowDetail.equalsIgnoreCase(VERSION)) {
             fillPrinterVersion(value);
         } else if (rowDetail.equalsIgnoreCase(DEFAULT)) {
-            switchToDefaultPrinter(value);
+            switchToDefaultPrinter(Boolean.parseBoolean(value));
         }
         pause1s();
+    }
+
+    public void clickSubmitButton() {
+        clickAndWaitUntilDone(SUBMIT_BUTTON);
+    }
+
+    private void clickActionButtonInFirstRecord(String buttonAriaLabel) {
+        clickButtonOnTableWithNgRepeat(1, "action", buttonAriaLabel, NG_REPEAT_TABLE);
+    }
+
+    private boolean isPrinterSettingsDisplayed(String value) {
+        searchPrinterSettings(value);
+        return !isTableEmpty();
+    }
+
+    public boolean isTableEmpty() {
+        return !isElementExistFast(String.format("//tr[@ng-repeat='%s'][1]", NG_REPEAT_TABLE));
+    }
+
+    public void searchPrinterSettings(String value) {
+        sendKeys(SEARCH_TEXT_FIELD, value);
+        pause200ms();
+    }
+
+    public void fillPrinterName(String name) {
+        sendKeys(PRINTER_NAME_TEXT_FIELD, name);
+    }
+
+    public void fillPrinterIpAddress(String ip) {
+        sendKeys(PRINTER_IP_ADDRESS_TEXT_FIELD, ip);
+    }
+
+    public void fillPrinterVersion(String ver) {
+        sendKeys(PRINTER_VERSION_TEXT_FIELD, ver);
+    }
+
+    public String getTextOnTable(int rowNumber, String columnDataClass) {
+        return getTextOnTableWithNgRepeat(rowNumber, columnDataClass, NG_REPEAT_TABLE);
     }
 }

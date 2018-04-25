@@ -5,7 +5,6 @@ import co.nvqa.operator_v2.util.TestConstants;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +13,7 @@ import java.util.Map;
  *
  * @author Soewandi Wirjawan
  */
+@SuppressWarnings("WeakerAccess")
 public class MainPage extends OperatorV2SimplePage
 {
     private static final String XPATH_OF_TOAST_WELCOME_DASHBOARD = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-bottom'][text()='Welcome to your operator dashboard.']";
@@ -27,6 +27,7 @@ public class MainPage extends OperatorV2SimplePage
         MAP_OF_END_URL.put("4. Route Engine - Bulk Add to Route", "add-parcel-to-route");
         MAP_OF_END_URL.put("5. Route Engine - Same-Day Route Engine", "same-day-route-engine");
         MAP_OF_END_URL.put("All Orders", "order");
+        MAP_OF_END_URL.put("All Shippers", "shippers");
         MAP_OF_END_URL.put("DP Company Management", "dp-company");
         MAP_OF_END_URL.put("DP Vault Management", "dp-station");
         MAP_OF_END_URL.put("Driver Report", "driver-reports");
@@ -34,8 +35,9 @@ public class MainPage extends OperatorV2SimplePage
         MAP_OF_END_URL.put("Linehaul Management", "linehaul");
         MAP_OF_END_URL.put("Messaging Module", "sms");
         MAP_OF_END_URL.put("Order Creation V2", "create-combine");
-        MAP_OF_END_URL.put("Recovery Tickets Scanning","recovery-ticket-scanning");
+        MAP_OF_END_URL.put("Pricing Scripts V2", "pricing-scripts-v2/active-scripts");
         MAP_OF_END_URL.put("Printer Settings", "printers");
+        MAP_OF_END_URL.put("Recovery Tickets Scanning", "recovery-ticket-scanning");
         MAP_OF_END_URL.put("Route Cash Inbound", "cod");
         MAP_OF_END_URL.put("Third Party Shippers", "third-party-shipper");
     }
@@ -66,12 +68,12 @@ public class MainPage extends OperatorV2SimplePage
     {
         String mainDashboard = grabEndURL("All Orders");
 
-        new WebDriverWait(getWebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver wd) ->
+        waitUntil(()->
         {
-            String currentUrl = wd.getCurrentUrl();
+            String currentUrl = getCurrentUrl();
             NvLogger.infof("verifyTheMainPageIsLoaded: Current URL = [%s] - Expected URL Ends With = [%s]", currentUrl, mainDashboard);
             return currentUrl.endsWith(mainDashboard);
-        });
+        }, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
         waitUntilPageLoaded();
         NvLogger.infof("Waiting until Welcome message toast disappear.");
@@ -99,7 +101,6 @@ public class MainPage extends OperatorV2SimplePage
             }
 
             pause100ms();
-
             boolean refreshPage = true;
 
             if(childNavWe.isDisplayed())
@@ -108,10 +109,10 @@ public class MainPage extends OperatorV2SimplePage
                 {
                     childNavWe.click();
                     refreshPage = false;
-                    break;
                 }
                 catch(WebDriverException ex)
                 {
+                    NvLogger.warn("Failed to click nav child.", ex);
                 }
             }
 
@@ -121,12 +122,16 @@ public class MainPage extends OperatorV2SimplePage
                 getWebDriver().navigate().refresh();
                 refreshPage();
             }
+            else
+            {
+                break;
+            }
         }
 
-        new WebDriverWait(getWebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver wd)->
+        waitUntil(()->
         {
             boolean result;
-            String currentUrl = wd.getCurrentUrl();
+            String currentUrl = getCurrentUrl();
             NvLogger.infof("clickNavigation: Current URL = [%s] - Expected URL Ends With = [%s]", currentUrl, urlPart);
 
             if("linehaul".equals(urlPart))
@@ -139,7 +144,7 @@ public class MainPage extends OperatorV2SimplePage
             }
 
             return result;
-        });
+        }, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
         waitUntilPageLoaded();
     }

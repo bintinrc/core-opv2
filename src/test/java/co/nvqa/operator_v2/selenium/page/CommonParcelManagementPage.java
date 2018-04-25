@@ -9,6 +9,7 @@ import java.util.Date;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class CommonParcelManagementPage extends OperatorV2SimplePage
 {
     protected static final int ACTION_SET_RTS_TO_SELECTED = 1;
@@ -17,7 +18,7 @@ public abstract class CommonParcelManagementPage extends OperatorV2SimplePage
 
     public static final String ACTION_BUTTON_RTS = "commons.return-to-sender";
 
-    private String mdVirtualRepeat;
+    private final String mdVirtualRepeat;
 
     public CommonParcelManagementPage(WebDriver webDriver, String mdVirtualRepeat)
     {
@@ -88,7 +89,7 @@ public abstract class CommonParcelManagementPage extends OperatorV2SimplePage
 
     public void checkRow(int rowIndex)
     {
-        click(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", mdVirtualRepeat, rowIndex));
+        clickf("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", mdVirtualRepeat, rowIndex);
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)

@@ -9,13 +9,14 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class AgedParcelManagementPage extends CommonParcelManagementPage
 {
     private static final String MD_VIRTUAL_REPEAT = "agedParcel in getTableData()";
     private static final String CSV_FILENAME_PATTERN = "aged-parcel-list";
 
-    public static final String COLUMN_CLASS_TRACKING_ID = "tracking_id";
-    public static final String COLUMN_CLASS_SHIPPER = "shipper";
+    public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking_id";
+    public static final String COLUMN_CLASS_DATA_SHIPPER = "shipper";
 
     public static final String ACTION_BUTTON_RESCHEDULE_NEXT_DAY = "container.aged-parcel-management.reschedule-next-day";
 
@@ -28,10 +29,10 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
     {
         searchTableByTrackingId(trackingId);
 
-        String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_TRACKING_ID);
+        String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
         Assert.assertEquals("Tracking ID", trackingId, actualTrackingId);
 
-        String actualShipper = getTextOnTable(1, COLUMN_CLASS_SHIPPER);
+        String actualShipper = getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER);
         Assert.assertEquals("Shipper", shipperName, actualShipper);
     }
 

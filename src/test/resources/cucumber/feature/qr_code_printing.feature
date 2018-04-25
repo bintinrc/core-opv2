@@ -2,8 +2,8 @@
 Feature: QR Code Printing
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator create QR Code from random text and verify the created QR Code is correct (uid:32784ac6-04a4-4a28-9da7-aecda3f830e7)
     Given Operator go to menu Utilities -> QRCode Printing
@@ -12,3 +12,4 @@ Feature: QR Code Printing
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

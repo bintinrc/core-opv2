@@ -1,8 +1,9 @@
-@OperatorV2 @LoginLogout @ShouldAlwaysRun
+@OperatorV2Disabled @LoginLogout @ShouldAlwaysRun
 Feature: Login and Logout
 
   @LaunchBrowser
   Scenario: Launch Browser
+    Given no-op
 
   Scenario: Operator login into operator portal (uid:142de4e2-23e8-49da-8ad4-ec887b90f011)
     Given Operator is in Operator Portal V2 login page
@@ -16,3 +17,4 @@ Feature: Login and Logout
 
   @KillBrowser
   Scenario: Kill Browser
+    Given no-op

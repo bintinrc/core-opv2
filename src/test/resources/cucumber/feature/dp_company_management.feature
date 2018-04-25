@@ -1,9 +1,9 @@
-@OperatorV2 @DpCompanyManagement
+@OperatorV2Disabled @DpCompanyManagement
 Feature: DP Company Management
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator create, update and delete DP Company (uid:97fa4e10-b3cc-4f81-975c-175c7ed57e82)
     Given Operator go to menu Distribution Points -> DP Company Management
@@ -50,3 +50,4 @@ Feature: DP Company Management
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

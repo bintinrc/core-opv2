@@ -47,7 +47,7 @@ public class PricingScriptsSteps extends AbstractSteps
     @Then("^Operator verify the new script on Pricing Scripts is created successfully$")
     public void operatorVerifyTheNewScriptOnPricingScriptsIsCreatedSuccessfully()
     {
-        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, PricingScriptsPage.COLUMN_CLASS_NAME);
+        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, PricingScriptsPage.COLUMN_CLASS_DATA_NAME);
         Assert.assertEquals(newPricingScriptsName, pricingScriptsNameFromTable);
     }
 
@@ -61,7 +61,7 @@ public class PricingScriptsSteps extends AbstractSteps
     @Then("^Operator verify the script on Pricing Scripts page is updated successfully$")
     public void operatorVerifyTheScriptOnPricingScriptsPageIsUpdatedSuccessfully()
     {
-        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, PricingScriptsPage.COLUMN_CLASS_NAME);
+        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, PricingScriptsPage.COLUMN_CLASS_DATA_NAME);
         Assert.assertEquals(newPricingScriptsName, pricingScriptsNameFromTable);
     }
 
@@ -75,7 +75,7 @@ public class PricingScriptsSteps extends AbstractSteps
     public void operatorVerifyTheScriptOnPricingScriptsPageIsDeletedSuccessfully()
     {
         String expectedValue = "";
-        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, PricingScriptsPage.COLUMN_CLASS_NAME);
+        String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, PricingScriptsPage.COLUMN_CLASS_DATA_NAME);
         Assert.assertEquals(expectedValue, pricingScriptsNameFromTable);
     }
 
@@ -130,6 +130,6 @@ public class PricingScriptsSteps extends AbstractSteps
         pricingScriptsPage.clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_SHIPPERS);
         boolean isPricingScriptsContainShipper = pricingScriptsPage.isPricingScriptsContainShipper(shipperLinkedToPricingScripts);
         pricingScriptsPage.clickButtonClose();
-        Assert.assertEquals("Pricing Scripts not contain the expected shipper.", true, isPricingScriptsContainShipper);
+        Assert.assertTrue("Pricing Scripts not contain the expected shipper.", isPricingScriptsContainShipper);
     }
 }

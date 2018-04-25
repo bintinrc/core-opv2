@@ -2,8 +2,8 @@
 Feature: Shipper Pickups
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator find Normal Reservation created by Auto-Reservation on Shipper Pickups page (uid:97e650a6-f7f9-4a49-8a6f-216cf5f80f51)
     Given API Operator create new shipper address using data below:
@@ -35,7 +35,7 @@ Feature: Shipper Pickups
       | approxVolume | Less than 10 Parcels         |
       | comments     | GET_FROM_CREATED_RESERVATION |
 
-    @ArchiveRoute
+    @ArchiveRouteViaDb
     Scenario: Operator add Reservation to Route using API and verify the Reservation info is correct (uid:b8b62011-882f-451b-9331-6cec2077aab2)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address using data below:
@@ -56,7 +56,7 @@ Feature: Shipper Pickups
       | routeId      | GET_FROM_CREATED_ROUTE       |
       | driverName   | {ninja-driver-name}          |
 
-    @ArchiveRoute
+    @ArchiveRouteViaDb
     Scenario: Operator assign Reservation to Route on Shipper Pickups page (uid:992f1485-ef00-45cc-88d8-df36a3e4e77d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address using data below:
@@ -79,7 +79,7 @@ Feature: Shipper Pickups
       | routeId      | GET_FROM_CREATED_ROUTE       |
       | driverName   | {ninja-driver-name}          |
 
-  @ArchiveRoute
+  @ArchiveRouteViaDb
   Scenario: Operator assign Reservation to Route with priority level on Shipper Pickups page (uid:4e1e8b2b-ddad-48c4-98ea-b1f5a5ef448c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address using data below:
@@ -119,3 +119,4 @@ Feature: Shipper Pickups
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

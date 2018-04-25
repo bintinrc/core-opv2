@@ -32,7 +32,7 @@ public class MessagingModulePage extends OperatorV2SimplePage
     private static final String FILE_PATH = TestConstants.TEMP_DIR + SMS_CAMPAIGN_FILE_NAME;
     private static final String MD_VIRTUAL_REPEAT = "sms in getTableData()";
     private static Map<String, Object> cache;
-    private SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD hh:ss");
+    private final SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD hh:ss");
 
     public MessagingModulePage(WebDriver webDriver)
     {
@@ -61,7 +61,7 @@ public class MessagingModulePage extends OperatorV2SimplePage
     {
         StringBuilder smsCampaignData = new StringBuilder();
 
-        data.stream().forEach((row)->
+        data.forEach((row)->
         {
             StringBuilder sb = new StringBuilder();
             sb.append(row.getTracking_id()).append(COMMA);
@@ -181,11 +181,11 @@ public class MessagingModulePage extends OperatorV2SimplePage
         Assert.assertEquals("Tracking id: "+trackingId, trackingIdElement.getText());
 
         //check the contact number
-        String number=  getTextOnTableWithMdVirtualRepeat(1,"to-number", MD_VIRTUAL_REPEAT, false);
+        String number=  getTextOnTableWithMdVirtualRepeat(1,"to-number", MD_VIRTUAL_REPEAT);
         Assert.assertEquals("Contact Number", contactNumber, number);
 
         //check sms-date on the message field
-        String message =  getTextOnTableWithMdVirtualRepeat(1,"message", MD_VIRTUAL_REPEAT, false);
+        String message =  getTextOnTableWithMdVirtualRepeat(1,"message", MD_VIRTUAL_REPEAT);
         Assert.assertThat("It contain sms-date woth same date", message, Matchers.containsString(smsDate));
     }
 }

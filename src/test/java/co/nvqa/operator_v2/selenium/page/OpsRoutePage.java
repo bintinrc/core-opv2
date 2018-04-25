@@ -6,10 +6,11 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class OpsRoutePage extends OperatorV2SimplePage
 {
     public static final String NG_REPEAT = "opsRoute in $data";
-    public static final String COLUMN_CLASS_ROUTE_ID = "routeId";
+    public static final String COLUMN_CLASS_DATA_ROUTE_ID = "routeId";
     public static final String ACTION_BUTTON_EDIT = "Edit";
 
     public OpsRoutePage(WebDriver webDriver)
@@ -44,7 +45,6 @@ public class OpsRoutePage extends OperatorV2SimplePage
 
     public String getRouteIdAtRow(int editedRouteRowNumber)
     {
-        String routeId = getTextOnTableWithNgRepeat(editedRouteRowNumber, COLUMN_CLASS_ROUTE_ID, NG_REPEAT);
-        return routeId;
+        return getTextOnTableWithNgRepeat(editedRouteRowNumber, COLUMN_CLASS_DATA_ROUTE_ID, NG_REPEAT);
     }
 }

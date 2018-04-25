@@ -3,6 +3,8 @@ import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
 
 /**
+ * Cucumber - Junit link. Invoke with "gradle test".
+ * Sync the configuration here to build.gradle file.
  *
  * @author Ferdinand Kurniadi
  */
@@ -26,12 +28,9 @@ import org.junit.runner.RunWith;
         "src/test/resources/cucumber/feature"
     }
 )
-/**
- * Cucumber - Junit link. Invoke with "gradle test".
- * Sync the configuration here to build.gradle file.
- */
 public class TestRunner
 {
+    @SuppressWarnings("EmptyMethod")
     public static void main(String[] args)
     {
     }

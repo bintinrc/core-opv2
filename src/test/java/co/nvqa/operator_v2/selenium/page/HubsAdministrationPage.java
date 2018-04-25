@@ -1,20 +1,28 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.model.HubsAdministration;
+import co.nvqa.commons.model.operator_v2.HubsAdministration;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
+
+import java.util.Optional;
 
 /**
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class HubsAdministrationPage extends OperatorV2SimplePage
 {
     private static final String NG_REPEAT = "hub in $data";
     private static final String CSV_FILENAME = "hubs.csv";
 
-    public static final String COLUMN_CLASS_NAME = "name";
-    public static final String COLUMN_CLASS_LAT_LONG = "latlng";
+    public static final String COLUMN_CLASS_DATA_ID = "id";
+    public static final String COLUMN_CLASS_DATA_NAME = "name";
+    public static final String COLUMN_CLASS_DATA_DISPLAY_NAME = "short-name";
+    public static final String COLUMN_CLASS_DATA_CITY = "city";
+    public static final String COLUMN_CLASS_DATA_COUNTRY = "country";
+    public static final String COLUMN_CLASS_DATA_LAT_LONG = "latlng";
 
     private static final String ACTION_BUTTON_EDIT = "Edit";
 
@@ -25,53 +33,95 @@ public class HubsAdministrationPage extends OperatorV2SimplePage
 
     public void downloadCsvFile()
     {
-        clickNvApiTextButtonByName("Download CSV File");
+        clickNvApiTextButtonByNameAndWaitUntilDone("Download CSV File");
     }
 
-    public void verifyCsvFileDownloadedSuccessfully()
+    public void verifyCsvFileDownloadedSuccessfullyAndContainsCorrectInfo(HubsAdministration hubsAdministration)
     {
-        verifyFileDownloadedSuccessfully(CSV_FILENAME);
+        String hubName = hubsAdministration.getName();
+        verifyFileDownloadedSuccessfully(CSV_FILENAME, hubName);
     }
 
-    public void clickButtonAddHub()
+    public void createNewHub(HubsAdministration hubsAdministration)
     {
+        waitUntilInvisibilityOfElementLocated("//div[text()='Loading hubs...']");
         clickNvIconTextButtonByName("Add Hub");
+        sendKeysById("container.hub-list.hub-name", hubsAdministration.getName());
+        sendKeysById("container.hub-list.display-name", hubsAdministration.getDisplayName());
+        sendKeysById("container.hub-list.city", hubsAdministration.getCity());
+        sendKeysById("container.hub-list.country", hubsAdministration.getCountry());
+        sendKeysById("container.hub-list.latitude", String.valueOf(hubsAdministration.getLatitude()));
+        sendKeysById("container.hub-list.longitude", String.valueOf(hubsAdministration.getLongitude()));
+        clickNvButtonSaveByNameAndWaitUntilDone("Submit");
     }
 
-    public void editHub(HubsAdministration hubsAdministration, HubsAdministration hubsAdministrationEdited)
+    public void updateHub(String searchHubsKeyword, HubsAdministration hubsAdministration)
     {
-        searchTableByName(hubsAdministration);
+        searchTable(searchHubsKeyword);
+        Assert.assertFalse(String.format("Table is empty. Hub with keywords = '%s' not found.", searchHubsKeyword), isTableEmpty());
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
 
-        sendKeysById("hub-name", hubsAdministrationEdited.getName());
-        sendKeysById("latitude", String.valueOf(hubsAdministrationEdited.getLatitude()));
-        sendKeysById("longitude", String.valueOf(hubsAdministrationEdited.getLongitude()));
+        Optional.ofNullable(hubsAdministration.getName()).ifPresent(value -> sendKeysById("container.hub-list.hub-name", value));
+        Optional.ofNullable(hubsAdministration.getDisplayName()).ifPresent(value -> sendKeysById("container.hub-list.display-name", value));
+        Optional.ofNullable(hubsAdministration.getCity()).ifPresent(value -> sendKeysById("container.hub-list.city", value));
+        Optional.ofNullable(hubsAdministration.getCountry()).ifPresent(value -> sendKeysById("container.hub-list.country", value));
+        Optional.ofNullable(hubsAdministration.getLatitude()).ifPresent(value -> sendKeysById("container.hub-list.latitude", String.valueOf(value)));
+        Optional.ofNullable(hubsAdministration.getLongitude()).ifPresent(value -> sendKeysById("container.hub-list.longitude", String.valueOf(value)));
         clickNvButtonSaveByNameAndWaitUntilDone("Submit Changes");
     }
 
-    public void fillTheForm(HubsAdministration hubsAdministration)
+    public HubsAdministration searchHub(String searchHubsKeyword)
     {
-        sendKeysById("hub-name", hubsAdministration.getName());
-        sendKeysById("latitude", String.valueOf(hubsAdministration.getLatitude()));
-        sendKeysById("longitude", String.valueOf(hubsAdministration.getLongitude()));
-        clickNvButtonSaveByNameAndWaitUntilDone("Submit");
+        searchTable(searchHubsKeyword);
+        Assert.assertFalse(String.format("Table is empty. Hub with keywords = '%s' not found.", searchHubsKeyword), isTableEmpty());
+
+        String id = getTextOnTable(1, COLUMN_CLASS_DATA_ID);
+        String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
+        String actualDisplayName = getTextOnTable(1, COLUMN_CLASS_DATA_DISPLAY_NAME);
+        String actualCity = getTextOnTable(1, COLUMN_CLASS_DATA_CITY);
+        String actualCountry = getTextOnTable(1, COLUMN_CLASS_DATA_COUNTRY);
+        String actualLatLong = getTextOnTable(1, COLUMN_CLASS_DATA_LAT_LONG);
+
+        Double actualLatitude = null;
+        Double actualLongitude = null;
+
+        if(actualLatLong!=null && actualLatLong.contains("("))
+        {
+            actualLatLong = actualLatLong.replaceAll("[()]", "");
+
+            String[] temp = actualLatLong.split(", ");
+            actualLatitude = parseDouble(temp[0].trim());
+            actualLongitude = parseDouble(temp[1].trim());
+        }
+
+        HubsAdministration hubsAdministration = new HubsAdministration();
+        hubsAdministration.setId(Long.parseLong(Optional.ofNullable(id).orElse("-1")));
+        hubsAdministration.setName(actualName);
+        hubsAdministration.setDisplayName(actualDisplayName);
+        hubsAdministration.setCity(actualCity);
+        hubsAdministration.setCountry(actualCountry);
+        hubsAdministration.setLatitude(actualLatitude);
+        hubsAdministration.setLongitude(actualLongitude);
+
+        return hubsAdministration;
     }
 
     public void verifyHubIsExistAndDataIsCorrect(HubsAdministration hubsAdministration)
     {
-        searchTableByName(hubsAdministration);
+        HubsAdministration actualHubsAdministration = searchHub(hubsAdministration.getName());
 
-        String actualName = getTextOnTable(1, COLUMN_CLASS_NAME);
-        Assert.assertEquals("Hub Name", hubsAdministration.getName(), actualName);
-
-        String expectedLatLong = "("+hubsAdministration.getLatitude()+", "+hubsAdministration.getLongitude()+")";
-        String actualLatLong = getTextOnTable(1, COLUMN_CLASS_LAT_LONG);
-        Assert.assertEquals("Hub Lat/Long", expectedLatLong, actualLatLong);
+        hubsAdministration.setId(actualHubsAdministration.getId());
+        Assert.assertEquals("Hub Name", hubsAdministration.getName(), actualHubsAdministration.getName());
+        Assert.assertEquals("Display Name", hubsAdministration.getDisplayName(), actualHubsAdministration.getDisplayName());
+        Assert.assertThat("City", actualHubsAdministration.getCity(), Matchers.equalToIgnoringCase(hubsAdministration.getCity()));
+        Assert.assertThat("Country", actualHubsAdministration.getCountry(), Matchers.equalToIgnoringCase(hubsAdministration.getCountry()));
+        Assert.assertEquals("Latitude", hubsAdministration.getLatitude(), actualHubsAdministration.getLatitude());
+        Assert.assertEquals("Longitude", hubsAdministration.getLongitude(), actualHubsAdministration.getLongitude());
     }
 
-    public void searchTableByName(HubsAdministration hubsAdministration)
+    public void searchTable(String keyword)
     {
-        searchTable(hubsAdministration.getName());
+        super.searchTable(keyword);
         pause1s();
     }
 

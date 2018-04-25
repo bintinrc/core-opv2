@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Address;
+import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.OrderCreationV2Template;
@@ -10,6 +11,7 @@ import com.google.inject.Inject;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -19,6 +21,7 @@ import java.util.Map;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@ScenarioScoped
 public class OrderCreationV2Steps extends AbstractSteps
 {
     private OrderCreationV2Page orderCreationV2Page;
@@ -60,8 +63,27 @@ public class OrderCreationV2Steps extends AbstractSteps
     }
 
     @When("^Operator create order V2 by uploading CSV on Order Creation V2 page using data below:$")
-    public void operatorCreateOrderByUploadingCsvOnOrderCreationV2PageUsingDataBelow(DataTable dataTable)
+    public void operatorCreateOrderV2ByUploadingCsvOnOrderCreationV2PageUsingDataBelow(DataTable dataTable)
     {
+        operatorCreateOrderByUploadingCsvOnOrderCreationV2PageUsingDataBelow(dataTable);
+    }
+
+    @When("^Operator create order V3 by uploading CSV on Order Creation V2 page using data below:$")
+    public void operatorCreateOrderV3ByUploadingCsvOnOrderCreationV2PageUsingDataBelow(DataTable dataTable)
+    {
+        operatorCreateOrderByUploadingCsvOnOrderCreationV2PageUsingDataBelow(dataTable);
+    }
+
+    private void operatorCreateOrderByUploadingCsvOnOrderCreationV2PageUsingDataBelow(DataTable dataTable)
+    {
+        Long shipperV2OrV3Id = null;
+
+        if(containsKey(KEY_CREATED_SHIPPER))
+        {
+            shipperV2OrV3Id = this.<Shipper>get(KEY_CREATED_SHIPPER).getLegacyId();
+        }
+
+
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
         String orderCreationV2TemplateAsJsonString = mapOfData.get("orderCreationV2Template");
 
@@ -70,6 +92,7 @@ public class OrderCreationV2Steps extends AbstractSteps
 
         Map<String,String> mapOfDynamicVariable = new HashMap<>();
         mapOfDynamicVariable.put("cur_date", CURRENT_DATE_SDF.format(currentDate));
+        mapOfDynamicVariable.put("shipper_id", String.valueOf(shipperV2OrV3Id));
 
         orderCreationV2TemplateAsJsonString = replaceParam(orderCreationV2TemplateAsJsonString, mapOfDynamicVariable);
         OrderCreationV2Template order = JsonHelper.fromJson(JsonHelper.getDefaultSnakeCaseMapper(), orderCreationV2TemplateAsJsonString, OrderCreationV2Template.class);
@@ -147,13 +170,13 @@ public class OrderCreationV2Steps extends AbstractSteps
     public void operatorVerifyOrderV2IsCreatedSuccessfullyOnOrderCreationV2Page()
     {
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
-        orderCreationV2Page.verifyOrderIsCreatedSuccessfully(orderCreationV2Template);
+        orderCreationV2Page.verifyOrderV2IsCreatedSuccessfully(orderCreationV2Template);
     }
 
     @Then("^Operator verify order V3 is created successfully on Order Creation V2 page$")
     public void operatorVerifyOrderV3IsCreatedSuccessfullyOnOrderCreationV2Page()
     {
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
-        orderCreationV2Page.verifyOrderIsCreatedSuccessfully(orderCreationV2Template);
+        orderCreationV2Page.verifyOrderV3IsCreatedSuccessfully(orderCreationV2Template);
     }
 }

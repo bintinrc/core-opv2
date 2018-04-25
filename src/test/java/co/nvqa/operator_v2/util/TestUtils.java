@@ -1,24 +1,20 @@
 package co.nvqa.operator_v2.util;
 
+import co.nvqa.common_selenium.util.CommonSeleniumTestUtils;
 import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.commons.utils.NvTestRuntimeException;
-import co.nvqa.commons.utils.StandardTestUtils;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.Result;
-import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
-import com.google.zxing.common.HybridBinarizer;
 import org.junit.Assert;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.List;
@@ -29,7 +25,8 @@ import java.util.function.Consumer;
  *
  * @author Soewandi Wirjawan
  */
-public class TestUtils extends StandardTestUtils
+@SuppressWarnings("WeakerAccess")
+public class TestUtils extends CommonSeleniumTestUtils
 {
     private static final int DEFAULT_MAX_RETRY_ON_EXCEPTION = 10;
     private static final int DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS = 100;
@@ -129,15 +126,15 @@ public class TestUtils extends StandardTestUtils
     {
         String txt = webDriver.findElement(By.xpath("//input[@placeholder='" + placeHolder + "'][@ng-model='searchText']")).getAttribute("value");
         WebElement result = getResultInTable(webDriver, "//table[@ng-table='" + ngTable + "']/tbody/tr", txt);
-        Assert.assertTrue(result != null);
+        Assert.assertNotNull(result);
         return result;
     }
 
     /**
      * Get toast element. Only call this when you sure toast will we invoked.
      *
-     * @param webDriver
-     * @return
+     * @param webDriver Object WebDriver.
+     * @return Toast WebElement.
      */
     public static WebElement getToast(WebDriver webDriver)
     {
@@ -170,6 +167,7 @@ public class TestUtils extends StandardTestUtils
         }
         catch(NoSuchElementException ex)
         {
+            NvLogger.warnf("Failed to find element by XPath. Cause: %s", ex.getMessage());
         }
 
         return element;
@@ -185,6 +183,7 @@ public class TestUtils extends StandardTestUtils
         }
         catch(NoSuchElementException ex)
         {
+            NvLogger.warnf("Failed to get element by XPath. Cause: %s", ex.getMessage());
         }
 
         return elements;
@@ -298,25 +297,6 @@ public class TestUtils extends StandardTestUtils
         }
     }
 
-    public static String getTextFromQrCodeImage(File qrCodeFile)
-    {
-        return getTextFromBarcodeImage(qrCodeFile);
-    }
-
-    public static String getTextFromBarcodeImage(File barcodeFile)
-    {
-        try
-        {
-            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(ImageIO.read(new FileInputStream(barcodeFile)))));
-            Result qrCodeResult = new MultiFormatReader().decode(binaryBitmap);
-            return qrCodeResult.getText();
-        }
-        catch(IOException|NotFoundException ex)
-        {
-            throw new NvTestRuntimeException(ex);
-        }
-    }
-
     public static void columnSearchTable(WebDriver webDriver, String columnName, String value)
     {
         String xpath = "//th[span[text()='" + columnName + "']]/nv-search-input-filter/md-input-container/div/input";
@@ -332,8 +312,8 @@ public class TestUtils extends StandardTestUtils
      * Deprecated, should use waitUntilElementVisible(WebDriver webDriver, final By by) instead.
      * the calling of webDriver.findElement before this function negates the purpose of implicit wait.
      *
-     * @param webDriver
-     * @param element
+     * @param webDriver Object WebDriver.
+     * @param element Object WebDriver.
      */
     @Deprecated
     public static void waitUntilElementVisible(WebDriver webDriver, final WebElement element)

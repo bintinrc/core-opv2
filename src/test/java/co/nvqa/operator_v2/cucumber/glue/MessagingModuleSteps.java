@@ -39,13 +39,12 @@ public class MessagingModuleSteps extends AbstractSteps
 
         if(trackingId!=null)
         {
-            data = data.stream().map(smsCampaignCsv ->
+            data = data.stream().peek(smsCampaignCsv ->
             {
                 if("_created_".equalsIgnoreCase(smsCampaignCsv.getTracking_id()))
                 {
                     smsCampaignCsv.setTracking_id(trackingId);
                 }
-                return smsCampaignCsv;
             }).collect(Collectors.toList());
         }
 

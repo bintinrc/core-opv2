@@ -2,8 +2,8 @@
 Feature: Addressing
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator adds new address on Addressing Page (uid:baee8a52-1dc5-4064-92b4-aeddfbd7a445)
     Given Operator go to menu Addressing -> Addressing
@@ -48,3 +48,4 @@ Feature: Addressing
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

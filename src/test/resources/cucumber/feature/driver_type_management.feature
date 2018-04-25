@@ -2,8 +2,8 @@
 Feature: Driver Type Management
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: op download driver type management file (uid:a1f987ea-5292-41e3-8781-666e77cd4555)
     Given Operator go to menu Fleet -> Driver Type Management
@@ -146,3 +146,4 @@ Feature: Driver Type Management
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

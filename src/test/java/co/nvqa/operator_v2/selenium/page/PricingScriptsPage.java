@@ -1,8 +1,13 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import org.junit.Assert;
-import org.openqa.selenium.*;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
@@ -11,10 +16,11 @@ import java.util.Map;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class PricingScriptsPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "script in getTableData()";
-    public static final String COLUMN_CLASS_NAME = "name";
+    public static final String COLUMN_CLASS_DATA_NAME = "name";
 
     public static final String ACTION_BUTTON_CODE = "code";
     public static final String ACTION_BUTTON_EDIT = "edit script";
@@ -57,8 +63,8 @@ public class PricingScriptsPage extends OperatorV2SimplePage
 
     public String createDefaultScriptIfNotExists(String scriptName, String scriptDescription, String script)
     {
-        /**
-         * Check if the script exist.
+        /*
+          Check if the script exist.
          */
         String pricingScriptsName = searchAndGetTextOnTable(scriptName, 1, "name");
 
@@ -102,9 +108,9 @@ public class PricingScriptsPage extends OperatorV2SimplePage
             click(WRITE_SCRIPT_TAB);
             String oldScript = getAceEditorValue().replaceAll(System.lineSeparator(), "\\\\n"); // Replace all "CrLf" to "\n".
 
-            /**
-             * Updating script using the same code makes Angular Ace Editor two ways data binding not works.
-             * Refer to this JIRA NV-2830.
+            /*
+              Updating script using the same code makes Angular Ace Editor two ways data binding not works.
+              Refer to this JIRA NV-2830.
              */
             if(!oldScript.equals(newScript))
             {
@@ -157,20 +163,20 @@ public class PricingScriptsPage extends OperatorV2SimplePage
             clickActionButton(1, ACTION_BUTTON_SHIPPERS);
             pause1s();
 
-            /**
-             * Assign shipper with value $shipperName to Pricing Scripts with value $defaultScriptName1 or $defaultScriptName2
-             * only if the shipper does not have that shipper.
+            /*
+              Assign shipper with value $shipperName to Pricing Scripts with value $defaultScriptName1 or $defaultScriptName2
+              only if the shipper does not have that shipper.
              */
             if(!isPricingScriptsContainShipper(shipperName))
             {
                 sendKeysByAriaLabel("Search or Select...", shipperName);
                 pause1s();
-                click(String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", shipperName));
+                clickf("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", shipperName);
                 clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
 
-                /**
-                 * Check is Shipper already linked to another Pricing Scripts by find "Proceed" button.
-                 * Click "Proceed" button if found to override the shipper's Pricing Scripts.
+                /*
+                  Check is Shipper already linked to another Pricing Scripts by find "Proceed" button.
+                  Click "Proceed" button if found to override the shipper's Pricing Scripts.
                  */
                 /*WebElement proceedBtn = findElementByXpath("//button[div[contains(@class, 'idle ng-binding ng-scope') and text()='Proceed']]");
 
@@ -179,8 +185,8 @@ public class PricingScriptsPage extends OperatorV2SimplePage
                     proceedBtn.click();
                 }*/
 
-                /**
-                 * Check error element first, if error element not found then linking Pricing Scripts to the Shipper success.
+                /*
+                  Check error element first, if error element not found then linking Pricing Scripts to the Shipper success.
                  */
                 if(isElementExistFast("//md-dialog[@aria-label='ErrorUnexpected error']/md-dialog-content/h2[text()='Error']"))
                 {
@@ -194,9 +200,9 @@ public class PricingScriptsPage extends OperatorV2SimplePage
             }
             else
             {
-                /**
-                 * Shipper already linked to this Pricing Scripts.
-                 * Click "Discard Changes".
+                /*
+                  Shipper already linked to this Pricing Scripts.
+                  Click "Discard Changes".
                  */
                 clickButtonClose();
             }
@@ -224,6 +230,7 @@ public class PricingScriptsPage extends OperatorV2SimplePage
         }
         catch(NoSuchElementException | TimeoutException ex)
         {
+            NvLogger.warn("Failed to find the element.", ex);
         }
 
         return isFound;
@@ -279,7 +286,7 @@ public class PricingScriptsPage extends OperatorV2SimplePage
 
     public String getTextOnTable(int rowNumber, String columnDataClass)
     {
-        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT, true);
+        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT, XpathTextMode.STARTS_WITH);
     }
 
     public void clickActionButton(int rowNumber, String actionButtonName)
@@ -289,9 +296,9 @@ public class PricingScriptsPage extends OperatorV2SimplePage
 
     private void updateAceEditorValue(String script)
     {
-        /**
-         * editor.setValue(str, -1) // Moves cursor to the start.
-         * editor.setValue(str, 1) // Moves cursor to the end.
+        /*
+          editor.setValue(str, -1) // Moves cursor to the start.
+          editor.setValue(str, 1) // Moves cursor to the end.
          */
         executeJavascript(String.format("window.ace.edit('ace-editor').setValue('%s', 1);", script));
     }

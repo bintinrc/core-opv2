@@ -2,8 +2,8 @@
 Feature: Route Groups
 
   @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator create, update and delete 'route group' on 'Route Group Management' (uid:9c3eb32c-df35-4bb6-a53c-b741751c7971)
     Given Operator go to menu Routing -> 2. Route Group Management
@@ -18,3 +18,4 @@ Feature: Route Groups
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op

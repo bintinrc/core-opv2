@@ -7,15 +7,15 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  * @author Tristania Siagian
  */
-public class UserManagementPage extends OperatorV2SimplePage
-{
+@SuppressWarnings("WeakerAccess")
+public class UserManagementPage extends OperatorV2SimplePage {
+
     private static final String NG_REPEAT = "user in $data";
     private static final String COLUMN_DATA_TITLE_GRANT_TYPE = "ctrl.table.grantType";
     private static final String COLUMN_DATA_TITLE_FIRST_NAME = "ctrl.table.firstName";
@@ -87,21 +87,19 @@ public class UserManagementPage extends OperatorV2SimplePage
 
     public void verifyGrantType(UserManagement userManagement) {
         List<WebElement> grantTypeRows = findElementsByXpath("//td[@data-title='ctrl.table.grantType']");
-        List<String> grantType = new ArrayList<>();
-
         int count = 0;
+
         for(WebElement we: grantTypeRows) {
             if(count==10) {
                 break;
             }
-            grantType.add(we.getText());
             Assert.assertEquals("Different Grant Type Returned.", userManagement.getGrantType(), we.getText());
-            count+=1;
+            count += 1;
         }
     }
 
-    public String getTextOnTable(int rowNumber, String columnDataTitleText) {
-        return getTextOnTableWithNgRepeatUsingDataTitleText(rowNumber, columnDataTitleText, NG_REPEAT);
+    public String getTextOnTable(int rowNumber, String columnDataTitle) {
+        return getTextOnTableWithNgRepeatUsingDataTitle(rowNumber, columnDataTitle, NG_REPEAT);
     }
 
     public void clickActionButtonOnTable(int rowNumber, String actionButtonName) {

@@ -7,15 +7,16 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class FailedDeliveryManagementPage extends CommonParcelManagementPage
 {
     private static final String MD_VIRTUAL_REPEAT = "failedDelivery in getTableData()";
     private static final String CSV_FILENAME_PATTERN = "failed-delivery-list";
 
-    public static final String COLUMN_CLASS_TRACKING_ID = "tracking_id";
-    public static final String COLUMN_CLASS_TYPE = "type";
-    public static final String COLUMN_CLASS_FAILURE_COMMENTS = "last_attempt_comments";
-    public static final String COLUMN_CLASS_FAILURE_REASON = "failure_reason_code";
+    public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking_id";
+    public static final String COLUMN_CLASS_DATA_TYPE = "type";
+    public static final String COLUMN_CLASS_DATA_FAILURE_COMMENTS = "last_attempt_comments";
+    public static final String COLUMN_CLASS_DATA_FAILURE_REASON = "failure_reason_code";
 
     public static final String ACTION_BUTTON_RESCHEDULE_NEXT_DAY = "container.failed-delivery-management.reschedule-next-day";
 
@@ -28,16 +29,16 @@ public class FailedDeliveryManagementPage extends CommonParcelManagementPage
     {
         searchTableByTrackingId(trackingId);
 
-        String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_TRACKING_ID);
+        String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
         Assert.assertEquals("Tracking ID", trackingId, actualTrackingId);
 
-        String actualOrderType = getTextOnTable(1, COLUMN_CLASS_TYPE);
+        String actualOrderType = getTextOnTable(1, COLUMN_CLASS_DATA_TYPE);
         Assert.assertEquals("Order Type", orderType, actualOrderType);
 
-        String actualFailureComments = getTextOnTable(1, COLUMN_CLASS_FAILURE_COMMENTS);
+        String actualFailureComments = getTextOnTable(1, COLUMN_CLASS_DATA_FAILURE_COMMENTS);
         Assert.assertEquals("Failure Comments", "Package is defective - Damaged", actualFailureComments);
 
-        String actualFailureReason = getTextOnTable(1, COLUMN_CLASS_FAILURE_REASON);
+        String actualFailureReason = getTextOnTable(1, COLUMN_CLASS_DATA_FAILURE_REASON);
         Assert.assertEquals("Failure Comments", "RECOVERY", actualFailureReason);
     }
 

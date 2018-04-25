@@ -3,20 +3,24 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
 import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import com.google.inject.Inject;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@ScenarioScoped
 public class AllOrdersSteps extends AbstractSteps
 {
     private AllOrdersPage allOrdersPage;
@@ -63,8 +67,8 @@ public class AllOrdersSteps extends AbstractSteps
         AllOrdersPage.SearchLogic searchLogic = AllOrdersPage.SearchLogic.findByValue(mapOfData.get("searchLogic"));
         String searchTerm = mapOfData.get("searchTerm");
 
-        /**
-         * Replace searchTerm value to value on ScenarioStorage.
+        /*
+          Replace searchTerm value to value on ScenarioStorage.
          */
         if(containsKey(searchTerm))
         {
@@ -138,7 +142,7 @@ public class AllOrdersSteps extends AbstractSteps
     }
 
     @Then("^Operator verify that the page failed to find the orders inside the CSV that contains invalid Tracking IDS on All Orders page$")
-    public void operatorVerifyThatThePageFailedToFindTheOrdersInsedeTheCsvThatContainsInvalidTrackingIdsOnAllOrdersPage()
+    public void operatorVerifyThatThePageFailedToFindTheOrdersInsideTheCsvThatContainsInvalidTrackingIdsOnAllOrdersPage()
     {
         List<String> listOfInvalidTrackingId = get("listOfInvalidTrackingId");
         allOrdersPage.verifyInvalidTrackingIdsIsFailedToFind(listOfInvalidTrackingId);
@@ -152,20 +156,45 @@ public class AllOrdersSteps extends AbstractSteps
     }
 
     @Then("^Operator verify the order is Force Successed successfully$")
-    public void operatorVerifyTheOrderIsForceSuccessedSuccessfully()
+    public void operatorVerifyTheOrderIsForceSucceedSuccessfully()
     {
         OrderRequestV2 orderRequestV2 = get(KEY_CREATED_ORDER);
         allOrdersPage.verifyOrderIsForceSuccessedSuccessfully(orderRequestV2);
     }
 
-    @When("^Operator RTS single order on All Orders page$")
-    public void operatorRtsSingleOrderOnAllOrdersPage()
+    @When("^Operator RTS single order on next day on All Orders page$")
+    public void operatorRtsSingleOrderOnNextDayOnAllOrdersPage()
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        allOrdersPage.rtsSingleOrder(trackingId);
+        allOrdersPage.rtsSingleOrderNextDay(trackingId);
     }
 
-    @When("Operator print Waybill for single order on All Orders page")
+    @When("^Operator cancel multiple orders on All Orders page$")
+    public void operatorCancelMultipleOrdersOnAllOrdersPage()
+    {
+        List<OrderRequestV2> orders = get(KEY_LIST_OF_CREATED_ORDER);
+        List<String> listOfTrackingIds = orders.stream().map(OrderRequestV2::getTrackingId).collect(Collectors.toList());
+        allOrdersPage.cancelSelected(listOfTrackingIds);
+    }
+
+    @When("^Operator pull out multiple orders from route on All Orders page$")
+    public void operatorPullOutMultipleOrdersFromRouteOnAllOrdersPage()
+    {
+        List<OrderRequestV2> orders = get(KEY_LIST_OF_CREATED_ORDER);
+        List<String> listOfTrackingIds = orders.stream().map(OrderRequestV2::getTrackingId).collect(Collectors.toList());
+        allOrdersPage.pullOutFromRoute(listOfTrackingIds);
+    }
+
+    @When("^Operator add multiple orders to route on All Orders page$")
+    public void operatorAddMultipleOrdersToRouteOnAllOrdersPage()
+    {
+        List<OrderRequestV2> orders = get(KEY_LIST_OF_CREATED_ORDER);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
+        List<String> listOfTrackingIds = orders.stream().map(OrderRequestV2::getTrackingId).collect(Collectors.toList());
+        allOrdersPage.addToRoute(listOfTrackingIds, routeId);
+    }
+
+    @When("^Operator print Waybill for single order on All Orders page$")
     public void operatorPrintWaybillForSingleOrderOnAllOrdersPage()
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
@@ -177,5 +206,14 @@ public class AllOrdersSteps extends AbstractSteps
     {
         OrderRequestV2 orderRequestV2 = get(KEY_CREATED_ORDER);
         allOrdersPage.verifyWaybillContentsIsCorrect(orderRequestV2);
+    }
+
+    @Then("^Operator verify order info after Global Inbound$")
+    public void operatorVerifyOrderInfoAfterGlobalInbound()
+    {
+        OrderRequestV2 orderRequestV2 = get(KEY_CREATED_ORDER);
+        GlobalInboundParams globalInboundParams = get(KEY_GLOBAL_INBOUND_PARAMS);
+        Double currentOrderCost = get(KEY_CURRENT_ORDER_COST);
+        allOrdersPage.verifyOrderInfoAfterGlobalInbound(orderRequestV2, globalInboundParams, currentOrderCost);
     }
 }

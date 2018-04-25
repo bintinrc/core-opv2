@@ -16,6 +16,7 @@ import java.util.List;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings({"ResultOfMethodCallIgnored", "unused"})
 public class SamedayRouteEnginePage extends OperatorV2SimplePage
 {
     public SamedayRouteEnginePage(WebDriver webDriver)
@@ -27,21 +28,21 @@ public class SamedayRouteEnginePage extends OperatorV2SimplePage
     {
         click("//md-select[@aria-label='Select Route Group']");
         pause100ms();
-        click(String.format("//md-option/div[contains(text(), '%s')]", routeGroupName));
+        clickf("//md-option/div[contains(text(), '%s')]", routeGroupName);
     }
 
     public void selectRoutingAlgorithm(String routingAlgorithm)
     {
         click("//md-select[@aria-label='Routing Algorithm']");
         pause100ms();
-        click(String.format("//md-option/div[contains(text(), '%s')]", routingAlgorithm));
+        clickf("//md-option/div[contains(text(), '%s')]", routingAlgorithm);
     }
 
     public void selectHub(String hubName)
     {
         click("//md-select[@aria-label='Hub']");
         pause100ms();
-        click(String.format("//md-option/div[contains(text(), '%s')]", hubName));
+        clickf("//md-option/div[contains(text(), '%s')]", hubName);
     }
 
     public void clickRunRouteEngineButton()
@@ -53,35 +54,35 @@ public class SamedayRouteEnginePage extends OperatorV2SimplePage
     {
         click("//md-select[contains(@aria-label,'Operating Start')]");
         pause100ms();
-        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", operatingHoursStart));
+        clickf("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", operatingHoursStart);
     }
 
     public void selectFleetType1OperatingHoursEnd(String operatingHoursTo)
     {
         click("//md-select[contains(@aria-label,'Operating End')]");
         pause100ms();
-        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", operatingHoursTo));
+        clickf("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", operatingHoursTo);
     }
 
     public void selectFleetType1BreakDurationStart(String breakDurationStart)
     {
         click("//md-select[contains(@aria-label,'Break Start')]");
         pause100ms();
-        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", breakDurationStart));
+        clickf("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", breakDurationStart);
     }
 
     public void selectFleetType1BreakDurationEnd(String breakDurationEnd)
     {
         click("//md-select[contains(@aria-label,'Break End')]");
         pause100ms();
-        click(String.format("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", breakDurationEnd));
+        clickf("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", breakDurationEnd);
     }
 
     public void selectDriverOnRouteSettingsPage(String driverName)
     {
         sendKeysByAriaLabel("Search Driver", driverName);
         pause500ms();
-        click(String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", driverName));
+        clickf("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", driverName);
         pause100ms();
     }
 
@@ -104,17 +105,18 @@ public class SamedayRouteEnginePage extends OperatorV2SimplePage
 
     public void verifyWaypointDetailContent(String trackingId, String routeGroupName)
     {
-        //check the waypoint have correct tracking id
+        // Check the waypoint have correct tracking ID.
         String trackingIdData =  getTextOnTableWithMdVirtualRepeat(1,"tracking_id","route in ctrl.routeResponse.solution.routes" );
         Assert.assertEquals(trackingId, trackingIdData);
 
         String trackingIdData2= getTextOnTableWithMdVirtualRepeat(2,"tracking_id","route in ctrl.routeResponse.solution.routes" );
         Assert.assertEquals(trackingId, trackingIdData2);
-        //check the number of waypoint
-        String waypointTotal= getText("//md-dialog[contains(@class, 'nv-route-detail-dialog')]/md-dialog-content/div[1]/div[2]/p");
-        Assert.assertEquals(2, waypointTotal);
 
-        //check waypoint is pickup and delivery
+        // Check the number of waypoint.
+        String waypointTotal= getText("//md-dialog[contains(@class, 'nv-route-detail-dialog')]/md-dialog-content/div[1]/div[2]/p");
+        Assert.assertEquals(String.valueOf(2), waypointTotal);
+
+        // Check waypoint is pickup and delivery.
         Assert.assertEquals("PICKUP", getTextOnTableWithMdVirtualRepeat(1, "type", "route in ctrl.routeResponse.solution.routes"));
         Assert.assertEquals("DELIVERY", getTextOnTableWithMdVirtualRepeat(2, "type", "route in ctrl.routeResponse.solution.routes" ));
     }

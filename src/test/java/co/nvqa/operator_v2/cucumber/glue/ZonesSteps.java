@@ -43,7 +43,7 @@ public class ZonesSteps extends AbstractSteps
         zone.setHubName(hubName);
         zone.setLatitude(Double.parseDouble("1."+uniqueCoordinate));
         zone.setLongitude(Double.parseDouble("103."+uniqueCoordinate));
-        zone.setDescription(String.format("This zone is created by Operator V2 automation test. Created at %s.", new Date()));
+        zone.setDescription(String.format("This zone is created by Operator V2 automation test. Please don't use this zone. Created at %s.", new Date()));
 
         zonesPage.addZone(zone);
         put("zone", zone);

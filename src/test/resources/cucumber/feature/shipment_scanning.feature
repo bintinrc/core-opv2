@@ -1,9 +1,9 @@
-@OperatorV2 @ShipmentScanning @ShouldAlwaysRun
+@OperatorV2Disabled @ShipmentScanning @ShouldAlwaysRun
 Feature: Shipment Scanning
 
   @LaunchBrowser
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Scan order to shipment (uid:b776b582-a395-4a02-962a-9785f6945750)
     Given Create an V3 order with the following attributes:
@@ -16,3 +16,4 @@ Feature: Shipment Scanning
 
   @KillBrowser
   Scenario: Kill Browser
+    Given no-op

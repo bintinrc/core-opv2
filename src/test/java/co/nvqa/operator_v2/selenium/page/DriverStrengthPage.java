@@ -16,11 +16,12 @@ import java.util.List;
  *
  * @author Soewandi Wirjawan
  */
+@SuppressWarnings("WeakerAccess")
 public class DriverStrengthPage extends OperatorV2SimplePage
 {
-    public static final String COLUMN_CLASS_USERNAME = "username";
-    public static final String COLUMN_CLASS_DRIVER_TYPE = "driver-type";
-    public static final String COLUMN_CLASS_ZONE = "zone-preferences-zone-id";
+    public static final String COLUMN_CLASS_DATA_USERNAME = "username";
+    public static final String COLUMN_CLASS_DATA_DRIVER_TYPE = "driver-type";
+    public static final String COLUMN_CLASS_DATA_ZONE = "zone-preferences-zone-id";
 
     private final static String FILENAME = "drivers.csv";
     private String driverType;
@@ -36,6 +37,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage
         click("//button[@filename='" + FILENAME + "']");
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void verifyDownloadedFile()
     {
         File f = new File(TestConstants.TEMP_DIR + FILENAME);
@@ -74,8 +76,8 @@ public class DriverStrengthPage extends OperatorV2SimplePage
         try
         {
             pause100ms();
-            driverType = getTextOnTable(1, COLUMN_CLASS_DRIVER_TYPE);
-            zone = getTextOnTable(1, COLUMN_CLASS_ZONE);
+            driverType = getTextOnTable(1, COLUMN_CLASS_DATA_DRIVER_TYPE);
+            zone = getTextOnTable(1, COLUMN_CLASS_DATA_ZONE);
         }
         catch(Exception ex)
         {
@@ -130,9 +132,9 @@ public class DriverStrengthPage extends OperatorV2SimplePage
         click("//tr[@md-virtual-repeat='driver in getTableData()']/td[contains(@class, 'actions column-locked-right')]/md-menu/button");
         pause1s();
 
-        String expectedLicensoNo = "D" + SingletonStorage.getInstance().getTmpId();
+        String expectedLicenseNo = "D" + SingletonStorage.getInstance().getTmpId();
         String actualLicenseNo = getText("//div[@aria-hidden='false']/md-menu-content/md-menu-item[@class='contact-info-details' and @role='menuitem']/div[2]/div[2]");
-        Assert.assertEquals("License No. is not equal.", expectedLicensoNo, actualLicenseNo);
+        Assert.assertEquals("License No. is not equal.", expectedLicenseNo, actualLicenseNo);
         closeModal();
     }
 
@@ -152,41 +154,28 @@ public class DriverStrengthPage extends OperatorV2SimplePage
         sendKeys("//input[@type='text'][@aria-label='Driver License Number']", "D"+tmpId);
         sendKeys("//input[@type='number'][@aria-label='COD Limit']", "100");
 
-        /**
-         * Add vehicle.
-         */
+        // Add vehicle.
         clickButtonByAriaLabel("Add More Vehicles");
         sendKeys("//input[@type='text'][@aria-label='License Number']", "D"+tmpId);
         sendKeys("//input[@type='number'][@aria-label='Vehicle Capacity']", "100");
 
-        /**
-         * Add contact.
-         */
+        // Add contact.
         clickButtonByAriaLabel("Add More Contacts");
         sendKeys("//input[@type='text'][@aria-label='Contact']", "D"+tmpId+"@NV.CO");
 
-        /**
-         * Add zone.
-         */
+        // Add zone.
         clickButtonByAriaLabel("Add More Zones");
         sendKeys("//input[@type='number'][@aria-label='Min']", "1");
         sendKeys("//input[@type='number'][@aria-label='Max']", "1");
         sendKeys("//input[@type='number'][@aria-label='Cost']", "1");
 
-        /**
-         * Username + password.
-         */
+        // Username + password.
         sendKeys("//input[@type='text'][@aria-label='Username']", "D"+tmpId);
         sendKeys("//input[@type='text'][@aria-label='Password']", "D00"+tmpId);
 
-        /**
-         * Comments.
-         */
+        // Comments.
         sendKeys("//textarea[@aria-label='Comments']", "This driver is created by \"Automation Test\" for testing purpose.");
 
-        /**
-         * Save.
-         */
         clickNvButtonSaveByNameAndWaitUntilDone("Submit");
     }
 
@@ -197,7 +186,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage
         clickNvIconTextButtonByNameAndWaitUntilDone("container.driver-strength.load-everything");
         sendKeys("//th[contains(@class, 'username')]/nv-search-input-filter/md-input-container/div/input", expectedUsername);
 
-        String actualUsername = getTextOnTable(1, COLUMN_CLASS_USERNAME);
+        String actualUsername = getTextOnTable(1, COLUMN_CLASS_DATA_USERNAME);
         Assert.assertEquals(expectedUsername, actualUsername);
     }
 
@@ -230,12 +219,9 @@ public class DriverStrengthPage extends OperatorV2SimplePage
 
     public void createdDriverShouldNotExist()
     {
-        /**
-         * Check first row does not contain deleted driver.
-         */
-
+        // Check first row does not contain deleted driver.
         String expectedDriverUsername = "D"+ SingletonStorage.getInstance().getTmpId();
-        String actualDriverUsername = getTextOnTable(1, COLUMN_CLASS_USERNAME);
+        String actualDriverUsername = getTextOnTable(1, COLUMN_CLASS_DATA_USERNAME);
         Assert.assertNotEquals(expectedDriverUsername, actualDriverUsername);
     }
 

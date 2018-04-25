@@ -8,6 +8,7 @@ import co.nvqa.operator_v2.util.ScenarioStorageKeys;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class AbstractSteps extends CommonSeleniumAbstractSteps<ScenarioManager> implements ScenarioStorageKeys
 {
     public AbstractSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)

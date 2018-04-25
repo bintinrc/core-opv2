@@ -2,8 +2,8 @@
 Feature: Pricing Scripts
 
   @LaunchBrowserWithProxyEnabled @ShouldAlwaysRun
-  Scenario: Login to Operator V2
-    Given op login into Operator V2 with username "{operator-portal-uid}" and password "{operator-portal-pwd}"
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator create, update and delete script on Pricing Scripts menu. (uid:0c1175e7-b5af-474c-b0a8-3b89ea786a59)
     Given Operator go to menu Shipper -> Pricing Scripts
@@ -52,3 +52,4 @@ Feature: Pricing Scripts
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
+    Given no-op
