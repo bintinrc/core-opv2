@@ -16,7 +16,7 @@ import java.io.PrintWriter;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class OrderCreationV2Page extends OperatorV2SimplePage
 {
     private static final String NG_REPEAT = "row in $data";

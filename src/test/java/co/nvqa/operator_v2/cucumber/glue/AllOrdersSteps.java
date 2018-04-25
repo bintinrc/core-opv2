@@ -142,7 +142,7 @@ public class AllOrdersSteps extends AbstractSteps
     }
 
     @Then("^Operator verify that the page failed to find the orders inside the CSV that contains invalid Tracking IDS on All Orders page$")
-    public void operatorVerifyThatThePageFailedToFindTheOrdersInsedeTheCsvThatContainsInvalidTrackingIdsOnAllOrdersPage()
+    public void operatorVerifyThatThePageFailedToFindTheOrdersInsideTheCsvThatContainsInvalidTrackingIdsOnAllOrdersPage()
     {
         List<String> listOfInvalidTrackingId = get("listOfInvalidTrackingId");
         allOrdersPage.verifyInvalidTrackingIdsIsFailedToFind(listOfInvalidTrackingId);
@@ -156,7 +156,7 @@ public class AllOrdersSteps extends AbstractSteps
     }
 
     @Then("^Operator verify the order is Force Successed successfully$")
-    public void operatorVerifyTheOrderIsForceSuccessedSuccessfully()
+    public void operatorVerifyTheOrderIsForceSucceedSuccessfully()
     {
         OrderRequestV2 orderRequestV2 = get(KEY_CREATED_ORDER);
         allOrdersPage.verifyOrderIsForceSuccessedSuccessfully(orderRequestV2);

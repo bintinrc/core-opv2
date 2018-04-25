@@ -15,6 +15,7 @@ import java.util.Calendar;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class ReservationsPage extends OperatorV2SimplePage
 {
     public ReservationsPage(WebDriver webDriver)

@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.util.SingletonStorage;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -158,8 +159,9 @@ public class BlockedDatesSteps extends AbstractSteps
             int month = cal.get(Calendar.MONTH) + 1;
             monthText = month < 10 ? "0" + month : "" + month;
         }
-        catch(Exception e)
+        catch(Exception ex)
         {
+            NvLogger.warnf("Failed to get month. Cause: %s", ex.getMessage());
         }
 
         return monthText;

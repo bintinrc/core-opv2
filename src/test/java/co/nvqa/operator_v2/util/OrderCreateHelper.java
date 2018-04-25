@@ -35,8 +35,8 @@ public class OrderCreateHelper
     /**
      * Get next valid working days (Mon-Sat).
      *
-     * @param dateString
-     * @return
+     * @param dateString Object String.
+     * @return Date String.
      */
     public static String getDateString(String dateString)
     {
@@ -167,7 +167,7 @@ public class OrderCreateHelper
     /**
      * Shipper's authentication token. Used to access orders, etc.
      *
-     * @return
+     * @return Shipper's access token.
      */
     public static String getShipperAccessToken()
     {

@@ -42,7 +42,7 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
     /**
      * Inject object Scenario each time the scenario is running.
      *
-     * @param scenario
+     * @param scenario The current running scenario.
      */
     @Before
     public void before(Scenario scenario)
@@ -84,7 +84,7 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
      * Save screenshot and print "browser console log" if scenario failed.
      * You can find screenshot image at './build/report/cucumber-junit/htmloutput/index.html'.
      *
-     * @param scenario
+     * @param scenario The current running scenario.
      */
     @After
     @Override

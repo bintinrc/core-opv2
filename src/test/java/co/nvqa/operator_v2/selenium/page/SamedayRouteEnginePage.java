@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-@SuppressWarnings("ResultOfMethodCallIgnored")
+@SuppressWarnings({"ResultOfMethodCallIgnored", "unused"})
 public class SamedayRouteEnginePage extends OperatorV2SimplePage
 {
     public SamedayRouteEnginePage(WebDriver webDriver)
@@ -105,17 +105,18 @@ public class SamedayRouteEnginePage extends OperatorV2SimplePage
 
     public void verifyWaypointDetailContent(String trackingId, String routeGroupName)
     {
-        //check the waypoint have correct tracking id
+        // Check the waypoint have correct tracking ID.
         String trackingIdData =  getTextOnTableWithMdVirtualRepeat(1,"tracking_id","route in ctrl.routeResponse.solution.routes" );
         Assert.assertEquals(trackingId, trackingIdData);
 
         String trackingIdData2= getTextOnTableWithMdVirtualRepeat(2,"tracking_id","route in ctrl.routeResponse.solution.routes" );
         Assert.assertEquals(trackingId, trackingIdData2);
-        //check the number of waypoint
+
+        // Check the number of waypoint.
         String waypointTotal= getText("//md-dialog[contains(@class, 'nv-route-detail-dialog')]/md-dialog-content/div[1]/div[2]/p");
         Assert.assertEquals(String.valueOf(2), waypointTotal);
 
-        //check waypoint is pickup and delivery
+        // Check waypoint is pickup and delivery.
         Assert.assertEquals("PICKUP", getTextOnTableWithMdVirtualRepeat(1, "type", "route in ctrl.routeResponse.solution.routes"));
         Assert.assertEquals("DELIVERY", getTextOnTableWithMdVirtualRepeat(2, "type", "route in ctrl.routeResponse.solution.routes" ));
     }

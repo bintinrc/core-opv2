@@ -167,6 +167,7 @@ public class TestUtils extends CommonSeleniumTestUtils
         }
         catch(NoSuchElementException ex)
         {
+            NvLogger.warnf("Failed to find element by XPath. Cause: %s", ex.getMessage());
         }
 
         return element;
@@ -182,6 +183,7 @@ public class TestUtils extends CommonSeleniumTestUtils
         }
         catch(NoSuchElementException ex)
         {
+            NvLogger.warnf("Failed to get element by XPath. Cause: %s", ex.getMessage());
         }
 
         return elements;

@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.GlobalInboundPage;
@@ -42,6 +43,7 @@ public class GlobalInboundSteps extends AbstractSteps
             }
             catch(NumberFormatException ex)
             {
+                NvLogger.warnf("Failed to parse String to Double. Cause: %s", ex.getMessage());
             }
         }
 

@@ -132,9 +132,9 @@ public class DriverStrengthPage extends OperatorV2SimplePage
         click("//tr[@md-virtual-repeat='driver in getTableData()']/td[contains(@class, 'actions column-locked-right')]/md-menu/button");
         pause1s();
 
-        String expectedLicensoNo = "D" + SingletonStorage.getInstance().getTmpId();
+        String expectedLicenseNo = "D" + SingletonStorage.getInstance().getTmpId();
         String actualLicenseNo = getText("//div[@aria-hidden='false']/md-menu-content/md-menu-item[@class='contact-info-details' and @role='menuitem']/div[2]/div[2]");
-        Assert.assertEquals("License No. is not equal.", expectedLicensoNo, actualLicenseNo);
+        Assert.assertEquals("License No. is not equal.", expectedLicenseNo, actualLicenseNo);
         closeModal();
     }
 

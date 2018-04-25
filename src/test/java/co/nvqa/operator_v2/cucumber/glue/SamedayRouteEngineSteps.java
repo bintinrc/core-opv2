@@ -120,8 +120,8 @@ public class SamedayRouteEngineSteps extends AbstractSteps
         String routingAlgorithm = mapOfData.get("routingAlgorithm");
         String fleetType1OperatingHoursStart = mapOfData.get("fleetType1OperatingHoursStart");
         String fleetType1OperatingHoursEnd = mapOfData.get("fleetType1OperatingHoursEnd");
-        String fleetType1BreakingDurationStart = mapOfData.get("fleetType1BreakingDurationStart");
-        String fleetType1BreakingDurationEnd = mapOfData.get("fleetType1BreakingDurationEnd");
+        //String fleetType1BreakingDurationStart = mapOfData.get("fleetType1BreakingDurationStart");
+        //String fleetType1BreakingDurationEnd = mapOfData.get("fleetType1BreakingDurationEnd");
         String fleetType1Capacity = Optional.ofNullable(mapOfData.get("fleetType1Capacity")).orElse("10");
 
         samedayRouteEnginePage.selectRouteGroup(routeGroupName);

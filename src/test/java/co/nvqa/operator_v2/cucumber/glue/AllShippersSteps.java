@@ -227,7 +227,7 @@ public class AllShippersSteps extends AbstractSteps
     public void operatorVerifyShipperLabelPrinterSettingsIsUpdatedSuccessfully()
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
-        allShippersPage.verifyShipperLabelPrinterSettingsIsUpdatedSuccessfuly(shipper);
+        allShippersPage.verifyShipperLabelPrinterSettingsIsUpdatedSuccessfully(shipper);
     }
 
     @When("^Operator update Shipper's Returns settings$")
@@ -256,7 +256,7 @@ public class AllShippersSteps extends AbstractSteps
     public void operatorVerifyShipperReturnsSettingsIsUpdatedSuccessfully()
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
-        allShippersPage.verifyShipperReturnsSettingsIsUpdatedSuccessfuly(shipper);
+        allShippersPage.verifyShipperReturnsSettingsIsUpdatedSuccessfully(shipper);
     }
 
     @When("^Operator update Shipper's Distribution Point settings$")
@@ -284,7 +284,7 @@ public class AllShippersSteps extends AbstractSteps
     public void operatorVerifyShipperDistributionPointSettingsIsUpdatedSuccessfully()
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
-        allShippersPage.verifyShipperDistributionPointSettingsIsUpdatedSuccessfuly(shipper);
+        allShippersPage.verifyShipperDistributionPointSettingsIsUpdatedSuccessfully(shipper);
     }
 
     @When("^Operator update Shipper's Qoo10 settings$")
@@ -306,7 +306,7 @@ public class AllShippersSteps extends AbstractSteps
     public void operatorVerifyShipperQoo10SettingsIsUpdatedSuccessfully()
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
-        allShippersPage.verifyShipperQoo10SettingsIsUpdatedSuccessfuly(shipper);
+        allShippersPage.verifyShipperQoo10SettingsIsUpdatedSuccessfully(shipper);
     }
 
     @When("^Operator update Shipper's Shopify settings$")

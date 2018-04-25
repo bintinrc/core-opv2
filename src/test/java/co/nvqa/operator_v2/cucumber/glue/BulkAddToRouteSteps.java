@@ -39,7 +39,7 @@ public class BulkAddToRouteSteps extends AbstractSteps
         takesScreenshot();
         bulkAddToRoutePage.selectRouteGroup(routeGroupName);
         takesScreenshot();
-        bulkAddToRoutePage.selectTag("FLT"); //Unselect tag FLT. Tag FLT is default tag on this page.
+        bulkAddToRoutePage.selectTag("FLT"); //Un-select tag FLT. Tag FLT is default tag on this page.
         takesScreenshot();
         bulkAddToRoutePage.selectTag(tag);
         takesScreenshot();

@@ -117,7 +117,7 @@ public class AllShippersPage extends OperatorV2SimplePage
         allShippersCreateEditPage.updateShipperLabelPrinterSettings(shipper);
     }
 
-    public void verifyShipperLabelPrinterSettingsIsUpdatedSuccessfuly(Shipper shipper)
+    public void verifyShipperLabelPrinterSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
         searchTableByNameAndGoToEditPage(shipper);
         allShippersCreateEditPage.verifyShipperLabelPrinterSettingsIsUpdatedSuccessfully(shipper);
@@ -129,7 +129,7 @@ public class AllShippersPage extends OperatorV2SimplePage
         allShippersCreateEditPage.updateShipperDistributionPointSettings(shipper);
     }
 
-    public void verifyShipperDistributionPointSettingsIsUpdatedSuccessfuly(Shipper shipper)
+    public void verifyShipperDistributionPointSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
         searchTableByNameAndGoToEditPage(shipper);
         allShippersCreateEditPage.verifyShipperDistributionPointSettingsIsUpdatedSuccessfully(shipper);
@@ -141,7 +141,7 @@ public class AllShippersPage extends OperatorV2SimplePage
         allShippersCreateEditPage.updateShipperReturnsSettings(shipper);
     }
 
-    public void verifyShipperReturnsSettingsIsUpdatedSuccessfuly(Shipper shipper)
+    public void verifyShipperReturnsSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
         searchTableByNameAndGoToEditPage(shipper);
         allShippersCreateEditPage.verifyShipperReturnsSettingsIsUpdatedSuccessfully(shipper);
@@ -153,7 +153,7 @@ public class AllShippersPage extends OperatorV2SimplePage
         allShippersCreateEditPage.updateShipperQoo10Settings(shipper);
     }
 
-    public void verifyShipperQoo10SettingsIsUpdatedSuccessfuly(Shipper shipper)
+    public void verifyShipperQoo10SettingsIsUpdatedSuccessfully(Shipper shipper)
     {
         searchTableByNameAndGoToEditPage(shipper);
         allShippersCreateEditPage.verifyShipperQoo10SettingsIsUpdatedSuccessfully(shipper);

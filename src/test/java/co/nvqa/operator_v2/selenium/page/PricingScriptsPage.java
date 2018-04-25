@@ -16,7 +16,7 @@ import java.util.Map;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class PricingScriptsPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "script in getTableData()";

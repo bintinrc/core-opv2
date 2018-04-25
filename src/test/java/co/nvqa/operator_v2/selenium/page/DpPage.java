@@ -78,30 +78,36 @@ public class DpPage extends OperatorV2SimplePage
     public void search(String type)
     {
         //String placeHolder = null;
-        String prefix = null;
+        String prefix = "";
         String ngRepeat = null;
         String columnClass = null;
 
-        if(type.equals("dp-partners"))
+        switch(type)
         {
-            //placeHolder = "Search Distribution Point Partners...";
-            prefix = "Partner %s";
-            ngRepeat = "dpPartner in $data";
-            columnClass = DP_PARTNER_NAME_COL;
-        }
-        else if(type.equals("dps"))
-        {
-            //placeHolder = "Search Distribution Points...";
-            prefix = "DP %s";
-            ngRepeat = "dp in $data";
-            columnClass = DP_NAME_COL;
-        }
-        else if(type.equals("dp-users"))
-        {
-            //placeHolder = "Search Distribution Point Users...";
-            prefix = "user%s";
-            ngRepeat = "dpUser in $data";
-            columnClass = DP_USER_USERNAME_COL;
+            case "dp-partners":
+            {
+                //placeHolder = "Search Distribution Point Partners...";
+                prefix = "Partner %s";
+                ngRepeat = "dpPartner in $data";
+                columnClass = DP_PARTNER_NAME_COL;
+                break;
+            }
+            case "dps":
+            {
+                //placeHolder = "Search Distribution Points...";
+                prefix = "DP %s";
+                ngRepeat = "dp in $data";
+                columnClass = DP_NAME_COL;
+                break;
+            }
+            case "dp-users":
+            {
+                //placeHolder = "Search Distribution Point Users...";
+                prefix = "user%s";
+                ngRepeat = "dpUser in $data";
+                columnClass = DP_USER_USERNAME_COL;
+                break;
+            }
         }
 
         String keywords = String.format(prefix, SingletonStorage.getInstance().getTmpId());
@@ -120,41 +126,50 @@ public class DpPage extends OperatorV2SimplePage
         String columnClass = null;
         String expectedValue = null;
 
-        if(type.equals("add dp-partners"))
+        switch(type)
         {
-            ngRepeat = "dpPartner in $data";
-            columnClass = DP_PARTNER_NAME_COL;
-            expectedValue = String.format("Partner %s", SingletonStorage.getInstance().getTmpId());
-        }
-        else if(type.equals("edit dp-partners"))
-        {
-            ngRepeat = "dpPartner in $data";
-            columnClass = DP_PARTNER_RESTRICTION_COL;
-            expectedValue = String.format("No restrictions enforced. [%s]", SingletonStorage.getInstance().getTmpId());
-        }
-        else if(type.equals("add dps"))
-        {
-            ngRepeat = "dp in $data";
-            columnClass = DP_NAME_COL;
-            expectedValue = String.format("DP %s", SingletonStorage.getInstance().getTmpId());
-        }
-        else if(type.equals("edit dps"))
-        {
-            ngRepeat = "dp in $data";
-            columnClass = DP_DIRECTION_COL;
-            expectedValue = String.format("No directions provided. [%s]", SingletonStorage.getInstance().getTmpId());
-        }
-        else if(type.equals("add dp-users"))
-        {
-            ngRepeat = "dpUser in $data";
-            columnClass = DP_USER_USERNAME_COL;
-            expectedValue = String.format("user%s", SingletonStorage.getInstance().getTmpId());
-        }
-        else if(type.equals("edit dp-users"))
-        {
-            ngRepeat = "dpUser in $data";
-            columnClass = DP_USER_CONTACT_NO_COL;
-            expectedValue = String.format("+65 %s", SingletonStorage.getInstance().getTmpId());
+            case "add dp-partners":
+            {
+                ngRepeat = "dpPartner in $data";
+                columnClass = DP_PARTNER_NAME_COL;
+                expectedValue = String.format("Partner %s", SingletonStorage.getInstance().getTmpId());
+                break;
+            }
+            case "edit dp-partners":
+            {
+                ngRepeat = "dpPartner in $data";
+                columnClass = DP_PARTNER_RESTRICTION_COL;
+                expectedValue = String.format("No restrictions enforced. [%s]", SingletonStorage.getInstance().getTmpId());
+                break;
+            }
+            case "add dps":
+            {
+                ngRepeat = "dp in $data";
+                columnClass = DP_NAME_COL;
+                expectedValue = String.format("DP %s", SingletonStorage.getInstance().getTmpId());
+                break;
+            }
+            case "edit dps":
+            {
+                ngRepeat = "dp in $data";
+                columnClass = DP_DIRECTION_COL;
+                expectedValue = String.format("No directions provided. [%s]", SingletonStorage.getInstance().getTmpId());
+                break;
+            }
+            case "add dp-users":
+            {
+                ngRepeat = "dpUser in $data";
+                columnClass = DP_USER_USERNAME_COL;
+                expectedValue = String.format("user%s", SingletonStorage.getInstance().getTmpId());
+                break;
+            }
+            case "edit dp-users":
+            {
+                ngRepeat = "dpUser in $data";
+                columnClass = DP_USER_CONTACT_NO_COL;
+                expectedValue = String.format("+65 %s", SingletonStorage.getInstance().getTmpId());
+                break;
+            }
         }
 
         searchTable(expectedValue);
@@ -167,17 +182,11 @@ public class DpPage extends OperatorV2SimplePage
     {
         String btnXpath = null;
 
-        if(type.equals("dp-partners"))
+        switch(type)
         {
-            btnXpath = "//button[@aria-label='Add Partner']";
-        }
-        else if(type.equals("dps"))
-        {
-            btnXpath = "//button[@type='button'][@aria-label='Add DP']";
-        }
-        else if(type.equals("dp-users"))
-        {
-            btnXpath = "//button[@type='button'][@aria-label='Add Users']";
+            case "dp-partners": btnXpath = "//button[@aria-label='Add Partner']"; break;
+            case "dps": btnXpath = "//button[@type='button'][@aria-label='Add DP']"; break;
+            case "dp-users": btnXpath = "//button[@type='button'][@aria-label='Add Users']"; break;
         }
 
         click(btnXpath);
@@ -185,39 +194,45 @@ public class DpPage extends OperatorV2SimplePage
 
     public void enterDefaultValue(String type)
     {
-        if(type.equals("dp-partners"))
+        switch(type)
         {
-            String tmpId = DateUtil.getTimestamp();
-            SingletonStorage.getInstance().setTmpId(tmpId);
+            case "dp-partners":
+            {
+                String tmpId = DateUtil.getTimestamp();
+                SingletonStorage.getInstance().setTmpId(tmpId);
 
-            sendKeys("//input[@type='text'][@aria-label='Partner Name']", String.format("Partner %s", tmpId));
-            sendKeys("//input[@type='text'][@aria-label='POC Name']", String.format("Poc %s", tmpId));
-            sendKeys("//input[@type='tel'][@aria-label='POC No.']", String.format("+65 %s", tmpId));
-            sendKeys("//input[@type='email'][@aria-label='POC Email']", String.format("%s@poc.co", tmpId));
-            sendKeys("//textarea[@name='restrictions'][@aria-label='Restrictions']", "NA");
-        }
-        else if(type.equals("dps"))
-        {
-            sendKeys("//input[@type='text'][@aria-label='Name']", String.format("DP %s", SingletonStorage.getInstance().getTmpId()));
-            sendKeys("//input[@type='text'][@aria-label='Shortname']", String.format("DP%s", SingletonStorage.getInstance().getTmpId()));
-            sendKeys("//input[@type='tel'][@aria-label='Contact No.']", String.format("+65 %s", SingletonStorage.getInstance().getTmpId()));
-            sendKeys("//div[label[text()='Shipper Account']]//input", "QA\n");
-            sendKeys("//input[@type='text'][@aria-label='Address Line 1']", "Jl. Utan Kayu Raya No. 76");
-            sendKeys("//input[@type='text'][@aria-label='Address Line 2']", "Rawamangun");
-            sendKeys("//input[@type='text'][@aria-label='City']", "Jakarta");
-            sendKeys("//input[@type='text'][@aria-label='Country']", "Indonesia");
-            sendKeys("//input[@type='text'][@aria-label='Postcode']", "13120");
-            sendKeys("//input[@type='text'][@aria-label='Latitude']", "-6.1981719");
-            sendKeys("//input[@type='text'][@aria-label='Longitude']", "106.8628021");
-        }
-        else if(type.equals("dp-users"))
-        {
-            sendKeys("//input[@type='text'][@aria-label='First Name']", "User");
-            sendKeys("//input[@type='text'][@aria-label='Last Name']", SingletonStorage.getInstance().getTmpId());
-            sendKeys("//input[@type='tel'][@aria-label='Contact No.']", String.format("+65 %s", SingletonStorage.getInstance().getTmpId()));
-            sendKeys("//input[@type='email'][@aria-label='Email']", String.format("%s@poc.co", SingletonStorage.getInstance().getTmpId()));
-            sendKeys("//input[@type='text'][@aria-label='Username']", String.format("user%s", SingletonStorage.getInstance().getTmpId()));
-            sendKeys("//input[@type='password'][@aria-label='Password']", "Ninjitsu89");
+                sendKeys("//input[@type='text'][@aria-label='Partner Name']", String.format("Partner %s", tmpId));
+                sendKeys("//input[@type='text'][@aria-label='POC Name']", String.format("Poc %s", tmpId));
+                sendKeys("//input[@type='tel'][@aria-label='POC No.']", String.format("+65 %s", tmpId));
+                sendKeys("//input[@type='email'][@aria-label='POC Email']", String.format("%s@poc.co", tmpId));
+                sendKeys("//textarea[@name='restrictions'][@aria-label='Restrictions']", "NA");
+                break;
+            }
+            case "dps":
+            {
+                sendKeys("//input[@type='text'][@aria-label='Name']", String.format("DP %s", SingletonStorage.getInstance().getTmpId()));
+                sendKeys("//input[@type='text'][@aria-label='Shortname']", String.format("DP%s", SingletonStorage.getInstance().getTmpId()));
+                sendKeys("//input[@type='tel'][@aria-label='Contact No.']", String.format("+65 %s", SingletonStorage.getInstance().getTmpId()));
+                sendKeys("//div[label[text()='Shipper Account']]//input", "QA\n");
+                sendKeys("//input[@type='text'][@aria-label='Address Line 1']", "Jl. Utan Kayu Raya No. 76");
+                sendKeys("//input[@type='text'][@aria-label='Address Line 2']", "Rawamangun");
+                sendKeys("//input[@type='text'][@aria-label='City']", "Jakarta");
+                sendKeys("//input[@type='text'][@aria-label='Country']", "Indonesia");
+                sendKeys("//input[@type='text'][@aria-label='Postcode']", "13120");
+                sendKeys("//input[@type='text'][@aria-label='Latitude']", "-6.1981719");
+                sendKeys("//input[@type='text'][@aria-label='Longitude']", "106.8628021");
+                break;
+            }
+            case "dp-users":
+            {
+                sendKeys("//input[@type='text'][@aria-label='First Name']", "User");
+                sendKeys("//input[@type='text'][@aria-label='Last Name']", SingletonStorage.getInstance().getTmpId());
+                sendKeys("//input[@type='tel'][@aria-label='Contact No.']", String.format("+65 %s", SingletonStorage.getInstance().getTmpId()));
+                sendKeys("//input[@type='email'][@aria-label='Email']", String.format("%s@poc.co", SingletonStorage.getInstance().getTmpId()));
+                sendKeys("//input[@type='text'][@aria-label='Username']", String.format("user%s", SingletonStorage.getInstance().getTmpId()));
+                sendKeys("//input[@type='password'][@aria-label='Password']", "Ninjitsu89");
+                break;
+            }
         }
 
         click("//button[@type='submit'][@aria-label='Save Button']");
@@ -233,36 +248,40 @@ public class DpPage extends OperatorV2SimplePage
         String textAreaXpath = null;
         String editValue = null;
 
-        if(type.equals("dp-partners"))
+        switch(type)
         {
-            ngRepeat = "dpPartner in $data";
-            columnClass = DP_PARTNER_NAME_COL;
-            placeHolder = "Search Distribution Point Partners...";
-            textAreaXpath = "//textarea[@name='restrictions'][@aria-label='Restrictions']";
-            editValue = String.format("No restrictions enforced. [%s]", SingletonStorage.getInstance().getTmpId());
-        }
-        else if(type.equals("dps"))
-        {
-            ngRepeat = "dp in $data";
-            columnClass = DP_NAME_COL;
+            case "dp-partners":
+            {
+                ngRepeat = "dpPartner in $data";
+                columnClass = DP_PARTNER_NAME_COL;
+                placeHolder = "Search Distribution Point Partners...";
+                textAreaXpath = "//textarea[@name='restrictions'][@aria-label='Restrictions']";
+                editValue = String.format("No restrictions enforced. [%s]", SingletonStorage.getInstance().getTmpId());
+                break;
+            }
+            case "dps":
+            {
+                ngRepeat = "dp in $data";
+                columnClass = DP_NAME_COL;
 
-            placeHolder = "Search Distribution Points...";
-            textAreaXpath = "//textarea[@name='directions'][@aria-label='Directions']";
-            editValue = String.format("No directions provided. [%s]", SingletonStorage.getInstance().getTmpId());
-        }
-        else if(type.equals("dp-users"))
-        {
-            ngRepeat = "dpUser in $data";
-            columnClass = DP_USER_USERNAME_COL;
+                placeHolder = "Search Distribution Points...";
+                textAreaXpath = "//textarea[@name='directions'][@aria-label='Directions']";
+                editValue = String.format("No directions provided. [%s]", SingletonStorage.getInstance().getTmpId());
+                break;
+            }
+            case "dp-users":
+            {
+                ngRepeat = "dpUser in $data";
+                columnClass = DP_USER_USERNAME_COL;
 
-            placeHolder = "Search Distribution Point Users...";
-            textAreaXpath = "//input[@type='tel'][@aria-label='Contact No.']";
-            editValue = String.format("+65 %s", SingletonStorage.getInstance().getTmpId());
+                placeHolder = "Search Distribution Point Users...";
+                textAreaXpath = "//input[@type='tel'][@aria-label='Contact No.']";
+                editValue = String.format("+65 %s", SingletonStorage.getInstance().getTmpId());
+                break;
+            }
         }
 
-        /*
-          Verify searching results.
-         */
+        //Verify searching results.
         String expectedValue = findElementByXpath("//input[@placeholder='" + placeHolder + "'][@ng-model='searchText']").getAttribute("value");
         String actualValue = getTextOnTable(ngRepeat, 1, columnClass);
         Assert.assertEquals(expectedValue, actualValue);
@@ -271,19 +290,20 @@ public class DpPage extends OperatorV2SimplePage
         click("//nv-icon-button[@name='Edit']");
         pause100ms();
 
-        if(type.equals("dp-users"))
+        switch(type)
         {
-            /*
-              Since 9 January 2017, we cannot change DP User password from edit dialog.
+            case "dp-users":
+            {
+                /*
+                  Since 9 January 2017, we cannot change DP User password from edit dialog.
 
-              Password:
-              Please contact it-support if you want to change the password.
-             */
-            //sendKeys("//input[@type='password'][@aria-label='Password']", "Ninjitsu89");
-        }
-        else if(type.equals("dps"))
-        {
-            sendKeys("//div[label[text()='Shipper Account']]//input", "QA\n");
+                  Password:
+                  Please contact it-support if you want to change the password.
+                 */
+                //sendKeys("//input[@type='password'][@aria-label='Password']", "Ninjitsu89");
+                break;
+            }
+            case "dps": sendKeys("//div[label[text()='Shipper Account']]//input", "QA\n"); break;
         }
 
         sendKeys(textAreaXpath, editValue);
