@@ -1,11 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
+import co.nvqa.operator_v2.model.RecoveryTicket;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
-
-import java.util.Map;
 
 /**
  *
@@ -14,7 +13,6 @@ import java.util.Map;
 @SuppressWarnings("WeakerAccess")
 public class RecoveryTicketsPage extends OperatorV2SimplePage
 {
-    private static final int MAX_RETRY = 10;
     private static final String MD_VIRTUAL_REPEAT = "ticket in getTableData()";
 
     public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking-id";
@@ -27,192 +25,58 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         super(webDriver);
     }
 
-    public void clickCreateNewTicketButton()
+    public void createTicket(RecoveryTicket recoveryTicket)
     {
-        click("//button[@aria-label='Create New Ticket']");
-    }
+        waitUntilPageLoaded();
+        String trackingId = recoveryTicket.getTrackingId();
+        String ticketType = recoveryTicket.getTicketType();
 
-    public void selectFromCombobox(String ariaLabel, String selectedValue)
-    {
-        clickf("//md-select[contains(@aria-label, '%s')]", ariaLabel);
-        pause100ms();
-        clickf("//md-option/div[normalize-space(text())='%s']", selectedValue);
-        pause50ms();
-    }
-
-    public void selectEntrySource(String entrySource)
-    {
-        selectFromCombobox("Entry Source", entrySource);
-    }
-
-    public void selectInvestigatingParty(String investigatingParty)
-    {
-        selectFromCombobox("Investigating Party", investigatingParty);
-    }
-
-    public void selectTicketType(String ticketType)
-    {
-        selectFromCombobox("Ticket Type", ticketType);
-    }
-
-    public void selectTicketSubType(String ticketSubType)
-    {
-        selectFromCombobox("Ticket Sub Type", ticketSubType);
-    }
-
-    public void selectParcelLocation(String parcelLocation)
-    {
-        selectFromCombobox("Parcel Location", parcelLocation);
-    }
-
-    public void selectLiability(String liability)
-    {
-        selectFromCombobox("Liability", liability);
-    }
-
-    public void setDamageDescription(String damageDescription)
-    {
-        sendKeys("//input[@aria-label='Damage Description']", damageDescription);
-    }
-
-    public void setParcelDescription(String parcelDescription)
-    {
-        sendKeys("//input[@aria-label='Parcel Description']", parcelDescription);
-    }
-
-    public void setTicketNotes(String ticketNotes)
-    {
-        sendKeys("//textarea[@aria-label='Ticket Notes']", ticketNotes);
-    }
-
-    public void setCustZendeskId(String custZendeskId)
-    {
-        sendKeys("//input[@aria-label='Customer Zendesk ID']", custZendeskId);
-    }
-
-    public void setShipperZendeskId(String shipperZendeskId)
-    {
-        sendKeys("//input[@aria-label='Shipper Zendesk ID']", shipperZendeskId);
-    }
-
-    public void selectOrderOutcome(String orderOutcome)
-    {
-        selectFromCombobox("Order Outcome", orderOutcome);
-    }
-
-    public void setComments(String comments)
-    {
-        sendKeys("//textarea[@aria-label='Comments']", comments);
-    }
-
-    public void clickCreateTicketOnCreateNewTicketDialog()
-    {
-        click("//button[@aria-label='Create Ticket']");
-        waitUntilInvisibilityOfElementLocated("//button[@aria-label='Create Ticket']//md-progress-circular");
-        pause1s();
-    }
-
-    public void searchTableByTrackingId(String trackingId)
-    {
-        //-- remove default filters
-        click("//button[@aria-label='Clear All Selections']");
-        pause1s();
-
-        //-- select tracking id filter
-        sendKeys("//input[@placeholder='Select Filter']", "Tracking IDs");
-        pause1s();
-        click("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']//span[text()='Tracking IDs']");
-
-        //-- fill tracking id by filling it and press ENTER
-        sendKeys("//div[@class='main-title']//p[text()='Tracking IDs']/../..//input", trackingId);
-        altClick("//div[@class='main-title']//p[text()='Tracking IDs']/../..//input");
-        pause1s();
-
-        //-- click load selection
-        altClick("//button[@aria-label='Load Selection']");
-    }
-
-    public String getTextOnTable(int rowNumber, String columnDataClass)
-    {
-        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
-    }
-
-    public void createTicket(String trackingId, Map<String,String> mapOfParam)
-    {
-        String entrySource = mapOfParam.get("entrySource");
-        String investigatingParty = mapOfParam.get("investigatingParty");
-        String ticketType = mapOfParam.get("ticketType");
-
-        click("//button[@aria-label='Create New Ticket']");
-        sendKeys("//input[@aria-label='Tracking ID']", trackingId+" "); // Add 1 <SPACE> character at the end of tracking ID to make the textbox get trigged and request tracking ID validation to backend.
-        selectEntrySource(entrySource);
-        selectInvestigatingParty(investigatingParty);
+        clickButtonByAriaLabel("Create New Ticket");
+        sendKeysById("trackingId", trackingId+" "); // Add 1 <SPACE> character at the end of tracking ID to make the textbox get trigged and request tracking ID validation to backend.
+        selectEntrySource(recoveryTicket.getEntrySource());
+        selectInvestigatingDepartment(recoveryTicket.getInvestigatingDepartment());
+        selectInvestigatingHub(recoveryTicket.getInvestigatingHub());
         selectTicketType(ticketType);
 
-        if(TICKET_TYPE_DAMAGED.equals(ticketType))
+        switch(ticketType)
         {
-            String ticketSubType = mapOfParam.get("ticketSubType");
-            String parcelLocation = mapOfParam.get("parcelLocation");
-            String liability = mapOfParam.get("liability");
-            String damageDescription = mapOfParam.get("damageDescription");
-            String ticketNotes = mapOfParam.get("ticketNotes");
-            String custZendeskId = mapOfParam.get("custZendeskId");
-            String shipperZendeskId = mapOfParam.get("shipperZendeskId");
-            String orderOutcome = mapOfParam.get("orderOutcome");
-
-            selectTicketSubType(ticketSubType);
-            selectParcelLocation(parcelLocation);
-            selectLiability(liability);
-            setDamageDescription(damageDescription);
-            setTicketNotes(ticketNotes);
-            setCustZendeskId(custZendeskId);
-            setShipperZendeskId(shipperZendeskId);
-            selectOrderOutcome(orderOutcome);
-        }
-        else if(TICKET_TYPE_MISSING.equals(ticketType))
-        {
-            String parcelDescription = mapOfParam.get("parcelDescription");
-            String ticketNotes = mapOfParam.get("ticketNotes");
-            String custZendeskId = mapOfParam.get("custZendeskId");
-            String shipperZendeskId = mapOfParam.get("shipperZendeskId");
-
-            setParcelDescription(parcelDescription);
-            setTicketNotes(ticketNotes);
-            setCustZendeskId(custZendeskId);
-            setShipperZendeskId(shipperZendeskId);
-        }
-
-        try
-        {
-            setImplicitTimeout(0);
-
-            /*
-              Sometimes tracking ID textbox does not call the backend to verify the Tracking ID.
-              To fix it, we need key in the tracking ID over and over until the textbox call the backend
-              and enable the "Create Ticket" button.
-             */
-
-            int counter = 0;
-
-            while(isElementExist("//button[@aria-label='Create Ticket'][@disabled='disabled']") && counter<=MAX_RETRY)
+            case TICKET_TYPE_DAMAGED:
             {
-                NvLogger.info("Button \"Create Ticket\" still disabled. Trying to key in Tracking ID again.");
-                sendKeys("//input[@aria-label='Tracking ID']", trackingId);
-                pause1s();
-                counter++;
-            }
+                selectTicketSubType(recoveryTicket.getTicketSubType());
 
+                //Damaged Details
+                selectParcelLocation(recoveryTicket.getParcelLocation());
+                selectLiability(recoveryTicket.getLiability());
+                setDamageDescription(recoveryTicket.getDamageDescription());
+                selectOrderOutcomeDamaged(recoveryTicket.getOrderOutcomeDamaged());
+
+                setCustZendeskId(recoveryTicket.getCustZendeskId());
+                setShipperZendeskId(recoveryTicket.getShipperZendeskId());
+                setTicketNotes(recoveryTicket.getTicketNotes());
+                break;
+            }
+            case TICKET_TYPE_MISSING:
+            {
+                setParcelDescription(recoveryTicket.getParcelDescription());
+                setCustZendeskId(recoveryTicket.getCustZendeskId());
+                setShipperZendeskId(recoveryTicket.getShipperZendeskId());
+                setTicketNotes(recoveryTicket.getTicketNotes());
+                break;
+            }
         }
-        catch(Exception ex)
+
+        TestUtils.retryIfRuntimeExceptionOccurred(()->
         {
-            throw new NvTestRuntimeException(ex);
-        }
-        finally
-        {
-            resetImplicitTimeout();
-        }
+            if(isElementExistWait1Second("//button[@aria-label='Create Ticket'][@disabled='disabled']"))
+            {
+                sendKeys("//input[@aria-label='Tracking ID']", trackingId);
+                pause100ms();
+                throw new NvTestRuntimeException("Button \"Create Ticket\" still disabled. Trying to key in Tracking ID again.");
+            }
+        });
 
         clickCreateTicketOnCreateNewTicketDialog();
+        waitUntilInvisibilityOfToast("Ticket created");
     }
 
     public boolean verifyTicketIsExist(String trackingId)
@@ -237,5 +101,125 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         pause1s();
         String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
         Assert.assertEquals("Ticket with this tracking ID is not created", trackingId, actualTrackingId);
+    }
+
+    public void clickCreateNewTicketButton()
+    {
+        clickButtonByAriaLabel("Create New Ticket");
+    }
+
+    public void selectFromCombobox(String ariaLabel, String selectedValue)
+    {
+        clickf("//md-select[contains(@aria-label, '%s')]", ariaLabel);
+        pause100ms();
+        clickf("//md-option/div[normalize-space(text())='%s']", selectedValue);
+        pause50ms();
+    }
+
+    public void selectEntrySource(String entrySource)
+    {
+        selectValueFromMdSelectById("entry-source", entrySource);
+    }
+
+    public void selectInvestigatingDepartment(String investigatingDepartment)
+    {
+        selectValueFromMdSelectById("investigating-dept", investigatingDepartment);
+    }
+
+    public void selectInvestigatingHub(String investigatingHub)
+    {
+        selectValueFromMdSelectById("investigating-hub", investigatingHub);
+    }
+
+    public void selectTicketType(String ticketType)
+    {
+        selectValueFromMdSelectById("ticket-type", ticketType);
+    }
+
+    public void selectTicketSubType(String ticketSubType)
+    {
+        selectValueFromMdSelectById("ticket-sub-type", ticketSubType);
+    }
+
+    public void selectParcelLocation(String parcelLocation)
+    {
+        selectValueFromMdSelectById("parcelLocation", parcelLocation);
+    }
+
+    public void selectLiability(String liability)
+    {
+        selectValueFromMdSelectById("liability", liability);
+    }
+
+    public void setDamageDescription(String damageDescription)
+    {
+        sendKeysById("damageDescription", damageDescription);
+    }
+
+    public void setParcelDescription(String parcelDescription)
+    {
+        sendKeysById("parcelDescription", parcelDescription);
+    }
+
+    public void setTicketNotes(String ticketNotes)
+    {
+        sendKeysById("ticket-notes", ticketNotes);
+    }
+
+    public void setCustZendeskId(String custZendeskId)
+    {
+        sendKeysById("customer-zendesk-id", custZendeskId);
+    }
+
+    public void setShipperZendeskId(String shipperZendeskId)
+    {
+        sendKeysById("shipper-zendesk-id", shipperZendeskId);
+    }
+
+    public void selectOrderOutcomeDamaged(String orderOutcomeDamaged)
+    {
+        selectValueFromMdSelectById("orderOutcome(Damaged)", orderOutcomeDamaged);
+    }
+
+    public void setComments(String comments)
+    {
+        sendKeys("//textarea[@aria-label='Comments']", comments);
+    }
+
+    public void clickCreateTicketOnCreateNewTicketDialog()
+    {
+        clickNvApiTextButtonByNameAndWaitUntilDone("Create Ticket");
+        pause1s();
+    }
+
+    public void searchTableByTrackingId(String trackingId)
+    {
+        // Remove default filters.
+        clickButtonByAriaLabel("Clear All Selections");
+        pause1s();
+
+        // Select tracking ID filter.
+        sendKeys("//input[@placeholder='Select Filter']", "Tracking IDs");
+        pause1s();
+        click("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']//span[text()='Tracking IDs']");
+
+        // Fill tracking ID by filling it and press ENTER.
+        sendKeys("//div[@class='main-title']//p[text()='Tracking IDs']/../..//input", trackingId);
+        altClick("//div[@class='main-title']//p[text()='Tracking IDs']/../..//input");
+        pause1s();
+
+        // Click load selection.
+        altClick("//button[@aria-label='Load Selection']");
+    }
+
+    public void waitUntilPageLoaded()
+    {
+        super.waitUntilPageLoaded();
+        waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading data...']");
+    }
+
+    public String getTextOnTable(int rowNumber, String columnDataClass)
+    {
+        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
     }
 }

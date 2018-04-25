@@ -10,19 +10,21 @@ Feature: Recovery Tickets
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     Given Operator go to menu Recovery -> Recovery Tickets
-    When op create new ticket on Recovery Tickets menu with this property below:
-      | entrySource        | CUSTOMER COMPLAINT        |
-      | investigatingParty | DISTRIBUTION POINTS SG    |
-      | ticketType         | DAMAGED                   |
-      | ticketSubType      | IMPROPER PACKAGING        |
-      | parcelLocation     | DAMAGED RACK              |
-      | liability          | NV DRIVER                 |
-      | damageDescription  | Dummy damage description. |
-      | ticketNotes        | Dummy ticket notes.       |
-      | custZendeskId      | 1                         |
-      | shipperZendeskId   | 1                         |
-      | orderOutcome       | PENDING                   |
-    Then verify ticket is created successfully
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT     |
+      | investigatingDepartment | DISTRIBUTION POINTS SG |
+      | investigatingHub        | 30JKB                  |
+      | ticketType              | DAMAGED                |
+      | ticketSubType           | IMPROPER PACKAGING     |
+      | parcelLocation          | DAMAGED RACK           |
+      | liability               | NV DRIVER              |
+      | damageDescription       | GENERATED              |
+      | orderOutcomeDamaged     | PENDING                |
+      | custZendeskId           | 1                      |
+      | shipperZendeskId        | 1                      |
+      | ticketNotes             | GENERATED              |
+
+    Then Operator verify ticket is created successfully on page Recovery Tickets
 
   Scenario: Create missing ticket on Recovery Tickets menu (uid:dc66d575-0700-44c8-a4bc-2787a5616e64)
     Given API Shipper create Order V2 Parcel using data below:
@@ -30,15 +32,16 @@ Feature: Recovery Tickets
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
-    When op create new ticket on Recovery Tickets menu with this property below:
-      | entrySource        | CUSTOMER COMPLAINT        |
-      | investigatingParty | DISTRIBUTION POINTS SG    |
-      | ticketType         | MISSING                   |
-      | parcelDescription  | Dummy parcel description. |
-      | ticketNotes        | Dummy ticket notes.       |
-      | custZendeskId      | 1                         |
-      | shipperZendeskId   | 1                         |
-    Then verify ticket is created successfully
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT     |
+      | investigatingDepartment | DISTRIBUTION POINTS SG |
+      | investigatingHub        | 30JKB                  |
+      | ticketType              | MISSING                |
+      | parcelDescription       | GENERATED              |
+      | custZendeskId           | 1                      |
+      | shipperZendeskId        | 1                      |
+      | ticketNotes             | GENERATED              |
+    Then Operator verify ticket is created successfully on page Recovery Tickets
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
