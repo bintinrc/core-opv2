@@ -27,8 +27,7 @@ import java.util.Map;
 public class ApiShipperExtSteps extends StandardSteps<ScenarioManager>
 {
     private OrderCreateClientV3 orderCreateClientV3;
-    private List<OrderRequestV3> listOfOrderRequestV3 = new ArrayList<>();
-    private List<AsyncResponse> listOfAsyncResponseV3 = new ArrayList<>();
+    private final List<OrderRequestV3> listOfOrderRequestV3 = new ArrayList<>();
 
     @Inject
     public ApiShipperExtSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
@@ -73,7 +72,7 @@ public class ApiShipperExtSteps extends StandardSteps<ScenarioManager>
         String json = response.then().extract().body().asString();
         Assert.assertNotNull("Response json not null", json);
 
-        listOfAsyncResponseV3 = JsonHelper.fromJsonCollection(JsonHelper.getDefaultSnakeCaseMapper(), json, List.class, AsyncResponse.class);
+        List<AsyncResponse> listOfAsyncResponseV3 = JsonHelper.fromJsonCollection(JsonHelper.getDefaultSnakeCaseMapper(), json, List.class, AsyncResponse.class);
         Assert.assertNotNull("Response POJO not null", listOfAsyncResponseV3);
         Assert.assertEquals("Size", listOfOrderRequestV3.size(), listOfAsyncResponseV3.size());
 

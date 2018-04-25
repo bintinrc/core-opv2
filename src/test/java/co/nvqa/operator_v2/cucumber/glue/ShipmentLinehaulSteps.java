@@ -81,7 +81,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     }
 
     @When("^create new linehaul:$")
-    public void createLinehaul(Map<String, String> arg1) throws IOException
+    public void createLinehaul(Map<String, String> arg1)
     {
         //shipmentLinehaulPage.clickCreateLinehaul();
         fillLinehaulForm(arg1);
@@ -160,7 +160,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     }
 
     @When("^edit linehaul with:$")
-    public void edit_linehaul_with(Map<String, String> arg1) throws IOException
+    public void edit_linehaul_with(Map<String, String> arg1)
     {
         fillLinehaulForm(arg1);
         shipmentLinehaulPage.clickOnLabelEdit();

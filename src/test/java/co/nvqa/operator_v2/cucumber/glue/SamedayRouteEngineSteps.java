@@ -30,6 +30,7 @@ import java.util.TimeZone;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 @ScenarioScoped
 public class SamedayRouteEngineSteps extends AbstractSteps
 {

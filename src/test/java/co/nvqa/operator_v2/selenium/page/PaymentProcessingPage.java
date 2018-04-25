@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Lanang Jati
  */
+@SuppressWarnings("WeakerAccess")
 public class PaymentProcessingPage extends OperatorV2SimplePage
 {
     private static final String ADD_FILTER_INPUT = "//md-autocomplete-wrap/input[@aria-label='Select Filter']";

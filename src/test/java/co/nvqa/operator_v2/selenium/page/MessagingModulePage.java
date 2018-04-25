@@ -32,7 +32,7 @@ public class MessagingModulePage extends OperatorV2SimplePage
     private static final String FILE_PATH = TestConstants.TEMP_DIR + SMS_CAMPAIGN_FILE_NAME;
     private static final String MD_VIRTUAL_REPEAT = "sms in getTableData()";
     private static Map<String, Object> cache;
-    private SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD hh:ss");
+    private final SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD hh:ss");
 
     public MessagingModulePage(WebDriver webDriver)
     {

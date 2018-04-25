@@ -50,7 +50,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     public static final String ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER = "container.order.list.print-waybill";
 
-    private EditOrderPage editOrderPage;
+    private final EditOrderPage editOrderPage;
 
     public enum Category
     {

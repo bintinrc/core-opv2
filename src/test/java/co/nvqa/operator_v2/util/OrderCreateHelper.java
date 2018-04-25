@@ -19,6 +19,7 @@ import java.util.Random;
  *
  * Modified by Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class OrderCreateHelper
 {
     private static final SimpleDateFormat SDF_UNIQUE = new SimpleDateFormat("HHmmssSSS");
@@ -28,8 +29,8 @@ public class OrderCreateHelper
     private static String CREATE_ORDER_ACCESS_TOKEN = null; //-- refer to qa-shaun@ninjavan.sg (235)
 
     //-- these two will be replaced by newer Tracking ID on run
-    public static String EXISTING_V2_TRACKING_ID = "SHAUN123456789"; //-- e.g.: SHAUN 123456789 A (post pended with A)
-    public static String EXISTING_V3_TRACKING_ID = "NVSGSHAUN123456788"; //-- e.g.: NV SG SHAUN 123456789
+    public static final String EXISTING_V2_TRACKING_ID = "SHAUN123456789"; //-- e.g.: SHAUN 123456789 A (post pended with A)
+    public static final String EXISTING_V3_TRACKING_ID = "NVSGSHAUN123456788"; //-- e.g.: NV SG SHAUN 123456789
 
     /**
      * Get next valid working days (Mon-Sat).
@@ -39,9 +40,9 @@ public class OrderCreateHelper
      */
     public static String getDateString(String dateString)
     {
-        if(dateString == null)
+        if(dateString==null)
         {
-            return dateString;
+            return null;
         }
 
         Calendar cal = Calendar.getInstance();
@@ -79,7 +80,7 @@ public class OrderCreateHelper
     {
         if(word==null)
         {
-            return word;
+            return null;
         }
 
         switch(word)
@@ -96,7 +97,7 @@ public class OrderCreateHelper
     {
         if(word==null)
         {
-            return word;
+            return null;
         }
 
         String ts = String.valueOf((new Date()).getTime());
@@ -116,7 +117,7 @@ public class OrderCreateHelper
     {
         if(word==null)
         {
-            return word;
+            return null;
         }
 
         if(word.startsWith("RANDOM"))

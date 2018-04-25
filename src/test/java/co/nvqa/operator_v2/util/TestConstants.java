@@ -6,6 +6,7 @@ import co.nvqa.common_selenium.util.CommonSeleniumTestConstants;
  *
  * @author Soewandi Wirjawan
  */
+@SuppressWarnings("WeakerAccess")
 public final class TestConstants extends CommonSeleniumTestConstants
 {
     public static final String OPERATOR_PORTAL_URL;

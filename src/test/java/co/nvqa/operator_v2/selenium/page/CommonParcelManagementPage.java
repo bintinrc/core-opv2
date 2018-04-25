@@ -18,7 +18,7 @@ public abstract class CommonParcelManagementPage extends OperatorV2SimplePage
 
     public static final String ACTION_BUTTON_RTS = "commons.return-to-sender";
 
-    private String mdVirtualRepeat;
+    private final String mdVirtualRepeat;
 
     public CommonParcelManagementPage(WebDriver webDriver, String mdVirtualRepeat)
     {

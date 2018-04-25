@@ -77,28 +77,28 @@ public class DpPage extends OperatorV2SimplePage
 
     public void search(String type)
     {
-        String placeHolder = null;
+        //String placeHolder = null;
         String prefix = null;
         String ngRepeat = null;
         String columnClass = null;
 
         if(type.equals("dp-partners"))
         {
-            placeHolder = "Search Distribution Point Partners...";
+            //placeHolder = "Search Distribution Point Partners...";
             prefix = "Partner %s";
             ngRepeat = "dpPartner in $data";
             columnClass = DP_PARTNER_NAME_COL;
         }
         else if(type.equals("dps"))
         {
-            placeHolder = "Search Distribution Points...";
+            //placeHolder = "Search Distribution Points...";
             prefix = "DP %s";
             ngRepeat = "dp in $data";
             columnClass = DP_NAME_COL;
         }
         else if(type.equals("dp-users"))
         {
-            placeHolder = "Search Distribution Point Users...";
+            //placeHolder = "Search Distribution Point Users...";
             prefix = "user%s";
             ngRepeat = "dpUser in $data";
             columnClass = DP_USER_USERNAME_COL;

@@ -25,6 +25,7 @@ import java.util.function.Consumer;
  *
  * @author Soewandi Wirjawan
  */
+@SuppressWarnings("WeakerAccess")
 public class TestUtils extends CommonSeleniumTestUtils
 {
     private static final int DEFAULT_MAX_RETRY_ON_EXCEPTION = 10;
@@ -132,8 +133,8 @@ public class TestUtils extends CommonSeleniumTestUtils
     /**
      * Get toast element. Only call this when you sure toast will we invoked.
      *
-     * @param webDriver
-     * @return
+     * @param webDriver Object WebDriver.
+     * @return Toast WebElement.
      */
     public static WebElement getToast(WebDriver webDriver)
     {
@@ -309,8 +310,8 @@ public class TestUtils extends CommonSeleniumTestUtils
      * Deprecated, should use waitUntilElementVisible(WebDriver webDriver, final By by) instead.
      * the calling of webDriver.findElement before this function negates the purpose of implicit wait.
      *
-     * @param webDriver
-     * @param element
+     * @param webDriver Object WebDriver.
+     * @param element Object WebDriver.
      */
     @Deprecated
     public static void waitUntilElementVisible(WebDriver webDriver, final WebElement element)

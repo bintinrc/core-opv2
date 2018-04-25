@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Tristania Siagian
  */
+@SuppressWarnings("WeakerAccess")
 public class VehicleTypeManagementPage extends OperatorV2SimplePage
 {
     private static final String NG_REPEAT = "vehicleType in $data";

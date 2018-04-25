@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 @SuppressWarnings("WeakerAccess")
 public class PricingScriptsV2Page extends OperatorV2SimplePage
 {
-    private PricingScriptsV2CreateEditDraftPage pricingScriptsV2CreateEditDraftPage;
-    private TimeBoundedScriptsPage timeBoundedScriptsPage;
+    private final PricingScriptsV2CreateEditDraftPage pricingScriptsV2CreateEditDraftPage;
+    private final TimeBoundedScriptsPage timeBoundedScriptsPage;
 
     private static final String MD_VIRTUAL_REPEAT_TABLE_DRAFTS = "script in getTableData()";
     public static final String COLUMN_CLASS_DATA_ID_ON_TABLE_DRAFTS = "id";

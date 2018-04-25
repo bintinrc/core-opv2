@@ -27,7 +27,7 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
 
-    private AllShippersCreateEditPage allShippersCreateEditPage;
+    private final AllShippersCreateEditPage allShippersCreateEditPage;
 
     public AllShippersPage(WebDriver webDriver)
     {

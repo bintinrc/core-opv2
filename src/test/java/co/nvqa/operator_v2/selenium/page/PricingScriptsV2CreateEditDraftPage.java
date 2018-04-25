@@ -19,7 +19,7 @@ import java.util.List;
 @SuppressWarnings("WeakerAccess")
 public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
 {
-    private DecimalFormat RUN_CHECK_RESULT_DF = new DecimalFormat("###.###");
+    private final DecimalFormat RUN_CHECK_RESULT_DF = new DecimalFormat("###.###");
 
     protected static final int ACTION_SAVE = 1;
     protected static final int ACTION_SAVE_AND_EXIT = 2;

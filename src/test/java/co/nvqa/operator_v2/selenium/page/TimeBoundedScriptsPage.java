@@ -19,7 +19,7 @@ public class TimeBoundedScriptsPage extends OperatorV2SimplePage
     public static final String COLUMN_CLASS_DATA_STATUS_ON_TABLE = "status";
     public static final String COLUMN_CLASS_DATA_DURATION_ON_TABLE = "duration";
 
-    private TimeBoundedScriptsCreateEditPage timeBoundedScriptsCreateEditPage;
+    private final TimeBoundedScriptsCreateEditPage timeBoundedScriptsCreateEditPage;
 
     public TimeBoundedScriptsPage(WebDriver webDriver)
     {

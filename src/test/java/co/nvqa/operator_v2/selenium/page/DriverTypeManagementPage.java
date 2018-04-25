@@ -13,6 +13,7 @@ import java.util.List;
  *
  * @author Soewandi Wirjawan
  */
+@SuppressWarnings("WeakerAccess")
 public class DriverTypeManagementPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "driverTypeProp in ctrl.tableData";

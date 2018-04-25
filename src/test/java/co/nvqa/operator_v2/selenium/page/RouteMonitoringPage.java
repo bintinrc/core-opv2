@@ -21,7 +21,7 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
     public static final String COLUMN_CLASS_DATA_HUB_NAME = "hub-name";
     public static final String ACTION_BUTTON_VIEW_ROUTE_MANIFEST = "container.route-monitoring.view-route-manifest";
 
-    private RouteManifestPage routeManifestPage;
+    private final RouteManifestPage routeManifestPage;
 
     public RouteMonitoringPage(WebDriver webDriver)
     {

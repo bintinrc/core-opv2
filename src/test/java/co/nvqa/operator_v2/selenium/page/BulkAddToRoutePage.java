@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class BulkAddToRoutePage extends OperatorV2SimplePage
 {
     private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
