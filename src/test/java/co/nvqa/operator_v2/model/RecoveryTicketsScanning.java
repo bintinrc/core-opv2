@@ -8,6 +8,7 @@ public class RecoveryTicketsScanning {
     private String ticketType;
     private String ticketSubtype;
     private String investigatingGroup;
+    private String investigatingHub;
     private String entrySource;
     private String comment;
     private String trackingId;
@@ -61,5 +62,13 @@ public class RecoveryTicketsScanning {
 
     public void setTrackingId(String trackingId) {
         this.trackingId = trackingId;
+    }
+
+    public String getInvestigatingHub() {
+        return investigatingHub;
+    }
+
+    public void setInvestigatingHub(String investigatingHub) {
+        this.investigatingHub = investigatingHub;
     }
 }

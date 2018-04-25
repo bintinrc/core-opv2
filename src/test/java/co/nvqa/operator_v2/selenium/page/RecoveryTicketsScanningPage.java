@@ -73,13 +73,15 @@ public class RecoveryTicketsScanningPage extends OperatorV2SimplePage {
 
         String ticketType = recoveryTicketsScanning.getTicketType();
         String investigatingGroup = recoveryTicketsScanning.getInvestigatingGroup();
+        String investigatingHub = recoveryTicketsScanning.getInvestigatingHub();
         String entrySource = recoveryTicketsScanning.getEntrySource();
         String comment = recoveryTicketsScanning.getComment();
         String ticketSubtype = recoveryTicketsScanning.getTicketSubtype();
 
         selectFromCombobox("Ticket Type", ticketType);
         pause2s();
-        selectFromCombobox("Investigating Group", investigatingGroup);
+        selectFromCombobox("Investigating Dept.", investigatingGroup);
+        selectFromCombobox("Investigating Hub", investigatingHub);
         selectFromCombobox("Entry Source", entrySource);
 
         if(hasSubtype) {
