@@ -1,4 +1,4 @@
-@OperatorV2 @DpTagging
+@OperatorV2Disabled @DpTagging
 Feature: DP Tagging
 
   @LaunchBrowser @ShouldAlwaysRun
