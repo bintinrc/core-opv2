@@ -73,10 +73,4 @@ public class EditOrderSteps extends AbstractSteps
         Order order = get(KEY_ORDER_DETAILS);
         editOrderPage.verifyEditOrderDetailsIsSuccess(orderRequestV2Edited, order);
     }
-
-    @When("^Operator Edit Cash Collection Details on Edit Order page$")
-    public void operatorEditCashCollectionDetailsOnEditOrderPage()
-    {
-
-    }
 }

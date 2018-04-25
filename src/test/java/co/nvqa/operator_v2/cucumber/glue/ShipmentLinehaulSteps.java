@@ -14,7 +14,6 @@ import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;

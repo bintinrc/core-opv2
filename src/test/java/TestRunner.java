@@ -30,6 +30,7 @@ import org.junit.runner.RunWith;
 )
 public class TestRunner
 {
+    @SuppressWarnings("EmptyMethod")
     public static void main(String[] args)
     {
     }

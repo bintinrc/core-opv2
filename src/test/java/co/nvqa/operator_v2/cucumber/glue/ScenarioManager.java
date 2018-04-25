@@ -86,6 +86,7 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
      *
      * @param scenario The current running scenario.
      */
+    @SuppressWarnings("EmptyMethod")
     @After
     @Override
     public void teardown(Scenario scenario)
