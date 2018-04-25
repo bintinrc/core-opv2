@@ -108,14 +108,6 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         clickButtonByAriaLabel("Create New Ticket");
     }
 
-    public void selectFromCombobox(String ariaLabel, String selectedValue)
-    {
-        clickf("//md-select[contains(@aria-label, '%s')]", ariaLabel);
-        pause100ms();
-        clickf("//md-option/div[normalize-space(text())='%s']", selectedValue);
-        pause50ms();
-    }
-
     public void selectEntrySource(String entrySource)
     {
         selectValueFromMdSelectById("entry-source", entrySource);
