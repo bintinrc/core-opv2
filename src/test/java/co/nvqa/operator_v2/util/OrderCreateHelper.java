@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.util;
 
 import co.nvqa.commons.client.auth.AuthClient;
 import co.nvqa.commons.client.order_create.OrderCreateClientV3;
+import co.nvqa.commons.client.order_create.OrderCreateClientV4;
 import co.nvqa.commons.model.auth.AuthResponse;
 import co.nvqa.commons.model.auth.ClientCredentialsAuth;
 import co.nvqa.commons.model.order_create.v3.OrderRequestV3;
@@ -164,6 +165,11 @@ public class OrderCreateHelper
         return new OrderCreateClientV3(TestConstants.API_BASE_URL, getShipperAccessToken());
     }
 
+    public static OrderCreateClientV4 getOrderCreateClientV4()
+    {
+        return new OrderCreateClientV4(TestConstants.API_BASE_URL, getShipperAccessToken("V4"));
+    }
+
     /**
      * Shipper's authentication token. Used to access orders, etc.
      *
@@ -174,6 +180,40 @@ public class OrderCreateHelper
         if(CREATE_ORDER_ACCESS_TOKEN==null)
         {
             ClientCredentialsAuth clientCredentialsAuth = new ClientCredentialsAuth(TestConstants.SHIPPER_V3_CLIENT_ID, TestConstants.SHIPPER_V3_CLIENT_SECRET);
+            AuthClient authClient = new AuthClient(TestConstants.API_BASE_URL);
+            AuthResponse authResponse = authClient.authenticate(clientCredentialsAuth);
+            CREATE_ORDER_ACCESS_TOKEN = authResponse.getAccessToken();
+        }
+
+        return CREATE_ORDER_ACCESS_TOKEN;
+    }
+
+    /**
+     * Shipper's authentication token. Used to access orders, etc.
+     *
+     * @return Shipper's access token.
+     */
+    public static String getShipperAccessToken(String version)
+    {
+        if(CREATE_ORDER_ACCESS_TOKEN==null)
+        {
+            String shipperClientId;
+            String shipperClientSecret;
+            switch(version.toUpperCase()){
+                case "V2":
+                    shipperClientId = TestConstants.SHIPPER_V2_CLIENT_ID;
+                    shipperClientSecret = TestConstants.SHIPPER_V2_CLIENT_SECRET;
+                    break;
+                case "V4":
+                    shipperClientId = TestConstants.SHIPPER_V4_CLIENT_ID;
+                    shipperClientSecret = TestConstants.SHIPPER_V4_CLIENT_SECRET;
+                    break;
+                case "V3":
+                default:
+                    shipperClientId = TestConstants.SHIPPER_V3_CLIENT_ID;
+                    shipperClientSecret = TestConstants.SHIPPER_V3_CLIENT_SECRET;
+            }
+            ClientCredentialsAuth clientCredentialsAuth = new ClientCredentialsAuth(shipperClientId, shipperClientSecret);
             AuthClient authClient = new AuthClient(TestConstants.API_BASE_URL);
             AuthResponse authResponse = authClient.authenticate(clientCredentialsAuth);
             CREATE_ORDER_ACCESS_TOKEN = authResponse.getAccessToken();
