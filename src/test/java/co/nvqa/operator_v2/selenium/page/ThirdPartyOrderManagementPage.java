@@ -99,7 +99,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
     }
 
-    public class UploadSingleMappingPage extends OperatorV2SimplePage
+    public static class UploadSingleMappingPage extends OperatorV2SimplePage
     {
         private static final String FIELD_TRACKING_ID_ID = "commons.model.tracking-id";
         private static final String FIELD_3PL_TRACKING_ID_ID = "commons.model.third-party-tracking-id";
@@ -134,7 +134,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         }
     }
 
-    public class EditMappingPage extends OperatorV2SimplePage
+    public static class EditMappingPage extends OperatorV2SimplePage
     {
         private static final String FIELD_3PL_TRACKING_ID_ID = "commons.model.third-party-tracking-id";
         private static final String FIELD_SHIPPER_ID_ID = "commons.id";
@@ -164,7 +164,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         }
     }
 
-    public class UploadResultsPage extends OperatorV2SimplePage
+    public static class UploadResultsPage extends OperatorV2SimplePage
     {
         private static final String DIALOG_LOCATOR = "//md-dialog[contains(@class,'third-party-order-add-result')]";
         private static final String BUTTON_CLOSE_NAME = "Cancel";

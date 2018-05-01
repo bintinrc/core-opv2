@@ -28,6 +28,9 @@ public class OrderCreateHelper
     private static final RandomStringGenerator ALPHA_NUMERIC_STRING_GENERATOR = new RandomStringGenerator.Builder().withinRange('0', 'z').filteredBy(CharacterPredicates.LETTERS, CharacterPredicates.DIGITS).build();
 
     private static String CREATE_ORDER_ACCESS_TOKEN = null; //-- refer to qa-shaun@ninjavan.sg (235)
+    private static String CREATE_ORDER_V4_ACCESS_TOKEN = null;
+    private static String CREATE_ORDER_V2_ACCESS_TOKEN = null;
+    private static String CREATE_ORDER_V3_ACCESS_TOKEN = null;
 
     //-- these two will be replaced by newer Tracking ID on run
     public static final String EXISTING_V2_TRACKING_ID = "SHAUN123456789"; //-- e.g.: SHAUN 123456789 A (post pended with A)
@@ -193,32 +196,31 @@ public class OrderCreateHelper
      *
      * @return Shipper's access token.
      */
-    public static String getShipperAccessToken(String version)
-    {
-        if(CREATE_ORDER_ACCESS_TOKEN==null)
-        {
-            String shipperClientId;
-            String shipperClientSecret;
-            switch(version.toUpperCase()){
-                case "V2":
-                    shipperClientId = TestConstants.SHIPPER_V2_CLIENT_ID;
-                    shipperClientSecret = TestConstants.SHIPPER_V2_CLIENT_SECRET;
-                    break;
-                case "V4":
-                    shipperClientId = TestConstants.SHIPPER_V4_CLIENT_ID;
-                    shipperClientSecret = TestConstants.SHIPPER_V4_CLIENT_SECRET;
-                    break;
-                case "V3":
-                default:
-                    shipperClientId = TestConstants.SHIPPER_V3_CLIENT_ID;
-                    shipperClientSecret = TestConstants.SHIPPER_V3_CLIENT_SECRET;
-            }
-            ClientCredentialsAuth clientCredentialsAuth = new ClientCredentialsAuth(shipperClientId, shipperClientSecret);
-            AuthClient authClient = new AuthClient(TestConstants.API_BASE_URL);
-            AuthResponse authResponse = authClient.authenticate(clientCredentialsAuth);
-            CREATE_ORDER_ACCESS_TOKEN = authResponse.getAccessToken();
+    public static String getShipperAccessToken(String version){
+        switch(version.toUpperCase()){
+            case "V2":
+                if (CREATE_ORDER_V2_ACCESS_TOKEN == null) {
+                    CREATE_ORDER_V2_ACCESS_TOKEN = getCreateOrderAcceessTocken(TestConstants.SHIPPER_V2_CLIENT_ID, TestConstants.SHIPPER_V2_CLIENT_SECRET);
+                }
+                return CREATE_ORDER_V2_ACCESS_TOKEN;
+            case "V4":
+                if (CREATE_ORDER_V4_ACCESS_TOKEN == null) {
+                    CREATE_ORDER_V4_ACCESS_TOKEN = getCreateOrderAcceessTocken(TestConstants.SHIPPER_V4_CLIENT_ID, TestConstants.SHIPPER_V4_CLIENT_SECRET);
+                }
+                return CREATE_ORDER_V4_ACCESS_TOKEN;
+            case "V3":
+            default:
+                if (CREATE_ORDER_V3_ACCESS_TOKEN == null) {
+                    CREATE_ORDER_V3_ACCESS_TOKEN = getCreateOrderAcceessTocken(TestConstants.SHIPPER_V3_CLIENT_ID, TestConstants.SHIPPER_V3_CLIENT_SECRET);
+                }
+                return CREATE_ORDER_V3_ACCESS_TOKEN;
         }
+    }
 
-        return CREATE_ORDER_ACCESS_TOKEN;
+    private static String getCreateOrderAcceessTocken(String clientId, String clientSecret) {
+        ClientCredentialsAuth clientCredentialsAuth = new ClientCredentialsAuth(clientId, clientSecret);
+        AuthClient authClient = new AuthClient(TestConstants.API_BASE_URL);
+        AuthResponse authResponse = authClient.authenticate(clientCredentialsAuth);
+        return authResponse.getAccessToken();
     }
 }
