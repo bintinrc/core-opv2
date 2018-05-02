@@ -101,7 +101,6 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         editMappingPage.submitForm();
         String toastMessage = String.format("%s mapped to %s(%s)!", thirdPartyOrderMapping.getTrackingId(), thirdPartyOrderMapping.getThirdPlTrackingId(), thirdPartyOrderMapping.getShipperName());
         waitUntilInvisibilityOfToast(toastMessage);
-        waitUntilInvisibilityOfElementLocated(toastMessage);
     }
 
     public void deleteThirdPartyOrderMapping(ThirdPartyOrderMapping thirdPartyOrderMapping)
@@ -112,7 +111,6 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         clickButtonOnMdDialogByAriaLabel(CONFIRM_BUTTON_ARIA_LABEL);
         String toastMessage = "Third Party Order Deleted";
         waitUntilInvisibilityOfToast(toastMessage);
-        waitUntilInvisibilityOfElementLocated(toastMessage);
     }
 
     public void completeThirdPartyOrder(ThirdPartyOrderMapping thirdPartyOrderMapping)
@@ -123,7 +121,6 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         clickButtonOnMdDialogByAriaLabel(CONFIRM_BUTTON_ARIA_LABEL);
         String toastMessage = "Completed Order";
         waitUntilInvisibilityOfToast(toastMessage);
-        waitUntilInvisibilityOfElementLocated(toastMessage);
     }
 
     public void verifyThirdPartyOrderMappingWasRemoved(ThirdPartyOrderMapping thirdPartyOrderMapping, String message)
