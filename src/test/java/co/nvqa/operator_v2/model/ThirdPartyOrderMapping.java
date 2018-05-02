@@ -66,4 +66,8 @@ public class ThirdPartyOrderMapping
                 ", status='" + status + '\'' +
                 '}';
     }
+
+    public String toCsvLine(){
+        return trackingId + "," + shipperId + "," + thirdPlTrackingId;
+    }
 }

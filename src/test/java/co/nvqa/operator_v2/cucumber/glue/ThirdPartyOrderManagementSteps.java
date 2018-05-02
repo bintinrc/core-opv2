@@ -5,10 +5,14 @@ import co.nvqa.operator_v2.model.ThirdPartyOrderMapping;
 import co.nvqa.operator_v2.selenium.page.MainPage;
 import co.nvqa.operator_v2.selenium.page.ThirdPartyOrderManagementPage;
 import com.google.inject.Inject;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -78,5 +82,20 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps
     public void operatorVerifyTheNewMappingIsDeletedSuccessfully(){
         ThirdPartyOrderMapping orderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.verifyThirdPartyOrderMappingIsDeletedSuccessfully(orderMapping);
+    }
+
+    @When("^Operator uploads bulk mapping$")
+    public void operatorUploadsBulkMapping() {
+        List<String> trackingIds = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_IDS);
+        List<ThirdPartyOrderMapping> thirdPartyOrderMappings =
+                trackingIds.stream()
+                .map(trackingId -> {
+                    ThirdPartyOrderMapping thirdPartyOrderMapping = new ThirdPartyOrderMapping();
+                    thirdPartyOrderMapping.setTrackingId(trackingId);
+                    thirdPartyOrderMapping.setThirdPlTrackingId("3PL" + trackingId);
+                    return thirdPartyOrderMapping;
+                })
+                .collect(Collectors.toList());
+        thirdPartyOrderManagementPage.uploadBulkMapping(thirdPartyOrderMappings);
     }
 }

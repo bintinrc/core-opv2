@@ -58,6 +58,22 @@ public class ApiShipperExtSteps extends StandardSteps<ScenarioManager>
 
     @Given("^Create an V4 order with the following attributes:$")
     public void shipperCreateV4Order(Map<String,String> mapOfData) {
+        OrderRequestV4 response = createV4Order(mapOfData);
+        getScenarioStorage().put(KEY_CREATED_ORDER_TRACKING_ID, response.getTrackingNumber());
+    }
+
+    @Given("^Create multiple V4 orders with the following attributes:$")
+    public void shipperCreateMultipleV4Orders(Map<String,String> mapOfData) {
+        int numberOfOrder = Integer.parseInt(mapOfData.getOrDefault("numberOfOrder", "1"));
+        List<String> orderTrackingIds = new ArrayList<>();
+        for (int i=0; i<numberOfOrder; i++){
+            OrderRequestV4 response = createV4Order(mapOfData);
+            orderTrackingIds.add(response.getTrackingNumber());
+        }
+        getScenarioStorage().put(KEY_CREATED_ORDER_TRACKING_IDS, orderTrackingIds);
+    }
+
+    private OrderRequestV4 createV4Order(Map<String,String> mapOfData){
         String v4OrderRequestTemplate = mapOfData.get("v4OrderRequest");
         String shipperRefNo = generateShipperRefNo();
         String pickupDate = PICKUP_OR_DELIVERY_DATE_FORMAT.format(getNextDate(1));
@@ -69,8 +85,7 @@ public class ApiShipperExtSteps extends StandardSteps<ScenarioManager>
 
         OrderRequestV4 orderRequestV4 = JsonHelper.fromJson(JsonHelper.getDefaultSnakeCaseMapper(), orderRequestV4Json, OrderRequestV4.class);
         OrderCreateClientV4 orderCreateClientV4 = OrderCreateHelper.getOrderCreateClientV4();
-        OrderRequestV4 response = orderCreateClientV4.createOrder(orderRequestV4);
-        getScenarioStorage().put(KEY_CREATED_ORDER_TRACKING_ID, response.getTrackingNumber());
+        return orderCreateClientV4.createOrder(orderRequestV4);
     }
 
     private OrderRequestV3 createV3Order(Map<String, String> arg1)

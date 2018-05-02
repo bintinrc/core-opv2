@@ -5,8 +5,10 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -22,6 +24,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
     public static final String COLUMN_CLASS_DATA_SHIPPER_NAME = "third-party-order-third-party-shipper-name";
 
     public static final String BUTTON_UPLOAD_SINGLE_NAME = "container.third-party-order.create-single-mapping";
+    public static final String BUTTON_UPLOAD_BULK_NAME = "container.third-party-order.create-multiple-mapping";
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
     public static final String ACTION_BUTTON_DELETE = "commons.delete";
 
@@ -42,6 +45,19 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         clickNvIconTextButtonByName(BUTTON_UPLOAD_SINGLE_NAME);
         uploadSingleMappingPage.fillTheForm(thirdPartyOrderMapping);
         uploadSingleMappingPage.submitForm();
+    }
+
+    public void uploadBulkMapping(List<ThirdPartyOrderMapping> thirdPartyOrderMappings)
+    {
+        clickNvIconTextButtonByName(BUTTON_UPLOAD_BULK_NAME);
+        waitUntilVisibilityOfElementLocated("//md-dialog//h4[text()='Upload Bulk Mapping CSV']");
+
+        String csvContents = thirdPartyOrderMappings.stream().map(ThirdPartyOrderMapping::toCsvLine).collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
+        File csvFile = createFile(String.format("third-party-order-mappings-with-csv_%s.csv", generateDateUniqueString()), csvContents);
+
+        sendKeysByAriaLabel("Choose", csvFile.getAbsolutePath());
+        waitUntilVisibilityOfElementLocated(String.format("//span[contains(text(), '%s')]", csvFile.getName()));
+        clickNvButtonSaveByNameAndWaitUntilDone("Submit");
     }
 
     public void verifyOrderMappingCreatedSuccessfully(ThirdPartyOrderMapping expectedOrderMapping){
