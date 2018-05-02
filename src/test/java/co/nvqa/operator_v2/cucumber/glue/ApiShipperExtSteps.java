@@ -59,7 +59,7 @@ public class ApiShipperExtSteps extends StandardSteps<ScenarioManager>
     @Given("^Create an V4 order with the following attributes:$")
     public void shipperCreateV4Order(Map<String,String> mapOfData) {
         OrderRequestV4 response = createV4Order(mapOfData);
-        getScenarioStorage().put(KEY_CREATED_ORDER_TRACKING_ID, response.getTrackingNumber());
+        put(KEY_CREATED_ORDER_TRACKING_ID, response.getTrackingNumber());
     }
 
     @Given("^Create multiple V4 orders with the following attributes:$")
@@ -70,7 +70,7 @@ public class ApiShipperExtSteps extends StandardSteps<ScenarioManager>
             OrderRequestV4 response = createV4Order(mapOfData);
             orderTrackingIds.add(response.getTrackingNumber());
         }
-        getScenarioStorage().put(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID, orderTrackingIds);
+        put(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID, orderTrackingIds);
     }
 
     private OrderRequestV4 createV4Order(Map<String,String> mapOfData){

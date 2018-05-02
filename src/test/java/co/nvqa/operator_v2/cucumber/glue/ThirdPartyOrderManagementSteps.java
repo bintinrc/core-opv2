@@ -36,24 +36,24 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps
     public void operatorUploadsNewMapping()
     {
         ThirdPartyOrderMapping thirdPartyOrderMapping = new ThirdPartyOrderMapping();
-        String trackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         thirdPartyOrderMapping.setTrackingId(trackingId);
         thirdPartyOrderMapping.setThirdPlTrackingId("3PL" + trackingId);
         thirdPartyOrderManagementPage.uploadSingleMapping(thirdPartyOrderMapping);
-        getScenarioStorage().put(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS, thirdPartyOrderMapping);
+        put(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS, thirdPartyOrderMapping);
     }
 
     @Then("^Operator verify the new mapping is created successfully$")
     public void operatorVerifyTheNewMappingIsCreatedSuccessfully()
     {
-        ThirdPartyOrderMapping expectedOrderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
+        ThirdPartyOrderMapping expectedOrderMapping = get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.verifyOrderMappingCreatedSuccessfully(expectedOrderMapping);
     }
 
     @When("^Operator edit the new mapping with a new data$")
     public void operatorEditTheNewMappingWithANewData()
     {
-        ThirdPartyOrderMapping orderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
+        ThirdPartyOrderMapping orderMapping = get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         orderMapping.setThirdPlTrackingId(orderMapping.getThirdPlTrackingId() + "UPD");
         thirdPartyOrderManagementPage.editOrderMapping(orderMapping);
     }
@@ -61,21 +61,21 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps
     @Then("^Operator verify the new edited data is updated successfully$")
     public void operatorVerifyTheNewEditedDataIsUpdatedSuccessfully()
     {
-        ThirdPartyOrderMapping expectedOrderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
+        ThirdPartyOrderMapping expectedOrderMapping = get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.verifyOrderMappingRecord(expectedOrderMapping);
     }
 
     @When("^Operator delete the new mapping$")
     public void operatorDeleteTheNewMapping()
     {
-        ThirdPartyOrderMapping orderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
+        ThirdPartyOrderMapping orderMapping = get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.deleteThirdPartyOrderMapping(orderMapping);
     }
 
     @Then("^Operator verify the new mapping is deleted successfully$")
     public void operatorVerifyTheNewMappingIsDeletedSuccessfully()
     {
-        ThirdPartyOrderMapping orderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
+        ThirdPartyOrderMapping orderMapping = get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.verifyThirdPartyOrderMappingWasRemoved(
                 orderMapping,
                 String.format("Fail to delete Third Party Order Mapping (Tracking ID = %s).", orderMapping.getTrackingId())
@@ -84,7 +84,7 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps
 
     @When("^Operator uploads bulk mapping$")
     public void operatorUploadsBulkMapping() {
-        List<String> trackingIds = getScenarioStorage().get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
         ThirdPartyOrderMapping shipperInfo = new ThirdPartyOrderMapping();
         thirdPartyOrderManagementPage.adjustAvailableThirdPartyShipperData(shipperInfo);
         List<ThirdPartyOrderMapping> thirdPartyOrderMappings =
@@ -99,24 +99,24 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps
                 })
                 .collect(Collectors.toList());
         thirdPartyOrderManagementPage.uploadBulkMapping(thirdPartyOrderMappings);
-        getScenarioStorage().put(KEY_LIST_OF_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS, thirdPartyOrderMappings);
+        put(KEY_LIST_OF_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS, thirdPartyOrderMappings);
     }
 
     @Then("^Operator verify multiple new mapping is created successfully$")
     public void operatorVerifyMultipleNewMappingIsCreatedSuccessfully(){
-        List<ThirdPartyOrderMapping> expectedThirdPartyOrderMappings = getScenarioStorage().get(KEY_LIST_OF_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
+        List<ThirdPartyOrderMapping> expectedThirdPartyOrderMappings = get(KEY_LIST_OF_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.verifyMultipleOrderMappingCreatedSuccessfully(expectedThirdPartyOrderMappings);
     }
 
     @When("^Operator complete the new mapping order$")
     public void operatorCompleteTheNewMappingOrder(){
-        ThirdPartyOrderMapping orderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
+        ThirdPartyOrderMapping orderMapping = get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.completeThirdPartyOrder(orderMapping);
     }
 
     @Then("^Operator verify the new mapping order is completed$")
     public void operatorVerifyTheNewMappingOrderIsCompleted() {
-        ThirdPartyOrderMapping orderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
+        ThirdPartyOrderMapping orderMapping = get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.verifyThirdPartyOrderMappingWasRemoved(
                 orderMapping,
                 String.format("Fail to complete Third Party Order (Tracking ID = %s).", orderMapping.getTrackingId())
