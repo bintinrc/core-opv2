@@ -44,20 +44,23 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         uploadSingleMappingPage.submitForm();
     }
 
-    public void verifyOrderMappingCreatedSuccessfully(ThirdPartyOrderMapping expectedOrderMapping){
+    public void verifyOrderMappingCreatedSuccessfully(ThirdPartyOrderMapping expectedOrderMapping)
+    {
         uploadResultsPage.verifyUploadResultsData(expectedOrderMapping);
         uploadResultsPage.closeDialog();
         verifyOrderMappingRecord(expectedOrderMapping);
     }
 
-    public void verifyOrderMappingRecord(ThirdPartyOrderMapping expectedOrderMapping){
+    public void verifyOrderMappingRecord(ThirdPartyOrderMapping expectedOrderMapping)
+    {
         searchTableByTrackingId(expectedOrderMapping.getTrackingId());
         Assert.assertEquals("Third Party Order Tracking ID", expectedOrderMapping.getTrackingId(), getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID));
         Assert.assertEquals("Third Party Order 3PL Tracking ID", expectedOrderMapping.getThirdPlTrackingId(), getTextOnTable(1, COLUMN_CLASS_DATA_THIRD_PARTY_TRACKING_ID));
         Assert.assertEquals("Third Party Order 3PL Provider", expectedOrderMapping.getShipperName(), getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER_NAME));
     }
 
-    public void editOrderMapping(ThirdPartyOrderMapping thirdPartyOrderMapping){
+    public void editOrderMapping(ThirdPartyOrderMapping thirdPartyOrderMapping)
+    {
         searchTableByTrackingId(thirdPartyOrderMapping.getTrackingId());
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
         editMappingPage.fillTheForm(thirdPartyOrderMapping);
@@ -129,7 +132,8 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
             }
         }
 
-        public void submitForm(){
+        public void submitForm()
+        {
             clickNvButtonSaveByName(BUTTON_SUBMIT_NAME);
         }
     }
@@ -159,7 +163,8 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
             }
         }
 
-        public void submitForm(){
+        public void submitForm()
+        {
             clickNvButtonSaveByName(BUTTON_SUBMIT_NAME);
         }
     }
@@ -181,7 +186,9 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
             String cellLocatorTemplate = xpathForCounting + "[%d]/td[%d]";
             int recordsCount = getElementsCount(By.xpath(xpathForCounting));
             List<ThirdPartyOrderMapping> orderMappings = new ArrayList<>();
-            for (int rowIndex=1; rowIndex<=recordsCount; rowIndex++) {
+
+            for (int rowIndex=1; rowIndex<=recordsCount; rowIndex++)
+            {
                 ThirdPartyOrderMapping orderMapping = new ThirdPartyOrderMapping();
                 String locator = String.format(cellLocatorTemplate, rowIndex, 1);
                 orderMapping.setTrackingId(getText(locator));
@@ -193,10 +200,12 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
                 orderMapping.setStatus(getText(locator));
                 orderMappings.add(orderMapping);
             }
+
             return orderMappings;
         }
 
-        public void verifyUploadResultsData(ThirdPartyOrderMapping expectedOrderMapping){
+        public void verifyUploadResultsData(ThirdPartyOrderMapping expectedOrderMapping)
+        {
             List<ThirdPartyOrderMapping> orderMappings = readMappingUploadResults();
             Assert.assertEquals("Unexpected number of created order mappings", 1, orderMappings.size());
             ThirdPartyOrderMapping actualOrderMapping = orderMappings.get(0);
@@ -205,7 +214,8 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
             Assert.assertEquals("Upload Results dialog: Third Party Order Upload Status", expectedOrderMapping.getStatus(), actualOrderMapping.getStatus());
         }
 
-        public void closeDialog(){
+        public void closeDialog()
+        {
             clickNvIconButtonByName(BUTTON_CLOSE_NAME);
         }
     }
