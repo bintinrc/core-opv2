@@ -83,13 +83,15 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps
     }
 
     @When("^Operator uploads bulk mapping$")
-    public void operatorUploadsBulkMapping() {
+    public void operatorUploadsBulkMapping()
+    {
         List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
         ThirdPartyOrderMapping shipperInfo = new ThirdPartyOrderMapping();
         thirdPartyOrderManagementPage.adjustAvailableThirdPartyShipperData(shipperInfo);
         List<ThirdPartyOrderMapping> thirdPartyOrderMappings =
                 trackingIds.stream()
-                .map(trackingId -> {
+                .map(trackingId ->
+                {
                     ThirdPartyOrderMapping thirdPartyOrderMapping = new ThirdPartyOrderMapping();
                     thirdPartyOrderMapping.setTrackingId(trackingId);
                     thirdPartyOrderMapping.setThirdPlTrackingId("3PL" + trackingId);
@@ -103,19 +105,22 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps
     }
 
     @Then("^Operator verify multiple new mapping is created successfully$")
-    public void operatorVerifyMultipleNewMappingIsCreatedSuccessfully(){
+    public void operatorVerifyMultipleNewMappingIsCreatedSuccessfully()
+    {
         List<ThirdPartyOrderMapping> expectedThirdPartyOrderMappings = get(KEY_LIST_OF_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.verifyMultipleOrderMappingCreatedSuccessfully(expectedThirdPartyOrderMappings);
     }
 
     @When("^Operator complete the new mapping order$")
-    public void operatorCompleteTheNewMappingOrder(){
+    public void operatorCompleteTheNewMappingOrder()
+    {
         ThirdPartyOrderMapping orderMapping = get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.completeThirdPartyOrder(orderMapping);
     }
 
     @Then("^Operator verify the new mapping order is completed$")
-    public void operatorVerifyTheNewMappingOrderIsCompleted() {
+    public void operatorVerifyTheNewMappingOrderIsCompleted()
+    {
         ThirdPartyOrderMapping orderMapping = get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.verifyThirdPartyOrderMappingWasRemoved(
                 orderMapping,

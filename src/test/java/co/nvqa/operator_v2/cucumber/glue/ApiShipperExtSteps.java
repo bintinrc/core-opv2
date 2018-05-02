@@ -57,20 +57,25 @@ public class ApiShipperExtSteps extends StandardSteps<ScenarioManager>
     }
 
     @Given("^Create an V4 order with the following attributes:$")
-    public void shipperCreateV4Order(Map<String,String> mapOfData) {
+    public void shipperCreateV4Order(Map<String,String> mapOfData)
+    {
         OrderRequestV4 response = createV4Order(mapOfData);
         put(KEY_CREATED_ORDER_TRACKING_ID, response.getTrackingNumber());
     }
 
     @Given("^Create multiple V4 orders with the following attributes:$")
-    public void shipperCreateMultipleV4Orders(Map<String,String> mapOfData) {
+    public void shipperCreateMultipleV4Orders(Map<String,String> mapOfData)
+    {
         int numberOfOrder = Integer.parseInt(mapOfData.getOrDefault("numberOfOrder", "1"));
-        for (int i=0; i<numberOfOrder; i++){
+
+        for (int i=0; i<numberOfOrder; i++)
+        {
             putInList(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID, createV4Order(mapOfData).getTrackingNumber());
         }
     }
 
-    private OrderRequestV4 createV4Order(Map<String,String> mapOfData){
+    private OrderRequestV4 createV4Order(Map<String,String> mapOfData)
+    {
         String v4OrderRequestTemplate = mapOfData.get("v4OrderRequest");
         String shipperRefNo = generateShipperRefNo();
         String pickupDate = PICKUP_OR_DELIVERY_DATE_FORMAT.format(getNextDate(1));

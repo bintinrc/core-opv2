@@ -93,7 +93,8 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         expectedOrderMappings.forEach(this::verifyOrderMappingRecord);
     }
 
-    public void editOrderMapping(ThirdPartyOrderMapping thirdPartyOrderMapping){
+    public void editOrderMapping(ThirdPartyOrderMapping thirdPartyOrderMapping)
+    {
         searchTableByTrackingId(thirdPartyOrderMapping.getTrackingId());
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
         editMappingPage.fillTheForm(thirdPartyOrderMapping);
@@ -166,23 +167,34 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         {
             waitUntilVisibilityOfElementLocated(DIALOG_LOCATOR);
             String value = thirdPartyOrderMapping.getTrackingId();
-            if (value != null) {
+
+            if(value!=null)
+            {
                 sendKeysById(FIELD_TRACKING_ID_ID, value);
             }
+
             value = thirdPartyOrderMapping.getThirdPlTrackingId();
-            if (value != null) {
+
+            if(value!=null)
+            {
                 sendKeysById(FIELD_3PL_TRACKING_ID_ID, value);
             }
+
             value = thirdPartyOrderMapping.getShipperName();
-            if (value != null) {
+
+            if(value!=null)
+            {
                 selectValueFromMdSelectById(FIELD_SHIPPER_ID_ID, value);
                 thirdPartyOrderMapping.setShipperId(Integer.parseInt(getMdSelectedItemValueAttributeById(FIELD_SHIPPER_ID_ID)));
-            } else {
+            }
+            else
+            {
                 adjustSelectedShipperInfo(thirdPartyOrderMapping);
             }
         }
 
-        public void adjustSelectedShipperInfo(ThirdPartyOrderMapping thirdPartyOrderMapping){
+        public void adjustSelectedShipperInfo(ThirdPartyOrderMapping thirdPartyOrderMapping)
+        {
             thirdPartyOrderMapping.setShipperName(getMdSelectValueById(FIELD_SHIPPER_ID_ID));
             thirdPartyOrderMapping.setShipperId(Integer.parseInt(getMdSelectedItemValueAttributeById(FIELD_SHIPPER_ID_ID)));
         }
@@ -193,7 +205,8 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
             waitUntilInvisibilityOfElementLocated(DIALOG_LOCATOR);
         }
 
-        public void closeDialog(){
+        public void closeDialog()
+        {
             clickNvIconButtonByName(BUTTON_CLOSE_NAME);
             waitUntilInvisibilityOfElementLocated(DIALOG_LOCATOR);
         }
@@ -222,12 +235,14 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
             waitUntilVisibilityOfElementLocated(String.format("//span[contains(text(), '%s')]", csvFile.getName()));
         }
 
-        public void submitForm(){
+        public void submitForm()
+        {
             clickNvButtonSaveByNameAndWaitUntilDone(BUTTON_SUBMIT_NAME);
             waitUntilInvisibilityOfElementLocated(DIALOG_LOCATOR);
         }
 
-        public void closeDialog(){
+        public void closeDialog()
+        {
             clickNvIconButtonByName(BUTTON_CLOSE_NAME);
             waitUntilInvisibilityOfElementLocated(DIALOG_LOCATOR);
         }
@@ -247,18 +262,26 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         public void fillTheForm(ThirdPartyOrderMapping thirdPartyOrderMapping)
         {
             String value = thirdPartyOrderMapping.getThirdPlTrackingId();
-            if (value != null) {
+
+            if(value!=null)
+            {
                 sendKeysById(FIELD_3PL_TRACKING_ID_ID, value);
             }
+
             value = thirdPartyOrderMapping.getShipperName();
-            if (value != null) {
+
+            if(value!=null)
+            {
                 selectValueFromMdSelectById(FIELD_SHIPPER_ID_ID, value);
-            } else {
+            }
+            else
+            {
                 thirdPartyOrderMapping.setShipperName(getMdSelectValueById(FIELD_SHIPPER_ID_ID));
             }
         }
 
-        public void submitForm(){
+        public void submitForm()
+        {
             clickNvButtonSaveByName(BUTTON_SUBMIT_NAME);
         }
     }
@@ -281,7 +304,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
             int recordsCount = getElementsCount(By.xpath(xpathForCounting));
             List<ThirdPartyOrderMapping> orderMappings = new ArrayList<>();
 
-            for (int rowIndex=1; rowIndex<=recordsCount; rowIndex++)
+            for(int rowIndex=1; rowIndex<=recordsCount; rowIndex++)
             {
                 ThirdPartyOrderMapping orderMapping = new ThirdPartyOrderMapping();
                 String locator = String.format(cellLocatorTemplate, rowIndex, 1);
@@ -307,7 +330,9 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         {
             List<ThirdPartyOrderMapping> orderMappings = readMappingUploadResults();
             Assert.assertEquals("Unexpected number of created order mappings", expectedOrderMappings.size(), orderMappings.size());
-            for (int i=0; i<expectedOrderMappings.size(); i++) {
+
+            for(int i=0; i<expectedOrderMappings.size(); i++)
+            {
                 ThirdPartyOrderMapping expectedOrderMapping = expectedOrderMappings.get(i);
                 ThirdPartyOrderMapping actualOrderMapping = orderMappings.get(i);
                 Assert.assertEquals("Upload Results dialog: Third Party Order [" + i + 1 + "] Tracking ID", expectedOrderMapping.getTrackingId(), actualOrderMapping.getTrackingId());
