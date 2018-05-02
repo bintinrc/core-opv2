@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.ThirdPartyOrderMapping;
 import com.google.common.collect.ImmutableList;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -28,6 +29,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
     public static final String BUTTON_UPLOAD_BULK_NAME = "container.third-party-order.create-multiple-mapping";
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
     public static final String ACTION_BUTTON_DELETE = "commons.delete";
+    public static final String ACTION_BUTTON_COMPLETE = "container.third-party-order.complete-order";
 
     public UploadSingleMappingPage uploadSingleMappingPage;
     public UploadBulkMappingPage uploadBulkMappingPage;
@@ -102,15 +104,30 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
         pause100ms();
         clickButtonOnMdDialogByAriaLabel("Confirm");
-        waitUntilInvisibilityOfToast("Third Party Order Deleted");
-        waitUntilInvisibilityOfElementLocated("Third Party Order Deleted");
+        String toastMessage = "Third Party Order Deleted";
+        waitUntilInvisibilityOfToast(toastMessage);
+        waitUntilInvisibilityOfElementLocated(toastMessage);
     }
 
-    public void verifyThirdPartyOrderMappingIsDeletedSuccessfully(ThirdPartyOrderMapping thirdPartyOrderMapping)
+    public void completeThirdPartyOrder(ThirdPartyOrderMapping thirdPartyOrderMapping)
+    {
+        searchTableByTrackingId(thirdPartyOrderMapping.getTrackingId());
+        clickActionButtonOnTable(1, ACTION_BUTTON_COMPLETE);
+        pause100ms();
+        clickButtonOnMdDialogByAriaLabel("Confirm");
+        String toastMessage = "Completed Order";
+        waitUntilInvisibilityOfToast(toastMessage);
+        waitUntilInvisibilityOfElementLocated(toastMessage);
+    }
+
+    public void verifyThirdPartyOrderMappingWasRemoved(ThirdPartyOrderMapping thirdPartyOrderMapping, String message)
     {
         searchTableByTrackingId(thirdPartyOrderMapping.getTrackingId());
         boolean isTableEmpty = isTableEmpty();
-        Assert.assertTrue(String.format("Third Party Order Mapping still exist in table. Fail to delete Third Party Order Mapping (Tracking ID = %s).", thirdPartyOrderMapping.getTrackingId()), isTableEmpty);
+        if (StringUtils.isBlank(message)){
+            message = "Third Party Order Mapping still exist in table";
+        }
+        Assert.assertTrue(message, isTableEmpty);
     }
 
     public void searchTableByTrackingId(String trackingId)

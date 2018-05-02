@@ -79,7 +79,10 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps
     @Then("^Operator verify the new mapping is deleted successfully$")
     public void operatorVerifyTheNewMappingIsDeletedSuccessfully(){
         ThirdPartyOrderMapping orderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
-        thirdPartyOrderManagementPage.verifyThirdPartyOrderMappingIsDeletedSuccessfully(orderMapping);
+        thirdPartyOrderManagementPage.verifyThirdPartyOrderMappingWasRemoved(
+                orderMapping,
+                String.format("Third Party Order Mapping still exist in table. Fail to delete Third Party Order Mapping (Tracking ID = %s).", orderMapping.getTrackingId())
+        );
     }
 
     @When("^Operator uploads bulk mapping$")
@@ -106,5 +109,20 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps
     public void operatorVerifyMultipleNewMappingIsCreatedSuccessfully(){
         List<ThirdPartyOrderMapping> expectedThirdPartyOrderMappings = getScenarioStorage().get(KEY_LIST_OF_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.verifyMultipleOrderMappingCreatedSuccessfully(expectedThirdPartyOrderMappings);
+    }
+
+    @When("^Operator complete the new mapping order$")
+    public void operatorCompleteTheNewMappingOrder(){
+        ThirdPartyOrderMapping orderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
+        thirdPartyOrderManagementPage.completeThirdPartyOrder(orderMapping);
+    }
+
+    @Then("^Operator verify the new mapping order is completed$")
+    public void operatorVerifyTheNewMappingOrderIsCompleted() {
+        ThirdPartyOrderMapping orderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
+        thirdPartyOrderManagementPage.verifyThirdPartyOrderMappingWasRemoved(
+                orderMapping,
+                String.format("Third Party Order Mapping still exist in table. Fail to complete Third Party Order (Tracking ID = %s).", orderMapping.getTrackingId())
+        );
     }
 }
