@@ -184,7 +184,8 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
             thirdPartyOrderMapping.setShipperId(Integer.parseInt(getMdSelectedItemValueAttributeById(FIELD_SHIPPER_ID_ID)));
         }
 
-        public void submitForm(){
+        public void submitForm()
+        {
             clickNvButtonSaveByName(BUTTON_SUBMIT_NAME);
             waitUntilInvisibilityOfElementLocated(DIALOG_LOCATOR);
         }
@@ -276,7 +277,9 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
             String cellLocatorTemplate = xpathForCounting + "[%d]/td[%d]";
             int recordsCount = getElementsCount(By.xpath(xpathForCounting));
             List<ThirdPartyOrderMapping> orderMappings = new ArrayList<>();
-            for (int rowIndex=1; rowIndex<=recordsCount; rowIndex++) {
+
+            for (int rowIndex=1; rowIndex<=recordsCount; rowIndex++)
+            {
                 ThirdPartyOrderMapping orderMapping = new ThirdPartyOrderMapping();
                 String locator = String.format(cellLocatorTemplate, rowIndex, 1);
                 orderMapping.setTrackingId(getText(locator));
@@ -288,6 +291,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
                 orderMapping.setStatus(getText(locator));
                 orderMappings.add(orderMapping);
             }
+
             return orderMappings;
         }
 
@@ -308,7 +312,8 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
             }
         }
 
-        public void closeDialog(){
+        public void closeDialog()
+        {
             clickNvIconButtonByName(BUTTON_CLOSE_NAME);
         }
     }
