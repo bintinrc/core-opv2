@@ -615,6 +615,11 @@ public class OperatorV2SimplePage extends SimplePage
         return getText(String.format("//md-select[@ng-model='%s']/md-select-value/span/div[@class='md-text']", mdSelectNgModel));
     }
 
+    public String getMdSelectValueById(String mdSelectId)
+    {
+        return getText(String.format("//md-select[contains(@id,'%s')]/md-select-value/span/div[@class='md-text']", mdSelectId));
+    }
+
     public String getMdSelectValueTrimmed(String mdSelectNgModel)
     {
         String value = getMdSelectValue(mdSelectNgModel);

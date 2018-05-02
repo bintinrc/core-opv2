@@ -1,10 +1,12 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.client.order_create.OrderCreateClientV3;
+import co.nvqa.commons.client.order_create.OrderCreateClientV4;
 import co.nvqa.commons.constants.HttpConstants;
 import co.nvqa.commons.cucumber.glue.StandardSteps;
 import co.nvqa.commons.model.order_create.v3.AsyncResponse;
 import co.nvqa.commons.model.order_create.v3.OrderRequestV3;
+import co.nvqa.commons.model.order_create.v4.OrderRequestV4;
 import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.util.OrderCreateHelper;
@@ -16,6 +18,7 @@ import io.restassured.response.Response;
 import org.junit.Assert;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +54,23 @@ public class ApiShipperExtSteps extends StandardSteps<ScenarioManager>
         }
 
         pause1s();
+    }
+
+    @Given("^Create an V4 order with the following attributes:$")
+    public void shipperCreateV4Order(Map<String,String> mapOfData) {
+        String v4OrderRequestTemplate = mapOfData.get("v4OrderRequest");
+        String shipperRefNo = generateShipperRefNo();
+        String pickupDate = PICKUP_OR_DELIVERY_DATE_FORMAT.format(getNextDate(1));
+
+        Map<String, String> mapOfDynamicVariable = new HashMap<>();
+        mapOfDynamicVariable.put("shipper-order-ref-no", shipperRefNo);
+        mapOfDynamicVariable.put("tmp-pickup-date", pickupDate);
+        String orderRequestV4Json = replaceParam(v4OrderRequestTemplate, mapOfDynamicVariable);
+
+        OrderRequestV4 orderRequestV4 = JsonHelper.fromJson(JsonHelper.getDefaultSnakeCaseMapper(), orderRequestV4Json, OrderRequestV4.class);
+        OrderCreateClientV4 orderCreateClientV4 = OrderCreateHelper.getOrderCreateClientV4();
+        OrderRequestV4 response = orderCreateClientV4.createOrder(orderRequestV4);
+        getScenarioStorage().put(KEY_CREATED_ORDER_TRACKING_ID, response.getTrackingNumber());
     }
 
     private OrderRequestV3 createV3Order(Map<String, String> arg1)
