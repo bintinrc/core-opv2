@@ -52,7 +52,8 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         uploadSingleMappingPage.submitForm();
     }
 
-    public void adjustAvailableThirdPartyShipperData(ThirdPartyOrderMapping thirdPartyOrderMapping){
+    public void adjustAvailableThirdPartyShipperData(ThirdPartyOrderMapping thirdPartyOrderMapping)
+    {
         clickNvIconTextButtonByName(BUTTON_UPLOAD_SINGLE_NAME);
         uploadSingleMappingPage.adjustSelectedShipperInfo(thirdPartyOrderMapping);
         uploadSingleMappingPage.closeDialog();
@@ -65,26 +66,30 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         uploadBulkMappingPage.submitForm();
     }
 
-    public void verifyOrderMappingCreatedSuccessfully(ThirdPartyOrderMapping expectedOrderMapping){
+    public void verifyOrderMappingCreatedSuccessfully(ThirdPartyOrderMapping expectedOrderMapping)
+    {
         uploadResultsPage.verifyUploadResultsData(expectedOrderMapping);
         uploadResultsPage.closeDialog();
         verifyOrderMappingRecord(expectedOrderMapping);
     }
 
-    public void verifyMultipleOrderMappingCreatedSuccessfully(List<ThirdPartyOrderMapping> expectedOrderMappings){
+    public void verifyMultipleOrderMappingCreatedSuccessfully(List<ThirdPartyOrderMapping> expectedOrderMappings)
+    {
         uploadResultsPage.verifyUploadResultsData(expectedOrderMappings);
         uploadResultsPage.closeDialog();
         verifyOrderMappingRecords(expectedOrderMappings);
     }
 
-    public void verifyOrderMappingRecord(ThirdPartyOrderMapping expectedOrderMapping){
+    public void verifyOrderMappingRecord(ThirdPartyOrderMapping expectedOrderMapping)
+    {
         searchTableByTrackingId(expectedOrderMapping.getTrackingId());
         Assert.assertEquals("Third Party Order Tracking ID", expectedOrderMapping.getTrackingId(), getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID));
         Assert.assertEquals("Third Party Order 3PL Tracking ID", expectedOrderMapping.getThirdPlTrackingId(), getTextOnTable(1, COLUMN_CLASS_DATA_THIRD_PARTY_TRACKING_ID));
         Assert.assertEquals("Third Party Order 3PL Provider", expectedOrderMapping.getShipperName(), getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER_NAME));
     }
 
-    public void verifyOrderMappingRecords(List<ThirdPartyOrderMapping> expectedOrderMappings){
+    public void verifyOrderMappingRecords(List<ThirdPartyOrderMapping> expectedOrderMappings)
+    {
         expectedOrderMappings.forEach(this::verifyOrderMappingRecord);
     }
 
@@ -186,7 +191,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
 
         public void submitForm()
         {
-            clickNvButtonSaveByName(BUTTON_SUBMIT_NAME);
+            clickNvButtonSaveByNameAndWaitUntilDone(BUTTON_SUBMIT_NAME);
             waitUntilInvisibilityOfElementLocated(DIALOG_LOCATOR);
         }
 
@@ -295,11 +300,13 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
             return orderMappings;
         }
 
-        public void verifyUploadResultsData(ThirdPartyOrderMapping expectedOrderMapping){
+        public void verifyUploadResultsData(ThirdPartyOrderMapping expectedOrderMapping)
+        {
             verifyUploadResultsData(ImmutableList.of(expectedOrderMapping));
         }
 
-        public void verifyUploadResultsData(List<ThirdPartyOrderMapping> expectedOrderMappings){
+        public void verifyUploadResultsData(List<ThirdPartyOrderMapping> expectedOrderMappings)
+        {
             List<ThirdPartyOrderMapping> orderMappings = readMappingUploadResults();
             Assert.assertEquals("Unexpected number of created order mappings", expectedOrderMappings.size(), orderMappings.size());
             for (int i=0; i<expectedOrderMappings.size(); i++) {
