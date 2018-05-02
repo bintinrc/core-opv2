@@ -78,7 +78,7 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps
         ThirdPartyOrderMapping orderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.verifyThirdPartyOrderMappingWasRemoved(
                 orderMapping,
-                String.format("Third Party Order Mapping still exist in table. Fail to delete Third Party Order Mapping (Tracking ID = %s).", orderMapping.getTrackingId())
+                String.format("Fail to delete Third Party Order Mapping (Tracking ID = %s).", orderMapping.getTrackingId())
         );
     }
 
@@ -119,7 +119,7 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps
         ThirdPartyOrderMapping orderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.verifyThirdPartyOrderMappingWasRemoved(
                 orderMapping,
-                String.format("Third Party Order Mapping still exist in table. Fail to complete Third Party Order (Tracking ID = %s).", orderMapping.getTrackingId())
+                String.format("Fail to complete Third Party Order (Tracking ID = %s).", orderMapping.getTrackingId())
         );
     }
 }

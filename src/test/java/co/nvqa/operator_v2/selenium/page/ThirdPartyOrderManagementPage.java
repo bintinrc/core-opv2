@@ -30,6 +30,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
     public static final String ACTION_BUTTON_DELETE = "commons.delete";
     public static final String ACTION_BUTTON_COMPLETE = "container.third-party-order.complete-order";
+    public static final String CONFIRM_BUTTON_ARIA_LABEL = "Confirm";
 
     public UploadSingleMappingPage uploadSingleMappingPage;
     public UploadBulkMappingPage uploadBulkMappingPage;
@@ -108,7 +109,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         searchTableByTrackingId(thirdPartyOrderMapping.getTrackingId());
         clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
         pause100ms();
-        clickButtonOnMdDialogByAriaLabel("Confirm");
+        clickButtonOnMdDialogByAriaLabel(CONFIRM_BUTTON_ARIA_LABEL);
         String toastMessage = "Third Party Order Deleted";
         waitUntilInvisibilityOfToast(toastMessage);
         waitUntilInvisibilityOfElementLocated(toastMessage);
@@ -119,7 +120,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         searchTableByTrackingId(thirdPartyOrderMapping.getTrackingId());
         clickActionButtonOnTable(1, ACTION_BUTTON_COMPLETE);
         pause100ms();
-        clickButtonOnMdDialogByAriaLabel("Confirm");
+        clickButtonOnMdDialogByAriaLabel(CONFIRM_BUTTON_ARIA_LABEL);
         String toastMessage = "Completed Order";
         waitUntilInvisibilityOfToast(toastMessage);
         waitUntilInvisibilityOfElementLocated(toastMessage);
@@ -129,9 +130,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
     {
         searchTableByTrackingId(thirdPartyOrderMapping.getTrackingId());
         boolean isTableEmpty = isTableEmpty();
-        if (StringUtils.isBlank(message)){
-            message = "Third Party Order Mapping still exist in table";
-        }
+        message = "Third Party Order Mapping still exist in table. " + message;
         Assert.assertTrue(message, isTableEmpty);
     }
 
