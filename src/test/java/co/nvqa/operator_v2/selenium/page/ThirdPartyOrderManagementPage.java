@@ -1,14 +1,13 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.ThirdPartyOrderMapping;
-import com.google.common.collect.ImmutableList;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -301,7 +300,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
 
         public void verifyUploadResultsData(ThirdPartyOrderMapping expectedOrderMapping)
         {
-            verifyUploadResultsData(ImmutableList.of(expectedOrderMapping));
+            verifyUploadResultsData(Collections.singletonList(expectedOrderMapping));
         }
 
         public void verifyUploadResultsData(List<ThirdPartyOrderMapping> expectedOrderMappings)
