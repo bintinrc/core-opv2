@@ -5,7 +5,6 @@ import co.nvqa.operator_v2.model.ThirdPartyOrderMapping;
 import co.nvqa.operator_v2.selenium.page.MainPage;
 import co.nvqa.operator_v2.selenium.page.ThirdPartyOrderManagementPage;
 import com.google.inject.Inject;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -55,7 +54,6 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps
     @Then("^Operator verify the new mapping is created successfully$")
     public void operatorVerifyTheNewMappingIsCreatedSuccessfully() throws Throwable {
         ThirdPartyOrderMapping expectedOrderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
-        expectedOrderMapping.setStatus("Saved");
         thirdPartyOrderManagementPage.verifyOrderMappingCreatedSuccessfully(expectedOrderMapping);
     }
 
@@ -86,16 +84,27 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps
 
     @When("^Operator uploads bulk mapping$")
     public void operatorUploadsBulkMapping() {
-        List<String> trackingIds = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_IDS);
+        List<String> trackingIds = getScenarioStorage().get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        ThirdPartyOrderMapping shipperInfo = new ThirdPartyOrderMapping();
+        thirdPartyOrderManagementPage.adjustAvailableThirdPartyShipperData(shipperInfo);
         List<ThirdPartyOrderMapping> thirdPartyOrderMappings =
                 trackingIds.stream()
                 .map(trackingId -> {
                     ThirdPartyOrderMapping thirdPartyOrderMapping = new ThirdPartyOrderMapping();
                     thirdPartyOrderMapping.setTrackingId(trackingId);
                     thirdPartyOrderMapping.setThirdPlTrackingId("3PL" + trackingId);
+                    thirdPartyOrderMapping.setShipperId(shipperInfo.getShipperId());
+                    thirdPartyOrderMapping.setShipperName(shipperInfo.getShipperName());
                     return thirdPartyOrderMapping;
                 })
                 .collect(Collectors.toList());
         thirdPartyOrderManagementPage.uploadBulkMapping(thirdPartyOrderMappings);
+        getScenarioStorage().put(KEY_LIST_OF_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS, thirdPartyOrderMappings);
+    }
+
+    @Then("^Operator verify multiple new mapping is created successfully$")
+    public void operatorVerifyMultipleNewMappingIsCreatedSuccessfully(){
+        List<ThirdPartyOrderMapping> expectedThirdPartyOrderMappings = getScenarioStorage().get(KEY_LIST_OF_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
+        thirdPartyOrderManagementPage.verifyMultipleOrderMappingCreatedSuccessfully(expectedThirdPartyOrderMappings);
     }
 }

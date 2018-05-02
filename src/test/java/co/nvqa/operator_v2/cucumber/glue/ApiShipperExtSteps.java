@@ -70,7 +70,7 @@ public class ApiShipperExtSteps extends StandardSteps<ScenarioManager>
             OrderRequestV4 response = createV4Order(mapOfData);
             orderTrackingIds.add(response.getTrackingNumber());
         }
-        getScenarioStorage().put(KEY_CREATED_ORDER_TRACKING_IDS, orderTrackingIds);
+        getScenarioStorage().put(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID, orderTrackingIds);
     }
 
     private OrderRequestV4 createV4Order(Map<String,String> mapOfData){

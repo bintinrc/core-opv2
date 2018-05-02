@@ -10,7 +10,7 @@ public class ThirdPartyOrderMapping
     private String shipperName;
     private String trackingId;
     private String thirdPlTrackingId;
-    private String status;
+    private String status = "Saved";
 
     public ThirdPartyOrderMapping()
     {
