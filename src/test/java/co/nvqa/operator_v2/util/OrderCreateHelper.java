@@ -27,14 +27,14 @@ public class OrderCreateHelper
     private static final SimpleDateFormat SDF_ORDER_REQUEST = new SimpleDateFormat("yyyy-MM-dd");
     private static final RandomStringGenerator ALPHA_NUMERIC_STRING_GENERATOR = new RandomStringGenerator.Builder().withinRange('0', 'z').filteredBy(CharacterPredicates.LETTERS, CharacterPredicates.DIGITS).build();
 
-    private static String CREATE_ORDER_ACCESS_TOKEN = null; //-- refer to qa-shaun@ninjavan.sg (235)
-    private static String CREATE_ORDER_V4_ACCESS_TOKEN = null;
-    private static String CREATE_ORDER_V2_ACCESS_TOKEN = null;
-    private static String CREATE_ORDER_V3_ACCESS_TOKEN = null;
+    private static String CREATE_ORDER_ACCESS_TOKEN; // Refer to qa-shaun@ninjavan.sg (235)
+    private static String CREATE_ORDER_V4_ACCESS_TOKEN;
+    private static String CREATE_ORDER_V2_ACCESS_TOKEN;
+    private static String CREATE_ORDER_V3_ACCESS_TOKEN;
 
-    //-- these two will be replaced by newer Tracking ID on run
-    public static final String EXISTING_V2_TRACKING_ID = "SHAUN123456789"; //-- e.g.: SHAUN 123456789 A (post pended with A)
-    public static final String EXISTING_V3_TRACKING_ID = "NVSGSHAUN123456788"; //-- e.g.: NV SG SHAUN 123456789
+    // These two will be replaced by newer Tracking ID on run.
+    public static final String EXISTING_V2_TRACKING_ID = "SHAUN123456789"; // e.g.: SHAUN 123456789 A (post pended with A)
+    public static final String EXISTING_V3_TRACKING_ID = "NVSGSHAUN123456788"; // e.g.: NV SG SHAUN 123456789
 
     /**
      * Get next valid working days (Mon-Sat).
@@ -64,7 +64,7 @@ public class OrderCreateHelper
                 cal.add(Calendar.DATE, 3);
                 break;
             case "TODAY":
-                //-- no need to add zero days.
+                // No need to add zero days.
                 break;
             default:
                 return dateString;
@@ -196,28 +196,34 @@ public class OrderCreateHelper
      *
      * @return Shipper's access token.
      */
-    public static String getShipperAccessToken(String version){
-        switch(version.toUpperCase()){
+    public static String getShipperAccessToken(String version)
+    {
+        switch(version.toUpperCase())
+        {
             case "V2":
-                if (CREATE_ORDER_V2_ACCESS_TOKEN == null) {
-                    CREATE_ORDER_V2_ACCESS_TOKEN = getCreateOrderAcceessTocken(TestConstants.SHIPPER_V2_CLIENT_ID, TestConstants.SHIPPER_V2_CLIENT_SECRET);
+                if(CREATE_ORDER_V2_ACCESS_TOKEN==null)
+                {
+                    CREATE_ORDER_V2_ACCESS_TOKEN = getCreateOrderAccessToken(TestConstants.SHIPPER_V2_CLIENT_ID, TestConstants.SHIPPER_V2_CLIENT_SECRET);
                 }
                 return CREATE_ORDER_V2_ACCESS_TOKEN;
             case "V4":
-                if (CREATE_ORDER_V4_ACCESS_TOKEN == null) {
-                    CREATE_ORDER_V4_ACCESS_TOKEN = getCreateOrderAcceessTocken(TestConstants.SHIPPER_V4_CLIENT_ID, TestConstants.SHIPPER_V4_CLIENT_SECRET);
+                if(CREATE_ORDER_V4_ACCESS_TOKEN==null)
+                {
+                    CREATE_ORDER_V4_ACCESS_TOKEN = getCreateOrderAccessToken(TestConstants.SHIPPER_V4_CLIENT_ID, TestConstants.SHIPPER_V4_CLIENT_SECRET);
                 }
                 return CREATE_ORDER_V4_ACCESS_TOKEN;
             case "V3":
             default:
-                if (CREATE_ORDER_V3_ACCESS_TOKEN == null) {
-                    CREATE_ORDER_V3_ACCESS_TOKEN = getCreateOrderAcceessTocken(TestConstants.SHIPPER_V3_CLIENT_ID, TestConstants.SHIPPER_V3_CLIENT_SECRET);
+                if(CREATE_ORDER_V3_ACCESS_TOKEN==null)
+                {
+                    CREATE_ORDER_V3_ACCESS_TOKEN = getCreateOrderAccessToken(TestConstants.SHIPPER_V3_CLIENT_ID, TestConstants.SHIPPER_V3_CLIENT_SECRET);
                 }
                 return CREATE_ORDER_V3_ACCESS_TOKEN;
         }
     }
 
-    private static String getCreateOrderAcceessTocken(String clientId, String clientSecret) {
+    private static String getCreateOrderAccessToken(String clientId, String clientSecret)
+    {
         ClientCredentialsAuth clientCredentialsAuth = new ClientCredentialsAuth(clientId, clientSecret);
         AuthClient authClient = new AuthClient(TestConstants.API_BASE_URL);
         AuthResponse authResponse = authClient.authenticate(clientCredentialsAuth);

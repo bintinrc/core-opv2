@@ -2,10 +2,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.ThirdPartyOrderMapping;
-import co.nvqa.operator_v2.selenium.page.MainPage;
 import co.nvqa.operator_v2.selenium.page.ThirdPartyOrderManagementPage;
 import com.google.inject.Inject;
-import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -20,7 +18,6 @@ import java.util.stream.Collectors;
 @ScenarioScoped
 public class ThirdPartyOrderManagementSteps extends AbstractSteps
 {
-    private MainPage mainPage;
     private ThirdPartyOrderManagementPage thirdPartyOrderManagementPage;
 
     @Inject
@@ -32,17 +29,12 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps
     @Override
     public void init()
     {
-        mainPage = new MainPage(getWebDriver());
         thirdPartyOrderManagementPage = new ThirdPartyOrderManagementPage(getWebDriver());
     }
 
-    @Given("^Operator open page Third Party Order Management$")
-    public void operatorOpenPageThirdPartyOrderManagement() {
-        mainPage.clickNavigation("Cross Border & 3PL", "Third Party Order Management", "third-party-order");
-    }
-
     @When("^Operator uploads new mapping$")
-    public void operatorUploadsNewMapping() throws Throwable {
+    public void operatorUploadsNewMapping()
+    {
         ThirdPartyOrderMapping thirdPartyOrderMapping = new ThirdPartyOrderMapping();
         String trackingId = getScenarioStorage().get(KEY_CREATED_ORDER_TRACKING_ID);
         thirdPartyOrderMapping.setTrackingId(trackingId);
@@ -52,32 +44,37 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps
     }
 
     @Then("^Operator verify the new mapping is created successfully$")
-    public void operatorVerifyTheNewMappingIsCreatedSuccessfully() throws Throwable {
+    public void operatorVerifyTheNewMappingIsCreatedSuccessfully()
+    {
         ThirdPartyOrderMapping expectedOrderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.verifyOrderMappingCreatedSuccessfully(expectedOrderMapping);
     }
 
     @When("^Operator edit the new mapping with a new data$")
-    public void operatorEditTheNewMappingWithANewData() {
+    public void operatorEditTheNewMappingWithANewData()
+    {
         ThirdPartyOrderMapping orderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         orderMapping.setThirdPlTrackingId(orderMapping.getThirdPlTrackingId() + "UPD");
         thirdPartyOrderManagementPage.editOrderMapping(orderMapping);
     }
 
     @Then("^Operator verify the new edited data is updated successfully$")
-    public void operatorVerifyTheNewEditedDataIsUpdatedSuccessfully(){
+    public void operatorVerifyTheNewEditedDataIsUpdatedSuccessfully()
+    {
         ThirdPartyOrderMapping expectedOrderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.verifyOrderMappingRecord(expectedOrderMapping);
     }
 
     @When("^Operator delete the new mapping$")
-    public void operatorDeleteTheNewMapping() {
+    public void operatorDeleteTheNewMapping()
+    {
         ThirdPartyOrderMapping orderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.deleteThirdPartyOrderMapping(orderMapping);
     }
 
     @Then("^Operator verify the new mapping is deleted successfully$")
-    public void operatorVerifyTheNewMappingIsDeletedSuccessfully(){
+    public void operatorVerifyTheNewMappingIsDeletedSuccessfully()
+    {
         ThirdPartyOrderMapping orderMapping = getScenarioStorage().get(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS);
         thirdPartyOrderManagementPage.verifyThirdPartyOrderMappingIsDeletedSuccessfully(orderMapping);
     }

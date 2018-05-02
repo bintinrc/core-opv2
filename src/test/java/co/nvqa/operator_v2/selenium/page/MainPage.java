@@ -40,6 +40,7 @@ public class MainPage extends OperatorV2SimplePage
         MAP_OF_END_URL.put("Recovery Tickets Scanning", "recovery-ticket-scanning");
         MAP_OF_END_URL.put("Route Cash Inbound", "cod");
         MAP_OF_END_URL.put("Third Party Shippers", "third-party-shipper");
+        MAP_OF_END_URL.put("Third Party Order Management", "third-party-order");
     }
 
     public MainPage(WebDriver webDriver)

@@ -508,6 +508,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
         String matchedTrackingIdXpathExpression = String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope//span[text()='%s']", searchTerm);
         String searchButtonXpathExpression = "//nv-api-text-button[@name='commons.search']";
 
+        ////div[contains(@ng-messages, 'ctrl.specificSearch.form.searchTerm.$error')]/div[text()='No Results Found']
+
         if(isElementExistFast(matchedTrackingIdXpathExpression))
         {
             click(matchedTrackingIdXpathExpression);
