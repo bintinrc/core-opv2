@@ -10,7 +10,7 @@ Feature: Route Monitoring
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     #Note: Tag ZZZ = 250
-    Given Operator set tags of the new created route to [250]
+    Given API Operator set tags of the new created route to [250]
     Given Operator go to menu Routing -> Route Monitoring
     When Operator filter Route Monitoring using data below and then load selection:
       | routeDate | {current-date-yyyy-MM-dd} |

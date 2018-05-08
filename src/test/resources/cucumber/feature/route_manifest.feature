@@ -15,7 +15,7 @@ Feature: Route Manifest
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     #Note: Tag ZZZ = 250
-    Given Operator set tags of the new created route to [250]
+    Given API Operator set tags of the new created route to [250]
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     And API Driver collect all his routes
@@ -42,7 +42,7 @@ Feature: Route Manifest
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     #Note: Tag ZZZ = 250
-    Given Operator set tags of the new created route to [250]
+    Given API Operator set tags of the new created route to [250]
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     And API Driver collect all his routes
