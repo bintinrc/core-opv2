@@ -16,11 +16,11 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
-import java.awt.*;
-import java.awt.event.InputEvent;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -265,80 +265,8 @@ public class ShipperPickupsSteps extends AbstractSteps
         addresses.forEach(address -> shipperPickupsPage.verifyReservationInfo(reservationInfo, address));
     }
 
-    public static void main(String[] args) throws AWTException
-    {
-        Robot r = new Robot();
-        Date start = new Date();
-        while (new Date().getTime() - start.getTime() < 300000){
-            simulateMouse(r);
-            typeRandom(r, 60);
-            r.delay(30000);
-        }
-    }
-
-    public static void moveMouse(Robot robot, int x, int y){
-        System.out.println("move mouse to " + x + "," + y);
-        robot.mouseMove(x, y);
-        robot.delay(1000);
-    }
-
-    public static void simulateMouse(Robot robot){
-        simulateMouse(robot, random.nextInt(10) + 10);
-    }
-
-    public static void simulateMouse(Robot robot, int count){
-        for (int i=0; i<count; i++){
-            moveMouseRandom(robot);
-            if (random.nextBoolean()){
-                mouseClick(robot);
-            }
-            if (random.nextBoolean()){
-                mouseWheel(robot, random.nextInt(40) - 20);
-            }
-            robot.delay(random.nextInt(5000) + 5000);
-        }
-    }
-
-    public static void mouseClick(Robot robot){
-        System.out.println("Mouse click");
-        robot.mousePress(InputEvent.BUTTON1_MASK);
-        robot.mouseRelease(InputEvent.BUTTON1_MASK);
-    }
-
-    public static void mouseWheel(Robot robot, int wheelAmount){
-        System.out.println("Mouse wheel " + wheelAmount);
-        robot.mouseWheel(wheelAmount);
-    }
-
-    public static void moveMouseRandom(Robot robot){
-        Random random = new Random();
-        int x = random.nextInt(400)+500;
-        int y = random.nextInt(300)+200;
-        moveMouse(robot, x, y);
-    }
-
-    public static void typeRandom(Robot robot, int length){
-        Random random = new Random();
-        for (int i=0; i<length; i++){
-            robot.delay(500);
-            int keyCode = random.nextInt(200);
-            try
-            {
-                robot.keyPress(keyCode);
-                robot.keyRelease(keyCode);
-            } catch (Exception ex){
-                System.out.println((char)keyCode + " " + keyCode + " invalid");
-                i--;
-                continue;
-            }
-            System.out.println((char)keyCode + " " + keyCode);
-        }
-    }
-
-    private static Random random = new Random();
-
     @Then("^Operator verify the reservation data is correct on Shipper Pickups page$")
-    public void operatorVerifyTheReservationDataIsCorrectOnShipperPickupsPage() throws Throwable
+    public void operatorVerifyTheReservationDataIsCorrectOnShipperPickupsPage()
     {
         ReservationInfo reservationInfo = get(KEY_CREATED_RESERVATION_INFO);
         Address address = get(KEY_CREATED_ADDRESS);

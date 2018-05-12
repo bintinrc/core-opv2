@@ -430,8 +430,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         }
 
         public String readSuggestedRoute(int index){
-            //return getSelectedValueOfMdAutocompleteOnTableWithNgRepeat(index, "route", "reservation in ctrl.data.reservations");
-            return "202832 - OpV2 No.1";
+            return getSelectedValueOfMdAutocompleteOnTableWithNgRepeat(index, "route", "reservation in ctrl.data.reservations");
         }
 
         public Route validateSuggestedRoutes(List<Route> validRoutes)
