@@ -378,6 +378,42 @@ public class OperatorV2SimplePage extends SimplePage
         return getTextOnTableWithNgRepeat(rowNumber, "class", columnDataClass, ngRepeat);
     }
 
+    public int getRowsCountOfTableWithNgRepeat(String ngRepeat)
+    {
+        try
+        {
+            List<WebElement> webElements = findElementsByXpath(String.format("//tr[@ng-repeat='%s']", ngRepeat));
+            return webElements.size();
+        }
+        catch(NoSuchElementException ex)
+        {
+            NvLogger.warn("Table with NgRepeat [" + ngRepeat + "] was not found");
+            return 0;
+        }
+    }
+
+    public String getSelectedValueOfMdAutocompleteOnTableWithNgRepeat(int rowNumber, String columnDataClass, String ngRepeat)
+    {
+        return getSelectedValueOfMdAutocompleteOnTableWithNgRepeat(rowNumber, "class", columnDataClass, ngRepeat);
+    }
+
+    public String getSelectedValueOfMdAutocompleteOnTableWithNgRepeat(int rowNumber, String columnAttributeName, String attributeValue, String ngRepeat)
+    {
+        String value = null;
+
+        try
+        {
+            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@%s, \"%s\")]/nv-autocomplete//input", ngRepeat, rowNumber, columnAttributeName, attributeValue));
+            value = we.getAttribute("value").trim();
+        }
+        catch(NoSuchElementException ex)
+        {
+            NvLogger.warn("Failed to getTextOnTableWithNgRepeat.");
+        }
+
+        return value;
+    }
+
     public String getTextOnTableWithNgRepeatUsingDataTitle(int rowNumber, String columnDataTitle, String ngRepeat)
     {
         return getTextOnTableWithNgRepeat(rowNumber, "data-title", columnDataTitle, ngRepeat);
@@ -826,5 +862,11 @@ public class OperatorV2SimplePage extends SimplePage
     public String convertTimeFrom24sHourTo12HoursAmPm(String the24HourTime)
     {
         return StandardTestUtils.convertTimeFrom24sHourTo12HoursAmPm(the24HourTime);
+    }
+
+    public void clickMdMenuItem(String parentMenuName, String childMenuName){
+        clickf("//md-menu-bar/md-menu/button[*[contains(text(), '%s')]]", parentMenuName);
+        waitUntilVisibilityOfElementLocated("//div[@aria-hidden='false']/md-menu-content");
+        clickf("//div[@aria-hidden='false']/md-menu-content/md-menu-item/button/span[contains(text(), '%s')]", childMenuName);
     }
 }

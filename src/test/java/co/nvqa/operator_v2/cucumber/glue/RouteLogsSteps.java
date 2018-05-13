@@ -86,6 +86,7 @@ public class RouteLogsSteps extends AbstractSteps
 
             put(KEY_CREATE_ROUTE_PARAMS, createRouteParams);
             put(KEY_CREATED_ROUTE, createdRoute);
+            putInList(KEY_LIST_OF_CREATED_ROUTES, createdRoute);
             put(KEY_CREATED_ROUTE_ID, createdRouteId);
             putInList(KEY_LIST_OF_ARCHIVED_ROUTE_IDS, createdRouteId);
         }
@@ -141,7 +142,7 @@ public class RouteLogsSteps extends AbstractSteps
                 put(KEY_CREATE_ROUTE_PARAMS, createRouteParams);
                 put(KEY_CREATED_ROUTE, createdRoute);
                 put(KEY_CREATED_ROUTE_ID, createdRouteId);
-                putInList(KEY_LIST_OF_CREATED_ROUTE, createdRoute);
+                putInList(KEY_LIST_OF_CREATED_ROUTES, createdRoute);
                 putInList(KEY_LIST_OF_CREATED_ROUTE_ID, createdRouteId);
                 putInList(KEY_LIST_OF_ARCHIVED_ROUTE_IDS, createdRouteId);
                 writeToCurrentScenarioLogf("Created Route #%d: %d", counter++, createdRouteId);

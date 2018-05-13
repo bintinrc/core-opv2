@@ -36,7 +36,7 @@ Feature: Shipper Pickups
       | comments     | GET_FROM_CREATED_RESERVATION |
 
     @ArchiveRouteViaDb
-    Scenario: Operator add Reservation to Route using API and verify the Reservation info is correct (uid:b8b62011-882f-451b-9331-6cec2077aab2)
+  Scenario: Operator add Reservation to Route using API and verify the Reservation info is correct (uid:b8b62011-882f-451b-9331-6cec2077aab2)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address using data below:
       | shipperId       | {shipper-v2-id} |
@@ -57,7 +57,7 @@ Feature: Shipper Pickups
       | driverName   | {ninja-driver-name}          |
 
     @ArchiveRouteViaDb
-    Scenario: Operator assign Reservation to Route on Shipper Pickups page (uid:992f1485-ef00-45cc-88d8-df36a3e4e77d)
+  Scenario: Operator assign Reservation to Route on Shipper Pickups page (uid:992f1485-ef00-45cc-88d8-df36a3e4e77d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address using data below:
       | shipperId       | {shipper-v2-id} |
@@ -116,6 +116,113 @@ Feature: Shipper Pickups
       | shipperName   | {shipper-v2-name}            |
       | shipperId     | {shipper-v2-id}              |
       | reservationId | GET_FROM_CREATED_RESERVATION |
+
+  Scenario: Operator should be able to create/duplicate single reservation on Shipper Pickups page
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new shipper address using data below:
+      | shipperId       | {shipper-v2-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create reservation using data below:
+      | shipperId   | {shipper-v2-id}                                                                                                                                    |
+      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
+    And Operator duplicates created reservation
+    Then Operator verify the duplicated reservation is created successfully
+
+  Scenario: Operator should be able to create/duplicate multiple reservations on Shipper Pickups page
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create multiple shipper addresses using data below:
+      | numberOfAddresses | 2               |
+      | shipperId         | {shipper-v2-id} |
+      | generateAddress   | RANDOM          |
+    Given API Operator create multiple reservations using data below:
+      | shipperId   | {shipper-v2-id}                                                                                                                                    |
+      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
+    And Operator duplicates created reservations
+    Then Operator verify the duplicated reservations are created successfully
+
+  @ArchiveRouteViaDb
+  Scenario: Operator should be able to use the Route Suggestion and add single reservation to the route on Shipper Pickups page
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new shipper address using data below:
+      | shipperId       | {shipper-v2-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create reservation using data below:
+      | shipperId   | {shipper-v2-id}                                                                                                                                    |
+      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator set tags of the new created route to [250]
+    Given API Operator retrieve routes using data below:
+      | tagIds | 250 |
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
+    And Operator use the Route Suggestion to add created reservation to the route
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName | {shipper-v2-name}        |
+      | routeId     | GET_FROM_SUGGESTED_ROUTE |
+      | driverName  | GET_FROM_SUGGESTED_ROUTE |
+
+  @ArchiveRouteViaDb
+  Scenario: Operator should be able to use the Route Suggestion and add multiple reservations to the route on Shipper Pickups page
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create multiple shipper addresses using data below:
+      | numberOfAddresses | 2               |
+      | shipperId         | {shipper-v2-id} |
+      | generateAddress   | RANDOM          |
+    Given API Operator create multiple reservations using data below:
+      | shipperId   | {shipper-v2-id}                                                                                                                                    |
+      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator set tags of the new created route to [250]
+    Given API Operator retrieve routes using data below:
+      | tagIds | 250 |
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
+    And Operator use the Route Suggestion to add created reservations to the route
+    Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
+      | shipperName | {shipper-v2-name}        |
+      | routeId     | GET_FROM_SUGGESTED_ROUTE |
+      | driverName  | GET_FROM_SUGGESTED_ROUTE |
+
+  @ArchiveRouteViaDb
+  Scenario: Operator should be able to remove the route from single reservation on Shipper Pickups page
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new shipper address using data below:
+      | shipperId       | {shipper-v2-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create reservation using data below:
+      | shipperId   | {shipper-v2-id} |
+      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add reservation pick-up to the route
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
+    And Operator removes the route from the created reservation
+    Then Operator verify the route was removed from the created reservation
+
+  @ArchiveRouteViaDb
+  Scenario: Operator should be able to remove the route from multiple reservations on Shipper Pickups page
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create multiple shipper addresses using data below:
+      | numberOfAddresses | 2               |
+      | shipperId         | {shipper-v2-id} |
+      | generateAddress   | RANDOM          |
+    Given API Operator create multiple reservations using data below:
+      | shipperId   | {shipper-v2-id}                                                                                                                                    |
+      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add reservation pick-ups to the route
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
+    And Operator removes the route from the created reservations
+    Then Operator verify the route was removed from the created reservations
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
