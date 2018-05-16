@@ -11,7 +11,7 @@ Feature: Shipper Pickups
       | generateAddress | RANDOM          |
     Given API Operator enable auto reservation for Shipper with ID = "{shipper-v2-id}" and change shipper default address to the new address
     Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     Given API Operator disable auto reservation for Shipper with ID = "{shipper-v2-id}"
     Given Operator go to menu Pick Ups -> Shipper Pickups
@@ -26,7 +26,7 @@ Feature: Shipper Pickups
       | shipperId       | {shipper-v2-id} |
       | generateAddress | RANDOM          |
     Given API Operator create reservation using data below:
-      | shipperId   | {shipper-v2-id} |
+      | shipperId   | {shipper-v2-id}                                                                                                                                    |
       | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
     Given Operator go to menu Pick Ups -> Shipper Pickups
     When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
@@ -35,14 +35,14 @@ Feature: Shipper Pickups
       | approxVolume | Less than 10 Parcels         |
       | comments     | GET_FROM_CREATED_RESERVATION |
 
-    @ArchiveRouteViaDb
+  @ArchiveRouteViaDb
   Scenario: Operator add Reservation to Route using API and verify the Reservation info is correct (uid:b8b62011-882f-451b-9331-6cec2077aab2)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address using data below:
       | shipperId       | {shipper-v2-id} |
       | generateAddress | RANDOM          |
     Given API Operator create reservation using data below:
-      | shipperId   | {shipper-v2-id} |
+      | shipperId   | {shipper-v2-id}                                                                                                                                    |
       | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -56,14 +56,14 @@ Feature: Shipper Pickups
       | routeId      | GET_FROM_CREATED_ROUTE       |
       | driverName   | {ninja-driver-name}          |
 
-    @ArchiveRouteViaDb
+  @ArchiveRouteViaDb
   Scenario: Operator assign Reservation to Route on Shipper Pickups page (uid:992f1485-ef00-45cc-88d8-df36a3e4e77d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address using data below:
       | shipperId       | {shipper-v2-id} |
       | generateAddress | RANDOM          |
     Given API Operator create reservation using data below:
-      | shipperId   | {shipper-v2-id} |
+      | shipperId   | {shipper-v2-id}                                                                                                                                    |
       | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
     Given Operator go to menu Pick Ups -> Shipper Pickups
     Given API Operator create new route using data below:
@@ -86,7 +86,7 @@ Feature: Shipper Pickups
       | shipperId       | {shipper-v2-id} |
       | generateAddress | RANDOM          |
     Given API Operator create reservation using data below:
-      | shipperId   | {shipper-v2-id} |
+      | shipperId   | {shipper-v2-id}                                                                                                                                    |
       | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -108,7 +108,7 @@ Feature: Shipper Pickups
       | shipperId       | {shipper-v2-id} |
       | generateAddress | RANDOM          |
     Given API Operator create reservation using data below:
-      | shipperId   | {shipper-v2-id} |
+      | shipperId   | {shipper-v2-id}                                                                                                                                    |
       | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
     Given Operator go to menu Pick Ups -> Shipper Pickups
     When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
@@ -196,7 +196,7 @@ Feature: Shipper Pickups
       | shipperId       | {shipper-v2-id} |
       | generateAddress | RANDOM          |
     Given API Operator create reservation using data below:
-      | shipperId   | {shipper-v2-id} |
+      | shipperId   | {shipper-v2-id}                                                                                                                                    |
       | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -223,6 +223,98 @@ Feature: Shipper Pickups
     When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
     And Operator removes the route from the created reservations
     Then Operator verify the route was removed from the created reservations
+
+  @ArchiveRouteViaDb
+  Scenario Outline: Operator should be able to filter the Shipper Pickups by parameters
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new shipper address using data below:
+      | shipperId       | {shipper-v2-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create reservation using data below:
+      | shipperId   | {shipper-v2-id}                                                                                                                                    |
+      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":<zoneId>, "hubId":<hubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add reservation pick-up to the route
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate | TODAY      |
+      | toDate   | TOMORROW   |
+      | hub      | <hubName>  |
+      | zone     | <zoneName> |
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName | {shipper-v2-name}      |
+      | routeId     | GET_FROM_CREATED_ROUTE |
+      | driverName  | {ninja-driver-name}    |
+    Examples:
+      | hubId    | hubName | zoneId    | zoneName        |
+      | 2        | DOJO    | {zone-id} |                 |
+      | {hub-id} |         | 2         | 2-ZZZ-All Zones |
+
+  Scenario: Operator should be able to download CSV file on Shipper Pickups page
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new shipper address using data below:
+      | shipperId       | {shipper-v2-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create reservation using data below:
+      | shipperId   | {shipper-v2-id}                                                                                                                                    |
+      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
+    And Operator download CSV file for created reservation
+    Then Operator verify the reservation info is correct in downloaded CSV file
+
+  Scenario: Operator should be able to edit the Priority Level of single reservation on Shipper Pickups page
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new shipper address using data below:
+      | shipperId       | {shipper-v2-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create reservation using data below:
+      | shipperId   | {shipper-v2-id}                                                                                                                                    |
+      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
+    And Operator set the Priority Level of the created reservation to "2" from Apply Action
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | priorityLevel | 2 |
+
+  Scenario: Operator should be able to edit the Priority Level of multiple reservation on Shipper Pickups page
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create multiple shipper addresses using data below:
+      | numberOfAddresses | 2               |
+      | shipperId         | {shipper-v2-id} |
+      | generateAddress   | RANDOM          |
+    Given API Operator create multiple reservations using data below:
+      | shipperId   | {shipper-v2-id}                                                                                                                                    |
+      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
+    And Operator set the Priority Level of the created reservations to "2" from Apply Action
+    Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
+      | priorityLevel | 2 |
+
+  Scenario: Operator should be able to edit the Priority Level of multiple reservation on Shipper Pickups page using "Set To All" option
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create multiple shipper addresses using data below:
+      | numberOfAddresses | 2               |
+      | shipperId         | {shipper-v2-id} |
+      | generateAddress   | RANDOM          |
+    Given API Operator create multiple reservations using data below:
+      | shipperId   | {shipper-v2-id}                                                                                                                                    |
+      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
+    And Operator set the Priority Level of the created reservations to "2" from Apply Action using "Set To All" option
+    Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
+      | priorityLevel | 2 |
+
+  Scenario: Operator should be able to create order V4 on Order Creation V4
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Order -> Order Creation V4
+    When Operator create order V4 by uploading XLSX on Order Creation V4 page using data below:
+      | shipper_id    | 20106                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderParams | {"service_type":"Parcel","service_level":"Standard","requested_tracking_number":"{{shipper-order-ref-no}}","reference":{"merchant_order_number":"ship-{{shipper-order-ref-no}}"},"from":{"name":"[TEST] Han Solo Exports","phone_number":"91234567","email":"jane.doe@gmail.com","address":{"address1":"30 Jalan Kilang Barat","address2":"Ninja Van HQ","country":"SG","postcode":"159363"}},"to":{"name":"[TEST] James T Kirk","phone_number":"98765432","email":"james.t.kirik@gmail.com","address":{"address1":"998 Toa Payoh North","address2":"#01-10","country":"SG","postcode":"318993"}},"parcel_job":{"is_pickup_required":false,"pickup_instruction":"Pickup with care!","delivery_start_date":"{{tmp-pickup-date}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"delivery_instruction":"If recipient is not around, leave parcel in power riser.","dimensions":{"weight":1.0,"size":"L"}}} |
+    Then Operator verify order V4 is created successfully on Order Creation V4 page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -464,6 +464,19 @@ public class OperatorV2SimplePage extends SimplePage
         }
     }
 
+    public void sendKeysToMdInputContainerOnTableWithNgRepeat(int rowNumber, String inputModel, String ngRepeat, CharSequence... keysToSend)
+    {
+        try
+        {
+            String xpathExpression = String.format("//tr[@ng-repeat='%s'][%d]/td//md-input-container[@model='%s']/input", ngRepeat, rowNumber, inputModel);
+            sendKeys(xpathExpression, keysToSend);
+        }
+        catch(NoSuchElementException ex)
+        {
+            throw new NvTestRuntimeException("Cannot find md input on table.", ex);
+        }
+    }
+
     public void checkRowWithMdVirtualRepeat(int rowNumber, String mdVirtualRepeat)
     {
         WebElement mdCheckboxWe = findElementByXpath(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", mdVirtualRepeat, rowNumber));
@@ -514,6 +527,8 @@ public class OperatorV2SimplePage extends SimplePage
         we.sendKeys(value);
         pause1s();
         we.sendKeys(Keys.RETURN);
+        pause200ms();
+        we.sendKeys(Keys.ESCAPE);
         pause200ms();
     }
 

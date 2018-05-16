@@ -1,0 +1,61 @@
+package co.nvqa.operator_v2.cucumber.glue;
+
+import co.nvqa.commons.model.order_create.v4.OrderRequestV4;
+import co.nvqa.commons.support.JsonHelper;
+import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.operator_v2.selenium.page.OrderCreationV4Page;
+import com.google.inject.Inject;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author Sergey Mishanin
+ */
+@ScenarioScoped
+public class OrderCreationV4Steps extends AbstractSteps
+{
+    private OrderCreationV4Page orderCreationV4Page;
+
+    @Inject
+    public OrderCreationV4Steps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    {
+        super(scenarioManager, scenarioStorage);
+    }
+
+    @Override
+    public void init()
+    {
+        orderCreationV4Page = new OrderCreationV4Page(getWebDriver());
+    }
+
+    @When("^Operator create order V4 by uploading XLSX on Order Creation V4 page using data below:$")
+    public void operatorCreateOrderVByUploadingXLSXOnOrderCreationVPageUsingDataBelow(Map<String, String> mapOfData) throws Throwable
+    {
+        int shipperId = Integer.parseInt(mapOfData.get("shipper_id"));
+        String v4OrderRequestTemplate = mapOfData.get("v4OrderParams");
+        String shipperRefNo = generateShipperRefNo();
+        String pickupDate = PICKUP_OR_DELIVERY_DATE_FORMAT.format(getNextDate(1));
+
+
+        Map<String, String> mapOfDynamicVariable = new HashMap<>();
+        mapOfDynamicVariable.put("shipper-order-ref-no", shipperRefNo);
+        mapOfDynamicVariable.put("tmp-pickup-date", pickupDate);
+        String orderRequestV4Json = replaceParam(v4OrderRequestTemplate, mapOfDynamicVariable);
+
+        OrderRequestV4 orderRequestV4 = JsonHelper.fromJson(JsonHelper.getDefaultSnakeCaseMapper(), orderRequestV4Json, OrderRequestV4.class);
+
+        orderCreationV4Page.uploadXlsx(orderRequestV4, shipperId);
+        put(KEY_CREATED_ORDER, orderRequestV4);
+    }
+
+    @Then("^Operator verify order V4 is created successfully on Order Creation V4 page$")
+    public void operatorVerifyOrderVIsCreatedSuccessfullyOnOrderCreationVPage() throws Throwable
+    {
+        OrderRequestV4 order = get(KEY_CREATED_ORDER);
+        orderCreationV4Page.verifyOrderIsCreatedSuccessfully(order);
+    }
+}
