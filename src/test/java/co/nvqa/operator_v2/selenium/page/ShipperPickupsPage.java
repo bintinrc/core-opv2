@@ -26,15 +26,19 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 {
     public static final String REMOVE_BUTTON_ARIA_LABEL = "Remove";
     public static final String REFRESH_BUTTON_ARIA_LABEL = "Refresh";
+    public static final String EDIT_FILTERS_BUTTON_ARIA_LABEL = "Edit Filters";
 
     private static final String CSV_FILENAME = "shipper-pickups.csv";
     private static final String SELECTED_COUNT_LABEL_LOCATOR = "//h5[contains(text(),'Selected:')]";
 
     private CreateSelectedReservationsDialog createSelectedReservationsDialog;
-    public BulkRouteAssignmentDialog bulkRouteAssignmentDialog;
+    private BulkRouteAssignmentDialog bulkRouteAssignmentDialog;
     private BulkPriorityEditDialog bulkPriorityEditDialog;
     private ApplyActionsMenu applyActionsMenu;
     private ReservationsTable reservationsTable;
+    private FiltersForm filtersForm;
+    private ReservationDetailsDialog reservationDetailsDialog;
+    private EditRouteDialog editRouteDialog;
 
     public ShipperPickupsPage(WebDriver webDriver)
     {
@@ -44,6 +48,19 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         bulkPriorityEditDialog = new BulkPriorityEditDialog(webDriver);
         applyActionsMenu = new ApplyActionsMenu(webDriver);
         reservationsTable = new ReservationsTable(webDriver);
+        filtersForm = new FiltersForm(webDriver);
+        reservationDetailsDialog = new ReservationDetailsDialog(webDriver);
+        editRouteDialog = new EditRouteDialog(webDriver);
+    }
+
+    public BulkRouteAssignmentDialog bulkRouteAssignmentDialog()
+    {
+        return bulkRouteAssignmentDialog;
+    }
+
+    public FiltersForm filtersForm()
+    {
+        return filtersForm;
     }
 
     private static String buildPickupAddress(Address address)
@@ -56,26 +73,12 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         assignReservationToRoute(address, routeId, null);
     }
 
-    public void refreshRoutes()
-    {
-        clickNvApiIconButtonByNameAndWaitUntilDone(REFRESH_BUTTON_ARIA_LABEL);
-    }
-
     public void assignReservationToRoute(Address address, Long routeId, Integer priorityLevel)
     {
         reservationsTable.searchByPickupAddress(address);
         reservationsTable.clickActionButton(1, ACTION_BUTTON_ROUTE_EDIT);
-        pause2s();
-
-        Assert.assertNotNull("Route ID should not be null.", routeId);
-        selectValueFromNvAutocomplete("ctrl.data.textRoute", String.valueOf(routeId));
-
-        if (priorityLevel != null)
-        {
-            sendKeysById("Priority Level", String.valueOf(priorityLevel));
-        }
-
-        clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
+        editRouteDialog.fillTheForm(routeId, priorityLevel);
+        editRouteDialog.submitForm();
     }
 
     public void verifyReservationInfo(Address address, String shipperName, String routeId, String driverName, String priorityLevel, String approxVolume, String comments)
@@ -129,15 +132,20 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         }
     }
 
+    public void openFiltersForm()
+    {
+        clickButtonByAriaLabel(EDIT_FILTERS_BUTTON_ARIA_LABEL);
+    }
+
     public void verifyReservationInfo(ReservationInfo expectedReservationInfo, Address address)
     {
         Date readyDate = expectedReservationInfo.getReadyByDate();
         Date latestDate = expectedReservationInfo.getLatestByDate();
         if (readyDate != null && latestDate != null)
         {
-            clickButtonByAriaLabel("Edit Filters");
-            filterReservationDate(readyDate, latestDate);
-            clickButtonLoadSelection();
+            openFiltersForm();
+            filtersForm.filterReservationDate(readyDate, latestDate);
+            filtersForm.clickButtonLoadSelection();
         }
 
         ReservationInfo actualReservationInfo = readReservationInfo(address);
@@ -225,19 +233,12 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     {
         String pickupAddress = reservationsTable.searchByPickupAddress(address);
         reservationsTable.clickActionButton(1, ACTION_BUTTON_DETAILS);
-        waitUntilVisibilityOfElementLocated("//md-dialog-content//h5[text()='Details']");
+        reservationDetailsDialog.waitUntilDialogDisplayed();
 
-        String actualShipperName = getTextTrimmed("//md-input-container[@id='field-shipper-name']/div");
-        Assert.assertEquals("Shipper Name", shipperName, actualShipperName);
-
-        String actualShipperId = getTextTrimmed("//md-input-container[@id='field-shipper-id']/div");
-        Assert.assertEquals("Shipper ID", shipperId, actualShipperId);
-
-        String actualReservationId = getTextTrimmed("//md-input-container[@id='field-reservation-id']/div");
-        Assert.assertEquals("Reservation ID", reservationId, actualReservationId);
-
-        String actualPickupAddress = getTextTrimmed("//md-input-container[@id='field-pickup-address']/div");
-        Assert.assertThat("Pickup Address", actualPickupAddress, Matchers.startsWith(pickupAddress));
+        Assert.assertEquals("Shipper Name", shipperName, reservationDetailsDialog.getShipperName());
+        Assert.assertEquals("Shipper ID", shipperId, reservationDetailsDialog.getShipperId());
+        Assert.assertEquals("Reservation ID", reservationId, reservationDetailsDialog.getReservationId());
+        Assert.assertThat("Pickup Address", reservationDetailsDialog.getPickupAddress(), Matchers.startsWith(pickupAddress));
     }
 
     public ReservationInfo duplicateReservation(Address address, Date date)
@@ -359,34 +360,56 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         return reservationInfo;
     }
 
-    public void filterReservationDate(Date fromDate, Date toDate)
-    {
-        setMdDatepicker("fromModel", fromDate);
-        setMdDatepicker("toModel", toDate);
-    }
-
-    public void filterByHub(String hub)
-    {
-        selectValueFromMdAutocomplete("Select Filter", "Hubs");
-        selectValueFromNvAutocompleteByItemTypes("Hubs", hub);
-    }
-
-    public void filterByZone(String zone)
-    {
-        selectValueFromMdAutocomplete("Select Filter", "Zones");
-        selectValueFromNvAutocompleteByItemTypes("Zones", zone);
-    }
-
-    public void clickButtonLoadSelection()
-    {
-        clickNvApiTextButtonByNameAndWaitUntilDone("Load Selection");
-    }
-
     public void clickButtonRefresh()
     {
-        clickNvApiIconButtonByNameAndWaitUntilDone("Refresh");
+        clickNvApiIconButtonByNameAndWaitUntilDone(REFRESH_BUTTON_ARIA_LABEL);
     }
 
+    /**
+     * Accessor for Reservation Details dialog
+     */
+    public static class ReservationDetailsDialog extends OperatorV2SimplePage
+    {
+        private static final String DIALOG_TITLE = "Reservation Details";
+        private static final String FIELD_SHIPPER_NAME_LOCATOR = "//md-input-container[@id='field-shipper-name']/div";
+        private static final String FIELD_SHIPPER_ID_LOCATOR = "//md-input-container[@id='field-shipper-id']/div";
+        private static final String FIELD_RESERVATION_ID_LOCATOR = "//md-input-container[@id='field-reservation-id']/div";
+        private static final String FIELD_PICKUP_ADDRESS_LOCATOR = "//md-input-container[@id='field-pickup-address']/div";
+
+        public ReservationDetailsDialog(WebDriver webDriver)
+        {
+            super(webDriver);
+        }
+
+        public void waitUntilDialogDisplayed()
+        {
+            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+        }
+
+        public String getShipperName()
+        {
+            return getTextTrimmed(FIELD_SHIPPER_NAME_LOCATOR);
+        }
+
+        public String getShipperId()
+        {
+            return getTextTrimmed(FIELD_SHIPPER_ID_LOCATOR);
+        }
+
+        public String getReservationId()
+        {
+            return getTextTrimmed(FIELD_RESERVATION_ID_LOCATOR);
+        }
+
+        public String getPickupAddress()
+        {
+            return getTextTrimmed(FIELD_PICKUP_ADDRESS_LOCATOR);
+        }
+    }
+
+    /**
+     * Accessor for Create Reservation dialog
+     */
     public static class CreateSelectedReservationsDialog extends OperatorV2SimplePage
     {
         private static final String DIALOG_LOCATOR = "//md-dialog[contains(@class,'reservation-reschedule-selected')]";
@@ -410,6 +433,45 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         }
     }
 
+    /**
+     * Accessor for Create Reservation dialog
+     */
+    public static class EditRouteDialog extends OperatorV2SimplePage
+    {
+        private static final String DIALOG_TITLE = "Edit Route";
+        private static final String FIELD_NEW_ROUTE_LOCATOR = "ctrl.data.textRoute";
+        private static final String FIELD_PRIORITY_LEVEL_LOCATOR = "Priority Level";
+        private static final String BUTTON_SUBMIT_LOCATOR = "commons.save-changes";
+
+        public EditRouteDialog(WebDriver webDriver)
+        {
+            super(webDriver);
+        }
+
+        public void fillTheForm(Long routeId, Integer priorityLevel)
+        {
+            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+            pause2s();
+
+            Assert.assertNotNull("Route ID should not be null.", routeId);
+            selectValueFromNvAutocomplete(FIELD_NEW_ROUTE_LOCATOR, String.valueOf(routeId));
+
+            if (priorityLevel != null)
+            {
+                sendKeysById(FIELD_PRIORITY_LEVEL_LOCATOR, String.valueOf(priorityLevel));
+            }
+        }
+
+        public void submitForm()
+        {
+            clickNvApiTextButtonByNameAndWaitUntilDone(BUTTON_SUBMIT_LOCATOR);
+            waitUntilInvisibilityOfMdDialogByTitle(DIALOG_TITLE);
+        }
+    }
+
+    /**
+     * Accessor for Bulk Priority Edit dialog
+     */
     public static class BulkPriorityEditDialog extends OperatorV2SimplePage
     {
         private static final String DIALOG_TITLE = "Bulk Priority Edit";
@@ -453,6 +515,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         }
     }
 
+    /**
+     * Accessor for Bulk Route Assignment dialog
+     */
     public static class BulkRouteAssignmentDialog extends OperatorV2SimplePage
     {
         private static final String DIALOG_TITLE = "Bulk Route Assignment";
@@ -518,6 +583,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         }
     }
 
+    /**
+     * Accessor for Apply Action menu
+     */
     public static class ApplyActionsMenu extends OperatorV2SimplePage
     {
         private static final String PARENT_MENU_NAME = "Apply Action";
@@ -563,6 +631,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         }
     }
 
+    /**
+     * Accessor for Reservations table
+     */
     public static class ReservationsTable extends OperatorV2SimplePage
     {
         private static final String MD_VIRTUAL_REPEAT = "data in getTableData()";
@@ -677,7 +748,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
         public void searchByPickupAddress(String pickupAddress)
         {
-            searchTableCustom1("pickup-address", pickupAddress);
+            searchTableCustom1(COLUMN_CLASS_DATA_PICKUP_ADDRESS, pickupAddress);
         }
 
         public String searchByPickupAddress(Address address)
@@ -685,6 +756,47 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
             String pickupAddress = buildPickupAddress(address);
             searchByPickupAddress(pickupAddress);
             return pickupAddress;
+        }
+    }
+
+    /**
+     * Accessor for Filters form
+     */
+    public static class FiltersForm extends OperatorV2SimplePage
+    {
+        private static final String FIELD_FROM_NG_MODEL = "fromModel";
+        private static final String FIELD_TO_NG_MODEL = "toModel";
+        private static final String BUTTON_LOAD_SELECTION_NAME = "Load Selection";
+        private static final String FIELD_SELECT_FILTER_PLACEHOLDER = "Select Filter";
+        private static final String HUBS_ITEM_TYPE = "Hubs";
+        private static final String ZONES_ITEM_TYPE = "Zones";
+
+        public FiltersForm(WebDriver webDriver)
+        {
+            super(webDriver);
+        }
+
+        public void filterReservationDate(Date fromDate, Date toDate)
+        {
+            setMdDatepicker(FIELD_FROM_NG_MODEL, fromDate);
+            setMdDatepicker(FIELD_TO_NG_MODEL, toDate);
+        }
+
+        public void filterByHub(String hub)
+        {
+            selectValueFromMdAutocomplete(FIELD_SELECT_FILTER_PLACEHOLDER, HUBS_ITEM_TYPE);
+            selectValueFromNvAutocompleteByItemTypes(HUBS_ITEM_TYPE, hub);
+        }
+
+        public void filterByZone(String zone)
+        {
+            selectValueFromMdAutocomplete(FIELD_SELECT_FILTER_PLACEHOLDER, ZONES_ITEM_TYPE);
+            selectValueFromNvAutocompleteByItemTypes(ZONES_ITEM_TYPE, zone);
+        }
+
+        public void clickButtonLoadSelection()
+        {
+            clickNvApiTextButtonByNameAndWaitUntilDone(BUTTON_LOAD_SELECTION_NAME);
         }
     }
 }

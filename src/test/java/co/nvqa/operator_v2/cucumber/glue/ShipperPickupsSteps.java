@@ -47,8 +47,8 @@ public class ShipperPickupsSteps extends AbstractSteps
     {
         Date currentDate = new Date();
         Date nextDayDate = TestUtils.getNextDate(1);
-        shipperPickupsPage.filterReservationDate(currentDate, nextDayDate);
-        shipperPickupsPage.clickButtonLoadSelection();
+        shipperPickupsPage.filtersForm().filterReservationDate(currentDate, nextDayDate);
+        shipperPickupsPage.filtersForm().clickButtonLoadSelection();
     }
 
     @When("^Operator set filter parameters and click Load Selection on Shipper Pickups page:$")
@@ -56,18 +56,18 @@ public class ShipperPickupsSteps extends AbstractSteps
     {
         Date fromDate = resolveFilterDate(mapOfData.getOrDefault("fromDate", "TODAY"));
         Date toDate = resolveFilterDate(mapOfData.getOrDefault("toDate", "TOMORROW"));
-        shipperPickupsPage.filterReservationDate(fromDate, toDate);
+        shipperPickupsPage.filtersForm().filterReservationDate(fromDate, toDate);
         String value = mapOfData.get("hub");
         if (StringUtils.isNotBlank(value))
         {
-            shipperPickupsPage.filterByHub(value);
+            shipperPickupsPage.filtersForm().filterByHub(value);
         }
         value = mapOfData.get("zone");
         if (StringUtils.isNotBlank(value))
         {
-            shipperPickupsPage.filterByZone(value);
+            shipperPickupsPage.filtersForm().filterByZone(value);
         }
-        shipperPickupsPage.clickButtonLoadSelection();
+        shipperPickupsPage.filtersForm().clickButtonLoadSelection();
     }
 
     private Date resolveFilterDate(String value)
@@ -271,8 +271,8 @@ public class ShipperPickupsSteps extends AbstractSteps
                 .suggestRoute(addresses, routeTags)
                 .validateSuggestedRoutes(zzzRoutes);
         put(KEY_SUGGESTED_ROUTE, suggestedRoute);
-        shipperPickupsPage.bulkRouteAssignmentDialog.submitForm();
-        shipperPickupsPage.refreshRoutes();
+        shipperPickupsPage.bulkRouteAssignmentDialog().submitForm();
+        shipperPickupsPage.clickButtonRefresh();
     }
 
     @And("^Operator removes the route from the created reservation$")
