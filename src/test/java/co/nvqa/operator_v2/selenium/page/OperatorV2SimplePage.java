@@ -508,12 +508,19 @@ public class OperatorV2SimplePage extends SimplePage
         selectValueFromNvAutocompleteBy("item-types", itemTypes, value);
     }
 
+    public void selectValueFromNvAutocompleteByItemTypesAndDismiss(String itemTypes, String value)
+    {
+        WebElement we = selectValueFromNvAutocompleteBy("item-types", itemTypes, value);
+        we.sendKeys(Keys.ESCAPE);
+        pause200ms();
+    }
+
     public void selectValueFromNvAutocompleteByPossibleOptions(String possibleOptions, String value)
     {
         selectValueFromNvAutocompleteBy("possible-options", possibleOptions, value);
     }
 
-    private void selectValueFromNvAutocompleteBy(String nvAutocompleteAttribute, String nvAutocompleteAttributeValue, String value)
+    private WebElement selectValueFromNvAutocompleteBy(String nvAutocompleteAttribute, String nvAutocompleteAttributeValue, String value)
     {
         String xpathExpression = String.format("//nv-autocomplete[@%s='%s']//input", nvAutocompleteAttribute, nvAutocompleteAttributeValue);
         WebElement we = findElementByXpath(xpathExpression);
@@ -528,8 +535,7 @@ public class OperatorV2SimplePage extends SimplePage
         pause1s();
         we.sendKeys(Keys.RETURN);
         pause200ms();
-        we.sendKeys(Keys.ESCAPE);
-        pause200ms();
+        return we;
     }
 
     public String getNvAutocompleteValue(String searchTextAttribute)

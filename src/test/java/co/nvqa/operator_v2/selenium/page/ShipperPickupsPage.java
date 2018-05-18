@@ -9,7 +9,11 @@ import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -785,13 +789,13 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         public void filterByHub(String hub)
         {
             selectValueFromMdAutocomplete(FIELD_SELECT_FILTER_PLACEHOLDER, HUBS_ITEM_TYPE);
-            selectValueFromNvAutocompleteByItemTypes(HUBS_ITEM_TYPE, hub);
+            selectValueFromNvAutocompleteByItemTypesAndDismiss(HUBS_ITEM_TYPE, hub);
         }
 
         public void filterByZone(String zone)
         {
             selectValueFromMdAutocomplete(FIELD_SELECT_FILTER_PLACEHOLDER, ZONES_ITEM_TYPE);
-            selectValueFromNvAutocompleteByItemTypes(ZONES_ITEM_TYPE, zone);
+            selectValueFromNvAutocompleteByItemTypesAndDismiss(ZONES_ITEM_TYPE, zone);
         }
 
         public void clickButtonLoadSelection()
