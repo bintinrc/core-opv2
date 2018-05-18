@@ -117,7 +117,7 @@ Feature: Shipper Pickups
       | shipperId     | {shipper-v2-id}              |
       | reservationId | GET_FROM_CREATED_RESERVATION |
 
-  Scenario: Operator should be able to create/duplicate single reservation on Shipper Pickups page
+  Scenario: Operator should be able to create/duplicate single reservation on Shipper Pickups page (uid:37a2c9b1-7f8f-41e8-a0a9-52f57b69bcdc)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address using data below:
       | shipperId       | {shipper-v2-id} |
@@ -130,7 +130,7 @@ Feature: Shipper Pickups
     And Operator duplicates created reservation
     Then Operator verify the duplicated reservation is created successfully
 
-  Scenario: Operator should be able to create/duplicate multiple reservations on Shipper Pickups page
+  Scenario: Operator should be able to create/duplicate multiple reservations on Shipper Pickups page (uid:e974f8e8-498c-4602-a63e-2560902ff343)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create multiple shipper addresses using data below:
       | numberOfAddresses | 2               |
@@ -145,7 +145,7 @@ Feature: Shipper Pickups
     Then Operator verify the duplicated reservations are created successfully
 
   @ArchiveRouteViaDb
-  Scenario: Operator should be able to use the Route Suggestion and add single reservation to the route on Shipper Pickups page
+  Scenario: Operator should be able to use the Route Suggestion and add single reservation to the route on Shipper Pickups page (uid:87eaa63d-5f66-4bc7-b425-ebf33ab47392)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address using data below:
       | shipperId       | {shipper-v2-id} |
@@ -167,7 +167,7 @@ Feature: Shipper Pickups
       | driverName  | GET_FROM_SUGGESTED_ROUTE |
 
   @ArchiveRouteViaDb
-  Scenario: Operator should be able to use the Route Suggestion and add multiple reservations to the route on Shipper Pickups page
+  Scenario: Operator should be able to use the Route Suggestion and add multiple reservations to the route on Shipper Pickups page (uid:b5ffe64a-0143-4d66-aa5d-82d9be1f9ff4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create multiple shipper addresses using data below:
       | numberOfAddresses | 2               |
@@ -190,7 +190,7 @@ Feature: Shipper Pickups
       | driverName  | GET_FROM_SUGGESTED_ROUTE |
 
   @ArchiveRouteViaDb
-  Scenario: Operator should be able to remove the route from single reservation on Shipper Pickups page
+  Scenario: Operator should be able to remove the route from single reservation on Shipper Pickups page (uid:b96dab27-cb75-4696-a6fd-fed6c40b5caa)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address using data below:
       | shipperId       | {shipper-v2-id} |
@@ -207,7 +207,7 @@ Feature: Shipper Pickups
     Then Operator verify the route was removed from the created reservation
 
   @ArchiveRouteViaDb
-  Scenario: Operator should be able to remove the route from multiple reservations on Shipper Pickups page
+  Scenario: Operator should be able to remove the route from multiple reservations on Shipper Pickups page (uid:8bd44522-4d95-4fb9-8dba-5819de6171b9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create multiple shipper addresses using data below:
       | numberOfAddresses | 2               |
@@ -225,7 +225,7 @@ Feature: Shipper Pickups
     Then Operator verify the route was removed from the created reservations
 
   @ArchiveRouteViaDb
-  Scenario Outline: Operator should be able to filter the Shipper Pickups by parameters
+  Scenario Outline: Operator should be able to filter the Shipper Pickups by parameters (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address using data below:
       | shipperId       | {shipper-v2-id} |
@@ -247,11 +247,11 @@ Feature: Shipper Pickups
       | routeId     | GET_FROM_CREATED_ROUTE |
       | driverName  | {ninja-driver-name}    |
     Examples:
-      | hubId    | hubName | zoneId    | zoneName        |
-      | 2        | DOJO    | {zone-id} |                 |
-      | {hub-id} |         | 2         | 2-ZZZ-All Zones |
+      | Note     | hiptest-uid                              | hubId    | hubName | zoneId    | zoneName        |
+      | Params 1 | uid:619b39f4-1a64-4abe-8b8f-916e7509d129 | 2        | DOJO    | {zone-id} |                 |
+      | Params 2 | uid:579e00c4-0612-4c55-91b3-26d29a8fec8a | {hub-id} |         | 2         | 2-ZZZ-All Zones |
 
-  Scenario: Operator should be able to download CSV file on Shipper Pickups page
+  Scenario: Operator should be able to download CSV file on Shipper Pickups page (uid:1214e548-8996-403a-a58c-043ed5c642d9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address using data below:
       | shipperId       | {shipper-v2-id} |
@@ -264,7 +264,7 @@ Feature: Shipper Pickups
     And Operator download CSV file for created reservation
     Then Operator verify the reservation info is correct in downloaded CSV file
 
-  Scenario: Operator should be able to edit the Priority Level of single reservation on Shipper Pickups page
+  Scenario: Operator should be able to edit the Priority Level of single reservation on Shipper Pickups page (uid:a9630dc0-ce00-4caf-aced-c6dedc59b76b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address using data below:
       | shipperId       | {shipper-v2-id} |
@@ -278,7 +278,7 @@ Feature: Shipper Pickups
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | priorityLevel | 2 |
 
-  Scenario: Operator should be able to edit the Priority Level of multiple reservation on Shipper Pickups page
+  Scenario: Operator should be able to edit the Priority Level of multiple reservation on Shipper Pickups page (uid:1ef31434-423d-417c-955e-051d5b203a65)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create multiple shipper addresses using data below:
       | numberOfAddresses | 2               |
@@ -293,7 +293,7 @@ Feature: Shipper Pickups
     Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
       | priorityLevel | 2 |
 
-  Scenario: Operator should be able to edit the Priority Level of multiple reservation on Shipper Pickups page using "Set To All" option
+  Scenario: Operator should be able to edit the Priority Level of multiple reservation on Shipper Pickups page using "Set To All" option (uid:f68f5816-325a-425f-9dc8-656cfe75038d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create multiple shipper addresses using data below:
       | numberOfAddresses | 2               |

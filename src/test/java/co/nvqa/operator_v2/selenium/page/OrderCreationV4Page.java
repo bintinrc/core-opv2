@@ -109,7 +109,8 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
         XSSFRow valueRow = sheet.createRow(1);
 
         int i = 0;
-        for (Map.Entry<String, Object> entry : data.entrySet())
+
+        for(Map.Entry<String, Object> entry : data.entrySet())
         {
             String header = entry.getKey();
             Object value = entry.getValue();
@@ -117,11 +118,12 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
             i++;
         }
 
-        try (FileOutputStream fileOut = new FileOutputStream(excelFileName))
+        try(FileOutputStream fileOut = new FileOutputStream(excelFileName))
         {
             wb.write(fileOut);
             fileOut.flush();
-        } catch (IOException ex)
+        }
+        catch(IOException ex)
         {
             throw new NvTestRuntimeException(ex);
         }

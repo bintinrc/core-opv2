@@ -35,13 +35,13 @@ public class MainPage extends OperatorV2SimplePage
         MAP_OF_END_URL.put("Linehaul Management", "linehaul");
         MAP_OF_END_URL.put("Messaging Module", "sms");
         MAP_OF_END_URL.put("Order Creation V2", "create-combine");
+        MAP_OF_END_URL.put("Order Creation V4", "create-v4");
         MAP_OF_END_URL.put("Pricing Scripts V2", "pricing-scripts-v2/active-scripts");
         MAP_OF_END_URL.put("Printer Settings", "printers");
         MAP_OF_END_URL.put("Recovery Tickets Scanning", "recovery-ticket-scanning");
         MAP_OF_END_URL.put("Route Cash Inbound", "cod");
         MAP_OF_END_URL.put("Third Party Shippers", "third-party-shipper");
         MAP_OF_END_URL.put("Third Party Order Management", "third-party-order");
-        MAP_OF_END_URL.put("Order Creation V4", "create-v4");
     }
 
     public MainPage(WebDriver webDriver)

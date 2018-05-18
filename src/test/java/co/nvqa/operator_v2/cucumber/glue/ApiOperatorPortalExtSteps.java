@@ -10,7 +10,11 @@ import cucumber.api.java.en.Given;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -62,33 +66,43 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     {
         String value = mapOfData.getOrDefault("from", "TODAY");
         Date fromDate = null;
-        if (value.equalsIgnoreCase("TODAY")){
+
+        if("TODAY".equalsIgnoreCase(value))
+        {
             Calendar fromCal = Calendar.getInstance();
             fromCal.setTime(getNextDate(-1));
             fromCal.set(Calendar.HOUR_OF_DAY, 16);
             fromCal.set(Calendar.MINUTE, 0);
             fromCal.set(Calendar.SECOND, 0);
             fromDate = fromCal.getTime();
-        } else if (StringUtils.isNotBlank(value)){
+        }
+        else if(StringUtils.isNotBlank(value))
+        {
             fromDate = Date.from(DateUtil.getDate(value).toInstant());
         }
 
         value = mapOfData.getOrDefault("to", "TODAY");
         Date toDate = null;
-        if (value.equalsIgnoreCase("TODAY")){
+
+        if("TODAY".equalsIgnoreCase(value))
+        {
             Calendar toCal = Calendar.getInstance();
             toCal.setTime(new Date());
             toCal.set(Calendar.HOUR_OF_DAY, 15);
             toCal.set(Calendar.MINUTE, 59);
             toCal.set(Calendar.SECOND, 59);
             toDate = toCal.getTime();
-        } else if (StringUtils.isNotBlank(value)){
+        }
+        else if (StringUtils.isNotBlank(value))
+        {
             toDate = Date.from(DateUtil.getDate(value).toInstant());
         }
 
         List<Integer> tags = null;
         value = mapOfData.get("tagIds");
-        if (StringUtils.isNotBlank(value)){
+
+        if(StringUtils.isNotBlank(value))
+        {
             tags = Arrays.stream(value.split(",")).map(tag -> Integer.parseInt(tag.trim())).collect(Collectors.toList());
         }
 

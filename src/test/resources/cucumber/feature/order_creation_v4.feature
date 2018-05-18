@@ -5,7 +5,7 @@ Feature: Order Creation V4
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator should be able to create order V4 on Order Creation V4
+  Scenario: Operator should be able to create order V4 on Order Creation V4 (uid:31da6c5d-6f2d-4782-a7be-0a27c171014b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Order -> Order Creation V4
     When Operator create order V4 by uploading XLSX on Order Creation V4 page using data below:

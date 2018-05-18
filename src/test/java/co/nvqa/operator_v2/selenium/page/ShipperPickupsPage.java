@@ -9,7 +9,11 @@ import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,6 +23,7 @@ import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsT
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
+ *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
@@ -85,51 +90,23 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     {
         String pickupAddress = reservationsTable.searchByPickupAddress(address);
         String actualPickupAddress = reservationsTable.getPickupAddress(1);
+
+        if(comments.length()>255)
+        {
+            comments = comments.substring(0, 255) + "...";
+        }
+
         // Remove multiple [SPACE] chars from String value.
         actualPickupAddress = StringUtils.normalizeSpace(actualPickupAddress).trim();
         pickupAddress = StringUtils.normalizeSpace(pickupAddress).trim();
         Assert.assertThat("Pickup Address", actualPickupAddress, Matchers.startsWith(pickupAddress));
 
-        if (isNotBlank(shipperName))
-        {
-            String actualShipperNameAndContact = reservationsTable.getShipperNameAndContact(1);
-            Assert.assertThat("Shipper Name", actualShipperNameAndContact, Matchers.startsWith(shipperName));
-        }
-
-        if (isNotBlank(routeId))
-        {
-            String actualRouteId = reservationsTable.getRouteId(1);
-            Assert.assertEquals("Route ID", routeId, actualRouteId);
-        }
-
-        if (isNotBlank(driverName))
-        {
-            String actualDriverName = reservationsTable.getDriverName(1);
-            Assert.assertEquals("Driver Name", driverName, actualDriverName);
-        }
-
-        if (isNotBlank(priorityLevel))
-        {
-            String actualPriorityLevel = reservationsTable.getPriorityLevel(1);
-            Assert.assertEquals("Priority Level", priorityLevel, actualPriorityLevel);
-        }
-
-        if (isNotBlank(approxVolume))
-        {
-            String actualApproxVolume = reservationsTable.getApproxVolume(1);
-            Assert.assertEquals("Approx. Volume", approxVolume, actualApproxVolume);
-        }
-
-        if (isNotBlank(comments))
-        {
-            String actualComments = reservationsTable.getComments(1);
-            if (comments.length() > 255)
-            {
-                comments = comments.substring(0, 255) + "...";
-            }
-
-            Assert.assertEquals("Comments", comments, actualComments);
-        }
+        assertThatIfExpectedValueNotBlank("Shipper Name", shipperName, reservationsTable.getShipperNameAndContact(1), Matchers.startsWith(shipperName));
+        assertEqualsIfExpectedValueNotBlank("Route ID", routeId, reservationsTable.getRouteId(1));
+        assertEqualsIfExpectedValueNotBlank("Driver Name", driverName, reservationsTable.getDriverName(1));
+        assertEqualsIfExpectedValueNotBlank("Priority Level", priorityLevel, reservationsTable.getPriorityLevel(1));
+        assertEqualsIfExpectedValueNotBlank("Approx. Volume", approxVolume, reservationsTable.getApproxVolume(1));
+        assertEqualsIfExpectedValueNotBlank("Comments", comments, reservationsTable.getComments(1));
     }
 
     public void openFiltersForm()
@@ -141,7 +118,8 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     {
         Date readyDate = expectedReservationInfo.getReadyByDate();
         Date latestDate = expectedReservationInfo.getLatestByDate();
-        if (readyDate != null && latestDate != null)
+
+        if(readyDate!=null && latestDate!=null)
         {
             openFiltersForm();
             filtersForm.filterReservationDate(readyDate, latestDate);
@@ -149,81 +127,58 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         }
 
         ReservationInfo actualReservationInfo = readReservationInfo(address);
-        String expectedValue = expectedReservationInfo.getShipperName();
-        if (expectedValue != null)
+        assertEqualsIfExpectedValueNotNull("Shipper Name", expectedReservationInfo.getShipperName(), actualReservationInfo.getShipperName());
+        assertEqualsIfExpectedValueNotNull("Pickup Address", expectedReservationInfo.getPickupAddress(), actualReservationInfo.getPickupAddress());
+        assertEqualsIfExpectedValueNotNull("Route Id", expectedReservationInfo.getRouteId(), actualReservationInfo.getRouteId());
+        assertEqualsIfExpectedValueNotNull("Driver Name", expectedReservationInfo.getDriverName(), actualReservationInfo.getDriverName());
+        assertEqualsIfExpectedValueNotNull("Priority Level", expectedReservationInfo.getPriorityLevel(), actualReservationInfo.getPriorityLevel());
+        assertEqualsIfExpectedValueNotNull("Ready By", expectedReservationInfo.getReadyBy(), actualReservationInfo.getReadyBy());
+        assertEqualsIfExpectedValueNotNull("Latest By", expectedReservationInfo.getLatestBy(), actualReservationInfo.getLatestBy());
+        assertEqualsIfExpectedValueNotNull("Reservation Type", expectedReservationInfo.getReservationType(), actualReservationInfo.getReservationType());
+        assertEqualsIfExpectedValueNotNull("Reservation Status", expectedReservationInfo.getReservationStatus(), actualReservationInfo.getReservationStatus());
+        assertThatIfActualValueNotNull("Reservation Created Time", expectedReservationInfo.getReservationCreatedTime(), Matchers.startsWith(DateUtil.displayDate(expectedReservationInfo.getReservationCreatedDateTime())));
+        assertThatIfActualValueNotNull("Service Time", expectedReservationInfo.getServiceTime(), Matchers.startsWith(DateUtil.displayDate(expectedReservationInfo.getServiceDateTime())));
+        assertEqualsIfExpectedValueNotNull("Approx. Volume", expectedReservationInfo.getApproxVolume(), actualReservationInfo.getApproxVolume());
+        assertEqualsIfExpectedValueNotNull("Failure Reason", expectedReservationInfo.getFailureReason(), actualReservationInfo.getFailureReason());
+        assertEqualsIfExpectedValueNotNull("Comments", expectedReservationInfo.getComments(), actualReservationInfo.getComments());
+    }
+
+    private void assertEqualsIfExpectedValueNotNull(String message, Object expected, Object actual)
+    {
+        if(expected!=null)
         {
-            Assert.assertEquals("Shipper Name", expectedValue, actualReservationInfo.getShipperName());
+            Assert.assertEquals(message, expected, actual);
         }
-        expectedValue = expectedReservationInfo.getPickupAddress();
-        if (expectedValue != null)
+    }
+
+    private void assertEqualsIfExpectedValueNotBlank(String message, String expected, String actual)
+    {
+        if(isNotBlank(expected))
         {
-            Assert.assertEquals("Pickup Address", expectedValue, actualReservationInfo.getPickupAddress());
+            Assert.assertEquals(message, expected, actual);
         }
-        expectedValue = expectedReservationInfo.getRouteId();
-        if (expectedValue != null)
+    }
+
+    private <T> void assertThatIfActualValueNotNull(String message, T actual, org.hamcrest.Matcher<? super T> matcher)
+    {
+        if(actual!=null)
         {
-            Assert.assertEquals("Route Id", expectedValue, actualReservationInfo.getRouteId());
+            Assert.assertThat(message, actual, matcher);
         }
-        expectedValue = expectedReservationInfo.getDriverName();
-        if (expectedValue != null)
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private void assertThatIfExpectedValueNotBlank(String message, String expected, String actual, org.hamcrest.Matcher<String> matcher)
+    {
+        if(isNotBlank(expected))
         {
-            Assert.assertEquals("Driver Name", expectedValue, actualReservationInfo.getDriverName());
-        }
-        expectedValue = expectedReservationInfo.getPriorityLevel();
-        if (expectedValue != null)
-        {
-            Assert.assertEquals("Priority Level", expectedValue, actualReservationInfo.getPriorityLevel());
-        }
-        expectedValue = expectedReservationInfo.getReadyBy();
-        if (expectedValue != null)
-        {
-            Assert.assertEquals("Ready By", expectedValue, actualReservationInfo.getReadyBy());
-        }
-        expectedValue = expectedReservationInfo.getLatestBy();
-        if (expectedValue != null)
-        {
-            Assert.assertEquals("Latest By", expectedValue, actualReservationInfo.getLatestBy());
-        }
-        expectedValue = expectedReservationInfo.getReservationType();
-        if (expectedValue != null)
-        {
-            Assert.assertEquals("Reservation Type", expectedValue, actualReservationInfo.getReservationType());
-        }
-        expectedValue = expectedReservationInfo.getReservationStatus();
-        if (expectedValue != null)
-        {
-            Assert.assertEquals("Reservation Status", expectedValue, actualReservationInfo.getReservationStatus());
-        }
-        expectedValue = expectedReservationInfo.getReservationCreatedTime();
-        if (expectedValue != null)
-        {
-            Assert.assertThat("Reservation Created Time", expectedValue, Matchers.startsWith(DateUtil.displayDate(expectedReservationInfo.getReservationCreatedDateTime())));
-        }
-        expectedValue = expectedReservationInfo.getServiceTime();
-        if (expectedValue != null)
-        {
-            Assert.assertThat("Service Time", expectedValue, Matchers.startsWith(DateUtil.displayDate(expectedReservationInfo.getServiceDateTime())));
-        }
-        expectedValue = expectedReservationInfo.getApproxVolume();
-        if (expectedValue != null)
-        {
-            Assert.assertEquals("Approx. Volume", expectedValue, actualReservationInfo.getApproxVolume());
-        }
-        expectedValue = expectedReservationInfo.getFailureReason();
-        if (expectedValue != null)
-        {
-            Assert.assertEquals("Failure Reason", expectedValue, actualReservationInfo.getFailureReason());
-        }
-        expectedValue = expectedReservationInfo.getComments();
-        if (expectedValue != null)
-        {
-            Assert.assertEquals("Comments", expectedValue, actualReservationInfo.getComments());
+            Assert.assertThat(message, actual, matcher);
         }
     }
 
     public void verifyReservationsInfo(List<ReservationInfo> expectedReservationsInfo, List<Address> addresses)
     {
-        for (int i = 0; i < addresses.size(); i++)
+        for (int i=0; i<addresses.size(); i++)
         {
             verifyReservationInfo(expectedReservationsInfo.get(i), addresses.get(i));
         }
@@ -241,6 +196,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         Assert.assertThat("Pickup Address", reservationDetailsDialog.getPickupAddress(), Matchers.startsWith(pickupAddress));
     }
 
+    @SuppressWarnings("unused")
     public ReservationInfo duplicateReservation(Address address, Date date)
     {
         return duplicateReservations(Collections.singletonList(address), date).get(0);
@@ -325,7 +281,8 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     public List<ReservationInfo> selectReservationsAndStoreInfo(List<Address> addresses)
     {
         List<ReservationInfo> reservationsInfo = new ArrayList<>();
-        addresses.forEach(address -> {
+        addresses.forEach(address ->
+        {
             reservationsInfo.add(readReservationInfo(address));
             reservationsTable.checkSelectionCheckbox(1);
         });
@@ -485,6 +442,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
             super(webDriver);
         }
 
+        @SuppressWarnings("unused")
         public void fillTheForm(int priorityLevel)
         {
             fillTheForm(priorityLevel, false);
@@ -494,15 +452,17 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         {
             waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
             int rowsCount = 1;
-            if (setToAll)
+
+            if(setToAll)
             {
                 clickButtonByAriaLabel(BUTTON_SET_TO_ALL_ARIA_LABEL);
-            } else
+            }
+            else
             {
                 rowsCount = getRowsCountOfTableWithNgRepeat(RESERVATIONS_TABLE_NG_REPEAT);
             }
 
-            for (int index = 1; index <= rowsCount; index++)
+            for(int index=1; index<=rowsCount; index++)
             {
                 sendKeysToMdInputContainerOnTableWithNgRepeat(index, FIELD_PRIORITY_LEVEL_MODEL, RESERVATIONS_TABLE_NG_REPEAT, String.valueOf(priorityLevel));
             }
@@ -550,10 +510,12 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         {
             Route route = null;
             int rowsCount = getRowsCountOfTableWithNgRepeat("reservation in ctrl.data.reservations");
-            for (int index = 1; index <= rowsCount; index++)
+
+            for(int index=1; index<=rowsCount; index++)
             {
                 route = validateSuggestedRoute(index, validRoutes);
             }
+
             return route;
         }
 
@@ -564,10 +526,12 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
             Pattern p = Pattern.compile("(\\d*)(\\s-\\s)(.*)");
             Matcher m = p.matcher(suggestedRoute);
             AtomicLong routeId = new AtomicLong(0);
-            if (m.matches())
+
+            if(m.matches())
             {
                 routeId.set(Long.parseLong(m.group(1)));
             }
+
             String reason = String.format("[%d] Suggested Route ID", index);
             Assert.assertThat(reason, routeId.get(), Matchers.greaterThan(0L));
             Optional<Route> optRoute = validRoutes.stream().filter(route -> route.getId() == routeId.get()).findFirst();

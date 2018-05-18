@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -148,11 +149,12 @@ public class ShipperPickupsSteps extends AbstractSteps
 
     private String resolveExpectedRouteId(String routeIdParam)
     {
-        if (StringUtils.isBlank(routeIdParam))
+        if(StringUtils.isBlank(routeIdParam))
         {
             return null;
         }
-        switch (routeIdParam.toUpperCase())
+
+        switch(routeIdParam.toUpperCase())
         {
             case "GET_FROM_CREATED_ROUTE":
                 return String.valueOf((Long) get(KEY_CREATED_ROUTE_ID));
@@ -165,11 +167,13 @@ public class ShipperPickupsSteps extends AbstractSteps
 
     private String resolveExpectedDriverName(String driverNameParam)
     {
-        if (StringUtils.isBlank(driverNameParam))
+        if(StringUtils.isBlank(driverNameParam))
         {
             return null;
         }
+
         Route route;
+
         switch (driverNameParam.toUpperCase())
         {
             case "GET_FROM_CREATED_ROUTE":
@@ -192,7 +196,7 @@ public class ShipperPickupsSteps extends AbstractSteps
         String shipperId = mapOfData.get("shipperId");
         String reservationId = mapOfData.get("reservationId");
 
-        if ("GET_FROM_CREATED_RESERVATION".equals(reservationId))
+        if("GET_FROM_CREATED_RESERVATION".equals(reservationId))
         {
             Reservation reservationResult = get(KEY_CREATED_RESERVATION);
             reservationId = String.valueOf(reservationResult.getId());
@@ -206,8 +210,7 @@ public class ShipperPickupsSteps extends AbstractSteps
     {
         Address address = get(KEY_CREATED_ADDRESS);
         Reservation reservation = get(KEY_CREATED_RESERVATION);
-        ReservationInfo duplicatedReservationInfo =
-                duplicateReservations(Collections.singletonList(address), reservation).get(0);
+        ReservationInfo duplicatedReservationInfo = duplicateReservations(Collections.singletonList(address), reservation).get(0);
         put(KEY_DUPLICATED_RESERVATION_INFO, duplicatedReservationInfo);
     }
 
@@ -216,22 +219,19 @@ public class ShipperPickupsSteps extends AbstractSteps
     {
         List<Address> addresses = get(KEY_LIST_OF_CREATED_ADDRESSES);
         List<Reservation> reservations = get(KEY_LIST_OF_CREATED_RESERVATIONS);
-        List<ReservationInfo> duplicatedReservationsInfo =
-                duplicateReservations(addresses, reservations.get(0));
+        List<ReservationInfo> duplicatedReservationsInfo = duplicateReservations(addresses, reservations.get(0));
         put(KEY_LIST_OF_DUPLICATED_RESERVATIONS_INFO, duplicatedReservationsInfo);
     }
 
     private List<ReservationInfo> duplicateReservations(List<Address> addresses, Reservation reservation)
     {
         int daysShift = 1;
-        String newReadyBy = DateUtil.displayDateTime(
-                DateUtil.getDate(reservation.getReadyDatetime()).withZoneSameInstant(ZoneId.systemDefault()).plusDays(daysShift));
-        String newLatestBy = DateUtil.displayDateTime(
-                DateUtil.getDate(reservation.getLatestDatetime()).withZoneSameInstant(ZoneId.systemDefault()).plusDays(daysShift));
+        String newReadyBy = DateUtil.displayDateTime(DateUtil.getDate(reservation.getReadyDatetime()).withZoneSameInstant(ZoneId.systemDefault()).plusDays(daysShift));
+        String newLatestBy = DateUtil.displayDateTime(DateUtil.getDate(reservation.getLatestDatetime()).withZoneSameInstant(ZoneId.systemDefault()).plusDays(daysShift));
         Date newDate = Date.from(DateUtil.getDate(reservation.getReadyDatetime()).plusDays(daysShift).toInstant());
-        List<ReservationInfo> duplicatedReservationsInfo =
-                shipperPickupsPage.duplicateReservations(addresses, newDate);
-        duplicatedReservationsInfo.forEach(reservationInfo -> {
+        List<ReservationInfo> duplicatedReservationsInfo = shipperPickupsPage.duplicateReservations(addresses, newDate);
+        duplicatedReservationsInfo.forEach(reservationInfo ->
+        {
             reservationInfo.setReadyBy(newReadyBy);
             reservationInfo.setLatestBy(newLatestBy);
         });

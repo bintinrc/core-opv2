@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.support.DateUtil;
-import groovy.json.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.translate.CsvTranslators;
 
@@ -14,9 +13,9 @@ import java.util.List;
  *
  * @author Sergey Mishanin
  */
-public class ReservationInfo
-{
-    private static final CsvTranslators.CsvEscaper escaper = new CsvTranslators.CsvEscaper();
+@SuppressWarnings({"WeakerAccess", "unused"})
+public class ReservationInfo {
+    private static final CsvTranslators.CsvEscaper ESCAPER = new CsvTranslators.CsvEscaper();
 
     private String shipperName;
     private String pickupAddress;
@@ -33,12 +32,10 @@ public class ReservationInfo
     private String failureReason;
     private String comments;
 
-    public ReservationInfo()
-    {
+    public ReservationInfo() {
     }
 
-    public ReservationInfo(ReservationInfo reservationInfo)
-    {
+    public ReservationInfo(ReservationInfo reservationInfo) {
         setShipperName(reservationInfo.getShipperName());
         setPickupAddress(reservationInfo.getPickupAddress());
         setRouteId(reservationInfo.getRouteId());
@@ -99,15 +96,15 @@ public class ReservationInfo
         return readyBy;
     }
 
-    public Date getReadyByDate(){
-        if (readyBy == null){
+    public Date getReadyByDate() {
+        if (readyBy == null) {
             return null;
         }
         return Date.from(getReadyByDateTime().toInstant());
     }
 
-    public ZonedDateTime getReadyByDateTime(){
-        if (readyBy == null){
+    public ZonedDateTime getReadyByDateTime() {
+        if (readyBy == null) {
             return null;
         }
         return DateUtil.getDate(getReadyBy().replace(" ", "T") + "Z");
@@ -121,15 +118,15 @@ public class ReservationInfo
         return latestBy;
     }
 
-    public Date getLatestByDate(){
-        if (latestBy == null){
+    public Date getLatestByDate() {
+        if (latestBy == null) {
             return null;
         }
         return Date.from(getLatestByDateTime().toInstant());
     }
 
-    public ZonedDateTime getLatestByDateTime(){
-        if (latestBy == null){
+    public ZonedDateTime getLatestByDateTime() {
+        if (latestBy == null) {
             return null;
         }
         return DateUtil.getDate(getLatestBy().replace(" ", "T") + "Z");
@@ -151,7 +148,7 @@ public class ReservationInfo
         return reservationCreatedTime;
     }
 
-    public ZonedDateTime getReservationCreatedDateTime(){
+    public ZonedDateTime getReservationCreatedDateTime() {
         return DateUtil.getDate(getReservationCreatedTime().replace(" ", "T") + "Z");
     }
 
@@ -167,7 +164,7 @@ public class ReservationInfo
         this.serviceTime = serviceTime;
     }
 
-    public ZonedDateTime getServiceDateTime(){
+    public ZonedDateTime getServiceDateTime() {
         return DateUtil.getDate(getServiceTime().replace(" ", "T") + "Z");
     }
 
@@ -203,7 +200,7 @@ public class ReservationInfo
         this.reservationStatus = reservationStatus;
     }
 
-    public String toCsvLine(){
+    public String toCsvLine() {
         List<String> line = new ArrayList<>();
         line.add(escapeCsv(shipperName));
         line.add(escapeCsv(pickupAddress));
@@ -222,7 +219,7 @@ public class ReservationInfo
         return StringUtils.join(line, ",");
     }
 
-    private String escapeCsv(String text){
-        return escaper.translate(text);
+    private String escapeCsv(String text) {
+        return ESCAPER.translate(text);
     }
 }

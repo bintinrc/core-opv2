@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ *
  * @author Sergey Mishanin
  */
 @ScenarioScoped
@@ -33,7 +34,7 @@ public class OrderCreationV4Steps extends AbstractSteps
     }
 
     @When("^Operator create order V4 by uploading XLSX on Order Creation V4 page using data below:$")
-    public void operatorCreateOrderVByUploadingXLSXOnOrderCreationVPageUsingDataBelow(Map<String, String> mapOfData) throws Throwable
+    public void operatorCreateOrderVByUploadingXLSXOnOrderCreationVPageUsingDataBelow(Map<String, String> mapOfData)
     {
         int shipperId = Integer.parseInt(mapOfData.get("shipper_id"));
         String v4OrderRequestTemplate = mapOfData.get("v4OrderParams");
@@ -53,7 +54,7 @@ public class OrderCreationV4Steps extends AbstractSteps
     }
 
     @Then("^Operator verify order V4 is created successfully on Order Creation V4 page$")
-    public void operatorVerifyOrderVIsCreatedSuccessfullyOnOrderCreationVPage() throws Throwable
+    public void operatorVerifyOrderVIsCreatedSuccessfullyOnOrderCreationVPage()
     {
         OrderRequestV4 order = get(KEY_CREATED_ORDER);
         orderCreationV4Page.verifyOrderIsCreatedSuccessfully(order);
