@@ -749,13 +749,13 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         public void filterByHub(String hub)
         {
             selectValueFromMdAutocomplete(FIELD_SELECT_FILTER_PLACEHOLDER, HUBS_ITEM_TYPE);
-            selectValueFromNvAutocompleteByItemTypes(HUBS_ITEM_TYPE, hub);
+            selectValueFromNvAutocompleteByItemTypesAndDismiss(HUBS_ITEM_TYPE, hub);
         }
 
         public void filterByZone(String zone)
         {
             selectValueFromMdAutocomplete(FIELD_SELECT_FILTER_PLACEHOLDER, ZONES_ITEM_TYPE);
-            selectValueFromNvAutocompleteByItemTypes(ZONES_ITEM_TYPE, zone);
+            selectValueFromNvAutocompleteByItemTypesAndDismiss(ZONES_ITEM_TYPE, zone);
         }
 
         public void clickButtonLoadSelection()
