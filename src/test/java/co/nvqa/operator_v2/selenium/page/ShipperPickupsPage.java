@@ -91,7 +91,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         String pickupAddress = reservationsTable.searchByPickupAddress(address);
         String actualPickupAddress = reservationsTable.getPickupAddress(1);
 
-        if(comments.length()>255)
+        if(comments!=null && comments.length()>255)
         {
             comments = comments.substring(0, 255) + "...";
         }
