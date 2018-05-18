@@ -1,9 +1,14 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.support.DateUtil;
+import groovy.json.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.translate.CsvTranslators;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -11,6 +16,8 @@ import java.util.Date;
  */
 public class ReservationInfo
 {
+    private static final CsvTranslators.CsvEscaper escaper = new CsvTranslators.CsvEscaper();
+
     private String shipperName;
     private String pickupAddress;
     private String routeId;
@@ -194,5 +201,28 @@ public class ReservationInfo
 
     public void setReservationStatus(String reservationStatus) {
         this.reservationStatus = reservationStatus;
+    }
+
+    public String toCsvLine(){
+        List<String> line = new ArrayList<>();
+        line.add(escapeCsv(shipperName));
+        line.add(escapeCsv(pickupAddress));
+        line.add(escapeCsv(routeId));
+        line.add(escapeCsv(driverName));
+        line.add(escapeCsv(priorityLevel));
+        line.add(escapeCsv(readyBy));
+        line.add(escapeCsv(latestBy));
+        line.add(escapeCsv(reservationType));
+        line.add(escapeCsv(reservationStatus));
+        line.add(escapeCsv(reservationCreatedTime));
+        line.add(escapeCsv(serviceTime));
+        line.add(escapeCsv(approxVolume));
+        line.add(escapeCsv(failureReason));
+        line.add(escapeCsv(comments));
+        return StringUtils.join(line, ",");
+    }
+
+    private String escapeCsv(String text){
+        return escaper.translate(text);
     }
 }
