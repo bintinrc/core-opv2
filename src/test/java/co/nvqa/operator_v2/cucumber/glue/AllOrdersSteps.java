@@ -5,19 +5,21 @@ import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
+import co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction;
 import com.google.inject.Inject;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -61,7 +63,7 @@ public class AllOrdersSteps extends AbstractSteps
     @When("^Operator find order on All Orders page using this criteria below:$")
     public void operatorFindOrderOnAllOrdersPageUsingThisCriteriaBelow(DataTable dataTable)
     {
-        Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
+        Map<String, String> mapOfData = dataTable.asMap(String.class, String.class);
 
         AllOrdersPage.Category category = AllOrdersPage.Category.findByValue(mapOfData.get("category"));
         AllOrdersPage.SearchLogic searchLogic = AllOrdersPage.SearchLogic.findByValue(mapOfData.get("searchLogic"));
@@ -70,7 +72,7 @@ public class AllOrdersSteps extends AbstractSteps
         /*
           Replace searchTerm value to value on ScenarioStorage.
          */
-        if(containsKey(searchTerm))
+        if (containsKey(searchTerm))
         {
             searchTerm = get(searchTerm);
         }
@@ -101,7 +103,7 @@ public class AllOrdersSteps extends AbstractSteps
     {
         List<String> listOfCreatedTrackingId = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
 
-        if(listOfCreatedTrackingId==null || listOfCreatedTrackingId.isEmpty())
+        if (listOfCreatedTrackingId == null || listOfCreatedTrackingId.isEmpty())
         {
             throw new RuntimeException("List of created Tracking ID should not be null or empty.");
         }
@@ -109,19 +111,32 @@ public class AllOrdersSteps extends AbstractSteps
         allOrdersPage.findOrdersWithCsv(listOfCreatedTrackingId);
     }
 
+    @When("^Operator find order by uploading CSV on All Orders page$")
+    public void operatorFindOrderByUploadingCsvOnAllOrderPage()
+    {
+        String createdTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+
+        if (StringUtils.isBlank(createdTrackingId))
+        {
+            throw new RuntimeException("Created Order Tracking ID should not be null or empty.");
+        }
+
+        allOrdersPage.findOrdersWithCsv(Collections.singletonList(createdTrackingId));
+    }
+
     @Then("^Operator verify all orders in CSV is found on All Orders page with correct info$")
     public void operatorVerifyAllOrdersInCsvIsFoundOnAllOrdersPageWithCorrectInfo()
     {
         List<OrderRequestV2> listOfOrderRequestV2 = get(KEY_LIST_OF_CREATED_ORDER);
 
-        if(listOfOrderRequestV2==null || listOfOrderRequestV2.isEmpty())
+        if (listOfOrderRequestV2 == null || listOfOrderRequestV2.isEmpty())
         {
             throw new RuntimeException("List of created order should not be null or empty.");
         }
 
         List<Order> listOfOrderDetails = get(KEY_LIST_OF_ORDER_DETAILS);
 
-        if(listOfOrderDetails==null || listOfOrderDetails.isEmpty())
+        if (listOfOrderDetails == null || listOfOrderDetails.isEmpty())
         {
             throw new RuntimeException("List of order details should not be null or empty.");
         }
@@ -133,9 +148,9 @@ public class AllOrdersSteps extends AbstractSteps
     public void operatorUploadsCsvThatContainsInvalidTrackingIdOnAllOrdersPage()
     {
         List<String> listOfInvalidTrackingId = new ArrayList<>();
-        listOfInvalidTrackingId.add("DUMMY"+generateDateUniqueString()+'N');
-        listOfInvalidTrackingId.add("DUMMY"+generateDateUniqueString()+'C');
-        listOfInvalidTrackingId.add("DUMMY"+generateDateUniqueString()+'R');
+        listOfInvalidTrackingId.add("DUMMY" + generateDateUniqueString() + 'N');
+        listOfInvalidTrackingId.add("DUMMY" + generateDateUniqueString() + 'C');
+        listOfInvalidTrackingId.add("DUMMY" + generateDateUniqueString() + 'R');
 
         allOrdersPage.findOrdersWithCsv(listOfInvalidTrackingId);
         put("listOfInvalidTrackingId", listOfInvalidTrackingId);
@@ -177,6 +192,13 @@ public class AllOrdersSteps extends AbstractSteps
         allOrdersPage.cancelSelected(listOfTrackingIds);
     }
 
+    @When("^Operator cancel order on All Orders page$")
+    public void operatorCancelOrderOnAllOrdersPage()
+    {
+        String trackingID = get(KEY_CREATED_ORDER_TRACKING_ID);
+        allOrdersPage.cancelSelected(Collections.singletonList(trackingID));
+    }
+
     @When("^Operator pull out multiple orders from route on All Orders page$")
     public void operatorPullOutMultipleOrdersFromRouteOnAllOrdersPage()
     {
@@ -215,5 +237,40 @@ public class AllOrdersSteps extends AbstractSteps
         GlobalInboundParams globalInboundParams = get(KEY_GLOBAL_INBOUND_PARAMS);
         Double currentOrderCost = get(KEY_CURRENT_ORDER_COST);
         allOrdersPage.verifyOrderInfoAfterGlobalInbound(orderRequestV2, globalInboundParams, currentOrderCost);
+    }
+
+    @When("^Operator resume order on All Orders page$")
+    public void operatorResumeOrderOnAllOrdersPage()
+    {
+        List<String> trackingIds = Collections.singletonList(get(KEY_CREATED_ORDER_TRACKING_ID));
+        allOrdersPage.openFiltersForm();
+        allOrdersPage.findOrdersWithCsv(trackingIds);
+        allOrdersPage.resumeSelected(trackingIds);
+    }
+
+    @Then("^Operator verify order status is \"(.+)\"$")
+    public void operatorVerifyOrderStatusIs(String expectedOrderStatus)
+    {
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        allOrdersPage.openFiltersForm();
+        allOrdersPage.findOrdersWithCsv(Collections.singletonList(trackingId));
+        allOrdersPage.verifyOrderStatus(trackingId, expectedOrderStatus);
+    }
+
+    @When("^Operator apply \"(.+)\" action to created orders$")
+    public void operatorApplyActionToCreatedOrders(String actionName)
+    {
+        List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        AllOrdersAction action = AllOrdersAction.valueOf(actionName.toUpperCase().replaceAll("\\s", "_"));
+        allOrdersPage.applyActionToOrdersByTrackingId(trackingIds, action);
+    }
+
+    @Then("^Operator verify Selection Error dialog for invalid Pull From Order action$")
+    public void operatorVerifySelectionErrorDialogForInvalidPullFromOrderAction()
+    {
+        List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        List<String> expectedFailureReasons = new ArrayList<>(trackingIds.size());
+        Collections.fill(expectedFailureReasons, "No route to pull from");
+        allOrdersPage.verifySelectionErrorDialog(trackingIds, AllOrdersAction.PULL_FROM_ROUTE, expectedFailureReasons);
     }
 }

@@ -13,7 +13,7 @@ Feature: All Orders
   Scenario: Operator find new pending pickup order by using Specific Search on All Orders page (uid:3e6ffaf7-ca06-42e3-a68c-959e287f4afe)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     When Operator go to menu Order -> All Orders
     When API Operator get order details
@@ -26,7 +26,7 @@ Feature: All Orders
   Scenario Outline: Operator find new pending pickup order on All Orders page (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     When Operator go to menu Order -> All Orders
     When API Operator get order details
@@ -40,8 +40,8 @@ Feature: All Orders
   Scenario: Operator find multiple orders with CSV on All Orders page (uid:932287da-cf04-471e-b056-e3c44c233677)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple Order V2 Parcel using data below:
-      | numberOfOrder     | 3      |
-      | generateFromAndTo | RANDOM |
+      | numberOfOrder     | 3                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     When API Operator get order details
     When Operator go to menu Order -> All Orders
@@ -54,10 +54,10 @@ Feature: All Orders
     When Operator uploads CSV that contains invalid Tracking ID on All Orders page
     Then Operator verify that the page failed to find the orders inside the CSV that contains invalid Tracking IDS on All Orders page
 
-    Scenario: Operator Force Success single order on All Orders page (uid:59c20f59-9583-4b91-819b-f73f47c765c9)
+  Scenario: Operator Force Success single order on All Orders page (uid:59c20f59-9583-4b91-819b-f73f47c765c9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     When API Operator get order details
     When Operator go to menu Order -> All Orders
@@ -72,7 +72,7 @@ Feature: All Orders
   Scenario: Operator RTS failed delivery order on next day on All Orders page (uid:dc7a87b5-0743-4995-bd9f-b4e22e792a38)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
@@ -97,8 +97,8 @@ Feature: All Orders
   Scenario: Operator cancel multiple orders on All Orders page (uid:bd32337b-e3f7-4241-9cf4-5d847de48df9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple Order V2 Parcel using data below:
-      | numberOfOrder     | 3       |
-      | generateFromAndTo | RANDOM |
+      | numberOfOrder     | 3                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     When API Operator get order details
     When Operator go to menu Order -> All Orders
@@ -110,8 +110,8 @@ Feature: All Orders
   Scenario: Operator pull out multiple orders from route on All Orders page (uid:ec25528a-5be8-4026-9680-731a066f95cb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple Order V2 Parcel using data below:
-      | numberOfOrder     | 3      |
-      | generateFromAndTo | RANDOM |
+      | numberOfOrder     | 3                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     Given API Operator Global Inbound multiple parcels using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
@@ -130,8 +130,8 @@ Feature: All Orders
   Scenario: Operator add multiple orders to route on All Orders page (uid:c8d93bf5-a2d9-40bf-9346-9278299d3bd3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple Order V2 Parcel using data below:
-      | numberOfOrder     | 3      |
-      | generateFromAndTo | RANDOM |
+      | numberOfOrder     | 3                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     Given API Operator Global Inbound multiple parcels using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
@@ -147,7 +147,7 @@ Feature: All Orders
   Scenario: Operator print Waybill for single order on All Orders page and verify the downloaded PDF contains correct info (uid:9f09610b-5abf-4bc8-bfea-aad8693158bf)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                    |
       | v2OrderRequest    | { "type":"Normal", "cod_goods": 12.3, "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     When API Operator get order details
     When Operator go to menu Order -> All Orders
@@ -155,6 +155,29 @@ Feature: All Orders
     Then Operator verify all orders in CSV is found on All Orders page with correct info
     When Operator print Waybill for single order on All Orders page
     Then Operator verify the printed waybill for single order on All Orders page contains correct info
+
+  Scenario: Operator should be able to cancel an order on All Orders page
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create Order V2 Parcel using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
+      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    And Operator go to menu Order -> All Orders
+    And Operator find order by uploading CSV on All Orders page
+    When Operator cancel order on All Orders page
+    Then API Operator verify order info after Canceled
+    When Operator resume order on All Orders page
+    Then Operator verify order status is "Pending Pickup"
+
+  Scenario: Operator should not be able to pull out unrouted order on All Orders page
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create multiple Order V2 Parcel using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
+      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    And Operator go to menu Order -> All Orders
+    And Operator find multiple orders by uploading CSV on All Orders page
+    When Operator apply "Pull From Route" action to created orders
+    Then Operator verify Selection Error dialog for invalid Pull From Order action
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

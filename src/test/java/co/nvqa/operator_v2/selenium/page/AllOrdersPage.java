@@ -7,6 +7,7 @@ import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.PdfUtils;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
+import co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.hamcrest.Matchers;
@@ -21,19 +22,14 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.*;
+
 /**
- *
  * @author Tristania Siagian
  */
 @SuppressWarnings("WeakerAccess")
 public class AllOrdersPage extends OperatorV2SimplePage
 {
-    protected static final int ACTION_SET_RTS_TO_SELECTED = 1;
-    protected static final int ACTION_CANCEL_SELECTED = 2;
-    protected static final int ACTION_MANUALLY_COMPLETE_SELECTED = 3;
-    protected static final int ACTION_PULL_FROM_ROUTE = 4;
-    protected static final int ACTION_ADD_TO_ROUTE = 5;
-
     private static final String SAMPLE_CSV_FILENAME = "find-orders-with-csv.csv";
 
     private static final String MD_VIRTUAL_REPEAT_TABLE_ORDER = "order in getTableData()";
@@ -70,9 +66,9 @@ public class AllOrdersPage extends OperatorV2SimplePage
         {
             Category result = TRACKING_OR_STAMP_ID;
 
-            for(Category enumTemp : values())
+            for (Category enumTemp : values())
             {
-                if(enumTemp.getValue().equalsIgnoreCase(value))
+                if (enumTemp.getValue().equalsIgnoreCase(value))
                 {
                     result = enumTemp;
                     break;
@@ -104,9 +100,9 @@ public class AllOrdersPage extends OperatorV2SimplePage
         {
             SearchLogic result = EXACTLY_MATCHES;
 
-            for(SearchLogic enumTemp : values())
+            for (SearchLogic enumTemp : values())
             {
-                if(enumTemp.getValue().equalsIgnoreCase(value))
+                if (enumTemp.getValue().equalsIgnoreCase(value))
                 {
                     result = enumTemp;
                     break;
@@ -122,6 +118,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
         }
     }
 
+    public ApplyActionsMenu applyActionsMenu;
+
     public AllOrdersPage(WebDriver webDriver)
     {
         this(webDriver, new EditOrderPage(webDriver));
@@ -131,6 +129,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         super(webDriver);
         this.editOrderPage = editOrderPage;
+        applyActionsMenu = new ApplyActionsMenu(webDriver);
     }
 
     public void waitUntilPageLoaded()
@@ -162,6 +161,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         sendKeysByAriaLabel("Choose", csvFile.getAbsolutePath());
         waitUntilVisibilityOfElementLocated(String.format("//span[contains(text(), '%s')]", csvFile.getName()));
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.upload");
+        waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']");
     }
 
     public void verifyAllOrdersInCsvIsFoundWithCorrectInfo(List<OrderRequestV2> listOfOrderRequestV2, List<Order> listOfOrderDetails)
@@ -171,17 +171,16 @@ public class AllOrdersPage extends OperatorV2SimplePage
         Assert.assertEquals("Toast message is different.", "Matches with file shown in table", toastTopText);
         waitUntilInvisibilityOfToast("Matches with file shown in table", false);
 
-        for(OrderRequestV2 orderRequestV2 : listOfOrderRequestV2)
+        for (OrderRequestV2 orderRequestV2 : listOfOrderRequestV2)
         {
             String createdOrderTrackingId = orderRequestV2.getTrackingId();
             Optional<Order> matchedOrderDetailsOptional = listOfOrderDetails.stream().filter(o -> o.getTrackingId().equals(createdOrderTrackingId)).findFirst();
 
-            if(matchedOrderDetailsOptional.isPresent())
+            if (matchedOrderDetailsOptional.isPresent())
             {
                 Order matchedOrderDetails = matchedOrderDetailsOptional.get();
                 verifyOrderInfoOnTableOrderIsCorrect(orderRequestV2, matchedOrderDetails);
-            }
-            else
+            } else
             {
                 throw new NvTestRuntimeException(String.format("Order details for Tracking ID = '%s' not found.", createdOrderTrackingId));
             }
@@ -193,6 +192,13 @@ public class AllOrdersPage extends OperatorV2SimplePage
         List<WebElement> listOfWe = findElementsByXpath("//div[@ng-repeat='error in ctrl.payload.errors track by $index']");
         List<String> listOfActualInvalidTrackingId = listOfWe.stream().map(we -> we.getText().split("\\.")[1].trim()).collect(Collectors.toList());
         Assert.assertThat("Expected Tracking ID not found.", listOfActualInvalidTrackingId, Matchers.hasItems(listOfInvalidTrackingId.toArray(new String[]{})));
+    }
+
+    public void verifyOrderStatus(String trackingId, String expectedOrderStatus)
+    {
+        filterTableOrderByTrackingId(trackingId);
+        String actualGranularStatus = getTextOnTableOrder(1, COLUMN_CLASS_DATA_GRANULAR_STATUS_ON_TABLE_ORDER);
+        Assert.assertThat("Granular Status", actualGranularStatus, Matchers.equalToIgnoringCase(expectedOrderStatus));
     }
 
     public void verifyOrderInfoOnTableOrderIsCorrect(OrderRequestV2 orderRequestV2, Order order)
@@ -240,8 +246,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
             switchToEditOrderWindow(orderId);
             editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyOrderInfoIsCorrect(orderRequestV2, order);
-        }
-        finally
+        } finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
@@ -251,7 +256,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         filterTableOrderByTrackingId(trackingId);
         selectAllShown("ctrl.ordersTableParam");
-        selectAction(ACTION_MANUALLY_COMPLETE_SELECTED);
+        applyActionsMenu.chooseItem(MANUALLY_COMPLETE_SELECTED);
         waitUntilVisibilityOfElementLocated("//md-dialog//div[contains(text(), \"Proceed to set the order status to 'Completed'?\")]");
         clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.complete-order");
         waitUntilInvisibilityOfToast("The order has been completed");
@@ -269,8 +274,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
             switchToEditOrderWindow(orderId);
             editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyOrderIsForceSuccessedSuccessfully(orderRequestV2);
-        }
-        finally
+        } finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
@@ -280,7 +284,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         filterTableOrderByTrackingId(trackingId);
         selectAllShown("ctrl.ordersTableParam");
-        selectAction(ACTION_SET_RTS_TO_SELECTED);
+        applyActionsMenu.chooseItem(SET_RTS_TO_SELECTED);
         setMdDatepickerById("commons.model.delivery-date", TestUtils.getNextDate(1));
         selectValueFromMdSelectById("commons.timeslot", "3PM - 6PM");
         clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.set-order-to-rts");
@@ -291,14 +295,45 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         clearFilterTableOrderByTrackingId();
         selectAllShown("ctrl.ordersTableParam");
-        selectAction(ACTION_CANCEL_SELECTED);
+        applyActionsMenu.chooseItem(CANCEL_SELECTED);
 
         List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='order in ctrl.orders']/td[1]");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
         Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
         sendKeysById("container.order.edit.cancellation-reason", String.format("This order is canceled by automation to test 'Cancel Selected' feature on All Orders page. Canceled at %s.", CREATED_DATE_SDF.format(new Date())));
-        clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-orders");
+        if (listOfActualTrackingIds.size() == 1)
+        {
+            clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-order");
+        } else
+        {
+            clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-orders");
+        }
+        waitUntilInvisibilityOfToast("updated");
+    }
+
+    public void openFiltersForm()
+    {
+        clickButtonByAriaLabel("Edit Conditions");
+    }
+
+    public void resumeSelected(List<String> listOfExpectedTrackingId)
+    {
+        clearFilterTableOrderByTrackingId();
+        selectAllShown("ctrl.ordersTableParam");
+        applyActionsMenu.chooseItem(RESUME_SELECTED);
+
+        List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='order in ctrl.orders']/td[1]");
+        List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
+        Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+
+        if (listOfActualTrackingIds.size() == 1)
+        {
+            clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.resume-order");
+        } else
+        {
+            clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.resume-orders");
+        }
         waitUntilInvisibilityOfToast("updated");
     }
 
@@ -306,7 +341,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         clearFilterTableOrderByTrackingId();
         selectAllShown("ctrl.ordersTableParam");
-        selectAction(ACTION_PULL_FROM_ROUTE);
+        applyActionsMenu.chooseItem(PULL_FROM_ROUTE);
 
         List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='processedTransactionData in ctrl.processedTransactionsData']/td[@ng-if='ctrl.settings.showTrackingId']");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
@@ -316,11 +351,42 @@ public class AllOrdersPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast("updated");
     }
 
+    public void applyActionToOrdersByTrackingId(List<String> listOfExpectedTrackingId, AllOrdersAction action)
+    {
+        clearFilterTableOrderByTrackingId();
+        selectAllShown("ctrl.ordersTableParam");
+        applyActionsMenu.chooseItem(action);
+    }
+
+    public void verifySelectionErrorDialog(List<String> listOfExpectedTrackingId, AllOrdersAction action, List<String> expectedReasons)
+    {
+        waitUntilVisibilityOfMdDialogByTitle("Selection Error");
+
+        String actualAction = getText("//div[label[text()='Process']]/p");
+        Assert.assertThat("Unexpected Process", actualAction, Matchers.equalToIgnoringCase(action.getName()));
+
+        List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='row in ctrl.ordersValidationErrorData.errors']/td[1]");
+        List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
+        Assert.assertEquals("Unexpected number of Orders", listOfExpectedTrackingId.size(), listOfActualTrackingIds.size());
+        Assert.assertThat("Expected Tracking ID not found", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+
+        listOfWe = findElementsByXpath("//tr[@ng-repeat='row in ctrl.ordersValidationErrorData.errors']/td[2]");
+        List<String> listOfFailureReason = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
+        Assert.assertThat("Unexpected Failure Reason", listOfFailureReason, Matchers.hasItems(expectedReasons.toArray(new String[]{})));
+
+        clickNvIconTextButtonByNameAndWaitUntilDone("commons.continue");
+
+        String toastTopText = getToastTopText();
+        String toastBottomText = getToastBottomText();
+        Assert.assertEquals("Toast top text", "Unable to apply actions", toastTopText);
+        Assert.assertEquals("Toast bottom text", "No valid selection", toastBottomText);
+    }
+
     public void addToRoute(List<String> listOfExpectedTrackingId, long routeId)
     {
         clearFilterTableOrderByTrackingId();
         selectAllShown("ctrl.ordersTableParam");
-        selectAction(ACTION_ADD_TO_ROUTE);
+        applyActionsMenu.chooseItem(ADD_TO_ROUTE);
 
         List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='order in ctrl.formData.orders']/td[1]");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
@@ -343,7 +409,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     public void verifyWaybillContentsIsCorrect(OrderRequestV2 orderRequestV2)
     {
         String trackingId = orderRequestV2.getTrackingId();
-        String latestFilenameOfDownloadedPdf = getLatestDownloadedFilename("awb_"+trackingId);
+        String latestFilenameOfDownloadedPdf = getLatestDownloadedFilename("awb_" + trackingId);
         verifyFileDownloadedSuccessfully(latestFilenameOfDownloadedPdf);
         AirwayBill airwayBill = PdfUtils.getOrderInfoFromAirwayBill(TestConstants.TEMP_DIR + latestFilenameOfDownloadedPdf, 0);
 
@@ -390,12 +456,11 @@ public class AllOrdersPage extends OperatorV2SimplePage
             String expectedEndTime = "";
             Integer timewindow = changeDeliveryTiming.getTimewindow();
 
-            if(timewindow==null)
+            if (timewindow == null)
             {
                 actualStartDate = actualStartDate.substring(0, 10);
                 actualEndDate = actualEndDate.substring(0, 10);
-            }
-            else
+            } else
             {
                 expectedStartTime = TestUtils.getStartTime(timewindow);
                 expectedEndTime = TestUtils.getEndTime(timewindow);
@@ -406,12 +471,11 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
             boolean isDateEmpty = isBlank(changeDeliveryTiming.getStartDate()) || isBlank(changeDeliveryTiming.getEndDate());
 
-            if(!isDateEmpty)
+            if (!isDateEmpty)
             {
                 Assert.assertEquals("Start Date does not match.", expectedStartDateWithTime, actualStartDate);
                 Assert.assertEquals("End Date does not match.", expectedEndDateWithTime, actualEndDate);
-            }
-            else
+            } else
             {
                 /*
                   If date is empty, check only the start/end time.
@@ -422,8 +486,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
                 Assert.assertEquals("Start Date does not match.", expectedStartDateWithTime, actualStartTime);
                 Assert.assertEquals("End Date does not match.", expectedEndDateWithTime, actualEndTime);
             }
-        }
-        finally
+        } finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
@@ -431,7 +494,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     private String concatDateWithTime(String date, String time)
     {
-        if(time==null)
+        if (time == null)
         {
             time = "";
         }
@@ -449,8 +512,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
             switchToNewOpenedWindow(mainWindowHandle);
             editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyInboundIsSucceed();
-        }
-        finally
+        } finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
@@ -468,27 +530,10 @@ public class AllOrdersPage extends OperatorV2SimplePage
             switchToEditOrderWindow(orderId);
             editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyOrderIsGlobalInboundedSuccessfully(orderRequestV2, globalInboundParams, expectedOrderCost);
-        }
-        finally
+        } finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
-    }
-
-    public void selectAction(int actionType)
-    {
-        click("//span[text()='Apply Action']");
-
-        switch(actionType)
-        {
-            case ACTION_SET_RTS_TO_SELECTED: clickButtonByAriaLabel("Set RTS to Selected"); break;
-            case ACTION_CANCEL_SELECTED: clickButtonByAriaLabel("Cancel Selected"); break;
-            case ACTION_MANUALLY_COMPLETE_SELECTED: clickButtonByAriaLabel("Manually Complete Selected"); break;
-            case ACTION_PULL_FROM_ROUTE: clickButtonByAriaLabel("Pull Selected from Route"); break;
-            case ACTION_ADD_TO_ROUTE: clickButtonByAriaLabel("Add Selected to Route"); break;
-        }
-
-        pause500ms();
     }
 
     public void searchTrackingId(String trackingId)
@@ -510,12 +555,11 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         ////div[contains(@ng-messages, 'ctrl.specificSearch.form.searchTerm.$error')]/div[text()='No Results Found']
 
-        if(isElementExistFast(matchedTrackingIdXpathExpression))
+        if (isElementExistFast(matchedTrackingIdXpathExpression))
         {
             click(matchedTrackingIdXpathExpression);
             waitUntilNewWindowOrTabOpened();
-        }
-        else
+        } else
         {
             click(searchButtonXpathExpression);
         }
@@ -537,17 +581,17 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     public void switchToEditOrderWindow(Long orderId)
     {
-        switchToOtherWindow("order/"+orderId);
+        switchToOtherWindow("order/" + orderId);
     }
 
     public void switchToNewOpenedWindow(String mainWindowHandle)
     {
-        Set<String> windowHandles = TestUtils.retryIfRuntimeExceptionOccurred(()->
+        Set<String> windowHandles = TestUtils.retryIfRuntimeExceptionOccurred(() ->
         {
             pause100ms();
             Set<String> windowHandlesTemp = getWebDriver().getWindowHandles();
 
-            if(windowHandlesTemp.size()<=1)
+            if (windowHandlesTemp.size() <= 1)
             {
                 throw new RuntimeException("WebDriver only contains 1 Window.");
             }
@@ -557,9 +601,9 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         String newOpenedWindowHandle = null;
 
-        for(String windowHandle : windowHandles)
+        for (String windowHandle : windowHandles)
         {
-            if(!windowHandle.equals(mainWindowHandle))
+            if (!windowHandle.equals(mainWindowHandle))
             {
                 newOpenedWindowHandle = windowHandle; // Do not break, because we need to get the latest one.
             }
@@ -576,5 +620,45 @@ public class AllOrdersPage extends OperatorV2SimplePage
     public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
     {
         clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT_TABLE_ORDER);
+    }
+
+    /**
+     * Accessor for Apply Action menu
+     */
+    public static class ApplyActionsMenu extends OperatorV2SimplePage
+    {
+        public enum AllOrdersAction
+        {
+            SET_RTS_TO_SELECTED("Set RTS to Selected"),
+            CANCEL_SELECTED("Cancel Selected"),
+            RESUME_SELECTED("Resume Selected"),
+            MANUALLY_COMPLETE_SELECTED("Manually Complete Selected"),
+            PULL_FROM_ROUTE("Pull from Route"),
+            ADD_TO_ROUTE("Add To Route");
+
+            private String name;
+
+            public String getName()
+            {
+                return name;
+            }
+
+            AllOrdersAction(String name)
+            {
+                this.name = name;
+            }
+        }
+
+        private static final String PARENT_MENU_NAME = "Apply Action";
+
+        public ApplyActionsMenu(WebDriver webDriver)
+        {
+            super(webDriver);
+        }
+
+        public void chooseItem(AllOrdersAction action)
+        {
+            clickMdMenuItem(PARENT_MENU_NAME, action.getName());
+        }
     }
 }
