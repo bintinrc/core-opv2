@@ -58,10 +58,12 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     {
         List<JaroScore> jaroScores = get(KEY_LIST_OF_CREATED_JARO_SCORES);
         jaroScores.forEach(jaroScore -> {
-            JaroScore actualJaroScore = getAddressingJdbc().getJaroScores(jaroScore.getWaypointId());
-            Assert.assertEquals("Latitude", jaroScore.getLatitude(), actualJaroScore.getLatitude(), 0);
-            Assert.assertEquals("Longitude", jaroScore.getLongitude(), actualJaroScore.getLongitude(), 0);
-            Assert.assertEquals("Verified Address Id", jaroScore.getVerifiedAddressId(), actualJaroScore.getVerifiedAddressId());
+            List<JaroScore> actualJaroScores = getAddressingJdbc().getJaroScores(jaroScore.getWaypointId());
+            Assert.assertEquals("Number of rows in DB", 2, actualJaroScores.size());
+            JaroScore newJaroScore = actualJaroScores.get(actualJaroScores.size()-1);
+            Assert.assertEquals("Latitude", jaroScore.getLatitude(), newJaroScore.getLatitude(), 0);
+            Assert.assertEquals("Longitude", jaroScore.getLongitude(), newJaroScore.getLongitude(), 0);
+            Assert.assertEquals("Verified Address Id", jaroScore.getVerifiedAddressId(), newJaroScore.getVerifiedAddressId());
         });
     }
 }

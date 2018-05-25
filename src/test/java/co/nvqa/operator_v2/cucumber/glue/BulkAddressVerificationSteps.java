@@ -42,15 +42,16 @@ public class BulkAddressVerificationSteps extends AbstractSteps
         {
             case "FROM_CREATED_ORDER_DETAILS":
                 List<Order> ordersDetails = get(KEY_LIST_OF_ORDER_DETAILS);
-                ordersDetails.stream().map(od -> {
-                    List<Long> wptIds =
+                ordersDetails.forEach(od -> {
+                    List<Transaction> deliveryTransactions =
                             od.getTransactions().stream()
                                     .filter(transaction -> "delivery".equalsIgnoreCase(transaction.getType()))
-                                    .map(Transaction::getWaypointId).collect(Collectors.toList());
-                    return wptIds.get(wptIds.size() - 1);
-                }).forEach(waypointId -> {
+                                    .collect(Collectors.toList());
+                    Transaction transaction = deliveryTransactions.get(deliveryTransactions.size() - 1);
                     JaroScore jaroScore = new JaroScore();
-                    jaroScore.setWaypointId(waypointId);
+                    jaroScore.setWaypointId(transaction.getWaypointId());
+                    jaroScore.setVerifiedAddressId("BULK_VERIFY");
+                    jaroScore.setAddress1(od.getToAddress1());
                     jaroScores.add(jaroScore);
                 });
                 break;
@@ -82,12 +83,6 @@ public class BulkAddressVerificationSteps extends AbstractSteps
 
         put(KEY_LIST_OF_CREATED_JARO_SCORES, jaroScores);
 
-        List<String> csvLines = new ArrayList<>();
-        csvLines.add("\"waypoint\",\"latitude\",\"longitude\"");
-        jaroScores.forEach(jaroScore -> csvLines.add(jaroScore.getWaypointId() + "," + jaroScore.getLatitude() + "," + jaroScore.getLongitude()));
-        File file = TestUtils.createFileOnTempFolder(String.format("bulk_address_verification_%s.csv", generateDateUniqueString()));
-        FileUtils.writeLines(file, csvLines);
-
-        bulkAddressVerificationPage.uploadCsv(file);
+        bulkAddressVerificationPage.uploadWaypointsData(jaroScores);
     }
 }
