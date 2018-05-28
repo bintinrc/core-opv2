@@ -84,8 +84,15 @@ public class MainPage extends OperatorV2SimplePage
 
     public void clickNavigation(String parentTitle, String navTitle)
     {
+        if (isElementVisible("//i[@ng-if='!showLogo()']")){
+            openNavigationPanel();
+        }
         String mainDashboard = grabEndURL(navTitle);
         clickNavigation(parentTitle, navTitle, mainDashboard);
+    }
+
+    public void openNavigationPanel(){
+        clickButtonByAriaLabel("Open Sidenav");
     }
 
     public void clickNavigation(String parentTitle, String navTitle, String urlPart)

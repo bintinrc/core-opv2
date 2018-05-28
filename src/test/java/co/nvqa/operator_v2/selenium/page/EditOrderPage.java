@@ -557,7 +557,7 @@ public class EditOrderPage extends OperatorV2SimplePage
      */
     public static class DeliveryDetailsBox extends OperatorV2SimplePage
     {
-        private static final String DELIVERY_INSTRUCTIONS_LOCATOR = "Delivery Instructions";
+        private static final String DELIVERY_INSTRUCTIONS_LOCATOR = "//div[h5[text()='Delivery Details']]//div[label[text()='Delivery Instructions']]/p";
         private static final String ROUTE_ID_LOCATOR = "//div[h5[text()='Delivery Details']]//div[label[text()='Route Id']]/p";
         private static final String ROUTE_DATE_LOCATOR = "//div[h5[text()='Delivery Details']]//div[label[text()='Route Date']]/p";
         private static final String DRIVER_LOCATOR = "//div[h5[text()='Delivery Details']]//div[label[text()='Driver']]/p";
@@ -603,7 +603,7 @@ public class EditOrderPage extends OperatorV2SimplePage
      */
     public static class PickupDetailsBox extends OperatorV2SimplePage
     {
-        private static final String DELIVERY_INSTRUCTIONS_LOCATOR = "Pick Up Instructions";
+        private static final String PICKUP_INSTRUCTIONS_LOCATOR = "//div[h5[text()='Pickup Details']]//div[label[text()='Pick Up Instructions']]/p";
         private static final String ROUTE_ID_LOCATOR = "//div[h5[text()='Pickup Details']]//div[label[text()='Route Id']]/p";
         private static final String ROUTE_DATE_LOCATOR = "//div[h5[text()='Pickup Details']]//div[label[text()='Route Date']]/p";
         private static final String DRIVER_LOCATOR = "//div[h5[text()='Pickup Details']]//div[label[text()='Driver']]/p";
@@ -614,9 +614,9 @@ public class EditOrderPage extends OperatorV2SimplePage
             super(webDriver);
         }
 
-        public String getDeliveryInstructions()
+        public String getPickupInstructions()
         {
-            return getText(DELIVERY_INSTRUCTIONS_LOCATOR);
+            return getText(PICKUP_INSTRUCTIONS_LOCATOR);
         }
 
         public String getRouteId()
