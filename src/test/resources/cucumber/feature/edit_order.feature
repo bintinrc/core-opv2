@@ -5,6 +5,7 @@ Feature: Edit Order
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @CloseNewWindows
   Scenario: Operator Edit Order Details on Edit Order page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
@@ -21,6 +22,7 @@ Feature: Edit Order
     When API Operator get order details
     When Operator Edit Order Details on Edit Order page successfully
 
+  @CloseNewWindows
   Scenario: Operator should be able to Edit Instructions of an order on Edit Order page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
@@ -38,6 +40,7 @@ Feature: Edit Order
       | deliveryInstruction | new delivery instruction |
     When Operator verify Order Instructions are updated on Edit Order Page
 
+  @CloseNewWindows
   Scenario: Operator should be able to Manually Complete Order on Edit Order page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
@@ -53,6 +56,7 @@ Feature: Edit Order
     When Operator confirm manually complete order on Edit Order page
     Then Operator verify the order completed successfully on Edit Order page
 
+  @CloseNewWindows
   Scenario: Operator should be able to edit the Priority Level
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
@@ -68,6 +72,7 @@ Feature: Edit Order
     And Operator refresh page
     Then Operator verify Delivery Priority Level is "2" on Edit Order page
 
+  @CloseNewWindows
   Scenario: Operator should be able to print the airway bill
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
@@ -82,7 +87,7 @@ Feature: Edit Order
     When Operator print Airway Bill on Edit Order page
     Then Operator verify the printed Airway bill for single order on Edit Orders page contains correct info
 
-  @ArchiveRouteViaDb
+  @ArchiveRouteViaDb @CloseNewWindows
   Scenario Outline: Operator should be able to add <orderType> order to Route for Pickup on Edit Order page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
