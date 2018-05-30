@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Sergey Mishanin
@@ -52,10 +54,17 @@ public class BulkAddressVerificationPage extends OperatorV2SimplePage
         int actualSuccessfulMatches = successfulMatchesTable.getRowsCount();
         Assert.assertEquals("Number of successful matches", jaroScores.size(), actualSuccessfulMatches);
 
+        Map<Long, JaroScore> jsMapByWaypointId = jaroScores.stream().collect(Collectors.toMap(
+                JaroScore::getWaypointId,
+                jaroScore -> jaroScore
+        ));
+
         for (int rowIndex = 1; rowIndex <= actualSuccessfulMatches; rowIndex++)
         {
-            JaroScore jaroScore = jaroScores.get(rowIndex - 1);
-            Assert.assertEquals("[" + rowIndex + "] Waypoint ID", String.valueOf(jaroScore.getWaypointId()), successfulMatchesTable.getWaypointId(rowIndex));
+            String actualWaypointID = successfulMatchesTable.getWaypointId(rowIndex);
+            JaroScore jaroScore = jsMapByWaypointId.get(Long.parseLong(actualWaypointID));
+            Assert.assertThat("[" + rowIndex + "] Unexpected Waypoint ID " + actualWaypointID, jaroScore, Matchers.notNullValue());
+            Assert.assertEquals("[" + rowIndex + "] Waypoint ID", String.valueOf(jaroScore.getWaypointId()), actualWaypointID);
             Assert.assertThat("[" + rowIndex + " Address] ", successfulMatchesTable.getAddress(rowIndex), Matchers.equalToIgnoringCase(jaroScore.getAddress1()));
             String expectedCoordinates =
                     StringUtils.left(String.valueOf(jaroScore.getLatitude()), 6) +
