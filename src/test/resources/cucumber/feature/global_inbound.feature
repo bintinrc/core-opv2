@@ -1,5 +1,5 @@
 @OperatorV2 @GlobalInbound
-Feature: Van Inbound
+Feature: Global Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2

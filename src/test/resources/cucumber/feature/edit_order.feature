@@ -6,7 +6,7 @@ Feature: Edit Order
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows
-  Scenario: Operator Edit Order Details on Edit Order page
+  Scenario: Operator Edit Order Details on Edit Order page (uid:310145cf-c2c5-4451-9501-637b368d274c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
@@ -23,7 +23,7 @@ Feature: Edit Order
     When Operator Edit Order Details on Edit Order page successfully
 
   @CloseNewWindows
-  Scenario: Operator should be able to Edit Instructions of an order on Edit Order page
+  Scenario: Operator should be able to Edit Instructions of an order on Edit Order page (uid:083eeb16-7b61-4851-8896-70370bc848b6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
@@ -41,7 +41,7 @@ Feature: Edit Order
     When Operator verify Order Instructions are updated on Edit Order Page
 
   @CloseNewWindows
-  Scenario: Operator should be able to Manually Complete Order on Edit Order page
+  Scenario: Operator should be able to Manually Complete Order on Edit Order page (uid:eb872b68-ff7d-4b6d-b5da-98676774bb93)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
@@ -57,7 +57,7 @@ Feature: Edit Order
     Then Operator verify the order completed successfully on Edit Order page
 
   @CloseNewWindows
-  Scenario: Operator should be able to edit the Priority Level
+  Scenario: Operator should be able to edit the Priority Level (uid:6163a252-e695-4e75-93e2-9c976e03727b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
@@ -73,7 +73,7 @@ Feature: Edit Order
     Then Operator verify Delivery Priority Level is "2" on Edit Order page
 
   @CloseNewWindows
-  Scenario: Operator should be able to print the airway bill
+  Scenario: Operator should be able to print the airway bill (uid:f0095133-9d98-47bf-9d34-564917fa5bb4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
@@ -104,12 +104,10 @@ Feature: Edit Order
     When Operator add created order to the <routeType> route on Edit Order page
     And Operator refresh page
     Then Operator verify the order is added to the <routeType> route on Edit Order page
-
     Examples:
-      | hiptest-uid | orderType | routeType |
-      |             | C2C       | Delivery  |
-      |             | Return    | Pickup    |
-
+      | Note               | hiptest-uid                              | orderType | routeType |
+      | C2C - Delivery     | uid:c4f25b56-21c6-4f4a-9521-540a8678fc85 | C2C       | Delivery  |
+      | Return - Pickup    | uid:27ec7fb6-c2ac-4764-b483-5c656c72568d | Return    | Pickup    |
 
 #  Scenario: Operator Edit Cash Collection Details on Edit Order page
 #    Given Operator go to menu Shipper Support -> Blocked Dates

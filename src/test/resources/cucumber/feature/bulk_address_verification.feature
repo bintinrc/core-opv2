@@ -6,7 +6,7 @@ Feature: Bulk Address Verification
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @ArchiveRouteViaDb
-  Scenario: Operator should be able to verify Bulk Addresses on Bulk Address Verification
+  Scenario: Operator should be able to verify Bulk Addresses on Bulk Address Verification page (uid:ae74df19-c939-4b91-865d-94eb19021910)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple Order V2 Parcel using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                      |
@@ -25,7 +25,6 @@ Feature: Bulk Address Verification
       | latitude  | GENERATED                  |
       | longitude | GENERATED                  |
     Then Operator verify Jaro Scores are created successfully
-
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

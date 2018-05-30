@@ -156,7 +156,7 @@ Feature: All Orders
     When Operator print Waybill for single order on All Orders page
     Then Operator verify the printed waybill for single order on All Orders page contains correct info
 
-  Scenario: Operator should be able to cancel an order on All Orders page
+  Scenario: Operator should be able to cancel an order on All Orders page (uid:d622126f-1eec-46fc-9c2b-882facd63cde)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
@@ -168,7 +168,7 @@ Feature: All Orders
     When Operator resume order on All Orders page
     Then Operator verify order status is "Pending Pickup"
 
-  Scenario: Operator should not be able to pull out unrouted order on All Orders page
+  Scenario: Operator should not be able to pull out unrouted order on All Orders page (uid:e932221d-ebcd-4df9-9902-2d3086d913da)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple Order V2 Parcel using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                      |
