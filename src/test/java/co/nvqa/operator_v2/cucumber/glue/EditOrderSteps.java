@@ -10,6 +10,9 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.SerializationUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Map;
 
 /**
  *
@@ -72,5 +75,93 @@ public class EditOrderSteps extends AbstractSteps
         OrderRequestV2 orderRequestV2Edited = get("orderRequestV2Edited");
         Order order = get(KEY_ORDER_DETAILS);
         editOrderPage.verifyEditOrderDetailsIsSuccess(orderRequestV2Edited, order);
+    }
+
+    @When("^Operator enter Order Instructions on Edit Order page:$")
+    public void operatorEnterOrderInstructionsOnEditOrderPage(Map<String, String> data)
+    {
+        String pickupInstruction = data.get("pickupInstruction");
+        if (pickupInstruction != null)
+        {
+            put(KEY_PICKUP_INSTRUCTION, pickupInstruction);
+        }
+        String deliveryInstruction = data.getOrDefault("deliveryInstruction", "");
+        if (deliveryInstruction != null)
+        {
+            put(KEY_DELIVERY_INSTRUCTION, deliveryInstruction);
+        }
+        editOrderPage.editOrderInstructions(pickupInstruction, deliveryInstruction);
+    }
+
+    @When("^Operator verify Order Instructions are updated on Edit Order Page$")
+    public void operatorVerifyOrderInstructionsAreUpdatedOnEditOrderPage()
+    {
+        OrderRequestV2 orderRequestV2 = get(KEY_ORDER_CREATE_REQUEST);
+        String pickupInstruction = get(KEY_PICKUP_INSTRUCTION);
+        if (StringUtils.isNotBlank(pickupInstruction)){
+            pickupInstruction = orderRequestV2.getInstruction() + ", " + pickupInstruction;
+        }
+        String deliveryInstruction = get(KEY_DELIVERY_INSTRUCTION);
+        if (StringUtils.isNotBlank(deliveryInstruction)){
+            deliveryInstruction = orderRequestV2.getInstruction() + ", " + deliveryInstruction;
+        }
+
+        editOrderPage.verifyOrderInstructions(pickupInstruction, deliveryInstruction);
+    }
+
+    @When("^Operator confirm manually complete order on Edit Order page$")
+    public void operatorManuallyCompleteOrderOnEditOrderPage()
+    {
+        editOrderPage.confirmCompleteOrder();
+    }
+
+    @Then("^Operator verify the order completed successfully on Edit Order page$")
+    public void operatorVerifyTheOrderCompletedSuccessfullyOnEditOrderPage()
+    {
+        OrderRequestV2 orderRequestV2 = get(KEY_ORDER_CREATE_REQUEST);
+        orderRequestV2.setTrackingId(get(KEY_CREATED_ORDER_TRACKING_ID));
+        editOrderPage.verifyOrderIsForceSuccessedSuccessfully(orderRequestV2);
+    }
+
+    @When("^Operator change Priority Level to \"(\\d+)\" on Edit Order page$")
+    public void operatorChangePriorityLevelToOnEditOrderPage(int priorityLevel)
+    {
+        editOrderPage.editPriorityLevel(priorityLevel);
+    }
+
+    @Then("^Operator verify (.+) Priority Level is \"(\\d+)\" on Edit Order page$")
+    public void operatorVerifyDeliveryPriorityLevelIsOnEditOrderPage(String txnType, int expectedPriorityLevel)
+    {
+        editOrderPage.verifyPriorityLevel(txnType, expectedPriorityLevel);
+    }
+
+    @When("^Operator print Airway Bill on Edit Order page$")
+    public void operatorPrintAirwayBillOnEditOrderPage()
+    {
+        editOrderPage.printAirwayBill();
+    }
+
+    @Then("^Operator verify the printed Airway bill for single order on Edit Orders page contains correct info$")
+    public void operatorVerifyThePrintedAirwayBillForSingleOrderOnEditOrdersPageContainsCorrectInfo()
+    {
+        OrderRequestV2 orderRequestV2 = get(KEY_CREATED_ORDER);
+        editOrderPage.verifyAirwayBillContentsIsCorrect(orderRequestV2);
+    }
+
+    @When("^Operator add created order to the (.+) route on Edit Order page$")
+    public void operatorAddCreatedOrderToTheRouteOnEditOrderPage(String type)
+    {
+        editOrderPage.addToRoute(get(KEY_CREATED_ROUTE_ID), type);
+    }
+
+    @Then("^Operator verify the order is added to the (.+) route on Edit Order page$")
+    public void operatorVerifyTheOrderIsAddedToTheRouteOnEditOrderPage(String type)
+    {
+        switch (type.toUpperCase())
+        {
+            case "DELIVERY": editOrderPage.verifyDeliveryRouteInfo(get(KEY_CREATED_ROUTE)); break;
+            case "PICKUP": editOrderPage.verifyPickupRouteInfo(get(KEY_CREATED_ROUTE)); break;
+            default: throw new IllegalArgumentException("Unknown route type: " + type);
+        }
     }
 }

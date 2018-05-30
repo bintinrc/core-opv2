@@ -9,6 +9,7 @@ import co.nvqa.commons.utils.StandardScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.page.LoginPage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
 import co.nvqa.operator_v2.selenium.page.OperatorV2SimplePage;
+import co.nvqa.operator_v2.util.ScenarioStorageKeys;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
@@ -20,6 +21,7 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -113,6 +115,31 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
         catch(Throwable th)
         {
             NvLogger.warn("Failed to 'Reset Window'.", th);
+        }
+    }
+
+    @After("@CloseNewWindows")
+    public void closeNewWindows()
+    {
+        NvLogger.info("Close new windows.");
+
+        try
+        {
+            String mainWindowHandle = getCurrentScenarioStorage().get(ScenarioStorageKeys.KEY_MAIN_WINDOW_HANDLE);
+            if (StringUtils.isNotBlank(mainWindowHandle))
+            {
+                getWebDriver().getWindowHandles().forEach(windowHandle -> {
+                    if (!windowHandle.equals(mainWindowHandle))
+                    {
+                        getWebDriver().switchTo().window(windowHandle).close();
+                    }
+                });
+                getWebDriver().switchTo().window(mainWindowHandle).switchTo();
+            }
+        }
+        catch(Throwable th)
+        {
+            NvLogger.warn("Failed to 'Close new windows'.", th);
         }
     }
 
