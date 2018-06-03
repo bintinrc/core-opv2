@@ -113,6 +113,11 @@ public class OperatorV2SimplePage extends SimplePage
         clickf("//md-dialog//button[@aria-label='%s']", ariaLabel);
     }
 
+    public void clickButtonOnMdDialogByAriaLabelIgnoreCase(String ariaLabel)
+    {
+        clickf("//md-dialog//button[translate(@aria-label,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=translate('%s','ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')]", ariaLabel);
+    }
+
     public void clear(String xpathExpression)
     {
         WebElement we = findElementByXpath(xpathExpression);
@@ -388,6 +393,34 @@ public class OperatorV2SimplePage extends SimplePage
         catch(NoSuchElementException ex)
         {
             NvLogger.warn("Table with NgRepeat [" + ngRepeat + "] was not found");
+            return 0;
+        }
+    }
+
+    public int getRowsCountOfTableWithMdVirtualRepeat(String mdVirtualRepeat)
+    {
+        try
+        {
+            List<WebElement> webElements = findElementsByXpath(String.format("//tr[@md-virtual-repeat='%s']", mdVirtualRepeat));
+            return webElements.size();
+        }
+        catch(NoSuchElementException ex)
+        {
+            NvLogger.warn("Table with md-virtual-repeat [" + mdVirtualRepeat + "] was not found");
+            return 0;
+        }
+    }
+
+    public int getRowsCountOfTableWithMdVirtualRepeatFast(String mdVirtualRepeat)
+    {
+        try
+        {
+            List<WebElement> webElements = findElementsByXpathFast(String.format("//tr[@md-virtual-repeat='%s']", mdVirtualRepeat));
+            return webElements.size();
+        }
+        catch(NoSuchElementException ex)
+        {
+            NvLogger.warn("Table with md-virtual-repeat [" + mdVirtualRepeat + "] was not found");
             return 0;
         }
     }
