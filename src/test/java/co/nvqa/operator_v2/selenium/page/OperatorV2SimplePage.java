@@ -404,7 +404,7 @@ public class OperatorV2SimplePage extends SimplePage
             List<WebElement> webElements = findElementsByXpath(String.format("//tr[@md-virtual-repeat='%s']", mdVirtualRepeat));
             return webElements.size();
         }
-        catch(NoSuchElementException ex)
+        catch(NoSuchElementException | TimeoutException ex)
         {
             NvLogger.warn("Table with md-virtual-repeat [" + mdVirtualRepeat + "] was not found");
             return 0;
@@ -418,7 +418,7 @@ public class OperatorV2SimplePage extends SimplePage
             List<WebElement> webElements = findElementsByXpathFast(String.format("//tr[@md-virtual-repeat='%s']", mdVirtualRepeat));
             return webElements.size();
         }
-        catch(NoSuchElementException ex)
+        catch(NoSuchElementException | TimeoutException ex)
         {
             NvLogger.warn("Table with md-virtual-repeat [" + mdVirtualRepeat + "] was not found");
             return 0;

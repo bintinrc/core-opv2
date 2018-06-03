@@ -57,7 +57,7 @@ Feature: Driver Type Management
     Then Operator verify new Driver Type is deleted successfully
 
   @DeleteDriverType
-  Scenario Outline: op filter driver type management by delivery date (uid:6389d609-4c56-4856-8204-0246bce0f3d0)
+  Scenario Outline: Operator should be able to filter by '<value>' on Driver Type Management page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Driver Type Management
     Given Operator create new Driver Type with the following attributes:

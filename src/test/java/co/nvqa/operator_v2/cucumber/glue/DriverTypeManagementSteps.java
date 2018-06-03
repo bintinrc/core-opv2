@@ -168,6 +168,7 @@ public class DriverTypeManagementSteps extends AbstractSteps
         DriverTypeParams driverTypeParams = get(KEY_DRIVER_TYPE_PARAMS);
         dtmPage.searchingCreatedDriver(driverTypeParams.getDriverTypeName());
         Assert.assertTrue("Created Driver Type was not deleted", dtmPage.driverTypesTable().getRowsCount() == 0);
+        remove(KEY_DRIVER_TYPE_ID);
     }
 
     @When("^Operator configure filter on Driver Type Management page with the following attributes:$")

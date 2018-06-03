@@ -36,7 +36,6 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
     private static final String PARCEL_SIZE = "Parcel Size";
     private static final String TIMESLOT = "Timeslot";
 
-
     private static final String ACTION_BUTTON_EDIT = "Edit";
     private static final String ACTION_BUTTON_DELETE = "Delete";
 
@@ -149,9 +148,9 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
             if (StringUtils.isNotBlank(filterParams.getPriorityLevel()))
             {
                 List<String> expectedItems = filterParams.getPriorityLevels().stream().map(item -> {
-                    if (!StringUtils.containsAny("Only", "All", "Both"))
+                    if (!StringUtils.containsAny(item,"Only", "All", "Both"))
                     {
-                        return item + " Only";
+                        item += " Only";
                     }
                     return item;
                 }).collect(Collectors.toList());
@@ -243,7 +242,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
         if (expectedDriverTypeParams.getPriorityLevel() != null)
         {
             String expectedPriorityLevel = expectedDriverTypeParams.getPriorityLevel();
-            if (!StringUtils.containsAny("Only", "All", "Both"))
+            if (!StringUtils.containsAny(expectedPriorityLevel, "Only", "All", "Both"))
             {
                 expectedPriorityLevel += " Only";
             }
