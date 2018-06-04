@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Modified by Sergey Mishanin
+ *
  * @author Soewandi Wirjawan
  */
 @ScenarioScoped
@@ -31,72 +33,6 @@ public class DriverTypeManagementSteps extends AbstractSteps
     public void init()
     {
         dtmPage = new DriverTypeManagementPage(getWebDriver());
-    }
-
-    @When("^driver type management is filtered by ([^\"]*) of ([^\"]*)$")
-    public void filteredBy(String filterValue, String filterType)
-    {
-        dtmPage.filteredBy(filterValue, filterType);
-    }
-
-    @When("^download driver type management file$")
-    public void downloadFile()
-    {
-        dtmPage.downloadFile();
-    }
-
-    @Then("^driver type management file should exist$")
-    public void verifyFile()
-    {
-        dtmPage.verifyFile();
-    }
-
-    @When("^create driver type button is clicked$")
-    public void createDriverType()
-    {
-        String uniqueCode = generateDateUniqueString();
-        String driverTypeName = "DT-" + uniqueCode;
-        put("driverTypeName", driverTypeName);
-        dtmPage.createDriverType(driverTypeName);
-    }
-
-    @Then("^created driver type should exist$")
-    public void verifyDriverType()
-    {
-        String driverTypeName = get("driverTypeName");
-        dtmPage.verifyDriverType(driverTypeName);
-    }
-
-    @When("^searching created driver$")
-    public void searchingCreatedDriver()
-    {
-        String driverTypeName = get("driverTypeName");
-        dtmPage.searchingCreatedDriver(driverTypeName);
-    }
-
-    @When("^searching created driver and edit$")
-    public void searchingCreatedDriverAndEdit()
-    {
-        String driverTypeName = get("driverTypeName");
-        dtmPage.searchingCreatedDriverEdit(driverTypeName);
-    }
-
-    @Then("^verify changes of created driver type$")
-    public void verifyChangesCreatedDriver()
-    {
-        dtmPage.verifyChangesCreatedDriver();
-    }
-
-    @When("^created driver is deleted$")
-    public void deletedCreatedDriver()
-    {
-        dtmPage.deletedCreatedDriver();
-    }
-
-    @Then("^the created driver should not exist$")
-    public void createdDriverShouldNotExist()
-    {
-        dtmPage.createdDriverShouldNotExist();
     }
 
     @When("^Operator click on Download CSV File button on Driver Type Management page$")
@@ -167,12 +103,12 @@ public class DriverTypeManagementSteps extends AbstractSteps
         dtmPage.refreshPage();
         DriverTypeParams driverTypeParams = get(KEY_DRIVER_TYPE_PARAMS);
         dtmPage.searchingCreatedDriver(driverTypeParams.getDriverTypeName());
-        Assert.assertTrue("Created Driver Type was not deleted", dtmPage.driverTypesTable().getRowsCount() == 0);
+        Assert.assertEquals("Created Driver Type was not deleted", 0, dtmPage.driverTypesTable().getRowsCount());
         remove(KEY_DRIVER_TYPE_ID);
     }
 
     @When("^Operator configure filter on Driver Type Management page with the following attributes:$")
-    public void operatorConfigureFilterOnDriverTypeManagementPageWithTheFollowingAttributes(Map<String, String> dataMap) throws Throwable
+    public void operatorConfigureFilterOnDriverTypeManagementPageWithTheFollowingAttributes(Map<String, String> dataMap)
     {
         DriverTypeParams driverTypeParams = new DriverTypeParams();
         driverTypeParams.fromMap(dataMap);

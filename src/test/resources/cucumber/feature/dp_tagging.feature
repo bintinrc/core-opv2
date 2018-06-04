@@ -10,7 +10,7 @@ Feature: DP Tagging
     When Operator uploads invalid DP Tagging CSV
     Then Operator verify invalid DP Tagging CSV is not uploaded successfully
 
-  Scenario Outline: Operator tagged single order to DP (uid:491059a4-3343-44e2-940a-b021ab81c95d)
+  Scenario Outline: Operator tagged single order to DP (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM |

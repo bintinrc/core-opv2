@@ -5,8 +5,6 @@ import co.nvqa.commons.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -18,26 +16,27 @@ import java.util.stream.Collectors;
 
 import static co.nvqa.commons.utils.NvMatchers.hasItemIgnoreCase;
 import static co.nvqa.commons.utils.NvMatchers.hasItemsIgnoreCase;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
+ * Modified by Sergey Mishanin
+ *
  * @author Soewandi Wirjawan
  */
 @SuppressWarnings("WeakerAccess")
 public class DriverTypeManagementPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "driverTypeProp in ctrl.tableData";
-    private static final String XPATH_OF_TR_MD_VIRTUAL_REPEAT = String.format("//tr[@md-virtual-repeat='%s']", MD_VIRTUAL_REPEAT);
     private static final String CSV_FILENAME_PATTERN = "driver-types";
-    private static final String COLUMN_CLASS_DATA_NAME = "name";
     private static final String PRIORITY_LEVEL = "Priority Level";
     private static final String DELIVERY_TYPE = "Delivery Type";
     private static final String RESERVATION_SIZE = "Reservation Size";
     private static final String PARCEL_SIZE = "Parcel Size";
     private static final String TIMESLOT = "Timeslot";
-
-    private static final String ACTION_BUTTON_EDIT = "Edit";
-    private static final String ACTION_BUTTON_DELETE = "Delete";
 
     private DriverTypesTable driverTypesTable;
     private AddDriverTypeDialog addDriverTypeDialog;
@@ -63,47 +62,9 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
         return filtersForm;
     }
 
-    public void filteredBy(String filterValue, String filterType)
-    {
-        clickButtonByAriaLabel(filterValue);
-        pause1s();
-
-        // Get counter.
-        String counter = getText("//ng-pluralize[@class='nv-p-med count']").split(" ")[0];
-
-        if (Integer.parseInt(counter) == 0)
-        {
-            return;
-        }
-
-        String[] tokens = filterType.toLowerCase().split(" ");
-        String className = tokens.length == 2 ? tokens[0] + "-" + tokens[1] : tokens[0];
-
-        boolean valid = true;
-        List<WebElement> elm = findElementsByXpath(XPATH_OF_TR_MD_VIRTUAL_REPEAT);
-
-        for (WebElement e : elm)
-        {
-            WebElement t = e.findElement(By.className(className));
-
-            if (!t.getText().toLowerCase().contains(filterValue.toLowerCase()) && !t.getText().toLowerCase().contains("all"))
-            {
-                valid = false;
-                break;
-            }
-        }
-
-        Assert.assertTrue(filterType + " doesn't contains " + filterValue.toLowerCase(), valid);
-    }
-
     public void downloadFile()
     {
         clickNvApiTextButtonByName("Download CSV File");
-    }
-
-    public void verifyFile()
-    {
-        verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN));
     }
 
     public void verifyDownloadedFileContent(List<DriverTypeParams> expectedDriverTypeParams)
@@ -179,17 +140,6 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
         });
     }
 
-    private String[] getExpectedList(Set<String> values)
-    {
-        return values.stream().map(String::toLowerCase).collect(Collectors.toList()).toArray(new String[]{});
-    }
-
-    private List<String> getActualList(Set<String> values)
-    {
-        return values.stream().map(String::toLowerCase).collect(Collectors.toList());
-    }
-
-
     public void createDriverType(DriverTypeParams driverTypeParams)
     {
         clickButtonByAriaLabel("Create Driver Type");
@@ -203,24 +153,6 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
         driverTypesTable.clickEditButton(1);
         editDriverTypeDialog.fillForm(driverTypeParams);
         editDriverTypeDialog.submitForm();
-    }
-
-    public void createDriverType(String driverTypeName)
-    {
-        clickButtonByAriaLabel("Create Driver Type");
-        pause1s();
-
-        sendKeysByAriaLabel("Name", driverTypeName);
-        pause1s();
-
-        clickNvButtonSaveByName("Submit");
-    }
-
-    public void verifyDriverType(String expectedDriverTypeName)
-    {
-        searchingCreatedDriver(expectedDriverTypeName);
-        String actualDriverTypeName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
-        Assert.assertEquals("Driver Type Name", expectedDriverTypeName, actualDriverTypeName);
     }
 
     public void verifyDriverType(DriverTypeParams expectedDriverTypeParams)
@@ -275,19 +207,6 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
         pause1s();
     }
 
-    public void searchingCreatedDriverEdit(String driverTypeName)
-    {
-        searchingCreatedDriver(driverTypeName);
-
-        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
-        pause1s();
-
-        clickButtonOnMdDialogByAriaLabel("C2C + Return Pick Up");
-        pause1s();
-
-        clickNvButtonSaveByNameAndWaitUntilDone("Submit Changes");
-    }
-
     public void deleteDriverType(DriverTypeParams driverTypeParams)
     {
         searchingCreatedDriver(driverTypeParams.getDriverTypeName());
@@ -296,49 +215,6 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
         clickButtonOnMdDialogByAriaLabel("Delete");
         waitUntilInvisibilityOfMdDialogByTitle("Confirm delete");
         pause2s();
-    }
-
-    public void verifyChangesCreatedDriver()
-    {
-        boolean isFound = false;
-        List<WebElement> elm = findElementsByXpath(XPATH_OF_TR_MD_VIRTUAL_REPEAT);
-
-        for (WebElement e : elm)
-        {
-            List<WebElement> tds = e.findElements(By.tagName("td"));
-
-            for (WebElement td : tds)
-            {
-                if (td.getText().equalsIgnoreCase("Normal Delivery, C2C + Return Pick Up"))
-                {
-                    isFound = true;
-                    break;
-                }
-            }
-        }
-
-        Assert.assertTrue("Driver type is not found.", isFound);
-    }
-
-    public void deletedCreatedDriver()
-    {
-        clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
-        pause1s();
-
-        clickButtonOnMdDialogByAriaLabel("Delete");
-        pause1s();
-    }
-
-    public void createdDriverShouldNotExist()
-    {
-        try
-        {
-            findElementsByXpathFast(XPATH_OF_TR_MD_VIRTUAL_REPEAT);
-            Assert.fail("Driver still exists on table.");
-        } catch (TimeoutException ex)
-        {
-            NvLogger.warn("Failed to get element.", ex);
-        }
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)
@@ -471,6 +347,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
             super(webDriver);
         }
 
+        @SuppressWarnings("UnusedReturnValue")
         public AddDriverTypeDialog waitUntilVisible()
         {
             waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
@@ -529,6 +406,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
             clickButtonOnMdDialogByAriaLabel(LOCATOR_BUTTON_PRIORITY_LEVEL_NON_PRIOROTY + " Only");
         }
 
+        @SuppressWarnings("unused")
         public void selectPriorityLevelBoth()
         {
             clickButtonOnMdDialogByAriaLabel(LOCATOR_BUTTON_PRIORITY_LEVEL_BOTH);

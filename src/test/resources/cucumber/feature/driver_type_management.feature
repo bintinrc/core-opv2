@@ -5,144 +5,91 @@ Feature: Driver Type Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: op download driver type management file (uid:a1f987ea-5292-41e3-8781-666e77cd4555)
+  Scenario: Operator should be able to download CSV file on Driver Type Management page (uid:24c3e041-cf3a-4182-93a1-4b35320ab144)
     Given Operator go to menu Fleet -> Driver Type Management
-    When download driver type management file
-    Then driver type management file should exist
+    When Operator get all Driver Type params on Driver Type Management page
+    When Operator click on Download CSV File button on Driver Type Management page
+    Then Downloaded CSV file contains correct Driver Types data
 
-  Scenario: op create driver type (uid:ea2463ad-5215-44e5-b566-064ffb81c42c)
+  @DeleteDriverType
+  Scenario: Operator should be able to create a new Driver Type on Driver Type Management page (uid:1aff8024-0653-4a8d-8e3b-a662913bd5ee)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Driver Type Management
-    When create driver type button is clicked
-    Then created driver type should exist
-    When searching created driver
-    When created driver is deleted
-    Then the created driver should not exist
+    Given Operator create new Driver Type with the following attributes:
+      | driverTypeName  | GENERATED           |
+      | deliveryType    | Normal Delivery     |
+      | priorityLevel   | Priority            |
+      | reservationSize | Less Than 3 Parcels |
+      | parcelSize      | Small               |
+      | timeslot        | 9AM To 6PM          |
+    And Operator get new Driver Type params on Driver Type Management page
+    Then Operator verify new Driver Type params
 
-  Scenario: op edit driver type (uid:3ec5bf32-68e6-406c-bd05-88c920cc187a)
+  @DeleteDriverType
+  Scenario: Operator should be able to update a Driver Type on Driver Type Management page (uid:9638882f-eed5-4303-a422-2ee998e4cab9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Driver Type Management
-    When create driver type button is clicked
-    Then created driver type should exist
-    When searching created driver and edit
-    Then verify changes of created driver type
-    When searching created driver
-    When created driver is deleted
-    Then the created driver should not exist
+    Given Operator create new Driver Type with the following attributes:
+      | driverTypeName  | GENERATED           |
+      | deliveryType    | Normal Delivery     |
+      | priorityLevel   | Priority            |
+      | reservationSize | Less Than 3 Parcels |
+      | parcelSize      | Small               |
+      | timeslot        | 9AM To 6PM          |
+    Given Operator get new Driver Type params on Driver Type Management page
+    When Operator edit new Driver Type with the following attributes:
+      | driverTypeName  | GENERATED            |
+      | deliveryType    | C2C + Return Pick Up |
+      | priorityLevel   | Non-Priority         |
+      | reservationSize | Less Than 10 Parcels |
+      | parcelSize      | Medium               |
+      | timeslot        | 9AM To 10PM          |
+    Then Operator verify new Driver Type params
 
-  Scenario: op delete driver type (uid:82959c45-2b6d-4899-98aa-02e88f59793e)
+  @DeleteDriverType
+  Scenario: Operator should be able to delete a Driver Type on Driver Type Management page (uid:2288beb7-e076-41ea-a5bb-51d07956beb0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Driver Type Management
-    When create driver type button is clicked
-    Then created driver type should exist
-    When searching created driver
-    When created driver is deleted
-    Then the created driver should not exist
+    Given Operator create new Driver Type with the following attributes:
+      | driverTypeName | GENERATED |
+    Given Operator get new Driver Type params on Driver Type Management page
+    When Operator delete new Driver Type on on Driver Type Management page
+    Then Operator verify new Driver Type is deleted successfully
 
-  Scenario: op filter driver type management by delivery date (uid:6389d609-4c56-4856-8204-0246bce0f3d0)
+  @DeleteDriverType
+  Scenario Outline: Operator should be able to filter by '<value>' on Driver Type Management page (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by Normal Delivery of Delivery Type
-
-  Scenario: op filter driver type management by C2C + Return Pick Up (uid:adf1b75e-e88d-4dfc-99c9-82f4ac3d8e84)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by C2C + Return Pick Up of Delivery Type
-
-  Scenario: op filter driver type management by Reservation Pick Up (uid:58a0a7c2-478f-493d-9f7a-dce7b9b80d35)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by Reservation Pick Up of Delivery Type
-
-  Scenario: op filter driver type management by Priority (uid:0ee859ee-65c2-4eb3-a2b4-56e8fe25cc2f)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by Priority of Priority Level
-
-  Scenario: op filter driver type management by Non-Priority (uid:a781c1ab-02d6-42ff-866e-5421d8b7b180)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by Non-Priority of Priority Level
-
-  Scenario: op filter driver type management by Less than 3 Parcels (uid:32f9251f-8ee3-4789-a1b7-0d2cdd4354e8)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by Less Than 3 Parcels of Reservation Size
-
-  Scenario: op filter driver type management by Less than 10 Parcels (uid:fcb002e7-b1ab-4587-8c23-1d258b8dc4fe)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by Less Than 10 Parcels of Reservation Size
-
-  Scenario: op filter driver type management by Trolley Required (uid:a8e592f4-a079-4bc6-bf72-8a3a02acc9a3)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by Trolley Required of Reservation Size
-
-  Scenario: op filter driver type management by Half Van Load (uid:976ca5ff-22ae-4b5e-8968-8c705a3ed44f)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by Half Van Load of Reservation Size
-
-  Scenario: op filter driver type management by Full Van Load (uid:0fddd96d-3784-4db7-b0a4-a8749c231973)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by Full Van Load of Reservation Size
-
-  Scenario: op filter driver type management by Larger than Van Load (uid:7ae0c02a-202d-4d56-8a69-e32adf5be6af)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by Larger Than Van Load of Reservation Size
-
-  Scenario: op filter driver type management by Small (uid:d731ae1d-4e4a-4b18-a3d5-503fd69ede7e)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by Small of Parcel Size
-
-  Scenario: op filter driver type management by Medium (uid:32ecfa2a-dd8a-4b19-b4de-ca1a74f81471)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by Medium of Parcel Size
-
-  Scenario: op filter driver type management by Large (uid:ab9fc83e-8453-4e0f-af9c-05d1384373e9)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by Large of Parcel Size
-
-  Scenario: op filter driver type management by Extra Large (uid:8b5bccc3-bda8-4445-99b0-3a9b94877657)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by Extra Large of Parcel Size
-
-  Scenario: op filter driver type management by 9AM to 6PM (uid:6ae4ef97-3891-4938-b861-d8addf60fa25)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by 9AM To 6PM of Timeslot
-
-  Scenario: op filter driver type management by 9AM to 10PM (uid:0f04a728-a23f-419a-bac3-2712764dfa8b)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by 9AM TO 10PM of Timeslot
-
-  Scenario: op filter driver type management by 9AM to 12PM (uid:af8ab673-e4ef-4eae-956c-83c9bcc774de)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by 9AM TO 12PM of Timeslot
-
-  Scenario: op filter driver type management by 12PM to 3PM (uid:9dfee534-bcf1-4bf3-8e63-5abba766a73c)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by 12PM TO 3PM of Timeslot
-
-  Scenario: op filter driver type management by 3PM to 6PM (uid:8dfca2a0-a406-4e59-9c5c-c00bb61d1bae)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by 3PM TO 6PM of Timeslot
-
-  Scenario: op filter driver type management by 6PM to 10PM (uid:a59a9afe-356c-4653-b913-18cf9a77096e)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Fleet -> Driver Type Management
-    When driver type management is filtered by 6PM TO 10PM of Timeslot
+    Given Operator create new Driver Type with the following attributes:
+      | driverTypeName | GENERATED |
+      | <param>        | <value>   |
+    And Operator get new Driver Type params on Driver Type Management page
+    When Operator configure filter on Driver Type Management page with the following attributes:
+      | <param> | <value> |
+    Then Operator verify filter results on Driver Type Management page
+    Examples:
+      | Note                                  | hiptest-uid                              | param           | value                |
+      | deliveryType: Normal Delivery         | uid:ddc38972-2cd5-4ead-9f1b-e871c1060fee | deliveryType    | Normal Delivery      |
+      | deliveryType: C2C + Return Pick Up    | uid:eb311074-6ee1-4e3b-b243-b17afb2b9c30 | deliveryType    | C2C + Return Pick Up |
+      | deliveryType: Reservation Pick Up     | uid:f22d171c-4f0c-43e9-989a-b8586a68fe39 | deliveryType    | Reservation Pick Up  |
+      | priorityLevel: Priority               | uid:f622fc14-bfd5-4e34-bce1-5d25c0df6ab5 | priorityLevel   | Priority             |
+      | priorityLevel: Non-Priority           | uid:6b2d25f1-b065-4931-902c-02ba3471a98b | priorityLevel   | Non-Priority         |
+      | reservationSize: Less Than 3 Parcels  | uid:a95b5461-c876-42eb-9162-72b6a5093826 | reservationSize | Less Than 3 Parcels  |
+      | reservationSize: Less Than 10 Parcels | uid:9d7fc7d8-2fdd-4fb7-bf13-e9a8c51bfdb2 | reservationSize | Less Than 10 Parcels |
+      | reservationSize: Trolley Required     | uid:1418577e-f5dc-4990-889b-4b68cb3ebce2 | reservationSize | Trolley Required     |
+      | reservationSize: Half Van Load        | uid:c915829c-7957-42da-ae1c-8b82dce313e5 | reservationSize | Half Van Load        |
+      | reservationSize: Full Van Load        | uid:b4db25d5-d4d8-4eb8-94dd-781f5f48e49c | reservationSize | Full Van Load        |
+      | reservationSize: Larger Than Van Load | uid:94e2bbf9-4a80-45e2-9f98-c4245c0a94b8 | reservationSize | Larger Than Van Load |
+      | parcelSize: Small                     | uid:edba8c29-1ae6-4c4f-a0cc-0d57080ab402 | parcelSize      | Small                |
+      | parcelSize: Medium                    | uid:17259475-2e26-4456-a2c5-4edb4b8cb1cf | parcelSize      | Medium               |
+      | parcelSize: Large                     | uid:d44dad43-2e46-4554-8862-b346428e0413 | parcelSize      | Large                |
+      | parcelSize: Extra Large               | uid:782cd9d5-08bb-4a3b-85a8-c7b643f8e487 | parcelSize      | Extra Large          |
+      | timeslot: 9AM To 6PM                  | uid:cd65b713-c0dd-49ea-b2b0-3ab9295380a8 | timeslot        | 9AM To 6PM           |
+      | timeslot: 9AM To 10PM                 | uid:64e40eaa-a676-4049-bc1c-c1e7ea206f59 | timeslot        | 9AM To 10PM          |
+      | timeslot: 9AM To 12PM                 | uid:ac66a89d-d30a-440b-bced-b9ff388a00d5 | timeslot        | 9AM To 12PM          |
+      | timeslot: 12PM To 3PM                 | uid:4aa95dfa-37d1-4206-b867-fe6d512d2d78 | timeslot        | 12PM To 3PM          |
+      | timeslot: 3PM To 6PM                  | uid:0c3a580d-ce1d-4592-b836-145780ac9828 | timeslot        | 3PM To 6PM           |
+      | timeslot: 6PM To 10PM                 | uid:6b7caf52-9b9d-4464-8eb0-a9f12f543805 | timeslot        | 6PM To 10PM          |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

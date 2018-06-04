@@ -88,7 +88,7 @@ Feature: Edit Order
     Then Operator verify the printed Airway bill for single order on Edit Orders page contains correct info
 
   @ArchiveRouteViaDb @CloseNewWindows
-  Scenario Outline: Operator should be able to add C2C/Return  order to Route for Pickup on Edit Order page
+  Scenario Outline: Operator should be able to add C2C/Return  order to Route for Pickup on Edit Order page (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
