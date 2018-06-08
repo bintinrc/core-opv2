@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.RouteMonitoringFilters;
+import co.nvqa.operator_v2.model.RouteMonitoringParams;
 import co.nvqa.operator_v2.selenium.page.RouteMonitoringPage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
@@ -15,7 +16,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -36,7 +36,7 @@ public class RouteMonitoringSteps extends AbstractSteps
     }
 
     @When("^Operator filter Route Monitoring using data below and then load selection:$")
-    public void operatorFilterRouteMonitoringUsingDataBelowAndThenLoadSelection(Map<String,String> mapOfData)
+    public void operatorFilterRouteMonitoringUsingDataBelowAndThenLoadSelection(Map<String, String> mapOfData)
     {
         try
         {
@@ -55,8 +55,7 @@ public class RouteMonitoringSteps extends AbstractSteps
 
             routeMonitoringPage.filterAndLoadSelection(routeMonitoringFilters);
             put("routeMonitoringFilters", routeMonitoringFilters);
-        }
-        catch(ParseException ex)
+        } catch (ParseException ex)
         {
             throw new NvTestRuntimeException("Failed to parse date.", ex);
         }
@@ -68,5 +67,21 @@ public class RouteMonitoringSteps extends AbstractSteps
         Long routeId = get(KEY_CREATED_ROUTE_ID);
         RouteMonitoringFilters routeMonitoringFilters = get("routeMonitoringFilters");
         routeMonitoringPage.verifyRouteIsExistAndHasCorrectInfo(routeId, routeMonitoringFilters);
+    }
+
+    @When("^Operator click on 'Load Selection' Button on Route Monitoring Page$")
+    public void operatorClickOnLoadSelectionButtonOnRouteMonitoringPage()
+    {
+        routeMonitoringPage.waitUntilPageLoaded();
+        routeMonitoringPage.clickLoadSelectionButtonAndWaitUntilDone();
+    }
+
+    @Then("^Operator verify the created route monitoring params:$")
+    public void operatorVerifyTheCreatedRouteMonitoringParams(Map<String, String> dataMap)
+    {
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
+        RouteMonitoringParams routeMonitoringParams = new RouteMonitoringParams(dataMap);
+        routeMonitoringParams.setRouteId(routeId);
+        routeMonitoringPage.verifyRouteMonitoringParams(routeMonitoringParams);
     }
 }
