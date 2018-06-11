@@ -104,7 +104,7 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
         try
         {
             TestUtils.acceptAlertDialogIfAppear(getWebDriver());
-            getWebDriver().get(TestConstants.OPERATOR_PORTAL_URL);
+            getWebDriver().get(TestConstants.OPERATOR_PORTAL_LOGIN_URL);
             TestUtils.acceptAlertDialogIfAppear(getWebDriver());
             OperatorV2SimplePage operatorV2SimplePage = new OperatorV2SimplePage(getWebDriver());
             String leaveBtnXpath = "//md-dialog[@aria-label='Leaving PageYou have ...']//button[@aria-label='Leave']";

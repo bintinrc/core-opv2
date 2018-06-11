@@ -9,7 +9,8 @@ import co.nvqa.common_selenium.util.CommonSeleniumTestConstants;
 @SuppressWarnings("WeakerAccess")
 public final class TestConstants extends CommonSeleniumTestConstants
 {
-    public static final String OPERATOR_PORTAL_URL;
+    public static final String OPERATOR_PORTAL_BASE_URL;
+    public static final String OPERATOR_PORTAL_LOGIN_URL;
     public static final String OPERATOR_PORTAL_UID;
     public static final String OPERATOR_PORTAL_PWD;
     public static final boolean OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES;
@@ -41,7 +42,8 @@ public final class TestConstants extends CommonSeleniumTestConstants
 
     static
     {
-        OPERATOR_PORTAL_URL = getString("operator-portal-url");
+        OPERATOR_PORTAL_BASE_URL = getString("operator-portal-base-url");
+        OPERATOR_PORTAL_LOGIN_URL = getString("operator-portal-login-url");
         OPERATOR_PORTAL_UID = getString("operator-portal-uid");
         OPERATOR_PORTAL_PWD = getString("operator-portal-pwd");
 

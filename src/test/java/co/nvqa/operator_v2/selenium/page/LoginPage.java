@@ -32,7 +32,7 @@ public class LoginPage extends OperatorV2SimplePage
 
     public void loadPage()
     {
-        getWebDriver().get(TestConstants.OPERATOR_PORTAL_URL);
+        getWebDriver().get(TestConstants.OPERATOR_PORTAL_LOGIN_URL);
         waitUntilPageLoaded();
     }
 
@@ -63,7 +63,7 @@ public class LoginPage extends OperatorV2SimplePage
 
             getWebDriver().close();
             getWebDriver().switchTo().window(newWindowHandle);
-            getWebDriver().get(TestConstants.OPERATOR_PORTAL_URL);
+            getWebDriver().get(TestConstants.OPERATOR_PORTAL_LOGIN_URL);
         }
         catch(UnsupportedEncodingException ex)
         {
@@ -155,6 +155,6 @@ public class LoginPage extends OperatorV2SimplePage
     {
         pause1s();
         String currentUrl = getCurrentUrl();
-        Assert.assertThat("Default Operator Portal URL not loaded.", currentUrl, Matchers.containsString(TestConstants.OPERATOR_PORTAL_URL));
+        Assert.assertThat("Default Operator Portal URL not loaded.", currentUrl, Matchers.containsString(TestConstants.OPERATOR_PORTAL_LOGIN_URL));
     }
 }

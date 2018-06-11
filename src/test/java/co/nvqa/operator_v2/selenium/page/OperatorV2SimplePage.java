@@ -30,6 +30,11 @@ public class OperatorV2SimplePage extends SimplePage
         super(webDriver);
     }
 
+    public void goToUrl(String url)
+    {
+        getWebDriver().navigate().to(url);
+    }
+
     public void clickAndWaitUntilDone(String xpathExpression)
     {
         click(xpathExpression);
