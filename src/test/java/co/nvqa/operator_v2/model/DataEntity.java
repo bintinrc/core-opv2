@@ -1,0 +1,149 @@
+package co.nvqa.operator_v2.model;
+
+import co.nvqa.commons.utils.NvLogger;
+import com.google.common.reflect.TypeToken;
+import cucumber.api.java8.Ru;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
+import org.apache.commons.text.translate.CsvTranslators;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public abstract class DataEntity<T extends DataEntity>
+{
+    private static final CsvTranslators.CsvUnescaper UNESCAPER = new CsvTranslators.CsvUnescaper();
+
+    public DataEntity()
+    {
+    }
+
+    public DataEntity(Map<String, ?> data)
+    {
+        fromMap(data);
+    }
+
+    public void fromMap(Map<String, ?> data)
+    {
+        data.forEach(this::setProperty);
+    }
+
+    private void setProperty(String property, Object value)
+    {
+        Class<?> clazz = this.getClass();
+        try
+        {
+            Field field = findPropertyField(clazz, property);
+            if (field != null)
+            {
+                Method setter = findSetter(clazz, field.getName(), value.getClass());
+                if (setter != null)
+                {
+                    MethodUtils.invokeMethod(this, true, setter.getName(), value);
+                } else
+                {
+                    if (field.getType() == String.class)
+                    {
+                        FieldUtils.writeField(field, this, value, true);
+                    }
+                }
+            }
+        } catch (Exception ex)
+        {
+            String message = String.format("Could not set %s property to %s data entity", property, this.getClass().getName());
+            NvLogger.error(message);
+        }
+    }
+
+    private static Method findSetter(Class<?> clazz, String property, Class<?> valueType)
+    {
+        Method[] methods = clazz.getMethods();
+        String getterName = sanitizeString("set" + property);
+        for (Method method : methods)
+        {
+            if (StringUtils.equals(getterName, sanitizeString(method.getName()))
+                    && method.getParameterCount() == 1
+                    && method.getParameterTypes()[0].isAssignableFrom(valueType))
+            {
+                return method;
+            }
+        }
+        return null;
+    }
+
+    private static Field findPropertyField(Class<?> clazz, String property)
+    {
+        String propertyName = sanitizeString(property);
+        Field[] fields = FieldUtils.getAllFields(clazz);
+        Field field = null;
+        for (Field f : fields)
+        {
+            if (StringUtils.equals(propertyName, sanitizeString(f.getName())))
+            {
+                field = f;
+                break;
+            }
+        }
+        return field;
+    }
+
+    protected static String sanitizeString(String value)
+    {
+        return StringUtils.normalizeSpace(value.trim().toLowerCase()).replaceAll("\\s", "_");
+    }
+
+    protected static String[] splitCsvLine(String csvLine){
+        return csvLine.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+    }
+
+
+    public abstract void fromCsvLine(String csvLine);
+
+    protected static String getValueIfIndexExists(String[] values, int index)
+    {
+        if (values.length > index)
+        {
+            return StringUtils.trimToNull(StringUtils.strip(UNESCAPER.translate(values[index]), "\""));
+        } else
+        {
+            return null;
+        }
+    }
+
+    public static <T extends DataEntity> List<T> fromCsvFile(Class<T> clazz, String fileName, boolean ignoreHeader)
+    {
+        try
+        {
+            List<String> csvLines = FileUtils.readLines(new File(fileName));
+            if (ignoreHeader)
+            {
+                csvLines.remove(0);
+            }
+            return csvLines.stream().map(csvLine -> {
+                try
+                {
+                    T dataEntity = clazz.newInstance();
+                    dataEntity.fromCsvLine(csvLine);
+                    return dataEntity;
+                } catch (InstantiationException | IllegalAccessException e)
+                {
+                    String message = String.format("Could not create new instance of %s data entity", clazz.getName());
+                    NvLogger.error(message);
+                    throw new RuntimeException(e);
+                }
+            }).collect(Collectors.toList());
+        } catch (IOException ex)
+        {
+            NvLogger.warn("Could not read file [" + fileName + "]");
+            return new ArrayList<>();
+        }
+    }
+}
