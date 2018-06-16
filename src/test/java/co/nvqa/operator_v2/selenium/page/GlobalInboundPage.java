@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.util.TestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
@@ -104,10 +105,19 @@ public class GlobalInboundPage extends OperatorV2SimplePage
         }
     }
 
-    public void globalInbound(GlobalInboundParams globalInboundParams)
+    public void successfulGlobalInbound(GlobalInboundParams globalInboundParams)
     {
-        String trackingId = globalInboundParams.getTrackingId();
+        globalInbound(globalInboundParams);
 
+        String trackingId = globalInboundParams.getTrackingId();
+        TestUtils.retryIfAssertionErrorOccurred(() -> {
+            String lastScanned = getTextTrimmed("//div[contains(text(), 'Last Scanned')]");
+            String lastScannedTrackingId = lastScanned.split(":")[1].trim();
+            Assert.assertEquals("Last Scanned Tracking ID", trackingId, lastScannedTrackingId);
+        }, "Checking Last Scanned Tracking ID");
+    }
+
+    public void globalInbound(GlobalInboundParams globalInboundParams){
         selectHubAndDeviceId(globalInboundParams.getHubName(), globalInboundParams.getDeviceId());
         overrideSize(globalInboundParams.getOverrideSize());
         overrideWeight(globalInboundParams.getOverrideWeight());
@@ -117,9 +127,20 @@ public class GlobalInboundPage extends OperatorV2SimplePage
 
         sendKeysAndEnterByAriaLabel("Scan a new parcel / Enter a tracking ID", globalInboundParams.getTrackingId());
         pause500ms();
+    }
 
-        String lastScanned = getTextTrimmed("//div[contains(text(), 'Last Scanned')]");
-        String lastScannedTrackingId = lastScanned.split(":")[1].trim();
-        Assert.assertEquals("Last Scanned Tracking ID", trackingId, lastScannedTrackingId);
+    public void globalInboundAndCheckAlert(GlobalInboundParams globalInboundParams, String toastText, String rackInfo)
+    {
+        globalInbound(globalInboundParams);
+
+        if (StringUtils.isNotBlank(rackInfo))
+        {
+            String xpath = String.format("//h1[normalize-space(text())='%s']", rackInfo);
+            Assert.assertNotNull("rack info", waitUntilVisibilityOfElementLocated(xpath));
+        }
+        if (StringUtils.isNotBlank(toastText))
+        {
+            Assert.assertEquals("Toast text", toastText, getToastTopText());
+        }
     }
 }

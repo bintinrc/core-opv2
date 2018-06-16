@@ -96,6 +96,47 @@ Feature: Global Inbound
     When Operator go to menu Order -> All Orders
     Then Operator verify order info after Global Inbound
 
+  @ArchiveRouteViaDb
+  Scenario: Inbound routed pending delivery
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create Order V2 Parcel using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                              |
+      | v2OrderRequest    | { "parcels":[{"parcel_size_id": 0, "volume": 1, "weight": 4}], "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below and check alert:
+      | hubName    | {hub-name}             |
+      | trackingId | GET_FROM_CREATED_ORDER |
+      | toastText  | CMI Condition          |
+      | rackInfo   | ALERT                  |
+    And API Operator verify order info after Global Inbound
+    When Operator go to menu Order -> All Orders
+    Then Operator verify order info after Global Inbound
+    And Operator verify the last order event params:
+      | type | 26 |
+
+  @ArchiveRouteViaDb
+  Scenario Outline: Inbound parcel with <status> status
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create Order V2 Parcel using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                              |
+      | v2OrderRequest    | { "parcels":[{"parcel_size_id": 0, "volume": 1, "weight": 4}], "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
+    And API Operator force created order status to <status>
+    When Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below and check alert:
+      | hubName    | {hub-name}             |
+      | trackingId | GET_FROM_CREATED_ORDER |
+      | toastText  | <message>              |
+    Examples:
+      | status    | message         |
+      | Completed | ORDER_COMPLETED |
+      | Cancelled | ORDER_CANCELLED |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

@@ -9,8 +9,10 @@ import co.nvqa.commons.model.order_create.v2.Parcel;
 import co.nvqa.commons.model.pdf.AirwayBill;
 import co.nvqa.commons.utils.PdfUtils;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
+import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
@@ -29,6 +31,7 @@ public class EditOrderPage extends OperatorV2SimplePage
     private AddToRouteDialog addToRouteDialog;
     private DeliveryDetailsBox deliveryDetailsBox;
     private PickupDetailsBox pickupDetailsBox;
+    private EventsTable eventsTable;
 
     public EditOrderPage(WebDriver webDriver)
     {
@@ -37,6 +40,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         addToRouteDialog = new AddToRouteDialog(webDriver);
         deliveryDetailsBox = new DeliveryDetailsBox(webDriver);
         pickupDetailsBox = new PickupDetailsBox(webDriver);
+        eventsTable = new EventsTable(webDriver);
     }
 
     public void clickMenu(String parentMenuName, String childMenuName)
@@ -309,6 +313,11 @@ public class EditOrderPage extends OperatorV2SimplePage
 
             Assert.assertEquals("Cost", NO_TRAILING_ZERO_DF.format(expectedOrderCost), totalAsString);
         }
+
+        eventsTable.waitUntilVisibility();
+        OrderEvent orderEvent = eventsTable.readEntity(1);
+        Assert.assertEquals("Latest Event Name", "HUB INBOUND SCAN", orderEvent.getName());
+        Assert.assertEquals("Latest Event Hub Name", globalInboundParams.getHubName(), orderEvent.getHubName());
     }
 
     public String getShipperId()
@@ -509,6 +518,41 @@ public class EditOrderPage extends OperatorV2SimplePage
         public void searchByTxnType(String txnType)
         {
             searchTableCustom1(COLUMN_CLASS_TXN_TYPE, txnType);
+        }
+    }
+
+    /**
+     * Accessor for Reservations table
+     */
+    public static class EventsTable extends NgRepeatTable<OrderEvent>
+    {
+        private static final String NG_REPEAT = "event in getTableData()";
+        private static final String DATE_TIME = "eventTime";
+        private static final String EVENT_TAGS = "tags";
+        private static final String EVENT_NAME = "name";
+        private static final String USER_TYPE = "userType";
+        private static final String USER_ID = "user";
+        private static final String SCAN_ID = "scanId";
+        private static final String ROUTE_ID = "routeId";
+        private static final String HUB_NAME = "hubName";
+        private static final String DESCRIPTION = "description";
+
+        public EventsTable(WebDriver webDriver)
+        {
+            super(webDriver);
+            setNgRepeat(NG_REPEAT);
+            setColumnLocators(ImmutableMap.<String,String>builder()
+                .put(DATE_TIME, "_event_time")
+                .put(EVENT_TAGS, "_tags")
+                .put(EVENT_NAME, "name")
+                .put(USER_TYPE, "user_type")
+                .put(USER_ID, "_user")
+                .put(SCAN_ID, "_scan_id")
+                .put(ROUTE_ID, "_route_id")
+                .put(HUB_NAME, "_hub_name")
+                .put(DESCRIPTION, "_description")
+                .build());
+            setEntityClass(OrderEvent.class);
         }
     }
 

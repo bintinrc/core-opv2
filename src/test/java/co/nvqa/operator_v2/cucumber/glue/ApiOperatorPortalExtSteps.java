@@ -3,8 +3,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.cucumber.glue.AbstractApiOperatorPortalSteps;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.operator_v2.model.DpPartner;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Given;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -108,5 +110,13 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
 
         Route[] routes = getRouteClient().findPendingRoutesByTagsAndDates(fromDate, toDate, tags);
         put(KEY_LIST_OF_FOUND_ROUTES, Arrays.asList(routes));
+    }
+
+    @Given("^API Operator create new DP Partner with the following attributes:$")
+    public void apiOperatorCreateNewDPPartnerWithTheFollowingAttributes(Map<String, String> data)
+    {
+        DpPartner dpPartner = new DpPartner(data);
+        put(KEY_DP_PARTNER, dpPartner);
+        getDpClient().createPartner(JsonHelper.toJson(JsonHelper.getDefaultSnakeCaseMapper(),dpPartner));
     }
 }

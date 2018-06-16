@@ -50,9 +50,7 @@ public class GlobalInboundSteps extends AbstractSteps
         return result;
     }
 
-    @When("^Operator global inbounds parcel using data below:$")
-    public void operatorGlobalInboundsParcelUsingThisDataBelow(Map<String, String> mapOfData)
-    {
+    private GlobalInboundParams buildGlobalInboundParams(Map<String, String> mapOfData){
         String hubName = mapOfData.get("hubName");
         String deviceId = mapOfData.get("deviceId");
         String trackingId = mapOfData.get("trackingId");
@@ -77,8 +75,24 @@ public class GlobalInboundSteps extends AbstractSteps
         globalInboundParams.setOverrideDimHeight(overrideDimHeight);
         globalInboundParams.setOverrideDimWidth(overrideDimWidth);
         globalInboundParams.setOverrideDimLength(overrideDimLength);
+        return globalInboundParams;
+    }
 
-        globalInboundPage.globalInbound(globalInboundParams);
+    @When("^Operator global inbounds parcel using data below:$")
+    public void operatorGlobalInboundsParcelUsingThisDataBelow(Map<String, String> mapOfData)
+    {
+        GlobalInboundParams globalInboundParams = buildGlobalInboundParams(mapOfData);
+        globalInboundPage.successfulGlobalInbound(globalInboundParams);
+        put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
+    }
+
+    @When("^Operator global inbounds parcel using data below and check alert:$")
+    public void operatorGlobalInboundsParcelUsingThisDataBelowAndCheckAlert(Map<String, String> mapOfData)
+    {
+        GlobalInboundParams globalInboundParams = buildGlobalInboundParams(mapOfData);
+        String toastText = mapOfData.get("toastText");
+        String rackInfo = mapOfData.get("rackInfo");
+        globalInboundPage.globalInboundAndCheckAlert(globalInboundParams, toastText, rackInfo);
         put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
     }
 }
