@@ -40,6 +40,12 @@ public class MainSteps extends AbstractSteps
         operatorGoToMenu(parentMenuName, childMenuName);
     }
 
+    @Given("^Operator go to this URL \"([^\"]*)\"$")
+    public void operatorGoToThisUrl(String url)
+    {
+        mainPage.goToUrl(url);
+    }
+
     @Then("^Operator verify he is in main page$")
     public void operatorVerifyHeIsInMainPage()
     {

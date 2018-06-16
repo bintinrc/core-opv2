@@ -199,7 +199,7 @@ public class EditOrderPage extends OperatorV2SimplePage
     public void verifyInboundIsSucceed()
     {
         String actualLatestEvent = getTextOnTableEvent(1, COLUMN_CLASS_DATA_NAME_ON_TABLE_EVENT);
-        Assert.assertTrue("Different Result Returned", actualLatestEvent.contains("Van Inbound Scan"));
+        Assert.assertThat("Different Result Returned", actualLatestEvent, Matchers.containsString("Van Inbound Scan"));
     }
 
     public void verifyOrderInfoIsCorrect(OrderRequestV2 orderRequestV2, Order order)
@@ -340,6 +340,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         return getText("//label[text()='Granular']/following-sibling::p");
     }
 
+    @SuppressWarnings("unused")
     public String getLatestEvent()
     {
         return getText("//label[text()='Latest Event']/following-sibling::p");
@@ -369,6 +370,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         return weight;
     }
 
+    @SuppressWarnings("unused")
     public Double getCashOnDelivery()
     {
         Double cod = null;
@@ -499,11 +501,13 @@ public class EditOrderPage extends OperatorV2SimplePage
             return getTextOnTable(rowNumber, COLUMN_CLASS_PRIORITY_LEVEL);
         }
 
+        @SuppressWarnings("unused")
         public String getStatus(int rowNumber)
         {
             return getTextOnTable(rowNumber, COLUMN_CLASS_STATUS);
         }
 
+        @SuppressWarnings("unused")
         public String getTxnType(int rowNumber)
         {
             return getTextOnTable(rowNumber, COLUMN_CLASS_TXN_TYPE);
@@ -658,6 +662,7 @@ public class EditOrderPage extends OperatorV2SimplePage
             super(webDriver);
         }
 
+        @SuppressWarnings("unused")
         public String getPickupInstructions()
         {
             return getText(PICKUP_INSTRUCTIONS_LOCATOR);

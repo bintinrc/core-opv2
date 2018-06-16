@@ -1,4 +1,4 @@
-@OperatorV2 @FailedDeliveryManagement
+@OperatorV2 @FailedDeliveryManagement @Inbound
 Feature: Failed Delivery Management
 
   @LaunchBrowser @ShouldAlwaysRun

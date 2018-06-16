@@ -1,4 +1,4 @@
-@OperatorV2 @GlobalInbound
+@OperatorV2 @GlobalInbound @Inbound
 Feature: Global Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
