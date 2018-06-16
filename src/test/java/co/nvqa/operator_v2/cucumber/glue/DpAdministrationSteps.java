@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.selenium.page.DpAdministrationPage;
 import com.google.inject.Inject;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -133,7 +134,7 @@ public class DpAdministrationSteps extends AbstractSteps
     public void operatorUpdateDPUserForTheCreatedDPOnDPAdministrationPageWithTheFollowingAttributes(Map<String, String> data)
     {
         DpUser dpUser = get(KEY_DP_USER);
-        String username = dpUser.getUsername();
+        String username = dpUser.getClientId();
         DpUser newPdUserParams = new DpUser(data);
         dpUser.merge(newPdUserParams);
         dpAdminPage.editDpUser(username, newPdUserParams);
@@ -158,5 +159,19 @@ public class DpAdministrationSteps extends AbstractSteps
     {
         List<DpUser> dpUsers = get(KEY_LIST_OF_DP_USERS);
         dpAdminPage.verifyDownloadedDpUsersFileContent(dpUsers);
+    }
+
+    @And("^Operator select View DPs action for created DP partner on DP Administration page$")
+    public void operatorSelectViewDPsForCreatedDPPartnerOnDPAdministrationPage()
+    {
+        DpPartner dpPartner = get(KEY_DP_PARTNER);
+        dpAdminPage.openViewDPsScreen(dpPartner.getName());
+    }
+
+    @And("^Operator select View Users action for created DP on DP Administration page$")
+    public void operatorSelectViewUsersForCreatedDPOnDPAdministrationPage()
+    {
+        Dp dp = get(KEY_DISTRIBUTION_POINT);
+        dpAdminPage.openViewUsersScreen(dp.getName());
     }
 }

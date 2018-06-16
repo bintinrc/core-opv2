@@ -11,16 +11,19 @@ import java.util.Map;
 public class DpUser extends DataEntity<DpUser>
 {
     private Long id;
-    private String username;
-    private String password;
+    private String clientId;
+    private String clientSecret;
     private String firstName;
     private String lastName;
     private String contactNo;
-    private String email;
+    private String emailId;
 
-    public DpUser() {}
+    public DpUser()
+    {
+    }
 
-    public DpUser(Map<String, ?> data){
+    public DpUser(Map<String, ?> data)
+    {
         fromMap(data);
     }
 
@@ -39,28 +42,46 @@ public class DpUser extends DataEntity<DpUser>
         setId(Long.parseLong(id));
     }
 
-    public String getUsername()
+    public String getClientId()
     {
-        return username;
+        return clientId;
     }
 
-    public void setUsername(String username)
+    public void setClientId(String clientId)
     {
-        if ("generated".equalsIgnoreCase(username))
+        if ("generated".equalsIgnoreCase(clientId))
         {
-            username = "DP-User-" + TestUtils.generateDateUniqueString();
+            clientId = "DP-User-" + TestUtils.generateDateUniqueString();
         }
-        this.username = username;
+        this.clientId = clientId;
     }
 
-    public String getPassword()
+    public String getClientSecret()
     {
-        return password;
+        return clientSecret;
     }
 
-    public void setPassword(String password)
+    public void setClientSecret(String clientSecret)
     {
-        this.password = password;
+        if ("generated".equalsIgnoreCase(clientSecret))
+        {
+            clientSecret = TestUtils.generateDateUniqueString();
+        }
+        this.clientSecret = clientSecret;
+    }
+
+    public String getEmailId()
+    {
+        return emailId;
+    }
+
+    public void setEmailId(String emailId)
+    {
+        if ("generated".equalsIgnoreCase(emailId))
+        {
+            emailId = TestUtils.generateDateUniqueString() + "@gmail.com";
+        }
+        this.emailId = emailId;
     }
 
     public String getFirstName()
@@ -97,28 +118,14 @@ public class DpUser extends DataEntity<DpUser>
         this.contactNo = contactNo;
     }
 
-    public String getEmail()
-    {
-        return email;
-    }
-
-    public void setEmail(String email)
-    {
-        if ("generated".equalsIgnoreCase(email))
-        {
-            email = TestUtils.generateDateUniqueString() + "@gmail.com";
-        }
-        this.email = email;
-    }
-
     @Override
     public void fromCsvLine(String csvLine)
     {
         String[] values = splitCsvLine(csvLine);
-        setUsername(getValueIfIndexExists(values, 0));
+        setClientId(getValueIfIndexExists(values, 0));
         setFirstName(getValueIfIndexExists(values, 1));
         setLastName(getValueIfIndexExists(values, 2));
-        setEmail(getValueIfIndexExists(values, 3));
+        setEmailId(getValueIfIndexExists(values, 3));
         setContactNo(getValueIfIndexExists(values, 4));
     }
 
@@ -127,12 +134,12 @@ public class DpUser extends DataEntity<DpUser>
     {
         return new ToStringBuilder(this)
                 .append("id", id)
-                .append("username", username)
-                .append("password", password)
+                .append("clientId", clientId)
+                .append("clientSecret", clientSecret)
                 .append("firstName", firstName)
                 .append("lastName", lastName)
                 .append("contactNo", contactNo)
-                .append("email", email)
+                .append("emailId", emailId)
                 .toString();
     }
 }

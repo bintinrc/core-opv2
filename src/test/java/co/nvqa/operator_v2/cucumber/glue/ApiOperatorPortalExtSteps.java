@@ -6,15 +6,20 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
+import co.nvqa.operator_v2.model.DpUser;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Given;
+import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -117,6 +122,40 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     {
         DpPartner dpPartner = new DpPartner(data);
         put(KEY_DP_PARTNER, dpPartner);
-        getDpClient().createPartner(JsonHelper.toJson(JsonHelper.getDefaultSnakeCaseMapper(),dpPartner));
+        Map<String, Object> responseBody = getDpClient().createPartner(JsonHelper.toJson(JsonHelper.getDefaultSnakeCaseMapper(),dpPartner));
+        dpPartner.setId(Long.parseLong(responseBody.get("id").toString()));
+        dpPartner.setDpmsPartnerId(Long.parseLong(responseBody.get("dpms_partner_id").toString()));
+    }
+
+    @When("^API Operator add new DP for the created DP Partner with the following attributes:$")
+    public void operatorAddNewDPForTheDPPartnerWithTheFollowingAttributes(Map<String, String> data)
+    {
+        DpPartner dpPartner = get(KEY_DP_PARTNER);
+        Map<String,String> mapOfDynamicVariable = new HashMap<>();
+        mapOfDynamicVariable.put("unique_string", TestUtils.generateDateUniqueString());
+        mapOfDynamicVariable.put("generated_phone_no", TestUtils.generatePhoneNumber());
+        String json = replaceParam(data.get("requestBody"), mapOfDynamicVariable);
+        Dp dp = new Dp();
+        dp.fromJson(JsonHelper.getDefaultSnakeCaseMapper(), json);
+        Map<String, Object> responseBody = getDpClient().createDp(dpPartner.getId(), json);
+        dp.setId(Long.parseLong(responseBody.get("id").toString()));
+        dp.setDpmsId(Long.parseLong(responseBody.get("dpms_id").toString()));
+        put(KEY_DISTRIBUTION_POINT, dp);
+    }
+
+    @When("^API Operator add new DP User for the created DP with the following attributes:$")
+    public void operatorAddDPUserForTheCreatedDPWithTheFollowingAttributes(Map<String, String> data)
+    {
+        DpPartner dpPartner = get(KEY_DP_PARTNER);
+        Dp dp = get(KEY_DISTRIBUTION_POINT);
+        Map<String,String> mapOfDynamicVariable = new HashMap<>();
+        mapOfDynamicVariable.put("unique_string", TestUtils.generateDateUniqueString());
+        mapOfDynamicVariable.put("generated_phone_no", TestUtils.generatePhoneNumber());
+        String json = replaceParam(data.get("requestBody"), mapOfDynamicVariable);
+        DpUser dpUser = new DpUser();
+        dpUser.fromJson(JsonHelper.getDefaultCamelCaseMapper(), json);
+        Map<String, Object> responseBody = getDpmsClient().createUser(dpPartner.getDpmsPartnerId(), dp.getDpmsId(), json);
+        dpUser.setId(Long.parseLong(responseBody.get("id").toString()));
+        put(KEY_DP_USER, dpUser);
     }
 }

@@ -11,6 +11,7 @@ import java.util.Map;
 public class DpPartner extends DataEntity<DpPartner>
 {
     private Long id;
+    private Long dpmsPartnerId;
     private String name;
     private String pocName;
     private String pocTel;
@@ -30,6 +31,21 @@ public class DpPartner extends DataEntity<DpPartner>
     public void setId(String id)
     {
         setId(Long.parseLong(id));
+    }
+
+    public Long getDpmsPartnerId()
+    {
+        return dpmsPartnerId;
+    }
+
+    public void setDpmsPartnerId(Long dpmsPartnerId)
+    {
+        this.dpmsPartnerId = dpmsPartnerId;
+    }
+
+    public void setDpmsPartnerId(String dpmsPartnerId)
+    {
+        setDpmsPartnerId(Long.parseLong(dpmsPartnerId));
     }
 
     public String getName()

@@ -10,7 +10,6 @@ import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -109,16 +108,24 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
     public void addDistributionPoint(String dpPartnerName, Dp dpParams)
     {
-        dpPartnersTable.filterByColumn( "name", dpPartnerName);
-        dpPartnersTable.clickActionButton(1, "View DPs");
+        openViewDPsScreen(dpPartnerName);
         clickAddDpButton();
         addDpDialog.fillForm(dpParams);
     }
 
-    public void addDpUser(String dpName, DpUser dpUserParams)
-    {
+    public void openViewDPsScreen(String dpPartnerName){
+        dpPartnersTable.filterByColumn( "name", dpPartnerName);
+        dpPartnersTable.clickActionButton(1, "View DPs");
+    }
+
+    public void openViewUsersScreen(String dpName){
         dpTable.filterByColumn( "name", dpName);
         dpTable.clickActionButton(1, "View DPs");
+    }
+
+    public void addDpUser(String dpName, DpUser dpUserParams)
+    {
+        openViewUsersScreen(dpName);
         clickAddDpUserButton();
         addDpUserDialog.fillForm(dpUserParams);
     }
@@ -143,7 +150,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         DpPartner actualDpPartner = dpPartnersTable.readEntity(1);
         if (expectedDpPartnerParams.getId() != null)
         {
-            Assert.assertThat("DP Partner ID", actualDpPartner.getId(), Matchers.equalTo(expectedDpPartnerParams.getId()));
+            Assert.assertThat("DP Partner ID", actualDpPartner.getDpmsPartnerId(), Matchers.equalTo(expectedDpPartnerParams.getDpmsPartnerId()));
         }
         if (expectedDpPartnerParams.getName() != null)
         {
@@ -174,7 +181,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         Dp actualDpParams = dpTable.readEntity(1);
         if (expectedDpParams.getId() != null)
         {
-            Assert.assertThat("DP ID", actualDpParams.getId(), Matchers.equalTo(expectedDpParams.getId()));
+            Assert.assertThat("DP ID", actualDpParams.getDpmsId(), Matchers.equalTo(expectedDpParams.getDpmsId()));
         }
         if (expectedDpParams.getName() != null)
         {
@@ -205,15 +212,11 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
     public void verifyDpUserParams(DpUser expectedDpUserParams)
     {
-        dpUsersTable.filterByColumn( "username", expectedDpUserParams.getUsername());
+        dpUsersTable.filterByColumn( DpUsersTable.COLUMN_USERNAME, expectedDpUserParams.getClientId());
         DpUser actualDpUserParams = dpUsersTable.readEntity(1);
-        if (expectedDpUserParams.getId() != null)
+        if (expectedDpUserParams.getClientId() != null)
         {
-            Assert.assertThat("DP User ID", actualDpUserParams.getId(), Matchers.equalTo(expectedDpUserParams.getId()));
-        }
-        if (expectedDpUserParams.getUsername() != null)
-        {
-            Assert.assertThat("DP User Username", actualDpUserParams.getUsername(), Matchers.equalTo(expectedDpUserParams.getUsername()));
+            Assert.assertThat("DP User Username", actualDpUserParams.getClientId(), Matchers.equalTo(expectedDpUserParams.getClientId()));
         }
         if (expectedDpUserParams.getFirstName() != null)
         {
@@ -223,9 +226,9 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         {
             Assert.assertThat("DP User Last Name", actualDpUserParams.getLastName(), Matchers.equalTo(expectedDpUserParams.getLastName()));
         }
-        if (expectedDpUserParams.getEmail() != null)
+        if (expectedDpUserParams.getEmailId() != null)
         {
-            Assert.assertThat("DP User Email", actualDpUserParams.getEmail(), Matchers.equalTo(expectedDpUserParams.getEmail()));
+            Assert.assertThat("DP User Email", actualDpUserParams.getEmailId(), Matchers.equalTo(expectedDpUserParams.getEmailId()));
         }
         if (expectedDpUserParams.getContactNo() != null)
         {
@@ -300,18 +303,18 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         Assert.assertThat("Unexpected number of lines in CSV file", actualDpUsersParams.size(), greaterThanOrEqualTo(expectedDpUsersParams.size()));
 
         Map<String, DpUser> actualMap = actualDpUsersParams.stream().collect(Collectors.toMap(
-                DpUser::getUsername,
+                DpUser::getClientId,
                 params -> params
         ));
 
         for (DpUser expectedDpUserParams : expectedDpUsersParams)
         {
-            DpUser actualDpUser = actualMap.get(expectedDpUserParams.getUsername());
+            DpUser actualDpUser = actualMap.get(expectedDpUserParams.getClientId());
 
-            Assert.assertThat("DP with Username " + expectedDpUserParams.getUsername(), actualDpUser, notNullValue());
+            Assert.assertThat("DP with Username " + expectedDpUserParams.getClientId(), actualDpUser, notNullValue());
             Assert.assertEquals("DP User First Name", expectedDpUserParams.getFirstName(), actualDpUser.getFirstName());
             Assert.assertEquals("DP User Last Name", expectedDpUserParams.getLastName(), actualDpUser.getLastName());
-            Assert.assertEquals("DP User Email", expectedDpUserParams.getEmail(), actualDpUser.getEmail());
+            Assert.assertEquals("DP User Email", expectedDpUserParams.getEmailId(), actualDpUser.getEmailId());
             Assert.assertEquals("DP User Contact No.", expectedDpUserParams.getContactNo(), actualDpUser.getContactNo());
         }
     }
@@ -438,7 +441,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         {
             super(webDriver);
             setColumnLocators(ImmutableMap.<String, String>builder()
-                    .put("id", "id")
+                    .put("dpmsPartnerId", "id")
                     .put("name", "name")
                     .put("pocName", "poc_name")
                     .put("pocTel", "poc_tel")
@@ -461,7 +464,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         {
             super(webDriver);
             setColumnLocators(ImmutableMap.<String, String>builder()
-                    .put("id", "id")
+                    .put("dpmsId", "id")
                     .put("name", "name")
                     .put("shortName", "short_name")
                     .put("hub", "hub")
@@ -772,17 +775,17 @@ public class DpAdministrationPage extends OperatorV2SimplePage
             {
                 setContactNo(value);
             }
-            value = dpUser.getEmail();
+            value = dpUser.getEmailId();
             if (StringUtils.isNotBlank(value))
             {
                 setEmail(value);
             }
-            value = dpUser.getUsername();
+            value = dpUser.getClientId();
             if (StringUtils.isNotBlank(value))
             {
                 setUsername(value);
             }
-            value = dpUser.getPassword();
+            value = dpUser.getClientSecret();
             if (StringUtils.isNotBlank(value))
             {
                 setPassword(value);
@@ -812,10 +815,10 @@ public class DpAdministrationPage extends OperatorV2SimplePage
      */
     public static class DpUsersTable extends MdVirtualRepeatTable<DpUser>
     {
-        public static final String COLUMN_USERNAME = "username";
+        public static final String COLUMN_USERNAME = "clientId";
         public static final String COLUMN_FIRST_NAME = "firstName";
         public static final String COLUMN_LAST_NAME = "lastName";
-        public static final String COLUMN_EMAIL = "email";
+        public static final String COLUMN_EMAIL = "emailId";
         public static final String COLUMN_CONTACT_NO = "contactNo";
         public static final String ACTION_EDIT = "edit";
 

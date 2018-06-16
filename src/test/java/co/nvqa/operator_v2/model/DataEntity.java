@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.Pair;
+import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.commons.utils.NvLogger;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.reflect.TypeToken;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +41,16 @@ public abstract class DataEntity<T extends DataEntity>
     public void fromMap(Map<String, ?> data)
     {
         data.forEach(this::setProperty);
+    }
+
+    public void fromJson(String json)
+    {
+        fromMap(JsonHelper.fromJsonToHashMap(json));
+    }
+
+    public void fromJson(ObjectMapper mapper, String json)
+    {
+        fromMap(JsonHelper.fromJsonToHashMap(mapper, json));
     }
 
     public void merge(T entity){
