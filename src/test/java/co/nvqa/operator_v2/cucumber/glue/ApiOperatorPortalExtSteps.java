@@ -122,7 +122,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     {
         DpPartner dpPartner = new DpPartner(data);
         put(KEY_DP_PARTNER, dpPartner);
-        Map<String, Object> responseBody = getDpClient().createPartner(JsonHelper.toJson(JsonHelper.getDefaultSnakeCaseMapper(),dpPartner));
+        Map<String, Object> responseBody = getDPClient().createPartner(JsonHelper.toJson(JsonHelper.getDefaultSnakeCaseMapper(),dpPartner));
         dpPartner.setId(Long.parseLong(responseBody.get("id").toString()));
         dpPartner.setDpmsPartnerId(Long.parseLong(responseBody.get("dpms_partner_id").toString()));
     }
@@ -137,7 +137,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         String json = replaceParam(data.get("requestBody"), mapOfDynamicVariable);
         Dp dp = new Dp();
         dp.fromJson(JsonHelper.getDefaultSnakeCaseMapper(), json);
-        Map<String, Object> responseBody = getDpClient().createDp(dpPartner.getId(), json);
+        Map<String, Object> responseBody = getDPClient().createDp(dpPartner.getId(), json);
         dp.setId(Long.parseLong(responseBody.get("id").toString()));
         dp.setDpmsId(Long.parseLong(responseBody.get("dpms_id").toString()));
         put(KEY_DISTRIBUTION_POINT, dp);
