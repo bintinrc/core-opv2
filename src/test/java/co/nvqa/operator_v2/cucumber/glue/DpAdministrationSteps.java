@@ -14,6 +14,10 @@ import cucumber.api.java.en.When;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *
+ * @author Sergey Mishanin
+ */
 public class DpAdministrationSteps extends AbstractSteps
 {
     private DpAdministrationPage dpAdminPage;

@@ -390,7 +390,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         Dimension dimension = new Dimension();
         String actualText = getText("//label[text()='Dimensions']/following-sibling::p");
 
-        if (!actualText.contains("-"))
+        if(!actualText.contains("-") && !actualText.contains("x x cm"))
         {
             String temp = actualText.replace("cm", "");
             String[] dims = temp.split("x");

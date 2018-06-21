@@ -97,7 +97,7 @@ Feature: Global Inbound
     Then Operator verify order info after Global Inbound
 
   @ArchiveRouteViaDb
-  Scenario: Inbound routed pending delivery
+  Scenario: Operator should not be able to Global Inbound routed pending delivery (uid:f56aada4-dbed-4688-b4eb-a3126d0b4981)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                              |
@@ -120,8 +120,7 @@ Feature: Global Inbound
     And Operator verify the last order event params:
       | type | 26 |
 
-  @ArchiveRouteViaDb
-  Scenario Outline: Inbound parcel with <status> status
+  Scenario Outline: Operator should not be able to Global Inbound parcel with invalid order's status (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                              |
@@ -133,9 +132,9 @@ Feature: Global Inbound
       | trackingId | GET_FROM_CREATED_ORDER |
       | toastText  | <message>              |
     Examples:
-      | status    | message         |
-      | Completed | ORDER_COMPLETED |
-      | Cancelled | ORDER_CANCELLED |
+      | Note      | hiptest-uid                              | status    | message         |
+      | Completed | uid:cd293abb-cceb-44f2-a58c-ee89c1a8ba67 | Completed | ORDER_COMPLETED |
+      | Cancelled | uid:2b1af9c8-e582-434a-aee6-76fb06aadf95 | Cancelled | ORDER_CANCELLED |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

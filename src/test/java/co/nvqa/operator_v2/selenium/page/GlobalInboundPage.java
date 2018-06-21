@@ -110,14 +110,16 @@ public class GlobalInboundPage extends OperatorV2SimplePage
         globalInbound(globalInboundParams);
 
         String trackingId = globalInboundParams.getTrackingId();
-        TestUtils.retryIfAssertionErrorOccurred(() -> {
+        TestUtils.retryIfAssertionErrorOccurred(() ->
+        {
             String lastScanned = getTextTrimmed("//div[contains(text(), 'Last Scanned')]");
             String lastScannedTrackingId = lastScanned.split(":")[1].trim();
             Assert.assertEquals("Last Scanned Tracking ID", trackingId, lastScannedTrackingId);
         }, "Checking Last Scanned Tracking ID");
     }
 
-    public void globalInbound(GlobalInboundParams globalInboundParams){
+    public void globalInbound(GlobalInboundParams globalInboundParams)
+    {
         selectHubAndDeviceId(globalInboundParams.getHubName(), globalInboundParams.getDeviceId());
         overrideSize(globalInboundParams.getOverrideSize());
         overrideWeight(globalInboundParams.getOverrideWeight());
@@ -133,14 +135,16 @@ public class GlobalInboundPage extends OperatorV2SimplePage
     {
         globalInbound(globalInboundParams);
 
-        if (StringUtils.isNotBlank(rackInfo))
+        if(StringUtils.isNotBlank(rackInfo))
         {
             String xpath = String.format("//h1[normalize-space(text())='%s']", rackInfo);
             Assert.assertNotNull("rack info", waitUntilVisibilityOfElementLocated(xpath));
         }
-        if (StringUtils.isNotBlank(toastText))
+
+        if(StringUtils.isNotBlank(toastText))
         {
             Assert.assertEquals("Toast text", toastText, getToastTopText());
+            waitUntilInvisibilityOfToast(toastText);
         }
     }
 }
