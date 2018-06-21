@@ -53,7 +53,9 @@ public abstract class DataEntity<T extends DataEntity>
         fromMap(JsonHelper.fromJsonToHashMap(mapper, json));
     }
 
-    public void merge(T entity){
+    @SuppressWarnings("unchecked")
+    public void merge(T entity)
+    {
         fromMap(entity.toMap());
     }
 
@@ -95,6 +97,7 @@ public abstract class DataEntity<T extends DataEntity>
         }
     }
 
+    @SuppressWarnings("unchecked")
     private <T> T getProperty(String property)
     {
         Class<?> clazz = this.getClass();

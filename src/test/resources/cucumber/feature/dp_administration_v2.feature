@@ -1,4 +1,4 @@
-@OperatorV2Disabled @DpAdministrationV2
+@OperatorV2 @DpAdministrationV2
 Feature: DP Administration
 
   @LaunchBrowser
@@ -39,7 +39,7 @@ Feature: DP Administration
     Given Operator go to menu Distribution Points -> DP Administration
     When Operator get first 10 DP Partners params on DP Administration page
     When Operator click on Download CSV File button on DP Administration page
-    Then Downloaded CSV file contains correct PD Partners data
+    Then Downloaded CSV file contains correct DP Partners data
 
   @DeleteDpAndPartner
   Scenario: Operator should be able to create a new DP on DP Administration page
@@ -106,7 +106,7 @@ Feature: DP Administration
     And Operator select View DPs action for created DP partner on DP Administration page
     When Operator get all DP params on DP Administration page
     And Operator click on Download CSV File button on DP Administration page
-    Then Downloaded CSV file contains correct PD data
+    Then Downloaded CSV file contains correct DP data
 
   @DeleteDpAndPartner
   Scenario: Operator should be able to create a new DP User on DP Administration page
@@ -171,7 +171,7 @@ Feature: DP Administration
     And Operator select View Users action for created DP on DP Administration page
     When Operator get all DP Users params on DP Administration page
     And Operator click on Download CSV File button on DP Administration page
-    Then Downloaded CSV file contains correct PD Users data
+    Then Downloaded CSV file contains correct DP Users data
 
   @KillBrowser
   Scenario: Kill Browser

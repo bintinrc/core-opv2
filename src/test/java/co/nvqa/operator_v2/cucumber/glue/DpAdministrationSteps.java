@@ -58,8 +58,8 @@ public class DpAdministrationSteps extends AbstractSteps
         dpAdminPage.downloadCsvFile();
     }
 
-    @Then("^Downloaded CSV file contains correct PD Partners data$")
-    public void downloadedCSVFileContainsCorrectPDPartnersData()
+    @Then("^Downloaded CSV file contains correct DP Partners data$")
+    public void downloadedCSVFileContainsCorrectDpPartnersData()
     {
         List<DpPartner> dpPartnersParams = get(KEY_LIST_OF_DP_PARTNERS);
         dpAdminPage.verifyDownloadedFileContent(dpPartnersParams);
@@ -113,8 +113,8 @@ public class DpAdministrationSteps extends AbstractSteps
         put(KEY_LIST_OF_DISTRIBUTION_POINTS, dpParams);
     }
 
-    @Then("^Downloaded CSV file contains correct PD data$")
-    public void downloadedCSVFileContainsCorrectPDData()
+    @Then("^Downloaded CSV file contains correct DP data$")
+    public void downloadedCSVFileContainsCorrectDpData()
     {
         List<Dp> dpParams = get(KEY_LIST_OF_DISTRIBUTION_POINTS);
         dpAdminPage.verifyDownloadedDpFileContent(dpParams);
@@ -154,8 +154,8 @@ public class DpAdministrationSteps extends AbstractSteps
         put(KEY_LIST_OF_DP_USERS, dpUsers);
     }
 
-    @Then("^Downloaded CSV file contains correct PD Users data$")
-    public void downloadedCSVFileContainsCorrectPDUsersData()
+    @Then("^Downloaded CSV file contains correct DP Users data$")
+    public void downloadedCSVFileContainsCorrectDpUsersData()
     {
         List<DpUser> dpUsers = get(KEY_LIST_OF_DP_USERS);
         dpAdminPage.verifyDownloadedDpUsersFileContent(dpUsers);
