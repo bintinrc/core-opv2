@@ -1,12 +1,15 @@
 package co.nvqa.operator_v2.model;
 
+import co.nvqa.commons.model.Pair;
+import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.commons.utils.NvLogger;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.reflect.TypeToken;
-import cucumber.api.java8.Ru;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.commons.text.translate.CsvTranslators;
 
 import java.io.File;
@@ -31,9 +34,38 @@ public abstract class DataEntity<T extends DataEntity>
         fromMap(data);
     }
 
+    public DataEntity(T entity){
+        merge(entity);
+    }
+
     public void fromMap(Map<String, ?> data)
     {
         data.forEach(this::setProperty);
+    }
+
+    public void fromJson(String json)
+    {
+        fromMap(JsonHelper.fromJsonToHashMap(json));
+    }
+
+    public void fromJson(ObjectMapper mapper, String json)
+    {
+        fromMap(JsonHelper.fromJsonToHashMap(mapper, json));
+    }
+
+    public void merge(T entity){
+        fromMap(entity.toMap());
+    }
+
+    public Map<String, ?> toMap()
+    {
+        return FieldUtils.getAllFieldsList(this.getClass()).stream()
+                .map(field -> new Pair<>(field.getName(), getProperty(field.getName())))
+                .filter(pair -> pair.second != null)
+                .collect(Collectors.toMap(
+                        pair -> pair.first,
+                        pair -> pair.second
+                ));
     }
 
     private void setProperty(String property, Object value)
@@ -63,15 +95,55 @@ public abstract class DataEntity<T extends DataEntity>
         }
     }
 
+    private <T> T getProperty(String property)
+    {
+        Class<?> clazz = this.getClass();
+        try
+        {
+            Method getter = findGetter(clazz, property);
+            if (getter != null)
+            {
+                return (T) MethodUtils.invokeMethod(this, true, getter.getName());
+            } else
+            {
+                Field field = findPropertyField(clazz, property);
+                if (field != null)
+                {
+                    return (T) FieldUtils.readField(field, this, true);
+                }
+            }
+        } catch (Exception ex)
+        {
+            String message = String.format("Could not get %s property of %s data entity", property, this.getClass().getName());
+            NvLogger.error(message);
+        }
+        return null;
+    }
+
     private static Method findSetter(Class<?> clazz, String property, Class<?> valueType)
     {
         Method[] methods = clazz.getMethods();
-        String getterName = sanitizeString("set" + property);
+        String setterName = sanitizeString("set" + property);
+        for (Method method : methods)
+        {
+            if (StringUtils.equals(setterName, sanitizeString(method.getName()))
+                    && method.getParameterCount() == 1
+                    && method.getParameterTypes()[0].isAssignableFrom(valueType))
+            {
+                return method;
+            }
+        }
+        return null;
+    }
+
+    private static Method findGetter(Class<?> clazz, String property)
+    {
+        Method[] methods = clazz.getMethods();
+        String getterName = sanitizeString("get" + property);
         for (Method method : methods)
         {
             if (StringUtils.equals(getterName, sanitizeString(method.getName()))
-                    && method.getParameterCount() == 1
-                    && method.getParameterTypes()[0].isAssignableFrom(valueType))
+                    && method.getParameterCount() == 0)
             {
                 return method;
             }
@@ -100,12 +172,15 @@ public abstract class DataEntity<T extends DataEntity>
         return StringUtils.normalizeSpace(value.trim().toLowerCase()).replaceAll("\\s", "_");
     }
 
-    protected static String[] splitCsvLine(String csvLine){
+    protected static String[] splitCsvLine(String csvLine)
+    {
         return csvLine.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
     }
 
 
-    public abstract void fromCsvLine(String csvLine);
+    public void fromCsvLine(String csvLine)
+    {
+    }
 
     protected static String getValueIfIndexExists(String[] values, int index)
     {
@@ -118,7 +193,7 @@ public abstract class DataEntity<T extends DataEntity>
         }
     }
 
-    public static <T extends DataEntity> List<T> fromCsvFile(Class<T> clazz, String fileName, boolean ignoreHeader)
+    public static <T extends DataEntity<?>> List<T> fromCsvFile(Class<T> clazz, String fileName, boolean ignoreHeader)
     {
         try
         {
@@ -144,6 +219,21 @@ public abstract class DataEntity<T extends DataEntity>
         {
             NvLogger.warn("Could not read file [" + fileName + "]");
             return new ArrayList<>();
+        }
+    }
+
+    public static <T extends DataEntity<?>> T fromMap(Class<T> clazz, Map<String, String> data)
+    {
+        try
+        {
+            T dataEntity = clazz.newInstance();
+            dataEntity.fromMap(data);
+            return dataEntity;
+        } catch (InstantiationException | IllegalAccessException e)
+        {
+            String message = String.format("Could not create new instance of %s data entity", clazz.getName());
+            NvLogger.error(message);
+            throw new RuntimeException(e);
         }
     }
 }

@@ -679,6 +679,15 @@ public class OperatorV2SimplePage extends SimplePage
         pause300ms();
     }
 
+    public void toggleMdSwithcById(String mdSwitchId, boolean state)
+    {
+        String xpath = String.format("//md-switch[starts-with(@id, '%s')]", mdSwitchId);
+        boolean currentState = Boolean.parseBoolean(getAttribute(xpath, "aria-checked"));
+        if (currentState != state){
+            click(xpath);
+        }
+    }
+
     public void selectValueFromMdSelectById(String mdSelectId, String value)
     {
         clickf("//md-select[starts-with(@id, '%s')]", mdSelectId);
