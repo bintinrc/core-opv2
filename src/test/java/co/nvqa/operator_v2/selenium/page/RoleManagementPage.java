@@ -21,6 +21,7 @@ public class RoleManagementPage extends OperatorV2SimplePage {
     }
 
     public void createNewRole(RoleManagement roleManagement) {
+        waitUntilInvisibilityOfElementLocated("//div[contains(@class, 'loading-sheet')]/md-progress-circular");
         clickNvIconTextButtonByNameAndWaitUntilDone("Add Role");
         fillTheForm(roleManagement);
         clickNvApiTextButtonByNameAndWaitUntilDone("Add Role");
