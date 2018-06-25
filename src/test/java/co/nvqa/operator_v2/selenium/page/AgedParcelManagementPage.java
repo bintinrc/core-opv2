@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
@@ -18,6 +19,7 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
 
     public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking_id";
     public static final String COLUMN_CLASS_DATA_SHIPPER = "shipper";
+    public static final String COLUMN_CLASS_DAYS_SINCE_INBOUD = "custom_days_since_inbound";
 
     public static final String ACTION_BUTTON_RESCHEDULE_NEXT_DAY = "container.aged-parcel-management.reschedule-next-day";
 
@@ -26,15 +28,24 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
         super(webDriver, MD_VIRTUAL_REPEAT);
     }
 
-    public void verifyAgedParcelOrderIsListed(String trackingId, String shipperName)
+    public void verifyAgedParcelOrderIsListed(String trackingId, String shipperName, String daysSinceInbound)
     {
         searchTableByTrackingId(trackingId);
 
         String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
         Assert.assertEquals("Tracking ID", trackingId, actualTrackingId);
 
-        String actualShipper = getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER);
-        Assert.assertEquals("Shipper", shipperName, actualShipper);
+        if (StringUtils.isNotBlank(shipperName))
+        {
+            String actualShipper = getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER);
+            Assert.assertEquals("Shipper", shipperName, actualShipper);
+        }
+
+        if (StringUtils.isNotBlank(daysSinceInbound))
+        {
+            String actualDaysSinceInbound = getTextOnTable(1, COLUMN_CLASS_DAYS_SINCE_INBOUD);
+            Assert.assertThat("Days since inbound", actualDaysSinceInbound, Matchers.equalToIgnoringCase(daysSinceInbound));
+        }
     }
 
     public void verifyCsvFileDownloadedSuccessfully(String trackingId)

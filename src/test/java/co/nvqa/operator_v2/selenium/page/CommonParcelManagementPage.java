@@ -3,10 +3,11 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.WebDriver;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
@@ -35,8 +36,16 @@ public abstract class CommonParcelManagementPage extends OperatorV2SimplePage
 
     public void rescheduleNext2Days(String trackingId)
     {
-        searchTableByTrackingId(trackingId);
-        checkRow(1);
+        rescheduleNext2Days(Collections.singletonList(trackingId));
+    }
+
+    public void rescheduleNext2Days(List<String> trackingIds)
+    {
+        trackingIds.forEach(trackingId -> {
+                    searchTableByTrackingId(trackingId);
+                    checkRow(1);
+                }
+        );
         selectAction(ACTION_RESCHEDULE_SELECTED);
         setMdDatepickerById("commons.model.date", TestUtils.getNextDate(2));
         clickNvIconTextButtonByNameAndWaitUntilDone("commons.reschedule");
@@ -72,11 +81,17 @@ public abstract class CommonParcelManagementPage extends OperatorV2SimplePage
     {
         click("//span[text()='Apply Action']");
 
-        switch(actionType)
+        switch (actionType)
         {
-            case ACTION_SET_RTS_TO_SELECTED: clickButtonByAriaLabel("Set RTS to Selected"); break;
-            case ACTION_RESCHEDULE_SELECTED: clickButtonByAriaLabel("Reschedule Selected"); break;
-            case ACTION_DOWNLOAD_CSV_FILE: clickButtonByAriaLabel("Download CSV File"); break;
+            case ACTION_SET_RTS_TO_SELECTED:
+                clickButtonByAriaLabel("Set RTS to Selected");
+                break;
+            case ACTION_RESCHEDULE_SELECTED:
+                clickButtonByAriaLabel("Reschedule Selected");
+                break;
+            case ACTION_DOWNLOAD_CSV_FILE:
+                clickButtonByAriaLabel("Download CSV File");
+                break;
         }
 
         pause500ms();

@@ -8,6 +8,8 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,9 +53,18 @@ public class AgedParcelManagementSteps extends AbstractSteps
     @Then("^Operator verify the aged parcel order is listed on Aged Parcels list$")
     public void operatorVerifyTheAgedParcelOrderIsListedOnAgedParcelsList()
     {
+        operatorVerifyTheAgedParcelOrderIsListedOnAgedParcelsListWithFollowingParameters(
+                Collections.singletonMap("shipperName", TestConstants.SHIPPER_V2_NAME)
+        );
+    }
+
+    @Then("^Operator verify the aged parcel order is listed on Aged Parcels list with following parameters$")
+    public void operatorVerifyTheAgedParcelOrderIsListedOnAgedParcelsListWithFollowingParameters(Map<String, String> mapOfData)
+    {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        String shipperName = TestConstants.SHIPPER_V2_NAME;
-        agedParcelManagementPage.verifyAgedParcelOrderIsListed(trackingId, shipperName);
+        String shipperName = mapOfData.get("shipperName");
+        String daysSinceInbound = mapOfData.get("daysSinceInbound");
+        agedParcelManagementPage.verifyAgedParcelOrderIsListed(trackingId, shipperName, daysSinceInbound);
     }
 
     @When("^Operator download CSV file of aged parcel on Aged Parcels list$")
@@ -82,6 +93,13 @@ public class AgedParcelManagementSteps extends AbstractSteps
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         agedParcelManagementPage.rescheduleNext2Days(trackingId);
+    }
+
+    @When("^Operator reschedule multiple aged parcels on next 2 days$")
+    public void operatorRescheduleMultipleAgedParcelsOnNext2Days()
+    {
+        List<String> trackingIds= get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        agedParcelManagementPage.rescheduleNext2Days(trackingIds);
     }
 
     @When("^Operator RTS aged parcel on next day$")
