@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
@@ -49,14 +50,24 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
     }
 
     @SuppressWarnings("unchecked")
-    public void loadSelection(String shipperName, String trackingId, int agedDays)
+    public void loadSelection(String shipperName, String trackingId, Integer agedDays)
     {
         TestUtils.retryIfRuntimeExceptionOccurred(()->
         {
             if(!isElementExistFast(String.format("//button[contains(@aria-label,'%s')]", TestConstants.SHIPPER_V2_NAME)))
             {
-                selectValueFromMdAutocomplete("Search or Select...", shipperName);
-                sendKeysByAriaLabel("Aged Days", String.valueOf(agedDays));
+                if (StringUtils.isNotBlank(shipperName))
+                {
+                    selectValueFromNvAutocompleteByItemTypesAndDismiss("Shipper", shipperName);
+                } else {
+                    removeNvFilterBoxByMainTitle("Shipper");
+                }
+                if (agedDays != null)
+                {
+                    sendKeysByAriaLabel("Aged Days", String.valueOf(agedDays));
+                } else {
+                    removeNvFilterBoxByMainTitle("Aged Days");
+                }
             }
 
             clickButtonLoadSelection();

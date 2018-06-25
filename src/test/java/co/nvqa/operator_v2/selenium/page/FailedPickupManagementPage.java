@@ -1,10 +1,16 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.util.TestUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -55,6 +61,29 @@ public class FailedPickupManagementPage extends OperatorV2SimplePage
     {
         searchTableByTrackingId(trackingId);
         clickActionButtonOnTable(1, ACTION_BUTTON_RESCHEDULE_NEXT_DAY);
+    }
+
+    public void cancelSelected(List<String> listOfExpectedTrackingId)
+    {
+        listOfExpectedTrackingId.forEach(trackingId -> {
+            searchTableByTrackingId(trackingId);
+            checkRow(1);
+        });
+        selectAction(ACTION_CANCEL_SELECTED);
+
+        List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='order in ctrl.orders']/td[1]");
+        List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
+        Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+
+        sendKeysById("container.order.edit.cancellation-reason", String.format("This order is canceled by automation to test 'Cancel Selected' feature on Failed Pickup Management. Canceled at %s.", CREATED_DATE_SDF.format(new Date())));
+        if (listOfActualTrackingIds.size() == 1)
+        {
+            clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-order");
+        } else
+        {
+            clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-orders");
+        }
+        waitUntilInvisibilityOfToast("updated");
     }
 
     public void rescheduleNext2Days(String trackingId)

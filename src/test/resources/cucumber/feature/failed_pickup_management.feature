@@ -8,7 +8,7 @@ Feature: Failed Pickup Management
   @ArchiveRouteViaDb
   Scenario Outline: Operator find failed pickup C2C/Return order on Failed Pickup orders list (<hiptest-uid>)
     Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -29,7 +29,7 @@ Feature: Failed Pickup Management
   @ArchiveRouteViaDb
   Scenario Outline: Operator download and verify CSV file of failed pickup C2C/Return order on Failed Pickup orders list (<hiptest-uid>)
     Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -51,7 +51,7 @@ Feature: Failed Pickup Management
   @ArchiveRouteViaDb
   Scenario Outline: Operator reschedule failed pickup C2C/Return order on next day (<hiptest-uid>)
     Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -74,7 +74,7 @@ Feature: Failed Pickup Management
   @ArchiveRouteViaDb
   Scenario Outline: Operator reschedule failed pickup C2C/Return order on specific date (<hiptest-uid>)
     Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -93,6 +93,51 @@ Feature: Failed Pickup Management
       | Note   | hiptest-uid                              | orderType |
       | C2C    | uid:bec16db3-4ee0-4334-8a2f-d090a4f681cd | C2C       |
       | Return | uid:97126afe-c6ab-4aff-9dca-fc19ba021727 | Return    |
+
+  @ArchiveRouteViaDb
+  Scenario Outline: Operator should be able to cancel failed pickup <Note> order (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create Order V2 Parcel using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
+      | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator start the route
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Driver failed the C2C/Return order pickup
+    When Operator go to menu Shipper Support -> Failed Pickup Management
+    And Operator cancel order on Failed Pickup Management page
+    Then API Operator verify failed pickup order info after Canceled
+    Examples:
+      | Note   | hiptest-uid | orderType |
+      | C2C    |             | C2C       |
+      | Return |             | Return    |
+
+  @ArchiveRouteViaDb
+  Scenario Outline: Operator should be able to cancel multiple failed pickup <Note> orders (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create multiple Order V2 Parcel using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
+      | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add multiple parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator start the route
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoints of created orders
+    And API Driver failed multiple C2C/Return orders pickup
+    When Operator go to menu Shipper Support -> Failed Pickup Management
+    And Operator cancel multiple orders on Failed Pickup Management page
+    Then API Operator verify multiple failed pickup orders info after Canceled
+    Examples:
+      | Note   | hiptest-uid | orderType |
+      | C2C    |             | C2C       |
+      | Return |             | Return    |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

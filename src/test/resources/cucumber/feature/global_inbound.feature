@@ -117,7 +117,7 @@ Feature: Global Inbound
     And API Operator verify order info after Global Inbound
     When Operator go to menu Order -> All Orders
     Then Operator verify order info after Global Inbound
-    And Operator verify the last order event params:
+    And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
   Scenario Outline: Operator should not be able to Global Inbound parcel with invalid order's status (<hiptest-uid>)
@@ -135,6 +135,50 @@ Feature: Global Inbound
       | Note      | hiptest-uid                              | status    | message         |
       | Completed | uid:cd293abb-cceb-44f2-a58c-ee89c1a8ba67 | Completed | ORDER_COMPLETED |
       | Cancelled | uid:2b1af9c8-e582-434a-aee6-76fb06aadf95 | Cancelled | ORDER_CANCELLED |
+
+  @ArchiveRouteViaDb
+  Scenario Outline: Operator should be able to Global Inbound failed delivery order on Global Inbound page (uid:)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create Order V2 Parcel using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
+      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    Given API Driver collect all his routes
+    Given API Driver get pickup/delivery waypoint of the created order
+    Given API Operator Van Inbound parcel
+    Given API Operator start the route
+    Given API Driver failed the delivery of the created parcel with following parameters:
+      | failureReasonCodeId | <failureReasonCodeId> |
+    When Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below and check alert:
+      | hubName    | {hub-name}             |
+      | trackingId | GET_FROM_CREATED_ORDER |
+      | rackColor  | <rackColor>            |
+    And API Operator verify order info after delivery "DELIVERY_FAILED"
+    And DB Operator verify transaction_failure_reason record for the created order
+    And DB Operator verify the last inbound_scans record for the created order:
+      | hubId | {hub-id} |
+      | type  | 2        |
+    And DB Operator verify the last order_events record for the created order:
+      | type | 26 |
+    When Operator go to menu Order -> All Orders
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | Delivery fail      |
+      | granularStatus | Pending Reschedule |
+      | deliveryStatus | FAIL               |
+
+    Examples:
+      | failureReasonCodeId | rackColor |
+      | 1                   | #90EE90   |
+      | 2                   | #FFFFED   |
+      | 3                   | #D8BFD8   |
+      | 5                   | #FF9999   |
+      | 6                   | #9999FF   |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

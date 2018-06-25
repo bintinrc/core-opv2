@@ -518,7 +518,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         }
     }
 
-    public void verifyOrderInfoAfterGlobalInbound(OrderRequestV2 orderRequestV2, GlobalInboundParams globalInboundParams, Double expectedOrderCost)
+    public void verifyOrderInfoAfterGlobalInbound(OrderRequestV2 orderRequestV2, GlobalInboundParams globalInboundParams, Double expectedOrderCost, String expectedStatus, List<String> expectedGranularStatus, String expectedDeliveryStatus)
     {
         String mainWindowHandle = getWebDriver().getWindowHandle();
         Long orderId = TestUtils.getOrderId(orderRequestV2);
@@ -529,7 +529,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         {
             switchToEditOrderWindow(orderId);
             editOrderPage.waitUntilInvisibilityOfLoadingOrder();
-            editOrderPage.verifyOrderIsGlobalInboundedSuccessfully(orderRequestV2, globalInboundParams, expectedOrderCost);
+            editOrderPage.verifyOrderIsGlobalInboundedSuccessfully(orderRequestV2, globalInboundParams, expectedOrderCost, expectedStatus, expectedGranularStatus, expectedDeliveryStatus);
         } finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);

@@ -7,7 +7,7 @@ Feature: Aged Parcel Management
 
   Scenario Outline: Operator find aged parcel on Aged Parcels list (<hiptest-uid>)
     Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     When API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
@@ -24,7 +24,7 @@ Feature: Aged Parcel Management
 
   Scenario Outline: Operator download and verify CSV file of aged parcel on Aged Parcels list (<hiptest-uid>)
     Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     When API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
@@ -43,7 +43,7 @@ Feature: Aged Parcel Management
   @ArchiveRouteViaDb
   Scenario Outline: Operator reschedule failed delivery aged parcel on next day (<hiptest-uid>)
     Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
@@ -72,7 +72,7 @@ Feature: Aged Parcel Management
   @ArchiveRouteViaDb
   Scenario Outline: Operator reschedule failed delivery aged parcel on specific date (<hiptest-uid>)
     Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
@@ -101,7 +101,7 @@ Feature: Aged Parcel Management
   @ArchiveRouteViaDb
   Scenario Outline: Operator RTS failed delivery aged parcel on next day (<hiptest-uid>)
     Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
@@ -130,7 +130,7 @@ Feature: Aged Parcel Management
   @ArchiveRouteViaDb
   Scenario Outline: Operator RTS selected failed delivery aged parcel on next day (<hiptest-uid>)
     Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
@@ -155,6 +155,21 @@ Feature: Aged Parcel Management
       | Normal | uid:701c1c6c-c095-4055-a387-0fe38c38b0bb | Normal    |
       | C2C    | uid:fc207502-1b6d-472a-8a6b-0b6e32c9372b | C2C       |
       | Return | uid:e32ab4e8-b443-44b5-8dca-4bd92fb7fecf | Return    |
+
+  Scenario: Operator should be able to filter by Shipper on Aged Parcel Management page (uid:)
+    Given API Shipper create Order V2 Parcel using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
+      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
+    When API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+    Then API Operator verify order info after Global Inbound
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper Support -> Aged Parcel Management
+    When Operator apply filter parameters and load selection on Aged Parcel Management
+      | shipperName | {shipper-v2-name} |
+      | agedDays    | -1                |
+    Then Operator verify the aged parcel order is listed on Aged Parcels list
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

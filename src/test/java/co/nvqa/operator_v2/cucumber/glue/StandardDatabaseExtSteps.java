@@ -2,8 +2,13 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
 import co.nvqa.commons.model.addressing.JaroScore;
+import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.Transaction;
+import co.nvqa.commons.model.driver.FailureReason;
+import co.nvqa.commons.model.entity.InboundScanEntity;
 import co.nvqa.commons.model.entity.OrderEventEntity;
 import co.nvqa.commons.model.entity.RouteDriverTypeEntity;
+import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.CreateRouteParams;
 import co.nvqa.operator_v2.model.DpPartner;
@@ -28,6 +33,8 @@ import static org.hamcrest.Matchers.*;
 @ScenarioScoped
 public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioManager>
 {
+    private final String TRANSACTION_TYPE_DELIVERY = "DELIVERY";
+
     @Inject
     public StandardDatabaseExtSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
     {
@@ -73,7 +80,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         });
     }
 
-    @Then("^Operator verify the last order event params:$")
+    @Then("^DB Operator verify the last order_events record for the created order:$")
     public void operatorVerifyTheLastOrderEventParams(Map<String, String> mapOfData)
     {
         Long orderId = get(KEY_CREATED_ORDER_ID);
@@ -84,6 +91,40 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         if (StringUtils.isNotBlank(value))
         {
             Assert.assertEquals("Type", Short.parseShort(value), theLastOrderEvent.getType());
+        }
+    }
+
+    @Then("^DB Operator verify transaction_failure_reason record for the created order$")
+    public void dbOperatorVerifyTransactionFailureReasonForTheCreatedOrder()
+    {
+        FailureReason failureReason = get(KEY_FAILURE_REASON);
+        Order orderAfterDelivery = get(KEY_CREATED_ORDER_AFTER_DELIVERY);
+        List<Transaction> transactions = orderAfterDelivery.getTransactions();
+        Transaction deliveryTransaction = transactions.stream()
+                .filter(transaction -> TRANSACTION_TYPE_DELIVERY.equals(transaction.getType()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Delivery transaction not found"));
+        TransactionFailureReasonEntity transactionFailureReason = getCoreJdbc().findTransactionFailureReasonByTransactionId(deliveryTransaction.getId());
+        Assert.assertEquals("failure_reason_code_id", (long) failureReason.getFailureReasonCodeId(), (long) transactionFailureReason.getFailureReasonCodeId());
+    }
+
+    @Then("^DB Operator verify the last inbound_scans record for the created order:$")
+    public void dbOperatorVerifyTheLastInboundScansRecord(Map<String, String> mapOfData)
+    {
+        Long orderId = get(KEY_CREATED_ORDER_ID);
+        List<InboundScanEntity> inboundScans = getCoreJdbc().findInboundScansByOrderId(orderId);
+        InboundScanEntity theLastInboundScan = inboundScans.get(inboundScans.size() - 1);
+
+        String value = mapOfData.get("hubId");
+        if (StringUtils.isNotBlank(value))
+        {
+            Assert.assertEquals("Hub ID", Long.valueOf(value), theLastInboundScan.getHubId());
+        }
+
+        value = mapOfData.get("type");
+        if (StringUtils.isNotBlank(value))
+        {
+            Assert.assertEquals("Type", Short.valueOf(value), theLastInboundScan.getType());
         }
     }
 

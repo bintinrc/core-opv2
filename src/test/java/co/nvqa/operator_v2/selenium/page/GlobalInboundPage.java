@@ -4,11 +4,12 @@ import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.Color;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 public class GlobalInboundPage extends OperatorV2SimplePage
@@ -20,32 +21,31 @@ public class GlobalInboundPage extends OperatorV2SimplePage
 
     private void selectHubAndDeviceId(String hubName, String deviceId)
     {
-        if(isElementExistFast("//h4[text()='Select the following to begin:']"))
+        if (isElementExistFast("//h4[text()='Select the following to begin:']"))
         {
-            TestUtils.retryIfRuntimeExceptionOccurred(()->
+            TestUtils.retryIfRuntimeExceptionOccurred(() ->
             {
                 selectValueFromNvAutocomplete("ctrl.hubSearchText", hubName);
                 pause500ms();
 
-                if(isElementExistFast("//nv-api-text-button[@name='Continue']/button[@disabled='disabled']"))
+                if (isElementExistFast("//nv-api-text-button[@name='Continue']/button[@disabled='disabled']"))
                 {
                     throw new NvTestRuntimeException("Hub is not loaded yet.");
                 }
             });
 
-            if(deviceId!=null)
+            if (deviceId != null)
             {
                 sendKeysToMdInputContainerByModel("ctrl.data.deviceId", deviceId);
             }
 
             clickNvApiTextButtonByNameAndWaitUntilDone("Continue");
-        }
-        else
+        } else
         {
             clickNvIconButtonByNameAndWaitUntilEnabled("commons.settings");
             selectValueFromNvAutocomplete("ctrl.hubSearchText", hubName);
 
-            if(deviceId!=null)
+            if (deviceId != null)
             {
                 sendKeysToMdInputContainerByModel("ctrl.data.deviceId", deviceId);
             }
@@ -56,16 +56,15 @@ public class GlobalInboundPage extends OperatorV2SimplePage
 
     private void overrideSize(String overrideSize)
     {
-        if(overrideSize==null)
+        if (overrideSize == null)
         {
-            if(isElementExistFast("//nv-icon-text-button[@name='container.global-inbound.manual']"))
+            if (isElementExistFast("//nv-icon-text-button[@name='container.global-inbound.manual']"))
             {
                 clickNvIconTextButtonByName("container.global-inbound.manual");
             }
-        }
-        else
+        } else
         {
-            if(isElementExistFast("//nv-icon-text-button[@name='container.global-inbound.retain']"))
+            if (isElementExistFast("//nv-icon-text-button[@name='container.global-inbound.retain']"))
             {
                 clickNvIconTextButtonByName("container.global-inbound.retain");
                 selectValueFromMdSelectById("size", overrideSize);
@@ -95,11 +94,10 @@ public class GlobalInboundPage extends OperatorV2SimplePage
 
     private void setOverrideValue(String inputId, Double value)
     {
-        if(value==null)
+        if (value == null)
         {
             clearf("//input[@id='%s']", inputId);
-        }
-        else
+        } else
         {
             sendKeysById(inputId, NO_TRAILING_ZERO_DF.format(value));
         }
@@ -131,17 +129,31 @@ public class GlobalInboundPage extends OperatorV2SimplePage
         pause500ms();
     }
 
-    public void globalInboundAndCheckAlert(GlobalInboundParams globalInboundParams, String toastText, String rackInfo)
+    public void globalInboundAndCheckAlert(GlobalInboundParams globalInboundParams, String toastText, String rackInfo, String rackColor)
     {
         globalInbound(globalInboundParams);
 
-        if(StringUtils.isNotBlank(rackInfo))
-        {
-            String xpath = String.format("//h1[normalize-space(text())='%s']", rackInfo);
-            Assert.assertNotNull("rack info", waitUntilVisibilityOfElementLocated(xpath));
-        }
+        TestUtils.retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> {
+            if (StringUtils.isNotBlank(rackInfo))
+            {
+                String xpath = String.format("//h1[normalize-space(text())='%s']", rackInfo);
+                Assert.assertNotNull("rack info", waitUntilVisibilityOfElementLocated(xpath));
+            }
 
-        if(StringUtils.isNotBlank(toastText))
+            if (StringUtils.isNotBlank(rackColor))
+            {
+                String xpath = "//div[contains(@class, 'rack-sector')]";
+                String actualStyle = getAttribute(xpath, "style");
+                System.out.println("actualStyle " + actualStyle);
+                String colorString = actualStyle.replace("background:", "").replaceAll(";", "").trim();
+                System.out.println(colorString);
+                Color color = Color.fromString(colorString);
+                System.out.println(color.asHex());
+                Assert.assertThat("Unexpected Rack Sector color", color.asHex(), Matchers.equalToIgnoringCase(rackColor));
+            }
+        }, "globalInboundAndCheckAlert");
+
+        if (StringUtils.isNotBlank(toastText))
         {
             Assert.assertEquals("Toast text", toastText, getToastTopText());
             waitUntilInvisibilityOfToast(toastText);

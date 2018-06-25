@@ -8,8 +8,9 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
+import java.util.Map;
+
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -36,6 +37,15 @@ public class AgedParcelManagementSteps extends AbstractSteps
         String shipperName = TestConstants.SHIPPER_V2_NAME;
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         agedParcelManagementPage.loadSelection(shipperName, trackingId, -1);
+    }
+
+    @When("^Operator apply filter parameters and load selection on Aged Parcel Management$")
+    public void operatorLoadSelectionOnPageAgedParcelManagement(Map<String, String> mapOfData)
+    {
+        String shipperName = mapOfData.get("shipperName");
+        Integer agedDays = mapOfData.get("agedDays") != null ? Integer.parseInt(mapOfData.get("agedDays")) : null;
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        agedParcelManagementPage.loadSelection(shipperName, trackingId, agedDays);
     }
 
     @Then("^Operator verify the aged parcel order is listed on Aged Parcels list$")

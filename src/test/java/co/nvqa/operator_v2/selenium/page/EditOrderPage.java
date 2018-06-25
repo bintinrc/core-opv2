@@ -19,6 +19,8 @@ import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
+import java.util.List;
+
 /**
  * @author Daniel Joi Partogi Hutapea
  */
@@ -264,7 +266,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         Assert.assertThat("To Address", toAddress, Matchers.containsString(orderRequestV2.getToAddress2()));
     }
 
-    public void verifyOrderIsGlobalInboundedSuccessfully(OrderRequestV2 orderRequestV2, GlobalInboundParams globalInboundParams, Double expectedOrderCost)
+    public void verifyOrderIsGlobalInboundedSuccessfully(OrderRequestV2 orderRequestV2, GlobalInboundParams globalInboundParams, Double expectedOrderCost, String expectedStatus, List<String> expectedGranularStatus, String expectedDeliveryStatus)
     {
         if (isElementExistFast("//nv-icon-text-button[@name='container.order.edit.show-more']"))
         {
@@ -274,11 +276,20 @@ public class EditOrderPage extends OperatorV2SimplePage
         String expectedTrackingId = orderRequestV2.getTrackingId();
         Assert.assertEquals("Tracking ID", expectedTrackingId, getTrackingId());
 
-        Assert.assertThat(String.format("Status - [Tracking ID = %s]", expectedTrackingId), getStatus(), Matchers.equalToIgnoringCase("TRANSIT"));
-        Assert.assertThat(String.format("Granular Status - [Tracking ID = %s]", expectedTrackingId), getGranularStatus(), Matchers.anyOf(Matchers.equalTo("Arrived at Sorting Hub"), Matchers.equalTo("Arrived at Origin Hub")));
+        if (StringUtils.isNotBlank(expectedStatus))
+        {
+            Assert.assertThat(String.format("Status - [Tracking ID = %s]", expectedTrackingId), getStatus(), Matchers.equalToIgnoringCase(expectedStatus));
+        }
+        if (CollectionUtils.isNotEmpty(expectedGranularStatus))
+        {
+            Assert.assertThat(String.format("Granular Status - [Tracking ID = %s]", expectedTrackingId), getGranularStatus(), Matchers.isIn(expectedGranularStatus));
+        }
 
         Assert.assertEquals("Pickup Status", "SUCCESS", getPickupStatus());
-        Assert.assertEquals("Delivery Status", "PENDING", getDeliveryStatus());
+        if (StringUtils.isNotBlank(expectedDeliveryStatus))
+        {
+            Assert.assertThat("Delivery Status", getDeliveryStatus(), Matchers.equalToIgnoringCase(expectedDeliveryStatus));
+        }
 
         // There is an issue where after Global Inbound the new Size is not applied. KH need to fix this.
         // Uncomment this line below if KH has fixed it.
@@ -292,10 +303,9 @@ public class EditOrderPage extends OperatorV2SimplePage
             Assert.assertEquals("Weight", globalInboundParams.getOverrideWeight(), getWeight());
         }
 
-        Dimension actualDimension = getDimension();
-
         if (globalInboundParams.getOverrideDimHeight() != null && globalInboundParams.getOverrideDimWidth() != null && globalInboundParams.getOverrideDimLength() != null)
         {
+            Dimension actualDimension = getDimension();
             Assert.assertEquals("Dimension - Height", globalInboundParams.getOverrideDimHeight(), actualDimension.getHeight());
             Assert.assertEquals("Dimension - Width", globalInboundParams.getOverrideDimWidth(), actualDimension.getWidth());
             Assert.assertEquals("Dimension - Length", globalInboundParams.getOverrideDimLength(), actualDimension.getLength());
@@ -314,10 +324,12 @@ public class EditOrderPage extends OperatorV2SimplePage
             Assert.assertEquals("Cost", NO_TRAILING_ZERO_DF.format(expectedOrderCost), totalAsString);
         }
 
-        eventsTable.waitUntilVisibility();
-        OrderEvent orderEvent = eventsTable.readEntity(1);
-        Assert.assertEquals("Latest Event Name", "HUB INBOUND SCAN", orderEvent.getName());
-        Assert.assertEquals("Latest Event Hub Name", globalInboundParams.getHubName(), orderEvent.getHubName());
+        TestUtils.retryIfAssertionErrorOccurred(() -> {
+            eventsTable.waitUntilVisibility();
+            OrderEvent orderEvent = eventsTable.readEntity(1);
+            Assert.assertEquals("Latest Event Name", "HUB INBOUND SCAN", orderEvent.getName());
+            Assert.assertEquals("Latest Event Hub Name", globalInboundParams.getHubName(), orderEvent.getHubName());
+        }, "Check the last event params");
     }
 
     public String getShipperId()
