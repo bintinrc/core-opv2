@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.*;
 
 /**
+ *
  * @author Tristania Siagian
  */
 @SuppressWarnings("WeakerAccess")
@@ -171,16 +172,17 @@ public class AllOrdersPage extends OperatorV2SimplePage
         Assert.assertEquals("Toast message is different.", "Matches with file shown in table", toastTopText);
         waitUntilInvisibilityOfToast("Matches with file shown in table", false);
 
-        for (OrderRequestV2 orderRequestV2 : listOfOrderRequestV2)
+        for(OrderRequestV2 orderRequestV2 : listOfOrderRequestV2)
         {
             String createdOrderTrackingId = orderRequestV2.getTrackingId();
             Optional<Order> matchedOrderDetailsOptional = listOfOrderDetails.stream().filter(o -> o.getTrackingId().equals(createdOrderTrackingId)).findFirst();
 
-            if (matchedOrderDetailsOptional.isPresent())
+            if(matchedOrderDetailsOptional.isPresent())
             {
                 Order matchedOrderDetails = matchedOrderDetailsOptional.get();
                 verifyOrderInfoOnTableOrderIsCorrect(orderRequestV2, matchedOrderDetails);
-            } else
+            }
+            else
             {
                 throw new NvTestRuntimeException(String.format("Order details for Tracking ID = '%s' not found.", createdOrderTrackingId));
             }
@@ -246,7 +248,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
             switchToEditOrderWindow(orderId);
             editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyOrderInfoIsCorrect(orderRequestV2, order);
-        } finally
+        }
+        finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
@@ -274,7 +277,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
             switchToEditOrderWindow(orderId);
             editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyOrderIsForceSuccessedSuccessfully(orderRequestV2);
-        } finally
+        }
+        finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
@@ -302,13 +306,16 @@ public class AllOrdersPage extends OperatorV2SimplePage
         Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
         sendKeysById("container.order.edit.cancellation-reason", String.format("This order is canceled by automation to test 'Cancel Selected' feature on All Orders page. Canceled at %s.", CREATED_DATE_SDF.format(new Date())));
-        if (listOfActualTrackingIds.size() == 1)
+
+        if(listOfActualTrackingIds.size()==1)
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-order");
-        } else
+        }
+        else
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-orders");
         }
+
         waitUntilInvisibilityOfToast("updated");
     }
 
@@ -327,13 +334,15 @@ public class AllOrdersPage extends OperatorV2SimplePage
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
         Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
-        if (listOfActualTrackingIds.size() == 1)
+        if(listOfActualTrackingIds.size()==1)
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.resume-order");
-        } else
+        }
+        else
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.resume-orders");
         }
+
         waitUntilInvisibilityOfToast("updated");
     }
 
@@ -456,11 +465,12 @@ public class AllOrdersPage extends OperatorV2SimplePage
             String expectedEndTime = "";
             Integer timewindow = changeDeliveryTiming.getTimewindow();
 
-            if (timewindow == null)
+            if(timewindow==null)
             {
                 actualStartDate = actualStartDate.substring(0, 10);
                 actualEndDate = actualEndDate.substring(0, 10);
-            } else
+            }
+            else
             {
                 expectedStartTime = TestUtils.getStartTime(timewindow);
                 expectedEndTime = TestUtils.getEndTime(timewindow);
@@ -471,11 +481,12 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
             boolean isDateEmpty = isBlank(changeDeliveryTiming.getStartDate()) || isBlank(changeDeliveryTiming.getEndDate());
 
-            if (!isDateEmpty)
+            if(!isDateEmpty)
             {
                 Assert.assertEquals("Start Date does not match.", expectedStartDateWithTime, actualStartDate);
                 Assert.assertEquals("End Date does not match.", expectedEndDateWithTime, actualEndDate);
-            } else
+            }
+            else
             {
                 /*
                   If date is empty, check only the start/end time.
@@ -486,7 +497,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
                 Assert.assertEquals("Start Date does not match.", expectedStartDateWithTime, actualStartTime);
                 Assert.assertEquals("End Date does not match.", expectedEndDateWithTime, actualEndTime);
             }
-        } finally
+        }
+        finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
@@ -494,7 +506,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     private String concatDateWithTime(String date, String time)
     {
-        if (time == null)
+        if(time==null)
         {
             time = "";
         }
@@ -512,7 +524,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
             switchToNewOpenedWindow(mainWindowHandle);
             editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyInboundIsSucceed();
-        } finally
+        }
+        finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
@@ -530,7 +543,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
             switchToEditOrderWindow(orderId);
             editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyOrderIsGlobalInboundedSuccessfully(orderRequestV2, globalInboundParams, expectedOrderCost);
-        } finally
+        }
+        finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
@@ -548,18 +562,19 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         selectValueFromMdSelectByIdContains("category", category.getValue());
         selectValueFromMdSelectByIdContains("search-logic", searchLogic.getValue());
-        sendKeysById("fl-input", searchTerm);
+        sendKeys("//input[@id='fl-input' or @id='searchTerm']", searchTerm);
         pause2s(); // Wait until the page finished matching the tracking ID.
         String matchedTrackingIdXpathExpression = String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope//span[text()='%s']", searchTerm);
         String searchButtonXpathExpression = "//nv-api-text-button[@name='commons.search']";
 
         ////div[contains(@ng-messages, 'ctrl.specificSearch.form.searchTerm.$error')]/div[text()='No Results Found']
 
-        if (isElementExistFast(matchedTrackingIdXpathExpression))
+        if(isElementExistFast(matchedTrackingIdXpathExpression))
         {
             click(matchedTrackingIdXpathExpression);
             waitUntilNewWindowOrTabOpened();
-        } else
+        }
+        else
         {
             click(searchButtonXpathExpression);
         }
@@ -591,7 +606,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
             pause100ms();
             Set<String> windowHandlesTemp = getWebDriver().getWindowHandles();
 
-            if (windowHandlesTemp.size() <= 1)
+            if(windowHandlesTemp.size() <= 1)
             {
                 throw new RuntimeException("WebDriver only contains 1 Window.");
             }
@@ -601,9 +616,9 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         String newOpenedWindowHandle = null;
 
-        for (String windowHandle : windowHandles)
+        for(String windowHandle : windowHandles)
         {
-            if (!windowHandle.equals(mainWindowHandle))
+            if(!windowHandle.equals(mainWindowHandle))
             {
                 newOpenedWindowHandle = windowHandle; // Do not break, because we need to get the latest one.
             }

@@ -15,6 +15,7 @@ public final class TestConstants extends CommonSeleniumTestConstants
     public static final String OPERATOR_PORTAL_PWD;
     public static final boolean OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES;
     public static final String OPERATOR_PORTAL_USER_COOKIE;
+    public static final String OPERATOR_PORTAL_COOKIE_DOMAIN;
 
     public static final long SHIPPER_V2_ID;
     public static final String SHIPPER_V2_NAME;
@@ -49,6 +50,7 @@ public final class TestConstants extends CommonSeleniumTestConstants
 
         OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES = getBoolean("operator-portal-force-login-by-injecting-cookies");
         OPERATOR_PORTAL_USER_COOKIE = getString("operator-portal-user-cookie");
+        OPERATOR_PORTAL_COOKIE_DOMAIN = getString("operator-portal-cookie-domain");
 
         API_BASE_URL = getString("api-base-url");
 
