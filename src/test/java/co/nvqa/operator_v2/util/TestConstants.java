@@ -22,11 +22,6 @@ public final class TestConstants extends CommonSeleniumTestConstants
     public static final String SHIPPER_V2_CLIENT_ID;
     public static final String SHIPPER_V2_CLIENT_SECRET;
 
-    public static final long SHIPPER_V3_ID;
-    public static final String SHIPPER_V3_NAME;
-    public static final String SHIPPER_V3_CLIENT_ID;
-    public static final String SHIPPER_V3_CLIENT_SECRET;
-
     public static final long SHIPPER_V4_ID;
     public static final String SHIPPER_V4_NAME;
     public static final String SHIPPER_V4_CLIENT_ID;
@@ -58,11 +53,6 @@ public final class TestConstants extends CommonSeleniumTestConstants
         SHIPPER_V2_NAME = getString("shipper-v2-name");
         SHIPPER_V2_CLIENT_ID = getString("shipper-v2-client-id");
         SHIPPER_V2_CLIENT_SECRET = getString("shipper-v2-client-secret");
-
-        SHIPPER_V3_ID = getLong("shipper-v3-id");
-        SHIPPER_V3_NAME = getString("shipper-v3-name");
-        SHIPPER_V3_CLIENT_ID = getString("shipper-v3-client-id");
-        SHIPPER_V3_CLIENT_SECRET = getString("shipper-v3-client-secret");
 
         SHIPPER_V4_ID = getLong("shipper-v4-id");
         SHIPPER_V4_NAME = getString("shipper-v4-name");

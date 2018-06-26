@@ -51,8 +51,11 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
     {
         setCurrentScenario(scenario);
 
-        providerOfScenarioStorage.get().put(StandardScenarioStorageKeys.KEY_SHIPPER_CLIENT_ID, TestConstants.SHIPPER_V2_CLIENT_ID);
-        providerOfScenarioStorage.get().put(StandardScenarioStorageKeys.KEY_SHIPPER_CLIENT_SECRET, TestConstants.SHIPPER_V2_CLIENT_SECRET);
+        providerOfScenarioStorage.get().put(StandardScenarioStorageKeys.KEY_SHIPPER_V2_CLIENT_ID, TestConstants.SHIPPER_V2_CLIENT_ID);
+        providerOfScenarioStorage.get().put(StandardScenarioStorageKeys.KEY_SHIPPER_V2_CLIENT_SECRET, TestConstants.SHIPPER_V2_CLIENT_SECRET);
+
+        providerOfScenarioStorage.get().put(StandardScenarioStorageKeys.KEY_SHIPPER_V4_CLIENT_ID, TestConstants.SHIPPER_V4_CLIENT_ID);
+        providerOfScenarioStorage.get().put(StandardScenarioStorageKeys.KEY_SHIPPER_V4_CLIENT_SECRET, TestConstants.SHIPPER_V4_CLIENT_SECRET);
 
         providerOfScenarioStorage.get().put(StandardScenarioStorageKeys.KEY_NINJA_DRIVER_USERNAME, TestConstants.NINJA_DRIVER_USERNAME);
         providerOfScenarioStorage.get().put(StandardScenarioStorageKeys.KEY_NINJA_DRIVER_PASSWORD, TestConstants.NINJA_DRIVER_PASSWORD);
