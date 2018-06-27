@@ -115,4 +115,11 @@ public class AgedParcelManagementSteps extends AbstractSteps
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         agedParcelManagementPage.rtsSelectedOrderNextDay(trackingId);
     }
+
+    @When("^Operator RTS multiple aged parcels on next 2 days$")
+    public void operatorRtsMultipleAgedParcelsOnNext2Days()
+    {
+        List<String> trackingIds= get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        agedParcelManagementPage.rtsSelectedOrderNext2Days(trackingIds);
+    }
 }

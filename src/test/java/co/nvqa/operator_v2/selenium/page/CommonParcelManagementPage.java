@@ -77,6 +77,21 @@ public abstract class CommonParcelManagementPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast("Set Selected to Return to Sender");
     }
 
+    public void rtsSelectedOrderNext2Days(List<String> trackingIds)
+    {
+        trackingIds.forEach(trackingId -> {
+                    searchTableByTrackingId(trackingId);
+                    checkRow(1);
+                }
+        );
+        selectAction(ACTION_SET_RTS_TO_SELECTED);
+        setMdDatepickerById("commons.model.delivery-date", TestUtils.getNextDate(2));
+        selectValueFromMdSelectById("commons.timeslot", "3PM - 6PM");
+        String suitButtonLocator = trackingIds.size()>1 ? "container.order.edit.set-orders-to-rts" : "container.order.edit.set-order-to-rts";
+        clickNvApiTextButtonByNameAndWaitUntilDone(suitButtonLocator);
+        waitUntilInvisibilityOfToast("Set Selected to Return to Sender");
+    }
+
     public void selectAction(int actionType)
     {
         click("//span[text()='Apply Action']");
