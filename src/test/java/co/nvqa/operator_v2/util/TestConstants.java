@@ -15,16 +15,12 @@ public final class TestConstants extends CommonSeleniumTestConstants
     public static final String OPERATOR_PORTAL_PWD;
     public static final boolean OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES;
     public static final String OPERATOR_PORTAL_USER_COOKIE;
+    public static final String OPERATOR_PORTAL_COOKIE_DOMAIN;
 
     public static final long SHIPPER_V2_ID;
     public static final String SHIPPER_V2_NAME;
     public static final String SHIPPER_V2_CLIENT_ID;
     public static final String SHIPPER_V2_CLIENT_SECRET;
-
-    public static final long SHIPPER_V3_ID;
-    public static final String SHIPPER_V3_NAME;
-    public static final String SHIPPER_V3_CLIENT_ID;
-    public static final String SHIPPER_V3_CLIENT_SECRET;
 
     public static final long SHIPPER_V4_ID;
     public static final String SHIPPER_V4_NAME;
@@ -49,6 +45,7 @@ public final class TestConstants extends CommonSeleniumTestConstants
 
         OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES = getBoolean("operator-portal-force-login-by-injecting-cookies");
         OPERATOR_PORTAL_USER_COOKIE = getString("operator-portal-user-cookie");
+        OPERATOR_PORTAL_COOKIE_DOMAIN = getString("operator-portal-cookie-domain");
 
         API_BASE_URL = getString("api-base-url");
 
@@ -56,11 +53,6 @@ public final class TestConstants extends CommonSeleniumTestConstants
         SHIPPER_V2_NAME = getString("shipper-v2-name");
         SHIPPER_V2_CLIENT_ID = getString("shipper-v2-client-id");
         SHIPPER_V2_CLIENT_SECRET = getString("shipper-v2-client-secret");
-
-        SHIPPER_V3_ID = getLong("shipper-v3-id");
-        SHIPPER_V3_NAME = getString("shipper-v3-name");
-        SHIPPER_V3_CLIENT_ID = getString("shipper-v3-client-id");
-        SHIPPER_V3_CLIENT_SECRET = getString("shipper-v3-client-secret");
 
         SHIPPER_V4_ID = getLong("shipper-v4-id");
         SHIPPER_V4_NAME = getString("shipper-v4-name");

@@ -68,18 +68,26 @@ public class MainPage extends OperatorV2SimplePage
 
     public void verifyTheMainPageIsLoaded()
     {
-        String mainDashboard = grabEndURL("All Orders");
+        String mainDashboardUrl = grabEndURL("All Orders");
 
         waitUntil(()->
         {
             String currentUrl = getCurrentUrl();
-            NvLogger.infof("verifyTheMainPageIsLoaded: Current URL = [%s] - Expected URL Ends With = [%s]", currentUrl, mainDashboard);
-            return currentUrl.endsWith(mainDashboard);
+            NvLogger.infof("verifyTheMainPageIsLoaded: Current URL = [%s] - Expected URL Ends With = [%s]", currentUrl, mainDashboardUrl);
+            return currentUrl.endsWith(mainDashboardUrl);
         }, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
         waitUntilPageLoaded();
         NvLogger.infof("Waiting until Welcome message toast disappear.");
         waitUntilInvisibilityOfElementLocated(XPATH_OF_TOAST_WELCOME_DASHBOARD, TestConstants.VERY_LONG_WAIT_FOR_TOAST);
+
+        String currentUrl = getCurrentUrl();
+        String countrySpecificDashboardUrl = TestConstants.COUNTRY_CODE.toLowerCase()+'/'+mainDashboardUrl;
+
+        if(!currentUrl.endsWith(countrySpecificDashboardUrl))
+        {
+            getWebDriver().navigate().to(TestConstants.OPERATOR_PORTAL_BASE_URL+'/'+countrySpecificDashboardUrl);
+        }
     }
 
     public void clickNavigation(String parentTitle, String navTitle)

@@ -46,8 +46,8 @@ public class LoginPage extends OperatorV2SimplePage
             NvLogger.info("ninja_access_token = "+operatorBearerToken);
             NvLogger.info("user = "+userCookie);
 
-            getWebDriver().manage().addCookie(new Cookie("ninja_access_token", operatorBearerToken, ".ninjavan.co", "/", null));
-            getWebDriver().manage().addCookie(new Cookie("user", userCookie, ".ninjavan.co", "/", null));
+            getWebDriver().manage().addCookie(new Cookie("ninja_access_token", operatorBearerToken, TestConstants.OPERATOR_PORTAL_COOKIE_DOMAIN, "/", null));
+            getWebDriver().manage().addCookie(new Cookie("user", userCookie, TestConstants.OPERATOR_PORTAL_COOKIE_DOMAIN, "/", null));
             executeScript("window.open()");
             String currentWindowHandle = getWebDriver().getWindowHandle();
             String newWindowHandle = null;

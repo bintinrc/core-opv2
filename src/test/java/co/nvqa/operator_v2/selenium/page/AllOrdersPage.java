@@ -246,7 +246,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
             switchToEditOrderWindow(orderId);
             editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyOrderInfoIsCorrect(orderRequestV2, order);
-        } finally
+        }
+        finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
@@ -274,7 +275,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
             switchToEditOrderWindow(orderId);
             editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyOrderIsForceSuccessedSuccessfully(orderRequestV2);
-        } finally
+        }
+        finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
@@ -302,13 +304,16 @@ public class AllOrdersPage extends OperatorV2SimplePage
         Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
         sendKeysById("container.order.edit.cancellation-reason", String.format("This order is canceled by automation to test 'Cancel Selected' feature on All Orders page. Canceled at %s.", CREATED_DATE_SDF.format(new Date())));
-        if (listOfActualTrackingIds.size() == 1)
+
+        if(listOfActualTrackingIds.size()==1)
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-order");
-        } else
+        }
+        else
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-orders");
         }
+
         waitUntilInvisibilityOfToast("updated");
     }
 
@@ -330,10 +335,12 @@ public class AllOrdersPage extends OperatorV2SimplePage
         if (listOfActualTrackingIds.size() == 1)
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.resume-order");
-        } else
+        }
+        else
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.resume-orders");
         }
+
         waitUntilInvisibilityOfToast("updated");
     }
 
@@ -460,7 +467,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
             {
                 actualStartDate = actualStartDate.substring(0, 10);
                 actualEndDate = actualEndDate.substring(0, 10);
-            } else
+            }
+            else
             {
                 expectedStartTime = TestUtils.getStartTime(timewindow);
                 expectedEndTime = TestUtils.getEndTime(timewindow);
@@ -475,7 +483,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
             {
                 Assert.assertEquals("Start Date does not match.", expectedStartDateWithTime, actualStartDate);
                 Assert.assertEquals("End Date does not match.", expectedEndDateWithTime, actualEndDate);
-            } else
+            }
+            else
             {
                 /*
                   If date is empty, check only the start/end time.
@@ -486,7 +495,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
                 Assert.assertEquals("Start Date does not match.", expectedStartDateWithTime, actualStartTime);
                 Assert.assertEquals("End Date does not match.", expectedEndDateWithTime, actualEndTime);
             }
-        } finally
+        }
+        finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
@@ -512,7 +522,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
             switchToNewOpenedWindow(mainWindowHandle);
             editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyInboundIsSucceed();
-        } finally
+        }
+        finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
@@ -530,7 +541,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
             switchToEditOrderWindow(orderId);
             editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyOrderIsGlobalInboundedSuccessfully(orderRequestV2, globalInboundParams, expectedOrderCost, expectedStatus, expectedGranularStatus, expectedDeliveryStatus);
-        } finally
+        }
+        finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
@@ -548,7 +560,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         selectValueFromMdSelectByIdContains("category", category.getValue());
         selectValueFromMdSelectByIdContains("search-logic", searchLogic.getValue());
-        sendKeysById("fl-input", searchTerm);
+        sendKeys("//input[@id='fl-input' or @id='searchTerm']", searchTerm);
         pause2s(); // Wait until the page finished matching the tracking ID.
         String matchedTrackingIdXpathExpression = String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope//span[text()='%s']", searchTerm);
         String searchButtonXpathExpression = "//nv-api-text-button[@name='commons.search']";
@@ -559,7 +571,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
         {
             click(matchedTrackingIdXpathExpression);
             waitUntilNewWindowOrTabOpened();
-        } else
+        }
+        else
         {
             click(searchButtonXpathExpression);
         }
