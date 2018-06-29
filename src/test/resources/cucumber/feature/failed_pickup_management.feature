@@ -139,6 +139,30 @@ Feature: Failed Pickup Management
       | C2C    |             | C2C       |
       | Return |             | Return    |
 
+  @ArchiveRouteViaDb
+  Scenario Outline: Operator reschedule multiple failed pickup C2C/Return orders on specific date (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create multiple Order V2 Parcel using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
+      | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add multiple parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator start the route
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoints of created orders
+    And API Driver failed multiple C2C/Return orders pickup
+    When Operator go to menu Shipper Support -> Failed Pickup Management
+    And Operator reschedule multiple failed pickup C2C/Return orders on next 2 days
+    Then Operator verify multiple failed pickup C2C/Return orders rescheduled on next 2 days successfully
+    And API Operator verify multiple orders info after failed pickup C2C/Return order rescheduled on next 2 days
+    Examples:
+      | Note   | hiptest-uid | orderType |
+      | C2C    |             | C2C       |
+      | Return |             | Return    |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

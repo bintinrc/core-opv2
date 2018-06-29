@@ -73,11 +73,25 @@ public class FailedPickupManagementSteps extends AbstractSteps
         failedPickupManagementPage.rescheduleNext2Days(trackingId);
     }
 
+    @When("^Operator reschedule multiple failed pickup C2C/Return orders on next 2 days$")
+    public void operatorRescheduleMultipleFailedPickupC2cOrReturnOrdersOnNext2Days()
+    {
+        List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        failedPickupManagementPage.rescheduleNext2Days(trackingIds);
+    }
+
     @Then("^Operator verify failed pickup C2C/Return order rescheduled on next 2 days successfully$")
     public void operatorVerifyFailedPickupC2cOrReturnOrderRescheduleOnNext2DaysSuccessfully()
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         failedPickupManagementPage.verifyOrderIsRemovedFromTableAfterReschedule(trackingId);
+    }
+
+    @Then("^Operator verify multiple failed pickup C2C/Return orders rescheduled on next 2 days successfully$")
+    public void operatorVerifyMultipleFailedPickupC2cOrReturnOrdersRescheduledOnNext2DaysSuccessfully()
+    {
+        List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        trackingIds.forEach(trackingId -> failedPickupManagementPage.verifyOrderIsRemovedFromTableAfterReschedule(trackingId));
     }
 
     @And("^Operator cancel order on Failed Pickup Management page$")
