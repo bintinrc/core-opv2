@@ -17,10 +17,10 @@ import java.util.List;
 public class UserManagementPage extends OperatorV2SimplePage {
 
     private static final String NG_REPEAT = "user in $data";
-    private static final String COLUMN_DATA_TITLE_GRANT_TYPE = "ctrl.table.grantType";
-    private static final String COLUMN_DATA_TITLE_FIRST_NAME = "ctrl.table.firstName";
-    private static final String COLUMN_DATA_TITLE_LAST_NAME = "ctrl.table.lastName";
-    private static final String COLUMN_DATA_TITLE_ROLE = "ctrl.table.roles";
+    private static final String COLUMN_DATA_TITLE_GRANT_TYPE = "'container.user-management.grantType'";
+    private static final String COLUMN_DATA_TITLE_FIRST_NAME = "'commons.first-name'";
+    private static final String COLUMN_DATA_TITLE_LAST_NAME = "'commons.last-name'";
+    private static final String COLUMN_DATA_TITLE_ROLE = "'container.user-management.roles'";
 
     private static final String ACTION_BUTTON_EDIT = "Edit";
 
@@ -65,7 +65,7 @@ public class UserManagementPage extends OperatorV2SimplePage {
             sendKeysById("email", userManagement.getEmail());
         }
         selectValueFromMdAutocomplete("Search Role To Add", userManagement.getRoles());
-        pause(20_000);
+        pause300ms();
     }
 
     public void verifyEditedUserOnUserManagement(UserManagement userManagement) {
@@ -86,7 +86,7 @@ public class UserManagementPage extends OperatorV2SimplePage {
     }
 
     public void verifyGrantType(UserManagement userManagement) {
-        List<WebElement> grantTypeRows = findElementsByXpath("//td[@data-title='ctrl.table.grantType']");
+        List<WebElement> grantTypeRows = findElementsByXpath(String.format("//td[@data-title=\"%s\"]", COLUMN_DATA_TITLE_GRANT_TYPE));
         int count = 0;
 
         for(WebElement we: grantTypeRows) {
