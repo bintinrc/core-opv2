@@ -49,6 +49,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         fillBasicSettingsForm(shipper);
         clickNvIconTextButtonByName("container.shippers.create-shipper");
         waitUntilInvisibilityOfToast("All changes saved successfully");
+        backToShipperList();
+        pause3s();
     }
 
     public void updateShipper(Shipper shipper)
@@ -67,11 +69,12 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         clickToggleButton("ctrl.data.basic.status", shipperStatusAriaLabel);
         selectValueFromMdSelect("ctrl.data.basic.shipperType", shipper.getType());
+        selectValueFromMdSelect("ctrl.data.basic.shipperClassification", "B2C Marketplace");
 
         // Shipper Details
-        sendKeysById("Shipper Name", shipper.getName());
+        sendKeysById("shipper-name", shipper.getName());
         sendKeysById("Short Name", shipper.getShortName());
-        sendKeysById("shipper-contact", shipper.getContact());
+        sendKeysById("shipper-phone-number", shipper.getContact());
 
         if(isCreateForm)
         {
@@ -83,7 +86,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         sendKeysById("Liaison Name", shipper.getLiaisonName());
         sendKeysById("Liaison Contact", shipper.getLiaisonContact());
         sendKeysById("Liaison Email", shipper.getLiaisonEmail());
-        sendKeysById("Liaison Address", shipper.getLiaisonAddress());
+        sendKeysById("liaison-address", shipper.getLiaisonAddress());
         sendKeysById("Liaison Postcode", shipper.getLiaisonPostcode());
 
         // Services
@@ -163,10 +166,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         Assert.assertEquals("Shipper Type", shipper.getType(), actualShipperType);
 
         // Shipper Details
-        String actualShipperName = getInputValueById("Shipper Name");
+        String actualShipperName = getInputValueById("shipper-name");
         String actualShipperShortName = getInputValueById("Short Name");
-        String actualShipperContact = getInputValueById("shipper-contact");
-        String actualShipperEmail = getInputValueById("container.shippers.shipper-email", XpathTextMode.STARTS_WITH);
+        String actualShipperContact = getInputValueById("shipper-phone-number");
+        String actualShipperEmail = getInputValueById("shipper-email", XpathTextMode.STARTS_WITH);
 
         Assert.assertEquals("Shipper Name", shipper.getName(), actualShipperName);
         Assert.assertEquals("Shipper Short Name", shipper.getShortName(), actualShipperShortName);
@@ -177,7 +180,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         String actualLiaisonName = getInputValueById("Liaison Name");
         String actualLiaisonContact = getInputValueById("Liaison Contact");
         String actualLiaisonEmail = getInputValueById("Liaison Email");
-        String actualLiaisonAddress = getInputValueById("Liaison Address");
+        String actualLiaisonAddress = getInputValueById("liaison-address");
         String actualLiaisonPostcode = getInputValueById("Liaison Postcode");
 
         Assert.assertEquals("Liaison Name", shipper.getLiaisonName(), actualLiaisonName);

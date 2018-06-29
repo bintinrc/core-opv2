@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers
+@OperatorV2 @AllShippers @SAAS
 Feature: All Shippers
 
   @LaunchBrowser @EnableClearCache @ShouldAlwaysRun
