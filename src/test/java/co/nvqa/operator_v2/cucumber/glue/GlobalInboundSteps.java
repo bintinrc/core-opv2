@@ -92,7 +92,8 @@ public class GlobalInboundSteps extends AbstractSteps
         GlobalInboundParams globalInboundParams = buildGlobalInboundParams(mapOfData);
         String toastText = mapOfData.get("toastText");
         String rackInfo = mapOfData.get("rackInfo");
-        globalInboundPage.globalInboundAndCheckAlert(globalInboundParams, toastText, rackInfo);
+        String rackColor = mapOfData.get("rackColor");
+        globalInboundPage.globalInboundAndCheckAlert(globalInboundParams, toastText, rackInfo, rackColor);
         put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
     }
 }

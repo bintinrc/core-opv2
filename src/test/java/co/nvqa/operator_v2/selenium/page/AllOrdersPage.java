@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.*;
 
 /**
- *
  * @author Tristania Siagian
  */
 @SuppressWarnings("WeakerAccess")
@@ -172,17 +171,16 @@ public class AllOrdersPage extends OperatorV2SimplePage
         Assert.assertEquals("Toast message is different.", "Matches with file shown in table", toastTopText);
         waitUntilInvisibilityOfToast("Matches with file shown in table", false);
 
-        for(OrderRequestV2 orderRequestV2 : listOfOrderRequestV2)
+        for (OrderRequestV2 orderRequestV2 : listOfOrderRequestV2)
         {
             String createdOrderTrackingId = orderRequestV2.getTrackingId();
             Optional<Order> matchedOrderDetailsOptional = listOfOrderDetails.stream().filter(o -> o.getTrackingId().equals(createdOrderTrackingId)).findFirst();
 
-            if(matchedOrderDetailsOptional.isPresent())
+            if (matchedOrderDetailsOptional.isPresent())
             {
                 Order matchedOrderDetails = matchedOrderDetailsOptional.get();
                 verifyOrderInfoOnTableOrderIsCorrect(orderRequestV2, matchedOrderDetails);
-            }
-            else
+            } else
             {
                 throw new NvTestRuntimeException(String.format("Order details for Tracking ID = '%s' not found.", createdOrderTrackingId));
             }
@@ -334,7 +332,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
         Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
-        if(listOfActualTrackingIds.size()==1)
+        if (listOfActualTrackingIds.size() == 1)
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.resume-order");
         }
@@ -465,7 +463,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
             String expectedEndTime = "";
             Integer timewindow = changeDeliveryTiming.getTimewindow();
 
-            if(timewindow==null)
+            if (timewindow == null)
             {
                 actualStartDate = actualStartDate.substring(0, 10);
                 actualEndDate = actualEndDate.substring(0, 10);
@@ -481,7 +479,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
             boolean isDateEmpty = isBlank(changeDeliveryTiming.getStartDate()) || isBlank(changeDeliveryTiming.getEndDate());
 
-            if(!isDateEmpty)
+            if (!isDateEmpty)
             {
                 Assert.assertEquals("Start Date does not match.", expectedStartDateWithTime, actualStartDate);
                 Assert.assertEquals("End Date does not match.", expectedEndDateWithTime, actualEndDate);
@@ -506,7 +504,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     private String concatDateWithTime(String date, String time)
     {
-        if(time==null)
+        if (time == null)
         {
             time = "";
         }
@@ -531,7 +529,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         }
     }
 
-    public void verifyOrderInfoAfterGlobalInbound(OrderRequestV2 orderRequestV2, GlobalInboundParams globalInboundParams, Double expectedOrderCost)
+    public void verifyOrderInfoAfterGlobalInbound(OrderRequestV2 orderRequestV2, GlobalInboundParams globalInboundParams, Double expectedOrderCost, String expectedStatus, List<String> expectedGranularStatus, String expectedDeliveryStatus)
     {
         String mainWindowHandle = getWebDriver().getWindowHandle();
         Long orderId = TestUtils.getOrderId(orderRequestV2);
@@ -542,7 +540,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         {
             switchToEditOrderWindow(orderId);
             editOrderPage.waitUntilInvisibilityOfLoadingOrder();
-            editOrderPage.verifyOrderIsGlobalInboundedSuccessfully(orderRequestV2, globalInboundParams, expectedOrderCost);
+            editOrderPage.verifyOrderIsGlobalInboundedSuccessfully(orderRequestV2, globalInboundParams, expectedOrderCost, expectedStatus, expectedGranularStatus, expectedDeliveryStatus);
         }
         finally
         {
@@ -569,7 +567,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         ////div[contains(@ng-messages, 'ctrl.specificSearch.form.searchTerm.$error')]/div[text()='No Results Found']
 
-        if(isElementExistFast(matchedTrackingIdXpathExpression))
+        if (isElementExistFast(matchedTrackingIdXpathExpression))
         {
             click(matchedTrackingIdXpathExpression);
             waitUntilNewWindowOrTabOpened();
@@ -606,7 +604,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
             pause100ms();
             Set<String> windowHandlesTemp = getWebDriver().getWindowHandles();
 
-            if(windowHandlesTemp.size() <= 1)
+            if (windowHandlesTemp.size() <= 1)
             {
                 throw new RuntimeException("WebDriver only contains 1 Window.");
             }
@@ -616,9 +614,9 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         String newOpenedWindowHandle = null;
 
-        for(String windowHandle : windowHandles)
+        for (String windowHandle : windowHandles)
         {
-            if(!windowHandle.equals(mainWindowHandle))
+            if (!windowHandle.equals(mainWindowHandle))
             {
                 newOpenedWindowHandle = windowHandle; // Do not break, because we need to get the latest one.
             }

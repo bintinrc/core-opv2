@@ -553,6 +553,12 @@ public class OperatorV2SimplePage extends SimplePage
         pause200ms();
     }
 
+    public void removeNvFilterBoxByMainTitle(String mainTtitle)
+    {
+        String xpath = String.format("//*[self::nv-filter-text-box or self::nv-filter-box][@main-title='%s']//button[i[text()='close']]", mainTtitle);
+        click(xpath);
+    }
+
     public void selectValueFromNvAutocompleteByPossibleOptions(String possibleOptions, String value)
     {
         selectValueFromNvAutocompleteBy("possible-options", possibleOptions, value);
