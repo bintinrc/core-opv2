@@ -162,7 +162,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         sendKeysByAriaLabel("Choose", csvFile.getAbsolutePath());
         waitUntilVisibilityOfElementLocated(String.format("//span[contains(text(), '%s')]", csvFile.getName()));
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.upload");
-        waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']");
+        //waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']"); // Please don't enable this line because it will make the verification method (verifyAllOrdersInCsvIsFoundWithCorrectInfo) failed.
     }
 
     public void verifyAllOrdersInCsvIsFoundWithCorrectInfo(List<OrderRequestV2> listOfOrderRequestV2, List<Order> listOfOrderDetails)
@@ -262,7 +262,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         applyActionsMenu.chooseItem(MANUALLY_COMPLETE_SELECTED);
         waitUntilVisibilityOfElementLocated("//md-dialog//div[contains(text(), \"Proceed to set the order status to 'Completed'?\")]");
         clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.complete-order");
-        waitUntilInvisibilityOfToast("The order has been completed");
+        waitUntilInvisibilityOfToast("Complete Order");
     }
 
     public void verifyOrderIsForceSuccessedSuccessfully(OrderRequestV2 orderRequestV2)
