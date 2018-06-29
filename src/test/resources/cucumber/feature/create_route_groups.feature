@@ -1,4 +1,4 @@
-@OperatorV2 @Transactions
+@OperatorV2 @Transactions @Saas
 Feature: Transactions
 
   @LaunchBrowser @ShouldAlwaysRun

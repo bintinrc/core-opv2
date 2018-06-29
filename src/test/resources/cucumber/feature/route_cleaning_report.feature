@@ -1,4 +1,4 @@
-@OperatorV2 @RouteCleaningReport
+@OperatorV2 @RouteCleaningReport @Saas
 Feature: Route Cleaning Report
 
   @LaunchBrowser @ShouldAlwaysRun

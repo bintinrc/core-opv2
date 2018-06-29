@@ -1,4 +1,4 @@
-@OperatorV2 @VehicleTypeManagement @Current
+@OperatorV2 @VehicleTypeManagement @Saas
 Feature: Vehicle Type Management
 
   @LaunchBrowser @ShouldAlwaysRun

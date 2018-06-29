@@ -1,4 +1,4 @@
-@OperatorV2 @RouteLogs
+@OperatorV2 @RouteLogs @Saas
 Feature: Route Logs
 
   @LaunchBrowser @ShouldAlwaysRun

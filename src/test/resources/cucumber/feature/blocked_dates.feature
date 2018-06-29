@@ -1,4 +1,4 @@
-@OperatorV2 @BlockedDates @ShouldAlwaysRun
+@OperatorV2 @BlockedDates @Saas @ShouldAlwaysRun
 Feature: Blocked Dates
 
   @LaunchBrowser
