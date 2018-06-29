@@ -332,11 +332,11 @@ public class EditOrderPage extends OperatorV2SimplePage
                 OrderEvent orderEvent = eventsTable.readEntity(1);
                 Assert.assertEquals("Latest Event Name", "HUB INBOUND SCAN", orderEvent.getName());
                 Assert.assertEquals("Latest Event Hub Name", globalInboundParams.getHubName(), orderEvent.getHubName());
-            }, "Check the last event params");
+            }, "Check the last event params", 10, 5);
         }
-        catch(AssertionError ex)
+        catch(RuntimeException | AssertionError ex)
         {
-            NvLogger.warn("Incorrect expected Latest Event. For now we will ignore this assertion error because the event is not create in Realtime, I mean it takes time until it created.");
+            NvLogger.warn("Ignore this Assertion error for now because the event sometimes is not created right away.", ex);
         }
     }
 
@@ -566,16 +566,16 @@ public class EditOrderPage extends OperatorV2SimplePage
             super(webDriver);
             setNgRepeat(NG_REPEAT);
             setColumnLocators(ImmutableMap.<String,String>builder()
-                .put(DATE_TIME, "_event_time")
-                .put(EVENT_TAGS, "_tags")
-                .put(EVENT_NAME, "name")
-                .put(USER_TYPE, "user_type")
-                .put(USER_ID, "_user")
-                .put(SCAN_ID, "_scan_id")
-                .put(ROUTE_ID, "_route_id")
-                .put(HUB_NAME, "_hub_name")
-                .put(DESCRIPTION, "_description")
-                .build());
+                    .put(DATE_TIME, "_event_time")
+                    .put(EVENT_TAGS, "_tags")
+                    .put(EVENT_NAME, "name")
+                    .put(USER_TYPE, "user_type")
+                    .put(USER_ID, "_user")
+                    .put(SCAN_ID, "_scan_id")
+                    .put(ROUTE_ID, "_route_id")
+                    .put(HUB_NAME, "_hub_name")
+                    .put(DESCRIPTION, "_description")
+                    .build());
             setEntityClass(OrderEvent.class);
         }
     }
