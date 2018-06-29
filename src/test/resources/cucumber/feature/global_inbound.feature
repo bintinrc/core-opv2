@@ -1,4 +1,4 @@
-@OperatorV2 @GlobalInbound @Saas2 @Inbound
+@OperatorV2 @GlobalInbound @Saas @Inbound
 Feature: Global Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
