@@ -2,8 +2,11 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.DataEntity;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
+/**
+ *
+ * @author Sergey Mishanin
+ */
 public class NgRepeatTable<T extends DataEntity> extends AbstractTable<T>
 {
     private String ngRepeat;
@@ -23,7 +26,8 @@ public class NgRepeatTable<T extends DataEntity> extends AbstractTable<T>
         this.ngRepeat = ngRepeat;
     }
 
-    public void waitUntilVisibility(){
+    public void waitUntilVisibility()
+    {
         String xpath = String.format("//tr[@ng-repeat='%s']", ngRepeat);
         waitUntilVisibilityOfElementLocated(xpath);
     }

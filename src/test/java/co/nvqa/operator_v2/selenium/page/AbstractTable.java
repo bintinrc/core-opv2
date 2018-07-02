@@ -11,6 +11,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ *
+ * @author Sergey Mishanin
+ */
 public abstract class AbstractTable<T extends DataEntity> extends OperatorV2SimplePage
 {
     private Class<T> entityClass;
