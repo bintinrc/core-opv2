@@ -1,8 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Address;
+import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.ReservationInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
@@ -45,9 +47,12 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     private ReservationDetailsDialog reservationDetailsDialog;
     private EditRouteDialog editRouteDialog;
 
-    public ShipperPickupsPage(WebDriver webDriver)
+    private StandardScenarioStorage scenarioStorage; // This is a hack to get the complete Reservation comments.
+
+    public ShipperPickupsPage(WebDriver webDriver, StandardScenarioStorage scenarioStorage)
     {
         super(webDriver);
+        this.scenarioStorage = scenarioStorage;
         createSelectedReservationsDialog = new CreateSelectedReservationsDialog(webDriver);
         bulkRouteAssignmentDialog = new BulkRouteAssignmentDialog(webDriver);
         bulkPriorityEditDialog = new BulkPriorityEditDialog(webDriver);
@@ -313,7 +318,17 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         reservationInfo.setServiceTime(reservationsTable.getServiceTime(1));
         reservationInfo.setApproxVolume(reservationsTable.getApproxVolume(1));
         reservationInfo.setFailureReason(reservationsTable.getFailureReason(1));
-        reservationInfo.setComments(reservationsTable.getComments(1));
+
+        String comments = reservationsTable.getComments(1);
+
+        int index = comments.indexOf("...");
+
+        if(index!=-1)
+        {
+            comments = scenarioStorage.<Reservation>get("KEY_CREATED_RESERVATION").getComments();
+        }
+
+        reservationInfo.setComments(comments);
         return reservationInfo;
     }
 

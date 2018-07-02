@@ -40,7 +40,7 @@ public class ShipperPickupsSteps extends AbstractSteps
     @Override
     public void init()
     {
-        shipperPickupsPage = new ShipperPickupsPage(getWebDriver());
+        shipperPickupsPage = new ShipperPickupsPage(getWebDriver(), getScenarioStorage());
     }
 
     @When("^Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page$")
@@ -323,7 +323,6 @@ public class ShipperPickupsSteps extends AbstractSteps
         Address address = get(KEY_CREATED_ADDRESS);
         ReservationInfo reservationInfo = shipperPickupsPage.downloadCsvFile(address);
         put(KEY_CREATED_RESERVATION_INFO, reservationInfo);
-
     }
 
     @Then("^Operator verify the reservation info is correct in downloaded CSV file$")
