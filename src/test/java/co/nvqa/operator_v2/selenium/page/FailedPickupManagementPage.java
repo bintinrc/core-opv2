@@ -1,13 +1,12 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.util.TestUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -88,8 +87,16 @@ public class FailedPickupManagementPage extends OperatorV2SimplePage
 
     public void rescheduleNext2Days(String trackingId)
     {
-        searchTableByTrackingId(trackingId);
-        checkRow(1);
+        rescheduleNext2Days(Collections.singletonList(trackingId));
+    }
+
+    public void rescheduleNext2Days(List<String> trackingIds)
+    {
+        trackingIds.forEach(trackingId -> {
+                    searchTableByTrackingId(trackingId);
+                    checkRow(1);
+                }
+        );
         selectAction(ACTION_RESCHEDULE_SELECTED);
         setRescheduleDate(TestUtils.getNextDate(2));
         click("//button[@aria-label='Reschedule']");
