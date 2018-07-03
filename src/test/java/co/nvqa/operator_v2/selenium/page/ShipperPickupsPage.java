@@ -1,10 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Address;
-import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.route.Route;
-import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.ReservationInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
@@ -47,12 +44,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     private ReservationDetailsDialog reservationDetailsDialog;
     private EditRouteDialog editRouteDialog;
 
-    private StandardScenarioStorage scenarioStorage; // This is a hack to get the complete Reservation comments.
-
-    public ShipperPickupsPage(WebDriver webDriver, StandardScenarioStorage scenarioStorage)
+    public ShipperPickupsPage(WebDriver webDriver)
     {
         super(webDriver);
-        this.scenarioStorage = scenarioStorage;
         createSelectedReservationsDialog = new CreateSelectedReservationsDialog(webDriver);
         bulkRouteAssignmentDialog = new BulkRouteAssignmentDialog(webDriver);
         bulkPriorityEditDialog = new BulkPriorityEditDialog(webDriver);
@@ -141,8 +135,8 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         assertEqualsIfExpectedValueNotNull("Latest By", expectedReservationInfo.getLatestBy(), actualReservationInfo.getLatestBy());
         assertEqualsIfExpectedValueNotNull("Reservation Type", expectedReservationInfo.getReservationType(), actualReservationInfo.getReservationType());
         assertEqualsIfExpectedValueNotNull("Reservation Status", expectedReservationInfo.getReservationStatus(), actualReservationInfo.getReservationStatus());
-        assertThatIfActualValueNotNull("Reservation Created Time", expectedReservationInfo.getReservationCreatedTime(), Matchers.startsWith(DateUtil.displayDate(expectedReservationInfo.getReservationCreatedDateTime())));
-        assertThatIfActualValueNotNull("Service Time", expectedReservationInfo.getServiceTime(), Matchers.startsWith(DateUtil.displayDate(expectedReservationInfo.getServiceDateTime())));
+        assertDateIsEqualIfExpectedValueNotNullOrBlank("Reservation Created Time", expectedReservationInfo.getReservationCreatedTime(), actualReservationInfo.getReservationCreatedTime());
+        assertDateIsEqualIfExpectedValueNotNullOrBlank("Service Time", expectedReservationInfo.getServiceTime(), actualReservationInfo.getServiceTime());
         assertEqualsIfExpectedValueNotNull("Approx. Volume", expectedReservationInfo.getApproxVolume(), actualReservationInfo.getApproxVolume());
         assertEqualsIfExpectedValueNotNull("Failure Reason", expectedReservationInfo.getFailureReason(), actualReservationInfo.getFailureReason());
         assertEqualsIfExpectedValueNotNull("Comments", expectedReservationInfo.getComments(), actualReservationInfo.getComments());
@@ -164,11 +158,18 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         }
     }
 
-    private <T> void assertThatIfActualValueNotNull(String message, T actual, org.hamcrest.Matcher<? super T> matcher)
+    private void assertDateIsEqualIfExpectedValueNotNullOrBlank(String message, String expected, String actual)
     {
-        if(actual!=null)
+        if(isNotBlank(expected))
         {
-            Assert.assertThat(message, actual, matcher);
+            if(actual==null)
+            {
+                actual = "";
+            }
+
+            actual = actual.split(" ")[0];
+            expected = expected.split(" ")[0];
+            Assert.assertEquals(message, expected, actual);
         }
     }
 
@@ -318,17 +319,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         reservationInfo.setServiceTime(reservationsTable.getServiceTime(1));
         reservationInfo.setApproxVolume(reservationsTable.getApproxVolume(1));
         reservationInfo.setFailureReason(reservationsTable.getFailureReason(1));
-
-        String comments = reservationsTable.getComments(1);
-
-        int index = comments.indexOf("...");
-
-        if(index!=-1)
-        {
-            comments = scenarioStorage.<Reservation>get("KEY_CREATED_RESERVATION").getComments();
-        }
-
-        reservationInfo.setComments(comments);
+        reservationInfo.setComments(reservationsTable.getComments(1));
         return reservationInfo;
     }
 

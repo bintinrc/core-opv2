@@ -40,7 +40,7 @@ public class ShipperPickupsSteps extends AbstractSteps
     @Override
     public void init()
     {
-        shipperPickupsPage = new ShipperPickupsPage(getWebDriver(), getScenarioStorage());
+        shipperPickupsPage = new ShipperPickupsPage(getWebDriver());
     }
 
     @When("^Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page$")

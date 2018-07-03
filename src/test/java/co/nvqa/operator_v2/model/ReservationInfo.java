@@ -15,7 +15,7 @@ import java.util.List;
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class ReservationInfo {
-    private static final CsvTranslators.CsvEscaper ESCAPER = new CsvTranslators.CsvEscaper();
+    private static final CsvTranslators.CsvEscaper CSV_ESCAPER = new CsvTranslators.CsvEscaper();
 
     private String shipperName;
     private String pickupAddress;
@@ -148,10 +148,6 @@ public class ReservationInfo {
         return reservationCreatedTime;
     }
 
-    public ZonedDateTime getReservationCreatedDateTime() {
-        return DateUtil.getDate(getReservationCreatedTime().replace(" ", "T") + "Z");
-    }
-
     public void setReservationCreatedTime(String reservationCreatedTime) {
         this.reservationCreatedTime = reservationCreatedTime;
     }
@@ -162,10 +158,6 @@ public class ReservationInfo {
 
     public void setServiceTime(String serviceTime) {
         this.serviceTime = serviceTime;
-    }
-
-    public ZonedDateTime getServiceDateTime() {
-        return DateUtil.getDate(getServiceTime().replace(" ", "T") + "Z");
     }
 
     public String getApproxVolume() {
@@ -220,6 +212,6 @@ public class ReservationInfo {
     }
 
     private String escapeCsv(String text) {
-        return ESCAPER.translate(text);
+        return CSV_ESCAPER.translate(text);
     }
 }
