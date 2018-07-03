@@ -19,10 +19,9 @@ Feature: Add Parcel To Route
     Given Operator V2 add created Transaction to Route Group
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":16, "hubId":1, "vehicleId":880, "driverId":{ninja-driver-id} } |
-    #Note: Tag ZZZ = 250
-    Given API Operator set tags of the new created route to [250]
+    Given API Operator set tags of the new created route to [{route-tag-id}]
     Given Operator go to menu Routing -> 4. Route Engine - Bulk Add to Route
-    When Operator choose route group, select tag "ZZZ" and submit
+    When Operator choose route group, select tag "{route-tag-name}" and submit
     Then Operator verify parcel added to route
     Given Operator go to menu Routing -> 2. Route Group Management
     Then Operator V2 clean up 'Route Groups'

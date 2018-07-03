@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -429,8 +428,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
             selectValueFromNvAutocomplete(FIELD_NEW_ROUTE_LOCATOR, String.valueOf(routeId));
             String noDriverMatchingErrorText = String.format("No driver matching \"%s\" were found.", routeId);
-            WebElement noDriverMatchingWe = findElementByXpathFast(String.format("//span[contains(text(), '%s')]", noDriverMatchingErrorText));
-            Assert.assertNull(noDriverMatchingErrorText, noDriverMatchingWe);
+            Assert.assertFalse(noDriverMatchingErrorText, isElementExistWait2Seconds(String.format("//span[contains(text(), '%s')]", noDriverMatchingErrorText)));
 
             if(priorityLevel!=null)
             {

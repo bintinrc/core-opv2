@@ -155,9 +155,9 @@ Feature: Shipper Pickups
       | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator set tags of the new created route to [250]
+    Given API Operator set tags of the new created route to [{route-tag-id}]
     Given API Operator retrieve routes using data below:
-      | tagIds | 250 |
+      | tagIds | {route-tag-id} |
     Given Operator go to menu Pick Ups -> Shipper Pickups
     When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
     And Operator use the Route Suggestion to add created reservation to the route
@@ -178,9 +178,9 @@ Feature: Shipper Pickups
       | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator set tags of the new created route to [250]
+    Given API Operator set tags of the new created route to [{route-tag-id}]
     Given API Operator retrieve routes using data below:
-      | tagIds | 250 |
+      | tagIds | {route-tag-id} |
     Given Operator go to menu Pick Ups -> Shipper Pickups
     When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
     And Operator use the Route Suggestion to add created reservations to the route
