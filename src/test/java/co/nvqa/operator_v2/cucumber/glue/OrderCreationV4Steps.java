@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.cucumber.glue.StandardApiShipperSteps;
 import co.nvqa.commons.model.order_create.v4.OrderRequestV4;
-import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.OrderCreationV4Page;
 import com.google.inject.Inject;
@@ -9,7 +9,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -37,17 +36,8 @@ public class OrderCreationV4Steps extends AbstractSteps
     public void operatorCreateOrderVByUploadingXLSXOnOrderCreationVPageUsingDataBelow(Map<String, String> mapOfData)
     {
         int shipperId = Integer.parseInt(mapOfData.get("shipper_id"));
-        String v4OrderRequestTemplate = mapOfData.get("v4OrderParams");
-        String shipperRefNo = generateShipperRefNo();
-        String pickupDate = PICKUP_OR_DELIVERY_DATE_FORMAT.format(getNextDate(1));
 
-
-        Map<String, String> mapOfDynamicVariable = new HashMap<>();
-        mapOfDynamicVariable.put("shipper-order-ref-no", shipperRefNo);
-        mapOfDynamicVariable.put("tmp-pickup-date", pickupDate);
-        String orderRequestV4Json = replaceParam(v4OrderRequestTemplate, mapOfDynamicVariable);
-
-        OrderRequestV4 orderRequestV4 = JsonHelper.fromJson(JsonHelper.getDefaultSnakeCaseMapper(), orderRequestV4Json, OrderRequestV4.class);
+        OrderRequestV4 orderRequestV4 = StandardApiShipperSteps.buildOrderRequestV4(mapOfData);
 
         orderCreationV4Page.uploadXlsx(orderRequestV4, shipperId);
         put(KEY_CREATED_ORDER, orderRequestV4);
