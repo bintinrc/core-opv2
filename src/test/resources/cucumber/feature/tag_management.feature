@@ -8,14 +8,14 @@ Feature: Tag Management
   Scenario: Operator create, update and delete tag on Tag Management menu. (uid:a49a930e-1fb2-4a0c-8a8f-8bbccc5d87cc)
     Given Operator V2 cleaning Tag Management by calling API endpoint directly
     Given Operator go to menu Routing -> Tag Management
-    When op create new tag on Tag Management
-    Then new tag on Tag Management created successfully
-    When op update tag on Tag Management
-    Then tag on Tag Management updated successfully
+    When Operator create new tag on Tag Management
+    Then Operator verify the new tag is created successfully on Tag Management
+    When Operator update tag on Tag Management
+    Then Operator verify the tag is updated successfully on Tag Management
     Then Operator V2 cleaning Tag Management by calling API endpoint directly
 # This 2 steps below is removed because KH said the ops want that button to be removed.
-#    When op delete tag on Tag Management
-#    Then tag on Tag Management deleted successfully
+#    When Operator delete tag on Tag Management
+#    Then Operator verify the tag is deleted successfully on Tag Management
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

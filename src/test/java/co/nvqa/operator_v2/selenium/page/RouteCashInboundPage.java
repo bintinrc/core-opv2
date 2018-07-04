@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
+import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.TimeoutException;
@@ -108,7 +109,17 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
         String actualRouteId = getTextOnTable(1, COLUMN_CLASS_DATA_ROUTE_ID);
         Assert.assertEquals("Route Cash Inbound - COD - Route ID", String.valueOf(routeCashInboundCod.getRouteId()), actualRouteId);
 
-        String expectedAmountCollected = "S$"+DECIMAL_FORMAT.format(routeCashInboundCod.getAmountCollected());
+        String expectedAmountCollected = DECIMAL_FORMAT.format(routeCashInboundCod.getAmountCollected());
+
+        switch(TestConstants.COUNTRY_CODE)
+        {
+
+            case "ID": expectedAmountCollected = "$"+expectedAmountCollected; break;
+            case "MNT": expectedAmountCollected = "$"+expectedAmountCollected; break;
+            case "SG":
+            default: expectedAmountCollected = "S$"+expectedAmountCollected;
+        }
+
         String actualAmountCollected = getTextOnTable(1, COLUMN_CLASS_DATA_AMOUNT_COLLECTED);
         Assert.assertEquals("Route Cash Inbound - COD - Amount Collected", expectedAmountCollected, actualAmountCollected);
 

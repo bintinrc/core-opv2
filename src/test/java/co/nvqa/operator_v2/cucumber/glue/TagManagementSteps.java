@@ -35,7 +35,7 @@ public class TagManagementSteps extends AbstractSteps
         tagManagementPage = new TagManagementPage(getWebDriver());
     }
 
-    @When("^op create new tag on Tag Management$")
+    @When("^Operator create new tag on Tag Management$")
     public void createNewTag()
     {
         /*
@@ -69,7 +69,7 @@ public class TagManagementSteps extends AbstractSteps
         tagManagementPage.clickSubmitOnAddTag();
     }
 
-    @Then("^new tag on Tag Management created successfully$")
+    @Then("^Operator verify the new tag is created successfully on Tag Management$")
     public void verifyNewTagCreatedSuccessfully()
     {
         TestUtils.retryIfAssertionErrorOccurred(()->
@@ -81,7 +81,7 @@ public class TagManagementSteps extends AbstractSteps
         }, String.format("verifyNewTagCreatedSuccessfully - [Expected Tag Name = %s]", DEFAULT_TAG_NAME), getScenarioManager()::writeToCurrentScenarioLog);
     }
 
-    @When("^op update tag on Tag Management$")
+    @When("^Operator update tag on Tag Management$")
     public void updateTag()
     {
         /*
@@ -96,7 +96,7 @@ public class TagManagementSteps extends AbstractSteps
         tagManagementPage.clickSubmitChangesOnEditTag();
     }
 
-    @Then("^tag on Tag Management updated successfully$")
+    @Then("^Operator verify the tag is updated successfully on Tag Management$")
     public void verifyTagUpdatedSuccessfully()
     {
         TestUtils.retryIfAssertionErrorOccurred(()->
@@ -111,7 +111,7 @@ public class TagManagementSteps extends AbstractSteps
         }, "verifyTagUpdatedSuccessfully", getScenarioManager()::writeToCurrentScenarioLog);
     }
 
-    @When("^op delete tag on Tag Management$")
+    @When("^Operator delete tag on Tag Management$")
     public void deleteTag()
     {
         reloadPageAndEnableSortByName();
@@ -128,7 +128,7 @@ public class TagManagementSteps extends AbstractSteps
         pause200ms();
     }
 
-    @Then("^tag on Tag Management deleted successfully$")
+    @Then("^Operator verify the tag is deleted successfully on Tag Management$")
     public void verifyTagDeletedSuccessfully()
     {
         /*
