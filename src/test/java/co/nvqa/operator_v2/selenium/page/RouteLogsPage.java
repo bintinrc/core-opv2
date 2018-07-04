@@ -63,6 +63,17 @@ public class RouteLogsPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading data...']");
     }
 
+    private void fillCreateRouteFormExceptComments(CreateRouteParams createRouteParams)
+    {
+        setMdDatepickerById("commons.model.route-date", createRouteParams.getRouteDate());
+        selectMultipleValuesFromMdSelectById("commons.model.route-tags", createRouteParams.getRouteTags());
+        selectValueFromNvAutocompleteByPossibleOptions("zonesSelectionOptions", createRouteParams.getZoneName());
+        selectValueFromNvAutocompleteByPossibleOptions("hubsSelectionOptions", createRouteParams.getHubName());
+        pause2s(); // We put delay here because sometimes when typing on Driver Selection, the cursor is jumping to Hub Selection and this delay help to avoid that issue.
+        selectValueFromNvAutocompleteByPossibleOptions("driversSelectionOptions", createRouteParams.getNinjaDriverName().replaceAll(" ", ""));
+        selectValueFromNvAutocompleteByPossibleOptions("vehiclesSelectionOptions", createRouteParams.getVehicleName());
+    }
+
     /**
      * This method will create object Route and put it to CreateRouteParams
      * if the route is created successfully.
@@ -72,15 +83,9 @@ public class RouteLogsPage extends OperatorV2SimplePage
     public void createNewRoute(CreateRouteParams createRouteParams)
     {
         waitUntilPageLoaded();
-        selectRouteDateFilter(createRouteParams.getRouteDate(), createRouteParams.getRouteDate());
-        clickLoadSelection();
+        setFilterAndLoadSelection(createRouteParams.getRouteDate(), createRouteParams.getRouteDate(), createRouteParams.getHubName());
         clickNvIconTextButtonByName("Create Route");
-        setMdDatepickerById("commons.model.route-date", createRouteParams.getRouteDate());
-        selectMultipleValuesFromMdSelectById("commons.model.route-tags", createRouteParams.getRouteTags());
-        selectValueFromNvAutocompleteByPossibleOptions("zonesSelectionOptions", createRouteParams.getZoneName());
-        selectValueFromNvAutocompleteByPossibleOptions("hubsSelectionOptions", createRouteParams.getHubName());
-        selectValueFromNvAutocompleteByPossibleOptions("driversSelectionOptions", createRouteParams.getNinjaDriverName().replaceAll(" ", ""));
-        selectValueFromNvAutocompleteByPossibleOptions("vehiclesSelectionOptions", createRouteParams.getVehicleName());
+        fillCreateRouteFormExceptComments(createRouteParams);
         sendKeysById("comments", createRouteParams.getComments());
         clickNvButtonSaveByNameAndWaitUntilDone("Create Route(s)");
 
@@ -121,15 +126,9 @@ public class RouteLogsPage extends OperatorV2SimplePage
 
         CreateRouteParams createRouteParams = listOfCreateRouteParams.get(0);
 
-        selectRouteDateFilter(createRouteParams.getRouteDate(), createRouteParams.getRouteDate());
-        clickLoadSelection();
+        setFilterAndLoadSelection(createRouteParams.getRouteDate(), createRouteParams.getRouteDate(), createRouteParams.getHubName());
         clickNvIconTextButtonByName("Create Route");
-        setMdDatepickerById("commons.model.route-date", createRouteParams.getRouteDate());
-        selectMultipleValuesFromMdSelectById("commons.model.route-tags", createRouteParams.getRouteTags());
-        selectValueFromNvAutocompleteByPossibleOptions("zonesSelectionOptions", createRouteParams.getZoneName());
-        selectValueFromNvAutocompleteByPossibleOptions("hubsSelectionOptions", createRouteParams.getHubName());
-        selectValueFromNvAutocompleteByPossibleOptions("driversSelectionOptions", createRouteParams.getNinjaDriverName().replaceAll(" ", ""));
-        selectValueFromNvAutocompleteByPossibleOptions("vehiclesSelectionOptions", createRouteParams.getVehicleName());
+        fillCreateRouteFormExceptComments(createRouteParams);
 
         int listOfCreateRouteParamsSize = listOfCreateRouteParams.size();
 
@@ -410,15 +409,22 @@ public class RouteLogsPage extends OperatorV2SimplePage
         }
     }
 
-    public void selectRouteDateFilter(Date fromDate, Date toDate)
+    public void selectRouteDateFilter(Date routeDateFrom, Date routeDateTo)
     {
-        setMdDatepicker("fromModel", fromDate);
-        setMdDatepicker("toModel", toDate);
+        setMdDatepicker("fromModel", routeDateFrom);
+        setMdDatepicker("toModel", routeDateTo);
     }
 
     public boolean isLoadSelectionVisible()
     {
         return isElementExist("//button[@aria-label='Load Selection']");
+    }
+
+    public void setFilterAndLoadSelection(Date routeDateFrom, Date routeDateTo, String hubName)
+    {
+        selectRouteDateFilter(routeDateFrom, routeDateTo);
+        selectValueFromNvAutocompleteByItemTypesAndDismiss("Hub", hubName);
+        clickLoadSelection();
     }
 
     private void editFilterAndLoadSelection()
@@ -444,6 +450,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
         click("//div[text()='Load Waypoints of Selected Route(s) Only']");
     }
 
+    @SuppressWarnings("unused")
     public void clickLoadSelectedRoutesAndUnroutedWaypoints()
     {
         click("//div[text()='Load Selected Route(s) and Unrouted Waypoints']");

@@ -418,8 +418,6 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
             Assert.assertNotNull("Route ID should not be null.", routeId);
 
             selectValueFromNvAutocomplete(FIELD_NEW_ROUTE_LOCATOR, String.valueOf(routeId));
-            String noDriverMatchingErrorText = String.format("No driver matching \"%s\" were found.", routeId);
-            Assert.assertFalse(noDriverMatchingErrorText, isElementExistWait2Seconds(String.format("//span[contains(text(), '%s')]", noDriverMatchingErrorText)));
 
             if(priorityLevel!=null)
             {

@@ -5,6 +5,7 @@ import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.util.TestConstants;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -577,6 +578,22 @@ public class OperatorV2SimplePage extends SimplePage
 
         we.sendKeys(value);
         pause1s();
+
+        /*
+          Check if the value is not found on NV Autocomplete.
+         */
+        String noMatchingErrorText = String.format("\"%s\" were found.", value);
+
+        try
+        {
+            WebElement noMatchingErrorWe = findElementByXpath(String.format("//span[contains(text(), '%s')]", noMatchingErrorText), WAIT_1_SECOND);
+            String actualNoMatchingErrorText = getText(noMatchingErrorWe);
+            throw new NvTestRuntimeException(String.format("Value not found on NV Autocomplete. Error message: %s", actualNoMatchingErrorText));
+        }
+        catch(NoSuchElementException | TimeoutException ex)
+        {
+        }
+
         we.sendKeys(Keys.RETURN);
         pause200ms();
         return we;
