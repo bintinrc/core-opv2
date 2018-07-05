@@ -176,6 +176,7 @@ Feature: All Orders
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     And Operator go to menu Order -> All Orders
     And Operator find multiple orders by uploading CSV on All Orders page
+    Then Operator verify all orders in CSV is found on All Orders page with correct info
     When Operator apply "Pull From Route" action to created orders
     Then Operator verify Selection Error dialog for invalid Pull From Order action
 
