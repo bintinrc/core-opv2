@@ -1,4 +1,4 @@
-@OperatorV2 @RouteCashInbound
+@OperatorV2 @RouteCashInbound @Saas
 Feature: Route Cash Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
