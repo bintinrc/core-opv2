@@ -202,7 +202,7 @@ public class EditOrderPage extends OperatorV2SimplePage
     public void verifyInboundIsSucceed()
     {
         String actualLatestEvent = getTextOnTableEvent(1, COLUMN_CLASS_DATA_NAME_ON_TABLE_EVENT);
-        Assert.assertThat("Different Result Returned", actualLatestEvent, Matchers.containsString("Van Inbound Scan"));
+        Assert.assertThat("Different Result Returned", actualLatestEvent, Matchers.isOneOf("Van Inbound Scan", "DRIVER INBOUND SCAN"));
     }
 
     public void verifyOrderInfoIsCorrect(OrderRequestV2 orderRequestV2, Order order)

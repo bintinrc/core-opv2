@@ -573,9 +573,9 @@ public class RouteLogsPage extends OperatorV2SimplePage
         return getText(SELECT_TAG_XPATH);
     }
 
-    public void loadAndVerifyRoute(long routeId)
+    public void loadAndVerifyRoute(Date filterRouteDateFrom, Date filterRouteDateTo, String filterHubName, long routeId)
     {
-        clickLoadSelection();
+        setFilterAndLoadSelection(filterRouteDateFrom, filterRouteDateTo, filterHubName);
         searchTableByRouteId(routeId);
         String actualRouteStatus = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
         Assert.assertEquals("Track is not routed.","IN_PROGRESS", actualRouteStatus);
