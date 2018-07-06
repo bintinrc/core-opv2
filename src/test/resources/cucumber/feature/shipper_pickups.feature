@@ -146,6 +146,7 @@ Feature: Shipper Pickups
 
   @ArchiveRouteViaDb
   Scenario: Operator should be able to use the Route Suggestion and add single reservation to the route on Shipper Pickups page (uid:87eaa63d-5f66-4bc7-b425-ebf33ab47392)
+    # For a route to be able to be suggested to a RSVN, it should have at least 1 waypoint.
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address using data below:
       | shipperId       | {shipper-v2-id} |
@@ -153,9 +154,16 @@ Feature: Shipper Pickups
     Given API Operator create reservation using data below:
       | shipperId   | {shipper-v2-id}                                                                                                                                    |
       | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
+    Given API Shipper create Order V2 Parcel using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
+      | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator set tags of the new created route to [{route-tag-id}]
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
     Given API Operator retrieve routes using data below:
       | tagIds | {route-tag-id} |
     Given Operator go to menu Pick Ups -> Shipper Pickups
@@ -168,6 +176,7 @@ Feature: Shipper Pickups
 
   @ArchiveRouteViaDb
   Scenario: Operator should be able to use the Route Suggestion and add multiple reservations to the route on Shipper Pickups page (uid:b5ffe64a-0143-4d66-aa5d-82d9be1f9ff4)
+    # For a route to be able to be suggested to a RSVN, it should have at least 1 waypoint.
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create multiple shipper addresses using data below:
       | numberOfAddresses | 2               |
@@ -176,9 +185,16 @@ Feature: Shipper Pickups
     Given API Operator create multiple reservations using data below:
       | shipperId   | {shipper-v2-id}                                                                                                                                    |
       | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
+    Given API Shipper create Order V2 Parcel using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
+      | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator set tags of the new created route to [{route-tag-id}]
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
     Given API Operator retrieve routes using data below:
       | tagIds | {route-tag-id} |
     Given Operator go to menu Pick Ups -> Shipper Pickups

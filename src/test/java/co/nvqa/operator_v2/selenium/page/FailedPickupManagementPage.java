@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -41,7 +42,7 @@ public class FailedPickupManagementPage extends OperatorV2SimplePage
         String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
         Assert.assertEquals("Tracking ID", trackingId, actualTrackingId);
         String actualFailureComments = getTextOnTable(1, COLUMN_CLASS_DATA_FAILURE_COMMENTS);
-        Assert.assertEquals("Failure Comments", "Rejected - damaged items", actualFailureComments);
+        Assert.assertEquals("Failure Comments", TestConstants.DRIVER_PICKUP_FAIL_STRING, actualFailureComments);
     }
 
     public void downloadCsvFile(String trackingId)
