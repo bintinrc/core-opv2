@@ -1,5 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.util.TestConstants;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
@@ -36,10 +38,10 @@ public class FailedDeliveryManagementPage extends CommonParcelManagementPage
         Assert.assertEquals("Order Type", orderType, actualOrderType);
 
         String actualFailureComments = getTextOnTable(1, COLUMN_CLASS_DATA_FAILURE_COMMENTS);
-        Assert.assertEquals("Failure Comments", "Package is defective - Damaged", actualFailureComments);
+        Assert.assertEquals("Failure Comments", TestConstants.DRIVER_DELIVERY_FAIL_STRING, actualFailureComments);
 
         String actualFailureReason = getTextOnTable(1, COLUMN_CLASS_DATA_FAILURE_REASON);
-        Assert.assertEquals("Failure Comments", "RECOVERY", actualFailureReason);
+        Assert.assertThat(String.format("Failure Comments", trackingId), actualFailureReason, Matchers.anyOf(Matchers.equalTo("RECOVERY"), Matchers.equalTo("Normal FDM - Ignore")));
     }
 
     public void verifyCsvFileDownloadedSuccessfully(String trackingId)
