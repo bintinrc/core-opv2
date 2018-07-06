@@ -55,7 +55,8 @@ public class RouteMonitoringSteps extends AbstractSteps
 
             routeMonitoringPage.filterAndLoadSelection(routeMonitoringFilters);
             put("routeMonitoringFilters", routeMonitoringFilters);
-        } catch (ParseException ex)
+        }
+        catch(ParseException ex)
         {
             throw new NvTestRuntimeException("Failed to parse date.", ex);
         }

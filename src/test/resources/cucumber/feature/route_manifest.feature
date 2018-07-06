@@ -52,7 +52,7 @@ Feature: Route Manifest
     Given Operator go to menu Routing -> Route Monitoring
     When Operator filter Route Monitoring using data below and then load selection:
       | routeDate | {current-date-yyyy-MM-dd} |
-      | routeTags | [{route-tag-name}]          |
+      | routeTags | [{route-tag-name}]        |
       | hubs      | [{hub-name}]              |
     Then Operator verify the created route is exist and has correct info
     Then Operator verify 1 delivery fail at Route Manifest
