@@ -49,4 +49,10 @@ public class NgRepeatTable<T extends DataEntity> extends AbstractTable<T>
     {
         return getRowsCountOfTableWithNgRepeat(ngRepeat);
     }
+
+    @Override
+    protected void selectRow(int rowNumber)
+    {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 }

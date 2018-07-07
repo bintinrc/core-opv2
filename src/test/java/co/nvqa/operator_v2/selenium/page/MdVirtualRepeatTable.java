@@ -43,4 +43,10 @@ public class MdVirtualRepeatTable<T extends DataEntity> extends AbstractTable<T>
     {
         return getRowsCountOfTableWithNgRepeat(mdVirtualRepeat);
     }
+
+    @Override
+    protected void selectRow(int rowNumber)
+    {
+        clickf("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", mdVirtualRepeat, rowNumber);
+    }
 }
