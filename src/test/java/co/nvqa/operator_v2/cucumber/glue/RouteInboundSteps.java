@@ -14,13 +14,13 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 public class RouteInboundSteps extends AbstractSteps
 {
     private static final String FETCH_BY_ROUTE_ID = "FETCH_BY_ROUTE_ID";
     private static final String FETCH_BY_TRACKING_ID = "FETCH_BY_TRACKING_ID";
+    private static final String FETCH_BY_DRIVER = "FETCH_BY_DRIVER";
 
     private RouteInboundPage routeInboundPage;
 
@@ -37,31 +37,31 @@ public class RouteInboundSteps extends AbstractSteps
     }
 
     @When("^Operator get Route Summary Details on Route Inbound page using data below:$")
-    public void operatorGetRouteDetailsOnRouteInboundPageUsingDataBelow(Map<String,String> mapOfData)
+    public void operatorGetRouteDetailsOnRouteInboundPageUsingDataBelow(Map<String, String> mapOfData)
     {
         String hubName = mapOfData.get("hubName");
         String fetchBy = mapOfData.get("fetchBy");
         String fetchByValue = mapOfData.get("fetchByValue");
 
-        if(FETCH_BY_ROUTE_ID.equals(fetchBy))
+        switch (fetchBy.toUpperCase())
         {
-            Long routeId;
-
-            if("GET_FROM_CREATED_ROUTE".equals(fetchByValue))
-            {
+            case FETCH_BY_ROUTE_ID:
+                Long routeId = "GET_FROM_CREATED_ROUTE".equals(fetchByValue) ? get(KEY_CREATED_ROUTE_ID) : Long.parseLong(fetchByValue);
+                routeInboundPage.fetchRouteByRouteId(hubName, routeId);
+                break;
+            case FETCH_BY_TRACKING_ID:
+                String trackingId = "GET_FROM_CREATED_ROUTE".equals(fetchByValue) ? get(KEY_CREATED_ORDER_TRACKING_ID) : fetchByValue;
+                routeInboundPage.fetchRouteByTrackingId(hubName, trackingId);
+                break;
+            case FETCH_BY_DRIVER:
                 routeId = get(KEY_CREATED_ROUTE_ID);
-            }
-            else
-            {
-                routeId = Long.parseLong(fetchByValue);
-            }
-
-            routeInboundPage.fetchRouteByRouteId(hubName, routeId);
+                routeInboundPage.fetchRouteByDriver(hubName, fetchByValue, routeId);
+                break;
         }
     }
 
     @Then("^Operator verify the Route Summary Details is correct using data below:$")
-    public void operatorVerifyTheRouteSummaryDetailsIsCorrectUsingDataBelow(Map<String,String> mapOfData)
+    public void operatorVerifyTheRouteSummaryDetailsIsCorrectUsingDataBelow(Map<String, String> mapOfData)
     {
         String routeIdAsString = mapOfData.get("routeId");
         String driverName = mapOfData.get("driverName");
@@ -70,11 +70,10 @@ public class RouteInboundSteps extends AbstractSteps
 
         Long routeId;
 
-        if("GET_FROM_CREATED_ROUTE".equals(routeIdAsString))
+        if ("GET_FROM_CREATED_ROUTE".equals(routeIdAsString))
         {
             routeId = get(KEY_CREATED_ROUTE_ID);
-        }
-        else
+        } else
         {
             routeId = Long.parseLong(routeIdAsString);
         }
@@ -83,17 +82,15 @@ public class RouteInboundSteps extends AbstractSteps
 
         try
         {
-            if("GET_FROM_CREATED_ROUTE".equals(routeDateAsString))
+            if ("GET_FROM_CREATED_ROUTE".equals(routeDateAsString))
             {
                 Route route = get(KEY_CREATED_ROUTE);
                 routeDate = ISO_8601_WITHOUT_MILLISECONDS.parse(route.getCreatedAt());
-            }
-            else
+            } else
             {
                 routeDate = ISO_8601_WITHOUT_MILLISECONDS.parse(routeDateAsString);
             }
-        }
-        catch(ParseException ex)
+        } catch (ParseException ex)
         {
             throw new NvTestRuntimeException("Failed to parse route date.", ex);
         }

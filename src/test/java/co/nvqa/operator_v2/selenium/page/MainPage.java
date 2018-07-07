@@ -117,6 +117,7 @@ public class MainPage extends OperatorV2SimplePage
             if(!childNavWe.isDisplayed())
             {
                 click(parentNavXpath);
+                checkLeavingPage();
             }
 
             pause100ms();
@@ -127,6 +128,7 @@ public class MainPage extends OperatorV2SimplePage
                 try
                 {
                     childNavWe.click();
+                    checkLeavingPage();
                     refreshPage = false;
                 }
                 catch(WebDriverException ex)
@@ -166,5 +168,12 @@ public class MainPage extends OperatorV2SimplePage
         }, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
         waitUntilPageLoaded();
+    }
+
+    private void checkLeavingPage(){
+        String xpath = "//md-dialog//h2[text()='Leaving Page']";
+        if (isElementExist(xpath, 0)){
+            clickButtonByAriaLabel("Leave");
+        }
     }
 }
