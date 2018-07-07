@@ -21,7 +21,7 @@ Feature: Sameday Route Engine
     Given Operator V2 add created Transaction to Route Group
     Given Operator go to menu Routing -> 5. Route Engine - Same-Day Route Engine
     When op 'Run Route Engine' on Same-Day Route Engine menu using data below:
-      | hub                             | 30JKB                    |
+      | hub                             | {hub-name}               |
       | routingAlgorithm                | Same Day Pickup/Delivery |
       | fleetType1OperatingHoursStart   | 0900 hrs                 |
       | fleetType1OperatingHoursEnd     | 2300 hrs                 |
@@ -48,7 +48,7 @@ Feature: Sameday Route Engine
     Given Operator V2 add created Transaction to Route Group
     Given Operator go to menu Routing -> 5. Route Engine - Same-Day Route Engine
     When op 'Run Route Engine' on Same-Day Route Engine menu using data below:
-      | hub                             | 30JKB                    |
+      | hub                             | {hub-name}               |
       | routingAlgorithm                | Bulky Pickup/Delivery    |
       | fleetType1OperatingHoursStart   | 0900 hrs                 |
       | fleetType1OperatingHoursEnd     | 2300 hrs                 |
@@ -80,7 +80,7 @@ Feature: Sameday Route Engine
     Given Operator V2 add created Transactions to Route Group
     Given Operator go to menu Routing -> 5. Route Engine - Same-Day Route Engine
     When op 'Run Route Engine' on Same-Day Route Engine menu using data below:
-      | hub                             | 30JKB                    |
+      | hub                             | {hub-name}               |
       | routingAlgorithm                | Bulky Pickup/Delivery    |
       | fleetType1OperatingHoursStart   | 0900 hrs                 |
       | fleetType1OperatingHoursEnd     | 2300 hrs                 |
@@ -111,11 +111,11 @@ Feature: Sameday Route Engine
     Given Operator V2 add created Transactions to Route Group
     Given Operator go to menu Routing -> 5. Route Engine - Same-Day Route Engine
     When op 'Run Route Engine' on Same-Day Route Engine menu using data below:
-      | hub                             | 30JKB                    |
-      | routingAlgorithm                | Bulky Pickup/Delivery    |
-      | fleetType1OperatingHoursStart   | 0900 hrs                 |
-      | fleetType1OperatingHoursEnd     | 1500 hrs                 |
-      | fleetType1Capacity              | 10000                    |
+      | hub                             | {hub-name}            |
+      | routingAlgorithm                | Bulky Pickup/Delivery |
+      | fleetType1OperatingHoursStart   | 0900 hrs              |
+      | fleetType1OperatingHoursEnd     | 1500 hrs              |
+      | fleetType1Capacity              | 10000                 |
     When op open unrouted detail dialog
     Then op verify the unrouted detail dialog
     Then Operator V2 clean up 'Route Groups'
@@ -137,13 +137,13 @@ Feature: Sameday Route Engine
     Given Operator V2 add created Transactions to Route Group
     Given Operator go to menu Routing -> 5. Route Engine - Same-Day Route Engine
     When op 'Run Route Engine' on Same-Day Route Engine menu using data below:
-      | hub                             | 30JKB                    |
-      | routingAlgorithm                | Bulky Pickup/Delivery    |
-      | fleetType1OperatingHoursStart   | 0900 hrs                 |
-      | fleetType1OperatingHoursEnd     | 2300 hrs                 |
-      | fleetType1BreakingDurationStart | 1200 hrs                 |
-      | fleetType1BreakingDurationEnd   | 1300 hrs                 |
-      | fleetType1Capacity              | 1000000                  |
+      | hub                             | {hub-name}            |
+      | routingAlgorithm                | Bulky Pickup/Delivery |
+      | fleetType1OperatingHoursStart   | 0900 hrs              |
+      | fleetType1OperatingHoursEnd     | 2300 hrs              |
+      | fleetType1BreakingDurationStart | 1200 hrs              |
+      | fleetType1BreakingDurationEnd   | 1300 hrs              |
+      | fleetType1Capacity              | 1000000               |
     Then op open same day route engine waypoint detail dialog
     When op update timeslot on same day route engine
     Then op verify the updated timeslot

@@ -1,9 +1,12 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.DataEntity;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
+/**
+ *
+ * @author Sergey Mishanin
+ */
 public class MdVirtualRepeatTable<T extends DataEntity> extends AbstractTable<T>
 {
     private String mdVirtualRepeat = "data in getTableData()";

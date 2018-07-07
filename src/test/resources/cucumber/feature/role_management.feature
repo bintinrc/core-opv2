@@ -1,4 +1,4 @@
-@OperatorV2 @RoleManagement
+@OperatorV2 @RoleManagement @Saas
 Feature: Role Management
 
   @LaunchBrowser @ShouldAlwaysRun

@@ -1,4 +1,4 @@
-@OperatorV2 @FailedPickupManagement @Inbound
+@OperatorV2 @FailedPickupManagement @Saas @Inbound
 Feature: Failed Pickup Management
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -95,7 +95,7 @@ Feature: Failed Pickup Management
       | Return | uid:97126afe-c6ab-4aff-9dca-fc19ba021727 | Return    |
 
   @ArchiveRouteViaDb
-  Scenario Outline: Operator should be able to cancel failed pickup <Note> order (<hiptest-uid>)
+  Scenario Outline: Operator should be able to cancel failed pickup of C2C/Return order (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
@@ -112,12 +112,12 @@ Feature: Failed Pickup Management
     And Operator cancel order on Failed Pickup Management page
     Then API Operator verify failed pickup order info after Canceled
     Examples:
-      | Note   | hiptest-uid | orderType |
-      | C2C    |             | C2C       |
-      | Return |             | Return    |
+      | Note   | hiptest-uid                              | orderType |
+      | C2C    | uid:c30a6b0b-e5d9-49e3-bd1f-aebb7f6c7270 | C2C       |
+      | Return | uid:7b390a2f-975f-483b-97e4-3b9c6e2572f7 | Return    |
 
   @ArchiveRouteViaDb
-  Scenario Outline: Operator should be able to cancel multiple failed pickup <Note> orders (<hiptest-uid>)
+  Scenario Outline: Operator should be able to cancel multiple failed pickup of C2C/Return orders (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple Order V2 Parcel using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                           |
@@ -136,11 +136,11 @@ Feature: Failed Pickup Management
     Then API Operator verify multiple failed pickup orders info after Canceled
     Examples:
       | Note   | hiptest-uid | orderType |
-      | C2C    |             | C2C       |
-      | Return |             | Return    |
+      | C2C    | uid:2e8212f8-8a02-4a42-b760-6685bff08eeb | C2C    |
+      | Return | uid:72f6a742-59f2-4761-bdda-91699975de5b | Return |
 
   @ArchiveRouteViaDb
-  Scenario Outline: Operator reschedule multiple failed pickup C2C/Return orders on specific date (<hiptest-uid>)
+  Scenario Outline: Operator reschedule multiple failed pickup of C2C/Return orders on specific date (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple Order V2 Parcel using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                           |
@@ -160,8 +160,8 @@ Feature: Failed Pickup Management
     And API Operator verify multiple orders info after failed pickup C2C/Return order rescheduled on next 2 days
     Examples:
       | Note   | hiptest-uid | orderType |
-      | C2C    |             | C2C       |
-      | Return |             | Return    |
+      | C2C    | uid:2a6248d7-a754-494d-9750-b8e4beb94a52 | C2C    |
+      | Return | uid:721b3db0-da4c-482a-a9cb-cb8b6087147a | Return |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

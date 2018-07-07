@@ -333,16 +333,13 @@ public class RouteLogsSteps extends AbstractSteps
         routeLogsPage.verifyMultipleRoutesIsDeletedSuccessfully(listOfCreateRouteParams);
     }
 
-    @When("^Operator select route date filter and click 'Load Selection'$")
-    public void loadSelection()
+    @When("^Operator set filter using data below and click 'Load Selection'$")
+    public void loadSelection(Map<String,String> mapOfData)
     {
-        Calendar fromCalendar = Calendar.getInstance();
-        fromCalendar.add(Calendar.DATE, -1);
-
-        Calendar toCalendar = Calendar.getInstance();
-
-        routeLogsPage.selectRouteDateFilter(fromCalendar.getTime(), toCalendar.getTime());
-        routeLogsPage.clickLoadSelection();
+        Date routeDateFrom = getDateByMode(mapOfData.get("routeDateFrom"));
+        Date routeDateTo = getDateByMode(mapOfData.get("routeDateTo"));
+        String hubName = mapOfData.get("hubName");
+        routeLogsPage.setFilterAndLoadSelection(routeDateFrom, routeDateTo, hubName);
     }
 
     @When("^Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route\\(s\\) Only'$")

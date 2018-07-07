@@ -52,7 +52,7 @@ public class UserManagementSteps extends AbstractSteps {
 
         UserManagement userManagementEdited = new UserManagement();
         userManagementEdited.setLastName(userManagement.getLastName());
-        userManagementEdited.setRoles("QA_TEAM");
+        userManagementEdited.setRoles("OPERATOR_ADMINS");
 
         put("userManagementEdited", userManagementEdited);
         userManagementPage.editUser(userManagement, userManagementEdited);

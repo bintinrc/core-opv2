@@ -1,4 +1,4 @@
-@OperatorV2 @GlobalInbound @Inbound
+@OperatorV2 @GlobalInbound @Saas @Inbound
 Feature: Global Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -137,7 +137,7 @@ Feature: Global Inbound
       | Cancelled | uid:2b1af9c8-e582-434a-aee6-76fb06aadf95 | Cancelled | ORDER_CANCELLED |
 
   @ArchiveRouteViaDb
-  Scenario Outline: Operator should be able to Global Inbound failed delivery order on Global Inbound page (uid:)
+  Scenario Outline: Operator should be able to Global Inbound failed delivery order on Global Inbound page (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
@@ -171,14 +171,13 @@ Feature: Global Inbound
       | orderStatus    | Delivery fail      |
       | granularStatus | Pending Reschedule |
       | deliveryStatus | FAIL               |
-
     Examples:
-      | failureReasonCodeId | rackColor |
-      | 1                   | #90EE90   |
-      | 2                   | #FFFFED   |
-      | 3                   | #D8BFD8   |
-      | 5                   | #FF9999   |
-      | 6                   | #9999FF   |
+      | Note                       | hiptest-uid                              | failureReasonCodeId | rackColor |
+      | Failure Reason Code ID = 1 | uid:53f3925a-a618-41f2-8adc-4b853d8e412d | 1                   | #90EE90   |
+      | Failure Reason Code ID = 2 | uid:d1236bef-2762-4927-9f97-b07d81b7a8a4 | 2                   | #FFFFED   |
+      | Failure Reason Code ID = 3 | uid:b10f6e85-5a72-44d4-b2ee-38bfc7ddb85a | 3                   | #D8BFD8   |
+      | Failure Reason Code ID = 5 | uid:13495ba0-9a2d-47a2-8b0c-0718c1120487 | 5                   | #FF9999   |
+      | Failure Reason Code ID = 6 | uid:4cb215bb-c094-419c-8708-a741b476a43e | 6                   | #9999FF   |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

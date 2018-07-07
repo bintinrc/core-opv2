@@ -5,6 +5,26 @@ Feature: Aged Parcel Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  Scenario Outline: Operator should be able to filter by Shipper/Aged Days on Aged Parcel Management page (<hiptest-uid>)
+    Given API Shipper create Order V2 Parcel using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
+      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
+    When API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+    Then API Operator verify order info after Global Inbound
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper Support -> Aged Parcel Management
+    When Operator apply filter parameters and load selection on Aged Parcel Management
+      | shipperName | <shipperName> |
+      | agedDays    | <agedDays>    |
+    Then Operator verify the aged parcel order is listed on Aged Parcels list with following parameters
+      | shipperName      | <shipperName>      |
+      | daysSinceInbound | <daysSinceInbound> |
+    Examples:
+      | Note                | hiptest-uid                              | shipperName       | agedDays | daysSinceInbound |
+      | Filter by Shipper   | uid:810d03ee-8015-4ee3-b61f-2c15e8405c0a | {shipper-v2-name} | -1       | Today            |
+      | Filter by Aged Days | uid:4c357b48-fabf-49de-8da0-4c63f0284e67 | {shipper-v2-name} | -1       | Today            |
+
   Scenario Outline: Operator find aged parcel on Aged Parcels list (<hiptest-uid>)
     Given API Shipper create Order V2 Parcel using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
@@ -95,10 +115,9 @@ Feature: Aged Parcel Management
     Then API Operator verify multiple orders info after failed delivery aged parcel global inbounded and rescheduled on next 2 days
     Examples:
       | Note   | hiptest-uid | orderType |
-      | Normal |             | Normal    |
-      | C2C    |             | C2C       |
-      | Return |             | Return    |
-
+      | Normal | uid:962cab19-b57c-46cf-b252-d2c6588d9e89 | Normal |
+      | C2C    | uid:0c8c967e-fa45-4e05-810b-1cb4d650660d | C2C    |
+      | Return | uid:858b3b5f-7b58-4351-860a-6371aed39668 | Return |
 
   @ArchiveRouteViaDb
   Scenario Outline: Operator reschedule failed delivery aged parcel on specific date (<hiptest-uid>)
@@ -187,27 +206,6 @@ Feature: Aged Parcel Management
       | C2C    | uid:fc207502-1b6d-472a-8a6b-0b6e32c9372b | C2C       |
       | Return | uid:e32ab4e8-b443-44b5-8dca-4bd92fb7fecf | Return    |
 
-  Scenario Outline: Operator should be able to filter by '<Note>' on Aged Parcel Management page (uid: <hiptest-uid>)
-    Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
-      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
-    When API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
-    Then API Operator verify order info after Global Inbound
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Aged Parcel Management
-    When Operator apply filter parameters and load selection on Aged Parcel Management
-      | shipperName | <shipperName> |
-      | agedDays    | <agedDays>    |
-    Then Operator verify the aged parcel order is listed on Aged Parcels list with following parameters
-      | shipperName      | <shipperName>      |
-      | daysSinceInbound | <daysSinceInbound> |
-
-    Examples:
-      | Note      | hiptest-uid | shipperName       | agedDays | daysSinceInbound |
-      | Shipper   |             | {shipper-v2-name} | -1       | Today            |
-      | Aged Days |             | {shipper-v2-name} | -1       | Today            |
-
   @ArchiveRouteViaDb
   Scenario Outline: Operator RTS multiple failed delivery aged parcels on specific date (<hiptest-uid>)
     Given API Shipper create multiple Order V2 Parcel using data below:
@@ -234,8 +232,7 @@ Feature: Aged Parcel Management
     Then API Operator verify multiple orders info after failed delivery aged parcel global inbounded and RTS-ed on next day
     Examples:
       | Note   | hiptest-uid | orderType |
-      | Normal |             | Normal    |
-
+      | Normal | uid:ebe56256-8c4b-48cc-b379-289aebbbbe31 | Normal |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

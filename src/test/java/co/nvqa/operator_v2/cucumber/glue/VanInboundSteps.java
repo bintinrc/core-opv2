@@ -9,6 +9,9 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
+import java.util.Date;
+import java.util.Map;
+
 /**
  *
  * @author Tristania Siagian
@@ -60,10 +63,13 @@ public class VanInboundSteps extends AbstractSteps {
         vanInboundPage.startRoute(trackingId);
     }
 
-    @Then("^Operator verify the route is started after van inbounding$")
-    public void verifyRouteIsStarted() {
+    @Then("^Operator verify the route is started after van inbounding using data below:$")
+    public void verifyRouteIsStarted(Map<String,String> mapOfData) {
         long routeId = get(KEY_CREATED_ROUTE_ID);
-        routeLogsPage.loadAndVerifyRoute(routeId);
+        Date routeDateFrom = getDateByMode(mapOfData.get("routeDateFrom"));
+        Date routeDateTo = getDateByMode(mapOfData.get("routeDateTo"));
+        String hubName = mapOfData.get("hubName");
+        routeLogsPage.loadAndVerifyRoute(routeDateFrom, routeDateTo, hubName, routeId);
     }
 
     @And("^Operator fill the invalid tracking ID ([^\"]*) on Van Inbound Page$")

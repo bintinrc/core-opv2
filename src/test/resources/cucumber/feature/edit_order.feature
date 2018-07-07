@@ -1,4 +1,4 @@
-@OperatorV2 @EditOrder
+@OperatorV2 @EditOrder @Saas
 Feature: Edit Order
 
   @LaunchBrowser @ShouldAlwaysRun

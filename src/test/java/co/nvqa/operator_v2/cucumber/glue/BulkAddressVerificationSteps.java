@@ -8,17 +8,18 @@ import co.nvqa.operator_v2.selenium.page.BulkAddressVerificationPage;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import cucumber.api.java.en.When;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ *
+ * @author Sergey Mishanin
+ */
 public class BulkAddressVerificationSteps extends AbstractSteps
 {
-
     private BulkAddressVerificationPage bulkAddressVerificationPage;
 
     @Inject
@@ -82,7 +83,6 @@ public class BulkAddressVerificationSteps extends AbstractSteps
         }
 
         put(KEY_LIST_OF_CREATED_JARO_SCORES, jaroScores);
-
         bulkAddressVerificationPage.uploadWaypointsData(jaroScores);
     }
 }

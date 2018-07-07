@@ -323,7 +323,6 @@ public class ShipperPickupsSteps extends AbstractSteps
         Address address = get(KEY_CREATED_ADDRESS);
         ReservationInfo reservationInfo = shipperPickupsPage.downloadCsvFile(address);
         put(KEY_CREATED_RESERVATION_INFO, reservationInfo);
-
     }
 
     @Then("^Operator verify the reservation info is correct in downloaded CSV file$")

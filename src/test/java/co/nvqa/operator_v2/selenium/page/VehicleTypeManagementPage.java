@@ -28,6 +28,7 @@ public class VehicleTypeManagementPage extends OperatorV2SimplePage
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'vehicle-type-add')]");
         sendKeysById("name", name);
         clickNvButtonSaveByNameAndWaitUntilDone("Submit");
+        pause5s(); //This pause is used to wait until the cache is synced to all node. Sometimes we got an error that says the new Vehicle Type is not found.
     }
 
     public void verifyVehicleType(String expectedVehicleTypeName)
@@ -52,6 +53,7 @@ public class VehicleTypeManagementPage extends OperatorV2SimplePage
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'vehicle-type-edit')]");
         sendKeysById("name", newName);
         clickNvButtonSaveByNameAndWaitUntilDone("Submit");
+        pause5s(); //This pause is used to wait until the cache is synced to all node. Sometimes we got an error that says the new Vehicle Type is not found.
     }
 
     public void deleteVehicleType(String name)
@@ -60,11 +62,13 @@ public class VehicleTypeManagementPage extends OperatorV2SimplePage
         clickActionButtonOnTable(1, ACTION_BUTTON_DEL);
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'md-nvRed-theme')]");
         click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
+        pause5s(); //This pause is used to wait until the cache is synced to all node. Sometimes we got an error that says the new Vehicle Type is not found.
     }
 
     public void csvDownload()
     {
         clickNvApiTextButtonByName("Download CSV File");
+        pause5s(); //This pause is used to wait until the cache is synced to all node. Sometimes we got an error that says the new Vehicle Type is not found.
     }
 
     public void csvDownloadSuccessful(String vehicleTypeName)

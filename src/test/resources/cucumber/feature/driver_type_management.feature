@@ -1,4 +1,4 @@
-@OperatorV2 @DriverTypeManagement
+@OperatorV2 @DriverTypeManagement @Saas
 Feature: Driver Type Management
 
   @LaunchBrowser @ShouldAlwaysRun

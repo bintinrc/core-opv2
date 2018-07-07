@@ -1,4 +1,4 @@
-@OperatorV2 @RouteLogs
+@OperatorV2 @RouteLogs @Saas
 Feature: Route Logs
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -208,10 +208,13 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
-    When Operator select route date filter and click 'Load Selection'
+    When Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
     When Operator click 'Edit Details'
-    When Operator edit 'Assigned Driver' to driver 'OpV2 No.2' and edit 'Comments'
-    Then Operator verify route's driver must be changed to 'OpV2 No.2' in table list
+    When Operator edit 'Assigned Driver' to driver '{ninja-driver-2-name}' and edit 'Comments'
+    Then Operator verify route's driver must be changed to '{ninja-driver-2-name}' in table list
 
   @ArchiveAndDeleteRouteViaDb
   Scenario: Operator 'Add New Tag' on Operator V2 - Route Logs menu (uid:24ef3b76-c582-42da-b6d8-cf867aeec8e9)
@@ -219,9 +222,12 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
-    When Operator select route date filter and click 'Load Selection'
-    When Operator add tag 'CDS'
-    Then Operator verify route's tag must contain 'CDS'
+    When Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    When Operator add tag '{route-tag-name}'
+    Then Operator verify route's tag must contain '{route-tag-name}'
 
   @ArchiveAndDeleteRouteViaDb
   Scenario: Operator 'Delete Route' on Operator V2 - Route Logs menu (uid:ff70c3c0-73bc-4cde-9ce7-c340769560cb)
@@ -229,7 +235,10 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
-    When Operator select route date filter and click 'Load Selection'
+    When Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
     When Operator delete route on Operator V2
     Then Operator verify route must be deleted successfully
 
@@ -239,7 +248,10 @@ Feature: Route Logs
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
-    When Operator select route date filter and click 'Load Selection'
+    When Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
 #    When Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route(s) Only'
 #    Then Operator redirect to this page 'https://operator-qa.ninjavan.co/sg/ng#/zonal_routing_edit?fetch_unrouted_waypoints=false&to_cluster=true&id={{route_id}}'
 #    Then Operator close Edit Routes dialog

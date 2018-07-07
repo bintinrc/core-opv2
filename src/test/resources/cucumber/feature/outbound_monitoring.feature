@@ -1,4 +1,4 @@
-@OperatorV2 @OutboundMonitoring
+@OperatorV2 @OutboundMonitoring @Saas
 Feature: Outbound Monitoring
 
   @LaunchBrowser @ShouldAlwaysRun

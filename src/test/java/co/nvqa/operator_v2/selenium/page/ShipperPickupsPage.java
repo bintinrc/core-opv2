@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.route.Route;
-import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.model.ReservationInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
@@ -136,8 +135,8 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         assertEqualsIfExpectedValueNotNull("Latest By", expectedReservationInfo.getLatestBy(), actualReservationInfo.getLatestBy());
         assertEqualsIfExpectedValueNotNull("Reservation Type", expectedReservationInfo.getReservationType(), actualReservationInfo.getReservationType());
         assertEqualsIfExpectedValueNotNull("Reservation Status", expectedReservationInfo.getReservationStatus(), actualReservationInfo.getReservationStatus());
-        assertThatIfActualValueNotNull("Reservation Created Time", expectedReservationInfo.getReservationCreatedTime(), Matchers.startsWith(DateUtil.displayDate(expectedReservationInfo.getReservationCreatedDateTime())));
-        assertThatIfActualValueNotNull("Service Time", expectedReservationInfo.getServiceTime(), Matchers.startsWith(DateUtil.displayDate(expectedReservationInfo.getServiceDateTime())));
+        assertDateIsEqualIfExpectedValueNotNullOrBlank("Reservation Created Time", expectedReservationInfo.getReservationCreatedTime(), actualReservationInfo.getReservationCreatedTime());
+        assertDateIsEqualIfExpectedValueNotNullOrBlank("Service Time", expectedReservationInfo.getServiceTime(), actualReservationInfo.getServiceTime());
         assertEqualsIfExpectedValueNotNull("Approx. Volume", expectedReservationInfo.getApproxVolume(), actualReservationInfo.getApproxVolume());
         assertEqualsIfExpectedValueNotNull("Failure Reason", expectedReservationInfo.getFailureReason(), actualReservationInfo.getFailureReason());
         assertEqualsIfExpectedValueNotNull("Comments", expectedReservationInfo.getComments(), actualReservationInfo.getComments());
@@ -159,11 +158,18 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         }
     }
 
-    private <T> void assertThatIfActualValueNotNull(String message, T actual, org.hamcrest.Matcher<? super T> matcher)
+    private void assertDateIsEqualIfExpectedValueNotNullOrBlank(String message, String expected, String actual)
     {
-        if(actual!=null)
+        if(isNotBlank(expected))
         {
-            Assert.assertThat(message, actual, matcher);
+            if(actual==null)
+            {
+                actual = "";
+            }
+
+            actual = actual.split(" ")[0];
+            expected = expected.split(" ")[0];
+            Assert.assertEquals(message, expected, actual);
         }
     }
 
@@ -409,11 +415,11 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         {
             waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
             pause2s();
-
             Assert.assertNotNull("Route ID should not be null.", routeId);
+
             selectValueFromNvAutocomplete(FIELD_NEW_ROUTE_LOCATOR, String.valueOf(routeId));
 
-            if (priorityLevel != null)
+            if(priorityLevel!=null)
             {
                 sendKeysById(FIELD_PRIORITY_LEVEL_LOCATOR, String.valueOf(priorityLevel));
             }

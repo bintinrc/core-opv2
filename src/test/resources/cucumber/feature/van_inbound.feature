@@ -1,4 +1,4 @@
-@OperatorV2 @VanInbound @Inbound
+@OperatorV2 @VanInbound @Saas @Inbound
 Feature: Van Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -26,7 +26,10 @@ Feature: Van Inbound
     And Operator fill the route ID on Van Inbound Page then click enter
     And Operator click on start route after van inbounding
     And Operator go to menu Routing -> Route Logs
-    Then Operator verify the route is started after van inbounding
+    Then Operator verify the route is started after van inbounding using data below:
+      | routeDateFrom | TODAY      |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
 
   @ArchiveRouteViaDb
   Scenario: Operator van inbounds the created order with invalid tracking ID (uid:b91adc47-ea7d-412f-8166-175f0816809f)

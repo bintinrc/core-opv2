@@ -161,7 +161,12 @@ public class AllOrdersPage extends OperatorV2SimplePage
         sendKeysByAriaLabel("Choose", csvFile.getAbsolutePath());
         waitUntilVisibilityOfElementLocated(String.format("//span[contains(text(), '%s')]", csvFile.getName()));
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.upload");
-        //waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']"); // Please don't enable this line because it will make the verification method (verifyAllOrdersInCsvIsFoundWithCorrectInfo) failed.
+    }
+
+    public void findOrdersWithCsvAndWaitUntilToastDisappear(List<String> listOfTrackingId)
+    {
+        findOrdersWithCsv(listOfTrackingId);
+        waitUntilInvisibilityOfToast("Matches with file shown in table", false);
     }
 
     public void verifyAllOrdersInCsvIsFoundWithCorrectInfo(List<OrderRequestV2> listOfOrderRequestV2, List<Order> listOfOrderDetails)

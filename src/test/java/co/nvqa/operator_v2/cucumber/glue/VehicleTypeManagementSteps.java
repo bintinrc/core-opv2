@@ -38,15 +38,15 @@ public class VehicleTypeManagementSteps extends AbstractSteps
 
     }
 
-    @Then("^verify vehicle type$")
-    public void verifyNewVehicleIsCreated()
+    @Then("^Operator verify vehicle type$")
+    public void operatorVerifyNewVehicleIsCreated()
     {
         String Name = get("vehicleTypeName");
         vehicleTypeManagementPage.verifyVehicleType(Name);
     }
 
-    @When("^operator edit the vehicle type name$")
-    public void editVehicleType()
+    @When("^Operator edit the vehicle type name$")
+    public void operatorEditVehicleType()
     {
         String oldName = get("vehicleTypeName");
         String newName = oldName+" [EDITED]";
@@ -54,35 +54,35 @@ public class VehicleTypeManagementSteps extends AbstractSteps
         put("vehicleTypeNameEdited", newName);
     }
 
-    @Then("^verify the edited vehicle type name is existed$")
-    public void verifEditedVehicleType()
+    @Then("^Operator verify the edited vehicle type name is existed$")
+    public void verifyEditedVehicleType()
     {
         String Name = get("vehicleTypeNameEdited");
         vehicleTypeManagementPage.verifyVehicleType(Name);
     }
 
-    @When("^operator delete the vehicle type name$")
-    public void deleteVehicleTypeName()
+    @When("^Operator delete the vehicle type name$")
+    public void operatorDeleteVehicleTypeName()
     {
         String vehicleTypeName = containsKey("vehicleTypeNameEdited") ? get("vehicleTypeNameEdited") : get("vehicleTypeName");
         vehicleTypeManagementPage.deleteVehicleType(vehicleTypeName);
     }
 
-    @Then("^operator verify vehicle type name is deleted$")
+    @Then("^Operator verify vehicle type name is deleted$")
     public void operatorVerifyVehicleTypeNameIsDeleted()
     {
         String vehicleTypeName = containsKey("vehicleTypeNameEdited") ? get("vehicleTypeNameEdited") : get("vehicleTypeName");
         vehicleTypeManagementPage.verifyVehicleTypeNotExist(vehicleTypeName);
     }
 
-    @When("^operator click on download CSV file button$")
+    @When("^Operator click on download CSV file button$")
     public void downloadCSVFile()
     {
         vehicleTypeManagementPage.csvDownload();
     }
 
-    @Then("^verify the csv file$")
-    public void verifCSVFile()
+    @Then("^Operator verify the CSV file$")
+    public void operatorVerifyCsvFile()
     {
         String vehicleTypeName = containsKey("vehicleTypeNameEdited") ? get("vehicleTypeNameEdited") : get("vehicleTypeName");
         vehicleTypeManagementPage.csvDownloadSuccessful(vehicleTypeName);
@@ -91,6 +91,6 @@ public class VehicleTypeManagementSteps extends AbstractSteps
     @After("@DeleteAfterDone")
     public void deleteAfterDone()
     {
-        deleteVehicleTypeName();
+        operatorDeleteVehicleTypeName();
     }
 }

@@ -1,4 +1,4 @@
-@OperatorV2Disabled @RouteInbound
+@OperatorV2Disabled @RouteInbound @Saas
 Feature: Route Inbound
 
   @LaunchBrowser @ShouldAlwaysRun

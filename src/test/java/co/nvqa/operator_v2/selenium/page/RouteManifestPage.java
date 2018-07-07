@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.Route;
+import co.nvqa.operator_v2.util.TestConstants;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
@@ -59,7 +60,7 @@ public class RouteManifestPage extends OperatorV2SimplePage
         String actualComments = getTextOnTable(1, COLUMN_COMMENTS);
         Assert.assertEquals("Status", "Fail", actualStatus);
         Assert.assertEquals("Count Delivery", "1", actualCountDelivery);
-        Assert.assertEquals("Comments", "Package is defective - Damaged", actualComments);
+        Assert.assertEquals("Comments", TestConstants.DRIVER_DELIVERY_FAIL_STRING, actualComments);
     }
 
     public void searchTableByTrackingId(String trackingId)
