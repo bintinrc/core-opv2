@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.Map;
 
 /**
+ *
  * @author Daniel Joi Partogi Hutapea
  */
 public class RouteInboundSteps extends AbstractSteps
@@ -43,7 +44,7 @@ public class RouteInboundSteps extends AbstractSteps
         String fetchBy = mapOfData.get("fetchBy");
         String fetchByValue = mapOfData.get("fetchByValue");
 
-        switch (fetchBy.toUpperCase())
+        switch(fetchBy.toUpperCase())
         {
             case FETCH_BY_ROUTE_ID:
                 Long routeId = "GET_FROM_CREATED_ROUTE".equals(fetchByValue) ? get(KEY_CREATED_ROUTE_ID) : Long.parseLong(fetchByValue);
@@ -70,10 +71,11 @@ public class RouteInboundSteps extends AbstractSteps
 
         Long routeId;
 
-        if ("GET_FROM_CREATED_ROUTE".equals(routeIdAsString))
+        if("GET_FROM_CREATED_ROUTE".equals(routeIdAsString))
         {
             routeId = get(KEY_CREATED_ROUTE_ID);
-        } else
+        }
+        else
         {
             routeId = Long.parseLong(routeIdAsString);
         }
@@ -82,15 +84,17 @@ public class RouteInboundSteps extends AbstractSteps
 
         try
         {
-            if ("GET_FROM_CREATED_ROUTE".equals(routeDateAsString))
+            if("GET_FROM_CREATED_ROUTE".equals(routeDateAsString))
             {
                 Route route = get(KEY_CREATED_ROUTE);
                 routeDate = ISO_8601_WITHOUT_MILLISECONDS.parse(route.getCreatedAt());
-            } else
+            }
+            else
             {
                 routeDate = ISO_8601_WITHOUT_MILLISECONDS.parse(routeDateAsString);
             }
-        } catch (ParseException ex)
+        }
+        catch (ParseException ex)
         {
             throw new NvTestRuntimeException("Failed to parse route date.", ex);
         }

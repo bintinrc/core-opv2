@@ -170,9 +170,12 @@ public class MainPage extends OperatorV2SimplePage
         waitUntilPageLoaded();
     }
 
-    private void checkLeavingPage(){
+    private void checkLeavingPage()
+    {
         String xpath = "//md-dialog//h2[text()='Leaving Page']";
-        if (isElementExist(xpath, 0)){
+
+        if(isElementExistWait0Second(xpath))
+        {
             clickButtonByAriaLabel("Leave");
         }
     }
