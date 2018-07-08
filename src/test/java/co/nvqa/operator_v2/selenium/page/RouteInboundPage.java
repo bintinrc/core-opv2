@@ -26,10 +26,45 @@ public class RouteInboundPage extends OperatorV2SimplePage
         String continueBtnXpath = "//md-card-content[./label[text()='Enter the route ID']]/nv-api-text-button[@name='container.route-inbound.continue']/button";
         click(continueBtnXpath);
 
+        dismissDriverAttendanceDialog();
+
+        waitUntilInvisibilityOfElementLocated(continueBtnXpath+"//md-progress-circular");
+    }
+
+    private void dismissDriverAttendanceDialog(){
         if(isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Driver Attendance']"))
         {
             click("//md-dialog[./md-dialog-content/h2[text()='Driver Attendance']]//button[@aria-label='Yes']");
         }
+    }
+
+    public void fetchRouteByTrackingId(String hubName, String trackingId)
+    {
+        selectValueFromNvAutocomplete("ctrl.hubSelection.searchText", hubName);
+        sendKeysById("tracking-id", trackingId);
+
+        String continueBtnXpath = "//md-card-content[./label[text()='Scan a tracking ID']]/nv-api-text-button[@name='container.route-inbound.continue']/button";
+        click(continueBtnXpath);
+
+        dismissDriverAttendanceDialog();
+
+        waitUntilInvisibilityOfElementLocated(continueBtnXpath+"//md-progress-circular");
+    }
+
+    public void fetchRouteByDriver(String hubName, String driverName, long routeId)
+    {
+        selectValueFromNvAutocomplete("ctrl.hubSelection.searchText", hubName);
+        selectValueFromNvAutocomplete("ctrl.driverSearch.searchText", driverName);
+
+        String continueBtnXpath = "//md-card-content[.//label[text()='Search by driver']]/nv-api-text-button[@name='container.route-inbound.continue']/button";
+        click(continueBtnXpath);
+
+        if(isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Choose a route']"))
+        {
+            click(String.format("//tr[@ng-repeat='routeId in ctrl.routeIds'][td[text()='%d']]//button", routeId));
+        }
+
+        dismissDriverAttendanceDialog();
 
         waitUntilInvisibilityOfElementLocated(continueBtnXpath+"//md-progress-circular");
     }
@@ -52,10 +87,10 @@ public class RouteInboundPage extends OperatorV2SimplePage
         String actualWpCompleted = getText("//p[./parent::div/following-sibling::div[contains(text(),'Completed')]]");
         String actualWpTotal = getText("//p[./parent::div/following-sibling::div[contains(text(),'Total')]]");
 
-        Assert.assertEquals("Waypoint Performance - Pending", expectedWaypointPerformance.getPending(), actualWpPending);
-        Assert.assertEquals("Waypoint Performance - Partial", expectedWaypointPerformance.getPartial(), actualWpPartial);
-        Assert.assertEquals("Waypoint Performance - Failed", expectedWaypointPerformance.getFailed(), actualWpFailed);
-        Assert.assertEquals("Waypoint Performance - Completed", expectedWaypointPerformance.getCompleted(), actualWpCompleted);
-        Assert.assertEquals("Waypoint Performance - Total", expectedWaypointPerformance.getTotal(), actualWpTotal);
+        Assert.assertEquals("Waypoint Performance - Pending", String.valueOf(expectedWaypointPerformance.getPending()), actualWpPending);
+        Assert.assertEquals("Waypoint Performance - Partial", String.valueOf(expectedWaypointPerformance.getPartial()), actualWpPartial);
+        Assert.assertEquals("Waypoint Performance - Failed", String.valueOf(expectedWaypointPerformance.getFailed()), actualWpFailed);
+        Assert.assertEquals("Waypoint Performance - Completed", String.valueOf(expectedWaypointPerformance.getCompleted()), actualWpCompleted);
+        Assert.assertEquals("Waypoint Performance - Total", String.valueOf(expectedWaypointPerformance.getTotal()), actualWpTotal);
     }
 }

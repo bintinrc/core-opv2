@@ -6,9 +6,9 @@ Feature: Route Inbound
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @ArchiveRoute
-  Scenario: Operator get route details by Route ID
+  Scenario Outline: Operator get route details by <Note>
     Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                 |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
@@ -21,21 +21,27 @@ Feature: Route Inbound
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully
-    Given Operator go to this URL "{operator-portal-base-url}/{country-code}/route-inbound"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
-      | hubName      | {hub-name}             |
-      | fetchBy      | FETCH_BY_ROUTE_ID      |
-      | fetchByValue | GET_FROM_CREATED_ROUTE |
+      | hubName      | {hub-name}     |
+      | fetchBy      | <fetchBy>      |
+      | fetchByValue | <fetchByValue> |
     Then Operator verify the Route Summary Details is correct using data below:
       | routeId     | GET_FROM_CREATED_ROUTE |
       | driverName  | {ninja-driver-name}    |
       | hubName     | {hub-name}             |
       | routeDate   | GET_FROM_CREATED_ROUTE |
-      | wpPending   | 1                      |
+      | wpPending   | 0                      |
       | wpPartial   | 0                      |
-      | wpFailed    | 1                      |
-      | wpCompleted | 0                      |
+      | wpFailed    | 0                      |
+      | wpCompleted | 1                      |
       | wpTotal     | 1                      |
+    Examples:
+      | Note        | fetchBy              | fetchByValue           |
+      | Route ID    | FETCH_BY_ROUTE_ID    | GET_FROM_CREATED_ROUTE |
+      | Tracking ID | FETCH_BY_TRACKING_ID | GET_FROM_CREATED_ROUTE |
+      | Driver      | FETCH_BY_DRIVER | {ninja-driver-name}    |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

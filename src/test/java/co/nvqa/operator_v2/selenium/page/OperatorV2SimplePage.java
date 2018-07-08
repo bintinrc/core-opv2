@@ -554,6 +554,13 @@ public class OperatorV2SimplePage extends SimplePage
         pause200ms();
     }
 
+    public void selectValueFromNvAutocompleteBySearchTextAndDismiss(String searchText, String value)
+    {
+        WebElement we = selectValueFromNvAutocompleteBy("search-text", searchText, value);
+        we.sendKeys(Keys.ESCAPE);
+        pause200ms();
+    }
+
     public void removeNvFilterBoxByMainTitle(String mainTtitle)
     {
         String xpath = String.format("//*[self::nv-filter-text-box or self::nv-filter-box][@main-title='%s']//button[i[text()='close']]", mainTtitle);

@@ -52,6 +52,7 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
     }
 
     protected abstract String getTextOnTable(int rowNumber, String columnDataClass);
+    protected abstract void selectRow(int rowNumber);
 
     public String getColumnText(int rowNumber, String columnId)
     {
