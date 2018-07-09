@@ -565,12 +565,10 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         selectValueFromMdSelectByIdContains("category", category.getValue());
         selectValueFromMdSelectByIdContains("search-logic", searchLogic.getValue());
-        sendKeys("//input[@id='fl-input' or @id='searchTerm']", searchTerm);
+        sendKeys("//input[starts-with(@id, 'fl-input') or starts-with(@id, 'searchTerm')]", searchTerm);
         pause2s(); // Wait until the page finished matching the tracking ID.
         String matchedTrackingIdXpathExpression = String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope//span[text()='%s']", searchTerm);
         String searchButtonXpathExpression = "//nv-api-text-button[@name='commons.search']";
-
-        ////div[contains(@ng-messages, 'ctrl.specificSearch.form.searchTerm.$error')]/div[text()='No Results Found']
 
         if (isElementExistFast(matchedTrackingIdXpathExpression))
         {
