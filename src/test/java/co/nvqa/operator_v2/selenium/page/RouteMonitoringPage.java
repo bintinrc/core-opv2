@@ -106,11 +106,13 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
             if (verifyDeliverySuccess)
             {
                 routeManifestPage.verify1DeliveryIsSuccess(route, order);
-            } else
+            }
+            else
             {
                 routeManifestPage.verify1DeliveryIsFailed(route, order);
             }
-        } finally
+        }
+        finally
         {
             closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
         }
@@ -276,7 +278,6 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
         {
             return getTextOnTable(rowNumber, COLUMN_CLASS_LATE_WP);
         }
-
 
         private String getTextOnTable(int rowNumber, String columnDataClass)
         {
