@@ -249,7 +249,6 @@ public class AllOrdersPage extends OperatorV2SimplePage
         try
         {
             switchToEditOrderWindow(orderId);
-            editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyOrderInfoIsCorrect(orderRequestV2, order);
         }
         finally
@@ -278,7 +277,6 @@ public class AllOrdersPage extends OperatorV2SimplePage
         try
         {
             switchToEditOrderWindow(orderId);
-            editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyOrderIsForceSuccessedSuccessfully(orderRequestV2);
         }
         finally
@@ -544,7 +542,6 @@ public class AllOrdersPage extends OperatorV2SimplePage
         try
         {
             switchToEditOrderWindow(orderId);
-            editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyOrderIsGlobalInboundedSuccessfully(orderRequestV2, globalInboundParams, expectedOrderCost, expectedStatus, expectedGranularStatus, expectedDeliveryStatus);
         }
         finally
@@ -598,6 +595,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     public void switchToEditOrderWindow(Long orderId)
     {
         switchToOtherWindow("order/" + orderId);
+        editOrderPage.waitUntilInvisibilityOfLoadingOrder();
     }
 
     public void switchToNewOpenedWindow(String mainWindowHandle)
