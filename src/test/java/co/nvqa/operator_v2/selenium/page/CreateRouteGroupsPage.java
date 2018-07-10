@@ -105,5 +105,6 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
     public void clickAddTransactionsOnAddToRouteGroupDialog()
     {
         clickNvButtonSaveByNameAndWaitUntilDone("Add Transactions/Reservations");
+        waitUntilInvisibilityOfToast("Added successfully");
     }
 }
