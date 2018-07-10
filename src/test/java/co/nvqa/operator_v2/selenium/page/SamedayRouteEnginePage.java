@@ -26,23 +26,17 @@ public class SamedayRouteEnginePage extends OperatorV2SimplePage
 
     public void selectRouteGroup(String routeGroupName)
     {
-        click("//md-select[@aria-label='Select Route Group']");
-        pause100ms();
-        clickf("//md-option/div[contains(text(), '%s')]", routeGroupName);
+        selectValueFromMdSelectById("select-route-group", routeGroupName);
     }
 
     public void selectRoutingAlgorithm(String routingAlgorithm)
     {
-        click("//md-select[@aria-label='Routing Algorithm']");
-        pause100ms();
-        clickf("//md-option/div[contains(text(), '%s')]", routingAlgorithm);
+        selectValueFromMdSelectById("routing-algorithm", routingAlgorithm);
     }
 
     public void selectHub(String hubName)
     {
-        click("//md-select[@aria-label='Hub']");
-        pause100ms();
-        clickf("//md-option/div[contains(text(), '%s')]", hubName);
+        selectValueFromMdSelectById("hub", hubName);
     }
 
     public void clickRunRouteEngineButton()
@@ -93,7 +87,7 @@ public class SamedayRouteEnginePage extends OperatorV2SimplePage
 
     public void setFleetType1Capacity(String capacity)
     {
-        sendKeys("//input[@aria-label='Capacity']", capacity);
+        sendKeysByAriaLabel("Capacity", capacity);
     }
 
     public void openWaypointDetail()

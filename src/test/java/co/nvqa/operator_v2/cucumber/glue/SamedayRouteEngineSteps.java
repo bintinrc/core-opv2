@@ -89,8 +89,8 @@ public class SamedayRouteEngineSteps extends AbstractSteps
         String fleetType1Capacity = Optional.ofNullable(mapOfData.get("fleetType1Capacity")).orElse("10");
 
         samedayRouteEnginePage.selectRouteGroup(routeGroupName);
-        samedayRouteEnginePage.selectHub(hubName);
         samedayRouteEnginePage.selectRoutingAlgorithm(routingAlgorithm);
+        samedayRouteEnginePage.selectHub(hubName);
         samedayRouteEnginePage.setFleetType1Capacity(fleetType1Capacity);
         samedayRouteEnginePage.selectFleetType1OperatingHoursStart(fleetType1OperatingHoursStart);
         samedayRouteEnginePage.selectFleetType1OperatingHoursEnd(fleetType1OperatingHoursEnd);
