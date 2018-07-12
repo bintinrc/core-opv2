@@ -68,6 +68,11 @@ public class MainPage extends OperatorV2SimplePage
 
     public void verifyTheMainPageIsLoaded()
     {
+        if(isElementExistWait2Seconds("//button[@aria-label='login.sign-in-button']"))
+        {
+            getWebDriver().navigate().refresh();
+        }
+
         String mainDashboardUrl = grabEndURL("All Orders");
 
         waitUntil(()->

@@ -70,7 +70,16 @@ public class RouteLogsPage extends OperatorV2SimplePage
         selectValueFromNvAutocompleteByPossibleOptions("zonesSelectionOptions", createRouteParams.getZoneName());
         selectValueFromNvAutocompleteByPossibleOptions("hubsSelectionOptions", createRouteParams.getHubName());
         pause2s(); // We put delay here because sometimes when typing on Driver Selection, the cursor is jumping to Hub Selection and this delay help to avoid that issue.
-        selectValueFromNvAutocompleteByPossibleOptions("driversSelectionOptions", createRouteParams.getNinjaDriverName().replaceAll(" ", ""));
+
+        if(TestConstants.COUNTRY_CODE.equals("SG"))
+        {
+            selectValueFromNvAutocompleteByPossibleOptions("driversSelectionOptions", createRouteParams.getNinjaDriverName());
+        }
+        else
+        {
+            selectValueFromNvAutocompleteByPossibleOptions("driversSelectionOptions", createRouteParams.getNinjaDriverName().replaceAll(" ", ""));
+        }
+
         selectValueFromNvAutocompleteByPossibleOptions("vehiclesSelectionOptions", createRouteParams.getVehicleName());
     }
 
