@@ -5,6 +5,7 @@ import co.nvqa.commons.model.addressing.JaroScore;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.driver.FailureReason;
+import co.nvqa.commons.model.entity.DriverEntity;
 import co.nvqa.commons.model.entity.InboundScanEntity;
 import co.nvqa.commons.model.entity.OrderEventEntity;
 import co.nvqa.commons.model.entity.RouteDriverTypeEntity;
@@ -12,9 +13,11 @@ import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.CreateRouteParams;
 import co.nvqa.operator_v2.model.DpPartner;
+import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import com.google.inject.Inject;
 import cucumber.api.java.After;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -159,5 +162,15 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
             getDpJdbc().DeleteDp(dpPartner.getName());
             getDpJdbc().DeleteDpPartner(dpPartner.getName());
         }
+    }
+
+    @And("^DB Operator get data of created driver$")
+    public void dbOperatorGetDataOfCreatedDriver()
+    {
+        DriverInfo driverInfo = get(KEY_CREATED_DRIVER);
+        DriverEntity driverEntity = getDriverJdbc().getDriverData(driverInfo.getUsername());
+        driverInfo.setId(driverEntity.getId());
+        driverInfo.setUuid(driverEntity.getUuid());
+        put(KEY_CREATED_DRIVER_UUID, driverInfo.getUuid());
     }
 }

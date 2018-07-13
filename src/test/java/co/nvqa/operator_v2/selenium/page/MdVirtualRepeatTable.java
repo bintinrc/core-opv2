@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.DataEntity;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -35,13 +36,19 @@ public class MdVirtualRepeatTable<T extends DataEntity> extends AbstractTable<T>
     @Override
     public void clickActionButton(int rowNumber, String actionId)
     {
-        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonsLocators.get(actionId), mdVirtualRepeat);
+        String actionButtonLocator = actionButtonsLocators.get(actionId);
+        if (StringUtils.startsWith(actionButtonLocator,  "/")){
+            clickCustomActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonLocator, mdVirtualRepeat);
+        } else
+        {
+            clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonLocator, mdVirtualRepeat);
+        }
     }
 
     @Override
     public int getRowsCount()
     {
-        return getRowsCountOfTableWithNgRepeat(mdVirtualRepeat);
+        return getRowsCountOfTableWithMdVirtualRepeat(mdVirtualRepeat);
     }
 
     @Override
