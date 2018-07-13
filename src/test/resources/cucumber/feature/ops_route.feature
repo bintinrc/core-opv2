@@ -1,4 +1,4 @@
-@OperatorV2 @OpsRoute
+@OperatorV2 @OperatorV2Part1 @OpsRoute
 Feature: Ops Route
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -7,8 +7,8 @@ Feature: Ops Route
 
   Scenario: Operator edit ops route (uid:691f10d8-9501-40c0-b204-c44a34071011)
     Given Operator go to menu Recovery -> Ops Route
-    When op click edit button on table at Ops Route menu
-    Then ops route id must be changed
+    When Operator clicks edit button on table at Ops Route menu
+    Then Operator verifies the Route ID is changed
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -1,4 +1,4 @@
-@OperatorV2 @Zones @Saas
+@OperatorV2 @OperatorV2Part1 @Zones @Saas
 Feature: Zones
 
   @LaunchBrowser @ShouldAlwaysRun

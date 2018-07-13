@@ -33,7 +33,7 @@ public class OpsRouteSteps extends AbstractSteps
         opsRoutePage = new OpsRoutePage(getWebDriver());
     }
 
-    @When("^op click edit button on table at Ops Route menu$")
+    @When("^Operator clicks edit button on table at Ops Route menu$")
     public void editOpsRoute()
     {
         /*
@@ -45,7 +45,7 @@ public class OpsRouteSteps extends AbstractSteps
         opsRoutePage.editOpsRoute(EDITED_ROW_NUMBER, newRouteId);
     }
 
-    @Then("^ops route id must be changed$")
+    @Then("^Operator verifies the Route ID is changed$")
     public void verifyEditOpsRouteSuccess()
     {
         String actualRouteId = opsRoutePage.getRouteIdAtRow(EDITED_ROW_NUMBER);

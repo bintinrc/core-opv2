@@ -1,4 +1,4 @@
-@OperatorV2 @UnroutedPriorities @Saas
+@OperatorV2 @OperatorV2Part1 @UnroutedPriorities @Saas
 Feature: Unrouted Priorities
 
   @LaunchBrowser @ShouldAlwaysRun

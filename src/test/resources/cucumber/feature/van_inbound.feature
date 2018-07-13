@@ -1,4 +1,4 @@
-@OperatorV2 @VanInbound @Saas @Inbound
+@OperatorV2 @OperatorV2Part1 @VanInbound @Saas @Inbound
 Feature: Van Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
