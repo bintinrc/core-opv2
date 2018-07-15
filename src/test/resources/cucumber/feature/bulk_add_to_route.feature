@@ -1,4 +1,4 @@
-@OperatorV2 @AddParcelToRoute @Saas
+@OperatorV2 @OperatorV2Part2 @AddParcelToRoute @Saas
 Feature: Add Parcel To Route
 
   @LaunchBrowser @ShouldAlwaysRun
