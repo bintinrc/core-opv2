@@ -11,7 +11,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 /**
- * @author Soewandi Wirjawan
+ * @author Sergey Mishanin
  */
 @SuppressWarnings("WeakerAccess")
 public class DriverStrengthPageV2 extends OperatorV2SimplePage

@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 
 /**
  *
- * @author Soewandi Wirjawan
+ * @author Sergey Mishanin
  */
 @ScenarioScoped
 public class DriverStrengthStepsV2 extends AbstractSteps
