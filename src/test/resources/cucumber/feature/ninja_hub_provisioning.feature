@@ -1,4 +1,4 @@
-@OperatorV2 @NinjaHubProvisioning @Saas
+@OperatorV2 @OperatorV2Part1 @NinjaHubProvisioning @Saas
 Feature: Ninja Hub Provisioning
 
   @LaunchBrowser @ShouldAlwaysRun

@@ -1,4 +1,4 @@
-@OperatorV2 @QrCodePrinting @Saas
+@OperatorV2 @OperatorV2Part1 @QrCodePrinting @Saas
 Feature: QR Code Printing
 
   @LaunchBrowser @ShouldAlwaysRun

@@ -1,4 +1,4 @@
-@OperatorV2 @RecoveryTickets @Saas
+@OperatorV2 @OperatorV2Part1 @RecoveryTickets @Saas
 Feature: Recovery Tickets
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -13,7 +13,7 @@ Feature: Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT     |
       | investigatingDepartment | DISTRIBUTION POINTS SG |
-      | investigatingHub        | 30JKB                  |
+      | investigatingHub        | {hub-name}             |
       | ticketType              | DAMAGED                |
       | ticketSubType           | IMPROPER PACKAGING     |
       | parcelLocation          | DAMAGED RACK           |
@@ -35,7 +35,7 @@ Feature: Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT     |
       | investigatingDepartment | DISTRIBUTION POINTS SG |
-      | investigatingHub        | 30JKB                  |
+      | investigatingHub        | {hub-name}             |
       | ticketType              | MISSING                |
       | parcelDescription       | GENERATED              |
       | custZendeskId           | 1                      |

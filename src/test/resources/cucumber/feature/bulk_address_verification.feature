@@ -1,4 +1,4 @@
-@OperatorV2 @BulkAddressVerification @Saas
+@OperatorV2 @OperatorV2Part2 @BulkAddressVerification @Saas
 Feature: Bulk Address Verification
 
   @LaunchBrowser @ShouldAlwaysRun

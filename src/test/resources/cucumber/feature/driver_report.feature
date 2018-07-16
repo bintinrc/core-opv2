@@ -1,4 +1,4 @@
-@OperatorV2 @DriverReport @Saas
+@OperatorV2 @OperatorV2Part2 @DriverReport @Saas
 Feature: Driver Report
 
   @LaunchBrowser @ShouldAlwaysRun

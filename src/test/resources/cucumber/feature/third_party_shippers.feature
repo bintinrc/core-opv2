@@ -1,4 +1,4 @@
-@OperatorV2 @ThirdPartyShippers
+@OperatorV2 @OperatorV2Part1 @ThirdPartyShippers
 Feature: Third Party Shippers
 
   @LaunchBrowser @ShouldAlwaysRun

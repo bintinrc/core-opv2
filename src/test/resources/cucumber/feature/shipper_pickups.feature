@@ -1,4 +1,4 @@
-@OperatorV2 @ShipperPickups @Saas
+@OperatorV2 @OperatorV2Part2 @ShipperPickups @Saas
 Feature: Shipper Pickups
 
   @LaunchBrowser @ShouldAlwaysRun

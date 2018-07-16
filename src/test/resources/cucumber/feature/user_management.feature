@@ -1,4 +1,4 @@
-@OperatorV2 @UserManagement @Saas
+@OperatorV2 @OperatorV2Part1 @UserManagement @Saas
 Feature: User Management
 
   @LaunchBrowser @ShouldAlwaysRun

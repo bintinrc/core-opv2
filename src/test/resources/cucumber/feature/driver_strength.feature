@@ -1,4 +1,4 @@
-@OperatorV2 @DriverStrength @Saas @ShouldAlwaysRun
+@OperatorV2 @OperatorV2Part2 @DriverStrength @Saas @ShouldAlwaysRun
 Feature: Driver Strength
 
   @LaunchBrowser

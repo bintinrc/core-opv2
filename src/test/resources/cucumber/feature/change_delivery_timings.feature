@@ -1,4 +1,4 @@
-@OperatorV2 @ChangeDeliveryTimings @Saas
+@OperatorV2 @OperatorV2Part1 @ChangeDeliveryTimings @Saas
 Feature: Change Delivery Timings
 
   @LaunchBrowser @ShouldAlwaysRun

@@ -1,4 +1,4 @@
-@OperatorV2 @OrderCreationV2 @Saas
+@OperatorV2 @OperatorV2Part2 @OrderCreationV2 @Saas
 Feature: Order Creation V2
 
   @LaunchBrowser @ShouldAlwaysRun

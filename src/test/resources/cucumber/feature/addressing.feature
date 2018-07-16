@@ -1,4 +1,4 @@
-@OperatorV2 @Addressing
+@OperatorV2 @OperatorV2Part1 @Addressing
 Feature: Addressing
 
   @LaunchBrowser @ShouldAlwaysRun
