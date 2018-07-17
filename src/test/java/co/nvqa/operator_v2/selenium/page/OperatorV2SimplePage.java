@@ -912,7 +912,7 @@ public class OperatorV2SimplePage extends SimplePage
     public void waitUntilNewWindowOrTabOpened()
     {
         NvLogger.info("Wait until new window or tab opened.");
-        wait5sUntil(()->getWebDriver().getWindowHandles().size()>1, "Window handles size is < 1.");
+        wait5sUntil(()->getWebDriver().getWindowHandles().size()>1, String.format("Window handles size is = %d.", getWebDriver().getWindowHandles().size()));
     }
 
     public void switchToOtherWindow(String expectedUrlEndWith)

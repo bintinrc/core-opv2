@@ -1,6 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ThirdPartyOrderMapping;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -82,7 +84,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
 
     public void verifyOrderMappingRecord(ThirdPartyOrderMapping expectedOrderMapping)
     {
-        searchTableByTrackingId(expectedOrderMapping.getTrackingId());
+        searchTableByTrackingIdUntilFound(expectedOrderMapping.getTrackingId());
         Assert.assertEquals("Third Party Order Tracking ID", expectedOrderMapping.getTrackingId(), getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID));
         Assert.assertEquals("Third Party Order 3PL Tracking ID", expectedOrderMapping.getThirdPlTrackingId(), getTextOnTable(1, COLUMN_CLASS_DATA_THIRD_PARTY_TRACKING_ID));
         Assert.assertEquals("Third Party Order 3PL Provider", expectedOrderMapping.getShipperName(), getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER_NAME));
@@ -134,6 +136,21 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
     public void searchTableByTrackingId(String trackingId)
     {
         searchTableCustom1(COLUMN_CLASS_DATA_TRACKING_ID, trackingId);
+    }
+
+    public void searchTableByTrackingIdUntilFound(String trackingId)
+    {
+        TestUtils.retryIfRuntimeExceptionOccurred(() ->
+        {
+            searchTableByTrackingId(trackingId);
+            boolean isTableEmpty = isTableEmpty();
+
+            if(isTableEmpty)
+            {
+                refreshPage();
+                throw new NvTestRuntimeException("Table is empty. Tracking ID not found. Refreshing Third Party Order Management page.");
+            }
+        }, getCurrentMethodName());
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)
@@ -209,6 +226,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         }
     }
 
+    @SuppressWarnings("unused")
     public static class UploadBulkMappingPage extends OperatorV2SimplePage
     {
         private static final String DIALOG_LOCATOR = "//md-dialog//h4[text()='Upload Bulk Mapping CSV']";
