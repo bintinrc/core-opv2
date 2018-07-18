@@ -1,9 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
 import co.nvqa.commons.model.pdf.AirwayBill;
-import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.PdfUtils;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
@@ -18,13 +16,18 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.*;
+import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.ADD_TO_ROUTE;
+import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.CANCEL_SELECTED;
+import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.MANUALLY_COMPLETE_SELECTED;
+import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.PULL_FROM_ROUTE;
+import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.RESUME_SELECTED;
+import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.SET_RTS_TO_SELECTED;
 
 /**
+ *
  * @author Tristania Siagian
  */
 @SuppressWarnings("WeakerAccess")
@@ -169,27 +172,13 @@ public class AllOrdersPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast("Matches with file shown in table", false);
     }
 
-    public void verifyAllOrdersInCsvIsFoundWithCorrectInfo(List<OrderRequestV2> listOfOrderRequestV2, List<Order> listOfOrderDetails)
+    public void verifyAllOrdersInCsvIsFoundWithCorrectInfo(List<Order> listOfCreatedOrder)
     {
         pause100ms();
         String toastTopText = getToastTopText();
         Assert.assertEquals("Toast message is different.", "Matches with file shown in table", toastTopText);
         waitUntilInvisibilityOfToast("Matches with file shown in table", false);
-
-        for (OrderRequestV2 orderRequestV2 : listOfOrderRequestV2)
-        {
-            String createdOrderTrackingId = orderRequestV2.getTrackingId();
-            Optional<Order> matchedOrderDetailsOptional = listOfOrderDetails.stream().filter(o -> o.getTrackingId().equals(createdOrderTrackingId)).findFirst();
-
-            if (matchedOrderDetailsOptional.isPresent())
-            {
-                Order matchedOrderDetails = matchedOrderDetailsOptional.get();
-                verifyOrderInfoOnTableOrderIsCorrect(orderRequestV2, matchedOrderDetails);
-            } else
-            {
-                throw new NvTestRuntimeException(String.format("Order details for Tracking ID = '%s' not found.", createdOrderTrackingId));
-            }
-        }
+        listOfCreatedOrder.forEach((order) -> verifyOrderInfoOnTableOrderIsCorrect(order));
     }
 
     public void verifyInvalidTrackingIdsIsFailedToFind(List<String> listOfInvalidTrackingId)
@@ -206,9 +195,9 @@ public class AllOrdersPage extends OperatorV2SimplePage
         Assert.assertThat("Granular Status", actualGranularStatus, Matchers.equalToIgnoringCase(expectedOrderStatus));
     }
 
-    public void verifyOrderInfoOnTableOrderIsCorrect(OrderRequestV2 orderRequestV2, Order order)
+    public void verifyOrderInfoOnTableOrderIsCorrect(Order order)
     {
-        String trackingId = orderRequestV2.getTrackingId();
+        String trackingId = order.getTrackingId();
         filterTableOrderByTrackingId(trackingId);
 
         String actualTrackingId = getTextOnTableOrder(1, COLUMN_CLASS_DATA_TRACKING_ID_ON_TABLE_ORDER);
@@ -224,32 +213,32 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         Assert.assertEquals("Tracking ID", trackingId, actualTrackingId);
 
-        Assert.assertEquals("From Name", orderRequestV2.getFromName(), actualFromName);
-        Assert.assertEquals("From Contact", orderRequestV2.getFromContact(), actualFromContact);
-        Assert.assertThat("From Address", actualFromAddress, Matchers.containsString(orderRequestV2.getFromAddress1()));
-        Assert.assertThat("From Address", actualFromAddress, Matchers.containsString(orderRequestV2.getFromAddress2()));
-        Assert.assertEquals("From Postcode", orderRequestV2.getFromPostcode(), actualFromPostcode);
+        Assert.assertEquals("From Name", order.getFromName(), actualFromName);
+        Assert.assertEquals("From Contact", order.getFromContact(), actualFromContact);
+        Assert.assertThat("From Address", actualFromAddress, Matchers.containsString(order.getFromAddress1()));
+        Assert.assertThat("From Address", actualFromAddress, Matchers.containsString(order.getFromAddress2()));
+        Assert.assertEquals("From Postcode", order.getFromPostcode(), actualFromPostcode);
 
-        Assert.assertEquals("To Name", orderRequestV2.getToName(), actualToName);
-        Assert.assertEquals("To Contact", orderRequestV2.getToContact(), actualToContact);
-        Assert.assertThat("To Address", actualToAddress, Matchers.containsString(orderRequestV2.getToAddress1()));
-        Assert.assertThat("To Address", actualToAddress, Matchers.containsString(orderRequestV2.getToAddress2()));
-        Assert.assertEquals("To Postcode", orderRequestV2.getToPostcode(), actualToPostcode);
+        Assert.assertEquals("To Name", order.getToName(), actualToName);
+        Assert.assertEquals("To Contact", order.getToContact(), actualToContact);
+        Assert.assertThat("To Address", actualToAddress, Matchers.containsString(order.getToAddress1()));
+        Assert.assertThat("To Address", actualToAddress, Matchers.containsString(order.getToAddress2()));
+        Assert.assertEquals("To Postcode", order.getToPostcode(), actualToPostcode);
 
         Assert.assertThat("Granular Status", actualGranularStatus, Matchers.equalToIgnoringCase(order.getGranularStatus().replaceAll("_", " ")));
     }
 
-    public void verifyOrderInfoIsCorrect(OrderRequestV2 orderRequestV2, Order order)
+    public void verifyOrderInfoIsCorrect(Order order)
     {
         String mainWindowHandle = getWebDriver().getWindowHandle();
-        Long orderId = TestUtils.getOrderId(orderRequestV2);
-        String expectedTrackingId = orderRequestV2.getTrackingId();
+        Long orderId = order.getId();
+        String expectedTrackingId = order.getTrackingId();
         specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, expectedTrackingId);
 
         try
         {
             switchToEditOrderWindow(orderId);
-            editOrderPage.verifyOrderInfoIsCorrect(orderRequestV2, order);
+            editOrderPage.verifyOrderInfoIsCorrect(order);
         }
         finally
         {
@@ -267,17 +256,17 @@ public class AllOrdersPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast("Complete Order");
     }
 
-    public void verifyOrderIsForceSuccessedSuccessfully(OrderRequestV2 orderRequestV2)
+    public void verifyOrderIsForceSuccessedSuccessfully(Order order)
     {
         String mainWindowHandle = getWebDriver().getWindowHandle();
-        Long orderId = TestUtils.getOrderId(orderRequestV2);
-        String trackingId = orderRequestV2.getTrackingId();
+        Long orderId = order.getId();
+        String trackingId = order.getTrackingId();
         specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, trackingId);
 
         try
         {
             switchToEditOrderWindow(orderId);
-            editOrderPage.verifyOrderIsForceSuccessedSuccessfully(orderRequestV2);
+            editOrderPage.verifyOrderIsForceSuccessedSuccessfully(order);
         }
         finally
         {
@@ -416,29 +405,29 @@ public class AllOrdersPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast("Downloading");
     }
 
-    public void verifyWaybillContentsIsCorrect(OrderRequestV2 orderRequestV2)
+    public void verifyWaybillContentsIsCorrect(Order order)
     {
-        String trackingId = orderRequestV2.getTrackingId();
+        String trackingId = order.getTrackingId();
         String latestFilenameOfDownloadedPdf = getLatestDownloadedFilename("awb_" + trackingId);
         verifyFileDownloadedSuccessfully(latestFilenameOfDownloadedPdf);
         AirwayBill airwayBill = PdfUtils.getOrderInfoFromAirwayBill(TestConstants.TEMP_DIR + latestFilenameOfDownloadedPdf, 0);
 
         Assert.assertEquals("Tracking ID", trackingId, airwayBill.getTrackingId());
 
-        Assert.assertEquals("From Name", orderRequestV2.getFromName(), airwayBill.getFromName());
-        Assert.assertEquals("From Contact", orderRequestV2.getFromContact(), airwayBill.getFromContact());
-        Assert.assertThat("From Address", airwayBill.getFromAddress(), Matchers.containsString(orderRequestV2.getFromAddress1()));
-        Assert.assertThat("From Address", airwayBill.getFromAddress(), Matchers.containsString(orderRequestV2.getFromAddress2()));
-        Assert.assertThat("Postcode In From Address", airwayBill.getFromAddress(), Matchers.containsString(orderRequestV2.getFromPostcode()));
+        Assert.assertEquals("From Name", order.getFromName(), airwayBill.getFromName());
+        Assert.assertEquals("From Contact", order.getFromContact(), airwayBill.getFromContact());
+        Assert.assertThat("From Address", airwayBill.getFromAddress(), Matchers.containsString(order.getFromAddress1()));
+        Assert.assertThat("From Address", airwayBill.getFromAddress(), Matchers.containsString(order.getFromAddress2()));
+        Assert.assertThat("Postcode In From Address", airwayBill.getFromAddress(), Matchers.containsString(order.getFromPostcode()));
 
-        Assert.assertEquals("To Name", orderRequestV2.getToName(), airwayBill.getToName());
-        Assert.assertEquals("To Contact", orderRequestV2.getToContact(), airwayBill.getToContact());
-        Assert.assertThat("To Address", airwayBill.getToAddress(), Matchers.containsString(orderRequestV2.getToAddress1()));
-        Assert.assertThat("To Address", airwayBill.getToAddress(), Matchers.containsString(orderRequestV2.getToAddress2()));
-        Assert.assertThat("Postcode In To Address", airwayBill.getToAddress(), Matchers.containsString(orderRequestV2.getToPostcode()));
+        Assert.assertEquals("To Name", order.getToName(), airwayBill.getToName());
+        Assert.assertEquals("To Contact", order.getToContact(), airwayBill.getToContact());
+        Assert.assertThat("To Address", airwayBill.getToAddress(), Matchers.containsString(order.getToAddress1()));
+        Assert.assertThat("To Address", airwayBill.getToAddress(), Matchers.containsString(order.getToAddress2()));
+        Assert.assertThat("Postcode In To Address", airwayBill.getToAddress(), Matchers.containsString(order.getToPostcode()));
 
-        Assert.assertEquals("COD", orderRequestV2.getCodGoods(), airwayBill.getCod());
-        Assert.assertEquals("Comments", orderRequestV2.getInstruction(), airwayBill.getComments());
+        Assert.assertEquals("COD", order.getCodGoods(), airwayBill.getCod());
+        Assert.assertEquals("Comments", order.getInstruction(), airwayBill.getComments());
 
         String actualQrCodeTrackingId = TestUtils.getTextFromQrCodeImage(airwayBill.getTrackingIdQrCodeFile());
         Assert.assertEquals("Tracking ID - QR Code", trackingId, actualQrCodeTrackingId);
@@ -532,17 +521,17 @@ public class AllOrdersPage extends OperatorV2SimplePage
         }
     }
 
-    public void verifyOrderInfoAfterGlobalInbound(OrderRequestV2 orderRequestV2, GlobalInboundParams globalInboundParams, Double expectedOrderCost, String expectedStatus, List<String> expectedGranularStatus, String expectedDeliveryStatus)
+    public void verifyOrderInfoAfterGlobalInbound(Order order, GlobalInboundParams globalInboundParams, Double expectedOrderCost, String expectedStatus, List<String> expectedGranularStatus, String expectedDeliveryStatus)
     {
         String mainWindowHandle = getWebDriver().getWindowHandle();
-        Long orderId = TestUtils.getOrderId(orderRequestV2);
-        String trackingId = orderRequestV2.getTrackingId();
+        Long orderId = order.getId();
+        String trackingId = order.getTrackingId();
         specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, trackingId);
 
         try
         {
             switchToEditOrderWindow(orderId);
-            editOrderPage.verifyOrderIsGlobalInboundedSuccessfully(orderRequestV2, globalInboundParams, expectedOrderCost, expectedStatus, expectedGranularStatus, expectedDeliveryStatus);
+            editOrderPage.verifyOrderIsGlobalInboundedSuccessfully(order, globalInboundParams, expectedOrderCost, expectedStatus, expectedGranularStatus, expectedDeliveryStatus);
         }
         finally
         {

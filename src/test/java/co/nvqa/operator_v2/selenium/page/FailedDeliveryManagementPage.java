@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -27,8 +28,11 @@ public class FailedDeliveryManagementPage extends CommonParcelManagementPage
         super(webDriver, MD_VIRTUAL_REPEAT);
     }
 
-    public void verifyFailedDeliveryOrderIsListed(String trackingId, String orderType)
+    public void verifyFailedDeliveryOrderIsListed(Order order)
     {
+        String trackingId = order.getTrackingId();
+        String orderType = order.getType();
+
         searchTableByTrackingId(trackingId);
 
         String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
@@ -41,7 +45,7 @@ public class FailedDeliveryManagementPage extends CommonParcelManagementPage
         Assert.assertEquals("Failure Comments", TestConstants.DRIVER_DELIVERY_FAIL_STRING, actualFailureComments);
 
         String actualFailureReason = getTextOnTable(1, COLUMN_CLASS_DATA_FAILURE_REASON);
-        Assert.assertThat(String.format("Failure Comments", trackingId), actualFailureReason, Matchers.anyOf(Matchers.equalTo("RECOVERY"), Matchers.equalTo("Normal FDM - Ignore")));
+        Assert.assertThat("Failure Comments", actualFailureReason, Matchers.isOneOf("RECOVERY", "Normal FDM - Ignore"));
     }
 
     public void verifyCsvFileDownloadedSuccessfully(String trackingId)

@@ -4,7 +4,6 @@ import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.route.Route;
-import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
 import co.nvqa.commons.model.order_create.v2.Parcel;
 import co.nvqa.commons.model.pdf.AirwayBill;
 import co.nvqa.commons.utils.NvLogger;
@@ -23,6 +22,7 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 
 /**
+ *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
@@ -53,10 +53,10 @@ public class EditOrderPage extends OperatorV2SimplePage
         clickf("//div[@aria-hidden='false']/md-menu-content/md-menu-item/button/span[contains(text(), '%s')]", childMenuName);
     }
 
-    public void editOrderDetails(OrderRequestV2 orderRequestV2)
+    public void editOrderDetails(Order order)
     {
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'order-edit-details')]//nv-api-text-button[@name='commons.save-changes']");
-        Parcel parcel = orderRequestV2.getParcels().get(0);
+        Parcel parcel = null; //orderRequestV2.getParcels().get(0);
         selectValueFromMdSelectById("parcel-size", getParcelSizeAsString(parcel.getParcelSizeId()));
         sendKeysByIdAlt("weight", String.valueOf(parcel.getWeight()));
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
@@ -127,29 +127,29 @@ public class EditOrderPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast("Downloading");
     }
 
-    public void verifyAirwayBillContentsIsCorrect(OrderRequestV2 orderRequestV2)
+    public void verifyAirwayBillContentsIsCorrect(Order order)
     {
-        String trackingId = orderRequestV2.getTrackingId();
+        String trackingId = order.getTrackingId();
         String latestFilenameOfDownloadedPdf = getLatestDownloadedFilename("awb_" + trackingId);
         verifyFileDownloadedSuccessfully(latestFilenameOfDownloadedPdf);
         AirwayBill airwayBill = PdfUtils.getOrderInfoFromAirwayBill(TestConstants.TEMP_DIR + latestFilenameOfDownloadedPdf, 0);
 
         Assert.assertEquals("Tracking ID", trackingId, airwayBill.getTrackingId());
 
-        Assert.assertEquals("From Name", orderRequestV2.getFromName(), airwayBill.getFromName());
-        Assert.assertEquals("From Contact", orderRequestV2.getFromContact(), airwayBill.getFromContact());
-        Assert.assertThat("From Address", airwayBill.getFromAddress(), Matchers.containsString(orderRequestV2.getFromAddress1()));
-        Assert.assertThat("From Address", airwayBill.getFromAddress(), Matchers.containsString(orderRequestV2.getFromAddress2()));
-        Assert.assertThat("Postcode In From Address", airwayBill.getFromAddress(), Matchers.containsString(orderRequestV2.getFromPostcode()));
+        Assert.assertEquals("From Name", order.getFromName(), airwayBill.getFromName());
+        Assert.assertEquals("From Contact", order.getFromContact(), airwayBill.getFromContact());
+        Assert.assertThat("From Address", airwayBill.getFromAddress(), Matchers.containsString(order.getFromAddress1()));
+        Assert.assertThat("From Address", airwayBill.getFromAddress(), Matchers.containsString(order.getFromAddress2()));
+        Assert.assertThat("Postcode In From Address", airwayBill.getFromAddress(), Matchers.containsString(order.getFromPostcode()));
 
-        Assert.assertEquals("To Name", orderRequestV2.getToName(), airwayBill.getToName());
-        Assert.assertEquals("To Contact", orderRequestV2.getToContact(), airwayBill.getToContact());
-        Assert.assertThat("To Address", airwayBill.getToAddress(), Matchers.containsString(orderRequestV2.getToAddress1()));
-        Assert.assertThat("To Address", airwayBill.getToAddress(), Matchers.containsString(orderRequestV2.getToAddress2()));
-        Assert.assertThat("Postcode In To Address", airwayBill.getToAddress(), Matchers.containsString(orderRequestV2.getToPostcode()));
+        Assert.assertEquals("To Name", order.getToName(), airwayBill.getToName());
+        Assert.assertEquals("To Contact", order.getToContact(), airwayBill.getToContact());
+        Assert.assertThat("To Address", airwayBill.getToAddress(), Matchers.containsString(order.getToAddress1()));
+        Assert.assertThat("To Address", airwayBill.getToAddress(), Matchers.containsString(order.getToAddress2()));
+        Assert.assertThat("Postcode In To Address", airwayBill.getToAddress(), Matchers.containsString(order.getToPostcode()));
 
-        Assert.assertEquals("COD", orderRequestV2.getCodGoods(), airwayBill.getCod());
-        Assert.assertEquals("Comments", orderRequestV2.getInstruction(), airwayBill.getComments());
+        Assert.assertEquals("COD", order.getCodGoods(), airwayBill.getCod());
+        Assert.assertEquals("Comments", order.getInstruction(), airwayBill.getComments());
 
         String actualQrCodeTrackingId = TestUtils.getTextFromQrCodeImage(airwayBill.getTrackingIdQrCodeFile());
         Assert.assertEquals("Tracking ID - QR Code", trackingId, actualQrCodeTrackingId);
@@ -167,12 +167,13 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public void verifyOrderInstructions(String expectedPickupInstructions, String expectedDeliveryInstructions)
     {
-        if (expectedPickupInstructions != null)
+        if(expectedPickupInstructions!=null)
         {
             String actualPickupInstructions = getText("//div[label[text()='Pick Up Instructions']]/p");
             Assert.assertThat("Pick Up Instructions", expectedPickupInstructions, Matchers.equalToIgnoringCase(actualPickupInstructions));
         }
-        if (expectedDeliveryInstructions != null)
+
+        if(expectedDeliveryInstructions!=null)
         {
             Assert.assertEquals("Delivery Instructions", expectedDeliveryInstructions, deliveryDetailsBox.getDeliveryInstructions());
         }
@@ -185,9 +186,9 @@ public class EditOrderPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast("The order has been completed", true);
     }
 
-    public void verifyEditOrderDetailsIsSuccess(OrderRequestV2 orderRequestV2, Order order)
+    public void verifyEditOrderDetailsIsSuccess(Order oldOrder, Order newOrder)
     {
-        Parcel expectedParcel = orderRequestV2.getParcels().get(0);
+        Parcel expectedParcel = null; //oldOrder.getParcels().get(0);
 
         String actualSize = getSize();
         Double actualWeight = getWeight();
@@ -195,7 +196,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         Assert.assertEquals("Order - Size", getParcelSizeAsLongString(expectedParcel.getParcelSizeId()), actualSize);
         Assert.assertEquals("Order - Weight", expectedParcel.getWeight(), actualWeight);
 
-        Assert.assertEquals("Order Details - Size", order.getParcelSize(), getSize());
+        Assert.assertEquals("Order Details - Size", newOrder.getParcelSize(), getSize());
         Assert.assertEquals("Order Details - Weight", expectedParcel.getWeight(), getWeight());
     }
 
@@ -205,15 +206,15 @@ public class EditOrderPage extends OperatorV2SimplePage
         Assert.assertThat("Different Result Returned", actualLatestEvent, Matchers.isOneOf("Van Inbound Scan", "DRIVER INBOUND SCAN"));
     }
 
-    public void verifyOrderInfoIsCorrect(OrderRequestV2 orderRequestV2, Order order)
+    public void verifyOrderInfoIsCorrect(Order order)
     {
-        String expectedTrackingId = orderRequestV2.getTrackingId();
+        String expectedTrackingId = order.getTrackingId();
 
         Assert.assertEquals("Tracking ID", expectedTrackingId, getTrackingId());
         Assert.assertThat("Status", getStatus(), Matchers.equalToIgnoringCase(order.getStatus()));
         Assert.assertThat("Granular Status", getGranularStatus(), Matchers.equalToIgnoringCase(order.getGranularStatus().replaceFirst("_", " ")));
-        Assert.assertThat("Shipper ID", getShipperId(), Matchers.containsString(String.valueOf(orderRequestV2.getShipperId())));
-        Assert.assertEquals("Order Type", orderRequestV2.getType(), getOrderType());
+        Assert.assertThat("Shipper ID", getShipperId(), Matchers.containsString(String.valueOf(order.getShipper().getId())));
+        Assert.assertEquals("Order Type", order.getType(), getOrderType());
         Assert.assertEquals("Size", order.getParcelSize(), getSize());
         Assert.assertEquals("Weight", order.getWeight(), getWeight(), 0.0);
 
@@ -223,59 +224,59 @@ public class EditOrderPage extends OperatorV2SimplePage
         Transaction deliveryTransaction = order.getTransactions().get(1);
         Assert.assertEquals("Delivery Status", deliveryTransaction.getStatus(), getDeliveryStatus());
 
-        verifyPickupAndDeliveryInfo(orderRequestV2);
+        verifyPickupAndDeliveryInfo(order);
     }
 
-    public void verifyOrderIsForceSuccessedSuccessfully(OrderRequestV2 orderRequestV2)
+    public void verifyOrderIsForceSuccessedSuccessfully(Order order)
     {
-        String expectedTrackingId = orderRequestV2.getTrackingId();
+        String expectedTrackingId = order.getTrackingId();
 
         Assert.assertEquals("Tracking ID", expectedTrackingId, getTrackingId());
         Assert.assertThat("Status", getStatus(), Matchers.equalToIgnoringCase("Completed"));
         Assert.assertThat("Granular Status", getGranularStatus(), Matchers.equalToIgnoringCase("Completed"));
 
-        Long shipperId = orderRequestV2.getShipperId();
+        Long shipperId = order.getShipper().getId();
 
         if(shipperId!=null)
         {
             Assert.assertThat("Shipper ID", getShipperId(), Matchers.containsString(String.valueOf(shipperId)));
         }
 
-        Assert.assertEquals("Order Type", orderRequestV2.getType(), getOrderType());
+        Assert.assertEquals("Order Type", order.getType(), getOrderType());
         //Assert.assertThat("Latest Event", getLatestEvent(), Matchers.containsString("Order Force Successed")); //Disabled because somehow the latest event name is always 'PRICING_CHANGE' and the value on Latest Event is '-'.
         Assert.assertEquals("Pickup Status", "SUCCESS", getPickupStatus());
         Assert.assertEquals("Delivery Status", "SUCCESS", getDeliveryStatus());
 
-        verifyPickupAndDeliveryInfo(orderRequestV2);
+        verifyPickupAndDeliveryInfo(order);
     }
 
-    public void verifyPickupAndDeliveryInfo(OrderRequestV2 orderRequestV2)
+    public void verifyPickupAndDeliveryInfo(Order order)
     {
         // Pickup
-        Assert.assertEquals("From Name", orderRequestV2.getFromName(), getFromName());
-        Assert.assertEquals("From Email", orderRequestV2.getFromEmail(), getFromEmail());
-        Assert.assertEquals("From Contact", orderRequestV2.getFromContact(), getFromContact());
+        Assert.assertEquals("From Name", order.getFromName(), getFromName());
+        Assert.assertEquals("From Email", order.getFromEmail(), getFromEmail());
+        Assert.assertEquals("From Contact", order.getFromContact(), getFromContact());
         String fromAddress = getFromAddress();
-        Assert.assertThat("From Address", fromAddress, Matchers.containsString(orderRequestV2.getFromAddress1()));
-        Assert.assertThat("From Address", fromAddress, Matchers.containsString(orderRequestV2.getFromAddress2()));
+        Assert.assertThat("From Address", fromAddress, Matchers.containsString(order.getFromAddress1()));
+        Assert.assertThat("From Address", fromAddress, Matchers.containsString(order.getFromAddress2()));
 
         // Delivery
-        Assert.assertEquals("To Name", orderRequestV2.getToName(), getToName());
-        Assert.assertEquals("To Email", orderRequestV2.getToEmail(), getToEmail());
-        Assert.assertEquals("To Contact", orderRequestV2.getToContact(), getToContact());
+        Assert.assertEquals("To Name", order.getToName(), getToName());
+        Assert.assertEquals("To Email", order.getToEmail(), getToEmail());
+        Assert.assertEquals("To Contact", order.getToContact(), getToContact());
         String toAddress = getToAddress();
-        Assert.assertThat("To Address", toAddress, Matchers.containsString(orderRequestV2.getToAddress1()));
-        Assert.assertThat("To Address", toAddress, Matchers.containsString(orderRequestV2.getToAddress2()));
+        Assert.assertThat("To Address", toAddress, Matchers.containsString(order.getToAddress1()));
+        Assert.assertThat("To Address", toAddress, Matchers.containsString(order.getToAddress2()));
     }
 
-    public void verifyOrderIsGlobalInboundedSuccessfully(OrderRequestV2 orderRequestV2, GlobalInboundParams globalInboundParams, Double expectedOrderCost, String expectedStatus, List<String> expectedGranularStatus, String expectedDeliveryStatus)
+    public void verifyOrderIsGlobalInboundedSuccessfully(Order order, GlobalInboundParams globalInboundParams, Double expectedOrderCost, String expectedStatus, List<String> expectedGranularStatus, String expectedDeliveryStatus)
     {
         if(isElementExistFast("//nv-icon-text-button[@name='container.order.edit.show-more']"))
         {
             clickNvIconTextButtonByName("container.order.edit.show-more");
         }
 
-        String expectedTrackingId = orderRequestV2.getTrackingId();
+        String expectedTrackingId = order.getTrackingId();
         Assert.assertEquals("Tracking ID", expectedTrackingId, getTrackingId());
 
         if(StringUtils.isNotBlank(expectedStatus))

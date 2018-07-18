@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
@@ -87,17 +86,15 @@ public class AllOrdersSteps extends AbstractSteps
     @When("^Operator filter the result table by Tracking ID on All Orders page and verify order info is correct$")
     public void operatorFilterTheResultTableByTrackingIdOnAllOrdersPageAndVerifyOrderInfoIsCorrect()
     {
-        OrderRequestV2 orderRequestV2 = get(KEY_CREATED_ORDER);
-        Order order = get(KEY_ORDER_DETAILS);
-        allOrdersPage.verifyOrderInfoOnTableOrderIsCorrect(orderRequestV2, order);
+        Order order = get(KEY_CREATED_ORDER);
+        allOrdersPage.verifyOrderInfoOnTableOrderIsCorrect(order);
     }
 
     @Then("^Operator verify the new pending pickup order is found on All Orders page with correct info$")
     public void operatorVerifyTheNewPendingPickupOrderIsFoundOnAllOrdersPageWithCorrectInfo()
     {
-        OrderRequestV2 orderRequestV2 = get(KEY_CREATED_ORDER);
-        Order order = get(KEY_ORDER_DETAILS);
-        allOrdersPage.verifyOrderInfoIsCorrect(orderRequestV2, order);
+        Order order = get(KEY_CREATED_ORDER);
+        allOrdersPage.verifyOrderInfoIsCorrect(order);
     }
 
     @When("^Operator find multiple orders by uploading CSV on All Orders page$")
@@ -129,21 +126,8 @@ public class AllOrdersSteps extends AbstractSteps
     @Then("^Operator verify all orders in CSV is found on All Orders page with correct info$")
     public void operatorVerifyAllOrdersInCsvIsFoundOnAllOrdersPageWithCorrectInfo()
     {
-        List<OrderRequestV2> listOfOrderRequestV2 = get(KEY_LIST_OF_CREATED_ORDER);
-
-        if (listOfOrderRequestV2 == null || listOfOrderRequestV2.isEmpty())
-        {
-            throw new RuntimeException("List of created order should not be null or empty.");
-        }
-
-        List<Order> listOfOrderDetails = get(KEY_LIST_OF_ORDER_DETAILS);
-
-        if (listOfOrderDetails == null || listOfOrderDetails.isEmpty())
-        {
-            throw new RuntimeException("List of order details should not be null or empty.");
-        }
-
-        allOrdersPage.verifyAllOrdersInCsvIsFoundWithCorrectInfo(listOfOrderRequestV2, listOfOrderDetails);
+        List<Order> listOfCreatedOrder = get(KEY_LIST_OF_CREATED_ORDER);
+        allOrdersPage.verifyAllOrdersInCsvIsFoundWithCorrectInfo(listOfCreatedOrder);
     }
 
     @When("^Operator uploads CSV that contains invalid Tracking ID on All Orders page$")
@@ -175,8 +159,8 @@ public class AllOrdersSteps extends AbstractSteps
     @Then("^Operator verify the order is Force Successed successfully$")
     public void operatorVerifyTheOrderIsForceSucceedSuccessfully()
     {
-        OrderRequestV2 orderRequestV2 = get(KEY_CREATED_ORDER);
-        allOrdersPage.verifyOrderIsForceSuccessedSuccessfully(orderRequestV2);
+        Order order = get(KEY_CREATED_ORDER);
+        allOrdersPage.verifyOrderIsForceSuccessedSuccessfully(order);
     }
 
     @When("^Operator RTS single order on next day on All Orders page$")
@@ -189,8 +173,8 @@ public class AllOrdersSteps extends AbstractSteps
     @When("^Operator cancel multiple orders on All Orders page$")
     public void operatorCancelMultipleOrdersOnAllOrdersPage()
     {
-        List<OrderRequestV2> orders = get(KEY_LIST_OF_CREATED_ORDER);
-        List<String> listOfTrackingIds = orders.stream().map(OrderRequestV2::getTrackingId).collect(Collectors.toList());
+        List<Order> listOfCreatedOrder = get(KEY_LIST_OF_CREATED_ORDER);
+        List<String> listOfTrackingIds = listOfCreatedOrder.stream().map(Order::getTrackingId).collect(Collectors.toList());
         allOrdersPage.cancelSelected(listOfTrackingIds);
     }
 
@@ -204,17 +188,17 @@ public class AllOrdersSteps extends AbstractSteps
     @When("^Operator pull out multiple orders from route on All Orders page$")
     public void operatorPullOutMultipleOrdersFromRouteOnAllOrdersPage()
     {
-        List<OrderRequestV2> orders = get(KEY_LIST_OF_CREATED_ORDER);
-        List<String> listOfTrackingIds = orders.stream().map(OrderRequestV2::getTrackingId).collect(Collectors.toList());
+        List<Order> listOfCreatedOrder = get(KEY_LIST_OF_CREATED_ORDER);
+        List<String> listOfTrackingIds = listOfCreatedOrder.stream().map(Order::getTrackingId).collect(Collectors.toList());
         allOrdersPage.pullOutFromRoute(listOfTrackingIds);
     }
 
     @When("^Operator add multiple orders to route on All Orders page$")
     public void operatorAddMultipleOrdersToRouteOnAllOrdersPage()
     {
-        List<OrderRequestV2> orders = get(KEY_LIST_OF_CREATED_ORDER);
+        List<Order> listOfCreatedOrder = get(KEY_LIST_OF_CREATED_ORDER);
         Long routeId = get(KEY_CREATED_ROUTE_ID);
-        List<String> listOfTrackingIds = orders.stream().map(OrderRequestV2::getTrackingId).collect(Collectors.toList());
+        List<String> listOfTrackingIds = listOfCreatedOrder.stream().map(Order::getTrackingId).collect(Collectors.toList());
         allOrdersPage.addToRoute(listOfTrackingIds, routeId);
     }
 
@@ -228,8 +212,8 @@ public class AllOrdersSteps extends AbstractSteps
     @Then("^Operator verify the printed waybill for single order on All Orders page contains correct info$")
     public void operatorVerifyThePrintedWaybillForSingleOrderOnAllOrdersPageContainsCorrectInfo()
     {
-        OrderRequestV2 orderRequestV2 = get(KEY_CREATED_ORDER);
-        allOrdersPage.verifyWaybillContentsIsCorrect(orderRequestV2);
+        Order order = get(KEY_CREATED_ORDER);
+        allOrdersPage.verifyWaybillContentsIsCorrect(order);
     }
 
     @Then("^Operator verify order info after Global Inbound$")
@@ -244,7 +228,7 @@ public class AllOrdersSteps extends AbstractSteps
     @Then("^Operator verify following order info parameters after Global Inbound$")
     public void operatorVerifyFollowingOrderInfoParametersAfterGlobalInbound(Map<String, String> mapOfData)
     {
-        OrderRequestV2 orderRequestV2 = get(KEY_CREATED_ORDER);
+        Order createdOrder = get(KEY_CREATED_ORDER);
         GlobalInboundParams globalInboundParams = get(KEY_GLOBAL_INBOUND_PARAMS);
         Double currentOrderCost = get(KEY_CURRENT_ORDER_COST);
         String expectedStatus = mapOfData.get("orderStatus");
@@ -255,7 +239,7 @@ public class AllOrdersSteps extends AbstractSteps
             expectedGranularStatus = Arrays.stream(expectedGranularStatusStr.split(";")).map(String::trim).collect(Collectors.toList());
         }
         String expectedDeliveryStatus = mapOfData.get("deliveryStatus");
-        allOrdersPage.verifyOrderInfoAfterGlobalInbound(orderRequestV2, globalInboundParams, currentOrderCost, expectedStatus, expectedGranularStatus, expectedDeliveryStatus);
+        allOrdersPage.verifyOrderInfoAfterGlobalInbound(createdOrder, globalInboundParams, currentOrderCost, expectedStatus, expectedGranularStatus, expectedDeliveryStatus);
     }
 
     @When("^Operator resume order on All Orders page$")

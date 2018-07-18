@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
 import co.nvqa.commons.model.order_create.v2.Parcel;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
@@ -44,10 +43,10 @@ public class EditOrderSteps extends AbstractSteps
     @When("^Operator Edit Order Details on Edit Order page$")
     public void operatorEditOrderDetailsOnEditOrderPage()
     {
-        OrderRequestV2 orderRequestV2 = get(KEY_ORDER_CREATE_REQUEST);
+        Order order = get(KEY_ORDER_CREATE_REQUEST);
 
-        OrderRequestV2 orderRequestV2Edited = SerializationUtils.clone(orderRequestV2);
-        Parcel parcelEdited = orderRequestV2Edited.getParcels().get(0);
+        Order orderEdited = SerializationUtils.clone(order);
+        Parcel parcelEdited = null; //orderRequestV2Edited.getParcels().get(0);
 
         int newParcelSizeId = (parcelEdited.getParcelSizeId()+1)%4;
         parcelEdited.setParcelSizeId(newParcelSizeId);
@@ -65,16 +64,16 @@ public class EditOrderSteps extends AbstractSteps
 
         parcelEdited.setWeight(newWeight);
 
-        editOrderPage.editOrderDetails(orderRequestV2Edited);
-        put("orderRequestV2Edited", orderRequestV2Edited);
+        editOrderPage.editOrderDetails(orderEdited);
+        put("orderRequestV2Edited", orderEdited);
     }
 
     @Then("^Operator Edit Order Details on Edit Order page successfully$")
     public void operatorEditOrderDetailsOnEditOrderPageSuccessfully()
     {
-        OrderRequestV2 orderRequestV2Edited = get("orderRequestV2Edited");
+        Order orderEdited = get("orderRequestV2Edited");
         Order order = get(KEY_ORDER_DETAILS);
-        editOrderPage.verifyEditOrderDetailsIsSuccess(orderRequestV2Edited, order);
+        editOrderPage.verifyEditOrderDetailsIsSuccess(orderEdited, order);
     }
 
     @When("^Operator enter Order Instructions on Edit Order page:$")
@@ -96,14 +95,19 @@ public class EditOrderSteps extends AbstractSteps
     @When("^Operator verify Order Instructions are updated on Edit Order Page$")
     public void operatorVerifyOrderInstructionsAreUpdatedOnEditOrderPage()
     {
-        OrderRequestV2 orderRequestV2 = get(KEY_ORDER_CREATE_REQUEST);
+        Order order = get(KEY_ORDER_CREATE_REQUEST);
         String pickupInstruction = get(KEY_PICKUP_INSTRUCTION);
-        if (StringUtils.isNotBlank(pickupInstruction)){
-            pickupInstruction = orderRequestV2.getInstruction() + ", " + pickupInstruction;
+
+        if(StringUtils.isNotBlank(pickupInstruction))
+        {
+            pickupInstruction = order.getInstruction() + ", " + pickupInstruction;
         }
+
         String deliveryInstruction = get(KEY_DELIVERY_INSTRUCTION);
-        if (StringUtils.isNotBlank(deliveryInstruction)){
-            deliveryInstruction = orderRequestV2.getInstruction() + ", " + deliveryInstruction;
+
+        if(StringUtils.isNotBlank(deliveryInstruction))
+        {
+            deliveryInstruction = order.getInstruction() + ", " + deliveryInstruction;
         }
 
         editOrderPage.verifyOrderInstructions(pickupInstruction, deliveryInstruction);
@@ -118,9 +122,9 @@ public class EditOrderSteps extends AbstractSteps
     @Then("^Operator verify the order completed successfully on Edit Order page$")
     public void operatorVerifyTheOrderCompletedSuccessfullyOnEditOrderPage()
     {
-        OrderRequestV2 orderRequestV2 = get(KEY_ORDER_CREATE_REQUEST);
-        orderRequestV2.setTrackingId(get(KEY_CREATED_ORDER_TRACKING_ID));
-        editOrderPage.verifyOrderIsForceSuccessedSuccessfully(orderRequestV2);
+        Order order = get(KEY_ORDER_CREATE_REQUEST);
+        order.setTrackingId(get(KEY_CREATED_ORDER_TRACKING_ID));
+        editOrderPage.verifyOrderIsForceSuccessedSuccessfully(order);
     }
 
     @When("^Operator change Priority Level to \"(\\d+)\" on Edit Order page$")
@@ -144,8 +148,8 @@ public class EditOrderSteps extends AbstractSteps
     @Then("^Operator verify the printed Airway bill for single order on Edit Orders page contains correct info$")
     public void operatorVerifyThePrintedAirwayBillForSingleOrderOnEditOrdersPageContainsCorrectInfo()
     {
-        OrderRequestV2 orderRequestV2 = get(KEY_CREATED_ORDER);
-        editOrderPage.verifyAirwayBillContentsIsCorrect(orderRequestV2);
+        Order order = get(KEY_CREATED_ORDER);
+        editOrderPage.verifyAirwayBillContentsIsCorrect(order);
     }
 
     @When("^Operator add created order to the (.+) route on Edit Order page$")
@@ -157,7 +161,7 @@ public class EditOrderSteps extends AbstractSteps
     @Then("^Operator verify the order is added to the (.+) route on Edit Order page$")
     public void operatorVerifyTheOrderIsAddedToTheRouteOnEditOrderPage(String type)
     {
-        switch (type.toUpperCase())
+        switch(type.toUpperCase())
         {
             case "DELIVERY": editOrderPage.verifyDeliveryRouteInfo(get(KEY_CREATED_ROUTE)); break;
             case "PICKUP": editOrderPage.verifyPickupRouteInfo(get(KEY_CREATED_ROUTE)); break;

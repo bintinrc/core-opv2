@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
+import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.selenium.page.RouteCashInboundPage;
@@ -34,10 +34,10 @@ public class RouteCashInboundSteps extends AbstractSteps
     @When("^Operator create new COD on Route Cash Inbound page$")
     public void operatorCreateNewCod()
     {
-        OrderRequestV2 orderV2 = get(KEY_CREATED_ORDER);
+        Order order = get(KEY_CREATED_ORDER);
         Long routeId = get(KEY_CREATED_ROUTE_ID);
 
-        Double codGoods = orderV2.getCodGoods();
+        Double codGoods = order.getCodGoods();
         Assert.assertNotNull("COD Goods should not be null.", codGoods);
         Double amountCollected = codGoods-(codGoods.intValue()/2);
         String receiptNumber = "#"+routeId+"-"+generateDateUniqueString();

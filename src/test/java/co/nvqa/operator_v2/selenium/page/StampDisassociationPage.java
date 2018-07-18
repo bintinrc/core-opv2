@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
+ *
  * @author Sergey Mishanin
  */
 @SuppressWarnings("WeakerAccess")
@@ -45,6 +46,4 @@ public class StampDisassociationPage extends OperatorV2SimplePage
         String actualDeliveryAddress = StringUtils.normalizeSpace(getText(LOCATOR_TEXT_DELIVERY_ADDRESS));
         Assert.assertEquals("Delivery Address", order.buildCompleteToAddress(), actualDeliveryAddress);
     }
-
-
 }

@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
+import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.FailedDeliveryManagementPage;
 import com.google.inject.Inject;
@@ -32,10 +32,8 @@ public class FailedDeliveryManagementSteps extends AbstractSteps
     @Then("^Operator verify the failed delivery order is listed on Failed Delivery orders list$")
     public void operatorVerifyTheFailedDeliveryOrderIsListedOnFailedDeliveryOrderList()
     {
-        OrderRequestV2 orderV2 = get(KEY_CREATED_ORDER);
-        String trackingId = orderV2.getTrackingId();
-        String orderType = orderV2.getType();
-        failedDeliveryManagementPage.verifyFailedDeliveryOrderIsListed(trackingId, orderType);
+        Order order = get(KEY_CREATED_ORDER);
+        failedDeliveryManagementPage.verifyFailedDeliveryOrderIsListed(order);
     }
 
     @When("^Operator download CSV file of failed delivery order on Failed Delivery orders list$")

@@ -1,16 +1,11 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.order_create.v2.OrderRequestV2;
 import co.nvqa.commons.utils.StandardScenarioStorage;
-import co.nvqa.operator_v2.selenium.page.LoginPage;
 import co.nvqa.operator_v2.selenium.page.StampDisassociationPage;
 import com.google.inject.Inject;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
@@ -43,9 +38,8 @@ public class StampDisassociationSteps extends AbstractSteps
     @Then("^Operator verify order details on Stamp Disassociation page$")
     public void operatorVerifyOrderDetailsOnStampDisassociationPage()
     {
-        Order order = get(KEY_ORDER_DETAILS);
+        Order order = get(KEY_CREATED_ORDER);
         stampDisassociationPage.verifyOrderDetails(order);
-
     }
 
     @Then("^Operator verify the label says \"([^\"]*)\" on Stamp Disassociation page$")
