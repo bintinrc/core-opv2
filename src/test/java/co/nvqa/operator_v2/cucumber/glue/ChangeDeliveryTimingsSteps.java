@@ -47,15 +47,15 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
     }
 
     @Then("^Operator uploads the CSV file on Change Delivery Timings page using data below:$")
-    public void operatorUploadsTheCsvFileOnChangeDeliveryTimingsPageUsingDataBelow(DataTable dataTable) {
-        Map<String,String> mapOfDynamicVariable = new HashMap<>();
-        mapOfDynamicVariable.put("tracking_id", get(KEY_CREATED_ORDER_TRACKING_ID));
-        Map<String,String> mapOfData = replaceParamAndGetAsMap(dataTable, mapOfDynamicVariable);
+    public void operatorUploadsTheCsvFileOnChangeDeliveryTimingsPageUsingDataBelow(Map<String,String> dataTableAsMap) {
+        Map<String,String> mapOfTokens = new HashMap<>();
+        mapOfTokens.put("tracking_id", get(KEY_CREATED_ORDER_TRACKING_ID));
+        Map<String,String> dataTableAsMapReplaced = replaceDataTableTokens(dataTableAsMap, mapOfTokens);
 
-        String trackingId = mapOfData.get("trackingId");
-        String startDate = mapOfData.get("startDate");
-        String endDate = mapOfData.get("endDate");
-        String timewindowAsString = mapOfData.get("timewindow");
+        String trackingId = dataTableAsMapReplaced.get("trackingId");
+        String startDate = dataTableAsMapReplaced.get("startDate");
+        String endDate = dataTableAsMapReplaced.get("endDate");
+        String timewindowAsString = dataTableAsMapReplaced.get("timewindow");
 
         ChangeDeliveryTiming changeDeliveryTiming = new ChangeDeliveryTiming();
         changeDeliveryTiming.setTrackingId(trackingId);

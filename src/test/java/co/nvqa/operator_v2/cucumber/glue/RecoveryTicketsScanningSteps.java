@@ -36,14 +36,13 @@ public class RecoveryTicketsScanningSteps extends AbstractSteps {
     }
 
     @When("^Operator fills all the field on Recovery Tickets Scanning Page and clicks on enter with data bellow:$")
-    public void fillTheField(DataTable dataTable) {
+    public void fillTheField(Map<String,String> dataTableAsMap) {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
 
-        Map<String,String> mapOfDynamicVariable = new HashMap<>();
-        mapOfDynamicVariable.put("tracking_id", trackingId);
+        Map<String,String> mapOfTokens = new HashMap<>();
+        mapOfTokens.put("tracking_id", trackingId);
 
-        Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
-        String recoveryTicketsScanningRequestJson = replaceParam(mapOfData.get("recoveryTicketsScanning"), mapOfDynamicVariable);
+        String recoveryTicketsScanningRequestJson = replaceTokens(dataTableAsMap.get("recoveryTicketsScanning"), mapOfTokens);
         RecoveryTicketsScanning recoveryTicketsScanning = JsonHelper.fromJson(recoveryTicketsScanningRequestJson, RecoveryTicketsScanning.class);
 
         recoveryTicketsScanningPage.fillTheField(trackingId, recoveryTicketsScanning);
@@ -74,15 +73,14 @@ public class RecoveryTicketsScanningSteps extends AbstractSteps {
     }
 
     @When("^Operator fills all the field on Recovery Tickets Scanning Page with invalid tracking ID and clicks on enter with data bellow:$")
-    public void fillInvalidData(DataTable dataTable) {
+    public void fillInvalidData(Map<String,String> dataTableAsMap) {
         String uniqueCode = generateDateUniqueString();
         String trackingId = "DUMMY"+uniqueCode;
 
-        Map<String,String> mapOfDynamicVariable = new HashMap<>();
-        mapOfDynamicVariable.put("tracking_id", trackingId);
+        Map<String,String> mapOfTokens = new HashMap<>();
+        mapOfTokens.put("tracking_id", trackingId);
 
-        Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
-        String recoveryTicketsScanningRequestJson = replaceParam(mapOfData.get("recoveryTicketsScanning"), mapOfDynamicVariable);
+        String recoveryTicketsScanningRequestJson = replaceTokens(dataTableAsMap.get("recoveryTicketsScanning"), mapOfTokens);
         RecoveryTicketsScanning recoveryTicketsScanning = JsonHelper.fromJson(recoveryTicketsScanningRequestJson, RecoveryTicketsScanning.class);
 
         recoveryTicketsScanningPage.fillTheField(trackingId, recoveryTicketsScanning);

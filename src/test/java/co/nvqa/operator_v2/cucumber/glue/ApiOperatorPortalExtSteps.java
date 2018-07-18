@@ -134,7 +134,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         Map<String,String> mapOfDynamicVariable = new HashMap<>();
         mapOfDynamicVariable.put("unique_string", TestUtils.generateDateUniqueString());
         mapOfDynamicVariable.put("generated_phone_no", TestUtils.generatePhoneNumber());
-        String json = replaceParam(data.get("requestBody"), mapOfDynamicVariable);
+        String json = replaceTokens(data.get("requestBody"), mapOfDynamicVariable);
         Dp dp = new Dp();
         dp.fromJson(JsonHelper.getDefaultSnakeCaseMapper(), json);
         Map<String, Object> responseBody = getDPClient().createDp(dpPartner.getId(), json);
@@ -151,7 +151,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         Map<String,String> mapOfDynamicVariable = new HashMap<>();
         mapOfDynamicVariable.put("unique_string", TestUtils.generateDateUniqueString());
         mapOfDynamicVariable.put("generated_phone_no", TestUtils.generatePhoneNumber());
-        String json = replaceParam(data.get("requestBody"), mapOfDynamicVariable);
+        String json = replaceTokens(data.get("requestBody"), mapOfDynamicVariable);
         DpUser dpUser = new DpUser();
         dpUser.fromJson(JsonHelper.getDefaultCamelCaseMapper(), json);
         Map<String, Object> responseBody = getDpmsClient().createUser(dpPartner.getDpmsPartnerId(), dp.getDpmsId(), json);

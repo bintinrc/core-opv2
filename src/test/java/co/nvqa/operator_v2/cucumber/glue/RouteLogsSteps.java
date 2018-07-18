@@ -393,11 +393,10 @@ public class RouteLogsSteps extends AbstractSteps
             }
         }
 
-        Map<String,String> mapOfDynamicVariable = new HashMap<>();
-        mapOfDynamicVariable.put("route_id", String.valueOf(routeId));
-        String expectedRedirectUrl = replaceParam(redirectUrl, mapOfDynamicVariable);
-
-        Assert.assertEquals(String.format("Operator does not redirect to page %s", redirectUrl), expectedRedirectUrl, actualCurrentUrl);
+        Map<String,String> mapOfTokens = new HashMap<>();
+        mapOfTokens.put("route_id", String.valueOf(routeId));
+        String expectedRedirectUrl = replaceTokens(redirectUrl, mapOfTokens);
+        Assert.assertEquals(String.format("Operator does not redirect to page %s.", redirectUrl), expectedRedirectUrl, actualCurrentUrl);
     }
 
     @Then("^Operator close Edit Routes dialog$")

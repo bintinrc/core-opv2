@@ -83,7 +83,6 @@ public class OrderCreationV2Steps extends AbstractSteps
             shipperV2OrV3Id = this.<Shipper>get(KEY_CREATED_SHIPPER).getLegacyId();
         }
 
-
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
         String orderCreationV2TemplateAsJsonString = mapOfData.get("orderCreationV2Template");
 
@@ -94,7 +93,7 @@ public class OrderCreationV2Steps extends AbstractSteps
         mapOfDynamicVariable.put("cur_date", CURRENT_DATE_SDF.format(currentDate));
         mapOfDynamicVariable.put("shipper_id", String.valueOf(shipperV2OrV3Id));
 
-        orderCreationV2TemplateAsJsonString = replaceParam(orderCreationV2TemplateAsJsonString, mapOfDynamicVariable);
+        orderCreationV2TemplateAsJsonString = replaceTokens(orderCreationV2TemplateAsJsonString, mapOfDynamicVariable);
         OrderCreationV2Template order = JsonHelper.fromJson(JsonHelper.getDefaultSnakeCaseMapper(), orderCreationV2TemplateAsJsonString, OrderCreationV2Template.class);
 
         String orderType = order.getOrderType();
@@ -107,23 +106,23 @@ public class OrderCreationV2Steps extends AbstractSteps
 
         if("Normal".equals(orderType))
         {
-            fromEmail = String.format("shipper.normal.%s@test.com", trackingRefNo);
+            fromEmail = String.format("shipper.normal.%s@ninjavan.co", trackingRefNo);
             fromName = String.format("S-N-%s Shipper", trackingRefNo);
-            toEmail = String.format("customer.normal.%s@test.com", trackingRefNo);
+            toEmail = String.format("customer.normal.%s@ninjavan.co", trackingRefNo);
             toName = String.format("C-N-%s Customer", trackingRefNo);
         }
         else if("C2C".equals(orderType))
         {
-            fromEmail = String.format("shipper.c2c.%s@test.com", trackingRefNo);
+            fromEmail = String.format("shipper.c2c.%s@ninjavan.co", trackingRefNo);
             fromName = String.format("S-C-%s Shipper", trackingRefNo);
-            toEmail = String.format("customer.c2c.%s@test.com", trackingRefNo);
+            toEmail = String.format("customer.c2c.%s@ninjavan.co", trackingRefNo);
             toName = String.format("C-C-%s Customer", trackingRefNo);
         }
         else if("Return".equals(orderType))
         {
-            fromEmail = String.format("customer.return.%s@test.com", trackingRefNo);
+            fromEmail = String.format("customer.return.%s@ninjavan.co", trackingRefNo);
             fromName = String.format("C-R-%s Customer", trackingRefNo);
-            toEmail = String.format("shipper.return.%s@test.com", trackingRefNo);
+            toEmail = String.format("shipper.return.%s@ninjavan.co", trackingRefNo);
             toName = String.format("S-R-%s Shipper", trackingRefNo);
         }
 
