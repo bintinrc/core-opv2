@@ -1,14 +1,17 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AbstractApiOperatorPortalSteps;
+import co.nvqa.commons.model.core.CreateDriverV2Request;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
+import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Given;
@@ -157,5 +160,23 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         Map<String, Object> responseBody = getDpmsClient().createUser(dpPartner.getDpmsPartnerId(), dp.getDpmsId(), json);
         dpUser.setId(Long.parseLong(responseBody.get("id").toString()));
         put(KEY_DP_USER, dpUser);
+    }
+
+    @When("^API Operator create new Driver on Driver Strength page using data below:$")
+    public void apiOperatorCreateNewDriverOnDriverStrengthPageUsingDataBelow(Map<String, String> mapOfData)
+    {
+        String driverCreateRequestTemplate = mapOfData.get("driverCreateRequest");
+        Map<String, String> mapOfDynamicVariable = new HashMap<>();
+        mapOfDynamicVariable.put("RANDOM_FIRST_NAME", TestUtils.generateFirstName());
+        mapOfDynamicVariable.put("RANDOM_LAST_NAME", TestUtils.generateLastName());
+        mapOfDynamicVariable.put("TIMESTAMP", DateUtil.getTimestamp());
+        String driverCreateRequestJson = StandardTestUtils.replaceParam(driverCreateRequestTemplate, mapOfDynamicVariable);
+
+        CreateDriverV2Request driverCreateRequest = JsonHelper.fromJson(JsonHelper.getDefaultCamelCaseMapper(), driverCreateRequestJson, CreateDriverV2Request.class);
+        driverCreateRequest = getDriverClient().createDriver(driverCreateRequest);
+        DriverInfo driverInfo = new DriverInfo();
+        driverInfo.fromDriver(driverCreateRequest.getDriver());
+        put(KEY_CREATED_DRIVER, driverInfo);
+        put(KEY_CREATED_DRIVER_UUID, driverInfo.getUuid());
     }
 }

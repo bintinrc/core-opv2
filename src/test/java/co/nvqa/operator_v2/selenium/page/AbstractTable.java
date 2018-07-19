@@ -101,6 +101,15 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
                 .collect(Collectors.toList());
     }
 
+    public List<String> readFirstRowsInColumn(String columnId, int count)
+    {
+        int rowsCount = getRowsCount();
+        count = rowsCount >= count ? count : rowsCount;
+        return IntStream.rangeClosed(1, count)
+                .mapToObj(rowIndex -> this.getColumnText(rowIndex, columnId))
+                .collect(Collectors.toList());
+    }
+
     public AbstractTable filterByColumn(String columnId, String value)
     {
         Preconditions.checkArgument(StringUtils.isNotBlank(columnId), "columnId cannot be null or blank string");

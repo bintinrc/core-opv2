@@ -319,22 +319,40 @@ public class OperatorV2SimplePage extends SimplePage
         return text;
     }
 
-    public void clickActionButtonOnTableWithMdVirtualRepeat(int rowNumber, String actionButtonName, String ngRepeat)
+    public void clickActionButtonOnTableWithMdVirtualRepeat(int rowNumber, String actionButtonName, String mdVirtualRepeat)
     {
-        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, ngRepeat, XpathTextMode.STARTS_WITH, null);
+        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, mdVirtualRepeat, XpathTextMode.STARTS_WITH, null);
     }
 
-    public void clickActionButtonOnTableWithMdVirtualRepeat(int rowNumber, String actionButtonName, String ngRepeat, XpathTextMode xpathTextMode)
+    public void clickCustomActionButtonOnTableWithMdVirtualRepeat(int rowNumber, String actionButtonXpath, String mdVirtualRepeat)
     {
-        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, ngRepeat, xpathTextMode, null);
+        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, mdVirtualRepeat, XpathTextMode.STARTS_WITH, null, actionButtonXpath);
     }
 
-    public void clickActionButtonOnTableWithMdVirtualRepeat(int rowNumber, String actionButtonName, String ngRepeat, String nvTableParam)
+    public void clickActionButtonOnTableWithMdVirtualRepeat(int rowNumber, String actionButtonName, String mdVirtualRepeat, XpathTextMode xpathTextMode)
     {
-        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, ngRepeat, XpathTextMode.STARTS_WITH, nvTableParam);
+        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, mdVirtualRepeat, xpathTextMode, null);
     }
 
-    public void clickActionButtonOnTableWithMdVirtualRepeat(int rowNumber, String actionButtonName, String ngRepeat, XpathTextMode xpathTextMode, String nvTableParam)
+    public void clickActionButtonOnTableWithMdVirtualRepeat(int rowNumber, String actionButtonName, String mdVirtualRepeat, String nvTableParam)
+    {
+        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, mdVirtualRepeat, XpathTextMode.STARTS_WITH, nvTableParam);
+    }
+
+    public void clickActionButtonOnTableWithMdVirtualRepeat(int rowNumber, String actionButtonName, String mdVirtualRepeat, XpathTextMode xpathTextMode, String nvTableParam)
+    {
+        String actionButtonXpath = String.format("//nv-icon-button[@name='%s']", actionButtonName);
+        try
+        {
+            clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, mdVirtualRepeat, xpathTextMode, nvTableParam, actionButtonXpath);
+        }
+        catch(RuntimeException ex)
+        {
+            throw new RuntimeException(String.format("Cannot find action button '%s' on table.", actionButtonName), ex);
+        }
+    }
+
+    public void clickActionButtonOnTableWithMdVirtualRepeat(int rowNumber, String mdVirtualRepeat, XpathTextMode xpathTextMode, String nvTableParam, String actionButtonXpath)
     {
         try
         {
@@ -349,9 +367,9 @@ public class OperatorV2SimplePage extends SimplePage
 
             switch(xpathTextMode)
             {
-                case CONTAINS   : xpathExpression = String.format("%s//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'actions')]//nv-icon-button[@name='%s']", nvTableXpathExpression, ngRepeat, rowNumber, actionButtonName); break;
-                case STARTS_WITH: xpathExpression = String.format("%s//tr[@md-virtual-repeat='%s'][%d]/td[starts-with(@class, 'actions')]//nv-icon-button[@name='%s']", nvTableXpathExpression, ngRepeat, rowNumber, actionButtonName); break;
-                default         : xpathExpression = String.format("%s//tr[@md-virtual-repeat='%s'][%d]/td[starts-with(@class, 'actions')]//nv-icon-button[@name='%s']", nvTableXpathExpression, ngRepeat, rowNumber, actionButtonName);
+                case CONTAINS   : xpathExpression = String.format("%s//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'actions')]%s", nvTableXpathExpression, mdVirtualRepeat, rowNumber, actionButtonXpath); break;
+                case STARTS_WITH: xpathExpression = String.format("%s//tr[@md-virtual-repeat='%s'][%d]/td[starts-with(@class, 'actions')]%s", nvTableXpathExpression, mdVirtualRepeat, rowNumber, actionButtonXpath); break;
+                default         : xpathExpression = String.format("%s//tr[@md-virtual-repeat='%s'][%d]/td[starts-with(@class, 'actions')]%s", nvTableXpathExpression, mdVirtualRepeat, rowNumber, actionButtonXpath);
             }
 
             WebElement we = findElementByXpath(xpathExpression);
@@ -359,7 +377,7 @@ public class OperatorV2SimplePage extends SimplePage
         }
         catch(NoSuchElementException ex)
         {
-            throw new RuntimeException(String.format("Cannot find action button '%s' on table.", actionButtonName), ex);
+            throw new RuntimeException(String.format("Cannot find action button '%s' on table.", actionButtonXpath), ex);
         }
     }
 
