@@ -34,7 +34,8 @@ public abstract class DataEntity<T extends DataEntity>
         fromMap(data);
     }
 
-    public DataEntity(T entity){
+    public DataEntity(T entity)
+    {
         merge(entity);
     }
 
@@ -75,19 +76,20 @@ public abstract class DataEntity<T extends DataEntity>
         Class<?> clazz = this.getClass();
         try
         {
-            Field field = findPropertyField(clazz, property);
-            if (field != null)
+            Method setter = findSetter(clazz, property, value.getClass());
+            if (setter != null)
             {
-                Method setter = findSetter(clazz, field.getName(), value.getClass());
-                if (setter != null)
+                MethodUtils.invokeMethod(this, true, setter.getName(), value);
+            } else
+            {
+                Field field = findPropertyField(clazz, property);
+                if (field != null)
                 {
-                    MethodUtils.invokeMethod(this, true, setter.getName(), value);
-                } else
-                {
-                    if (field.getType() == String.class)
+                    if (field.getType().isAssignableFrom(value.getClass()))
                     {
                         FieldUtils.writeField(field, this, value, true);
                     }
+
                 }
             }
         } catch (Exception ex)
