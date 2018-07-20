@@ -189,6 +189,6 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
             String currentUrl = getCurrentUrl();
             NvLogger.infof("PricingScriptsV2CreateEditDraftPage.waitUntilPageLoaded: Current URL = [%s] - Expected URL contains = [%s]", currentUrl, expectedUrlEndsWith);
             return currentUrl.endsWith(expectedUrlEndsWith);
-        }, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS, String.format("Current URL does not contain '%s'.", expectedUrlEndsWith));
+        }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS, String.format("Current URL does not contain '%s'.", expectedUrlEndsWith));
     }
 }

@@ -26,7 +26,7 @@ Feature: Non Inbounded Orders
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     #This step is already implemented.
     Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id} } |
     #This step is already implemented.
     Given Operator go to menu New Features -> Non Inbounded Orders
 

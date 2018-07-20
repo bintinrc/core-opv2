@@ -80,7 +80,7 @@ public class MainPage extends OperatorV2SimplePage
             String currentUrl = getCurrentUrl();
             NvLogger.infof("verifyTheMainPageIsLoaded: Current URL = [%s] - Expected URL Ends With = [%s]", currentUrl, mainDashboardUrl);
             return currentUrl.endsWith(mainDashboardUrl);
-        }, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
+        }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
         waitUntilPageLoaded();
         NvLogger.infof("Waiting until Welcome message toast disappear.");
@@ -170,7 +170,7 @@ public class MainPage extends OperatorV2SimplePage
             }
 
             return result;
-        }, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
+        }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
         waitUntilPageLoaded();
     }

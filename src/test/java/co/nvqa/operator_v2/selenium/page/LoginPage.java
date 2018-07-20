@@ -100,7 +100,7 @@ public class LoginPage extends OperatorV2SimplePage
             NvLogger.info("=======================================");
 
             return isExpectedUrlFound;
-        }, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
+        }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
 
         String googlePageUrl = googlePageUrlSb.toString();

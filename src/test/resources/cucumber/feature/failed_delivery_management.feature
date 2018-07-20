@@ -11,7 +11,7 @@ Feature: Failed Delivery Management
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -36,7 +36,7 @@ Feature: Failed Delivery Management
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -62,7 +62,7 @@ Feature: Failed Delivery Management
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -89,7 +89,7 @@ Feature: Failed Delivery Management
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -116,7 +116,7 @@ Feature: Failed Delivery Management
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -143,7 +143,7 @@ Feature: Failed Delivery Management
       | generateFromAndTo | RANDOM |
       | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:

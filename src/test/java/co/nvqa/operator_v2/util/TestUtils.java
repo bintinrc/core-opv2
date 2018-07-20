@@ -305,7 +305,7 @@ public class TestUtils extends CommonSeleniumTestUtils
 
     public static void waitPageLoad(WebDriver webDriver)
     {
-        new WebDriverWait(webDriver, TestConstants.SELENIUM_PAGE_LOAD_TIMEOUT_SECONDS, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver driver) -> ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete"));
+        new WebDriverWait(webDriver, TestConstants.SELENIUM_PAGE_LOAD_TIMEOUT_IN_SECONDS, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver driver) -> ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete"));
     }
 
     /**
@@ -321,7 +321,7 @@ public class TestUtils extends CommonSeleniumTestUtils
         try
         {
             setImplicitTimeout(webDriver, 0);
-            new WebDriverWait(webDriver, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS, SLEEP_POLL_MILLIS).until(ExpectedConditions.visibilityOf(element));
+            new WebDriverWait(webDriver, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS, SLEEP_POLL_MILLIS).until(ExpectedConditions.visibilityOf(element));
         }
         finally
         {
@@ -334,7 +334,7 @@ public class TestUtils extends CommonSeleniumTestUtils
         try
         {
             setImplicitTimeout(webDriver, 0);
-            new WebDriverWait(webDriver, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS, SLEEP_POLL_MILLIS).until(ExpectedConditions.visibilityOfElementLocated(by));
+            new WebDriverWait(webDriver, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS, SLEEP_POLL_MILLIS).until(ExpectedConditions.visibilityOfElementLocated(by));
         }
         finally
         {
@@ -347,7 +347,7 @@ public class TestUtils extends CommonSeleniumTestUtils
         try
         {
             setImplicitTimeout(webDriver, 0);
-            new WebDriverWait(webDriver, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS, SLEEP_POLL_MILLIS).until(ExpectedConditions.invisibilityOfElementLocated(by));
+            new WebDriverWait(webDriver, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS, SLEEP_POLL_MILLIS).until(ExpectedConditions.invisibilityOfElementLocated(by));
         }
         finally
         {
@@ -362,7 +362,7 @@ public class TestUtils extends CommonSeleniumTestUtils
 
     public static void resetImplicitTimeout(WebDriver webDriver)
     {
-        setImplicitTimeout(webDriver, TestConstants.SELENIUM_IMPLICIT_WAIT_TIMEOUT_SECONDS);
+        setImplicitTimeout(webDriver, TestConstants.SELENIUM_IMPLICIT_WAIT_TIMEOUT_IN_SECONDS);
     }
 
     public static void retryIfStaleElementReferenceExceptionOccurred(Runnable runnable)

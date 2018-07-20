@@ -43,7 +43,7 @@ public class AgedParcelManagementSteps extends AbstractSteps
     @When("^Operator apply filter parameters and load selection on Aged Parcel Management$")
     public void operatorLoadSelectionOnPageAgedParcelManagement(Map<String,String> dataTableAsMap)
     {
-        String shipperName = dataTableAsMap.get("shipperName");
+        String shipperName = dataTableAsMap.getOrDefault("shipperName", getShipperOfCreatedOrder().getName());
         Integer agedDays = dataTableAsMap.containsKey("agedDays") ? Integer.parseInt(dataTableAsMap.get("agedDays")) : null;
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         agedParcelManagementPage.loadSelection(shipperName, trackingId, agedDays);
@@ -52,15 +52,14 @@ public class AgedParcelManagementSteps extends AbstractSteps
     @Then("^Operator verify the aged parcel order is listed on Aged Parcels list$")
     public void operatorVerifyTheAgedParcelOrderIsListedOnAgedParcelsList()
     {
-        Map<String,String> dataTableAsMap = Collections.singletonMap("shipperName", getShipperOfCreatedOrder().getName());
-        operatorVerifyTheAgedParcelOrderIsListedOnAgedParcelsListWithFollowingParameters(dataTableAsMap);
+        operatorVerifyTheAgedParcelOrderIsListedOnAgedParcelsListWithFollowingParameters(Collections.emptyMap());
     }
 
     @Then("^Operator verify the aged parcel order is listed on Aged Parcels list with following parameters$")
     public void operatorVerifyTheAgedParcelOrderIsListedOnAgedParcelsListWithFollowingParameters(Map<String,String> dataTableAsMap)
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        String shipperName = dataTableAsMap.get("shipperName");
+        String shipperName = dataTableAsMap.getOrDefault("shipperName", getShipperOfCreatedOrder().getName());
         String daysSinceInbound = dataTableAsMap.get("daysSinceInbound");
         agedParcelManagementPage.verifyAgedParcelOrderIsListed(trackingId, shipperName, daysSinceInbound);
     }

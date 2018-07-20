@@ -75,7 +75,7 @@ Feature: All Orders
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
     Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id} } |
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add parcel to the route using data below:
@@ -86,7 +86,7 @@ Feature: All Orders
     Given API Operator start the route
     Given API Driver failed the delivery of the created parcel
     Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id} } |
     When API Operator get order details
     When Operator go to menu Order -> All Orders
     When Operator find multiple orders by uploading CSV on All Orders page
@@ -114,10 +114,10 @@ Feature: All Orders
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     Given API Operator Global Inbound multiple parcels using data below:
-      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id} } |
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{formatted_route_date}}" } |
-    Given API Operator add multiple parcel to the route using data below:
+    Given API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When API Operator get order details
     When Operator go to menu Order -> All Orders
@@ -134,7 +134,7 @@ Feature: All Orders
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
       | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
     Given API Operator Global Inbound multiple parcels using data below:
-      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id} } |
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When API Operator get order details

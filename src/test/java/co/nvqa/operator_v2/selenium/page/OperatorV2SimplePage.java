@@ -922,7 +922,7 @@ public class OperatorV2SimplePage extends SimplePage
             }
 
             return result;
-        }, TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
+        }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
         waitUntilPageLoaded();
     }

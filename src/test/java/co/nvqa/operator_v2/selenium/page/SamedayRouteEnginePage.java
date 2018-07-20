@@ -129,7 +129,7 @@ public class SamedayRouteEnginePage extends OperatorV2SimplePage
 
         click("//button[@aria-label='Download CSV']");
 
-        new WebDriverWait(getWebDriver(), TestConstants.SELENIUM_DEFAULT_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver driver)->
+        new WebDriverWait(getWebDriver(), TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_SECONDS).until((WebDriver driver)->
         {
             File csvFileDownloaded = new File(TestConstants.TEMP_DIR+"/"+routeName+".csv");
             return csvFileDownloaded.exists();
