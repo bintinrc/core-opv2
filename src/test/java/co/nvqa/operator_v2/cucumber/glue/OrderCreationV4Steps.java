@@ -18,6 +18,7 @@ import java.util.Map;
 @ScenarioScoped
 public class OrderCreationV4Steps extends AbstractSteps
 {
+    @Inject private StandardApiShipperSteps standardApiShipperSteps;
     private OrderCreationV4Page orderCreationV4Page;
 
     @Inject
@@ -33,12 +34,10 @@ public class OrderCreationV4Steps extends AbstractSteps
     }
 
     @When("^Operator create order V4 by uploading XLSX on Order Creation V4 page using data below:$")
-    public void operatorCreateOrderVByUploadingXLSXOnOrderCreationVPageUsingDataBelow(Map<String, String> mapOfData)
+    public void operatorCreateOrderVByUploadingXLSXOnOrderCreationVPageUsingDataBelow(Map<String,String> dataTableAsMap)
     {
-        int shipperId = Integer.parseInt(mapOfData.get("shipper_id"));
-
-        OrderRequestV4 orderRequestV4 = StandardApiShipperSteps.buildOrderRequestV4(mapOfData);
-
+        int shipperId = Integer.parseInt(dataTableAsMap.get("shipperId"));
+        OrderRequestV4 orderRequestV4 = standardApiShipperSteps.buildOrderRequestV4(dataTableAsMap);
         orderCreationV4Page.uploadXlsx(orderRequestV4, shipperId);
         put(KEY_CREATED_ORDER, orderRequestV4);
     }

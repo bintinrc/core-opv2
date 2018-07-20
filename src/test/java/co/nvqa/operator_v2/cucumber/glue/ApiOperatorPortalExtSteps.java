@@ -170,7 +170,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         mapOfDynamicVariable.put("RANDOM_FIRST_NAME", TestUtils.generateFirstName());
         mapOfDynamicVariable.put("RANDOM_LAST_NAME", TestUtils.generateLastName());
         mapOfDynamicVariable.put("TIMESTAMP", DateUtil.getTimestamp());
-        String driverCreateRequestJson = StandardTestUtils.replaceParam(driverCreateRequestTemplate, mapOfDynamicVariable);
+        String driverCreateRequestJson = replaceTokens(driverCreateRequestTemplate, mapOfDynamicVariable);
 
         CreateDriverV2Request driverCreateRequest = JsonHelper.fromJson(JsonHelper.getDefaultCamelCaseMapper(), driverCreateRequestJson, CreateDriverV2Request.class);
         driverCreateRequest = getDriverClient().createDriver(driverCreateRequest);

@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.AgedParcelManagementPage;
-import co.nvqa.operator_v2.util.TestConstants;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -36,16 +35,16 @@ public class AgedParcelManagementSteps extends AbstractSteps
     public void operatorLoadSelectionOnPageAgedParcelManagement()
     {
         pause2s();
-        String shipperName = TestConstants.SHIPPER_V2_NAME;
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        String shipperName = getShipperOfCreatedOrder().getName();
         agedParcelManagementPage.loadSelection(shipperName, trackingId, -1);
     }
 
     @When("^Operator apply filter parameters and load selection on Aged Parcel Management$")
-    public void operatorLoadSelectionOnPageAgedParcelManagement(Map<String, String> mapOfData)
+    public void operatorLoadSelectionOnPageAgedParcelManagement(Map<String,String> dataTableAsMap)
     {
-        String shipperName = mapOfData.get("shipperName");
-        Integer agedDays = mapOfData.get("agedDays") != null ? Integer.parseInt(mapOfData.get("agedDays")) : null;
+        String shipperName = dataTableAsMap.get("shipperName");
+        Integer agedDays = dataTableAsMap.containsKey("agedDays") ? Integer.parseInt(dataTableAsMap.get("agedDays")) : null;
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         agedParcelManagementPage.loadSelection(shipperName, trackingId, agedDays);
     }
@@ -53,17 +52,16 @@ public class AgedParcelManagementSteps extends AbstractSteps
     @Then("^Operator verify the aged parcel order is listed on Aged Parcels list$")
     public void operatorVerifyTheAgedParcelOrderIsListedOnAgedParcelsList()
     {
-        operatorVerifyTheAgedParcelOrderIsListedOnAgedParcelsListWithFollowingParameters(
-                Collections.singletonMap("shipperName", TestConstants.SHIPPER_V2_NAME)
-        );
+        Map<String,String> dataTableAsMap = Collections.singletonMap("shipperName", getShipperOfCreatedOrder().getName());
+        operatorVerifyTheAgedParcelOrderIsListedOnAgedParcelsListWithFollowingParameters(dataTableAsMap);
     }
 
     @Then("^Operator verify the aged parcel order is listed on Aged Parcels list with following parameters$")
-    public void operatorVerifyTheAgedParcelOrderIsListedOnAgedParcelsListWithFollowingParameters(Map<String, String> mapOfData)
+    public void operatorVerifyTheAgedParcelOrderIsListedOnAgedParcelsListWithFollowingParameters(Map<String,String> dataTableAsMap)
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        String shipperName = mapOfData.get("shipperName");
-        String daysSinceInbound = mapOfData.get("daysSinceInbound");
+        String shipperName = dataTableAsMap.get("shipperName");
+        String daysSinceInbound = dataTableAsMap.get("daysSinceInbound");
         agedParcelManagementPage.verifyAgedParcelOrderIsListed(trackingId, shipperName, daysSinceInbound);
     }
 
