@@ -8,7 +8,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  *
@@ -55,28 +54,15 @@ public class CodReportPage extends OperatorV2SimplePage
 
     private int findOrderRowIndexInTable(String trackingId)
     {
-        List<WebElement> listOfTrackingIdsWe = findElementsByXpath(String.format("//tr[@ng-repeat='%s']/td[contains(@class,'%s')]", NG_REPEAT, COLUMN_CLASS_DATA_TRACKING_ID));
-        int indexResult = 0;
-        int indexCounter = 0;
-
-        for(WebElement we : listOfTrackingIdsWe)
+        try
         {
-            indexCounter++;
-            String weTrackingId = we.getText().trim();
-
-            if(trackingId.equals(weTrackingId))
-            {
-                indexResult = indexCounter;
-                break;
-            }
+            WebElement rowIndexWe = findElementByXpath(String.format("//tr[@ng-repeat='%s']/td[contains(@class,'%s')][contains(text(), '%s')]/preceding-sibling::td", NG_REPEAT, COLUMN_CLASS_DATA_TRACKING_ID, trackingId));
+            return Integer.parseInt(rowIndexWe.getText().trim());
         }
-
-        if(indexResult==0)
+        catch(RuntimeException ex)
         {
             throw new NvTestRuntimeException(String.format("Tracking ID = '%s' not found on table.", trackingId));
         }
-
-        return indexResult;
     }
 
     public void downloadCsvFile()
