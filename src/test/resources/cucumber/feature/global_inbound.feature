@@ -6,9 +6,9 @@ Feature: Global Inbound
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator global inbounds the created order with valid tracking ID (uid:50b27d44-6f86-44e7-b9b8-f9f0cd8178c2)
-    Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
-      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
       | hubName    | {hub-name}             |
@@ -19,9 +19,9 @@ Feature: Global Inbound
 
   Scenario: Operator global inbounds the created order and override the size (uid:68e2827e-93e7-4407-9726-503b3e9966b9)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                              |
-      | v2OrderRequest    | { "parcels":[{"parcel_size_id": 0, "volume": 1, "weight": 4}], "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
       | hubName      | {hub-name}             |
@@ -33,9 +33,9 @@ Feature: Global Inbound
 
   Scenario: Operator global inbounds the created order and override the weight (uid:7a93ddec-359a-4e66-b50a-0044a92b8d70)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                              |
-      | v2OrderRequest    | { "parcels":[{"parcel_size_id": 0, "volume": 1, "weight": 4}], "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
       | hubName        | {hub-name}             |
@@ -47,9 +47,9 @@ Feature: Global Inbound
 
   Scenario: Operator global inbounds the created order, override the weight and recalculate the price (uid:f1ae23d0-1c04-4312-99fc-1c24733e9cc1)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                              |
-      | v2OrderRequest    | { "parcels":[{"parcel_size_id": 0, "volume": 1, "weight": 4}], "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
       | hubName        | {hub-name}             |
@@ -64,9 +64,9 @@ Feature: Global Inbound
 
   Scenario: Operator global inbounds the created order and override dimension (uid:f40ec594-d63f-44c8-9298-54cd3553b081)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                              |
-      | v2OrderRequest    | { "parcels":[{"parcel_size_id": 0, "volume": 1, "weight": 4}], "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
       | hubName           | {hub-name}             |
@@ -80,9 +80,9 @@ Feature: Global Inbound
 
   Scenario: Operator global inbounds the created order and override size, weight and dimension (uid:234173e8-0d85-4f22-a729-437f8799fc72)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                              |
-      | v2OrderRequest    | { "parcels":[{"parcel_size_id": 0, "volume": 1, "weight": 4}], "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
       | hubName           | {hub-name}             |
@@ -99,14 +99,14 @@ Feature: Global Inbound
   @ArchiveRouteViaDb
   Scenario: Operator should not be able to Global Inbound routed pending delivery (uid:f56aada4-dbed-4688-b4eb-a3126d0b4981)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                              |
-      | v2OrderRequest    | { "parcels":[{"parcel_size_id": 0, "volume": 1, "weight": 4}], "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
-    And API Operator Global Inbound parcel using data below:
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator create new route using data below:
+    Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
+    Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     When Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below and check alert:
@@ -122,9 +122,9 @@ Feature: Global Inbound
 
   Scenario Outline: Operator should not be able to Global Inbound parcel with invalid order's status (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                              |
-      | v2OrderRequest    | { "parcels":[{"parcel_size_id": 0, "volume": 1, "weight": 4}], "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator force created order status to <status>
     When Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below and check alert:
@@ -139,9 +139,9 @@ Feature: Global Inbound
   @ArchiveRouteViaDb
   Scenario Outline: Operator should be able to Global Inbound failed delivery order on Global Inbound page (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
-      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given API Operator create new route using data below:
