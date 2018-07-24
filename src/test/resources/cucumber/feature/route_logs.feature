@@ -9,12 +9,12 @@ Feature: Route Logs
   Scenario: Operator create new route from page Route Logs (uid:fe58af45-de7f-4dff-aced-8bf7521666e3)
     Given Operator go to menu Routing -> Route Logs
     When Operator create new route using data below:
-      | routeDate       | {current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                     |
-      | zoneName        | {zone-name}               |
-      | hubName         | {hub-name}                |
-      | ninjaDriverName | {ninja-driver-name}       |
-      | vehicleName     | {vehicle-name}            |
+      | routeDate       | {gradle-current-date-yyyy-MM-dd} |
+      | routeTags       | [FLT]                            |
+      | zoneName        | {zone-name}                      |
+      | hubName         | {hub-name}                       |
+      | ninjaDriverName | {ninja-driver-name}              |
+      | vehicleName     | {vehicle-name}                   |
     Then Operator verify the new route is created successfully
 
   @ArchiveAndDeleteRouteViaDb
@@ -22,13 +22,13 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
-      | numberOfRoute   | 2                         |
-      | routeDate       | {current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                     |
-      | zoneName        | {zone-name}               |
-      | hubName         | {hub-name}                |
-      | ninjaDriverName | {ninja-driver-name}       |
-      | vehicleName     | {vehicle-name}            |
+      | numberOfRoute   | 2                                |
+      | routeDate       | {gradle-current-date-yyyy-MM-dd} |
+      | routeTags       | [FLT]                            |
+      | zoneName        | {zone-name}                      |
+      | hubName         | {hub-name}                       |
+      | ninjaDriverName | {ninja-driver-name}              |
+      | vehicleName     | {vehicle-name}                   |
     Then Operator verify multiple routes is created successfully
 
   @ArchiveAndDeleteRouteViaDb
@@ -36,21 +36,21 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
-      | numberOfRoute   | 2                         |
-      | routeDate       | {current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                     |
-      | zoneName        | {zone-name}               |
-      | hubName         | {hub-name}                |
-      | ninjaDriverName | {ninja-driver-name}       |
-      | vehicleName     | {vehicle-name}            |
+      | numberOfRoute   | 2                                |
+      | routeDate       | {gradle-current-date-yyyy-MM-dd} |
+      | routeTags       | [FLT]                            |
+      | zoneName        | {zone-name}                      |
+      | hubName         | {hub-name}                       |
+      | ninjaDriverName | {ninja-driver-name}              |
+      | vehicleName     | {vehicle-name}                   |
     Then Operator verify multiple routes is created successfully
     When Operator bulk edit details multiple routes using data below:
-      | routeDate       | {current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                     |
-      | zoneName        | {zone-name}               |
-      | hubName         | {hub-name}                |
-      | ninjaDriverName | {ninja-driver-2-name}     |
-      | vehicleName     | {vehicle-name}            |
+      | routeDate       | {gradle-current-date-yyyy-MM-dd} |
+      | routeTags       | [FLT]                            |
+      | zoneName        | {zone-name}                      |
+      | hubName         | {hub-name}                       |
+      | ninjaDriverName | {ninja-driver-2-name}            |
+      | vehicleName     | {vehicle-name}                   |
     Then Operator verify multiple routes is bulk edited successfully
 
   @ArchiveAndDeleteRouteViaDb
@@ -58,13 +58,13 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
-      | numberOfRoute   | 2                         |
-      | routeDate       | {current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                     |
-      | zoneName        | {zone-name}               |
-      | hubName         | {hub-name}                |
-      | ninjaDriverName | {ninja-driver-name}       |
-      | vehicleName     | {vehicle-name}            |
+      | numberOfRoute   | 2                                |
+      | routeDate       | {gradle-current-date-yyyy-MM-dd} |
+      | routeTags       | [FLT]                            |
+      | zoneName        | {zone-name}                      |
+      | hubName         | {hub-name}                       |
+      | ninjaDriverName | {ninja-driver-name}              |
+      | vehicleName     | {vehicle-name}                   |
     Then Operator verify multiple routes is created successfully
     When Operator edit driver type of multiple routes using data below:
       | driverTypeId   | {driver-type-id}   |
@@ -76,13 +76,13 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
-      | numberOfRoute   | 2                         |
-      | routeDate       | {current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                     |
-      | zoneName        | {zone-name}               |
-      | hubName         | {hub-name}                |
-      | ninjaDriverName | {ninja-driver-name}       |
-      | vehicleName     | {vehicle-name}            |
+      | numberOfRoute   | 2                                |
+      | routeDate       | {gradle-current-date-yyyy-MM-dd} |
+      | routeTags       | [FLT]                            |
+      | zoneName        | {zone-name}                      |
+      | hubName         | {hub-name}                       |
+      | ninjaDriverName | {ninja-driver-name}              |
+      | vehicleName     | {vehicle-name}                   |
     Then Operator verify multiple routes is created successfully
     Given API Shipper create multiple Order V2 Parcel using data below:
       | numberOfOrder  | 4       |
@@ -101,13 +101,13 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
-      | numberOfRoute   | 2                         |
-      | routeDate       | {current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                     |
-      | zoneName        | {zone-name}               |
-      | hubName         | {hub-name}                |
-      | ninjaDriverName | {ninja-driver-name}       |
-      | vehicleName     | {vehicle-name}            |
+      | numberOfRoute   | 2                                |
+      | routeDate       | {gradle-current-date-yyyy-MM-dd} |
+      | routeTags       | [FLT]                            |
+      | zoneName        | {zone-name}                      |
+      | hubName         | {hub-name}                       |
+      | ninjaDriverName | {ninja-driver-name}              |
+      | vehicleName     | {vehicle-name}                   |
     Then Operator verify multiple routes is created successfully
     Given API Shipper create multiple Order V2 Parcel using data below:
       | numberOfOrder     | 4      |
@@ -125,13 +125,13 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
-      | numberOfRoute   | 2                         |
-      | routeDate       | {current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                     |
-      | zoneName        | {zone-name}               |
-      | hubName         | {hub-name}                |
-      | ninjaDriverName | {ninja-driver-name}       |
-      | vehicleName     | {vehicle-name}            |
+      | numberOfRoute   | 2                                |
+      | routeDate       | {gradle-current-date-yyyy-MM-dd} |
+      | routeTags       | [FLT]                            |
+      | zoneName        | {zone-name}                      |
+      | hubName         | {hub-name}                       |
+      | ninjaDriverName | {ninja-driver-name}              |
+      | vehicleName     | {vehicle-name}                   |
     Then Operator verify multiple routes is created successfully
     When Operator print passwords of multiple routes
     Then Operator verify printed passwords of selected routes info is correct
@@ -141,13 +141,13 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
-      | numberOfRoute   | 2                         |
-      | routeDate       | {current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                     |
-      | zoneName        | {zone-name}               |
-      | hubName         | {hub-name}                |
-      | ninjaDriverName | {ninja-driver-name}       |
-      | vehicleName     | {vehicle-name}            |
+      | numberOfRoute   | 2                                |
+      | routeDate       | {gradle-current-date-yyyy-MM-dd} |
+      | routeTags       | [FLT]                            |
+      | zoneName        | {zone-name}                      |
+      | hubName         | {hub-name}                       |
+      | ninjaDriverName | {ninja-driver-name}              |
+      | vehicleName     | {vehicle-name}                   |
     Then Operator verify multiple routes is created successfully
     When Operator print multiple routes
     Then Operator verify multiple routes is printed successfully
@@ -158,7 +158,7 @@ Feature: Route Logs
     Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
       | numberOfRoute   | 2                         |
-      | routeDate       | {current-date-yyyy-MM-dd} |
+      | routeDate       | {gradle-current-date-yyyy-MM-dd} |
       | routeTags       | [FLT]                     |
       | zoneName        | {zone-name}               |
       | hubName         | {hub-name}                |
@@ -173,13 +173,13 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
-      | numberOfRoute   | 2                         |
-      | routeDate       | {current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                     |
-      | zoneName        | {zone-name}               |
-      | hubName         | {hub-name}                |
-      | ninjaDriverName | {ninja-driver-name}       |
-      | vehicleName     | {vehicle-name}            |
+      | numberOfRoute   | 2                                |
+      | routeDate       | {gradle-current-date-yyyy-MM-dd} |
+      | routeTags       | [FLT]                            |
+      | zoneName        | {zone-name}                      |
+      | hubName         | {hub-name}                       |
+      | ninjaDriverName | {ninja-driver-name}              |
+      | vehicleName     | {vehicle-name}                   |
     Then Operator verify multiple routes is created successfully
     When Operator archive multiple routes
     Then Operator verify multiple routes is archived successfully
@@ -191,13 +191,13 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
-      | numberOfRoute   | 2                         |
-      | routeDate       | {current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                     |
-      | zoneName        | {zone-name}               |
-      | hubName         | {hub-name}                |
-      | ninjaDriverName | {ninja-driver-name}       |
-      | vehicleName     | {vehicle-name}            |
+      | numberOfRoute   | 2                                |
+      | routeDate       | {gradle-current-date-yyyy-MM-dd} |
+      | routeTags       | [FLT]                            |
+      | zoneName        | {zone-name}                      |
+      | hubName         | {hub-name}                       |
+      | ninjaDriverName | {ninja-driver-name}              |
+      | vehicleName     | {vehicle-name}                   |
     Then Operator verify multiple routes is created successfully
     When Operator delete multiple routes
     Then Operator verify multiple routes is deleted successfully

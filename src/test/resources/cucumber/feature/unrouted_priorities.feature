@@ -12,7 +12,7 @@ Feature: Unrouted Priorities
     Given API Operator get order details
     Given Operator go to menu Analytics -> Unrouted Priorities
     When Operator select filter and click Load Selection on page Unrouted Priorities using data below:
-      | routeDate | {current-date-yyyy-MM-dd} |
+      | routeDate | {gradle-current-date-yyyy-MM-dd} |
     Then Operator verify order with delivery date is today should be listed on page Unrouted Priorities
 
   Scenario: Order with delivery date is next day should not be listed on page Unrouted Priorities (uid:08207375-a006-4b7b-8797-2142d5c47d83)
@@ -23,7 +23,7 @@ Feature: Unrouted Priorities
     Given API Operator get order details
     Given Operator go to menu Analytics -> Unrouted Priorities
     When Operator select filter and click Load Selection on page Unrouted Priorities using data below:
-      | routeDate | {current-date-yyyy-MM-dd} |
+      | routeDate | {gradle-current-date-yyyy-MM-dd} |
     Then Operator verify order with delivery date is next day should not be listed on page Unrouted Priorities
 
   Scenario: Order with delivery date is next day should be listed on next 2 day route date on page Unrouted Priorities (uid:e5bf257b-1bf3-4ce8-8319-e48394aec56f)
@@ -34,7 +34,7 @@ Feature: Unrouted Priorities
     Given API Operator get order details
     Given Operator go to menu Analytics -> Unrouted Priorities
     When Operator select filter and click Load Selection on page Unrouted Priorities using data below:
-      | routeDate | {next-2-date-yyyy-MM-dd} |
+      | routeDate | {gradle-next-2-day-yyyy-MM-dd} |
     Then Operator verify order with delivery date is next day should be listed on next 2 days route date on page Unrouted Priorities
 
   @KillBrowser @ShouldAlwaysRun

@@ -11,7 +11,7 @@ Feature: COD Report
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Operator get order details
     Given Operator go to menu Analytics -> COD Report
-    When Operator filter COD Report by Mode = "Get CODs For A Day" and Date = "{current-date-yyyy-MM-dd}"
+    When Operator filter COD Report by Mode = "Get CODs For A Day" and Date = "{gradle-current-date-yyyy-MM-dd}"
     Then Operator verify order is exist on COD Report table with correct info
 
   @ArchiveRouteViaDb
@@ -28,7 +28,7 @@ Feature: COD Report
       | addParcelToRouteRequest | { "type":"DD" } |
     When API Operator get order details
     Given Operator go to menu Analytics -> COD Report
-    When Operator filter COD Report by Mode = "Get Driver CODs For A Route Day" and Date = "{current-date-yyyy-MM-dd}"
+    When Operator filter COD Report by Mode = "Get Driver CODs For A Route Day" and Date = "{gradle-current-date-yyyy-MM-dd}"
     Then Operator verify order is exist on COD Report table with correct info
 
   Scenario: Operator is able to download CODs For A Day and verify the data is correct (uid:569b8003-7e8d-4afe-92ed-c54a8daaf290)
@@ -37,7 +37,7 @@ Feature: COD Report
       | generateFromAndTo | RANDOM |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Analytics -> COD Report
-    When Operator filter COD Report by Mode = "Get CODs For A Day" and Date = "{current-date-yyyy-MM-dd}"
+    When Operator filter COD Report by Mode = "Get CODs For A Day" and Date = "{gradle-current-date-yyyy-MM-dd}"
     When Operator download COD Report
     When API Operator get order details
     Then Operator verify the downloaded COD Report data is correct
@@ -55,7 +55,7 @@ Feature: COD Report
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     Given Operator go to menu Analytics -> COD Report
-    When Operator filter COD Report by Mode = "Get Driver CODs For A Route Day" and Date = "{current-date-yyyy-MM-dd}"
+    When Operator filter COD Report by Mode = "Get Driver CODs For A Route Day" and Date = "{gradle-current-date-yyyy-MM-dd}"
     When Operator download COD Report
     When API Operator get order details
     Then Operator verify the downloaded COD Report data is correct
