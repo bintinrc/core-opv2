@@ -53,6 +53,7 @@ public class UserManagementPage extends OperatorV2SimplePage {
         clickNvApiTextButtonByNameAndWaitUntilDone("Load Selected Users");
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'user-edit')]");
+        pause300ms();
         click("//tbody//tr[1]//button[@aria-label='Remove']");
         fillTheForm(userManagementEdited, false);
         clickNvApiTextButtonByNameAndWaitUntilDone("Save Changes");
@@ -64,12 +65,14 @@ public class UserManagementPage extends OperatorV2SimplePage {
             sendKeysById("last-name", userManagement.getLastName());
             sendKeysById("email", userManagement.getEmail());
         }
+        pause300ms();
         selectValueFromMdAutocomplete("Search Role To Add", userManagement.getRoles());
         pause300ms();
     }
 
     public void verifyEditedUserOnUserManagement(UserManagement userManagement) {
         sendKeys("//input[@type='text'][@ng-model='ctrl.keyword']", userManagement.getLastName());
+        pause500ms();
         clickNvApiTextButtonByNameAndWaitUntilDone("Load Selected Users");
         pause500ms();
         String actualRole = getTextOnTable(1, COLUMN_DATA_TITLE_ROLE);
