@@ -5,13 +5,11 @@ import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.ChangeDeliveryTimingsPage;
 import com.google.inject.Inject;
-import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,8 +46,8 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
 
     @Then("^Operator uploads the CSV file on Change Delivery Timings page using data below:$")
     public void operatorUploadsTheCsvFileOnChangeDeliveryTimingsPageUsingDataBelow(Map<String,String> dataTableAsMap) {
-        Map<String,String> mapOfTokens = new HashMap<>();
-        mapOfTokens.put("tracking_id", get(KEY_CREATED_ORDER_TRACKING_ID));
+        Map<String,String> mapOfTokens = createDefaultTokens();
+        mapOfTokens.put("tracking-id", get(KEY_CREATED_ORDER_TRACKING_ID));
         Map<String,String> dataTableAsMapReplaced = replaceDataTableTokens(dataTableAsMap, mapOfTokens);
 
         String trackingId = dataTableAsMapReplaced.get("trackingId");
