@@ -6,21 +6,19 @@ Feature: Unrouted Priorities
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Order with delivery date is today should be listed on page Unrouted Priorities (uid:a0dc5a79-a32f-49b2-88e2-2c6cddcbf6ba)
-    Given API Shipper create Order V2 Parcel using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
-      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
-    Given API Operator get order details
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Analytics -> Unrouted Priorities
     When Operator select filter and click Load Selection on page Unrouted Priorities using data below:
-      | routeDate | {gradle-current-date-yyyy-MM-dd} |
+      | routeDate | {gradle-next-1-day-yyyy-MM-dd} |
     Then Operator verify order with delivery date is today should be listed on page Unrouted Priorities
 
   Scenario: Order with delivery date is next day should not be listed on page Unrouted Priorities (uid:08207375-a006-4b7b-8797-2142d5c47d83)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create Order V2 Parcel using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
-      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
-    Given API Operator get order details
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Nextday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Analytics -> Unrouted Priorities
     When Operator select filter and click Load Selection on page Unrouted Priorities using data below:
       | routeDate | {gradle-current-date-yyyy-MM-dd} |
@@ -28,10 +26,9 @@ Feature: Unrouted Priorities
 
   Scenario: Order with delivery date is next day should be listed on next 2 day route date on page Unrouted Priorities (uid:e5bf257b-1bf3-4ce8-8319-e48394aec56f)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create Order V2 Parcel using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
-      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
-    Given API Operator get order details
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Nextday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Analytics -> Unrouted Priorities
     When Operator select filter and click Load Selection on page Unrouted Priorities using data below:
       | routeDate | {gradle-next-2-day-yyyy-MM-dd} |
