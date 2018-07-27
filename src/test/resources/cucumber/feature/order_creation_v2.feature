@@ -19,7 +19,7 @@ Feature: Order Creation V2
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Order -> Order Creation V2
     When Operator create order V2 by uploading CSV on Order Creation V2 page using data below:
-      | orderCreationV2Template | { "shipper_id":{shipper-v2-id}, "order_type":"<orderType>", "parcel_size":1, "weight":2, "length":3, "width":5, "height":7, "delivery_date":"{{cur_date}}", "delivery_timewindow_id":1, "max_delivery_days":3, "pickup_date":"{{cur_date}}", "pickup_timewindow_id":1 } |
+      | orderCreationV2Template | { "shipper_id":{shipper-v2-legacy-id}, "order_type":"<orderType>", "parcel_size":1, "weight":2, "length":3, "width":5, "height":7, "delivery_date":"{{cur_date}}", "delivery_timewindow_id":1, "max_delivery_days":3, "pickup_date":"{{cur_date}}", "pickup_timewindow_id":1 } |
     Then Operator verify order V2 is created successfully on Order Creation V2 page
     Examples:
       | Note   | hiptest-uid                              | orderType |

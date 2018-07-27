@@ -7,8 +7,8 @@ Feature: Reservations
 
   Scenario: Operator create new Reservation (uid:b2a5084c-16f9-42ce-9203-131574e5f3d2)
     Given API Operator create new shipper address using data below:
-      | shipperId       | {shipper-v2-id} |
-      | generateAddress | RANDOM          |
+      | shipperId       | {shipper-v2-legacy-id} |
+      | generateAddress | RANDOM                 |
     Given Operator go to menu Shipper Support -> Reservations
     When Operator create new Reservation using data below:
       | shipperName  | {shipper-v2-name}   |
@@ -19,8 +19,8 @@ Feature: Reservations
 
   Scenario: Operator create and edit Reservation (uid:a7b7630f-5723-45c4-9575-1b9ed572be17)
     Given API Operator create new shipper address using data below:
-      | shipperId       | {shipper-v2-id} |
-      | generateAddress | RANDOM          |
+      | shipperId       | {shipper-v2-legacy-id} |
+      | generateAddress | RANDOM                 |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper Support -> Reservations
     When Operator create new Reservation using data below:
@@ -36,8 +36,8 @@ Feature: Reservations
 
   Scenario: Operator create and delete Reservation (uid:4d256cf6-cada-491d-855f-900e7f01c8d6)
     Given API Operator create new shipper address using data below:
-      | shipperId       | {shipper-v2-id} |
-      | generateAddress | RANDOM          |
+      | shipperId       | {shipper-v2-legacy-id} |
+      | generateAddress | RANDOM                 |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper Support -> Reservations
     When Operator create new Reservation using data below:
@@ -51,8 +51,8 @@ Feature: Reservations
 
   Scenario: Operator create, edit, and delete Reservation (uid:7d8deed7-7ccd-4d29-8645-16aa43a90931)
     Given API Operator create new shipper address using data below:
-      | shipperId       | {shipper-v2-id} |
-      | generateAddress | RANDOM          |
+      | shipperId       | {shipper-v2-legacy-id} |
+      | generateAddress | RANDOM                 |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper Support -> Reservations
     When Operator create new Reservation using data below:
