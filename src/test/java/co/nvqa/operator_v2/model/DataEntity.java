@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
+
 /**
  *
  * @author Sergey Mishanin
@@ -265,5 +268,23 @@ public abstract class DataEntity<T extends DataEntity>
             NvLogger.error(message);
             throw new RuntimeException(ex);
         }
+    }
+
+    public void compareWithActual(T actualEntity){
+        Map<String, ?> expectedData = toMap();
+        Map<String, ?> actualData = actualEntity.toMap();
+        expectedData.forEach((propertyName, expectedValue) -> {
+            if (expectedValue != null){
+                String message = StringUtils.capitalize(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase(propertyName), " "));
+                if (expectedValue instanceof String)
+                {
+                    String actualValue = StringUtils.normalizeSpace(String.valueOf(actualData.get(propertyName)).trim());
+                    String strExpectedValue = StringUtils.normalizeSpace(String.valueOf(actualValue).trim());
+                    assertThat(message, actualValue, equalTo(strExpectedValue));
+                } else {
+                    assertThat(message, actualData.get(propertyName), equalTo(expectedValue));
+                }
+            }
+        });
     }
 }
