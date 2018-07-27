@@ -46,7 +46,7 @@ public class ReservationsSteps extends AbstractSteps
         String shipperName = mapOfData.get("shipperName");
         String timeslot = mapOfData.get("timeslot");
         String approxVolume = mapOfData.get("approxVolume");
-        String comments = String.format("This reservation is created for testing purpose only. Ignore this reservation. Created at %s by scenario \"%s\".", createdDate, scenarioName);
+        String comments = String.format("Please ignore this Automation test reservation. Created at %s by scenario \"%s\".", createdDate, scenarioName);
 
         Reservation reservation = new Reservation();
         reservation.setAddressId(address.getId());

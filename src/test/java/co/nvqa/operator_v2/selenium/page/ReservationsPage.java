@@ -52,7 +52,7 @@ public class ReservationsPage extends OperatorV2SimplePage
         selectValueFromMdSelect("ctrl.createForm.approxVolume", reservation.getApproxVolume());
         sendKeys("//md-input-container[@form='createForm']//input[@aria-label='Comments']", reservation.getComments());
         clickNvButtonSaveByNameAndWaitUntilDone("Create Reservation");
-        waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Reservations created']", TestConstants.VERY_LONG_WAIT_FOR_TOAST);
+        waitUntilInvisibilityOfToast("Reservation Created Successfully");
     }
 
     public void verifyReservationIsCreatedSuccessfully(String expectedTimeslotTextOnCalendar)
@@ -60,7 +60,7 @@ public class ReservationsPage extends OperatorV2SimplePage
         boolean isCurrentDateCellLabeledAsReserved = isElementExist(getCurrentDateCellXpath()+"//div[text()='Reserved']");
         Assert.assertTrue(String.format("Reservation is not created. Label 'Reserved' is not found at the calendar on date %d.", getCurrentDateNumber()), isCurrentDateCellLabeledAsReserved);
 
-        String actualTimeslotTextOnCalendar = getText(getCurrentDateCellXpath()+"//span[@class='reservation-calendar-item-time']");
+        String actualTimeslotTextOnCalendar = getText(getCurrentDateCellXpath()+"//div[contains(@ng-repeat,'rsvn in $calendar.reservations')]/nv-icon-text-button/button/div[1]");
         Assert.assertEquals("Reservation is not created correctly. Timeslot does not change.", expectedTimeslotTextOnCalendar.trim(), actualTimeslotTextOnCalendar.trim());
     }
 
@@ -81,7 +81,7 @@ public class ReservationsPage extends OperatorV2SimplePage
         boolean isCurrentDateCellLabeledAsReserved = isElementExist(getCurrentDateCellXpath()+"//div[text()='Reserved']");
         Assert.assertTrue(String.format("Reservation is not updated. Label 'Reserved' is not found at the calendar on date %d.", getCurrentDateNumber()), isCurrentDateCellLabeledAsReserved);
 
-        String actualTimeslotTextOnCalendar = getText(getCurrentDateCellXpath()+"//span[@class='reservation-calendar-item-time']");
+        String actualTimeslotTextOnCalendar = getText(getCurrentDateCellXpath()+"//div[contains(@ng-repeat,'rsvn in $calendar.reservations')]/nv-icon-text-button/button/div[1]");
         Assert.assertEquals("Reservation is not updated. Timeslot does not change.", expectedTimeslotTextOnCalendar.trim(), actualTimeslotTextOnCalendar.trim());
     }
 
