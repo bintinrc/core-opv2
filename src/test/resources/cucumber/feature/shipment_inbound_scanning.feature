@@ -59,9 +59,9 @@ Feature: Shipment Inbound Scanning
     Then Operator clear all filters on Shipment Management page
 
   Scenario: Change end date when inbound scanning (uid:6efa9d01-49d8-4515-b924-5805d34d587a)
-    Given API Shipper create Order V2 Parcel using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
-      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Management
     When Operator create Shipment with Start Hub 30JKB, End hub DOJO and comment Created by feature @ShipmentInboundScanning.
