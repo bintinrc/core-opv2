@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.ListOfDateFormat;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.NonInboundedOrder;
@@ -43,15 +42,15 @@ public class NonInboundedOrdersSteps extends AbstractSteps
             Map<String,String> mapOfTokens = createDefaultTokens();
             Map<String,String> dataTableAsMapReplaced = replaceDataTableTokens(mapOfData, mapOfTokens);
 
+            String routeDate = dataTableAsMapReplaced.get("routeDate");
             Date fromDate = null;
-            String value = dataTableAsMapReplaced.get("routeDate");
-            if (StringUtils.isNotBlank(value))
+
+            if(StringUtils.isNotBlank(routeDate))
             {
-                fromDate = ListOfDateFormat.YYYY_MM_DD_SDF.parse(value);
+                fromDate = YYYY_MM_DD_SDF.parse(routeDate);
             }
 
             String shipperName = dataTableAsMapReplaced.get("shipperName");
-
             nonInboundedOrdersPage.filterAndLoadSelection(fromDate, shipperName);
         }
         catch(ParseException ex)
@@ -90,7 +89,8 @@ public class NonInboundedOrdersSteps extends AbstractSteps
         trackingIds.forEach(this::checkOrderIsNotFound);
     }
 
-    private void checkOrderIsNotFound(String trackingId){
+    private void checkOrderIsNotFound(String trackingId)
+    {
         nonInboundedOrdersPage.filterBy(NonInboundedOrdersPage.OrdersTable.COLUMN_TRACKING_ID, trackingId);
         Assert.assertTrue("Filtered Orders page is empty", nonInboundedOrdersPage.ordersTable().isTableEmpty());
     }
@@ -103,7 +103,7 @@ public class NonInboundedOrdersSteps extends AbstractSteps
     }
 
     @Then("^Operator verify the CSV of selected Non Inbounded Orders is downloaded successfully and contains correct info$")
-    public void operatorVerifyTheCSVOfSelectedNonInboundedOrdersIsDownloadedSuccessfullyAndContainsCorrectInfo() throws Throwable
+    public void operatorVerifyTheCSVOfSelectedNonInboundedOrdersIsDownloadedSuccessfullyAndContainsCorrectInfo()
     {
         List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
         nonInboundedOrdersPage.verifyDownloadedCsvFileContent(trackingIds);

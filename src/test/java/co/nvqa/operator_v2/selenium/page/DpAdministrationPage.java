@@ -322,6 +322,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
     /**
      * Accessor for Add Partner dialog
      */
+    @SuppressWarnings("UnusedReturnValue")
     public static class AddPartnerDialog extends OperatorV2SimplePage
     {
         protected String dialogTittle;
@@ -481,6 +482,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
     /**
      * Accessor for Add Distribution Point dialog
      */
+    @SuppressWarnings("UnusedReturnValue")
     public static class AddDpDialog extends OperatorV2SimplePage
     {
         protected String dialogTittle;
@@ -541,13 +543,13 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setCanShipperLodgeIn(Boolean value)
         {
-            toggleMdSwithcById(LOCATOR_FIELD_CAN_SHIPPER_LODGE_IN, value);
+            toggleMdSwitchById(LOCATOR_FIELD_CAN_SHIPPER_LODGE_IN, value);
             return this;
         }
 
         public AddDpDialog setCanCustomerCollect(Boolean value)
         {
-            toggleMdSwithcById(LOCATOR_FIELD_CAN_CUSTOMER_COLLECT, value);
+            toggleMdSwitchById(LOCATOR_FIELD_CAN_CUSTOMER_COLLECT, value);
             return this;
         }
 
@@ -688,6 +690,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
     /**
      * Accessor for Add User dialog
      */
+    @SuppressWarnings("UnusedReturnValue")
     public static class AddDpUserDialog extends OperatorV2SimplePage
     {
         protected String dialogTittle;
@@ -836,5 +839,4 @@ public class DpAdministrationPage extends OperatorV2SimplePage
             setEntityClass(DpUser.class);
         }
     }
-
 }

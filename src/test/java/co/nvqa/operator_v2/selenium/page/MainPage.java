@@ -34,6 +34,7 @@ public class MainPage extends OperatorV2SimplePage
         MAP_OF_END_URL.put("Hubs Administration", "hub");
         MAP_OF_END_URL.put("Linehaul Management", "linehaul");
         MAP_OF_END_URL.put("Messaging Module", "sms");
+        MAP_OF_END_URL.put("Non Inbounded Orders", "non-inbounded-list");
         MAP_OF_END_URL.put("Order Creation V2", "create-combine");
         MAP_OF_END_URL.put("Order Creation V4", "create-v4");
         MAP_OF_END_URL.put("Pricing Scripts V2", "pricing-scripts-v2/active-scripts");
@@ -42,7 +43,6 @@ public class MainPage extends OperatorV2SimplePage
         MAP_OF_END_URL.put("Route Cash Inbound", "cod");
         MAP_OF_END_URL.put("Third Party Shippers", "third-party-shipper");
         MAP_OF_END_URL.put("Third Party Order Management", "third-party-order");
-        MAP_OF_END_URL.put("Non Inbounded Orders", "non-inbounded-list");
     }
 
     public MainPage(WebDriver webDriver)

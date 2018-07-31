@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -112,7 +113,7 @@ public abstract class DataEntity<T extends DataEntity>
     }
 
     @SuppressWarnings("unchecked")
-    private <T> T getProperty(String property)
+    private <U> U getProperty(String property)
     {
         Class<?> clazz = this.getClass();
 
@@ -122,7 +123,7 @@ public abstract class DataEntity<T extends DataEntity>
 
             if(getter!=null)
             {
-                return (T) MethodUtils.invokeMethod(this, true, getter.getName());
+                return (U) MethodUtils.invokeMethod(this, true, getter.getName());
             }
             else
             {
@@ -130,7 +131,7 @@ public abstract class DataEntity<T extends DataEntity>
 
                 if(field!=null)
                 {
-                    return (T) FieldUtils.readField(field, this, true);
+                    return (U) FieldUtils.readField(field, this, true);
                 }
             }
         }
@@ -225,7 +226,7 @@ public abstract class DataEntity<T extends DataEntity>
     {
         try
         {
-            List<String> csvLines = FileUtils.readLines(new File(fileName));
+            List<String> csvLines = FileUtils.readLines(new File(fileName), Charset.defaultCharset());
 
             if(ignoreHeader)
             {
@@ -270,18 +271,25 @@ public abstract class DataEntity<T extends DataEntity>
         }
     }
 
-    public void compareWithActual(T actualEntity){
+    @SuppressWarnings("unchecked")
+    public void compareWithActual(T actualEntity)
+    {
         Map<String, ?> expectedData = toMap();
         Map<String, ?> actualData = actualEntity.toMap();
-        expectedData.forEach((propertyName, expectedValue) -> {
-            if (expectedValue != null){
+        expectedData.forEach((propertyName, expectedValue) ->
+        {
+            if(expectedValue!=null)
+            {
                 String message = StringUtils.capitalize(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase(propertyName), " "));
-                if (expectedValue instanceof String)
+
+                if(expectedValue instanceof String)
                 {
                     String actualValue = StringUtils.normalizeSpace(String.valueOf(actualData.get(propertyName)).trim());
                     String strExpectedValue = StringUtils.normalizeSpace(String.valueOf(actualValue).trim());
                     assertThat(message, actualValue, equalTo(strExpectedValue));
-                } else {
+                }
+                else
+                {
                     assertThat(message, actualData.get(propertyName), equalTo(expectedValue));
                 }
             }

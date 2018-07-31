@@ -15,6 +15,7 @@ import java.util.stream.IntStream;
  *
  * @author Sergey Mishanin
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class AbstractTable<T extends DataEntity> extends OperatorV2SimplePage
 {
     private Class<T> entityClass;
@@ -53,14 +54,18 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
 
     protected abstract String getTextOnTable(int rowNumber, String columnDataClass);
 
+    @SuppressWarnings("SameParameterValue")
     protected abstract void selectRow(int rowNumber);
 
-    protected void selectEntity(String columnId, String value){
+    protected void selectEntity(String columnId, String value)
+    {
         filterByColumn(columnId, value);
         selectRow(1);
     }
 
-    protected void selectEntities(String columnId, List<String> values){
+    @SuppressWarnings("SameParameterValue")
+    protected void selectEntities(String columnId, List<String> values)
+    {
         values.forEach(value -> selectEntity(columnId, value));
     }
 
@@ -120,6 +125,7 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
                 .collect(Collectors.toList());
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public AbstractTable filterByColumn(String columnId, String value)
     {
         Preconditions.checkArgument(StringUtils.isNotBlank(columnId), "columnId cannot be null or blank string");

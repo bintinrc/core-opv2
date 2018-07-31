@@ -7,8 +7,10 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
+ *
  * @author Sergey Mishanin
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class DriverInfo extends DataEntity<DriverInfo>
 {
     private String uuid;
@@ -62,7 +64,8 @@ public class DriverInfo extends DataEntity<DriverInfo>
 
     public void setFirstName(String firstName)
     {
-        if ("GENERATED".equalsIgnoreCase(firstName)){
+        if("GENERATED".equalsIgnoreCase(firstName))
+        {
             firstName = "Driver";
         }
         this.firstName = firstName;
@@ -75,7 +78,8 @@ public class DriverInfo extends DataEntity<DriverInfo>
 
     public void setLastName(String lastName)
     {
-        if ("GENERATED".equalsIgnoreCase(lastName)){
+        if("GENERATED".equalsIgnoreCase(lastName))
+        {
             lastName = TestUtils.generateDateUniqueString();
         }
         this.lastName = lastName;
@@ -88,7 +92,8 @@ public class DriverInfo extends DataEntity<DriverInfo>
 
     public void setLicenseNumber(String licenseNumber)
     {
-        if ("GENERATED".equalsIgnoreCase(licenseNumber)){
+        if("GENERATED".equalsIgnoreCase(licenseNumber))
+        {
             licenseNumber = "D" + DateUtil.getTimestamp();
         }
         this.licenseNumber = licenseNumber;
@@ -126,7 +131,8 @@ public class DriverInfo extends DataEntity<DriverInfo>
 
     public void setVehicleLicenseNumber(String vehicleLicenseNumber)
     {
-        if ("GENERATED".equalsIgnoreCase(vehicleLicenseNumber)){
+        if("GENERATED".equalsIgnoreCase(vehicleLicenseNumber))
+        {
             vehicleLicenseNumber = "D" + DateUtil.getTimestamp();
         }
         this.vehicleLicenseNumber = vehicleLicenseNumber;
@@ -164,8 +170,9 @@ public class DriverInfo extends DataEntity<DriverInfo>
 
     public void setContact(String contact)
     {
-        if ("GENERATED".equalsIgnoreCase(contact)){
-            contact = "D" + DateUtil.getTimestamp() + "@NV.CO";
+        if("GENERATED".equalsIgnoreCase(contact))
+        {
+            contact = "D" + DateUtil.getTimestamp() + "@ninjavan.co";
         }
         this.contact = contact;
     }
@@ -232,7 +239,8 @@ public class DriverInfo extends DataEntity<DriverInfo>
 
     public void setUsername(String username)
     {
-        if ("GENERATED".equalsIgnoreCase(username)){
+        if("GENERATED".equalsIgnoreCase(username))
+        {
             username = "D" + DateUtil.getTimestamp();
         }
         this.username = username;
@@ -245,20 +253,26 @@ public class DriverInfo extends DataEntity<DriverInfo>
 
     public void setPassword(String password)
     {
-        if ("GENERATED".equalsIgnoreCase(password)){
+        if("GENERATED".equalsIgnoreCase(password))
+        {
             password = "D00" + DateUtil.getTimestamp();
         }
         this.password = password;
     }
 
-    public void setName(String name){
-        if (StringUtils.isNotBlank(name))
+    public void setName(String name)
+    {
+        if(StringUtils.isNotBlank(name))
         {
             String[] parts = StringUtils.normalizeSpace(name.trim()).split("\\s");
-            if (parts.length > 0){
+
+            if(parts.length>0)
+            {
                 setFirstName(parts[0]);
             }
-            if (parts.length > 1){
+
+            if(parts.length>1)
+            {
                 setLastName(parts[1]);
             }
         }
@@ -274,19 +288,23 @@ public class DriverInfo extends DataEntity<DriverInfo>
         this.comments = comments;
     }
 
-    public boolean hasVehicleInfo(){
-        return vehicleLicenseNumber != null || vehicleCapacity != null;
+    public boolean hasVehicleInfo()
+    {
+        return vehicleLicenseNumber!=null || vehicleCapacity!=null;
     }
 
-    public boolean hasContactsInfo(){
-        return contact != null || contactType != null;
+    public boolean hasContactsInfo()
+    {
+        return contact!=null || contactType!=null;
     }
 
-    public boolean hasZoneInfo(){
-        return zoneId != null ||zoneMin != null || zoneMax != null || zoneCost != null;
+    public boolean hasZoneInfo()
+    {
+        return zoneId!=null || zoneMin!=null || zoneMax!=null || zoneCost!=null;
     }
 
-    public void fromDriver(Driver driver){
+    public void fromDriver(Driver driver)
+    {
         setUuid(driver.getUuid());
         setId(driver.getId());
         setFirstName(driver.getFirstName());
@@ -294,19 +312,26 @@ public class DriverInfo extends DataEntity<DriverInfo>
         setLicenseNumber(driver.getLicenseNumber());
         setType(driver.getDriverType());
         setCodLimit(driver.getCodLimit());
-        if (CollectionUtils.isNotEmpty(driver.getVehicles())){
+
+        if(CollectionUtils.isNotEmpty(driver.getVehicles()))
+        {
             setVehicleLicenseNumber(driver.getVehicles().get(0).getVehicleNo());
             setVehicleCapacity(driver.getVehicles().get(0).getCapacity());
         }
-        if (CollectionUtils.isNotEmpty(driver.getContacts())){
+
+        if(CollectionUtils.isNotEmpty(driver.getContacts()))
+        {
             setContactType(driver.getContacts().get(0).getType());
             setContact(driver.getContacts().get(0).getDetails());
         }
-        if (CollectionUtils.isNotEmpty(driver.getZonePreferences())){
+
+        if(CollectionUtils.isNotEmpty(driver.getZonePreferences()))
+        {
             setZoneMin(driver.getZonePreferences().get(0).getMinWaypoints());
             setZoneMax(driver.getZonePreferences().get(0).getMaxWaypoints());
             setZoneCost(driver.getZonePreferences().get(0).getCost());
         }
+
         setUsername(driver.getUsername());
         setPassword(driver.getPassword());
         setComments(driver.getComments());

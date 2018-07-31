@@ -5,7 +5,6 @@ import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.util.TestConstants;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -23,7 +22,7 @@ import java.util.stream.Collectors;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class OperatorV2SimplePage extends SimplePage
 {
     public OperatorV2SimplePage(WebDriver webDriver)
@@ -590,6 +589,7 @@ public class OperatorV2SimplePage extends SimplePage
         selectValueFromNvAutocompleteBy("possible-options", possibleOptions, value);
     }
 
+    @SuppressWarnings("CatchMayIgnoreException")
     private WebElement selectValueFromNvAutocompleteBy(String nvAutocompleteAttribute, String nvAutocompleteAttributeValue, String value)
     {
         String xpathExpression = String.format("//nv-autocomplete[@%s='%s']//input", nvAutocompleteAttribute, nvAutocompleteAttributeValue);
@@ -609,7 +609,8 @@ public class OperatorV2SimplePage extends SimplePage
          */
         String noMatchingErrorText = String.format("\"%s\" were found.", value);
 
-        StandardTestUtils.retryIfRuntimeExceptionOccurred(() -> {
+        StandardTestUtils.retryIfRuntimeExceptionOccurred(()->
+        {
             try
             {
                 WebElement noMatchingErrorWe = findElementByXpath(String.format("//span[contains(text(), '%s')]", noMatchingErrorText), WAIT_1_SECOND);
@@ -729,11 +730,13 @@ public class OperatorV2SimplePage extends SimplePage
         pause300ms();
     }
 
-    public void toggleMdSwithcById(String mdSwitchId, boolean state)
+    public void toggleMdSwitchById(String mdSwitchId, boolean state)
     {
         String xpath = String.format("//md-switch[starts-with(@id, '%s')]", mdSwitchId);
         boolean currentState = Boolean.parseBoolean(getAttribute(xpath, "aria-checked"));
-        if (currentState != state){
+
+        if(currentState!=state)
+        {
             click(xpath);
         }
     }
