@@ -52,7 +52,17 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
     }
 
     protected abstract String getTextOnTable(int rowNumber, String columnDataClass);
+
     protected abstract void selectRow(int rowNumber);
+
+    protected void selectEntity(String columnId, String value){
+        filterByColumn(columnId, value);
+        selectRow(1);
+    }
+
+    protected void selectEntities(String columnId, List<String> values){
+        values.forEach(value -> selectEntity(columnId, value));
+    }
 
     public String getColumnText(int rowNumber, String columnId)
     {
