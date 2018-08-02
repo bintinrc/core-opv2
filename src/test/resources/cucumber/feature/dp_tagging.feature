@@ -12,24 +12,24 @@ Feature: DP Tagging
 
   Scenario Outline: Operator tagged single order to DP (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create Order V2 Parcel using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
-      | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+      | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Distribution Points -> DP Tagging
     When Operator tags single order to DP with ID = "{dp-id}"
     Then Operator verify the order(s) is tagged to DP successfully
     Examples:
-      | Note   | hiptest-uid                              | orderType |
-      | Normal | uid:c798aa53-3cab-4d3b-80e8-23849cfda6c5 | Normal    |
-      | C2C    | uid:192326b0-9a43-4017-91c7-e8312d6f58ce | C2C       |
-      | Return | uid:c9fcc03b-99cc-41ee-91d0-ae2e46e74774 | Return    |
+      | Note   | hiptest-uid                              | orderType | isPickupRequired |
+      | Normal | uid:c798aa53-3cab-4d3b-80e8-23849cfda6c5 | Normal    | false            |
+      | Return | uid:c9fcc03b-99cc-41ee-91d0-ae2e46e74774 | Return    | true             |
+      | C2C    | uid:192326b0-9a43-4017-91c7-e8312d6f58ce | C2C       | true             |
 
   Scenario: Operator tagged multiple order to DP (uid:d3342895-66f9-4e9e-bfb7-7bc369d94b55)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create multiple Order V2 Parcel using data below:
-      | numberOfOrder     | 3       |
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 3      |
       | generateFromAndTo | RANDOM |
-      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Distribution Points -> DP Tagging
     When Operator tags multiple orders to DP with ID = "{dp-id}"
     Then Operator verify the order(s) is tagged to DP successfully

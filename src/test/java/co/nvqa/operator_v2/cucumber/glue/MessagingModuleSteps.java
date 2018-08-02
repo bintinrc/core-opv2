@@ -32,7 +32,7 @@ public class MessagingModuleSteps extends AbstractSteps
         messagingModulePage = new MessagingModulePage(getWebDriver());
     }
 
-    @Then("^op upload sms campaign csv file$")
+    @Then("^Operator upload SMS campaign CSV file$")
     public void uploadSmsCampaignCsv(List<SmsCampaignCsv> data)
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
@@ -41,7 +41,7 @@ public class MessagingModuleSteps extends AbstractSteps
         {
             data = data.stream().peek(smsCampaignCsv ->
             {
-                if("_created_".equalsIgnoreCase(smsCampaignCsv.getTracking_id()))
+                if("GET_FROM_CREATED_ORDER".equalsIgnoreCase(smsCampaignCsv.getTracking_id()))
                 {
                     smsCampaignCsv.setTracking_id(trackingId);
                 }
@@ -51,26 +51,26 @@ public class MessagingModuleSteps extends AbstractSteps
         messagingModulePage.uploadCsvCampaignFile(data);
     }
 
-    @When("^op continue on invalid dialog$")
+    @When("^Operator continue on invalid dialog$")
     public void onPartialErrorContinue()
     {
         messagingModulePage.continueOnCsvUploadFailure();
     }
 
-    @Then("^op verify sms module page resetted$")
-    public void onSmsModulePageResetted()
+    @Then("^Operator verify sms module page reset$")
+    public void onSmsModulePageReset()
     {
         messagingModulePage.verifyThatPageReset();
     }
 
-    @When("^op compose sms with data : ([^\"]*), ([^\"]*)$")
+    @When("^Operator compose SMS with name = \"([^\"]*)\" and tracking ID = \"([^\"]*)\"$")
     public void composeSms(String name, String trackingId)
     {
         String createdTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
 
         if(createdTrackingId!=null)
         {
-            if("_created_".equalsIgnoreCase(trackingId))
+            if("GET_FROM_CREATED_ORDER".equalsIgnoreCase(trackingId))
             {
                 trackingId = createdTrackingId;
             }
@@ -79,19 +79,19 @@ public class MessagingModuleSteps extends AbstractSteps
         messagingModulePage.composeSms(name, trackingId);
     }
 
-    @Then("^op compose sms using url shortener$")
+    @Then("^Operator compose SMS using URL shortener$")
     public void composeSmsWithUrlShortener()
     {
         messagingModulePage.composeSmsWithUrlShortener();
     }
 
-    @Then("^op verify sms preview using shortened url$")
+    @Then("^Operator verify SMS preview using shortened URL$")
     public void verifyPreviewUsingShortenedUrl()
     {
         messagingModulePage.verifyThatPreviewUsingShortenedUrl();
     }
 
-    @When("^op send sms$")
+    @When("^Operator send SMS$")
     public void sendSms()
     {
         messagingModulePage.sendSms();
@@ -109,7 +109,7 @@ public class MessagingModuleSteps extends AbstractSteps
         messagingModulePage.searchSmsSentHistory(trackingId);
     }
 
-    @Then("^op verify that tracking id ([^\"]*) is invalid$")
+    @Then("^Operator verify that tracking ID \"([^\"]*)\" is invalid$")
     public void verifyOnTrackingIdInvalid(String trackingId)
     {
         messagingModulePage.searchSmsSentHistory(trackingId);
