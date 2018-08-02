@@ -1,8 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.order_create.v2.Parcel;
 import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
@@ -12,6 +13,7 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  *
@@ -43,37 +45,24 @@ public class EditOrderSteps extends AbstractSteps
     @When("^Operator Edit Order Details on Edit Order page$")
     public void operatorEditOrderDetailsOnEditOrderPage()
     {
-        Order order = get(KEY_ORDER_CREATE_REQUEST);
-
+        Order order = get(KEY_CREATED_ORDER);
         Order orderEdited = SerializationUtils.clone(order);
-        Parcel parcelEdited = null; //orderRequestV2Edited.getParcels().get(0);
 
-        int newParcelSizeId = (parcelEdited.getParcelSizeId()+1)%4;
-        parcelEdited.setParcelSizeId(newParcelSizeId);
+        int newParcelSizeId = (StandardTestUtils.getParcelSizeIdByLongString(orderEdited.getParcelSize())+1)%4;
+        orderEdited.setParcelSize(StandardTestUtils.getParcelSizeAsLongString(newParcelSizeId));
 
-        Double newWeight = parcelEdited.getWeight();
-
-        if(newWeight==null)
-        {
-            newWeight = 1.0;
-        }
-        else
-        {
-            newWeight += 1.0;
-        }
-
-        parcelEdited.setWeight(newWeight);
+        Dimension dimension = orderEdited.getDimensions();
+        dimension.setWeight(Optional.ofNullable(dimension.getWeight()).orElse(0.0)+1.0);
 
         editOrderPage.editOrderDetails(orderEdited);
-        put("orderRequestV2Edited", orderEdited);
+        put("orderEdited", orderEdited);
     }
 
     @Then("^Operator Edit Order Details on Edit Order page successfully$")
     public void operatorEditOrderDetailsOnEditOrderPageSuccessfully()
     {
-        Order orderEdited = get("orderRequestV2Edited");
-        Order order = get(KEY_ORDER_DETAILS);
-        editOrderPage.verifyEditOrderDetailsIsSuccess(orderEdited, order);
+        Order orderEdited = get("orderEdited");
+        editOrderPage.verifyEditOrderDetailsIsSuccess(orderEdited);
     }
 
     @When("^Operator enter Order Instructions on Edit Order page:$")
@@ -95,7 +84,7 @@ public class EditOrderSteps extends AbstractSteps
     @When("^Operator verify Order Instructions are updated on Edit Order Page$")
     public void operatorVerifyOrderInstructionsAreUpdatedOnEditOrderPage()
     {
-        Order order = get(KEY_ORDER_CREATE_REQUEST);
+        Order order = get(KEY_CREATED_ORDER);
         String pickupInstruction = get(KEY_PICKUP_INSTRUCTION);
 
         if(StringUtils.isNotBlank(pickupInstruction))
@@ -122,8 +111,7 @@ public class EditOrderSteps extends AbstractSteps
     @Then("^Operator verify the order completed successfully on Edit Order page$")
     public void operatorVerifyTheOrderCompletedSuccessfullyOnEditOrderPage()
     {
-        Order order = get(KEY_ORDER_CREATE_REQUEST);
-        order.setTrackingId(get(KEY_CREATED_ORDER_TRACKING_ID));
+        Order order = get(KEY_CREATED_ORDER);
         editOrderPage.verifyOrderIsForceSuccessedSuccessfully(order);
     }
 

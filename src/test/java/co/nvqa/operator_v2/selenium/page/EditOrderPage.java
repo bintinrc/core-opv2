@@ -4,7 +4,6 @@ import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.route.Route;
-import co.nvqa.commons.model.order_create.v2.Parcel;
 import co.nvqa.commons.model.pdf.AirwayBill;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.PdfUtils;
@@ -55,11 +54,14 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public void editOrderDetails(Order order)
     {
+        String parcelSize = getParcelSizeShortStringByLongString(order.getParcelSize());
+        Dimension dimension = order.getDimensions();
+
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'order-edit-details')]//nv-api-text-button[@name='commons.save-changes']");
-        Parcel parcel = null; //orderRequestV2.getParcels().get(0);
-        selectValueFromMdSelectById("parcel-size", getParcelSizeAsString(parcel.getParcelSizeId()));
-        sendKeysByIdAlt("weight", String.valueOf(parcel.getWeight()));
+        selectValueFromMdSelectById("parcel-size", parcelSize);
+        sendKeysByIdAlt("weight", String.valueOf(dimension.getWeight()));
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
+        waitUntilInvisibilityOfToast("Current order updated successfully");
     }
 
     public void editOrderInstructions(String pickupInstruction, String deliveryInstruction)
@@ -186,18 +188,11 @@ public class EditOrderPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast("The order has been completed", true);
     }
 
-    public void verifyEditOrderDetailsIsSuccess(Order oldOrder, Order newOrder)
+    public void verifyEditOrderDetailsIsSuccess(Order editedOrder)
     {
-        Parcel expectedParcel = null; //oldOrder.getParcels().get(0);
-
-        String actualSize = getSize();
-        Double actualWeight = getWeight();
-
-        Assert.assertEquals("Order - Size", getParcelSizeAsLongString(expectedParcel.getParcelSizeId()), actualSize);
-        Assert.assertEquals("Order - Weight", expectedParcel.getWeight(), actualWeight);
-
-        Assert.assertEquals("Order Details - Size", newOrder.getParcelSize(), getSize());
-        Assert.assertEquals("Order Details - Weight", expectedParcel.getWeight(), getWeight());
+        Dimension expectedDimension = editedOrder.getDimensions();
+        Assert.assertEquals("Order Details - Size", editedOrder.getParcelSize(), getSize());
+        Assert.assertEquals("Order Details - Weight", expectedDimension.getWeight(), getWeight());
     }
 
     public void verifyInboundIsSucceed()
