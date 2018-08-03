@@ -25,9 +25,9 @@ Feature: Messaging Module
     Then Operator verify sms module page reset
 
 #  Scenario: Check sent SMS history (uid:343d98d0-ce45-41da-8821-077af014a561)
-#    Given API Shipper create Order V2 Parcel using data below:
+#    Given API Shipper create V4 order using data below:
 #      | generateFromAndTo | RANDOM |
-#      | v2OrderRequest    | { "type":"Normal", "from_name":"Sim Sze Kiat", "from_contact":"+6588698632", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":0 } |
+#      | v4OrderRequest    | { "from":{ "name":"Sim Sze Kiat", "phone_number":"+6588698632" }, "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
 #    Given Operator go to menu Mass Communications -> Messaging Module
 #    Then op upload sms campaign csv file
 #        | tracking_id | name         | email          | job |
