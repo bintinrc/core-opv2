@@ -88,9 +88,9 @@ Feature: Pricing Scripts V2
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> Pricing Scripts V2
     Then Operator verify the Script is linked successfully
-    Given API Shipper create Order V2 Parcel using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
-      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Nextday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Operator get order details
     Then Operator verify the price is correct using data below:
       | expectedCost | 1.82 |
@@ -123,9 +123,9 @@ Feature: Pricing Scripts V2
       | startWeight      | 1.0 |
       | endWeight        | 2.0 |
     Then Operator verify the new Time-Bounded Script is created and released successfully
-    Given API Shipper create Order V2 Parcel using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
-      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Nextday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Operator get order details
     Then Operator verify the price is correct using data below:
       | expectedCost | 3.64 |

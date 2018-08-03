@@ -148,15 +148,14 @@ Feature: Shipper Pickups
   Scenario: Operator should be able to use the Route Suggestion and add single reservation to the route on Shipper Pickups page (uid:87eaa63d-5f66-4bc7-b425-ebf33ab47392)
     # For a route to be able to be suggested to a RSVN, it should have at least 1 waypoint.
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create new shipper address using data below:
-      | shipperId       | {shipper-v2-legacy-id} |
-      | generateAddress | RANDOM                 |
-    Given API Operator create reservation using data below:
-      | shipperId   | {shipper-v2-legacy-id} |
-      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
-    Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
-      | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given API Operator create new route using data below:
@@ -170,7 +169,7 @@ Feature: Shipper Pickups
     When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
     And Operator use the Route Suggestion to add created reservation to the route
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName | {shipper-v2-name}        |
+      | shipperName | {shipper-v4-name}        |
       | routeId     | GET_FROM_SUGGESTED_ROUTE |
       | driverName  | GET_FROM_SUGGESTED_ROUTE |
 
@@ -178,16 +177,15 @@ Feature: Shipper Pickups
   Scenario: Operator should be able to use the Route Suggestion and add multiple reservations to the route on Shipper Pickups page (uid:b5ffe64a-0143-4d66-aa5d-82d9be1f9ff4)
     # For a route to be able to be suggested to a RSVN, it should have at least 1 waypoint.
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Operator create multiple shipper addresses using data below:
-      | numberOfAddresses | 2                      |
-      | shipperId         | {shipper-v2-legacy-id} |
-      | generateAddress   | RANDOM                 |
-    Given API Operator create multiple reservations using data below:
-      | shipperId   | {shipper-v2-legacy-id} |
-      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
-    Given API Shipper create Order V2 Parcel using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                      |
-      | v2OrderRequest    | { "type":"<orderType>", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    Given API Operator create multiple shipper addresses V2 using data below:
+      | numberOfAddresses | 2               |
+      | shipperId         | {shipper-v4-id} |
+      | generateAddress   | RANDOM          |
+    Given API Operator create multiple V2 reservations based on number of created addresses using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given API Operator create new route using data below:
@@ -201,7 +199,7 @@ Feature: Shipper Pickups
     When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
     And Operator use the Route Suggestion to add created reservations to the route
     Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
-      | shipperName | {shipper-v2-name}        |
+      | shipperName | {shipper-v4-name}        |
       | routeId     | GET_FROM_SUGGESTED_ROUTE |
       | driverName  | GET_FROM_SUGGESTED_ROUTE |
 

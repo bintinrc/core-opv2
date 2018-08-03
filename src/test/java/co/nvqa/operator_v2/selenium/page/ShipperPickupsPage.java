@@ -69,7 +69,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
     private static String buildPickupAddress(Address address)
     {
-        return StringUtils.trim(address.getAddress1() + " " + StringUtils.trimToEmpty(address.getAddress2()));
+        return StringUtils.trim(address.getAddress1());
     }
 
     public void assignReservationToRoute(Address address, Long routeId)
