@@ -8,10 +8,10 @@ Feature: Bulk Address Verification
   @ArchiveRouteViaDb
   Scenario: Operator should be able to verify Bulk Addresses on Bulk Address Verification page (uid:ae74df19-c939-4b91-865d-94eb19021910)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create multiple Order V2 Parcel using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                      |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                 |
-      | v2OrderRequest    | { "type":"Normal", "delivery_date":"{{cur_date}}", "pickup_date":"{{cur_date}}", "pickup_reach_by":"{{cur_date}} 15:00:00", "delivery_reach_by":"{{cur_date}} 17:00:00", "weekend":true, "pickup_timewindow_id":1, "delivery_timewindow_id":2, "max_delivery_days":1 } |
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2      |
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound multiple parcels using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given API Operator create new route using data below:
