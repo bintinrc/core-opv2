@@ -18,6 +18,11 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
         super(webDriver);
     }
 
+    public void waitUntilRouteGroupPageIsLoaded()
+    {
+        waitUntilInvisibilityOfElementLocated("//div[contains(@class,'message') and text()='Loading...']");
+    }
+
     public void setCreationTimeFilter()
     {
         String dateLabel = DATE_FILTER_SDF.format(TestUtils.getNextDate(1));

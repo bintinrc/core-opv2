@@ -83,6 +83,7 @@ public class SamedayRouteEnginePage extends OperatorV2SimplePage
     public void clickCreate1RoutesButton()
     {
         clickNvApiTextButtonByNameAndWaitUntilDone("Create 1 Route(s)");
+        waitUntilInvisibilityOfToast("1 Route(s) Created");
     }
 
     public void setFleetType1Capacity(String capacity)

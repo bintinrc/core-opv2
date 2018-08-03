@@ -29,6 +29,12 @@ public class CreateRouteGroupsSteps extends AbstractSteps
         createRouteGroupsPage = new CreateRouteGroupsPage(getWebDriver());
     }
 
+    @When("^Operator wait until 'Create Route Group' page is loaded$")
+    public void waitUntilCreateRouteGroupIsLoaded()
+    {
+        createRouteGroupsPage.waitUntilRouteGroupPageIsLoaded();
+    }
+
     @When("^Operator V2 add created Transaction to Route Group$")
     public void addCreatedTransactionToRouteGroup()
     {

@@ -74,7 +74,7 @@ public class SamedayRouteEngineSteps extends AbstractSteps
         return bulkyTrackingClient;
     }
 
-    @When("^op 'Run Route Engine' on Same-Day Route Engine menu using data below:$")
+    @When("^Operator 'Run Route Engine' on Same-Day Route Engine menu using data below:$")
     public void runRouteEngine(DataTable dataTable)
     {
         String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
@@ -135,10 +135,10 @@ public class SamedayRouteEngineSteps extends AbstractSteps
         takesScreenshot();
     }
 
-    @Then("^op create the suggested route$")
-    public void createRoute()
+    @Then("^Operator create the suggested route with driver name = \"([^\"]*)\"$")
+    public void createRoute(String driverName)
     {
-        samedayRouteEnginePage.selectDriverOnRouteSettingsPage("OpV2No.1");
+        samedayRouteEnginePage.selectDriverOnRouteSettingsPage(driverName);
         takesScreenshot();
         samedayRouteEnginePage.clickCreate1RoutesButton();
         takesScreenshot();
