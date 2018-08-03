@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.Cod;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
@@ -37,9 +38,12 @@ public class RouteCashInboundSteps extends AbstractSteps
         Order order = get(KEY_CREATED_ORDER);
         Long routeId = get(KEY_CREATED_ROUTE_ID);
 
-        Double codGoods = order.getCodGoods();
-        Assert.assertNotNull("COD Goods should not be null.", codGoods);
-        Double amountCollected = codGoods-(codGoods.intValue()/2);
+        Cod cod = order.getCod();
+        Assert.assertNotNull("COD should not be null.", cod);
+        Double codGoodsAmount = cod.getGoodsAmount();
+        Assert.assertNotNull("COD Goods Amount should not be null.", codGoodsAmount);
+
+        Double amountCollected = codGoodsAmount-(codGoodsAmount.intValue()/2);
         String receiptNumber = "#"+routeId+"-"+generateDateUniqueString();
 
         RouteCashInboundCod routeCashInboundCod = new RouteCashInboundCod();
