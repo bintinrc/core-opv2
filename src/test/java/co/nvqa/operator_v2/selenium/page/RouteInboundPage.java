@@ -61,7 +61,10 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
         if(isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Choose a route']"))
         {
-            click(String.format("//tr[@ng-repeat='routeId in ctrl.routeIds'][td[text()='%d']]//button", routeId));
+            String routeIdProceedButton = String.format("//tr[@ng-repeat='routeId in ctrl.routeIds'][td[text()='%d']]//button", routeId);
+            moveToElementWithXpath(routeIdProceedButton); //This needed to make sure the button is clicked if there are many routes.
+            pause200ms();
+            click(routeIdProceedButton);
         }
 
         dismissDriverAttendanceDialog();
