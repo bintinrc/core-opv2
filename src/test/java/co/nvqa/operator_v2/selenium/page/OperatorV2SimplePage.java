@@ -302,10 +302,10 @@ public class OperatorV2SimplePage extends SimplePage
 
             switch(xpathTextMode)
             {
-                case EXACT      : we = findElementByXpath(String.format("%s//tr[@md-virtual-repeat='%s'][%d]/td[normalize-space(@class)='%s']", nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass)); break;
-                case CONTAINS   : we = findElementByXpath(String.format("%s//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, '%s')]", nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass)); break;
-                case STARTS_WITH: we = findElementByXpath(String.format("%s//tr[@md-virtual-repeat='%s'][%d]/td[starts-with(@class, '%s')]", nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass)); break;
-                default         : we = findElementByXpath(String.format("%s//tr[@md-virtual-repeat='%s'][%d]/td[starts-with(@class, '%s')]", nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass));
+                case EXACT      : we = findElementByXpath(String.format("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[normalize-space(@class)='%s']", nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass)); break;
+                case CONTAINS   : we = findElementByXpath(String.format("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[contains(@class, '%s')]", nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass)); break;
+                case STARTS_WITH: we = findElementByXpath(String.format("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[starts-with(@class, '%s')]", nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass)); break;
+                default         : we = findElementByXpath(String.format("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[starts-with(@class, '%s')]", nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass));
             }
 
             text = we.getText().trim();
@@ -424,7 +424,7 @@ public class OperatorV2SimplePage extends SimplePage
     {
         try
         {
-            List<WebElement> webElements = findElementsByXpath(String.format("//tr[@md-virtual-repeat='%s']", mdVirtualRepeat));
+            List<WebElement> webElements = findElementsByXpath(String.format("//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))]", mdVirtualRepeat));
             return webElements.size();
         }
         catch(NoSuchElementException | TimeoutException ex)

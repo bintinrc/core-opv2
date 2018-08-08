@@ -19,6 +19,8 @@ import org.junit.Assert;
 public class RouteCashInboundSteps extends AbstractSteps
 {
     private RouteCashInboundPage routeCashInboundPage;
+    public static final String KEY_ROUTE_CASH_INBOUND_COD = "KEY_ROUTE_CASH_INBOUND_COD";
+    public static final String KEY_ROUTE_CASH_INBOUND_COD_EDITED = "KEY_ROUTE_CASH_INBOUND_COD_EDITED";
 
     @Inject
     public RouteCashInboundSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
@@ -52,27 +54,27 @@ public class RouteCashInboundSteps extends AbstractSteps
         routeCashInboundCod.setReceiptNumber(receiptNumber);
 
         routeCashInboundPage.addCod(routeCashInboundCod);
-        put("routeCashInboundCod", routeCashInboundCod);
+        put(KEY_ROUTE_CASH_INBOUND_COD, routeCashInboundCod);
     }
 
     @Then("^Operator verify the new COD on Route Cash Inbound page is created successfully$")
     public void operatorVerifyTheNewCodIsCreatedSuccessfully()
     {
-        RouteCashInboundCod routeCashInboundCod = get("routeCashInboundCod");
+        RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
         routeCashInboundPage.verifyNewCodIsCreatedSuccessfully(routeCashInboundCod);
     }
 
     @Then("^Operator check filter on Route Cash Inbound page work fine$")
     public void operatorCheckFilterOnRouteCashInboundPageWork()
     {
-        RouteCashInboundCod routeCashInboundCod = get("routeCashInboundCod");
+        RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
         routeCashInboundPage.verifyFilterWorkFine(routeCashInboundCod);
     }
 
     @When("^Operator update the new COD on Route Cash Inbound page$")
     public void operatorUpdateTheNewCod()
     {
-        RouteCashInboundCod routeCashInboundCod = get("routeCashInboundCod");
+        RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
 
         Double oldAmountCollected = routeCashInboundCod.getAmountCollected();
         Double newAmountCollected = oldAmountCollected+(oldAmountCollected.intValue()/2);
@@ -90,21 +92,21 @@ public class RouteCashInboundSteps extends AbstractSteps
     @Then("^Operator verify the new COD on Route Cash Inbound page is updated successfully$")
     public void operatorVerifyTheNewZoneIsUpdatedSuccessfully()
     {
-        RouteCashInboundCod routeCashInboundCodEdited = get("routeCashInboundCodEdited");
+        RouteCashInboundCod routeCashInboundCodEdited = get(KEY_ROUTE_CASH_INBOUND_COD_EDITED);
         routeCashInboundPage.verifyCodIsUpdatedSuccessfully(routeCashInboundCodEdited);
     }
 
     @When("^Operator delete the new COD on Route Cash Inbound page$")
     public void operatorDeleteTheNewZone()
     {
-        RouteCashInboundCod routeCashInboundCod = containsKey("routeCashInboundCodEdited") ? get("routeCashInboundCodEdited") : get("routeCashInboundCod");
+        RouteCashInboundCod routeCashInboundCod = containsKey(KEY_ROUTE_CASH_INBOUND_COD_EDITED) ? get(KEY_ROUTE_CASH_INBOUND_COD_EDITED) : get(KEY_ROUTE_CASH_INBOUND_COD);
         routeCashInboundPage.deleteCod(routeCashInboundCod);
     }
 
     @Then("^Operator verify the new COD on Route Cash Inbound page is deleted successfully$")
     public void operatorVerifyTheNewCodIsDeletedSuccessfully()
     {
-        RouteCashInboundCod routeCashInboundCod = containsKey("routeCashInboundCodEdited") ? get("routeCashInboundCodEdited") : get("routeCashInboundCod");
+        RouteCashInboundCod routeCashInboundCod = containsKey(KEY_ROUTE_CASH_INBOUND_COD_EDITED) ? get(KEY_ROUTE_CASH_INBOUND_COD_EDITED) : get(KEY_ROUTE_CASH_INBOUND_COD);
         routeCashInboundPage.verifyCodIsDeletedSuccessfully(routeCashInboundCod);
     }
 
@@ -117,7 +119,7 @@ public class RouteCashInboundSteps extends AbstractSteps
     @Then("^Operator verify COD CSV file on Route Cash Inbound page is downloaded successfully$")
     public void operatorVerifyCodCsvFileIsDownloadSuccessfully()
     {
-        RouteCashInboundCod routeCashInboundCod = get("routeCashInboundCod");
+        RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
         routeCashInboundPage.verifyCsvFileDownloadedSuccessfully(routeCashInboundCod);
     }
 }
