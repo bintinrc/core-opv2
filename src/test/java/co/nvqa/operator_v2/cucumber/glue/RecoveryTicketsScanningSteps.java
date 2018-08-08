@@ -6,7 +6,6 @@ import co.nvqa.operator_v2.model.RecoveryTicketsScanning;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsScanningPage;
 import com.google.inject.Inject;
-import cucumber.api.DataTable;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
