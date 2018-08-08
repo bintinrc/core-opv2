@@ -41,7 +41,7 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
         clickNvIconTextButtonByName("Add COD");
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'cod-add')]");
         fillTheFormAndSubmit(routeCashInboundCod);
-        closeToastErrorDialog();
+        waitUntilToastErrorDisappear();
     }
 
     public void editCod(RouteCashInboundCod routeCashInboundCodOld, RouteCashInboundCod routeCashInboundCodEdited)
@@ -58,7 +58,7 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
                 WebElement toastErrorMessageWe = waitUntilVisibilityOfElementLocated(XPATH_OF_TOAST_ERROR_MESSAGE, FAST_WAIT_IN_SECONDS);
                 String toastErrorMessage = toastErrorMessageWe.getText();
                 NvLogger.warnf("Error when submitting COD on Route Cash Inbound page. Cause: %s", toastErrorMessage);
-                closeToastErrorDialog();
+                waitUntilToastErrorDisappear();
                 closeModal();
 
                 /*
@@ -193,27 +193,9 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
         Assert.assertTrue("Table should not be empty.", !isTableEmpty);
     }
 
-    public void closeToastErrorDialog()
+    public void waitUntilToastErrorDisappear()
     {
-        String xpathOfToastCloseButton = "//div[@id='toast-container']//button/i[@class='material-icons'][text()='close']";
-
-        while(isElementExistFast(xpathOfToastCloseButton))
-        {
-            NvLogger.info("Close toast error dialog.");
-            TestUtils.retryIfStaleElementReferenceExceptionOccurred(()->
-            {
-                try
-                {
-                    WebElement webElement = findElementByXpathFast(xpathOfToastCloseButton);
-                    webElement.click();
-                }
-                catch(TimeoutException ex)
-                {
-                    NvLogger.warn("Close button of Toast error message dialog is disappear.");
-                }
-            }, "closeToastErrorDialog");
-            pause30ms();
-        }
+        waitUntilInvisibilityOfToast("Cannot read property", false);
     }
 
     public boolean isTableEmpty()
