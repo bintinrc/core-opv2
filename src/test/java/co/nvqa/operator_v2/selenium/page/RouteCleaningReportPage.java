@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.CodTable.COLUMN_COD_INBOUND;
+import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.CodTable.COLUMN_ROUTE_ID;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 /**
@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
  */
 public class RouteCleaningReportPage extends OperatorV2SimplePage
 {
-    private static final String EXCEL_FILENAME_PATTERN = "route-cleaning-report";
+    private static final String CSV_FILENAME_PATTERN = "COD";
     private CodTable codTable;
 
     public RouteCleaningReportPage(WebDriver webDriver)
@@ -30,16 +30,19 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
         codTable = new CodTable(webDriver);
     }
 
-    public void clickButtonDownloadExcelReport()
+    public CodTable codTable()
+    {
+        return codTable;
+    }
+
+    public void clickButtonDownloadCSVReport()
     {
         clickNvIconTextButtonByName("container.route-cleaning-report.download-report");
     }
 
-    public void verifyExcelFileIsDownloadedSuccessfully()
+    public void verifyCSVFileIsDownloadedSuccessfully()
     {
-        waitUntilInvisibilityOfElementLocated("//div[text()='Attempting to download route-cleaning-report.xls...']");
-        waitUntilInvisibilityOfElementLocated("//div[text='Downloading route-cleaning-report.xls...']");
-        verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(EXCEL_FILENAME_PATTERN));
+        verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN));
     }
 
     public void fetchByDate(Date date)
@@ -63,50 +66,50 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
         clickButtonByAriaLabel("Reservation");
     }
 
-    public void downloadCsvForSelectedCOD(List<String> codInboundValues)
+    public void downloadCsvForSelectedCOD(List<String> routeIds)
     {
-        codInboundValues.forEach(codInbound -> {
-            codTable.filterByColumn(COLUMN_COD_INBOUND, codInbound);
+        routeIds.forEach(routeId -> {
+            codTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
             codTable.selectRow(1);
         });
-        clickButtonDownloadExcelReport();
+        clickButtonDownloadCSVReport();
     }
 
     public void verifyDownloadedCodCsvFileContent(List<RouteCleaningReportCodInfo> expectedCodInfoRecords)
     {
-        String fileName = getLatestDownloadedFilename(EXCEL_FILENAME_PATTERN);
+        String fileName = getLatestDownloadedFilename(CSV_FILENAME_PATTERN);
         verifyFileDownloadedSuccessfully(fileName);
         String pathName = StandardTestConstants.TEMP_DIR + fileName;
         List<RouteCleaningReportCodInfo> actualCodInfoRecords = RouteCleaningReportCodInfo.fromCsvFile(RouteCleaningReportCodInfo.class, pathName, true);
 
         Assert.assertThat("Unexpected number of lines in CSV file", actualCodInfoRecords.size(), greaterThanOrEqualTo(expectedCodInfoRecords.size()));
 
-        Map<String, RouteCleaningReportCodInfo> actualMap = actualCodInfoRecords.stream().collect(Collectors.toMap(
-                RouteCleaningReportCodInfo::getCodInbound,
+        Map<Long, RouteCleaningReportCodInfo> actualMap = actualCodInfoRecords.stream().collect(Collectors.toMap(
+                RouteCleaningReportCodInfo::getRouteId,
                 codInfo -> codInfo
         ));
 
         for (RouteCleaningReportCodInfo expectedCodInfo : expectedCodInfoRecords)
         {
-            RouteCleaningReportCodInfo actualCodInfo = actualMap.get(expectedCodInfo.getCodInbound());
+            RouteCleaningReportCodInfo actualCodInfo = actualMap.get(expectedCodInfo.getRouteId());
             verifyCodInfo(expectedCodInfo, actualCodInfo);
         }
     }
 
     public void verifyCodInfo(RouteCleaningReportCodInfo expectedCodInfo)
     {
-        codTable.filterByColumn(COLUMN_COD_INBOUND, expectedCodInfo.getCodInbound());
+        codTable.filterByColumn(COLUMN_ROUTE_ID, String.valueOf(expectedCodInfo.getRouteId()));
         RouteCleaningReportCodInfo actualCodInfo = codTable.readEntity(1);
         verifyCodInfo(expectedCodInfo, actualCodInfo);
     }
 
     private void verifyCodInfo(RouteCleaningReportCodInfo expectedCodInfo, RouteCleaningReportCodInfo actualCodInfo)
     {
-        if (StringUtils.isNotBlank(expectedCodInfo.getCodExpected()))
+        if (expectedCodInfo.getCodInbound() != null)
         {
             Assert.assertThat("COD Inbound", actualCodInfo.getCodInbound(), Matchers.equalTo(expectedCodInfo.getCodInbound()));
         }
-        if (StringUtils.isNotBlank(expectedCodInfo.getCodExpected()))
+        if (expectedCodInfo.getCodExpected() != null)
         {
             Assert.assertThat("COD Expected", actualCodInfo.getCodInbound(), Matchers.equalTo(expectedCodInfo.getCodInbound()));
         }
@@ -126,6 +129,7 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
     public static class CodTable extends MdVirtualRepeatTable<RouteCleaningReportCodInfo>
     {
         public static final String COLUMN_COD_INBOUND = "codInbound";
+        public static final String COLUMN_ROUTE_ID = "routeId";
 
         public CodTable(WebDriver webDriver)
         {
@@ -133,7 +137,7 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
             setColumnLocators(ImmutableMap.<String, String>builder()
                     .put(COLUMN_COD_INBOUND, "cod-inbounded")
                     .put("codExpected", "cod-expected")
-                    .put("routeId", "route-id")
+                    .put(COLUMN_ROUTE_ID, "route-id")
                     .put("driverName", "driver-name")
                     .build()
             );

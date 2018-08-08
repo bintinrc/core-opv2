@@ -31,7 +31,7 @@ Feature: Route Cleaning Report
   @ArchiveAndDeleteRouteViaDb
   Scenario: Operator verify the COD information is correct on Route Cleaning Report
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -51,8 +51,8 @@ Feature: Route Cleaning Report
     And Operator Select COD on Route Cleaning Report page
     And Operator fetch by current date on Route Cleaning Report page
     Then Operator verify the COD information on Route Cleaning Report page by following parameters:
-      | codInbound  |                        |
-      | codExpected |                        |
+      | codInbound  | GET_FROM_CREATED_COD   |
+      | codExpected | GET_FROM_CREATED_ORDER |
       | routeId     | GET_FROM_CREATED_ROUTE |
       | driverName  | {ninja-driver-name}    |
 
@@ -78,7 +78,9 @@ Feature: Route Cleaning Report
     When Operator go to menu Recovery -> Route Cleaning Report
     And Operator Select COD on Route Cleaning Report page
     And Operator fetch by current date on Route Cleaning Report page
+    And Operator collect COD info for the route
     Then Operator download CSV for the new COD on Route Cleaning Report page
+    And Operator verify the COD info is correct in downloaded CSV file
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

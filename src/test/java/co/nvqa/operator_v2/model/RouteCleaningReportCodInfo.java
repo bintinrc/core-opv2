@@ -1,13 +1,13 @@
 package co.nvqa.operator_v2.model;
 
 /**
- *
  * @author Sergey Mishanin
  */
 public class RouteCleaningReportCodInfo extends DataEntity<RouteCleaningReportCodInfo>
 {
-    private String codInbound;
-    private String codExpected;
+    private String routeDate;
+    private Double codInbound;
+    private Double codExpected;
     private Long routeId;
     private String driverName;
 
@@ -15,24 +15,34 @@ public class RouteCleaningReportCodInfo extends DataEntity<RouteCleaningReportCo
     {
     }
 
-    public String getCodInbound()
+    public Double getCodInbound()
     {
         return codInbound;
     }
 
-    public void setCodInbound(String codInbound)
+    public void setCodInbound(Double codInbound)
     {
         this.codInbound = codInbound;
     }
 
-    public String getCodExpected()
+    public void setCodInbound(String codInbound)
+    {
+        setCodInbound(Double.valueOf(codInbound));
+    }
+
+    public Double getCodExpected()
     {
         return codExpected;
     }
 
-    public void setCodExpected(String codExpected)
+    public void setCodExpected(Double codExpected)
     {
         this.codExpected = codExpected;
+    }
+
+    public void setCodExpected(String codExpected)
+    {
+        setCodExpected(Double.valueOf(codExpected));
     }
 
     public Long getRouteId()
@@ -60,13 +70,24 @@ public class RouteCleaningReportCodInfo extends DataEntity<RouteCleaningReportCo
         this.driverName = driverName;
     }
 
+    public String getRouteDate()
+    {
+        return routeDate;
+    }
+
+    public void setRouteDate(String routeDate)
+    {
+        this.routeDate = routeDate;
+    }
+
     @Override
     public void fromCsvLine(String csvLine)
     {
         String[] values = splitCsvLine(csvLine);
-        setCodInbound(getValueIfIndexExists(values, 0));
-        setCodExpected(getValueIfIndexExists(values, 1));
-        setRouteId(getValueIfIndexExists(values, 2));
-        setDriverName(getValueIfIndexExists(values, 3));
+        setRouteDate(getValueIfIndexExists(values, 0));
+        setCodInbound(getValueIfIndexExists(values, 1));
+        setCodExpected(getValueIfIndexExists(values, 2));
+        setRouteId(getValueIfIndexExists(values, 3));
+        setDriverName(getValueIfIndexExists(values, 4));
     }
 }
