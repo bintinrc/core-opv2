@@ -145,20 +145,22 @@ Feature: Shipper Pickups
     And Operator duplicates created reservation
     Then Operator verify the duplicated reservation is created successfully
 
-#  Scenario: Operator should be able to create/duplicate multiple reservations on Shipper Pickups page (uid:e974f8e8-498c-4602-a63e-2560902ff343)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given API Operator create multiple shipper addresses using data below:
-#      | numberOfAddresses | 2                      |
-#      | shipperId         | {shipper-v2-legacy-id} |
-#      | generateAddress   | RANDOM                 |
-#    Given API Operator create multiple reservations using data below:
-#      | shipperId   | {shipper-v2-legacy-id} |
-#      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
-#    Given Operator go to menu Pick Ups -> Shipper Pickups
-#    When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
-#    And Operator duplicates created reservations
-#    Then Operator verify the duplicated reservations are created successfully
-#
+  Scenario: Operator should be able to create/duplicate multiple reservations on Shipper Pickups page (uid:e974f8e8-498c-4602-a63e-2560902ff343)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create multiple shipper addresses V2 using data below:
+      | numberOfAddresses | 2               |
+      | shipperId         | {shipper-v4-id} |
+      | generateAddress   | RANDOM          |
+    Given API Operator create multiple V2 reservations based on number of created addresses using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filters using data below and click Load Selection on Shipper Pickups page:
+      | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
+      | reservationDateEnd   | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName          | {shipper-v4-name}                |
+    And Operator duplicates created reservations
+    Then Operator verify the duplicated reservations are created successfully
+
   @ArchiveRouteViaDb
   Scenario: Operator should be able to use the Route Suggestion and add single reservation to the route on Shipper Pickups page (uid:87eaa63d-5f66-4bc7-b425-ebf33ab47392)
     # For a route to be able to be suggested to a RSVN, it should have at least 1 waypoint.
