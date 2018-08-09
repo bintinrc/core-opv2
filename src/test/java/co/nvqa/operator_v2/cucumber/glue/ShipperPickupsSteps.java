@@ -5,6 +5,7 @@ import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.ReservationInfo;
 import co.nvqa.operator_v2.selenium.page.ShipperPickupsPage;
@@ -16,7 +17,10 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.ParseException;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -50,6 +54,23 @@ public class ShipperPickupsSteps extends AbstractSteps
         Date nextDayDate = TestUtils.getNextDate(1);
         shipperPickupsPage.filtersForm().filterReservationDate(currentDate, nextDayDate);
         shipperPickupsPage.filtersForm().clickButtonLoadSelection();
+    }
+
+    @When("^Operator set filters using data below and click Load Selection on Shipper Pickups page:$")
+    public void operatorSetFilterUsingDataBelowAndClickLoadSelectionOnShipperPickupsPage(Map<String, String> dataTableAsMap)
+    {
+        try
+        {
+            Date reservationDateStart = YYYY_MM_DD_SDF.parse(dataTableAsMap.get("reservationDateStart"));
+            Date reservationDateEnd = YYYY_MM_DD_SDF.parse(dataTableAsMap.get("reservationDateEnd"));
+            shipperPickupsPage.filtersForm().filterReservationDate(reservationDateStart, reservationDateEnd);
+            shipperPickupsPage.filtersForm().filterByShipper(dataTableAsMap.get("shipperName"));
+            shipperPickupsPage.filtersForm().clickButtonLoadSelection();
+        }
+        catch(ParseException ex)
+        {
+            throw new NvTestRuntimeException(ex);
+        }
     }
 
     @When("^Operator set filter parameters and click Load Selection on Shipper Pickups page:$")
@@ -226,15 +247,25 @@ public class ShipperPickupsSteps extends AbstractSteps
     private List<ReservationInfo> duplicateReservations(List<Address> addresses, Reservation reservation)
     {
         int daysShift = 1;
-        String newReadyBy = DateUtil.displayDateTime(DateUtil.getDate(reservation.getReadyDatetime()).withZoneSameInstant(ZoneId.systemDefault()).plusDays(daysShift));
-        String newLatestBy = DateUtil.displayDateTime(DateUtil.getDate(reservation.getLatestDatetime()).withZoneSameInstant(ZoneId.systemDefault()).plusDays(daysShift));
-        Date newDate = Date.from(DateUtil.getDate(reservation.getReadyDatetime()).plusDays(daysShift).toInstant());
+        DateTimeFormatter reservationDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("UTC"));
+        ZonedDateTime readyDatetime = DateUtil.getDate(reservation.getReadyDatetime(), reservationDateTimeFormatter);
+        ZonedDateTime latestDatetime = DateUtil.getDate(reservation.getLatestDatetime(), reservationDateTimeFormatter);
+
+        ZonedDateTime newReadyDatetime = readyDatetime.plusDays(daysShift);
+        ZonedDateTime newLatestDatetime = latestDatetime.plusDays(daysShift);
+
+        String newReadyDatetimeAsString = DateUtil.displayDateTime(newReadyDatetime.withZoneSameInstant(ZoneId.systemDefault()));
+        String newLatestDatetimeAsString = DateUtil.displayDateTime(newLatestDatetime.withZoneSameInstant(ZoneId.systemDefault()));
+
+        Date newDate = Date.from(newReadyDatetime.toInstant());
         List<ReservationInfo> duplicatedReservationsInfo = shipperPickupsPage.duplicateReservations(addresses, newDate);
+
         duplicatedReservationsInfo.forEach(reservationInfo ->
         {
-            reservationInfo.setReadyBy(newReadyBy);
-            reservationInfo.setLatestBy(newLatestBy);
+            reservationInfo.setReadyBy(newReadyDatetimeAsString);
+            reservationInfo.setLatestBy(newLatestDatetimeAsString);
         });
+
         return duplicatedReservationsInfo;
     }
 

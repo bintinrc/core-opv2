@@ -748,8 +748,8 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
         public void filterReservationDate(Date fromDate, Date toDate)
         {
+            setMdDatepicker(FIELD_TO_NG_MODEL, toDate); // To Date should be select first.
             setMdDatepicker(FIELD_FROM_NG_MODEL, fromDate);
-            setMdDatepicker(FIELD_TO_NG_MODEL, toDate);
         }
 
         public void filterByHub(String hub)
@@ -762,6 +762,11 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         {
             selectValueFromMdAutocomplete(FIELD_SELECT_FILTER_PLACEHOLDER, ZONES_ITEM_TYPE);
             selectValueFromNvAutocompleteByItemTypesAndDismiss(ZONES_ITEM_TYPE, zone);
+        }
+
+        public void filterByShipper(String shipperName)
+        {
+            selectValueFromNvAutocompleteByItemTypesAndDismiss("Shipper", shipperName);
         }
 
         public void clickButtonLoadSelection()
