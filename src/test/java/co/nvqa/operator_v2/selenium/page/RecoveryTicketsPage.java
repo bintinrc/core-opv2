@@ -87,6 +87,11 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         return trackingId.equals(actualTrackingId);
     }
 
+    public void removeFilterTicketSubType()
+    {
+        click("//nv-filter-box[@main-title='Ticket Sub Type']//button[@aria-label='Remove Filter']");
+    }
+
     public void enterTrackingId(String trackingId)
     {
         waitUntilVisibilityOfElementLocated("//nv-api-text-button[@name='commons.load-selection']");
