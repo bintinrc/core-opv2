@@ -119,7 +119,7 @@ Feature: Shipper Pickups
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     Given API Operator create V2 reservation using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     Given Operator go to menu Pick Ups -> Shipper Pickups
     When Operator set filters using data below and click Load Selection on Shipper Pickups page:
       | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
@@ -136,7 +136,7 @@ Feature: Shipper Pickups
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     Given API Operator create V2 reservation using data below:
-      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     Given Operator go to menu Pick Ups -> Shipper Pickups
     When Operator set filters using data below and click Load Selection on Shipper Pickups page:
       | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
@@ -287,62 +287,70 @@ Feature: Shipper Pickups
 #      | Params 1 | uid:619b39f4-1a64-4abe-8b8f-916e7509d129 | 2        | DOJO    | {zone-id} |                 |
 #      | Params 2 | uid:579e00c4-0612-4c55-91b3-26d29a8fec8a | {hub-id} |         | 2         | 2-ZZZ-All Zones |
 #
-#  Scenario: Operator should be able to download CSV file on Shipper Pickups page (uid:1214e548-8996-403a-a58c-043ed5c642d9)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given API Operator create new shipper address using data below:
-#      | shipperId       | {shipper-v2-legacy-id} |
-#      | generateAddress | RANDOM                 |
-#    Given API Operator create reservation using data below:
-#      | shipperId   | {shipper-v2-legacy-id} |
-#      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
-#    Given Operator go to menu Pick Ups -> Shipper Pickups
-#    When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
-#    And Operator download CSV file for created reservation
-#    Then Operator verify the reservation info is correct in downloaded CSV file
-#
-#  Scenario: Operator should be able to edit the Priority Level of single reservation on Shipper Pickups page (uid:a9630dc0-ce00-4caf-aced-c6dedc59b76b)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given API Operator create new shipper address using data below:
-#      | shipperId       | {shipper-v2-legacy-id} |
-#      | generateAddress | RANDOM                 |
-#    Given API Operator create reservation using data below:
-#      | shipperId   | {shipper-v2-legacy-id} |
-#      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
-#    Given Operator go to menu Pick Ups -> Shipper Pickups
-#    When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
-#    And Operator set the Priority Level of the created reservation to "2" from Apply Action
-#    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-#      | priorityLevel | 2 |
-#
-#  Scenario: Operator should be able to edit the Priority Level of multiple reservation on Shipper Pickups page (uid:1ef31434-423d-417c-955e-051d5b203a65)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given API Operator create multiple shipper addresses using data below:
-#      | numberOfAddresses | 2                      |
-#      | shipperId         | {shipper-v2-legacy-id} |
-#      | generateAddress   | RANDOM                 |
-#    Given API Operator create multiple reservations using data below:
-#      | shipperId   | {shipper-v2-legacy-id} |
-#      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
-#    Given Operator go to menu Pick Ups -> Shipper Pickups
-#    When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
-#    And Operator set the Priority Level of the created reservations to "2" from Apply Action
-#    Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
-#      | priorityLevel | 2 |
-#
-#  Scenario: Operator should be able to edit the Priority Level of multiple reservation on Shipper Pickups page using "Set To All" option (uid:f68f5816-325a-425f-9dc8-656cfe75038d)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given API Operator create multiple shipper addresses using data below:
-#      | numberOfAddresses | 2                      |
-#      | shipperId         | {shipper-v2-legacy-id} |
-#      | generateAddress   | RANDOM                 |
-#    Given API Operator create multiple reservations using data below:
-#      | shipperId   | {shipper-v2-legacy-id} |
-#      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
-#    Given Operator go to menu Pick Ups -> Shipper Pickups
-#    When Operator set filter Reservation Date to current date and click Load Selection on Shipper Pickups page
-#    And Operator set the Priority Level of the created reservations to "2" from Apply Action using "Set To All" option
-#    Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
-#      | priorityLevel | 2 |
+  Scenario: Operator should be able to download CSV file on Shipper Pickups page (uid:1214e548-8996-403a-a58c-043ed5c642d9)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filters using data below and click Load Selection on Shipper Pickups page:
+      | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
+      | reservationDateEnd   | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName          | {shipper-v4-name}                |
+    And Operator download CSV file for created reservation
+    Then Operator verify the reservation info is correct in downloaded CSV file
+
+  Scenario: Operator should be able to edit the Priority Level of single reservation on Shipper Pickups page (uid:a9630dc0-ce00-4caf-aced-c6dedc59b76b)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filters using data below and click Load Selection on Shipper Pickups page:
+      | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
+      | reservationDateEnd   | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName          | {shipper-v4-name}                |
+    And Operator set the Priority Level of the created reservation to "2" from Apply Action
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | priorityLevel | 2 |
+
+  Scenario: Operator should be able to edit the Priority Level of multiple reservation on Shipper Pickups page (uid:1ef31434-423d-417c-955e-051d5b203a65)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create multiple shipper addresses V2 using data below:
+      | numberOfAddresses | 2               |
+      | shipperId         | {shipper-v4-id} |
+      | generateAddress   | RANDOM          |
+    Given API Operator create multiple V2 reservations based on number of created addresses using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filters using data below and click Load Selection on Shipper Pickups page:
+      | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
+      | reservationDateEnd   | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName          | {shipper-v4-name}                |
+    And Operator set the Priority Level of the created reservations to "2" from Apply Action
+    Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
+      | priorityLevel | 2 |
+
+  Scenario: Operator should be able to edit the Priority Level of multiple reservation on Shipper Pickups page using "Set To All" option (uid:f68f5816-325a-425f-9dc8-656cfe75038d)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create multiple shipper addresses V2 using data below:
+      | numberOfAddresses | 2               |
+      | shipperId         | {shipper-v4-id} |
+      | generateAddress   | RANDOM          |
+    Given API Operator create multiple V2 reservations based on number of created addresses using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filters using data below and click Load Selection on Shipper Pickups page:
+      | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
+      | reservationDateEnd   | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName          | {shipper-v4-name}                |
+    And Operator set the Priority Level of the created reservations to "2" from Apply Action using "Set To All" option
+    Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
+      | priorityLevel | 2 |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
