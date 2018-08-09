@@ -1,12 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.pdf.AirwayBill;
-import co.nvqa.commons.utils.PdfUtils;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction;
-import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -34,8 +31,8 @@ import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.A
 public class AllOrdersPage extends OperatorV2SimplePage
 {
     private static final String SAMPLE_CSV_FILENAME = "find-orders-with-csv.csv";
-
     private static final String MD_VIRTUAL_REPEAT_TABLE_ORDER = "order in getTableData()";
+
     public static final String COLUMN_CLASS_DATA_TRACKING_ID_ON_TABLE_ORDER = "tracking-id";
     public static final String COLUMN_CLASS_DATA_FROM_NAME_ON_TABLE_ORDER = "from-name";
     public static final String COLUMN_CLASS_DATA_FROM_CONTACT_ON_TABLE_ORDER = "from-contact";
@@ -48,8 +45,6 @@ public class AllOrdersPage extends OperatorV2SimplePage
     public static final String COLUMN_CLASS_DATA_GRANULAR_STATUS_ON_TABLE_ORDER = "_granular-status";
 
     public static final String ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER = "container.order.list.print-waybill";
-
-    private final EditOrderPage editOrderPage;
 
     public enum Category
     {
@@ -121,6 +116,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         }
     }
 
+    private final EditOrderPage editOrderPage;
     public ApplyActionsMenu applyActionsMenu;
 
     public AllOrdersPage(WebDriver webDriver)
@@ -132,7 +128,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         super(webDriver);
         this.editOrderPage = editOrderPage;
-        applyActionsMenu = new ApplyActionsMenu(webDriver);
+        this.applyActionsMenu = new ApplyActionsMenu(webDriver);
     }
 
     public void waitUntilPageLoaded()
@@ -178,7 +174,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         String toastTopText = getToastTopText();
         Assert.assertEquals("Toast message is different.", "Matches with file shown in table", toastTopText);
         waitUntilInvisibilityOfToast("Matches with file shown in table", false);
-        listOfCreatedOrder.forEach((order) -> verifyOrderInfoOnTableOrderIsCorrect(order));
+        listOfCreatedOrder.forEach(this::verifyOrderInfoOnTableOrderIsCorrect);
     }
 
     public void verifyInvalidTrackingIdsIsFailedToFind(List<String> listOfInvalidTrackingId)
@@ -350,7 +346,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast("updated");
     }
 
-    public void applyActionToOrdersByTrackingId(List<String> listOfExpectedTrackingId, AllOrdersAction action)
+    public void applyActionToOrdersByTrackingId(@SuppressWarnings("unused") List<String> listOfExpectedTrackingId, AllOrdersAction action)
     {
         clearFilterTableOrderByTrackingId();
         selectAllShown("ctrl.ordersTableParam");
@@ -407,33 +403,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     public void verifyWaybillContentsIsCorrect(Order order)
     {
-        String trackingId = order.getTrackingId();
-        String latestFilenameOfDownloadedPdf = getLatestDownloadedFilename("awb_" + trackingId);
-        verifyFileDownloadedSuccessfully(latestFilenameOfDownloadedPdf);
-        AirwayBill airwayBill = PdfUtils.getOrderInfoFromAirwayBill(TestConstants.TEMP_DIR + latestFilenameOfDownloadedPdf, 0);
-
-        Assert.assertEquals("Tracking ID", trackingId, airwayBill.getTrackingId());
-
-        Assert.assertEquals("From Name", order.getFromName(), airwayBill.getFromName());
-        Assert.assertEquals("From Contact", order.getFromContact(), airwayBill.getFromContact());
-        Assert.assertThat("From Address", airwayBill.getFromAddress(), Matchers.containsString(order.getFromAddress1()));
-        Assert.assertThat("From Address", airwayBill.getFromAddress(), Matchers.containsString(order.getFromAddress2()));
-        Assert.assertThat("Postcode In From Address", airwayBill.getFromAddress(), Matchers.containsString(order.getFromPostcode()));
-
-        Assert.assertEquals("To Name", order.getToName(), airwayBill.getToName());
-        Assert.assertEquals("To Contact", order.getToContact(), airwayBill.getToContact());
-        Assert.assertThat("To Address", airwayBill.getToAddress(), Matchers.containsString(order.getToAddress1()));
-        Assert.assertThat("To Address", airwayBill.getToAddress(), Matchers.containsString(order.getToAddress2()));
-        Assert.assertThat("Postcode In To Address", airwayBill.getToAddress(), Matchers.containsString(order.getToPostcode()));
-
-        Assert.assertEquals("COD", order.getCodGoods(), airwayBill.getCod());
-        Assert.assertEquals("Comments", order.getInstruction(), airwayBill.getComments());
-
-        String actualQrCodeTrackingId = TestUtils.getTextFromQrCodeImage(airwayBill.getTrackingIdQrCodeFile());
-        Assert.assertEquals("Tracking ID - QR Code", trackingId, actualQrCodeTrackingId);
-
-        String actualBarcodeTrackingId = TestUtils.getTextFromQrCodeImage(airwayBill.getTrackingIdBarcodeFile());
-        Assert.assertEquals("Tracking ID - Barcode 128", trackingId, actualBarcodeTrackingId);
+        editOrderPage.verifyAirwayBillContentsIsCorrect(order);
     }
 
     public void verifyDeliveryTimingIsUpdatedSuccessfully(ChangeDeliveryTiming changeDeliveryTiming)

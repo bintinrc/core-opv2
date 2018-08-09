@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.core.Cod;
 import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
@@ -19,6 +20,7 @@ import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -150,7 +152,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         Assert.assertThat("To Address", airwayBill.getToAddress(), Matchers.containsString(order.getToAddress2()));
         Assert.assertThat("Postcode In To Address", airwayBill.getToAddress(), Matchers.containsString(order.getToPostcode()));
 
-        Assert.assertEquals("COD", order.getCodGoods(), airwayBill.getCod());
+        Assert.assertEquals("COD", Optional.ofNullable(order.getCod()).orElse(new Cod()).getGoodsAmount(), airwayBill.getCod());
         Assert.assertEquals("Comments", order.getInstruction(), airwayBill.getComments());
 
         String actualQrCodeTrackingId = TestUtils.getTextFromQrCodeImage(airwayBill.getTrackingIdQrCodeFile());

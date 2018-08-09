@@ -126,7 +126,7 @@ public class AllOrdersSteps extends AbstractSteps
     @Then("^Operator verify all orders in CSV is found on All Orders page with correct info$")
     public void operatorVerifyAllOrdersInCsvIsFoundOnAllOrdersPageWithCorrectInfo()
     {
-        List<Order> listOfCreatedOrder = get(KEY_LIST_OF_ORDER_DETAILS);
+        List<Order> listOfCreatedOrder = containsKey(KEY_LIST_OF_ORDER_DETAILS)? get(KEY_LIST_OF_ORDER_DETAILS) : get(KEY_LIST_OF_CREATED_ORDER);
         allOrdersPage.verifyAllOrdersInCsvIsFoundWithCorrectInfo(listOfCreatedOrder);
     }
 
