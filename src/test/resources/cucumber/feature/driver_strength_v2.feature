@@ -1,7 +1,7 @@
-@OperatorV2 @DriverStrengthV2 @Saas @ShouldAlwaysRun
+@OperatorV2 @OperatorV2Part2 @DriverStrengthV2 @Saas @ShouldAlwaysRun
 Feature: Driver Strength
 
-  @LaunchBrowser
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -93,6 +93,6 @@ Feature: Driver Strength
     When Operator filter driver strength by "Ops" driver type
     Then Operator verify driver strength is filtered by "Ops" driver type
 
-  @KillBrowser
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
