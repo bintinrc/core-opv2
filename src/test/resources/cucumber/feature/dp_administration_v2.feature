@@ -1,4 +1,4 @@
-@OperatorV2Disabled @DpAdministrationV2
+@OperatorV2 @OperatorV2Part1 @DpAdministrationV2
 Feature: DP Administration
 
   @LaunchBrowser
