@@ -37,9 +37,12 @@ public class MdVirtualRepeatTable<T extends DataEntity> extends AbstractTable<T>
     public void clickActionButton(int rowNumber, String actionId)
     {
         String actionButtonLocator = actionButtonsLocators.get(actionId);
-        if (StringUtils.startsWith(actionButtonLocator,  "/")){
+
+        if(StringUtils.startsWith(actionButtonLocator,  "/"))
+        {
             clickCustomActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonLocator, mdVirtualRepeat);
-        } else
+        }
+        else
         {
             clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonLocator, mdVirtualRepeat);
         }

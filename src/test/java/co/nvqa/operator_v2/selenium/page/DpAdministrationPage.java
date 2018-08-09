@@ -12,6 +12,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
@@ -251,16 +252,16 @@ public class DpAdministrationPage extends OperatorV2SimplePage
                 (params1, params2) -> params1
         ));
 
-        for (DpPartner expectedDpPartner : expectedDpPartners)
+        for(DpPartner expectedDpPartner : expectedDpPartners)
         {
-            DpPartner actualDpPartner = actualMap.get(expectedDpPartner.getId());
+            DpPartner actualDpPartner = actualMap.get(expectedDpPartner.getDpmsPartnerId());
 
             Assert.assertThat("DP Partner with Id " + expectedDpPartner.getId(), actualDpPartner, notNullValue());
             Assert.assertEquals("DP Partner Name", expectedDpPartner.getName(), actualDpPartner.getName());
             Assert.assertEquals("POC Name", expectedDpPartner.getPocName(), actualDpPartner.getPocName());
             Assert.assertEquals("POC No.", expectedDpPartner.getPocTel(), actualDpPartner.getPocTel());
-            Assert.assertEquals("POC Email", expectedDpPartner.getPocEmail(), actualDpPartner.getPocEmail());
-            Assert.assertEquals("Restrictions", expectedDpPartner.getRestrictions(), actualDpPartner.getRestrictions());
+            Assert.assertEquals("POC Email", Optional.ofNullable(expectedDpPartner.getPocEmail()).orElse("-"), actualDpPartner.getPocEmail());
+            Assert.assertEquals("Restrictions", Optional.ofNullable(expectedDpPartner.getRestrictions()).orElse("-"), actualDpPartner.getRestrictions());
         }
     }
 
@@ -279,14 +280,14 @@ public class DpAdministrationPage extends OperatorV2SimplePage
                 (params1, params2) -> params1
         ));
 
-        for (Dp expectedDp : expectedDpParams)
+        for(Dp expectedDp : expectedDpParams)
         {
-            Dp actualDp = actualMap.get(expectedDp.getId());
+            Dp actualDp = actualMap.get(expectedDp.getDpmsId());
 
             Assert.assertThat("DP with Id " + expectedDp.getId(), actualDp, notNullValue());
             Assert.assertEquals("DP Name", expectedDp.getName(), actualDp.getName());
             Assert.assertEquals("DP Shortname", expectedDp.getShortname(), actualDp.getShortname());
-            Assert.assertEquals("DP Hub", expectedDp.getHub(), actualDp.getHub());
+            Assert.assertEquals("DP Hub", Optional.ofNullable(expectedDp.getHub()).orElse(""), actualDp.getHub());
             Assert.assertEquals("DP Address", expectedDp.getAddress(), actualDp.getAddress());
             Assert.assertEquals("DP Directions", expectedDp.getDirections(), actualDp.getDirections());
             Assert.assertEquals("DP Activity", expectedDp.getActivity(), actualDp.getActivity());
@@ -489,18 +490,18 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         protected String locatorButtonSubmit;
 
         static final String DIALOG_TITLE = "Add Distribution Point";
-        static final String LOCATOR_FIELD_NAME = "Name";
+        static final String LOCATOR_FIELD_NAME = "Name *";
         static final String LOCATOR_FIELD_SHORT_NAME = "Shortname";
         static final String LOCATOR_FIELD_TYPE = "type";
         static final String LOCATOR_FIELD_SERVICE = "service";
         static final String LOCATOR_FIELD_CAN_SHIPPER_LODGE_IN = "can-shipper-lodge-in?";
         static final String LOCATOR_FIELD_CAN_CUSTOMER_COLLECT = "can-customer-collect?";
-        static final String LOCATOR_FIELD_CONTACT_NO = "Contact No.";
-        static final String LOCATOR_FIELD_ADDRESS_LINE_1 = "Address Line 1";
-        static final String LOCATOR_FIELD_ADDRESS_LINE_2 = "Address Line 2";
-        static final String LOCATOR_FIELD_CITY = "City";
-        static final String LOCATOR_FIELD_COUNTRY = "Country";
-        static final String LOCATOR_FIELD_POSTCODE = "Postcode";
+        static final String LOCATOR_FIELD_CONTACT_NO = "Contact No. *";
+        static final String LOCATOR_FIELD_ADDRESS_LINE_1 = "Address Line 1 *";
+        static final String LOCATOR_FIELD_ADDRESS_LINE_2 = "Address Line 2 *";
+        static final String LOCATOR_FIELD_CITY = "City *";
+        static final String LOCATOR_FIELD_COUNTRY = "Country *";
+        static final String LOCATOR_FIELD_POSTCODE = "Postcode *";
         static final String LOCATOR_FIELD_DIRECTIONS = "Directions";
         static final String LOCATOR_BUTTON_SUBMIT = "Submit";
 
