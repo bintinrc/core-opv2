@@ -11,7 +11,7 @@ Feature: Unrouted Priorities
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Analytics -> Unrouted Priorities
     When Operator select filter and click Load Selection on page Unrouted Priorities using data below:
-      | routeDate | {gradle-next-1-day-yyyy-MM-dd} |
+      | routeDate | GET_FROM_ORDER_DELIVERY_END_TIME_TRANSACTION |
     Then Operator verify order with delivery date is today should be listed on page Unrouted Priorities
 
   Scenario: Order with delivery date is next day should not be listed on page Unrouted Priorities (uid:08207375-a006-4b7b-8797-2142d5c47d83)
@@ -31,7 +31,7 @@ Feature: Unrouted Priorities
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Nextday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Analytics -> Unrouted Priorities
     When Operator select filter and click Load Selection on page Unrouted Priorities using data below:
-      | routeDate | {gradle-next-2-day-yyyy-MM-dd} |
+      | routeDate | GET_FROM_ORDER_DELIVERY_END_TIME_TRANSACTION |
     Then Operator verify order with delivery date is next day should be listed on next 2 days route date on page Unrouted Priorities
 
   @KillBrowser @ShouldAlwaysRun
