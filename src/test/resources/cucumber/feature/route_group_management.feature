@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @RouteGroups @Saas
+@OperatorV2 @OperatorV2Part1 @RouteGroups @Saas
 Feature: Route Groups
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -7,14 +7,16 @@ Feature: Route Groups
 
   Scenario: Operator create, update and delete 'route group' on 'Route Group Management' (uid:9c3eb32c-df35-4bb6-a53c-b741751c7971)
     Given Operator go to menu Routing -> 2. Route Group Management
-    When Operator create new 'route group' on 'Route Groups' using data below:
-      | generateName | true |
+    When Operator create new 'Route Group' on 'Route Groups Management' using data below:
+      | generateName | true       |
+      | hubName      | {hub-name} |
     Given Operator go to menu Routing -> 2. Route Group Management
-    Then Operator verify new 'route group' on 'Route Groups' created successfully
-    When Operator update 'route group' on 'Route Group Management'
-    Then Operator verify 'route group' on 'Route Group Management' updated successfully
-    When Operator delete 'route group' on 'Route Group Management'
-    Then Operator verify 'route group' on 'Route Group Management' deleted successfully
+    When Operator wait until 'Route Group Management' page is loaded
+    Then Operator verify new 'Route Group' on 'Route Groups Management' created successfully
+    When Operator update 'Route Group' on 'Route Group Management'
+    Then Operator verify 'Route Group' on 'Route Group Management' updated successfully
+    When Operator delete 'Route Group' on 'Route Group Management'
+    Then Operator verify 'Route Group' on 'Route Group Management' deleted successfully
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

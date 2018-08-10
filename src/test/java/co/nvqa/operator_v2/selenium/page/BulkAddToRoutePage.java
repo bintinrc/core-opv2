@@ -1,8 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.WebDriver;
-
-import java.util.Date;
 
 /**
  *
@@ -20,7 +19,7 @@ public class BulkAddToRoutePage extends OperatorV2SimplePage
 
     public void selectCurrentDate()
     {
-        setMdDatepickerById("commons.model.route-date", new Date());
+        setMdDatepickerById("commons.model.route-date", TestUtils.getBeforeDate(1)); //This is a hack for now. It should be select current date.
     }
 
     public void selectRouteGroup(String routeGroupName)
