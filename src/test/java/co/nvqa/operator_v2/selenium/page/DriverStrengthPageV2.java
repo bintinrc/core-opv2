@@ -118,6 +118,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
     /**
      * Accessor for Add Driver dialog
      */
+    @SuppressWarnings("UnusedReturnValue")
     public static class AddDriverDialog extends OperatorV2SimplePage
     {
         protected String dialogTittle;
@@ -323,6 +324,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
     /**
      * Accessor for Edit Driver dialog
      */
+    @SuppressWarnings("UnusedReturnValue")
     public static class EditDriverDialog extends AddDriverDialog
     {
         static final String DIALOG_TITLE = "Edit Driver";

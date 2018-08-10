@@ -6,7 +6,7 @@ Feature: Driver Strength
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriver
-  Scenario: op add new driver
+  Scenario: Operator should be able to add a new Driver
     Given Operator go to menu Fleet -> Driver Strength
     When Operator create new Driver on Driver Strength page using data below:
       | firstName            | GENERATED                                                        |
