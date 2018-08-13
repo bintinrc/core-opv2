@@ -5,15 +5,12 @@ import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.RouteGroupManagementPage;
 import co.nvqa.operator_v2.selenium.page.TagManagementPage;
 import com.google.inject.Inject;
-import cucumber.api.DataTable;
-import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -38,54 +35,34 @@ public class RouteGroupManagementSteps extends AbstractSteps
         routeGroupManagementPage = new RouteGroupManagementPage(getWebDriver());
     }
 
-    @Given("^Operator V2 create 'Route Group'$")
-    public void createNewRouteGroupWithParam()
+    @When("^Operator create new 'Route Group' on 'Route Groups Management' using data below:$")
+    public void createNewRouteGroup(Map<String,String> dataTableAsMap)
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-
-        /*
-          Create new Route Group.
-         */
-        String routeGroupName = "RG "+trackingId;
-        put(KEY_ROUTE_GROUP_NAME, routeGroupName);
-        routeGroupManagementPage.createRouteGroup(routeGroupName);
-        pause500ms();
-
-        /*
-          Verify the page is redirect to '/#/sg/transactions' after route group is created.
-         */
-        Assert.assertThat("Page not redirect to '/#/sg/transactions'.", getCurrentUrl(), Matchers.containsString("/#/sg/transactions"));
-    }
-
-    @When("^Operator create new 'route group' on 'Route Groups' using data below:$")
-    public void createNewRouteGroup(DataTable dataTable)
-    {
-        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-
-        Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
-        boolean generateName = Boolean.valueOf(mapOfData.get("generateName"));
+        boolean generateName = Boolean.valueOf(dataTableAsMap.get("generateName"));
+        String hubName = dataTableAsMap.get("hubName");
         String routeGroupName;
 
         if(generateName || trackingId==null)
         {
-            routeGroupName = "RG "+new Date().getTime();
+            routeGroupName = "ARG-"+generateDateUniqueString();
         }
         else
         {
-            routeGroupName = "RG "+trackingId;
+            routeGroupName = "ARG-"+trackingId;
         }
 
-        routeGroupManagementPage.createRouteGroup(routeGroupName);
+        routeGroupManagementPage.createRouteGroup(routeGroupName, hubName);
         put(KEY_ROUTE_GROUP_NAME, routeGroupName);
     }
 
-    @When("^Operator wait until 'Route Group' page is loaded$")
+    @When("^Operator wait until 'Route Group Management' page is loaded$")
     public void waitUntilRouteGroupIsLoaded()
     {
         routeGroupManagementPage.waitUntilRouteGroupPageIsLoaded();
     }
 
-    @Then("^Operator verify new 'route group' on 'Route Groups' created successfully$")
+    @Then("^Operator verify new 'Route Group' on 'Route Groups Management' created successfully$")
     public void verifyNewRouteGroupCreatedSuccessfully()
     {
         String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
@@ -113,7 +90,7 @@ public class RouteGroupManagementSteps extends AbstractSteps
         Assert.assertThat("Route Group name not matched.", actualRouteGroupName, Matchers.startsWith(routeGroupName)); //Route Group name is concatenated with description.
     }
 
-    @When("^Operator update 'route group' on 'Route Group Management'$")
+    @When("^Operator update 'Route Group' on 'Route Group Management'$")
     public void updateRouteGroup()
     {
         String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
@@ -123,7 +100,7 @@ public class RouteGroupManagementSteps extends AbstractSteps
         put(KEY_ROUTE_GROUP_NAME, routeGroupName);
     }
 
-    @Then("^Operator verify 'route group' on 'Route Group Management' updated successfully$")
+    @Then("^Operator verify 'Route Group' on 'Route Group Management' updated successfully$")
     public void verifyRouteGroupUpdatedSuccessfully()
     {
         String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
@@ -132,14 +109,14 @@ public class RouteGroupManagementSteps extends AbstractSteps
         Assert.assertTrue("Route Group name not matched.", actualName.startsWith(routeGroupName)); //Route Group name is concatenated with description.
     }
 
-    @When("^Operator delete 'route group' on 'Route Group Management'$")
+    @When("^Operator delete 'Route Group' on 'Route Group Management'$")
     public void deleteRouteGroup()
     {
         String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
         routeGroupManagementPage.deleteRouteGroup(routeGroupName);
     }
 
-    @Then("^Operator verify 'route group' on 'Route Group Management' deleted successfully$")
+    @Then("^Operator verify 'Route Group' on 'Route Group Management' deleted successfully$")
     public void verifyRouteGroupDeletedSuccessfully()
     {
         /*

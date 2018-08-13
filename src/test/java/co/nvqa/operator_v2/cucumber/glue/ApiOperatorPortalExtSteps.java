@@ -7,7 +7,6 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.StandardScenarioStorage;
-import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
@@ -165,17 +164,21 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     @When("^API Operator create new Driver on Driver Strength page using data below:$")
     public void apiOperatorCreateNewDriverOnDriverStrengthPageUsingDataBelow(Map<String, String> mapOfData)
     {
-        String driverCreateRequestTemplate = mapOfData.get("driverCreateRequest");
+        String dateUniqueString = TestUtils.generateDateUniqueString();
+
         Map<String, String> mapOfDynamicVariable = new HashMap<>();
-        mapOfDynamicVariable.put("RANDOM_FIRST_NAME", TestUtils.generateFirstName());
-        mapOfDynamicVariable.put("RANDOM_LAST_NAME", TestUtils.generateLastName());
-        mapOfDynamicVariable.put("TIMESTAMP", DateUtil.getTimestamp());
+        mapOfDynamicVariable.put("RANDOM_FIRST_NAME", "Driver-"+dateUniqueString);
+        mapOfDynamicVariable.put("RANDOM_LAST_NAME", "Rider-"+dateUniqueString);
+        mapOfDynamicVariable.put("TIMESTAMP", dateUniqueString);
+
+        String driverCreateRequestTemplate = mapOfData.get("driverCreateRequest");
         String driverCreateRequestJson = replaceTokens(driverCreateRequestTemplate, mapOfDynamicVariable);
 
         CreateDriverV2Request driverCreateRequest = JsonHelper.fromJson(JsonHelper.getDefaultCamelCaseMapper(), driverCreateRequestJson, CreateDriverV2Request.class);
         driverCreateRequest = getDriverClient().createDriver(driverCreateRequest);
         DriverInfo driverInfo = new DriverInfo();
         driverInfo.fromDriver(driverCreateRequest.getDriver());
+
         put(KEY_CREATED_DRIVER, driverInfo);
         put(KEY_CREATED_DRIVER_UUID, driverInfo.getUuid());
     }

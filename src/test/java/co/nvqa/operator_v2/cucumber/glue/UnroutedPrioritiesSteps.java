@@ -37,7 +37,19 @@ public class UnroutedPrioritiesSteps extends AbstractSteps
     {
         try
         {
-            Date routeDate = YYYY_MM_DD_SDF.parse(mapOfData.get("routeDate"));
+            String routeDateAsString = mapOfData.get("routeDate");
+            Date routeDate;
+
+            if("GET_FROM_ORDER_DELIVERY_END_TIME_TRANSACTION".equalsIgnoreCase(routeDateAsString))
+            {
+                Order order = get(KEY_CREATED_ORDER);
+                routeDate = ISO_8601_WITHOUT_MILLISECONDS.parse(order.getTransactions().get(1).getEndTime());
+            }
+            else
+            {
+                routeDate = YYYY_MM_DD_SDF.parse(routeDateAsString);
+            }
+
             unroutedPrioritiesPage.filterAndClickLoadSelection(routeDate);
         }
         catch(ParseException ex)

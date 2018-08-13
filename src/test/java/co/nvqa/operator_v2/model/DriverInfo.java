@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.core.Driver;
-import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -94,7 +93,7 @@ public class DriverInfo extends DataEntity<DriverInfo>
     {
         if("GENERATED".equalsIgnoreCase(licenseNumber))
         {
-            licenseNumber = "D" + DateUtil.getTimestamp();
+            licenseNumber = "D" + TestUtils.generateDateUniqueString();
         }
         this.licenseNumber = licenseNumber;
     }
@@ -133,7 +132,7 @@ public class DriverInfo extends DataEntity<DriverInfo>
     {
         if("GENERATED".equalsIgnoreCase(vehicleLicenseNumber))
         {
-            vehicleLicenseNumber = "D" + DateUtil.getTimestamp();
+            vehicleLicenseNumber = "D" + TestUtils.generateDateUniqueString();
         }
         this.vehicleLicenseNumber = vehicleLicenseNumber;
     }
@@ -172,7 +171,7 @@ public class DriverInfo extends DataEntity<DriverInfo>
     {
         if("GENERATED".equalsIgnoreCase(contact))
         {
-            contact = "D" + DateUtil.getTimestamp() + "@ninjavan.co";
+            contact = "driver." + TestUtils.generateDateUniqueString() + "@ninjavan.co";
         }
         this.contact = contact;
     }
@@ -241,7 +240,7 @@ public class DriverInfo extends DataEntity<DriverInfo>
     {
         if("GENERATED".equalsIgnoreCase(username))
         {
-            username = "D" + DateUtil.getTimestamp();
+            username = "D" + TestUtils.generateDateUniqueString();
         }
         this.username = username;
     }
@@ -255,7 +254,7 @@ public class DriverInfo extends DataEntity<DriverInfo>
     {
         if("GENERATED".equalsIgnoreCase(password))
         {
-            password = "D00" + DateUtil.getTimestamp();
+            password = "D00" + TestUtils.generateDateUniqueString();
         }
         this.password = password;
     }

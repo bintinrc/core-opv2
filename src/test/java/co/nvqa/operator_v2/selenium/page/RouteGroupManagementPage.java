@@ -22,17 +22,27 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
     public static final String ACTION_BUTTON_DELETE = "commons.delete";
 
+    private CreateRouteGroupsPage createRouteGroupsPage;
+
     public RouteGroupManagementPage(WebDriver webDriver)
     {
         super(webDriver);
+        createRouteGroupsPage = new CreateRouteGroupsPage(getWebDriver());
     }
 
-    public void createRouteGroup(String routeGroupName)
+    public void createRouteGroup(String routeGroupName, String hubName)
     {
         clickNvIconTextButtonByNameAndWaitUntilDone("container.route-group.create-route-group");
         setRouteGroupNameValue(routeGroupName);
-        setRouteGroupDescriptionValue(String.format("This Route Group is created by automation test from Operator V2. Created at %s.", new Date().toString()));
+        setRouteGroupDescriptionValue(String.format("This Route Group is created by automation test from Operator V2. Created at %s.", CREATED_DATE_SDF.format(new Date())));
+
+        if(hubName!=null)
+        {
+            selectValueFromNvAutocompleteByPossibleOptions("fields.hub.options", hubName);
+        }
+
         clickCreateRouteGroupAndAddTransactionsOnCreateDialog();
+        createRouteGroupsPage.waitUntilRouteGroupPageIsLoaded();
     }
 
     public void editRouteGroup(String filterRouteGroupName, String newRouteGroupName)

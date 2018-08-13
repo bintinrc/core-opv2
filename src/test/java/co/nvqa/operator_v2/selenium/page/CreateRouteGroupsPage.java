@@ -28,18 +28,6 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
         String dateLabel = DATE_FILTER_SDF.format(TestUtils.getNextDate(1));
 
         /*
-          Set fromHour & fromMinute of Creation Time.
-         */
-        click("//md-input-container[@model='container.fromHour']");
-        pause500ms();
-        click("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), ' 00 ')]");
-        pause500ms();
-        click("//md-input-container[@model='container.fromMinute']");
-        pause500ms();
-        click("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), ' 00 ')]");
-        pause500ms();
-
-        /*
           Set toHour & toMinute of Creation Time.
          */
         click("//md-input-container[@model='container.toHour']");
@@ -54,6 +42,18 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
         click("//md-datepicker[@ng-model='container.toDate']/button");
         pause500ms();
         click("//td[@aria-label='" + dateLabel + "']");
+        pause500ms();
+
+        /*
+          Set fromHour & fromMinute of Creation Time.
+         */
+        click("//md-input-container[@model='container.fromHour']");
+        pause500ms();
+        click("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), ' 00 ')]");
+        pause500ms();
+        click("//md-input-container[@model='container.fromMinute']");
+        pause500ms();
+        click("//div[@aria-hidden='false']/md-select-menu/md-content/md-option/div[contains(text(), ' 00 ')]");
         pause500ms();
     }
 
@@ -101,10 +101,7 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
 
     public void selectRouteGroupOnAddToRouteGroupDialog(String routeGroupName)
     {
-        click("//md-select[@aria-label='Route Group']");
-        pause100ms();
-        clickf("//md-option/div[contains(text(), '%s')]", routeGroupName);
-        pause100ms();
+        selectValueFromMdSelectById("route-group", routeGroupName);
     }
 
     public void clickAddTransactionsOnAddToRouteGroupDialog()
