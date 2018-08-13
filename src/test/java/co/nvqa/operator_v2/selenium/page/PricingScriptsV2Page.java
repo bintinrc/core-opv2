@@ -12,6 +12,8 @@ import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -40,6 +42,8 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
 
     private static final String TAB_DRAFTS = "Drafts";
     private static final String TAB_ACTIVE_SCRIPTS = "Active Scripts";
+    private static final String ACTIVE_TAB_XPATH = "//tab-content[@aria-hidden='false']";
+    private static final Pattern SHIPPER_SELECT_VALUE_PATTERN = Pattern.compile("(\\d+-)(.*)");
 
     public PricingScriptsV2Page(WebDriver webDriver)
     {
@@ -58,7 +62,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
     {
         clickTabItem(TAB_DRAFTS);
         searchTableDraftsByScriptName(script.getName());
-        wait10sUntil(()->!isTableEmpty(), "Drafts table is empty. New script failed to created.");
+        wait10sUntil(()->!isTableEmpty(ACTIVE_TAB_XPATH), "Drafts table is empty. New script failed to created.");
 
         String actualId = getTextOnTableDrafts(1, COLUMN_CLASS_DATA_ID_ON_TABLE_DRAFTS);
         Assert.assertNotNull("Script ID is empty. Script is not created.", actualId);
@@ -81,7 +85,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
     {
         clickTabItem(TAB_DRAFTS);
         searchTableDraftsByScriptName(script.getName());
-        Assert.assertTrue("Drafts Table is not empty. The Draft Script is not deleted successfully.", isTableEmpty());
+        Assert.assertTrue("Drafts Table is not empty. The Draft Script is not deleted successfully.", isTableEmpty(ACTIVE_TAB_XPATH));
     }
 
     public void runCheckDraftScript(Script script, RunCheckParams runCheckParams)
@@ -109,7 +113,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
     {
         clickTabItem(TAB_DRAFTS);
         searchTableDraftsByScriptName(script.getName());
-        wait10sUntil(()->!isTableEmpty(), "Drafts Table is empty. Cannot delete script.");
+        wait10sUntil(()->!isTableEmpty(ACTIVE_TAB_XPATH), "Drafts Table is empty. Cannot delete script.");
         clickActionButtonOnTableDrafts(1, ACTION_BUTTON_EDIT_ON_TABLE_DRAFTS);
     }
 
@@ -117,7 +121,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
     {
         clickTabItem(TAB_ACTIVE_SCRIPTS);
         searchTableActiveScriptsByScriptName(script.getName());
-        wait10sUntil(()->!isTableEmpty(), "Active Scripts table is empty. Draft Script failed to release.");
+        wait10sUntil(()->!isTableEmpty(ACTIVE_TAB_XPATH), "Active Scripts table is empty. Draft Script failed to release.");
 
         String actualId = getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_ID_ON_TABLE_DRAFTS);
         String actualScriptName = getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_NAME_ON_TABLE_DRAFTS);
@@ -135,15 +139,29 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
 
         clickTabItem(TAB_ACTIVE_SCRIPTS);
         searchTableActiveScriptsByScriptName(scriptName);
-        wait10sUntil(()->!isTableEmpty(), "Active Scripts table is empty. Script not found.");
+        wait10sUntil(()->!isTableEmpty(ACTIVE_TAB_XPATH), "Active Scripts table is empty. Script not found.");
         clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS);
         NvLogger.info("Waiting until Link Shippers Dialog loaded.");
         waitUntilInvisibilityOfElementLocated("//md-dialog//md-dialog-content/div/md-progress-circular");
         selectValueFromNvAutocomplete("ctrl.view.textShipper", shipperName);
 
-        List<String> listOfLinkedShippers = findElementsByXpath("//tr[@ng-repeat='shipper in $data']/td/div[1]").stream().map(we -> we.getText().trim()).collect(Collectors.toList());
+        List<String> listOfLinkedShippers = getLinkedShipperNames();
         Assert.assertThat(String.format("Shipper '%s' is not added to table.", shipperName), listOfLinkedShippers, Matchers.hasItem(shipperName));
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
+    }
+
+    private List<String> getLinkedShipperNames(){
+        return findElementsByXpath("//tr[@ng-repeat='shipper in $data']/td/div[1]").stream()
+                .map(we -> {
+                    String text = we.getText().trim();
+                    Matcher m = SHIPPER_SELECT_VALUE_PATTERN.matcher(text);
+                    if (m.matches()){
+                        return m.group(2).trim();
+                    } else {
+                        return "";
+                    }
+                })
+                .collect(Collectors.toList());
     }
 
     public void verifyShipperIsLinked(Script script, Shipper shipper)
@@ -153,12 +171,12 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
 
         clickTabItem(TAB_ACTIVE_SCRIPTS);
         searchTableActiveScriptsByScriptName(scriptName);
-        wait10sUntil(()->!isTableEmpty(), "Active Scripts table is empty. Script not found.");
+        wait10sUntil(()->!isTableEmpty(ACTIVE_TAB_XPATH), "Active Scripts table is empty. Script not found.");
         clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS);
         NvLogger.info("Waiting until Link Shippers Dialog loaded.");
         waitUntilInvisibilityOfElementLocated("//md-dialog//md-dialog-content/div/md-progress-circular");
 
-        List<String> listOfLinkedShippers = findElementsByXpath("//tr[@ng-repeat='shipper in $data']/td/div[1]").stream().map(we -> we.getText().trim()).collect(Collectors.toList());
+        List<String> listOfLinkedShippers = getLinkedShipperNames();
         Assert.assertThat(String.format("Shipper '%s' is not added to table.", shipperName), listOfLinkedShippers, Matchers.hasItem(shipperName));
         clickButtonOnMdDialogByAriaLabel("Cancel");
     }
@@ -173,14 +191,14 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
     {
         clickTabItem(TAB_ACTIVE_SCRIPTS);
         searchTableActiveScriptsByScriptName(script.getName());
-        Assert.assertTrue("Active Scripts Table is not empty. The Active Script is not deleted successfully.", isTableEmpty());
+        Assert.assertTrue("Active Scripts Table is not empty. The Active Script is not deleted successfully.", isTableEmpty(ACTIVE_TAB_XPATH));
     }
 
     public void goToEditActiveScript(Script script)
     {
         clickTabItem(TAB_ACTIVE_SCRIPTS);
         searchTableActiveScriptsByScriptName(script.getName());
-        wait10sUntil(()->!isTableEmpty(), "Active Scripts Table is empty. Cannot delete script.");
+        wait10sUntil(()->!isTableEmpty(ACTIVE_TAB_XPATH), "Active Scripts Table is empty. Cannot delete script.");
         clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_EDIT_ON_TABLE_ACTIVE_SCRIPTS);
     }
 
@@ -188,7 +206,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
     {
         clickTabItem(TAB_ACTIVE_SCRIPTS);
         searchTableActiveScriptsByScriptName(script.getName());
-        wait10sUntil(()->!isTableEmpty(), "Active Scripts Table is empty. Cannot create child for selected Script.");
+        wait10sUntil(()->!isTableEmpty(ACTIVE_TAB_XPATH), "Active Scripts Table is empty. Cannot create child for selected Script.");
         clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_MANAGE_TIME_BOUNDED_SCRIPTS_ON_TABLE_ACTIVE_SCRIPTS);
     }
 
@@ -223,8 +241,14 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
 
         switch(tabItemText)
         {
-            case TAB_DRAFTS: waitUntilPageLoaded("pricing-scripts-v2/drafts"); break;
-            case TAB_ACTIVE_SCRIPTS: waitUntilPageLoaded("pricing-scripts-v2/active-scripts"); break;
+            case TAB_DRAFTS:
+                waitUntilPageLoaded("pricing-scripts-v2/drafts");
+                waitUntilVisibilityOfElementLocated("//nv-table[@param='ctrl.draftScriptsTableParam']");
+                break;
+            case TAB_ACTIVE_SCRIPTS:
+                waitUntilPageLoaded("pricing-scripts-v2/active-scripts");
+                waitUntilVisibilityOfElementLocated("//nv-table[@param='ctrl.activeScriptsTableParam']");
+                break;
         }
     }
 
