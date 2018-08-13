@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.pricing.Script;
 import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
@@ -13,7 +14,6 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
@@ -32,7 +32,7 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
 
     public void createDraft(Script script)
     {
-        waitUntilPageLoaded("pricing-scripts-v2/create");
+        waitUntilPageLoaded("pricing-scripts-v2/create?type=normal");
         setScriptInfo(script);
         setWriteScript(script);
         saveDraft();
@@ -63,7 +63,7 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
 
     private void activateParameters(List<String> activeParameters)
     {
-        for(String activeParameter : activeParameters)
+        for (String activeParameter : activeParameters)
         {
             activateInactiveParameter(activeParameter);
         }
@@ -76,16 +76,20 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
 
     public void deleteScript(Script script)
     {
-        waitUntilPageLoaded("pricing-scripts-v2/"+script.getId());
+        waitUntilPageLoaded(buildScriptUrl(script));
         waitUntilVisibilityOfElementLocated("//p[text()='No errors found. You may proceed to verify or save the draft.']");
         selectAction(ACTION_DELETE);
         clickButtonOnMdDialogByAriaLabel("Delete");
-        clickToast(script.getName()+" has been successfully deleted.");
+        clickToast(script.getName() + " has been successfully deleted.");
+    }
+
+    private String buildScriptUrl(Script script){
+        return String.format("pricing-scripts-v2/%d?type=normal", script.getId());
     }
 
     public void runCheck(Script script, RunCheckParams runCheckParams)
     {
-        waitUntilPageLoaded("pricing-scripts-v2/"+script.getId());
+        waitUntilPageLoaded(buildScriptUrl(script));
         waitUntilVisibilityOfElementLocated("//p[text()='No errors found. You may proceed to verify or save the draft.']");
         clickTabItem("Check Script");
 
@@ -97,13 +101,13 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
 
         // Insured Value and COD Value have a special input method.
         // We need to round the value to 2 decimal digits and then multiply by 100.
-        long insuredValue = Math.round(runCheckParams.getInsuredValue()*100.0);
-        long codValue = Math.round(runCheckParams.getCodValue()*100.0);
+        long insuredValue = Math.round(runCheckParams.getInsuredValue() * 100.0);
+        long codValue = Math.round(runCheckParams.getCodValue() * 100.0);
         sendKeysByIdCustom1("container.pricing-scripts.description-insured-value", String.valueOf(insuredValue));
         sendKeysByIdCustom1("container.pricing-scripts.description-cod-value", String.valueOf(codValue));
 
-        selectValueFromNvAutocomplete("ctrl.view.textFromZone", runCheckParams.getFromZone());
-        selectValueFromNvAutocomplete("ctrl.view.textToZone", runCheckParams.getToZone());
+        StandardTestUtils.retryIfRuntimeExceptionOccurred(() -> selectValueFromNvAutocomplete("ctrl.view.textFromZone", runCheckParams.getFromZone()), "Select value from \"From Zone\" NvAutocomplete");
+        StandardTestUtils.retryIfRuntimeExceptionOccurred(() -> selectValueFromNvAutocomplete("ctrl.view.textToZone", runCheckParams.getToZone()), "Select value from \"To Zone\" NvAutocomplete");
 
         clickNvApiTextButtonByNameAndWaitUntilDone("container.pricing-scripts.run-check"); //Button Run Check
     }
@@ -137,11 +141,11 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
 
     public void validateDraftAndReleaseScript(Script script, VerifyDraftParams verifyDraftParams)
     {
-        waitUntilPageLoaded("pricing-scripts-v2/"+script.getId());
+        waitUntilPageLoaded(buildScriptUrl(script));
         waitUntilVisibilityOfElementLocated("//p[text()='No errors found. You may proceed to verify or save the draft.']");
         clickNvIconTextButtonByName("Verify Draft");
 
-        if(isElementExistFast("//input[starts-with(@id, 'start-weight')]"))
+        if (isElementExistFast("//input[starts-with(@id, 'start-weight')]"))
         {
             sendKeysById("start-weight", String.valueOf(verifyDraftParams.getStartWeight()));
             sendKeysById("end-weight", String.valueOf(verifyDraftParams.getEndWeight()));
@@ -161,11 +165,17 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
     {
         clickNvIconButtonByName("commons.actions");
 
-        switch(actionType)
+        switch (actionType)
         {
-            case ACTION_SAVE: click("//div[@ng-repeat='action in ctrl.manageScriptActions'][normalize-space()='Save']"); break;
-            case ACTION_SAVE_AND_EXIT: click("//div[@ng-repeat='action in ctrl.manageScriptActions'][normalize-space()='Save and Exit']"); break;
-            case ACTION_DELETE: click("//div[@ng-repeat='action in ctrl.manageScriptActions'][normalize-space()='Delete']"); break;
+            case ACTION_SAVE:
+                click("//div[@ng-repeat='action in ctrl.manageScriptActions'][normalize-space()='Save']");
+                break;
+            case ACTION_SAVE_AND_EXIT:
+                click("//div[@ng-repeat='action in ctrl.manageScriptActions'][normalize-space()='Save and Exit']");
+                break;
+            case ACTION_DELETE:
+                click("//div[@ng-repeat='action in ctrl.manageScriptActions'][normalize-space()='Delete']");
+                break;
         }
 
         pause1s();
@@ -184,7 +194,7 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
     {
         super.waitUntilPageLoaded();
 
-        waitUntil(()->
+        waitUntil(() ->
         {
             String currentUrl = getCurrentUrl();
             NvLogger.infof("PricingScriptsV2CreateEditDraftPage.waitUntilPageLoaded: Current URL = [%s] - Expected URL contains = [%s]", currentUrl, expectedUrlEndsWith);

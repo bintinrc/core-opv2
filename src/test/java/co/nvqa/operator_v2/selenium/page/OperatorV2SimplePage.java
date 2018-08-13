@@ -5,6 +5,7 @@ import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.util.TestConstants;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -642,6 +643,49 @@ public class OperatorV2SimplePage extends SimplePage
         pause100ms();
     }
 
+    public boolean isMdSelectEnabled(String mdSelectNgModel)
+    {
+        return !Boolean.parseBoolean(getAttribute("aria-disabled", "//md-select[@ng-model='%s']", mdSelectNgModel));
+    }
+
+    public void selectValueFromMdSelectOrCheckCurrentIfDisabled(String selectName, String mdSelectNgModel, String value)
+    {
+        if (isMdSelectEnabled(mdSelectNgModel))
+        {
+            selectValueFromMdSelect(mdSelectNgModel, value);
+        } else {
+            Assert.assertEquals(
+                    selectName + " select is disabled and current value is not equal to expected",
+                    value,
+                    getMdSelectValue(mdSelectNgModel));
+        }
+    }
+
+    public void selectValueFromMdSelectWithSearchById(String id, String value)
+    {
+        selectValueFromMdSelectWithSearch("id", id, value);
+    }
+
+    public void selectValueFromMdSelectWithSearch(String mdSelectNgModel, String value)
+    {
+        selectValueFromMdSelectWithSearch("ng-model", mdSelectNgModel, value);
+    }
+
+    public void selectValueFromMdSelectWithSearch(String attribute, String attributeValue, String value)
+    {
+        String xpath = String.format("//md-select[@%s='%s']", attribute, attributeValue);
+        click(xpath);
+        pause100ms();
+        String menuContainerId = getAttribute(xpath, "aria-owns");
+        String menuContainerXpath = String.format("//*[@id='%s']", menuContainerId);
+        String searchBoxXpath = menuContainerXpath + "//input[@ng-model='searchTerm']";
+        sendKeys(searchBoxXpath, value);
+        pause100ms();
+        String optionXpath = menuContainerXpath + "//md-option";
+        click(optionXpath);
+        pause100ms();
+    }
+
     public void selectValueFromMdSelect(String mdSelectNgModel, String value)
     {
         clickf("//md-select[@ng-model='%s']", mdSelectNgModel);
@@ -871,19 +915,22 @@ public class OperatorV2SimplePage extends SimplePage
 
     public boolean isTableEmpty()
     {
-        boolean isEmpty = false;
+        return isTableEmpty("");
+    }
 
+    public boolean isTableEmpty(String tableXpath)
+    {
         try
         {
-            WebElement webElement = findElementByXpath("//h5[text()='No Results Found']", FAST_WAIT_IN_SECONDS);
-            isEmpty = webElement!=null;
+            String xpath = tableXpath + "//h5[text()='No Results Found']";
+            WebElement webElement = findElementByXpath(xpath, FAST_WAIT_IN_SECONDS);
+            return webElement != null && webElement.isDisplayed();
         }
         catch(TimeoutException ex)
         {
             NvLogger.warn("Table is not empty.");
+            return false;
         }
-
-        return isEmpty;
     }
 
     public void selectAllShown(String nvTableParam)

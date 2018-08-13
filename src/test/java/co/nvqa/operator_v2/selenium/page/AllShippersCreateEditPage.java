@@ -37,6 +37,12 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     private static final String NG_REPEAT_TABLE_ADDRESS = "address in getTableData()";
 
     public static final String ACTION_BUTTON_SET_AS_DEFAULT = "Set as Default";
+    public static final String LOCATOR_FIELD_OC_VERSION = "ctrl.data.basic.ocVersion";
+    public static final String LOCATOR_FIELD_PRICING_SCRIPT = "commons.pricing-script";
+    public static final String LOCATOR_FIELD_INDUSTRY = "ctrl.data.basic.industry";
+    public static final String LOCATOR_FIELD_SALES_PERSON = "container.shippers.oc-sales-person";
+    public static final String LOCATOR_FIELD_CHANNEL = "ctrl.data.basic.shipperClassification";
+    public static final String LOCATOR_FIELD_ACCOUNT_TYPE = "ctrl.data.basic.accountType";
 
     public AllShippersCreateEditPage(WebDriver webDriver)
     {
@@ -69,7 +75,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         clickToggleButton("ctrl.data.basic.status", shipperStatusAriaLabel);
         selectValueFromMdSelect("ctrl.data.basic.shipperType", shipper.getType());
-        selectValueFromMdSelect("ctrl.data.basic.shipperClassification", "B2C Marketplace");
 
         // Shipper Details
         sendKeysById("shipper-name", shipper.getName());
@@ -91,7 +96,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         // Services
         OrderCreate orderCreate = shipper.getOrderCreate();
-        selectValueFromMdSelect("ctrl.data.basic.ocVersion", orderCreate.getVersion());
+        selectValueFromMdSelectOrCheckCurrentIfDisabled("OC Version", LOCATOR_FIELD_OC_VERSION, orderCreate.getVersion());
 
         if(isCreateForm)
         {
@@ -128,7 +133,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         // Pricing
         Pricing pricing = shipper.getPricing();
-        selectValueFromNvAutocomplete("ctrl.view.pricingScripts.searchText", pricing.getScriptName());
+        selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT, pricing.getScriptName());
 
         // Billing
         sendKeysById("Billing Name", shipper.getBillingName());
@@ -136,12 +141,14 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         sendKeysById("Billing Address", shipper.getBillingAddress());
         sendKeysById("Billing Postcode", shipper.getBillingPostcode());
 
-        // Industry & Sales
-        selectValueFromNvAutocomplete("ctrl.view.industry.searchText", shipper.getIndustryName());
-
+        // Account Type
+        selectValueFromMdSelect(LOCATOR_FIELD_CHANNEL, "B2C Marketplace");
+        selectValueFromMdSelect(LOCATOR_FIELD_INDUSTRY, shipper.getIndustryName());
+        String accountTypeId = shipper.getAccountTypeId() != null ? String.valueOf(shipper.getAccountTypeId()) : "0";
+        selectValueFromMdSelect(LOCATOR_FIELD_ACCOUNT_TYPE, accountTypeId);
         if(isCreateForm)
         {
-            selectValueFromNvAutocomplete("ctrl.view.salesPerson.searchText", shipper.getSalesPerson());
+            selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_SALES_PERSON, shipper.getSalesPerson());
         }
 
         clickTabItem("More Settings");
