@@ -25,7 +25,7 @@ public class TimeBoundedScriptsCreateEditPage extends OperatorV2SimplePage
 
     public void createAndReleaseTimeBoundedScript(Script parentScript, Script script, VerifyDraftParams verifyDraftParams)
     {
-        waitUntilPageLoaded(String.format("pricing-scripts-v2/%s/create", parentScript.getId()));
+        waitUntilPageLoaded(String.format("pricing-scripts-v2/%s/create?type=time_inbounded", parentScript.getId()));
         setTimeBoundedScriptInfo(script);
         setWriteScript(script);
         validateAndReleaseScript(verifyDraftParams);

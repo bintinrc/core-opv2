@@ -57,7 +57,7 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void verifyNewShipperIsCreatedSuccessfully(Shipper shipper)
     {
-        verifyShipperInfoIsCorrect(shipper.getName(), shipper);
+        verifyShipperInfoIsCorrect(shipper.getShortName(), shipper);
     }
 
     public void verifyShipperInfoIsCorrect(String shipperNameKeyword, Shipper shipper)
@@ -101,7 +101,7 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void verifyShipperIsDeletedSuccessfully(Shipper shipper)
     {
-        searchTableByName(shipper.getName());
+        searchTableByName(shipper.getShortName());
         Assert.assertTrue("Table should be empty.", isTableEmpty());
     }
 

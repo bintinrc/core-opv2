@@ -141,6 +141,7 @@ public class AllShippersSteps extends AbstractSteps
         // Industry & Sales
         shipper.setIndustryName(industryName);
         shipper.setSalesPerson(salesPerson);
+        shipper.setAccountTypeId(6L);
 
         Pickup pickupSettings = new Pickup();
         pickupSettings.setDefaultStartTime("09:00");
