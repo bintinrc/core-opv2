@@ -19,8 +19,6 @@ import org.junit.Assert;
 public class RouteCashInboundSteps extends AbstractSteps
 {
     private RouteCashInboundPage routeCashInboundPage;
-    public static final String KEY_ROUTE_CASH_INBOUND_COD = "KEY_ROUTE_CASH_INBOUND_COD";
-    public static final String KEY_ROUTE_CASH_INBOUND_COD_EDITED = "KEY_ROUTE_CASH_INBOUND_COD_EDITED";
 
     @Inject
     public RouteCashInboundSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
@@ -86,7 +84,7 @@ public class RouteCashInboundSteps extends AbstractSteps
 
 
         routeCashInboundPage.editCod(routeCashInboundCod, routeCashInboundCodEdited);
-        put("routeCashInboundCodEdited", routeCashInboundCodEdited);
+        put(KEY_ROUTE_CASH_INBOUND_COD_EDITED, routeCashInboundCodEdited);
     }
 
     @Then("^Operator verify the new COD on Route Cash Inbound page is updated successfully$")

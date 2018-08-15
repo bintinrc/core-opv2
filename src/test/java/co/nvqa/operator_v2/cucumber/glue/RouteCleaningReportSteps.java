@@ -18,8 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static co.nvqa.operator_v2.cucumber.glue.RouteCashInboundSteps.KEY_ROUTE_CASH_INBOUND_COD;
-
 /**
  *
  * @author Daniel Joi Partogi Hutapea
@@ -28,7 +26,7 @@ import static co.nvqa.operator_v2.cucumber.glue.RouteCashInboundSteps.KEY_ROUTE_
 public class RouteCleaningReportSteps extends AbstractSteps
 {
     private RouteCleaningReportPage routeCleaningReportPage;
-    public static final String KEY_LIST_OF_COD_INFO = "KEY_LIST_OF_COD_INFO";
+    private static final String KEY_LIST_OF_COD_INFO = "KEY_LIST_OF_COD_INFO";
 
     @Inject
     public RouteCleaningReportSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
@@ -72,25 +70,37 @@ public class RouteCleaningReportSteps extends AbstractSteps
         Map<String, String> adjustedData = new HashMap<>(mapOfData);
         RouteCleaningReportCodInfo expectedCodInfo = new RouteCleaningReportCodInfo();
         String value = adjustedData.get("codInbound");
-        if (StringUtils.isNotBlank(value)){
-            if ("GET_FROM_CREATED_COD".equalsIgnoreCase(value)){
+
+        if(StringUtils.isNotBlank(value))
+        {
+            if("GET_FROM_CREATED_COD".equalsIgnoreCase(value))
+            {
                 RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
                 adjustedData.put("codInbound", String.valueOf(routeCashInboundCod.getAmountCollected()));
             }
         }
+
         value = adjustedData.get("codExpected");
-        if (StringUtils.isNotBlank(value)){
-            if ("GET_FROM_CREATED_ORDER".equalsIgnoreCase(value)){
+
+        if(StringUtils.isNotBlank(value))
+        {
+            if("GET_FROM_CREATED_ORDER".equalsIgnoreCase(value))
+            {
                 Order order = get(KEY_CREATED_ORDER);
                 adjustedData.put("codExpected", String.valueOf(order.getCod().getGoodsAmount()));
             }
         }
+
         value = adjustedData.get("routeId");
-        if (StringUtils.isNotBlank(value)){
-            if ("GET_FROM_CREATED_ROUTE".equalsIgnoreCase(value)){
+
+        if(StringUtils.isNotBlank(value))
+        {
+            if("GET_FROM_CREATED_ROUTE".equalsIgnoreCase(value))
+            {
                 adjustedData.put("routeId", String.valueOf((Long) get(KEY_CREATED_ROUTE_ID)));
             }
         }
+
         expectedCodInfo.fromMap(adjustedData);
         routeCleaningReportPage.verifyCodInfo(expectedCodInfo);
     }
