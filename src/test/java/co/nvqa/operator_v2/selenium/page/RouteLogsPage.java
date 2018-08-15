@@ -216,7 +216,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
         setMdDatepickerById("commons.model.route-date", createRouteParams.getRouteDate());
         selectMultipleValuesFromMdSelectById("commons.model.route-tags", createRouteParams.getRouteTags());
         selectValueFromNvAutocompleteByPossibleOptions("hubsSelectionOptions", createRouteParams.getHubName());
-        selectValueFromNvAutocompleteByPossibleOptions("driversSelectionOptions", createRouteParams.getNinjaDriverName().replaceAll(" ", ""));
+        selectValueFromNvAutocompleteByPossibleOptions("driversSelectionOptions", createRouteParams.getNinjaDriverName());
         selectValueFromNvAutocompleteByPossibleOptions("vehiclesSelectionOptions", createRouteParams.getVehicleName());
         clickNvButtonSaveByNameAndWaitUntilDone("commons.save-changes");
         waitUntilInvisibilityOfToast("Route(s) Edited");
