@@ -9,6 +9,8 @@ import co.nvqa.common_selenium.util.CommonSeleniumTestConstants;
 @SuppressWarnings("WeakerAccess")
 public final class TestConstants extends CommonSeleniumTestConstants
 {
+    public static final boolean NV_LOGGER_IS_SYSTEM_OUT_ENABLE;
+
     public static final String OPERATOR_PORTAL_BASE_URL;
     public static final String OPERATOR_PORTAL_LOGIN_URL;
     public static final String OPERATOR_PORTAL_UID;
@@ -40,6 +42,8 @@ public final class TestConstants extends CommonSeleniumTestConstants
 
     static
     {
+        NV_LOGGER_IS_SYSTEM_OUT_ENABLE = getBoolean("nv-logger-is-system-out-enable");
+
         OPERATOR_PORTAL_BASE_URL = getString("operator-portal-base-url");
         OPERATOR_PORTAL_LOGIN_URL = getString("operator-portal-login-url");
         OPERATOR_PORTAL_UID = getString("operator-portal-uid");
