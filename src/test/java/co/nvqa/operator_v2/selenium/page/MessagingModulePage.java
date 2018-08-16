@@ -141,7 +141,7 @@ public class MessagingModulePage extends OperatorV2SimplePage
     public void verifyThatPreviewUsingShortenedUrl()
     {
         pause10s();
-        String actualValue = findElementByXpath("(//textarea[@name='preview'])[2]").getAttribute("value");
+        String actualValue = getAttribute("//textarea[@name='preview']", "value");
         String expectedValue = "http://qa.nnj.vn";
         Assert.assertThat("The produced sms using ninja url shortener is failed", actualValue, Matchers.containsString(expectedValue));
     }
