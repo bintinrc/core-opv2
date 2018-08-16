@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.util;
 
 import co.nvqa.common_selenium.util.CommonSeleniumTestConstants;
+import co.nvqa.commons.utils.NvLogger;
 
 /**
  *
@@ -43,6 +44,7 @@ public final class TestConstants extends CommonSeleniumTestConstants
     static
     {
         NV_LOGGER_IS_SYSTEM_OUT_ENABLE = getBoolean("nv-logger-is-system-out-enable");
+        NvLogger.setSystemOutEnabled(NV_LOGGER_IS_SYSTEM_OUT_ENABLE);
 
         OPERATOR_PORTAL_BASE_URL = getString("operator-portal-base-url");
         OPERATOR_PORTAL_LOGIN_URL = getString("operator-portal-login-url");
