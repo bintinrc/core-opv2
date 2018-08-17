@@ -1,7 +1,7 @@
 @OperatorV2 @OperatorV2Part1 @DpAdministrationV2
 Feature: DP Administration
 
-  @LaunchBrowser
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -173,6 +173,6 @@ Feature: DP Administration
     And Operator click on Download CSV File button on DP Administration page
     Then Downloaded CSV file contains correct DP Users data
 
-  @KillBrowser
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
