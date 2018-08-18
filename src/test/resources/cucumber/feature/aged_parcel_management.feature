@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @AgedParcelManagement @Inbound
+@OperatorV2 @OperatorV2Part2 @AgedParcelManagement @Saas @Inbound
 Feature: Aged Parcel Management
 
   @LaunchBrowser @ShouldAlwaysRun
