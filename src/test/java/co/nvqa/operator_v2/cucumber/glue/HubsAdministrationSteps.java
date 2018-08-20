@@ -2,7 +2,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
+import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.operator_v2.HubsAdministration;
+import co.nvqa.commons.utils.HubFactory;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.HubsAdministrationPage;
@@ -74,7 +76,6 @@ public class HubsAdministrationSteps extends AbstractSteps
         String longitude = mapOfData.get("longitude");
 
         String uniqueCode = generateDateUniqueString();
-        String uniqueCoordinate = uniqueCode.substring(6);
         Address address = AddressFactory.getRandomAddress();
 
         if("GENERATED".equals(name))
@@ -97,14 +98,16 @@ public class HubsAdministrationSteps extends AbstractSteps
             country = address.getCountry();
         }
 
+        Hub randomHub = HubFactory.getRandomHub();
+
         if("GENERATED".equals(latitude))
         {
-            latitude = "1."+uniqueCoordinate;
+            latitude = String.valueOf(randomHub.getLatitude());
         }
 
         if("GENERATED".equals(longitude))
         {
-            longitude = "103."+uniqueCoordinate;
+            longitude = String.valueOf(randomHub.getLongitude());
         }
 
         HubsAdministration hubsAdministration = new HubsAdministration();
@@ -161,7 +164,6 @@ public class HubsAdministrationSteps extends AbstractSteps
         }
 
         String uniqueCode = generateDateUniqueString();
-        String uniqueCoordinate = uniqueCode.substring(6);
         Address address = AddressFactory.getRandomAddress();
 
         if("GENERATED".equals(name))
@@ -186,14 +188,16 @@ public class HubsAdministrationSteps extends AbstractSteps
             country = address.getCountry();
         }
 
+        Hub randomHub = HubFactory.getRandomHub();
+
         if("GENERATED".equals(latitude))
         {
-            latitude = "1."+uniqueCoordinate;
+            latitude = String.valueOf(randomHub.getLatitude());
         }
 
         if("GENERATED".equals(longitude))
         {
-            longitude = "103."+uniqueCoordinate;
+            longitude = String.valueOf(randomHub.getLongitude());
         }
 
         hubsAdministration.setName(name);
