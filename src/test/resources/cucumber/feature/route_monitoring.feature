@@ -26,6 +26,7 @@ Feature: Route Monitoring
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator set tags of the new created route to [{route-tag-id}]
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     And API Driver collect all his routes
@@ -34,7 +35,10 @@ Feature: Route Monitoring
     And API Operator start the route
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Monitoring
-    When Operator click on 'Load Selection' Button on Route Monitoring Page
+    When Operator filter Route Monitoring using data below and then load selection:
+      | routeDate | {gradle-current-date-yyyy-MM-dd} |
+      | routeTags | [{route-tag-name}]               |
+      | hubs      | [{hub-name}]                     |
     Then Operator verify the created route monitoring params:
       | totalWaypoint        | 1 |
       | completionPercentage | 0 |
@@ -52,6 +56,7 @@ Feature: Route Monitoring
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator set tags of the new created route to [{route-tag-id}]
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     And API Driver collect all his routes
@@ -61,7 +66,10 @@ Feature: Route Monitoring
     And API Driver deliver the created parcel successfully
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Monitoring
-    When Operator click on 'Load Selection' Button on Route Monitoring Page
+    When Operator filter Route Monitoring using data below and then load selection:
+      | routeDate | {gradle-current-date-yyyy-MM-dd} |
+      | routeTags | [{route-tag-name}]               |
+      | hubs      | [{hub-name}]                     |
     Then Operator verify the created route monitoring params:
       | totalWaypoint        | 1   |
       | completionPercentage | 100 |
@@ -79,6 +87,7 @@ Feature: Route Monitoring
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator set tags of the new created route to [{route-tag-id}]
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     And API Driver collect all his routes
@@ -88,7 +97,10 @@ Feature: Route Monitoring
     And API Driver failed the delivery of the created parcel
     When Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Routing -> Route Monitoring
-    And Operator click on 'Load Selection' Button on Route Monitoring Page
+    And Operator filter Route Monitoring using data below and then load selection:
+      | routeDate | {gradle-current-date-yyyy-MM-dd} |
+      | routeTags | [{route-tag-name}]               |
+      | hubs      | [{hub-name}]                     |
     Then Operator verify the created route monitoring params:
       | totalWaypoint        | 1   |
       | completionPercentage | 100 |
