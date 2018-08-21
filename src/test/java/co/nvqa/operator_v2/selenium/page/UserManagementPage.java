@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.UserManagement;
+import co.nvqa.operator_v2.util.TestConstants;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
@@ -36,7 +37,7 @@ public class UserManagementPage extends OperatorV2SimplePage {
     }
 
     public void verifyUserOnUserManagement(UserManagement userManagement) {
-        sendKeys("//input[@type='text'][@ng-model='ctrl.keyword']",userManagement.getFirstName()+userManagement.getLastName());
+        sendKeys("//input[@type='text'][@ng-model='ctrl.keyword']",userManagement.getEmail());
         clickNvApiTextButtonByNameAndWaitUntilDone("Load Selected Users");
         String actualGrantType = getTextOnTable(1,  COLUMN_DATA_TITLE_GRANT_TYPE);
         Assert.assertEquals("Different Grant Type Returned", userManagement.getGrantType(), actualGrantType);
@@ -49,7 +50,7 @@ public class UserManagementPage extends OperatorV2SimplePage {
     }
 
     public void editUser(UserManagement userManagement, UserManagement userManagementEdited) {
-        sendKeys("//input[@type='text'][@ng-model='ctrl.keyword']",userManagement.getFirstName()+userManagement.getLastName());
+        sendKeys("//input[@type='text'][@ng-model='ctrl.keyword']",userManagement.getEmail());
         clickNvApiTextButtonByNameAndWaitUntilDone("Load Selected Users");
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'user-edit')]");
@@ -65,6 +66,8 @@ public class UserManagementPage extends OperatorV2SimplePage {
             sendKeysById("last-name", userManagement.getLastName());
             sendKeysById("email", userManagement.getEmail());
         }
+        pause300ms();
+        selectValueFromMdSelect("ctrl.selectedCountry", TestConstants.COUNTRY_CODE.toLowerCase());
         pause300ms();
         selectValueFromMdAutocomplete("Search Role To Add", userManagement.getRoles());
         pause300ms();
