@@ -113,11 +113,16 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
 
         switch(TestConstants.COUNTRY_CODE)
         {
-
-            case "ID": expectedAmountCollected = "$"+expectedAmountCollected; break;
-            case "MNT": expectedAmountCollected = "$"+expectedAmountCollected; break;
-            case "SG":
-            default: expectedAmountCollected = "S$"+expectedAmountCollected;
+            case "SG": expectedAmountCollected = "S$"+expectedAmountCollected;
+            case "ID":
+            case "MBS":
+            case "FEF":
+            case "MMPG":
+            case "TKL":
+            case "HBL":
+            case "MNT":
+            case "DEMO": expectedAmountCollected = "$"+expectedAmountCollected; break;
+            default: expectedAmountCollected = "$"+expectedAmountCollected;
         }
 
         String actualAmountCollected = getTextOnTable(1, COLUMN_CLASS_DATA_AMOUNT_COLLECTED);
