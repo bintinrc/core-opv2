@@ -46,7 +46,6 @@ public class RouteLogsPage extends OperatorV2SimplePage
     public static final String COLUMN_CLASS_DATA_ZONE_NAME = "_zone-name";
     public static final String COLUMN_CLASS_DATA_COMMENTS = "comments";
 
-
     public static final String ACTION_BUTTON_EDIT_ROUTE = "container.route-logs.edit-route";
     public static final String ACTION_BUTTON_EDIT_DETAILS = "container.route-logs.edit-details";
 
@@ -63,6 +62,22 @@ public class RouteLogsPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading data...']");
     }
 
+    private String normalizeNinjaDriverName(String ninjaDriverName)
+    {
+        switch(TestConstants.COUNTRY_CODE.toUpperCase())
+        {
+            case "MBS":
+            case "FEF":
+            case "MMPG":
+            case "TKL":
+            case "HBL":
+            case "MNT":
+            case "DEMO": return ninjaDriverName.replaceAll(" ", "");
+        }
+
+        return ninjaDriverName;
+    }
+
     private void fillCreateRouteFormExceptComments(CreateRouteParams createRouteParams)
     {
         setMdDatepickerById("commons.model.route-date", createRouteParams.getRouteDate());
@@ -70,16 +85,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
         selectValueFromNvAutocompleteByPossibleOptions("zonesSelectionOptions", createRouteParams.getZoneName());
         selectValueFromNvAutocompleteByPossibleOptions("hubsSelectionOptions", createRouteParams.getHubName());
         pause2s(); // We put delay here because sometimes when typing on Driver Selection, the cursor is jumping to Hub Selection and this delay help to avoid that issue.
-
-        if(TestConstants.COUNTRY_CODE.equals("SG"))
-        {
-            selectValueFromNvAutocompleteByPossibleOptions("driversSelectionOptions", createRouteParams.getNinjaDriverName());
-        }
-        else
-        {
-            selectValueFromNvAutocompleteByPossibleOptions("driversSelectionOptions", createRouteParams.getNinjaDriverName().replaceAll(" ", ""));
-        }
-
+        selectValueFromNvAutocompleteByPossibleOptions("driversSelectionOptions", normalizeNinjaDriverName(createRouteParams.getNinjaDriverName()));
         selectValueFromNvAutocompleteByPossibleOptions("vehiclesSelectionOptions", createRouteParams.getVehicleName());
     }
 
@@ -216,7 +222,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
         setMdDatepickerById("commons.model.route-date", createRouteParams.getRouteDate());
         selectMultipleValuesFromMdSelectById("commons.model.route-tags", createRouteParams.getRouteTags());
         selectValueFromNvAutocompleteByPossibleOptions("hubsSelectionOptions", createRouteParams.getHubName());
-        selectValueFromNvAutocompleteByPossibleOptions("driversSelectionOptions", createRouteParams.getNinjaDriverName());
+        selectValueFromNvAutocompleteByPossibleOptions("driversSelectionOptions", normalizeNinjaDriverName(createRouteParams.getNinjaDriverName()));
         selectValueFromNvAutocompleteByPossibleOptions("vehiclesSelectionOptions", createRouteParams.getVehicleName());
         clickNvButtonSaveByNameAndWaitUntilDone("commons.save-changes");
         waitUntilInvisibilityOfToast("Route(s) Edited");
@@ -226,7 +232,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
     {
         checkMultipleRows(listOfCreateRouteParams);
         selectAction(ACTION_EDIT_DRIVER_TYPES_OF_SELECTED);
-        String driverTypeNameFormatted = driverTypeParams.getDriverTypeName().replaceAll(" - ", " ").toLowerCase();
+        String driverTypeNameFormatted = driverTypeParams.getDriverTypeName().replaceAll(" - ", " ").replace("_", " ").toLowerCase();
         selectMultipleValuesFromMdSelectById("container.route-logs.select-driver-types", driverTypeNameFormatted);
         clickNvIconTextButtonByNameAndWaitUntilDone("container.route-logs.edit-routes");
         waitUntilInvisibilityOfToast("Route(s) Edited");

@@ -10,7 +10,7 @@ Feature: Route Logs
     Given Operator go to menu Routing -> Route Logs
     When Operator create new route using data below:
       | routeDate       | {gradle-current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                            |
+      | routeTags       | [{route-tag-name}]               |
       | zoneName        | {zone-name}                      |
       | hubName         | {hub-name}                       |
       | ninjaDriverName | {ninja-driver-name}              |
@@ -24,7 +24,7 @@ Feature: Route Logs
     When Operator create multiple routes using data below:
       | numberOfRoute   | 2                                |
       | routeDate       | {gradle-current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                            |
+      | routeTags       | [{route-tag-name}]               |
       | zoneName        | {zone-name}                      |
       | hubName         | {hub-name}                       |
       | ninjaDriverName | {ninja-driver-name}              |
@@ -38,7 +38,7 @@ Feature: Route Logs
     When Operator create multiple routes using data below:
       | numberOfRoute   | 2                                |
       | routeDate       | {gradle-current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                            |
+      | routeTags       | [{route-tag-name}]               |
       | zoneName        | {zone-name}                      |
       | hubName         | {hub-name}                       |
       | ninjaDriverName | {ninja-driver-name}              |
@@ -46,7 +46,7 @@ Feature: Route Logs
     Then Operator verify multiple routes is created successfully
     When Operator bulk edit details multiple routes using data below:
       | routeDate       | {gradle-current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                            |
+      | routeTags       | [{route-tag-name}]               |
       | zoneName        | {zone-name}                      |
       | hubName         | {hub-name}                       |
       | ninjaDriverName | {ninja-driver-2-name}            |
@@ -60,7 +60,7 @@ Feature: Route Logs
     When Operator create multiple routes using data below:
       | numberOfRoute   | 2                                |
       | routeDate       | {gradle-current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                            |
+      | routeTags       | [{route-tag-name}]               |
       | zoneName        | {zone-name}                      |
       | hubName         | {hub-name}                       |
       | ninjaDriverName | {ninja-driver-name}              |
@@ -78,7 +78,7 @@ Feature: Route Logs
     When Operator create multiple routes using data below:
       | numberOfRoute   | 2                                |
       | routeDate       | {gradle-current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                            |
+      | routeTags       | [{route-tag-name}]               |
       | zoneName        | {zone-name}                      |
       | hubName         | {hub-name}                       |
       | ninjaDriverName | {ninja-driver-name}              |
@@ -103,7 +103,7 @@ Feature: Route Logs
     When Operator create multiple routes using data below:
       | numberOfRoute   | 2                                |
       | routeDate       | {gradle-current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                            |
+      | routeTags       | [{route-tag-name}]               |
       | zoneName        | {zone-name}                      |
       | hubName         | {hub-name}                       |
       | ninjaDriverName | {ninja-driver-name}              |
@@ -127,7 +127,7 @@ Feature: Route Logs
     When Operator create multiple routes using data below:
       | numberOfRoute   | 2                                |
       | routeDate       | {gradle-current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                            |
+      | routeTags       | [{route-tag-name}]               |
       | zoneName        | {zone-name}                      |
       | hubName         | {hub-name}                       |
       | ninjaDriverName | {ninja-driver-name}              |
@@ -143,7 +143,7 @@ Feature: Route Logs
     When Operator create multiple routes using data below:
       | numberOfRoute   | 2                                |
       | routeDate       | {gradle-current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                            |
+      | routeTags       | [{route-tag-name}]               |
       | zoneName        | {zone-name}                      |
       | hubName         | {hub-name}                       |
       | ninjaDriverName | {ninja-driver-name}              |
@@ -157,13 +157,13 @@ Feature: Route Logs
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
-      | numberOfRoute   | 2                         |
+      | numberOfRoute   | 2                                |
       | routeDate       | {gradle-current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                     |
-      | zoneName        | {zone-name}               |
-      | hubName         | {hub-name}                |
-      | ninjaDriverName | {ninja-driver-name}       |
-      | vehicleName     | {vehicle-name}            |
+      | routeTags       | [{route-tag-name}]               |
+      | zoneName        | {zone-name}                      |
+      | hubName         | {hub-name}                       |
+      | ninjaDriverName | {ninja-driver-name}              |
+      | vehicleName     | {vehicle-name}                   |
     Then Operator verify multiple routes is created successfully
     When Operator archive multiple routes
     Then Operator verify multiple routes is archived successfully
@@ -175,7 +175,7 @@ Feature: Route Logs
     When Operator create multiple routes using data below:
       | numberOfRoute   | 2                                |
       | routeDate       | {gradle-current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                            |
+      | routeTags       | [{route-tag-name}]               |
       | zoneName        | {zone-name}                      |
       | hubName         | {hub-name}                       |
       | ninjaDriverName | {ninja-driver-name}              |
@@ -193,7 +193,7 @@ Feature: Route Logs
     When Operator create multiple routes using data below:
       | numberOfRoute   | 2                                |
       | routeDate       | {gradle-current-date-yyyy-MM-dd} |
-      | routeTags       | [FLT]                            |
+      | routeTags       | [{route-tag-name}]               |
       | zoneName        | {zone-name}                      |
       | hubName         | {hub-name}                       |
       | ninjaDriverName | {ninja-driver-name}              |
