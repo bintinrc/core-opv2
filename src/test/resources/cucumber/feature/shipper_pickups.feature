@@ -187,7 +187,8 @@ Feature: Shipper Pickups
       | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
       | reservationDateEnd   | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName          | {shipper-v4-name}                |
-    And Operator use the Route Suggestion to add created reservation to the route
+    And Operator use the Route Suggestion to add created reservation to the route using data below:
+      | routeTagName | {route-tag-name} |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | shipperName | {shipper-v4-name}        |
       | routeId     | GET_FROM_SUGGESTED_ROUTE |
@@ -220,7 +221,8 @@ Feature: Shipper Pickups
       | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
       | reservationDateEnd   | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName          | {shipper-v4-name}                |
-    And Operator use the Route Suggestion to add created reservations to the route
+    And Operator use the Route Suggestion to add created reservations to the route using data below:
+      | routeTagName | {route-tag-name} |
     Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
       | shipperName | {shipper-v4-name}        |
       | routeId     | GET_FROM_SUGGESTED_ROUTE |
