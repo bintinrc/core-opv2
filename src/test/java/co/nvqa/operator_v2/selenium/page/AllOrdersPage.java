@@ -383,7 +383,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         selectAllShown("ctrl.ordersTableParam");
         applyActionsMenu.chooseItem(ADD_TO_ROUTE);
 
-        List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='order in ctrl.formData.orders']/td[1]");
+        List<WebElement> listOfWe = findElementsByXpath("//tr[@md-virtual-repeat='order in ctrl.formData.orders']/td[1]");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
         Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
