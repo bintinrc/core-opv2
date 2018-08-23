@@ -78,7 +78,13 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
 
         switch(TestConstants.COUNTRY_CODE.toUpperCase())
         {
+            case "MBS":
+            case "FEF":
+            case "MMPG":
+            case "TKL":
+            case "HBL":
             case "MNT":
+            case "DEMO":
             {
                 fromAddress = addressMap.get("address1");
                 fromAddress += " " + addressMap.getOrDefault("address2", "");

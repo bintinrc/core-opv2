@@ -11,7 +11,7 @@ Feature: Order Creation V4
     When Operator create order V4 by uploading XLSX on Order Creation V4 page using data below:
       | shipperId         | {shipper-v4-legacy-id} |
       | generateFromAndTo | RANDOM                 |
-      | v4OrderRequest    | {"service_type":"Parcel","service_level":"Standard","requested_tracking_number":"{{shipper-order-ref-no}}","reference":{"merchant_order_number":"ship-{{shipper-order-ref-no}}"},"parcel_job":{"is_pickup_required":false,"pickup_instruction":"Pickup with care!","delivery_start_date":"{{tmp-pickup-date}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"{default-timezone}"},"delivery_instruction":"If recipient is not around, leave parcel in power riser.","dimensions":{"weight":1.0,"size":"L"}}} |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Then Operator verify order V4 is created successfully on Order Creation V4 page
 
   @KillBrowser @ShouldAlwaysRun
