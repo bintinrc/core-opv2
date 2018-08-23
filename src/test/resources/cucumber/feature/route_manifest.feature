@@ -49,6 +49,7 @@ Feature: Route Manifest
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
     And API Operator get order details
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Monitoring
     When Operator filter Route Monitoring using data below and then load selection:
       | routeDate | {gradle-current-date-yyyy-MM-dd} |
