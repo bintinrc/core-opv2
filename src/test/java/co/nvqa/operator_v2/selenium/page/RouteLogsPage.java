@@ -574,12 +574,10 @@ public class RouteLogsPage extends OperatorV2SimplePage
     public void selectTag(long routeId, String newTag)
     {
         searchAndVerifyRouteExist(routeId);
-        click(SELECT_TAG_XPATH);
-        pause100ms();
-        clickf("//div[contains(@class,'md-select-menu-container') and @aria-hidden='false']/md-select-menu/md-content/md-option/div[@class='md-text' and contains(text(), '%s')]", newTag);
-        pause100ms();
+        selectValueFromMdSelectById("container.route-logs.select-tag", newTag);
         click("//nv-table-description/div/div/span[text()='Showing']"); //Click on random element to close 'Select Tag' dialog.
         pause200ms();
+        waitUntilInvisibilityOfToast("Route(s) Tagged");
     }
 
     public String getRouteTag(long routeId)
