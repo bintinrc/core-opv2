@@ -247,7 +247,7 @@ public class AllShippersSteps extends AbstractSteps
         returnSettings.setAddress2(returnAddress.getAddress2());
         returnSettings.setCity(returnAddress.getCity());
         returnSettings.setPostcode(returnAddress.getPostcode());
-        returnSettings.setLastReturnNumber(dateUniqueString);
+        returnSettings.setLastReturnNumber(String.valueOf(System.currentTimeMillis()));
         shipper.setReturns(returnSettings);
 
         allShippersPage.updateShipperReturnsSettings(shipper);

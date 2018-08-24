@@ -144,8 +144,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         // Account Type
         selectValueFromMdSelect(LOCATOR_FIELD_CHANNEL, "B2C Marketplace");
         selectValueFromMdSelect(LOCATOR_FIELD_INDUSTRY, shipper.getIndustryName());
-        String accountTypeId = shipper.getAccountTypeId() != null ? String.valueOf(shipper.getAccountTypeId()) : "0";
+        String accountTypeId = shipper.getAccountTypeId()!=null? String.valueOf(shipper.getAccountTypeId()) : "0";
         selectValueFromMdSelect(LOCATOR_FIELD_ACCOUNT_TYPE, accountTypeId);
+
         if(isCreateForm)
         {
             selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_SALES_PERSON, shipper.getSalesPerson());
@@ -238,7 +239,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         // Pricing
         Pricing pricing = shipper.getPricing();
-        String actualPricingScript = getNvAutocompleteValue("ctrl.view.pricingScripts.searchText");
+        String actualPricingScript = getMdSelectValueById(LOCATOR_FIELD_PRICING_SCRIPT);
         Assert.assertThat("Pricing Script", actualPricingScript, Matchers.endsWith(pricing.getScriptName()));
 
         // Billing
@@ -253,8 +254,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         Assert.assertEquals("Billing Postcode", shipper.getBillingPostcode(), actualBillingPostcode);
 
         // Industry & Sales
-        String actualIndustry = getNvAutocompleteValue("ctrl.view.industry.searchText");
-        String actualSalesPerson = getNvAutocompleteValue("ctrl.view.salesPerson.searchText");
+        String actualIndustry = getMdSelectValue(LOCATOR_FIELD_INDUSTRY); //getNvAutocompleteValue("ctrl.view.industry.searchText");
+        String actualSalesPerson = getMdSelectValueById(LOCATOR_FIELD_SALES_PERSON); //getNvAutocompleteValue("ctrl.view.salesPerson.searchText");
 
         Assert.assertEquals("Industry", shipper.getIndustryName(), actualIndustry);
         Assert.assertEquals("Sales Person", shipper.getSalesPerson(), actualSalesPerson);

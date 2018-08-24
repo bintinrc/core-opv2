@@ -70,179 +70,179 @@ Feature: All Shippers
 #      | Shipper V3 | uid:fd5a8ad9-48ed-4d95-a6d9-c36daad021f1 | true            | Normal      | v3        | 1DAY, 2DAY, 3DAY                   | Fixed         | true       | false             | false     | false               | false                | true                         |
       | Shipper V4 | uid:7fc77afb-999d-4257-b20e-e1540aebf820 | true            | Normal      | v4        | 3DAY                               | Fixed         | false      | true              | true      | false               | false                | false                        |
 
-#  @ResetWindow
-#  Scenario: Operator create new Shipper with basic settings and then update the Label Printer settings (uid:5f4793bb-04d8-496d-9e92-aeb863a0149d)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given Operator go to menu Shipper -> All Shippers
-#    When Operator create new Shipper with basic settings using data below:
-#      | isShipperActive              | true                               |
-#      | shipperType                  | Normal                             |
-#      | ocVersion                    | v2                                 |
-#      | services                     | 1DAY, 2DAY, 3DAY, SAMEDAY, FREIGHT |
-#      | trackingType                 | LegacyDynamic                      |
-#      | isAllowCod                   | true                               |
-#      | isAllowCashPickup            | true                               |
-#      | isPrepaid                    | true                               |
-#      | isAllowStagedOrders          | true                               |
-#      | isMultiParcelShipper         | true                               |
-#      | isDisableDriverAppReschedule | true                               |
-#      | pricingScriptName            | {pricing-script-name}              |
-#      | industryName                 | {industry-name}                    |
-#      | salesPerson                  | {sales-person}                     |
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify the new Shipper is created successfully
-#    When Operator update Shipper's Label Printer settings
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify Shipper's Label Printer settings is updated successfully
-#    When DB Operator soft delete shipper by Legacy ID
-#    When API Operator reload shipper's cache
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify the shipper is deleted successfully
+  @ResetWindow
+  Scenario: Operator create new Shipper with basic settings and then update the Label Printer settings (uid:5f4793bb-04d8-496d-9e92-aeb863a0149d)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                               |
+      | shipperType                  | Normal                             |
+      | ocVersion                    | v4                                 |
+      | services                     | 1DAY, 2DAY, 3DAY, SAMEDAY, FREIGHT |
+      | trackingType                 | Fixed                              |
+      | isAllowCod                   | true                               |
+      | isAllowCashPickup            | true                               |
+      | isPrepaid                    | true                               |
+      | isAllowStagedOrders          | true                               |
+      | isMultiParcelShipper         | true                               |
+      | isDisableDriverAppReschedule | true                               |
+      | pricingScriptName            | {pricing-script-name}              |
+      | industryName                 | {industry-name}                    |
+      | salesPerson                  | {sales-person}                     |
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify the new Shipper is created successfully
+    When Operator update Shipper's Label Printer settings
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify Shipper's Label Printer settings is updated successfully
+    When DB Operator soft delete shipper by Legacy ID
+    When API Operator reload shipper's cache
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify the shipper is deleted successfully
 
-#  @ResetWindow
-#  Scenario: Operator create new Shipper with basic settings and then update the Returns settings (uid:3390ffc7-f6b1-4cce-af8d-787bae1d2fac)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given Operator go to menu Shipper -> All Shippers
-#    When Operator create new Shipper with basic settings using data below:
-#      | isShipperActive              | true                               |
-#      | shipperType                  | Normal                             |
-#      | ocVersion                    | v2                                 |
-#      | services                     | 1DAY, 2DAY, 3DAY, SAMEDAY, FREIGHT |
-#      | trackingType                 | LegacyDynamic                      |
-#      | isAllowCod                   | true                               |
-#      | isAllowCashPickup            | true                               |
-#      | isPrepaid                    | true                               |
-#      | isAllowStagedOrders          | true                               |
-#      | isMultiParcelShipper         | true                               |
-#      | isDisableDriverAppReschedule | true                               |
-#      | pricingScriptName            | {pricing-script-name}              |
-#      | industryName                 | {industry-name}                    |
-#      | salesPerson                  | {sales-person}                     |
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify the new Shipper is created successfully
-#    When Operator update Shipper's Returns settings
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify Shipper's Returns settings is updated successfully
-#    When DB Operator soft delete shipper by Legacy ID
-#    When API Operator reload shipper's cache
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify the shipper is deleted successfully
+  @ResetWindow
+  Scenario: Operator create new Shipper with basic settings and then update the Returns settings (uid:3390ffc7-f6b1-4cce-af8d-787bae1d2fac)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                               |
+      | shipperType                  | Normal                             |
+      | ocVersion                    | v4                                 |
+      | services                     | 1DAY, 2DAY, 3DAY, SAMEDAY, FREIGHT |
+      | trackingType                 | Fixed                              |
+      | isAllowCod                   | true                               |
+      | isAllowCashPickup            | true                               |
+      | isPrepaid                    | true                               |
+      | isAllowStagedOrders          | true                               |
+      | isMultiParcelShipper         | true                               |
+      | isDisableDriverAppReschedule | true                               |
+      | pricingScriptName            | {pricing-script-name}              |
+      | industryName                 | {industry-name}                    |
+      | salesPerson                  | {sales-person}                     |
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify the new Shipper is created successfully
+    When Operator update Shipper's Returns settings
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify Shipper's Returns settings is updated successfully
+    When DB Operator soft delete shipper by Legacy ID
+    When API Operator reload shipper's cache
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify the shipper is deleted successfully
 
-#  @ResetWindow
-#  Scenario: Operator create new Shipper with basic settings and then update the Distribution Point settings (uid:d13bf02a-cae8-43be-939f-1380aee1acfb)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given Operator go to menu Shipper -> All Shippers
-#    When Operator create new Shipper with basic settings using data below:
-#      | isShipperActive              | true                               |
-#      | shipperType                  | Normal                             |
-#      | ocVersion                    | v2                                 |
-#      | services                     | 1DAY, 2DAY, 3DAY, SAMEDAY, FREIGHT |
-#      | trackingType                 | LegacyDynamic                      |
-#      | isAllowCod                   | true                               |
-#      | isAllowCashPickup            | true                               |
-#      | isPrepaid                    | true                               |
-#      | isAllowStagedOrders          | true                               |
-#      | isMultiParcelShipper         | true                               |
-#      | isDisableDriverAppReschedule | true                               |
-#      | pricingScriptName            | {pricing-script-name}              |
-#      | industryName                 | {industry-name}                    |
-#      | salesPerson                  | {sales-person}                     |
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify the new Shipper is created successfully
-#    When Operator update Shipper's Distribution Point settings
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify Shipper's Distribution Point settings is updated successfully
-#    When DB Operator soft delete shipper by Legacy ID
-#    When API Operator reload shipper's cache
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify the shipper is deleted successfully
+  @ResetWindow
+  Scenario: Operator create new Shipper with basic settings and then update the Distribution Point settings (uid:d13bf02a-cae8-43be-939f-1380aee1acfb)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                               |
+      | shipperType                  | Normal                             |
+      | ocVersion                    | v4                                 |
+      | services                     | 1DAY, 2DAY, 3DAY, SAMEDAY, FREIGHT |
+      | trackingType                 | Fixed                              |
+      | isAllowCod                   | true                               |
+      | isAllowCashPickup            | true                               |
+      | isPrepaid                    | true                               |
+      | isAllowStagedOrders          | true                               |
+      | isMultiParcelShipper         | true                               |
+      | isDisableDriverAppReschedule | true                               |
+      | pricingScriptName            | {pricing-script-name}              |
+      | industryName                 | {industry-name}                    |
+      | salesPerson                  | {sales-person}                     |
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify the new Shipper is created successfully
+    When Operator update Shipper's Distribution Point settings
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify Shipper's Distribution Point settings is updated successfully
+    When DB Operator soft delete shipper by Legacy ID
+    When API Operator reload shipper's cache
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify the shipper is deleted successfully
 
-#  @ResetWindow
-#  Scenario: Operator create new Shipper with basic settings and then update the Qoo10 settings (uid:45827cde-6d96-4fbc-b04d-b759ae670722)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given Operator go to menu Shipper -> All Shippers
-#    When Operator create new Shipper with basic settings using data below:
-#      | isShipperActive              | true                               |
-#      | shipperType                  | Normal                             |
-#      | ocVersion                    | v2                                 |
-#      | services                     | 1DAY, 2DAY, 3DAY, SAMEDAY, FREIGHT |
-#      | trackingType                 | LegacyDynamic                      |
-#      | isAllowCod                   | true                               |
-#      | isAllowCashPickup            | true                               |
-#      | isPrepaid                    | true                               |
-#      | isAllowStagedOrders          | true                               |
-#      | isMultiParcelShipper         | true                               |
-#      | isDisableDriverAppReschedule | true                               |
-#      | pricingScriptName            | {pricing-script-name}              |
-#      | industryName                 | {industry-name}                    |
-#      | salesPerson                  | {sales-person}                     |
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify the new Shipper is created successfully
-#    When Operator update Shipper's Qoo10 settings
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify Shipper's Qoo10 settings is updated successfully
-#    When DB Operator soft delete shipper by Legacy ID
-#    When API Operator reload shipper's cache
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify the shipper is deleted successfully
+  @ResetWindow
+  Scenario: Operator create new Shipper with basic settings and then update the Qoo10 settings (uid:45827cde-6d96-4fbc-b04d-b759ae670722)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                               |
+      | shipperType                  | Normal                             |
+      | ocVersion                    | v4                                 |
+      | services                     | 1DAY, 2DAY, 3DAY, SAMEDAY, FREIGHT |
+      | trackingType                 | Fixed                              |
+      | isAllowCod                   | true                               |
+      | isAllowCashPickup            | true                               |
+      | isPrepaid                    | true                               |
+      | isAllowStagedOrders          | true                               |
+      | isMultiParcelShipper         | true                               |
+      | isDisableDriverAppReschedule | true                               |
+      | pricingScriptName            | {pricing-script-name}              |
+      | industryName                 | {industry-name}                    |
+      | salesPerson                  | {sales-person}                     |
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify the new Shipper is created successfully
+    When Operator update Shipper's Qoo10 settings
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify Shipper's Qoo10 settings is updated successfully
+    When DB Operator soft delete shipper by Legacy ID
+    When API Operator reload shipper's cache
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify the shipper is deleted successfully
 
-#  @ResetWindow
-#  Scenario: Operator create new Shipper with basic settings and then update the Shopify settings (uid:d20c7d44-cd01-44a4-8e19-07e86465168d)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given Operator go to menu Shipper -> All Shippers
-#    When Operator create new Shipper with basic settings using data below:
-#      | isShipperActive              | true                               |
-#      | shipperType                  | Normal                             |
-#      | ocVersion                    | v2                                 |
-#      | services                     | 1DAY, 2DAY, 3DAY, SAMEDAY, FREIGHT |
-#      | trackingType                 | LegacyDynamic                      |
-#      | isAllowCod                   | true                               |
-#      | isAllowCashPickup            | true                               |
-#      | isPrepaid                    | true                               |
-#      | isAllowStagedOrders          | true                               |
-#      | isMultiParcelShipper         | true                               |
-#      | isDisableDriverAppReschedule | true                               |
-#      | pricingScriptName            | {pricing-script-name}              |
-#      | industryName                 | {industry-name}                    |
-#      | salesPerson                  | {sales-person}                     |
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify the new Shipper is created successfully
-#    When Operator update Shipper's Shopify settings
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify Shipper's Shopify settings is updated successfully
-#    When DB Operator soft delete shipper by Legacy ID
-#    When API Operator reload shipper's cache
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify the shipper is deleted successfully
+  @ResetWindow
+  Scenario: Operator create new Shipper with basic settings and then update the Shopify settings (uid:d20c7d44-cd01-44a4-8e19-07e86465168d)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                               |
+      | shipperType                  | Normal                             |
+      | ocVersion                    | v4                                 |
+      | services                     | 1DAY, 2DAY, 3DAY, SAMEDAY, FREIGHT |
+      | trackingType                 | Fixed                              |
+      | isAllowCod                   | true                               |
+      | isAllowCashPickup            | true                               |
+      | isPrepaid                    | true                               |
+      | isAllowStagedOrders          | true                               |
+      | isMultiParcelShipper         | true                               |
+      | isDisableDriverAppReschedule | true                               |
+      | pricingScriptName            | {pricing-script-name}              |
+      | industryName                 | {industry-name}                    |
+      | salesPerson                  | {sales-person}                     |
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify the new Shipper is created successfully
+    When Operator update Shipper's Shopify settings
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify Shipper's Shopify settings is updated successfully
+    When DB Operator soft delete shipper by Legacy ID
+    When API Operator reload shipper's cache
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify the shipper is deleted successfully
 
-#  @ResetWindow
-#  Scenario: Operator create new Shipper with basic settings and then update the Magento settings (uid:a32a3f0f-c48b-4c46-8739-40c4b9ff80ad)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given Operator go to menu Shipper -> All Shippers
-#    When Operator create new Shipper with basic settings using data below:
-#      | isShipperActive              | true                               |
-#      | shipperType                  | Normal                             |
-#      | ocVersion                    | v2                                 |
-#      | services                     | 1DAY, 2DAY, 3DAY, SAMEDAY, FREIGHT |
-#      | trackingType                 | LegacyDynamic                      |
-#      | isAllowCod                   | true                               |
-#      | isAllowCashPickup            | true                               |
-#      | isPrepaid                    | true                               |
-#      | isAllowStagedOrders          | true                               |
-#      | isMultiParcelShipper         | true                               |
-#      | isDisableDriverAppReschedule | true                               |
-#      | pricingScriptName            | {pricing-script-name}              |
-#      | industryName                 | {industry-name}                    |
-#      | salesPerson                  | {sales-person}                     |
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify the new Shipper is created successfully
-#    When Operator update Shipper's Magento settings
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify Shipper's Magento settings is updated successfully
-#    When DB Operator soft delete shipper by Legacy ID
-#    When API Operator reload shipper's cache
-#    When Operator clear browser cache and reload All Shipper page
-#    Then Operator verify the shipper is deleted successfully
+  @ResetWindow
+  Scenario: Operator create new Shipper with basic settings and then update the Magento settings (uid:a32a3f0f-c48b-4c46-8739-40c4b9ff80ad)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                               |
+      | shipperType                  | Normal                             |
+      | ocVersion                    | v4                                 |
+      | services                     | 1DAY, 2DAY, 3DAY, SAMEDAY, FREIGHT |
+      | trackingType                 | Fixed                              |
+      | isAllowCod                   | true                               |
+      | isAllowCashPickup            | true                               |
+      | isPrepaid                    | true                               |
+      | isAllowStagedOrders          | true                               |
+      | isMultiParcelShipper         | true                               |
+      | isDisableDriverAppReschedule | true                               |
+      | pricingScriptName            | {pricing-script-name}              |
+      | industryName                 | {industry-name}                    |
+      | salesPerson                  | {sales-person}                     |
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify the new Shipper is created successfully
+    When Operator update Shipper's Magento settings
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify Shipper's Magento settings is updated successfully
+    When DB Operator soft delete shipper by Legacy ID
+    When API Operator reload shipper's cache
+    When Operator clear browser cache and reload All Shipper page
+    Then Operator verify the shipper is deleted successfully
 
 #  @ResetWindow
 #  Scenario: Operator enable Auto Reservation for Shipper, create order V2 and verify the reservation is created (uid:93ec816b-e633-4248-8660-ee2a21cd8040)
