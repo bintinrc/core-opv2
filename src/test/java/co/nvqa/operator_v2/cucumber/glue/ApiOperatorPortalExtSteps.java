@@ -5,6 +5,7 @@ import co.nvqa.commons.model.core.CreateDriverV2Request;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.support.JsonHelper;
+import co.nvqa.commons.utils.HubFactory;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.Dp;
@@ -170,6 +171,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         mapOfDynamicVariable.put("RANDOM_FIRST_NAME", "Driver-"+dateUniqueString);
         mapOfDynamicVariable.put("RANDOM_LAST_NAME", "Rider-"+dateUniqueString);
         mapOfDynamicVariable.put("TIMESTAMP", dateUniqueString);
+        mapOfDynamicVariable.put("RANDOM_LATITUDE", String.valueOf(HubFactory.getRandomHub().getLatitude()));
+        mapOfDynamicVariable.put("RANDOM_LONGITUDE", String.valueOf(HubFactory.getRandomHub().getLongitude()));
 
         String driverCreateRequestTemplate = mapOfData.get("driverCreateRequest");
         String driverCreateRequestJson = replaceTokens(driverCreateRequestTemplate, mapOfDynamicVariable);

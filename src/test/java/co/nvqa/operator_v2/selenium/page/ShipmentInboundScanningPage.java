@@ -16,14 +16,12 @@ import java.util.stream.Collectors;
 @SuppressWarnings("WeakerAccess")
 public class ShipmentInboundScanningPage extends OperatorV2SimplePage
 {
-    public static final String XPATH_HUB_DROPDOWN = "//md-select[md-select-value[span[text()='Inbound Hub']]]";
-    public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
+    public static final String LOCATOR_HUB_DROPDOWN = "inbound-hub";
     public static final String XPATH_SCAN_INPUT = "//md-card-content[div[h5[text()='Scan Shipment to Inbound']]]/md-input-container/input";
     public static final String XPATH_CHANGE_END_DATE_BUTTON = "//button[@aria-label='Change End Date']";
     public static final String XPATH_SCANNING_SESSION = "//table/tbody/tr[contains(@ng-repeat,'log in ctrl.scans')]";
     public static final String XPATH_SCANNING_SESSION_NO_CHANGE = XPATH_SCANNING_SESSION;
     public static final String XPATH_SCANNING_SESSION_CHANGE = XPATH_SCANNING_SESSION + "[contains(@class,'changed')]";
-    //public static final String XPATH_DATE_INPUT = "//input[@class='md-datepicker-input']";
     public static final String XPATH_CHANGE_DATE_BUTTON = "//button[@aria-label='Change Date']";
 
     public ShipmentInboundScanningPage(WebDriver webDriver)
@@ -33,9 +31,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
 
     public void selectHub(String hubName)
     {
-        click(XPATH_HUB_DROPDOWN);
-        pause100ms();
-        selectDropdownValue(hubName);
+        selectValueFromMdSelectById(LOCATOR_HUB_DROPDOWN, hubName);
     }
 
     public void inboundScanning(String shipmentId, String label, String hub)
@@ -46,11 +42,6 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
 
         inputShipmentToInbound(shipmentId);
         checkSessionScan(shipmentId);
-    }
-
-    private void selectDropdownValue(String value)
-    {
-        click(XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()=' " + value + " ']]");
     }
 
     public String grabXpathButton(String label)

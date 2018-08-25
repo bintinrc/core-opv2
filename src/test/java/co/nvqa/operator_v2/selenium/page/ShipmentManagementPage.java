@@ -20,8 +20,12 @@ import java.util.List;
 @SuppressWarnings("WeakerAccess")
 public class ShipmentManagementPage extends OperatorV2SimplePage
 {
-    public static final String XPATH_CREATE_SHIPMENT_BUTTON = "//nv-table-button[@id='create-shipment-1']/button";
+    public static final String LOCATOR_CREATE_SHIPMENT_BUTTON = "Create Shipment";
+    public static final String LOCATOR_FIELD_SELECT_TYPE = "select-type";
+    public static final String LOCATOR_FIELD_START_HUB = "start-hub";
+    public static final String LOCATOR_FIELD_END_HUB = "end-hub";
     public static final String XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON = "//nv-table-button[@id='createButton']/button";
+    public static final String LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON = "Create";
     //public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[@aria-label='Load Selection']";
     //public static final String XPATH_SAVE_CHANGES_BUTTON = "//button[div[text()='Save Changes']]";
     public static final String XPATH_LINEHAUL_DROPDOWN = "//div[p[text()='Select Linehaul']]/md-select";
@@ -29,6 +33,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     public static final String XPATH_END_HUB_DROPDOWN = "//div[p[text()='End Hub']]/md-select";
     public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, \"md-active\")]/md-select-menu/md-content/md-option";
     public static final String XPATH_COMMENT_TEXT_AREA = "//textarea[@id=\"comment\"]";
+    public static final String LOCATOR_COMMENT_TEXT_AREA = "container.shipment-management.comments-optional";
     public static final String XPATH_SHIPMENTS_TR = "//tr[@md-virtual-repeat='shipment in getTableData()']";
     public static final String XPATH_EDIT_SEARCH_FILTER_BUTTON = "//button[contains(@aria-label, 'Edit Filter')]";
     //public static final String XPATH_LABEL_EDIT_SHIPMENT = "//h4[text()='Edit Shipment']";
@@ -99,32 +104,21 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         return findElementByXpath(XPATH_END_HUB_DROPDOWN);
     }
 
-    public void selectFirstLineHaul()
-    {
-        grabLineHaul().click();
-        pause1s();
-        click(XPATH_HUB_ACTIVE_DROPDOWN + "[@ng-repeat='l in ctrl.linehauls']");
-    }
-
     public void selectStartHub(String hubName)
     {
-        grabStartHubDiv().click();
-        pause1s();
-        click(XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + hubName + "']]");
+        selectValueFromMdSelectById(LOCATOR_FIELD_START_HUB, hubName);
         pause200ms();
     }
 
     public void selectEndHub(String hubName)
     {
-        grabEndHubDiv().click();
-        pause1s();
-        click(XPATH_HUB_ACTIVE_DROPDOWN + "[div[text()='" + hubName + "']]");
+        selectValueFromMdSelectById(LOCATOR_FIELD_END_HUB, hubName);
         pause200ms();
     }
 
     public void fillFieldComments(String comments)
     {
-        sendKeys(XPATH_COMMENT_TEXT_AREA, comments);
+        sendKeysById(LOCATOR_COMMENT_TEXT_AREA, comments);
         pause200ms();
     }
 
@@ -177,26 +171,23 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
 
     public String createShipment(String startHub, String endHub, String comment)
     {
-        click(XPATH_CREATE_SHIPMENT_BUTTON);
+        clickNvIconTextButtonByName(LOCATOR_CREATE_SHIPMENT_BUTTON);
 
-        selectFirstLineHaul();
+        selectByIndexFromMdSelectById(LOCATOR_FIELD_SELECT_TYPE, 1);
         pause200ms();
 
         selectStartHub(startHub);
-        pause200ms();
 
         selectEndHub(endHub);
-        pause200ms();
 
         fillFieldComments(comment);
-        click(XPATH_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
 
-        WebElement toast = getToast();
-        String toastMessage = toast.getText();
+        clickNvApiTextButtonByNameAndWaitUntilDone(LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
 
+        String toastMessage = getToastTopText();
         Assert.assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage, Matchers.allOf(Matchers.containsString("Shipment"), Matchers.containsString("created")));
         String shipmentId = toastMessage.split(" ")[1];
-        waitUntilInvisibilityOfElementLocated(String.format("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s created']", shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
+        confirmToast(toastMessage, false);
 
         return shipmentId;
     }
@@ -297,18 +288,10 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
             try
             {
                 List<Shipment> shipmentList = getShipmentsFromTable();
-                boolean isExist = false;
-
-                for(ShipmentManagementPage.Shipment shipment : shipmentList)
-                {
-                    if(shipment.getId().equalsIgnoreCase(shipmentId))
-                    {
-                        isExist = true;
-                        break;
-                    }
-                }
-
-                Assert.assertTrue(String.format("Shipment with ID = '%s' not exist", shipmentId), isExist);
+                shipmentList.stream()
+                        .filter(shipment -> shipment.getId().equalsIgnoreCase(shipmentId))
+                        .findFirst()
+                        .orElseThrow(() -> new AssertionError(String.format("Shipment with ID = '%s' not exist", shipmentId)));
             }
             catch(AssertionError ex)
             {
@@ -381,11 +364,11 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         {
             List<WebElement> listOfElements = shipmentWe.findElements(By.tagName("td"));
             this.shipmentWe = shipmentWe;
-            this.id = listOfElements.get(2).getText().trim();
-            this.status = listOfElements.get(4).getText().trim();
-            this.startHub = listOfElements.get(5).getText().trim();
-            this.endHub = listOfElements.get(8).getText().trim();
-            this.comment = listOfElements.get(10).getText().trim();
+            this.id = listOfElements.get(3).getText().trim();
+            this.status = listOfElements.get(6).getText().trim();
+            this.startHub = listOfElements.get(7).getText().trim();
+            this.endHub = listOfElements.get(9).getText().trim();
+            this.comment = listOfElements.get(13).getText().trim();
         }
 
         public void clickShipmentActionButton(String actionButton)
