@@ -19,7 +19,7 @@ Feature: Recovery Tickets
       | parcelLocation          | DAMAGED RACK           |
       | liability               | NV DRIVER              |
       | damageDescription       | GENERATED              |
-      | orderOutcomeDamaged     | PENDING                |
+      | orderOutcomeDamaged     | NV LIABLE - FULL       |
       | custZendeskId           | 1                      |
       | shipperZendeskId        | 1                      |
       | ticketNotes             | GENERATED              |
@@ -36,6 +36,7 @@ Feature: Recovery Tickets
       | investigatingDepartment | Fleet (First Mile)     |
       | investigatingHub        | {hub-name}             |
       | ticketType              | MISSING                |
+      | orderOutcomeMissing     | LOST - DECLARED        |
       | parcelDescription       | GENERATED              |
       | custZendeskId           | 1                      |
       | shipperZendeskId        | 1                      |

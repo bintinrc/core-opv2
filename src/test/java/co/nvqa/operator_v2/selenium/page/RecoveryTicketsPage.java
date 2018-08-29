@@ -42,7 +42,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         {
             case TICKET_TYPE_DAMAGED:
             {
-                selectTicketSubType(recoveryTicket.getTicketSubType());
+                //selectTicketSubType(recoveryTicket.getTicketSubType());
 
                 //Damaged Details
                 selectParcelLocation(recoveryTicket.getParcelLocation());
@@ -57,6 +57,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
             }
             case TICKET_TYPE_MISSING:
             {
+                selectOrderOutcomeMissing(recoveryTicket.getOrderOutcomeMissing());
                 setParcelDescription(recoveryTicket.getParcelDescription());
                 setCustZendeskId(recoveryTicket.getCustZendeskId());
                 setShipperZendeskId(recoveryTicket.getShipperZendeskId());
@@ -176,6 +177,11 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     public void selectOrderOutcomeDamaged(String orderOutcomeDamaged)
     {
         selectValueFromMdSelectById("orderOutcome(Damaged)", orderOutcomeDamaged);
+    }
+
+    public void selectOrderOutcomeMissing(String orderOutcomeMissing)
+    {
+        selectValueFromMdSelectById("orderOutcome(Missing)", orderOutcomeMissing);
     }
 
     public void setComments(String comments)
