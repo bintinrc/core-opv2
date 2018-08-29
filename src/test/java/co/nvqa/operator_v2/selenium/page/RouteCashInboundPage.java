@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -65,7 +66,7 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
                   If toast error message found, that's means updated the zone is failed.
                   Throw runtime exception so the code will retry again until success or max retry is reached.
                  */
-                throw new RuntimeException(toastErrorMessage);
+                throw new NvTestRuntimeException(toastErrorMessage);
             }
             catch(TimeoutException ex)
             {
@@ -111,9 +112,9 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
 
         String expectedAmountCollected = DECIMAL_FORMAT.format(routeCashInboundCod.getAmountCollected());
 
-        switch(TestConstants.COUNTRY_CODE)
+        switch(TestConstants.COUNTRY_CODE.toUpperCase())
         {
-            case "SG": expectedAmountCollected = "S$"+expectedAmountCollected;
+            case "SG": expectedAmountCollected = "S$"+expectedAmountCollected; break;
             case "ID":
             case "MBS":
             case "FEF":
