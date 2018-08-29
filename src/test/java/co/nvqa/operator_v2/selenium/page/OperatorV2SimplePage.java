@@ -261,7 +261,7 @@ public class OperatorV2SimplePage extends SimplePage
         }
         catch(RuntimeException ex)
         {
-            //NvLogger.warnf("Failed to get text from element Toast. XPath: %s", toastXpathExpression);
+            NvLogger.warnf("Failed to get text from element Toast. XPath: %s", toastXpathExpression);
             NvAllure.addWarnAttachment(getCurrentMethodName(), "Failed to get text from element Toast. XPath: %s", toastXpathExpression);
         }
 
@@ -314,7 +314,7 @@ public class OperatorV2SimplePage extends SimplePage
         }
         catch(NoSuchElementException ex)
         {
-            //NvLogger.warnf("Failed to find element by XPath. XPath: %s", nvTableXpathExpression);
+            NvLogger.warnf("Failed to find element by XPath. XPath: %s", nvTableXpathExpression);
             NvAllure.addWarnAttachment(getCurrentMethodName(), "Failed to find element by XPath. XPath: %s", nvTableXpathExpression);
         }
 
@@ -420,7 +420,7 @@ public class OperatorV2SimplePage extends SimplePage
         }
         catch(NoSuchElementException ex)
         {
-            //NvLogger.warnf("Table with NgRepeat [%s] was not found. XPath: %s", ngRepeat, xpath);
+            NvLogger.warnf("Table with NgRepeat [%s] was not found. XPath: %s", ngRepeat, xpath);
             NvAllure.addWarnAttachment(getCurrentMethodName(), "Table with NgRepeat [%s] was not found. XPath: %s", ngRepeat, xpath);
             return 0;
         }
@@ -437,7 +437,7 @@ public class OperatorV2SimplePage extends SimplePage
         }
         catch(NoSuchElementException | TimeoutException ex)
         {
-            //NvLogger.warnf("Table with md-virtual-repeat [%s] was not found. XPath: %s", mdVirtualRepeat, xpath);
+            NvLogger.warnf("Table with md-virtual-repeat [%s] was not found. XPath: %s", mdVirtualRepeat, xpath);
             NvAllure.addWarnAttachment(getCurrentMethodName(), "Table with md-virtual-repeat [%s] was not found. XPath: %s", mdVirtualRepeat, xpath);
             return 0;
         }
@@ -454,7 +454,7 @@ public class OperatorV2SimplePage extends SimplePage
         }
         catch(NoSuchElementException | TimeoutException ex)
         {
-            //NvLogger.warnf("Table with md-virtual-repeat [%s] was not found. XPath: %s", mdVirtualRepeat, xpath);
+            NvLogger.warnf("Table with md-virtual-repeat [%s] was not found. XPath: %s", mdVirtualRepeat, xpath);
             NvAllure.addWarnAttachment(getCurrentMethodName(), "Table with md-virtual-repeat [%s] was not found. XPath: %s", mdVirtualRepeat, xpath);
             return 0;
         }
@@ -477,7 +477,7 @@ public class OperatorV2SimplePage extends SimplePage
         }
         catch(NoSuchElementException ex)
         {
-            //NvLogger.warnf("Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
+            NvLogger.warnf("Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
             NvAllure.addWarnAttachment(getCurrentMethodName(), "Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
         }
 
@@ -501,7 +501,7 @@ public class OperatorV2SimplePage extends SimplePage
         }
         catch(NoSuchElementException ex)
         {
-            //NvLogger.warnf("Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
+            NvLogger.warnf("Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
             NvAllure.addWarnAttachment(getCurrentMethodName(), "Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
         }
 
@@ -945,7 +945,7 @@ public class OperatorV2SimplePage extends SimplePage
         }
         catch(TimeoutException ex)
         {
-            //NvLogger.warnf("Table is not empty. XPath: %s", xpath);
+            NvLogger.warnf("Table is not empty. XPath: %s", xpath);
             NvAllure.addWarnAttachment(getCurrentMethodName(), "Table is not empty. XPath: %s", xpath);
             return false;
         }
