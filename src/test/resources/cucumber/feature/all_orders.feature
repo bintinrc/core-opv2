@@ -64,7 +64,7 @@ Feature: All Orders
     Then Operator verify the order is Force Successed successfully
     Then API Operator verify order info after Force Successed
 
-  @ArchiveRouteViaDb
+  @DeleteOrArchiveRoute
   Scenario: Operator RTS failed delivery order on next day on All Orders page (uid:dc7a87b5-0743-4995-bd9f-b4e22e792a38)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -121,7 +121,7 @@ Feature: All Orders
     When Operator pull out multiple orders from route on All Orders page
     Then API Operator verify multiple orders is pulled out from route
 
-  @ArchiveRouteViaDb
+  @DeleteOrArchiveRoute
   Scenario: Operator add multiple orders to route on All Orders page (uid:c8d93bf5-a2d9-40bf-9346-9278299d3bd3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:

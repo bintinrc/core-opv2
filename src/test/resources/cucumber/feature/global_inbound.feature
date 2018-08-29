@@ -96,7 +96,7 @@ Feature: Global Inbound
     When Operator go to menu Order -> All Orders
     Then Operator verify order info after Global Inbound
 
-  @ArchiveRouteViaDb
+  @DeleteOrArchiveRoute
   Scenario: Operator should not be able to Global Inbound routed pending delivery (uid:f56aada4-dbed-4688-b4eb-a3126d0b4981)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -136,7 +136,7 @@ Feature: Global Inbound
       | Completed | uid:cd293abb-cceb-44f2-a58c-ee89c1a8ba67 | Completed | ORDER_COMPLETED |
       | Cancelled | uid:2b1af9c8-e582-434a-aee6-76fb06aadf95 | Cancelled | ORDER_CANCELLED |
 
-  @ArchiveRouteViaDb
+  @DeleteOrArchiveRoute
   Scenario Outline: Operator should be able to Global Inbound failed delivery order on Global Inbound page (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:

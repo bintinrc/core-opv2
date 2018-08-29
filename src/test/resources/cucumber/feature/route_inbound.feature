@@ -5,7 +5,7 @@ Feature: Route Inbound
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRoute
+  @DeleteOrArchiveRoute
   Scenario Outline: Operator get route details by Route ID/Tracking ID/Driver (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |

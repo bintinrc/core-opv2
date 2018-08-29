@@ -5,7 +5,7 @@ Feature: Van Inbound
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteViaDb
+  @DeleteOrArchiveRoute
   Scenario: Operator van inbounds the created order with valid tracking ID (uid:dbb54d2b-a9a4-4975-b9db-456680953a54)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
@@ -31,7 +31,7 @@ Feature: Van Inbound
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
 
-  @ArchiveRouteViaDb
+  @DeleteOrArchiveRoute
   Scenario: Operator van inbounds the created order with invalid tracking ID (uid:b91adc47-ea7d-412f-8166-175f0816809f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
@@ -41,7 +41,7 @@ Feature: Van Inbound
     And Operator fill the invalid tracking ID INVALID_TRACKING_ID on Van Inbound Page
     Then Operator verify the tracking ID INVALID_TRACKING_ID that has been input on Van Inbound Page is invalid
 
-  @ArchiveRouteViaDb
+  @DeleteOrArchiveRoute
   Scenario: Operator van inbounds the created order with empty tracking ID (uid:485bf214-d45a-45b2-9696-179c9d5afe3d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new route using data below:
