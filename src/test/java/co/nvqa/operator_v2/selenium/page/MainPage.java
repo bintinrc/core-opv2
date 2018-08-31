@@ -5,6 +5,8 @@ import co.nvqa.operator_v2.util.TestConstants;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -104,6 +106,13 @@ public class MainPage extends OperatorV2SimplePage
         }
         String mainDashboard = grabEndURL(navTitle);
         clickNavigation(parentTitle, navTitle, mainDashboard);
+
+        if(navTitle.equalsIgnoreCase("Order Monitoring"))
+        {
+            LogEntries logEntries = getWebDriver().manage().logs().get(LogType.PERFORMANCE);
+            clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
+            throw new RuntimeException("Test");
+        }
     }
 
     public void openNavigationPanel()

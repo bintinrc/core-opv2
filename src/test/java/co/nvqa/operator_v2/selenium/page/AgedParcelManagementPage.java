@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
@@ -35,13 +35,13 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
         String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
         Assert.assertEquals("Tracking ID", trackingId, actualTrackingId);
 
-        if (StringUtils.isNotBlank(shipperName))
+        if(StringUtils.isNotBlank(shipperName))
         {
             String actualShipper = getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER);
             Assert.assertEquals("Shipper", shipperName, actualShipper);
         }
 
-        if (StringUtils.isNotBlank(daysSinceInbound))
+        if(StringUtils.isNotBlank(daysSinceInbound))
         {
             String actualDaysSinceInbound = getTextOnTable(1, COLUMN_CLASS_DAYS_SINCE_INBOUD);
             Assert.assertThat("Days since inbound", actualDaysSinceInbound, Matchers.equalToIgnoringCase(daysSinceInbound));
@@ -63,20 +63,25 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
     @SuppressWarnings("unchecked")
     public void loadSelection(String shipperName, String trackingId, Integer agedDays)
     {
-        TestUtils.retryIfRuntimeExceptionOccurred(()->
+        TestUtils.retryIfNvTestRuntimeExceptionOccurred(()->
         {
-            if(!isElementExistFast(String.format("//button[contains(@aria-label,'%s')]", TestConstants.SHIPPER_V2_NAME)))
+            if(!isElementExistFast(String.format("//button[contains(@aria-label,'%s')]", shipperName)))
             {
-                if (StringUtils.isNotBlank(shipperName))
+                if(StringUtils.isNotBlank(shipperName))
                 {
                     selectValueFromNvAutocompleteByItemTypesAndDismiss("Shipper", shipperName);
-                } else {
+                }
+                else
+                {
                     removeNvFilterBoxByMainTitle("Shipper");
                 }
-                if (agedDays != null)
+
+                if(agedDays!=null)
                 {
                     sendKeysByAriaLabel("Aged Days", String.valueOf(agedDays));
-                } else {
+                }
+                else
+                {
                     removeNvFilterBoxByMainTitle("Aged Days");
                 }
             }
@@ -87,7 +92,7 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
             if(isTableEmpty())
             {
                 clickButtonByAriaLabel("Edit Conditions");
-                throw new RuntimeException(String.format("Order with tracking ID = '%s' is not listed on table.", trackingId));
+                throw new NvTestRuntimeException(String.format("Order with tracking ID = '%s' is not listed on table.", trackingId));
             }
         }, String.format("%s - [Tracking ID = %s]", getCurrentMethodName(), trackingId));
     }
