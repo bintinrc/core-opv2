@@ -117,7 +117,6 @@ public class GlobalInboundPage extends OperatorV2SimplePage
             String lastScannedTrackingId = lastScanned.split(":")[1].trim();
             Assert.assertEquals("Last Scanned Tracking ID", trackingId, lastScannedTrackingId);
         }, "Checking Last Scanned Tracking ID");
-        throw new RuntimeException("Test");
     }
 
     @SuppressWarnings("WeakerAccess")
