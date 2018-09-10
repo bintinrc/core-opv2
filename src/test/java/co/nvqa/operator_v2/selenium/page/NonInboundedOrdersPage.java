@@ -38,19 +38,21 @@ public class NonInboundedOrdersPage extends OperatorV2SimplePage
         applyActionsMenu = new ApplyActionsMenu(webDriver);
     }
 
-    public OrdersTable ordersTable(){
+    public OrdersTable ordersTable()
+    {
         return ordersTable;
     }
 
     public void filterAndLoadSelection(Date fromDate, String shipper)
     {
         waitUntilPageLoaded();
-        if (fromDate != null)
+
+        if(fromDate!=null)
         {
             setMdDatepicker("fromModel", fromDate);
         }
 
-        if (StringUtils.isNotBlank(shipper))
+        if(StringUtils.isNotBlank(shipper))
         {
             selectValueFromNvAutocompleteByItemTypes("Shipper Select", shipper);
         }
@@ -63,14 +65,17 @@ public class NonInboundedOrdersPage extends OperatorV2SimplePage
         clickNvApiTextButtonByNameAndWaitUntilDone(LOCATOR_BUTTON_LOAD_SELECTION);
     }
 
-    public void filterBy(String columnName, String value){
-        if (isElementExist(String.format("//*[@name='%s']", LOCATOR_BUTTON_LOAD_SELECTION), 0)){
+    public void filterBy(String columnName, String value)
+    {
+        if(isElementExist(String.format("//*[@name='%s']", LOCATOR_BUTTON_LOAD_SELECTION), 0))
+        {
             clickLoadSelectionButtonAndWaitUntilDone();
         }
         ordersTable.filterByColumn(columnName, value);
     }
 
-    public void cancelOrders(List<String> trackingIds){
+    public void cancelOrders(List<String> trackingIds)
+    {
         ordersTable.selectEntities(COLUMN_TRACKING_ID, trackingIds);
         applyActionsMenu.chooseItem(CANCEL_ORDER);
 
@@ -92,12 +97,14 @@ public class NonInboundedOrdersPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast("updated");
     }
 
-    public void dowloadCsvFile(List<String> trackingIds){
+    public void dowloadCsvFile(List<String> trackingIds)
+    {
         ordersTable.selectEntities(COLUMN_TRACKING_ID, trackingIds);
         applyActionsMenu.chooseItem(DOWNLOAD_CSV_FILE);
     }
 
-    public void verifyOrderDetails(String trackingId, NonInboundedOrder expectedOrderDetails){
+    public void verifyOrderDetails(String trackingId, NonInboundedOrder expectedOrderDetails)
+    {
         filterBy(COLUMN_TRACKING_ID, trackingId);
         NonInboundedOrder actualOrderDetails = ordersTable.readEntity(1);
         expectedOrderDetails.compareWithActual(actualOrderDetails);
@@ -117,7 +124,8 @@ public class NonInboundedOrdersPage extends OperatorV2SimplePage
                 params -> params
         ));
 
-        trackingIds.forEach(trackingId -> {
+        trackingIds.forEach(trackingId ->
+        {
             filterBy(COLUMN_TRACKING_ID, trackingId);
             NonInboundedOrder expectedOrderDetails = ordersTable.readEntity(1);
             NonInboundedOrder actualOrderDetails = actualMap.get(trackingId);
@@ -195,5 +203,4 @@ public class NonInboundedOrdersPage extends OperatorV2SimplePage
             clickMdMenuItem(PARENT_MENU_NAME, action.getName());
         }
     }
-
 }

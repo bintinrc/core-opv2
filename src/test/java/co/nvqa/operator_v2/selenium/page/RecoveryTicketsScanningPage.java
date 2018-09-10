@@ -27,7 +27,7 @@ public class RecoveryTicketsScanningPage extends OperatorV2SimplePage {
         String ticketType = recoveryTicketsScanning.getTicketType();
 
         if(TICKET_TYPE_DAMAGED.equals(ticketType)) {
-            fillTheForm(trackingId, recoveryTicketsScanning, true);
+            fillTheForm(trackingId, recoveryTicketsScanning, false);
         }
         else if(TICKET_TYPE_MISSING.equals(ticketType)) {
             fillTheForm(trackingId, recoveryTicketsScanning, false);

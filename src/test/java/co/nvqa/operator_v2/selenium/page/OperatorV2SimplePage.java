@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common_selenium.page.SimplePage;
+import co.nvqa.commons.utils.NvAllure;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.StandardTestUtils;
@@ -284,7 +285,8 @@ public class OperatorV2SimplePage extends SimplePage
         }
         catch(RuntimeException ex)
         {
-            NvLogger.warn("Failed to get text from element Toast.");
+            NvLogger.warnf("Failed to get text from element Toast. XPath: %s", toastXpathExpression);
+            NvAllure.addWarnAttachment(getCurrentMethodName(), "Failed to get text from element Toast. XPath: %s", toastXpathExpression);
         }
 
         return text;
@@ -313,11 +315,10 @@ public class OperatorV2SimplePage extends SimplePage
     public String getTextOnTableWithMdVirtualRepeat(int rowNumber, String columnDataClass, String mdVirtualRepeat, XpathTextMode xpathTextMode, String nvTableParam)
     {
         String text = null;
+        String nvTableXpathExpression = "";
 
         try
         {
-            String nvTableXpathExpression = "";
-
             if(!isBlank(nvTableParam))
             {
                 nvTableXpathExpression = String.format("//nv-table[@param='%s']", nvTableParam);
@@ -337,7 +338,8 @@ public class OperatorV2SimplePage extends SimplePage
         }
         catch(NoSuchElementException ex)
         {
-            NvLogger.warn("Failed to find element by XPath.");
+            NvLogger.warnf("Failed to find element by XPath. XPath: %s", nvTableXpathExpression);
+            NvAllure.addWarnAttachment(getCurrentMethodName(), "Failed to find element by XPath. XPath: %s", nvTableXpathExpression);
         }
 
         return text;
@@ -433,42 +435,51 @@ public class OperatorV2SimplePage extends SimplePage
 
     public int getRowsCountOfTableWithNgRepeat(String ngRepeat)
     {
+        String xpath = String.format("//tr[@ng-repeat='%s']", ngRepeat);
+
         try
         {
-            List<WebElement> webElements = findElementsByXpath(String.format("//tr[@ng-repeat='%s']", ngRepeat));
+            List<WebElement> webElements = findElementsByXpath(xpath);
             return webElements.size();
         }
         catch(NoSuchElementException ex)
         {
-            NvLogger.warn("Table with NgRepeat [" + ngRepeat + "] was not found");
+            NvLogger.warnf("Table with NgRepeat [%s] was not found. XPath: %s", ngRepeat, xpath);
+            NvAllure.addWarnAttachment(getCurrentMethodName(), "Table with NgRepeat [%s] was not found. XPath: %s", ngRepeat, xpath);
             return 0;
         }
     }
 
     public int getRowsCountOfTableWithMdVirtualRepeat(String mdVirtualRepeat)
     {
+        String xpath = String.format("//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))]", mdVirtualRepeat);
+
         try
         {
-            List<WebElement> webElements = findElementsByXpath(String.format("//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))]", mdVirtualRepeat));
+            List<WebElement> webElements = findElementsByXpath(xpath);
             return webElements.size();
         }
         catch(NoSuchElementException | TimeoutException ex)
         {
-            NvLogger.warn("Table with md-virtual-repeat [" + mdVirtualRepeat + "] was not found");
+            NvLogger.warnf("Table with md-virtual-repeat [%s] was not found. XPath: %s", mdVirtualRepeat, xpath);
+            NvAllure.addWarnAttachment(getCurrentMethodName(), "Table with md-virtual-repeat [%s] was not found. XPath: %s", mdVirtualRepeat, xpath);
             return 0;
         }
     }
 
     public int getRowsCountOfTableWithMdVirtualRepeatFast(String mdVirtualRepeat)
     {
+        String xpath = String.format("//tr[@md-virtual-repeat='%s']", mdVirtualRepeat);
+
         try
         {
-            List<WebElement> webElements = findElementsByXpathFast(String.format("//tr[@md-virtual-repeat='%s']", mdVirtualRepeat));
+            List<WebElement> webElements = findElementsByXpathFast(xpath);
             return webElements.size();
         }
         catch(NoSuchElementException | TimeoutException ex)
         {
-            NvLogger.warn("Table with md-virtual-repeat [" + mdVirtualRepeat + "] was not found");
+            NvLogger.warnf("Table with md-virtual-repeat [%s] was not found. XPath: %s", mdVirtualRepeat, xpath);
+            NvAllure.addWarnAttachment(getCurrentMethodName(), "Table with md-virtual-repeat [%s] was not found. XPath: %s", mdVirtualRepeat, xpath);
             return 0;
         }
     }
@@ -481,15 +492,17 @@ public class OperatorV2SimplePage extends SimplePage
     public String getSelectedValueOfMdAutocompleteOnTableWithNgRepeat(int rowNumber, String columnAttributeName, String attributeValue, String ngRepeat)
     {
         String value = null;
+        String xpath = String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@%s, \"%s\")]/nv-autocomplete//input", ngRepeat, rowNumber, columnAttributeName, attributeValue);
 
         try
         {
-            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@%s, \"%s\")]/nv-autocomplete//input", ngRepeat, rowNumber, columnAttributeName, attributeValue));
+            WebElement we = findElementByXpath(xpath);
             value = we.getAttribute("value").trim();
         }
         catch(NoSuchElementException ex)
         {
-            NvLogger.warn("Failed to getTextOnTableWithNgRepeat.");
+            NvLogger.warnf("Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
+            NvAllure.addWarnAttachment(getCurrentMethodName(), "Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
         }
 
         return value;
@@ -503,15 +516,17 @@ public class OperatorV2SimplePage extends SimplePage
     public String getTextOnTableWithNgRepeat(int rowNumber, String columnAttributeName, String attributeValue, String ngRepeat)
     {
         String text = null;
+        String xpath = String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@%s, \"%s\")]", ngRepeat, rowNumber, columnAttributeName, attributeValue);
 
         try
         {
-            WebElement we = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@%s, \"%s\")]", ngRepeat, rowNumber, columnAttributeName, attributeValue));
+            WebElement we = findElementByXpath(xpath);
             text = we.getText().trim();
         }
         catch(NoSuchElementException ex)
         {
-            NvLogger.warn("Failed to getTextOnTableWithNgRepeat.");
+            NvLogger.warnf("Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
+            NvAllure.addWarnAttachment(getCurrentMethodName(), "Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
         }
 
         return text;
@@ -952,15 +967,18 @@ public class OperatorV2SimplePage extends SimplePage
 
     public boolean isTableEmpty(String tableXpath)
     {
+        String xpath = null;
+
         try
         {
-            String xpath = tableXpath + "//h5[text()='No Results Found']";
+            xpath = tableXpath + "//h5[text()='No Results Found']";
             WebElement webElement = findElementByXpath(xpath, FAST_WAIT_IN_SECONDS);
             return webElement != null && webElement.isDisplayed();
         }
         catch(TimeoutException ex)
         {
-            NvLogger.warn("Table is not empty.");
+            NvLogger.warnf("Table is not empty. XPath: %s", xpath);
+            NvAllure.addWarnAttachment(getCurrentMethodName(), "Table is not empty. XPath: %s", xpath);
             return false;
         }
     }

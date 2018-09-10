@@ -14,7 +14,7 @@ Feature: COD Report
     When Operator filter COD Report by Mode = "Get CODs For A Day" and Date = "{gradle-current-date-yyyy-MM-dd}"
     Then Operator verify order is exist on COD Report table with correct info
 
-  @ArchiveRouteViaDb
+  @DeleteOrArchiveRoute
   Scenario: Operator is able to load Driver CODs For A Route Day and verify the created order is exist and contains correct info (uid:c03caac5-c0e9-470d-a740-ef3fcdc9a835)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -42,7 +42,7 @@ Feature: COD Report
     When API Operator get order details
     Then Operator verify the downloaded COD Report data is correct
 
-  @ArchiveRouteViaDb
+  @DeleteOrArchiveRoute
   Scenario: Operator is able to download Driver CODs For A Route Day and verify the data is correct (uid:92b275ec-79ee-4162-bd72-2923736f5460)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:

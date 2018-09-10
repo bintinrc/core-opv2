@@ -3,9 +3,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.addressing.JaroScore;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
+import co.nvqa.commons.model.other.LatLong;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.BulkAddressVerificationPage;
-import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import cucumber.api.java.en.When;
 
@@ -35,20 +35,22 @@ public class BulkAddressVerificationSteps extends AbstractSteps
     }
 
     @When("^Operator upload bulk address CSV using data below:$")
-    public void operatorUploadBulkAddressCSV(Map<String, String> data) throws Throwable
+    public void operatorUploadBulkAddressCSV(Map<String, String> data)
     {
         String waypoint = data.getOrDefault("waypoint", "");
         List<JaroScore> jaroScores = new ArrayList<>();
-        switch (waypoint.toUpperCase())
+
+        switch(waypoint.toUpperCase())
         {
             case "FROM_CREATED_ORDER_DETAILS":
                 List<Order> ordersDetails = get(KEY_LIST_OF_ORDER_DETAILS);
-                ordersDetails.forEach(od -> {
+                ordersDetails.forEach(od ->
+                {
                     List<Transaction> deliveryTransactions =
                             od.getTransactions().stream()
                                     .filter(transaction -> "delivery".equalsIgnoreCase(transaction.getType()))
                                     .collect(Collectors.toList());
-                    Transaction transaction = deliveryTransactions.get(deliveryTransactions.size() - 1);
+                    Transaction transaction = deliveryTransactions.get(deliveryTransactions.size()-1);
                     JaroScore jaroScore = new JaroScore();
                     jaroScore.setWaypointId(transaction.getWaypointId());
                     jaroScore.setVerifiedAddressId("BULK_VERIFY");
@@ -63,23 +65,26 @@ public class BulkAddressVerificationSteps extends AbstractSteps
         }
 
         String latitude = data.getOrDefault("latitude", "");
-        switch (latitude.toUpperCase())
+        LatLong randomLatLong = generateRandomLatLong();
+
+        switch(latitude.toUpperCase())
         {
             case "GENERATED":
-                jaroScores.forEach(jaroScore -> jaroScore.setLatitude(TestUtils.generateLatitude()));
+                jaroScores.forEach(jaroScore -> jaroScore.setLatitude(randomLatLong.getLatitude()));
                 break;
             default:
-                jaroScores.forEach(jaroScore -> jaroScore.setLatitude(Long.parseLong(latitude)));
+                jaroScores.forEach(jaroScore -> jaroScore.setLatitude(Double.parseDouble(latitude)));
         }
 
         String longitude = data.getOrDefault("longitude", "");
-        switch (longitude.toUpperCase())
+
+        switch(longitude.toUpperCase())
         {
             case "GENERATED":
-                jaroScores.forEach(jaroScore -> jaroScore.setLongitude(TestUtils.generateLongitude()));
+                jaroScores.forEach(jaroScore -> jaroScore.setLongitude(randomLatLong.getLongitude()));
                 break;
             default:
-                jaroScores.forEach(jaroScore -> jaroScore.setLongitude(Long.parseLong(longitude)));
+                jaroScores.forEach(jaroScore -> jaroScore.setLongitude(Double.parseDouble(longitude)));
         }
 
         put(KEY_LIST_OF_CREATED_JARO_SCORES, jaroScores);

@@ -61,6 +61,7 @@ public class FailedDeliveryManagementPage extends CommonParcelManagementPage
 
     public void verifyOrderIsRemovedFromTableAfterReschedule(String trackingId)
     {
+        refreshPage();
         searchTableByTrackingId(trackingId);
         boolean isTableEmpty = isTableEmpty();
         Assert.assertTrue(String.format("Tracking ID '%s' is still listed on failed order list.", trackingId), isTableEmpty);

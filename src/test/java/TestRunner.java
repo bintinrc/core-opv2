@@ -10,24 +10,24 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Cucumber.class)
 @CucumberOptions
-(
-    plugin =
-    {
-        "pretty",
-        "html:build/reports/cucumber-junit/htmloutput",
-        "json:build/reports/cucumber-junit/cucumber.json",
-        "junit:build/reports/cucumber-junit/cucumber.xml"
-    },
-    monochrome = true,
-    glue =
-    {
-        "com.nv.qa.cucumber.glue"
-    },
-    features =
-    {
-        "src/test/resources/cucumber/feature"
-    }
-)
+        (
+                plugin =
+                        {
+                                "pretty",
+                                "html:build/reports/cucumber-junit/htmloutput",
+                                "json:build/reports/cucumber-junit/cucumber.json",
+                                "junit:build/reports/cucumber-junit/cucumber.xml"
+                        },
+                monochrome = true,
+                glue =
+                        {
+                                "com.nv.qa.cucumber.glue"
+                        },
+                features =
+                        {
+                                "src/test/resources/cucumber/feature"
+                        }
+        )
 public class TestRunner
 {
     @SuppressWarnings("EmptyMethod")

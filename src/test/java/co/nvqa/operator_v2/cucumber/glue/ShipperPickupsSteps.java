@@ -281,18 +281,20 @@ public class ShipperPickupsSteps extends AbstractSteps
         shipperPickupsPage.verifyReservationsInfo(get(KEY_LIST_OF_DUPLICATED_RESERVATIONS_INFO), get(KEY_LIST_OF_CREATED_ADDRESSES));
     }
 
-    @And("^Operator use the Route Suggestion to add created reservation to the route$")
-    public void operatorUseTheRouteSuggestionToAddCreatedReservationToTheRoute()
+    @And("^Operator use the Route Suggestion to add created reservation to the route using data below:$")
+    public void operatorUseTheRouteSuggestionToAddCreatedReservationToTheRoute(Map<String,String> dataTableAsMap)
     {
         Address address = get(KEY_CREATED_ADDRESS);
-        addRouteViaRouteSuggestion(Collections.singletonList(address), Collections.singletonList("ZZZ"));
+        String routeTagName = dataTableAsMap.get("routeTagName");
+        addRouteViaRouteSuggestion(Collections.singletonList(address), Collections.singletonList(routeTagName));
     }
 
-    @And("^Operator use the Route Suggestion to add created reservations to the route$")
-    public void operatorUseTheRouteSuggestionToAddCreatedReservationsToTheRoute()
+    @And("^Operator use the Route Suggestion to add created reservations to the route using data below:$")
+    public void operatorUseTheRouteSuggestionToAddCreatedReservationsToTheRoute(Map<String,String> dataTableAsMap)
     {
         List<Address> addresses = get(KEY_LIST_OF_CREATED_ADDRESSES);
-        addRouteViaRouteSuggestion(addresses, Collections.singletonList("ZZZ"));
+        String routeTagName = dataTableAsMap.get("routeTagName");
+        addRouteViaRouteSuggestion(addresses, Collections.singletonList(routeTagName));
     }
 
     private void addRouteViaRouteSuggestion(List<Address> addresses, List<String> routeTags)

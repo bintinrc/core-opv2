@@ -27,6 +27,14 @@ public class BulkAddToRoutePage extends OperatorV2SimplePage
         selectMultipleValuesFromMdSelectById("select-route-group(s)", routeGroupName);
     }
 
+    public void unselectTag(String tagName)
+    {
+        if(isElementExistFast(String.format("//md-switch[@aria-label='%s'][@aria-checked='true']", tagName)))
+        {
+            selectTag(tagName); //By clicking the tag, the tag will be switched to false.
+        }
+    }
+
     public void selectTag(String tagName)
     {
         clickf("//md-switch[@aria-label='%s']", tagName);

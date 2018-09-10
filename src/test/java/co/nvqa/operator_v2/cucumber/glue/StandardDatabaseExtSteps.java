@@ -4,6 +4,7 @@ import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
 import co.nvqa.commons.model.addressing.JaroScore;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
+import co.nvqa.commons.model.core.Waypoint;
 import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.commons.model.entity.DriverEntity;
 import co.nvqa.commons.model.entity.InboundScanEntity;
@@ -73,14 +74,16 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     public void operatorVerifyJaroScoresAreCreatedSuccessfully()
     {
         List<JaroScore> jaroScores = get(KEY_LIST_OF_CREATED_JARO_SCORES);
+
         jaroScores.forEach(jaroScore ->
         {
-            List<JaroScore> actualJaroScores = getAddressingJdbc().getJaroScores(jaroScore.getWaypointId());
+            List<JaroScore> actualJaroScores = getCoreJdbc().getJaroScores(jaroScore.getWaypointId());
             Assert.assertEquals("Number of rows in DB", 2, actualJaroScores.size());
-            JaroScore newJaroScore = actualJaroScores.get(actualJaroScores.size() - 1);
-            Assert.assertEquals("Latitude", jaroScore.getLatitude(), newJaroScore.getLatitude(), 0);
-            Assert.assertEquals("Longitude", jaroScore.getLongitude(), newJaroScore.getLongitude(), 0);
-            Assert.assertEquals("Verified Address Id", jaroScore.getVerifiedAddressId(), newJaroScore.getVerifiedAddressId());
+
+            Waypoint actualWaypoint = getCoreJdbc().getWaypoint(jaroScore.getWaypointId());
+            Assert.assertNotNull("Actual waypoint from DB should not be null.", actualWaypoint);
+            Assert.assertEquals("Latitude", jaroScore.getLatitude(), actualWaypoint.getLatitude(), 0);
+            Assert.assertEquals("Longitude", jaroScore.getLongitude(), actualWaypoint.getLongitude(), 0);
         });
     }
 

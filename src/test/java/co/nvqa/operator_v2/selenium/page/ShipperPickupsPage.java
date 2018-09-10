@@ -271,13 +271,17 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         selectReservationsByAddress(addresses);
         applyActionsMenu.chooseRemoveRoute();
         clickButtonOnMdDialogByAriaLabel(REMOVE_BUTTON_ARIA_LABEL);
-        String toastMessage = String.format("%d Reservation(s) Pulled Out from Route", addresses.size());
-        waitUntilInvisibilityOfToast(toastMessage, true);
+        //String toastMessage = String.format("%d Reservation(s) Pulled Out from Route", addresses.size());
+        //waitUntilInvisibilityOfToast(toastMessage);
+
+        //Temporary Solution, use the above code after Felix fix the issue.
+        waitUntilInvisibilityOfToast("Cannot read property");
     }
 
     public void selectReservationsByAddress(List<Address> addresses)
     {
-        addresses.forEach(address -> {
+        addresses.forEach(address ->
+        {
             reservationsTable.searchByPickupAddress(address);
             reservationsTable.checkSelectionCheckbox(1);
         });

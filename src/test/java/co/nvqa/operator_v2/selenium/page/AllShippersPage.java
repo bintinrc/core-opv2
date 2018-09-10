@@ -57,7 +57,7 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void verifyNewShipperIsCreatedSuccessfully(Shipper shipper)
     {
-        verifyShipperInfoIsCorrect(shipper.getShortName(), shipper);
+        verifyShipperInfoIsCorrect(shipper.getName(), shipper);
     }
 
     public void verifyShipperInfoIsCorrect(String shipperNameKeyword, Shipper shipper)
@@ -73,6 +73,12 @@ public class AllShippersPage extends OperatorV2SimplePage
         String actualContact = getTextOnTable(1, COLUMN_CLASS_DATA_CONTACT);
         String actualSalesPerson = getTextOnTable(1, COLUMN_CLASS_DATA_SALES_PERSON);
         String actualStatus = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
+
+        switch(actualStatus)
+        {
+            case "container.shippers.active": actualStatus = "Active"; break;
+            case "container.shippers.inactive": actualStatus = "Inactive"; break;
+        }
 
         shipper.setLegacyId(actualLegacyId);
 

@@ -47,6 +47,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
         String liability = mapOfData.get("liability");
         String damageDescription = mapOfData.get("damageDescription");
         String orderOutcomeDamaged = mapOfData.get("orderOutcomeDamaged");
+        String orderOutcomeMissing = mapOfData.get("orderOutcomeMissing");
         String custZendeskId = mapOfData.get("custZendeskId");
         String shipperZendeskId = mapOfData.get("shipperZendeskId");
         String ticketNotes = mapOfData.get("ticketNotes");
@@ -59,7 +60,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
 
         if("GENERATED".equals(ticketNotes))
         {
-            ticketNotes = String.format("This ticket description is created by automation at %s.", CREATED_DATE_SDF.format(new Date()));
+            ticketNotes = String.format("This ticket notes is created by automation at %s.", CREATED_DATE_SDF.format(new Date()));
         }
 
         if("GENERATED".equals(parcelDescription))
@@ -78,6 +79,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
         recoveryTicket.setLiability(liability);
         recoveryTicket.setDamageDescription(damageDescription);
         recoveryTicket.setOrderOutcomeDamaged(orderOutcomeDamaged);
+        recoveryTicket.setOrderOutcomeMissing(orderOutcomeMissing);
         recoveryTicket.setCustZendeskId(custZendeskId);
         recoveryTicket.setShipperZendeskId(shipperZendeskId);
         recoveryTicket.setTicketNotes(ticketNotes);

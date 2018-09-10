@@ -5,7 +5,7 @@ Feature: Add Parcel To Route
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveRouteViaDb
+  @DeleteOrArchiveRoute
   Scenario: Add Parcel To Route (uid:f0213ffe-ff22-43cd-89e3-9f3abbe581e6)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |

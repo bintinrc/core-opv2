@@ -31,9 +31,9 @@ public class UserManagementSteps extends AbstractSteps {
         String uniqueCode = generateDateUniqueString();
 
         UserManagement userManagement = new UserManagement();
-        userManagement.setEmail(String.format("AUTOMATION%s@gmail.com", uniqueCode));
+        userManagement.setEmail(String.format("automation.%s@gmail.com", uniqueCode));
         userManagement.setGrantType("GOOGLE_SSO");
-        userManagement.setFirstName("AUTOMATION");
+        userManagement.setFirstName("Automation");
         userManagement.setLastName(uniqueCode);
         userManagement.setRoles("SUPER_USERS");
         userManagementPage.createUser(userManagement);

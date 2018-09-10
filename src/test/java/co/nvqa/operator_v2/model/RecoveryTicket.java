@@ -16,6 +16,7 @@ public class RecoveryTicket
     private String liability;
     private String damageDescription;
     private String orderOutcomeDamaged;
+    private String orderOutcomeMissing;
     private String ticketNotes;
     private String custZendeskId;
     private String shipperZendeskId;
@@ -123,6 +124,16 @@ public class RecoveryTicket
     public void setOrderOutcomeDamaged(String orderOutcomeDamaged)
     {
         this.orderOutcomeDamaged = orderOutcomeDamaged;
+    }
+
+    public String getOrderOutcomeMissing()
+    {
+        return orderOutcomeMissing;
+    }
+
+    public void setOrderOutcomeMissing(String orderOutcomeMissing)
+    {
+        this.orderOutcomeMissing = orderOutcomeMissing;
     }
 
     public String getTicketNotes()
