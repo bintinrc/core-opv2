@@ -1,26 +1,27 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
 import com.google.inject.Inject;
+import cucumber.api.PendingException;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
+import java.util.Map;
+
 /**
- *
  * @author Lanang Jati
- *
+ * <p>
  * Modified by Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
 public class ShipmentManagementSteps extends AbstractSteps
 {
     private ShipmentManagementPage shipmentManagementPage;
-    private String start = "";
-    private String end = "";
-    private String comment = "";
 
     @Inject
     public ShipmentManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
@@ -32,13 +33,6 @@ public class ShipmentManagementSteps extends AbstractSteps
     public void init()
     {
         shipmentManagementPage = new ShipmentManagementPage(getWebDriver());
-    }
-
-    @When("^Operator create Shipment with Start Hub ([^\"]*), End hub ([^\"]*) and comment ([^\"]*)$")
-    public void createShipment(String startHub, String endHub, String comment)
-    {
-        String id = shipmentManagementPage.createShipment(startHub, endHub, comment);
-        put(KEY_SHIPMENT_ID, id);
     }
 
     @When("^Operator click \"Load All Selection\" on Shipment Management page$")
@@ -53,52 +47,10 @@ public class ShipmentManagementSteps extends AbstractSteps
         String shipmentId = get(KEY_SHIPMENT_ID);
         shipmentManagementPage.clickActionButton(shipmentId, actionButton);
 
-        if("Force".equals(actionButton))
+        if ("Force".equals(actionButton))
         {
             shipmentManagementPage.waitUntilForceToastDisappear(shipmentId);
         }
-    }
-
-    @When("^Operator edit Shipment with Start Hub ([^\"]*), End hub ([^\"]*) and comment ([^\"]*)$")
-    public void editShipment(String startHub, String endHub, String newComment)
-    {
-        String shipmentId = get(KEY_SHIPMENT_ID);
-        shipmentManagementPage.selectStartHub(startHub);
-        shipmentManagementPage.selectEndHub(endHub);
-        shipmentManagementPage.fillFieldComments(newComment);
-        shipmentManagementPage.clickButtonSaveChangesOnEditShipmentDialog(shipmentId);
-
-        start = startHub;
-        end = endHub;
-        comment = newComment;
-    }
-
-    @Then("^Operator verify the shipment is edited successfully$")
-    public void shipmentEdited()
-    {
-        String shipmentId = get(KEY_SHIPMENT_ID);
-        shipmentManagementPage.verifyShipmentUpdatedSuccessfully(shipmentId, start, end, comment);
-    }
-
-    @Then("^Operator verify the shipment status is ([^\"]*)$")
-    public void checkStatus(String expectedStatus)
-    {
-        String shipmentId = get(KEY_SHIPMENT_ID);
-        shipmentManagementPage.checkStatus(shipmentId, expectedStatus);
-    }
-
-    @When("^Operator click \"Cancel Shipment\" button on Shipment Management page$")
-    public void clickCancelShipmentButton()
-    {
-        String shipmentId = get(KEY_SHIPMENT_ID);
-        shipmentManagementPage.clickCancelShipmentButton(shipmentId);
-    }
-
-    @Then("^Operator verify the Shipment is deleted successfully$")
-    public void isShipmentDeleted()
-    {
-        String shipmentId = get(KEY_SHIPMENT_ID);
-        shipmentManagementPage.verifyShipmentDeletedSuccessfully(shipmentId);
     }
 
     @When("^Operator filter ([^\"]*) = ([^\"]*) on Shipment Management page$")
@@ -119,8 +71,7 @@ public class ShipmentManagementSteps extends AbstractSteps
         try
         {
             shipmentManagementPage.shipmentScanExist(source, hub);
-        }
-        finally
+        } finally
         {
             shipmentManagementPage.closeScanModal();
         }
@@ -137,5 +88,60 @@ public class ShipmentManagementSteps extends AbstractSteps
     public void operatorClearAllFiltersOnShipmentManagementPage()
     {
         shipmentManagementPage.clearAllFilters();
+    }
+
+    @When("^Operator create Shipment on Shipment Management page using data below:$")
+    public void operatorCreateShipmentOnShipmentManagementPageUsingDataBelow(Map<String, String> mapOfData)
+    {
+        ShipmentInfo shipmentInfo = new ShipmentInfo();
+        shipmentInfo.fromMap(mapOfData);
+        shipmentManagementPage.createShipment(shipmentInfo);
+        put(KEY_SHIPMENT_INFO, shipmentInfo);
+        put(KEY_SHIPMENT_ID, shipmentInfo.getId());
+    }
+
+    @When("^Operator edit Shipment on Shipment Management page using data below:$")
+    public void operatorEditShipmentOnShipmentManagementPageUsingDataBelow(Map<String, String> mapOfData)
+    {
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+        shipmentInfo.fromMap(mapOfData);
+        shipmentManagementPage.editShipment(shipmentInfo);
+    }
+
+    @Then("^Operator verify parameters of the created shipment on Shipment Management page$")
+    public void operatorVerifyParametersOfTheCreatedShipmentOnShipmentManagementPage()
+    {
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+        shipmentManagementPage.validateShipmentInfo(shipmentInfo.getId(), shipmentInfo);
+    }
+
+    @Then("^Operator verify the following parameters of the created shipment on Shipment Management page:$")
+    public void operatorVerifyTheFollowingParametersOfTheCreatedShipmentOnShipmentManagementPage(Map<String, String> mapOfData)
+    {
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+        ShipmentInfo expectedShipmentInfo = new ShipmentInfo();
+        expectedShipmentInfo.fromMap(mapOfData);
+        shipmentManagementPage.validateShipmentInfo(shipmentInfo.getId(), expectedShipmentInfo);
+    }
+
+    @When("^Operator click \"([^\"]*)\" action button for the created shipment on Shipment Management page$")
+    public void operatorClickActionButtonForTheCreatedShipmentOnShipmentManagementPage(String actionId)
+    {
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+        shipmentManagementPage.clickActionButton(shipmentInfo.getId(), actionId);
+    }
+
+    @And("^Operator force success the created shipment on Shipment Management page$")
+    public void operatorForceSuccessTheCreatedShipmentOnShipmentManagementPage()
+    {
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+        shipmentManagementPage.forceSuccessShipment(shipmentInfo.getId());
+    }
+
+    @And("^Operator cancel the created shipment on Shipment Management page$")
+    public void operatorCancelTheCreatedShipmentOnShipmentManagementPage()
+    {
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+        shipmentManagementPage.cancelShipment(shipmentInfo.getId());
     }
 }

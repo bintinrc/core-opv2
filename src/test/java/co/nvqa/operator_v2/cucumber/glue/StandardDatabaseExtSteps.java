@@ -16,6 +16,7 @@ import co.nvqa.operator_v2.model.CreateRouteParams;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.DriverTypeParams;
+import co.nvqa.operator_v2.model.ShipmentInfo;
 import com.google.inject.Inject;
 import cucumber.api.java.After;
 import cucumber.api.java.en.And;
@@ -61,7 +62,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
         Long driverTypeId = driverTypeParams.getDriverTypeId();
 
-        for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
+        for (CreateRouteParams createRouteParams : listOfCreateRouteParams)
         {
             long routeId = createRouteParams.getCreatedRoute().getId();
             List<RouteDriverTypeEntity> listOfRouteDriverTypeEntity = getRouteJdbc().findRouteDriverTypeByRouteIdAndNotDeleted(routeId);
@@ -124,14 +125,14 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
         String value = mapOfData.get("hubId");
 
-        if(StringUtils.isNotBlank(value))
+        if (StringUtils.isNotBlank(value))
         {
             Assert.assertEquals("Hub ID", Long.valueOf(value), theLastInboundScan.getHubId());
         }
 
         value = mapOfData.get("type");
 
-        if(StringUtils.isNotBlank(value))
+        if (StringUtils.isNotBlank(value))
         {
             Assert.assertEquals("Type", Short.valueOf(value), theLastInboundScan.getType());
         }
@@ -142,7 +143,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     {
         DpPartner dpPartner = get(KEY_DP_PARTNER);
 
-        if(dpPartner!=null)
+        if (dpPartner != null)
         {
             getDpJdbc().deleteDpPartner(dpPartner.getName());
         }
@@ -153,7 +154,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     {
         DpPartner dpPartner = get(KEY_DP_PARTNER);
 
-        if(dpPartner!=null)
+        if (dpPartner != null)
         {
             getDpJdbc().deleteDp(dpPartner.getName());
             getDpJdbc().deleteDpPartner(dpPartner.getName());
@@ -165,7 +166,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     {
         DpPartner dpPartner = get(KEY_DP_PARTNER);
 
-        if(dpPartner!=null)
+        if (dpPartner != null)
         {
             getDpJdbc().deleteDpUser(dpPartner.getName());
             getDpJdbc().deleteDp(dpPartner.getName());
@@ -181,5 +182,16 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         driverInfo.setId(driverEntity.getId());
         driverInfo.setUuid(driverEntity.getUuid());
         put(KEY_CREATED_DRIVER_UUID, driverInfo.getUuid());
+    }
+
+    @After(value = "@DeleteShipment")
+    public void deleteShipment()
+    {
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+
+        if (shipmentInfo != null)
+        {
+            getShipmentJdbc().deleteShipment(Long.parseLong(shipmentInfo.getId()));
+        }
     }
 }
