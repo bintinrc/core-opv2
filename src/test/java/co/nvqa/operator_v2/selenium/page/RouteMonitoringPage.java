@@ -13,9 +13,13 @@ import org.openqa.selenium.WebDriver;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.isOneOf;
 
 /**
+ *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
@@ -56,13 +60,13 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
         waitUntilPageLoaded();
         setMdDatepicker("fromModel", routeMonitoringFilters.getRouteDate());
 
-        for (String hub : routeMonitoringFilters.getHubs())
+        for(String hub : routeMonitoringFilters.getHubs())
         {
             selectValueFromNvAutocompleteByItemTypes("Hubs", hub);
             click("//p[text()='Hubs']");
         }
 
-        for (String tag : routeMonitoringFilters.getRouteTags())
+        for(String tag : routeMonitoringFilters.getRouteTags())
         {
             selectValueFromNvAutocompleteByItemTypes("Route Tags", tag);
             click("//p[text()='Route Tags']");
@@ -103,7 +107,7 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
             switchToRouteManifestWindow(route.getId());
             routeManifestPage.waitUntilPageLoaded();
 
-            if (verifyDeliverySuccess)
+            if(verifyDeliverySuccess)
             {
                 routeManifestPage.verify1DeliveryIsSuccess(route, order);
             }
@@ -130,7 +134,7 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
             routeMonitoringTable.filterByRouteId(routeId);
             boolean isTableEmpty = isTableEmpty();
 
-            if (isTableEmpty)
+            if(isTableEmpty)
             {
                 refreshFilterResults();
                 throw new NvTestRuntimeException("Table is empty. Route not found.");
@@ -159,38 +163,43 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
     public void verifyRouteMonitoringParams(RouteMonitoringParams expectedRouteMonitoringParams)
     {
         searchTableByRouteIdUntilFound(expectedRouteMonitoringParams.getRouteId());
-
         RouteMonitoringParams actualRouteMonitoringParams = routeMonitoringTable.getRouteMonitoringParams(1);
-        if (expectedRouteMonitoringParams.getRouteId() != null)
+
+        if(expectedRouteMonitoringParams.getRouteId()!=null)
         {
             Assert.assertThat("Route ID", actualRouteMonitoringParams.getRouteId(), equalTo(expectedRouteMonitoringParams.getRouteId()));
         }
-        if (expectedRouteMonitoringParams.getTotalWaypoint() != null)
+
+        if(expectedRouteMonitoringParams.getTotalWaypoint()!=null)
         {
             Assert.assertThat("Total WP", actualRouteMonitoringParams.getTotalWaypoint(), equalTo(expectedRouteMonitoringParams.getTotalWaypoint()));
         }
-        if (expectedRouteMonitoringParams.getCompletionPercentage() != null)
+
+        if(expectedRouteMonitoringParams.getCompletionPercentage()!=null)
         {
             Assert.assertThat("Completion %", actualRouteMonitoringParams.getCompletionPercentage(), equalTo(expectedRouteMonitoringParams.getCompletionPercentage()));
         }
-        if (expectedRouteMonitoringParams.getPendingCount() != null)
+
+        if(expectedRouteMonitoringParams.getPendingCount()!=null)
         {
             Assert.assertThat("Pending Count", actualRouteMonitoringParams.getPendingCount(), equalTo(expectedRouteMonitoringParams.getPendingCount()));
         }
-        if (expectedRouteMonitoringParams.getSuccessCount() != null)
+
+        if(expectedRouteMonitoringParams.getSuccessCount()!=null)
         {
             List<Integer> actualValues = ImmutableList.of(
                     actualRouteMonitoringParams.getSuccessCount(),
                     actualRouteMonitoringParams.getEarlyCount(),
                     actualRouteMonitoringParams.getLateCount());
-            Assert.assertThat("Success Count or Early WP or Late WP", actualValues,
-                    hasItem(expectedRouteMonitoringParams.getSuccessCount()));
+            Assert.assertThat("Success Count or Early WP or Late WP", actualValues, hasItem(expectedRouteMonitoringParams.getSuccessCount()));
         }
-        if (expectedRouteMonitoringParams.getFailedCount() != null)
+
+        if(expectedRouteMonitoringParams.getFailedCount()!=null)
         {
             Assert.assertThat("Valid Failed", actualRouteMonitoringParams.getFailedCount(), equalTo(expectedRouteMonitoringParams.getFailedCount()));
         }
-        if (expectedRouteMonitoringParams.getCmiCount() != null)
+
+        if(expectedRouteMonitoringParams.getCmiCount()!=null)
         {
             Assert.assertThat("Invalid Failed", actualRouteMonitoringParams.getCmiCount(), equalTo(expectedRouteMonitoringParams.getCmiCount()));
         }
@@ -199,6 +208,7 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
     /**
      * Accessor for Reservations table
      */
+    @SuppressWarnings("UnusedReturnValue")
     public static class RouteMonitoringTable extends OperatorV2SimplePage
     {
         private static final String MD_VIRTUAL_REPEAT = "route in getTableData()";
@@ -221,6 +231,8 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
         public RouteMonitoringParams getRouteMonitoringParams(int rowIndex)
         {
             Assert.assertThat("Number of rows", getRowsCount(), greaterThanOrEqualTo(rowIndex));
+            moveToElementWithXpath(String.format("//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[starts-with(@class, '%s')]", MD_VIRTUAL_REPEAT, rowIndex, COLUMN_CLASS_LATE_WP));
+
             RouteMonitoringParams routeMonitoringParams = new RouteMonitoringParams();
             routeMonitoringParams.setRouteId(getId(rowIndex));
             routeMonitoringParams.setTotalWaypoint(getTotalWp(rowIndex));
