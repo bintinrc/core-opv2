@@ -16,7 +16,7 @@ import org.openqa.selenium.WebElement;
 @SuppressWarnings("WeakerAccess")
 public class ZonesPage extends OperatorV2SimplePage
 {
-    private static final String NG_REPEAT = "zone in getTableData()";
+    private static final String MD_VIRTUAL_REPEAT = "zone in getTableData()";
     private static final String CSV_FILENAME = "zones.csv";
     private static final String XPATH_OF_TOAST_ERROR_MESSAGE = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-bottom']/strong[4]";
 
@@ -235,11 +235,11 @@ public class ZonesPage extends OperatorV2SimplePage
 
     public String getTextOnTable(int rowNumber, String columnDataClass)
     {
-        return getTextOnTableWithNgRepeat(rowNumber, columnDataClass, NG_REPEAT);
+        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
     }
 
     public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
     {
-        clickActionButtonOnTableWithNgRepeat(rowNumber, actionButtonName, NG_REPEAT);
+        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
     }
 }
