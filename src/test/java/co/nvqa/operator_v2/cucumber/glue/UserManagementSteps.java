@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.apache.commons.lang3.SerializationUtils;
 
 /**
  *
@@ -37,30 +38,29 @@ public class UserManagementSteps extends AbstractSteps {
         userManagement.setLastName(uniqueCode);
         userManagement.setRoles("SUPER_USERS");
         userManagementPage.createUser(userManagement);
-        put("userManagement", userManagement);
+        put(KEY_CREATED_USER_MANAGEMENT, userManagement);
     }
 
     @Then("^Operator verify the new user on User Management page$")
     public void verifyUserOnUserManagement() {
-        UserManagement userManagement = get("userManagement");
+        UserManagement userManagement = get(KEY_CREATED_USER_MANAGEMENT);
         userManagementPage.verifyUserOnUserManagement(userManagement);
     }
 
     @When("^Operator edit a user on User Management page$")
     public void editUser() {
-        UserManagement userManagement = get("userManagement");
+        UserManagement userManagement = get(KEY_CREATED_USER_MANAGEMENT);
 
-        UserManagement userManagementEdited = new UserManagement();
-        userManagementEdited.setLastName(userManagement.getLastName());
+        UserManagement userManagementEdited = SerializationUtils.clone(userManagement);
         userManagementEdited.setRoles("OPERATOR_ADMINS");
 
-        put("userManagementEdited", userManagementEdited);
+        put(KEY_UPDATED_USER_MANAGEMENT, userManagementEdited);
         userManagementPage.editUser(userManagement, userManagementEdited);
     }
 
     @Then("^Operator verify the edited user on User Management page is existed$")
     public void verifyEditedUserOnUserManagement() {
-        UserManagement userManagementEdited = get("userManagementEdited");
+        UserManagement userManagementEdited = get(KEY_UPDATED_USER_MANAGEMENT);
         userManagementPage.verifyEditedUserOnUserManagement(userManagementEdited);
     }
 
@@ -74,6 +74,6 @@ public class UserManagementSteps extends AbstractSteps {
         UserManagement userManagement = new UserManagement();
         userManagement.setGrantType("GOOGLE_SSO");
         userManagementPage.verifyGrantType(userManagement);
-        put("userManagement", userManagement);
+        put(KEY_CREATED_USER_MANAGEMENT, userManagement);
     }
 }

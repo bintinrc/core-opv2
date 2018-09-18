@@ -1,10 +1,12 @@
 package co.nvqa.operator_v2.model;
 
+import java.io.Serializable;
+
 /**
  * @author Tristania Siagian
  *
  */
-public class UserManagement {
+public class UserManagement implements Serializable {
 
     private String email;
     private String grantType;

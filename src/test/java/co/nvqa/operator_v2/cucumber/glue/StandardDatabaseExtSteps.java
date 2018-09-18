@@ -13,12 +13,9 @@ import co.nvqa.commons.model.entity.RouteDriverTypeEntity;
 import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.CreateRouteParams;
-import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import com.google.inject.Inject;
-import cucumber.api.java.After;
-import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -29,9 +26,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.not;
 
 /**
+ *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -137,43 +137,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         }
     }
 
-    @After(value = {"@DeleteDpPartner"})
-    public void deleteDpPartner()
-    {
-        DpPartner dpPartner = get(KEY_DP_PARTNER);
-
-        if(dpPartner!=null)
-        {
-            getDpJdbc().deleteDpPartner(dpPartner.getName());
-        }
-    }
-
-    @After(value = {"@DeleteDpAndPartner"})
-    public void deleteDp()
-    {
-        DpPartner dpPartner = get(KEY_DP_PARTNER);
-
-        if(dpPartner!=null)
-        {
-            getDpJdbc().deleteDp(dpPartner.getName());
-            getDpJdbc().deleteDpPartner(dpPartner.getName());
-        }
-    }
-
-    @After(value = {"@DeleteDpUserDpAndPartner"})
-    public void deleteDpUser()
-    {
-        DpPartner dpPartner = get(KEY_DP_PARTNER);
-
-        if(dpPartner!=null)
-        {
-            getDpJdbc().deleteDpUser(dpPartner.getName());
-            getDpJdbc().deleteDp(dpPartner.getName());
-            getDpJdbc().deleteDpPartner(dpPartner.getName());
-        }
-    }
-
-    @And("^DB Operator get data of created driver$")
+    @Given("^DB Operator get data of created driver$")
     public void dbOperatorGetDataOfCreatedDriver()
     {
         DriverInfo driverInfo = get(KEY_CREATED_DRIVER);
