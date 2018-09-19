@@ -19,7 +19,6 @@ import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import com.google.inject.Inject;
 import cucumber.api.java.After;
-import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -30,7 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.not;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -174,7 +175,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         }
     }
 
-    @And("^DB Operator get data of created driver$")
+    @Given("^DB Operator get data of created driver$")
     public void dbOperatorGetDataOfCreatedDriver()
     {
         DriverInfo driverInfo = get(KEY_CREATED_DRIVER);
