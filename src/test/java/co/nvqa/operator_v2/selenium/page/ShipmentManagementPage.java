@@ -11,7 +11,10 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.*;
+import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_CANCEL;
+import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_FORCE;
+import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.COLUMN_SHIPMENT_ID;
 
 /**
  * @author Lanang Jati
@@ -181,7 +184,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
                         .filter(shipment -> shipment.getId().equalsIgnoreCase(shipmentId))
                         .findFirst()
                         .orElseThrow(() -> new AssertionError(String.format("Shipment with ID = '%s' not exist", shipmentId)));
-            } catch (AssertionError ex)
+            }
+            catch(AssertionError ex)
             {
                 clickEditSearchFilterButton();
                 clickButtonLoadSelection();
@@ -192,13 +196,13 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
 
     public void clearAllFilters()
     {
-        if (findElementByXpath(XPATH_CLEAR_FILTER_BUTTON).isDisplayed())
+        if(findElementByXpath(XPATH_CLEAR_FILTER_BUTTON).isDisplayed())
         {
-            if (findElementByXpath(XPATH_CLEAR_FILTER_VALUE).isDisplayed())
+            if(findElementByXpath(XPATH_CLEAR_FILTER_VALUE).isDisplayed())
             {
                 List<WebElement> clearValueBtnList = findElementsByXpath(XPATH_CLEAR_FILTER_VALUE);
 
-                for (WebElement clearBtn : clearValueBtnList)
+                for(WebElement clearBtn : clearValueBtnList)
                 {
                     clearBtn.click();
                     pause1s();

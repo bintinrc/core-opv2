@@ -1,8 +1,10 @@
 package co.nvqa.operator_v2.model;
 
 /**
+ *
  * @author Sergey Mishanin
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class RouteCleaningReportParcelInfo extends DataEntity<RouteCleaningReportParcelInfo>
 {
     private String date;

@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
+ *
  * @author Sergey Mishanin
  */
 @SuppressWarnings("WeakerAccess")
@@ -51,6 +52,7 @@ public class LatLngCleanupPage extends OperatorV2SimplePage
     /**
      * Accessor for Edit Waypoint Details dialog
      */
+    @SuppressWarnings("UnusedReturnValue")
     public static class EditWaypointDetailsDialog extends OperatorV2SimplePage
     {
         private static final String DIALOG_TITLE = "Edit Waypoint Details";
@@ -85,99 +87,130 @@ public class LatLngCleanupPage extends OperatorV2SimplePage
             return this;
         }
 
-        public EditWaypointDetailsDialog setAddress1(String address1){
+        public EditWaypointDetailsDialog setAddress1(String address1)
+        {
             sendKeysById(LOCATOR_FIELD_ADDRESS_1, address1);
             return this;
         }
 
-        public EditWaypointDetailsDialog setAddress2(String address2){
+        public EditWaypointDetailsDialog setAddress2(String address2)
+        {
             sendKeysById(LOCATOR_FIELD_ADDRESS_2, address2);
             return this;
         }
 
-        public EditWaypointDetailsDialog setCity(String city){
+        public EditWaypointDetailsDialog setCity(String city)
+        {
             sendKeysById(LOCATOR_FIELD_CITY, city);
             return this;
         }
 
-        public EditWaypointDetailsDialog setCountry(String country){
+        public EditWaypointDetailsDialog setCountry(String country)
+        {
             sendKeysById(LOCATOR_FIELD_COUNTRY, country);
             return this;
         }
 
-        public EditWaypointDetailsDialog setPostalCode(String postalCode){
+        public EditWaypointDetailsDialog setPostalCode(String postalCode)
+        {
             sendKeysById(LOCATOR_FIELD_POSTAL_CODE, postalCode);
             return this;
         }
 
-        public EditWaypointDetailsDialog setLatitude(String latitude){
+        public EditWaypointDetailsDialog setLatitude(String latitude)
+        {
             sendKeysById(LOCATOR_FIELD_LATITUDE, latitude);
             return this;
         }
 
-        public EditWaypointDetailsDialog setLongitude(String longitude){
+        public EditWaypointDetailsDialog setLongitude(String longitude)
+        {
             sendKeysById(LOCATOR_FIELD_LONGITUDE, longitude);
             return this;
         }
 
-        public EditWaypointDetailsDialog fillForm(WaypointDetails waypointDetails){
-            if (waypointDetails.getAddress1() != null){
+        public EditWaypointDetailsDialog fillForm(WaypointDetails waypointDetails)
+        {
+            if(waypointDetails.getAddress1()!=null)
+            {
                 setAddress1(waypointDetails.getAddress1());
             }
-            if (waypointDetails.getAddress2() != null){
+
+            if(waypointDetails.getAddress2()!=null)
+            {
                 setAddress2(waypointDetails.getAddress2());
             }
-            if (waypointDetails.getCity() != null){
+
+            if(waypointDetails.getCity()!=null)
+            {
                 setCity(waypointDetails.getCity());
             }
-            if (waypointDetails.getCountry() != null){
+
+            if(waypointDetails.getCountry()!=null)
+            {
                 setCountry(waypointDetails.getCountry());
             }
-            if (waypointDetails.getPostalCode() != null){
+
+            if(waypointDetails.getPostalCode()!=null)
+            {
                 setPostalCode(waypointDetails.getPostalCode());
             }
-            if (waypointDetails.getLatitude() != null){
+
+            if(waypointDetails.getLatitude()!=null)
+            {
                 setLatitude(String.valueOf(waypointDetails.getLatitude()));
             }
-            if (waypointDetails.getLongitude() != null){
+
+            if(waypointDetails.getLongitude()!=null)
+            {
                 setLongitude(String.valueOf(waypointDetails.getLongitude()));
             }
+
             return this;
         }
 
-        public String getWaypointId(){
+        public String getWaypointId()
+        {
             return getInputValueById(LOCATOR_FIELD_WAYPOINT_ID, XpathTextMode.STARTS_WITH);
         }
 
-        public String getAddress1(){
+        public String getAddress1()
+        {
             return getInputValueById(LOCATOR_FIELD_ADDRESS_1, XpathTextMode.STARTS_WITH);
         }
 
-        public String getAddress2(){
+        public String getAddress2()
+        {
             return getInputValueById(LOCATOR_FIELD_ADDRESS_2, XpathTextMode.STARTS_WITH);
         }
 
-        public String getCity(){
+        public String getCity()
+        {
             return getInputValueById(LOCATOR_FIELD_CITY, XpathTextMode.STARTS_WITH);
         }
 
-        public String getCountry(){
+        public String getCountry()
+        {
             return getInputValueById(LOCATOR_FIELD_COUNTRY, XpathTextMode.STARTS_WITH);
         }
 
-        public String getPostalCode(){
+        public String getPostalCode()
+        {
             return getInputValueById(LOCATOR_FIELD_POSTAL_CODE, XpathTextMode.STARTS_WITH);
         }
 
-        public String getLatitude(){
+        public String getLatitude()
+        {
             return getInputValueById(LOCATOR_FIELD_LATITUDE, XpathTextMode.STARTS_WITH);
         }
 
-        public String getLongitude(){
+        public String getLongitude()
+        {
             return getInputValueById(LOCATOR_FIELD_LONGITUDE, XpathTextMode.STARTS_WITH);
         }
 
-        public WaypointDetails getWaypointDetails(){
+        public WaypointDetails getWaypointDetails()
+        {
             WaypointDetails waypointDetails = new WaypointDetails();
             waypointDetails.setId(getWaypointId());
             waypointDetails.setAddress1(getAddress1());
@@ -191,7 +224,8 @@ public class LatLngCleanupPage extends OperatorV2SimplePage
             return waypointDetails;
         }
 
-        public EditWaypointDetailsDialog validateWaypoitWasFound(){
+        public EditWaypointDetailsDialog validateWaypoitWasFound()
+        {
             Assert.assertFalse("Waypoint Id cannot be found", isElementVisible(LOCATOR_MESSAGE_WAYPOINT_NOT_FOUND));
             return this;
         }
@@ -202,10 +236,10 @@ public class LatLngCleanupPage extends OperatorV2SimplePage
             return this;
         }
 
-        public void close(){
+        public void close()
+        {
             clickNvIconButtonByName(LOCATOR_BUTTON_CLOSE);
             waitUntilInvisibilityOfMdDialogByTitle(DIALOG_TITLE);
         }
     }
-
 }

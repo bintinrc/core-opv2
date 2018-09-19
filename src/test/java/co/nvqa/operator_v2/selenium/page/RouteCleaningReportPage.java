@@ -15,12 +15,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.CodTable.COLUMN_ROUTE_ID;
-import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.ParcelTable.*;
+import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.ParcelTable.ACTION_CREATE_TICKET;
+import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.ParcelTable.ACTION_SHOW_DETAIL;
+import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.ParcelTable.COLUMN_TRACKING_ID;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("unused")
 public class RouteCleaningReportPage extends OperatorV2SimplePage
 {
     private static final String COD_CSV_FILENAME_PATTERN = "COD";
@@ -79,7 +82,8 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
 
     public void downloadCsvForSelectedCOD(List<String> routeIds)
     {
-        routeIds.forEach(routeId -> {
+        routeIds.forEach(routeId ->
+        {
             codTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
             codTable.selectRow(1);
         });
@@ -88,7 +92,8 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
 
     public void downloadCsvForSelectedParcel(List<String> trackingIds)
     {
-        trackingIds.forEach(trackingId -> {
+        trackingIds.forEach(trackingId ->
+        {
             parcelTable.filterByColumn(COLUMN_TRACKING_ID, trackingId);
             codTable.selectRow(1);
         });
@@ -109,26 +114,29 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
                 codInfo -> codInfo
         ));
 
-        for (RouteCleaningReportCodInfo expectedCodInfo : expectedCodInfoRecords)
+        for(RouteCleaningReportCodInfo expectedCodInfo : expectedCodInfoRecords)
         {
             RouteCleaningReportCodInfo actualCodInfo = actualMap.get(expectedCodInfo.getRouteId());
             verifyCodInfo(expectedCodInfo, actualCodInfo);
         }
     }
 
-    public void verifyParcelInfo(RouteCleaningReportParcelInfo expectedParcelInfo){
+    public void verifyParcelInfo(RouteCleaningReportParcelInfo expectedParcelInfo)
+    {
         parcelTable.filterByColumn(COLUMN_TRACKING_ID, expectedParcelInfo.getTrackingId());
         RouteCleaningReportParcelInfo actualParcelInfo = parcelTable.readEntity(1);
         expectedParcelInfo.compareWithActual(actualParcelInfo);
     }
 
-    public void createTicketForParcel(String trackingId){
+    public void createTicketForParcel(String trackingId)
+    {
         parcelTable.filterByColumn(COLUMN_TRACKING_ID, trackingId);
         parcelTable.clickActionButton(1, ACTION_CREATE_TICKET);
         waitUntilInvisibilityOfToast("Ticket has been created!", true);
     }
 
-    public void verifyTickedForParcelWasCreated(String trackingId){
+    public void verifyTickedForParcelWasCreated(String trackingId)
+    {
         parcelTable.filterByColumn(COLUMN_TRACKING_ID, trackingId);
         parcelTable.clickActionButton(1, ACTION_SHOW_DETAIL);
     }
@@ -147,7 +155,7 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
                 parcelInfo -> parcelInfo
         ));
 
-        for (RouteCleaningReportParcelInfo expectedParcelInfo : expectedParcelInfoRecords)
+        for(RouteCleaningReportParcelInfo expectedParcelInfo : expectedParcelInfoRecords)
         {
             RouteCleaningReportParcelInfo actualParcelInfo = actualMap.get(expectedParcelInfo.getTrackingId());
             expectedParcelInfo.compareWithActual(actualParcelInfo);
@@ -163,19 +171,19 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
 
     private void verifyCodInfo(RouteCleaningReportCodInfo expectedCodInfo, RouteCleaningReportCodInfo actualCodInfo)
     {
-        if (expectedCodInfo.getCodInbound() != null)
+        if(expectedCodInfo.getCodInbound()!=null)
         {
             Assert.assertThat("COD Inbound", actualCodInfo.getCodInbound(), Matchers.equalTo(expectedCodInfo.getCodInbound()));
         }
-        if (expectedCodInfo.getCodExpected() != null)
+        if(expectedCodInfo.getCodExpected()!=null)
         {
             Assert.assertThat("COD Expected", actualCodInfo.getCodInbound(), Matchers.equalTo(expectedCodInfo.getCodInbound()));
         }
-        if (expectedCodInfo.getRouteId() != null)
+        if(expectedCodInfo.getRouteId()!=null)
         {
             Assert.assertThat("Route ID", actualCodInfo.getRouteId(), Matchers.equalTo(expectedCodInfo.getRouteId()));
         }
-        if (StringUtils.isNotBlank(expectedCodInfo.getDriverName()))
+        if(StringUtils.isNotBlank(expectedCodInfo.getDriverName()))
         {
             Assert.assertThat("Driver Name", actualCodInfo.getDriverName(), Matchers.equalTo(expectedCodInfo.getDriverName()));
         }
@@ -184,6 +192,7 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
     /**
      * Accessor for COD table
      */
+    @SuppressWarnings("WeakerAccess")
     public static class CodTable extends MdVirtualRepeatTable<RouteCleaningReportCodInfo>
     {
         public static final String COLUMN_COD_INBOUND = "codInbound";
@@ -206,6 +215,7 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
     /**
      * Accessor for Parcel table
      */
+    @SuppressWarnings("WeakerAccess")
     public static class ParcelTable extends MdVirtualRepeatTable<RouteCleaningReportParcelInfo>
     {
         public static final String COLUMN_TRACKING_ID = "trackingId";

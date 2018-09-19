@@ -75,9 +75,9 @@ public class RouteCleaningReportSteps extends AbstractSteps
         RouteCleaningReportCodInfo expectedCodInfo = new RouteCleaningReportCodInfo();
         String value = adjustedData.get("codInbound");
 
-        if (StringUtils.isNotBlank(value))
+        if(StringUtils.isNotBlank(value))
         {
-            if ("GET_FROM_CREATED_COD".equalsIgnoreCase(value))
+            if("GET_FROM_CREATED_COD".equalsIgnoreCase(value))
             {
                 RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
                 adjustedData.put("codInbound", String.valueOf(routeCashInboundCod.getAmountCollected()));
@@ -86,9 +86,9 @@ public class RouteCleaningReportSteps extends AbstractSteps
 
         value = adjustedData.get("codExpected");
 
-        if (StringUtils.isNotBlank(value))
+        if(StringUtils.isNotBlank(value))
         {
-            if ("GET_FROM_CREATED_ORDER".equalsIgnoreCase(value))
+            if("GET_FROM_CREATED_ORDER".equalsIgnoreCase(value))
             {
                 Order order = get(KEY_CREATED_ORDER);
                 adjustedData.put("codExpected", String.valueOf(order.getCod().getGoodsAmount()));
@@ -97,9 +97,9 @@ public class RouteCleaningReportSteps extends AbstractSteps
 
         value = adjustedData.get("routeId");
 
-        if (StringUtils.isNotBlank(value))
+        if(StringUtils.isNotBlank(value))
         {
-            if ("GET_FROM_CREATED_ROUTE".equalsIgnoreCase(value))
+            if("GET_FROM_CREATED_ROUTE".equalsIgnoreCase(value))
             {
                 adjustedData.put("routeId", String.valueOf((Long) get(KEY_CREATED_ROUTE_ID)));
             }
@@ -166,9 +166,9 @@ public class RouteCleaningReportSteps extends AbstractSteps
         RouteCleaningReportParcelInfo expectedParcelInfo = new RouteCleaningReportParcelInfo();
         String value = adjustedData.get("trackingId");
 
-        if (StringUtils.isNotBlank(value))
+        if(StringUtils.isNotBlank(value))
         {
-            if ("GET_FROM_CREATED_ORDER".equalsIgnoreCase(value))
+            if("GET_FROM_CREATED_ORDER".equalsIgnoreCase(value))
             {
                 adjustedData.put("trackingId", get(KEY_CREATED_ORDER_TRACKING_ID));
             }
@@ -176,9 +176,9 @@ public class RouteCleaningReportSteps extends AbstractSteps
 
         value = adjustedData.get("routeId");
 
-        if (StringUtils.isNotBlank(value))
+        if(StringUtils.isNotBlank(value))
         {
-            if ("GET_FROM_CREATED_ROUTE".equalsIgnoreCase(value))
+            if("GET_FROM_CREATED_ROUTE".equalsIgnoreCase(value))
             {
                 adjustedData.put("routeId", String.valueOf((Long) get(KEY_CREATED_ROUTE_ID)));
             }

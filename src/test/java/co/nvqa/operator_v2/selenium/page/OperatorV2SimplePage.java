@@ -689,14 +689,13 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void selectValueFromMdSelectOrCheckCurrentIfDisabled(String selectName, String mdSelectNgModel, String value)
     {
-        if (isMdSelectEnabled(mdSelectNgModel))
+        if(isMdSelectEnabled(mdSelectNgModel))
         {
             selectValueFromMdSelect(mdSelectNgModel, value);
-        } else {
-            Assert.assertEquals(
-                    selectName + " select is disabled and current value is not equal to expected",
-                    value,
-                    getMdSelectValue(mdSelectNgModel));
+        }
+        else
+        {
+            Assert.assertEquals(selectName + " select is disabled and current value is not equal to expected", value, getMdSelectValue(mdSelectNgModel));
         }
     }
 

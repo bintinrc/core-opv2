@@ -1,8 +1,10 @@
 package co.nvqa.operator_v2.model;
 
 /**
+ *
  * @author Sergey Mishanin
  */
+@SuppressWarnings("unused")
 public class ShipmentInfo extends DataEntity<ShipmentInfo>
 {
     private String shipmentType;

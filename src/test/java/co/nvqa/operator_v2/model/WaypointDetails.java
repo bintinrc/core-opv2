@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.model;
 import co.nvqa.operator_v2.util.TestUtils;
 
 /**
+ *
  * @author Sergey Mishanin
  */
 public class WaypointDetails extends DataEntity<WaypointDetails>
@@ -42,9 +43,10 @@ public class WaypointDetails extends DataEntity<WaypointDetails>
 
     public void setAddress1(String address1)
     {
-        if ("GENERATED".equalsIgnoreCase(address1)){
+        if("GENERATED".equalsIgnoreCase(address1)){
             this.address1 = TestUtils.generateRandomAddress().getAddress1();
-        } else
+        }
+        else
         {
             this.address1 = address1;
         }
@@ -57,9 +59,10 @@ public class WaypointDetails extends DataEntity<WaypointDetails>
 
     public void setAddress2(String address2)
     {
-        if ("GENERATED".equalsIgnoreCase(address2)){
+        if("GENERATED".equalsIgnoreCase(address2)){
             this.address2 = TestUtils.generateRandomAddress().getAddress2();
-        } else
+        }
+        else
         {
             this.address2 = address2;
         }
@@ -72,9 +75,11 @@ public class WaypointDetails extends DataEntity<WaypointDetails>
 
     public void setCity(String city)
     {
-        if ("GENERATED".equalsIgnoreCase(city)){
+        if("GENERATED".equalsIgnoreCase(city))
+        {
             this.city = TestUtils.generateRandomAddress().getCity();
-        } else
+        }
+        else
         {
             this.city = city;
         }
@@ -87,9 +92,11 @@ public class WaypointDetails extends DataEntity<WaypointDetails>
 
     public void setCountry(String country)
     {
-        if ("GENERATED".equalsIgnoreCase(country)){
+        if("GENERATED".equalsIgnoreCase(country))
+        {
             this.country = TestUtils.generateRandomAddress().getCountry();
-        } else
+        }
+        else
         {
             this.country = country;
         }
@@ -102,9 +109,11 @@ public class WaypointDetails extends DataEntity<WaypointDetails>
 
     public void setPostalCode(String postalCode)
     {
-        if ("GENERATED".equalsIgnoreCase(postalCode)){
+        if("GENERATED".equalsIgnoreCase(postalCode))
+        {
             this.postalCode = TestUtils.generateRandomAddress().getPostcode();
-        } else
+        }
+        else
         {
             this.postalCode = postalCode;
         }
@@ -122,9 +131,11 @@ public class WaypointDetails extends DataEntity<WaypointDetails>
 
     public void setLatitude(String latitude)
     {
-        if ("GENERATED".equalsIgnoreCase(latitude)){
+        if("GENERATED".equalsIgnoreCase(latitude))
+        {
             setLatitude(TestUtils.generateLatitude());
-        } else
+        }
+        else
         {
             setLatitude(Double.valueOf(latitude));
         }
@@ -142,9 +153,11 @@ public class WaypointDetails extends DataEntity<WaypointDetails>
 
     public void setLongitude(String longitude)
     {
-        if ("GENERATED".equalsIgnoreCase(longitude)){
+        if("GENERATED".equalsIgnoreCase(longitude))
+        {
             setLongitude(TestUtils.generateLongitude());
-        } else
+        }
+        else
         {
             setLongitude(Double.valueOf(longitude));
         }

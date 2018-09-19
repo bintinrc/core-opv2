@@ -4,7 +4,6 @@ import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
 import com.google.inject.Inject;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -15,8 +14,8 @@ import java.util.Map;
 
 /**
  * @author Lanang Jati
- * <p>
- * Modified by Daniel Joi Partogi Hutapea
+ *
+ * Modified by Daniel Joi Partogi Hutapea.
  */
 @ScenarioScoped
 public class ShipmentManagementSteps extends AbstractSteps
@@ -47,7 +46,7 @@ public class ShipmentManagementSteps extends AbstractSteps
         String shipmentId = get(KEY_SHIPMENT_ID);
         shipmentManagementPage.clickActionButton(shipmentId, actionButton);
 
-        if ("Force".equals(actionButton))
+        if("Force".equals(actionButton))
         {
             shipmentManagementPage.waitUntilForceToastDisappear(shipmentId);
         }
@@ -71,7 +70,8 @@ public class ShipmentManagementSteps extends AbstractSteps
         try
         {
             shipmentManagementPage.shipmentScanExist(source, hub);
-        } finally
+        }
+        finally
         {
             shipmentManagementPage.closeScanModal();
         }

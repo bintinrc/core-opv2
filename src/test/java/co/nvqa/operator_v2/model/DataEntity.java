@@ -97,7 +97,7 @@ public abstract class DataEntity<T extends DataEntity>
 
                 if(field!=null)
                 {
-                    if (field.getType().isAssignableFrom(value.getClass()))
+                    if(field.getType().isAssignableFrom(value.getClass()))
                     {
                         FieldUtils.writeField(field, this, value, true);
                     }
@@ -168,8 +168,7 @@ public abstract class DataEntity<T extends DataEntity>
 
         for(Method method : methods)
         {
-            if(StringUtils.equals(getterName, sanitizeString(method.getName()))
-                    && method.getParameterCount() == 0)
+            if(StringUtils.equals(getterName, sanitizeString(method.getName())) && method.getParameterCount()==0)
             {
                 return method;
             }

@@ -63,7 +63,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
         Long driverTypeId = driverTypeParams.getDriverTypeId();
 
-        for (CreateRouteParams createRouteParams : listOfCreateRouteParams)
+        for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
         {
             long routeId = createRouteParams.getCreatedRoute().getId();
             List<RouteDriverTypeEntity> listOfRouteDriverTypeEntity = getRouteJdbc().findRouteDriverTypeByRouteIdAndNotDeleted(routeId);
@@ -97,7 +97,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         Assert.assertThat(String.format("Order %d events list", orderId), orderEvents, not(empty()));
         OrderEventEntity theLastOrderEvent = orderEvents.get(0);
         String value = mapOfData.get("type");
-        if (StringUtils.isNotBlank(value))
+
+        if(StringUtils.isNotBlank(value))
         {
             Assert.assertEquals("Type", Short.parseShort(value), theLastOrderEvent.getType());
         }
@@ -126,14 +127,14 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
         String value = mapOfData.get("hubId");
 
-        if (StringUtils.isNotBlank(value))
+        if(StringUtils.isNotBlank(value))
         {
             Assert.assertEquals("Hub ID", Long.valueOf(value), theLastInboundScan.getHubId());
         }
 
         value = mapOfData.get("type");
 
-        if (StringUtils.isNotBlank(value))
+        if(StringUtils.isNotBlank(value))
         {
             Assert.assertEquals("Type", Short.valueOf(value), theLastInboundScan.getType());
         }
@@ -144,7 +145,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     {
         DpPartner dpPartner = get(KEY_DP_PARTNER);
 
-        if (dpPartner != null)
+        if(dpPartner!=null)
         {
             getDpJdbc().deleteDpPartner(dpPartner.getName());
         }
@@ -155,7 +156,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     {
         DpPartner dpPartner = get(KEY_DP_PARTNER);
 
-        if (dpPartner != null)
+        if(dpPartner!=null)
         {
             getDpJdbc().deleteDp(dpPartner.getName());
             getDpJdbc().deleteDpPartner(dpPartner.getName());
@@ -167,7 +168,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     {
         DpPartner dpPartner = get(KEY_DP_PARTNER);
 
-        if (dpPartner != null)
+        if(dpPartner!=null)
         {
             getDpJdbc().deleteDpUser(dpPartner.getName());
             getDpJdbc().deleteDp(dpPartner.getName());
@@ -190,7 +191,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     {
         ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
 
-        if (shipmentInfo != null)
+        if(shipmentInfo!=null)
         {
             getShipmentJdbc().deleteShipment(Long.parseLong(shipmentInfo.getId()));
         }
