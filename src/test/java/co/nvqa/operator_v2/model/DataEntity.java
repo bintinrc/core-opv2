@@ -285,7 +285,7 @@ public abstract class DataEntity<T extends DataEntity>
                 if(expectedValue instanceof String)
                 {
                     String actualValue = StringUtils.normalizeSpace(String.valueOf(actualData.get(propertyName)).trim());
-                    String strExpectedValue = StringUtils.normalizeSpace(String.valueOf(actualValue).trim());
+                    String strExpectedValue = StringUtils.normalizeSpace(String.valueOf(expectedValue).trim());
                     assertThat(message, actualValue, equalTo(strExpectedValue));
                 }
                 else

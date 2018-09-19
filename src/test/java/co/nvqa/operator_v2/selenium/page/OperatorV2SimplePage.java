@@ -6,6 +6,7 @@ import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.util.TestConstants;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -181,6 +182,14 @@ public class OperatorV2SimplePage extends SimplePage
         waitUntilVisibilityOfElementLocated(String.format("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage));
     }
 
+    public void waitUntilInvisibilityOfToast(){
+        waitUntilInvisibilityOfToast(null);
+    }
+
+    public void waitUntilInvisibilityOfToast(boolean waitUntilElementVisibleFirst){
+        waitUntilInvisibilityOfToast(null, waitUntilElementVisibleFirst);
+    }
+
     public void waitUntilInvisibilityOfToast(String containsMessage)
     {
         waitUntilInvisibilityOfToast(containsMessage, true);
@@ -188,7 +197,9 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void waitUntilInvisibilityOfToast(String containsMessage, boolean waitUntilElementVisibleFirst)
     {
-        String xpathExpression = String.format("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage);
+        String xpathExpression = StringUtils.isNotBlank(containsMessage)
+                ? String.format("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage)
+                : "//div[@id='toast-container']";
 
         if(waitUntilElementVisibleFirst)
         {
@@ -196,6 +207,19 @@ public class OperatorV2SimplePage extends SimplePage
         }
 
         waitUntilInvisibilityOfElementLocated(xpathExpression);
+    }
+
+    public void confirmToast(String containsMessage, boolean waitUntilElementVisibleFirst)
+    {
+        String xpathExpression = String.format("//div[@id='toast-container'][.//div[contains(text(), '%s')]]", containsMessage);
+
+        if(waitUntilElementVisibleFirst)
+        {
+            waitUntilVisibilityOfElementLocated(xpathExpression);
+        }
+
+        clickf(xpathExpression + "//button[text()='OK']");
+        waitUntilInvisibilityOfToast(containsMessage, false);
     }
 
     public void clickToast(String containsMessage)
@@ -805,6 +829,14 @@ public class OperatorV2SimplePage extends SimplePage
         clickf("//md-select[starts-with(@id, '%s')]", mdSelectId);
         pause100ms();
         clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value);
+        pause50ms();
+    }
+
+    public void selectByIndexFromMdSelectById(String mdSelectId, int index)
+    {
+        clickf("//md-select[starts-with(@id, '%s')]", mdSelectId);
+        pause100ms();
+        clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[%d]", index);
         pause50ms();
     }
 

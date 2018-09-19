@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.RouteCleaningReportCodInfo;
+import co.nvqa.operator_v2.model.RouteCleaningReportParcelInfo;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.CodTable.COLUMN_ROUTE_ID;
+import static co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage.ParcelTable.*;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 /**
@@ -21,18 +23,26 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
  */
 public class RouteCleaningReportPage extends OperatorV2SimplePage
 {
-    private static final String CSV_FILENAME_PATTERN = "COD";
+    private static final String COD_CSV_FILENAME_PATTERN = "COD";
+    private static final String PARCEL_CSV_FILENAME_PATTERN = "Parcel";
     private CodTable codTable;
+    private ParcelTable parcelTable;
 
     public RouteCleaningReportPage(WebDriver webDriver)
     {
         super(webDriver);
         codTable = new CodTable(webDriver);
+        parcelTable = new ParcelTable(webDriver);
     }
 
     public CodTable codTable()
     {
         return codTable;
+    }
+
+    public ParcelTable parcelTable()
+    {
+        return parcelTable;
     }
 
     public void clickButtonDownloadCSVReport()
@@ -42,7 +52,7 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
 
     public void verifyCSVFileIsDownloadedSuccessfully()
     {
-        verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN));
+        verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(COD_CSV_FILENAME_PATTERN));
     }
 
     public void fetchByDate(Date date)
@@ -55,6 +65,7 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
     {
         clickButtonByAriaLabel("COD");
     }
+
 
     public void selectParcel()
     {
@@ -75,9 +86,18 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
         clickButtonDownloadCSVReport();
     }
 
+    public void downloadCsvForSelectedParcel(List<String> trackingIds)
+    {
+        trackingIds.forEach(trackingId -> {
+            parcelTable.filterByColumn(COLUMN_TRACKING_ID, trackingId);
+            codTable.selectRow(1);
+        });
+        clickButtonDownloadCSVReport();
+    }
+
     public void verifyDownloadedCodCsvFileContent(List<RouteCleaningReportCodInfo> expectedCodInfoRecords)
     {
-        String fileName = getLatestDownloadedFilename(CSV_FILENAME_PATTERN);
+        String fileName = getLatestDownloadedFilename(COD_CSV_FILENAME_PATTERN);
         verifyFileDownloadedSuccessfully(fileName);
         String pathName = StandardTestConstants.TEMP_DIR + fileName;
         List<RouteCleaningReportCodInfo> actualCodInfoRecords = RouteCleaningReportCodInfo.fromCsvFile(RouteCleaningReportCodInfo.class, pathName, true);
@@ -93,6 +113,44 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
         {
             RouteCleaningReportCodInfo actualCodInfo = actualMap.get(expectedCodInfo.getRouteId());
             verifyCodInfo(expectedCodInfo, actualCodInfo);
+        }
+    }
+
+    public void verifyParcelInfo(RouteCleaningReportParcelInfo expectedParcelInfo){
+        parcelTable.filterByColumn(COLUMN_TRACKING_ID, expectedParcelInfo.getTrackingId());
+        RouteCleaningReportParcelInfo actualParcelInfo = parcelTable.readEntity(1);
+        expectedParcelInfo.compareWithActual(actualParcelInfo);
+    }
+
+    public void createTicketForParcel(String trackingId){
+        parcelTable.filterByColumn(COLUMN_TRACKING_ID, trackingId);
+        parcelTable.clickActionButton(1, ACTION_CREATE_TICKET);
+        waitUntilInvisibilityOfToast("Ticket has been created!", true);
+    }
+
+    public void verifyTickedForParcelWasCreated(String trackingId){
+        parcelTable.filterByColumn(COLUMN_TRACKING_ID, trackingId);
+        parcelTable.clickActionButton(1, ACTION_SHOW_DETAIL);
+    }
+
+    public void verifyDownloadedParcelCsvFileContent(List<RouteCleaningReportParcelInfo> expectedParcelInfoRecords)
+    {
+        String fileName = getLatestDownloadedFilename(PARCEL_CSV_FILENAME_PATTERN);
+        verifyFileDownloadedSuccessfully(fileName);
+        String pathName = StandardTestConstants.TEMP_DIR + fileName;
+        List<RouteCleaningReportParcelInfo> actualParcelInfoRecords = RouteCleaningReportParcelInfo.fromCsvFile(RouteCleaningReportParcelInfo.class, pathName, true);
+
+        Assert.assertThat("Unexpected number of lines in CSV file", actualParcelInfoRecords.size(), greaterThanOrEqualTo(expectedParcelInfoRecords.size()));
+
+        Map<String, RouteCleaningReportParcelInfo> actualMap = actualParcelInfoRecords.stream().collect(Collectors.toMap(
+                RouteCleaningReportParcelInfo::getTrackingId,
+                parcelInfo -> parcelInfo
+        ));
+
+        for (RouteCleaningReportParcelInfo expectedParcelInfo : expectedParcelInfoRecords)
+        {
+            RouteCleaningReportParcelInfo actualParcelInfo = actualMap.get(expectedParcelInfo.getTrackingId());
+            expectedParcelInfo.compareWithActual(actualParcelInfo);
         }
     }
 
@@ -142,6 +200,35 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
                     .build()
             );
             setEntityClass(RouteCleaningReportCodInfo.class);
+        }
+    }
+
+    /**
+     * Accessor for Parcel table
+     */
+    public static class ParcelTable extends MdVirtualRepeatTable<RouteCleaningReportParcelInfo>
+    {
+        public static final String COLUMN_TRACKING_ID = "trackingId";
+        public static final String ACTION_CREATE_TICKET = "Create Ticket";
+        public static final String ACTION_SHOW_DETAIL = "Ticket Info";
+
+        public ParcelTable(WebDriver webDriver)
+        {
+            super(webDriver);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                    .put(COLUMN_TRACKING_ID, "tracking-id")
+                    .put("granularStatus", "granular-status")
+                    .put("lastScanHubId", "last-scan-hub-id")
+                    .put("exception", "exception")
+                    .put("routeId", "route-id")
+                    .put("lastSeen", "last-seen")
+                    .put("shipperName", "shipper-name")
+                    .put("driverName", "driver-name")
+                    .put("lastScanType", "last-scan-type")
+                    .build()
+            );
+            setEntityClass(RouteCleaningReportParcelInfo.class);
+            setActionButtonsLocators(ImmutableMap.of(ACTION_CREATE_TICKET, "//nv-api-icon-button[@name='container.route-cleaning-report.create-ticket']/button", ACTION_SHOW_DETAIL, "//button[@aria-label='Ticket Info']"));
         }
     }
 }

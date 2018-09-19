@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.DataEntity;
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
@@ -37,6 +38,7 @@ public class MdVirtualRepeatTable<T extends DataEntity> extends AbstractTable<T>
     public void clickActionButton(int rowNumber, String actionId)
     {
         String actionButtonLocator = actionButtonsLocators.get(actionId);
+        Preconditions.checkArgument(StringUtils.isNotBlank(actionButtonLocator), "Unknown action [" + actionId + "]");
 
         if(StringUtils.startsWith(actionButtonLocator,  "/"))
         {
