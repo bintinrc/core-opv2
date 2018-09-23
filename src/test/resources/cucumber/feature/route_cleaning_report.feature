@@ -5,7 +5,7 @@ Feature: Route Cleaning Report
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-#  @ArchiveAndDeleteRouteViaDb
+#  @DeleteOrArchiveRoute
 #  Scenario: Operator download Excel report on Route Cleaning Report successfully (uid:860479ee-1308-41ef-bd2f-1e14ab841e8b)
 #    Given API Shipper create V4 order using data below:
 #      | generateFromAndTo | RANDOM |
@@ -28,7 +28,7 @@ Feature: Route Cleaning Report
 #    When Operator download Excel report on Route Cleaning Report page
 #    Then Operator download Excel report on Route Cleaning Report page successfully
 
-  @ArchiveAndDeleteRouteViaDb
+  @DeleteOrArchiveRoute
   Scenario: Operator verify the COD information is correct on Route Cleaning Report (uid:3d81bfb3-1a19-4f3e-b434-12668a7a0300)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -56,7 +56,7 @@ Feature: Route Cleaning Report
       | routeId     | GET_FROM_CREATED_ROUTE |
       | driverName  | {ninja-driver-name}    |
 
-  @ArchiveAndDeleteRouteViaDb
+  @DeleteOrArchiveRoute
   Scenario: Operator download CSV of selected COD and verify the CSV contains correct information on Route Cleaning Report (uid:d9fb1eb2-4d47-42e0-8c1b-669391020e00)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
@@ -82,8 +82,8 @@ Feature: Route Cleaning Report
     Then Operator download CSV for the new COD on Route Cleaning Report page
     And Operator verify the COD info is correct in downloaded CSV file
 
-  @ArchiveAndDeleteRouteViaDb
-  Scenario: Operator verify order info on Parcel tab is correct on Route Cleaning Report page
+  @DeleteOrArchiveRoute
+  Scenario: Operator verify order info on Parcel tab is correct on Route Cleaning Report page (uid:679392bc-3621-4fc0-8592-b1e6abfaf0a0)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -108,8 +108,8 @@ Feature: Route Cleaning Report
       | driverName     | {ninja-driver-name}    |
       | lastScanType   | INBOUND (SORTING_HUB)  |
 
-  @ArchiveAndDeleteRouteViaDb
-  Scenario: Operator download CSV of order on Parcel tab and verify the info is correct on Route Cleaning Report page
+  @DeleteOrArchiveRoute
+  Scenario: Operator download CSV of order on Parcel tab and verify the info is correct on Route Cleaning Report page (uid:96f0836b-b890-4a2f-a2c2-1c356c0e228a)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -128,8 +128,8 @@ Feature: Route Cleaning Report
     Then Operator download CSV for the created order on Route Cleaning Report page
     And Operator verify the Parcel info is correct in downloaded CSV file
 
-  @ArchiveAndDeleteRouteViaDb
-  Scenario: Operator verify order info on Parcel tab is correct on Route Cleaning Report page
+  @DeleteOrArchiveRoute
+  Scenario: Operator should be able to create a ticket from Route Cleaning Report page (uid:4dd2ec04-3136-426b-8462-4fca7e7321a6)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

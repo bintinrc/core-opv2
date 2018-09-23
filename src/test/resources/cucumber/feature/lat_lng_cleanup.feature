@@ -5,7 +5,7 @@ Feature: Lat/Lng Cleanup
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveAndDeleteRouteViaDb
+  @DeleteOrArchiveRoute
   Scenario: Operator should be able to edit waypoint details on Lat/Lng Cleanup page
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
