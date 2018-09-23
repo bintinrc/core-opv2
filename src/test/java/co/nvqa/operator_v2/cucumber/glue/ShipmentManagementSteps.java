@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -14,13 +15,17 @@ import java.util.Map;
 
 /**
  * @author Lanang Jati
- *
+ * <p>
  * Modified by Daniel Joi Partogi Hutapea.
+ * Modified by Sergey Mishanin.
  */
 @ScenarioScoped
 public class ShipmentManagementSteps extends AbstractSteps
 {
     private ShipmentManagementPage shipmentManagementPage;
+    public static final String KEY_SHIPMENT_MANAGEMENT_FILTERS = "KEY_SHIPMENT_MANAGEMENT_FILTERS";
+    public static final String KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID = "KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID";
+    public static final String KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME = "KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME";
 
     @Inject
     public ShipmentManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
@@ -46,7 +51,7 @@ public class ShipmentManagementSteps extends AbstractSteps
         String shipmentId = get(KEY_SHIPMENT_ID);
         shipmentManagementPage.clickActionButton(shipmentId, actionButton);
 
-        if("Force".equals(actionButton))
+        if ("Force".equals(actionButton))
         {
             shipmentManagementPage.waitUntilForceToastDisappear(shipmentId);
         }
@@ -55,7 +60,8 @@ public class ShipmentManagementSteps extends AbstractSteps
     @When("^Operator filter ([^\"]*) = ([^\"]*) on Shipment Management page$")
     public void fillSearchFilter(String filter, String value)
     {
-        shipmentManagementPage.clickAddFilter(filter, value);
+        shipmentManagementPage.addFilter(filter, value);
+        putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, filter, value);
     }
 
     @Given("^Operator click Edit filter on Shipment Management page$")
@@ -70,8 +76,7 @@ public class ShipmentManagementSteps extends AbstractSteps
         try
         {
             shipmentManagementPage.shipmentScanExist(source, hub);
-        }
-        finally
+        } finally
         {
             shipmentManagementPage.closeScanModal();
         }
@@ -143,5 +148,43 @@ public class ShipmentManagementSteps extends AbstractSteps
     {
         ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
         shipmentManagementPage.cancelShipment(shipmentInfo.getId());
+    }
+
+    @And("^Operator save current filters as preset on Shipment Management page$")
+    public void operatorSaveCurrentFiltersAsPresetWithNameOnShipmentManagementPage()
+    {
+        String presetName = "Test" + TestUtils.generateDateUniqueString();
+        long presetId = shipmentManagementPage.saveFiltersAsPreset(presetName);
+        put(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID, presetId);
+        put(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME, presetName);
+    }
+
+    @And("^Operator select created filters preset on Shipment Management page$")
+    public void operatorSelectCreatedFiltersPresetOnShipmentManagementPage()
+    {
+        String presetName = get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID) + "-" + get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME);
+        shipmentManagementPage.selectFiltersPreset(presetName);
+    }
+
+    @And("^Operator verify parameters of selected filters preset on Shipment Management page$")
+    public void operatorVerifyParametersOfSelectedFiltersPresetOnShipmentManagementPage()
+    {
+        Map<String, String> filters = get(KEY_SHIPMENT_MANAGEMENT_FILTERS);
+        shipmentManagementPage.verifySelectedFilters(filters);
+    }
+
+    @And("^Operator delete created filters preset on Shipment Management page$")
+    public void operatorDeleteCreatedFiltersPresetOnShipmentManagementPage()
+    {
+        String presetName = get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID) + "-" + get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME);
+        shipmentManagementPage.deleteFiltersPreset(presetName);
+    }
+
+    @Then("^Operator verify filters preset was deleted$")
+    public void operatorVerifyFiltersPresetWasDeleted()
+    {
+        String presetName = get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID) + "-" + get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME);
+        shipmentManagementPage.verifyFiltersPresetWasDeleted(presetName);
+        remove(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID);
     }
 }
