@@ -8,10 +8,10 @@ import co.nvqa.operator_v2.model.OrderCreationV2Template;
 import co.nvqa.operator_v2.selenium.page.OrderCreationV2Page;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
-import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.datatable.DataTable;
 
 import java.util.Date;
 import java.util.HashMap;
