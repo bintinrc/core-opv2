@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @RouteGroups @Saas
+@OperatorV2Disabled @OperatorV2Part1Disabled @RouteGroups @Saas
 Feature: Route Groups
 
   @LaunchBrowser @ShouldAlwaysRun
