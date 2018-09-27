@@ -1,13 +1,16 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.pricing.Param;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.RouteGroupManagementPage;
 import co.nvqa.operator_v2.selenium.page.TagManagementPage;
 import com.google.inject.Inject;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.datatable.DataTable;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 
@@ -139,5 +142,12 @@ public class RouteGroupManagementSteps extends AbstractSteps
         {
             NvLogger.warn("Failed to delete 'Route Group'.");
         }
+    }
+
+    @Given("test list")
+    public void testList(DataTable dataTable)
+    {
+        java.util.List<Param> listOfParam = dataTable.asList(Param.class);
+        System.out.println(listOfParam);
     }
 }
