@@ -1,5 +1,5 @@
-@OperatorV2 @OperatorV2Part1 @RouteGroups @Saas
-Feature: Route Groups
+@OperatorV2 @OperatorV2Part1 @RouteGroupManagement @Saas
+Feature: Route Group Management
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2

@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -10,6 +11,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.Color;
 
 /**
+ *
  * @author Daniel Joi Partogi Hutapea
  */
 public class GlobalInboundPage extends OperatorV2SimplePage
@@ -149,11 +151,11 @@ public class GlobalInboundPage extends OperatorV2SimplePage
             {
                 String xpath = "//div[contains(@class, 'rack-sector')]";
                 String actualStyle = getAttribute(xpath, "style");
-                System.out.println("actualStyle " + actualStyle);
+                NvLogger.infof("Actual Style: %s", actualStyle);
                 String colorString = actualStyle.replace("background:", "").replaceAll(";", "").trim();
-                System.out.println(colorString);
+                NvLogger.infof("Color       : %s", colorString);
                 Color color = Color.fromString(colorString);
-                System.out.println(color.asHex());
+                NvLogger.infof("Color as Hex: %s", color.asHex());
                 Assert.assertThat("Unexpected Rack Sector color", color.asHex(), Matchers.equalToIgnoringCase(rackColor));
             }
         }, "globalInboundAndCheckAlert");

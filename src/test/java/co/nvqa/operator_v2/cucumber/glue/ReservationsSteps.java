@@ -5,10 +5,10 @@ import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.ReservationsPage;
 import com.google.inject.Inject;
-import cucumber.api.DataTable;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.datatable.DataTable;
 
 import java.util.Date;
 import java.util.Map;
