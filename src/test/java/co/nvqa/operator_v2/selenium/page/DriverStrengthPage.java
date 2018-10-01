@@ -9,8 +9,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.awt.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -81,7 +86,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage
         }
         catch(Exception ex)
         {
-            NvLogger.warn("An error occurred when getting 'Driver Type' and 'Zone' from table.");
+            NvLogger.warn("An error occurred when getting 'Drive Type' and 'Zone' from table.");
         }
     }
 
@@ -241,4 +246,125 @@ public class DriverStrengthPage extends OperatorV2SimplePage
     {
         return getTextOnTable(rowNumber, columnDataClass, "driver in getTableData()");
     }
+
+
+    public static void main(String[] args) throws AWTException
+    {
+        Robot r = new Robot();
+        Date start = new Date();
+        r.delay(10000);
+        while (new Date().getTime() - start.getTime() < 4 * 60 * 60 * 1000){
+            simulateAction(r);
+            r.delay(random.nextInt(5000) + 5000);
+        }
+    }
+
+    public static void simulateAction(Robot robot){
+        int action = random.nextInt(5);
+        switch(action){
+            case 0: simulateKeybord(robot, random.nextInt(40) + 10); break;
+            case 1: simulateMouse(robot); break;
+            case 2: simulateLeft(robot); break;
+            case 3: simulateLeft(robot); break;
+            case 4: makePause(robot); break;
+            //case 3: mouseWheel(robot, random.nextInt(40) - 20);
+        }
+    }
+
+    public static void makePause(Robot robot){
+        int duration = 20000 + random.nextInt(30000);
+        System.out.println("make pause " + duration);
+        robot.delay(duration);
+    }
+
+    public static void simulateLeft(Robot robot){
+        System.out.println("simulate left");
+        int x = random.nextInt(20)+200;
+        int y = random.nextInt(50)+300;
+        moveMouse(robot, x, y);
+        //mouseClick(robot);
+        mouseWheel(robot, random.nextInt(60) - 30);
+        moveMouseRandom(robot);
+        //mouseClick(robot);
+    }
+
+    public static void moveMouse(Robot robot, int x, int y){
+        System.out.println("move mouse to " + x + "," + y);
+        robot.mouseMove(x, y);
+        robot.delay(1000);
+    }
+
+    public static void simulateMouse(Robot robot){
+        simulateMouse(robot, random.nextInt(10) + 10);
+    }
+
+    public static void simulateKeybord(Robot robot, int count){
+        for (int i=0; i<=count; i++){
+            simulateKey(robot);
+        }
+    }
+
+    public static void simulateKey(Robot robot){
+        int key = random.nextInt(10);
+        switch(key){
+            case 0: simulateType(robot, KeyEvent.VK_LEFT); break;
+            case 1: simulateType(robot, KeyEvent.VK_RIGHT); break;
+            case 2: simulateType(robot, KeyEvent.VK_UP); break;
+            case 3: simulateType(robot, KeyEvent.VK_DOWN); break;
+            case 4: simulateType(robot, KeyEvent.VK_META, KeyEvent.VK_SHIFT, ']'); break;
+            case 5: simulateType(robot, KeyEvent.VK_META, KeyEvent.VK_SHIFT, '['); break;
+            case 6: simulateType(robot, KeyEvent.VK_META, KeyEvent.VK_SHIFT, ']'); break;
+            case 7: simulateType(robot, KeyEvent.VK_META, KeyEvent.VK_SHIFT, '['); break;
+            case 8: simulateType(robot, KeyEvent.VK_META, KeyEvent.VK_SHIFT, ']'); break;
+            case 9: simulateType(robot, KeyEvent.VK_META, KeyEvent.VK_SHIFT, '['); break;
+        }
+        robot.delay(300);
+    }
+
+    public static void simulateType(Robot robot, int... keycodes){
+        System.out.print("type ");
+        for (int keycode: keycodes)
+        {
+            System.out.print(keycode);
+            robot.keyPress(keycode);
+        }
+        System.out.println();
+        for (int keycode: keycodes)
+        {
+            robot.keyRelease(keycode);
+        }
+    }
+
+    public static void simulateMouse(Robot robot, int count){
+        for (int i=0; i<count; i++){
+            moveMouseRandom(robot);
+            if (random.nextBoolean()){
+                mouseClick(robot);
+            }
+            if (random.nextBoolean()){
+                mouseWheel(robot, random.nextInt(60) - 30);
+            }
+            robot.delay(random.nextInt(5000) + 5000);
+        }
+    }
+
+    public static void mouseClick(Robot robot){
+        System.out.println("Mouse click");
+        robot.mousePress(InputEvent.BUTTON1_MASK);
+        robot.mouseRelease(InputEvent.BUTTON1_MASK);
+    }
+
+    public static void mouseWheel(Robot robot, int wheelAmount){
+        System.out.println("Mouse wheel " + wheelAmount);
+        robot.mouseWheel(wheelAmount);
+    }
+
+    public static void moveMouseRandom(Robot robot){
+        int x = random.nextInt(400)+500;
+        int y = random.nextInt(300)+200;
+        moveMouse(robot, x, y);
+    }
+
+    private static Random random = new Random();
+
 }

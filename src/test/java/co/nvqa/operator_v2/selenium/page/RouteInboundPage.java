@@ -1,21 +1,38 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.CollectionSummary;
+import co.nvqa.operator_v2.model.WaypointOrderInfo;
 import co.nvqa.operator_v2.model.WaypointPerformance;
-import org.junit.Assert;
+import co.nvqa.operator_v2.model.WaypointReservationInfo;
+import co.nvqa.operator_v2.model.WaypointShipperInfo;
+import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static co.nvqa.operator_v2.selenium.page.RouteInboundPage.ShippersTable.VIEW_ORDERS;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 public class RouteInboundPage extends OperatorV2SimplePage
 {
+    private ShippersTable shippersTable;
+    private ReservationsTable reservationsTable;
+    private OrdersTable ordersTable;
+
     public RouteInboundPage(WebDriver webDriver)
     {
         super(webDriver);
+        shippersTable = new ShippersTable(webDriver);
+        reservationsTable = new ReservationsTable(webDriver);
+        ordersTable = new OrdersTable(webDriver);
     }
 
     public void fetchRouteByRouteId(String hubName, long routeId)
@@ -28,11 +45,12 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
         dismissDriverAttendanceDialog();
 
-        waitUntilInvisibilityOfElementLocated(continueBtnXpath+"//md-progress-circular");
+        waitUntilInvisibilityOfElementLocated(continueBtnXpath + "//md-progress-circular");
     }
 
-    private void dismissDriverAttendanceDialog(){
-        if(isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Driver Attendance']"))
+    private void dismissDriverAttendanceDialog()
+    {
+        if (isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Driver Attendance']"))
         {
             click("//md-dialog[./md-dialog-content/h2[text()='Driver Attendance']]//button[@aria-label='Yes']");
         }
@@ -48,7 +66,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
         dismissDriverAttendanceDialog();
 
-        waitUntilInvisibilityOfElementLocated(continueBtnXpath+"//md-progress-circular");
+        waitUntilInvisibilityOfElementLocated(continueBtnXpath + "//md-progress-circular");
     }
 
     public void fetchRouteByDriver(String hubName, String driverName, long routeId)
@@ -59,7 +77,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
         String continueBtnXpath = "//md-card-content[.//label[text()='Search by driver']]/nv-api-text-button[@name='container.route-inbound.continue']/button";
         click(continueBtnXpath);
 
-        if(isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Choose a route']"))
+        if (isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Choose a route']"))
         {
             String routeIdProceedButton = String.format("//tr[@ng-repeat='routeId in ctrl.routeIds'][td[text()='%d']]//button", routeId);
             moveToElementWithXpath(routeIdProceedButton); //This needed to make sure the button is clicked if there are many routes.
@@ -69,7 +87,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
         dismissDriverAttendanceDialog();
 
-        waitUntilInvisibilityOfElementLocated(continueBtnXpath+"//md-progress-circular");
+        waitUntilInvisibilityOfElementLocated(continueBtnXpath + "//md-progress-circular");
     }
 
     public void verifyRouteSummaryInfoIsCorrect(long expectedRouteId, String expectedDriverName, String expectedHubName, Date expectedRouteDate, WaypointPerformance expectedWaypointPerformance, CollectionSummary expectedCollectionSummary)
@@ -79,10 +97,10 @@ public class RouteInboundPage extends OperatorV2SimplePage
         String actualHubName = getText("//div[./label[text()='Hub']]/h3/span");
         String actualRouteDate = getText("//div[./label[text()='Date']]/h3/span");
 
-        Assert.assertEquals("Route ID", String.valueOf(expectedRouteId), actualRouteId);
-        Assert.assertEquals("Driver Name", actualDriverName.replaceAll(" ", ""), expectedDriverName.replaceAll(" ", ""));
-        Assert.assertEquals("Hub Name", expectedHubName, actualHubName);
-        Assert.assertEquals("Route Date", YYYY_MM_DD_SDF.format(expectedRouteDate), actualRouteDate);
+        assertEquals("Route ID", String.valueOf(expectedRouteId), actualRouteId);
+        assertEquals("Driver Name", actualDriverName.replaceAll(" ", ""), expectedDriverName.replaceAll(" ", ""));
+        assertEquals("Hub Name", expectedHubName, actualHubName);
+        assertEquals("Route Date", YYYY_MM_DD_SDF.format(expectedRouteDate), actualRouteDate);
 
         String actualWpPending = getText("//p[./parent::div/following-sibling::div[contains(text(),'Pending')]]");
         String actualWpPartial = getText("//p[./parent::div/following-sibling::div[contains(text(),'Partial')]]");
@@ -90,10 +108,174 @@ public class RouteInboundPage extends OperatorV2SimplePage
         String actualWpCompleted = getText("//p[./parent::div/following-sibling::div[contains(text(),'Completed')]]");
         String actualWpTotal = getText("//p[./parent::div/following-sibling::div[contains(text(),'Total')]]");
 
-        Assert.assertEquals("Waypoint Performance - Pending", String.valueOf(expectedWaypointPerformance.getPending()), actualWpPending);
-        Assert.assertEquals("Waypoint Performance - Partial", String.valueOf(expectedWaypointPerformance.getPartial()), actualWpPartial);
-        Assert.assertEquals("Waypoint Performance - Failed", String.valueOf(expectedWaypointPerformance.getFailed()), actualWpFailed);
-        Assert.assertEquals("Waypoint Performance - Completed", String.valueOf(expectedWaypointPerformance.getCompleted()), actualWpCompleted);
-        Assert.assertEquals("Waypoint Performance - Total", String.valueOf(expectedWaypointPerformance.getTotal()), actualWpTotal);
+        assertEquals("Waypoint Performance - Pending", String.valueOf(expectedWaypointPerformance.getPending()), actualWpPending);
+        assertEquals("Waypoint Performance - Partial", String.valueOf(expectedWaypointPerformance.getPartial()), actualWpPartial);
+        assertEquals("Waypoint Performance - Failed", String.valueOf(expectedWaypointPerformance.getFailed()), actualWpFailed);
+        assertEquals("Waypoint Performance - Completed", String.valueOf(expectedWaypointPerformance.getCompleted()), actualWpCompleted);
+        assertEquals("Waypoint Performance - Total", String.valueOf(expectedWaypointPerformance.getTotal()), actualWpTotal);
+    }
+
+    public void openPendingWaypointsDialog()
+    {
+        click("//p[./parent::div/following-sibling::div[contains(text(),'Pending')]]");
+        waitUntilVisibilityOfMdDialogByTitle("Pending");
+    }
+
+    public void openCompletedWaypointsDialog()
+    {
+        click("//p[./parent::div/following-sibling::div[contains(text(),'Completed')]]");
+        waitUntilVisibilityOfMdDialogByTitle("Completed");
+    }
+
+    public void openFailedWaypointsDialog()
+    {
+        click("//p[./parent::div/following-sibling::div[contains(text(),'Failed')]]");
+        waitUntilVisibilityOfMdDialogByTitle("Failed");
+    }
+
+    public void clickContinueToInbound()
+    {
+        clickNvIconTextButtonByName("container.route-inbound.continue-to-inbound");
+    }
+
+    public void clickGoBack()
+    {
+        clickNvIconTextButtonByName("commons.go-back");
+    }
+
+    public void scanTrackingId(String trackingId)
+    {
+        sendKeysAndEnterById("tracking-id", trackingId);
+        String xpath = "//tr[@ng-repeat=\"row in ctrl.inboundingHistory | orderBy:'createdAt':true\"]/td[normalize-space(text())='%s']";
+        waitUntilVisibilityOfElementLocated(xpath, trackingId);
+    }
+
+    public void openViewOrdersOrReservationsDialog(int index)
+    {
+        shippersTable.clickActionButton(index, VIEW_ORDERS);
+    }
+
+    public void validateShippersTable(List<WaypointShipperInfo> expectedShippersInfo)
+    {
+        List<WaypointShipperInfo> actualShippersInfo = shippersTable.readAllEntities();
+        assertEquals("Shippers count", expectedShippersInfo.size(), actualShippersInfo.size());
+
+        for (int i = 0; i < actualShippersInfo.size(); i++)
+        {
+            expectedShippersInfo.get(i).compareWithActual(actualShippersInfo.get(i));
+        }
+    }
+
+    public void validateReservationsTable(List<WaypointReservationInfo> expectedReservationsInfo)
+    {
+        List<WaypointReservationInfo> actualReservationsInfo = reservationsTable.readAllEntities();
+        assertEquals("Reservations count", expectedReservationsInfo.size(), actualReservationsInfo.size());
+
+        for (int i = 0; i < actualReservationsInfo.size(); i++)
+        {
+            expectedReservationsInfo.get(i).compareWithActual(actualReservationsInfo.get(i));
+        }
+    }
+
+    public void validateOrdersTable(List<WaypointOrderInfo> expectedOrdersInfo)
+    {
+        List<WaypointOrderInfo> actualOrdersInfo = ordersTable.readAllEntities();
+        Map<String, WaypointOrderInfo> actualOrdersInfoMap = actualOrdersInfo.stream()
+                .collect(Collectors.toMap(
+                        WaypointOrderInfo::getTrackingId,
+                        orderInfo -> orderInfo
+                ));
+        assertEquals("Orders count", expectedOrdersInfo.size(), actualOrdersInfo.size());
+
+        expectedOrdersInfo.forEach(expectedOrderInfo -> {
+            WaypointOrderInfo actualOrderInfo = actualOrdersInfoMap.get(expectedOrderInfo.getTrackingId());
+            assertThat("Order with Tracking ID = " + expectedOrderInfo.getTrackingId() + " was not found", actualOrderInfo, notNullValue());
+            expectedOrderInfo.compareWithActual(actualOrderInfo);
+        });
+    }
+
+    /**
+     * Accessor for Shippers table
+     */
+    public static class ShippersTable extends NgRepeatTable<WaypointShipperInfo>
+    {
+        public static final String NG_REPEAT = "shipper in getTableData()";
+        public static final String SHIPPER_NAME = "shipperName";
+        public static final String ROUTE_INBOUNDED = "scanned";
+        public static final String TOTAL = "total";
+        public static final String VIEW_ORDERS = "View orders or reservations";
+
+        public ShippersTable(WebDriver webDriver)
+        {
+            super(webDriver);
+            setNgRepeat(NG_REPEAT);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                    .put(SHIPPER_NAME, "name")
+                    .put(ROUTE_INBOUNDED, "scanned")
+                    .put(TOTAL, "total")
+                    .build());
+            setEntityClass(WaypointShipperInfo.class);
+            setActionButtonsLocators(ImmutableMap.of(VIEW_ORDERS, "container.route-inbound.view-orders-or-reservations"));
+        }
+    }
+
+    /**
+     * Accessor for Reservations table
+     */
+    public static class ReservationsTable extends NgRepeatTable<WaypointReservationInfo>
+    {
+        public static final String NG_REPEAT = "reservation in getTableData()";
+        public static final String RESERVATION_ID = "reservationId";
+        public static final String LOCATION = "location";
+        public static final String READY_TO_LATEST_TIME = "readyToLatestTime";
+        public static final String APPROX_VALUE = "approxVolume";
+        public static final String STATUS = "status";
+        public static final String RECEIVED_PARCELS = "receivedParcels";
+
+        public ReservationsTable(WebDriver webDriver)
+        {
+            super(webDriver);
+            setNgRepeat(NG_REPEAT);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                    .put(RESERVATION_ID, "id")
+                    .put(LOCATION, "location")
+                    .put(READY_TO_LATEST_TIME, "ready-to-latest-time")
+                    .put(APPROX_VALUE, "approx_volume")
+                    .put(STATUS, "translated-status")
+                    .put(RECEIVED_PARCELS, "total-pickup-count")
+                    .build());
+            setEntityClass(WaypointReservationInfo.class);
+        }
+    }
+
+    /**
+     * Accessor for Orders table
+     */
+    public static class OrdersTable extends NgRepeatTable<WaypointOrderInfo>
+    {
+        public static final String NG_REPEAT = "order in getTableData()";
+        public static final String TRACKING_ID = "trackingId";
+        public static final String STAMP_ID = "stampId";
+        public static final String LOCATION = "location";
+        public static final String TYPE = "type";
+        public static final String STATUS = "status";
+        public static final String CMI_COUNT = "cmiCount";
+        public static final String ROUTE_INBOUND_STATUS = "routeInboundStatus";
+
+        public OrdersTable(WebDriver webDriver)
+        {
+            super(webDriver);
+            setNgRepeat(NG_REPEAT);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                    .put(TRACKING_ID, "tracking_id")
+                    .put(STAMP_ID, "stamp_id")
+                    .put(LOCATION, "location")
+                    .put(TYPE, "custom-type")
+                    .put(STATUS, "translated-status")
+                    .put(CMI_COUNT, "cmi_count")
+                    .put(ROUTE_INBOUND_STATUS, "scan-status")
+                    .build());
+            setEntityClass(WaypointOrderInfo.class);
+        }
     }
 }
