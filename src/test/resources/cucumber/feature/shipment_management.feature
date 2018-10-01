@@ -56,6 +56,30 @@ Feature: Shipment Management
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Cancelled |
 
+  @DeleteFilersPreset
+  Scenario: Save Shipment filters as preset
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Pending on Shipment Management page
+    And Operator filter Start Hub = 30JKB on Shipment Management page
+    And Operator filter End Hub = DOJO on Shipment Management page
+    And Operator filter Shipment Type = Air Haul on Shipment Management page
+    And Operator save current filters as preset on Shipment Management page
+    And Operator go to menu Shipper Support -> Blocked Dates
+    And Operator go to menu Inter-Hub -> Shipment Management
+    Then Operator select created filters preset on Shipment Management page
+    And Operator verify parameters of selected filters preset on Shipment Management page
+
+  @DeleteFilersPreset
+  Scenario: Delete Shipment filters as preset
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Pending on Shipment Management page
+    And Operator save current filters as preset on Shipment Management page
+    And Operator delete created filters preset on Shipment Management page
+    And Operator refresh page
+    Then Operator verify filters preset was deleted
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

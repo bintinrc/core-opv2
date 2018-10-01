@@ -4,17 +4,17 @@ import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
-import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_CANCEL;
-import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_EDIT;
-import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_FORCE;
-import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.COLUMN_SHIPMENT_ID;
+import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.*;
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Lanang Jati
@@ -30,6 +30,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     public static final String LOCATOR_FIELD_END_HUB = "end-hub";
     public static final String LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON = "Create";
     public static final String LOCATOR_COMMENT_TEXT_AREA = "container.shipment-management.comments-optional";
+    public static final String LOCATOR_SELCT_FILTERS_PRESET = "commons.preset.load-filter-preset";
+
     public static final String XPATH_EDIT_SEARCH_FILTER_BUTTON = "//button[contains(@aria-label, 'Edit Filter')]";
     public static final String XPATH_FORCE_SUCCESS_CONFIRMATION_BUTTON = "//button[span[text()='Confirm']]";
     public static final String XPATH_SHIPMENT_SCAN = "//div[contains(@class,'table-shipment-scan-container')]/table/tbody/tr";
@@ -80,24 +82,58 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         pause200ms();
     }
 
-    public void clickAddFilter(String filterLabel, String value)
+    public void addFilter(String filterLabel, String value)
     {
-        click("//input[@placeholder='Select Filter']");
-        click(grabXPathFilterDropdown(filterLabel));
-        TestUtils.hoverMouseTo(getWebDriver(), "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
-        click("//h4[text()='Select Search Filters']");
-
-        sendKeys(String.format("//nv-autocomplete[@item-types='%s']//input[@aria-label='Search or Select...']", filterLabel), value);
-        clickf("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope/span/span[text()='%s']", value);
-        TestUtils.hoverMouseTo(getWebDriver(), "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span");
-        click("//h4[text()='Select Search Filters']");
-
+        selectValueFromNvAutocompleteByItemTypesAndDismiss("filters", filterLabel);
+        selectValueFromNvAutocompleteByItemTypesAndDismiss(filterLabel, value);
         pause1s();
     }
 
-    public String grabXPathFilterDropdown(String value)
+    public long saveFiltersAsPreset(String presetName)
     {
-        return "//md-virtual-repeat-container[@aria-hidden='false']/div/div/ul/li/md-autocomplete-parent-scope/span[text()='" + value + "']";
+        clickButtonByAriaLabel("Action");
+        clickButtonByAriaLabel("Save Current as Preset");
+        waitUntilVisibilityOfMdDialogByTitle("Save Preset");
+        sendKeysById("preset-name", presetName);
+        clickNvIconTextButtonByName("commons.save");
+        waitUntilVisibilityOfToast("1 filter preset created");
+        String presetId = getMdSelectValueById("commons.preset.load-filter-preset");
+        Pattern p = Pattern.compile("(\\d+)(-)(.+)");
+        Matcher m = p.matcher(presetId);
+        if (m.matches())
+        {
+            presetId = m.group(1);
+            Assert.assertThat("created preset is selected", m.group(3), equalTo(presetName));
+        }
+        return Long.parseLong(presetId);
+    }
+
+    public void deleteFiltersPreset(String presetName)
+    {
+        clickButtonByAriaLabel("Action");
+        clickButtonByAriaLabel("Delete Preset");
+        waitUntilVisibilityOfMdDialogByTitle("Delete Preset");
+        selectValueFromMdSelectById("select-preset", presetName);
+        clickNvIconTextButtonByName("commons.delete");
+        waitUntilVisibilityOfToast("1 filter preset deleted");
+    }
+
+    public void verifyFiltersPresetWasDeleted(String presetName)
+    {
+        Assert.assertThat("Preset [" + presetName + "] exists in presets list", getMdSelectMultipleValuesById(LOCATOR_SELCT_FILTERS_PRESET), not(contains(presetName)));
+    }
+
+    public void selectFiltersPreset(String presetName)
+    {
+        selectValueFromMdSelectById(LOCATOR_SELCT_FILTERS_PRESET, presetName);
+    }
+
+    public void verifySelectedFilters(Map<String, String> filters)
+    {
+        filters.forEach((filter, expectedValue) -> {
+            String actualValue = getAttribute("aria-label", "//nv-filter-box[@item-types='%s']//nv-icon-text-button[@ng-repeat]", filter);
+            Assert.assertThat(filter + " filter selected value", actualValue, equalTo(expectedValue));
+        });
     }
 
     public void shipmentScanExist(String source, String hub)
@@ -121,7 +157,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         clickNvApiTextButtonByNameAndWaitUntilDone(LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
 
         String toastMessage = getToastTopText();
-        Assert.assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage, Matchers.allOf(Matchers.containsString("Shipment"), Matchers.containsString("created")));
+        Assert.assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage, allOf(containsString("Shipment"), containsString("created")));
         String shipmentId = toastMessage.split(" ")[1];
         confirmToast(toastMessage, false);
         shipmentInfo.setId(shipmentId);
@@ -184,8 +220,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
                         .filter(shipment -> shipment.getId().equalsIgnoreCase(shipmentId))
                         .findFirst()
                         .orElseThrow(() -> new AssertionError(String.format("Shipment with ID = '%s' not exist", shipmentId)));
-            }
-            catch(AssertionError ex)
+            } catch (AssertionError ex)
             {
                 clickEditSearchFilterButton();
                 clickButtonLoadSelection();
@@ -196,13 +231,13 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
 
     public void clearAllFilters()
     {
-        if(findElementByXpath(XPATH_CLEAR_FILTER_BUTTON).isDisplayed())
+        if (findElementByXpath(XPATH_CLEAR_FILTER_BUTTON).isDisplayed())
         {
-            if(findElementByXpath(XPATH_CLEAR_FILTER_VALUE).isDisplayed())
+            if (findElementByXpath(XPATH_CLEAR_FILTER_VALUE).isDisplayed())
             {
                 List<WebElement> clearValueBtnList = findElementsByXpath(XPATH_CLEAR_FILTER_VALUE);
 
-                for(WebElement clearBtn : clearValueBtnList)
+                for (WebElement clearBtn : clearValueBtnList)
                 {
                     clearBtn.click();
                     pause1s();

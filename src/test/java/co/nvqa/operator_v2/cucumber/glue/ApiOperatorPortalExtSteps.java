@@ -14,6 +14,7 @@ import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
+import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -28,7 +29,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -53,8 +53,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         try
         {
             getRouteClient().deleteTag(tagName);
-        }
-        catch(RuntimeException ex)
+        } catch (RuntimeException ex)
         {
             NvLogger.warnf("An error occurred when trying to delete tag with name = '%s'. Error: %s", tagName, ex.getMessage());
         }
@@ -64,20 +63,19 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         try
         {
             getRouteClient().deleteTag(tagName);
-        }
-        catch(RuntimeException ex)
+        } catch (RuntimeException ex)
         {
             NvLogger.warnf("An error occurred when trying to delete tag with name = '%s'. Error: %s", tagName, ex.getMessage());
         }
     }
 
     @Given("^API Operator retrieve routes using data below:$")
-    public void apiOperatorRetrieveRoutesUsingDataBelow(Map<String,String> mapOfData)
+    public void apiOperatorRetrieveRoutesUsingDataBelow(Map<String, String> mapOfData)
     {
         String value = mapOfData.getOrDefault("from", "TODAY");
         Date fromDate = null;
 
-        if("TODAY".equalsIgnoreCase(value))
+        if ("TODAY".equalsIgnoreCase(value))
         {
             Calendar fromCal = Calendar.getInstance();
             fromCal.setTime(getNextDate(-1));
@@ -85,8 +83,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
             fromCal.set(Calendar.MINUTE, 0);
             fromCal.set(Calendar.SECOND, 0);
             fromDate = fromCal.getTime();
-        }
-        else if(StringUtils.isNotBlank(value))
+        } else if (StringUtils.isNotBlank(value))
         {
             fromDate = Date.from(DateUtil.getDate(value).toInstant());
         }
@@ -94,7 +91,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         value = mapOfData.getOrDefault("to", "TODAY");
         Date toDate = null;
 
-        if("TODAY".equalsIgnoreCase(value))
+        if ("TODAY".equalsIgnoreCase(value))
         {
             Calendar toCal = Calendar.getInstance();
             toCal.setTime(new Date());
@@ -102,8 +99,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
             toCal.set(Calendar.MINUTE, 59);
             toCal.set(Calendar.SECOND, 59);
             toDate = toCal.getTime();
-        }
-        else if (StringUtils.isNotBlank(value))
+        } else if (StringUtils.isNotBlank(value))
         {
             toDate = Date.from(DateUtil.getDate(value).toInstant());
         }
@@ -111,7 +107,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         List<Integer> tags = null;
         value = mapOfData.get("tagIds");
 
-        if(StringUtils.isNotBlank(value))
+        if (StringUtils.isNotBlank(value))
         {
             tags = Arrays.stream(value.split(",")).map(tag -> Integer.parseInt(tag.trim())).collect(Collectors.toList());
         }
@@ -125,7 +121,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     {
         DpPartner dpPartner = new DpPartner(data);
         put(KEY_DP_PARTNER, dpPartner);
-        Map<String, Object> responseBody = getDPClient().createPartner(JsonHelper.toJson(JsonHelper.getDefaultSnakeCaseMapper(),dpPartner));
+        Map<String, Object> responseBody = getDPClient().createPartner(JsonHelper.toJson(JsonHelper.getDefaultSnakeCaseMapper(), dpPartner));
         dpPartner.setId(Long.parseLong(responseBody.get("id").toString()));
         dpPartner.setDpmsPartnerId(Long.parseLong(responseBody.get("dpms_partner_id").toString()));
     }
@@ -134,7 +130,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     public void operatorAddNewDPForTheDPPartnerWithTheFollowingAttributes(Map<String, String> data)
     {
         DpPartner dpPartner = get(KEY_DP_PARTNER);
-        Map<String,String> mapOfDynamicVariable = new HashMap<>();
+        Map<String, String> mapOfDynamicVariable = new HashMap<>();
         mapOfDynamicVariable.put("unique_string", TestUtils.generateDateUniqueString());
         mapOfDynamicVariable.put("generated_phone_no", TestUtils.generatePhoneNumber());
         String json = replaceTokens(data.get("requestBody"), mapOfDynamicVariable);
@@ -151,7 +147,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     {
         DpPartner dpPartner = get(KEY_DP_PARTNER);
         Dp dp = get(KEY_DISTRIBUTION_POINT);
-        Map<String,String> mapOfDynamicVariable = new HashMap<>();
+        Map<String, String> mapOfDynamicVariable = new HashMap<>();
         mapOfDynamicVariable.put("unique_string", TestUtils.generateDateUniqueString());
         mapOfDynamicVariable.put("generated_phone_no", TestUtils.generatePhoneNumber());
         String json = replaceTokens(data.get("requestBody"), mapOfDynamicVariable);
@@ -168,8 +164,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         String dateUniqueString = TestUtils.generateDateUniqueString();
 
         Map<String, String> mapOfDynamicVariable = new HashMap<>();
-        mapOfDynamicVariable.put("RANDOM_FIRST_NAME", "Driver-"+dateUniqueString);
-        mapOfDynamicVariable.put("RANDOM_LAST_NAME", "Rider-"+dateUniqueString);
+        mapOfDynamicVariable.put("RANDOM_FIRST_NAME", "Driver-" + dateUniqueString);
+        mapOfDynamicVariable.put("RANDOM_LAST_NAME", "Rider-" + dateUniqueString);
         mapOfDynamicVariable.put("TIMESTAMP", dateUniqueString);
         mapOfDynamicVariable.put("RANDOM_LATITUDE", String.valueOf(HubFactory.getRandomHub().getLatitude()));
         mapOfDynamicVariable.put("RANDOM_LONGITUDE", String.valueOf(HubFactory.getRandomHub().getLongitude()));
@@ -184,5 +180,15 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
 
         put(KEY_CREATED_DRIVER, driverInfo);
         put(KEY_CREATED_DRIVER_UUID, driverInfo.getUuid());
+    }
+
+    @After("@DeleteFilersPreset")
+    public void deleteFiltersPreset()
+    {
+        Long presetId = get(ShipmentManagementSteps.KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID);
+        if (presetId != null)
+        {
+            getTemplatesClient().deleteTemplate(presetId);
+        }
     }
 }

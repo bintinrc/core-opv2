@@ -896,6 +896,18 @@ public class OperatorV2SimplePage extends SimplePage
         return null;
     }
 
+    public List<String> getMdSelectMultipleValuesById(String mdSelectId)
+    {
+        List<WebElement> listOfWe = findElementsByXpath(String.format("//md-select[starts-with(@id,'%s')]/md-select-value/span/div[@class='md-text']", mdSelectId));
+
+        if(listOfWe!=null)
+        {
+            return listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
+        }
+
+        return null;
+    }
+
     public List<String> getMdSelectMultipleValuesTrimmed(String mdSelectNgModel)
     {
         List<WebElement> listOfWe = findElementsByXpath(String.format("//md-select[@ng-model='%s']/md-select-value/span/div[@class='md-text']", mdSelectNgModel));
