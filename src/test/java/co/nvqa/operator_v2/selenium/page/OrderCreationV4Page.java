@@ -85,6 +85,7 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
             case "HBL":
             case "MNT":
             case "DEMO":
+            case "MSI":
             {
                 fromAddress = addressMap.get("address1");
                 fromAddress += " " + addressMap.getOrDefault("address2", "");

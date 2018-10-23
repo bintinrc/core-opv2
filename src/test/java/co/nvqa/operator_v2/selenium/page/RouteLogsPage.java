@@ -72,7 +72,8 @@ public class RouteLogsPage extends OperatorV2SimplePage
             case "TKL":
             case "HBL":
             case "MNT":
-            case "DEMO": return ninjaDriverName.replaceAll(" ", "");
+            case "DEMO":
+            case "MSI": return ninjaDriverName.replaceAll(" ", "");
         }
 
         return ninjaDriverName;
