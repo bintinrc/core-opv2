@@ -87,6 +87,12 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
     public void verifyReservationInfo(Address address, String shipperName, String routeId, String driverName, String priorityLevel, String approxVolume, String comments)
     {
+        /*
+          Reload the table to make sure the table info is updated.
+         */
+        openFiltersForm();
+        filtersForm.clickButtonLoadSelection();
+
         String pickupAddress = reservationsTable.searchByPickupAddress(address);
         String actualPickupAddress = reservationsTable.getPickupAddress(1);
 
