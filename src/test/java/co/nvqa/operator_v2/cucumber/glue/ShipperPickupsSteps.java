@@ -328,7 +328,7 @@ public class ShipperPickupsSteps extends AbstractSteps
         Address address = get(KEY_CREATED_ADDRESS);
         ReservationInfo reservationInfo = new ReservationInfo();
         reservationInfo.setRouteId("-");
-        reservationInfo.setDriverName("No Driver");
+        reservationInfo.setDriverName("-");
         shipperPickupsPage.verifyReservationInfo(reservationInfo, address);
     }
 
@@ -338,7 +338,7 @@ public class ShipperPickupsSteps extends AbstractSteps
         List<Address> addresses = get(KEY_LIST_OF_CREATED_ADDRESSES);
         ReservationInfo reservationInfo = new ReservationInfo();
         reservationInfo.setRouteId("-");
-        reservationInfo.setDriverName("No Driver");
+        reservationInfo.setDriverName("-");
         addresses.forEach(address -> shipperPickupsPage.verifyReservationInfo(reservationInfo, address));
     }
 
