@@ -73,6 +73,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
             case "HBL":
             case "MNT":
             case "DEMO": return ninjaDriverName.replaceAll(" ", "");
+            case "MSI": return ninjaDriverName;
         }
 
         return ninjaDriverName;
@@ -232,8 +233,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
     {
         checkMultipleRows(listOfCreateRouteParams);
         selectAction(ACTION_EDIT_DRIVER_TYPES_OF_SELECTED);
-        String driverTypeNameFormatted = driverTypeParams.getDriverTypeName().replaceAll(" - ", " ").replace("_", " ").toLowerCase();
-        selectMultipleValuesFromMdSelectById("container.route-logs.select-driver-types", driverTypeNameFormatted);
+        selectMultipleValuesFromMdSelectById("container.route-logs.select-driver-types", XpathTextMode.EXACT, String.valueOf(driverTypeParams.getDriverTypeId()));
         clickNvIconTextButtonByNameAndWaitUntilDone("container.route-logs.edit-routes");
         waitUntilInvisibilityOfToast("Route(s) Edited");
     }

@@ -122,7 +122,8 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
             case "TKL":
             case "HBL":
             case "MNT":
-            case "DEMO": expectedAmountCollected = "$"+expectedAmountCollected; break;
+            case "DEMO":
+            case "MSI": expectedAmountCollected = "$"+expectedAmountCollected; break;
             default: expectedAmountCollected = "$"+expectedAmountCollected;
         }
 

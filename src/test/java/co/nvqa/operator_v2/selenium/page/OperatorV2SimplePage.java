@@ -799,9 +799,9 @@ public class OperatorV2SimplePage extends SimplePage
         {
             switch(xpathTextMode)
             {
-                case EXACT   : clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[@value='%s' or ./div/text()='%s']", value); break;
-                case CONTAINS: clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value); break;
-                default      : clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value); break;
+                case EXACT   : clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[@value='%s' or ./div/text()='%<s']", value); break;
+                case CONTAINS: clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%<s')]", value); break;
+                default      : clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%<s')]", value); break;
             }
 
             pause100ms();
@@ -827,7 +827,7 @@ public class OperatorV2SimplePage extends SimplePage
     {
         clickf("//md-select[starts-with(@id, '%s')]", mdSelectId);
         pause100ms();
-        clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value);
+        clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%<s')]", value);
         pause50ms();
     }
 
@@ -843,7 +843,7 @@ public class OperatorV2SimplePage extends SimplePage
     {
         clickf("//md-select[contains(@id, '%s')]", mdSelectId);
         pause100ms();
-        clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]", value, value);
+        clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%<s')]", value);
         pause50ms();
     }
 

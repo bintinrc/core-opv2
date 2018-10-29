@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.WebDriver;
 
@@ -19,7 +20,11 @@ public class BulkAddToRoutePage extends OperatorV2SimplePage
 
     public void selectCurrentDate()
     {
-        setMdDatepickerById("commons.model.route-date", TestUtils.getBeforeDate(1)); //This is a hack for now. It should be select current date.
+        switch(TestConstants.COUNTRY_CODE.toUpperCase())
+        {
+            case "MSI": setMdDatepickerById("commons.model.route-date", TestUtils.getBeforeDate(0)); break;
+            default: setMdDatepickerById("commons.model.route-date", TestUtils.getBeforeDate(1)); //This is a hack for now. It should be select current date.
+        }
     }
 
     public void selectRouteGroup(String routeGroupName)

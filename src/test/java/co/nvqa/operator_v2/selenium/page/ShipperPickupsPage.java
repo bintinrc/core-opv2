@@ -87,6 +87,12 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
     public void verifyReservationInfo(Address address, String shipperName, String routeId, String driverName, String priorityLevel, String approxVolume, String comments)
     {
+        /*
+          Reload the table to make sure the table info is updated.
+         */
+        openFiltersForm();
+        filtersForm.clickButtonLoadSelection();
+
         String pickupAddress = reservationsTable.searchByPickupAddress(address);
         String actualPickupAddress = reservationsTable.getPickupAddress(1);
 
@@ -235,6 +241,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
                 "1 Reservation(s) Created" :
                 "Reservation(s) created successfully";
         waitUntilInvisibilityOfToast(toastMessage, true);
+        click("//nv-icon-button[@name='Cancel']");
 
         return originalReservationsInfo;
     }
@@ -542,7 +549,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
             String reason = String.format("[%d] Suggested Route ID", index);
             Assert.assertThat(reason, routeId.get(), Matchers.greaterThan(0L));
             Optional<Route> optRoute = validRoutes.stream().filter(route -> route.getId() == routeId.get()).findFirst();
-            reason = String.format("[%d] Suggested rout is not valid", index);
+            reason = String.format("[%d] Suggested route is not valid", index);
             Assert.assertTrue(reason, optRoute.isPresent());
             return optRoute.get();
         }

@@ -247,53 +247,52 @@ Feature: Shipper Pickups
     And Operator removes the route from the created reservation
     Then Operator verify the route was removed from the created reservation
 
-#  @DeleteOrArchiveRoute
-#  Scenario: Operator should be able to remove the route from multiple reservations on Shipper Pickups page (uid:8bd44522-4d95-4fb9-8dba-5819de6171b9)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given API Operator create multiple shipper addresses V2 using data below:
-#      | numberOfAddresses | 2               |
-#      | shipperId         | {shipper-v4-id} |
-#      | generateAddress   | RANDOM          |
-#    Given API Operator create multiple V2 reservations based on number of created addresses using data below:
-#      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-#    Given API Operator create new route using data below:
-#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-#    Given API Operator add reservation pick-ups to the route
-#    Given Operator go to menu Pick Ups -> Shipper Pickups
-#    When Operator set filters using data below and click Load Selection on Shipper Pickups page:
-#      | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
-#      | reservationDateEnd   | {gradle-next-1-day-yyyy-MM-dd}   |
-#      | shipperName          | {shipper-v4-name}                |
-#    And Operator removes the route from the created reservations
-#    Then Operator verify the route was removed from the created reservations
+  @DeleteOrArchiveRoute
+  Scenario: Operator should be able to remove the route from multiple reservations on Shipper Pickups page (uid:8bd44522-4d95-4fb9-8dba-5819de6171b9)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create multiple shipper addresses V2 using data below:
+      | numberOfAddresses | 2               |
+      | shipperId         | {shipper-v4-id} |
+      | generateAddress   | RANDOM          |
+    Given API Operator create multiple V2 reservations based on number of created addresses using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add reservation pick-ups to the route
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filters using data below and click Load Selection on Shipper Pickups page:
+      | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
+      | reservationDateEnd   | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName          | {shipper-v4-name}                |
+    And Operator removes the route from the created reservations
+    Then Operator verify the route was removed from the created reservations
 
-#  @DeleteOrArchiveRoute
-#  Scenario Outline: Operator should be able to filter the Shipper Pickups by parameters (<hiptest-uid>)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given API Operator create new shipper address using data below:
-#      | shipperId       | {shipper-v2-legacy-id} |
-#      | generateAddress | RANDOM                 |
-#    Given API Operator create reservation using data below:
-#      | shipperId   | {shipper-v2-legacy-id} |
-#      | reservation | [ { "timewindowId":2, "readyDatetime":"{{cur_date}} 07:00:00", "latestDatetime":"{{cur_date}} 10:00:00", "approxVolume":"Less than 10 Parcels" } ] |
-#    Given API Operator create new route using data below:
-#      | createRouteRequest | { "zoneId":<zoneId>, "hubId":<hubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-#    Given API Operator add reservation pick-up to the route
-#    Given Operator go to menu Pick Ups -> Shipper Pickups
-#    When Operator set filter parameters and click Load Selection on Shipper Pickups page:
-#      | fromDate | TODAY      |
-#      | toDate   | TOMORROW   |
-#      | hub      | <hubName>  |
-#      | zone     | <zoneName> |
-#    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-#      | shipperName | {shipper-v2-name}      |
-#      | routeId     | GET_FROM_CREATED_ROUTE |
-#      | driverName  | {ninja-driver-name}    |
-#    Examples:
-#      | Note     | hiptest-uid                              | hubId    | hubName | zoneId    | zoneName        |
-#      | Params 1 | uid:619b39f4-1a64-4abe-8b8f-916e7509d129 | 2        | DOJO    | {zone-id} |                 |
-#      | Params 2 | uid:579e00c4-0612-4c55-91b3-26d29a8fec8a | {hub-id} |         | 2         | 2-ZZZ-All Zones |
-#
+  @DeleteOrArchiveRoute
+  Scenario Outline: Operator should be able to filter the Shipper Pickups by parameters (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":<zoneId>, "hubId":<hubId>, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add reservation pick-up to the route
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate | TODAY      |
+      | toDate   | TOMORROW   |
+      | hub      | <hubName>  |
+      | zone     | <zoneName> |
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName | {shipper-v4-name}      |
+      | routeId     | GET_FROM_CREATED_ROUTE |
+      | driverName  | {ninja-driver-name}    |
+    Examples:
+      | Note     | hiptest-uid                              | hubId    | hubName            | zoneId    | zoneName            |
+      | Params 1 | uid:619b39f4-1a64-4abe-8b8f-916e7509d129 | 5        | DRIVER-APP-MSI-HUB | {zone-id} |                     |
+      | Params 2 | uid:579e00c4-0612-4c55-91b3-26d29a8fec8a | {hub-id} |                    | 569       | DRIVER-APP-MSI-ZONE |
+
   Scenario: Operator should be able to download CSV file on Shipper Pickups page (uid:1214e548-8996-403a-a58c-043ed5c642d9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
