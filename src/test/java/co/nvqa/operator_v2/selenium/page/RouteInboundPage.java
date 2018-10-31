@@ -50,7 +50,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
     private void dismissDriverAttendanceDialog()
     {
-        if (isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Driver Attendance']"))
+        if(isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Driver Attendance']"))
         {
             click("//md-dialog[./md-dialog-content/h2[text()='Driver Attendance']]//button[@aria-label='Yes']");
         }
@@ -77,7 +77,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
         String continueBtnXpath = "//md-card-content[.//label[text()='Search by driver']]/nv-api-text-button[@name='container.route-inbound.continue']/button";
         click(continueBtnXpath);
 
-        if (isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Choose a route']"))
+        if(isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Choose a route']"))
         {
             String routeIdProceedButton = String.format("//tr[@ng-repeat='routeId in ctrl.routeIds'][td[text()='%d']]//button", routeId);
             moveToElementWithXpath(routeIdProceedButton); //This needed to make sure the button is clicked if there are many routes.
@@ -160,7 +160,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
         List<WaypointShipperInfo> actualShippersInfo = shippersTable.readAllEntities();
         assertEquals("Shippers count", expectedShippersInfo.size(), actualShippersInfo.size());
 
-        for (int i = 0; i < actualShippersInfo.size(); i++)
+        for(int i=0; i<actualShippersInfo.size(); i++)
         {
             expectedShippersInfo.get(i).compareWithActual(actualShippersInfo.get(i));
         }
@@ -197,6 +197,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
     /**
      * Accessor for Shippers table
      */
+    @SuppressWarnings("WeakerAccess")
     public static class ShippersTable extends NgRepeatTable<WaypointShipperInfo>
     {
         public static final String NG_REPEAT = "shipper in getTableData()";
@@ -222,6 +223,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
     /**
      * Accessor for Reservations table
      */
+    @SuppressWarnings("WeakerAccess")
     public static class ReservationsTable extends NgRepeatTable<WaypointReservationInfo>
     {
         public static final String NG_REPEAT = "reservation in getTableData()";
@@ -251,6 +253,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
     /**
      * Accessor for Orders table
      */
+    @SuppressWarnings("WeakerAccess")
     public static class OrdersTable extends NgRepeatTable<WaypointOrderInfo>
     {
         public static final String NG_REPEAT = "order in getTableData()";

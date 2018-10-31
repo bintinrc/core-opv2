@@ -35,7 +35,7 @@ public class MainSteps extends AbstractSteps
     }
 
     @Given("^Operator go to menu ([^\"]*) -> ([^\"]*)$")
-    public void  operatorGoToMenuWithoutQuote(String parentMenuName, String childMenuName)
+    public void operatorGoToMenuWithoutQuote(String parentMenuName, String childMenuName)
     {
         operatorGoToMenu(parentMenuName, childMenuName);
     }
