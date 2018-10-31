@@ -435,7 +435,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public int getRowsCountOfTableWithNgRepeat(String ngRepeat)
     {
-        String xpath = String.format("//tr[@ng-repeat='%s']", ngRepeat);
+        String xpath = String.format("//tr[@ng-repeat='%s'][not(contains(@class,'last-row'))]", ngRepeat);
 
         try
         {

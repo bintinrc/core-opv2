@@ -81,7 +81,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage
         }
         catch(Exception ex)
         {
-            NvLogger.warn("An error occurred when getting 'Driver Type' and 'Zone' from table.");
+            NvLogger.warn("An error occurred when getting 'Drive Type' and 'Zone' from table.");
         }
     }
 
@@ -241,4 +241,5 @@ public class DriverStrengthPage extends OperatorV2SimplePage
     {
         return getTextOnTable(rowNumber, columnDataClass, "driver in getTableData()");
     }
+
 }
