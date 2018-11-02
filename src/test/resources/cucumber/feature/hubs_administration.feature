@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @HubsAdministration @Saas
+@OperatorV2Disabled @OperatorV2Part2Disabled @HubsAdministration @Saas
 Feature: Hubs Administration
 
   @LaunchBrowser @ShouldAlwaysRun
