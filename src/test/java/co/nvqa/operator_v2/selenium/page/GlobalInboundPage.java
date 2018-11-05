@@ -135,12 +135,18 @@ public class GlobalInboundPage extends OperatorV2SimplePage
         pause500ms();
     }
 
-    public void globalInboundAndCheckAlert(GlobalInboundParams globalInboundParams, String toastText, String rackInfo, String rackColor)
+    public void globalInboundAndCheckAlert(GlobalInboundParams globalInboundParams, String toastText, String rackInfo, String rackColor, String weightWarning)
     {
         globalInbound(globalInboundParams);
 
         TestUtils.retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
         {
+            if(StringUtils.isNotBlank(weightWarning))
+            {
+                String message = getText("//div[@ng-if='ctrl.state.weightDiff']/span");
+                Assert.assertEquals("Weight warning message", weightWarning, message);
+            }
+
             if(StringUtils.isNotBlank(rackInfo))
             {
                 String xpath = String.format("//h1[normalize-space(text())='%s']", rackInfo);
