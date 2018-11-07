@@ -6,6 +6,7 @@ import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import com.google.inject.Inject;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -156,4 +157,19 @@ public class EditOrderSteps extends AbstractSteps
             default: throw new IllegalArgumentException("Unknown route type: " + type);
         }
     }
+
+    @And("^Operator verify Delivery dates:$")
+    public void operatorVerifyDeliveryStartDateTimeValueIs(Map<String, String> mapOfData)
+    {
+        mapOfData = StandardTestUtils.replaceDataTableTokens(mapOfData);
+        String startDateTime = mapOfData.get("startDateTime");
+        if (StringUtils.isNoneBlank(startDateTime)){
+            editOrderPage.verifyDeliveryStartDateTime(startDateTime);
+        }
+        String endDateTime = mapOfData.get("endDateTime");
+        if (StringUtils.isNoneBlank(endDateTime)){
+            editOrderPage.verifyDeliveryEndDateTime(endDateTime);
+        }
+    }
+
 }
