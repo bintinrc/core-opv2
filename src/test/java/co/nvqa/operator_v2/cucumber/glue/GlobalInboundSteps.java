@@ -11,7 +11,6 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.Map;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -35,13 +34,12 @@ public class GlobalInboundSteps extends AbstractSteps
     {
         Double result = null;
 
-        if(str!=null)
+        if (str != null)
         {
             try
             {
                 result = Double.parseDouble(str);
-            }
-            catch(NumberFormatException ex)
+            } catch (NumberFormatException ex)
             {
                 NvLogger.warnf("Failed to parse String to Double. Cause: %s", ex.getMessage());
             }
@@ -50,7 +48,8 @@ public class GlobalInboundSteps extends AbstractSteps
         return result;
     }
 
-    private GlobalInboundParams buildGlobalInboundParams(Map<String, String> mapOfData){
+    private GlobalInboundParams buildGlobalInboundParams(Map<String, String> mapOfData)
+    {
         String hubName = mapOfData.get("hubName");
         String deviceId = mapOfData.get("deviceId");
         String trackingId = mapOfData.get("trackingId");
@@ -61,7 +60,7 @@ public class GlobalInboundSteps extends AbstractSteps
         Double overrideDimWidth = parseDoubleOrNull(mapOfData.get("overrideDimWidth"));
         Double overrideDimLength = parseDoubleOrNull(mapOfData.get("overrideDimLength"));
 
-        if("GET_FROM_CREATED_ORDER".equalsIgnoreCase(trackingId))
+        if ("GET_FROM_CREATED_ORDER".equalsIgnoreCase(trackingId))
         {
             trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         }
@@ -93,7 +92,8 @@ public class GlobalInboundSteps extends AbstractSteps
         String toastText = mapOfData.get("toastText");
         String rackInfo = mapOfData.get("rackInfo");
         String rackColor = mapOfData.get("rackColor");
-        globalInboundPage.globalInboundAndCheckAlert(globalInboundParams, toastText, rackInfo, rackColor);
+        String weightWarning = mapOfData.get("weightWarning");
+        globalInboundPage.globalInboundAndCheckAlert(globalInboundParams, toastText, rackInfo, rackColor, weightWarning);
         put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
     }
 }

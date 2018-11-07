@@ -126,7 +126,7 @@ public class AllOrdersSteps extends AbstractSteps
     @Then("^Operator verify all orders in CSV is found on All Orders page with correct info$")
     public void operatorVerifyAllOrdersInCsvIsFoundOnAllOrdersPageWithCorrectInfo()
     {
-        List<Order> listOfCreatedOrder = containsKey(KEY_LIST_OF_ORDER_DETAILS)? get(KEY_LIST_OF_ORDER_DETAILS) : get(KEY_LIST_OF_CREATED_ORDER);
+        List<Order> listOfCreatedOrder = containsKey(KEY_LIST_OF_ORDER_DETAILS) ? get(KEY_LIST_OF_ORDER_DETAILS) : get(KEY_LIST_OF_CREATED_ORDER);
         allOrdersPage.verifyAllOrdersInCsvIsFoundWithCorrectInfo(listOfCreatedOrder);
     }
 
@@ -275,5 +275,14 @@ public class AllOrdersSteps extends AbstractSteps
         List<String> expectedFailureReasons = new ArrayList<>(trackingIds.size());
         Collections.fill(expectedFailureReasons, "No route to pull from");
         allOrdersPage.verifySelectionErrorDialog(trackingIds, AllOrdersAction.PULL_FROM_ROUTE, expectedFailureReasons);
+    }
+
+    @When("^Operator open page of the created order from All Orders page$")
+    public void operatorOpenPageOfTheCreatedOrderFromAllOrdersPage()
+    {
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        Order createdOrder = get(KEY_CREATED_ORDER);
+        allOrdersPage.specificSearch(AllOrdersPage.Category.TRACKING_OR_STAMP_ID, AllOrdersPage.SearchLogic.EXACTLY_MATCHES, trackingId);
+        allOrdersPage.switchToEditOrderWindow(createdOrder.getId());
     }
 }
