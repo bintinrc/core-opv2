@@ -1,4 +1,4 @@
-@OperatorV2Deprecated @OperatorV2Part1Deprecated @OutboundMonitoringDeprecated @SaasDeprecated
+@OperatorV2 @OperatorV2Part1 @OutboundMonitoring @Saas
 Feature: Outbound Monitoring
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -113,6 +113,27 @@ Feature: Outbound Monitoring
     When Operator search on Route ID Header Table on Outbound Monitoring Page
     When Operator click on comment icon on chosen route ID on Outbound Monitoring Page
     Then Operator verifies the comment table on the chosen route ID is changed
+
+  @CloseNewWindows @DeleteOrArchiveRoute
+  Scenario: Operator should be able to Pull out order from route on Outbound Monitoring page (uid:a0b72c03-6596-454c-a697-00a02ed7984a)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    Given Operator go to menu New Features -> Outbound Monitoring
+    When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
+      | fromDate    | {{previous-1-day-yyyy-MM-dd}} |
+      | toDate      | {{current-date-yyyy-MM-dd}}   |
+      | zoneName    | {zone-name}                   |
+      | hubName     | {hub-name}                    |
+    When Operator pull out order from route on Outbound Monitoring page
+    Then API Operator verify order is pulled out from route
 
 #TO DO : after the page is migrated to OpV2
 #  @DeleteOrArchiveRoute

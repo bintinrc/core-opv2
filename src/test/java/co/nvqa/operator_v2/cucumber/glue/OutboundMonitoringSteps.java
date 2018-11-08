@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage;
 import com.google.inject.Inject;
@@ -7,6 +8,9 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+
+import java.util.Date;
+import java.util.Map;
 
 /**
  *
@@ -23,7 +27,7 @@ public class OutboundMonitoringSteps extends AbstractSteps {
 
     @Override
     public void init() {
-        outboundMonitoringPage = new OutboundMonitoringPage(getWebDriver());
+        outboundMonitoringPage = new OutboundMonitoringPage(getWebDriver(), getScenarioStorage());
     }
 
     @When("^Operator click on 'Load Selection' Button on Outbound Monitoring Page$")
@@ -34,7 +38,7 @@ public class OutboundMonitoringSteps extends AbstractSteps {
     @And("^Operator search on Route ID Header Table on Outbound Monitoring Page$")
     public void searchRouteId() {
         long routeId = get(KEY_CREATED_ROUTE_ID);
-        outboundMonitoringPage.searchRouteId(String.valueOf(routeId));
+        outboundMonitoringPage.searchTableByRouteId(routeId);
     }
 
     @Then("^Operator verify the route ID is exist on Outbound Monitoring Page$")
@@ -71,5 +75,26 @@ public class OutboundMonitoringSteps extends AbstractSteps {
     @Then("^Operator verifies the comment table on the chosen route ID is changed$")
     public void verifyCommentIsRight() {
         outboundMonitoringPage.verifyCommentIsRight();
+    }
+
+    @When("^Operator select filter and click Load Selection on Outbound Monitoring page using data below:$")
+    public void selectFiltersAndClickLoadSelection(Map<String,String> dataTableAsMap) {
+        Map<String,String> mapOfTokens = createDefaultTokens();
+        Map<String,String> dataTableAsMapReplaced = replaceDataTableTokens(dataTableAsMap, mapOfTokens);
+
+        Date fromDate = parseToDate(dataTableAsMapReplaced.get("fromDate"), YYYY_MM_DD_SDF);
+        Date toDate = parseToDate(dataTableAsMapReplaced.get("toDate"), YYYY_MM_DD_SDF);
+        String zoneName = dataTableAsMap.get("zoneName");
+        String hubName = dataTableAsMap.get("hubName");
+
+        outboundMonitoringPage.selectFiltersAndClickLoadSelection(fromDate, toDate, zoneName, hubName);
+    }
+
+    @When("^Operator pull out order from route on Outbound Monitoring page$")
+    public void pullOutOrderFromRoute() {
+        Order order = get(KEY_CREATED_ORDER);
+        long routeId = get(KEY_CREATED_ROUTE_ID);
+
+        outboundMonitoringPage.pullOutOrderFromRoute(order, routeId);
     }
 }
