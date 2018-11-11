@@ -6,8 +6,9 @@ import co.nvqa.commons.model.shipper.v2.Shipper;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
+import static co.nvqa.commons.utils.StandardTestUtils.retryIfRuntimeExceptionOccurred;
+
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
@@ -26,6 +27,7 @@ public class AllShippersPage extends OperatorV2SimplePage
     public static final String COLUMN_CLASS_DATA_STATUS = "_status";
 
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
+    public static final String ACTION_BUTTON_LOGIN = "container.shippers.shipper-dashboard-login";
 
     private final AllShippersCreateEditPage allShippersCreateEditPage;
 
@@ -60,6 +62,17 @@ public class AllShippersPage extends OperatorV2SimplePage
         verifyShipperInfoIsCorrect(shipper.getName(), shipper);
     }
 
+    public void loginToShipperDashboard(Shipper shipper)
+    {
+        retryIfRuntimeExceptionOccurred(() -> {
+            searchTableByName(shipper.getName());
+        });
+        Assert.assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
+        clickActionButtonOnTable(1, ACTION_BUTTON_LOGIN);
+        waitUntilNewWindowOrTabOpened();
+        switchToOtherWindowAndWaitWhileLoading("/orders/management/");
+    }
+
     public void verifyShipperInfoIsCorrect(String shipperNameKeyword, Shipper shipper)
     {
         searchTableByName(shipperNameKeyword);
@@ -74,10 +87,14 @@ public class AllShippersPage extends OperatorV2SimplePage
         String actualSalesPerson = getTextOnTable(1, COLUMN_CLASS_DATA_SALES_PERSON);
         String actualStatus = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
 
-        switch(actualStatus)
+        switch (actualStatus)
         {
-            case "container.shippers.active": actualStatus = "Active"; break;
-            case "container.shippers.inactive": actualStatus = "Inactive"; break;
+            case "container.shippers.active":
+                actualStatus = "Active";
+                break;
+            case "container.shippers.inactive":
+                actualStatus = "Inactive";
+                break;
         }
 
         shipper.setLegacyId(actualLegacyId);
@@ -192,7 +209,7 @@ public class AllShippersPage extends OperatorV2SimplePage
     public void searchTableByNameAndGoToEditPage(Shipper shipper)
     {
         searchTableByName(shipper.getName());
-        Assert.assertFalse("Table is empty. Cannot enable Auto-Reservation for shipper with Legacy ID = "+shipper.getLegacyId(), isTableEmpty());
+        Assert.assertFalse("Table is empty. Cannot enable Auto-Reservation for shipper with Legacy ID = " + shipper.getLegacyId(), isTableEmpty());
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
     }
 

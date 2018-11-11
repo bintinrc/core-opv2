@@ -242,4 +242,15 @@ public class ZonesPage extends OperatorV2SimplePage
     {
         clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
     }
+
+    private void clickViewSelectedPolygonsButton()
+    {
+        waitUntilEnabledAndClickNvIconTextButtonByName("View Selected Polygons");
+    }
+
+    public void viewSelectedPolygonsOfZone(String name){
+        searchTableByNameAndRetryIfTableIsEmpty(name);
+        checkRowWithMdVirtualRepeat(1, MD_VIRTUAL_REPEAT);
+        clickViewSelectedPolygonsButton();
+    }
 }

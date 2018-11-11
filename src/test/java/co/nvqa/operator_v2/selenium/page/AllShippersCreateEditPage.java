@@ -4,6 +4,8 @@ import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.shipper.v2.DistributionPoint;
 import co.nvqa.commons.model.shipper.v2.LabelPrinter;
 import co.nvqa.commons.model.shipper.v2.Magento;
+import co.nvqa.commons.model.shipper.v2.MarketplaceBilling;
+import co.nvqa.commons.model.shipper.v2.MarketplaceDefault;
 import co.nvqa.commons.model.shipper.v2.OrderCreate;
 import co.nvqa.commons.model.shipper.v2.Pickup;
 import co.nvqa.commons.model.shipper.v2.Pricing;
@@ -16,6 +18,8 @@ import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.NoSuchElementException;
@@ -28,7 +32,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
@@ -53,6 +56,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     {
         waitUntilPageLoaded("shippers/create");
         fillBasicSettingsForm(shipper);
+        fillMoreSettingsForm(shipper);
+        if (shipper.getMarketplaceDefault() != null)
+        {
+            fillMarketplaceSettingsForm(shipper);
+        }
         clickNvIconTextButtonByName("container.shippers.create-shipper");
         waitUntilInvisibilityOfToast("All changes saved successfully");
         backToShipperList();
@@ -61,7 +69,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipper(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
         fillBasicSettingsForm(shipper);
         clickNvIconTextButtonByName("Save Changes");
         waitUntilInvisibilityOfToast("All changes saved successfully");
@@ -81,7 +89,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         sendKeysById("Short Name", shipper.getShortName());
         sendKeysById("shipper-phone-number", shipper.getContact());
 
-        if(isCreateForm)
+        if (isCreateForm)
         {
             sendKeysById("shipper-email", shipper.getEmail());
             sendKeysById("shipper-dashboard-password", shipper.getShipperDashboardPassword());
@@ -98,16 +106,16 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         OrderCreate orderCreate = shipper.getOrderCreate();
         selectValueFromMdSelectOrCheckCurrentIfDisabled("OC Version", LOCATOR_FIELD_OC_VERSION, orderCreate.getVersion());
 
-        if(isCreateForm)
+        if (isCreateForm)
         {
             selectMultipleValuesFromMdSelect("ctrl.data.basic.selectedOcServices", orderCreate.getServicesAvailable());
         }
 
         selectValueFromMdSelect("ctrl.data.basic.trackingType", orderCreate.getTrackingType());
 
-        if(isCreateForm)
+        if (isCreateForm)
         {
-            TestUtils.retryIfRuntimeExceptionOccurred(()->
+            TestUtils.retryIfRuntimeExceptionOccurred(() ->
             {
                 String generatedPrefix = generateUpperCaseAlphaNumericString(5);
                 orderCreate.setPrefix(generatedPrefix);
@@ -116,7 +124,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
                 pause500ms();
                 boolean isPrefixAlreadyUsed = isElementExistWait3Seconds("//div[text()='Prefix already used']");
 
-                if(isPrefixAlreadyUsed)
+                if (isPrefixAlreadyUsed)
                 {
                     throw new NvTestRuntimeException("Prefix already used. Regenerate new prefix.");
                 }
@@ -133,7 +141,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         // Pricing
         Pricing pricing = shipper.getPricing();
-        selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT, pricing.getScriptName());
+        if (pricing != null && StringUtils.isNotBlank(pricing.getScriptName()))
+        {
+            selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT, pricing.getScriptName());
+        }
 
         // Billing
         sendKeysById("Billing Name", shipper.getBillingName());
@@ -144,31 +155,151 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         // Account Type
         selectValueFromMdSelect(LOCATOR_FIELD_CHANNEL, "B2C Marketplace");
         selectValueFromMdSelect(LOCATOR_FIELD_INDUSTRY, shipper.getIndustryName());
-        String accountTypeId = shipper.getAccountTypeId()!=null? String.valueOf(shipper.getAccountTypeId()) : "0";
+        String accountTypeId = shipper.getAccountTypeId() != null ? String.valueOf(shipper.getAccountTypeId()) : "0";
         selectValueFromMdSelect(LOCATOR_FIELD_ACCOUNT_TYPE, accountTypeId);
 
-        if(isCreateForm)
+        if (isCreateForm)
         {
             selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_SALES_PERSON, shipper.getSalesPerson());
         }
+    }
 
-        clickTabItem("More Settings");
+    private void fillMoreSettingsForm(Shipper shipper)
+    {
         Pickup pickupSettings = shipper.getPickup();
+        if (pickupSettings != null)
+        {
+            clickTabItem("More Settings");
 
-        String startTimeFormatted = convertTimeFrom24sHourTo12HoursAmPm(pickupSettings.getDefaultStartTime());
-        String endTimeFormatted = convertTimeFrom24sHourTo12HoursAmPm(pickupSettings.getDefaultEndTime());
-        String defaultPickupTimeSelector = startTimeFormatted+" - "+endTimeFormatted;
-        selectValueFromMdSelectByIdContains("commons.select", defaultPickupTimeSelector);
+            if (CollectionUtils.isNotEmpty(pickupSettings.getReservationPickupAddresses()))
+            {
+                pickupSettings.getReservationPickupAddresses().forEach(address -> {
+                    addAddress(address);
+                    verifyPickupAddress(address);
+                });
+            }
 
-        clickTabItem("Basic Settings");
+            String startTimeFormatted = convertTimeFrom24sHourTo12HoursAmPm(pickupSettings.getDefaultStartTime());
+            String endTimeFormatted = convertTimeFrom24sHourTo12HoursAmPm(pickupSettings.getDefaultEndTime());
+            String defaultPickupTimeSelector = startTimeFormatted + " - " + endTimeFormatted;
+            selectValueFromMdSelectByIdContains("commons.select", defaultPickupTimeSelector);
+        }
+    }
+
+    private void addAddress(Address address)
+    {
+        scrollIntoView("//*[@name='container.shippers.more-reservation-add-pickup-address']", false);
+        clickNvIconTextButtonByName("container.shippers.more-reservation-add-pickup-address");
+        fillAddAddressForm(address);
+    }
+
+    private void fillAddAddressForm(Address address)
+    {
+        waitUntilVisibilityOfMdDialogByTitle("Add Address");
+
+        String value = address.getName();
+        if (StringUtils.isNotBlank(value))
+        {
+            sendKeysById("Contact Name", value);
+        }
+
+        value = address.getContact();
+        if (StringUtils.isNotBlank(value))
+        {
+            sendKeysById("Contact Mobile Number", value);
+        }
+
+        value = address.getEmail();
+        if (StringUtils.isNotBlank(value))
+        {
+            sendKeysById("Contact Email", value);
+        }
+
+        value = address.getAddress1();
+        if (StringUtils.isNotBlank(value))
+        {
+            sendKeysById("Pickup Address 1", value);
+        }
+
+        value = address.getAddress2();
+        if (StringUtils.isNotBlank(value))
+        {
+            sendKeysById("Pickup Address 2 / Unit Number", value);
+        }
+
+        value = address.getCountry();
+        if (StringUtils.isNotBlank(value))
+        {
+            selectValueFromMdSelectById("commons.country", value);
+        }
+
+        value = address.getPostcode();
+        if (StringUtils.isNotBlank(value))
+        {
+            sendKeysById("Pickup Postcode", value);
+        }
+
+        Double val = address.getLatitude();
+        if (val != null)
+        {
+            sendKeysById("Latitude", String.valueOf(val));
+        }
+
+        val = address.getLongitude();
+        if (val != null)
+        {
+            sendKeysById("Longitude", String.valueOf(val));
+        }
+
+        clickButtonByAriaLabel("Save changes");
+        waitUntilInvisibilityOfMdDialogByTitle("Add Address");
+    }
+
+    private void fillMarketplaceSettingsForm(Shipper shipper)
+    {
+        clickTabItem("Marketplace");
+
+        MarketplaceDefault md = shipper.getMarketplaceDefault();
+        if (md != null)
+        {
+            // Services
+            selectValueFromMdSelect("ctrl.data.marketplace.ocVersion", md.getOrderCreateVersion());
+            selectMultipleValuesFromMdSelect("ctrl.data.marketplace.selectedOcServices", md.getOrderCreateServicesAvailable());
+            selectValueFromMdSelect("ctrl.data.marketplace.trackingType", md.getOrderCreateTrackingType());
+
+            clickToggleButton("ctrl.data.marketplace.allowCod", convertBooleanToString(md.getOrderCreateAllowCodService(), "Yes", "No"));
+            clickToggleButton("ctrl.data.marketplace.allowCp", convertBooleanToString(md.getOrderCreateAllowCpService(), "Yes", "No"));
+            clickToggleButton("ctrl.data.marketplace.isPrePaid", convertBooleanToString(md.getOrderCreateIsPrePaid(), "Yes", "No"));
+            clickToggleButton("ctrl.data.marketplace.allowStaging", convertBooleanToString(md.getOrderCreateAllowStagedOrders(), "Yes", "No"));
+            clickToggleButton("ctrl.data.marketplace.isMultiParcel", convertBooleanToString(md.getOrderCreateIsMultiParcelShipper(), "Yes", "No"));
+            sendKeys("//md-input-container[@model='ctrl.data.marketplace.premiumPickupDailyLimit']//input", String.valueOf(md.getPickupPremiumPickupDailyLimit()));
+        }
+
+        // Billing
+        MarketplaceBilling mb = shipper.getMarketplaceBilling();
+        if (mb != null)
+        {
+            sendKeys("//md-input-container[@model='ctrl.data.marketplace.billingName']//input", mb.getBillingName());
+            sendKeys("//md-input-container[@model='ctrl.data.marketplace.billingContact']//input", mb.getBillingContact());
+            sendKeys("//md-input-container[@model='ctrl.data.marketplace.billingAddress']//input", mb.getBillingAddress());
+            sendKeys("//md-input-container[@model='ctrl.data.marketplace.billingPostcode']//input", mb.getBillingPostcode());
+        }
     }
 
     public void verifyNewShipperIsCreatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
 
         String actualShipperStatus = getToggleButtonValue("ctrl.data.basic.status");
-        String actualShipperType = getMdSelectValueTrimmed("ctrl.data.basic.shipperType");
+
+        String actualShipperType;
+        if (StringUtils.equalsIgnoreCase(shipper.getType(), "Marketplace"))
+        {
+            actualShipperType = getInputValueById("Shipper Type");
+        } else
+        {
+            actualShipperType = getMdSelectValueTrimmed("ctrl.data.basic.shipperType");
+        }
 
         Assert.assertEquals("Shipper Status", convertBooleanToString(shipper.getActive(), "Active", "Disabled"), actualShipperStatus);
         Assert.assertEquals("Shipper Type", shipper.getType(), actualShipperType);
@@ -205,11 +336,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         List<String> listOfActualServices;
 
-        if(availableService==null || availableService.equals("oc-services"))
+        if (availableService == null || availableService.equals("oc-services"))
         {
             listOfActualServices = new ArrayList<>();
-        }
-        else
+        } else
         {
             String[] temp = availableService.split("oc-services:")[1].split(",");
             listOfActualServices = Stream.of(temp).map(String::trim).collect(Collectors.toList());
@@ -260,12 +390,40 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         Assert.assertEquals("Industry", shipper.getIndustryName(), actualIndustry);
         Assert.assertEquals("Sales Person", shipper.getSalesPerson(), actualSalesPerson);
 
+        verifyMoreSettingsTab(shipper);
+
         backToShipperList();
+    }
+
+    public void verifyMoreSettingsTab(Shipper shipper)
+    {
+        Pickup pickupSettings = shipper.getPickup();
+        if (pickupSettings != null)
+        {
+            clickTabItem("More Settings");
+
+            if (CollectionUtils.isNotEmpty(pickupSettings.getReservationPickupAddresses()))
+            {
+                pickupSettings.getReservationPickupAddresses().forEach(this::verifyPickupAddress);
+            }
+        }
+    }
+
+    public void verifyPickupAddress(Address address)
+    {
+        boolean isEditForm = isElementExistFast("//div[@class='action-toolbar']//div[contains(text(),'Edit Shippers')]");
+        searchTableCustom1("contact", address.getContact());
+        Assert.assertTrue("Pickup Addresses with contact [" + address.getContact() + "] exists", !isTableEmpty());
+        String actualAddress = isEditForm ?
+                getTextOnTableWithMdVirtualRepeat(1, "address", "address in getTableData()") :
+                getTextOnTableWithNgRepeat(1, "address", "address in getTableData()");
+
+        Assert.assertEquals("Address", address.to1LineAddressWithPostcode(), actualAddress);
     }
 
     public void enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(Shipper shipper, Address address, Reservation reservation)
     {
-        waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
         clickTabItem("More Settings");
         addAddress(address);
         setAsDefaultAddress(address);
@@ -273,32 +431,15 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         backToShipperList();
     }
 
-    private void addAddress(Address address)
-    {
-        clickNvIconTextButtonByName("container.shippers.more-reservation-add-pickup-address");
-
-        sendKeysById("Contact Name", address.getName());
-        sendKeysById("Contact Mobile Number", address.getContact());
-        sendKeysById("Contact Email", address.getEmail());
-        sendKeysById("Pickup Address 1", address.getAddress1());
-        sendKeysById("Pickup Address 2", address.getAddress2());
-        sendKeysById("Pickup Country", address.getCountry());
-        sendKeysById("Pickup City", address.getCity());
-        sendKeysById("Pickup Postcode", address.getPostcode());
-        clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
-    }
-
     public void setAsDefaultAddress(Address address)
     {
         searchTableAddressByAddress(address.getAddress2());
         clickActionButtonOnTableAddress(1, ACTION_BUTTON_SET_AS_DEFAULT);
-
         try
         {
             long addressId = Long.parseLong(getInputValueById("Address ID"));
             address.setId(addressId);
-        }
-        catch(NumberFormatException ex)
+        } catch (NumberFormatException ex)
         {
             throw new RuntimeException("Failed to get address ID.");
         }
@@ -319,7 +460,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         String latestTimeMinute = latestTime[1];
 
         String[] cutoffTime = reservation.getAutoReservationCutoffTime().split(":");
-        String cutoffTimeHour= cutoffTime[0];
+        String cutoffTimeHour = cutoffTime[0];
         String cutoffTimeMinute = cutoffTime[1];
 
         selectValueFromMdSelect("ctrl.data.more.readyTime.hour", readyTimeHour);
@@ -338,7 +479,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperLabelPrinterSettings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
         clickTabItem("Basic Settings");
 
         LabelPrinter labelPrinter = shipper.getLabelPrinter();
@@ -352,7 +493,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperLabelPrinterSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
         clickTabItem("Basic Settings");
 
         LabelPrinter labelPrinter = shipper.getLabelPrinter();
@@ -368,7 +509,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperDistributionPointSettings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
         clickTabItem("More Settings");
 
         DistributionPoint distributionPoint = shipper.getDistributionPoints();
@@ -393,7 +534,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperDistributionPointSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
         clickTabItem("More Settings");
 
         DistributionPoint distributionPoint = shipper.getDistributionPoints();
@@ -427,7 +568,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperReturnsSettings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
         clickTabItem("More Settings");
 
         Return returnSettings = shipper.getReturns();
@@ -448,7 +589,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperReturnsSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
         clickTabItem("More Settings");
 
         Return returnSettings = shipper.getReturns();
@@ -476,7 +617,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperQoo10Settings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
         clickTabItem("Integrations");
 
         Qoo10 qoo10 = shipper.getQoo10();
@@ -491,7 +632,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperQoo10SettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
         clickTabItem("Integrations");
 
         Qoo10 qoo10 = shipper.getQoo10();
@@ -507,7 +648,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperShopifySettings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
         clickTabItem("Integrations");
 
         Shopify shopify = shipper.getShopify();
@@ -528,7 +669,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperShopifySettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
         clickTabItem("Integrations");
 
         Shopify shopify = shipper.getShopify();
@@ -556,7 +697,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperMagentoSettings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
         clickTabItem("Integrations");
 
         Magento magento = shipper.getMagento();
@@ -572,7 +713,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperMagentoSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/"+shipper.getLegacyId());
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
         clickTabItem("Integrations");
 
         Magento magento = shipper.getMagento();
@@ -592,7 +733,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     {
         clickNvIconTextButtonByName("container.shippers.back-to-shipper-list");
 
-        if(isElementExistFast("//md-dialog//button[@aria-label='Leave']"))
+        if (isElementExistFast("//md-dialog//button[@aria-label='Leave']"))
         {
             clickButtonOnMdDialogByAriaLabel("Leave");
         }
@@ -614,8 +755,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
             String xpath = xpath1 + " | " + xpath2;
             WebElement we = findElementByXpath(xpath);
             moveAndClick(we);
-        }
-        catch(NoSuchElementException ex)
+        } catch (NoSuchElementException ex)
         {
             throw new RuntimeException("Cannot find action button on table.", ex);
         }
@@ -625,7 +765,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     {
         super.waitUntilPageLoaded();
 
-        waitUntil(()->
+        waitUntil(() ->
         {
             String currentUrl = getCurrentUrl();
             NvLogger.infof("AllShippersCreateEditPage.waitUntilPageLoaded: Current URL = [%s] - Expected URL contains = [%s]", currentUrl, expectedUrlEndsWith);
