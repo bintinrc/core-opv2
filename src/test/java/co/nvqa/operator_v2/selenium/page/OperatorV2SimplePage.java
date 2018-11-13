@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static co.nvqa.commons.utils.StandardTestUtils.retryIfExpectedExceptionOccurred;
+
 /**
  *
  * @author Daniel Joi Partogi Hutapea
@@ -61,11 +63,23 @@ public class OperatorV2SimplePage extends SimplePage
         clickf("//nv-icon-button[@name='%s']", name);
     }
 
+    public void setValueOfIconButtonByName(String name)
+    {
+        clickf("//nv-icon-button[@name='%s']", name);
+    }
+
     public void clickNvIconButtonByNameAndWaitUntilEnabled(String name)
     {
         String xpathExpression = String.format("//nv-icon-button[@name='%s']", name);
         click(xpathExpression);
         waitUntilInvisibilityOfElementLocated(xpathExpression + "/button[@disabled='disabled']");
+    }
+
+    public void waitUntilEnabledAndClickNvIconTextButtonByName(String name)
+    {
+        String xpathExpression = String.format("//nv-icon-text-button[@name='%s']", name);
+        waitUntilInvisibilityOfElementLocated(xpathExpression + "/button[@disabled='disabled']");
+        click(xpathExpression);
     }
 
     public void clickNvIconTextButtonByName(String name)
@@ -584,6 +598,17 @@ public class OperatorV2SimplePage extends SimplePage
         }
     }
 
+    public void checkRowWithNgRepeat(int rowNumber, String ngRepeat)
+    {
+        WebElement mdCheckboxWe = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[contains(@class, 'selection')]//md-checkbox", ngRepeat, rowNumber));
+        boolean ariaChecked = Boolean.valueOf(getAttribute(mdCheckboxWe, "aria-checked"));
+
+        if(!ariaChecked)
+        {
+            mdCheckboxWe.click();
+        }
+    }
+
     public void clickToggleButton(String divModel, String buttonAriaLabel)
     {
         clickf("//div[@model='%s']//button[@aria-label='%s']", divModel, buttonAriaLabel);
@@ -1044,6 +1069,12 @@ public class OperatorV2SimplePage extends SimplePage
     {
         NvLogger.info("Wait until new window or tab opened.");
         wait5sUntil(()->getWebDriver().getWindowHandles().size()>1, String.format("Window handles size is = %d.", getWebDriver().getWindowHandles().size()));
+    }
+
+    public void switchToOtherWindowAndWaitWhileLoading(String expectedUrlEndWith){
+        retryIfExpectedExceptionOccurred(() -> {
+            switchToOtherWindow(expectedUrlEndWith);
+        }, 4000, NvTestRuntimeException.class);
     }
 
     public void switchToOtherWindow(String expectedUrlEndWith)

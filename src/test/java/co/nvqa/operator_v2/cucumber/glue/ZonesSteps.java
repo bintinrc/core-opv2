@@ -3,7 +3,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.Zone;
 import co.nvqa.operator_v2.selenium.page.ZonesPage;
+import co.nvqa.operator_v2.selenium.page.ZonesSelectedPolygonsPage;
 import com.google.inject.Inject;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -11,13 +13,13 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.Date;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
 public class ZonesSteps extends AbstractSteps
 {
     private ZonesPage zonesPage;
+    private ZonesSelectedPolygonsPage zonesSelectedPolygonsPage;
 
     @Inject
     public ZonesSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
@@ -29,6 +31,7 @@ public class ZonesSteps extends AbstractSteps
     public void init()
     {
         zonesPage = new ZonesPage(getWebDriver());
+        zonesSelectedPolygonsPage = new ZonesSelectedPolygonsPage(getWebDriver());
     }
 
     @When("^Operator create new Zone using Hub \"([^\"]*)\"$")
@@ -38,11 +41,11 @@ public class ZonesSteps extends AbstractSteps
         long uniqueCoordinate = System.currentTimeMillis();
 
         Zone zone = new Zone();
-        zone.setName("ZONE-"+uniqueCode);
-        zone.setShortName("Z-"+uniqueCode);
+        zone.setName("ZONE-" + uniqueCode);
+        zone.setShortName("Z-" + uniqueCode);
         zone.setHubName(hubName);
-        zone.setLatitude(Double.parseDouble("1."+uniqueCoordinate));
-        zone.setLongitude(Double.parseDouble("103."+uniqueCoordinate));
+        zone.setLatitude(Double.parseDouble("1." + uniqueCoordinate));
+        zone.setLongitude(Double.parseDouble("103." + uniqueCoordinate));
         zone.setDescription(String.format("This zone is created by Operator V2 automation test. Please don't use this zone. Created at %s.", new Date()));
 
         zonesPage.addZone(zone);
@@ -62,12 +65,12 @@ public class ZonesSteps extends AbstractSteps
         Zone zone = get("zone");
 
         Zone zoneEdited = new Zone();
-        zoneEdited.setName(zone.getName()+"-EDITED");
-        zoneEdited.setShortName(zone.getShortName()+"-E");
-        zoneEdited.setLatitude(zone.getLatitude()+0.1);
-        zoneEdited.setLongitude(zone.getLongitude()+0.1);
+        zoneEdited.setName(zone.getName() + "-EDITED");
+        zoneEdited.setShortName(zone.getShortName() + "-E");
+        zoneEdited.setLatitude(zone.getLatitude() + 0.1);
+        zoneEdited.setLongitude(zone.getLongitude() + 0.1);
         zoneEdited.setHubName(zone.getHubName());
-        zoneEdited.setDescription(zone.getDescription()+" [EDITED]");
+        zoneEdited.setDescription(zone.getDescription() + " [EDITED]");
 
         put("zoneEdited", zoneEdited);
         zonesPage.editZone(zone, zoneEdited);
@@ -113,5 +116,35 @@ public class ZonesSteps extends AbstractSteps
     {
         Zone zone = get("zone");
         zonesPage.verifyCsvFileDownloadedSuccessfully(zone);
+    }
+
+    @Then("^Operator click View Selected Polygons for zone \"([^\"]*)\"$")
+    public void operatorClickViewSelectedPolygonsForZone(String zoneName)
+    {
+        zonesPage.viewSelectedPolygonsOfZone(zoneName);
+    }
+
+    @Then("^Operator add new \"([^\"]*)\" zone on View Selected Polygons page$")
+    public void operatorAddNewZoneOnViewSelectedPolygonsPage(String zoneName)
+    {
+        zonesSelectedPolygonsPage.addZone(zoneName);
+    }
+
+    @And("^Operator remove zone \"([^\"]*)\" if it is added on View Selected Polygons page$")
+    public void operatorRemoveZoneIfItIsAddedOnViewSelectedPolygonsPage(String zoneName)
+    {
+        zonesSelectedPolygonsPage.removeZoneIfAdded(zoneName);
+    }
+
+    @Then("^Operator verify zone \"([^\"]*)\" is selected on View Selected Polygons page$")
+    public void operatorVerifyZoneIsSelectedOnViewSelectedPolygonsPage(String zoneName)
+    {
+        zonesSelectedPolygonsPage.verifySelectedZone(zoneName);
+    }
+
+    @Then("^Operator verify count of selected zones is (\\d+) on View Selected Polygons page$")
+    public void operatorVerifyCountOfSelectedZonesIsOnViewSelectedPolygonsPage(int countOfZones)
+    {
+        zonesSelectedPolygonsPage.verifyCountOfSelectedZones(countOfZones);
     }
 }

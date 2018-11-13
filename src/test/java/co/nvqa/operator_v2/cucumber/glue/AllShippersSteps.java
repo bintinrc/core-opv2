@@ -2,9 +2,12 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
+import co.nvqa.commons.model.other.LatLong;
 import co.nvqa.commons.model.shipper.v2.DistributionPoint;
 import co.nvqa.commons.model.shipper.v2.LabelPrinter;
 import co.nvqa.commons.model.shipper.v2.Magento;
+import co.nvqa.commons.model.shipper.v2.MarketplaceBilling;
+import co.nvqa.commons.model.shipper.v2.MarketplaceDefault;
 import co.nvqa.commons.model.shipper.v2.OrderCreate;
 import co.nvqa.commons.model.shipper.v2.Pickup;
 import co.nvqa.commons.model.shipper.v2.Pricing;
@@ -23,6 +26,7 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +34,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -57,7 +60,7 @@ public class AllShippersSteps extends AbstractSteps
     }
 
     @When("^Operator create new Shipper with basic settings using data below:$")
-    public void operatorCreateNewShipperWithBasicSettingsUsingDataBelow(Map<String,String> mapOfData)
+    public void operatorCreateNewShipperWithBasicSettingsUsingDataBelow(Map<String, String> mapOfData)
     {
         Boolean isShipperActive = Boolean.parseBoolean(mapOfData.get("isShipperActive"));
         String shipperType = mapOfData.get("shipperType");
@@ -67,11 +70,10 @@ public class AllShippersSteps extends AbstractSteps
 
         List<String> listOfAvailableService;
 
-        if(servicesTemp==null || servicesTemp.isEmpty())
+        if (servicesTemp == null || servicesTemp.isEmpty())
         {
             listOfAvailableService = new ArrayList<>();
-        }
-        else
+        } else
         {
             listOfAvailableService = Stream.of(servicesTemp.split(",")).map(String::trim).collect(Collectors.toList());
         }
@@ -94,19 +96,19 @@ public class AllShippersSteps extends AbstractSteps
         // Shipper Details
         shipper.setActive(isShipperActive);
         shipper.setType(shipperType);
-        shipper.setName("Dummy Shipper #"+dateUniqueString);
-        shipper.setShortName("DS-"+StringUtils.right(dateUniqueString, 13));
+        shipper.setName("Dummy Shipper #" + dateUniqueString);
+        shipper.setShortName("DS-" + StringUtils.right(dateUniqueString, 13));
         shipper.setContact(generatePhoneNumber(dateUniqueString));
-        shipper.setEmail("ds."+dateUniqueString+"@automation.co");
+        shipper.setEmail("ds." + dateUniqueString + "@automation.co");
         shipper.setShipperDashboardPassword("Ninjitsu89");
 
         // Liaison Details
         Address liaisonAddress = generateRandomAddress();
 
-        shipper.setLiaisonName("Liaison #"+dateUniqueString);
-        shipper.setLiaisonContact(generatePhoneNumber(dateUniqueString+"1"));
-        shipper.setLiaisonEmail("ln."+dateUniqueString+"@automation.co");
-        shipper.setLiaisonAddress(liaisonAddress.to1LineAddress()+" #"+dateUniqueString);
+        shipper.setLiaisonName("Liaison #" + dateUniqueString);
+        shipper.setLiaisonContact(generatePhoneNumber(dateUniqueString + "1"));
+        shipper.setLiaisonEmail("ln." + dateUniqueString + "@automation.co");
+        shipper.setLiaisonAddress(liaisonAddress.to1LineAddress() + " #" + dateUniqueString);
         shipper.setLiaisonPostcode(liaisonAddress.getPostcode());
 
         // Services
@@ -133,9 +135,9 @@ public class AllShippersSteps extends AbstractSteps
         // Billing
         Address billingAddress = generateRandomAddress();
 
-        shipper.setBillingName("Billing #"+dateUniqueString);
-        shipper.setBillingContact(generatePhoneNumber(dateUniqueString+"2"));
-        shipper.setBillingAddress(billingAddress.to1LineAddress()+" #"+dateUniqueString);
+        shipper.setBillingName("Billing #" + dateUniqueString);
+        shipper.setBillingContact(generatePhoneNumber(dateUniqueString + "2"));
+        shipper.setBillingAddress(billingAddress.to1LineAddress() + " #" + dateUniqueString);
         shipper.setBillingPostcode(billingAddress.getPostcode());
 
         // Industry & Sales
@@ -148,8 +150,78 @@ public class AllShippersSteps extends AbstractSteps
         pickupSettings.setDefaultEndTime("22:00");
         shipper.setPickup(pickupSettings);
 
+        fillMarketplaceProperties(shipper, mapOfData);
+        generatePickupAddresses(shipper, mapOfData);
+
         allShippersPage.createNewShipper(shipper);
         put(KEY_CREATED_SHIPPER, shipper);
+    }
+
+    private void generatePickupAddresses(Shipper shipper, Map<String, String> mapOfData)
+    {
+        String value = mapOfData.get("pickupAddressCount");
+        if (StringUtils.isNotBlank(value))
+        {
+            int count = Integer.parseInt(value);
+            List<Address> pickupAddresses = new ArrayList<>();
+            for (int i = 0; i < count; i++)
+            {
+                Address address = generateRandomAddress();
+                address.setName("DA-" + generateDateUniqueString());
+                LatLong latLong = generateRandomLatLong();
+                address.setLongitude(latLong.getLongitude());
+                address.setLatitude(latLong.getLatitude());
+                pickupAddresses.add(address);
+            }
+            shipper.getPickup().setReservationPickupAddresses(pickupAddresses);
+        }
+    }
+
+    private void fillMarketplaceProperties(Shipper shipper, Map<String, String> mapOfData)
+    {
+        if (mapOfData.keySet().stream().anyMatch(key -> key.startsWith("marketplace.")))
+        {
+            MarketplaceDefault md = new MarketplaceDefault();
+            md.setOrderCreateVersion(mapOfData.get("marketplace.ocVersion"));
+            String value = mapOfData.get("marketplace.selectedOcServices");
+            if (StringUtils.isNotBlank(value))
+            {
+                List<String> selectedOcServices = Arrays.asList(value.split(","));
+                md.setOrderCreateServicesAvailable(selectedOcServices);
+            }
+            md.setOrderCreateTrackingType(mapOfData.get("marketplace.trackingType"));
+
+            md.setOrderCreateAllowCodService(Boolean.valueOf(mapOfData.get("marketplace.allowCod")));
+            md.setOrderCreateAllowCpService(Boolean.valueOf(mapOfData.get("marketplace.allowCp")));
+            md.setOrderCreateIsPrePaid(Boolean.valueOf(mapOfData.get("marketplace.isPrePaid")));
+            md.setOrderCreateAllowStagedOrders(Boolean.valueOf(mapOfData.get("marketplace.allowStaging")));
+            md.setOrderCreateIsMultiParcelShipper(Boolean.valueOf(mapOfData.get("marketplace.isMultiParcel")));
+            value = mapOfData.get("marketplace.premiumPickupDailyLimit");
+            if (StringUtils.isNotBlank(value))
+            {
+                md.setPickupPremiumPickupDailyLimit(Integer.valueOf(value));
+            }
+
+            // Billing
+            MarketplaceBilling mb = new MarketplaceBilling();
+            Address billingAddress = generateRandomAddress();
+            String dateUniqueString = generateDateUniqueString();
+
+            value = mapOfData.get("marketplace.billingName");
+            mb.setBillingName(StringUtils.isNotBlank(value) ? value : "Billing #" + dateUniqueString);
+
+            value = mapOfData.get("marketplace.billingContact");
+            mb.setBillingContact(StringUtils.isNotBlank(value) ? value : generatePhoneNumber(dateUniqueString + "2"));
+
+            value = mapOfData.get("marketplace.billingAddress");
+            mb.setBillingAddress(StringUtils.isNotBlank(value) ? value : billingAddress.to1LineAddress() + " #" + dateUniqueString);
+
+            value = mapOfData.get("marketplace.billingPostcode");
+            mb.setBillingPostcode(StringUtils.isNotBlank(value) ? value : billingAddress.getPostcode());
+
+            shipper.setMarketplaceBilling(mb);
+            shipper.setMarketplaceDefault(md);
+        }
     }
 
     @Then("^Operator verify the new Shipper is created successfully$")
@@ -168,16 +240,16 @@ public class AllShippersSteps extends AbstractSteps
 
         // Shipper Details
         shipper.setActive(!shipper.getActive());
-        shipper.setShortName("DS-"+StringUtils.right(dateUniqueString, 13));
+        shipper.setShortName("DS-" + StringUtils.right(dateUniqueString, 13));
         shipper.setContact(generatePhoneNumber(dateUniqueString));
 
         // Liaison Details
         Address liaisonAddress = generateRandomAddress();
 
-        shipper.setLiaisonName("Liaison #"+dateUniqueString);
-        shipper.setLiaisonContact(generatePhoneNumber(dateUniqueString+"1"));
-        shipper.setLiaisonEmail("ln."+dateUniqueString+"@automation.co");
-        shipper.setLiaisonAddress(liaisonAddress.to1LineAddress()+" #"+dateUniqueString);
+        shipper.setLiaisonName("Liaison #" + dateUniqueString);
+        shipper.setLiaisonContact(generatePhoneNumber(dateUniqueString + "1"));
+        shipper.setLiaisonEmail("ln." + dateUniqueString + "@automation.co");
+        shipper.setLiaisonAddress(liaisonAddress.to1LineAddress() + " #" + dateUniqueString);
         shipper.setLiaisonPostcode(liaisonAddress.getPostcode());
 
         // Services
@@ -194,9 +266,9 @@ public class AllShippersSteps extends AbstractSteps
         // Billing
         Address billingAddress = generateRandomAddress();
 
-        shipper.setBillingName("Billing #"+dateUniqueString);
-        shipper.setBillingContact(generatePhoneNumber(dateUniqueString+"2"));
-        shipper.setBillingAddress(billingAddress.to1LineAddress()+" #"+dateUniqueString);
+        shipper.setBillingName("Billing #" + dateUniqueString);
+        shipper.setBillingContact(generatePhoneNumber(dateUniqueString + "2"));
+        shipper.setBillingAddress(billingAddress.to1LineAddress() + " #" + dateUniqueString);
         shipper.setBillingPostcode(billingAddress.getPostcode());
 
         allShippersPage.updateShipper(oldShipper, shipper);
@@ -240,9 +312,9 @@ public class AllShippersSteps extends AbstractSteps
         Address returnAddress = generateRandomAddress();
 
         Return returnSettings = new Return();
-        returnSettings.setName("Return #"+dateUniqueString);
+        returnSettings.setName("Return #" + dateUniqueString);
         returnSettings.setContact(generatePhoneNumber(dateUniqueString));
-        returnSettings.setEmail("return."+dateUniqueString+"@automation.co");
+        returnSettings.setEmail("return." + dateUniqueString + "@automation.co");
         returnSettings.setAddress1(returnAddress.getAddress1());
         returnSettings.setAddress2(returnAddress.getAddress2());
         returnSettings.setCity(returnAddress.getCity());
@@ -271,11 +343,11 @@ public class AllShippersSteps extends AbstractSteps
         distributionPoint.setVaultIsIntegrated(true);
         distributionPoint.setVaultCollectCustomerNricCode(true);
         distributionPoint.setAllowReturnsOnDpms(true);
-        distributionPoint.setDpmsLogoUrl("https://dpmslogo"+dateUniqueString+".com");
+        distributionPoint.setDpmsLogoUrl("https://dpmslogo" + dateUniqueString + ".com");
         distributionPoint.setAllowReturnsOnVault(true);
-        distributionPoint.setVaultLogoUrl("https://vaultlogo"+dateUniqueString+".com");
+        distributionPoint.setVaultLogoUrl("https://vaultlogo" + dateUniqueString + ".com");
         distributionPoint.setAllowReturnsOnShipperLite(true);
-        distributionPoint.setShipperLiteLogoUrl("https://shipperlitelogo"+dateUniqueString+".com");
+        distributionPoint.setShipperLiteLogoUrl("https://shipperlitelogo" + dateUniqueString + ".com");
         shipper.setDistributionPoints(distributionPoint);
 
         allShippersPage.updateShipperDistributionPointSettings(shipper);
@@ -296,7 +368,7 @@ public class AllShippersSteps extends AbstractSteps
         String dateUniqueString = generateDateUniqueString();
 
         Qoo10 qoo10 = new Qoo10();
-        qoo10.setUsername("qoo10"+dateUniqueString);
+        qoo10.setUsername("qoo10" + dateUniqueString);
         qoo10.setPassword(dateUniqueString);
         shipper.setQoo10(qoo10);
 
@@ -322,8 +394,8 @@ public class AllShippersSteps extends AbstractSteps
         shopify.setDdOffset(1L);
         shopify.setDdTimewindowId(2L);
         shopify.setBaseUri(String.format("https://www.shopify%s.com", dateUniqueString));
-        shopify.setApiKey(dateUniqueString+"1");
-        shopify.setPassword(dateUniqueString+"2");
+        shopify.setApiKey(dateUniqueString + "1");
+        shopify.setPassword(dateUniqueString + "2");
         shopify.setShippingCodes(Collections.singletonList(dateUniqueString + "3"));
         shopify.setShippingCodeFilterEnabled(true);
         shipper.setShopify(shopify);
@@ -346,7 +418,7 @@ public class AllShippersSteps extends AbstractSteps
         String dateUniqueString = generateDateUniqueString();
 
         Magento magento = new Magento();
-        magento.setUsername("magento"+dateUniqueString);
+        magento.setUsername("magento" + dateUniqueString);
         magento.setPassword(dateUniqueString);
         magento.setSoapApiUrl(String.format("https://www.magento%s.com", dateUniqueString));
         shipper.setMagento(magento);
@@ -362,7 +434,7 @@ public class AllShippersSteps extends AbstractSteps
     }
 
     @When("^Operator enable Auto Reservation for Shipper and change Shipper default Address to the new Address using data below:$")
-    public void operatorEnableAutoReservationForShipperAndChangeShipperDefaultAddressToTheNewAddressUsingDataBelow(Map<String,String> mapOfData)
+    public void operatorEnableAutoReservationForShipperAndChangeShipperDefaultAddressToTheNewAddressUsingDataBelow(Map<String, String> mapOfData)
     {
         String reservationDays = mapOfData.get("reservationDays");
         String autoReservationReadyTime = mapOfData.get("autoReservationReadyTime");
@@ -373,22 +445,20 @@ public class AllShippersSteps extends AbstractSteps
 
         List<Long> listOfReservationDays;
 
-        if(reservationDays==null || reservationDays.isEmpty())
+        if (reservationDays == null || reservationDays.isEmpty())
         {
             listOfReservationDays = new ArrayList<>();
-        }
-        else
+        } else
         {
             listOfReservationDays = Stream.of(reservationDays.split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
         }
 
         List<String> listOfAllowedTypes;
 
-        if(allowedTypes==null || allowedTypes.isEmpty())
+        if (allowedTypes == null || allowedTypes.isEmpty())
         {
             listOfAllowedTypes = new ArrayList<>();
-        }
-        else
+        } else
         {
             listOfAllowedTypes = Stream.of(allowedTypes.split(",")).map(String::trim).collect(Collectors.toList());
         }
@@ -398,7 +468,7 @@ public class AllShippersSteps extends AbstractSteps
         String unique = generateDateUniqueString();
         createdAddress.setName(String.format("Dummy Address #%s", unique));
         createdAddress.setEmail(String.format("dummy.address.%s@gmail.com", unique));
-        createdAddress.setAddress2(createdAddress.getAddress2()+" #"+unique);
+        createdAddress.setAddress2(createdAddress.getAddress2() + " #" + unique);
 
         Reservation reservation = new Reservation();
         reservation.setAutoReservationEnabled(true);
@@ -418,5 +488,14 @@ public class AllShippersSteps extends AbstractSteps
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
         allShippersPage.verifyShipperIsDeletedSuccessfully(shipper);
+    }
+
+    @When("^Operator login to created Shipper's Dashboard from All Shipper page$")
+    public void operatorLoginAsCreatedShipperFromAllShipperPage()
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+        String mainWindowHandle = getWebDriver().getWindowHandle();
+        put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
+        allShippersPage.loginToShipperDashboard(shipper);
     }
 }
