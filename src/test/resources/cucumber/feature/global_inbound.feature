@@ -179,7 +179,7 @@ Feature: Global Inbound
       | Failure Reason Code ID = 5 | uid:13495ba0-9a2d-47a2-8b0c-0718c1120487 | 5                   | #FF9999   |
       | Failure Reason Code ID = 6 | uid:4cb215bb-c094-419c-8708-a741b476a43e | 6                   | #9999FF   |
 
-  Scenario: Inbound showing Weight Discrepancy - Weight Tolerance to not Taking Affect on Global Inbound
+  Scenario: Inbound showing Weight Discrepancy - Weight Tolerance to not Taking Affect on Global Inbound (uid:bafa05c9-ad25-417e-9270-7b7ae23581ed)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -192,7 +192,7 @@ Feature: Global Inbound
       | trackingId | GET_FROM_CREATED_ORDER |
     Then API Operator verify order info after Global Inbound
 
-  Scenario: Inbound showing Weight Discrepancy - Global Inbound with Higher Weight
+  Scenario: Inbound showing Weight Discrepancy - Global Inbound with Higher Weight (uid:a8ee166c-7c3b-4b75-bc8d-b8cd916fef77)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -207,7 +207,7 @@ Feature: Global Inbound
       | weightWarning  | Weight is Higher than original by 3 kg |
     Then API Operator verify order info after Global Inbound
 
-  Scenario: Inbound showing Weight Discrepancy - Global Inbound with Lower Weight
+  Scenario: Inbound showing Weight Discrepancy - Global Inbound with Lower Weight (uid:0eee9227-d369-4fe8-b69e-5ed5586c2705)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -223,7 +223,7 @@ Feature: Global Inbound
     Then API Operator verify order info after Global Inbound
 
   @CloseNewWindows
-  Scenario: Check Delivery dates after global inbound
+  Scenario: Check delivery dates after Global Inbound (uid:4390f3d5-a70b-4a59-b724-39da79efbbfe)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                       |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -234,8 +234,8 @@ Feature: Global Inbound
     When Operator go to menu Order -> All Orders
     When Operator open page of the created order from All Orders page
     And Operator verify Delivery dates:
-      | startDateTime | {{next-2-working-days-yyyy-MM-dd}} 09:00:00|
-      | endDateTime | {{next-4-working-days-yyyy-MM-dd}} 22:00:00|
+      | startDateTime | {{next-2-working-days-yyyy-MM-dd}} 09:00:00 |
+      | endDateTime   | {{next-4-working-days-yyyy-MM-dd}} 22:00:00 |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
