@@ -1071,10 +1071,10 @@ public class OperatorV2SimplePage extends SimplePage
         wait5sUntil(()->getWebDriver().getWindowHandles().size()>1, String.format("Window handles size is = %d.", getWebDriver().getWindowHandles().size()));
     }
 
-    public void switchToOtherWindowAndWaitWhileLoading(String expectedUrlEndWith){
-        retryIfExpectedExceptionOccurred(() -> {
-            switchToOtherWindow(expectedUrlEndWith);
-        }, 4000, NvTestRuntimeException.class);
+    @SuppressWarnings("unchecked")
+    public void switchToOtherWindowAndWaitWhileLoading(String expectedUrlEndWith)
+    {
+        retryIfExpectedExceptionOccurred(() -> switchToOtherWindow(expectedUrlEndWith), 4000, NvTestRuntimeException.class);
     }
 
     public void switchToOtherWindow(String expectedUrlEndWith)
