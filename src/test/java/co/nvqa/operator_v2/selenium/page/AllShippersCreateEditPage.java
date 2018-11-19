@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Address;
+import co.nvqa.commons.model.core.MilkrunSettings;
 import co.nvqa.commons.model.shipper.v2.DistributionPoint;
 import co.nvqa.commons.model.shipper.v2.LabelPrinter;
 import co.nvqa.commons.model.shipper.v2.Magento;
@@ -19,6 +20,7 @@ import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -251,8 +253,52 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
             sendKeysById("Longitude", String.valueOf(val));
         }
 
-        clickButtonByAriaLabel("Save changes");
+        if (BooleanUtils.isTrue(address.getMilkRun()))
+        {
+            fillMilkrunReservationSettings(address);
+        }
+
+        clickNvApiTextButtonByName("commons.save-changes");
         waitUntilInvisibilityOfMdDialogByTitle("Add Address");
+    }
+
+    private void fillMilkrunReservationSettings(Address address)
+    {
+        click("//span[.='Milkrun Reservations']");
+        if (CollectionUtils.isNotEmpty(address.getMilkrunSettings()))
+        {
+            List<MilkrunSettings> milkrunSettingsList = address.getMilkrunSettings();
+            for (int i = 0; i < milkrunSettingsList.size(); i++)
+            {
+                MilkrunSettings milkrunSettings = milkrunSettingsList.get(i);
+                clickNvIconTextButtonByName("container.shippers.add-new-reservation");
+                fillMilkrunReservationForm(milkrunSettings, i + 1);
+            }
+        }
+    }
+
+    private void fillMilkrunReservationForm(MilkrunSettings milkrunSettings, int index)
+    {
+        String itemXpath = "//*[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings'][" + index + "]";
+        executeInContext(itemXpath, () -> {
+            if (CollectionUtils.isNotEmpty(milkrunSettings.getDays()))
+            {
+                selectMultipleValuesFromMdSelectById("container.shippers.more-reservation-days",
+                        milkrunSettings.getDays().stream().map(String::valueOf).collect(Collectors.toList()));
+            }
+
+            if (StringUtils.isNoneBlank(milkrunSettings.getStartTime(), milkrunSettings.getEndTime()))
+            {
+                selectValueFromMdSelectById("container.shippers.timeslot-selected",
+                        milkrunSettings.getStartTime().toUpperCase() + " - " + milkrunSettings.getEndTime().toUpperCase());
+            }
+
+            if (milkrunSettings.getNoOfReservation() != null)
+            {
+                selectValueFromMdSelectById("container.shippers.number-of-reservations",
+                        String.valueOf(milkrunSettings.getNoOfReservation()));
+            }
+        });
     }
 
     private void fillMarketplaceSettingsForm(Shipper shipper)
@@ -284,6 +330,71 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
             sendKeys("//md-input-container[@model='ctrl.data.marketplace.billingAddress']//input", mb.getBillingAddress());
             sendKeys("//md-input-container[@model='ctrl.data.marketplace.billingPostcode']//input", mb.getBillingPostcode());
         }
+    }
+
+    public void removeMilkrunReservarion(Shipper shipper, int addressIndex, int milkrunReservationIndex)
+    {
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        clickTabItem("More Settings");
+        if (CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses()))
+        {
+            Address address = shipper.getPickup().getReservationPickupAddresses().get(addressIndex - 1);
+            int reservationsCount = CollectionUtils.size(address.getMilkrunSettings());
+            searchTableCustom1("contact", address.getContact());
+            clickNvIconButtonByName("container.shippers.more-reservation-edit-pickup-address");
+            waitUntilVisibilityOfMdDialogByTitle("Edit Address");
+            click("//span[.='Milkrun Reservations']");
+            String xpath = String.format("//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings'][%d]//nv-icon-button[@name='commons.delete']/button", milkrunReservationIndex);
+            waitUntilVisibilityOfElementLocated(xpath);
+            click(xpath);
+            pause500ms();
+            Assert.assertEquals("Number of Milkrun Reservations", reservationsCount - 1, getElementsCount("//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']"));
+            clickNvApiTextButtonByName("commons.save-changes");
+            waitUntilInvisibilityOfMdDialogByTitle("Edit Address");
+        }
+        clickNvIconTextButtonByName("Save Changes");
+        waitUntilInvisibilityOfToast("All changes saved successfully");
+        backToShipperList();
+    }
+
+    public void removeAllMilkrunReservations(Shipper shipper, int addressIndex)
+    {
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        clickTabItem("More Settings");
+        if (CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses()))
+        {
+            Address address = shipper.getPickup().getReservationPickupAddresses().get(addressIndex - 1);
+            searchTableCustom1("contact", address.getContact());
+            clickNvIconTextButtonByName("container.shippers.milkrun");
+            waitUntilVisibilityOfMdDialogByTitle("Unset as Milkrun");
+            executeInContext("//md-dialog", () -> clickButtonByAriaLabelAndWaitUntilDone("Delete"));
+            waitUntilInvisibilityOfMdDialogByTitle("Unset as Milkrun");
+        }
+        clickNvIconTextButtonByName("Save Changes");
+        waitUntilInvisibilityOfToast("All changes saved successfully");
+        backToShipperList();
+    }
+
+    public void setPickupAddressesAsMilkrun(Shipper shipper)
+    {
+        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        clickTabItem("More Settings");
+        if (CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses()))
+        {
+            shipper.getPickup().getReservationPickupAddresses().stream().filter(Address::getMilkRun).forEach(address -> {
+                searchTableCustom1("contact", address.getContact());
+                clickNvIconTextButtonByName("container.shippers.set-as-milkrun");
+                waitUntilVisibilityOfMdDialogByTitle("Edit Address");
+                fillMilkrunReservationSettings(address);
+                clickNvApiTextButtonByName("commons.save-changes");
+                waitUntilInvisibilityOfMdDialogByTitle("Edit Address");
+
+                verifyPickupAddress(address);
+            });
+        }
+        clickNvIconTextButtonByName("Save Changes");
+        waitUntilInvisibilityOfToast("All changes saved successfully");
+        backToShipperList();
     }
 
     public void verifyNewShipperIsCreatedSuccessfully(Shipper shipper)
@@ -419,6 +530,26 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
                 getTextOnTableWithNgRepeat(1, "address", "address in getTableData()");
 
         Assert.assertEquals("Address", address.to1LineAddressWithPostcode(), actualAddress);
+        if (BooleanUtils.isTrue(address.getMilkRun()))
+        {
+            Assert.assertTrue("Milkrun action button is not displayed for address", isElementVisible("//nv-icon-text-button[@name='container.shippers.milkrun']"));
+            verifyMilkrunSettings(address);
+            scrollIntoView("//*[@name='container.shippers.more-reservation-add-pickup-address']", false);
+        } else {
+            Assert.assertTrue("Set As Milkrun action button is not displayed for address", isElementVisible("//nv-icon-text-button[@name='container.shippers.set-as-milkrun']"));
+        }
+    }
+
+    public void verifyMilkrunSettings(Address address)
+    {
+        int reservationsCount = CollectionUtils.size(address.getMilkrunSettings());
+        clickNvIconButtonByName("container.shippers.more-reservation-edit-pickup-address");
+        waitUntilVisibilityOfMdDialogByTitle("Edit Address");
+        click("//span[.='Milkrun Reservations']");
+        waitUntilVisibilityOfElementLocated("//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']");
+        Assert.assertEquals("Number of Milkrun Reservations", reservationsCount, getElementsCount("//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']"));
+        clickNvIconButtonByName("Cancel");
+        waitUntilInvisibilityOfMdDialogByTitle("Edit Address");
     }
 
     public void enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(Shipper shipper, Address address, Reservation reservation)

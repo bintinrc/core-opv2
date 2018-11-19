@@ -53,14 +53,14 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickButtonByAriaLabelAndWaitUntilDone(String ariaLabel)
     {
-        String xpathExpression = String.format("//button[@aria-label='%s']", ariaLabel);
+        String xpathExpression = String.format(".//button[@aria-label='%s']", ariaLabel);
         click(xpathExpression);
         waitUntilInvisibilityOfElementLocated(xpathExpression + "/div[contains(@class,'show')]/md-progress-circular");
     }
 
     public void clickNvIconButtonByName(String name)
     {
-        clickf("//nv-icon-button[@name='%s']", name);
+        clickf(".//nv-icon-button[@name='%s']", name);
     }
 
     public void setValueOfIconButtonByName(String name)
@@ -817,7 +817,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void selectMultipleValuesFromMdSelectById(String mdSelectId, XpathTextMode xpathTextMode, String... values)
     {
-        clickf("//md-select[starts-with(@id, '%s')]", mdSelectId);
+        clickf(".//md-select[starts-with(@id, '%s')]", mdSelectId);
         pause100ms();
 
         for(String value : values)
@@ -850,7 +850,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void selectValueFromMdSelectById(String mdSelectId, String value)
     {
-        clickf("//md-select[starts-with(@id, '%s')]", mdSelectId);
+        clickf(".//md-select[starts-with(@id, '%s')]", mdSelectId);
         pause100ms();
         clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%<s')]", value);
         pause50ms();
