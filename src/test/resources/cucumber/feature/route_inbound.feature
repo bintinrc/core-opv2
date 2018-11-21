@@ -44,29 +44,25 @@ Feature: Route Inbound
       | FETCH_BY_DRIVER      | uid:d8922f44-3b18-4243-84ce-fd2f13adb663 | FETCH_BY_DRIVER      | {ninja-driver-name}    |
 
   @DeleteOrArchiveRoute
-  Scenario: View waypoint performance of Pending Waypoints on Route Inbound page
-    And API Operator create new route using data below:
+  Scenario: View waypoint performance of Pending Waypoints on Route Inbound page (uid:10f08a94-963c-4964-8c01-759f23f53767)
+    Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator add reservation pick-up to the route
-
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -74,7 +70,6 @@ Feature: Route Inbound
     And Operator create new COD on Route Cash Inbound page
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}             |
@@ -90,11 +85,9 @@ Feature: Route Inbound
       | wpFailed    | 0                      |
       | wpCompleted | 0                      |
       | wpTotal     | 4                      |
-
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
     When Operator click 'Go Back' button on Route Inbound page
-
     When Operator open Pending Waypoints Info dialog on Route Inbound page
     Then Operator verify Shippers Info in Pending Waypoints dialog using data below:
       | shipperName       | scanned | total |
@@ -103,7 +96,6 @@ Feature: Route Inbound
     Then Operator verify Reservations table in Pending Waypoints dialog using data below:
       | reservationId                  | location                   | readyToLatestTime              | approxVolume                   | status  | receivedParcels |
       | GET_FROM_CREATED_RESERVATION_1 | GET_FROM_CREATED_ADDRESS_1 | GET_FROM_CREATED_RESERVATION_1 | GET_FROM_CREATED_RESERVATION_1 | Pending | 0               |
-
     Then Operator verify Orders table in Pending Waypoints dialog using data below:
       | trackingId               | stampId | location                 | type              | status  | cmiCount | routeInboundStatus |
       | GET_FROM_CREATED_ORDER_1 |         | GET_FROM_CREATED_ORDER_1 | Delivery (Normal) | Pending | 0        |                    |
@@ -111,22 +103,19 @@ Feature: Route Inbound
       | GET_FROM_CREATED_ORDER_3 |         | GET_FROM_CREATED_ORDER_3 | Delivery (Normal) | Pending | 0        | Inbounded          |
 
   @DeleteOrArchiveRoute
-  Scenario: View waypoint performance of Success Waypoints on Route Inbound page
-    And API Operator create new route using data below:
+  Scenario: View waypoint performance of Success Waypoints on Route Inbound page (uid:6b926cc8-3dfc-4db4-8e76-21cc10f345bd)
+    Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -134,13 +123,11 @@ Feature: Route Inbound
     And Operator create new COD on Route Cash Inbound page
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound multiple parcels
     And API Operator start the route
     And API Driver deliver all created parcels successfully
-
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}             |
@@ -156,11 +143,9 @@ Feature: Route Inbound
       | wpFailed    | 0                      |
       | wpCompleted | 3                      |
       | wpTotal     | 3                      |
-
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
     When Operator click 'Go Back' button on Route Inbound page
-
     When Operator open Completed Waypoints Info dialog on Route Inbound page
     Then Operator verify Shippers Info in Pending Waypoints dialog using data below:
       | shipperName       | scanned | total |
@@ -172,23 +157,20 @@ Feature: Route Inbound
       | GET_FROM_CREATED_ORDER_2 |         | GET_FROM_CREATED_ORDER_2 | Delivery (Return) | Success | 0        |                    |
       | GET_FROM_CREATED_ORDER_3 |         | GET_FROM_CREATED_ORDER_3 | Delivery (Normal) | Success | 0        | Inbounded          |
 
-    @DeleteOrArchiveRoute
-  Scenario: View waypoint performance of Failed Waypoints on Route Inbound page
-    And API Operator create new route using data below:
+  @DeleteOrArchiveRoute
+  Scenario: View waypoint performance of Failed Waypoints on Route Inbound page (uid:90c4045e-f5d3-4a2c-960e-da2fbb27cd0c)
+    Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -196,13 +178,11 @@ Feature: Route Inbound
     And Operator create new COD on Route Cash Inbound page
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound multiple parcels
     And API Operator start the route
     And API Driver failed the delivery of multiple parcels
-
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}             |
@@ -218,11 +198,9 @@ Feature: Route Inbound
       | wpFailed    | 3                      |
       | wpCompleted | 0                      |
       | wpTotal     | 3                      |
-
     When Operator click 'Continue To Inbound' button on Route Inbound page
     And Operator scan a tracking ID of created order on Route Inbound page
     When Operator click 'Go Back' button on Route Inbound page
-
     When Operator open Failed Waypoints Info dialog on Route Inbound page
     Then Operator verify Shippers Info in Failed Waypoints dialog using data below:
       | shipperName       | scanned | total |

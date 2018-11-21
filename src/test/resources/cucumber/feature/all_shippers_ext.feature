@@ -1,4 +1,4 @@
-@OperatorV2Disabled @OperatorV2Part2Disabled @AllShippersExt @Saas
+@OperatorV2 @OperatorV2Part2 @AllShippersExt @Saas
 Feature: All Shippers
 
   @LaunchBrowser @EnableClearCache @ShouldAlwaysRun
@@ -38,11 +38,11 @@ Feature: All Shippers
     When Operator login to created Shipper's Dashboard from All Shipper page
     Then Operator validate new Shipper is logged in on Dashboard site
     Examples:
-      | Note       | hiptest-uid | isShipperActive | shipperType | ocVersion | services | trackingType | isAllowCod | isAllowCashPickup | isPrepaid | isAllowStagedOrders | isMultiParcelShipper | isDisableDriverAppReschedule | marketplace.trackingType | marketplace.premiumPickupDailyLimit |
-      | Shipper V4 |             | true            | Marketplace | v4        | 3DAY     | Fixed        | false      | true              | true      | false               | false                | false                        | Prefixless               | 3                                   |
+      | Note       | hiptest-uid                              | isShipperActive | shipperType | ocVersion | services | trackingType | isAllowCod | isAllowCashPickup | isPrepaid | isAllowStagedOrders | isMultiParcelShipper | isDisableDriverAppReschedule | marketplace.trackingType | marketplace.premiumPickupDailyLimit |
+      | Shipper V4 | uid:bc736a20-01fe-40d6-8839-dc7dcdf4c5d7 | true            | Marketplace | v4        | 3DAY     | Fixed        | false      | true              | true      | false               | false                | false                        | Prefixless               | 3                                   |
 
   @CloseNewWindows
-  Scenario Outline: Create new Pick-up Address on Edit Shipper page (<hiptest-uid>)
+  Scenario Outline: Operator Create new Pick-up Address on Edit Shipper page (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -67,10 +67,10 @@ Feature: All Shippers
     And Operator go to menu "Deliveries" -> "Pickup Management" on Dashboard site
     Then Operator verify pickup addresses of the new Shipper on Dashboard site
     Examples:
-      | Note       | hiptest-uid | isShipperActive | shipperType | ocVersion | services | trackingType | isAllowCod | isAllowCashPickup | isPrepaid | isAllowStagedOrders | isMultiParcelShipper | isDisableDriverAppReschedule | marketplace.trackingType | marketplace.premiumPickupDailyLimit |
-      | Shipper V4 |             | true            | Normal      | v4        | 3DAY     | Fixed        | false      | true              | true      | false               | false                | false                        | Prefixless               | 3                                   |
+      | Note       | hiptest-uid                              | isShipperActive | shipperType | ocVersion | services | trackingType | isAllowCod | isAllowCashPickup | isPrepaid | isAllowStagedOrders | isMultiParcelShipper | isDisableDriverAppReschedule | marketplace.trackingType | marketplace.premiumPickupDailyLimit |
+      | Shipper V4 | uid:447de852-5093-4367-bbf2-51c135e0b9d9 | true            | Normal      | v4        | 3DAY     | Fixed        | false      | true              | true      | false               | false                | false                        | Prefixless               | 3                                   |
 
-  Scenario Outline: Add Address as Milkrun (<hiptest-uid>)
+  Scenario Outline: Operator Add Address as Milkrun (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -96,10 +96,10 @@ Feature: All Shippers
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the new Shipper is created successfully
     Examples:
-      | Note       | hiptest-uid | isShipperActive | shipperType | ocVersion | services | trackingType | isAllowCod | isAllowCashPickup | isPrepaid | isAllowStagedOrders | isMultiParcelShipper | isDisableDriverAppReschedule | marketplace.trackingType | marketplace.premiumPickupDailyLimit |
-      | Shipper V4 |             | true            | Normal      | v4        | 3DAY     | Fixed        | false      | true              | true      | false               | false                | false                        | Prefixless               | 3                                   |
+      | Note       | hiptest-uid                              | isShipperActive | shipperType | ocVersion | services | trackingType | isAllowCod | isAllowCashPickup | isPrepaid | isAllowStagedOrders | isMultiParcelShipper | isDisableDriverAppReschedule | marketplace.trackingType | marketplace.premiumPickupDailyLimit |
+      | Shipper V4 | uid:3b2c8083-d63c-4de8-8e23-31eea390b624 | true            | Normal      | v4        | 3DAY     | Fixed        | false      | true              | true      | false               | false                | false                        | Prefixless               | 3                                   |
 
-  Scenario Outline: Set Existing Address as Milkrun(<hiptest-uid>)
+  Scenario Outline: Operator Set Existing Address as Milkrun (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -125,10 +125,10 @@ Feature: All Shippers
       | address.1.milkrun.1.noOfReservation | 3     |
     Then Operator verify the new Shipper is updated successfully
     Examples:
-      | Note       | hiptest-uid | isShipperActive | shipperType | ocVersion | services | trackingType | isAllowCod | isAllowCashPickup | isPrepaid | isAllowStagedOrders | isMultiParcelShipper | isDisableDriverAppReschedule | marketplace.trackingType | marketplace.premiumPickupDailyLimit |
-      | Shipper V4 |             | true            | Normal      | v4        | 3DAY     | Fixed        | false      | true              | true      | false               | false                | false                        | Prefixless               | 3                                   |
+      | Note       | hiptest-uid                              | isShipperActive | shipperType | ocVersion | services | trackingType | isAllowCod | isAllowCashPickup | isPrepaid | isAllowStagedOrders | isMultiParcelShipper | isDisableDriverAppReschedule | marketplace.trackingType | marketplace.premiumPickupDailyLimit |
+      | Shipper V4 | uid:d044ca8e-49f2-4d34-a942-2b596ab20323 | true            | Normal      | v4        | 3DAY     | Fixed        | false      | true              | true      | false               | false                | false                        | Prefixless               | 3                                   |
 
-  Scenario Outline: Unset a Milkrun in an Address (<hiptest-uid>)
+  Scenario Outline: Operator Unset a Milkrun in an Address (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -160,10 +160,10 @@ Feature: All Shippers
     And Operator unset milkrun reservation "1" form pickup address "1" for created shipper
     Then Operator verify the new Shipper is created successfully
     Examples:
-      | Note       | hiptest-uid | isShipperActive | shipperType | ocVersion | services | trackingType | isAllowCod | isAllowCashPickup | isPrepaid | isAllowStagedOrders | isMultiParcelShipper | isDisableDriverAppReschedule | marketplace.trackingType | marketplace.premiumPickupDailyLimit |
-      | Shipper V4 |             | true            | Normal      | v4        | 3DAY     | Fixed        | false      | true              | true      | false               | false                | false                        | Prefixless               | 3                                   |
+      | Note       | hiptest-uid                              | isShipperActive | shipperType | ocVersion | services | trackingType | isAllowCod | isAllowCashPickup | isPrepaid | isAllowStagedOrders | isMultiParcelShipper | isDisableDriverAppReschedule | marketplace.trackingType | marketplace.premiumPickupDailyLimit |
+      | Shipper V4 | uid:377873fb-8842-48c9-98a5-c84a6fe1d3b1 | true            | Normal      | v4        | 3DAY     | Fixed        | false      | true              | true      | false               | false                | false                        | Prefixless               | 3                                   |
 
-  Scenario Outline: Unset all Milkrun in an Address (<hiptest-uid>)
+  Scenario Outline: Operator Unset all Milkrun in an Address (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -190,8 +190,8 @@ Feature: All Shippers
     And Operator unset all milkrun reservations form pickup address "1" for created shipper
     Then Operator verify the new Shipper is created successfully
     Examples:
-      | Note       | hiptest-uid | isShipperActive | shipperType | ocVersion | services | trackingType | isAllowCod | isAllowCashPickup | isPrepaid | isAllowStagedOrders | isMultiParcelShipper | isDisableDriverAppReschedule | marketplace.trackingType | marketplace.premiumPickupDailyLimit |
-      | Shipper V4 |             | true            | Normal      | v4        | 3DAY     | Fixed        | false      | true              | true      | false               | false                | false                        | Prefixless               | 3                                   |
+      | Note       | hiptest-uid                              | isShipperActive | shipperType | ocVersion | services | trackingType | isAllowCod | isAllowCashPickup | isPrepaid | isAllowStagedOrders | isMultiParcelShipper | isDisableDriverAppReschedule | marketplace.trackingType | marketplace.premiumPickupDailyLimit |
+      | Shipper V4 | uid:dba8d6dc-54ca-4d03-bd94-ec37e3457744 | true            | Normal      | v4        | 3DAY     | Fixed        | false      | true              | true      | false               | false                | false                        | Prefixless               | 3                                   |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
