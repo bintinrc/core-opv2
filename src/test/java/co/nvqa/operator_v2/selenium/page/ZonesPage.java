@@ -248,7 +248,8 @@ public class ZonesPage extends OperatorV2SimplePage
         waitUntilEnabledAndClickNvIconTextButtonByName("View Selected Polygons");
     }
 
-    public void viewSelectedPolygonsOfZone(String name){
+    public void viewSelectedPolygonsOfZone(String name)
+    {
         searchTableByNameAndRetryIfTableIsEmpty(name);
         checkRowWithMdVirtualRepeat(1, MD_VIRTUAL_REPEAT);
         clickViewSelectedPolygonsButton();
