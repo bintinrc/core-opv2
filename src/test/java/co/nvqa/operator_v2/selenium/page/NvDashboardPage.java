@@ -2,12 +2,14 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.utils.StandardTestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Sergey Mishanin
@@ -53,7 +55,9 @@ public class NvDashboardPage extends OperatorV2SimplePage
     public void validatePickupAddressExists(Address address)
     {
         waitUntilVisibilityOfElementLocated(PICKUP_ADDRESS_XPATH);
-        List<String> addresses = getSelectElementOptions(PICKUP_ADDRESS_XPATH);
+        List<String> addresses = getSelectElementOptions(PICKUP_ADDRESS_XPATH).stream()
+                .map(StringUtils::normalizeSpace)
+                .collect(Collectors.toList());
         String expectedAddress = address.to1LineAddressWithPostcode().replaceAll(",", "").toUpperCase();
         Assert.assertThat("List of available addresses", addresses, Matchers.hasItem(expectedAddress));
     }

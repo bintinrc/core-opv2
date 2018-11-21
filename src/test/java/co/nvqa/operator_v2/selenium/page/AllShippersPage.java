@@ -73,6 +73,33 @@ public class AllShippersPage extends OperatorV2SimplePage
         switchToOtherWindowAndWaitWhileLoading("/orders/management/");
     }
 
+    public void setPickupAddressesAsMilkrun(Shipper shipper){
+        searchTableByName(shipper.getName());
+        Assert.assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
+        Long actualLegacyId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_DATA_ID));
+        shipper.setLegacyId(actualLegacyId);
+        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        allShippersCreateEditPage.setPickupAddressesAsMilkrun(shipper);
+    }
+
+    public void removeMilkrunReservarion(Shipper shipper, int addressIndex, int milkrunReservationIndex){
+        searchTableByName(shipper.getName());
+        Assert.assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
+        Long actualLegacyId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_DATA_ID));
+        shipper.setLegacyId(actualLegacyId);
+        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        allShippersCreateEditPage.removeMilkrunReservarion(shipper, addressIndex, milkrunReservationIndex);
+    }
+
+    public void removeAllMilkrunReservarions(Shipper shipper, int addressIndex){
+        searchTableByName(shipper.getName());
+        Assert.assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
+        Long actualLegacyId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_DATA_ID));
+        shipper.setLegacyId(actualLegacyId);
+        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        allShippersCreateEditPage.removeAllMilkrunReservations(shipper, addressIndex);
+    }
+
     public void verifyShipperInfoIsCorrect(String shipperNameKeyword, Shipper shipper)
     {
         searchTableByName(shipperNameKeyword);

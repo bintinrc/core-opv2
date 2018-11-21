@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
+import co.nvqa.commons.model.core.MilkrunSettings;
 import co.nvqa.commons.model.other.LatLong;
 import co.nvqa.commons.model.shipper.v2.DistributionPoint;
 import co.nvqa.commons.model.shipper.v2.LabelPrinter;
@@ -19,15 +20,18 @@ import co.nvqa.commons.model.shipper.v2.Shopify;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import com.google.inject.Inject;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -171,10 +175,21 @@ public class AllShippersSteps extends AbstractSteps
                 LatLong latLong = generateRandomLatLong();
                 address.setLongitude(latLong.getLongitude());
                 address.setLatitude(latLong.getLatitude());
+                fillMilkrunReservarionsProperties(address, i + 1, mapOfData);
                 pickupAddresses.add(address);
             }
             shipper.getPickup().setReservationPickupAddresses(pickupAddresses);
         }
+    }
+
+    private <T> Map<String, T> extractSubmap(Map<String, T> map, String prefix)
+    {
+        return map.entrySet().stream()
+                .filter(entry -> entry.getKey().startsWith(prefix))
+                .collect(Collectors.toMap(
+                        entry -> StringUtils.removeStart(entry.getKey(), prefix + ".").trim(),
+                        Map.Entry::getValue
+                ));
     }
 
     private void fillMarketplaceProperties(Shipper shipper, Map<String, String> mapOfData)
@@ -224,11 +239,75 @@ public class AllShippersSteps extends AbstractSteps
         }
     }
 
+    private void fillMilkrunReservarionsProperties(Address address, int addressIndex, Map<String, String> mapOfData)
+    {
+        String milkruntPrefix = "address." + addressIndex + ".milkrun";
+        if (mapOfData.keySet().stream().anyMatch(key -> key.startsWith(milkruntPrefix)))
+        {
+            Map<String, String> milkrunData = extractSubmap(mapOfData, milkruntPrefix);
+            int reservationsCount = milkrunData.containsKey("reservationCount") ? Integer.parseInt(milkrunData.get("reservationCount")) : 1;
+            for (int j = 1; j <= reservationsCount; j++)
+            {
+                Map<String, String> reservationData = extractSubmap(milkrunData, String.valueOf(j));
+                fillMilkrunReservarionProperties(address, reservationData);
+            }
+        }
+    }
+
+    private void fillMilkrunReservarionProperties(Address address, Map<String, String> mapOfData)
+    {
+        MilkrunSettings ms = new MilkrunSettings();
+        String value = mapOfData.get("startTime");
+        if (StringUtils.isNotBlank(value))
+        {
+            ms.setStartTime(value);
+        }
+
+        value = mapOfData.get("endTime");
+        if (StringUtils.isNotBlank(value))
+        {
+            ms.setEndTime(value);
+        }
+
+        value = mapOfData.get("days");
+        if (StringUtils.isNotBlank(value))
+        {
+            List<Integer> days = Arrays.stream(value.split(","))
+                    .map(d -> Integer.parseInt(d.trim()))
+                    .collect(Collectors.toList());
+            ms.setDays(days);
+        }
+
+        value = mapOfData.get("noOfReservation");
+        if (StringUtils.isNotBlank(value))
+        {
+            ms.setNoOfReservation(Integer.valueOf(value));
+        }
+        List<MilkrunSettings> milkrunSettings = new LinkedList<>();
+        milkrunSettings.add(ms);
+
+        address.setMilkRun(true);
+
+        if (address.getMilkrunSettings() == null)
+        {
+            address.setMilkrunSettings(milkrunSettings);
+        } else
+        {
+            address.getMilkrunSettings().addAll(milkrunSettings);
+        }
+    }
+
     @Then("^Operator verify the new Shipper is created successfully$")
     public void operatorVerifyTheNewShipperIsCreatedSuccessfully()
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
         allShippersPage.verifyNewShipperIsCreatedSuccessfully(shipper);
+    }
+
+    @Then("^Operator verify the new Shipper is updated successfully$")
+    public void operatorVerifyTheNewShipperIsUpdatedSuccessfully()
+    {
+        operatorVerifyTheNewShipperIsCreatedSuccessfully();
     }
 
     @When("^Operator update Shipper's basic settings$")
@@ -497,5 +576,43 @@ public class AllShippersSteps extends AbstractSteps
         String mainWindowHandle = getWebDriver().getWindowHandle();
         put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
         allShippersPage.loginToShipperDashboard(shipper);
+    }
+
+    @When("^Operator set pickup addresses of the created shipper using data below:$")
+    public void operatorSetPickupAddressesOfTheCreatedShipperUsingDataBelow(Map<String, String> mapOfData)
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+        List<Address> addresses = shipper.getPickup().getReservationPickupAddresses();
+        if (CollectionUtils.isNotEmpty(addresses))
+        {
+            for (int i = 0; i < addresses.size(); i++)
+            {
+                fillMilkrunReservarionsProperties(addresses.get(i), i + 1, mapOfData);
+            }
+        }
+        allShippersPage.setPickupAddressesAsMilkrun(shipper);
+    }
+
+    @And("^Operator unset milkrun reservation \"(\\d+)\" form pickup address \"(\\d+)\" for created shipper$")
+    public void operatorUnsetMilkrunReservationFormPickupAddressForCreatedShipper(int milkrunReservationIndex, int addressIndex)
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+        allShippersPage.removeMilkrunReservarion(shipper, addressIndex, milkrunReservationIndex);
+        Address address = shipper.getPickup().getReservationPickupAddresses().get(addressIndex - 1);
+        address.getMilkrunSettings().remove(milkrunReservationIndex - 1);
+        if (CollectionUtils.isEmpty(address.getMilkrunSettings()))
+        {
+            address.setMilkRun(false);
+        }
+    }
+
+    @And("^Operator unset all milkrun reservations form pickup address \"(\\d+)\" for created shipper$")
+    public void operatorUnsetAllMilkrunReservationsFormPickupAddressForCreatedShipper(int addressIndex)
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+        allShippersPage.removeAllMilkrunReservarions(shipper, addressIndex);
+        Address address = shipper.getPickup().getReservationPickupAddresses().get(addressIndex - 1);
+        address.getMilkrunSettings().clear();
+        address.setMilkRun(false);
     }
 }
