@@ -35,14 +35,6 @@ Feature: Zones
     When Operator delete the new Zone
     Then Operator verify the new Zone is deleted successfully
 
-  Scenario: View multiple selected Polygon (uid:)
-    Given Operator go to menu "Routing" -> "Zones"
-    When Operator click View Selected Polygons for zone "{zone-name}"
-    And Operator remove zone "{zone-name-2}" if it is added on View Selected Polygons page
-    And Operator add new "{zone-name-2}" zone on View Selected Polygons page
-    Then Operator verify zone "{zone-name-2}" is selected on View Selected Polygons page
-    Then Operator verify count of selected zones is 2 on View Selected Polygons page
-
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
