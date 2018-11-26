@@ -1,6 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.GlobalInboundResponse;
+import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.zone.Zone;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.ParcelSweeperPage;
@@ -13,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Sergey Mishanin
@@ -78,11 +81,18 @@ public class ParcelSweeperSteps extends AbstractSteps
     public void operatorVerifyZoneOnParcelSweeperPageUsingDataBelow(Map<String, String> mapOfData)
     {
         String zoneName = mapOfData.get("zoneName");
-        if (StringUtils.equalsIgnoreCase(zoneName, "FROM ROUTE DRIVER"))
+        if (StringUtils.equalsIgnoreCase(zoneName, "FROM CREATED ORDER"))
         {
+            Order order = get(KEY_CREATED_ORDER);
+            Transaction deliveryTransaction = order.getTransactions().stream()
+                    .filter(transaction -> "DELIVERY".equalsIgnoreCase(transaction.getType()))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Could not find DELIVERY transaction for order [" + order.getId() + "]"));
             List<Zone> zones = get(KEY_LIST_OF_ZONE_PREFERENCES);
-            Zone zone = zones.get(0);
-            zoneName = String.format("%s (%s)", zone.getShortName(), zone.getName());
+            Zone routingZone = zones.stream().filter(zone -> Objects.equals(zone.getLegacyZoneId(), deliveryTransaction.getRoutingZoneId()))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Could not find zone with ID = " + deliveryTransaction.getRoutingZoneId()));
+            zoneName = String.format("%s (%s)", routingZone.getShortName(), routingZone.getName());
         }
         String color = mapOfData.get("color");
         parcelSweeperPage.verifyZoneInfo(zoneName, color);
