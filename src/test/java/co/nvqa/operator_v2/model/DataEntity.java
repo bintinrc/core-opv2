@@ -5,6 +5,7 @@ import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.commons.utils.NvLogger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
@@ -25,7 +26,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 /**
- *
  * @author Sergey Mishanin
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -87,25 +87,23 @@ public abstract class DataEntity<T extends DataEntity>
         {
             Method setter = findSetter(clazz, property, value.getClass());
 
-            if(setter != null)
+            if (setter != null)
             {
                 MethodUtils.invokeMethod(this, true, setter.getName(), value);
-            }
-            else
+            } else
             {
                 Field field = findPropertyField(clazz, property);
 
-                if(field!=null)
+                if (field != null)
                 {
-                    if(field.getType().isAssignableFrom(value.getClass()))
+                    if (field.getType().isAssignableFrom(value.getClass()))
                     {
                         FieldUtils.writeField(field, this, value, true);
                     }
 
                 }
             }
-        }
-        catch(Exception ex)
+        } catch (Exception ex)
         {
             String message = String.format("Could not set %s property to %s data entity", property, this.getClass().getName());
             NvLogger.error(message);
@@ -121,21 +119,19 @@ public abstract class DataEntity<T extends DataEntity>
         {
             Method getter = findGetter(clazz, property);
 
-            if(getter!=null)
+            if (getter != null)
             {
                 return (U) MethodUtils.invokeMethod(this, true, getter.getName());
-            }
-            else
+            } else
             {
                 Field field = findPropertyField(clazz, property);
 
-                if(field!=null)
+                if (field != null)
                 {
                     return (U) FieldUtils.readField(field, this, true);
                 }
             }
-        }
-        catch(Exception ex)
+        } catch (Exception ex)
         {
             String message = String.format("Could not get %s property of %s data entity", property, this.getClass().getName());
             NvLogger.error(message);
@@ -148,9 +144,9 @@ public abstract class DataEntity<T extends DataEntity>
         Method[] methods = clazz.getMethods();
         String setterName = sanitizeString("set" + property);
 
-        for(Method method : methods)
+        for (Method method : methods)
         {
-            if(StringUtils.equals(setterName, sanitizeString(method.getName()))
+            if (StringUtils.equals(setterName, sanitizeString(method.getName()))
                     && method.getParameterCount() == 1
                     && method.getParameterTypes()[0].isAssignableFrom(valueType))
             {
@@ -166,9 +162,9 @@ public abstract class DataEntity<T extends DataEntity>
         Method[] methods = clazz.getMethods();
         String getterName = sanitizeString("get" + property);
 
-        for(Method method : methods)
+        for (Method method : methods)
         {
-            if(StringUtils.equals(getterName, sanitizeString(method.getName())) && method.getParameterCount()==0)
+            if (StringUtils.equals(getterName, sanitizeString(method.getName())) && method.getParameterCount() == 0)
             {
                 return method;
             }
@@ -183,9 +179,9 @@ public abstract class DataEntity<T extends DataEntity>
         Field[] fields = FieldUtils.getAllFields(clazz);
         Field field = null;
 
-        for(Field f : fields)
+        for (Field f : fields)
         {
-            if(StringUtils.equals(propertyName, sanitizeString(f.getName())))
+            if (StringUtils.equals(propertyName, sanitizeString(f.getName())))
             {
                 field = f;
                 break;
@@ -211,11 +207,10 @@ public abstract class DataEntity<T extends DataEntity>
 
     protected static String getValueIfIndexExists(String[] values, int index)
     {
-        if(values.length>index)
+        if (values.length > index)
         {
             return StringUtils.trimToNull(StringUtils.strip(UNESCAPER.translate(values[index]), "\""));
-        }
-        else
+        } else
         {
             return null;
         }
@@ -227,27 +222,25 @@ public abstract class DataEntity<T extends DataEntity>
         {
             List<String> csvLines = FileUtils.readLines(new File(fileName), Charset.defaultCharset());
 
-            if(ignoreHeader)
+            if (ignoreHeader)
             {
                 csvLines.remove(0);
             }
-            return csvLines.stream().map(csvLine->
+            return csvLines.stream().map(csvLine ->
             {
                 try
                 {
                     T dataEntity = clazz.getDeclaredConstructor().newInstance();
                     dataEntity.fromCsvLine(csvLine);
                     return dataEntity;
-                }
-                catch(InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex)
+                } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex)
                 {
                     String message = String.format("Could not create new instance of %s data entity", clazz.getName());
                     NvLogger.error(message);
                     throw new RuntimeException(ex);
                 }
             }).collect(Collectors.toList());
-        }
-        catch(IOException ex)
+        } catch (IOException ex)
         {
             NvLogger.warn("Could not read file [" + fileName + "]");
             return new ArrayList<>();
@@ -261,8 +254,7 @@ public abstract class DataEntity<T extends DataEntity>
             T dataEntity = clazz.getDeclaredConstructor().newInstance();
             dataEntity.fromMap(data);
             return dataEntity;
-        }
-        catch(InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex)
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex)
         {
             String message = String.format("Could not create new instance of %s data entity", clazz.getName());
             NvLogger.error(message);
@@ -270,24 +262,22 @@ public abstract class DataEntity<T extends DataEntity>
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public void compareWithActual(T actualEntity)
+    public void compareWithActual(T actualEntity, String... ignoredProperties)
     {
         Map<String, ?> expectedData = toMap();
         Map<String, ?> actualData = actualEntity.toMap();
         expectedData.forEach((propertyName, expectedValue) ->
         {
-            if(expectedValue!=null)
+            if (expectedValue != null && !ArrayUtils.contains(ignoredProperties, propertyName))
             {
                 String message = StringUtils.capitalize(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase(propertyName), " "));
 
-                if(expectedValue instanceof String)
+                if (expectedValue instanceof String)
                 {
                     String actualValue = StringUtils.normalizeSpace(String.valueOf(actualData.get(propertyName)).trim());
                     String strExpectedValue = StringUtils.normalizeSpace(String.valueOf(expectedValue).trim());
                     assertThat(message, actualValue, equalTo(strExpectedValue));
-                }
-                else
+                } else
                 {
                     assertThat(message, actualData.get(propertyName), equalTo(expectedValue));
                 }

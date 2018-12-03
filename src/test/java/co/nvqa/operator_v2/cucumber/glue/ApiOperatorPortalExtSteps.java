@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AbstractApiOperatorPortalSteps;
 import co.nvqa.commons.model.core.CreateDriverV2Request;
+import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.support.JsonHelper;
@@ -12,9 +13,11 @@ import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.model.DriverInfo;
+import co.nvqa.operator_v2.model.ReservationGroup;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.inject.Inject;
 import cucumber.api.java.After;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -27,6 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static co.nvqa.operator_v2.cucumber.glue.ReservationPresetManagementSteps.KEY_CREATED_RESERVATION_GROUP;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -190,5 +195,18 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         {
             getTemplatesClient().deleteTemplate(presetId);
         }
+    }
+
+    @And("^API Operator get created Reservation Group params$")
+    public void apiOperatorGetCreatedReservationGroupParams()
+    {
+        ReservationGroup reservationGroup = get(KEY_CREATED_RESERVATION_GROUP);
+        List<MilkrunGroup> milkrunGroups = getRouteClient().getMilkrunGroups(new Date());
+        MilkrunGroup group = milkrunGroups.stream()
+                .filter(milkrunGroup -> StringUtils.equals(milkrunGroup.getName(), reservationGroup.getName()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Could not find milkrun group with name [" + reservationGroup.getName() + "]"));
+        reservationGroup.setId(group.getId());
+        put(KEY_CREATED_RESERVATION_GROUP_ID, reservationGroup.getId());
     }
 }
