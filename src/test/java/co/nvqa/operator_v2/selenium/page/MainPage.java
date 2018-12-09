@@ -44,6 +44,7 @@ public class MainPage extends OperatorV2SimplePage
         MAP_OF_END_URL.put("Third Party Shippers", "third-party-shipper");
         MAP_OF_END_URL.put("Third Party Order Management", "third-party-order");
         MAP_OF_END_URL.put("Lat/Lng Cleanup", "lat-lng-cleanup");
+        MAP_OF_END_URL.put("Hubs Group Management", "hub-group");
     }
 
     public MainPage(WebDriver webDriver)

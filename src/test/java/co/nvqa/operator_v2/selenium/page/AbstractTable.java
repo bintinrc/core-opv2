@@ -8,11 +8,12 @@ import org.openqa.selenium.WebDriver;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- *
  * @author Sergey Mishanin
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -21,6 +22,7 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
     private Class<T> entityClass;
     protected Map<String, String> columnLocators = new HashMap<>();
     protected Map<String, String> actionButtonsLocators = new HashMap<>();
+    protected Map<String, Function<Integer, String>> columnReaders = new HashMap<>();
 
     public AbstractTable(WebDriver webDriver)
     {
@@ -52,6 +54,11 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
         this.actionButtonsLocators.putAll(actionButtonsLocators);
     }
 
+    public void setColumnReaders(Map<String, Function<Integer, String>> columnReaders)
+    {
+        this.columnReaders.putAll(columnReaders);
+    }
+
     protected abstract String getTextOnTable(int rowNumber, String columnDataClass);
 
     @SuppressWarnings("SameParameterValue")
@@ -74,7 +81,14 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
         Preconditions.checkArgument(StringUtils.isNotBlank(columnId), "columnId cannot be null or blank string");
         String columnLocator = columnLocators.get(columnId);
         Preconditions.checkArgument(StringUtils.isNotBlank(columnLocator), "locator for columnId [" + columnId + "] was not defined");
-        String text = getTextOnTable(rowNumber, columnLocator);
+        String text;
+        if (columnReaders.containsKey(columnId))
+        {
+            text = columnReaders.get(columnId).apply(rowNumber);
+        } else
+        {
+            text = getTextOnTable(rowNumber, columnLocator);
+        }
         return StringUtils.trimToEmpty(StringUtils.strip(StringUtils.normalizeSpace(text.trim()), "-"));
     }
 
@@ -93,10 +107,10 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
 
     public T readEntity(int rowIndex)
     {
-        Map<String,String> data =
+        Map<String, String> data =
                 readRow(rowIndex).entrySet().stream()
-                    .filter(entry -> StringUtils.isNotBlank(entry.getValue()))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                        .filter(entry -> StringUtils.isNotBlank(entry.getValue()))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         return DataEntity.fromMap(entityClass, data);
     }
 
