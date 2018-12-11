@@ -262,6 +262,7 @@ public abstract class DataEntity<T extends DataEntity>
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void compareWithActual(T actualEntity, String... ignoredProperties)
     {
         Map<String, ?> expectedData = toMap();

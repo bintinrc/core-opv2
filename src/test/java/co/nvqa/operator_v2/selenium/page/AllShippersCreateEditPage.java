@@ -711,7 +711,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         sendKeysById("Returns Address 2 / Unit Number", returnSettings.getAddress2());
         sendKeysById("Returns City", returnSettings.getCity());
         sendKeysById("Returns Postcode", returnSettings.getPostcode());
-        sendKeysById("Last Returns Number", returnSettings.getLastReturnNumber());
+        sendKeysById("Last Returns Number", String.valueOf(returnSettings.getLastReturnNumber()));
         clickNvIconTextButtonByName("Save Changes");
 
         waitUntilInvisibilityOfToast("All changes saved successfully");
