@@ -32,8 +32,32 @@ public class RouteManifestPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading...']");
     }
 
+    public void verify1DeliverySuccessAtRouteManifest(Route route, Order order)
+    {
+        verify1DeliverySuccessOrFailAtRouteManifest(route, order, true);
+    }
+
+    public void verify1DeliveryFailAtRouteManifest(Route route, Order order)
+    {
+        verify1DeliverySuccessOrFailAtRouteManifest(route, order, false);
+    }
+
+    private void verify1DeliverySuccessOrFailAtRouteManifest(Route route, Order order, boolean verifyDeliverySuccess)
+    {
+        if(verifyDeliverySuccess)
+        {
+            verify1DeliveryIsSuccess(route, order);
+        }
+        else
+        {
+            verify1DeliveryIsFailed(route, order);
+        }
+    }
+
     public void verify1DeliveryIsSuccess(Route route, Order order)
     {
+        waitUntilPageLoaded();
+
         String actualRouteId = getText("//div[contains(@class,'route-detail')]/div[text()='Route ID']/following-sibling::div");
         String actualWaypointSuccessCount = getText("//div[text()='Waypoint Type']/following-sibling::table//td[contains(@ng-class, 'column.Success.value')]");
         Assert.assertEquals("Route ID", String.valueOf(route.getId()), actualRouteId);
@@ -50,6 +74,8 @@ public class RouteManifestPage extends OperatorV2SimplePage
 
     public void verify1DeliveryIsFailed(Route route, Order order)
     {
+        waitUntilPageLoaded();
+
         String actualRouteId = getText("//div[contains(@class,'route-detail')]/div[text()='Route ID']/following-sibling::div");
         String actualWaypointSuccessCount = getText("//div[text()='Waypoint Type']/following-sibling::table//td[contains(@ng-class, 'column.Fail.value')]");
         Assert.assertEquals("Route ID", String.valueOf(route.getId()), actualRouteId);

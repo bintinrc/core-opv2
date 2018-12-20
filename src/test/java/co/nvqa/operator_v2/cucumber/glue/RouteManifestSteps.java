@@ -5,7 +5,6 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.RouteManifestPage;
-import co.nvqa.operator_v2.selenium.page.RouteMonitoringPage;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
@@ -19,7 +18,6 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 @ScenarioScoped
 public class RouteManifestSteps extends AbstractSteps
 {
-    private RouteMonitoringPage routeMonitoringPage;
     private RouteManifestPage routeManifestPage;
 
     @Inject
@@ -31,7 +29,6 @@ public class RouteManifestSteps extends AbstractSteps
     @Override
     public void init()
     {
-        routeMonitoringPage = new RouteMonitoringPage(getWebDriver());
         routeManifestPage = new RouteManifestPage(getWebDriver());
     }
 
@@ -47,7 +44,7 @@ public class RouteManifestSteps extends AbstractSteps
     {
         Route route = get(KEY_CREATED_ROUTE);
         Order order = get(KEY_ORDER_DETAILS);
-        routeMonitoringPage.verify1DeliverySuccessAtRouteManifest(route, order);
+        routeManifestPage.verify1DeliverySuccessAtRouteManifest(route, order);
     }
 
     @Then("^Operator verify 1 delivery fail at Route Manifest$")
@@ -55,10 +52,10 @@ public class RouteManifestSteps extends AbstractSteps
     {
         Route route = get(KEY_CREATED_ROUTE);
         Order order = get(KEY_ORDER_DETAILS);
-        routeMonitoringPage.verify1DeliveryFailAtRouteManifest(route, order);
+        routeManifestPage.verify1DeliveryFailAtRouteManifest(route, order);
     }
 
-    @When("Operator fail delivery waypoint from Route Manifest page")
+    @When("^Operator fail delivery waypoint from Route Manifest page$")
     public void operatorFailDeliveryWaypointFromRouteManifestPage()
     {
         routeManifestPage.failDeliveryWaypoint(FailureReasonFactory.getFailureReason());

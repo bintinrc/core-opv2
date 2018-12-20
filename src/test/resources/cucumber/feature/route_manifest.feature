@@ -50,6 +50,7 @@ Feature: Route Manifest
     Then Operator verify 1 delivery fail at Route Manifest
 
   #@DeleteOrArchiveRoute
+  # Success-ing or Failing waypoint from Route Manifest still do nothing (no error).
 #  Scenario: Operator is able to load routes manifest and verify 1 delivery is failed (uid:0139c8ab-cd38-4389-b0e0-0546504cd5a1)
 #    Given API Shipper create V4 order using data below:
 #      | generateFromAndTo | RANDOM |
