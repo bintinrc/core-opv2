@@ -67,8 +67,9 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
         Collection<String> sourceTagNames = scenario.getSourceTagNames();
         boolean enableProxy = sourceTagNames.contains("@EnableProxy");
         boolean enableClearCache = sourceTagNames.contains("@EnableClearCache");
+        boolean forceNotHeadless = sourceTagNames.contains("@ForceNotHeadless");
         NvLogger.infof("Launching browser.");
-        setWebDriver(SeleniumUtils.createWebDriver(enableProxy, enableClearCache));
+        setWebDriver(SeleniumUtils.createWebDriver(enableProxy, enableClearCache, forceNotHeadless));
     }
 
     @Before("@LaunchBrowserWithProxyEnabled")
