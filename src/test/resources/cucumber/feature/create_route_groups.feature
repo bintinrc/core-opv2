@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @CreateRouteGroups @Saas @ForceNotHeadless
+@OperatorV2 @OperatorV2Part2 @CreateRouteGroups @Saas
 Feature: Transactions
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -26,7 +26,7 @@ Feature: Transactions
     Then Operator V2 clean up 'Route Groups'
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter RTS Transaction (<hiptest-uid>)
+  Scenario: Operator Filter RTS Transaction (uid:52a86349-8c4c-4ae7-ab22-eea3af31ebff)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -61,7 +61,7 @@ Feature: Transactions
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 15:00:00 |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Routed Transaction (<hiptest-uid>)
+  Scenario: Operator Filter Routed Transaction (uid:ab4c851f-876e-4cdc-8315-90ab4fa0cdc8)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
