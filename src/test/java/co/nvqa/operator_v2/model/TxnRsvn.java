@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Sergey Mishanin
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class TxnRsvn extends DataEntity<TxnRsvn>
 {
     private Long sequence;
@@ -21,6 +22,10 @@ public class TxnRsvn extends DataEntity<TxnRsvn>
     private String dp;
     private String pickupSize;
     private String comments;
+
+    public TxnRsvn()
+    {
+    }
 
     public Long getSequence()
     {

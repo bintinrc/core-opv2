@@ -19,6 +19,7 @@ import static co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage.TxnRsvnTab
 /**
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 public class CreateRouteGroupsPage extends OperatorV2SimplePage
 {
     private static final SimpleDateFormat DATE_FILTER_SDF = new SimpleDateFormat("EEEE MMMM d yyyy");
@@ -83,11 +84,13 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
     {
         String fromDateStr;
         String toDateStr;
-        if (StringUtils.equalsIgnoreCase("today", dates))
+
+        if(StringUtils.equalsIgnoreCase("today", dates))
         {
             fromDateStr = DATE_FILTER_SDF_2.format(new Date());
             toDateStr = fromDateStr;
-        } else
+        }
+        else
         {
             String[] datesStr = dates.split(";");
             fromDateStr = StringUtils.normalizeSpace(datesStr[0]);
@@ -125,13 +128,14 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
 
     public void removeFilter(String filterName)
     {
-        if (filterName.contains("time"))
+        if(filterName.contains("time"))
         {
-            if (isElementExist("//div[div[p[text()='" + filterName + "']]]/div/nv-icon-button/button"))
+            if(isElementExist("//div[div[p[text()='" + filterName + "']]]/div/nv-icon-button/button"))
             {
                 click("//div[div[p[text()='" + filterName + "']]]/div/nv-icon-button/button");
             }
-        } else
+        }
+        else
         {
             click("//div[div[p[text()='" + filterName + "']]]/div/div/nv-icon-button/button");
         }
@@ -158,9 +162,10 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
 
     public void addTransactionFilters(Map<String, String> data)
     {
-        data.forEach((filter, value) -> {
+        data.forEach((filter, value) ->
+        {
             String xpath = String.format(XPATH_TRANSACTION_FILTERS + XPATH_FILTER_BY_TITLE, filter);
-            if (!isElementExistFast(xpath))
+            if(!isElementExistFast(xpath))
             {
                 executeInContext(XPATH_TRANSACTION_FILTERS, () -> selectValueFromNvAutocompleteBySearchTextAndDismiss("::searchText", filter));
             }
@@ -170,9 +175,10 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
 
     public void addGeneralFilters(Map<String, String> data)
     {
-        data.forEach((filter, value) -> {
+        data.forEach((filter, value) ->
+        {
             String xpath = String.format(XPATH_GENERAL_FILTERS + XPATH_FILTER_BY_TITLE, filter);
-            if (!isElementExistFast(xpath))
+            if(!isElementExistFast(xpath))
             {
                 executeInContext(XPATH_GENERAL_FILTERS, () -> selectValueFromNvAutocompleteBySearchTextAndDismiss("::searchText", filter));
             }

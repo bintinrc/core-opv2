@@ -76,7 +76,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps
         List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
         String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
 
-        trackingIds.forEach((String trackingId) ->
+        trackingIds.forEach(trackingId ->
         {
             createRouteGroupsPage.removeFilter("Start Datetime");
             createRouteGroupsPage.removeFilter("End Datetime");
@@ -136,48 +136,64 @@ public class CreateRouteGroupsSteps extends AbstractSteps
     {
         mapOfData = new HashMap<>(mapOfData);
         Order order = get(KEY_ORDER_DETAILS);
+
         Transaction transaction = order.getTransactions().stream()
                 .filter(txn -> StringUtils.equalsIgnoreCase(type, txn.getType()))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException(String.format("Order [%s] doesn't have %s transactions", order.getTrackingId(), type)));
+
         String value = mapOfData.get("id");
-        if (StringUtils.equalsIgnoreCase(value, "GET_FROM_CREATED_ORDER"))
+
+        if(StringUtils.equalsIgnoreCase(value, "GET_FROM_CREATED_ORDER"))
         {
             mapOfData.put("id", String.valueOf(transaction.getId()));
         }
+
         value = mapOfData.get("orderId");
-        if (StringUtils.equalsIgnoreCase(value, "GET_FROM_CREATED_ORDER"))
+
+        if(StringUtils.equalsIgnoreCase(value, "GET_FROM_CREATED_ORDER"))
         {
             mapOfData.put("orderId", String.valueOf(order.getId()));
         }
+
         value = mapOfData.get("trackingId");
-        if (StringUtils.equalsIgnoreCase(value, "GET_FROM_CREATED_ORDER"))
+
+        if(StringUtils.equalsIgnoreCase(value, "GET_FROM_CREATED_ORDER"))
         {
             mapOfData.put("trackingId", String.valueOf(order.getTrackingId()));
         }
+
         value = mapOfData.get("shipper");
-        if (StringUtils.equalsIgnoreCase(value, "GET_FROM_CREATED_ORDER"))
+
+        if(StringUtils.equalsIgnoreCase(value, "GET_FROM_CREATED_ORDER"))
         {
             mapOfData.put("shipper", String.valueOf(transaction.getName()));
         }
+
         value = mapOfData.get("address");
-        if (StringUtils.equalsIgnoreCase(value, "GET_FROM_CREATED_ORDER"))
+
+        if(StringUtils.equalsIgnoreCase(value, "GET_FROM_CREATED_ORDER"))
         {
             String address = StringUtils.normalizeSpace(StringUtils.join(ImmutableList.of(transaction.getAddress1(), transaction.getAddress2(), transaction.getPostcode()), " "));
             mapOfData.put("address", address);
         }
+
         value = mapOfData.get("startDateTime");
-        if (StringUtils.equalsIgnoreCase(value, "GET_FROM_CREATED_ORDER"))
+
+        if(StringUtils.equalsIgnoreCase(value, "GET_FROM_CREATED_ORDER"))
         {
             Date date = ISO8601_LITE_DATETIME_FORMAT.parse(transaction.getStartTime());
             mapOfData.put("startDateTime", SDF_YYYY_MM_DD_HH_MM_SS.format(date));
         }
+
         value = mapOfData.get("endDateTime");
-        if (StringUtils.equalsIgnoreCase(value, "GET_FROM_CREATED_ORDER"))
+
+        if(StringUtils.equalsIgnoreCase(value, "GET_FROM_CREATED_ORDER"))
         {
             Date date = ISO8601_LITE_DATETIME_FORMAT.parse(transaction.getEndTime());
             mapOfData.put("endDateTime", SDF_YYYY_MM_DD_HH_MM_SS.format(date));
         }
+
         TxnRsvn expectedRecord = new TxnRsvn();
         expectedRecord.fromMap(mapOfData);
         createRouteGroupsPage.validateRecord(expectedRecord, type);

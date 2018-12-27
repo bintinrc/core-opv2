@@ -64,9 +64,9 @@ public class AllOrdersPage extends OperatorV2SimplePage
         {
             Category result = TRACKING_OR_STAMP_ID;
 
-            for (Category enumTemp : values())
+            for(Category enumTemp : values())
             {
-                if (enumTemp.getValue().equalsIgnoreCase(value))
+                if(enumTemp.getValue().equalsIgnoreCase(value))
                 {
                     result = enumTemp;
                     break;
@@ -98,9 +98,9 @@ public class AllOrdersPage extends OperatorV2SimplePage
         {
             SearchLogic result = EXACTLY_MATCHES;
 
-            for (SearchLogic enumTemp : values())
+            for(SearchLogic enumTemp : values())
             {
-                if (enumTemp.getValue().equalsIgnoreCase(value))
+                if(enumTemp.getValue().equalsIgnoreCase(value))
                 {
                     result = enumTemp;
                     break;
@@ -321,7 +321,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
         Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
-        if (listOfActualTrackingIds.size() == 1)
+        if(listOfActualTrackingIds.size()==1)
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.resume-order");
         }
@@ -426,7 +426,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
             String expectedEndTime = "";
             Integer timewindow = changeDeliveryTiming.getTimewindow();
 
-            if (timewindow == null)
+            if(timewindow==null)
             {
                 actualStartDate = actualStartDate.substring(0, 10);
                 actualEndDate = actualEndDate.substring(0, 10);
@@ -442,7 +442,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
             boolean isDateEmpty = isBlank(changeDeliveryTiming.getStartDate()) || isBlank(changeDeliveryTiming.getEndDate());
 
-            if (!isDateEmpty)
+            if(!isDateEmpty)
             {
                 Assert.assertEquals("Start Date does not match.", expectedStartDateWithTime, actualStartDate);
                 Assert.assertEquals("End Date does not match.", expectedEndDateWithTime, actualEndDate);
@@ -467,7 +467,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     private String concatDateWithTime(String date, String time)
     {
-        if (time == null)
+        if(time==null)
         {
             time = "";
         }
@@ -527,7 +527,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         String matchedTrackingIdXpathExpression = String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope//span[text()='%s']", searchTerm);
         String searchButtonXpathExpression = "//nv-api-text-button[@name='commons.search']";
 
-        if (isElementExistFast(matchedTrackingIdXpathExpression))
+        if(isElementExistFast(matchedTrackingIdXpathExpression))
         {
             click(matchedTrackingIdXpathExpression);
             waitUntilNewWindowOrTabOpened();
@@ -565,7 +565,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
             pause100ms();
             Set<String> windowHandlesTemp = getWebDriver().getWindowHandles();
 
-            if (windowHandlesTemp.size() <= 1)
+            if(windowHandlesTemp.size()<=1)
             {
                 throw new RuntimeException("WebDriver only contains 1 Window.");
             }
@@ -575,9 +575,9 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         String newOpenedWindowHandle = null;
 
-        for (String windowHandle : windowHandles)
+        for(String windowHandle : windowHandles)
         {
-            if (!windowHandle.equals(mainWindowHandle))
+            if(!windowHandle.equals(mainWindowHandle))
             {
                 newOpenedWindowHandle = windowHandle; // Do not break, because we need to get the latest one.
             }

@@ -11,16 +11,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ *
+ * @author Sergey Mishanin
+ */
+@SuppressWarnings("unused")
 public class TypeRegistryConfiguration implements TypeRegistryConfigurer
 {
-
     @Override
-    public void configureTypeRegistry(TypeRegistry typeRegistry) {
-        typeRegistry.defineParameterType(new ParameterType<>(
-                "strings",
+    public void configureTypeRegistry(TypeRegistry typeRegistry)
+    {
+        typeRegistry.defineParameterType(new ParameterType<>("strings",
                 Collections.singletonList("\"([^\"\\\\]*(\\\\.[^\"\\\\]*)*)\"|'([^'\\\\]*(\\\\.[^'\\\\]*)*)'"),
-                new TypeReference<List<String>>() {
-                }.getType(),
+                new TypeReference<List<String>>(){}.getType(),
                 (CaptureGroupTransformer<List<String>>) s ->
                         Arrays.asList(s[0]
                                 .replaceAll("\\\\\"", "\"")
@@ -33,7 +36,8 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer
     }
 
     @Override
-    public Locale locale() {
+    public Locale locale()
+    {
         return Locale.ENGLISH;
     }
 }
