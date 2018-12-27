@@ -160,6 +160,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         sendKeysByAriaLabel("Choose", csvFile.getAbsolutePath());
         waitUntilVisibilityOfElementLocated(String.format("//span[contains(text(), '%s')]", csvFile.getName()));
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.upload");
+        waitUntilInvisibilityOfToast(true);
     }
 
     public void findOrdersWithCsvAndWaitUntilToastDisappear(List<String> listOfTrackingId)

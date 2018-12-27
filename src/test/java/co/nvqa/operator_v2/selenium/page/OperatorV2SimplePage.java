@@ -657,7 +657,7 @@ public class OperatorV2SimplePage extends SimplePage
     @SuppressWarnings("CatchMayIgnoreException")
     private WebElement selectValueFromNvAutocompleteBy(String nvAutocompleteAttribute, String nvAutocompleteAttributeValue, String value)
     {
-        String xpathExpression = String.format("//nv-autocomplete[@%s='%s']//input", nvAutocompleteAttribute, nvAutocompleteAttributeValue);
+        String xpathExpression = String.format(".//nv-autocomplete[@%s='%s']//input", nvAutocompleteAttribute, nvAutocompleteAttributeValue);
         WebElement we = findElementByXpath(xpathExpression);
 
         if(!we.getAttribute("value").isEmpty())
