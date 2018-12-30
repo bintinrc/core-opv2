@@ -20,7 +20,7 @@ Feature: Outbound Monitoring
     Given API Driver get pickup/delivery waypoint of the created order
     Given API Operator Van Inbound parcel
     Given API Operator start the route
-    Given Operator go to menu New Features -> Outbound Monitoring
+    Given Operator go to menu New Features -> Outbound/Route Load Monitoring
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
     When Operator search on Route ID Header Table on Outbound Monitoring Page
     Then Operator verify the route ID is exist on Outbound Monitoring Page
@@ -41,7 +41,7 @@ Feature: Outbound Monitoring
     Given API Driver get pickup/delivery waypoint of the created order
     Given API Operator Van Inbound parcel
     Given API Operator start the route
-    Given Operator go to menu New Features -> Outbound Monitoring
+    Given Operator go to menu New Features -> Outbound/Route Load Monitoring
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
     When Operator search on Route ID Header Table on Outbound Monitoring Page
     Then Operator verify the In Progress Outbound Status on Outbound Monitoring Page
@@ -65,7 +65,7 @@ Feature: Outbound Monitoring
       | outboundRequest | { "hubId":{hub-id} } |
     Given API Operator start the route
     Given API Driver deliver the created parcel successfully
-    Given Operator go to menu New Features -> Outbound Monitoring
+    Given Operator go to menu New Features -> Outbound/Route Load Monitoring
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
     When Operator search on Route ID Header Table on Outbound Monitoring Page
     Then Operator verify the Complete Outbound Status on Outbound Monitoring Page
@@ -86,7 +86,7 @@ Feature: Outbound Monitoring
     Given API Driver get pickup/delivery waypoint of the created order
     Given API Operator Van Inbound parcel
     Given API Operator start the route
-    Given Operator go to menu New Features -> Outbound Monitoring
+    Given Operator go to menu New Features -> Outbound/Route Load Monitoring
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
     When Operator search on Route ID Header Table on Outbound Monitoring Page
     When Operator click on flag icon on chosen route ID on Outbound Monitoring Page
@@ -108,7 +108,7 @@ Feature: Outbound Monitoring
     Given API Driver get pickup/delivery waypoint of the created order
     Given API Operator Van Inbound parcel
     Given API Operator start the route
-    Given Operator go to menu New Features -> Outbound Monitoring
+    Given Operator go to menu New Features -> Outbound/Route Load Monitoring
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
     When Operator search on Route ID Header Table on Outbound Monitoring Page
     When Operator click on comment icon on chosen route ID on Outbound Monitoring Page
@@ -126,7 +126,7 @@ Feature: Outbound Monitoring
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    Given Operator go to menu New Features -> Outbound Monitoring
+    Given Operator go to menu New Features -> Outbound/Route Load Monitoring
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | fromDate    | {{previous-1-day-yyyy-MM-dd}} |
       | toDate      | {{current-date-yyyy-MM-dd}}   |
