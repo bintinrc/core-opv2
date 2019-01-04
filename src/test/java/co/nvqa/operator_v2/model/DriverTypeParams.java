@@ -8,11 +8,13 @@ import org.apache.commons.text.translate.CsvTranslators;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -130,11 +132,12 @@ public class DriverTypeParams
         this.timeslot = timeslot;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static DriverTypeParams fromCsvLine(String csvLine)
     {
         String[] values = csvLine.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         DriverTypeParams params = new DriverTypeParams();
-        params.setDriverTypeId(Long.parseLong(getValueIfIndexExists(values, 0)));
+        params.setDriverTypeId(Long.parseLong(Objects.requireNonNull(getValueIfIndexExists(values, 0))));
         params.setDriverTypeName(getValueIfIndexExists(values, 1));
         params.setDeliveryType(getValueIfIndexExists(values, 2));
         params.setPriorityLevel(getValueIfIndexExists(values, 3));
@@ -158,7 +161,7 @@ public class DriverTypeParams
     {
         try
         {
-            List<String> csvLines = FileUtils.readLines(new File(fileName));
+            List<String> csvLines = FileUtils.readLines(new File(fileName), Charset.defaultCharset());
             if (ignoreHeader)
             {
                 csvLines.remove(0);
