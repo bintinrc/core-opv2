@@ -38,10 +38,14 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
     {
         selectHub(hub);
         click(grabXpathButton(label));
-        click(grabXpathButton("Start Inbound"));
+        clickStartInbound();
 
         inputShipmentToInbound(shipmentId);
         checkSessionScan(shipmentId);
+    }
+
+    public void clickStartInbound(){
+        clickNvIconTextButtonByNameAndWaitUntilDone("container.inbound-scanning.start-inbound");
     }
 
     public String grabXpathButton(String label)

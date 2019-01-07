@@ -10,6 +10,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -48,7 +49,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     @When("^Operator click ([^\"]*) button on Shipment Management page$")
     public void clickActionButton(String actionButton)
     {
-        String shipmentId = get(KEY_SHIPMENT_ID);
+        String shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         shipmentManagementPage.clickActionButton(shipmentId, actionButton);
 
         if ("Force".equals(actionButton))
@@ -85,7 +86,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     @Then("^Operator verify inbounded Shipment exist on Shipment Management page$")
     public void operatorVerifyInboundedShipmentExistOnShipmentManagementPage()
     {
-        String shipmentId = get(KEY_SHIPMENT_ID);
+        String shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         shipmentManagementPage.verifyInboundedShipmentExist(shipmentId);
     }
 
@@ -101,8 +102,11 @@ public class ShipmentManagementSteps extends AbstractSteps
         ShipmentInfo shipmentInfo = new ShipmentInfo();
         shipmentInfo.fromMap(mapOfData);
         shipmentManagementPage.createShipment(shipmentInfo);
+        if (StringUtils.isBlank(shipmentInfo.getShipmentType())){
+            shipmentInfo.setShipmentType("Air Haul");
+        }
         put(KEY_SHIPMENT_INFO, shipmentInfo);
-        put(KEY_SHIPMENT_ID, shipmentInfo.getId());
+        put(KEY_CREATED_SHIPMENT_ID, shipmentInfo.getId());
     }
 
     @When("^Operator edit Shipment on Shipment Management page using data below:$")

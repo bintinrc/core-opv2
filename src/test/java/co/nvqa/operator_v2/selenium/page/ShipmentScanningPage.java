@@ -29,30 +29,27 @@ public class ShipmentScanningPage extends OperatorV2SimplePage
 
     public void selectHub(String hubName)
     {
-        click(XPATH_HUB_DROPDOWN);
-        pause1s();
-        selectDropdownValue(hubName);
-        pause1s();
+        selectValueFromMdSelectById("commons.hub", hubName);
     }
 
-    public void selectShipment(String shipmentId)
+    public void selectShipmentId(String shipmentId)
     {
-        pause3s();
-        click(XPATH_SHIPMENT_DROPDOWN);
-        pause500ms();
-        selectDropdownValue(shipmentId);
-        pause500ms();
-        click(XPATH_SELECT_SHIPMENT_BUTTON);
+        selectValueFromMdSelectById("container.shipment-management.shipment-id", shipmentId);
+    }
+
+    public void clickSelectShipment()
+    {
+        clickNvApiTextButtonByNameAndWaitUntilDone("container.shipment-scanning.select-shipment");
+    }
+
+    public void selectShipmentType(String shipmentType)
+    {
+        selectValueFromMdSelectById("container.shipment-scanning.shipment-type", shipmentType);
     }
 
     public void scanBarcode(String trackingId)
     {
         sendKeysAndEnter(XPATH_BARCODE_SCAN, trackingId);
-    }
-
-    private void selectDropdownValue(String value)
-    {
-        clickf("//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option/div[contains(text(), '%s')]", value);
     }
 
     public void checkOrderInShipment(String orderId)
