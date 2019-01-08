@@ -9,7 +9,6 @@ import co.nvqa.commons.utils.StandardScenarioStorageKeys;
 public interface ScenarioStorageKeys extends StandardScenarioStorageKeys
 {
     String KEY_ROUTE_GROUP_NAME = "KEY_ROUTE_GROUP_NAME";
-    String KEY_SHIPMENT_ID = "KEY_ROUTE_GROUP_NAME";
     String KEY_MAIN_WINDOW_HANDLE = "KEY_MAIN_WINDOW_HANDLE";
     String KEY_PICKUP_INSTRUCTION = "KEY_PICKUP_INSTRUCTION";
     String KEY_DELIVERY_INSTRUCTION = "KEY_DELIVERY_INSTRUCTION";

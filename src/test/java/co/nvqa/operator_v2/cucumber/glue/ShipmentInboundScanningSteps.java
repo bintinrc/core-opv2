@@ -36,14 +36,14 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
     @When("^Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page$")
     public void inboundScanning(String label, String hub)
     {
-        String shipmentId = get(KEY_SHIPMENT_ID);
+        String shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         scanningPage.inboundScanning(shipmentId, label, hub);
     }
 
     @When("^Operator change End Date on Shipment Inbound Scanning page$")
     public void clickChangeEndDateButton()
     {
-        Date next2DaysDate = TestUtils.getNextDate(2);
+        Date next2DaysDate = TestUtils.getNextWorkingDay();
         List<String> mustCheckId = scanningPage.grabSessionIdNotChangedScan();
         scanningPage.clickEditEndDate();
         scanningPage.inputEndDate(next2DaysDate);
