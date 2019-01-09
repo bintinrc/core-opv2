@@ -10,7 +10,7 @@ Feature: DP Administration
     Given Operator go to menu Distribution Points -> DP Administration
     Given Operator add new DP Partner on DP Administration page with the following attributes:
       | name         | GENERATED                            |
-      | pocName      | TEST                                 |
+      | pocName      | GENERATED                            |
       | pocTel       | GENERATED                            |
       | pocEmail     | GENERATED                            |
       | restrictions | Created for test automation purposes |
@@ -21,7 +21,7 @@ Feature: DP Administration
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
-      | pocName      | TEST                                 |
+      | pocName      | GENERATED                            |
       | pocTel       | GENERATED                            |
       | pocEmail     | GENERATED                            |
       | restrictions | Created for test automation purposes |
@@ -46,7 +46,7 @@ Feature: DP Administration
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
-      | pocName      | TEST                                 |
+      | pocName      | GENERATED                            |
       | pocTel       | GENERATED                            |
       | pocEmail     | GENERATED                            |
       | restrictions | Created for test automation purposes |
@@ -71,7 +71,7 @@ Feature: DP Administration
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
-      | pocName      | TEST                                 |
+      | pocName      | GENERATED                            |
       | pocTel       | GENERATED                            |
       | pocEmail     | GENERATED                            |
       | restrictions | Created for test automation purposes |
@@ -96,7 +96,7 @@ Feature: DP Administration
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
-      | pocName      | TEST                                 |
+      | pocName      | GENERATED                            |
       | pocTel       | GENERATED                            |
       | pocEmail     | GENERATED                            |
       | restrictions | Created for test automation purposes |
@@ -113,7 +113,7 @@ Feature: DP Administration
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
-      | pocName      | TEST                                 |
+      | pocName      | GENERATED                            |
       | pocTel       | GENERATED                            |
       | pocEmail     | GENERATED                            |
       | restrictions | Created for test automation purposes |
@@ -135,7 +135,7 @@ Feature: DP Administration
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
-      | pocName      | TEST                                 |
+      | pocName      | GENERATED                            |
       | pocTel       | GENERATED                            |
       | pocEmail     | GENERATED                            |
       | restrictions | Created for test automation purposes |
@@ -158,7 +158,7 @@ Feature: DP Administration
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
-      | pocName      | TEST                                 |
+      | pocName      | GENERATED                            |
       | pocTel       | GENERATED                            |
       | pocEmail     | GENERATED                            |
       | restrictions | Created for test automation purposes |

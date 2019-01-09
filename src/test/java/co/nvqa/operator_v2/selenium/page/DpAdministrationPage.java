@@ -443,7 +443,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         {
             super(webDriver);
             setColumnLocators(ImmutableMap.<String, String>builder()
-                    .put("dpmsPartnerId", "id")
+                    .put("dpmsPartnerId", "dpms_partner_id")
                     .put("name", "name")
                     .put("pocName", "poc_name")
                     .put("pocTel", "poc_tel")

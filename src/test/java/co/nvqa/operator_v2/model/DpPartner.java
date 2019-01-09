@@ -8,6 +8,7 @@ import java.util.Map;
 /**
  * @author Sergey Mishanin
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class DpPartner extends DataEntity<DpPartner>
 {
     private Long id;
@@ -55,7 +56,7 @@ public class DpPartner extends DataEntity<DpPartner>
 
     public void setName(String name)
     {
-        if ("generated".equalsIgnoreCase(name))
+        if("GENERATED".equalsIgnoreCase(name))
         {
             name = "DP-Partner-" + TestUtils.generateDateUniqueString();
         }
@@ -79,7 +80,7 @@ public class DpPartner extends DataEntity<DpPartner>
 
     public void setPocTel(String pocTel)
     {
-        if ("generated".equalsIgnoreCase(pocTel))
+        if("GENERATED".equalsIgnoreCase(pocTel))
         {
             pocTel = TestUtils.generatePhoneNumber();
         }
@@ -93,9 +94,9 @@ public class DpPartner extends DataEntity<DpPartner>
 
     public void setPocEmail(String pocEmail)
     {
-        if ("generated".equalsIgnoreCase(pocEmail))
+        if("GENERATED".equalsIgnoreCase(pocEmail))
         {
-            pocEmail = TestUtils.generateDateUniqueString() + "@gmail.com";
+            pocEmail = TestUtils.generateDateUniqueString() + "@ninjavan.co";
         }
         this.pocEmail = pocEmail;
     }

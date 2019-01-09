@@ -6,7 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
-import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.*;
+import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.ACTION_DELETE;
+import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.COLUMN_NAME;
 
 /**
  * @author Sergey Mishanin
