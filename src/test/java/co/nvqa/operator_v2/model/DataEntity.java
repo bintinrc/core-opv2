@@ -87,23 +87,24 @@ public abstract class DataEntity<T extends DataEntity>
         {
             Method setter = findSetter(clazz, property, value.getClass());
 
-            if (setter != null)
+            if(setter!=null)
             {
                 MethodUtils.invokeMethod(this, true, setter.getName(), value);
-            } else
+            }
+            else
             {
                 Field field = findPropertyField(clazz, property);
 
-                if (field != null)
+                if(field!=null)
                 {
-                    if (field.getType().isAssignableFrom(value.getClass()))
+                    if(field.getType().isAssignableFrom(value.getClass()))
                     {
                         FieldUtils.writeField(field, this, value, true);
                     }
-
                 }
             }
-        } catch (Exception ex)
+        }
+        catch(Exception ex)
         {
             String message = String.format("Could not set %s property to %s data entity", property, this.getClass().getName());
             NvLogger.error(message);
@@ -119,23 +120,26 @@ public abstract class DataEntity<T extends DataEntity>
         {
             Method getter = findGetter(clazz, property);
 
-            if (getter != null)
+            if(getter!=null)
             {
                 return (U) MethodUtils.invokeMethod(this, true, getter.getName());
-            } else
+            }
+            else
             {
                 Field field = findPropertyField(clazz, property);
 
-                if (field != null)
+                if(field!=null)
                 {
                     return (U) FieldUtils.readField(field, this, true);
                 }
             }
-        } catch (Exception ex)
+        }
+        catch(Exception ex)
         {
             String message = String.format("Could not get %s property of %s data entity", property, this.getClass().getName());
             NvLogger.error(message);
         }
+
         return null;
     }
 
@@ -144,9 +148,9 @@ public abstract class DataEntity<T extends DataEntity>
         Method[] methods = clazz.getMethods();
         String setterName = sanitizeString("set" + property);
 
-        for (Method method : methods)
+        for(Method method : methods)
         {
-            if (StringUtils.equals(setterName, sanitizeString(method.getName()))
+            if(StringUtils.equals(setterName, sanitizeString(method.getName()))
                     && method.getParameterCount() == 1
                     && method.getParameterTypes()[0].isAssignableFrom(valueType))
             {
