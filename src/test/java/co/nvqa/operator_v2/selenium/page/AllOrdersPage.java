@@ -239,7 +239,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         }
         finally
         {
-            closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
+            closeAllWindows(mainWindowHandle);
         }
     }
 
@@ -267,7 +267,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         }
         finally
         {
-            closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
+            closeAllWindows(mainWindowHandle);
         }
     }
 
@@ -461,7 +461,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         }
         finally
         {
-            closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
+            closeAllWindows(mainWindowHandle);
         }
     }
 
@@ -488,7 +488,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         }
         finally
         {
-            closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
+            closeAllWindows(mainWindowHandle);
         }
     }
 
@@ -506,7 +506,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         }
         finally
         {
-            closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
+            closeAllWindows(mainWindowHandle);
         }
     }
 

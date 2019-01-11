@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.isOneOf;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class RouteMonitoringPage extends OperatorV2SimplePage
 {
     private static final String MD_VIRTUAL_REPEAT = "route in getTableData()";
@@ -118,7 +118,7 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
         }
         finally
         {
-            closeAllWindowsAcceptTheMainWindow(mainWindowHandle);
+            closeAllWindows(mainWindowHandle);
         }
     }
 
