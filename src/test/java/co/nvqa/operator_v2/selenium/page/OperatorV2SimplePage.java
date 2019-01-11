@@ -1103,22 +1103,6 @@ public class OperatorV2SimplePage extends SimplePage
         }
     }
 
-    public void closeAllWindowsAcceptTheMainWindow(String mainWindowHandle)
-    {
-        Set<String> windowHandles = getWebDriver().getWindowHandles();
-
-        for(String windowHandle : windowHandles)
-        {
-            if(!windowHandle.equals(mainWindowHandle))
-            {
-                getWebDriver().switchTo().window(windowHandle);
-                getWebDriver().close();
-            }
-        }
-
-        getWebDriver().switchTo().window(mainWindowHandle);
-    }
-
     public String convertTimeFrom24sHourTo12HoursAmPm(String the24HourTime)
     {
         return StandardTestUtils.convertTimeFrom24sHourTo12HoursAmPm(the24HourTime);
