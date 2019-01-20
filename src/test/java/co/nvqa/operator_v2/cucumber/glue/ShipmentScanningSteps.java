@@ -34,7 +34,7 @@ public class ShipmentScanningSteps extends AbstractSteps
     @When("^Operator scan the created order to shipment in hub ([^\"]*)$")
     public void operatorScanTheCreatedOrderToShipmentInHub(String hub)
     {
-        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        String trackingId =get(KEY_CREATED_ORDER_TRACKING_ID);
         String shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
                 ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :

@@ -85,8 +85,12 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
                     removeNvFilterBoxByMainTitle("Aged Days");
                 }
             }
-
             clickButtonLoadSelection();
+
+            if(isElementExistFast("//*[contains(@class,'toast-error')]")){
+                closeToast();
+            }
+
             searchTableByTrackingId(trackingId);
 
             if(isTableEmpty())
