@@ -189,7 +189,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
         }
         else
         {
-            Assert.assertThat(String.format("Toast message not contains: '%s'", msg), toast.getText(), Matchers.containsString(msg));
+            Assert.assertThat(f("Toast message not contains: '%s'", msg), toast.getText(), Matchers.containsString(msg));
             shipmentLinehaulPage.waitUntilInvisibilityOfToast("Success delete Linehaul ID", false);
         }
     }
@@ -206,7 +206,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
         }
         else
         {
-            Assert.assertThat(String.format("Toast message not contains: '%s'", msg), toast.getText(), Matchers.containsString(msg));
+            Assert.assertThat(f("Toast message not contains: '%s'", msg), toast.getText(), Matchers.containsString(msg));
             shipmentLinehaulPage.waitUntilInvisibilityOfToast("updated");
         }
 

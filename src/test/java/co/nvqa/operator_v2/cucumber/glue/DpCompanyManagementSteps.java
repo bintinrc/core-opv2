@@ -38,11 +38,11 @@ public class DpCompanyManagementSteps extends AbstractSteps
     {
         String uniqueCode = generateDateUniqueString();
         DpCompany dpCompany = new DpCompany();
-        dpCompany.setName(String.format("DP Company #%s", uniqueCode));
-        dpCompany.setEmail(String.format("dp.company.%s@test.co", uniqueCode));
-        dpCompany.setContact(String.format("65%s", uniqueCode));
-        dpCompany.setDropOffWebhookUrl(String.format("https://www.dropoffwebhook-%s.co", uniqueCode));
-        dpCompany.setCollectWebhookUrl(String.format("https://www.collectwebhook-%s.co", uniqueCode));
+        dpCompany.setName(f("DP Company #%s", uniqueCode));
+        dpCompany.setEmail(f("dp.company.%s@test.co", uniqueCode));
+        dpCompany.setContact(f("65%s", uniqueCode));
+        dpCompany.setDropOffWebhookUrl(f("https://www.dropoffwebhook-%s.co", uniqueCode));
+        dpCompany.setCollectWebhookUrl(f("https://www.collectwebhook-%s.co", uniqueCode));
         dpCompany.setIntegrated(Boolean.FALSE);
         dpCompanyManagementPage.addDpCompany(dpCompany);
         put("dpCompany", dpCompany);
@@ -120,9 +120,9 @@ public class DpCompanyManagementSteps extends AbstractSteps
 
         String uniqueCode = generateDateUniqueString();
         DpCompanyAgent dpCompanyAgent = new DpCompanyAgent();
-        dpCompanyAgent.setName(String.format("DP Company Agent #%s", uniqueCode));
-        dpCompanyAgent.setEmail(String.format("dp.company.agent.%s@test.co", uniqueCode));
-        dpCompanyAgent.setContact(String.format("65%s", uniqueCode));
+        dpCompanyAgent.setName(f("DP Company Agent #%s", uniqueCode));
+        dpCompanyAgent.setEmail(f("dp.company.agent.%s@test.co", uniqueCode));
+        dpCompanyAgent.setContact(f("65%s", uniqueCode));
         dpCompanyAgent.setUnlockCode(uniqueCode);
         dpCompanyAgentPage.addDpCompanyAgent(dpCompanyAgent);
 

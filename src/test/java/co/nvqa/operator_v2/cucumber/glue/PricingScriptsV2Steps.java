@@ -53,7 +53,7 @@ public class PricingScriptsV2Steps extends AbstractSteps
 
         String createdDate = CREATED_DATE_SDF.format(new Date());
         String name = "Dummy Script #"+dateUniqueString;
-        String description = String.format("This script is created for testing purpose only. Ignore this script. Created at %s by scenario \"%s\".", createdDate, scenarioName);
+        String description = f("This script is created for testing purpose only. Ignore this script. Created at %s by scenario \"%s\".", createdDate, scenarioName);
 
         Script script = new Script();
         script.setName(name);

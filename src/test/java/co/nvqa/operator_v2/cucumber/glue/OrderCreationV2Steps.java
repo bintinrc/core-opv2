@@ -106,24 +106,24 @@ public class OrderCreationV2Steps extends AbstractSteps
 
         if("Normal".equals(orderType))
         {
-            fromEmail = String.format("shipper.normal.%s@ninjavan.co", trackingRefNo);
-            fromName = String.format("S-N-%s Shipper", trackingRefNo);
-            toEmail = String.format("customer.normal.%s@ninjavan.co", trackingRefNo);
-            toName = String.format("C-N-%s Customer", trackingRefNo);
+            fromEmail = f("shipper.normal.%s@ninjavan.co", trackingRefNo);
+            fromName = f("S-N-%s Shipper", trackingRefNo);
+            toEmail = f("customer.normal.%s@ninjavan.co", trackingRefNo);
+            toName = f("C-N-%s Customer", trackingRefNo);
         }
         else if("C2C".equals(orderType))
         {
-            fromEmail = String.format("shipper.c2c.%s@ninjavan.co", trackingRefNo);
-            fromName = String.format("S-C-%s Shipper", trackingRefNo);
-            toEmail = String.format("customer.c2c.%s@ninjavan.co", trackingRefNo);
-            toName = String.format("C-C-%s Customer", trackingRefNo);
+            fromEmail = f("shipper.c2c.%s@ninjavan.co", trackingRefNo);
+            fromName = f("S-C-%s Shipper", trackingRefNo);
+            toEmail = f("customer.c2c.%s@ninjavan.co", trackingRefNo);
+            toName = f("C-C-%s Customer", trackingRefNo);
         }
         else if("Return".equals(orderType))
         {
-            fromEmail = String.format("customer.return.%s@ninjavan.co", trackingRefNo);
-            fromName = String.format("C-R-%s Customer", trackingRefNo);
-            toEmail = String.format("shipper.return.%s@ninjavan.co", trackingRefNo);
-            toName = String.format("S-R-%s Shipper", trackingRefNo);
+            fromEmail = f("customer.return.%s@ninjavan.co", trackingRefNo);
+            fromName = f("C-R-%s Customer", trackingRefNo);
+            toEmail = f("shipper.return.%s@ninjavan.co", trackingRefNo);
+            toName = f("S-R-%s Shipper", trackingRefNo);
         }
 
         Address fromAddress = generateAddress("RANDOM");
@@ -144,8 +144,8 @@ public class OrderCreationV2Steps extends AbstractSteps
         order.setToCountry(toAddress.getCountry());
         order.setPickupWeekend(true);
         order.setDeliveryWeekend(true);
-        order.setPickupInstruction(String.format("This order's pickup instruction is created by automation test. Ignore this order. Created at %s by scenario '%s'.", CREATED_DATE_SDF.format(currentDate), scenarioName));
-        order.setDeliveryInstruction(String.format("This order's delivery instruction is created by automation test. Ignore this order. Created at %s by scenario '%s'.", CREATED_DATE_SDF.format(currentDate), scenarioName));
+        order.setPickupInstruction(f("This order's pickup instruction is created by automation test. Ignore this order. Created at %s by scenario '%s'.", CREATED_DATE_SDF.format(currentDate), scenarioName));
+        order.setDeliveryInstruction(f("This order's delivery instruction is created by automation test. Ignore this order. Created at %s by scenario '%s'.", CREATED_DATE_SDF.format(currentDate), scenarioName));
         order.setCodValue(0.0);
         order.setInsuredValue(0.0);
         order.setFromFirstName(fromName);

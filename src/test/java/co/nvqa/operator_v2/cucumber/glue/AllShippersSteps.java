@@ -472,7 +472,7 @@ public class AllShippersSteps extends AbstractSteps
         shopify.setMaxDeliveryDays(randomLong(0, 3));
         shopify.setDdOffset(1L);
         shopify.setDdTimewindowId(2L);
-        shopify.setBaseUri(String.format("https://www.shopify%s.com", dateUniqueString));
+        shopify.setBaseUri(f("https://www.shopify%s.com", dateUniqueString));
         shopify.setApiKey(dateUniqueString + "1");
         shopify.setPassword(dateUniqueString + "2");
         shopify.setShippingCodes(Collections.singletonList(dateUniqueString + "3"));
@@ -499,7 +499,7 @@ public class AllShippersSteps extends AbstractSteps
         Magento magento = new Magento();
         magento.setUsername("magento" + dateUniqueString);
         magento.setPassword(dateUniqueString);
-        magento.setSoapApiUrl(String.format("https://www.magento%s.com", dateUniqueString));
+        magento.setSoapApiUrl(f("https://www.magento%s.com", dateUniqueString));
         shipper.setMagento(magento);
 
         allShippersPage.updateShipperMagentoSettings(shipper);
@@ -545,8 +545,8 @@ public class AllShippersSteps extends AbstractSteps
         Shipper shipper = get(KEY_CREATED_SHIPPER);
         Address createdAddress = AddressFactory.getRandomAddress();
         String unique = generateDateUniqueString();
-        createdAddress.setName(String.format("Dummy Address #%s", unique));
-        createdAddress.setEmail(String.format("dummy.address.%s@gmail.com", unique));
+        createdAddress.setName(f("Dummy Address #%s", unique));
+        createdAddress.setEmail(f("dummy.address.%s@gmail.com", unique));
         createdAddress.setAddress2(createdAddress.getAddress2() + " #" + unique);
 
         Reservation reservation = new Reservation();

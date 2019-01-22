@@ -35,7 +35,7 @@ public class RoleManagementSteps extends AbstractSteps {
 
         RoleManagement roleManagement = new RoleManagement();
         roleManagement.setRoleName("QA_"+uniqueCode);
-        roleManagement.setDesc(String.format("This role is created for testing purpose only. Ignore this role. Created at %s by scenario \"%s\".", CREATED_DATE_SDF.format(new Date()), scenarioName));
+        roleManagement.setDesc(f("This role is created for testing purpose only. Ignore this role. Created at %s by scenario \"%s\".", CREATED_DATE_SDF.format(new Date()), scenarioName));
         roleManagement.setScope("ALL_ACCESS");
 
         roleManagementPage.createNewRole(roleManagement);
@@ -65,7 +65,7 @@ public class RoleManagementSteps extends AbstractSteps {
 
         RoleManagement roleManagementEdited = new RoleManagement();
         roleManagementEdited.setRoleName(roleManagement.getRoleName()+"_EDITED");
-        roleManagementEdited.setDesc(String.format(roleManagement.getDesc()+" Modified at %s.", CREATED_DATE_SDF.format(new Date())));
+        roleManagementEdited.setDesc(f(roleManagement.getDesc()+" Modified at %s.", CREATED_DATE_SDF.format(new Date())));
         roleManagementEdited.setScope("AUTH_ADMIN");
 
         put("roleManagementEdited", roleManagementEdited);

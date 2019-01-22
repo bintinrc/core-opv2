@@ -140,7 +140,7 @@ public class CreateRouteGroupsSteps extends AbstractSteps
         Transaction transaction = order.getTransactions().stream()
                 .filter(txn -> StringUtils.equalsIgnoreCase(type, txn.getType()))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException(String.format("Order [%s] doesn't have %s transactions", order.getTrackingId(), type)));
+                .orElseThrow(() -> new RuntimeException(f("Order [%s] doesn't have %s transactions", order.getTrackingId(), type)));
 
         String value = mapOfData.get("id");
 

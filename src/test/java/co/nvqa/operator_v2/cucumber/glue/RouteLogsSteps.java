@@ -67,7 +67,7 @@ public class RouteLogsSteps extends AbstractSteps
             String hubName = mapOfData.get("hubName");
             String ninjaDriverName = mapOfData.get("ninjaDriverName");
             String vehicleName = mapOfData.get("vehicleName");
-            String comments = String.format("This route is created from OpV2 for testing purpose only. Ignore this route. Created at %s by scenario \"%s\".", createdDate, scenarioName);
+            String comments = f("This route is created from OpV2 for testing purpose only. Ignore this route. Created at %s by scenario \"%s\".", createdDate, scenarioName);
 
             CreateRouteParams createRouteParams = new CreateRouteParams();
             createRouteParams.setRouteDate(routeDate);
@@ -117,7 +117,7 @@ public class RouteLogsSteps extends AbstractSteps
 
             for(int i=0; i<numberOfRoute; i++)
             {
-                String comments = String.format("This route (#%d) is created from OpV2 for testing purpose only. Ignore this route. Created at %s by scenario \"%s\".", (i+1), createdDate, scenarioName);
+                String comments = f("This route (#%d) is created from OpV2 for testing purpose only. Ignore this route. Created at %s by scenario \"%s\".", (i+1), createdDate, scenarioName);
 
                 CreateRouteParams createRouteParams = new CreateRouteParams();
                 createRouteParams.setRouteDate(routeDate);
@@ -378,7 +378,7 @@ public class RouteLogsSteps extends AbstractSteps
                 }
                 catch(Exception ex)
                 {
-                    getScenarioManager().writeToCurrentScenarioLog(String.format("Alert is not present after %ds.", ALERT_WAIT_TIMEOUT_IN_SECONDS));
+                    getScenarioManager().writeToCurrentScenarioLog(f("Alert is not present after %ds.", ALERT_WAIT_TIMEOUT_IN_SECONDS));
                     getScenarioManager().writeToCurrentScenarioLog(TestUtils.convertExceptionStackTraceToString(ex));
                 }
 
@@ -395,7 +395,7 @@ public class RouteLogsSteps extends AbstractSteps
         Map<String,String> mapOfTokens = new HashMap<>();
         mapOfTokens.put("route_id", String.valueOf(routeId));
         String expectedRedirectUrl = replaceTokens(redirectUrl, mapOfTokens);
-        Assert.assertEquals(String.format("Operator does not redirect to page %s.", redirectUrl), expectedRedirectUrl, actualCurrentUrl);
+        Assert.assertEquals(f("Operator does not redirect to page %s.", redirectUrl), expectedRedirectUrl, actualCurrentUrl);
     }
 
     @Then("^Operator close Edit Routes dialog$")
@@ -444,7 +444,7 @@ public class RouteLogsSteps extends AbstractSteps
             }
 
             takesScreenshot();
-            writeToCurrentScenarioLog(String.format("%s Trying to click 'Edit Filter' button x%d.", level, counter++));
+            writeToCurrentScenarioLog(f("%s Trying to click 'Edit Filter' button x%d.", level, counter++));
 
             routeLogsPage.clickEditFilter();
             loadSelectionButtonIsVisible = routeLogsPage.isLoadSelectionVisible();
@@ -469,7 +469,7 @@ public class RouteLogsSteps extends AbstractSteps
     {
         Long routeId = get(KEY_CREATED_ROUTE_ID);
         String tags = routeLogsPage.getRouteTag(routeId);
-        Assert.assertThat(String.format("Route does not contains tag '%s'.", newTag), tags, Matchers.containsString(newTag));
+        Assert.assertThat(f("Route does not contains tag '%s'.", newTag), tags, Matchers.containsString(newTag));
     }
 
     @When("^Operator delete route on Operator V2$")

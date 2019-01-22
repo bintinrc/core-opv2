@@ -92,7 +92,7 @@ public class ParcelSweeperSteps extends AbstractSteps
             Zone routingZone = zones.stream().filter(zone -> Objects.equals(zone.getLegacyZoneId(), deliveryTransaction.getRoutingZoneId()))
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("Could not find zone with ID = " + deliveryTransaction.getRoutingZoneId()));
-            zoneName = String.format("%s (%s)", routingZone.getShortName(), routingZone.getName());
+            zoneName = f("%s (%s)", routingZone.getShortName(), routingZone.getName());
         }
         String color = mapOfData.get("color");
         parcelSweeperPage.verifyZoneInfo(zoneName, color);

@@ -78,7 +78,7 @@ public class TagManagementSteps extends AbstractSteps
 
             String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
             Assert.assertEquals(DEFAULT_TAG_NAME, actualTagName);
-        }, String.format("verifyNewTagCreatedSuccessfully - [Expected Tag Name = %s]", DEFAULT_TAG_NAME), getScenarioManager()::writeToCurrentScenarioLog);
+        }, f("verifyNewTagCreatedSuccessfully - [Expected Tag Name = %s]", DEFAULT_TAG_NAME), getScenarioManager()::writeToCurrentScenarioLog);
     }
 
     @When("^Operator update tag on Tag Management$")

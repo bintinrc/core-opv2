@@ -79,11 +79,11 @@ public class RouteGroupManagementSteps extends AbstractSteps
             routeGroupManagementPage.searchTable(routeGroupName);
             actualRouteGroupName = routeGroupManagementPage.getTextOnTable(1, RouteGroupManagementPage.COLUMN_CLASS_DATA_NAME);
 
-            retry = (actualRouteGroupName==null||actualRouteGroupName.isEmpty()) && counter++<=MAX_RETRY;
+            retry = (actualRouteGroupName==null || actualRouteGroupName.isEmpty()) && counter++<=MAX_RETRY;
 
             if(retry)
             {
-                writeToCurrentScenarioLog(String.format("[INFO] Retrying to load and search Route Group. [Route Group Name = '%s'] Retrying %dx ...", actualRouteGroupName, counter));
+                writeToCurrentScenarioLog(f("[INFO] Retrying to load and search Route Group. [Route Group Name = '%s'] Retrying %dx ...", actualRouteGroupName, counter));
                 takesScreenshot();
                 reloadPage();
             }

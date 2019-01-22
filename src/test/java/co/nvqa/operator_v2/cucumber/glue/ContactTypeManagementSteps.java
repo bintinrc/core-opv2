@@ -180,7 +180,7 @@ public class ContactTypeManagementSteps extends AbstractSteps
         ContactType expectedContactType = get(KEY_CONTACT_TYPE);
         ContactType actualContactType = get(KEY_CONTACT_TYPE_SEARCH_RESULT);
 
-        Assert.assertNotNull(String.format("Search Contact Type with keyword = '%s' found nothing.", searchContactTypesKeyword), actualContactType);
+        Assert.assertNotNull(f("Search Contact Type with keyword = '%s' found nothing.", searchContactTypesKeyword), actualContactType);
         Assert.assertEquals("Contact Type", expectedContactType.getName(), actualContactType.getName());
     }
 

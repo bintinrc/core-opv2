@@ -240,7 +240,7 @@ public class HubsAdministrationSteps extends AbstractSteps
         HubsAdministration expectedHubsAdministration = get(KEY_HUBS_ADMINISTRATION);
         HubsAdministration actualHubsAdministration = get(KEY_HUBS_ADMINISTRATION_SEARCH_RESULT);
 
-        Assert.assertNotNull(String.format("Search Hub with keyword = '%s' found nothing.", searchHubsKeyword), actualHubsAdministration);
+        Assert.assertNotNull(f("Search Hub with keyword = '%s' found nothing.", searchHubsKeyword), actualHubsAdministration);
         Assert.assertEquals("Hub Name", expectedHubsAdministration.getName(), actualHubsAdministration.getName());
         Assert.assertEquals("Display Name", expectedHubsAdministration.getDisplayName(), actualHubsAdministration.getDisplayName());
         Assert.assertThat("City", actualHubsAdministration.getCity(), Matchers.equalToIgnoringCase(expectedHubsAdministration.getCity()));

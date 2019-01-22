@@ -41,7 +41,7 @@ public class PricingScriptsSteps extends AbstractSteps
     public void operatorCreateNewScriptOnPricingScriptsPage()
     {
         newPricingScriptsName = "Dummy Script #"+generateDateUniqueString();
-        pricingScriptsPage.createScript(newPricingScriptsName, String.format("This 'Pricing Script' is created by Operator V2 automation test. Created at %s.", new Date()));
+        pricingScriptsPage.createScript(newPricingScriptsName, f("This 'Pricing Script' is created by Operator V2 automation test. Created at %s.", new Date()));
     }
 
     @Then("^Operator verify the new script on Pricing Scripts is created successfully$")
@@ -55,7 +55,7 @@ public class PricingScriptsSteps extends AbstractSteps
     public void operatorUpdateScriptOnPricingScriptsPage()
     {
         newPricingScriptsName += " [EDITED]";
-        pricingScriptsPage.updateScript(1, newPricingScriptsName, String.format("This 'Pricing Script' is modified by Operator V2 automation test. Modified at %s.", new Date()));
+        pricingScriptsPage.updateScript(1, newPricingScriptsName, f("This 'Pricing Script' is modified by Operator V2 automation test. Modified at %s.", new Date()));
     }
 
     @Then("^Operator verify the script on Pricing Scripts page is updated successfully$")
@@ -86,7 +86,7 @@ public class PricingScriptsSteps extends AbstractSteps
         String script1 = "function getDefaultPrice() {\\n    return 0.2;\\n}";
         String script1Id = pricingScriptsPage.createDefaultScriptIfNotExists(defaultScriptName1, scriptDescription, script1);
 
-        String importScript = String.format("importScript(%s);", script1Id);
+        String importScript = f("importScript(%s);", script1Id);
         String script2 = importScript+"\\n\\nfunction calculate(deliveryType, orderType, timeslotType, size, weight,\\n    fromZone, toZone, codValue, insuredValue) {\\n\\n    var price = getDefaultPrice();\\n\\n    if (deliveryType == \"STANDARD\") {\\n        price += 0.3;\\n    } else if (deliveryType == \"EXPRESS\") {\\n        price += 0.5;\\n    } else if (deliveryType == \"NEXT_DAY\") {\\n        price += 0.7;\\n    } else if (deliveryType == \"SAME_DAY\") {\\n        price += 1.1;\\n    } else {\\n        throw \"Unknown delivery type.\";\\n    }\\n\\n    if (orderType == \"NORMAL\") {\\n        price += 1.3;\\n    } else if (orderType == \"RETURN\") {\\n        price += 1.7;\\n    } else if (orderType == \"C2C\") {\\n        price += 1.9;\\n    } else {\\n        throw \"Unknown order type.\";\\n    }\\n\\n    if (timeslotType == \"NONE\") {\\n        price += 2.3;\\n    } else if (timeslotType == \"DAY_NIGHT\") {\\n        price += 2.9;\\n    } else if (timeslotType == \"TIMESLOT\") {\\n        price += 3.1;\\n    } else {\\n        throw \"Unknown timeslot type.\";\\n    }\\n\\n    if (size == \"S\") {\\n        price += 3.7;\\n    } else if (size == \"M\") {\\n        price += 4.1;\\n    } else if (size == \"L\") {\\n        price += 4.3;\\n    } else if (size == \"XL\") {\\n        price += 4.7;\\n    } else if (size == \"XXL\") {\\n        price += 5.3;\\n    } else {\\n        throw \"Unknown size.\";\\n    }\\n\\n    price += weight;\\n\\n    var result = {};\\n    result.delivery_fee = price;\\n    result.cod_fee = codValue;\\n    result.insurance_fee = insuredValue;\\n\tresult.gst = 7;\\n    result.handling_fee = 11;\\n\\n    return result;\\n}";
 
         pricingScriptsPage.createDefaultScriptIfNotExists(defaultScriptName2, scriptDescription, script2);

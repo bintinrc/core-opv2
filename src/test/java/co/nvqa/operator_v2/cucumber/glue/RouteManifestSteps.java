@@ -36,7 +36,7 @@ public class RouteManifestSteps extends AbstractSteps
     public void operatorGoToCreatedRouteManifest()
     {
         Route route = get(KEY_CREATED_ROUTE);
-        getWebDriver().navigate().to(String.format("%s/%s/route-manifest/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, route.getId()).toLowerCase());
+        getWebDriver().navigate().to(f("%s/%s/route-manifest/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, route.getId()).toLowerCase());
     }
 
     @Then("^Operator verify 1 delivery success at Route Manifest$")

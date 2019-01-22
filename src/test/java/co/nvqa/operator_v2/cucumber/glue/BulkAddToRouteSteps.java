@@ -51,7 +51,7 @@ public class BulkAddToRouteSteps extends AbstractSteps
     public void verifyParcelAddedToRoute()
     {
         String expectedTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        String xpath = String.format("//td[contains(@class, 'tracking_id') and contains(text(), '%s')]", expectedTrackingId);
+        String xpath = f("//td[contains(@class, 'tracking_id') and contains(text(), '%s')]", expectedTrackingId);
         takesScreenshot();
         WebElement actualTrackingId = bulkAddToRoutePage.findElementByXpath(xpath);
         Assert.assertEquals("Order did not added to route.", expectedTrackingId, actualTrackingId.getText());

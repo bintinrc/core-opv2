@@ -55,17 +55,17 @@ public class RecoveryTicketsSteps extends AbstractSteps
 
         if("GENERATED".equals(damageDescription))
         {
-            damageDescription = String.format("This damage description is created by automation at %s.", CREATED_DATE_SDF.format(new Date()));
+            damageDescription = f("This damage description is created by automation at %s.", CREATED_DATE_SDF.format(new Date()));
         }
 
         if("GENERATED".equals(ticketNotes))
         {
-            ticketNotes = String.format("This ticket notes is created by automation at %s.", CREATED_DATE_SDF.format(new Date()));
+            ticketNotes = f("This ticket notes is created by automation at %s.", CREATED_DATE_SDF.format(new Date()));
         }
 
         if("GENERATED".equals(parcelDescription))
         {
-            parcelDescription = String.format("This parcel description is created by automation at %s.", CREATED_DATE_SDF.format(new Date()));
+            parcelDescription = f("This parcel description is created by automation at %s.", CREATED_DATE_SDF.format(new Date()));
         }
 
         RecoveryTicket recoveryTicket = new RecoveryTicket();
@@ -94,6 +94,6 @@ public class RecoveryTicketsSteps extends AbstractSteps
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         boolean isTicketCreated = recoveryTicketsPage.verifyTicketIsExist(trackingId);
-        Assert.assertTrue(String.format("Ticket '%s' does not created.", trackingId), isTicketCreated);
+        Assert.assertTrue(f("Ticket '%s' does not created.", trackingId), isTicketCreated);
     }
 }

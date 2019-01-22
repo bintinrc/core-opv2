@@ -32,16 +32,16 @@ public class ThirdPartyShippersSteps extends AbstractSteps
 
     private String generateThirdPartyShipperCode()
     {
-        return String.format("T-%s", StringUtils.left(String.valueOf(System.currentTimeMillis()), 8)); // Maximum character is 10.
+        return f("T-%s", StringUtils.left(String.valueOf(System.currentTimeMillis()), 8)); // Maximum character is 10.
     }
 
     @When("^Operator create new Third Party Shippers$")
     public void operatorCreateNewThirdPartyShippers()
     {
         String uniqueString = generateDateUniqueString();
-        String name = String.format("TPS-%s", uniqueString);
+        String name = f("TPS-%s", uniqueString);
         String code = generateThirdPartyShipperCode();
-        String url = String.format("https://www.tps%s.co", uniqueString);
+        String url = f("https://www.tps%s.co", uniqueString);
 
         ThirdPartyShipper thirdPartyShipper = new ThirdPartyShipper();
         thirdPartyShipper.setName(name);

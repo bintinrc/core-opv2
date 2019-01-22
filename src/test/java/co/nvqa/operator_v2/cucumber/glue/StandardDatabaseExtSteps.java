@@ -68,7 +68,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
             long routeId = createRouteParams.getCreatedRoute().getId();
             List<RouteDriverTypeEntity> listOfRouteDriverTypeEntity = getRouteJdbc().findRouteDriverTypeByRouteIdAndNotDeleted(routeId);
             List<Long> listOfRouteDriverTypeId = listOfRouteDriverTypeEntity.stream().map(RouteDriverTypeEntity::getDriverTypeId).collect(Collectors.toList());
-            Assert.assertThat(String.format("Route with ID = %d does not contain the expected Driver Type ID = %d", routeId, driverTypeId), listOfRouteDriverTypeId, hasItem(driverTypeId));
+            Assert.assertThat(f("Route with ID = %d does not contain the expected Driver Type ID = %d", routeId, driverTypeId), listOfRouteDriverTypeId, hasItem(driverTypeId));
         }
     }
 
@@ -94,7 +94,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     {
         Long orderId = get(KEY_CREATED_ORDER_ID);
         List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
-        Assert.assertThat(String.format("Order %d events list", orderId), orderEvents, not(empty()));
+        Assert.assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
         OrderEventEntity theLastOrderEvent = orderEvents.get(0);
         String value = mapOfData.get("type");
 

@@ -36,11 +36,11 @@ public class DpVaultManagementSteps extends AbstractSteps
         long uniqueCoordinate = System.currentTimeMillis();
 
         DpVault dpVault = new DpVault();
-        dpVault.setName(String.format("DP Station #%s", uniqueCode));
+        dpVault.setName(f("DP Station #%s", uniqueCode));
         dpVault.setAppVersion(1L);
         dpVault.setDpName(dpName);
-        dpVault.setAddress1(String.format("123 Orchard Road %s", uniqueCode));
-        dpVault.setAddress2(String.format("OG Orchard #%s", uniqueCode));
+        dpVault.setAddress1(f("123 Orchard Road %s", uniqueCode));
+        dpVault.setAddress2(f("OG Orchard #%s", uniqueCode));
         dpVault.setCity("SG");
         dpVault.setCountry("SG");
         dpVault.setLatitude(Double.parseDouble("1."+uniqueCoordinate));

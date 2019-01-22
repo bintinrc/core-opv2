@@ -50,7 +50,7 @@ public class BlockedDatesSteps extends AbstractSteps
         blockedDatesYearWe.click();
 
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        WebElement currentYearOptionWe = getWebDriver().findElement(By.xpath(String.format("//md-option[@ng-repeat='m in yearList' and @value='%d']", currentYear)));
+        WebElement currentYearOptionWe = getWebDriver().findElement(By.xpath(f("//md-option[@ng-repeat='m in yearList' and @value='%d']", currentYear)));
         currentYearOptionWe.click();
 
         List<WebElement> elm = getWebDriver().findElements(By.xpath("//div[@ng-repeat='day in week track by $index' and not(contains(@class, 'active')) and not(contains(@class, 'not-same-month'))]"));
@@ -85,7 +85,7 @@ public class BlockedDatesSteps extends AbstractSteps
                     }
                 }
 
-                Assert.assertTrue(isAdded);
+                assertTrue("Blocked Date should be added.", isAdded);
             }, getCurrentMethodName(), getScenarioManager()::writeToCurrentScenarioLog);
         }
     }
@@ -111,7 +111,7 @@ public class BlockedDatesSteps extends AbstractSteps
                 }
             }
 
-            Assert.assertTrue(isRemoved);
+            assertTrue("Blocked Date should be removed.", isRemoved);
         }
     }
 
@@ -134,7 +134,7 @@ public class BlockedDatesSteps extends AbstractSteps
                     }
                 }
 
-                Assert.assertFalse(isFound);
+                assertFalse(isFound);
             }, getCurrentMethodName(), getScenarioManager()::writeToCurrentScenarioLog);
         }
     }
