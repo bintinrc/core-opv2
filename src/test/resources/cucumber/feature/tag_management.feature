@@ -1,7 +1,7 @@
 @OperatorV2 @OperatorV2Part1 @TagManagement @Saas
 Feature: Tag Management
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
