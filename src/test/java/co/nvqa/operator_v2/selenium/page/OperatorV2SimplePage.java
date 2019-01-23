@@ -259,6 +259,12 @@ public class OperatorV2SimplePage extends SimplePage
         return waitUntilVisibilityOfElementLocated(xpathExpression);
     }
 
+    public void closeToast()
+    {
+        String xpathExpression = "//div[@id='toast-container']//i[.='close']";
+        click(xpathExpression);
+    }
+
     public List<WebElement> getToasts()
     {
         String xpathExpression = "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div";

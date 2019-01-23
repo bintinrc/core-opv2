@@ -41,7 +41,7 @@ public class AgedParcelManagementSteps extends AbstractSteps
     }
 
     @When("^Operator apply filter parameters and load selection on Aged Parcel Management$")
-    public void operatorLoadSelectionOnPageAgedParcelManagement(Map<String,String> dataTableAsMap)
+    public void operatorLoadSelectionOnPageAgedParcelManagement(Map<String, String> dataTableAsMap)
     {
         String shipperName = dataTableAsMap.getOrDefault("shipperName", getShipperOfCreatedOrder().getName());
         Integer agedDays = dataTableAsMap.containsKey("agedDays") ? Integer.parseInt(dataTableAsMap.get("agedDays")) : null;
@@ -56,7 +56,7 @@ public class AgedParcelManagementSteps extends AbstractSteps
     }
 
     @Then("^Operator verify the aged parcel order is listed on Aged Parcels list with following parameters$")
-    public void operatorVerifyTheAgedParcelOrderIsListedOnAgedParcelsListWithFollowingParameters(Map<String,String> dataTableAsMap)
+    public void operatorVerifyTheAgedParcelOrderIsListedOnAgedParcelsListWithFollowingParameters(Map<String, String> dataTableAsMap)
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         String shipperName = dataTableAsMap.getOrDefault("shipperName", getShipperOfCreatedOrder().getName());
@@ -95,7 +95,7 @@ public class AgedParcelManagementSteps extends AbstractSteps
     @When("^Operator reschedule multiple aged parcels on next 2 days$")
     public void operatorRescheduleMultipleAgedParcelsOnNext2Days()
     {
-        List<String> trackingIds= get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
         agedParcelManagementPage.rescheduleNext2Days(trackingIds);
     }
 
@@ -116,7 +116,7 @@ public class AgedParcelManagementSteps extends AbstractSteps
     @When("^Operator RTS multiple aged parcels on next 2 days$")
     public void operatorRtsMultipleAgedParcelsOnNext2Days()
     {
-        List<String> trackingIds= get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
         agedParcelManagementPage.rtsSelectedOrderNext2Days(trackingIds);
     }
 }

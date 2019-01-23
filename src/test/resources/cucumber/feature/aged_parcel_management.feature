@@ -7,7 +7,7 @@ Feature: Aged Parcel Management
 
   Scenario Outline: Operator should be able to filter by Shipper/Aged Days on Aged Parcel Management page (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -27,7 +27,7 @@ Feature: Aged Parcel Management
 
   Scenario Outline: Operator find aged parcel on Aged Parcels list (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -44,7 +44,7 @@ Feature: Aged Parcel Management
 
   Scenario Outline: Operator download and verify CSV file of aged parcel on Aged Parcels list (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -63,7 +63,7 @@ Feature: Aged Parcel Management
   @DeleteOrArchiveRoute
   Scenario Outline: Operator reschedule failed delivery aged parcel on next day (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -92,8 +92,8 @@ Feature: Aged Parcel Management
   @DeleteOrArchiveRoute
   Scenario Outline: Operator reschedule multiple failed delivery aged parcels on specific date (<hiptest-uid>)
     Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2      |
-      | generateFromAndTo | RANDOM |
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                  |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound multiple parcels using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -122,7 +122,7 @@ Feature: Aged Parcel Management
   @DeleteOrArchiveRoute
   Scenario Outline: Operator reschedule failed delivery aged parcel on specific date (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -151,7 +151,7 @@ Feature: Aged Parcel Management
   @DeleteOrArchiveRoute
   Scenario Outline: Operator RTS failed delivery aged parcel on next day (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -180,7 +180,7 @@ Feature: Aged Parcel Management
   @DeleteOrArchiveRoute
   Scenario Outline: Operator RTS selected failed delivery aged parcel on next day (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -209,8 +209,8 @@ Feature: Aged Parcel Management
   @DeleteOrArchiveRoute
   Scenario Outline: Operator RTS multiple failed delivery aged parcels on specific date (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
-      | numberOfOrder     | 2      |
-      | generateFromAndTo | RANDOM |
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                  |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound multiple parcels using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
