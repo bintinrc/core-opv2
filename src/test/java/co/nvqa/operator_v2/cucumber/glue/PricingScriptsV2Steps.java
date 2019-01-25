@@ -3,12 +3,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.pricing.Script;
 import co.nvqa.commons.model.shipper.v2.Shipper;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
 import co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -29,10 +27,8 @@ public class PricingScriptsV2Steps extends AbstractSteps
 {
     private PricingScriptsV2Page pricingScriptsV2Page;
 
-    @Inject
-    public PricingScriptsV2Steps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public PricingScriptsV2Steps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

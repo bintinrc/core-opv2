@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Address;
-import co.nvqa.commons.utils.StandardTestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -36,10 +35,7 @@ public class NvDashboardPage extends OperatorV2SimplePage
     public void validateUserInfo(String username, String email)
     {
         waitUntilPageLoaded();
-        StandardTestUtils.retryIfAssertionErrorOccurred(() -> {
-            Assert.assertEquals("Username and email", username + "\n" + email, getText(USER_INFO_XPATH));
-        }, "Validate User Info");
-
+        retryIfAssertionErrorOccurred(() -> assertEquals("Username and email", username + "\n" + email, getText(USER_INFO_XPATH)), "Validate User Info");
     }
 
     public void selectMenuItem(String item1, String item2)

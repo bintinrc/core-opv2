@@ -1,9 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.ThirdPartyOrderMapping;
 import co.nvqa.operator_v2.selenium.page.ThirdPartyOrderManagementPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -20,10 +18,8 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps
 {
     private ThirdPartyOrderManagementPage thirdPartyOrderManagementPage;
 
-    @Inject
-    public ThirdPartyOrderManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public ThirdPartyOrderManagementSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ThirdPartyOrderMapping;
-import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -140,7 +139,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
 
     public void searchTableByTrackingIdUntilFound(String trackingId)
     {
-        TestUtils.retryIfRuntimeExceptionOccurred(() ->
+        retryIfRuntimeExceptionOccurred(() ->
         {
             searchTableByTrackingId(trackingId);
             boolean isTableEmpty = isTableEmpty();

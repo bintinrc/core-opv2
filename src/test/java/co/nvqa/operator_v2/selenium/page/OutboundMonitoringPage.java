@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.commons.utils.ScenarioStorage;
 import co.nvqa.operator_v2.util.ScenarioStorageKeys;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
@@ -24,10 +24,10 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage implements Scen
 
     private static final String MD_VIRTUAL_REPEAT = "data in getTableData()";
 
-    private StandardScenarioStorage scenarioStorage;
+    private ScenarioStorage scenarioStorage;
     private OutboundBreakroutePage outboundBreakroutePage;
 
-    public OutboundMonitoringPage(WebDriver webDriver, StandardScenarioStorage scenarioStorage) {
+    public OutboundMonitoringPage(WebDriver webDriver, ScenarioStorage scenarioStorage) {
         super(webDriver);
         this.scenarioStorage = scenarioStorage;
         outboundBreakroutePage = new OutboundBreakroutePage(getWebDriver());

@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.util.TestConstants;
-import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
@@ -218,7 +217,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
 
     public void verifyInboundedShipmentExist(String shipmentId)
     {
-        TestUtils.retryIfAssertionErrorOccurred(() ->
+        retryIfAssertionErrorOccurred(() ->
         {
             try
             {
@@ -227,7 +226,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
                         .filter(shipment -> shipment.getId().equalsIgnoreCase(shipmentId))
                         .findFirst()
                         .orElseThrow(() -> new AssertionError(String.format("Shipment with ID = '%s' not exist", shipmentId)));
-            } catch (AssertionError ex)
+            }
+            catch (AssertionError ex)
             {
                 clickEditSearchFilterButton();
                 clickButtonLoadSelection();

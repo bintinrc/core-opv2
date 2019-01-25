@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.utils.NvTestRuntimeException;
-import co.nvqa.operator_v2.util.TestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -63,7 +62,7 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
     @SuppressWarnings("unchecked")
     public void loadSelection(String shipperName, String trackingId, Integer agedDays)
     {
-        TestUtils.retryIfNvTestRuntimeExceptionOccurred(()->
+        retryIfNvTestRuntimeExceptionOccurred(()->
         {
             if(!isElementExistFast(String.format("//button[contains(@aria-label,'%s')]", shipperName)))
             {

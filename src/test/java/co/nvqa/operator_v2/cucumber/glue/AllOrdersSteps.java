@@ -1,12 +1,10 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction;
 import com.google.common.collect.ImmutableMap;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -28,10 +26,8 @@ public class AllOrdersSteps extends AbstractSteps
 {
     private AllOrdersPage allOrdersPage;
 
-    @Inject
-    public AllOrdersSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public AllOrdersSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

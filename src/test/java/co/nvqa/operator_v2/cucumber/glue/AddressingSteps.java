@@ -1,10 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.Addressing;
 import co.nvqa.operator_v2.selenium.page.AddressingPage;
 import co.nvqa.operator_v2.util.TestUtils;
-import com.google.inject.Inject;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -18,9 +16,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 public class AddressingSteps extends AbstractSteps {
     private AddressingPage addressingPage;
 
-    @Inject
-    public AddressingSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage) {
-        super(scenarioManager, scenarioStorage);
+    public AddressingSteps() {
     }
 
     @Override

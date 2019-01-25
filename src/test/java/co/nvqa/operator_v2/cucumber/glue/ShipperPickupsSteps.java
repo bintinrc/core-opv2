@@ -6,11 +6,9 @@ import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.utils.NvTestRuntimeException;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.ReservationInfo;
 import co.nvqa.operator_v2.selenium.page.ShipperPickupsPage;
 import co.nvqa.operator_v2.util.TestUtils;
-import com.google.inject.Inject;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -35,10 +33,8 @@ public class ShipperPickupsSteps extends AbstractSteps
 {
     private ShipperPickupsPage shipperPickupsPage;
 
-    @Inject
-    public ShipperPickupsSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public ShipperPickupsSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

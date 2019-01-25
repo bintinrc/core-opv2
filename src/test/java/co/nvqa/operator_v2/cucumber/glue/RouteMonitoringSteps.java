@@ -1,11 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.utils.NvTestRuntimeException;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.RouteMonitoringFilters;
 import co.nvqa.operator_v2.model.RouteMonitoringParams;
 import co.nvqa.operator_v2.selenium.page.RouteMonitoringPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -23,10 +21,8 @@ public class RouteMonitoringSteps extends AbstractSteps
 {
     private RouteMonitoringPage routeMonitoringPage;
 
-    @Inject
-    public RouteMonitoringSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public RouteMonitoringSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

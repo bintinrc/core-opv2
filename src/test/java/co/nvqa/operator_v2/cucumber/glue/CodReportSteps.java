@@ -2,9 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.utils.NvTestRuntimeException;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.CodReportPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -20,10 +18,8 @@ public class CodReportSteps extends AbstractSteps
 {
     private CodReportPage codReportPage;
 
-    @Inject
-    public CodReportSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public CodReportSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

@@ -1,11 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.support.JsonHelper;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.RecoveryTicketsScanning;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsScanningPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -23,9 +21,7 @@ public class RecoveryTicketsScanningSteps extends AbstractSteps {
     private RecoveryTicketsScanningPage recoveryTicketsScanningPage;
     private RecoveryTicketsPage recoveryTicketsPage;
 
-    @Inject
-    public RecoveryTicketsScanningSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage) {
-        super(scenarioManager, scenarioStorage);
+    public RecoveryTicketsScanningSteps() {
     }
 
     @Override

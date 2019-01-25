@@ -2,7 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.utils.NvTestRuntimeException;
-import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.commons.utils.ScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.UnroutedPrioritiesPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -21,7 +21,7 @@ public class UnroutedPrioritiesSteps extends AbstractSteps
     private UnroutedPrioritiesPage unroutedPrioritiesPage;
 
     @Inject
-    public UnroutedPrioritiesSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public UnroutedPrioritiesSteps(ScenarioManager scenarioManager, ScenarioStorage scenarioStorage)
     {
         super(scenarioManager, scenarioStorage);
     }

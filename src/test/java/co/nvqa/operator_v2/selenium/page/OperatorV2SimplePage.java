@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static co.nvqa.commons.utils.StandardTestUtils.retryIfExpectedExceptionOccurred;
-
 /**
  *
  * @author Daniel Joi Partogi Hutapea
@@ -680,7 +678,7 @@ public class OperatorV2SimplePage extends SimplePage
          */
         String noMatchingErrorText = String.format("\"%s\" were found.", value);
 
-        StandardTestUtils.retryIfRuntimeExceptionOccurred(()->
+        retryIfRuntimeExceptionOccurred(()->
         {
             try
             {

@@ -1,9 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.HubsGroup;
 import co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -20,10 +18,8 @@ public class HubGroupsManagementSteps extends AbstractSteps
     private HubsGroupManagementPage hubsGroupManagementPage;
     public static final String KEY_CREATED_HUBS_GROUP= "KEY_CREATED_HUBS_GROUP";
 
-    @Inject
-    public HubGroupsManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public HubGroupsManagementSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

@@ -1,11 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.support.JsonHelper;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.Linehaul;
 import co.nvqa.operator_v2.selenium.page.ShipmentLinehaulPage;
 import co.nvqa.operator_v2.util.TestUtils;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -36,10 +34,8 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     private Linehaul linehaul;
     private String linehaulId = "0";
 
-    @Inject
-    public ShipmentLinehaulSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public ShipmentLinehaulSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

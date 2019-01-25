@@ -2,13 +2,12 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.StandardApiShipperSteps;
 import co.nvqa.commons.model.order_create.v4.OrderRequestV4;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.OrderCreationV4Page;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
+import javax.inject.Inject;
 import java.util.Map;
 
 /**
@@ -21,10 +20,8 @@ public class OrderCreationV4Steps extends AbstractSteps
     @Inject private StandardApiShipperSteps standardApiShipperSteps;
     private OrderCreationV4Page orderCreationV4Page;
 
-    @Inject
-    public OrderCreationV4Steps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public OrderCreationV4Steps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

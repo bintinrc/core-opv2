@@ -2,10 +2,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Cod;
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.selenium.page.RouteCashInboundPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -20,10 +18,8 @@ public class RouteCashInboundSteps extends AbstractSteps
 {
     private RouteCashInboundPage routeCashInboundPage;
 
-    @Inject
-    public RouteCashInboundSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public RouteCashInboundSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

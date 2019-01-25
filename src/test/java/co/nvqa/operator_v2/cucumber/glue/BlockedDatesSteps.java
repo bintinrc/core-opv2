@@ -1,14 +1,11 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.util.SingletonStorage;
 import co.nvqa.operator_v2.util.TestUtils;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -29,10 +26,8 @@ public class BlockedDatesSteps extends AbstractSteps
 {
     private static final SimpleDateFormat MONTH_SDF = new SimpleDateFormat("MMMM", Locale.ENGLISH);
 
-    @Inject
-    public BlockedDatesSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public BlockedDatesSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -71,7 +66,7 @@ public class BlockedDatesSteps extends AbstractSteps
     {
         if(SingletonStorage.getInstance().getTmpId()!=null)
         {
-            TestUtils.retryIfStaleElementReferenceExceptionOccurred(() ->
+            retryIfStaleElementReferenceExceptionOccurred(() ->
             {
                 boolean isAdded = false;
                 List<WebElement> els = getWebDriver().findElements(By.xpath("//md-list-item[@ng-repeat=\"date in calendarListData.dates | nvFilterByYear:year | orderBy\"]/p/span[1]"));
@@ -120,7 +115,7 @@ public class BlockedDatesSteps extends AbstractSteps
     {
         if(SingletonStorage.getInstance().getTmpId()!=null)
         {
-            TestUtils.retryIfStaleElementReferenceExceptionOccurred(() ->
+            retryIfStaleElementReferenceExceptionOccurred(() ->
             {
                 boolean isFound = false;
                 List<WebElement> els = getWebDriver().findElements(By.xpath("//md-list-item[@ng-repeat=\"date in calendarListData.dates | nvFilterByYear:year | orderBy\"]/p/span[1]"));

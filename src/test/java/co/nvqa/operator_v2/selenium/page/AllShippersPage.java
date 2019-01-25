@@ -6,8 +6,6 @@ import co.nvqa.commons.model.shipper.v2.Shipper;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
-import static co.nvqa.commons.utils.StandardTestUtils.retryIfRuntimeExceptionOccurred;
-
 /**
  * @author Daniel Joi Partogi Hutapea
  */
@@ -64,9 +62,7 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void loginToShipperDashboard(Shipper shipper)
     {
-        retryIfRuntimeExceptionOccurred(() -> {
-            searchTableByName(shipper.getName());
-        });
+        retryIfRuntimeExceptionOccurred(() -> searchTableByName(shipper.getName()));
         Assert.assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
         clickActionButtonOnTable(1, ACTION_BUTTON_LOGIN);
         waitUntilNewWindowOrTabOpened();

@@ -1,10 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage;
 import co.nvqa.operator_v2.selenium.page.VanInboundPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -22,9 +20,7 @@ public class VanInboundSteps extends AbstractSteps {
     private AllOrdersPage allOrdersPage;
     private RouteLogsPage routeLogsPage;
 
-    @Inject
-    public VanInboundSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage) {
-        super(scenarioManager, scenarioStorage);
+    public VanInboundSteps() {
     }
 
     @Override

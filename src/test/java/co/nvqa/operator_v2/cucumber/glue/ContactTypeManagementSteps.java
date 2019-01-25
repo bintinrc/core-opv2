@@ -1,16 +1,13 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.utils.NvTestRuntimeException;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.ContactType;
 import co.nvqa.operator_v2.selenium.page.ContactTypeManagementPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.junit.Assert;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -24,10 +21,8 @@ public class ContactTypeManagementSteps extends AbstractSteps
 {
     private ContactTypeManagementPage contactTypeManagementPage;
 
-    @Inject
-    public ContactTypeManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public ContactTypeManagementSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -78,10 +73,6 @@ public class ContactTypeManagementSteps extends AbstractSteps
         contactType.setName(name);
         contactTypeManagementPage.createNewContactType(contactType);
 
-        Map<String,String> mapOfInfo = new LinkedHashMap<>();
-        mapOfInfo.put("Contact Type - Name", contactType.getName());
-        writeToCurrentScenarioLogf(generateHtmlTableInfo(mapOfInfo));
-
         put(KEY_CONTACT_TYPE, contactType);
     }
 
@@ -90,11 +81,6 @@ public class ContactTypeManagementSteps extends AbstractSteps
     {
         ContactType contactType = get(KEY_CONTACT_TYPE);
         contactTypeManagementPage.verifyContactTypeIsExistAndDataIsCorrect(contactType);
-
-        Map<String,String> mapOfInfo = new LinkedHashMap<>();
-        mapOfInfo.put("Contact Type - ID", String.valueOf(contactType.getId()));
-        mapOfInfo.put("Contact Type - Name", contactType.getName());
-        writeToCurrentScenarioLogf(generateHtmlTableInfo(mapOfInfo));
     }
 
     @When("^Operator update Contact Type on page Contact Type Management using data below:$")
@@ -123,12 +109,6 @@ public class ContactTypeManagementSteps extends AbstractSteps
 
         contactType.setName(name);
         contactTypeManagementPage.updateContactType(searchContactTypesKeyword, contactType);
-
-        Map<String,String> mapOfInfo = new LinkedHashMap<>();
-        mapOfInfo.put("Search Contact Types Keyword", searchContactTypesKeyword);
-        mapOfInfo.put("Contact Type - ID", String.valueOf(contactType.getId()));
-        mapOfInfo.put("Contact Type - Name", contactType.getName());
-        writeToCurrentScenarioLogf(generateHtmlTableInfo(mapOfInfo));
     }
 
     @Then("^Operator verify Contact Type is updated successfully on page Contact Type Management$")
@@ -146,12 +126,6 @@ public class ContactTypeManagementSteps extends AbstractSteps
         String searchContactTypesKeyword = mapOfData.get("searchContactTypesKeyword");
         searchContactTypesKeyword = getFromCreatedContactTypeName(searchContactTypesKeyword, contactType);
         contactTypeManagementPage.deleteContactType(searchContactTypesKeyword);
-
-        Map<String,String> mapOfInfo = new LinkedHashMap<>();
-        mapOfInfo.put("Search Contact Types Keyword", searchContactTypesKeyword);
-        mapOfInfo.put("Contact Type - ID", String.valueOf(contactType.getId()));
-        mapOfInfo.put("Contact Type - Name", contactType.getName());
-        writeToCurrentScenarioLogf(generateHtmlTableInfo(mapOfInfo));
 
         put("searchContactTypesKeyword", searchContactTypesKeyword);
     }

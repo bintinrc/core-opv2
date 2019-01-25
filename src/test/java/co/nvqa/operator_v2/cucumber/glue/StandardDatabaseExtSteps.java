@@ -11,13 +11,12 @@ import co.nvqa.commons.model.entity.InboundScanEntity;
 import co.nvqa.commons.model.entity.OrderEventEntity;
 import co.nvqa.commons.model.entity.RouteDriverTypeEntity;
 import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
-import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.commons.utils.ScenarioStorage;
 import co.nvqa.operator_v2.model.CreateRouteParams;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.model.ShipmentInfo;
-import com.google.inject.Inject;
 import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -41,10 +40,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 {
     private final String TRANSACTION_TYPE_DELIVERY = "DELIVERY";
 
-    @Inject
-    public StandardDatabaseExtSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public StandardDatabaseExtSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

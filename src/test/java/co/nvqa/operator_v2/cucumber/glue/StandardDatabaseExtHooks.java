@@ -1,13 +1,11 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
-import co.nvqa.commons.cucumber.glue.CommonScenarioManager;
 import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.commons.utils.StandardScenarioManager;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.UserManagement;
 import co.nvqa.operator_v2.util.ScenarioStorageKeys;
-import com.google.inject.Inject;
 import cucumber.api.java.After;
 
 import java.util.ArrayList;
@@ -19,12 +17,10 @@ import java.util.Set;
  *
  * @author Daniel Joi Partogi Hutapea
  */
-public class StandardDatabaseExtHooks extends AbstractDatabaseSteps<CommonScenarioManager> implements ScenarioStorageKeys
+public class StandardDatabaseExtHooks extends AbstractDatabaseSteps<StandardScenarioManager> implements ScenarioStorageKeys
 {
-    @Inject
-    public StandardDatabaseExtHooks(CommonScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public StandardDatabaseExtHooks()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

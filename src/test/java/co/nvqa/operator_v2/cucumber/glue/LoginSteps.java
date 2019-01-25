@@ -1,12 +1,16 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
 import co.nvqa.operator_v2.selenium.page.LoginPage;
-import com.google.inject.Inject;
+import co.nvqa.operator_v2.selenium.page.MainPage;
+import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  *
@@ -15,18 +19,39 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 @ScenarioScoped
 public class LoginSteps extends AbstractSteps
 {
+    @Inject private Provider<StandardApiOperatorPortalSteps> providerOfStandardApiOperatorPortalSteps;
     private LoginPage loginPage;
+    private MainPage mainPage;
 
-    @Inject
-    public LoginSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public LoginSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override
     public void init()
     {
         loginPage = new LoginPage(getWebDriver());
+        mainPage = new MainPage(getWebDriver());
+    }
+
+    @Given("^Operator login with username = \"([^\"]*)\" and password = \"([^\"]*)\"$")
+    public void loginToOperatorV2(String username, String password)
+    {
+        loginPage.loadPage();
+
+        if(TestConstants.OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES)
+        {
+            String operatorAccessToken = providerOfStandardApiOperatorPortalSteps.get().getOperatorAccessToken();
+            loginPage.forceLogin(operatorAccessToken);
+        }
+        else
+        {
+            loginPage.clickLoginButton();
+            loginPage.enterCredential(username, password);
+            //loginPage.checkForGoogleSimpleVerification("Singapore");
+        }
+
+        mainPage.verifyTheMainPageIsLoaded();
     }
 
     @Given("^Operator is in Operator Portal V2 login page$")

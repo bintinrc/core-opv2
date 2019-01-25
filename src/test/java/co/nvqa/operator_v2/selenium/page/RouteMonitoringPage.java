@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.utils.NvTestRuntimeException;
-import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.RouteMonitoringFilters;
 import co.nvqa.operator_v2.model.RouteMonitoringParams;
 import com.google.common.collect.ImmutableList;
@@ -129,7 +128,7 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
 
     public void searchTableByRouteIdUntilFound(long routeId)
     {
-        StandardTestUtils.retryIfRuntimeExceptionOccurred(() ->
+        retryIfRuntimeExceptionOccurred(() ->
         {
             routeMonitoringTable.filterByRouteId(routeId);
             boolean isTableEmpty = isTableEmpty();

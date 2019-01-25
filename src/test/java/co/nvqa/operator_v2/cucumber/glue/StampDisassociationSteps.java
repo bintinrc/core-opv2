@@ -1,12 +1,13 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.commons.utils.ScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.StampDisassociationPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
+
+import javax.inject.Inject;
 
 /**
  * @author Sergey Mishanin
@@ -17,7 +18,7 @@ public class StampDisassociationSteps extends AbstractSteps
     private StampDisassociationPage stampDisassociationPage;
 
     @Inject
-    public StampDisassociationSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public StampDisassociationSteps(ScenarioManager scenarioManager, ScenarioStorage scenarioStorage)
     {
         super(scenarioManager, scenarioStorage);
     }

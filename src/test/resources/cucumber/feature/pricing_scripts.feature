@@ -1,7 +1,7 @@
 @OperatorV2Disabled @PricingScripts
 Feature: Pricing Scripts
 
-  @LaunchBrowserWithProxyEnabled @ShouldAlwaysRun
+  @LaunchBrowser @EnableProxy @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 

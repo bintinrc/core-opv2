@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.Zone;
-import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -58,7 +57,7 @@ public class ZonesPage extends OperatorV2SimplePage
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'zone-form')]");
         fillTheForm(zoneEdited);
 
-        TestUtils.retryIfRuntimeExceptionOccurred(()->
+        retryIfRuntimeExceptionOccurred(()->
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("Update");
 
@@ -131,7 +130,7 @@ public class ZonesPage extends OperatorV2SimplePage
     {
         waitUntilPageLoaded();
 
-        TestUtils.retryIfRuntimeExceptionOccurred(()->
+        retryIfRuntimeExceptionOccurred(()->
         {
             searchTableByNameAndRetryIfTableIsEmpty(zone.getName());
 
@@ -221,14 +220,14 @@ public class ZonesPage extends OperatorV2SimplePage
 
     public void searchTableByNameAndRetryIfTableIsEmpty(String name)
     {
-        TestUtils.retryIfRuntimeExceptionOccurred(()->
+        retryIfRuntimeExceptionOccurred(()->
         {
             clickRefreshCache();
             searchTableByName(name);
 
             if(isTableEmpty())
             {
-                throw new RuntimeException(String.format("Zone with name = '%s' not found. Zones table is empty.", name));
+                throw new NvTestRuntimeException(f("Zone with name = '%s' not found. Zones table is empty.", name));
             }
         });
     }

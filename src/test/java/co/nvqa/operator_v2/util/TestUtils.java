@@ -8,7 +8,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -17,9 +16,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 /**
  *
@@ -221,7 +220,7 @@ public class TestUtils extends CommonSeleniumTestUtils
 
         try
         {
-            String userJson = URLDecoder.decode(cookie,"UTF-8");
+            String userJson = URLDecoder.decode(cookie, StandardCharsets.UTF_8.name());
             return (String) JsonHelper.fromJsonToHashMap(userJson).get("timezone");
         }
         catch(IOException ex)
@@ -363,22 +362,5 @@ public class TestUtils extends CommonSeleniumTestUtils
     public static void resetImplicitTimeout(WebDriver webDriver)
     {
         setImplicitTimeout(webDriver, TestConstants.SELENIUM_IMPLICIT_WAIT_TIMEOUT_IN_SECONDS);
-    }
-
-    public static void retryIfStaleElementReferenceExceptionOccurred(Runnable runnable)
-    {
-        retryIfStaleElementReferenceExceptionOccurred(runnable, null);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static void retryIfStaleElementReferenceExceptionOccurred(Runnable runnable, String methodName)
-    {
-        retryIfExpectedExceptionOccurred(runnable, methodName, System.out::println, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, DEFAULT_MAX_RETRY_ON_EXCEPTION, StaleElementReferenceException.class);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static void retryIfStaleElementReferenceExceptionOccurred(Runnable runnable, String methodName, Consumer<String> logConsumer)
-    {
-        retryIfExpectedExceptionOccurred(runnable, methodName, logConsumer, DEFAULT_DELAY_ON_RETRY_IN_MILLISECONDS, DEFAULT_MAX_RETRY_ON_EXCEPTION, StaleElementReferenceException.class);
     }
 }

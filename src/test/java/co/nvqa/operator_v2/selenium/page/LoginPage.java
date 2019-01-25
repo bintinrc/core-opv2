@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.util.TestConstants;
-import co.nvqa.operator_v2.util.TestUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.Cookie;
@@ -129,7 +128,7 @@ public class LoginPage extends OperatorV2SimplePage
         sendKeys("//input[@id='identifierId'][@name='identifier']", username);
         click("//div[@id='identifierNext']");
         pause10ms();
-        TestUtils.retryIfExpectedExceptionOccurred(()->sendKeys("//input[@name='password']", password), InvalidElementStateException.class);
+        retryIfExpectedExceptionOccurred(()->sendKeys("//input[@name='password']", password), InvalidElementStateException.class);
         click("//div[@id='passwordNext']");
     }
 

@@ -1,9 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.ReservationGroup;
 import co.nvqa.operator_v2.selenium.page.ReservationPresetManagementPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -19,10 +17,8 @@ public class ReservationPresetManagementSteps extends AbstractSteps
     private ReservationPresetManagementPage reservationPresetManagementPage;
     public static final String KEY_CREATED_RESERVATION_GROUP = "KEY_CREATED_RESERVATION_GROUP";
 
-    @Inject
-    public ReservationPresetManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public ReservationPresetManagementSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

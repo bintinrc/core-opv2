@@ -2,12 +2,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.utils.NvTestRuntimeException;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.CreateRouteParams;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage;
 import co.nvqa.operator_v2.util.TestUtils;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -38,10 +36,8 @@ public class RouteLogsSteps extends AbstractSteps
 
     private RouteLogsPage routeLogsPage;
 
-    @Inject
-    public RouteLogsSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public RouteLogsSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

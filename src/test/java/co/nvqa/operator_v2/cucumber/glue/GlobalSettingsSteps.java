@@ -1,8 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.GlobalSettingsPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.And;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -14,10 +12,8 @@ public class GlobalSettingsSteps extends AbstractSteps
 {
     private GlobalSettingsPage globalSettingsPage;
 
-    @Inject
-    public GlobalSettingsSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public GlobalSettingsSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

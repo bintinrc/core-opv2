@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.pricing.Script;
 import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
@@ -106,8 +105,8 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
         sendKeysByIdCustom1("container.pricing-scripts.description-insured-value", String.valueOf(insuredValue));
         sendKeysByIdCustom1("container.pricing-scripts.description-cod-value", String.valueOf(codValue));
 
-        StandardTestUtils.retryIfRuntimeExceptionOccurred(() -> selectValueFromNvAutocomplete("ctrl.view.textFromZone", runCheckParams.getFromZone()), "Select value from \"From Zone\" NvAutocomplete");
-        StandardTestUtils.retryIfRuntimeExceptionOccurred(() -> selectValueFromNvAutocomplete("ctrl.view.textToZone", runCheckParams.getToZone()), "Select value from \"To Zone\" NvAutocomplete");
+        retryIfRuntimeExceptionOccurred(() -> selectValueFromNvAutocomplete("ctrl.view.textFromZone", runCheckParams.getFromZone()), "Select value from \"From Zone\" NvAutocomplete");
+        retryIfRuntimeExceptionOccurred(() -> selectValueFromNvAutocomplete("ctrl.view.textToZone", runCheckParams.getToZone()), "Select value from \"To Zone\" NvAutocomplete");
 
         clickNvApiTextButtonByNameAndWaitUntilDone("container.pricing-scripts.run-check"); //Button Run Check
     }

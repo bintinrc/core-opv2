@@ -11,7 +11,6 @@ import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTabl
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_USERNAME;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author Sergey Mishanin

@@ -1,8 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -16,10 +14,8 @@ public class MainSteps extends AbstractSteps
 {
     private MainPage mainPage;
 
-    @Inject
-    public MainSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public MainSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

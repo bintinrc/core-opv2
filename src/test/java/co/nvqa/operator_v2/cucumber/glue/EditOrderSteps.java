@@ -3,10 +3,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -26,10 +24,8 @@ public class EditOrderSteps extends AbstractSteps
 {
     private EditOrderPage editOrderPage;
 
-    @Inject
-    public EditOrderSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public EditOrderSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

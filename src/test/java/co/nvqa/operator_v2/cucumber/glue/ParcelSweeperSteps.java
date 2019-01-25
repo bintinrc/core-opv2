@@ -4,9 +4,7 @@ import co.nvqa.commons.model.core.GlobalInboundResponse;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.zone.Zone;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.ParcelSweeperPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -25,10 +23,8 @@ public class ParcelSweeperSteps extends AbstractSteps
 {
     private ParcelSweeperPage parcelSweeperPage;
 
-    @Inject
-    public ParcelSweeperSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public ParcelSweeperSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

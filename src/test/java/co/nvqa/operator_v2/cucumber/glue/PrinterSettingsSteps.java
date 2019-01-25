@@ -1,9 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.PrinterSettings;
 import co.nvqa.operator_v2.selenium.page.PrinterSettingsPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -23,9 +21,7 @@ public class PrinterSettingsSteps extends AbstractSteps {
     private static final String IS_DEFAULT_PRINTER = "isDefaultPrinter";
     private PrinterSettingsPage printerSettingsPage;
 
-    @Inject
-    public PrinterSettingsSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage) {
-        super(scenarioManager, scenarioStorage);
+    public PrinterSettingsSteps() {
     }
 
     @Override

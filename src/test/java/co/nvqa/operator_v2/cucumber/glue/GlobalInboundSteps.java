@@ -1,10 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.GlobalInboundPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -18,10 +16,8 @@ public class GlobalInboundSteps extends AbstractSteps
 {
     private GlobalInboundPage globalInboundPage;
 
-    @Inject
-    public GlobalInboundSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public GlobalInboundSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

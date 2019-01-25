@@ -559,7 +559,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     public void switchToNewOpenedWindow(String mainWindowHandle)
     {
-        Set<String> windowHandles = TestUtils.retryIfRuntimeExceptionOccurred(() ->
+        Set<String> windowHandles = retryIfRuntimeExceptionOccurred(() ->
         {
             pause100ms();
             Set<String> windowHandlesTemp = getWebDriver().getWindowHandles();

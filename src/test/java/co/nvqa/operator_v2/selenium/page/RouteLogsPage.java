@@ -4,11 +4,9 @@ import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.pdf.RoutePassword;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.commons.utils.PdfUtils;
-import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.model.CreateRouteParams;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.util.TestConstants;
-import co.nvqa.operator_v2.util.TestUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
@@ -336,7 +334,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
     {
         for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
         {
-            StandardTestUtils.retryIfRuntimeExceptionOccurred(() ->
+            retryIfRuntimeExceptionOccurred(() ->
             {
                 Route route = createRouteParams.getCreatedRoute();
                 Long routeId = route.getId();
@@ -370,7 +368,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
     {
         for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
         {
-            StandardTestUtils.retryIfRuntimeExceptionOccurred(() ->
+            retryIfRuntimeExceptionOccurred(() ->
             {
                 Route route = createRouteParams.getCreatedRoute();
                 Long routeId = route.getId();
@@ -379,9 +377,9 @@ public class RouteLogsPage extends OperatorV2SimplePage
 
                 try
                 {
-                    Assert.assertFalse("Table is empty.", isTableEmpty);
+                    assertFalse("Table is empty.", isTableEmpty);
                     String actualRouteStatus = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
-                    Assert.assertNotEquals("Route Status", "ARCHIVED", actualRouteStatus);
+                    assertNotEquals("Route Status", "ARCHIVED", actualRouteStatus);
                 }
                 catch(AssertionError ex)
                 {
@@ -404,7 +402,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
     {
         for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
         {
-            StandardTestUtils.retryIfRuntimeExceptionOccurred(() ->
+            retryIfRuntimeExceptionOccurred(() ->
             {
                 Route route = createRouteParams.getCreatedRoute();
                 Long routeId = route.getId();
@@ -497,7 +495,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
         click("//button[@ng-class='ngClazz'][@aria-label='Delete']");
         pause200ms();
 
-        TestUtils.retryIfStaleElementReferenceExceptionOccurred(()->
+        retryIfStaleElementReferenceExceptionOccurred(()->
         {
             clickButtonByAriaLabel("Delete");
             pause200ms();
@@ -526,7 +524,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
 
     public void searchTableByRouteIdUntilFoundAndPasswordIsNotEmpty(long routeId)
     {
-        StandardTestUtils.retryIfRuntimeExceptionOccurred(() ->
+        retryIfRuntimeExceptionOccurred(() ->
         {
             searchTableByRouteId(routeId);
             boolean isTableEmpty = isTableEmpty();

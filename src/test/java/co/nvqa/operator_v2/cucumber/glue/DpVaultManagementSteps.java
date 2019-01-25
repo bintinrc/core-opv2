@@ -1,9 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.DpVault;
 import co.nvqa.operator_v2.selenium.page.DpVaultManagementPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -17,10 +15,8 @@ public class DpVaultManagementSteps extends AbstractSteps
 {
     private DpVaultManagementPage dpVaultManagementPage;
 
-    @Inject
-    public DpVaultManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public DpVaultManagementSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

@@ -18,7 +18,6 @@ import co.nvqa.commons.model.shipper.v2.Shopify;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.util.TestConstants;
-import co.nvqa.operator_v2.util.TestUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -117,7 +116,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         if (isCreateForm)
         {
-            TestUtils.retryIfRuntimeExceptionOccurred(() ->
+            retryIfRuntimeExceptionOccurred(() ->
             {
                 String generatedPrefix = generateUpperCaseAlphaNumericString(5);
                 orderCreate.setPrefix(generatedPrefix);

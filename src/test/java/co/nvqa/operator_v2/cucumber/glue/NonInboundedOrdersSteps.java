@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.utils.NvTestRuntimeException;
-import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.commons.utils.ScenarioStorage;
 import co.nvqa.operator_v2.model.NonInboundedOrder;
 import co.nvqa.operator_v2.selenium.page.NonInboundedOrdersPage;
 import cucumber.api.java.en.Then;
@@ -23,7 +23,7 @@ public class NonInboundedOrdersSteps extends AbstractSteps
     private NonInboundedOrdersPage nonInboundedOrdersPage;
 
     @Inject
-    public NonInboundedOrdersSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public NonInboundedOrdersSteps(ScenarioManager scenarioManager, ScenarioStorage scenarioStorage)
     {
         super(scenarioManager, scenarioStorage);
     }

@@ -1,9 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -17,11 +15,8 @@ import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTabl
 import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_ZONE;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -33,10 +28,8 @@ public class DriverStrengthStepsV2 extends AbstractSteps
     private DriverStrengthPageV2 dsPage;
     private static final String KEY_INITIAL_COMING_VALUE = "KEY_INITIAL_COMING_VALUE";
 
-    @Inject
-    public DriverStrengthStepsV2(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public DriverStrengthStepsV2()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

@@ -1,10 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.utils.StandardScenarioStorage;
-import co.nvqa.commons.utils.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -21,9 +18,7 @@ import java.util.Map;
 public class OutboundMonitoringSteps extends AbstractSteps {
     private OutboundMonitoringPage outboundMonitoringPage;
 
-    @Inject
-    public OutboundMonitoringSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage) {
-        super(scenarioManager, scenarioStorage);
+    public OutboundMonitoringSteps() {
     }
 
     @Override
@@ -65,10 +60,7 @@ public class OutboundMonitoringSteps extends AbstractSteps {
 
     @Then("^Operator verifies the Outbound status on the chosen route ID is changed$")
     public void verifyStatusMarked() {
-        StandardTestUtils.retryIfAssertionErrorOccurred(
-                () -> outboundMonitoringPage.verifyStatusMarked(),
-                "Verify Status is Marked"
-        );
+        retryIfAssertionErrorOccurred(outboundMonitoringPage::verifyStatusMarked, "Verify Status is Marked");
     }
 
     @And("^Operator click on comment icon on chosen route ID on Outbound Monitoring Page$")

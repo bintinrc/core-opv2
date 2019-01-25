@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
-import co.nvqa.operator_v2.util.TestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -25,7 +24,7 @@ public class GlobalInboundPage extends OperatorV2SimplePage
     {
         if(isElementExistFast("//h4[text()='Select the following to begin:']"))
         {
-            TestUtils.retryIfRuntimeExceptionOccurred(() ->
+            retryIfRuntimeExceptionOccurred(() ->
             {
                 selectValueFromNvAutocomplete("ctrl.hubSearchText", hubName);
                 pause500ms();
@@ -113,7 +112,7 @@ public class GlobalInboundPage extends OperatorV2SimplePage
         globalInbound(globalInboundParams);
         String trackingId = globalInboundParams.getTrackingId();
 
-        TestUtils.retryIfAssertionErrorOccurred(() ->
+        retryIfAssertionErrorOccurred(() ->
         {
             String lastScanned = getTextTrimmed("//div[contains(text(), 'Last Scanned')]");
             String lastScannedTrackingId = lastScanned.split(":")[1].trim();
@@ -139,7 +138,7 @@ public class GlobalInboundPage extends OperatorV2SimplePage
     {
         globalInbound(globalInboundParams);
 
-        TestUtils.retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
+        retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
         {
             if(StringUtils.isNotBlank(weightWarning))
             {

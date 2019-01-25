@@ -1,9 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.shipper.v2.Shipper;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.NvDashboardPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -17,10 +15,8 @@ public class NvDashboardSteps extends AbstractSteps
 {
     private NvDashboardPage nvDashboardPage;
 
-    @Inject
-    public NvDashboardSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public NvDashboardSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

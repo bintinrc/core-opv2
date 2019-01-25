@@ -1,8 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.FailedPickupManagementPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -19,10 +17,8 @@ public class FailedPickupManagementSteps extends AbstractSteps
 {
     private FailedPickupManagementPage failedPickupManagementPage;
 
-    @Inject
-    public FailedPickupManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public FailedPickupManagementSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

@@ -1,9 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.UserManagement;
 import co.nvqa.operator_v2.selenium.page.UserManagementPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -17,9 +15,7 @@ import org.apache.commons.lang3.SerializationUtils;
 public class UserManagementSteps extends AbstractSteps {
     private UserManagementPage userManagementPage;
 
-    @Inject
-    public UserManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage) {
-        super(scenarioManager, scenarioStorage);
+    public UserManagementSteps() {
     }
 
     @Override

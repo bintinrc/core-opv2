@@ -2,11 +2,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.TxnRsvn;
 import co.nvqa.operator_v2.selenium.page.CreateRouteGroupsPage;
 import com.google.common.collect.ImmutableList;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -30,10 +28,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps
 {
     private CreateRouteGroupsPage createRouteGroupsPage;
 
-    @Inject
-    public CreateRouteGroupsSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public CreateRouteGroupsSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

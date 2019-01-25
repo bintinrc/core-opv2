@@ -47,7 +47,7 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
 
     public void editCod(RouteCashInboundCod routeCashInboundCodOld, RouteCashInboundCod routeCashInboundCodEdited)
     {
-        TestUtils.retryIfRuntimeExceptionOccurred(()->
+        retryIfRuntimeExceptionOccurred(()->
         {
             searchAndVerifyTableIsNotEmpty(routeCashInboundCodOld);
             clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);

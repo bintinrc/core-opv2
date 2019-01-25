@@ -3,10 +3,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.factory.FailureReasonFactory;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.Route;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.RouteManifestPage;
 import co.nvqa.operator_v2.util.TestConstants;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -20,10 +18,8 @@ public class RouteManifestSteps extends AbstractSteps
 {
     private RouteManifestPage routeManifestPage;
 
-    @Inject
-    public RouteManifestSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public RouteManifestSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

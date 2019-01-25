@@ -1,9 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.FailedDeliveryManagementPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -17,10 +15,8 @@ public class FailedDeliveryManagementSteps extends AbstractSteps
 {
     private FailedDeliveryManagementPage failedDeliveryManagementPage;
 
-    @Inject
-    public FailedDeliveryManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public FailedDeliveryManagementSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

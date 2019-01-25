@@ -1,9 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.TagManagementPage;
-import co.nvqa.operator_v2.util.TestUtils;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -23,10 +20,8 @@ public class TagManagementSteps extends AbstractSteps
 
     private TagManagementPage tagManagementPage;
 
-    @Inject
-    public TagManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public TagManagementSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -72,7 +67,7 @@ public class TagManagementSteps extends AbstractSteps
     @Then("^Operator verify the new tag is created successfully on Tag Management$")
     public void verifyNewTagCreatedSuccessfully()
     {
-        TestUtils.retryIfAssertionErrorOccurred(()->
+        retryIfAssertionErrorOccurred(()->
         {
             reloadPageAndEnableSortByName();
 
@@ -99,7 +94,7 @@ public class TagManagementSteps extends AbstractSteps
     @Then("^Operator verify the tag is updated successfully on Tag Management$")
     public void verifyTagUpdatedSuccessfully()
     {
-        TestUtils.retryIfAssertionErrorOccurred(()->
+        retryIfAssertionErrorOccurred(()->
         {
             reloadPageAndEnableSortByName();
 

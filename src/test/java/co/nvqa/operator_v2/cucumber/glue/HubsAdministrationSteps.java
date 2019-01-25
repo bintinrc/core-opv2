@@ -6,16 +6,13 @@ import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.operator_v2.HubsAdministration;
 import co.nvqa.commons.utils.HubFactory;
 import co.nvqa.commons.utils.NvTestRuntimeException;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.HubsAdministrationPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -27,10 +24,8 @@ public class HubsAdministrationSteps extends AbstractSteps
 {
     private HubsAdministrationPage hubsAdministrationPage;
 
-    @Inject
-    public HubsAdministrationSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public HubsAdministrationSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override
@@ -119,11 +114,6 @@ public class HubsAdministrationSteps extends AbstractSteps
         hubsAdministration.setLongitude(Double.parseDouble(longitude));
         hubsAdministrationPage.createNewHub(hubsAdministration);
 
-        Map<String,String> mapOfInfo = new LinkedHashMap<>();
-        mapOfInfo.put("Hub Name", hubsAdministration.getName());
-        mapOfInfo.put("Hub Display Name", hubsAdministration.getDisplayName());
-        writeToCurrentScenarioLogf(generateHtmlTableInfo(mapOfInfo));
-
         put(KEY_HUBS_ADMINISTRATION, hubsAdministration);
         putInList(KEY_LIST_OF_HUBS_ADMINISTRATION, hubsAdministration);
     }
@@ -133,12 +123,6 @@ public class HubsAdministrationSteps extends AbstractSteps
     {
         HubsAdministration hubsAdministration = get(KEY_HUBS_ADMINISTRATION);
         hubsAdministrationPage.verifyHubIsExistAndDataIsCorrect(hubsAdministration);
-
-        Map<String,String> mapOfInfo = new LinkedHashMap<>();
-        mapOfInfo.put("Hub ID", String.valueOf(hubsAdministration.getId()));
-        mapOfInfo.put("Hub Name", hubsAdministration.getName());
-        mapOfInfo.put("Hub Display Name", hubsAdministration.getDisplayName());
-        writeToCurrentScenarioLogf(generateHtmlTableInfo(mapOfInfo));
     }
 
     @When("^Operator update Hub on page Hubs Administration using data below:$")
@@ -208,12 +192,6 @@ public class HubsAdministrationSteps extends AbstractSteps
         hubsAdministration.setLongitude(Double.parseDouble(longitude));
 
         hubsAdministrationPage.updateHub(searchHubsKeyword, hubsAdministration);
-
-        Map<String,String> mapOfInfo = new LinkedHashMap<>();
-        mapOfInfo.put("Hub ID", String.valueOf(hubsAdministration.getId()));
-        mapOfInfo.put("Hub Name", hubsAdministration.getName());
-        mapOfInfo.put("Hub Display Name", hubsAdministration.getDisplayName());
-        writeToCurrentScenarioLogf(generateHtmlTableInfo(mapOfInfo));
     }
 
     @Then("^Operator verify Hub is updated successfully on page Hubs Administration$")

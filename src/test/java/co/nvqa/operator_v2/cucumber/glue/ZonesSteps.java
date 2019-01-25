@@ -1,10 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.Zone;
 import co.nvqa.operator_v2.selenium.page.ZonesPage;
 import co.nvqa.operator_v2.selenium.page.ZonesSelectedPolygonsPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -21,10 +19,8 @@ public class ZonesSteps extends AbstractSteps
     private ZonesPage zonesPage;
     private ZonesSelectedPolygonsPage zonesSelectedPolygonsPage;
 
-    @Inject
-    public ZonesSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public ZonesSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

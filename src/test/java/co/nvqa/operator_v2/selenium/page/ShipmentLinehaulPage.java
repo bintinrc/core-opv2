@@ -108,7 +108,7 @@ public class ShipmentLinehaulPage extends OperatorV2SimplePage
 
     public void fillLinehaulNameFT(String name)
     {
-        TestUtils.retryIfStaleElementReferenceExceptionOccurred(()-> sendKeys(XPATH_LINEHAUL_NAME_TF, name), "fillLinehaulNameFT");
+        retryIfStaleElementReferenceExceptionOccurred(()-> sendKeys(XPATH_LINEHAUL_NAME_TF, name), "fillLinehaulNameFT");
     }
 
     public void fillCommentsFT(String comment)

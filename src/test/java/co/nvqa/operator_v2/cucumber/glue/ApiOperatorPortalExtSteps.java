@@ -8,14 +8,12 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.commons.utils.HubFactory;
 import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.ReservationGroup;
 import co.nvqa.operator_v2.util.TestUtils;
-import com.google.inject.Inject;
 import cucumber.api.java.After;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -39,10 +37,8 @@ import static co.nvqa.operator_v2.cucumber.glue.ReservationPresetManagementSteps
 @ScenarioScoped
 public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<ScenarioManager>
 {
-    @Inject
-    public ApiOperatorPortalExtSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public ApiOperatorPortalExtSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

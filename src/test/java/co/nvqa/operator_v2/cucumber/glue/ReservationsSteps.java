@@ -2,9 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Reservation;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.ReservationsPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -22,10 +20,8 @@ public class ReservationsSteps extends AbstractSteps
 {
     private ReservationsPage reservationsPage;
 
-    @Inject
-    public ReservationsSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public ReservationsSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

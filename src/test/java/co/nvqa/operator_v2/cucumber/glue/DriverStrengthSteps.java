@@ -1,8 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.DriverStrengthPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -16,10 +14,8 @@ public class DriverStrengthSteps extends AbstractSteps
 {
     private DriverStrengthPage dsPage;
 
-    @Inject
-    public DriverStrengthSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public DriverStrengthSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

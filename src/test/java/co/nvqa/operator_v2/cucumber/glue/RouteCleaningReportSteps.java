@@ -1,12 +1,10 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.model.RouteCleaningReportCodInfo;
 import co.nvqa.operator_v2.model.RouteCleaningReportParcelInfo;
 import co.nvqa.operator_v2.selenium.page.RouteCleaningReportPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -32,10 +30,8 @@ public class RouteCleaningReportSteps extends AbstractSteps
     private static final String KEY_LIST_OF_COD_INFO = "KEY_LIST_OF_COD_INFO";
     private static final String KEY_PARCEL_INFO = "KEY_PARCEL_INFO";
 
-    @Inject
-    public RouteCleaningReportSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public RouteCleaningReportSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

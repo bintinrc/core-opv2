@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common_selenium.cucumber.glue.CommonSeleniumAbstractSteps;
-import co.nvqa.commons.utils.StandardScenarioStorage;
+import co.nvqa.commons.utils.ScenarioStorage;
 import co.nvqa.operator_v2.util.ScenarioStorageKeys;
 
 /**
@@ -11,8 +11,12 @@ import co.nvqa.operator_v2.util.ScenarioStorageKeys;
 @SuppressWarnings("WeakerAccess")
 public abstract class AbstractSteps extends CommonSeleniumAbstractSteps<ScenarioManager> implements ScenarioStorageKeys
 {
-    public AbstractSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public AbstractSteps()
     {
-        super(scenarioManager, scenarioStorage);
+    }
+
+    public AbstractSteps(ScenarioManager scenarioManager, ScenarioStorage scenarioStorage)
+    {
+        super();
     }
 }

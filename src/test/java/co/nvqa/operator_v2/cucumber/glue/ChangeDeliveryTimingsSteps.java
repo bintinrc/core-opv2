@@ -1,10 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.ChangeDeliveryTimingsPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -23,9 +21,7 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
     private ChangeDeliveryTimingsPage changeDeliveryTimingsPage;
     private AllOrdersPage allOrdersPage;
 
-    @Inject
-    public ChangeDeliveryTimingsSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage) {
-        super(scenarioManager, scenarioStorage);
+    public ChangeDeliveryTimingsSteps() {
     }
 
     @Override

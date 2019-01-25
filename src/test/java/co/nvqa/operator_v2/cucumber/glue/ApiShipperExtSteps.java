@@ -1,8 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.StandardSteps;
-import co.nvqa.commons.utils.StandardScenarioStorage;
-import com.google.inject.Inject;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
@@ -12,10 +10,8 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 @ScenarioScoped
 public class ApiShipperExtSteps extends StandardSteps<ScenarioManager>
 {
-    @Inject
-    public ApiShipperExtSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public ApiShipperExtSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

@@ -5,13 +5,11 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.utils.NvTestRuntimeException;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.WaypointOrderInfo;
 import co.nvqa.operator_v2.model.WaypointPerformance;
 import co.nvqa.operator_v2.model.WaypointReservationInfo;
 import co.nvqa.operator_v2.model.WaypointShipperInfo;
 import co.nvqa.operator_v2.selenium.page.RouteInboundPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -35,10 +33,8 @@ public class RouteInboundSteps extends AbstractSteps
 
     private RouteInboundPage routeInboundPage;
 
-    @Inject
-    public RouteInboundSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public RouteInboundSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

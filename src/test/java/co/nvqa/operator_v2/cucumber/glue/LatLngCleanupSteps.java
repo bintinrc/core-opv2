@@ -1,9 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.WaypointDetails;
 import co.nvqa.operator_v2.selenium.page.LatLngCleanupPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -21,10 +19,8 @@ public class LatLngCleanupSteps extends AbstractSteps
     public static final String KEY_WAYPOINT_DETAILS = "KEY_WAYPOINT_DETAILS";
     private LatLngCleanupPage latLngCleanupPage;
 
-    @Inject
-    public LatLngCleanupSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public LatLngCleanupSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

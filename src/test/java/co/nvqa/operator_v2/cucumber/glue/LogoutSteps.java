@@ -1,8 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.LogoutPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -15,10 +13,8 @@ public class LogoutSteps extends AbstractSteps
 {
     private LogoutPage logoutPage;
 
-    @Inject
-    public LogoutSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public LogoutSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

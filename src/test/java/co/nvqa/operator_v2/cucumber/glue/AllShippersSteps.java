@@ -17,9 +17,7 @@ import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Return;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.shipper.v2.Shopify;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -45,10 +43,8 @@ public class AllShippersSteps extends AbstractSteps
 {
     private AllShippersPage allShippersPage;
 
-    @Inject
-    public AllShippersSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public AllShippersSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

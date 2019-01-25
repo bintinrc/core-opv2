@@ -1,8 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.QrCodePrintingPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -16,10 +14,8 @@ public class QrCodePrintingSteps extends AbstractSteps
 {
     private QrCodePrintingPage qrCodePrintingPage;
 
-    @Inject
-    public QrCodePrintingSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public QrCodePrintingSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

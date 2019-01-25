@@ -18,7 +18,8 @@ dependencies {
 }
 
 project.ext {
-    cucumberGluePackage = ["co.nvqa.operator_v2.cucumber.glue", "classpath:co.nvqa.commons.cucumber.glue"]
+    defaultScenarioManager = "co.nvqa.operator_v2.cucumber.glue.ScenarioManager"
+    cucumberGluePackage = ["co.nvqa.operator_v2.cucumber.glue", "classpath:co.nvqa.commons.cucumber.glue", "classpath:co.nvqa.common_selenium.cucumber.glue"]
 }
 
 apply from: "commons/build-commons.gradle"

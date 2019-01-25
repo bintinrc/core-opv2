@@ -1,10 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.hub.Shipments;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.ShipmentScanningPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -19,10 +17,8 @@ public class ShipmentScanningSteps extends AbstractSteps
 {
     private ShipmentScanningPage shipmentScanningPage;
 
-    @Inject
-    public ShipmentScanningSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public ShipmentScanningSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

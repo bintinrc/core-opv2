@@ -1,8 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.PricingScriptsPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -25,10 +23,8 @@ public class PricingScriptsSteps extends AbstractSteps
     private String pricingScriptsLinkedToAShipper;
     private String shipperLinkedToPricingScripts;
 
-    @Inject
-    public PricingScriptsSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public PricingScriptsSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

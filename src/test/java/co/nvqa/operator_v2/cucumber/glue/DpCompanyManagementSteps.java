@@ -1,11 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.model.DpCompany;
 import co.nvqa.operator_v2.model.DpCompanyAgent;
 import co.nvqa.operator_v2.selenium.page.DpCompanyAgentPage;
 import co.nvqa.operator_v2.selenium.page.DpCompanyManagementPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -20,10 +18,8 @@ public class DpCompanyManagementSteps extends AbstractSteps
     private DpCompanyManagementPage dpCompanyManagementPage;
     private DpCompanyAgentPage dpCompanyAgentPage;
 
-    @Inject
-    public DpCompanyManagementSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public DpCompanyManagementSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

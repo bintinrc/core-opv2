@@ -21,9 +21,6 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-
 /**
  * @author Daniel Joi Partogi Hutapea
  */
@@ -339,7 +336,7 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         try
         {
-            TestUtils.retryIfAssertionErrorOccurred(() ->
+            retryIfAssertionErrorOccurred(() ->
             {
                 eventsTable.waitUntilVisibility();
                 OrderEvent orderEvent = eventsTable.readEntity(1);

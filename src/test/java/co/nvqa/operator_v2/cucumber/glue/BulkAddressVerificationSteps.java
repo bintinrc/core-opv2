@@ -4,9 +4,7 @@ import co.nvqa.commons.model.addressing.JaroScore;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.other.LatLong;
-import co.nvqa.commons.utils.StandardScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.BulkAddressVerificationPage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.When;
 
 import java.util.ArrayList;
@@ -22,10 +20,8 @@ public class BulkAddressVerificationSteps extends AbstractSteps
 {
     private BulkAddressVerificationPage bulkAddressVerificationPage;
 
-    @Inject
-    public BulkAddressVerificationSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public BulkAddressVerificationSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

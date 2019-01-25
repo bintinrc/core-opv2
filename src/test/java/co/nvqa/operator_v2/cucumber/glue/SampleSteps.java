@@ -2,8 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.commons.utils.NvTestRuntimeException;
-import co.nvqa.commons.utils.StandardScenarioStorage;
-import com.google.inject.Inject;
 import cucumber.api.java.en.Given;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -18,10 +16,8 @@ public class SampleSteps extends AbstractSteps
 {
     private static final Random random = new Random();
 
-    @Inject
-    public SampleSteps(ScenarioManager scenarioManager, StandardScenarioStorage scenarioStorage)
+    public SampleSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RecoveryTicket;
-import co.nvqa.operator_v2.util.TestUtils;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
@@ -66,7 +65,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
             }
         }
 
-        TestUtils.retryIfRuntimeExceptionOccurred(()->
+        retryIfRuntimeExceptionOccurred(()->
         {
             if(isElementExistWait1Second("//button[@aria-label='Create Ticket'][@disabled='disabled']"))
             {
