@@ -4,6 +4,7 @@ import co.nvqa.commons.model.order_create.v4.OrderRequestV4;
 import co.nvqa.commons.model.order_create.v4.Timeslot;
 import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.commons.utils.NvTestRuntimeException;
+import co.nvqa.commons.utils.StandardTestConstants;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -11,14 +12,19 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  *
@@ -27,6 +33,16 @@ import java.util.Map;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class OrderCreationV4Page extends OperatorV2SimplePage
 {
+    private static final Map<String, String> MAP_OF_ADDITIONAL_CONFIGURATIONS_XPATH = new HashMap<>();
+    private static final String CSV_FILENAME_PATTERN = "sample-ocv4";
+
+    static
+    {
+        MAP_OF_ADDITIONAL_CONFIGURATIONS_XPATH.put("Pickup Required","//md-checkbox[@ng-model=\"ctrl.state.isPickupRequired\"]");
+        MAP_OF_ADDITIONAL_CONFIGURATIONS_XPATH.put("Cash Enabled","//md-checkbox[@ng-model=\"ctrl.state.isCashEnabled\"]");
+        MAP_OF_ADDITIONAL_CONFIGURATIONS_XPATH.put("Stamp Shipper","//md-checkbox[@ng-model=\"ctrl.state.isStampShipper\"]");
+    }
+
     private OrdersTable ordersTable;
     private UploadSummaryTable uploadSummaryTable;
 
@@ -57,19 +73,144 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
     {
         ordersTable.searchOrderByTrackingId(order.getRequestedTrackingNumber());
         String totalSuccess = uploadSummaryTable.getTotalSuccess();
-        Assert.assertEquals("Total Success", "1", totalSuccess);
+        assertEquals("Total Success", "1", totalSuccess);
         String totalOrders = uploadSummaryTable.getTotalOrders();
-        Assert.assertEquals("Total Orders", "1", totalOrders);
+        assertEquals("Total Orders", "1", totalOrders);
 
         int rowNumber = 1;
-        Assert.assertThat("Tracking ID", ordersTable.getTrackingId(rowNumber), Matchers.endsWith(order.getRequestedTrackingNumber()));
-        Assert.assertThat("Service Level", ordersTable.getServiceLevel(rowNumber), Matchers.equalToIgnoringCase(order.getServiceLevel()));
-        Assert.assertThat("From Name", ordersTable.getFromName(rowNumber), Matchers.equalTo(order.getFrom().getName()));
-        Assert.assertThat("From Address", ordersTable.getFromAddress(rowNumber), Matchers.equalTo(buildAddress(order.getFrom().getAddress())));
-        Assert.assertThat("To Name", ordersTable.getToName(rowNumber), Matchers.equalTo(order.getTo().getName()));
-        Assert.assertThat("To Address", ordersTable.getToAddress(rowNumber), Matchers.equalTo(buildAddress(order.getTo().getAddress())));
-        //Assert.assertThat("Delivery Start Date", ordersTable.getDeliveryStartDate(rowNumber), Matchers.equalTo(order.getParcelJob().getDeliveryStartDate())); // Need to add logic to calculate the expected delivery date.
-        Assert.assertThat("Delivery Timeslot", ordersTable.getDeliveryTimeslot(rowNumber), Matchers.equalTo(buildTimeslot(order.getParcelJob().getDeliveryTimeslot())));
+        assertThat("Tracking ID", ordersTable.getTrackingId(rowNumber), endsWith(order.getRequestedTrackingNumber()));
+        assertThat("Service Level", ordersTable.getServiceLevel(rowNumber), equalToIgnoringCase(order.getServiceLevel()));
+        assertThat("From Name", ordersTable.getFromName(rowNumber), equalTo(order.getFrom().getName()));
+        assertThat("From Address", ordersTable.getFromAddress(rowNumber), equalTo(buildAddress(order.getFrom().getAddress())));
+        assertThat("To Name", ordersTable.getToName(rowNumber), equalTo(order.getTo().getName()));
+        assertThat("To Address", ordersTable.getToAddress(rowNumber), equalTo(buildAddress(order.getTo().getAddress())));
+        //assertThat("Delivery Start Date", ordersTable.getDeliveryStartDate(rowNumber), equalTo(order.getParcelJob().getDeliveryStartDate())); // Need to add logic to calculate the expected delivery date.
+        assertThat("Delivery Timeslot", ordersTable.getDeliveryTimeslot(rowNumber), equalTo(buildTimeslot(order.getParcelJob().getDeliveryTimeslot())));
+    }
+
+    public void downloadSampleFile(Map<String,String> dataTableAsMap) throws ParseException
+    {
+        String shipperName = dataTableAsMap.get("shipperName");
+        String orderType = dataTableAsMap.get("orderType");
+        String additionalConfigurations = dataTableAsMap.get("additionalConfigurations");
+        String serviceLevel = dataTableAsMap.get("serviceLevel");
+        String deliveryDate = dataTableAsMap.get("deliveryDate");
+        String deliveryTimeslot = dataTableAsMap.get("deliveryTimeslot");
+        String cashAmount = dataTableAsMap.get("cashAmount");
+        String cashCollectionTransaction = dataTableAsMap.get("cashCollectionTransaction");
+        String cashCollectionType = dataTableAsMap.get("cashCollectionType");
+        String pickupDate = dataTableAsMap.get("pickupDate");
+        String pickupType = dataTableAsMap.get("pickupType");
+        String pickupLevel = dataTableAsMap.get("pickupLevel");
+        String pickupTimeslot = dataTableAsMap.get("pickupTimeslot");
+        String reservationVolume = dataTableAsMap.get("reservationVolume");
+
+        List<String> additionalConfigurationsAsList = new ArrayList<>();
+
+        Optional.ofNullable(additionalConfigurations).ifPresent(it ->
+        {
+            String[] temp = additionalConfigurations.replaceAll(",\\s+", ",").split(",");
+            additionalConfigurationsAsList.addAll(Arrays.asList(temp));
+        });
+
+        clickNvIconTextButtonByName("container.order.create.download-sample-file");
+
+        // Step 1
+        retryIfNvTestRuntimeExceptionOccurred(
+                ()->selectValueFromNvAutocomplete("ctrl.shipperText", shipperName),
+                "Select shipper from NvAutoComplete");
+
+        clickf("//md-radio-button//span[contains(text(),'%s')]", orderType);
+        additionalConfigurationsAsList.forEach(additionalConfiguration -> click(MAP_OF_ADDITIONAL_CONFIGURATIONS_XPATH.get(additionalConfiguration)));
+        click("//div[@layout-align=\"end\"]//nv-icon-text-button[@name=\"commons.next\"]");
+
+        // Step 2
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'ocv4-preset-sample')]");
+        selectValueFromMdSelectByIdContains("container.order.create.dialog.service-level", serviceLevel);
+        click("//div[@layout-align=\"space-between\"]//nv-icon-text-button[@name=\"commons.next\"]");
+
+        // Step 3
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'ocv4-preset-sample')]");
+        setMdDatepicker("ctrl.currentStep.date", YYYY_MM_DD_SDF.parse(deliveryDate));
+        selectValueFromMdSelectByIdContains("container.order.create.dialog.delivery-timeslot", deliveryTimeslot);
+        click("//div[@class=\"layout-column\"]//nv-icon-text-button[@name=\"commons.next\"]");
+
+        // step 4
+        if(additionalConfigurationsAsList.contains("Pickup Required"))
+        {
+            waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'ocv4-preset-sample')]");
+            setMdDatepicker("ctrl.currentStep.date", YYYY_MM_DD_SDF.parse(pickupDate));
+            selectValueFromMdSelectByIdContains("container.order.create.dialog.pickup-type", pickupType);
+            selectValueFromMdSelectByIdContains("Pickup Level", pickupLevel);
+            selectValueFromMdSelectByIdContains("Pickup Timeslot", pickupTimeslot);
+            selectValueFromMdSelectByIdContains("container.order.create.dialog.reservation-volume", reservationVolume);
+        }
+
+        // step 5
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'ocv4-preset-sample')]");
+
+        if("Marketplace".equals(orderType))
+        {
+            click("//div[@class=\"layout-column\"]//nv-icon-text-button[@name=\"commons.next\"]");
+            sendKeysById("Seller ID","OPV2");
+            sendKeysById("commons.company-name","Ninja Van");
+        }
+
+        // step 6
+        if(additionalConfigurationsAsList.contains("Cash Enabled"))
+        {
+            click("//div[@class=\"layout-column\"]//nv-icon-text-button[@name=\"commons.next\"]");
+            waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'ocv4-preset-sample')]");
+            sendKeys("//input[@name='commons.cash-amount']",cashAmount);
+            click("//md-radio-button//span[contains(text(),'"+cashCollectionTransaction+"')]");
+            click("//md-radio-button//span[contains(text(),'"+cashCollectionType+"')]");
+        }
+
+        click("//div[@class='layout-column']//nv-icon-text-button[@name='commons.done']");
+    }
+
+    public void clickDownloadSampleFile()
+    {
+        clickNvApiTextButtonByNameAndWaitUntilDone("Download sample CSV file");
+    }
+
+    public void verifyFileDownloadedSuccessfully()
+    {
+        verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN));
+    }
+
+    public void verifyDownloadedFile(Map<String,String> dataTableAsMap) throws IOException
+    {
+        Map<String, String> fileValues = new HashMap<>();
+        fileValues.put("service_type", dataTableAsMap.get("orderType"));
+        fileValues.put("service_level", dataTableAsMap.get("serviceLevel"));
+        fileValues.put("parcel_job.delivery_start_date", dataTableAsMap.get("deliveryDate"));
+        fileValues.put("cash_job.amount", dataTableAsMap.get("cashAmount"));
+        fileValues.put("cash_job.transacted_at", dataTableAsMap.get("cashCollectionTransaction"));
+        fileValues.put("cash_job.type", dataTableAsMap.get("cashCollectionType"));
+        fileValues.put("parcel_job.pickup_date", dataTableAsMap.get("pickupDate"));
+        fileValues.put("parcel_job.pickup_service_type", dataTableAsMap.get("pickupType"));
+        fileValues.put("parcel_job.pickup_service_level", dataTableAsMap.get("pickupLevel"));
+        fileValues.put("parcel_job.pickup_approximate_volume", dataTableAsMap.get("reservationVolume"));
+
+        FileInputStream downloadedFile = new FileInputStream(StandardTestConstants.TEMP_DIR + getLatestDownloadedFilename(CSV_FILENAME_PATTERN));
+        XSSFWorkbook myWorkBook = new XSSFWorkbook (downloadedFile);
+        XSSFSheet mySheet = myWorkBook.getSheetAt(0);
+
+        String cellHeader;
+        String cellValue;
+        int rowNumber = 0;
+        int cols = mySheet.getRow(rowNumber).getPhysicalNumberOfCells();
+
+        for(int c=0; c<cols; c++)
+        {
+            cellHeader = mySheet.getRow(0).getCell(c).getStringCellValue();
+            if(fileValues.containsKey(cellHeader))
+            {
+                cellValue = mySheet.getRow(1).getCell(c).getStringCellValue();
+                assertEquals(fileValues.get(cellHeader).toLowerCase(),cellValue.toLowerCase());
+            }
+        }
     }
 
     private String buildAddress(Map<String, String> addressMap)

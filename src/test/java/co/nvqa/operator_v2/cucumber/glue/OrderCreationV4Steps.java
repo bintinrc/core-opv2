@@ -8,12 +8,15 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
 import javax.inject.Inject;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.Map;
 
 /**
  *
  * @author Sergey Mishanin
  */
+@SuppressWarnings("unused")
 @ScenarioScoped
 public class OrderCreationV4Steps extends AbstractSteps
 {
@@ -44,5 +47,29 @@ public class OrderCreationV4Steps extends AbstractSteps
     {
         OrderRequestV4 order = get(KEY_CREATED_ORDER);
         orderCreationV4Page.verifyOrderIsCreatedSuccessfully(order);
+    }
+
+    @When("^Operator click \"Download Sample File\" button on Order Creation V4 page$")
+    public void operatorClickDownloadSampleFileButtonOnOrderCreationVIsPage()
+    {
+        orderCreationV4Page.clickNvIconTextButtonByNameAndWaitUntilDone("container.order.create.download-sample-file");
+    }
+
+    @When("^Operator download Sample File of OCV4 on Order Creation V4 page using data below:$")
+    public void operator(Map<String,String> dataTableAsMap) throws ParseException
+    {
+        orderCreationV4Page.downloadSampleFile(dataTableAsMap);
+    }
+
+    @When("^Operator verify Sample CSV file on Order Creation V4 page downloaded successfully$")
+    public void operatorVerifySampleCsvFileOnOrderCreationIvPageDownloadedSuccessfully()
+    {
+        orderCreationV4Page.verifyFileDownloadedSuccessfully();
+    }
+
+    @When("^Operator verify the downloaded CSV file is contains the correct value by following parameters:$")
+    public void OperatorVerifyTheDownloadedCsvFileIsContainsTheCorrectValue(Map<String,String> dataTable) throws IOException
+    {
+        orderCreationV4Page.verifyDownloadedFile(dataTable);
     }
 }

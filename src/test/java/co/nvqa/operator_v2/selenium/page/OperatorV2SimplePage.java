@@ -676,17 +676,17 @@ public class OperatorV2SimplePage extends SimplePage
         /*
           Check if the value is not found on NV Autocomplete.
          */
-        String noMatchingErrorText = String.format("\"%s\" were found.", value);
+        String noMatchingErrorText = f("\"%s\" were found.", value);
 
         retryIfRuntimeExceptionOccurred(()->
         {
             try
             {
-                WebElement noMatchingErrorWe = findElementByXpath(String.format("//span[contains(text(), '%s')]", noMatchingErrorText), WAIT_1_SECOND);
+                WebElement noMatchingErrorWe = findElementByXpath(f("//span[contains(text(), '%s')]", noMatchingErrorText), WAIT_1_SECOND);
                 String actualNoMatchingErrorText = getText(noMatchingErrorWe);
-                throw new NvTestRuntimeException(String.format("Value not found on NV Autocomplete. Error message: %s", actualNoMatchingErrorText));
+                throw new NvTestRuntimeException(f("Value not found on NV Autocomplete. Error message: %s", actualNoMatchingErrorText));
             }
-            catch(NoSuchElementException | TimeoutException ex)
+            catch(NoSuchElementException | TimeoutException ignore)
             {
             }
         }, "Check if the value is not found on NV Autocomplete", 500, 5);
