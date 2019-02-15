@@ -17,8 +17,6 @@ import java.util.stream.Collectors;
 import static co.nvqa.commons.utils.NvMatchers.hasItemIgnoreCase;
 import static co.nvqa.commons.utils.NvMatchers.hasItemsIgnoreCase;
 import static org.hamcrest.Matchers.anyOf;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
 

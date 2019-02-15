@@ -31,7 +31,7 @@ public class ShipmentScanningSteps extends AbstractSteps
     public void operatorScanTheCreatedOrderToShipmentInHub(String hub)
     {
         String trackingId =get(KEY_CREATED_ORDER_TRACKING_ID);
-        String shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
                 ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
                 ((Shipments)get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();

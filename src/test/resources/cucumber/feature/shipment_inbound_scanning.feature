@@ -19,10 +19,10 @@ Feature: Shipment Inbound Scanning
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub JKB on Shipment Inbound Scanning page
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
     When Operator filter Shipment Status = Transit on Shipment Management page
-    When Operator filter Last Inbound Hub = JKB on Shipment Management page
+    When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
     When Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
 

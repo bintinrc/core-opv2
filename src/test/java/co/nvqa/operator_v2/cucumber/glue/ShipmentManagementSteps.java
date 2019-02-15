@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -10,6 +11,9 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,6 +22,7 @@ import java.util.Map;
  * Modified by Daniel Joi Partogi Hutapea.
  * Modified by Sergey Mishanin.
  */
+@SuppressWarnings("WeakerAccess")
 @ScenarioScoped
 public class ShipmentManagementSteps extends AbstractSteps
 {
@@ -45,10 +50,10 @@ public class ShipmentManagementSteps extends AbstractSteps
     @When("^Operator click ([^\"]*) button on Shipment Management page$")
     public void clickActionButton(String actionButton)
     {
-        String shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         shipmentManagementPage.clickActionButton(shipmentId, actionButton);
 
-        if ("Force".equals(actionButton))
+        if("Force".equals(actionButton))
         {
             shipmentManagementPage.waitUntilForceToastDisappear(shipmentId);
         }
@@ -73,7 +78,8 @@ public class ShipmentManagementSteps extends AbstractSteps
         try
         {
             shipmentManagementPage.shipmentScanExist(source, hub);
-        } finally
+        }
+        finally
         {
             shipmentManagementPage.closeScanModal();
         }
@@ -82,7 +88,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     @Then("^Operator verify inbounded Shipment exist on Shipment Management page$")
     public void operatorVerifyInboundedShipmentExistOnShipmentManagementPage()
     {
-        String shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         shipmentManagementPage.verifyInboundedShipmentExist(shipmentId);
     }
 
@@ -95,12 +101,32 @@ public class ShipmentManagementSteps extends AbstractSteps
     @When("^Operator create Shipment on Shipment Management page using data below:$")
     public void operatorCreateShipmentOnShipmentManagementPageUsingDataBelow(Map<String, String> mapOfData)
     {
+        List<Order> listOfOrders;
+
+        if(containsKey(KEY_LIST_OF_CREATED_ORDER))
+        {
+            listOfOrders = get(KEY_LIST_OF_CREATED_ORDER);
+        }
+        else if(containsKey(KEY_CREATED_ORDER))
+        {
+            listOfOrders = Arrays.asList(get(KEY_CREATED_ORDER));
+        }
+        else
+        {
+            listOfOrders = new ArrayList<>();
+        }
+
         ShipmentInfo shipmentInfo = new ShipmentInfo();
         shipmentInfo.fromMap(mapOfData);
+        shipmentInfo.setOrdersCount(listOfOrders.size());
+
         shipmentManagementPage.createShipment(shipmentInfo);
-        if (StringUtils.isBlank(shipmentInfo.getShipmentType())){
-            shipmentInfo.setShipmentType("Air Haul");
+
+        if(StringUtils.isBlank(shipmentInfo.getShipmentType()))
+        {
+            shipmentInfo.setShipmentType("AIR_HAUL");
         }
+
         put(KEY_SHIPMENT_INFO, shipmentInfo);
         put(KEY_CREATED_SHIPMENT_ID, shipmentInfo.getId());
     }
@@ -136,6 +162,13 @@ public class ShipmentManagementSteps extends AbstractSteps
         shipmentManagementPage.clickActionButton(shipmentInfo.getId(), actionId);
     }
 
+    @And("^Operator open the shipment detail for the created shipment on Shipment Management Page$")
+    public void operatorOpenShipmentDetailsPageForCreatedShipmentOnShipmentManagementPage()
+    {
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+        shipmentManagementPage.openShipmentDetailsPage(shipmentInfo.getId());
+    }
+
     @And("^Operator force success the created shipment on Shipment Management page$")
     public void operatorForceSuccessTheCreatedShipmentOnShipmentManagementPage()
     {
@@ -148,6 +181,27 @@ public class ShipmentManagementSteps extends AbstractSteps
     {
         ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
         shipmentManagementPage.cancelShipment(shipmentInfo.getId());
+    }
+
+    @And("^Operator open the Master AWB of the created shipment on Shipment Management Page$")
+    public void operatorOpenTheMasterAwbOfTheCreatedShipmentOnShipmentManagementPage()
+    {
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+        shipmentManagementPage.openAwb(shipmentInfo.getId());
+    }
+
+    @And("^Operator verify the Shipment Details Page opened is for the created shipment$")
+    public void operatorVerifyShipmentDetailsPageOpenedIsForTheCreatedShipment()
+    {
+        Order order = get(KEY_CREATED_ORDER);
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+        shipmentManagementPage.verifyOpenedShipmentDetailsPageIsTrue(shipmentInfo.getId(), order.getTrackingId());
+    }
+
+    @And("^Operator verify the the master AWB is opened$")
+    public void operatorVerifyTheOpenedMasterAwbIsConsistedOfTheRightData()
+    {
+        shipmentManagementPage.verifyMasterAwbIsOpened();
     }
 
     @And("^Operator save current filters as preset on Shipment Management page$")
@@ -186,5 +240,13 @@ public class ShipmentManagementSteps extends AbstractSteps
         String presetName = get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID) + "-" + get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME);
         shipmentManagementPage.verifyFiltersPresetWasDeleted(presetName);
         remove(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID);
+    }
+
+    @And("^Operator verify that the data consist is correct$")
+    public void operatorDownloadAndVerifyThatTheDataConsistsIsCorrect()
+    {
+        byte[] shipmentAirwayBill = get(KEY_SHIPMENT_AWB);
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+        shipmentManagementPage.downloadPdfAndVerifyTheDataIsCorrect(shipmentInfo, shipmentAirwayBill);
     }
 }

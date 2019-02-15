@@ -34,7 +34,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
         selectValueFromMdSelectById(LOCATOR_HUB_DROPDOWN, hubName);
     }
 
-    public void inboundScanning(String shipmentId, String label, String hub)
+    public void inboundScanning(Long shipmentId, String label, String hub)
     {
         selectHub(hub);
         click(grabXpathButton(label));
@@ -69,14 +69,14 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
         click(XPATH_CHANGE_DATE_BUTTON);
     }
 
-    public void inputShipmentToInbound(String shipmentId)
+    public void inputShipmentToInbound(Long shipmentId)
     {
-        sendKeysAndEnter(XPATH_SCAN_INPUT, shipmentId);
+        sendKeysAndEnter(XPATH_SCAN_INPUT, String.valueOf(shipmentId));
     }
 
-    public void checkSessionScan(String shipmentId)
+    public void checkSessionScan(Long shipmentId)
     {
-        waitUntilVisibilityOfElementLocated(XPATH_SCANNING_SESSION_NO_CHANGE + String.format("[td[contains(@class,'sn')][text()='1']][td[@class='shipmentId'][text()='%s']]", shipmentId));
+        waitUntilVisibilityOfElementLocated(XPATH_SCANNING_SESSION_NO_CHANGE + String.format("[td[contains(@class,'sn')][text()='1']][td[@class='shipmentId'][text()='%s']]", String.valueOf(shipmentId)));
     }
 
     public void checkEndDateSessionScanChange(List<String> mustCheckId, Date endDate)

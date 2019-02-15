@@ -11,7 +11,6 @@ import co.nvqa.commons.model.entity.InboundScanEntity;
 import co.nvqa.commons.model.entity.OrderEventEntity;
 import co.nvqa.commons.model.entity.RouteDriverTypeEntity;
 import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
-import co.nvqa.commons.utils.ScenarioStorage;
 import co.nvqa.operator_v2.model.CreateRouteParams;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DriverInfo;
@@ -190,7 +189,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
         if(shipmentInfo!=null)
         {
-            getShipmentJdbc().deleteShipment(Long.parseLong(shipmentInfo.getId()));
+            getShipmentJdbc().deleteShipment(shipmentInfo.getId());
         }
     }
 }

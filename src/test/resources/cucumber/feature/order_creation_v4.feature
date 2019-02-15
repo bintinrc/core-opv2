@@ -14,7 +14,6 @@ Feature: Order Creation V4
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Then Operator verify order V4 is created successfully on Order Creation V4 page
 
-    @RunThis
   Scenario: Operator download sample file of order creation V4
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Order -> Order Creation V4

@@ -32,9 +32,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage
         selectValueFromMdSelectById("commons.hub", hubName);
     }
 
-    public void selectShipmentId(String shipmentId)
+    public void selectShipmentId(Long shipmentId)
     {
-        selectValueFromMdSelectById("container.shipment-management.shipment-id", shipmentId);
+        selectValueFromMdSelectById("container.shipment-management.shipment-id", String.valueOf(shipmentId));
     }
 
     public void clickSelectShipment()

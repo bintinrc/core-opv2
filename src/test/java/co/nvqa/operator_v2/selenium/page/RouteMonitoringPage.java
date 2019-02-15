@@ -12,10 +12,8 @@ import org.openqa.selenium.WebDriver;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.isOneOf;
 
 /**
  *

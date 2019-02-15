@@ -1,25 +1,28 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.pdf.ShipmentAirwayBill;
+import co.nvqa.commons.utils.PdfUtils;
+import co.nvqa.commons.utils.StandardTestConstants;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_CANCEL;
+import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_DETAILS;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_FORCE;
+import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_PRINT;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.COLUMN_SHIPMENT_ID;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
 /**
@@ -63,11 +66,11 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
     }
 
-    public void clickButtonSaveChangesOnEditShipmentDialog(String shipmentId)
+    public void clickButtonSaveChangesOnEditShipmentDialog(Long shipmentId)
     {
         clickNvIconTextButtonByNameAndWaitUntilDone("Save Changes");
         pause1s();
-        waitUntilInvisibilityOfElementLocated(String.format("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s updated']", shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
+        waitUntilInvisibilityOfElementLocated(f("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s updated']", shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
     }
 
     public void selectStartHub(String hubName)
@@ -88,6 +91,17 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         pause200ms();
     }
 
+    public void switchToOtherWindow()
+    {
+        waitUntilNewWindowOrTabOpened();
+        Set<String> windowHandles = getWebDriver().getWindowHandles();
+
+        for(String windowHandle : windowHandles)
+        {
+            getWebDriver().switchTo().window(windowHandle);
+        }
+    }
+
     public void addFilter(String filterLabel, String value)
     {
         selectValueFromNvAutocompleteByItemTypesAndDismiss("filters", filterLabel);
@@ -106,10 +120,10 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         String presetId = getMdSelectValueById("commons.preset.load-filter-preset");
         Pattern p = Pattern.compile("(\\d+)(-)(.+)");
         Matcher m = p.matcher(presetId);
-        if (m.matches())
+        if(m.matches())
         {
             presetId = m.group(1);
-            Assert.assertThat("created preset is selected", m.group(3), equalTo(presetName));
+            assertThat("created preset is selected", m.group(3), equalTo(presetName));
         }
         return Long.parseLong(presetId);
     }
@@ -126,7 +140,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
 
     public void verifyFiltersPresetWasDeleted(String presetName)
     {
-        Assert.assertThat("Preset [" + presetName + "] exists in presets list", getMdSelectMultipleValuesById(LOCATOR_SELCT_FILTERS_PRESET), not(contains(presetName)));
+        assertThat("Preset [" + presetName + "] exists in presets list", getMdSelectMultipleValuesById(LOCATOR_SELCT_FILTERS_PRESET), not(contains(presetName)));
     }
 
     public void selectFiltersPreset(String presetName)
@@ -136,9 +150,10 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
 
     public void verifySelectedFilters(Map<String, String> filters)
     {
-        filters.forEach((filter, expectedValue) -> {
+        filters.forEach((filter, expectedValue) ->
+        {
             String actualValue = getAttribute("aria-label", "//nv-filter-box[@item-types='%s']//nv-icon-text-button[@ng-repeat]", filter);
-            Assert.assertThat(filter + " filter selected value", actualValue, equalTo(expectedValue));
+            assertThat(filter + " filter selected value", actualValue, equalTo(expectedValue));
         });
     }
 
@@ -146,7 +161,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     {
         String xpath = XPATH_SHIPMENT_SCAN + "[td[text()='" + source + "']]" + "[td[text()='" + hub + "']]";
         WebElement scan = findElementByXpath(xpath);
-        Assert.assertEquals("shipment(" + source + ") not exist", "tr", scan.getTagName());
+        assertEquals("shipment(" + source + ") not exist", "tr", scan.getTagName());
     }
 
     public void createShipment(ShipmentInfo shipmentInfo)
@@ -163,8 +178,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         clickNvApiTextButtonByNameAndWaitUntilDone(LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
 
         String toastMessage = getToastTopText();
-        Assert.assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage, allOf(containsString("Shipment"), containsString("created")));
-        String shipmentId = toastMessage.split(" ")[1];
+        assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage, allOf(containsString("Shipment"), containsString("created")));
+        long shipmentId = Long.parseLong(toastMessage.split(" ")[1]);
         confirmToast(toastMessage, false);
         shipmentInfo.setId(shipmentId);
     }
@@ -178,44 +193,76 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         fillFieldComments(shipmentInfo.getComments());
 
         clickButtonSaveChangesOnEditShipmentDialog(shipmentInfo.getId());
+        waitUntilVisibilityOfToast(f("Shipment %s updated", shipmentInfo.getId()));
     }
 
-    public void clickActionButton(String shipmentId, String actionButton)
+    public void clickActionButton(Long shipmentId, String actionButton)
     {
-        shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, shipmentId);
+        shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
         shipmentsTable.clickActionButton(1, actionButton);
         pause200ms();
     }
 
-    public void forceSuccessShipment(String shipmentId)
+    public void openShipmentDetailsPage(Long shipmentId)
     {
-        shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, shipmentId);
+        shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
+        shipmentsTable.clickActionButton(1, ACTION_DETAILS);
+        pause100ms();
+        switchToOtherWindow();
+    }
+
+    public void forceSuccessShipment(Long shipmentId)
+    {
+        shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
         shipmentsTable.clickActionButton(1, ACTION_FORCE);
         click(XPATH_FORCE_SUCCESS_CONFIRMATION_BUTTON);
-        pause200ms();
+        waitUntilVisibilityOfToast(f("Success changed status to Force Success for Shipment ID %d", shipmentId));
     }
 
-    public void cancelShipment(String shipmentId)
+    public void cancelShipment(Long shipmentId)
     {
-        shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, shipmentId);
+        shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
         shipmentsTable.clickActionButton(1, ACTION_CANCEL);
         clickButtonByAriaLabel("Cancel Shipment");
-        pause200ms();
+        waitUntilVisibilityOfToast(f("Success changed status to Cancelled for Shipment ID %d", shipmentId));
     }
 
-    public void validateShipmentInfo(String shipmentId, ShipmentInfo expectedShipmentInfo)
+    public void openAwb(Long shipmentId)
     {
-        shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, shipmentId);
+        shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
+        shipmentsTable.clickActionButton(1, ACTION_PRINT);
+        pause100ms();
+        switchToOtherWindow();
+    }
+
+    public void validateShipmentInfo(Long shipmentId, ShipmentInfo expectedShipmentInfo)
+    {
+        shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
         ShipmentInfo actualShipmentInfo = shipmentsTable.readEntity(1);
         expectedShipmentInfo.compareWithActual(actualShipmentInfo);
     }
 
-    public void waitUntilForceToastDisappear(String shipmentId)
+    public void verifyOpenedShipmentDetailsPageIsTrue(Long shipmentId, String trackingId)
     {
-        waitUntilInvisibilityOfElementLocated(String.format("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Success changed status to Force Success for Shipment ID %s']", shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
+        String expectedTextShipmentDetails = f("Shipment ID : %d", shipmentId);
+        String actualTextShipmentDetails = getText("//md-content[contains(@class,'nv-shipment-details')]//h3");
+        assertEquals("Shipment ID is not the same: ", expectedTextShipmentDetails, actualTextShipmentDetails);
+        isElementExist(f("//td[contains(text(),'%s')]", trackingId));
     }
 
-    public void verifyInboundedShipmentExist(String shipmentId)
+    public void verifyMasterAwbIsOpened()
+    {
+        String currentUrl = getCurrentUrl();
+        assertTrue("Tab is not opened", currentUrl.startsWith("blob"));
+        getWebDriver().close();
+    }
+
+    public void waitUntilForceToastDisappear(Long shipmentId)
+    {
+        waitUntilInvisibilityOfElementLocated(f("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Success changed status to Force Success for Shipment ID %d']", shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
+    }
+
+    public void verifyInboundedShipmentExist(Long shipmentId)
     {
         retryIfAssertionErrorOccurred(() ->
         {
@@ -223,11 +270,11 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
             {
                 List<ShipmentInfo> shipmentList = shipmentsTable.readAllEntities();
                 shipmentList.stream()
-                        .filter(shipment -> shipment.getId().equalsIgnoreCase(shipmentId))
+                        .filter(shipment -> shipment.getId().equals(shipmentId))
                         .findFirst()
-                        .orElseThrow(() -> new AssertionError(String.format("Shipment with ID = '%s' not exist", shipmentId)));
+                        .orElseThrow(() -> new AssertionError(f("Shipment with ID = '%s' not exist.", shipmentId)));
             }
-            catch (AssertionError ex)
+            catch(AssertionError ex)
             {
                 clickEditSearchFilterButton();
                 clickButtonLoadSelection();
@@ -261,6 +308,15 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     {
         click(XPATH_CLOSE_SCAN_MODAL_BUTTON);
         pause1s();
+    }
+
+    public void downloadPdfAndVerifyTheDataIsCorrect(ShipmentInfo shipmentInfo, byte[] shipmentAirwayBill)
+    {
+        ShipmentAirwayBill sab = PdfUtils.getShipmentFromShipmentAirwayBill(shipmentAirwayBill);
+        assertEquals("Shipment ID is not the same: ", shipmentInfo.getId(), sab.getShipmentId());
+        assertEquals("Start Hub is not the same: ", StandardTestConstants.COUNTRY_CODE + "-" + shipmentInfo.getOrigHubName(), sab.getStartHub());
+        assertEquals("Destination Hub is not the same: ", StandardTestConstants.COUNTRY_CODE + "-" + shipmentInfo.getDestHubName(), sab.getDestinationHub());
+        assertEquals("Contains has a different number: ", shipmentInfo.getOrdersCount(), sab.getContains());
     }
 
     /**

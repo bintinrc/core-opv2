@@ -32,7 +32,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
     @When("^Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page$")
     public void inboundScanning(String label, String hub)
     {
-        String shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         scanningPage.inboundScanning(shipmentId, label, hub);
     }
 

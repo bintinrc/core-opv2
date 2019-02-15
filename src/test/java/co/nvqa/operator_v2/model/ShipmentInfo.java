@@ -8,7 +8,7 @@ package co.nvqa.operator_v2.model;
 public class ShipmentInfo extends DataEntity<ShipmentInfo>
 {
     private String shipmentType;
-    private String id;
+    private Long id;
     private String createdAt;
     private String transitAt;
     private String status;
@@ -17,7 +17,7 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo>
     private String destHubName;
     private String arrivalDatetime;
     private String completedAt;
-    private String ordersCount;
+    private int ordersCount;
     private String comments;
     private String mawb;
 
@@ -35,12 +35,12 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo>
         this.shipmentType = shipmentType;
     }
 
-    public String getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
     }
@@ -125,12 +125,12 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo>
         this.completedAt = completedAt;
     }
 
-    public String getOrdersCount()
+    public int getOrdersCount()
     {
         return ordersCount;
     }
 
-    public void setOrdersCount(String ordersCount)
+    public void setOrdersCount(int ordersCount)
     {
         this.ordersCount = ordersCount;
     }
