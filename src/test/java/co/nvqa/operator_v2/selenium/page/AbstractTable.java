@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.operator_v2.model.DataEntity;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
@@ -110,7 +111,7 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
                 readRow(rowIndex).entrySet().stream()
                         .filter(entry -> StringUtils.isNotBlank(entry.getValue()))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        return DataEntity.fromMap(entityClass, data);
+        return JsonHelper.mapToObject(data, entityClass);
     }
 
     public List<T> readAllEntities()
