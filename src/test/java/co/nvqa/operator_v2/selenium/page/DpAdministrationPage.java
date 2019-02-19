@@ -188,9 +188,9 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         {
             Assert.assertThat("DP Name", actualDpParams.getName(), Matchers.equalTo(expectedDpParams.getName()));
         }
-        if (expectedDpParams.getShortname() != null)
+        if (expectedDpParams.getShortName() != null)
         {
-            Assert.assertThat("DP Short Name", actualDpParams.getShortname(), Matchers.equalTo(expectedDpParams.getShortname()));
+            Assert.assertThat("DP Short Name", actualDpParams.getShortName(), Matchers.equalTo(expectedDpParams.getShortName()));
         }
         if (expectedDpParams.getHub() != null)
         {
@@ -286,7 +286,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
             Assert.assertThat("DP with Id " + expectedDp.getId(), actualDp, notNullValue());
             Assert.assertEquals("DP Name", expectedDp.getName(), actualDp.getName());
-            Assert.assertEquals("DP Shortname", expectedDp.getShortname(), actualDp.getShortname());
+            Assert.assertEquals("DP Shortname", expectedDp.getShortName(), actualDp.getShortName());
             Assert.assertEquals("DP Hub", Optional.ofNullable(expectedDp.getHub()).orElse(""), actualDp.getHub());
             Assert.assertEquals("DP Address", expectedDp.getAddress(), actualDp.getAddress());
             Assert.assertEquals("DP Directions", expectedDp.getDirections(), actualDp.getDirections());
@@ -466,7 +466,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         {
             super(webDriver);
             setColumnLocators(ImmutableMap.<String, String>builder()
-                    .put("dpmsId", "id")
+                    .put("dpmsId", "dpms_id")
                     .put("name", "name")
                     .put("shortName", "short_name")
                     .put("hub", "hub")
@@ -496,9 +496,13 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         static final String LOCATOR_FIELD_SERVICE = "service";
         static final String LOCATOR_FIELD_CAN_SHIPPER_LODGE_IN = "can-shipper-lodge-in?";
         static final String LOCATOR_FIELD_CAN_CUSTOMER_COLLECT = "can-customer-collect?";
+        static final String LOCATOR_FIELD_MAX_CAP = "Max Cap *";
+        static final String LOCATOR_FIELD_CAP_BUFFER = "Cap Buffer *";
         static final String LOCATOR_FIELD_CONTACT_NO = "Contact No. *";
         static final String LOCATOR_FIELD_ADDRESS_LINE_1 = "Address Line 1 *";
         static final String LOCATOR_FIELD_ADDRESS_LINE_2 = "Address Line 2 *";
+        static final String LOCATOR_FIELD_UNIT_NO = "Unit No. *";
+        static final String LOCATOR_FIELD_FLOOR_NO = "Floor No. *";
         static final String LOCATOR_FIELD_CITY = "City *";
         static final String LOCATOR_FIELD_COUNTRY = "Country *";
         static final String LOCATOR_FIELD_POSTCODE = "Postcode *";
@@ -554,6 +558,18 @@ public class DpAdministrationPage extends OperatorV2SimplePage
             return this;
         }
 
+        public AddDpDialog setMaxCap(String value)
+        {
+            sendKeysByAriaLabel(LOCATOR_FIELD_MAX_CAP, value);
+            return this;
+        }
+
+        public AddDpDialog setCapBuffer(String value)
+        {
+            sendKeysByAriaLabel(LOCATOR_FIELD_CAP_BUFFER, value);
+            return this;
+        }
+
         public AddDpDialog setContactNo(String value)
         {
             sendKeysByAriaLabel(LOCATOR_FIELD_CONTACT_NO, value);
@@ -569,6 +585,18 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         public AddDpDialog setAddressLine2(String value)
         {
             sendKeysByAriaLabel(LOCATOR_FIELD_ADDRESS_LINE_2, value);
+            return this;
+        }
+
+        public AddDpDialog setUnitNo(String value)
+        {
+            sendKeysByAriaLabel(LOCATOR_FIELD_UNIT_NO, value);
+            return this;
+        }
+
+        public AddDpDialog setFloorNo(String value)
+        {
+            sendKeysByAriaLabel(LOCATOR_FIELD_FLOOR_NO, value);
             return this;
         }
 
@@ -610,7 +638,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
             {
                 setName(value);
             }
-            value = dpParams.getShortname();
+            value = dpParams.getShortName();
             if (StringUtils.isNotBlank(value))
             {
                 setShortName(value);
@@ -633,6 +661,16 @@ public class DpAdministrationPage extends OperatorV2SimplePage
             {
                 setCanCustomerCollect(dpParams.getCanCustomerCollect());
             }
+            value = dpParams.getMaxCap();
+            if (StringUtils.isNotBlank(value))
+            {
+                setMaxCap(value);
+            }
+            value = dpParams.getCapBuffer();
+            if (StringUtils.isNotBlank(value))
+            {
+                setCapBuffer(value);
+            }
             value = dpParams.getContactNo();
             if (StringUtils.isNotBlank(value))
             {
@@ -647,6 +685,16 @@ public class DpAdministrationPage extends OperatorV2SimplePage
             if (StringUtils.isNotBlank(value))
             {
                 setAddressLine2(value);
+            }
+            value = dpParams.getUnitNo();
+            if (StringUtils.isNotBlank(value))
+            {
+                setUnitNo(value);
+            }
+            value = dpParams.getFloorNo();
+            if (StringUtils.isNotBlank(value))
+            {
+                setFloorNo(value);
             }
             value = dpParams.getCity();
             if (StringUtils.isNotBlank(value))
@@ -830,11 +878,11 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         {
             super(webDriver);
             setColumnLocators(ImmutableMap.of(
-                    COLUMN_USERNAME, "client-id",
-                    COLUMN_FIRST_NAME, "first-name",
-                    COLUMN_LAST_NAME, "last-name",
-                    COLUMN_EMAIL, "email-id",
-                    COLUMN_CONTACT_NO, "contact-no"
+                    COLUMN_USERNAME, "username",
+                    COLUMN_FIRST_NAME, "first_name",
+                    COLUMN_LAST_NAME, "last_name",
+                    COLUMN_EMAIL, "email",
+                    COLUMN_CONTACT_NO, "contact_no"
             ));
             setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "Edit"));
             setEntityClass(DpUser.class);

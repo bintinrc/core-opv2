@@ -13,23 +13,36 @@ public class Dp extends DataEntity<Dp>
     private Long id;
     private Long dpmsId;
     private String name;
-    private String shortname;
+    private String shortName;
     private String type;
     private Boolean canShipperLodgeIn;
     private Boolean canCustomerCollect;
     private String service;
     private String driverCollectionMode;
     private Long maxParcelStayDuration;
+    private String maxCap;
+    private String capBuffer;
     private String contactNo;
     private String hub;
     private String address;
     private String address1;
     private String address2;
+    private String unitNo;
+    private String floorNo;
     private String city;
     private String country;
     private String postcode;
     private String directions;
     private String activity;
+
+    public Dp()
+    {
+    }
+
+    public Dp(Map<String, ?> dataMap)
+    {
+        fromMap(dataMap);
+    }
 
     public Long getId()
     {
@@ -75,14 +88,14 @@ public class Dp extends DataEntity<Dp>
         this.name = name;
     }
 
-    public String getShortname()
+    public String getShortName()
     {
-        return shortname;
+        return shortName;
     }
 
-    public void setShortname(String shortname)
+    public void setShortName(String shortName)
     {
-        this.shortname = shortname;
+        this.shortName = shortName;
     }
 
     public String getHub()
@@ -100,16 +113,18 @@ public class Dp extends DataEntity<Dp>
         return address1;
     }
 
-    public void setAddress(String address)
+    public void setAddress1(String address1)
     {
-        this.address = address;
+        this.address1 = address1;
     }
 
     public String getAddress()
     {
-        if (StringUtils.isNotBlank(address)){
+        if (StringUtils.isNotBlank(address))
+        {
             return address;
-        } else {
+        } else
+        {
             return StringUtils.trimToEmpty(getAddress1()) + " " + StringUtils.trimToEmpty(getAddress2()) +
                     " " + StringUtils.trimToEmpty(getCity()) +
                     " " + StringUtils.trimToEmpty(getPostcode()) +
@@ -118,9 +133,9 @@ public class Dp extends DataEntity<Dp>
 
     }
 
-    public void setAddress1(String address1)
+    public void setAddress(String address)
     {
-        this.address1 = address1;
+        this.address = address;
     }
 
     public String getAddress2()
@@ -131,6 +146,26 @@ public class Dp extends DataEntity<Dp>
     public void setAddress2(String address2)
     {
         this.address2 = address2;
+    }
+
+    public String getUnitNo()
+    {
+        return unitNo;
+    }
+
+    public void setUnitNo(String unitNo)
+    {
+        this.unitNo = unitNo;
+    }
+
+    public String getFloorNo()
+    {
+        return floorNo;
+    }
+
+    public void setFloorNo(String floorNo)
+    {
+        this.floorNo = floorNo;
     }
 
     public String getCity()
@@ -272,26 +307,36 @@ public class Dp extends DataEntity<Dp>
         setCanCustomerCollect(Boolean.parseBoolean(canCustomerCollect));
     }
 
-    public Dp()
-    {
-    }
-
-    public Dp(Map<String, ?> dataMap)
-    {
-        fromMap(dataMap);
-    }
-
     @Override
     public void fromCsvLine(String csvLine)
     {
         String[] values = splitCsvLine(csvLine);
         setId(getValueIfIndexExists(values, 0));
         setName(getValueIfIndexExists(values, 1));
-        setShortname(getValueIfIndexExists(values, 2));
+        setShortName(getValueIfIndexExists(values, 2));
         setHub(getValueIfIndexExists(values, 3));
         setAddress(getValueIfIndexExists(values, 4));
         setDirections(getValueIfIndexExists(values, 5));
         setActivity(getValueIfIndexExists(values, 6));
     }
 
+    public String getMaxCap()
+    {
+        return maxCap;
+    }
+
+    public void setMaxCap(String maxCap)
+    {
+        this.maxCap = maxCap;
+    }
+
+    public String getCapBuffer()
+    {
+        return capBuffer;
+    }
+
+    public void setCapBuffer(String capBuffer)
+    {
+        this.capBuffer = capBuffer;
+    }
 }
