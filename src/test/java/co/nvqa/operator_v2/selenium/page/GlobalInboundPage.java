@@ -142,7 +142,7 @@ public class GlobalInboundPage extends OperatorV2SimplePage
         {
             if(StringUtils.isNotBlank(weightWarning))
             {
-                String message = getText("//div[@ng-if='ctrl.state.weightDiff']/span");
+                String message = getText("//div[contains(@class,'weight-diff-info')]/span");
                 Assert.assertEquals("Weight warning message", weightWarning, message);
             }
 

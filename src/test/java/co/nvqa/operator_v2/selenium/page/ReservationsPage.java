@@ -46,7 +46,11 @@ public class ReservationsPage extends OperatorV2SimplePage
         String completeAddress = address.getAddress1() + ' ' + address.getAddress2();
 
         selectValueFromNvAutocomplete("ctrl.shipperSearchText", shipperName);
-        selectValueFromNvAutocomplete("ctrl.addressSearchText", completeAddress);
+        retryIfRuntimeExceptionOccurred(
+                () -> selectValueFromNvAutocomplete("ctrl.addressSearchText", completeAddress),
+                "Select address"
+        );
+
         waitUntilInvisibilityOfElementLocated(getNextDateCellXpath()+"//div[contains(@style, 'inherit')]/md-progress-circular");
         click(getNextDateCellXpath());
         clickButtonByAriaLabel("Create Reservations");
