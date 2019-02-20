@@ -5,7 +5,6 @@ import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.junit.Assert;
 
 import java.util.Date;
 import java.util.Map;
@@ -90,6 +89,6 @@ public class RecoveryTicketsSteps extends AbstractSteps
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         boolean isTicketCreated = recoveryTicketsPage.verifyTicketIsExist(trackingId);
-        Assert.assertTrue(f("Ticket '%s' does not created.", trackingId), isTicketCreated);
+        assertTrue(f("Ticket '%s' does not created.", trackingId), isTicketCreated);
     }
 }

@@ -6,7 +6,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import io.cucumber.datatable.DataTable;
-import org.junit.Assert;
 
 import java.util.Date;
 import java.util.Map;
@@ -44,7 +43,7 @@ public class PricingScriptsSteps extends AbstractSteps
     public void operatorVerifyTheNewScriptOnPricingScriptsIsCreatedSuccessfully()
     {
         String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, PricingScriptsPage.COLUMN_CLASS_DATA_NAME);
-        Assert.assertEquals(newPricingScriptsName, pricingScriptsNameFromTable);
+        assertEquals(newPricingScriptsName, pricingScriptsNameFromTable);
     }
 
     @When("^Operator update script on Pricing Scripts page$")
@@ -58,7 +57,7 @@ public class PricingScriptsSteps extends AbstractSteps
     public void operatorVerifyTheScriptOnPricingScriptsPageIsUpdatedSuccessfully()
     {
         String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, PricingScriptsPage.COLUMN_CLASS_DATA_NAME);
-        Assert.assertEquals(newPricingScriptsName, pricingScriptsNameFromTable);
+        assertEquals(newPricingScriptsName, pricingScriptsNameFromTable);
     }
 
     @When("^Operator delete script on Pricing Scripts page$")
@@ -72,7 +71,7 @@ public class PricingScriptsSteps extends AbstractSteps
     {
         String expectedValue = "";
         String pricingScriptsNameFromTable = pricingScriptsPage.searchAndGetTextOnTable(newPricingScriptsName, 1, PricingScriptsPage.COLUMN_CLASS_DATA_NAME);
-        Assert.assertEquals(expectedValue, pricingScriptsNameFromTable);
+        assertEquals(expectedValue, pricingScriptsNameFromTable);
     }
 
     @Given("^Operator have two default script \"([^\"]*)\" and \"([^\"]*)\"$")
@@ -126,6 +125,6 @@ public class PricingScriptsSteps extends AbstractSteps
         pricingScriptsPage.clickActionButton(1, PricingScriptsPage.ACTION_BUTTON_SHIPPERS);
         boolean isPricingScriptsContainShipper = pricingScriptsPage.isPricingScriptsContainShipper(shipperLinkedToPricingScripts);
         pricingScriptsPage.clickButtonClose();
-        Assert.assertTrue("Pricing Scripts not contain the expected shipper.", isPricingScriptsContainShipper);
+        assertTrue("Pricing Scripts not contain the expected shipper.", isPricingScriptsContainShipper);
     }
 }

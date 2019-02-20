@@ -6,7 +6,6 @@ import co.nvqa.operator_v2.selenium.page.ContactTypeManagementPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.junit.Assert;
 
 import java.util.Map;
 
@@ -154,8 +153,8 @@ public class ContactTypeManagementSteps extends AbstractSteps
         ContactType expectedContactType = get(KEY_CONTACT_TYPE);
         ContactType actualContactType = get(KEY_CONTACT_TYPE_SEARCH_RESULT);
 
-        Assert.assertNotNull(f("Search Contact Type with keyword = '%s' found nothing.", searchContactTypesKeyword), actualContactType);
-        Assert.assertEquals("Contact Type", expectedContactType.getName(), actualContactType.getName());
+        assertNotNull(f("Search Contact Type with keyword = '%s' found nothing.", searchContactTypesKeyword), actualContactType);
+        assertEquals("Contact Type", expectedContactType.getName(), actualContactType.getName());
     }
 
     @When("^Operator download Contact Type CSV file on page Contact Type Management$")

@@ -4,7 +4,6 @@ import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
-import org.junit.Assert;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -33,7 +32,7 @@ public class ReservationsPage extends OperatorV2SimplePage
 
     private String getNextDateCellXpath()
     {
-        return String.format("//nv-calendar//div[@ng-repeat='day in week track by $index'][@tabindex='%d']", getNextDateNumber());
+        return f("//nv-calendar//div[@ng-repeat='day in week track by $index'][@tabindex='%d']", getNextDateNumber());
     }
 
     public void waitUntilReservationsLoaded()
@@ -65,10 +64,10 @@ public class ReservationsPage extends OperatorV2SimplePage
     public void verifyReservationIsCreatedSuccessfully(String expectedTimeslotTextOnCalendar)
     {
         boolean isNextDateCellLabeledAsReserved = isElementExist(getNextDateCellXpath()+"//div[text()='Reserved']");
-        Assert.assertTrue(String.format("Reservation is not created. Label 'Reserved' is not found at the calendar on date %d.", getNextDateNumber()), isNextDateCellLabeledAsReserved);
+        assertTrue(String.format("Reservation is not created. Label 'Reserved' is not found at the calendar on date %d.", getNextDateNumber()), isNextDateCellLabeledAsReserved);
 
         String actualTimeslotTextOnCalendar = getText(getNextDateCellXpath()+"//div[contains(@ng-repeat,'rsvn in $calendar.reservations')]/nv-icon-text-button/button/div[1]");
-        Assert.assertEquals("Reservation is not created correctly. Timeslot does not change.", expectedTimeslotTextOnCalendar.trim(), actualTimeslotTextOnCalendar.trim());
+        assertEquals("Reservation is not created correctly. Timeslot does not change.", expectedTimeslotTextOnCalendar.trim(), actualTimeslotTextOnCalendar.trim());
     }
 
     public void editReservation(String shipperName, Address address, Reservation reservation, String newTimeslot)
@@ -86,10 +85,10 @@ public class ReservationsPage extends OperatorV2SimplePage
     public void verifyReservationIsUpdatedSuccessfully(String expectedTimeslotTextOnCalendar)
     {
         boolean isNextDateCellLabeledAsReserved = isElementExist(getNextDateCellXpath()+"//div[text()='Reserved']");
-        Assert.assertTrue(String.format("Reservation is not updated. Label 'Reserved' is not found at the calendar on date %d.", getNextDateNumber()), isNextDateCellLabeledAsReserved);
+        assertTrue(String.format("Reservation is not updated. Label 'Reserved' is not found at the calendar on date %d.", getNextDateNumber()), isNextDateCellLabeledAsReserved);
 
         String actualTimeslotTextOnCalendar = getText(getNextDateCellXpath()+"//div[contains(@ng-repeat,'rsvn in $calendar.reservations')]/nv-icon-text-button/button/div[1]");
-        Assert.assertEquals("Reservation is not updated. Timeslot does not change.", expectedTimeslotTextOnCalendar.trim(), actualTimeslotTextOnCalendar.trim());
+        assertEquals("Reservation is not updated. Timeslot does not change.", expectedTimeslotTextOnCalendar.trim(), actualTimeslotTextOnCalendar.trim());
     }
 
     public void deleteReservation(String shipperName, Address address, Reservation reservation)
@@ -117,6 +116,6 @@ public class ReservationsPage extends OperatorV2SimplePage
             isNextDateCellLabeledAsReserved = true;
         }
 
-        Assert.assertFalse(String.format("Reservation is not deleted. Label 'Reserved' is still found at the calendar on date %d.", getNextDateNumber()), isNextDateCellLabeledAsReserved);
+        assertFalse(String.format("Reservation is not deleted. Label 'Reserved' is still found at the calendar on date %d.", getNextDateNumber()), isNextDateCellLabeledAsReserved);
     }
 }

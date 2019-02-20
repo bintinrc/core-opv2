@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.PrinterSettings;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -11,7 +10,6 @@ import org.openqa.selenium.WebElement;
 @SuppressWarnings("WeakerAccess")
 public class PrinterSettingsPage extends OperatorV2SimplePage
 {
-
     public static final String COLUMN_CLASS_DATA_NAME = "name";
     public static final String COLUMN_CLASS_DATA_IP_ADDRESS = "ip_address";
     public static final String COLUMN_CLASS_DATA_VERSION = "version";
@@ -43,7 +41,7 @@ public class PrinterSettingsPage extends OperatorV2SimplePage
     public void verifyAddPrinterFormIsDisplayed()
     {
         WebElement modal = findElementByXpath(ADD_PRINTER_MODAL);
-        Assert.assertTrue("Add Printer Label not Shown", modal.isDisplayed());
+        assertTrue("Add Printer Label not Shown", modal.isDisplayed());
     }
 
     public void addPrinter(PrinterSettings printerSettings)
@@ -60,7 +58,7 @@ public class PrinterSettingsPage extends OperatorV2SimplePage
         WebElement element = findElementByXpath(PRINTER_DEFAULT_SWITCH);
         boolean isChecked = Boolean.parseBoolean(element.getAttribute("aria-checked"));
 
-        if (isDefault != isChecked)
+        if(isDefault!=isChecked)
         {
             element.click();
             pause300ms();
@@ -70,7 +68,7 @@ public class PrinterSettingsPage extends OperatorV2SimplePage
     public void printerSettingWithNameOnDisplay(String name)
     {
         boolean isExist = isPrinterSettingsDisplayed(name);
-        Assert.assertTrue(String.format("New printer setting with name %s doesn't exist", name), isExist);
+        assertTrue(f("New printer setting with name %s doesn't exist", name), isExist);
     }
 
     public void checkPrinterSettingInfo(int index, PrinterSettings printerSettings)
@@ -79,15 +77,15 @@ public class PrinterSettingsPage extends OperatorV2SimplePage
         String actualIpAddress = getTextOnTable(index, COLUMN_CLASS_DATA_IP_ADDRESS);
         String actualVersion = getTextOnTable(index, COLUMN_CLASS_DATA_VERSION);
 
-        Assert.assertEquals("Printer Setting name is incorrect.", printerSettings.getName(), actualName);
-        Assert.assertEquals("Printer Setting IP Address is incorrect.", printerSettings.getIpAddress(), actualIpAddress);
-        Assert.assertEquals("Printer Setting version is incorrect.", printerSettings.getVersion(), actualVersion);
+        assertEquals("Printer Setting name is incorrect.", printerSettings.getName(), actualName);
+        assertEquals("Printer Setting IP Address is incorrect.", printerSettings.getIpAddress(), actualIpAddress);
+        assertEquals("Printer Setting version is incorrect.", printerSettings.getVersion(), actualVersion);
     }
 
     public void printerSettingWithNameNotDisplayed(String name)
     {
         boolean isExist = isPrinterSettingsDisplayed(name);
-        Assert.assertFalse(String.format("Printer Setting with name '%s' still exist.", name), isExist);
+        assertFalse(f("Printer Setting with name '%s' still exist.", name), isExist);
     }
 
     public void deletePrinterSettingWithName(String name)
@@ -106,16 +104,19 @@ public class PrinterSettingsPage extends OperatorV2SimplePage
 
     public void editDetails(String rowDetail, String value)
     {
-        if (rowDetail.equalsIgnoreCase(NAME))
+        if(rowDetail.equalsIgnoreCase(NAME))
         {
             fillPrinterName(value);
-        } else if (rowDetail.equalsIgnoreCase(IP_ADDRESS))
+        }
+        else if(rowDetail.equalsIgnoreCase(IP_ADDRESS))
         {
             fillPrinterIpAddress(value);
-        } else if (rowDetail.equalsIgnoreCase(VERSION))
+        }
+        else if(rowDetail.equalsIgnoreCase(VERSION))
         {
             fillPrinterVersion(value);
-        } else if (rowDetail.equalsIgnoreCase(DEFAULT))
+        }
+        else if(rowDetail.equalsIgnoreCase(DEFAULT))
         {
             switchToDefaultPrinter(Boolean.parseBoolean(value));
         }

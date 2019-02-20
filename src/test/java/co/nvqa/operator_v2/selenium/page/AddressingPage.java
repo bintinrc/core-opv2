@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.Addressing;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -50,19 +49,19 @@ public class AddressingPage extends OperatorV2SimplePage {
         pause100ms();
 
         String actualBuildingNo = getText("//label[starts-with(@for, 'building-no')]/following-sibling::div[1]");
-        Assert.assertEquals("Building No is different.", addressing.getBuildingNo(), actualBuildingNo);
+        assertEquals("Building No is different.", addressing.getBuildingNo(), actualBuildingNo);
 
         String actualStreetName = getText("//label[starts-with(@for, 'street')]/following-sibling::div[1]");
-        Assert.assertEquals("Street Name is different.", addressing.getStreetName(), actualStreetName);
+        assertEquals("Street Name is different.", addressing.getStreetName(), actualStreetName);
 
         String actualPostcode = getText("//label[starts-with(@for, 'postcode')]/following-sibling::div[1]");
-        Assert.assertEquals("Postcode is different.", addressing.getPostcode(), actualPostcode);
+        assertEquals("Postcode is different.", addressing.getPostcode(), actualPostcode);
 
         String actualLatitude = getText("//label[starts-with(@for, 'latitude')]/following-sibling::div[1]");
-        Assert.assertEquals("Latitude is different.", String.valueOf(addressing.getLatitude()), actualLatitude);
+        assertEquals("Latitude is different.", String.valueOf(addressing.getLatitude()), actualLatitude);
 
         String actualLongitude = getText("//label[starts-with(@for, 'longitude')]/following-sibling::div[1]");
-        Assert.assertEquals("Longitude is different.", String.valueOf(addressing.getLongitude()), actualLongitude);
+        assertEquals("Longitude is different.", String.valueOf(addressing.getLongitude()), actualLongitude);
     }
 
     public void deleteAddress() {
@@ -74,7 +73,7 @@ public class AddressingPage extends OperatorV2SimplePage {
     public void verifyDelete(Addressing addressing) {
         searchAddress(addressing);
         String actualResult = getText("//md-card[contains(@class, 'address-list-card')]/div/h5");
-        Assert.assertEquals("Result is different.", "No address found!", actualResult);
+        assertEquals("Result is different.", "No address found!", actualResult);
     }
 
     public void editAddress(Addressing addressingOld, Addressing addressingEdited) {

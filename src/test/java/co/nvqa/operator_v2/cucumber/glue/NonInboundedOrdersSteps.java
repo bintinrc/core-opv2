@@ -7,7 +7,6 @@ import co.nvqa.operator_v2.selenium.page.NonInboundedOrdersPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
 
 import javax.inject.Inject;
 import java.text.ParseException;
@@ -92,7 +91,7 @@ public class NonInboundedOrdersSteps extends AbstractSteps
     private void checkOrderIsNotFound(String trackingId)
     {
         nonInboundedOrdersPage.filterBy(NonInboundedOrdersPage.OrdersTable.COLUMN_TRACKING_ID, trackingId);
-        Assert.assertTrue("Filtered Orders page is empty", nonInboundedOrdersPage.ordersTable().isTableEmpty());
+        assertTrue("Filtered Orders page is empty", nonInboundedOrdersPage.ordersTable().isTableEmpty());
     }
 
     @When("^Operator download CSV file for created orders on Non Inbounded Orders page$")

@@ -21,15 +21,10 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.not;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -64,7 +59,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
             long routeId = createRouteParams.getCreatedRoute().getId();
             List<RouteDriverTypeEntity> listOfRouteDriverTypeEntity = getRouteJdbc().findRouteDriverTypeByRouteIdAndNotDeleted(routeId);
             List<Long> listOfRouteDriverTypeId = listOfRouteDriverTypeEntity.stream().map(RouteDriverTypeEntity::getDriverTypeId).collect(Collectors.toList());
-            Assert.assertThat(f("Route with ID = %d does not contain the expected Driver Type ID = %d", routeId, driverTypeId), listOfRouteDriverTypeId, hasItem(driverTypeId));
+            assertThat(f("Route with ID = %d does not contain the expected Driver Type ID = %d", routeId, driverTypeId), listOfRouteDriverTypeId, hasItem(driverTypeId));
         }
     }
 
@@ -76,12 +71,12 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         jaroScores.forEach(jaroScore ->
         {
             List<JaroScore> actualJaroScores = getCoreJdbc().getJaroScores(jaroScore.getWaypointId());
-            Assert.assertEquals("Number of rows in DB", 2, actualJaroScores.size());
+            assertEquals("Number of rows in DB", 2, actualJaroScores.size());
 
             Waypoint actualWaypoint = getCoreJdbc().getWaypoint(jaroScore.getWaypointId());
-            Assert.assertNotNull("Actual waypoint from DB should not be null.", actualWaypoint);
-            Assert.assertEquals("Latitude", jaroScore.getLatitude(), actualWaypoint.getLatitude(), 0);
-            Assert.assertEquals("Longitude", jaroScore.getLongitude(), actualWaypoint.getLongitude(), 0);
+            assertNotNull("Actual waypoint from DB should not be null.", actualWaypoint);
+            assertEquals("Latitude", jaroScore.getLatitude(), actualWaypoint.getLatitude(), 0);
+            assertEquals("Longitude", jaroScore.getLongitude(), actualWaypoint.getLongitude(), 0);
         });
     }
 
@@ -90,13 +85,13 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     {
         Long orderId = get(KEY_CREATED_ORDER_ID);
         List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
-        Assert.assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
+        assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
         OrderEventEntity theLastOrderEvent = orderEvents.get(0);
         String value = mapOfData.get("type");
 
         if(StringUtils.isNotBlank(value))
         {
-            Assert.assertEquals("Type", Short.parseShort(value), theLastOrderEvent.getType());
+            assertEquals("Type", Short.parseShort(value), theLastOrderEvent.getType());
         }
     }
 
@@ -111,7 +106,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
                 .findFirst()
                 .orElseThrow(() -> new AssertionError("Delivery transaction not found"));
         TransactionFailureReasonEntity transactionFailureReason = getCoreJdbc().findTransactionFailureReasonByTransactionId(deliveryTransaction.getId());
-        Assert.assertEquals("failure_reason_code_id", (long) failureReason.getFailureReasonCodeId(), (long) transactionFailureReason.getFailureReasonCodeId());
+        assertEquals("failure_reason_code_id", (long) failureReason.getFailureReasonCodeId(), (long) transactionFailureReason.getFailureReasonCodeId());
     }
 
     @Then("^DB Operator verify the last inbound_scans record for the created order:$")
@@ -125,14 +120,14 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
         if(StringUtils.isNotBlank(value))
         {
-            Assert.assertEquals("Hub ID", Long.valueOf(value), theLastInboundScan.getHubId());
+            assertEquals("Hub ID", Long.valueOf(value), theLastInboundScan.getHubId());
         }
 
         value = mapOfData.get("type");
 
         if(StringUtils.isNotBlank(value))
         {
-            Assert.assertEquals("Type", Short.valueOf(value), theLastInboundScan.getType());
+            assertEquals("Type", Short.valueOf(value), theLastInboundScan.getType());
         }
     }
 

@@ -5,8 +5,6 @@ import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction;
 import co.nvqa.operator_v2.util.TestUtils;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -172,7 +170,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         pause100ms();
         String toastTopText = getToastTopText();
-        Assert.assertEquals("Toast message is different.", "Matches with file shown in table", toastTopText);
+        assertEquals("Toast message is different.", "Matches with file shown in table", toastTopText);
         waitUntilInvisibilityOfToast("Matches with file shown in table", false);
         listOfCreatedOrder.forEach(this::verifyOrderInfoOnTableOrderIsCorrect);
     }
@@ -181,14 +179,14 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         List<WebElement> listOfWe = findElementsByXpath("//div[@ng-repeat='error in ctrl.payload.errors track by $index']");
         List<String> listOfActualInvalidTrackingId = listOfWe.stream().map(we -> we.getText().split("\\.")[1].trim()).collect(Collectors.toList());
-        Assert.assertThat("Expected Tracking ID not found.", listOfActualInvalidTrackingId, Matchers.hasItems(listOfInvalidTrackingId.toArray(new String[]{})));
+        assertThat("Expected Tracking ID not found.", listOfActualInvalidTrackingId, hasItems(listOfInvalidTrackingId.toArray(new String[]{})));
     }
 
     public void verifyOrderStatus(String trackingId, String expectedOrderStatus)
     {
         filterTableOrderByTrackingId(trackingId);
         String actualGranularStatus = getTextOnTableOrder(1, COLUMN_CLASS_DATA_GRANULAR_STATUS_ON_TABLE_ORDER);
-        Assert.assertThat("Granular Status", actualGranularStatus, Matchers.equalToIgnoringCase(expectedOrderStatus));
+        assertThat("Granular Status", actualGranularStatus, equalToIgnoringCase(expectedOrderStatus));
     }
 
     public void verifyOrderInfoOnTableOrderIsCorrect(Order order)
@@ -207,21 +205,21 @@ public class AllOrdersPage extends OperatorV2SimplePage
         String actualToPostcode = getTextOnTableOrder(1, COLUMN_CLASS_DATA_TO_POSTCODE_ON_TABLE_ORDER);
         String actualGranularStatus = getTextOnTableOrder(1, COLUMN_CLASS_DATA_GRANULAR_STATUS_ON_TABLE_ORDER);
 
-        Assert.assertEquals("Tracking ID", trackingId, actualTrackingId);
+        assertEquals("Tracking ID", trackingId, actualTrackingId);
 
-        Assert.assertEquals("From Name", order.getFromName(), actualFromName);
-        Assert.assertEquals("From Contact", order.getFromContact(), actualFromContact);
-        Assert.assertThat("From Address", actualFromAddress, Matchers.containsString(order.getFromAddress1()));
-        Assert.assertThat("From Address", actualFromAddress, Matchers.containsString(order.getFromAddress2()));
-        Assert.assertEquals("From Postcode", order.getFromPostcode(), actualFromPostcode);
+        assertEquals("From Name", order.getFromName(), actualFromName);
+        assertEquals("From Contact", order.getFromContact(), actualFromContact);
+        assertThat("From Address", actualFromAddress, containsString(order.getFromAddress1()));
+        assertThat("From Address", actualFromAddress, containsString(order.getFromAddress2()));
+        assertEquals("From Postcode", order.getFromPostcode(), actualFromPostcode);
 
-        Assert.assertEquals("To Name", order.getToName(), actualToName);
-        Assert.assertEquals("To Contact", order.getToContact(), actualToContact);
-        Assert.assertThat("To Address", actualToAddress, Matchers.containsString(order.getToAddress1()));
-        Assert.assertThat("To Address", actualToAddress, Matchers.containsString(order.getToAddress2()));
-        Assert.assertEquals("To Postcode", order.getToPostcode(), actualToPostcode);
+        assertEquals("To Name", order.getToName(), actualToName);
+        assertEquals("To Contact", order.getToContact(), actualToContact);
+        assertThat("To Address", actualToAddress, containsString(order.getToAddress1()));
+        assertThat("To Address", actualToAddress, containsString(order.getToAddress2()));
+        assertEquals("To Postcode", order.getToPostcode(), actualToPostcode);
 
-        Assert.assertThat("Granular Status", actualGranularStatus, Matchers.equalToIgnoringCase(order.getGranularStatus().replaceAll("_", " ")));
+        assertThat("Granular Status", actualGranularStatus, equalToIgnoringCase(order.getGranularStatus().replaceAll("_", " ")));
     }
 
     public void verifyOrderInfoIsCorrect(Order order)
@@ -289,7 +287,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='order in ctrl.orders']/td[1]");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
-        Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+        assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
         sendKeysById("container.order.edit.cancellation-reason", String.format("This order is canceled by automation to test 'Cancel Selected' feature on All Orders page. Canceled at %s.", CREATED_DATE_SDF.format(new Date())));
 
@@ -318,7 +316,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='order in ctrl.orders']/td[1]");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
-        Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+        assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
         if(listOfActualTrackingIds.size()==1)
         {
@@ -340,7 +338,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='processedTransactionData in ctrl.processedTransactionsData']/td[@ng-if='ctrl.settings.showTrackingId']");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
-        Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+        assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
         clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.pull-orders-from-routes");
         waitUntilInvisibilityOfToast("updated");
@@ -358,23 +356,23 @@ public class AllOrdersPage extends OperatorV2SimplePage
         waitUntilVisibilityOfMdDialogByTitle("Selection Error");
 
         String actualAction = getText("//div[label[text()='Process']]/p");
-        Assert.assertThat("Unexpected Process", actualAction, Matchers.equalToIgnoringCase(action.getName()));
+        assertThat("Unexpected Process", actualAction, equalToIgnoringCase(action.getName()));
 
         List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='row in ctrl.ordersValidationErrorData.errors']/td[1]");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
-        Assert.assertEquals("Unexpected number of Orders", listOfExpectedTrackingId.size(), listOfActualTrackingIds.size());
-        Assert.assertThat("Expected Tracking ID not found", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+        assertEquals("Unexpected number of Orders", listOfExpectedTrackingId.size(), listOfActualTrackingIds.size());
+        assertThat("Expected Tracking ID not found", listOfActualTrackingIds, hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
         listOfWe = findElementsByXpath("//tr[@ng-repeat='row in ctrl.ordersValidationErrorData.errors']/td[2]");
         List<String> listOfFailureReason = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
-        Assert.assertThat("Unexpected Failure Reason", listOfFailureReason, Matchers.hasItems(expectedReasons.toArray(new String[]{})));
+        assertThat("Unexpected Failure Reason", listOfFailureReason, hasItems(expectedReasons.toArray(new String[]{})));
 
         clickNvIconTextButtonByNameAndWaitUntilDone("commons.continue");
 
         String toastTopText = getToastTopText();
         String toastBottomText = getToastBottomText();
-        Assert.assertEquals("Toast top text", "Unable to apply actions", toastTopText);
-        Assert.assertEquals("Toast bottom text", "No valid selection", toastBottomText);
+        assertEquals("Toast top text", "Unable to apply actions", toastTopText);
+        assertEquals("Toast bottom text", "No valid selection", toastBottomText);
     }
 
     public void addToRoute(List<String> listOfExpectedTrackingId, long routeId)
@@ -385,7 +383,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         List<WebElement> listOfWe = findElementsByXpath("//tr[@md-virtual-repeat='order in ctrl.formData.orders']/td[1]");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
-        Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+        assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
         clickNvIconTextButtonByName("container.order.edit.set-to-all");
         sendKeysById("container.order.edit.route", String.valueOf(routeId));
@@ -443,8 +441,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
             if(!isDateEmpty)
             {
-                Assert.assertEquals("Start Date does not match.", expectedStartDateWithTime, actualStartDate);
-                Assert.assertEquals("End Date does not match.", expectedEndDateWithTime, actualEndDate);
+                assertEquals("Start Date does not match.", expectedStartDateWithTime, actualStartDate);
+                assertEquals("End Date does not match.", expectedEndDateWithTime, actualEndDate);
             }
             else
             {
@@ -454,8 +452,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
                 String actualStartTime = actualStartDate.substring(11, 19);
                 String actualEndTime = actualEndDate.substring(11, 19);
 
-                Assert.assertEquals("Start Date does not match.", expectedStartDateWithTime, actualStartTime);
-                Assert.assertEquals("End Date does not match.", expectedEndDateWithTime, actualEndTime);
+                assertEquals("Start Date does not match.", expectedStartDateWithTime, actualStartTime);
+                assertEquals("End Date does not match.", expectedEndDateWithTime, actualEndTime);
             }
         }
         finally

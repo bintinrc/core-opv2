@@ -14,7 +14,6 @@ import java.util.Map;
 @ScenarioScoped
 public class PrinterSettingsSteps extends AbstractSteps
 {
-
     private static final String NAME = "name";
     private static final String IP_ADDRESS = "ipAddress";
     private static final String VERSION = "version";
@@ -49,10 +48,10 @@ public class PrinterSettingsSteps extends AbstractSteps
         String name = mapOfData.get(NAME);
         String ipAddress = mapOfData.get(IP_ADDRESS);
         String version = mapOfData.get(VERSION);
-        Boolean isDefaultPrinter = Boolean.parseBoolean(mapOfData.get(IS_DEFAULT_PRINTER));
+        boolean isDefaultPrinter = Boolean.parseBoolean(mapOfData.get(IS_DEFAULT_PRINTER));
         String dateUniqueString = generateDateUniqueString();
 
-        if ("GENERATED".equalsIgnoreCase(name))
+        if("GENERATED".equalsIgnoreCase(name))
         {
             name = "Printer " + dateUniqueString;
         }
@@ -84,7 +83,7 @@ public class PrinterSettingsSteps extends AbstractSteps
     }
 
     @Then("^Operator verify Printer Settings is deleted successfully$")
-    public void operatorVerifyPrinterSettingsIsDeletedSuccessfuly()
+    public void operatorVerifyPrinterSettingsIsDeletedSuccessfully()
     {
         PrinterSettings printerSettings = get("printerSettings");
         retryIfAssertionErrorOccurred(
@@ -104,7 +103,7 @@ public class PrinterSettingsSteps extends AbstractSteps
         printerSettingsPage.editDetails(configName, configValue);
         printerSettingsPage.clickSubmitButton();
 
-        switch (configName)
+        switch(configName)
         {
             case NAME:
                 printerSettings.setName(configValue);

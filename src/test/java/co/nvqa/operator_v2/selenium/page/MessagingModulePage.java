@@ -155,7 +155,7 @@ public class MessagingModulePage extends OperatorV2SimplePage
     {
         click("//nv-api-text-button[@text='container.sms.send-messages']");
         waitUntilVisibilityOfElementLocated("//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
-        WebElement successToast = TestUtils.getToast(getWebDriver());
+        WebElement successToast = getToast();
         Assert.assertEquals("Successfully sent 1 SMS", successToast.getText());
     }
 
@@ -168,7 +168,7 @@ public class MessagingModulePage extends OperatorV2SimplePage
     public void verifySmsHistoryTrackingIdInvalid(String trackingId)
     {
         waitUntilVisibilityOfElementLocated("//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
-        WebElement failedToast = TestUtils.getToast(getWebDriver());
+        WebElement failedToast = getToast();
         Assert.assertEquals("Order with trackingId "+trackingId+" not found!", failedToast.getText());
     }
 

@@ -4,7 +4,6 @@ import co.nvqa.operator_v2.selenium.page.OpsRoutePage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.junit.Assert;
 
 import java.util.Random;
 
@@ -45,6 +44,6 @@ public class OpsRouteSteps extends AbstractSteps
     public void verifyEditOpsRouteSuccess()
     {
         String actualRouteId = opsRoutePage.getRouteIdAtRow(EDITED_ROW_NUMBER);
-        Assert.assertEquals(newRouteId, actualRouteId);
+        assertEquals(newRouteId, actualRouteId);
     }
 }

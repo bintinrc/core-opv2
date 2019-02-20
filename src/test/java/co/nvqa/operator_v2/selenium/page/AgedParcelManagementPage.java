@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.utils.NvTestRuntimeException;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -32,18 +31,18 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
         searchTableByTrackingId(trackingId);
 
         String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
-        Assert.assertEquals("Tracking ID", trackingId, actualTrackingId);
+        assertEquals("Tracking ID", trackingId, actualTrackingId);
 
         if(StringUtils.isNotBlank(shipperName))
         {
             String actualShipper = getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER);
-            Assert.assertEquals("Shipper", shipperName, actualShipper);
+            assertEquals("Shipper", shipperName, actualShipper);
         }
 
         if(StringUtils.isNotBlank(daysSinceInbound))
         {
             String actualDaysSinceInbound = getTextOnTable(1, COLUMN_CLASS_DAYS_SINCE_INBOUD);
-            Assert.assertThat("Days since inbound", actualDaysSinceInbound, Matchers.equalToIgnoringCase(daysSinceInbound));
+            assertThat("Days since inbound", actualDaysSinceInbound, Matchers.equalToIgnoringCase(daysSinceInbound));
         }
     }
 

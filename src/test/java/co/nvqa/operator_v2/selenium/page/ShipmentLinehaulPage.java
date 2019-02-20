@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.utils.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.Linehaul;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.WebDriver;
@@ -130,22 +131,23 @@ public class ShipmentLinehaulPage extends OperatorV2SimplePage
         for(String hub : hubs)
         {
             clickAddHubButton();
-            TestUtils.chooseValueFromMdContain(getWebDriver(), "//md-select[@name='select-hub-" + index + "']", hub);
+            selectValueFromMdSelectById("select-hub-"+index, hub);
             index++;
         }
     }
 
     public void chooseFrequency(String frequencyValue)
     {
-        TestUtils.chooseValueFromMdContain(getWebDriver(), "//md-select[contains(@name,'select-frequency')]", frequencyValue);
+        selectValueFromMdSelectByIdContains("select-frequency", frequencyValue);
     }
 
     public void chooseWorkingDays(List<String> days)
     {
-        TestUtils.chooseValuesFromMdContain(getWebDriver(), "//md-select[contains(@name,'select-days-of-week')]", days);
+        //selectValueFromMdSelectByIdContains("select-days-of-week", days);
+        throw new NvTestRuntimeException("Tristania please help me (Daniel) to fix this.");
     }
 
-    public List<WebElement> grabListOfLinehaul()
+    public List<WebElement> grabListOfLinehaulWebElements()
     {
         return findElementsByXpath(XPATH_TABLE_ITEM);
     }
@@ -155,9 +157,9 @@ public class ShipmentLinehaulPage extends OperatorV2SimplePage
         return findElementsByXpath(XPATH_TABLE_ITEM+"/td[3]");
     }
 
-    public List<Linehaul> grabListofLinehaul()
+    public List<Linehaul> grabListOfLinehaul()
     {
-        List<WebElement> list = grabListOfLinehaul();
+        List<WebElement> list = grabListOfLinehaulWebElements();
         List<Linehaul> result = new ArrayList<>();
 
         for(WebElement element : list)
@@ -174,11 +176,11 @@ public class ShipmentLinehaulPage extends OperatorV2SimplePage
         click(XPATH_DELETE_BUTTON);
     }
 
-    public void clickLinhaulScheduleDate(Calendar date)
+    public void clickLinehaulScheduleDate(Calendar date)
     {
-        TestUtils.chooseValueFromMdContain(getWebDriver(), XPATH_SCHEDULE_MONTH, TestUtils.integerToMonth(date.get(Calendar.MONTH)));
+        selectValueFromMdSelectByIdContains(XPATH_SCHEDULE_MONTH, TestUtils.integerToMonth(date.get(Calendar.MONTH)));
         pause3s();
-        TestUtils.chooseValueFromMdContain(getWebDriver(), XPATH_SCHEDULE_YEAR, String.valueOf(date.get(Calendar.YEAR)));
+        selectValueFromMdSelectByIdContains(XPATH_SCHEDULE_YEAR, String.valueOf(date.get(Calendar.YEAR)));
         pause3s();
         click("//div[@tabindex='" + date.get(Calendar.DAY_OF_MONTH) + "']");
     }
