@@ -13,6 +13,10 @@ public class SmsCampaignCsv
     private String email;
     private String job;
 
+    public SmsCampaignCsv()
+    {
+    }
+
     public SmsCampaignCsv(String tracking_id, String name, String email, String job)
     {
         this.tracking_id = tracking_id;
