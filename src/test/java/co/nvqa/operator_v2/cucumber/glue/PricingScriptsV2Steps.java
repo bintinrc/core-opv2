@@ -10,7 +10,6 @@ import co.nvqa.operator_v2.selenium.page.PricingScriptsV2Page;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.junit.Assert;
 
 import java.util.Date;
 import java.util.List;
@@ -204,7 +203,7 @@ public class PricingScriptsV2Steps extends AbstractSteps
     {
         Order order = get(KEY_ORDER_DETAILS);
         Double expectedCost = Double.parseDouble(mapOfData.get("expectedCost"));
-        Assert.assertEquals("Order Cost", expectedCost, order.getCost());
+        assertEquals("Order Cost", expectedCost, order.getCost());
     }
 
     @When("^Operator create and release new Time-Bounded Script using data below:$")

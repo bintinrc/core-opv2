@@ -10,7 +10,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -391,7 +390,7 @@ public class RouteLogsSteps extends AbstractSteps
         Map<String,String> mapOfTokens = new HashMap<>();
         mapOfTokens.put("route_id", String.valueOf(routeId));
         String expectedRedirectUrl = replaceTokens(redirectUrl, mapOfTokens);
-        Assert.assertEquals(f("Operator does not redirect to page %s.", redirectUrl), expectedRedirectUrl, actualCurrentUrl);
+        assertEquals(f("Operator does not redirect to page %s.", redirectUrl), expectedRedirectUrl, actualCurrentUrl);
     }
 
     @Then("^Operator close Edit Routes dialog$")
@@ -450,7 +449,7 @@ public class RouteLogsSteps extends AbstractSteps
         routeLogsPage.clickLoadSelection();
         routeLogsPage.searchAndVerifyRouteExist(routeId);
         String actualDriverName = routeLogsPage.getTextOnTable(1, RouteLogsPage.COLUMN_CLASS_DATA_DRIVER_NAME);
-        Assert.assertEquals("Driver is not change.", newDriverName, actualDriverName);
+        assertEquals("Driver is not change.", newDriverName, actualDriverName);
     }
 
     @When("^Operator add tag '([^\"]*)'$")
@@ -465,7 +464,7 @@ public class RouteLogsSteps extends AbstractSteps
     {
         Long routeId = get(KEY_CREATED_ROUTE_ID);
         String tags = routeLogsPage.getRouteTag(routeId);
-        Assert.assertThat(f("Route does not contains tag '%s'.", newTag), tags, Matchers.containsString(newTag));
+        assertThat(f("Route does not contains tag '%s'.", newTag), tags, Matchers.containsString(newTag));
     }
 
     @When("^Operator delete route on Operator V2$")
@@ -482,6 +481,6 @@ public class RouteLogsSteps extends AbstractSteps
         routeLogsPage.searchTableByRouteId(routeId);
         boolean isTableEmpty = routeLogsPage.isTableEmpty();
         put(KEY_ROUTE_IS_ALREADY_DELETED, true);
-        Assert.assertTrue("Route still exist in table. Fail to delete route.", isTableEmpty);
+        assertTrue("Route still exist in table. Fail to delete route.", isTableEmpty);
     }
 }

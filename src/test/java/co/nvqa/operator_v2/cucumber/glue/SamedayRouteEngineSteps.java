@@ -193,10 +193,10 @@ public class SamedayRouteEngineSteps extends AbstractSteps
         String suggestedDate = get("new-suggested-date");
         String trackingIdsString = get("bulky-tracking-id");
         List<String> trackingIds = Arrays.asList(trackingIdsString.split(","));
-        trackingIds.forEach((String trId) ->
+        trackingIds.forEach(trId ->
         {
             BulkyOrder order = getBulkyTrackingClient().getBulkyOrderDetail(trId, asyncIdString);
-            Assert.assertEquals(suggestedDate,order.getSuggestedTimeslot().getDate());
+            assertEquals(suggestedDate,order.getSuggestedTimeslot().getDate());
         });
     }
 }

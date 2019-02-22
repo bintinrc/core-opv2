@@ -11,7 +11,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 
 import java.util.Map;
 
@@ -218,13 +217,13 @@ public class HubsAdministrationSteps extends AbstractSteps
         HubsAdministration expectedHubsAdministration = get(KEY_HUBS_ADMINISTRATION);
         HubsAdministration actualHubsAdministration = get(KEY_HUBS_ADMINISTRATION_SEARCH_RESULT);
 
-        Assert.assertNotNull(f("Search Hub with keyword = '%s' found nothing.", searchHubsKeyword), actualHubsAdministration);
-        Assert.assertEquals("Hub Name", expectedHubsAdministration.getName(), actualHubsAdministration.getName());
-        Assert.assertEquals("Display Name", expectedHubsAdministration.getDisplayName(), actualHubsAdministration.getDisplayName());
-        Assert.assertThat("City", actualHubsAdministration.getCity(), Matchers.equalToIgnoringCase(expectedHubsAdministration.getCity()));
-        Assert.assertThat("Country", actualHubsAdministration.getCountry(), Matchers.equalToIgnoringCase(expectedHubsAdministration.getCountry()));
-        Assert.assertEquals("Latitude", expectedHubsAdministration.getLatitude(), actualHubsAdministration.getLatitude());
-        Assert.assertEquals("Longitude", expectedHubsAdministration.getLongitude(), actualHubsAdministration.getLongitude());
+        assertNotNull(f("Search Hub with keyword = '%s' found nothing.", searchHubsKeyword), actualHubsAdministration);
+        assertEquals("Hub Name", expectedHubsAdministration.getName(), actualHubsAdministration.getName());
+        assertEquals("Display Name", expectedHubsAdministration.getDisplayName(), actualHubsAdministration.getDisplayName());
+        assertThat("City", actualHubsAdministration.getCity(), Matchers.equalToIgnoringCase(expectedHubsAdministration.getCity()));
+        assertThat("Country", actualHubsAdministration.getCountry(), Matchers.equalToIgnoringCase(expectedHubsAdministration.getCountry()));
+        assertEquals("Latitude", expectedHubsAdministration.getLatitude(), actualHubsAdministration.getLatitude());
+        assertEquals("Longitude", expectedHubsAdministration.getLongitude(), actualHubsAdministration.getLongitude());
     }
 
     @When("^Operator download Hub CSV file on page Hubs Administration$")

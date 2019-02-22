@@ -200,11 +200,6 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         clickButtonByAriaLabel("Clear All Selections");
         pause1s();
 
-        // Select tracking ID filter.
-        sendKeys("//input[@placeholder='Select Filter']", "Tracking IDs");
-        pause1s();
-        click("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']//span[text()='Tracking IDs']");
-
         // Fill tracking ID by filling it and press ENTER.
         sendKeys("//div[@class='main-title']//p[text()='Tracking IDs']/../..//input", trackingId);
         altClick("//div[@class='main-title']//p[text()='Tracking IDs']/../..//input");

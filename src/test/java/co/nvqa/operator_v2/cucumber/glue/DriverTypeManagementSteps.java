@@ -6,7 +6,6 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.junit.Assert;
 
 import java.util.List;
 import java.util.Map;
@@ -99,7 +98,7 @@ public class DriverTypeManagementSteps extends AbstractSteps
         dtmPage.refreshPage();
         DriverTypeParams driverTypeParams = get(KEY_DRIVER_TYPE_PARAMS);
         dtmPage.searchingCreatedDriver(driverTypeParams.getDriverTypeName());
-        Assert.assertEquals("Created Driver Type was not deleted", 0, dtmPage.driverTypesTable().getRowsCount());
+        assertEquals("Created Driver Type was not deleted", 0, dtmPage.driverTypesTable().getRowsCount());
         remove(KEY_DRIVER_TYPE_ID);
     }
 

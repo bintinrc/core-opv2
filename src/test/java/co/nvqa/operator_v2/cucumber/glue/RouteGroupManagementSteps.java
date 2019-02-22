@@ -1,16 +1,12 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.pricing.Param;
 import co.nvqa.commons.utils.NvLogger;
 import co.nvqa.operator_v2.selenium.page.RouteGroupManagementPage;
 import co.nvqa.operator_v2.selenium.page.TagManagementPage;
-import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import io.cucumber.datatable.DataTable;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 
 import java.util.Map;
 
@@ -86,7 +82,7 @@ public class RouteGroupManagementSteps extends AbstractSteps
         }
         while(retry);
 
-        Assert.assertThat("Route Group name not matched.", actualRouteGroupName, Matchers.startsWith(routeGroupName)); //Route Group name is concatenated with description.
+        assertThat("Route Group name not matched.", actualRouteGroupName, Matchers.startsWith(routeGroupName)); //Route Group name is concatenated with description.
     }
 
     @When("^Operator update 'Route Group' on 'Route Group Management'$")
@@ -105,7 +101,7 @@ public class RouteGroupManagementSteps extends AbstractSteps
         String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
         routeGroupManagementPage.searchTable(routeGroupName);
         String actualName = routeGroupManagementPage.getTextOnTable(1, RouteGroupManagementPage.COLUMN_CLASS_DATA_NAME);
-        Assert.assertTrue("Route Group name not matched.", actualName.startsWith(routeGroupName)); //Route Group name is concatenated with description.
+        assertTrue("Route Group name not matched.", actualName.startsWith(routeGroupName)); //Route Group name is concatenated with description.
     }
 
     @When("^Operator delete 'Route Group' on 'Route Group Management'$")
@@ -123,7 +119,7 @@ public class RouteGroupManagementSteps extends AbstractSteps
          */
         String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
         String actualName = routeGroupManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
-        Assert.assertNotEquals(routeGroupName, actualName);
+        assertNotEquals(routeGroupName, actualName);
     }
 
     @Then("^Operator V2 clean up 'Route Groups'$")
@@ -138,12 +134,5 @@ public class RouteGroupManagementSteps extends AbstractSteps
         {
             NvLogger.warn("Failed to delete 'Route Group'.");
         }
-    }
-
-    @Given("test list")
-    public void testList(DataTable dataTable)
-    {
-        java.util.List<Param> listOfParam = dataTable.asList(Param.class);
-        System.out.println(listOfParam);
     }
 }

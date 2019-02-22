@@ -4,12 +4,12 @@ import co.nvqa.operator_v2.selenium.page.TagManagementPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.junit.Assert;
 
 /**
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("WeakerAccess")
 @ScenarioScoped
 public class TagManagementSteps extends AbstractSteps
 {
@@ -72,7 +72,7 @@ public class TagManagementSteps extends AbstractSteps
             reloadPageAndEnableSortByName();
 
             String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
-            Assert.assertEquals(DEFAULT_TAG_NAME, actualTagName);
+            assertEquals(DEFAULT_TAG_NAME, actualTagName);
         }, f("verifyNewTagCreatedSuccessfully - [Expected Tag Name = %s]", DEFAULT_TAG_NAME), getScenarioManager()::writeToCurrentScenarioLog);
     }
 
@@ -83,7 +83,7 @@ public class TagManagementSteps extends AbstractSteps
           Check first row is tag DEFAULT_TAG_NAME.
          */
         String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
-        Assert.assertEquals(DEFAULT_TAG_NAME, actualTagName);
+        assertEquals(DEFAULT_TAG_NAME, actualTagName);
 
         tagManagementPage.clickActionButtonOnTable(1, TagManagementPage.ACTION_BUTTON_EDIT);
         tagManagementPage.setTagNameValue(EDITED_TAG_NAME);
@@ -99,10 +99,10 @@ public class TagManagementSteps extends AbstractSteps
             reloadPageAndEnableSortByName();
 
             String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
-            Assert.assertEquals(EDITED_TAG_NAME, actualTagName);
+            assertEquals(EDITED_TAG_NAME, actualTagName);
 
             String actualTagDescription = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_DESCRIPTION);
-            Assert.assertEquals(EDITED_DEFAULT_TAG_DESCRIPTION, actualTagDescription);
+            assertEquals(EDITED_DEFAULT_TAG_DESCRIPTION, actualTagDescription);
         }, "verifyTagUpdatedSuccessfully", getScenarioManager()::writeToCurrentScenarioLog);
     }
 
@@ -115,7 +115,7 @@ public class TagManagementSteps extends AbstractSteps
           Check first row is tag EDITED_TAG_NAME.
          */
         String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
-        Assert.assertEquals(EDITED_TAG_NAME, actualTagName);
+        assertEquals(EDITED_TAG_NAME, actualTagName);
 
         tagManagementPage.clickActionButtonOnTable(1, TagManagementPage.ACTION_BUTTON_DELETE);
         pause100ms();
@@ -130,7 +130,7 @@ public class TagManagementSteps extends AbstractSteps
           Check first row does not contain tag EDITED_TAG_NAME.
          */
         String actualTagName = tagManagementPage.getTextOnTable(1, TagManagementPage.COLUMN_CLASS_DATA_TAG_NAME);
-        Assert.assertNotEquals(EDITED_TAG_NAME, actualTagName);
+        assertNotEquals(EDITED_TAG_NAME, actualTagName);
     }
 
     private void reloadPageAndEnableSortByName()

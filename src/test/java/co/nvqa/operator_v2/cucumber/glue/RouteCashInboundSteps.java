@@ -7,7 +7,6 @@ import co.nvqa.operator_v2.selenium.page.RouteCashInboundPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.junit.Assert;
 
 /**
  *
@@ -35,9 +34,9 @@ public class RouteCashInboundSteps extends AbstractSteps
         Long routeId = get(KEY_CREATED_ROUTE_ID);
 
         Cod cod = order.getCod();
-        Assert.assertNotNull("COD should not be null.", cod);
+        assertNotNull("COD should not be null.", cod);
         Double codGoodsAmount = cod.getGoodsAmount();
-        Assert.assertNotNull("COD Goods Amount should not be null.", codGoodsAmount);
+        assertNotNull("COD Goods Amount should not be null.", codGoodsAmount);
 
         Double amountCollected = codGoodsAmount-(codGoodsAmount.intValue()/2);
         String receiptNumber = "#"+routeId+"-"+generateDateUniqueString();

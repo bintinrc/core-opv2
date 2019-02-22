@@ -9,7 +9,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 
 import java.text.SimpleDateFormat;
@@ -63,7 +62,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     public void deleteButtonClicked()
     {
         shipmentLinehaulPage.search(linehaulId);
-        List<Linehaul> list = shipmentLinehaulPage.grabListofLinehaul();
+        List<Linehaul> list = shipmentLinehaulPage.grabListOfLinehaul();
 
         for(Linehaul item : list)
         {
@@ -83,9 +82,9 @@ public class ShipmentLinehaulSteps extends AbstractSteps
         shipmentLinehaulPage.clickOnLabelCreate();
         shipmentLinehaulPage.clickCreateButton();
 
-        WebElement toast = TestUtils.getToast(getWebDriver());
+        WebElement toast = shipmentLinehaulPage.getToast();
         String toastMessage = toast.getText();
-        Assert.assertTrue("Toast message does not contain: linehaul <LINEHAUL_ID> created", toastMessage.contains("Linehaul") && toastMessage.contains("created"));
+        assertTrue("Toast message does not contain: linehaul <LINEHAUL_ID> created", toastMessage.contains("Linehaul") && toastMessage.contains("created"));
         linehaulId = toast.getText().split(" ")[1];
         shipmentLinehaulPage.waitUntilInvisibilityOfToast("created", false);
     }
@@ -122,7 +121,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
             }
         }
 
-        Assert.assertTrue("linehaul not exist", isExist);
+        assertTrue("Linehaul does not exist.", isExist);
         pause3s();
     }
 
@@ -142,7 +141,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     public void editActionButtonClicked()
     {
         shipmentLinehaulPage.search(linehaulId);
-        List<Linehaul> list = shipmentLinehaulPage.grabListofLinehaul();
+        List<Linehaul> list = shipmentLinehaulPage.grabListOfLinehaul();
 
         for(Linehaul item : list)
         {
@@ -177,15 +176,15 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     public void linehaulDeleted()
     {
         String msg = "Success delete Linehaul ID " + linehaulId;
-        WebElement toast = TestUtils.getToast(getWebDriver());
+        WebElement toast = shipmentLinehaulPage.getToast();
 
         if(toast==null)
         {
-            Assert.fail("Cannot find toast message.");
+            fail("Cannot find toast message.");
         }
         else
         {
-            Assert.assertThat(f("Toast message not contains: '%s'", msg), toast.getText(), Matchers.containsString(msg));
+            assertThat(f("Toast message not contains: '%s'", msg), toast.getText(), containsString(msg));
             shipmentLinehaulPage.waitUntilInvisibilityOfToast("Success delete Linehaul ID", false);
         }
     }
@@ -194,28 +193,28 @@ public class ShipmentLinehaulSteps extends AbstractSteps
     public void linehaul_edited()
     {
         String msg = "Linehaul " + linehaulId + " updated";
-        WebElement toast = TestUtils.getToast(getWebDriver());
+        WebElement toast = shipmentLinehaulPage.getToast();
 
         if(toast==null)
         {
-            Assert.fail("Cannot find toast message.");
+            fail("Cannot find toast message.");
         }
         else
         {
-            Assert.assertThat(f("Toast message not contains: '%s'", msg), toast.getText(), Matchers.containsString(msg));
+            assertThat(f("Toast message not contains: '%s'", msg), toast.getText(), Matchers.containsString(msg));
             shipmentLinehaulPage.waitUntilInvisibilityOfToast("updated");
         }
 
         shipmentLinehaulPage.clickTab("LINEHAUL DATE");
         linehaulExist();
-        List<Linehaul> list = shipmentLinehaulPage.grabListofLinehaul();
+        List<Linehaul> list = shipmentLinehaulPage.grabListOfLinehaul();
 
         for(Linehaul item : list)
         {
             if(item.getId().equals(linehaulId))
             {
-                Assert.assertEquals("Linehaul name", linehaul.getName(), item.getName());
-                Assert.assertEquals("Linehaul frequency", linehaul.getFrequency().toLowerCase(), item.getFrequency().toLowerCase());
+                assertEquals("Linehaul name", linehaul.getName(), item.getName());
+                assertEquals("Linehaul frequency", linehaul.getFrequency().toLowerCase(), item.getFrequency().toLowerCase());
                 break;
             }
         }
@@ -229,12 +228,12 @@ public class ShipmentLinehaulSteps extends AbstractSteps
 
         for(String day : linehaul.getDays())
         {
-            Integer dayNumber = TestUtils.dayToInteger(day);
+            int dayNumber = TestUtils.dayToInteger(day);
             Calendar now = Calendar.getInstance();
-            Integer todayNumber = now.get(Calendar.DAY_OF_WEEK);
-            Integer diffToDayNumber = dayNumber - todayNumber;
+            int todayNumber = now.get(Calendar.DAY_OF_WEEK);
+            int diffToDayNumber = dayNumber - todayNumber;
 
-            if(diffToDayNumber < 0)
+            if(diffToDayNumber<0)
             {
                 diffToDayNumber += 7;
             }
@@ -245,7 +244,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
 
         for(Calendar date : dates)
         {
-            shipmentLinehaulPage.clickLinhaulScheduleDate(date);
+            shipmentLinehaulPage.clickLinehaulScheduleDate(date);
             shipmentLinehaulPage.checkLinehaulAtDate(linehaulId);
         }
     }

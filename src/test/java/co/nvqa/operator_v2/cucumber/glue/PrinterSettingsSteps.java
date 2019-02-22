@@ -9,47 +9,51 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.Map;
 
 /**
- *
  * @author Lanang Jati
  */
 @ScenarioScoped
-public class PrinterSettingsSteps extends AbstractSteps {
-
+public class PrinterSettingsSteps extends AbstractSteps
+{
     private static final String NAME = "name";
     private static final String IP_ADDRESS = "ipAddress";
     private static final String VERSION = "version";
     private static final String IS_DEFAULT_PRINTER = "isDefaultPrinter";
     private PrinterSettingsPage printerSettingsPage;
 
-    public PrinterSettingsSteps() {
+    public PrinterSettingsSteps()
+    {
     }
 
     @Override
-    public void init() {
+    public void init()
+    {
         this.printerSettingsPage = new PrinterSettingsPage(getWebDriver());
     }
 
     @When("^Operator click Add Printer button$")
-    public void opClickAddPrinterButton() {
+    public void opClickAddPrinterButton()
+    {
         printerSettingsPage.clickAddPrinterButtons();
     }
 
     @Then("^Operator verify Add Printer form is displayed$")
-    public void operatorVerifyAddPrinterFormIsDisplayed() {
+    public void operatorVerifyAddPrinterFormIsDisplayed()
+    {
         printerSettingsPage.verifyAddPrinterFormIsDisplayed();
     }
 
     @When("^Operator create Printer Settings with details:$")
-    public void operatorCreatePrinterSettingsWithDetails(Map<String, String> mapOfData) {
+    public void operatorCreatePrinterSettingsWithDetails(Map<String, String> mapOfData)
+    {
         String name = mapOfData.get(NAME);
         String ipAddress = mapOfData.get(IP_ADDRESS);
         String version = mapOfData.get(VERSION);
-        Boolean isDefaultPrinter = Boolean.parseBoolean(mapOfData.get(IS_DEFAULT_PRINTER));
+        boolean isDefaultPrinter = Boolean.parseBoolean(mapOfData.get(IS_DEFAULT_PRINTER));
         String dateUniqueString = generateDateUniqueString();
 
         if("GENERATED".equalsIgnoreCase(name))
         {
-            name = "Printer "+dateUniqueString;
+            name = "Printer " + dateUniqueString;
         }
 
         PrinterSettings printerSettings = new PrinterSettings();
@@ -63,27 +67,36 @@ public class PrinterSettingsSteps extends AbstractSteps {
     }
 
     @Then("^Operator verify Printer Settings is added successfully$")
-    public void operatorVerifyPrinterSettingsIsAddedSuccessfully() {
+    public void operatorVerifyPrinterSettingsIsAddedSuccessfully()
+    {
         PrinterSettings printerSettings = get("printerSettings");
         printerSettingsPage.printerSettingWithNameOnDisplay(printerSettings.getName());
         printerSettingsPage.checkPrinterSettingInfo(1, printerSettings);
     }
 
     @When("^Operator delete Printer Settings$")
-    public void operatorDeletePrinterSettings() {
+    public void operatorDeletePrinterSettings()
+    {
         PrinterSettings printerSettings = get("printerSettings");
         printerSettingsPage.searchPrinterSettings(printerSettings.getName());
         printerSettingsPage.deletePrinterSettingWithName(printerSettings.getName());
     }
 
     @Then("^Operator verify Printer Settings is deleted successfully$")
-    public void operatorVerifyPrinterSettingsIsDeletedSuccessfuly() {
+    public void operatorVerifyPrinterSettingsIsDeletedSuccessfully()
+    {
         PrinterSettings printerSettings = get("printerSettings");
-        printerSettingsPage.printerSettingWithNameNotDisplayed(printerSettings.getName());
+        retryIfAssertionErrorOccurred(
+                () -> printerSettingsPage.printerSettingWithNameNotDisplayed(printerSettings.getName()),
+                "Check if printer record is not displayed",
+                2000,
+                5
+        );
     }
 
     @When("^Operator set \"([^\"]*)\" = \"([^\"]*)\" for Printer Settings with name = \"([^\"]*)\"$")
-    public void operatorEditPrinterSettings(String configName, String configValue, String printerSettingsName) {
+    public void operatorEditPrinterSettings(String configName, String configValue, String printerSettingsName)
+    {
         PrinterSettings printerSettings = get("printerSettings");
 
         printerSettingsPage.clickEditPrinterSettingWithName(printerSettingsName);
@@ -92,14 +105,21 @@ public class PrinterSettingsSteps extends AbstractSteps {
 
         switch(configName)
         {
-            case NAME: printerSettings.setName(configValue); break;
-            case IP_ADDRESS: printerSettings.setIpAddress(configValue); break;
-            case VERSION: printerSettings.setVersion(configValue); break;
+            case NAME:
+                printerSettings.setName(configValue);
+                break;
+            case IP_ADDRESS:
+                printerSettings.setIpAddress(configValue);
+                break;
+            case VERSION:
+                printerSettings.setVersion(configValue);
+                break;
         }
     }
 
     @Then("^Operator verify Printer Settings is edited successfully$")
-    public void operatorVerifyPrinterSettingsIsEditedSuccessfully() {
+    public void operatorVerifyPrinterSettingsIsEditedSuccessfully()
+    {
         PrinterSettings printerSettings = get("printerSettings");
         printerSettingsPage.printerSettingWithNameOnDisplay(printerSettings.getName());
         printerSettingsPage.checkPrinterSettingInfo(1, printerSettings);
