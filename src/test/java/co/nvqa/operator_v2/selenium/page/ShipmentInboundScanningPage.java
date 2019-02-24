@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @SuppressWarnings("WeakerAccess")
 public class ShipmentInboundScanningPage extends OperatorV2SimplePage
 {
-    public static final String LOCATOR_HUB_DROPDOWN = "inbound-hub";
     public static final String XPATH_SCAN_INPUT = "//md-card-content[div[h5[text()='Scan Shipment to Inbound']]]/md-input-container/input";
     public static final String XPATH_CHANGE_END_DATE_BUTTON = "//button[@aria-label='Change End Date']";
     public static final String XPATH_SCANNING_SESSION = "//table/tbody/tr[contains(@ng-repeat,'log in ctrl.scans')]";
@@ -31,7 +30,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
 
     public void selectHub(String hubName)
     {
-        selectValueFromMdSelectById(LOCATOR_HUB_DROPDOWN, hubName);
+        selectValueFromMdSelectWithSearch("placeholder", "Inbound Hub", hubName);
     }
 
     public void inboundScanning(Long shipmentId, String label, String hub)
@@ -85,7 +84,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
 
         for(String shipmentId : mustCheckId)
         {
-            waitUntilVisibilityOfElementLocated(XPATH_SCANNING_SESSION_CHANGE + String.format("[td[contains(@class,'sn')][text()='%s']][td[contains(@class,'end-date')][text()='%s']]", shipmentId, formattedEndDate));
+            waitUntilVisibilityOfElementLocated(XPATH_SCANNING_SESSION_CHANGE + f("[td[contains(@class,'sn')][text()='%s']][td[contains(@class,'end-date')][text()='%s']]", shipmentId, formattedEndDate));
         }
     }
 
