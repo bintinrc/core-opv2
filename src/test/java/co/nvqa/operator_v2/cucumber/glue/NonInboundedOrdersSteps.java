@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.cucumber.ScenarioStorage;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.NonInboundedOrder;
 import co.nvqa.operator_v2.selenium.page.NonInboundedOrdersPage;
@@ -8,7 +7,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.inject.Inject;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -21,10 +19,8 @@ public class NonInboundedOrdersSteps extends AbstractSteps
 {
     private NonInboundedOrdersPage nonInboundedOrdersPage;
 
-    @Inject
-    public NonInboundedOrdersSteps(ScenarioManager scenarioManager, ScenarioStorage scenarioStorage)
+    public NonInboundedOrdersSteps()
     {
-        super(scenarioManager, scenarioStorage);
     }
 
     @Override

@@ -6,6 +6,7 @@ import co.nvqa.commons.cucumber.StandardScenarioStorageKeys;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@SuppressWarnings("unused")
 public interface ScenarioStorageKeys extends StandardScenarioStorageKeys
 {
     String KEY_ROUTE_GROUP_NAME = "KEY_ROUTE_GROUP_NAME";

@@ -3,9 +3,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.cucumber.StandardScenarioManager;
 import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.UserManagement;
-import co.nvqa.operator_v2.util.ScenarioStorageKeys;
 import cucumber.api.java.After;
 
 import java.util.ArrayList;

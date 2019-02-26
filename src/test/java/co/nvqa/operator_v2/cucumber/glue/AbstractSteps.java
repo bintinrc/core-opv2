@@ -1,8 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common_selenium.cucumber.glue.CommonSeleniumAbstractSteps;
-import co.nvqa.commons.cucumber.ScenarioStorage;
-import co.nvqa.operator_v2.util.ScenarioStorageKeys;
+import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 
 /**
  *
@@ -13,10 +12,5 @@ public abstract class AbstractSteps extends CommonSeleniumAbstractSteps<Scenario
 {
     public AbstractSteps()
     {
-    }
-
-    public AbstractSteps(ScenarioManager scenarioManager, ScenarioStorage scenarioStorage)
-    {
-        super();
     }
 }
