@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.NvTestRuntimeException;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ContactType;
 import co.nvqa.operator_v2.selenium.page.ContactTypeManagementPage;
 import cucumber.api.java.en.Then;

@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.ThirdPartyShipper;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;

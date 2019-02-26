@@ -2,8 +2,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.commons.utils.StandardTestUtils;
+import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;

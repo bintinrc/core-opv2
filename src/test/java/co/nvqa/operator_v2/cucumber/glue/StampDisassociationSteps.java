@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.cucumber.ScenarioStorage;
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.utils.ScenarioStorage;
 import co.nvqa.operator_v2.selenium.page.StampDisassociationPage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;

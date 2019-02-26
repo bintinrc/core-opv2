@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.utils.NvTestRuntimeException;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.openqa.selenium.WebDriver;

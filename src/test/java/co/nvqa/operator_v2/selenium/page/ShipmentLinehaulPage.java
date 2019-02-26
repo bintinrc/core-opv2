@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.commons.utils.NvTestRuntimeException;
+import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.Linehaul;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.WebDriver;

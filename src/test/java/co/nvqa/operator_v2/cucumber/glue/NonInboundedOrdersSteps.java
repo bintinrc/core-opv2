@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.NvTestRuntimeException;
-import co.nvqa.commons.utils.ScenarioStorage;
+import co.nvqa.commons.cucumber.ScenarioStorage;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.NonInboundedOrder;
 import co.nvqa.operator_v2.selenium.page.NonInboundedOrdersPage;
 import cucumber.api.java.en.Then;

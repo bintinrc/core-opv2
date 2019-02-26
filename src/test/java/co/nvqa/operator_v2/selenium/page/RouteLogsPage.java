@@ -2,8 +2,8 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.pdf.RoutePassword;
-import co.nvqa.commons.utils.NvTestRuntimeException;
-import co.nvqa.commons.utils.PdfUtils;
+import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.operator_v2.model.CreateRouteParams;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.util.TestConstants;

@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.utils.NvTestRuntimeException;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;

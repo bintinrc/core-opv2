@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.pdf.ShipmentAirwayBill;
-import co.nvqa.commons.utils.PdfUtils;
-import co.nvqa.commons.utils.StandardTestConstants;
+import co.nvqa.commons.util.PdfUtils;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
@@ -23,7 +23,6 @@ import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.Shipments
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.COLUMN_SHIPMENT_ID;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.not;
 
 /**
  * @author Lanang Jati

@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.commons.utils.NvTestRuntimeException;
+import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.Zone;
 import org.junit.Assert;
 import org.openqa.selenium.TimeoutException;

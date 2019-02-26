@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.utils.StandardTestConstants;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.NonInboundedOrder;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;

@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.RouteGroupManagementPage;
 import co.nvqa.operator_v2.selenium.page.TagManagementPage;
 import cucumber.api.java.en.Then;

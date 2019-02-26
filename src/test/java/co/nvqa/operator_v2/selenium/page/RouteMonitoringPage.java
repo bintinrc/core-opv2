@@ -2,7 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.Route;
-import co.nvqa.commons.utils.NvTestRuntimeException;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RouteMonitoringFilters;
 import co.nvqa.operator_v2.model.RouteMonitoringParams;
 import com.google.common.collect.ImmutableList;
@@ -13,7 +13,6 @@ import org.openqa.selenium.WebDriver;
 import java.util.List;
 
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.hasItem;
 
 /**
  *

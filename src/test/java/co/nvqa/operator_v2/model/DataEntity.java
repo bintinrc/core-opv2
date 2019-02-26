@@ -2,10 +2,10 @@ package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.Pair;
 import co.nvqa.commons.support.JsonHelper;
-import co.nvqa.commons.utils.NvAssert;
-import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.commons.utils.NvMatchers;
-import co.nvqa.commons.utils.NvTestRuntimeException;
+import co.nvqa.commons.util.NvAssert;
+import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvMatchers;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;

@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.pricing.Script;
-import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.junit.Assert;

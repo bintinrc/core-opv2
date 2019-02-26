@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common_selenium.cucumber.glue.CommonSeleniumAbstractSteps;
-import co.nvqa.commons.utils.ScenarioStorage;
+import co.nvqa.commons.cucumber.ScenarioStorage;
 import co.nvqa.operator_v2.util.ScenarioStorageKeys;
 
 /**

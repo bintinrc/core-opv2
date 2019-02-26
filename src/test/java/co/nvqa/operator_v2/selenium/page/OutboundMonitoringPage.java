@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.cucumber.ScenarioStorage;
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.utils.ScenarioStorage;
 import co.nvqa.operator_v2.util.ScenarioStorageKeys;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;

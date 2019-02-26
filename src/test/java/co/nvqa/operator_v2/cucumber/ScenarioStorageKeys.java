@@ -1,6 +1,6 @@
-package co.nvqa.operator_v2.util;
+package co.nvqa.operator_v2.cucumber;
 
-import co.nvqa.commons.utils.StandardScenarioStorageKeys;
+import co.nvqa.commons.cucumber.StandardScenarioStorageKeys;
 
 /**
  *

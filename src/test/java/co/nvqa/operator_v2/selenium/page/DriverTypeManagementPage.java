@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.commons.utils.StandardTestConstants;
+import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
@@ -14,8 +14,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static co.nvqa.commons.utils.NvMatchers.hasItemIgnoreCase;
-import static co.nvqa.commons.utils.NvMatchers.hasItemsIgnoreCase;
+import static co.nvqa.commons.util.NvMatchers.hasItemIgnoreCase;
+import static co.nvqa.commons.util.NvMatchers.hasItemsIgnoreCase;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;

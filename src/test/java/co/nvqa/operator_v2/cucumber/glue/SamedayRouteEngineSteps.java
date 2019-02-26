@@ -5,7 +5,7 @@ import co.nvqa.commons.client.core.BulkyTrackingClient;
 import co.nvqa.commons.model.auth.AuthResponse;
 import co.nvqa.commons.model.auth.ClientCredentialsAuth;
 import co.nvqa.commons.model.core.bukly.BulkyOrder;
-import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.SamedayRouteEnginePage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -13,7 +13,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import io.cucumber.datatable.DataTable;
-import org.junit.Assert;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;

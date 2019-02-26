@@ -4,7 +4,7 @@ import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.route.Route;
-import co.nvqa.commons.utils.NvTestRuntimeException;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.WaypointOrderInfo;
 import co.nvqa.operator_v2.model.WaypointPerformance;
 import co.nvqa.operator_v2.model.WaypointReservationInfo;

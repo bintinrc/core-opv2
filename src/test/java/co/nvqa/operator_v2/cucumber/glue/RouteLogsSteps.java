@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.route.Route;
-import co.nvqa.commons.utils.NvTestRuntimeException;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.CreateRouteParams;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage;

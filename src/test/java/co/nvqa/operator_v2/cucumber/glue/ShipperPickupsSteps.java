@@ -5,7 +5,7 @@ import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.utils.NvTestRuntimeException;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ReservationInfo;
 import co.nvqa.operator_v2.selenium.page.ShipperPickupsPage;
 import co.nvqa.operator_v2.util.TestUtils;

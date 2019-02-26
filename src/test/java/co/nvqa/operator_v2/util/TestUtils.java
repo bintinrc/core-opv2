@@ -2,7 +2,7 @@ package co.nvqa.operator_v2.util;
 
 import co.nvqa.common_selenium.util.CommonSeleniumTestUtils;
 import co.nvqa.commons.support.JsonHelper;
-import co.nvqa.commons.utils.NvLogger;
+import co.nvqa.commons.util.NvLogger;
 import org.openqa.selenium.WebDriver;
 
 import java.io.IOException;

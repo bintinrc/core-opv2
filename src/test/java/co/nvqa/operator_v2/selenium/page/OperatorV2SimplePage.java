@@ -1,10 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.common_selenium.page.SimplePage;
-import co.nvqa.commons.utils.NvAllure;
-import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.commons.utils.NvTestRuntimeException;
-import co.nvqa.commons.utils.StandardTestUtils;
+import co.nvqa.commons.util.NvAllure;
+import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;

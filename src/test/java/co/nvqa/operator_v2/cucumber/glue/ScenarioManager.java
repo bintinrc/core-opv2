@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.common_selenium.cucumber.glue.CommonSeleniumScenarioManager;
-import co.nvqa.commons.utils.NvLogger;
-import co.nvqa.commons.utils.StandardScenarioStorageKeys;
+import co.nvqa.commons.cucumber.StandardScenarioStorageKeys;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.OperatorV2SimplePage;
 import co.nvqa.operator_v2.util.ScenarioStorageKeys;
 import co.nvqa.operator_v2.util.TestConstants;
