@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.shipper.v2.Shipper;
-import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.operator_v2.model.OrderCreationV2Template;
 import co.nvqa.operator_v2.selenium.page.OrderCreationV2Page;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -90,7 +89,7 @@ public class OrderCreationV2Steps extends AbstractSteps
         mapOfDynamicVariable.put("shipper_id", String.valueOf(shipperV2OrV3Id));
 
         orderCreationV2TemplateAsJsonString = replaceTokens(orderCreationV2TemplateAsJsonString, mapOfDynamicVariable);
-        OrderCreationV2Template order = JsonHelper.fromJson(JsonHelper.getDefaultSnakeCaseMapper(), orderCreationV2TemplateAsJsonString, OrderCreationV2Template.class);
+        OrderCreationV2Template order = fromJsonSnakeCase(orderCreationV2TemplateAsJsonString, OrderCreationV2Template.class);
 
         String orderType = order.getOrderType();
         String trackingRefNo = TestUtils.generateTrackingRefNo();

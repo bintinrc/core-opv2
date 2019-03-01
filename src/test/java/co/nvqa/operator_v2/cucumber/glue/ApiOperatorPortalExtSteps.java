@@ -5,7 +5,7 @@ import co.nvqa.commons.model.core.CreateDriverV2Request;
 import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.support.JsonHelper;
+import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.factory.HubFactory;
 import co.nvqa.operator_v2.model.Dp;
@@ -122,7 +122,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     {
         DpPartner dpPartner = new DpPartner(data);
         put(KEY_DP_PARTNER, dpPartner);
-        Map<String, Object> responseBody = getDPClient().createPartner(JsonHelper.toJson(JsonHelper.getDefaultSnakeCaseMapper(), dpPartner));
+        Map<String, Object> responseBody = getDPClient().createPartner(toJsonSnakeCase(dpPartner));
         dpPartner.setId(Long.parseLong(responseBody.get("id").toString()));
         dpPartner.setDpmsPartnerId(Long.parseLong(responseBody.get("dpms_partner_id").toString()));
     }
@@ -136,7 +136,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         mapOfDynamicVariable.put("generated_phone_no", TestUtils.generatePhoneNumber());
         String json = replaceTokens(data.get("requestBody"), mapOfDynamicVariable);
         Dp dp = new Dp();
-        dp.fromJson(JsonHelper.getDefaultSnakeCaseMapper(), json);
+        dp.fromJson(JsonUtils.getDefaultSnakeCaseMapper(), json);
         Map<String, Object> responseBody = getDPClient().createDp(dpPartner.getId(), json);
         dp.setId(Long.parseLong(responseBody.get("id").toString()));
         dp.setDpmsId(Long.parseLong(responseBody.get("dpms_id").toString()));
@@ -153,7 +153,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         mapOfDynamicVariable.put("generated_phone_no", TestUtils.generatePhoneNumber());
         String json = replaceTokens(data.get("requestBody"), mapOfDynamicVariable);
         DpUser dpUser = new DpUser();
-        dpUser.fromJson(JsonHelper.getDefaultCamelCaseMapper(), json);
+        dpUser.fromJson(JsonUtils.getDefaultCamelCaseMapper(), json);
         Map<String, Object> responseBody = getDpmsClient().createUser(dpPartner.getDpmsPartnerId(), dp.getDpmsId(), json);
         dpUser.setId(Long.parseLong(responseBody.get("id").toString()));
         put(KEY_DP_USER, dpUser);
@@ -174,7 +174,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         String driverCreateRequestTemplate = mapOfData.get("driverCreateRequest");
         String driverCreateRequestJson = replaceTokens(driverCreateRequestTemplate, mapOfDynamicVariable);
 
-        CreateDriverV2Request driverCreateRequest = JsonHelper.fromJson(JsonHelper.getDefaultCamelCaseMapper(), driverCreateRequestJson, CreateDriverV2Request.class);
+        CreateDriverV2Request driverCreateRequest = fromJsonCamelCase(driverCreateRequestJson, CreateDriverV2Request.class);
         driverCreateRequest = getDriverClient().createDriver(driverCreateRequest);
         DriverInfo driverInfo = new DriverInfo();
         driverInfo.fromDriver(driverCreateRequest.getDriver());

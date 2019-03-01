@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.util;
 
 import co.nvqa.common_selenium.util.CommonSeleniumTestUtils;
-import co.nvqa.commons.support.JsonHelper;
+import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvLogger;
 import org.openqa.selenium.WebDriver;
 
@@ -28,11 +28,11 @@ public class TestUtils extends CommonSeleniumTestUtils
         try
         {
             String userJson = URLDecoder.decode(cookie, StandardCharsets.UTF_8.name());
-            return (String) JsonHelper.fromJsonToHashMap(userJson).get("timezone");
+            return (String) JsonUtils.fromJsonCamelCaseToMap(userJson).get("timezone");
         }
         catch(IOException ex)
         {
-            NvLogger.error("Error on method 'getOperatorTimezone'. Cause: "+ex.getMessage());
+            NvLogger.error("Failed to get timezone from browser cookies.", ex);
         }
 
         return null;

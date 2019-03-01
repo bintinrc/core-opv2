@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.Pair;
-import co.nvqa.commons.support.JsonHelper;
+import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvAssert;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvMatchers;
@@ -54,12 +54,12 @@ public abstract class DataEntity<T extends DataEntity> implements NvAssert, NvMa
 
     public void fromJson(String json)
     {
-        fromMap(JsonHelper.fromJsonToHashMap(json));
+        fromMap(JsonUtils.fromJsonCamelCaseToMap(json));
     }
 
     public void fromJson(ObjectMapper mapper, String json)
     {
-        fromMap(JsonHelper.fromJsonToHashMap(mapper, json));
+        fromMap(JsonUtils.fromJsonToMap(mapper, json));
     }
 
     @SuppressWarnings("unchecked")

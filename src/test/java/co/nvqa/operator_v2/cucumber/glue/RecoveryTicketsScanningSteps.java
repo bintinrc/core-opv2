@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.support.JsonHelper;
 import co.nvqa.operator_v2.model.RecoveryTicketsScanning;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsScanningPage;
@@ -38,7 +37,7 @@ public class RecoveryTicketsScanningSteps extends AbstractSteps {
         mapOfTokens.put("tracking_id", trackingId);
 
         String recoveryTicketsScanningRequestJson = replaceTokens(dataTableAsMap.get("recoveryTicketsScanning"), mapOfTokens);
-        RecoveryTicketsScanning recoveryTicketsScanning = JsonHelper.fromJson(recoveryTicketsScanningRequestJson, RecoveryTicketsScanning.class);
+        RecoveryTicketsScanning recoveryTicketsScanning = fromJsonCamelCase(recoveryTicketsScanningRequestJson, RecoveryTicketsScanning.class);
 
         recoveryTicketsScanningPage.fillTheField(trackingId, recoveryTicketsScanning);
         put("recoveryTicketsScanning", recoveryTicketsScanning);
@@ -77,7 +76,7 @@ public class RecoveryTicketsScanningSteps extends AbstractSteps {
         mapOfTokens.put("tracking_id", trackingId);
 
         String recoveryTicketsScanningRequestJson = replaceTokens(dataTableAsMap.get("recoveryTicketsScanning"), mapOfTokens);
-        RecoveryTicketsScanning recoveryTicketsScanning = JsonHelper.fromJson(recoveryTicketsScanningRequestJson, RecoveryTicketsScanning.class);
+        RecoveryTicketsScanning recoveryTicketsScanning = fromJsonCamelCase(recoveryTicketsScanningRequestJson, RecoveryTicketsScanning.class);
 
         recoveryTicketsScanningPage.fillTheField(trackingId, recoveryTicketsScanning);
 
