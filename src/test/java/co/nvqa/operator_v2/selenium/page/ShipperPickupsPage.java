@@ -241,7 +241,8 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
                 "1 Reservation(s) Created" :
                 "Reservation(s) created successfully";
         waitUntilInvisibilityOfToast(toastMessage, true);
-        click("//nv-icon-button[@name='Cancel']");
+        clickNvIconButtonByName("Cancel");
+        waitUntilInvisibilityOfMdDialog();
 
         return originalReservationsInfo;
     }
