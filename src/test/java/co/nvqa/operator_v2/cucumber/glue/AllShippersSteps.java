@@ -148,6 +148,10 @@ public class AllShippersSteps extends AbstractSteps
         Pickup pickupSettings = new Pickup();
         pickupSettings.setDefaultStartTime("09:00");
         pickupSettings.setDefaultEndTime("22:00");
+        if (mapOfData.containsKey("premiumPickupDailyLimit"))
+        {
+            pickupSettings.setPremiumPickupDailyLimit(Integer.valueOf(mapOfData.get("premiumPickupDailyLimit")));
+        }
         shipper.setPickup(pickupSettings);
 
         fillMarketplaceProperties(shipper, mapOfData);

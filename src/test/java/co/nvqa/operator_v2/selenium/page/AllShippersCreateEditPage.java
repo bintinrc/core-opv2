@@ -89,11 +89,20 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         sendKeysById("shipper-name", shipper.getName());
         sendKeysById("Short Name", shipper.getShortName());
         sendKeysById("shipper-phone-number", shipper.getContact());
-
         if (isCreateForm)
         {
             sendKeysById("shipper-email", shipper.getEmail());
             sendKeysById("shipper-dashboard-password", shipper.getShipperDashboardPassword());
+        }
+
+        // Account Type
+        selectValueFromMdSelect(LOCATOR_FIELD_CHANNEL, "B2C Marketplace");
+        selectValueFromMdSelect(LOCATOR_FIELD_INDUSTRY, shipper.getIndustryName());
+        String accountTypeId = shipper.getAccountTypeId() != null ? String.valueOf(shipper.getAccountTypeId()) : "0";
+        selectValueFromMdSelect(LOCATOR_FIELD_ACCOUNT_TYPE, accountTypeId);
+        if (isCreateForm)
+        {
+            selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_SALES_PERSON, shipper.getSalesPerson());
         }
 
         // Liaison Details
@@ -109,7 +118,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         if (isCreateForm)
         {
-            selectMultipleValuesFromMdSelect("ctrl.data.basic.selectedOcServices", orderCreate.getServicesAvailable());
+            selectMultipleValuesFromMdSelectById("container.shippers.service-level", orderCreate.getServicesAvailable());
         }
 
         selectValueFromMdSelect("ctrl.data.basic.trackingType", orderCreate.getTrackingType());
@@ -152,17 +161,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         sendKeysById("Billing Contact", shipper.getBillingContact());
         sendKeysById("Billing Address", shipper.getBillingAddress());
         sendKeysById("Billing Postcode", shipper.getBillingPostcode());
-
-        // Account Type
-        selectValueFromMdSelect(LOCATOR_FIELD_CHANNEL, "B2C Marketplace");
-        selectValueFromMdSelect(LOCATOR_FIELD_INDUSTRY, shipper.getIndustryName());
-        String accountTypeId = shipper.getAccountTypeId() != null ? String.valueOf(shipper.getAccountTypeId()) : "0";
-        selectValueFromMdSelect(LOCATOR_FIELD_ACCOUNT_TYPE, accountTypeId);
-
-        if (isCreateForm)
-        {
-            selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_SALES_PERSON, shipper.getSalesPerson());
-        }
     }
 
     private void fillMoreSettingsForm(Shipper shipper)
@@ -180,9 +178,15 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
                 });
             }
 
+            if (pickupSettings.getPremiumPickupDailyLimit() != null)
+            {
+                sendKeysById("premium-pickup-daily-limit", String.valueOf(pickupSettings.getPremiumPickupDailyLimit()));
+            }
+
             String startTimeFormatted = convertTimeFrom24sHourTo12HoursAmPm(pickupSettings.getDefaultStartTime());
             String endTimeFormatted = convertTimeFrom24sHourTo12HoursAmPm(pickupSettings.getDefaultEndTime());
             String defaultPickupTimeSelector = startTimeFormatted + " - " + endTimeFormatted;
+            scrollIntoView("//md-select[contains(@id, 'commons.select')]", false);
             selectValueFromMdSelectByIdContains("commons.select", defaultPickupTimeSelector);
         }
     }
@@ -440,24 +444,27 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         // Services
         String actualOcVersion = getMdSelectValueTrimmed("ctrl.data.basic.ocVersion");
-        String availableService = getAttribute("//md-select[@ng-model='ctrl.data.basic.selectedOcServices']", "aria-label");
+        String availableService = getAttribute("//*[@id='container.shippers.service-level']", "aria-label");
         String actualTrackingType = getMdSelectValue("ctrl.data.basic.trackingType");
         String actualPrefix = getInputValueById("shipper-prefix");
 
         List<String> listOfActualServices;
 
-        if (availableService == null || availableService.equals("oc-services"))
+        if (availableService == null || availableService.equals("Service Level"))
         {
             listOfActualServices = new ArrayList<>();
         } else
         {
-            String[] temp = availableService.split("oc-services:")[1].split(",");
-            listOfActualServices = Stream.of(temp).map(String::trim).collect(Collectors.toList());
+            String[] temp = availableService.replace("Service Level:", "").split(",");
+            listOfActualServices = Stream.of(temp).map(val -> val.replace(" ", "").toUpperCase()).collect(Collectors.toList());
         }
 
         OrderCreate orderCreate = shipper.getOrderCreate();
         Assert.assertEquals("OC Version", orderCreate.getVersion(), actualOcVersion);
-        Assert.assertThat("Services Available", listOfActualServices, Matchers.hasItems(orderCreate.getServicesAvailable().toArray(new String[]{})));
+
+        String[] expectedServices = orderCreate.getServicesAvailable().stream().map(val -> val.replace(" ", "").toUpperCase()).toArray(String[]::new);
+        Assert.assertThat("Services Available", listOfActualServices, Matchers.hasItems(expectedServices));
+
         Assert.assertEquals("Tracking Type", orderCreate.getTrackingType(), actualTrackingType);
         Assert.assertEquals("Prefix", orderCreate.getPrefix(), actualPrefix);
 
