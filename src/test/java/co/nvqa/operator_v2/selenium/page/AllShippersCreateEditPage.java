@@ -21,8 +21,6 @@ import co.nvqa.operator_v2.util.TestConstants;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -58,10 +56,12 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         waitUntilPageLoaded("shippers/create");
         fillBasicSettingsForm(shipper);
         fillMoreSettingsForm(shipper);
-        if (shipper.getMarketplaceDefault() != null)
+
+        if(shipper.getMarketplaceDefault()!=null)
         {
             fillMarketplaceSettingsForm(shipper);
         }
+
         clickNvIconTextButtonByName("container.shippers.create-shipper");
         waitUntilInvisibilityOfToast("All changes saved successfully");
         backToShipperList();
@@ -85,45 +85,73 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         clickToggleButton("ctrl.data.basic.status", shipperStatusAriaLabel);
         selectValueFromMdSelect("ctrl.data.basic.shipperType", shipper.getType());
 
-        // Shipper Details
+        /*
+          ===== SHIPPER INFORMATION =====
+         */
         sendKeysById("shipper-name", shipper.getName());
         sendKeysById("Short Name", shipper.getShortName());
         sendKeysById("shipper-phone-number", shipper.getContact());
-        if (isCreateForm)
+
+        if(isCreateForm)
         {
             sendKeysById("shipper-email", shipper.getEmail());
             sendKeysById("shipper-dashboard-password", shipper.getShipperDashboardPassword());
         }
 
-        // Account Type
         selectValueFromMdSelect(LOCATOR_FIELD_CHANNEL, "B2C Marketplace");
         selectValueFromMdSelect(LOCATOR_FIELD_INDUSTRY, shipper.getIndustryName());
         String accountTypeId = shipper.getAccountTypeId() != null ? String.valueOf(shipper.getAccountTypeId()) : "0";
         selectValueFromMdSelect(LOCATOR_FIELD_ACCOUNT_TYPE, accountTypeId);
-        if (isCreateForm)
+
+        if(isCreateForm)
         {
             selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_SALES_PERSON, shipper.getSalesPerson());
         }
 
-        // Liaison Details
+        /*
+          ===== CONTACT DETAILS =====
+         */
         sendKeysById("Liaison Name", shipper.getLiaisonName());
         sendKeysById("Liaison Contact", shipper.getLiaisonContact());
         sendKeysById("Liaison Email", shipper.getLiaisonEmail());
         sendKeysById("liaison-address", shipper.getLiaisonAddress());
         sendKeysById("Liaison Postcode", shipper.getLiaisonPostcode());
 
-        // Services
+        /*
+          ===== SERVICE OFFERINGS =====
+         */
         OrderCreate orderCreate = shipper.getOrderCreate();
+
         selectValueFromMdSelectOrCheckCurrentIfDisabled("OC Version", LOCATOR_FIELD_OC_VERSION, orderCreate.getVersion());
 
-        if (isCreateForm)
+        //Service Type
+        // TO-DO: Add 'Parcel Delivery', 'Return', 'Marketplace', 'Ninja Pack', 'Bulky', 'International' and 'Marketplace International'.
+
+        if(isCreateForm)
         {
             selectMultipleValuesFromMdSelectById("container.shippers.service-level", orderCreate.getServicesAvailable());
         }
 
+        /*
+          ===== OPERATIONAL SETTINGS =====
+         */
+        clickToggleButton("ctrl.data.basic.allowCod", convertBooleanToString(orderCreate.getAllowCodService(), "Yes", "No"));
+        clickToggleButton("ctrl.data.basic.allowCp", convertBooleanToString(orderCreate.getAllowCpService(), "Yes", "No"));
+        clickToggleButton("ctrl.data.basic.isPrePaid", convertBooleanToString(orderCreate.getIsPrePaid(), "Yes", "No"));
+        clickToggleButton("ctrl.data.basic.allowStaging", convertBooleanToString(orderCreate.getAllowStagedOrders(), "Yes", "No"));
+        clickToggleButton("ctrl.data.basic.isMultiParcel", convertBooleanToString(orderCreate.getIsMultiParcelShipper(), "Yes", "No"));
+
+        DistributionPoint distributionPoint = shipper.getDistributionPoints();
+        clickToggleButton("ctrl.data.basic.disableReschedule", convertBooleanToString(distributionPoint.getShipperLiteAllowRescheduleFirstAttempt(), "Yes", "No"));
+        //To-Do: Add Enforce Pickup Scanning
+
+        //Driver Delivery One-Time Pin
+        // To-Do: Add 'No. of Digits in Delivery OTP' and 'No. of Validation Attempts'.
+
+        // Tracking ID
         selectValueFromMdSelect("ctrl.data.basic.trackingType", orderCreate.getTrackingType());
 
-        if (isCreateForm)
+        if(isCreateForm)
         {
             retryIfRuntimeExceptionOccurred(() ->
             {
@@ -134,24 +162,21 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
                 pause500ms();
                 boolean isPrefixAlreadyUsed = isElementExistWait3Seconds("//div[text()='Prefix already used']");
 
-                if (isPrefixAlreadyUsed)
+                if(isPrefixAlreadyUsed)
                 {
                     throw new NvTestRuntimeException("Prefix already used. Regenerate new prefix.");
                 }
             });
         }
 
-        DistributionPoint distributionPoint = shipper.getDistributionPoints();
-        clickToggleButton("ctrl.data.basic.allowCod", convertBooleanToString(orderCreate.getAllowCodService(), "Yes", "No"));
-        clickToggleButton("ctrl.data.basic.allowCp", convertBooleanToString(orderCreate.getAllowCpService(), "Yes", "No"));
-        clickToggleButton("ctrl.data.basic.isPrePaid", convertBooleanToString(orderCreate.getIsPrePaid(), "Yes", "No"));
-        clickToggleButton("ctrl.data.basic.allowStaging", convertBooleanToString(orderCreate.getAllowStagedOrders(), "Yes", "No"));
-        clickToggleButton("ctrl.data.basic.isMultiParcel", convertBooleanToString(orderCreate.getIsMultiParcelShipper(), "Yes", "No"));
-        clickToggleButton("ctrl.data.basic.disableReschedule", convertBooleanToString(distributionPoint.getShipperLiteAllowRescheduleFirstAttempt(), "Yes", "No"));
+        // Label Printing: Skipped on fill Basic Settings.
 
-        // Pricing
+        /*
+          ===== PRICING & BILLING =====
+         */
         Pricing pricing = shipper.getPricing();
-        if (pricing != null && StringUtils.isNotBlank(pricing.getScriptName()))
+
+        if(pricing!=null && StringUtils.isNotBlank(pricing.getScriptName()))
         {
             selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT, pricing.getScriptName());
         }
@@ -166,13 +191,15 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     private void fillMoreSettingsForm(Shipper shipper)
     {
         Pickup pickupSettings = shipper.getPickup();
-        if (pickupSettings != null)
+
+        if(pickupSettings!=null)
         {
             clickTabItem("More Settings");
 
-            if (CollectionUtils.isNotEmpty(pickupSettings.getReservationPickupAddresses()))
+            if(CollectionUtils.isNotEmpty(pickupSettings.getReservationPickupAddresses()))
             {
-                pickupSettings.getReservationPickupAddresses().forEach(address -> {
+                pickupSettings.getReservationPickupAddresses().forEach(address ->
+                {
                     addAddress(address);
                     verifyPickupAddress(address);
                 });
@@ -201,62 +228,70 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     private void fillAddAddressForm(Address address)
     {
         waitUntilVisibilityOfMdDialogByTitle("Add Address");
-
         String value = address.getName();
-        if (StringUtils.isNotBlank(value))
+
+        if(StringUtils.isNotBlank(value))
         {
             sendKeysById("Contact Name", value);
         }
 
         value = address.getContact();
-        if (StringUtils.isNotBlank(value))
+
+        if(StringUtils.isNotBlank(value))
         {
             sendKeysById("Contact Mobile Number", value);
         }
 
         value = address.getEmail();
-        if (StringUtils.isNotBlank(value))
+
+        if(StringUtils.isNotBlank(value))
         {
             sendKeysById("Contact Email", value);
         }
 
         value = address.getAddress1();
-        if (StringUtils.isNotBlank(value))
+
+        if(StringUtils.isNotBlank(value))
         {
             sendKeysById("Pickup Address 1", value);
         }
 
         value = address.getAddress2();
-        if (StringUtils.isNotBlank(value))
+
+        if(StringUtils.isNotBlank(value))
         {
             sendKeysById("Pickup Address 2 / Unit Number", value);
         }
 
         value = address.getCountry();
-        if (StringUtils.isNotBlank(value))
+
+        if(StringUtils.isNotBlank(value))
         {
             selectValueFromMdSelectById("commons.country", value);
         }
 
         value = address.getPostcode();
-        if (StringUtils.isNotBlank(value))
+
+        if(StringUtils.isNotBlank(value))
         {
             sendKeysById("Pickup Postcode", value);
         }
 
         Double val = address.getLatitude();
-        if (val != null)
+
+        if(val!=null)
         {
             sendKeysById("Latitude", String.valueOf(val));
         }
 
         val = address.getLongitude();
-        if (val != null)
+
+        if(val!=null)
         {
             sendKeysById("Longitude", String.valueOf(val));
         }
 
-        if (BooleanUtils.isTrue(address.getMilkRun()))
+        if(BooleanUtils.isTrue(address.getMilkRun()))
         {
             fillMilkrunReservationSettings(address);
         }
@@ -268,10 +303,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     private void fillMilkrunReservationSettings(Address address)
     {
         click("//span[.='Milkrun Reservations']");
-        if (CollectionUtils.isNotEmpty(address.getMilkrunSettings()))
+        if(CollectionUtils.isNotEmpty(address.getMilkrunSettings()))
         {
             List<MilkrunSettings> milkrunSettingsList = address.getMilkrunSettings();
-            for (int i = 0; i < milkrunSettingsList.size(); i++)
+            for(int i=0; i<milkrunSettingsList.size(); i++)
             {
                 MilkrunSettings milkrunSettings = milkrunSettingsList.get(i);
                 clickNvIconTextButtonByName("container.shippers.add-new-reservation");
@@ -283,20 +318,21 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     private void fillMilkrunReservationForm(MilkrunSettings milkrunSettings, int index)
     {
         String itemXpath = "//*[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings'][" + index + "]";
-        executeInContext(itemXpath, () -> {
-            if (CollectionUtils.isNotEmpty(milkrunSettings.getDays()))
+        executeInContext(itemXpath, () ->
+        {
+            if(CollectionUtils.isNotEmpty(milkrunSettings.getDays()))
             {
                 selectMultipleValuesFromMdSelectById("container.shippers.more-reservation-days",
                         milkrunSettings.getDays().stream().map(String::valueOf).collect(Collectors.toList()));
             }
 
-            if (StringUtils.isNoneBlank(milkrunSettings.getStartTime(), milkrunSettings.getEndTime()))
+            if(StringUtils.isNoneBlank(milkrunSettings.getStartTime(), milkrunSettings.getEndTime()))
             {
                 selectValueFromMdSelectById("container.shippers.timeslot-selected",
                         milkrunSettings.getStartTime().toUpperCase() + " - " + milkrunSettings.getEndTime().toUpperCase());
             }
 
-            if (milkrunSettings.getNoOfReservation() != null)
+            if(milkrunSettings.getNoOfReservation()!=null)
             {
                 selectValueFromMdSelectById("container.shippers.number-of-reservations",
                         String.valueOf(milkrunSettings.getNoOfReservation()));
@@ -307,9 +343,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     private void fillMarketplaceSettingsForm(Shipper shipper)
     {
         clickTabItem("Marketplace");
-
         MarketplaceDefault md = shipper.getMarketplaceDefault();
-        if (md != null)
+
+        if(md!=null)
         {
             // Services
             selectValueFromMdSelect("ctrl.data.marketplace.ocVersion", md.getOrderCreateVersion());
@@ -326,7 +362,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         // Billing
         MarketplaceBilling mb = shipper.getMarketplaceBilling();
-        if (mb != null)
+
+        if(mb!=null)
         {
             sendKeys("//md-input-container[@model='ctrl.data.marketplace.billingName']//input", mb.getBillingName());
             sendKeys("//md-input-container[@model='ctrl.data.marketplace.billingContact']//input", mb.getBillingContact());
@@ -339,7 +376,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     {
         waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
         clickTabItem("More Settings");
-        if (CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses()))
+
+        if(CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses()))
         {
             Address address = shipper.getPickup().getReservationPickupAddresses().get(addressIndex - 1);
             int reservationsCount = CollectionUtils.size(address.getMilkrunSettings());
@@ -351,10 +389,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
             waitUntilVisibilityOfElementLocated(xpath);
             click(xpath);
             pause500ms();
-            Assert.assertEquals("Number of Milkrun Reservations", reservationsCount - 1, getElementsCount("//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']"));
+            assertEquals("Number of Milkrun Reservations", reservationsCount-1, getElementsCount("//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']"));
             clickNvApiTextButtonByName("commons.save-changes");
             waitUntilInvisibilityOfMdDialogByTitle("Edit Address");
         }
+
         clickNvIconTextButtonByName("Save Changes");
         waitUntilInvisibilityOfToast("All changes saved successfully");
         backToShipperList();
@@ -364,7 +403,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     {
         waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
         clickTabItem("More Settings");
-        if (CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses()))
+        if(CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses()))
         {
             Address address = shipper.getPickup().getReservationPickupAddresses().get(addressIndex - 1);
             searchTableCustom1("contact", address.getContact());
@@ -382,9 +421,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     {
         waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
         clickTabItem("More Settings");
-        if (CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses()))
+        if(CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses()))
         {
-            shipper.getPickup().getReservationPickupAddresses().stream().filter(Address::getMilkRun).forEach(address -> {
+            shipper.getPickup().getReservationPickupAddresses().stream().filter(Address::getMilkRun).forEach(address ->
+            {
                 searchTableCustom1("contact", address.getContact());
                 clickNvIconTextButtonByName("container.shippers.set-as-milkrun");
                 waitUntilVisibilityOfMdDialogByTitle("Edit Address");
@@ -403,20 +443,20 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void verifyNewShipperIsCreatedSuccessfully(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
-
         String actualShipperStatus = getToggleButtonValue("ctrl.data.basic.status");
-
         String actualShipperType;
-        if (StringUtils.equalsIgnoreCase(shipper.getType(), "Marketplace"))
+
+        if(StringUtils.equalsIgnoreCase(shipper.getType(), "Marketplace"))
         {
             actualShipperType = getInputValueById("Shipper Type");
-        } else
+        }
+        else
         {
             actualShipperType = getMdSelectValueTrimmed("ctrl.data.basic.shipperType");
         }
 
-        Assert.assertEquals("Shipper Status", convertBooleanToString(shipper.getActive(), "Active", "Disabled"), actualShipperStatus);
-        Assert.assertEquals("Shipper Type", shipper.getType(), actualShipperType);
+        assertEquals("Shipper Status", convertBooleanToString(shipper.getActive(), "Active", "Disabled"), actualShipperStatus);
+        assertEquals("Shipper Type", shipper.getType(), actualShipperType);
 
         // Shipper Details
         String actualShipperName = getInputValueById("shipper-name");
@@ -424,10 +464,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         String actualShipperContact = getInputValueById("shipper-phone-number");
         String actualShipperEmail = getInputValueById("shipper-email", XpathTextMode.STARTS_WITH);
 
-        Assert.assertEquals("Shipper Name", shipper.getName(), actualShipperName);
-        Assert.assertEquals("Shipper Short Name", shipper.getShortName(), actualShipperShortName);
-        Assert.assertEquals("Shipper Contact", shipper.getContact(), actualShipperContact);
-        Assert.assertEquals("Shipper Email", shipper.getEmail(), actualShipperEmail);
+        assertEquals("Shipper Name", shipper.getName(), actualShipperName);
+        assertEquals("Shipper Short Name", shipper.getShortName(), actualShipperShortName);
+        assertEquals("Shipper Contact", shipper.getContact(), actualShipperContact);
+        assertEquals("Shipper Email", shipper.getEmail(), actualShipperEmail);
 
         // Liaison Details
         String actualLiaisonName = getInputValueById("Liaison Name");
@@ -436,11 +476,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         String actualLiaisonAddress = getInputValueById("liaison-address");
         String actualLiaisonPostcode = getInputValueById("Liaison Postcode");
 
-        Assert.assertEquals("Liaison Name", shipper.getLiaisonName(), actualLiaisonName);
-        Assert.assertEquals("Liaison Contact", shipper.getLiaisonContact(), actualLiaisonContact);
-        Assert.assertEquals("Liaison Email", shipper.getLiaisonEmail(), actualLiaisonEmail);
-        Assert.assertEquals("Liaison Address", shipper.getLiaisonAddress(), actualLiaisonAddress);
-        Assert.assertEquals("Liaison Postcode", shipper.getLiaisonPostcode(), actualLiaisonPostcode);
+        assertEquals("Liaison Name", shipper.getLiaisonName(), actualLiaisonName);
+        assertEquals("Liaison Contact", shipper.getLiaisonContact(), actualLiaisonContact);
+        assertEquals("Liaison Email", shipper.getLiaisonEmail(), actualLiaisonEmail);
+        assertEquals("Liaison Address", shipper.getLiaisonAddress(), actualLiaisonAddress);
+        assertEquals("Liaison Postcode", shipper.getLiaisonPostcode(), actualLiaisonPostcode);
 
         // Services
         String actualOcVersion = getMdSelectValueTrimmed("ctrl.data.basic.ocVersion");
@@ -450,23 +490,21 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         List<String> listOfActualServices;
 
-        if (availableService == null || availableService.equals("Service Level"))
+        if(availableService==null || availableService.equals("oc-services"))
         {
             listOfActualServices = new ArrayList<>();
-        } else
+        }
+        else
         {
             String[] temp = availableService.replace("Service Level:", "").split(",");
             listOfActualServices = Stream.of(temp).map(val -> val.replace(" ", "").toUpperCase()).collect(Collectors.toList());
         }
 
         OrderCreate orderCreate = shipper.getOrderCreate();
-        Assert.assertEquals("OC Version", orderCreate.getVersion(), actualOcVersion);
-
-        String[] expectedServices = orderCreate.getServicesAvailable().stream().map(val -> val.replace(" ", "").toUpperCase()).toArray(String[]::new);
-        Assert.assertThat("Services Available", listOfActualServices, Matchers.hasItems(expectedServices));
-
-        Assert.assertEquals("Tracking Type", orderCreate.getTrackingType(), actualTrackingType);
-        Assert.assertEquals("Prefix", orderCreate.getPrefix(), actualPrefix);
+        assertEquals("OC Version", orderCreate.getVersion(), actualOcVersion);
+        assertThat("Services Available", listOfActualServices, hasItems(orderCreate.getServicesAvailable().toArray(new String[]{})));
+        assertEquals("Tracking Type", orderCreate.getTrackingType(), actualTrackingType);
+        assertEquals("Prefix", orderCreate.getPrefix(), actualPrefix);
 
         String actualAllowCodService = getToggleButtonValue("ctrl.data.basic.allowCod");
         String actualAllowCpService = getToggleButtonValue("ctrl.data.basic.allowCp");
@@ -477,17 +515,17 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         DistributionPoint distributionPoint = shipper.getDistributionPoints();
 
-        Assert.assertEquals("Allow COD Service", convertBooleanToString(orderCreate.getAllowCodService(), "Yes", "No"), actualAllowCodService);
-        Assert.assertEquals("Allow CP Service", convertBooleanToString(orderCreate.getAllowCpService(), "Yes", "No"), actualAllowCpService);
-        Assert.assertEquals("Is Prepaid Account", convertBooleanToString(orderCreate.getIsPrePaid(), "Yes", "No"), actualIsPrePaid);
-        Assert.assertEquals("Allow Staged Orders", convertBooleanToString(orderCreate.getAllowStagedOrders(), "Yes", "No"), actualAllowStagedOrders);
-        Assert.assertEquals("Is Multi Parcel Shipper", convertBooleanToString(orderCreate.getIsMultiParcelShipper(), "Yes", "No"), actualIsMultiParcelShipper);
-        Assert.assertEquals("Disable Driver App Reschedule", convertBooleanToString(distributionPoint.getShipperLiteAllowRescheduleFirstAttempt(), "Yes", "No"), actualShipperLiteAllowRescheduleFirstAttempt);
+        assertEquals("Allow COD Service", convertBooleanToString(orderCreate.getAllowCodService(), "Yes", "No"), actualAllowCodService);
+        assertEquals("Allow CP Service", convertBooleanToString(orderCreate.getAllowCpService(), "Yes", "No"), actualAllowCpService);
+        assertEquals("Is Prepaid Account", convertBooleanToString(orderCreate.getIsPrePaid(), "Yes", "No"), actualIsPrePaid);
+        assertEquals("Allow Staged Orders", convertBooleanToString(orderCreate.getAllowStagedOrders(), "Yes", "No"), actualAllowStagedOrders);
+        assertEquals("Is Multi Parcel Shipper", convertBooleanToString(orderCreate.getIsMultiParcelShipper(), "Yes", "No"), actualIsMultiParcelShipper);
+        assertEquals("Disable Driver App Reschedule", convertBooleanToString(distributionPoint.getShipperLiteAllowRescheduleFirstAttempt(), "Yes", "No"), actualShipperLiteAllowRescheduleFirstAttempt);
 
         // Pricing
         Pricing pricing = shipper.getPricing();
         String actualPricingScript = getMdSelectValueById(LOCATOR_FIELD_PRICING_SCRIPT);
-        Assert.assertThat("Pricing Script", actualPricingScript, Matchers.endsWith(pricing.getScriptName()));
+        assertThat("Pricing Script", actualPricingScript, endsWith(pricing.getScriptName()));
 
         // Billing
         String actualBillingName = getInputValueById("Billing Name");
@@ -495,31 +533,30 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         String actualBillingAddress = getInputValueById("Billing Address");
         String actualBillingPostcode = getInputValueById("Billing Postcode");
 
-        Assert.assertEquals("Billing Name", shipper.getBillingName(), actualBillingName);
-        Assert.assertEquals("Billing Contact", shipper.getBillingContact(), actualBillingContact);
-        Assert.assertEquals("Billing Address", shipper.getBillingAddress(), actualBillingAddress);
-        Assert.assertEquals("Billing Postcode", shipper.getBillingPostcode(), actualBillingPostcode);
+        assertEquals("Billing Name", shipper.getBillingName(), actualBillingName);
+        assertEquals("Billing Contact", shipper.getBillingContact(), actualBillingContact);
+        assertEquals("Billing Address", shipper.getBillingAddress(), actualBillingAddress);
+        assertEquals("Billing Postcode", shipper.getBillingPostcode(), actualBillingPostcode);
 
         // Industry & Sales
         String actualIndustry = getMdSelectValue(LOCATOR_FIELD_INDUSTRY); //getNvAutocompleteValue("ctrl.view.industry.searchText");
         String actualSalesPerson = getMdSelectValueById(LOCATOR_FIELD_SALES_PERSON); //getNvAutocompleteValue("ctrl.view.salesPerson.searchText");
 
-        Assert.assertEquals("Industry", shipper.getIndustryName(), actualIndustry);
-        Assert.assertEquals("Sales Person", shipper.getSalesPerson(), actualSalesPerson);
+        assertEquals("Industry", shipper.getIndustryName(), actualIndustry);
+        assertEquals("Sales Person", shipper.getSalesPerson(), actualSalesPerson);
 
         verifyMoreSettingsTab(shipper);
-
         backToShipperList();
     }
 
     public void verifyMoreSettingsTab(Shipper shipper)
     {
         Pickup pickupSettings = shipper.getPickup();
-        if (pickupSettings != null)
+        if(pickupSettings!=null)
         {
             clickTabItem("More Settings");
 
-            if (CollectionUtils.isNotEmpty(pickupSettings.getReservationPickupAddresses()))
+            if(CollectionUtils.isNotEmpty(pickupSettings.getReservationPickupAddresses()))
             {
                 pickupSettings.getReservationPickupAddresses().forEach(this::verifyPickupAddress);
             }
@@ -530,19 +567,22 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     {
         boolean isEditForm = isElementExistFast("//div[@class='action-toolbar']//div[contains(text(),'Edit Shippers')]");
         searchTableCustom1("contact", address.getContact());
-        Assert.assertTrue("Pickup Addresses with contact [" + address.getContact() + "] exists", !isTableEmpty());
+        assertTrue("Pickup Addresses with contact [" + address.getContact() + "] exists", !isTableEmpty());
         String actualAddress = isEditForm ?
                 getTextOnTableWithMdVirtualRepeat(1, "address", "address in getTableData()") :
                 getTextOnTableWithNgRepeat(1, "address", "address in getTableData()");
 
-        Assert.assertEquals("Address", address.to1LineAddressWithPostcode(), actualAddress);
-        if (BooleanUtils.isTrue(address.getMilkRun()))
+        assertEquals("Address", address.to1LineAddressWithPostcode(), actualAddress);
+
+        if(BooleanUtils.isTrue(address.getMilkRun()))
         {
-            Assert.assertTrue("Milkrun action button is not displayed for address", isElementVisible("//nv-icon-text-button[@name='container.shippers.milkrun']"));
+            assertTrue("Milkrun action button is not displayed for address", isElementVisible("//nv-icon-text-button[@name='container.shippers.milkrun']"));
             verifyMilkrunSettings(address);
             scrollIntoView("//*[@name='container.shippers.more-reservation-add-pickup-address']", false);
-        } else {
-            Assert.assertTrue("Set As Milkrun action button is not displayed for address", isElementVisible("//nv-icon-text-button[@name='container.shippers.set-as-milkrun']"));
+        }
+        else
+        {
+            assertTrue("Set As Milkrun action button is not displayed for address", isElementVisible("//nv-icon-text-button[@name='container.shippers.set-as-milkrun']"));
         }
     }
 
@@ -553,7 +593,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         waitUntilVisibilityOfMdDialogByTitle("Edit Address");
         click("//span[.='Milkrun Reservations']");
         waitUntilVisibilityOfElementLocated("//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']");
-        Assert.assertEquals("Number of Milkrun Reservations", reservationsCount, getElementsCount("//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']"));
+        assertEquals("Number of Milkrun Reservations", reservationsCount, getElementsCount("//div[@ng-repeat='milkrunSetting in ctrl.data.milkrunSettings']"));
         clickNvIconButtonByName("Cancel");
         waitUntilInvisibilityOfMdDialogByTitle("Edit Address");
     }
@@ -576,7 +616,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         {
             long addressId = Long.parseLong(getInputValueById("Address ID"));
             address.setId(addressId);
-        } catch (NumberFormatException ex)
+        }
+        catch(NumberFormatException ex)
         {
             throw new RuntimeException("Failed to get address ID.");
         }
@@ -638,8 +679,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         String actualPrinterIp = getInputValueById("Printer IP");
         String actualShowShipperDetails = getToggleButtonValue("ctrl.data.basic.isPrinterAvailable");
 
-        Assert.assertEquals("Label Printer - Printer IP", labelPrinter.getPrinterIp(), actualPrinterIp);
-        Assert.assertEquals("Label Printer - Show Shipper Details", convertBooleanToString(labelPrinter.getShowShipperDetails(), "Yes", "No"), actualShowShipperDetails);
+        assertEquals("Label Printer - Printer IP", labelPrinter.getPrinterIp(), actualPrinterIp);
+        assertEquals("Label Printer - Show Shipper Details", convertBooleanToString(labelPrinter.getShowShipperDetails(), "Yes", "No"), actualShowShipperDetails);
 
         backToShipperList();
     }
@@ -688,17 +729,17 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         String actualIsReturnsOnShipperLite = getToggleButtonValue("ctrl.data.more.isReturnsOnShipperLite");
         String actualShipperLiteLogoUrl = getInputValueById("Shipper Lite Logo URL");
 
-        Assert.assertEquals("Distribution Point - Is Integrated Vault", convertBooleanToString(distributionPoint.getVaultIsIntegrated(), "Yes", "No"), actualIsIntegratedVault);
-        Assert.assertEquals("Distribution Point - Is Collect Customer NRIC Code", convertBooleanToString(distributionPoint.getVaultCollectCustomerNricCode(), "Yes", "No"), actualIsCollectCustomerNricCode);
+        assertEquals("Distribution Point - Is Integrated Vault", convertBooleanToString(distributionPoint.getVaultIsIntegrated(), "Yes", "No"), actualIsIntegratedVault);
+        assertEquals("Distribution Point - Is Collect Customer NRIC Code", convertBooleanToString(distributionPoint.getVaultCollectCustomerNricCode(), "Yes", "No"), actualIsCollectCustomerNricCode);
 
-        Assert.assertEquals("Distribution Point - Is Return On DPMS", convertBooleanToString(distributionPoint.getAllowReturnsOnDpms(), "Yes", "No"), actualIsReturnsOnDpms);
-        Assert.assertEquals("Distribution Point - DPMS Logo URL", distributionPoint.getDpmsLogoUrl(), actualDpmsLogoUrl);
+        assertEquals("Distribution Point - Is Return On DPMS", convertBooleanToString(distributionPoint.getAllowReturnsOnDpms(), "Yes", "No"), actualIsReturnsOnDpms);
+        assertEquals("Distribution Point - DPMS Logo URL", distributionPoint.getDpmsLogoUrl(), actualDpmsLogoUrl);
 
-        Assert.assertEquals("Distribution Point - Is Return On Vault", convertBooleanToString(distributionPoint.getAllowReturnsOnVault(), "Yes", "No"), actualIsReturnsOnVault);
-        Assert.assertEquals("Distribution Point - Vault Logo URL", distributionPoint.getVaultLogoUrl(), actualVaultLogoUrl);
+        assertEquals("Distribution Point - Is Return On Vault", convertBooleanToString(distributionPoint.getAllowReturnsOnVault(), "Yes", "No"), actualIsReturnsOnVault);
+        assertEquals("Distribution Point - Vault Logo URL", distributionPoint.getVaultLogoUrl(), actualVaultLogoUrl);
 
-        Assert.assertEquals("Distribution Point - Is Return On Shipper Lite", convertBooleanToString(distributionPoint.getAllowReturnsOnShipperLite(), "Yes", "No"), actualIsReturnsOnShipperLite);
-        Assert.assertEquals("Distribution Point - Shipper Lite Logo URL", distributionPoint.getShipperLiteLogoUrl(), actualShipperLiteLogoUrl);
+        assertEquals("Distribution Point - Is Return On Shipper Lite", convertBooleanToString(distributionPoint.getAllowReturnsOnShipperLite(), "Yes", "No"), actualIsReturnsOnShipperLite);
+        assertEquals("Distribution Point - Shipper Lite Logo URL", distributionPoint.getShipperLiteLogoUrl(), actualShipperLiteLogoUrl);
 
         backToShipperList();
     }
@@ -740,14 +781,14 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         String actualReturnsPostcode = getInputValueById("Returns Postcode");
         String actualLastReturnsNumber = getInputValueById("Last Returns Number");
 
-        Assert.assertEquals("Returns Name", returnSettings.getName(), actualReturnsName);
-        Assert.assertEquals("Returns Contact", returnSettings.getContact(), actualReturnsContact);
-        Assert.assertEquals("Returns Email", returnSettings.getEmail(), actualReturnsEmail);
-        Assert.assertEquals("Returns Address1 1", returnSettings.getAddress1(), actualReturnsAddress1);
-        Assert.assertEquals("Returns Address1 2", returnSettings.getAddress2(), actualReturnsAddress2);
-        Assert.assertEquals("Returns City", returnSettings.getCity(), actualReturnsCity);
-        Assert.assertEquals("Returns Postcode", returnSettings.getPostcode(), actualReturnsPostcode);
-        Assert.assertEquals("Last Returns Number", returnSettings.getLastReturnNumber(), actualLastReturnsNumber);
+        assertEquals("Returns Name", returnSettings.getName(), actualReturnsName);
+        assertEquals("Returns Contact", returnSettings.getContact(), actualReturnsContact);
+        assertEquals("Returns Email", returnSettings.getEmail(), actualReturnsEmail);
+        assertEquals("Returns Address1 1", returnSettings.getAddress1(), actualReturnsAddress1);
+        assertEquals("Returns Address1 2", returnSettings.getAddress2(), actualReturnsAddress2);
+        assertEquals("Returns City", returnSettings.getCity(), actualReturnsCity);
+        assertEquals("Returns Postcode", returnSettings.getPostcode(), actualReturnsPostcode);
+        assertEquals("Last Returns Number", String.valueOf(returnSettings.getLastReturnNumber()), actualLastReturnsNumber);
 
         backToShipperList();
     }
@@ -777,8 +818,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         String actualQoo10Username = getValue("//md-input-container[@model='ctrl.data.integrations.qooUsername']/input");
         String actualQoo10Password = getValue("//md-input-container[@model='ctrl.data.integrations.qooPassword']/input");
 
-        Assert.assertEquals("Qoo10 - Username", qoo10.getUsername(), actualQoo10Username);
-        Assert.assertEquals("Qoo10 - Password", qoo10.getPassword(), actualQoo10Password);
+        assertEquals("Qoo10 - Username", qoo10.getUsername(), actualQoo10Username);
+        assertEquals("Qoo10 - Password", qoo10.getPassword(), actualQoo10Password);
 
         backToShipperList();
     }
@@ -820,14 +861,14 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         String actualShippingCodes = getValue("//md-input-container[@model='ctrl.data.integrations.shopifyCode']/input");
         String actualShoppingCodeFilter = getToggleButtonValue("ctrl.data.integrations.shopifyCodeFilter");
 
-        Assert.assertEquals("Shopify - Max Delivery Days", String.valueOf(shopify.getMaxDeliveryDays()), actualMaxDeliveryDays);
-        Assert.assertEquals("Shopify - DD Offset", String.valueOf(shopify.getDdOffset()), actualDdOffset);
-        Assert.assertEquals("Shopify - DD Time-window ID", String.valueOf(shopify.getDdTimewindowId()), actualDDTimeWindowId);
-        Assert.assertEquals("Shopify - Base URL", shopify.getBaseUri(), actualBaseUrl);
-        Assert.assertEquals("Shopify - API Key", shopify.getApiKey(), actualApiKey);
-        Assert.assertEquals("Shopify - Password", shopify.getPassword(), actualPassword);
-        Assert.assertEquals("Shopify - Shipping Codes", shopify.getShippingCodes().get(0), actualShippingCodes);
-        Assert.assertEquals("Shopify - Shopping Code Filter", convertBooleanToString(shopify.getShippingCodeFilterEnabled(), "Yes", "No"), actualShoppingCodeFilter);
+        assertEquals("Shopify - Max Delivery Days", String.valueOf(shopify.getMaxDeliveryDays()), actualMaxDeliveryDays);
+        assertEquals("Shopify - DD Offset", String.valueOf(shopify.getDdOffset()), actualDdOffset);
+        assertEquals("Shopify - DD Time-window ID", String.valueOf(shopify.getDdTimewindowId()), actualDDTimeWindowId);
+        assertEquals("Shopify - Base URL", shopify.getBaseUri(), actualBaseUrl);
+        assertEquals("Shopify - API Key", shopify.getApiKey(), actualApiKey);
+        assertEquals("Shopify - Password", shopify.getPassword(), actualPassword);
+        assertEquals("Shopify - Shipping Codes", shopify.getShippingCodes().get(0), actualShippingCodes);
+        assertEquals("Shopify - Shopping Code Filter", convertBooleanToString(shopify.getShippingCodeFilterEnabled(), "Yes", "No"), actualShoppingCodeFilter);
 
         backToShipperList();
     }
@@ -859,9 +900,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         String actualMagentoPassword = getValue("//md-input-container[@model='ctrl.data.integrations.magentoPassword']/input");
         String actualMagentoApiUrl = getValue("//md-input-container[@model='ctrl.data.integrations.magentoApiUrl']/input");
 
-        Assert.assertEquals("Magento - Username", magento.getUsername(), actualMagentoUsername);
-        Assert.assertEquals("Magento - Password", magento.getPassword(), actualMagentoPassword);
-        Assert.assertEquals("Magento - SOAP API URL", magento.getSoapApiUrl(), actualMagentoApiUrl);
+        assertEquals("Magento - Username", magento.getUsername(), actualMagentoUsername);
+        assertEquals("Magento - Password", magento.getPassword(), actualMagentoPassword);
+        assertEquals("Magento - SOAP API URL", magento.getSoapApiUrl(), actualMagentoApiUrl);
 
         backToShipperList();
     }
@@ -870,7 +911,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     {
         clickNvIconTextButtonByName("container.shippers.back-to-shipper-list");
 
-        if (isElementExistFast("//md-dialog//button[@aria-label='Leave']"))
+        if(isElementExistFast("//md-dialog//button[@aria-label='Leave']"))
         {
             clickButtonOnMdDialogByAriaLabel("Leave");
         }
@@ -892,9 +933,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
             String xpath = xpath1 + " | " + xpath2;
             WebElement we = findElementByXpath(xpath);
             moveAndClick(we);
-        } catch (NoSuchElementException ex)
+        }
+        catch(NoSuchElementException ex)
         {
-            throw new RuntimeException("Cannot find action button on table.", ex);
+            throw new NvTestRuntimeException("Cannot find action button on table.", ex);
         }
     }
 
@@ -907,7 +949,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
             String currentUrl = getCurrentUrl();
             NvLogger.infof("AllShippersCreateEditPage.waitUntilPageLoaded: Current URL = [%s] - Expected URL contains = [%s]", currentUrl, expectedUrlEndsWith);
             return currentUrl.endsWith(expectedUrlEndsWith);
-        }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS, String.format("Current URL does not contain '%s'.", expectedUrlEndsWith));
+        }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS, f("Current URL does not contain '%s'.", expectedUrlEndsWith));
 
         waitUntilInvisibilityOfElementLocated("//tab-content[@aria-hidden='false']//md-content[@ng-if='ctrl.state.loading === true']//md-progress-circular");
     }

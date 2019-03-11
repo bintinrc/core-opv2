@@ -613,6 +613,11 @@ public class OperatorV2SimplePage extends SimplePage
         }
     }
 
+    public void clickToggleButtonByLabel(String label, String buttonAriaLabel)
+    {
+        clickf("//label[text()='%s']/following-sibling::div//button[@aria-label='%s']", label, buttonAriaLabel);
+    }
+
     public void clickToggleButton(String divModel, String buttonAriaLabel)
     {
         clickf("//div[@model='%s']//button[@aria-label='%s']", divModel, buttonAriaLabel);

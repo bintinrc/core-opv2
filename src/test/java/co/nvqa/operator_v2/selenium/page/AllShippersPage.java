@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Shipper;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -21,7 +20,7 @@ public class AllShippersPage extends OperatorV2SimplePage
     public static final String COLUMN_CLASS_DATA_LIAISON_EMAIL = "liaison_email";
     public static final String COLUMN_CLASS_DATA_CONTACT = "contact";
     public static final String COLUMN_CLASS_DATA_SALES_PERSON = "sales_person";
-    public static final String COLUMN_CLASS_DATA_PRICING_TEMPLATE_NAME = "_template_name";
+    //public static final String COLUMN_CLASS_DATA_PRICING_TEMPLATE_NAME = "_template_name";
     public static final String COLUMN_CLASS_DATA_STATUS = "_status";
 
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
@@ -63,7 +62,7 @@ public class AllShippersPage extends OperatorV2SimplePage
     public void loginToShipperDashboard(Shipper shipper)
     {
         retryIfRuntimeExceptionOccurred(() -> searchTableByName(shipper.getName()));
-        Assert.assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
+        assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
         clickActionButtonOnTable(1, ACTION_BUTTON_LOGIN);
         waitUntilNewWindowOrTabOpened();
         switchToOtherWindowAndWaitWhileLoading("/orders/management/");
@@ -71,7 +70,7 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void setPickupAddressesAsMilkrun(Shipper shipper){
         searchTableByName(shipper.getName());
-        Assert.assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
+        assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
         Long actualLegacyId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_DATA_ID));
         shipper.setLegacyId(actualLegacyId);
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
@@ -80,7 +79,7 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void removeMilkrunReservarion(Shipper shipper, int addressIndex, int milkrunReservationIndex){
         searchTableByName(shipper.getName());
-        Assert.assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
+        assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
         Long actualLegacyId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_DATA_ID));
         shipper.setLegacyId(actualLegacyId);
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
@@ -89,7 +88,7 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void removeAllMilkrunReservarions(Shipper shipper, int addressIndex){
         searchTableByName(shipper.getName());
-        Assert.assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
+        assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
         Long actualLegacyId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_DATA_ID));
         shipper.setLegacyId(actualLegacyId);
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
@@ -99,7 +98,7 @@ public class AllShippersPage extends OperatorV2SimplePage
     public void verifyShipperInfoIsCorrect(String shipperNameKeyword, Shipper shipper)
     {
         searchTableByName(shipperNameKeyword);
-        Assert.assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
+        assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
 
         Long actualLegacyId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_DATA_ID));
         String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
@@ -122,13 +121,13 @@ public class AllShippersPage extends OperatorV2SimplePage
 
         shipper.setLegacyId(actualLegacyId);
 
-        Assert.assertEquals("Name", shipper.getName(), actualName);
-        Assert.assertEquals("Email", shipper.getEmail(), actualEmail);
-        Assert.assertEquals("Industry", shipper.getIndustryName(), actualIndustry);
-        Assert.assertEquals("Liaison Email", shipper.getLiaisonEmail(), actualLiaisonEmail);
-        Assert.assertEquals("Contact", shipper.getContact(), actualContact);
-        Assert.assertEquals("Sales Person", shipper.getSalesPerson().split("-")[0], actualSalesPerson);
-        Assert.assertEquals("Expected Status = Inactive", convertBooleanToString(shipper.getActive(), "Active", "Inactive"), actualStatus);
+        assertEquals("Name", shipper.getName(), actualName);
+        assertEquals("Email", shipper.getEmail(), actualEmail);
+        assertEquals("Industry", shipper.getIndustryName(), actualIndustry);
+        assertEquals("Liaison Email", shipper.getLiaisonEmail(), actualLiaisonEmail);
+        assertEquals("Contact", shipper.getContact(), actualContact);
+        assertEquals("Sales Person", shipper.getSalesPerson().split("-")[0], actualSalesPerson);
+        assertEquals("Expected Status = Inactive", convertBooleanToString(shipper.getActive(), "Active", "Inactive"), actualStatus);
 
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
         allShippersCreateEditPage.verifyNewShipperIsCreatedSuccessfully(shipper);
@@ -148,7 +147,7 @@ public class AllShippersPage extends OperatorV2SimplePage
     public void verifyShipperIsDeletedSuccessfully(Shipper shipper)
     {
         searchTableByName(shipper.getShortName());
-        Assert.assertTrue("Table should be empty.", isTableEmpty());
+        assertTrue("Table should be empty.", isTableEmpty());
     }
 
     public void enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(Shipper shipper, Address address, Reservation reservation)
@@ -232,7 +231,7 @@ public class AllShippersPage extends OperatorV2SimplePage
     public void searchTableByNameAndGoToEditPage(Shipper shipper)
     {
         searchTableByName(shipper.getName());
-        Assert.assertFalse("Table is empty. Cannot enable Auto-Reservation for shipper with Legacy ID = " + shipper.getLegacyId(), isTableEmpty());
+        assertFalse("Table is empty. Cannot enable Auto-Reservation for shipper with Legacy ID = " + shipper.getLegacyId(), isTableEmpty());
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
     }
 
