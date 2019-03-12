@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @AllShippersExt @Saas @CWF
+@OperatorV2 @OperatorV2Part2 @AllShippersExt @Saas
 Feature: All Shippers Ext
 
   @LaunchBrowser @EnableClearCache @ShouldAlwaysRun
@@ -70,7 +70,7 @@ Feature: All Shippers Ext
       | Note       | hiptest-uid                              | isShipperActive | shipperType | ocVersion | services | trackingType | isAllowCod | isAllowCashPickup | isPrepaid | isAllowStagedOrders | isMultiParcelShipper | isDisableDriverAppReschedule |
       | Shipper V4 | uid:447de852-5093-4367-bbf2-51c135e0b9d9 | true            | Normal      | v4        | NEXTDAY  | Fixed        | false      | true              | true      | false               | false                | false                        |
 
-#  @CloseNewWindows @RT
+#  @CloseNewWindows
 #  Scenario Outline: Operator Add Address as Milkrun (<hiptest-uid>)
 #    Given Operator go to menu Shipper Support -> Blocked Dates
 #    Given Operator go to menu Shipper -> All Shippers
