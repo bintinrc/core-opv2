@@ -91,7 +91,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
         if(StringUtils.isNotBlank(value))
         {
-            assertEquals("Type", Short.parseShort(value), theLastOrderEvent.getType());
+            assertEquals("Type", Integer.parseInt(value), theLastOrderEvent.getType());
         }
     }
 
