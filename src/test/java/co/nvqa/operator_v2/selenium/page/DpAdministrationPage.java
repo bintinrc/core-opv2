@@ -6,8 +6,6 @@ import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
@@ -149,30 +147,12 @@ public class DpAdministrationPage extends OperatorV2SimplePage
     {
         dpPartnersTable.filterByColumn( "name", expectedDpPartnerParams.getName());
         DpPartner actualDpPartner = dpPartnersTable.readEntity(1);
-        if (expectedDpPartnerParams.getId() != null)
-        {
-            Assert.assertThat("DP Partner ID", actualDpPartner.getDpmsPartnerId(), Matchers.equalTo(expectedDpPartnerParams.getDpmsPartnerId()));
-        }
-        if (expectedDpPartnerParams.getName() != null)
-        {
-            Assert.assertThat("DP Partner Name", actualDpPartner.getName(), Matchers.equalTo(expectedDpPartnerParams.getName()));
-        }
-        if (expectedDpPartnerParams.getPocName() != null)
-        {
-            Assert.assertThat("DP Partner POC Name", actualDpPartner.getPocName(), Matchers.equalTo(expectedDpPartnerParams.getPocName()));
-        }
-        if (expectedDpPartnerParams.getPocTel() != null)
-        {
-            Assert.assertThat("DP Partner POC No.", actualDpPartner.getPocTel(), Matchers.equalTo(expectedDpPartnerParams.getPocTel()));
-        }
-        if (expectedDpPartnerParams.getPocEmail() != null)
-        {
-            Assert.assertThat("DP Partner POC Email", actualDpPartner.getPocEmail(), Matchers.equalTo(expectedDpPartnerParams.getPocEmail()));
-        }
-        if (expectedDpPartnerParams.getRestrictions() != null)
-        {
-            Assert.assertThat("DP Partner Restrictions", actualDpPartner.getRestrictions(), Matchers.equalTo(expectedDpPartnerParams.getRestrictions()));
-        }
+        assertThatIfExpectedValueNotNull("DP Partner ID", expectedDpPartnerParams.getDpmsPartnerId(), actualDpPartner.getDpmsPartnerId(), equalTo(expectedDpPartnerParams.getDpmsPartnerId()));
+        assertThatIfExpectedValueNotNull("DP Partner Name", expectedDpPartnerParams.getName(), actualDpPartner.getName(), equalTo(expectedDpPartnerParams.getName()));
+        assertThatIfExpectedValueNotNull("DP Partner POC Name", expectedDpPartnerParams.getPocName(), actualDpPartner.getPocName(), equalTo(expectedDpPartnerParams.getPocName()));
+        assertThatIfExpectedValueNotNull("DP Partner POC No.", expectedDpPartnerParams.getPocTel(), actualDpPartner.getPocTel(), equalTo(expectedDpPartnerParams.getPocTel()));
+        assertThatIfExpectedValueNotNull("DP Partner POC Email", expectedDpPartnerParams.getPocEmail(), actualDpPartner.getPocEmail(), equalTo(expectedDpPartnerParams.getPocEmail()));
+        assertThatIfExpectedValueNotNull("DP Partner POC Restrictions", expectedDpPartnerParams.getRestrictions(), actualDpPartner.getRestrictions(), equalTo(expectedDpPartnerParams.getRestrictions()));
         expectedDpPartnerParams.setId(actualDpPartner.getId());
     }
 
@@ -180,34 +160,13 @@ public class DpAdministrationPage extends OperatorV2SimplePage
     {
         dpTable.filterByColumn( "name", expectedDpParams.getName());
         Dp actualDpParams = dpTable.readEntity(1);
-        if (expectedDpParams.getId() != null)
-        {
-            Assert.assertThat("DP ID", actualDpParams.getDpmsId(), Matchers.equalTo(expectedDpParams.getDpmsId()));
-        }
-        if (expectedDpParams.getName() != null)
-        {
-            Assert.assertThat("DP Name", actualDpParams.getName(), Matchers.equalTo(expectedDpParams.getName()));
-        }
-        if (expectedDpParams.getShortName() != null)
-        {
-            Assert.assertThat("DP Short Name", actualDpParams.getShortName(), Matchers.equalTo(expectedDpParams.getShortName()));
-        }
-        if (expectedDpParams.getHub() != null)
-        {
-            Assert.assertThat("DP Hub", actualDpParams.getHub(), Matchers.equalTo(expectedDpParams.getHub()));
-        }
-        if (expectedDpParams.getAddress() != null)
-        {
-            Assert.assertThat("DP Address", actualDpParams.getAddress(), Matchers.equalTo(expectedDpParams.getAddress()));
-        }
-        if (expectedDpParams.getDirections() != null)
-        {
-            Assert.assertThat("DP Directions", actualDpParams.getDirections(), Matchers.equalTo(expectedDpParams.getDirections()));
-        }
-        if (expectedDpParams.getActivity() != null)
-        {
-            Assert.assertThat("DP Activity", actualDpParams.getActivity(), Matchers.equalTo(expectedDpParams.getActivity()));
-        }
+        assertThatIfExpectedValueNotNull("DP ID", expectedDpParams.getId(), actualDpParams.getId(), equalTo(expectedDpParams.getId()));
+        assertThatIfExpectedValueNotNull("DP Name", expectedDpParams.getName(), actualDpParams.getName(), equalTo(expectedDpParams.getName()));
+        assertThatIfExpectedValueNotNull("DP Short Name", expectedDpParams.getShortName(), actualDpParams.getShortName(), equalTo(expectedDpParams.getShortName()));
+        assertThatIfExpectedValueNotNull("DP Hub", expectedDpParams.getHub(), actualDpParams.getHub(), equalTo(expectedDpParams.getHub()));
+        assertThatIfExpectedValueNotNull("DP Address", expectedDpParams.getAddress(), actualDpParams.getAddress(), equalTo(expectedDpParams.getAddress()));
+        assertThatIfExpectedValueNotNull("DP Directions", expectedDpParams.getDirections(), actualDpParams.getDirections(), equalTo(expectedDpParams.getDirections()));
+        assertThatIfExpectedValueNotNull("DP Activity", expectedDpParams.getActivity(), actualDpParams.getDirections(), equalTo(expectedDpParams.getActivity()));
         expectedDpParams.setId(actualDpParams.getId());
     }
 
@@ -215,26 +174,12 @@ public class DpAdministrationPage extends OperatorV2SimplePage
     {
         dpUsersTable.filterByColumn( DpUsersTable.COLUMN_USERNAME, expectedDpUserParams.getClientId());
         DpUser actualDpUserParams = dpUsersTable.readEntity(1);
-        if (expectedDpUserParams.getClientId() != null)
-        {
-            Assert.assertThat("DP User Username", actualDpUserParams.getClientId(), Matchers.equalTo(expectedDpUserParams.getClientId()));
-        }
-        if (expectedDpUserParams.getFirstName() != null)
-        {
-            Assert.assertThat("DP User First Name", actualDpUserParams.getFirstName(), Matchers.equalTo(expectedDpUserParams.getFirstName()));
-        }
-        if (expectedDpUserParams.getLastName() != null)
-        {
-            Assert.assertThat("DP User Last Name", actualDpUserParams.getLastName(), Matchers.equalTo(expectedDpUserParams.getLastName()));
-        }
-        if (expectedDpUserParams.getEmailId() != null)
-        {
-            Assert.assertThat("DP User Email", actualDpUserParams.getEmailId(), Matchers.equalTo(expectedDpUserParams.getEmailId()));
-        }
-        if (expectedDpUserParams.getContactNo() != null)
-        {
-            Assert.assertThat("DP User Contact No", actualDpUserParams.getContactNo(), Matchers.equalTo(expectedDpUserParams.getContactNo()));
-        }
+
+        assertThatIfExpectedValueNotNull("DP User Username", expectedDpUserParams.getClientId(), actualDpUserParams.getClientId(), equalTo(expectedDpUserParams.getClientId()));
+        assertThatIfExpectedValueNotNull("DP User First Name", expectedDpUserParams.getFirstName(), actualDpUserParams.getFirstName(), equalTo(expectedDpUserParams.getFirstName()));
+        assertThatIfExpectedValueNotNull("DP User Last Name", expectedDpUserParams.getLastName(), actualDpUserParams.getLastName(), equalTo(expectedDpUserParams.getLastName()));
+        assertThatIfExpectedValueNotNull("DP User Email", expectedDpUserParams.getEmailId(), actualDpUserParams.getEmailId(), equalTo(expectedDpUserParams.getEmailId()));
+        assertThatIfExpectedValueNotNull("DP User Contact No", expectedDpUserParams.getContactNo(), actualDpUserParams.getContactNo(), equalTo(expectedDpUserParams.getContactNo()));
     }
 
     public void verifyDownloadedFileContent(List<DpPartner> expectedDpPartners)
@@ -244,7 +189,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         String pathName = StandardTestConstants.TEMP_DIR + fileName;
         List<DpPartner> actualDpPartners = DpPartner.fromCsvFile(DpPartner.class, pathName, true);
 
-        Assert.assertThat("Unexpected number of lines in CSV file", actualDpPartners.size(), greaterThanOrEqualTo(expectedDpPartners.size()));
+        assertThat("Unexpected number of lines in CSV file", actualDpPartners.size(), greaterThanOrEqualTo(expectedDpPartners.size()));
 
         Map<Long, DpPartner> actualMap = actualDpPartners.stream().collect(Collectors.toMap(
                 DpPartner::getId,
@@ -256,12 +201,12 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         {
             DpPartner actualDpPartner = actualMap.get(expectedDpPartner.getDpmsPartnerId());
 
-            Assert.assertThat("DP Partner with Id " + expectedDpPartner.getId(), actualDpPartner, notNullValue());
-            Assert.assertEquals("DP Partner Name", expectedDpPartner.getName(), actualDpPartner.getName());
-            Assert.assertEquals("POC Name", expectedDpPartner.getPocName(), actualDpPartner.getPocName());
-            Assert.assertEquals("POC No.", expectedDpPartner.getPocTel(), actualDpPartner.getPocTel());
-            Assert.assertEquals("POC Email", Optional.ofNullable(expectedDpPartner.getPocEmail()).orElse("-"), actualDpPartner.getPocEmail());
-            Assert.assertEquals("Restrictions", Optional.ofNullable(expectedDpPartner.getRestrictions()).orElse("-"), actualDpPartner.getRestrictions());
+            assertThat("DP Partner with Id " + expectedDpPartner.getId(), actualDpPartner, notNullValue());
+            assertEquals("DP Partner Name", expectedDpPartner.getName(), actualDpPartner.getName());
+            assertEquals("POC Name", expectedDpPartner.getPocName(), actualDpPartner.getPocName());
+            assertEquals("POC No.", expectedDpPartner.getPocTel(), actualDpPartner.getPocTel());
+            assertEquals("POC Email", Optional.ofNullable(expectedDpPartner.getPocEmail()).orElse("-"), actualDpPartner.getPocEmail());
+            assertEquals("Restrictions", Optional.ofNullable(expectedDpPartner.getRestrictions()).orElse("-"), actualDpPartner.getRestrictions());
         }
     }
 
@@ -272,7 +217,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         String pathName = StandardTestConstants.TEMP_DIR + fileName;
         List<Dp> actualDpParams = Dp.fromCsvFile(Dp.class, pathName, true);
 
-        Assert.assertThat("Unexpected number of lines in CSV file", actualDpParams.size(), greaterThanOrEqualTo(expectedDpParams.size()));
+        assertThat("Unexpected number of lines in CSV file", actualDpParams.size(), greaterThanOrEqualTo(expectedDpParams.size()));
 
         Map<Long, Dp> actualMap = actualDpParams.stream().collect(Collectors.toMap(
                 Dp::getId,
@@ -284,13 +229,13 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         {
             Dp actualDp = actualMap.get(expectedDp.getDpmsId());
 
-            Assert.assertThat("DP with Id " + expectedDp.getId(), actualDp, notNullValue());
-            Assert.assertEquals("DP Name", expectedDp.getName(), actualDp.getName());
-            Assert.assertEquals("DP Shortname", expectedDp.getShortName(), actualDp.getShortName());
-            Assert.assertEquals("DP Hub", Optional.ofNullable(expectedDp.getHub()).orElse(""), actualDp.getHub());
-            Assert.assertEquals("DP Address", expectedDp.getAddress(), actualDp.getAddress());
-            Assert.assertEquals("DP Directions", expectedDp.getDirections(), actualDp.getDirections());
-            Assert.assertEquals("DP Activity", expectedDp.getActivity(), actualDp.getActivity());
+            assertThat("DP with Id " + expectedDp.getId(), actualDp, notNullValue());
+            assertEquals("DP Name", expectedDp.getName(), actualDp.getName());
+            assertEquals("DP Shortname", expectedDp.getShortName(), actualDp.getShortName());
+            assertEquals("DP Hub", Optional.ofNullable(expectedDp.getHub()).orElse(""), actualDp.getHub());
+            assertEquals("DP Address", expectedDp.getAddress(), actualDp.getAddress());
+            assertEquals("DP Directions", expectedDp.getDirections(), actualDp.getDirections());
+            assertEquals("DP Activity", expectedDp.getActivity(), actualDp.getActivity());
         }
     }
 
@@ -301,22 +246,22 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         String pathName = StandardTestConstants.TEMP_DIR + fileName;
         List<DpUser> actualDpUsersParams = DpUser.fromCsvFile(DpUser.class, pathName, true);
 
-        Assert.assertThat("Unexpected number of lines in CSV file", actualDpUsersParams.size(), greaterThanOrEqualTo(expectedDpUsersParams.size()));
+        assertThat("Unexpected number of lines in CSV file", actualDpUsersParams.size(), greaterThanOrEqualTo(expectedDpUsersParams.size()));
 
         Map<String, DpUser> actualMap = actualDpUsersParams.stream().collect(Collectors.toMap(
                 DpUser::getClientId,
                 params -> params
         ));
 
-        for (DpUser expectedDpUserParams : expectedDpUsersParams)
+        for(DpUser expectedDpUserParams : expectedDpUsersParams)
         {
             DpUser actualDpUser = actualMap.get(expectedDpUserParams.getClientId());
 
-            Assert.assertThat("DP with Username " + expectedDpUserParams.getClientId(), actualDpUser, notNullValue());
-            Assert.assertEquals("DP User First Name", expectedDpUserParams.getFirstName(), actualDpUser.getFirstName());
-            Assert.assertEquals("DP User Last Name", expectedDpUserParams.getLastName(), actualDpUser.getLastName());
-            Assert.assertEquals("DP User Email", expectedDpUserParams.getEmailId(), actualDpUser.getEmailId());
-            Assert.assertEquals("DP User Contact No.", expectedDpUserParams.getContactNo(), actualDpUser.getContactNo());
+            assertThat("DP with Username " + expectedDpUserParams.getClientId(), actualDpUser, notNullValue());
+            assertEquals("DP User First Name", expectedDpUserParams.getFirstName(), actualDpUser.getFirstName());
+            assertEquals("DP User Last Name", expectedDpUserParams.getLastName(), actualDpUser.getLastName());
+            assertEquals("DP User Email", expectedDpUserParams.getEmailId(), actualDpUser.getEmailId());
+            assertEquals("DP User Contact No.", expectedDpUserParams.getContactNo(), actualDpUser.getContactNo());
         }
     }
 
@@ -466,7 +411,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         {
             super(webDriver);
             setColumnLocators(ImmutableMap.<String, String>builder()
-                    .put("dpmsId", "dpms_id")
+                    .put("id", "dpms_id")
                     .put("name", "name")
                     .put("shortName", "short_name")
                     .put("hub", "hub")

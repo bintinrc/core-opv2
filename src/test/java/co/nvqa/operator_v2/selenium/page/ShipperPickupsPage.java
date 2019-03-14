@@ -4,8 +4,6 @@ import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.operator_v2.model.ReservationInfo;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
@@ -19,7 +17,6 @@ import java.util.regex.Pattern;
 
 import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.ACTION_BUTTON_DETAILS;
 import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.ACTION_BUTTON_ROUTE_EDIT;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  *
@@ -104,9 +101,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         // Remove multiple [SPACE] chars from String value.
         actualPickupAddress = StringUtils.normalizeSpace(actualPickupAddress).trim();
         pickupAddress = StringUtils.normalizeSpace(pickupAddress).trim();
-        Assert.assertThat("Pickup Address", actualPickupAddress, Matchers.startsWith(pickupAddress));
+        assertThat("Pickup Address", actualPickupAddress, startsWith(pickupAddress));
 
-        assertThatIfExpectedValueNotBlank("Shipper Name", shipperName, reservationsTable.getShipperNameAndContact(1), Matchers.startsWith(shipperName));
+        assertThatIfExpectedValueNotBlank("Shipper Name", shipperName, reservationsTable.getShipperNameAndContact(1), startsWith(shipperName));
         assertEqualsIfExpectedValueNotBlank("Route ID", routeId, reservationsTable.getRouteId(1));
         assertEqualsIfExpectedValueNotBlank("Driver Name", driverName, reservationsTable.getDriverName(1));
         assertEqualsIfExpectedValueNotBlank("Priority Level", priorityLevel, reservationsTable.getPriorityLevel(1));
@@ -148,25 +145,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         assertEqualsIfExpectedValueNotNull("Comments", expectedReservationInfo.getComments(), actualReservationInfo.getComments());
     }
 
-    private void assertEqualsIfExpectedValueNotNull(String message, Object expected, Object actual)
-    {
-        if(expected!=null)
-        {
-            Assert.assertEquals(message, expected, actual);
-        }
-    }
-
-    private void assertEqualsIfExpectedValueNotBlank(String message, String expected, String actual)
-    {
-        if(isNotBlank(expected))
-        {
-            Assert.assertEquals(message, expected, actual);
-        }
-    }
-
     private void assertDateIsEqualIfExpectedValueNotNullOrBlank(String message, String expected, String actual)
     {
-        if(isNotBlank(expected))
+        if(StringUtils.isNotBlank(expected))
         {
             if(actual==null)
             {
@@ -175,16 +156,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
             actual = actual.split(" ")[0];
             expected = expected.split(" ")[0];
-            Assert.assertEquals(message, expected, actual);
-        }
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private void assertThatIfExpectedValueNotBlank(String message, String expected, String actual, org.hamcrest.Matcher<String> matcher)
-    {
-        if(isNotBlank(expected))
-        {
-            Assert.assertThat(message, actual, matcher);
+            assertEquals(message, expected, actual);
         }
     }
 
@@ -202,10 +174,10 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         reservationsTable.clickActionButton(1, ACTION_BUTTON_DETAILS);
         reservationDetailsDialog.waitUntilDialogDisplayed();
 
-        Assert.assertEquals("Shipper Name", shipperName, reservationDetailsDialog.getShipperName());
-        Assert.assertEquals("Shipper ID", shipperId, reservationDetailsDialog.getShipperId());
-        Assert.assertEquals("Reservation ID", reservationId, reservationDetailsDialog.getReservationId());
-        Assert.assertThat("Pickup Address", reservationDetailsDialog.getPickupAddress(), Matchers.startsWith(pickupAddress));
+        assertEquals("Shipper Name", shipperName, reservationDetailsDialog.getShipperName());
+        assertEquals("Shipper ID", shipperId, reservationDetailsDialog.getShipperId());
+        assertEquals("Reservation ID", reservationId, reservationDetailsDialog.getReservationId());
+        assertThat("Pickup Address", reservationDetailsDialog.getPickupAddress(), startsWith(pickupAddress));
     }
 
     @SuppressWarnings("unused")
@@ -307,14 +279,14 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
     public void verifySelectedCount(int count)
     {
-        Assert.assertEquals(getText(SELECTED_COUNT_LABEL_LOCATOR), String.format("Selected: %d", count));
+        assertEquals(getText(SELECTED_COUNT_LABEL_LOCATOR), String.format("Selected: %d", count));
     }
 
     public ReservationInfo readReservationInfo(Address address)
     {
         ReservationInfo reservationInfo = new ReservationInfo();
         reservationsTable.searchByPickupAddress(address);
-        Assert.assertFalse("Reservation was not found", isTableEmpty());
+        assertFalse("Reservation was not found", isTableEmpty());
         reservationInfo.setShipperName(reservationsTable.getShipperNameAndContact(1));
         reservationInfo.setPickupAddress(reservationsTable.getPickupAddress(1));
         reservationInfo.setRouteId(reservationsTable.getRouteId(1));
@@ -424,7 +396,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         {
             waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
             pause2s();
-            Assert.assertNotNull("Route ID should not be null.", routeId);
+            assertNotNull("Route ID should not be null.", routeId);
 
             selectValueFromNvAutocomplete(FIELD_NEW_ROUTE_LOCATOR, String.valueOf(routeId));
 
@@ -537,7 +509,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         public Route validateSuggestedRoute(int index, List<Route> validRoutes)
         {
             String suggestedRoute = readSuggestedRoute(index);
-            Assert.assertThat("Suggested Route", suggestedRoute, Matchers.not(Matchers.isEmptyOrNullString()));
+            assertThat("Suggested Route", suggestedRoute, not(isEmptyOrNullString()));
             Pattern p = Pattern.compile("(\\d*)(\\s-\\s)(.*)");
             Matcher m = p.matcher(suggestedRoute);
             AtomicLong routeId = new AtomicLong(0);
@@ -548,11 +520,11 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
             }
 
             String reason = String.format("[%d] Suggested Route ID", index);
-            Assert.assertThat(reason, routeId.get(), Matchers.greaterThan(0L));
+            assertThat(reason, routeId.get(), greaterThan(0L));
             Optional<Route> optRoute = validRoutes.stream().filter(route -> route.getId() == routeId.get()).findFirst();
             reason = String.format("[%d] Suggested route is not valid", index);
-            Assert.assertTrue(reason, optRoute.isPresent());
-            return optRoute.get();
+            assertTrue(reason, optRoute.isPresent());
+            return optRoute.orElse(null);
         }
 
         public void submitForm()

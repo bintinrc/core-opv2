@@ -29,8 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static co.nvqa.operator_v2.cucumber.glue.ReservationPresetManagementSteps.KEY_CREATED_RESERVATION_GROUP;
-
 /**
  * @author Daniel Joi Partogi Hutapea
  */
@@ -54,7 +52,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         try
         {
             getRouteClient().deleteTag(tagName);
-        } catch (RuntimeException ex)
+        }
+        catch (RuntimeException ex)
         {
             NvLogger.warnf("An error occurred when trying to delete tag with name = '%s'. Error: %s", tagName, ex.getMessage());
         }
@@ -196,7 +195,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     @And("^API Operator get created Reservation Group params$")
     public void apiOperatorGetCreatedReservationGroupParams()
     {
-        ReservationGroup reservationGroup = get(KEY_CREATED_RESERVATION_GROUP);
+        ReservationGroup reservationGroup = get(ReservationPresetManagementSteps.KEY_CREATED_RESERVATION_GROUP);
         List<MilkrunGroup> milkrunGroups = getRouteClient().getMilkrunGroups(new Date());
         MilkrunGroup group = milkrunGroups.stream()
                 .filter(milkrunGroup -> StringUtils.equals(milkrunGroup.getName(), reservationGroup.getName()))

@@ -15,7 +15,6 @@ import java.util.Map;
 public class ReservationPresetManagementSteps extends AbstractSteps
 {
     private ReservationPresetManagementPage reservationPresetManagementPage;
-    public static final String KEY_CREATED_RESERVATION_GROUP = "KEY_CREATED_RESERVATION_GROUP";
 
     public ReservationPresetManagementSteps()
     {

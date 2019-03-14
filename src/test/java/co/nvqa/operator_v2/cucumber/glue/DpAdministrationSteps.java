@@ -31,7 +31,7 @@ public class DpAdministrationSteps extends AbstractSteps
     }
 
     @Given("^Operator add new DP Partner on DP Administration page with the following attributes:$")
-    public void operatorAddNewDPPartnerOnDPAdministrationPageWithTheFollowingAttributes(Map<String, String> data)
+    public void operatorAddNewDpPartnerOnDPAdministrationPageWithTheFollowingAttributes(Map<String, String> data)
     {
         DpPartner dpPartner = new DpPartner(data);
         dpAdminPage.addPartner(dpPartner);
@@ -39,14 +39,14 @@ public class DpAdministrationSteps extends AbstractSteps
     }
 
     @Then("^Operator verify new DP Partner params$")
-    public void operatorVerifyNewDPPartnerParams()
+    public void operatorVerifyNewDpPartnerParams()
     {
         DpPartner dpPartner = get(KEY_DP_PARTNER);
         dpAdminPage.verifyDpPartnerParams(dpPartner);
     }
 
     @When("^Operator get all DP Partners params on DP Administration page$")
-    public void operatorGetAllDPPartnersParamsOnDriverTypeManagementPage()
+    public void operatorGetAllDpPartnersParamsOnDriverTypeManagementPage()
     {
         List<DpPartner> dpPartnersParams = dpAdminPage.dpPartnersTable().readAllEntities();
         put(KEY_LIST_OF_DP_PARTNERS, dpPartnersParams);
@@ -66,14 +66,14 @@ public class DpAdministrationSteps extends AbstractSteps
     }
 
     @When("^Operator get first (\\d+) DP Partners params on DP Administration page$")
-    public void operatorGetFirstDPPartnersParamsOnDPAdministrationPage(int count)
+    public void operatorGetFirstDpPartnersParamsOnDPAdministrationPage(int count)
     {
         List<DpPartner> dpPartnersParams = dpAdminPage.dpPartnersTable().readFirstEntities(count);
         put(KEY_LIST_OF_DP_PARTNERS, dpPartnersParams);
     }
 
     @When("^Operator update created DP Partner on DP Administration page with the following attributes:$")
-    public void operatorUpdateCreatedDPPartnerOnDPAdministrationPageWithTheFollowingAttributes(Map<String, String> data)
+    public void operatorUpdateCreatedDpPartnerOnDPAdministrationPageWithTheFollowingAttributes(Map<String, String> data)
     {
         DpPartner dpPartner = get(KEY_DP_PARTNER);
         String partnerName = dpPartner.getName();
@@ -82,7 +82,7 @@ public class DpAdministrationSteps extends AbstractSteps
     }
 
     @When("^Operator add new DP for the DP Partner on DP Administration page with the following attributes:$")
-    public void operatorAddNewDPForTheDPPartnerOnDPAdministrationPageWithTheFollowingAttributes(Map<String, String> data)
+    public void operatorAddNewDPForTheDpPartnerOnDPAdministrationPageWithTheFollowingAttributes(Map<String, String> data)
     {
         DpPartner dpPartner = get(KEY_DP_PARTNER);
         Dp dp = new Dp(data);
@@ -91,14 +91,14 @@ public class DpAdministrationSteps extends AbstractSteps
     }
 
     @Then("^Operator verify new DP params$")
-    public void operatorVerifyNewDPParams()
+    public void operatorVerifyNewDpParams()
     {
         Dp expectedDpParams = get(KEY_DISTRIBUTION_POINT);
         dpAdminPage.verifyDpParams(expectedDpParams);
     }
 
     @When("^Operator update created DP for the DP Partner on DP Administration page with the following attributes:$")
-    public void operatorUpdateCreatedDPForTheDPPartnerOnDPAdministrationPageWithTheFollowingAttributes(Map<String, String> data)
+    public void operatorUpdateCreatedDPForTheDpPartnerOnDPAdministrationPageWithTheFollowingAttributes(Map<String, String> data)
     {
         Dp dpParams = get(KEY_DISTRIBUTION_POINT);
         String currentDpName = dpParams.getName();
@@ -107,7 +107,7 @@ public class DpAdministrationSteps extends AbstractSteps
     }
 
     @When("^Operator get all DP params on DP Administration page$")
-    public void operatorGetAllDPParamsOnDPAdministrationPage()
+    public void operatorGetAllDpParamsOnDPAdministrationPage()
     {
         List<Dp> dpParams = dpAdminPage.dpTable().readAllEntities();
         put(KEY_LIST_OF_DISTRIBUTION_POINTS, dpParams);
@@ -162,7 +162,7 @@ public class DpAdministrationSteps extends AbstractSteps
     }
 
     @And("^Operator select View DPs action for created DP partner on DP Administration page$")
-    public void operatorSelectViewDPsForCreatedDPPartnerOnDPAdministrationPage()
+    public void operatorSelectViewDPsForCreatedDpPartnerOnDPAdministrationPage()
     {
         DpPartner dpPartner = get(KEY_DP_PARTNER);
         dpAdminPage.openViewDPsScreen(dpPartner.getName());
