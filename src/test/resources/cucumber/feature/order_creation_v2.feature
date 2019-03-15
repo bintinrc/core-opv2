@@ -24,8 +24,8 @@ Feature: Order Creation V2
     Examples:
       | Note   | hiptest-uid                              | orderType |
       | Normal | uid:e58a4c81-1b83-4115-bbee-584764277d30 | Normal    |
-      | C2C    | uid:bed66e60-2242-4987-a487-7ff54f8a4d02 | C2C       |
       | Return | uid:d3d37cf1-32e9-4e08-bc8c-b407e9e2930d | Return    |
+#      | C2C    | uid:bed66e60-2242-4987-a487-7ff54f8a4d02 | C2C       |
 
 #  Scenario Outline: Operator create order V3 on Order Creation V2 (<hiptest-uid>)
 #    Given Operator go to menu Shipper Support -> Blocked Dates
