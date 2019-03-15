@@ -2,8 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.util.TestConstants;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -18,8 +16,8 @@ public class FailedDeliveryManagementPage extends CommonParcelManagementPage
 
     public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking_id";
     public static final String COLUMN_CLASS_DATA_TYPE = "type";
-    public static final String COLUMN_CLASS_DATA_FAILURE_COMMENTS = "last_attempt_comments";
-    public static final String COLUMN_CLASS_DATA_FAILURE_REASON = "failure_reason_code";
+    public static final String COLUMN_CLASS_DATA_FAILURE_COMMENTS = "_failure-reason-comments";
+    public static final String COLUMN_CLASS_DATA_FAILURE_REASON = "_failure-reason-code-descriptions";
 
     public static final String ACTION_BUTTON_RESCHEDULE_NEXT_DAY = "container.failed-delivery-management.reschedule-next-day";
 
@@ -36,16 +34,16 @@ public class FailedDeliveryManagementPage extends CommonParcelManagementPage
         searchTableByTrackingId(trackingId);
 
         String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
-        Assert.assertEquals("Tracking ID", trackingId, actualTrackingId);
+        assertEquals("Tracking ID", trackingId, actualTrackingId);
 
         String actualOrderType = getTextOnTable(1, COLUMN_CLASS_DATA_TYPE);
-        Assert.assertEquals("Order Type", orderType, actualOrderType);
+        assertEquals("Order Type", orderType, actualOrderType);
 
         String actualFailureComments = getTextOnTable(1, COLUMN_CLASS_DATA_FAILURE_COMMENTS);
-        Assert.assertEquals("Failure Comments", TestConstants.DRIVER_DELIVERY_FAIL_STRING, actualFailureComments);
+        assertEquals("Failure Comments", TestConstants.DRIVER_DELIVERY_FAIL_STRING, actualFailureComments);
 
         String actualFailureReason = getTextOnTable(1, COLUMN_CLASS_DATA_FAILURE_REASON);
-        Assert.assertThat("Failure Comments", actualFailureReason, Matchers.isOneOf("RECOVERY", "Normal FDM - Ignore"));
+        assertThat("Failure Comments", actualFailureReason, isOneOf("RECOVERY", "Normal FDM - Ignore"));
     }
 
     public void verifyCsvFileDownloadedSuccessfully(String trackingId)
@@ -64,6 +62,6 @@ public class FailedDeliveryManagementPage extends CommonParcelManagementPage
         refreshPage();
         searchTableByTrackingId(trackingId);
         boolean isTableEmpty = isTableEmpty();
-        Assert.assertTrue(String.format("Tracking ID '%s' is still listed on failed order list.", trackingId), isTableEmpty);
+        assertTrue(f("Tracking ID '%s' is still listed on failed order list.", trackingId), isTableEmpty);
     }
 }

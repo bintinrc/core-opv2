@@ -2,8 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -23,7 +21,7 @@ public class FailedPickupManagementPage extends OperatorV2SimplePage
     private static final String CSV_FILENAME_PATTERN = "failed-pickup-list";
 
     public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking_id";
-    public static final String COLUMN_CLASS_DATA_FAILURE_COMMENTS = "last_attempt_comments";
+    public static final String COLUMN_CLASS_DATA_FAILURE_COMMENTS = "_failure-reason-comments";
 
     public static final String ACTION_BUTTON_RESCHEDULE_NEXT_DAY = "container.failed-pickup-management.reschedule-next-day";
 
@@ -40,9 +38,9 @@ public class FailedPickupManagementPage extends OperatorV2SimplePage
     {
         searchTableByTrackingId(trackingId);
         String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
-        Assert.assertEquals("Tracking ID", trackingId, actualTrackingId);
+        assertEquals("Tracking ID", trackingId, actualTrackingId);
         String actualFailureComments = getTextOnTable(1, COLUMN_CLASS_DATA_FAILURE_COMMENTS);
-        Assert.assertEquals("Failure Comments", TestConstants.DRIVER_PICKUP_FAIL_STRING, actualFailureComments);
+        assertEquals("Failure Comments", TestConstants.DRIVER_PICKUP_FAIL_STRING, actualFailureComments);
     }
 
     public void downloadCsvFile(String trackingId)
@@ -65,24 +63,29 @@ public class FailedPickupManagementPage extends OperatorV2SimplePage
 
     public void cancelSelected(List<String> listOfExpectedTrackingId)
     {
-        listOfExpectedTrackingId.forEach(trackingId -> {
+        listOfExpectedTrackingId.forEach(trackingId ->
+        {
             searchTableByTrackingId(trackingId);
             checkRow(1);
         });
+
         selectAction(ACTION_CANCEL_SELECTED);
 
         List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='order in ctrl.orders']/td[1]");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
-        Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+        assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
         sendKeysById("container.order.edit.cancellation-reason", String.format("This order is canceled by automation to test 'Cancel Selected' feature on Failed Pickup Management. Canceled at %s.", CREATED_DATE_SDF.format(new Date())));
-        if (listOfActualTrackingIds.size() == 1)
+
+        if(listOfActualTrackingIds.size()==1)
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-order");
-        } else
+        }
+        else
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-orders");
         }
+
         waitUntilInvisibilityOfToast("updated");
     }
 
@@ -93,11 +96,12 @@ public class FailedPickupManagementPage extends OperatorV2SimplePage
 
     public void rescheduleNext2Days(List<String> trackingIds)
     {
-        trackingIds.forEach(trackingId -> {
-                    searchTableByTrackingId(trackingId);
-                    checkRow(1);
-                }
-        );
+        trackingIds.forEach(trackingId ->
+        {
+            searchTableByTrackingId(trackingId);
+            checkRow(1);
+        });
+
         selectAction(ACTION_RESCHEDULE_SELECTED);
         setRescheduleDate(TestUtils.getNextDate(2));
         click("//button[@aria-label='Reschedule']");
@@ -112,7 +116,7 @@ public class FailedPickupManagementPage extends OperatorV2SimplePage
     {
         searchTableByTrackingId(trackingId);
         boolean isTableEmpty = isTableEmpty();
-        Assert.assertTrue(String.format("Tracking ID '%s' is still listed on failed order list.", trackingId), isTableEmpty);
+        assertTrue(f("Tracking ID '%s' is still listed on failed order list.", trackingId), isTableEmpty);
     }
 
     public void checkRow(int rowIndex)
