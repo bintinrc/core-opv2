@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @DpAdministrationV2 @CWF
+@OperatorV2 @OperatorV2Part1 @DpAdministrationV2
 Feature: DP Administration
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
@@ -97,7 +97,7 @@ Feature: DP Administration
       | directions        | Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360 |
     Then Operator verify new DP params
 
-  @DeleteDpAndPartner @RT
+  @DeleteDpAndPartner
   Scenario: Operator should be able to download and verify DPs CSV file on DP Administration page (uid:2adb0efd-f26f-43a1-a250-008f74fe634b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
