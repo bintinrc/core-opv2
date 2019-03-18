@@ -227,9 +227,9 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         for(Dp expectedDp : expectedDpParams)
         {
-            Dp actualDp = actualMap.get(expectedDp.getDpmsId());
+            Dp actualDp = actualMap.get(expectedDp.getId());
 
-            //assertThat("DP with Id " + expectedDp.getId(), actualDp, notNullValue()); // To-Do: Uncomment after Felix fix the issue.
+            assertEquals("DP ID", expectedDp.getId(), actualDp.getId());
             assertEquals("DP Name", expectedDp.getName(), actualDp.getName());
             assertEquals("DP Short Name", expectedDp.getShortName(), actualDp.getShortName());
             assertEquals("DP Hub", Optional.ofNullable(expectedDp.getHub()).orElse(""), actualDp.getHub());
