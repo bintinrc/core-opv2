@@ -60,7 +60,7 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
         }
         catch(Throwable th)
         {
-            NvLogger.warn("Failed to 'Reset Window'.", th);
+            NvLogger.warnf("Failed to 'Reset Window'. Cause: %s", th.getMessage());
         }
     }
 
