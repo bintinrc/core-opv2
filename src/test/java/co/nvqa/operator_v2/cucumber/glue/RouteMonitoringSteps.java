@@ -44,10 +44,14 @@ public class RouteMonitoringSteps extends AbstractSteps
             String hubsRaw = mapOfData.get("hubs").replaceAll("\\[", "").replaceAll("]", "");
             String[] hubs = Stream.of(hubsRaw.split(",")).map(String::trim).toArray(String[]::new);
 
+            String zonesRaw = mapOfData.get("zones").replaceAll("\\[", "").replaceAll("]", "");
+            String[] zones = Stream.of(zonesRaw.split(",")).map(String::trim).toArray(String[]::new);
+
             RouteMonitoringFilters routeMonitoringFilters = new RouteMonitoringFilters();
             routeMonitoringFilters.setRouteDate(routeDate);
             routeMonitoringFilters.setRouteTags(tags);
             routeMonitoringFilters.setHubs(hubs);
+            routeMonitoringFilters.setZones(zones);
 
             routeMonitoringPage.filterAndLoadSelection(routeMonitoringFilters);
             put("routeMonitoringFilters", routeMonitoringFilters);

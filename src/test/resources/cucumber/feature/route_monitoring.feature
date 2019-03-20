@@ -15,6 +15,7 @@ Feature: Route Monitoring
       | routeDate | {gradle-current-date-yyyy-MM-dd} |
       | routeTags | [{route-tag-name}]               |
       | hubs      | [{hub-name}]                     |
+      | zones     | [{zone-name}]                    |
     Then Operator verify the created route is exist and has correct info
 
   @DeleteOrArchiveRoute
@@ -39,6 +40,7 @@ Feature: Route Monitoring
       | routeDate | {gradle-current-date-yyyy-MM-dd} |
       | routeTags | [{route-tag-name}]               |
       | hubs      | [{hub-name}]                     |
+      | zones     | [{zone-name}]                    |
     Then Operator verify the created route monitoring params:
       | totalWaypoint        | 1 |
       | completionPercentage | 0 |
@@ -70,6 +72,7 @@ Feature: Route Monitoring
       | routeDate | {gradle-current-date-yyyy-MM-dd} |
       | routeTags | [{route-tag-name}]               |
       | hubs      | [{hub-name}]                     |
+      | zones     | [{zone-name}]                    |
     Then Operator verify the created route monitoring params:
       | totalWaypoint        | 1   |
       | completionPercentage | 100 |
@@ -101,6 +104,7 @@ Feature: Route Monitoring
       | routeDate | {gradle-current-date-yyyy-MM-dd} |
       | routeTags | [{route-tag-name}]               |
       | hubs      | [{hub-name}]                     |
+      | zones     | [{zone-name}]                    |
     Then Operator verify the created route monitoring params:
       | totalWaypoint        | 1   |
       | completionPercentage | 100 |

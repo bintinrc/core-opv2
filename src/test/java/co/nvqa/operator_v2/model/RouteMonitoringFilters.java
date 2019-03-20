@@ -11,6 +11,7 @@ public class RouteMonitoringFilters
     private Date routeDate;
     private String[] routeTags;
     private String[] hubs;
+    private String[] zones;
 
     public RouteMonitoringFilters()
     {
@@ -44,5 +45,15 @@ public class RouteMonitoringFilters
     public void setHubs(String[] hubs)
     {
         this.hubs = hubs;
+    }
+
+    public String[] getZones()
+    {
+        return zones;
+    }
+
+    public void setZones(String[] zones)
+    {
+        this.zones = zones;
     }
 }

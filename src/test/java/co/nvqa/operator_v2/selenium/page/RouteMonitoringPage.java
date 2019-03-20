@@ -68,6 +68,12 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
             click("//p[text()='Route Tags']");
         }
 
+        for(String zone : routeMonitoringFilters.getZones())
+        {
+            selectValueFromNvAutocompleteByItemTypes("Zones", zone);
+            click("//p[text()='Zones']");
+        }
+
         clickLoadSelectionButtonAndWaitUntilDone();
     }
 
