@@ -4,8 +4,6 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.Color;
 
@@ -116,7 +114,7 @@ public class GlobalInboundPage extends OperatorV2SimplePage
         {
             String lastScanned = getTextTrimmed("//div[contains(text(), 'Last Scanned')]");
             String lastScannedTrackingId = lastScanned.split(":")[1].trim();
-            Assert.assertEquals("Last Scanned Tracking ID", trackingId, lastScannedTrackingId);
+            assertEquals("Last Scanned Tracking ID", trackingId, lastScannedTrackingId);
         }, "Checking Last Scanned Tracking ID");
     }
 
@@ -143,13 +141,13 @@ public class GlobalInboundPage extends OperatorV2SimplePage
             if(StringUtils.isNotBlank(weightWarning))
             {
                 String message = getText("//div[contains(@class,'weight-diff-info')]/span");
-                Assert.assertEquals("Weight warning message", weightWarning, message);
+                assertEquals("Weight warning message", weightWarning, message);
             }
 
             if(StringUtils.isNotBlank(rackInfo))
             {
                 String xpath = String.format("//h1[normalize-space(text())='%s']", rackInfo);
-                Assert.assertNotNull("rack info", waitUntilVisibilityOfElementLocated(xpath));
+                assertNotNull("rack info", waitUntilVisibilityOfElementLocated(xpath));
             }
 
             if(StringUtils.isNotBlank(rackColor))
@@ -161,13 +159,13 @@ public class GlobalInboundPage extends OperatorV2SimplePage
                 NvLogger.infof("Color       : %s", colorString);
                 Color color = Color.fromString(colorString);
                 NvLogger.infof("Color as Hex: %s", color.asHex());
-                Assert.assertThat("Unexpected Rack Sector color", color.asHex(), Matchers.equalToIgnoringCase(rackColor));
+                assertThat("Unexpected Rack Sector color", color.asHex(), equalToIgnoringCase(rackColor));
             }
         }, "globalInboundAndCheckAlert");
 
         if(StringUtils.isNotBlank(toastText))
         {
-            Assert.assertEquals("Toast text", toastText, getToastTopText());
+            assertEquals("Toast text", toastText, getToastTopText());
             waitUntilInvisibilityOfToast(toastText);
         }
     }

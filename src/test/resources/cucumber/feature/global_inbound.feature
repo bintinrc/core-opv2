@@ -176,7 +176,7 @@ Feature: Global Inbound
       | Failure Reason Code ID = 1 | uid:53f3925a-a618-41f2-8adc-4b853d8e412d | 1                   | #90EE90   |
       | Failure Reason Code ID = 2 | uid:d1236bef-2762-4927-9f97-b07d81b7a8a4 | 2                   | #FFFFED   |
       | Failure Reason Code ID = 3 | uid:b10f6e85-5a72-44d4-b2ee-38bfc7ddb85a | 3                   | #D8BFD8   |
-      | Failure Reason Code ID = 5 | uid:13495ba0-9a2d-47a2-8b0c-0718c1120487 | 5                   | #FF9999   |
+      | Failure Reason Code ID = 5 | uid:13495ba0-9a2d-47a2-8b0c-0718c1120487 | 13                  | #90EE90   |
       | Failure Reason Code ID = 6 | uid:4cb215bb-c094-419c-8708-a741b476a43e | 6                   | #9999FF   |
 
   Scenario: Inbound showing Weight Discrepancy - Weight Tolerance to not Taking Affect on Global Inbound (uid:bafa05c9-ad25-417e-9270-7b7ae23581ed)

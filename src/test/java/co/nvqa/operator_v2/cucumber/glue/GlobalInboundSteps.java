@@ -30,12 +30,13 @@ public class GlobalInboundSteps extends AbstractSteps
     {
         Double result = null;
 
-        if (str != null)
+        if(str!=null)
         {
             try
             {
                 result = Double.parseDouble(str);
-            } catch (NumberFormatException ex)
+            }
+            catch(NumberFormatException ex)
             {
                 NvLogger.warnf("Failed to parse String to Double. Cause: %s", ex.getMessage());
             }
@@ -56,7 +57,7 @@ public class GlobalInboundSteps extends AbstractSteps
         Double overrideDimWidth = parseDoubleOrNull(mapOfData.get("overrideDimWidth"));
         Double overrideDimLength = parseDoubleOrNull(mapOfData.get("overrideDimLength"));
 
-        if ("GET_FROM_CREATED_ORDER".equalsIgnoreCase(trackingId))
+        if("GET_FROM_CREATED_ORDER".equalsIgnoreCase(trackingId))
         {
             trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         }
