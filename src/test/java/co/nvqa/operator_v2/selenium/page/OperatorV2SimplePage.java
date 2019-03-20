@@ -881,6 +881,14 @@ public class OperatorV2SimplePage extends SimplePage
         pause50ms();
     }
 
+    public void selectValueFromMdSelectByMdSelectXpath(String mdSelectXpath, String value)
+    {
+        click(mdSelectXpath);
+        pause100ms();
+        clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%<s')]", value);
+        pause50ms();
+    }
+
     public void selectValueFromMdSelectMenu(String xpathMdSelectMenu, String xpathMdSelectOption)
     {
         WebElement mdSelectMenu = findElementByXpath(xpathMdSelectMenu);

@@ -340,6 +340,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
         assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
+        listOfExpectedTrackingId.forEach(trackingId -> selectValueFromMdSelectByMdSelectXpath(f("//tr[@ng-repeat='processedTransactionData in ctrl.processedTransactionsData']/td[text()='%s']/following-sibling::td//md-select", trackingId), "Delivery"));
+
         clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.pull-orders-from-routes");
         waitUntilInvisibilityOfToast("updated");
     }
