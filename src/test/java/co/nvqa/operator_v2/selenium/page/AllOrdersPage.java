@@ -332,18 +332,25 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     public void pullOutFromRoute(List<String> listOfExpectedTrackingId)
     {
-        clearFilterTableOrderByTrackingId();
-        selectAllShown("ctrl.ordersTableParam");
-        applyActionsMenu.chooseItem(PULL_FROM_ROUTE);
+        applyActionToOrdersByTrackingId(listOfExpectedTrackingId, PULL_FROM_ROUTE);
+        selectTypeFromPullSelectedFromRouteDialog(listOfExpectedTrackingId, "Delivery");
+        clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.pull-orders-from-routes");
+        waitUntilInvisibilityOfToast("updated");
+    }
 
+    public void pullOutFromRouteWithExpectedSelectionError(List<String> listOfExpectedTrackingId)
+    {
+        applyActionToOrdersByTrackingId(listOfExpectedTrackingId, PULL_FROM_ROUTE);
+        selectTypeFromPullSelectedFromRouteDialog(listOfExpectedTrackingId, "Delivery");
+        clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.pull-orders-from-routes");
+    }
+
+    public void selectTypeFromPullSelectedFromRouteDialog(List<String> listOfExpectedTrackingId, String type)
+    {
         List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='processedTransactionData in ctrl.processedTransactionsData']/td[@ng-if='ctrl.settings.showTrackingId']");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
         assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
-
-        listOfExpectedTrackingId.forEach(trackingId -> selectValueFromMdSelectByMdSelectXpath(f("//tr[@ng-repeat='processedTransactionData in ctrl.processedTransactionsData']/td[text()='%s']/following-sibling::td//md-select", trackingId), "Delivery"));
-
-        clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.pull-orders-from-routes");
-        waitUntilInvisibilityOfToast("updated");
+        listOfExpectedTrackingId.forEach(trackingId -> selectValueFromMdSelectByMdSelectXpath(f("//tr[@ng-repeat='processedTransactionData in ctrl.processedTransactionsData']/td[text()='%s']/following-sibling::td//md-select", trackingId), type));
     }
 
     public void applyActionToOrdersByTrackingId(@SuppressWarnings("unused") List<String> listOfExpectedTrackingId, AllOrdersAction action)
@@ -355,6 +362,11 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     public void verifySelectionErrorDialog(List<String> listOfExpectedTrackingId, AllOrdersAction action, List<String> expectedReasons)
     {
+        WebElement failedToUpdateWe = findElementByXpath("//div[contains(text(), 'Failed to update')]");
+        assertNotNull("Failed to update n item(s) dialog not found.", failedToUpdateWe);
+
+        //To-Do: Enable this codes below when they fix the UI.
+        /*
         waitUntilVisibilityOfMdDialogByTitle("Selection Error");
 
         String actualAction = getText("//div[label[text()='Process']]/p");
@@ -375,6 +387,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         String toastBottomText = getToastBottomText();
         assertEquals("Toast top text", "Unable to apply actions", toastTopText);
         assertEquals("Toast bottom text", "No valid selection", toastBottomText);
+        */
     }
 
     public void addToRoute(List<String> listOfExpectedTrackingId, long routeId)

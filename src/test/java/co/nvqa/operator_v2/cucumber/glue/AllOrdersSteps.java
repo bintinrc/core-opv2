@@ -264,6 +264,13 @@ public class AllOrdersSteps extends AbstractSteps
         allOrdersPage.applyActionToOrdersByTrackingId(trackingIds, action);
     }
 
+    @When("^Operator apply \"Pull From Route\" action and expect to see \"Selection Error\"$")
+    public void operatorApplyPullFromRouteActionAndExpectToSeeSelectionError()
+    {
+        List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        allOrdersPage.pullOutFromRouteWithExpectedSelectionError(trackingIds);
+    }
+
     @Then("^Operator verify Selection Error dialog for invalid Pull From Order action$")
     public void operatorVerifySelectionErrorDialogForInvalidPullFromOrderAction()
     {
