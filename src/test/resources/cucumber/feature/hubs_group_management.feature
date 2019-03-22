@@ -1,4 +1,4 @@
-@OperatorV2Disabled @OperatorV2Part1Disabled @HubGroupsManagement
+@OperatorV2 @OperatorV2Part1 @HubGroupsManagement
 Feature: Hubs Group Management
 
   @LaunchBrowser @ShouldAlwaysRun
