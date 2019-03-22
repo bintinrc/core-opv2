@@ -1,4 +1,4 @@
-@ReservationPresetManagement
+@OperatorV2 @OperatorV2Part2 @ReservationPresetManagement
 Feature: Reservation Preset Management
 
   @LaunchBrowser @ShouldAlwaysRun

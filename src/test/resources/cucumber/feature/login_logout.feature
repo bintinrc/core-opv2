@@ -1,4 +1,4 @@
-@OperatorV2Disabled @LoginLogout @ShouldAlwaysRun
+@OperatorV2Disabled @OperatorV2Part1Disabled @LoginLogout @ShouldAlwaysRun
 Feature: Login and Logout
 
   @LaunchBrowser

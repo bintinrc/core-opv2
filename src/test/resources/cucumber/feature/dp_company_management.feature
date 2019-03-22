@@ -1,4 +1,4 @@
-@OperatorV2Disabled @DpCompanyManagement
+@OperatorV2Deprecated @OperatorV2Part2Deprecated @DpCompanyManagement
 Feature: DP Company Management
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless

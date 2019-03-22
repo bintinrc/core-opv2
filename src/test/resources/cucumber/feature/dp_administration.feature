@@ -1,4 +1,4 @@
-@OperatorV2Disabled @DpAdministration @ShouldAlwaysRun
+@OperatorV2Deprecated @OperatorV2Part1Deprecated @DpAdministration @ShouldAlwaysRun
 Feature: DP Administration
 
   @LaunchBrowser @ForceNotHeadless

@@ -26,26 +26,26 @@ public class BlockedDatesSteps extends AbstractSteps
         blockedDatesPage = new BlockedDatesPage(getWebDriver());
     }
 
-    @When("^blocked dates add$")
-    public void add()
+    @When("^Operator adds Blocked Date$")
+    public void operatorAddsBlockedDate()
     {
         blockedDatesPage.addBlockedDate();
     }
 
-    @Then("^blocked dates verify add$")
-    public void verifyAdd()
+    @Then("^Operator verifies new Blocked Date is added successfully$")
+    public void operatorVerifiesNewBlockedDateIsAddedSuccessfully()
     {
         blockedDatesPage.verifyBlockedDateAddedSuccessfully();
     }
 
-    @When("^blocked dates remove$")
-    public void remove()
+    @When("^Operator removes Blocked Date$")
+    public void operatorRemovesBlockedDate()
     {
         blockedDatesPage.removeBlockedDate();
     }
 
-    @Then("^blocked dates verify remove$")
-    public void verifyRemove()
+    @Then("^Operator verifies Blocked Date is removed successfully$")
+    public void operatorVerifiesBlockedDateIsRemovedSuccessfully()
     {
         blockedDatesPage.verifyBlockedDateRemovedSuccessfully();
     }

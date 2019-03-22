@@ -51,7 +51,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickButtonByAriaLabelAndWaitUntilDone(String ariaLabel)
     {
-        String xpathExpression = String.format(".//button[@aria-label='%s']", ariaLabel);
+        String xpathExpression = f(".//button[@aria-label='%s']", ariaLabel);
         click(xpathExpression);
         waitUntilInvisibilityOfElementLocated(xpathExpression + "/div[contains(@class,'show')]/md-progress-circular");
     }
@@ -68,14 +68,14 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickNvIconButtonByNameAndWaitUntilEnabled(String name)
     {
-        String xpathExpression = String.format("//nv-icon-button[@name='%s']", name);
+        String xpathExpression = f("//nv-icon-button[@name='%s']", name);
         click(xpathExpression);
         waitUntilInvisibilityOfElementLocated(xpathExpression + "/button[@disabled='disabled']");
     }
 
     public void waitUntilEnabledAndClickNvIconTextButtonByName(String name)
     {
-        String xpathExpression = String.format("//nv-icon-text-button[@name='%s']", name);
+        String xpathExpression = f("//nv-icon-text-button[@name='%s']", name);
         waitUntilInvisibilityOfElementLocated(xpathExpression + "/button[@disabled='disabled']");
         click(xpathExpression);
     }
@@ -87,7 +87,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickNvIconTextButtonByNameAndWaitUntilDone(String name)
     {
-        String xpathExpression = String.format("//nv-icon-text-button[@name='%s']", name);
+        String xpathExpression = f("//nv-icon-text-button[@name='%s']", name);
         click(xpathExpression);
         waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
     }
@@ -99,7 +99,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickNvApiTextButtonByNameAndWaitUntilDone(String name)
     {
-        String xpathExpression = String.format("//nv-api-text-button[@name='%s']", name);
+        String xpathExpression = f("//nv-api-text-button[@name='%s']", name);
         click(xpathExpression);
         waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
     }
@@ -111,7 +111,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickNvApiIconButtonByNameAndWaitUntilDone(String name)
     {
-        String xpathExpression = String.format("//nv-api-icon-button[@name='%s']", name);
+        String xpathExpression = f("//nv-api-icon-button[@name='%s']", name);
         click(xpathExpression);
         waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'waiting')]/md-progress-circular");
     }
@@ -123,7 +123,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickNvButtonSaveByNameAndWaitUntilDone(String name)
     {
-        String xpathExpression = String.format("//nv-button-save[@name='%s']", name);
+        String xpathExpression = f("//nv-button-save[@name='%s']", name);
         click(xpathExpression);
         waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'saving')]/md-progress-circular");
     }
@@ -147,7 +147,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clearf(String xpathExpression, Object... args)
     {
-        xpathExpression = String.format(xpathExpression, args);
+        xpathExpression = f(xpathExpression, args);
         WebElement we = findElementByXpath(xpathExpression);
         we.clear();
         pause100ms();
@@ -155,7 +155,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void sendKeysByIdCustom1(String id, CharSequence... keysToSend)
     {
-        String xpathExpression = String.format("//*[self::input or self::textarea][starts-with(@id, '%s')]", id);
+        String xpathExpression = f("//*[self::input or self::textarea][starts-with(@id, '%s')]", id);
         WebElement we = findElementByXpath(xpathExpression);
         we.click();
         we.sendKeys(keysToSend);
@@ -164,23 +164,23 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void sendKeysAndEnterByAriaLabel(String ariaLabel, CharSequence... keysToSend)
     {
-        sendKeysAndEnter(String.format("//*[@aria-label='%s']", ariaLabel), keysToSend);
+        sendKeysAndEnter(f("//*[@aria-label='%s']", ariaLabel), keysToSend);
     }
 
     public void sendKeysToMdInputContainerByModel(String mdInputContainerModel, CharSequence... keysToSend)
     {
-        sendKeys(String.format("//md-input-container[@model='%s']/input", mdInputContainerModel), keysToSend);
+        sendKeys(f("//md-input-container[@model='%s']/input", mdInputContainerModel), keysToSend);
     }
 
     public void setMdDatepicker(String mdDatepickerNgModel, Date date)
     {
-        sendKeys(String.format("//md-datepicker[@ng-model='%s']/div/input", mdDatepickerNgModel), MD_DATEPICKER_SDF.format(date));
+        sendKeys(f("//md-datepicker[@ng-model='%s']/div/input", mdDatepickerNgModel), MD_DATEPICKER_SDF.format(date));
         clickf("//md-datepicker[@ng-model='%s']/parent::*", mdDatepickerNgModel);
     }
 
     public void setMdDatepickerById(String mdDatepickerId, Date date)
     {
-        sendKeys(String.format("//md-datepicker[@id='%s']/div/input", mdDatepickerId), MD_DATEPICKER_SDF.format(date));
+        sendKeys(f("//md-datepicker[@id='%s']/div/input", mdDatepickerId), MD_DATEPICKER_SDF.format(date));
         clickf("//md-datepicker[@id='%s']/parent::*", mdDatepickerId);
     }
 
@@ -191,7 +191,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void waitUntilVisibilityOfToast(String containsMessage)
     {
-        waitUntilVisibilityOfElementLocated(String.format("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage));
+        waitUntilVisibilityOfElementLocated(f("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage));
     }
 
     public void waitUntilInvisibilityOfToast(){
@@ -210,7 +210,7 @@ public class OperatorV2SimplePage extends SimplePage
     public void waitUntilInvisibilityOfToast(String containsMessage, boolean waitUntilElementVisibleFirst)
     {
         String xpathExpression = StringUtils.isNotBlank(containsMessage)
-                ? String.format("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage)
+                ? f("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage)
                 : "//div[@id='toast-container']";
 
         if(waitUntilElementVisibleFirst)
@@ -223,7 +223,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void confirmToast(String containsMessage, boolean waitUntilElementVisibleFirst)
     {
-        String xpathExpression = String.format("//div[@id='toast-container'][.//div[contains(text(), '%s')]]", containsMessage);
+        String xpathExpression = f("//div[@id='toast-container'][.//div[contains(text(), '%s')]]", containsMessage);
 
         if(waitUntilElementVisibleFirst)
         {
@@ -241,7 +241,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickToast(String containsMessage, boolean waitUntilElementVisibleFirst)
     {
-        String xpathExpression = String.format("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage);
+        String xpathExpression = f("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage);
 
         if(waitUntilElementVisibleFirst)
         {
@@ -339,17 +339,17 @@ public class OperatorV2SimplePage extends SimplePage
         {
             if(!isBlank(nvTableParam))
             {
-                nvTableXpathExpression = String.format("//nv-table[@param='%s']", nvTableParam);
+                nvTableXpathExpression = f("//nv-table[@param='%s']", nvTableParam);
             }
 
             WebElement we;
 
             switch(xpathTextMode)
             {
-                case EXACT      : we = findElementByXpath(String.format("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[normalize-space(@class)='%s']", nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass)); break;
-                case CONTAINS   : we = findElementByXpath(String.format("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[contains(@class, '%s')]", nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass)); break;
-                case STARTS_WITH: we = findElementByXpath(String.format("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[starts-with(@class, '%s')]", nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass)); break;
-                default         : we = findElementByXpath(String.format("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[starts-with(@class, '%s')]", nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass));
+                case EXACT      : we = findElementByXpath(f("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[normalize-space(@class)='%s']", nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass)); break;
+                case CONTAINS   : we = findElementByXpath(f("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[contains(@class, '%s')]", nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass)); break;
+                case STARTS_WITH: we = findElementByXpath(f("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[starts-with(@class, '%s')]", nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass)); break;
+                default         : we = findElementByXpath(f("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[starts-with(@class, '%s')]", nvTableXpathExpression, mdVirtualRepeat, rowNumber, columnDataClass));
             }
 
             text = we.getText().trim();
@@ -385,14 +385,14 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickActionButtonOnTableWithMdVirtualRepeat(int rowNumber, String actionButtonName, String mdVirtualRepeat, XpathTextMode xpathTextMode, String nvTableParam)
     {
-        String actionButtonXpath = String.format("//nv-icon-button[@name='%s']", actionButtonName);
+        String actionButtonXpath = f("//nv-icon-button[@name='%s']", actionButtonName);
         try
         {
             clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, mdVirtualRepeat, xpathTextMode, nvTableParam, actionButtonXpath);
         }
         catch(RuntimeException ex)
         {
-            throw new RuntimeException(String.format("Cannot find action button '%s' on table.", actionButtonName), ex);
+            throw new RuntimeException(f("Cannot find action button '%s' on table.", actionButtonName), ex);
         }
     }
 
@@ -404,16 +404,16 @@ public class OperatorV2SimplePage extends SimplePage
 
             if(!isBlank(nvTableParam))
             {
-                nvTableXpathExpression = String.format("//nv-table[@param='%s']", nvTableParam);
+                nvTableXpathExpression = f("//nv-table[@param='%s']", nvTableParam);
             }
 
             String xpathExpression;
 
             switch(xpathTextMode)
             {
-                case CONTAINS   : xpathExpression = String.format("%s//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'actions')]%s", nvTableXpathExpression, mdVirtualRepeat, rowNumber, actionButtonXpath); break;
-                case STARTS_WITH: xpathExpression = String.format("%s//tr[@md-virtual-repeat='%s'][%d]/td[starts-with(@class, 'actions')]%s", nvTableXpathExpression, mdVirtualRepeat, rowNumber, actionButtonXpath); break;
-                default         : xpathExpression = String.format("%s//tr[@md-virtual-repeat='%s'][%d]/td[starts-with(@class, 'actions')]%s", nvTableXpathExpression, mdVirtualRepeat, rowNumber, actionButtonXpath);
+                case CONTAINS   : xpathExpression = f("%s//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'actions')]%s", nvTableXpathExpression, mdVirtualRepeat, rowNumber, actionButtonXpath); break;
+                case STARTS_WITH: xpathExpression = f("%s//tr[@md-virtual-repeat='%s'][%d]/td[starts-with(@class, 'actions')]%s", nvTableXpathExpression, mdVirtualRepeat, rowNumber, actionButtonXpath); break;
+                default         : xpathExpression = f("%s//tr[@md-virtual-repeat='%s'][%d]/td[starts-with(@class, 'actions')]%s", nvTableXpathExpression, mdVirtualRepeat, rowNumber, actionButtonXpath);
             }
 
             WebElement we = findElementByXpath(xpathExpression);
@@ -421,7 +421,7 @@ public class OperatorV2SimplePage extends SimplePage
         }
         catch(NoSuchElementException ex)
         {
-            throw new RuntimeException(String.format("Cannot find action button '%s' on table.", actionButtonXpath), ex);
+            throw new RuntimeException(f("Cannot find action button '%s' on table.", actionButtonXpath), ex);
         }
     }
 
@@ -436,7 +436,7 @@ public class OperatorV2SimplePage extends SimplePage
     {
         try
         {
-            String xpathExpression = String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, '%s')]//button[@aria-label='%s']", ngRepeat, rowNumber, columnClassName, buttonAriaLabel);
+            String xpathExpression = f("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, '%s')]//button[@aria-label='%s']", ngRepeat, rowNumber, columnClassName, buttonAriaLabel);
             WebElement we = findElementByXpath(xpathExpression);
             moveAndClick(we);
         }
@@ -453,7 +453,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public int getRowsCountOfTableWithNgRepeat(String ngRepeat)
     {
-        String xpath = String.format("//tr[@ng-repeat='%s'][not(contains(@class,'last-row'))]", ngRepeat);
+        String xpath = f("//tr[@ng-repeat='%s'][not(contains(@class,'last-row'))]", ngRepeat);
 
         try
         {
@@ -470,7 +470,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public int getRowsCountOfTableWithMdVirtualRepeat(String mdVirtualRepeat)
     {
-        String xpath = String.format("//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))]", mdVirtualRepeat);
+        String xpath = f("//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))]", mdVirtualRepeat);
 
         try
         {
@@ -487,7 +487,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public int getRowsCountOfTableWithMdVirtualRepeatFast(String mdVirtualRepeat)
     {
-        String xpath = String.format("//tr[@md-virtual-repeat='%s']", mdVirtualRepeat);
+        String xpath = f("//tr[@md-virtual-repeat='%s']", mdVirtualRepeat);
 
         try
         {
@@ -510,7 +510,7 @@ public class OperatorV2SimplePage extends SimplePage
     public String getSelectedValueOfMdAutocompleteOnTableWithNgRepeat(int rowNumber, String columnAttributeName, String attributeValue, String ngRepeat)
     {
         String value = null;
-        String xpath = String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@%s, \"%s\")]/nv-autocomplete//input", ngRepeat, rowNumber, columnAttributeName, attributeValue);
+        String xpath = f("//tr[@ng-repeat='%s'][%d]/td[starts-with(@%s, \"%s\")]/nv-autocomplete//input", ngRepeat, rowNumber, columnAttributeName, attributeValue);
 
         try
         {
@@ -534,7 +534,7 @@ public class OperatorV2SimplePage extends SimplePage
     public String getTextOnTableWithNgRepeat(int rowNumber, String columnAttributeName, String attributeValue, String ngRepeat)
     {
         String text = null;
-        String xpath = String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@%s, \"%s\")]", ngRepeat, rowNumber, columnAttributeName, attributeValue);
+        String xpath = f("//tr[@ng-repeat='%s'][%d]/td[starts-with(@%s, \"%s\")]", ngRepeat, rowNumber, columnAttributeName, attributeValue);
 
         try
         {
@@ -554,7 +554,7 @@ public class OperatorV2SimplePage extends SimplePage
     {
         try
         {
-            String xpathExpression = String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@class, 'actions')]//nv-icon-button[@name='%s']", ngRepeat, rowNumber, actionButtonName);
+            String xpathExpression = f("//tr[@ng-repeat='%s'][%d]/td[starts-with(@class, 'actions')]//nv-icon-button[@name='%s']", ngRepeat, rowNumber, actionButtonName);
             WebElement we = findElementByXpath(xpathExpression);
             moveAndClick(we);
         }
@@ -568,7 +568,7 @@ public class OperatorV2SimplePage extends SimplePage
     {
         try
         {
-            String xpathExpression = String.format("//tr[@ng-repeat='%s'][%d]/td[starts-with(@class, '%s')]//button[@aria-label='%s']", ngRepeat, rowNumber, className, buttonAriaLabel);
+            String xpathExpression = f("//tr[@ng-repeat='%s'][%d]/td[starts-with(@class, '%s')]//button[@aria-label='%s']", ngRepeat, rowNumber, className, buttonAriaLabel);
             WebElement we = findElementByXpath(xpathExpression);
             moveAndClick(we);
         }
@@ -582,7 +582,7 @@ public class OperatorV2SimplePage extends SimplePage
     {
         try
         {
-            String xpathExpression = String.format("//tr[@ng-repeat='%s'][%d]/td//md-input-container[@model='%s']/input", ngRepeat, rowNumber, inputModel);
+            String xpathExpression = f("//tr[@ng-repeat='%s'][%d]/td//md-input-container[@model='%s']/input", ngRepeat, rowNumber, inputModel);
             sendKeys(xpathExpression, keysToSend);
         }
         catch(NoSuchElementException ex)
@@ -593,7 +593,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void checkRowWithMdVirtualRepeat(int rowNumber, String mdVirtualRepeat)
     {
-        WebElement mdCheckboxWe = findElementByXpath(String.format("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", mdVirtualRepeat, rowNumber));
+        WebElement mdCheckboxWe = findElementByXpath(f("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", mdVirtualRepeat, rowNumber));
         String ariaChecked = getAttribute(mdCheckboxWe, "aria-checked");
 
         if("false".equalsIgnoreCase(ariaChecked))
@@ -604,7 +604,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void checkRowWithNgRepeat(int rowNumber, String ngRepeat)
     {
-        WebElement mdCheckboxWe = findElementByXpath(String.format("//tr[@ng-repeat='%s'][%d]/td[contains(@class, 'selection')]//md-checkbox", ngRepeat, rowNumber));
+        WebElement mdCheckboxWe = findElementByXpath(f("//tr[@ng-repeat='%s'][%d]/td[contains(@class, 'selection')]//md-checkbox", ngRepeat, rowNumber));
         boolean ariaChecked = Boolean.valueOf(getAttribute(mdCheckboxWe, "aria-checked"));
 
         if(!ariaChecked)
@@ -625,7 +625,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public String getToggleButtonValue(String divModel)
     {
-        return getText(String.format("//div[@model='%s']//button[contains(@class,'raised')]/span", divModel));
+        return getText(f("//div[@model='%s']//button[contains(@class,'raised')]/span", divModel));
     }
 
     public void selectValueFromNvAutocomplete(String searchText, String value)
@@ -652,10 +652,9 @@ public class OperatorV2SimplePage extends SimplePage
         pause200ms();
     }
 
-    public void removeNvFilterBoxByMainTitle(String mainTtitle)
+    public void removeNvFilterBoxByMainTitle(String mainTitle)
     {
-        String xpath = String.format("//*[self::nv-filter-text-box or self::nv-filter-box][@main-title='%s']//button[i[text()='close']]", mainTtitle);
-        click(xpath);
+        click(f("//*[self::nv-filter-text-box or self::nv-filter-box][@main-title='%s']//button[i[text()='close']]", mainTitle));
     }
 
     public void selectValueFromNvAutocompleteByPossibleOptions(String possibleOptions, String value)
@@ -663,10 +662,9 @@ public class OperatorV2SimplePage extends SimplePage
         selectValueFromNvAutocompleteBy("possible-options", possibleOptions, value);
     }
 
-    @SuppressWarnings("CatchMayIgnoreException")
     private WebElement selectValueFromNvAutocompleteBy(String nvAutocompleteAttribute, String nvAutocompleteAttributeValue, String value)
     {
-        String xpathExpression = String.format(".//nv-autocomplete[@%s='%s']//input", nvAutocompleteAttribute, nvAutocompleteAttributeValue);
+        String xpathExpression = f(".//nv-autocomplete[@%s='%s']//input", nvAutocompleteAttribute, nvAutocompleteAttributeValue);
         WebElement we = findElementByXpath(xpathExpression);
 
         if(!we.getAttribute("value").isEmpty())
@@ -703,12 +701,12 @@ public class OperatorV2SimplePage extends SimplePage
 
     public String getNvAutocompleteValue(String searchTextAttribute)
     {
-        return getValue(String.format("//nv-autocomplete[@search-text='%s']//input", searchTextAttribute));
+        return getValue(f("//nv-autocomplete[@search-text='%s']//input", searchTextAttribute));
     }
 
     public void selectValueFromMdAutocomplete(String placeholder, String value)
     {
-        String xpathExpression = String.format("//md-autocomplete[@placeholder='%s']//input", placeholder);
+        String xpathExpression = f("//md-autocomplete[@placeholder='%s']//input", placeholder);
         WebElement we = findElementByXpath(xpathExpression);
         we.sendKeys(value);
         pause1s();
@@ -745,11 +743,11 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void selectValueFromMdSelectWithSearch(String attribute, String attributeValue, String value)
     {
-        String xpath = String.format("//md-select[@%s='%s']", attribute, attributeValue);
+        String xpath = f("//md-select[@%s='%s']", attribute, attributeValue);
         click(xpath);
         pause100ms();
         String menuContainerId = getAttribute(xpath, "aria-owns");
-        String menuContainerXpath = String.format("//*[@id='%s']", menuContainerId);
+        String menuContainerXpath = f("//*[@id='%s']", menuContainerId);
         String searchBoxXpath = menuContainerXpath + "//input[@ng-model='searchTerm']";
         sendKeys(searchBoxXpath, value);
         pause100ms();
@@ -848,7 +846,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void toggleMdSwitchById(String mdSwitchId, boolean state)
     {
-        String xpath = String.format("//md-switch[starts-with(@id, '%s')]", mdSwitchId);
+        String xpath = f("//md-switch[starts-with(@id, '%s')]", mdSwitchId);
         boolean currentState = Boolean.parseBoolean(getAttribute(xpath, "aria-checked"));
 
         if(currentState!=state)
@@ -901,17 +899,17 @@ public class OperatorV2SimplePage extends SimplePage
 
     public String getMdSelectValue(String mdSelectNgModel)
     {
-        return getText(String.format("//md-select[@ng-model='%s']/md-select-value/span/div[@class='md-text']", mdSelectNgModel));
+        return getText(f("//md-select[@ng-model='%s']/md-select-value/span/div[@class='md-text']", mdSelectNgModel));
     }
 
     public String getMdSelectValueById(String mdSelectId)
     {
-        return getText(String.format("//md-select[contains(@id,'%s')]/md-select-value/span/div[@class='md-text']", mdSelectId));
+        return getText(f("//md-select[contains(@id,'%s')]/md-select-value/span/div[@class='md-text']", mdSelectId));
     }
 
     public String getMdSelectedItemValueAttributeById(String mdSelectId)
     {
-        return getAttribute(String.format("//md-select[contains(@id,'%s')]//md-option[@selected='selected']", mdSelectId), "value");
+        return getAttribute(f("//md-select[contains(@id,'%s')]//md-option[@selected='selected']", mdSelectId), "value");
     }
 
     public String getMdSelectValueTrimmed(String mdSelectNgModel)
@@ -928,7 +926,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public List<String> getMdSelectMultipleValues(String mdSelectNgModel)
     {
-        List<WebElement> listOfWe = findElementsByXpath(String.format("//md-select[@ng-model='%s']/md-select-value/span/div[@class='md-text']", mdSelectNgModel));
+        List<WebElement> listOfWe = findElementsByXpath(f("//md-select[@ng-model='%s']/md-select-value/span/div[@class='md-text']", mdSelectNgModel));
 
         if(listOfWe!=null)
         {
@@ -940,7 +938,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public List<String> getMdSelectMultipleValuesById(String mdSelectId)
     {
-        List<WebElement> listOfWe = findElementsByXpath(String.format("//md-select[starts-with(@id,'%s')]/md-select-value/span/div[@class='md-text']", mdSelectId));
+        List<WebElement> listOfWe = findElementsByXpath(f("//md-select[starts-with(@id,'%s')]/md-select-value/span/div[@class='md-text']", mdSelectId));
 
         if(listOfWe!=null)
         {
@@ -952,7 +950,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public List<String> getMdSelectMultipleValuesTrimmed(String mdSelectNgModel)
     {
-        List<WebElement> listOfWe = findElementsByXpath(String.format("//md-select[@ng-model='%s']/md-select-value/span/div[@class='md-text']", mdSelectNgModel));
+        List<WebElement> listOfWe = findElementsByXpath(f("//md-select[@ng-model='%s']/md-select-value/span/div[@class='md-text']", mdSelectNgModel));
 
         if(listOfWe!=null)
         {
@@ -964,7 +962,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void inputListBox(String placeHolder, String searchValue)
     {
-        String xpathExpression = String.format("//input[@placeholder='%s']", placeHolder);
+        String xpathExpression = f("//input[@placeholder='%s']", placeHolder);
         WebElement we = findElementByXpath(xpathExpression);
         we.clear();
         we.sendKeys(searchValue);
@@ -993,19 +991,19 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void searchTableCustom1(String columnClass, String keywords)
     {
-        sendKeys(String.format("//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input", columnClass), keywords);
+        sendKeys(f("//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input", columnClass), keywords);
         pause200ms();
     }
 
     public void searchTableCustom2(String columnClass, String keywords)
     {
-        sendKeys(String.format("//th[starts-with(@class, '%s')]/nv-search-input-filter/md-input-container/div/input", columnClass), keywords);
+        sendKeys(f("//th[starts-with(@class, '%s')]/nv-search-input-filter/md-input-container/div/input", columnClass), keywords);
         pause200ms();
     }
 
     public void clearSearchTableCustom1(String columnClass)
     {
-        String xpathExpression = String.format("//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/button[@aria-hidden='false']", columnClass);
+        String xpathExpression = f("//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/button[@aria-hidden='false']", columnClass);
 
         if(isElementExistWait1Second(xpathExpression))
         {
@@ -1085,7 +1083,7 @@ public class OperatorV2SimplePage extends SimplePage
     public void waitUntilNewWindowOrTabOpened()
     {
         NvLogger.info("Wait until new window or tab opened.");
-        wait5sUntil(()->getWebDriver().getWindowHandles().size()>1, String.format("Window handles size is = %d.", getWebDriver().getWindowHandles().size()));
+        wait5sUntil(()->getWebDriver().getWindowHandles().size()>1, f("Window handles size is = %d.", getWebDriver().getWindowHandles().size()));
     }
 
     @SuppressWarnings("unchecked")
@@ -1116,7 +1114,7 @@ public class OperatorV2SimplePage extends SimplePage
         if(!windowFound)
         {
             getWebDriver().switchTo().window(currentWindowHandle);
-            throw new NvTestRuntimeException(String.format("Window with URL end with '%s' not found.", expectedUrlEndWith));
+            throw new NvTestRuntimeException(f("Window with URL end with '%s' not found.", expectedUrlEndWith));
         }
     }
 

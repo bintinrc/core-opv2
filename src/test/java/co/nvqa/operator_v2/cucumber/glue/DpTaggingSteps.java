@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.DpTagging;
 import co.nvqa.operator_v2.selenium.page.DpTaggingPage;
-import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -43,16 +42,10 @@ public class DpTaggingSteps extends AbstractSteps
 
         dpTaggingPage.uploadDpTaggingCsv(listOfDpTagging);
         dpTaggingPage.verifyDpTaggingCsvIsUploadedSuccessfully(listOfDpTagging);
-        dpTaggingPage.checkAndAssignAll();
+        dpTaggingPage.checkAndAssignAll(false);
 
         put("listOfDpTagging", listOfDpTagging);
-    }
-
-    @Then("^Operator verify the order\\(s\\) is tagged to DP successfully$")
-    public void operatorVerifyTheOrdersIsTaggedToDpSuccessfully()
-    {
-        List<DpTagging> listOfDpTagging = get("listOfDpTagging");
-        dpTaggingPage.verifyTheOrdersIsTaggedToDpSuccessfully(listOfDpTagging);
+        put(KEY_DISTRIBUTION_POINT_ID, dpId);
     }
 
     @When("^Operator tags multiple orders to DP with ID = \"([^\"]*)\"$")
@@ -73,9 +66,10 @@ public class DpTaggingSteps extends AbstractSteps
 
         dpTaggingPage.uploadDpTaggingCsv(listOfDpTagging);
         dpTaggingPage.verifyDpTaggingCsvIsUploadedSuccessfully(listOfDpTagging);
-        dpTaggingPage.checkAndAssignAll();
+        dpTaggingPage.checkAndAssignAll(true);
 
         put("listOfDpTagging", listOfDpTagging);
+        put(KEY_DISTRIBUTION_POINT_ID, dpId);
     }
 
     @When("^Operator uploads invalid DP Tagging CSV$")

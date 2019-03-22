@@ -1,4 +1,4 @@
-@OperatorV2Disabled @DpVaultManagement
+@OperatorV2Deprecated @OperatorV2Part1Deprecated @DpVaultManagement
 Feature: DP Vault Management
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless

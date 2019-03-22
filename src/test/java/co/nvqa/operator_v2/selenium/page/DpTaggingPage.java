@@ -3,8 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.DpTagging;
 import co.nvqa.operator_v2.util.TestUtils;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
@@ -21,7 +19,7 @@ import java.util.List;
 @SuppressWarnings("WeakerAccess")
 public class DpTaggingPage extends OperatorV2SimplePage
 {
-    private static final String NG_REPEAT = "order in ctrl.uploadDeliveryResults";
+    private static final String MD_VIRTUAL_REPEAT = "order in getTableData()";
 
     public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking-id";
     public static final String COLUMN_CLASS_DATA_CURRENT_DP_ID = "current-dp-id";
@@ -56,7 +54,7 @@ public class DpTaggingPage extends OperatorV2SimplePage
 
         for(DpTagging dpTagging : listOfDpTagging)
         {
-            Assert.assertThat("Tracking ID is not listed on table.", dpTagging.getTrackingId(), Matchers.isIn(listOfTrackingIdsOnTable));
+            assertThat("Tracking ID is not listed on table.", dpTagging.getTrackingId(), isIn(listOfTrackingIdsOnTable));
         }
     }
 
@@ -64,7 +62,7 @@ public class DpTaggingPage extends OperatorV2SimplePage
     {
         String expectedErrorMessageOnToast = "No order data to process, please check the file";
         String actualMessage = getText("//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
-        Assert.assertEquals("Error Message", expectedErrorMessageOnToast, actualMessage);
+        assertEquals("Error Message", expectedErrorMessageOnToast, actualMessage);
         waitUntilInvisibilityOfToast(expectedErrorMessageOnToast, false);
     }
 
@@ -103,36 +101,28 @@ public class DpTaggingPage extends OperatorV2SimplePage
         }
     }
 
-    public void checkAndAssignAll()
+    public void checkAndAssignAll(boolean isMultipleOrders)
     {
-        clickNvIconTextButtonByName("check-all");
+        selectAllShown("ctrl.deliveryResultsTableParams");
         clickNvApiTextButtonByNameAndWaitUntilDone("container.dp-tagging.assign-all");
-        waitUntilInvisibilityOfToast("tagged successfully");
-    }
 
-    public void verifyTheOrdersIsTaggedToDpSuccessfully(List<DpTagging> listOfDpTagging)
-    {
-        int rowIndex = 1;
-
-        for(DpTagging dpTagging : listOfDpTagging)
+        if(isMultipleOrders)
         {
-            String trackingId = getTextOnTable(rowIndex, COLUMN_CLASS_DATA_TRACKING_ID);
-            String currentDpId = getTextOnTable(rowIndex, COLUMN_CLASS_DATA_CURRENT_DP_ID);
-
-            Assert.assertEquals("Tracking ID", dpTagging.getTrackingId(), trackingId);
-            Assert.assertEquals("Current DP ID", String.valueOf(dpTagging.getDpId()), currentDpId);
-
-            rowIndex++;
+            waitUntilInvisibilityOfToast("DP tagging performed successfully");
+        }
+        else
+        {
+            waitUntilInvisibilityOfToast("tagged successfully");
         }
     }
 
     public int getRowCount()
     {
-        return findElementsByXpath(String.format("//tr[@ng-repeat='%s']", NG_REPEAT)).size();
+        return getRowsCountOfTableWithMdVirtualRepeat(MD_VIRTUAL_REPEAT);
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)
     {
-        return getTextOnTableWithNgRepeat(rowNumber, columnDataClass, NG_REPEAT);
+        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
     }
 }
