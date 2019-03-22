@@ -1,4 +1,4 @@
-@OperatorV2 @LatLngCleanup
+@OperatorV2 @OperatorV2Part1 @LatLngCleanup
 Feature: Lat/Lng Cleanup
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -28,7 +28,6 @@ Feature: Lat/Lng Cleanup
       | latitude   | GENERATED |
       | longitude  | GENERATED |
     Then Operator verify waypoint details on Lat/Lng Cleanup page
-
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

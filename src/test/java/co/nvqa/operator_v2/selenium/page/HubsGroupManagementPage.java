@@ -4,7 +4,6 @@ import co.nvqa.operator_v2.model.HubsGroup;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
@@ -81,7 +80,7 @@ public class HubsGroupManagementPage extends OperatorV2SimplePage
     public void verifyHubsGroupDeleted(Long hubsGroupId)
     {
         hubsGroupTable.filterByColumn(COLUMN_ID, String.valueOf(hubsGroupId));
-        Assert.assertTrue("Hubs Group with ID [" + hubsGroupId + "] was not deleted", hubsGroupTable.isTableEmpty());
+        assertTrue("Hubs Group with ID [" + hubsGroupId + "] was not deleted", hubsGroupTable.isTableEmpty());
     }
 
     /**
@@ -128,7 +127,7 @@ public class HubsGroupManagementPage extends OperatorV2SimplePage
 
         public CreateHubsGroupDialog addHubs(List<String> values)
         {
-            if (CollectionUtils.isNotEmpty(values))
+            if(CollectionUtils.isNotEmpty(values))
             {
                 values.forEach(this::addHub);
             }

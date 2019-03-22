@@ -40,7 +40,7 @@ public class HubsGroup extends DataEntity<HubsGroup>
     {
         if ("GENERATED".equalsIgnoreCase(name))
         {
-            name = "TA-" + TestUtils.generateDateUniqueString();
+            name = "HG-" + TestUtils.generateDateUniqueString();
         }
         this.name = name;
         return this;
@@ -51,23 +51,10 @@ public class HubsGroup extends DataEntity<HubsGroup>
         return hubs;
     }
 
-    public HubsGroup setHubs(List<String> hubs)
+    public void setHubs(String hubs)
     {
-        this.hubs = hubs;
+        this.hubs = Arrays.asList(hubs.split(","));
         this.hubs.sort(String::compareTo);
-        return this;
-    }
-
-    public HubsGroup setHubs(String[] hubs)
-    {
-        setHubs(Arrays.asList(hubs));
-        return this;
-    }
-
-    public HubsGroup setHubs(String hubs)
-    {
-        setHubs(hubs.split(","));
-        return this;
     }
 
     @Override

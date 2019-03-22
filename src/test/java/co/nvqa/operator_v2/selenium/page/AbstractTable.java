@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.support.JsonHelper;
+import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.operator_v2.model.DataEntity;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
@@ -78,17 +78,20 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
 
     public String getColumnText(int rowNumber, String columnId)
     {
-        Preconditions.checkArgument(StringUtils.isNotBlank(columnId), "columnId cannot be null or blank string");
+        Preconditions.checkArgument(StringUtils.isNotBlank(columnId), "'columnId' cannot be null or blank string.");
         String columnLocator = columnLocators.get(columnId);
-        Preconditions.checkArgument(StringUtils.isNotBlank(columnLocator), "locator for columnId [" + columnId + "] was not defined");
+        Preconditions.checkArgument(StringUtils.isNotBlank(columnLocator), "Locator for columnId [" + columnId + "] was not defined.");
         String text;
-        if (columnReaders.containsKey(columnId))
+
+        if(columnReaders.containsKey(columnId))
         {
             text = columnReaders.get(columnId).apply(rowNumber);
-        } else
+        }
+        else
         {
             text = getTextOnTable(rowNumber, columnLocator);
         }
+
         return StringUtils.trimToEmpty(StringUtils.strip(StringUtils.normalizeSpace(text.trim()), "-"));
     }
 
@@ -111,7 +114,7 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
                 readRow(rowIndex).entrySet().stream()
                         .filter(entry -> StringUtils.isNotBlank(entry.getValue()))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        return JsonHelper.mapToObject(data, entityClass);
+        return JsonUtils.fromMapCamelCase(data, entityClass);
     }
 
     public List<T> readAllEntities()
@@ -124,7 +127,7 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
     public List<T> readFirstEntities(int count)
     {
         int rowsCount = getRowsCount();
-        count = rowsCount >= count ? count : rowsCount;
+        count = rowsCount>=count? count : rowsCount;
         return IntStream.rangeClosed(1, count)
                 .mapToObj(this::readEntity)
                 .collect(Collectors.toList());
@@ -133,7 +136,7 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
     public List<String> readFirstRowsInColumn(String columnId, int count)
     {
         int rowsCount = getRowsCount();
-        count = rowsCount >= count ? count : rowsCount;
+        count = rowsCount>=count? count : rowsCount;
         return IntStream.rangeClosed(1, count)
                 .mapToObj(rowIndex -> this.getColumnText(rowIndex, columnId))
                 .collect(Collectors.toList());
@@ -142,9 +145,9 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
     @SuppressWarnings("UnusedReturnValue")
     public AbstractTable filterByColumn(String columnId, String value)
     {
-        Preconditions.checkArgument(StringUtils.isNotBlank(columnId), "columnId cannot be null or blank string");
+        Preconditions.checkArgument(StringUtils.isNotBlank(columnId), "'columnId' cannot be null or blank string.");
         String columnLocator = columnLocators.get(columnId);
-        Preconditions.checkArgument(StringUtils.isNotBlank(columnLocator), "locator for columnId [" + columnId + "] was not defined");
+        Preconditions.checkArgument(StringUtils.isNotBlank(columnLocator), "Locator for columnId [" + columnId + "] was not defined.");
         searchTableCustom1(columnLocator, value);
         return this;
     }

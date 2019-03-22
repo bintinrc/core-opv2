@@ -1,7 +1,7 @@
-@OperatorV2 @OperatorV2Part2 @AllShippers @Saas @ForceNotHeadless
+@OperatorV2 @OperatorV2Part2 @AllShippers @Saas
 Feature: All Shippers
 
-  @LaunchBrowser @EnableClearCache @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @EnableClearCache @ForceNotHeadless
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 

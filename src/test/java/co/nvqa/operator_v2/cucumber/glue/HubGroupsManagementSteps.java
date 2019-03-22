@@ -31,8 +31,7 @@ public class HubGroupsManagementSteps extends AbstractSteps
     @When("^Operator create new Hub Group on Hubs Group Management page using data below:$")
     public void operatorCreateNewHubGroupOnHubGroupsManagementPageUsingDataBelow(Map<String, String> mapOfData)
     {
-        HubsGroup hubsGroup = new HubsGroup();
-        hubsGroup.fromMap(mapOfData);
+        HubsGroup hubsGroup = fromMapCamelCase(mapOfData, HubsGroup.class);
         hubsGroupManagementPage.createHubsGroup(hubsGroup);
         put(KEY_CREATED_HUBS_GROUP, hubsGroup);
     }
