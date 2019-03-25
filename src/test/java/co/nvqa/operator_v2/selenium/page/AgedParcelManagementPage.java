@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -42,7 +41,7 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
         if(StringUtils.isNotBlank(daysSinceInbound))
         {
             String actualDaysSinceInbound = getTextOnTable(1, COLUMN_CLASS_DAYS_SINCE_INBOUD);
-            assertThat("Days since inbound", actualDaysSinceInbound, Matchers.equalToIgnoringCase(daysSinceInbound));
+            assertThat("Days since inbound", actualDaysSinceInbound, equalToIgnoringCase(daysSinceInbound));
         }
     }
 
@@ -58,12 +57,11 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
         waitUntilInvisibilityOfToast("Reschedule");
     }
 
-    @SuppressWarnings("unchecked")
     public void loadSelection(String shipperName, String trackingId, Integer agedDays)
     {
         retryIfNvTestRuntimeExceptionOccurred(()->
         {
-            if(!isElementExistFast(String.format("//button[contains(@aria-label,'%s')]", shipperName)))
+            if(!isElementExistFast(f("//button[contains(@aria-label,'%s')]", shipperName)))
             {
                 if(StringUtils.isNotBlank(shipperName))
                 {
@@ -94,9 +92,9 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
             if(isTableEmpty())
             {
                 clickButtonByAriaLabel("Edit Conditions");
-                throw new NvTestRuntimeException(String.format("Order with tracking ID = '%s' is not listed on table.", trackingId));
+                throw new NvTestRuntimeException(f("Order with tracking ID = '%s' is not listed on table.", trackingId));
             }
-        }, String.format("%s - [Tracking ID = %s]", getCurrentMethodName(), trackingId));
+        }, f("%s - [Tracking ID = %s]", getCurrentMethodName(), trackingId));
     }
 
     private void clickButtonLoadSelection()
