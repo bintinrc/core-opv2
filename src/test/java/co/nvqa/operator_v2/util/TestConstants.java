@@ -34,8 +34,6 @@ public final class TestConstants extends CommonSeleniumTestConstants
     public static final String NINJA_DRIVER_USERNAME;
     public static final String NINJA_DRIVER_PASSWORD;
 
-    public static final Long DP_ID;
-
     public static final int VERY_LONG_WAIT_FOR_TOAST = 90;
 
     static
@@ -67,8 +65,6 @@ public final class TestConstants extends CommonSeleniumTestConstants
         NINJA_DRIVER_NAME = getString("ninja-driver-name");
         NINJA_DRIVER_USERNAME = getString("ninja-driver-username");
         NINJA_DRIVER_PASSWORD = getString("ninja-driver-password");
-
-        DP_ID = getLong("dp-id");
     }
 
     private TestConstants()
