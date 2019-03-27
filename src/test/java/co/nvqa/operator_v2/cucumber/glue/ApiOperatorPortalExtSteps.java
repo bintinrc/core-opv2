@@ -75,7 +75,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         String value = mapOfData.getOrDefault("from", "TODAY");
         Date fromDate = null;
 
-        if ("TODAY".equalsIgnoreCase(value))
+        if("TODAY".equalsIgnoreCase(value))
         {
             Calendar fromCal = Calendar.getInstance();
             fromCal.setTime(getNextDate(-1));
@@ -83,7 +83,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
             fromCal.set(Calendar.MINUTE, 0);
             fromCal.set(Calendar.SECOND, 0);
             fromDate = fromCal.getTime();
-        } else if (StringUtils.isNotBlank(value))
+        }
+        else if(StringUtils.isNotBlank(value))
         {
             fromDate = Date.from(DateUtil.getDate(value).toInstant());
         }
@@ -91,7 +92,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         value = mapOfData.getOrDefault("to", "TODAY");
         Date toDate = null;
 
-        if ("TODAY".equalsIgnoreCase(value))
+        if("TODAY".equalsIgnoreCase(value))
         {
             Calendar toCal = Calendar.getInstance();
             toCal.setTime(new Date());
@@ -99,7 +100,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
             toCal.set(Calendar.MINUTE, 59);
             toCal.set(Calendar.SECOND, 59);
             toDate = toCal.getTime();
-        } else if (StringUtils.isNotBlank(value))
+        }
+        else if(StringUtils.isNotBlank(value))
         {
             toDate = Date.from(DateUtil.getDate(value).toInstant());
         }
@@ -107,7 +109,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         List<Integer> tags = null;
         value = mapOfData.get("tagIds");
 
-        if (StringUtils.isNotBlank(value))
+        if(StringUtils.isNotBlank(value))
         {
             tags = Arrays.stream(value.split(",")).map(tag -> Integer.parseInt(tag.trim())).collect(Collectors.toList());
         }
@@ -117,17 +119,17 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     }
 
     @Given("^API Operator create new DP Partner with the following attributes:$")
-    public void apiOperatorCreateNewDPPartnerWithTheFollowingAttributes(Map<String, String> data)
+    public void apiOperatorCreateNewDpPartnerWithTheFollowingAttributes(Map<String, String> data)
     {
         DpPartner dpPartner = new DpPartner(data);
         put(KEY_DP_PARTNER, dpPartner);
-        Map<String, Object> responseBody = getDPClient().createPartner(toJsonSnakeCase(dpPartner));
+        Map<String, Object> responseBody = getDpClient().createPartner(toJsonSnakeCase(dpPartner));
         dpPartner.setId(Long.parseLong(responseBody.get("id").toString()));
         dpPartner.setDpmsPartnerId(Long.parseLong(responseBody.get("dpms_partner_id").toString()));
     }
 
     @When("^API Operator add new DP for the created DP Partner with the following attributes:$")
-    public void operatorAddNewDPForTheDPPartnerWithTheFollowingAttributes(Map<String, String> data)
+    public void operatorAddNewDpForTheDpPartnerWithTheFollowingAttributes(Map<String, String> data)
     {
         DpPartner dpPartner = get(KEY_DP_PARTNER);
         Map<String, String> mapOfDynamicVariable = new HashMap<>();
@@ -136,14 +138,14 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         String json = replaceTokens(data.get("requestBody"), mapOfDynamicVariable);
         Dp dp = new Dp();
         dp.fromJson(JsonUtils.getDefaultSnakeCaseMapper(), json);
-        Map<String, Object> responseBody = getDPClient().createDp(dpPartner.getId(), json);
+        Map<String, Object> responseBody = getDpClient().createDp(dpPartner.getId(), json);
         dp.setId(Long.parseLong(responseBody.get("id").toString()));
         dp.setDpmsId(Long.parseLong(responseBody.get("dpms_id").toString()));
         put(KEY_DISTRIBUTION_POINT, dp);
     }
 
     @When("^API Operator add new DP User for the created DP with the following attributes:$")
-    public void operatorAddDPUserForTheCreatedDPWithTheFollowingAttributes(Map<String, String> data)
+    public void operatorAddDpUserForTheCreatedDpWithTheFollowingAttributes(Map<String, String> data)
     {
         DpPartner dpPartner = get(KEY_DP_PARTNER);
         Dp dp = get(KEY_DISTRIBUTION_POINT);

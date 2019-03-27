@@ -107,17 +107,19 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
     public void addDistributionPoint(String dpPartnerName, Dp dpParams)
     {
-        openViewDPsScreen(dpPartnerName);
+        openViewDpsScreen(dpPartnerName);
         clickAddDpButton();
         addDpDialog.fillForm(dpParams);
     }
 
-    public void openViewDPsScreen(String dpPartnerName){
+    public void openViewDpsScreen(String dpPartnerName)
+    {
         dpPartnersTable.filterByColumn( "name", dpPartnerName);
         dpPartnersTable.clickActionButton(1, "View DPs");
     }
 
-    public void openViewUsersScreen(String dpName){
+    public void openViewUsersScreen(String dpName)
+    {
         dpTable.filterByColumn( "name", dpName);
         dpTable.clickActionButton(1, "View DPs");
     }
