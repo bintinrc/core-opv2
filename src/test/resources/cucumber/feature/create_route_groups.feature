@@ -50,7 +50,7 @@ Feature: Transactions
       | RTS | Show |
     Given Operator choose "Hide Reservations" on Reservation Filters section on Create Route Group page
     Given Operator click Load Selection on Create Route Group page
-    Then Operator verify PICKUP Transaction/Reservarion record on Create Route Group page using data below:
+    Then Operator verify PICKUP Transaction/Reservation record on Create Route Group page using data below:
       | id            | GET_FROM_CREATED_ORDER                  |
       | orderId       | GET_FROM_CREATED_ORDER                  |
       | trackingId    | GET_FROM_CREATED_ORDER                  |
@@ -81,7 +81,7 @@ Feature: Transactions
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Group page
     And Operator choose "Hide Reservations" on Reservation Filters section on Create Route Group page
     And Operator click Load Selection on Create Route Group page
-    Then Operator verify PICKUP Transaction/Reservarion record on Create Route Group page using data below:
+    Then Operator verify PICKUP Transaction/Reservation record on Create Route Group page using data below:
       | id            | GET_FROM_CREATED_ORDER                  |
       | orderId       | GET_FROM_CREATED_ORDER                  |
       | trackingId    | GET_FROM_CREATED_ORDER                  |

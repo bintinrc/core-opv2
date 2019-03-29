@@ -12,6 +12,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -90,9 +91,10 @@ public class CreateRouteGroupsSteps extends AbstractSteps
         });
     }
 
-    @Given("Operator removes all General Filters except following: {strings}")
-    public void operatorRemovesAllGeneralFiltersExceptFollowingCreationTime(List<String> filters)
+    @Given("^Operator removes all General Filters except following: \"([^\"]*)\"$")
+    public void operatorRemovesAllGeneralFiltersExceptFollowingCreationTime(String filtersAsString)
     {
+        List<String> filters = Arrays.asList(filtersAsString.replaceAll(", ", ",").split(","));
         createRouteGroupsPage.removeAllFilterExceptGiven(filters);
     }
 
@@ -127,8 +129,8 @@ public class CreateRouteGroupsSteps extends AbstractSteps
     }
 
 
-    @Then("^Operator verify (.+) Transaction/Reservarion record on Create Route Group page using data below:$")
-    public void operatorVerifyTransactionReservarionRecordOnCreateRouteGroupPageUsingDataBelow(String type, Map<String, String> mapOfData) throws ParseException
+    @Then("^Operator verify (.+) Transaction/Reservation record on Create Route Group page using data below:$")
+    public void operatorVerifyTransactionReservationRecordOnCreateRouteGroupPageUsingDataBelow(String type, Map<String, String> mapOfData) throws ParseException
     {
         mapOfData = new HashMap<>(mapOfData);
         Order order = get(KEY_ORDER_DETAILS);
