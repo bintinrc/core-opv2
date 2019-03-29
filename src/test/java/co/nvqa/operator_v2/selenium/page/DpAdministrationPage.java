@@ -149,7 +149,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
     {
         dpPartnersTable.filterByColumn( "name", expectedDpPartnerParams.getName());
         DpPartner actualDpPartner = dpPartnersTable.readEntity(1);
-        assertThatIfExpectedValueNotNull("DP Partner ID", expectedDpPartnerParams.getDpmsPartnerId(), actualDpPartner.getDpmsPartnerId(), equalTo(expectedDpPartnerParams.getDpmsPartnerId()));
+        assertThatIfExpectedValueNotNull("DP Partner ID", expectedDpPartnerParams.getId(), actualDpPartner.getId(), equalTo(expectedDpPartnerParams.getId()));
         assertThatIfExpectedValueNotNull("DP Partner Name", expectedDpPartnerParams.getName(), actualDpPartner.getName(), equalTo(expectedDpPartnerParams.getName()));
         assertThatIfExpectedValueNotNull("DP Partner POC Name", expectedDpPartnerParams.getPocName(), actualDpPartner.getPocName(), equalTo(expectedDpPartnerParams.getPocName()));
         assertThatIfExpectedValueNotNull("DP Partner POC No.", expectedDpPartnerParams.getPocTel(), actualDpPartner.getPocTel(), equalTo(expectedDpPartnerParams.getPocTel()));
@@ -201,9 +201,8 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         for(DpPartner expectedDpPartner : expectedDpPartners)
         {
-            DpPartner actualDpPartner = actualMap.get(expectedDpPartner.getDpmsPartnerId());
-
-            assertThat("DP Partner with Id " + expectedDpPartner.getId(), actualDpPartner, notNullValue());
+            DpPartner actualDpPartner = actualMap.get(expectedDpPartner.getId());
+            assertEquals("DP Partner ID", expectedDpPartner.getId(), actualDpPartner.getId());
             assertEquals("DP Partner Name", expectedDpPartner.getName(), actualDpPartner.getName());
             assertEquals("POC Name", expectedDpPartner.getPocName(), actualDpPartner.getPocName());
             assertEquals("POC No.", expectedDpPartner.getPocTel(), actualDpPartner.getPocTel());
@@ -390,7 +389,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         {
             super(webDriver);
             setColumnLocators(ImmutableMap.<String, String>builder()
-                    .put("dpmsPartnerId", "dpms_partner_id")
+                    .put("id", "id")
                     .put("name", "name")
                     .put("pocName", "poc_name")
                     .put("pocTel", "poc_tel")
@@ -408,7 +407,6 @@ public class DpAdministrationPage extends OperatorV2SimplePage
      */
     public static class DpTable extends MdVirtualRepeatTable<Dp>
     {
-
         public DpTable(WebDriver webDriver)
         {
             super(webDriver);

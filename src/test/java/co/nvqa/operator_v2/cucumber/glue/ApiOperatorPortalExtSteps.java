@@ -122,10 +122,10 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     public void apiOperatorCreateNewDpPartnerWithTheFollowingAttributes(Map<String, String> data)
     {
         DpPartner dpPartner = new DpPartner(data);
-        put(KEY_DP_PARTNER, dpPartner);
         Map<String, Object> responseBody = getDpClient().createPartner(toJsonSnakeCase(dpPartner));
         dpPartner.setId(Long.parseLong(responseBody.get("id").toString()));
         dpPartner.setDpmsPartnerId(Long.parseLong(responseBody.get("dpms_partner_id").toString()));
+        put(KEY_DP_PARTNER, dpPartner);
     }
 
     @When("^API Operator add new DP for the created DP Partner with the following attributes:$")
