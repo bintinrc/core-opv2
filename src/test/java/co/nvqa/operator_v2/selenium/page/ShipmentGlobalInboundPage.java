@@ -50,16 +50,13 @@ public class ShipmentGlobalInboundPage extends OperatorV2SimplePage
 
     public void selectShipmentId(Long shipmentId)
     {
-        clickMdSelectValue(SELECT_SHIPMENT_IDS_TEXT);
-        sendKeys(INPUT_SHIPMENT_ID_XPATH, String.valueOf(shipmentId));
-        waitUntilVisibilityOfElementLocated(f(MD_OPTION_SHIPMENT_ID_FIRST_ELEMENT, String.valueOf(shipmentId)));
-        click(f(MD_OPTION_SHIPMENT_ID_FIRST_ELEMENT, String.valueOf(shipmentId)));
+        selectValueFromNvAutocompleteByItemTypes("Shipment ID", String.valueOf(shipmentId));
     }
 
     public void clickAddShipmentThenContinue(Long shipmentId)
     {
-        clickButtonByAriaLabel(ADD_SHIPMENT_ICON_ARIA_LABEL);
-        isElementExistWait3Seconds(f(SHIPMENT_INPUT_LIST_XPATH, String.valueOf(shipmentId)));
+        //clickButtonByAriaLabel(ADD_SHIPMENT_ICON_ARIA_LABEL);
+        //isElementExistWait3Seconds(f(SHIPMENT_INPUT_LIST_XPATH, String.valueOf(shipmentId)));
         clickButtonByAriaLabel(CONTINUE_BUTTON_ARIA_LABEL);
         waitUntilVisibilityOfElementLocated(SCANNER_FIELD_XPATH);
     }
