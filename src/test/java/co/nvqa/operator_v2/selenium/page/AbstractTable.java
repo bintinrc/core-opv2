@@ -62,7 +62,7 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
     protected abstract String getTextOnTable(int rowNumber, String columnDataClass);
 
     @SuppressWarnings("SameParameterValue")
-    protected abstract void selectRow(int rowNumber);
+    public abstract void selectRow(int rowNumber);
 
     protected void selectEntity(String columnId, String value)
     {

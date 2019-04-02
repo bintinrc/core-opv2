@@ -51,7 +51,7 @@ public class NgRepeatTable<T extends DataEntity> extends AbstractTable<T>
     }
 
     @Override
-    protected void selectRow(int rowNumber)
+    public void selectRow(int rowNumber)
     {
         throw new UnsupportedOperationException("Not implemented yet");
     }

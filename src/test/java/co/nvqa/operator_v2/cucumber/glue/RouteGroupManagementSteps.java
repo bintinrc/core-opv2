@@ -7,11 +7,14 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.hamcrest.Matchers;
+import org.junit.Assert;
 
 import java.util.Map;
 
+import static co.nvqa.operator_v2.selenium.page.RouteGroupManagementPage.EditRouteGroupDialog.JobDetailsTable.COLUMN_TRACKING_ID;
+import static co.nvqa.operator_v2.selenium.page.RouteGroupManagementPage.EditRouteGroupDialog.JobDetailsTable.COLUMN_TYPE;
+
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -31,20 +34,19 @@ public class RouteGroupManagementSteps extends AbstractSteps
     }
 
     @When("^Operator create new 'Route Group' on 'Route Groups Management' using data below:$")
-    public void createNewRouteGroup(Map<String,String> dataTableAsMap)
+    public void createNewRouteGroup(Map<String, String> dataTableAsMap)
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         boolean generateName = Boolean.valueOf(dataTableAsMap.get("generateName"));
         String hubName = dataTableAsMap.get("hubName");
         String routeGroupName;
 
-        if(generateName || trackingId==null)
+        if (generateName || trackingId == null)
         {
-            routeGroupName = "ARG-"+generateDateUniqueString();
-        }
-        else
+            routeGroupName = "ARG-" + generateDateUniqueString();
+        } else
         {
-            routeGroupName = "ARG-"+trackingId;
+            routeGroupName = "ARG-" + trackingId;
         }
 
         routeGroupManagementPage.createRouteGroup(routeGroupName, hubName);
@@ -71,16 +73,16 @@ public class RouteGroupManagementSteps extends AbstractSteps
             routeGroupManagementPage.searchTable(routeGroupName);
             actualRouteGroupName = routeGroupManagementPage.getTextOnTable(1, RouteGroupManagementPage.COLUMN_CLASS_DATA_NAME);
 
-            retry = (actualRouteGroupName==null || actualRouteGroupName.isEmpty()) && counter++<=MAX_RETRY;
+            retry = (actualRouteGroupName == null || actualRouteGroupName.isEmpty()) && counter++ <= MAX_RETRY;
 
-            if(retry)
+            if (retry)
             {
                 writeToCurrentScenarioLog(f("[INFO] Retrying to load and search Route Group. [Route Group Name = '%s'] Retrying %dx ...", actualRouteGroupName, counter));
                 takesScreenshot();
                 reloadPage();
             }
         }
-        while(retry);
+        while (retry);
 
         assertThat("Route Group name not matched.", actualRouteGroupName, Matchers.startsWith(routeGroupName)); //Route Group name is concatenated with description.
     }
@@ -129,10 +131,27 @@ public class RouteGroupManagementSteps extends AbstractSteps
         {
             String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
             routeGroupManagementPage.deleteRouteGroup(routeGroupName);
-        }
-        catch(Exception ex)
+        } catch (Exception ex)
         {
             NvLogger.warn("Failed to delete 'Route Group'.");
         }
+    }
+
+    @Then("^Operator delete created delivery transaction from route group$")
+    public void deleteTransactionFromRouteGroup()
+    {
+        String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+
+        RouteGroupManagementPage.EditRouteGroupDialog editRouteGroupDialog = routeGroupManagementPage
+                .openEditRouteGroupDialog(routeGroupName);
+        editRouteGroupDialog.jobDetailsTable()
+                .filterByColumn(COLUMN_TRACKING_ID, trackingId)
+                .filterByColumn(COLUMN_TYPE, "DDNT")
+                .selectRow(1);
+        editRouteGroupDialog.clickRemoveSelected();
+        Assert.assertTrue("Is Jobs table empty", editRouteGroupDialog.jobDetailsTable().isTableEmpty());
+        editRouteGroupDialog.saveChanges();
+        routeGroupManagementPage.waitUntilInvisibilityOfToast("Route Group Updated", true);
     }
 }
