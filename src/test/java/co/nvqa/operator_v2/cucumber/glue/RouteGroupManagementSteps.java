@@ -9,6 +9,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 
+import java.util.List;
 import java.util.Map;
 
 import static co.nvqa.operator_v2.selenium.page.RouteGroupManagementPage.EditRouteGroupDialog.JobDetailsTable.COLUMN_TRACKING_ID;
@@ -51,6 +52,7 @@ public class RouteGroupManagementSteps extends AbstractSteps
 
         routeGroupManagementPage.createRouteGroup(routeGroupName, hubName);
         put(KEY_ROUTE_GROUP_NAME, routeGroupName);
+        putInList(KEY_LIST_OF_ROUTE_GROUP_NAMES, routeGroupName);
     }
 
     @When("^Operator wait until 'Route Group Management' page is loaded$")
@@ -124,6 +126,11 @@ public class RouteGroupManagementSteps extends AbstractSteps
         assertNotEquals(routeGroupName, actualName);
     }
 
+    private void verifyRouteGroupDeletedSuccessfullyByName(String routeGroupName){
+        routeGroupManagementPage.searchTable(routeGroupName);
+        Assert.assertTrue(routeGroupName + " route group was deleted", routeGroupManagementPage.isTableEmpty());
+    }
+
     @Then("^Operator V2 clean up 'Route Groups'$")
     public void cleanUpRouteGroup()
     {
@@ -153,5 +160,24 @@ public class RouteGroupManagementSteps extends AbstractSteps
         Assert.assertTrue("Is Jobs table empty", editRouteGroupDialog.jobDetailsTable().isTableEmpty());
         editRouteGroupDialog.saveChanges();
         routeGroupManagementPage.waitUntilInvisibilityOfToast("Route Group Updated", true);
+    }
+
+    @When("^Operator delete created Route Groups on 'Route Group Management' page using password \"(.+)\"$")
+    public void operatorDeleteCreatedRouteGroupsOnRouteGroupManagement(String password)
+    {
+        List<String> routeGroupNames = get(KEY_LIST_OF_ROUTE_GROUP_NAMES);
+        routeGroupManagementPage.selectRouteGroups(routeGroupNames);
+        RouteGroupManagementPage.DeleteRouteGroupsDialog deleteRouteGroupsDialog = routeGroupManagementPage.openDeleteRouteGroupsDialog();
+        List<String> groupNames = deleteRouteGroupsDialog.getRouteGroupNames();
+        Assert.assertThat("Route Group Names to delete", groupNames.toArray(new String[0]), Matchers.arrayContainingInAnyOrder(routeGroupNames.toArray(new String[0])));
+        deleteRouteGroupsDialog.enterPassword(password);
+        deleteRouteGroupsDialog.clickDeleteRouteGroups();
+    }
+
+    @Then("^Operator verify created Route Groups on 'Route Group Management' deleted successfully$")
+    public void operatorVerifyCreatedRouteGroupsOnRouteGroupManagementDeletedSuccessfully()
+    {
+        List<String> routeGroupNames = get(KEY_LIST_OF_ROUTE_GROUP_NAMES);
+        routeGroupNames.forEach(this::verifyRouteGroupDeletedSuccessfullyByName);
     }
 }

@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -26,12 +27,14 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage
 
     private CreateRouteGroupsPage createRouteGroupsPage;
     private EditRouteGroupDialog editRouteGroupDialog;
+    private DeleteRouteGroupsDialog deleteRouteGroupsDialog;
 
     public RouteGroupManagementPage(WebDriver webDriver)
     {
         super(webDriver);
-        createRouteGroupsPage = new CreateRouteGroupsPage(getWebDriver());
+        createRouteGroupsPage = new CreateRouteGroupsPage(webDriver);
         editRouteGroupDialog = new EditRouteGroupDialog(webDriver);
+        deleteRouteGroupsDialog = new DeleteRouteGroupsDialog(webDriver);
     }
 
     public void createRouteGroup(String routeGroupName, String hubName)
@@ -70,6 +73,24 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage
         pause100ms();
         click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
         waitUntilInvisibilityOfToast("Route Group Deleted");
+    }
+
+    public DeleteRouteGroupsDialog openDeleteRouteGroupsDialog()
+    {
+        clickMdMenuItem("Apply Action", "Delete Selected");
+        return deleteRouteGroupsDialog.waitUntilVisible();
+    }
+
+    public void selectRouteGroups(List<String> routeGroupNames)
+    {
+        routeGroupNames.forEach(this::selectRouteGroup);
+    }
+
+    public void selectRouteGroup(String routeGroupName)
+    {
+        searchTable(routeGroupName);
+        pause100ms();
+        checkRowWithMdVirtualRepeat(1, "routeGroup in getTableData()");
     }
 
     public EditRouteGroupDialog openEditRouteGroupDialog(String filterRouteGroupName)
@@ -179,6 +200,39 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage
         public void saveChanges()
         {
             clickNvButtonSaveByNameAndWaitUntilDone("container.route-group.dialogs.save-changes");
+            waitUntilInvisibilityOfMdDialogByTitle(DIALOG_TITLE);
+        }
+    }
+
+    /**
+     * Accessor for Delete Route Group(s) dialog
+     */
+    public static class DeleteRouteGroupsDialog extends OperatorV2SimplePage
+    {
+        private static final String DIALOG_TITLE = "Delete Route Group(s)";
+
+        public DeleteRouteGroupsDialog(WebDriver webDriver) {
+            super(webDriver);
+        }
+
+        public DeleteRouteGroupsDialog waitUntilVisible()
+        {
+            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+            return this;
+        }
+
+        public DeleteRouteGroupsDialog enterPassword(String password){
+            sendKeysById("password", password);
+            return this;
+        }
+
+        public List<String> getRouteGroupNames(){
+            return getTextOfElements("//tr[@ng-repeat='routeGroup in ctrl.routeGroups']/td[2]");
+        }
+
+        public void clickDeleteRouteGroups()
+        {
+            clickNvApiTextButtonByNameAndWaitUntilDone("container.route-group.delete-route-groups");
             waitUntilInvisibilityOfMdDialogByTitle(DIALOG_TITLE);
         }
     }

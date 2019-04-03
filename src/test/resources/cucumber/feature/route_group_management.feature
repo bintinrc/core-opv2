@@ -20,7 +20,7 @@ Feature: Route Group Management
 
   Scenario: Delete Transactions From Route Group
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Routing -> 2. Route Group Management
     When Operator wait until 'Route Group Management' page is loaded
@@ -34,6 +34,19 @@ Feature: Route Group Management
     When Operator wait until 'Route Group Management' page is loaded
     Then Operator delete created delivery transaction from route group
 
+  Scenario: Bulk Delete Route Groups
+    Given Operator go to menu Routing -> 2. Route Group Management
+    When Operator create new 'Route Group' on 'Route Groups Management' using data below:
+      | generateName | true       |
+      | hubName      | {hub-name} |
+    And Operator go to menu Routing -> 2. Route Group Management
+    And Operator create new 'Route Group' on 'Route Groups Management' using data below:
+      | generateName | true       |
+      | hubName      | {hub-name} |
+    And Operator go to menu Routing -> 2. Route Group Management
+    And Operator wait until 'Route Group Management' page is loaded
+    When Operator delete created Route Groups on 'Route Group Management' page using password "{operator-portal-pwd}"
+    Then Operator verify created Route Groups on 'Route Group Management' deleted successfully
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
