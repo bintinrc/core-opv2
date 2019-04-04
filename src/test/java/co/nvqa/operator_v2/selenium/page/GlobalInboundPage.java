@@ -169,4 +169,13 @@ public class GlobalInboundPage extends OperatorV2SimplePage
             waitUntilInvisibilityOfToast(toastText);
         }
     }
+
+    public void verifiesPriorityLevelInfoIsCorrect(int expectedPriorityLevel, String expectedPriorityLevelColorAsHex)
+    {
+        String actualPriorityLevel = getText("//div[contains(text(), 'Priority Level')]/following-sibling::div[1]/span");
+        Color actualPriorityLevelColor = getBackgroundColor("//div[div[contains(text(), 'Priority Level')]]");
+
+        assertEquals("Priority Level", String.valueOf(expectedPriorityLevel), actualPriorityLevel);
+        assertEquals("Priority Level Color", expectedPriorityLevelColorAsHex, actualPriorityLevelColor.asHex());
+    }
 }

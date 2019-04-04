@@ -93,4 +93,12 @@ public class GlobalInboundSteps extends AbstractSteps
         globalInboundPage.globalInboundAndCheckAlert(globalInboundParams, toastText, rackInfo, rackColor, weightWarning);
         put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
     }
+
+    @When("^Operator verifies priority level info is correct using data below:$")
+    public void operatorVerifiesPriorityLevelInfoIsCorrectUsingDataBelow(Map<String, String> mapOfData)
+    {
+        int expectedPriorityLevel = Integer.parseInt(mapOfData.get("priorityLevel"));
+        String expectedPriorityLevelColorAsHex = mapOfData.get("priorityLevelColorAsHex");
+        globalInboundPage.verifiesPriorityLevelInfoIsCorrect(expectedPriorityLevel, expectedPriorityLevelColorAsHex);
+    }
 }
