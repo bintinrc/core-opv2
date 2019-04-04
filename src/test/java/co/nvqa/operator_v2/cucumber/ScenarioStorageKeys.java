@@ -10,6 +10,7 @@ import co.nvqa.commons.cucumber.StandardScenarioStorageKeys;
 public interface ScenarioStorageKeys extends StandardScenarioStorageKeys
 {
     String KEY_ROUTE_GROUP_NAME = "KEY_ROUTE_GROUP_NAME";
+    String KEY_LIST_OF_ROUTE_GROUP_NAMES = "KEY_LIST_OF_ROUTE_GROUP_NAMES";
     String KEY_MAIN_WINDOW_HANDLE = "KEY_MAIN_WINDOW_HANDLE";
     String KEY_PICKUP_INSTRUCTION = "KEY_PICKUP_INSTRUCTION";
     String KEY_DELIVERY_INSTRUCTION = "KEY_DELIVERY_INSTRUCTION";

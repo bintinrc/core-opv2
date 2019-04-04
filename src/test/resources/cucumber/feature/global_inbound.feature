@@ -237,6 +237,19 @@ Feature: Global Inbound
       | startDateTime | {{next-2-working-days-yyyy-MM-dd}} 09:00:00 |
       | endDateTime   | {{next-4-working-days-yyyy-MM-dd}} 22:00:00 |
 
+  Scenario: Inbound parcel picked up from DP
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API DP lodge in an order to DP with ID = "{dp-id}" and Shipper Legacy ID = "{shipper-v4-legacy-id}"
+    And Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below:
+      | hubName    | {hub-name}             |
+      | trackingId | GET_FROM_CREATED_ORDER |
+    Then API Operator verify order info after Global Inbound
+    When Operator go to menu Order -> All Orders
+    Then Operator verify order info after Global Inbound
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

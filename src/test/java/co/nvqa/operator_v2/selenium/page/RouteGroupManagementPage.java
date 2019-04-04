@@ -1,11 +1,14 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.model.RouteGroupJobDetails;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.common.collect.ImmutableMap;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -23,11 +26,15 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage
     public static final String ACTION_BUTTON_DELETE = "commons.delete";
 
     private CreateRouteGroupsPage createRouteGroupsPage;
+    private EditRouteGroupDialog editRouteGroupDialog;
+    private DeleteRouteGroupsDialog deleteRouteGroupsDialog;
 
     public RouteGroupManagementPage(WebDriver webDriver)
     {
         super(webDriver);
-        createRouteGroupsPage = new CreateRouteGroupsPage(getWebDriver());
+        createRouteGroupsPage = new CreateRouteGroupsPage(webDriver);
+        editRouteGroupDialog = new EditRouteGroupDialog(webDriver);
+        deleteRouteGroupsDialog = new DeleteRouteGroupsDialog(webDriver);
     }
 
     public void createRouteGroup(String routeGroupName, String hubName)
@@ -66,6 +73,32 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage
         pause100ms();
         click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
         waitUntilInvisibilityOfToast("Route Group Deleted");
+    }
+
+    public DeleteRouteGroupsDialog openDeleteRouteGroupsDialog()
+    {
+        clickMdMenuItem("Apply Action", "Delete Selected");
+        return deleteRouteGroupsDialog.waitUntilVisible();
+    }
+
+    public void selectRouteGroups(List<String> routeGroupNames)
+    {
+        routeGroupNames.forEach(this::selectRouteGroup);
+    }
+
+    public void selectRouteGroup(String routeGroupName)
+    {
+        searchTable(routeGroupName);
+        pause100ms();
+        checkRowWithMdVirtualRepeat(1, "routeGroup in getTableData()");
+    }
+
+    public EditRouteGroupDialog openEditRouteGroupDialog(String filterRouteGroupName)
+    {
+        searchTable(filterRouteGroupName);
+        pause100ms();
+        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        return editRouteGroupDialog.waitUntilVisible();
     }
 
     public void setRouteGroupNameValue(String value)
@@ -107,5 +140,100 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage
     public void waitUntilRouteGroupPageIsLoaded()
     {
         waitUntilInvisibilityOfElementLocated("//div[contains(@class,'message') and text()='Loading route groups...']");
+    }
+
+    /**
+     * Accessor for Edit Route Group dialog
+     */
+    public static class EditRouteGroupDialog extends OperatorV2SimplePage
+    {
+        private static final String DIALOG_TITLE = "Edit Route Group";
+
+        private JobDetailsTable jobDetailsTable;
+
+        public EditRouteGroupDialog(WebDriver webDriver)
+        {
+            super(webDriver);
+            jobDetailsTable = new JobDetailsTable(webDriver);
+        }
+
+        public EditRouteGroupDialog waitUntilVisible()
+        {
+            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+            return this;
+        }
+
+        public JobDetailsTable jobDetailsTable()
+        {
+            return jobDetailsTable;
+        }
+
+        public EditRouteGroupDialog clickRemoveSelected(){
+            clickNvIconTextButtonByName("container.route-group.dialogs.remove-selected");
+            return this;
+        }
+
+        /**
+         * Accessor for Jobs table
+         */
+        public static class JobDetailsTable extends MdVirtualRepeatTable<RouteGroupJobDetails>
+        {
+            public static final String COLUMN_TRACKING_ID = "trackingId";
+            public static final String COLUMN_TYPE = "type";
+
+            public JobDetailsTable(WebDriver webDriver)
+            {
+                super(webDriver);
+                setColumnLocators(ImmutableMap.<String, String>builder()
+                        .put("sn", "_idx")
+                        .put("id", "id")
+                        .put("orderId", "order-id")
+                        .put(COLUMN_TRACKING_ID, "tracking-id")
+                        .put(COLUMN_TYPE, "type")
+                        .build()
+                );
+                setEntityClass(RouteGroupJobDetails.class);
+                setMdVirtualRepeat("job in getTableData()");
+            }
+        }
+
+        public void saveChanges()
+        {
+            clickNvButtonSaveByNameAndWaitUntilDone("container.route-group.dialogs.save-changes");
+            waitUntilInvisibilityOfMdDialogByTitle(DIALOG_TITLE);
+        }
+    }
+
+    /**
+     * Accessor for Delete Route Group(s) dialog
+     */
+    public static class DeleteRouteGroupsDialog extends OperatorV2SimplePage
+    {
+        private static final String DIALOG_TITLE = "Delete Route Group(s)";
+
+        public DeleteRouteGroupsDialog(WebDriver webDriver) {
+            super(webDriver);
+        }
+
+        public DeleteRouteGroupsDialog waitUntilVisible()
+        {
+            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+            return this;
+        }
+
+        public DeleteRouteGroupsDialog enterPassword(String password){
+            sendKeysById("password", password);
+            return this;
+        }
+
+        public List<String> getRouteGroupNames(){
+            return getTextOfElements("//tr[@ng-repeat='routeGroup in ctrl.routeGroups']/td[2]");
+        }
+
+        public void clickDeleteRouteGroups()
+        {
+            clickNvApiTextButtonByNameAndWaitUntilDone("container.route-group.delete-route-groups");
+            waitUntilInvisibilityOfMdDialogByTitle(DIALOG_TITLE);
+        }
     }
 }

@@ -7,11 +7,15 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.hamcrest.Matchers;
+import org.junit.Assert;
 
+import java.util.List;
 import java.util.Map;
 
+import static co.nvqa.operator_v2.selenium.page.RouteGroupManagementPage.EditRouteGroupDialog.JobDetailsTable.COLUMN_TRACKING_ID;
+import static co.nvqa.operator_v2.selenium.page.RouteGroupManagementPage.EditRouteGroupDialog.JobDetailsTable.COLUMN_TYPE;
+
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -31,24 +35,24 @@ public class RouteGroupManagementSteps extends AbstractSteps
     }
 
     @When("^Operator create new 'Route Group' on 'Route Groups Management' using data below:$")
-    public void createNewRouteGroup(Map<String,String> dataTableAsMap)
+    public void createNewRouteGroup(Map<String, String> dataTableAsMap)
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         boolean generateName = Boolean.valueOf(dataTableAsMap.get("generateName"));
         String hubName = dataTableAsMap.get("hubName");
         String routeGroupName;
 
-        if(generateName || trackingId==null)
+        if (generateName || trackingId == null)
         {
-            routeGroupName = "ARG-"+generateDateUniqueString();
-        }
-        else
+            routeGroupName = "ARG-" + generateDateUniqueString();
+        } else
         {
-            routeGroupName = "ARG-"+trackingId;
+            routeGroupName = "ARG-" + trackingId;
         }
 
         routeGroupManagementPage.createRouteGroup(routeGroupName, hubName);
         put(KEY_ROUTE_GROUP_NAME, routeGroupName);
+        putInList(KEY_LIST_OF_ROUTE_GROUP_NAMES, routeGroupName);
     }
 
     @When("^Operator wait until 'Route Group Management' page is loaded$")
@@ -71,16 +75,16 @@ public class RouteGroupManagementSteps extends AbstractSteps
             routeGroupManagementPage.searchTable(routeGroupName);
             actualRouteGroupName = routeGroupManagementPage.getTextOnTable(1, RouteGroupManagementPage.COLUMN_CLASS_DATA_NAME);
 
-            retry = (actualRouteGroupName==null || actualRouteGroupName.isEmpty()) && counter++<=MAX_RETRY;
+            retry = (actualRouteGroupName == null || actualRouteGroupName.isEmpty()) && counter++ <= MAX_RETRY;
 
-            if(retry)
+            if (retry)
             {
                 writeToCurrentScenarioLog(f("[INFO] Retrying to load and search Route Group. [Route Group Name = '%s'] Retrying %dx ...", actualRouteGroupName, counter));
                 takesScreenshot();
                 reloadPage();
             }
         }
-        while(retry);
+        while (retry);
 
         assertThat("Route Group name not matched.", actualRouteGroupName, Matchers.startsWith(routeGroupName)); //Route Group name is concatenated with description.
     }
@@ -122,6 +126,11 @@ public class RouteGroupManagementSteps extends AbstractSteps
         assertNotEquals(routeGroupName, actualName);
     }
 
+    private void verifyRouteGroupDeletedSuccessfullyByName(String routeGroupName){
+        routeGroupManagementPage.searchTable(routeGroupName);
+        Assert.assertTrue(routeGroupName + " route group was deleted", routeGroupManagementPage.isTableEmpty());
+    }
+
     @Then("^Operator V2 clean up 'Route Groups'$")
     public void cleanUpRouteGroup()
     {
@@ -129,10 +138,46 @@ public class RouteGroupManagementSteps extends AbstractSteps
         {
             String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
             routeGroupManagementPage.deleteRouteGroup(routeGroupName);
-        }
-        catch(Exception ex)
+        } catch (Exception ex)
         {
             NvLogger.warn("Failed to delete 'Route Group'.");
         }
+    }
+
+    @Then("^Operator delete created delivery transaction from route group$")
+    public void deleteTransactionFromRouteGroup()
+    {
+        String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+
+        RouteGroupManagementPage.EditRouteGroupDialog editRouteGroupDialog = routeGroupManagementPage
+                .openEditRouteGroupDialog(routeGroupName);
+        editRouteGroupDialog.jobDetailsTable()
+                .filterByColumn(COLUMN_TRACKING_ID, trackingId)
+                .filterByColumn(COLUMN_TYPE, "DDNT")
+                .selectRow(1);
+        editRouteGroupDialog.clickRemoveSelected();
+        Assert.assertTrue("Is Jobs table empty", editRouteGroupDialog.jobDetailsTable().isTableEmpty());
+        editRouteGroupDialog.saveChanges();
+        routeGroupManagementPage.waitUntilInvisibilityOfToast("Route Group Updated", true);
+    }
+
+    @When("^Operator delete created Route Groups on 'Route Group Management' page using password \"(.+)\"$")
+    public void operatorDeleteCreatedRouteGroupsOnRouteGroupManagement(String password)
+    {
+        List<String> routeGroupNames = get(KEY_LIST_OF_ROUTE_GROUP_NAMES);
+        routeGroupManagementPage.selectRouteGroups(routeGroupNames);
+        RouteGroupManagementPage.DeleteRouteGroupsDialog deleteRouteGroupsDialog = routeGroupManagementPage.openDeleteRouteGroupsDialog();
+        List<String> groupNames = deleteRouteGroupsDialog.getRouteGroupNames();
+        Assert.assertThat("Route Group Names to delete", groupNames.toArray(new String[0]), Matchers.arrayContainingInAnyOrder(routeGroupNames.toArray(new String[0])));
+        deleteRouteGroupsDialog.enterPassword(password);
+        deleteRouteGroupsDialog.clickDeleteRouteGroups();
+    }
+
+    @Then("^Operator verify created Route Groups on 'Route Group Management' deleted successfully$")
+    public void operatorVerifyCreatedRouteGroupsOnRouteGroupManagementDeletedSuccessfully()
+    {
+        List<String> routeGroupNames = get(KEY_LIST_OF_ROUTE_GROUP_NAMES);
+        routeGroupNames.forEach(this::verifyRouteGroupDeletedSuccessfullyByName);
     }
 }

@@ -47,6 +47,119 @@ public abstract class DataEntity<T extends DataEntity> implements NvAssert, NvMa
         merge(entity);
     }
 
+    private static Method findSetter(Class<?> clazz, String property, Class<?> valueType)
+    {
+        Method[] methods = clazz.getMethods();
+        String setterName = sanitizeString("set" + property);
+
+        for (Method method : methods)
+        {
+            if (StringUtils.equals(setterName, sanitizeString(method.getName()))
+                    && method.getParameterCount() == 1
+                    && method.getParameterTypes()[0].isAssignableFrom(valueType))
+            {
+                return method;
+            }
+        }
+
+        return null;
+    }
+
+    private static Method findGetter(Class<?> clazz, String property)
+    {
+        Method[] methods = clazz.getMethods();
+        String getterName = sanitizeString("get" + property);
+
+        for (Method method : methods)
+        {
+            if (StringUtils.equals(getterName, sanitizeString(method.getName())) && method.getParameterCount() == 0)
+            {
+                return method;
+            }
+        }
+
+        return null;
+    }
+
+    private static Field findPropertyField(Class<?> clazz, String property)
+    {
+        String propertyName = sanitizeString(property);
+        Field[] fields = FieldUtils.getAllFields(clazz);
+        Field field = null;
+
+        for (Field f : fields)
+        {
+            if (StringUtils.equals(propertyName, sanitizeString(f.getName())))
+            {
+                field = f;
+                break;
+            }
+        }
+
+        return field;
+    }
+
+    protected static String sanitizeString(String value)
+    {
+        return StringUtils.normalizeSpace(value.trim().toLowerCase()).replaceAll("\\s", "_");
+    }
+
+    protected static String[] splitCsvLine(String csvLine)
+    {
+        return csvLine.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+    }
+
+    protected static String getValueIfIndexExists(String[] values, int index)
+    {
+        return values.length > index ? StringUtils.trimToNull(StringUtils.strip(UNESCAPER.translate(values[index]), "\"")) : null;
+    }
+
+    public static <T extends DataEntity<?>> List<T> fromCsvFile(Class<T> clazz, String fileName, boolean ignoreHeader)
+    {
+        try
+        {
+            List<String> csvLines = FileUtils.readLines(new File(fileName), Charset.defaultCharset());
+
+            if (ignoreHeader)
+            {
+                csvLines.remove(0);
+            }
+            return csvLines.stream().map(csvLine ->
+            {
+                try
+                {
+                    T dataEntity = clazz.getDeclaredConstructor().newInstance();
+                    dataEntity.fromCsvLine(csvLine);
+                    return dataEntity;
+                } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex)
+                {
+                    String message = String.format("Could not create new instance of %s data entity.", clazz.getName());
+                    NvLogger.error(message);
+                    throw new NvTestRuntimeException(ex);
+                }
+            }).collect(Collectors.toList());
+        } catch (IOException ex)
+        {
+            NvLogger.warn("Could not read file [" + fileName + "]");
+            return new ArrayList<>();
+        }
+    }
+
+    public static <T extends DataEntity<?>> T fromMap(Class<T> clazz, Map<String, String> data)
+    {
+        try
+        {
+            T dataEntity = clazz.getDeclaredConstructor().newInstance();
+            dataEntity.fromMap(data);
+            return dataEntity;
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex)
+        {
+            String message = String.format("Could not create new instance of %s data entity", clazz.getName());
+            NvLogger.error(message);
+            throw new NvTestRuntimeException(ex);
+        }
+    }
+
     public void fromMap(Map<String, ?> data)
     {
         data.forEach(this::setProperty);
@@ -85,30 +198,63 @@ public abstract class DataEntity<T extends DataEntity> implements NvAssert, NvMa
 
         try
         {
+            if (property.contains("."))
+            {
+                String entityName = property.substring(0, property.indexOf("."));
+                String nestedPropertyName = property.substring(property.indexOf(".") + 1);
+                DataEntity<?> entity = initNestedDataEntity(entityName);
+                if (entity != null) {
+                    entity.setProperty(nestedPropertyName, value);
+                }
+                return;
+            }
+
             Method setter = findSetter(clazz, property, value.getClass());
 
-            if(setter!=null)
+            if (setter != null)
             {
                 MethodUtils.invokeMethod(this, true, setter.getName(), value);
-            }
-            else
+            } else
             {
                 Field field = findPropertyField(clazz, property);
 
-                if(field!=null)
+                if (field != null)
                 {
-                    if(field.getType().isAssignableFrom(value.getClass()))
+                    if (field.getType().isAssignableFrom(value.getClass()))
                     {
                         FieldUtils.writeField(field, this, value, true);
                     }
                 }
             }
-        }
-        catch(Exception ex)
+        } catch (Exception ex)
         {
             String message = String.format("Could not set %s property to %s data entity", property, this.getClass().getName());
             NvLogger.error(message);
         }
+    }
+
+    private DataEntity<?> initNestedDataEntity(String property)
+    {
+        Field field = findPropertyField(this.getClass(), property);
+
+        DataEntity<?> nestedEntity = null;
+
+        if (field != null)
+        {
+            try
+            {
+                nestedEntity = (DataEntity<?>) FieldUtils.readField(field, this, true);
+                if (nestedEntity == null){
+                    nestedEntity = (DataEntity<?>) field.getType().newInstance();
+                    FieldUtils.writeField(field, this, nestedEntity, true);
+                }
+            } catch (Exception ex){
+                NvLogger.error(ex.getMessage());
+                nestedEntity = null;
+            }
+        }
+
+        return nestedEntity;
     }
 
     @SuppressWarnings("unchecked")
@@ -120,21 +266,19 @@ public abstract class DataEntity<T extends DataEntity> implements NvAssert, NvMa
         {
             Method getter = findGetter(clazz, property);
 
-            if(getter!=null)
+            if (getter != null)
             {
                 return (U) MethodUtils.invokeMethod(this, true, getter.getName());
-            }
-            else
+            } else
             {
                 Field field = findPropertyField(clazz, property);
 
-                if(field!=null)
+                if (field != null)
                 {
                     return (U) FieldUtils.readField(field, this, true);
                 }
             }
-        }
-        catch(Exception ex)
+        } catch (Exception ex)
         {
             String message = String.format("Could not get %s property of %s data entity", property, this.getClass().getName());
             NvLogger.error(message);
@@ -143,124 +287,8 @@ public abstract class DataEntity<T extends DataEntity> implements NvAssert, NvMa
         return null;
     }
 
-    private static Method findSetter(Class<?> clazz, String property, Class<?> valueType)
-    {
-        Method[] methods = clazz.getMethods();
-        String setterName = sanitizeString("set" + property);
-
-        for(Method method : methods)
-        {
-            if(StringUtils.equals(setterName, sanitizeString(method.getName()))
-                    && method.getParameterCount() == 1
-                    && method.getParameterTypes()[0].isAssignableFrom(valueType))
-            {
-                return method;
-            }
-        }
-
-        return null;
-    }
-
-    private static Method findGetter(Class<?> clazz, String property)
-    {
-        Method[] methods = clazz.getMethods();
-        String getterName = sanitizeString("get" + property);
-
-        for(Method method : methods)
-        {
-            if(StringUtils.equals(getterName, sanitizeString(method.getName())) && method.getParameterCount()==0)
-            {
-                return method;
-            }
-        }
-
-        return null;
-    }
-
-    private static Field findPropertyField(Class<?> clazz, String property)
-    {
-        String propertyName = sanitizeString(property);
-        Field[] fields = FieldUtils.getAllFields(clazz);
-        Field field = null;
-
-        for(Field f : fields)
-        {
-            if (StringUtils.equals(propertyName, sanitizeString(f.getName())))
-            {
-                field = f;
-                break;
-            }
-        }
-
-        return field;
-    }
-
-    protected static String sanitizeString(String value)
-    {
-        return StringUtils.normalizeSpace(value.trim().toLowerCase()).replaceAll("\\s", "_");
-    }
-
-    protected static String[] splitCsvLine(String csvLine)
-    {
-        return csvLine.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
-    }
-
     public void fromCsvLine(String csvLine)
     {
-    }
-
-    protected static String getValueIfIndexExists(String[] values, int index)
-    {
-        return values.length>index? StringUtils.trimToNull(StringUtils.strip(UNESCAPER.translate(values[index]), "\"")) : null;
-    }
-
-    public static <T extends DataEntity<?>> List<T> fromCsvFile(Class<T> clazz, String fileName, boolean ignoreHeader)
-    {
-        try
-        {
-            List<String> csvLines = FileUtils.readLines(new File(fileName), Charset.defaultCharset());
-
-            if(ignoreHeader)
-            {
-                csvLines.remove(0);
-            }
-            return csvLines.stream().map(csvLine ->
-            {
-                try
-                {
-                    T dataEntity = clazz.getDeclaredConstructor().newInstance();
-                    dataEntity.fromCsvLine(csvLine);
-                    return dataEntity;
-                }
-                catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex)
-                {
-                    String message = String.format("Could not create new instance of %s data entity.", clazz.getName());
-                    NvLogger.error(message);
-                    throw new NvTestRuntimeException(ex);
-                }
-            }).collect(Collectors.toList());
-        }
-        catch(IOException ex)
-        {
-            NvLogger.warn("Could not read file [" + fileName + "]");
-            return new ArrayList<>();
-        }
-    }
-
-    public static <T extends DataEntity<?>> T fromMap(Class<T> clazz, Map<String, String> data)
-    {
-        try
-        {
-            T dataEntity = clazz.getDeclaredConstructor().newInstance();
-            dataEntity.fromMap(data);
-            return dataEntity;
-        }
-        catch(InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex)
-        {
-            String message = String.format("Could not create new instance of %s data entity", clazz.getName());
-            NvLogger.error(message);
-            throw new NvTestRuntimeException(ex);
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -271,17 +299,16 @@ public abstract class DataEntity<T extends DataEntity> implements NvAssert, NvMa
 
         expectedData.forEach((propertyName, expectedValue) ->
         {
-            if(expectedValue!=null && !ArrayUtils.contains(ignoredProperties, propertyName))
+            if (expectedValue != null && !ArrayUtils.contains(ignoredProperties, propertyName))
             {
                 String message = StringUtils.capitalize(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase(propertyName), " "));
 
-                if(expectedValue instanceof String)
+                if (expectedValue instanceof String)
                 {
                     String actualValue = StringUtils.normalizeSpace(String.valueOf(actualData.get(propertyName)).trim());
                     String strExpectedValue = StringUtils.normalizeSpace(String.valueOf(expectedValue).trim());
                     assertThat(message, actualValue, equalTo(strExpectedValue));
-                }
-                else
+                } else
                 {
                     assertThat(message, actualData.get(propertyName), equalTo(expectedValue));
                 }
