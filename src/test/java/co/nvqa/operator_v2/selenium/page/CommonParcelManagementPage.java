@@ -44,11 +44,12 @@ public abstract class CommonParcelManagementPage extends OperatorV2SimplePage
 
     public void rescheduleNext2Days(List<String> trackingIds)
     {
-        trackingIds.forEach(trackingId -> {
-                    searchTableByTrackingId(trackingId);
-                    checkRow(1);
-                }
-        );
+        trackingIds.forEach(trackingId ->
+        {
+            searchTableByTrackingId(trackingId);
+            checkRow(1);
+        });
+
         selectAction(ACTION_RESCHEDULE_SELECTED);
         setMdDatepickerById("commons.model.date", TestUtils.getNextDate(2));
         clickNvIconTextButtonByNameAndWaitUntilDone("commons.reschedule");
@@ -90,11 +91,12 @@ public abstract class CommonParcelManagementPage extends OperatorV2SimplePage
 
     public void rtsSelectedOrderNext2Days(List<String> trackingIds)
     {
-        trackingIds.forEach(trackingId -> {
-                    searchTableByTrackingId(trackingId);
-                    checkRow(1);
-                }
-        );
+        trackingIds.forEach(trackingId ->
+        {
+            searchTableByTrackingId(trackingId);
+            checkRow(1);
+        });
+
         selectAction(ACTION_SET_RTS_TO_SELECTED);
         setMdDatepickerById("commons.model.delivery-date", TestUtils.getNextDate(2));
         selectValueFromMdSelectById("commons.timeslot", "3PM - 6PM");
@@ -107,7 +109,7 @@ public abstract class CommonParcelManagementPage extends OperatorV2SimplePage
     {
         click("//span[text()='Apply Action']");
 
-        switch (actionType)
+        switch(actionType)
         {
             case ACTION_SET_RTS_TO_SELECTED:
                 clickButtonByAriaLabel("Set RTS to Selected");
@@ -186,23 +188,23 @@ public abstract class CommonParcelManagementPage extends OperatorV2SimplePage
         {
             clickNvIconTextButtonByName("container.order.edit.change-address");
 
-            if (StringUtils.isNotBlank(address.getCountry()))
+            if(StringUtils.isNotBlank(address.getCountry()))
             {
                 sendKeysById("commons.country", address.getCountry());
             }
-            if (StringUtils.isNotBlank(address.getCity()))
+            if(StringUtils.isNotBlank(address.getCity()))
             {
                 sendKeysById("commons.city", address.getCity());
             }
-            if (StringUtils.isNotBlank(address.getAddress1()))
+            if(StringUtils.isNotBlank(address.getAddress1()))
             {
                 sendKeysById("commons.address1", address.getAddress1());
             }
-            if (StringUtils.isNotBlank(address.getAddress2()))
+            if(StringUtils.isNotBlank(address.getAddress2()))
             {
                 sendKeysById("commons.address2", address.getAddress2());
             }
-            if (StringUtils.isNotBlank(address.getPostcode()))
+            if(StringUtils.isNotBlank(address.getPostcode()))
             {
                 sendKeysById("commons.postcode", address.getPostcode());
             }
@@ -210,23 +212,23 @@ public abstract class CommonParcelManagementPage extends OperatorV2SimplePage
 
         public EditRtsDetailsDialog fillForm(RtsDetails rtsDetails)
         {
-            if (StringUtils.isNotBlank(rtsDetails.getReason()))
+            if(StringUtils.isNotBlank(rtsDetails.getReason()))
             {
                 setReason(rtsDetails.getReason());
             }
-            if (StringUtils.isNotBlank(rtsDetails.getInternalNotes()))
+            if(StringUtils.isNotBlank(rtsDetails.getInternalNotes()))
             {
                 setInternalNotes(rtsDetails.getInternalNotes());
             }
-            if (rtsDetails.getDeliveryDate() != null)
+            if(rtsDetails.getDeliveryDate() != null)
             {
                 setDeliveryDate(rtsDetails.getDeliveryDate());
             }
-            if (StringUtils.isNotBlank(rtsDetails.getTimeSlot()))
+            if(StringUtils.isNotBlank(rtsDetails.getTimeSlot()))
             {
                 setTimeSlot(rtsDetails.getTimeSlot());
             }
-            if (rtsDetails.getAddress() != null)
+            if(rtsDetails.getAddress() != null)
             {
                 changeAddress(rtsDetails.getAddress());
             }

@@ -168,7 +168,8 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage
             return jobDetailsTable;
         }
 
-        public EditRouteGroupDialog clickRemoveSelected(){
+        public EditRouteGroupDialog clickRemoveSelected()
+        {
             clickNvIconTextButtonByName("container.route-group.dialogs.remove-selected");
             return this;
         }
@@ -211,7 +212,8 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage
     {
         private static final String DIALOG_TITLE = "Delete Route Group(s)";
 
-        public DeleteRouteGroupsDialog(WebDriver webDriver) {
+        public DeleteRouteGroupsDialog(WebDriver webDriver)
+        {
             super(webDriver);
         }
 
@@ -221,12 +223,14 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage
             return this;
         }
 
-        public DeleteRouteGroupsDialog enterPassword(String password){
+        public DeleteRouteGroupsDialog enterPassword(String password)
+        {
             sendKeysById("password", password);
             return this;
         }
 
-        public List<String> getRouteGroupNames(){
+        public List<String> getRouteGroupNames()
+        {
             return getTextOfElements("//tr[@ng-repeat='routeGroup in ctrl.routeGroups']/td[2]");
         }
 

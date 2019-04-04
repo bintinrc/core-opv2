@@ -99,7 +99,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps
                 .fillForm(rtsDetails)
                 .submitForm();
 
-        if (rtsDetails.getAddress() != null)
+        if(rtsDetails.getAddress()!=null)
         {
             RtsDetails.RtsAddress newAddress = rtsDetails.getAddress();
             Order createdOrder = get(KEY_CREATED_ORDER);

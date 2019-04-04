@@ -198,7 +198,6 @@ Feature: Failed Delivery Management
       | Note   | hiptest-uid                              | orderType | isPickupRequired |
       | Normal | uid:3e01ecc1-4e17-4b26-bc30-65711dd73133 | Normal    | false            |
 
-
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

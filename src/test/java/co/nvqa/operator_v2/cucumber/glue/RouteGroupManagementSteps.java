@@ -6,8 +6,6 @@ import co.nvqa.operator_v2.selenium.page.TagManagementPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 
 import java.util.List;
 import java.util.Map;
@@ -42,10 +40,11 @@ public class RouteGroupManagementSteps extends AbstractSteps
         String hubName = dataTableAsMap.get("hubName");
         String routeGroupName;
 
-        if (generateName || trackingId == null)
+        if(generateName || trackingId==null)
         {
             routeGroupName = "ARG-" + generateDateUniqueString();
-        } else
+        }
+        else
         {
             routeGroupName = "ARG-" + trackingId;
         }
@@ -75,18 +74,18 @@ public class RouteGroupManagementSteps extends AbstractSteps
             routeGroupManagementPage.searchTable(routeGroupName);
             actualRouteGroupName = routeGroupManagementPage.getTextOnTable(1, RouteGroupManagementPage.COLUMN_CLASS_DATA_NAME);
 
-            retry = (actualRouteGroupName == null || actualRouteGroupName.isEmpty()) && counter++ <= MAX_RETRY;
+            retry = (actualRouteGroupName==null || actualRouteGroupName.isEmpty()) && counter++ <= MAX_RETRY;
 
-            if (retry)
+            if(retry)
             {
                 writeToCurrentScenarioLog(f("[INFO] Retrying to load and search Route Group. [Route Group Name = '%s'] Retrying %dx ...", actualRouteGroupName, counter));
                 takesScreenshot();
                 reloadPage();
             }
         }
-        while (retry);
+        while(retry);
 
-        assertThat("Route Group name not matched.", actualRouteGroupName, Matchers.startsWith(routeGroupName)); //Route Group name is concatenated with description.
+        assertThat("Route Group name not matched.", actualRouteGroupName, startsWith(routeGroupName)); //Route Group name is concatenated with description.
     }
 
     @When("^Operator update 'Route Group' on 'Route Group Management'$")
@@ -126,9 +125,10 @@ public class RouteGroupManagementSteps extends AbstractSteps
         assertNotEquals(routeGroupName, actualName);
     }
 
-    private void verifyRouteGroupDeletedSuccessfullyByName(String routeGroupName){
+    private void verifyRouteGroupDeletedSuccessfullyByName(String routeGroupName)
+    {
         routeGroupManagementPage.searchTable(routeGroupName);
-        Assert.assertTrue(routeGroupName + " route group was deleted", routeGroupManagementPage.isTableEmpty());
+        assertTrue(f("Route Group with name = '%s' not deleted successfully.", routeGroupName), routeGroupManagementPage.isTableEmpty());
     }
 
     @Then("^Operator V2 clean up 'Route Groups'$")
@@ -138,7 +138,8 @@ public class RouteGroupManagementSteps extends AbstractSteps
         {
             String routeGroupName = get(KEY_ROUTE_GROUP_NAME);
             routeGroupManagementPage.deleteRouteGroup(routeGroupName);
-        } catch (Exception ex)
+        }
+        catch(Exception ex)
         {
             NvLogger.warn("Failed to delete 'Route Group'.");
         }
@@ -157,7 +158,7 @@ public class RouteGroupManagementSteps extends AbstractSteps
                 .filterByColumn(COLUMN_TYPE, "DDNT")
                 .selectRow(1);
         editRouteGroupDialog.clickRemoveSelected();
-        Assert.assertTrue("Is Jobs table empty", editRouteGroupDialog.jobDetailsTable().isTableEmpty());
+        assertTrue("Is Jobs table empty", editRouteGroupDialog.jobDetailsTable().isTableEmpty());
         editRouteGroupDialog.saveChanges();
         routeGroupManagementPage.waitUntilInvisibilityOfToast("Route Group Updated", true);
     }
@@ -169,7 +170,7 @@ public class RouteGroupManagementSteps extends AbstractSteps
         routeGroupManagementPage.selectRouteGroups(routeGroupNames);
         RouteGroupManagementPage.DeleteRouteGroupsDialog deleteRouteGroupsDialog = routeGroupManagementPage.openDeleteRouteGroupsDialog();
         List<String> groupNames = deleteRouteGroupsDialog.getRouteGroupNames();
-        Assert.assertThat("Route Group Names to delete", groupNames.toArray(new String[0]), Matchers.arrayContainingInAnyOrder(routeGroupNames.toArray(new String[0])));
+        assertThat("Route Group Names to delete", groupNames.toArray(new String[0]), arrayContainingInAnyOrder(routeGroupNames.toArray(new String[0])));
         deleteRouteGroupsDialog.enterPassword(password);
         deleteRouteGroupsDialog.clickDeleteRouteGroups();
     }
