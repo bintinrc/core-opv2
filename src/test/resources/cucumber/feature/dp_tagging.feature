@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @DpTagging @CWF
+@OperatorV2 @OperatorV2Part1 @DpTagging
 Feature: DP Tagging
 
   @LaunchBrowser @ShouldAlwaysRun

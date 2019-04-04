@@ -879,6 +879,14 @@ public class OperatorV2SimplePage extends SimplePage
         pause50ms();
     }
 
+    public void selectValueFromMdSelectByAriaLabel(String mdSelectAriaLabel, String value)
+    {
+        clickf("//md-select[contains(@aria-label, '%s')]", mdSelectAriaLabel);
+        pause100ms();
+        clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%<s')]", value);
+        pause50ms();
+    }
+
     public void selectValueFromMdSelectByMdSelectXpath(String mdSelectXpath, String value)
     {
         click(mdSelectXpath);
