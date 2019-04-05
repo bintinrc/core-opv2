@@ -183,15 +183,10 @@ Feature: Failed Delivery Management
     And Operator refresh page
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator RTS failed delivery order with following properties:
-      | reason           | Other Reason                                                             |
-      | internalNotes    | Internal notes created by OpV2 automation on {{current-date-yyyy-MM-dd}} |
-      | deliveryDate     | {{next-1-day-yyyy-MM-dd}}                                                |
-      | timeSlot         | 3PM - 6PM                                                                |
-      | address.country  | SG                                                                       |
-      | address.city     | SG                                                                       |
-      | address.address1 | new address 1                                                            |
-      | address.address2 | new address 2                                                            |
-      | address.postcode | 123456                                                                   |
+      | reason           | Other Reason                                                              |
+      | internalNotes    | Internal notes created by OpV2 automation on {{current-date-yyyy-MM-dd}}. |
+      | deliveryDate     | {{next-1-day-yyyy-MM-dd}}                                                 |
+      | timeSlot         | 3PM - 6PM                                                                 |
     Then Operator verify failed delivery order RTS-ed successfully
     And API Operator verify order info after failed delivery order RTS-ed on next day
     Examples:

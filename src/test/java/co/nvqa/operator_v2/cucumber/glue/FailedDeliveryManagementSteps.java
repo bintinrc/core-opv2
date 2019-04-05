@@ -1,5 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.cucumber.glue.AddressFactory;
+import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.RtsDetails;
 import co.nvqa.operator_v2.selenium.page.FailedDeliveryManagementPage;
@@ -99,16 +101,26 @@ public class FailedDeliveryManagementSteps extends AbstractSteps
                 .fillForm(rtsDetails)
                 .submitForm();
 
-        if(rtsDetails.getAddress()!=null)
+        if(rtsDetails.getAddress()==null)
         {
-            RtsDetails.RtsAddress newAddress = rtsDetails.getAddress();
-            Order createdOrder = get(KEY_CREATED_ORDER);
-            createdOrder.setFromCountry(newAddress.getCountry());
-            createdOrder.setFromCity(newAddress.getCity());
-            createdOrder.setFromAddress1(newAddress.getAddress1());
-            createdOrder.setFromAddress2(newAddress.getAddress2());
-            createdOrder.setFromPostcode(newAddress.getPostcode());
+            Address randomAddress = AddressFactory.getRandomAddress();
+
+            RtsDetails.RtsAddress rtsAddress = new RtsDetails.RtsAddress();
+            rtsAddress.setCountry(randomAddress.getCountry());
+            rtsAddress.setCity(randomAddress.getCity());
+            rtsAddress.setAddress1(randomAddress.getAddress1());
+            rtsAddress.setAddress2(randomAddress.getAddress2());
+            rtsAddress.setPostcode(randomAddress.getPostcode());
+            rtsDetails.setAddress(rtsAddress);
         }
+
+        RtsDetails.RtsAddress newAddress = rtsDetails.getAddress();
+        Order createdOrder = get(KEY_CREATED_ORDER);
+        createdOrder.setFromCountry(newAddress.getCountry());
+        createdOrder.setFromCity(newAddress.getCity());
+        createdOrder.setFromAddress1(newAddress.getAddress1());
+        createdOrder.setFromAddress2(newAddress.getAddress2());
+        createdOrder.setFromPostcode(newAddress.getPostcode());
     }
 
     @Then("^Operator verify failed delivery order RTS-ed successfully$")
