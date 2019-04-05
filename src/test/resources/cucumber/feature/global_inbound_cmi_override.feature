@@ -1,12 +1,11 @@
-@OperatorV2 @OperatorV2Part1 @GlobalInboundCmiOverride @CWF
+@OperatorV2 @OperatorV2Part1 @GlobalInboundCmiOverride
 Feature: Global Inbound CMI Override
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @RT
-  Scenario Outline: Operator Global Inbound CMI Override an order with different Priority Level
+  Scenario Outline: Operator Global Inbound CMI Override an order with different Priority Level (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Special Pages -> Global Inbound CMI Override
     Given API Shipper create V4 order using data below:
@@ -22,10 +21,10 @@ Feature: Global Inbound CMI Override
       | priorityLevelColorAsHex | <priorityLevelColorAsHex> |
     Examples:
       | Note         | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
-      | Level 0      |                                          | 0             | #e8e8e8                 |
-      | Level 1      |                                          | 1             | #ffff00                 |
-      | Level 2 - 90 |                                          | 30            | #ffa500                 |
-      | Level > 90   |                                          | 91            | #ff0000                 |
+      | Level 0      | uid:24a430c9-a7d9-489c-8a0f-bd412ad14151 | 0             | #e8e8e8                 |
+      | Level 1      | uid:811ceb47-d042-4abf-961c-ebe2f3da1603 | 1             | #ffff00                 |
+      | Level 2 - 90 | uid:d8129d0a-aaf1-43be-850c-fe180606d753 | 42            | #ffa500                 |
+      | Level > 90   | uid:6bff6c9b-9664-45ec-89a8-ab3defa547bb | 91            | #ff0000                 |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
