@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.model.CreateRouteParams;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.selenium.page.RouteLogsPage;
 import co.nvqa.operator_v2.util.TestUtils;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -482,5 +483,12 @@ public class RouteLogsSteps extends AbstractSteps
         boolean isTableEmpty = routeLogsPage.isTableEmpty();
         put(KEY_ROUTE_IS_ALREADY_DELETED, true);
         assertTrue("Route still exist in table. Fail to delete route.", isTableEmpty);
+    }
+
+    @And("Operator open Route Manifest of created route from Route Logs page")
+    public void operatorOpenRouteManifestOfCreatedRouteFromRouteLogsPage()
+    {
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
+        routeLogsPage.openRouteManifest(routeId);
     }
 }

@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.DataEntity;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -35,7 +36,12 @@ public class NgRepeatTable<T extends DataEntity> extends AbstractTable<T>
     @Override
     protected String getTextOnTable(int rowNumber, String columnDataClass)
     {
-        return getTextOnTableWithNgRepeat(rowNumber, columnDataClass, ngRepeat);
+        if (StringUtils.startsWithAny(columnDataClass, "/", "./")){
+            return getTextOnTableWithNgRepeatAndCustomCellLocator(rowNumber, columnDataClass, ngRepeat);
+        } else
+        {
+            return getTextOnTableWithNgRepeat(rowNumber, columnDataClass, ngRepeat);
+        }
     }
 
     @Override

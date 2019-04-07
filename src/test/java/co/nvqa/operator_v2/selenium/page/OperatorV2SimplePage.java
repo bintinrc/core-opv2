@@ -531,6 +531,26 @@ public class OperatorV2SimplePage extends SimplePage
         return getTextOnTableWithNgRepeat(rowNumber, "data-title", columnDataTitle, ngRepeat);
     }
 
+
+    public String getTextOnTableWithNgRepeatAndCustomCellLocator(int rowNumber, String cellLocator, String ngRepeat)
+    {
+        String text = null;
+        String xpath = f("//tr[@ng-repeat='%s'][%d]" + cellLocator, ngRepeat, rowNumber);
+
+        try
+        {
+            WebElement we = findElementByXpath(xpath);
+            text = we.getText().trim();
+        }
+        catch(NoSuchElementException ex)
+        {
+            NvLogger.warnf("Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
+            NvAllure.addWarnAttachment(getCurrentMethodName(), "Failed to getTextOnTableWithNgRepeat. XPath: %s", xpath);
+        }
+
+        return text;
+    }
+
     public String getTextOnTableWithNgRepeat(int rowNumber, String columnAttributeName, String attributeValue, String ngRepeat)
     {
         String text = null;
@@ -859,7 +879,7 @@ public class OperatorV2SimplePage extends SimplePage
     {
         clickf(".//md-select[starts-with(@id, '%s')]", mdSelectId);
         pause100ms();
-        clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%<s')]", value);
+        clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,\"%s\") or contains(./div/text(),\"%<s\")]", value);
         pause50ms();
     }
 
