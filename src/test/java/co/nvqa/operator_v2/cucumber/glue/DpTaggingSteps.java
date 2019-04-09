@@ -27,7 +27,7 @@ public class DpTaggingSteps extends AbstractSteps
         dpTaggingPage = new DpTaggingPage(getWebDriver());
     }
 
-    @When("^Operator tags single order to DP with ID = \"([^\"]*)\"$")
+    @When("^Operator tags single order to DP with DPMS ID = \"([^\"]*)\"$")
     public void operatorTagsSingleOrderToDpWithId(String dpIdAsString)
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
@@ -48,7 +48,7 @@ public class DpTaggingSteps extends AbstractSteps
         put(KEY_DISTRIBUTION_POINT_ID, dpId);
     }
 
-    @When("^Operator tags multiple orders to DP with ID = \"([^\"]*)\"$")
+    @When("^Operator tags multiple orders to DP with DPMS ID = \"([^\"]*)\"$")
     public void operatorTagsMultipleOrdersToDpWithId(String dpIdAsString)
     {
         List<String> listOfTrackingId = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);

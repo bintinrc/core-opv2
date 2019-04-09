@@ -16,7 +16,7 @@ Feature: DP Tagging
       | generateFromAndTo | RANDOM |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Distribution Points -> DP Tagging
-    When Operator tags single order to DP with ID = "{dpms-id}"
+    When Operator tags single order to DP with DPMS ID = "{dpms-id}"
     Then API Operator verify order info after Operator assign delivery waypoint of an order to DP
     Examples:
       | Note   | hiptest-uid                              | orderType | isPickupRequired |
@@ -30,7 +30,7 @@ Feature: DP Tagging
       | generateFromAndTo | RANDOM |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Distribution Points -> DP Tagging
-    When Operator tags multiple orders to DP with ID = "{dpms-id}"
+    When Operator tags multiple orders to DP with DPMS ID = "{dpms-id}"
     Then API Operator verify multiple orders info after Operator assign delivery waypoint of the orders to the same DP
 
   @KillBrowser @ShouldAlwaysRun
