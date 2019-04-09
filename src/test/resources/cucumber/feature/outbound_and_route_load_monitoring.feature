@@ -12,6 +12,7 @@ Feature: Outbound Monitoring
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+
   Scenario: Operator verifies the created route is exist and will gone from table when filter Show only "Partially loaded route" is enable
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                  |
@@ -33,8 +34,9 @@ Feature: Outbound Monitoring
 
     # Implement this step: Then Operator verifies the created route is gone from table
 
-  @CWF @RT
+
   Scenario: Operator verifies the created route is exist and will still be displayed on table when filter Show only "Partially loaded route" is enable
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                  |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
@@ -57,7 +59,9 @@ Feature: Outbound Monitoring
 
     # Implement this step: Then Operator verifies the created route is still displayed on table
 
+
   Scenario: Operator verifies route contains 2 Parcels Assigned, 0 Parcels Loaded, 0 Parcels Passed Back and 2 Missing Parcels
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                  |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
@@ -90,7 +94,9 @@ Feature: Outbound Monitoring
 
     # Implement this step: Then Operator verifies the Transaction Log contains all created Tracking ID
 
+
   Scenario: Operator verifies route contains 2 Parcels Assigned, 2 Parcels Loaded, 2 Parcels Passed Back and 0 Missing Parcels
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                  |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
@@ -128,3 +134,8 @@ Feature: Outbound Monitoring
     # Implement this step: When Operator clicks the number on Parcels Passed Back column
 
     # Implement this step: Then Operator verifies the Transaction Log contains all created Tracking ID
+
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op
