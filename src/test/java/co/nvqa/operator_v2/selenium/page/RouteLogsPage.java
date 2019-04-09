@@ -622,4 +622,12 @@ public class RouteLogsPage extends OperatorV2SimplePage
     {
         clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
     }
+
+    public void openRouteManifest(Long routeId)
+    {
+        String strRouteId = String.valueOf(routeId);
+        searchTableByRouteId(routeId);
+        clickf("//a[@ui-sref='container.route-manifest({routeId: route.id})'][.='%s']", strRouteId);
+        switchToOtherWindowAndWaitWhileLoading("route-manifest/" + strRouteId);
+    }
 }

@@ -85,9 +85,9 @@ Feature: Route Logs
       | vehicleName     | {vehicle-name}                   |
     Then Operator verify multiple routes is created successfully
     Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder  | 4       |
-      | generateFrom   | INDEX-0 |
-      | generateTo     | INDEX-1 |
+      | numberOfOrder  | 4                                                                                                                                                                                                                                                                                                                                |
+      | generateFrom   | INDEX-0                                                                                                                                                                                                                                                                                                                          |
+      | generateTo     | INDEX-1                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound multiple parcels using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -110,8 +110,8 @@ Feature: Route Logs
       | vehicleName     | {vehicle-name}                   |
     Then Operator verify multiple routes is created successfully
     Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 4      |
-      | generateFromAndTo | RANDOM |
+      | numberOfOrder     | 4                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound multiple parcels using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -255,6 +255,177 @@ Feature: Route Logs
 #    When Operator click 'Edit Route' and then click 'Load Waypoints of Selected Route(s) Only'
 #    Then Operator redirect to this page 'https://operator-qa.ninjavan.co/sg/ng#/zonal_routing_edit?fetch_unrouted_waypoints=false&to_cluster=true&id={{route_id}}'
 #    Then Operator close Edit Routes dialog
+
+  @DeleteOrArchiveRoute
+  Scenario: Trigger Force Finish a pending waypoint (Reservation/Transaction) from route manifest - Failed Reservation (uid:cdb4aefa-8ddc-4859-b2d5-7d4a56187aee)
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add reservation pick-up to the route
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Routing -> Route Logs
+    When Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator open Route Manifest of created route from Route Logs page
+    When Operator fail reservation waypoint from Route Manifest page
+    And Operator refresh page
+    Then Operator verify waypoint at Route Manifest using data below:
+      | status             | Fail                       |
+      | deliveriesCount    | 0                          |
+      | pickupsCount       | 0                          |
+#      | comments           | KEY_FAILURE_REASON         |
+      | reservation.id     | KEY_CREATED_RESERVATION_ID |
+      | reservation.status | Fail                       |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Trigger Force Finish a pending waypoint (Reservation/Transaction) from route manifest - Success Reservation (uid:cde1674e-43f0-4ebc-94fc-008720179133)
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add reservation pick-up to the route
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Routing -> Route Logs
+    When Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator open Route Manifest of created route from Route Logs page
+    When Operator success reservation waypoint from Route Manifest page
+    And Operator refresh page
+    Then Operator verify waypoint at Route Manifest using data below:
+      | status             | Success                    |
+      | deliveriesCount    | 0                          |
+      | pickupsCount       | 0                          |
+      | reservation.id     | KEY_CREATED_RESERVATION_ID |
+      | reservation.status | Success                    |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Trigger Force Finish a pending waypoint (Reservation/Transaction) from route manifest - Failed Transaction PP (uid:60418fe1-7c3c-497e-ae95-7b966df157d3)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Routing -> Route Logs
+    When Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator open Route Manifest of created route from Route Logs page
+    When Operator fail pickup waypoint from Route Manifest page
+    And Operator refresh page
+    Then Operator verify waypoint at Route Manifest using data below:
+      | status               | Fail                          |
+      | deliveriesCount      | 0                             |
+      | pickupsCount         | 1                             |
+      | trackingIds          | KEY_CREATED_ORDER_TRACKING_ID |
+      | comments             | KEY_FAILURE_REASON            |
+      | pickup.trackingId    | KEY_CREATED_ORDER_TRACKING_ID |
+      | pickup.status        | Fail                          |
+      | pickup.failureReason | 9                             |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Trigger Force Finish a pending waypoint (Reservation/Transaction) from route manifest - Success Transaction PP (uid:a13591f4-84c7-4b80-88a0-05c293ddb13a)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Routing -> Route Logs
+    When Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator open Route Manifest of created route from Route Logs page
+    When Operator success pickup waypoint from Route Manifest page
+    And Operator refresh page
+    Then Operator verify waypoint at Route Manifest using data below:
+      | status            | Success                       |
+      | deliveriesCount   | 0                             |
+      | pickupsCount      | 1                             |
+      | trackingIds       | KEY_CREATED_ORDER_TRACKING_ID |
+      | pickup.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
+      | pickup.status     | Success                       |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Trigger Force Finish a pending waypoint (Reservation/Transaction) from route manifest - Failed Transaction DD (uid:3bc55101-8da8-4127-a14e-ac38f7908949)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator set tags of the new created route to [{route-tag-id}]
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Routing -> Route Logs
+    When Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator open Route Manifest of created route from Route Logs page
+    When Operator fail delivery waypoint from Route Manifest page
+    And Operator refresh page
+    Then Operator verify waypoint at Route Manifest using data below:
+      | status                 | Fail                          |
+      | deliveriesCount        | 1                             |
+      | pickupsCount           | 0                             |
+      | comments               | KEY_FAILURE_REASON            |
+      | trackingIds            | KEY_CREATED_ORDER_TRACKING_ID |
+      | delivery.trackingId    | KEY_CREATED_ORDER_TRACKING_ID |
+      | delivery.status        | Fail                          |
+      | delivery.failureReason | 1                             |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Trigger Force Finish a pending waypoint (Reservation/Transaction) from route manifest - Success Transaction DD (uid:8f755436-4f6f-4461-9bb8-2675efbd3806)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    Given API Driver collect all his routes
+    Given API Driver get pickup/delivery waypoint of the created order
+    Given API Operator Van Inbound parcel
+    Given API Operator start the route
+    Given API Driver failed the delivery of the created parcel
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Routing -> Route Logs
+    When Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator open Route Manifest of created route from Route Logs page
+    When Operator success delivery waypoint from Route Manifest page
+    And Operator refresh page
+    Then Operator verify waypoint at Route Manifest using data below:
+      | status              | Success                       |
+      | deliveriesCount     | 1                             |
+      | pickupsCount        | 0                             |
+      | trackingIds         | KEY_CREATED_ORDER_TRACKING_ID |
+      | delivery.trackingId | KEY_CREATED_ORDER_TRACKING_ID |
+      | delivery.status     | Success                       |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
