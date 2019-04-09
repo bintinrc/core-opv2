@@ -4,6 +4,10 @@ Feature: Outbound Monitoring
   so no need to create your own implementation. Implement the Java code only for the line that says
   "Implement this step:". Will give you a briefing later so you can have a sense about how our automation project works.
 
+  Estimation Time: 6 hours
+  - Learn About This Project: 4 hours
+  - Implement All The Steps: 2 hours
+
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
