@@ -250,6 +250,11 @@ Feature: Global Inbound
     When Operator go to menu Order -> All Orders
     Then Operator verify order info after Global Inbound
 
+  Scenario: Operator should be able to Inbound an International Order and verify the alert info is correct
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "international":{ "portation":"Export" }, "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"15:00", "end_time":"18:00"}}} |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
