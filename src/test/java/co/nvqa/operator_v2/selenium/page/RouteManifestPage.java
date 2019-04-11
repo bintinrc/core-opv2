@@ -8,6 +8,8 @@ import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
+import java.util.Stack;
+
 /**
  * @author Daniel Joi Partogi Hutapea
  */
@@ -149,8 +151,29 @@ public class RouteManifestPage extends OperatorV2SimplePage
     {
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
         clickButtonOnMdDialogByAriaLabel("Failure");
-        selectValueFromMdSelectById("container.route-manifest.choose-failure-reason", failureReason.getParent().getDescription());
-        selectValueFromMdSelectById("container.route-manifest.failure-reason-detail", failureReason.getDescription());
+
+        Stack<FailureReason> stackOfFailureReason = new Stack<>();
+        FailureReason pointer = failureReason;
+
+        do
+        {
+            stackOfFailureReason.push(pointer);
+            pointer = pointer.getParent();
+        }
+        while(pointer!=null);
+
+        FailureReason failureReasonGrandParent = stackOfFailureReason.pop();
+        selectValueFromMdSelectById("container.route-manifest.choose-failure-reason", failureReasonGrandParent.getDescription());
+        int stackSize = stackOfFailureReason.size();
+
+        for(int i=0; i<stackSize; i++)
+        {
+            FailureReason childFailureReason = stackOfFailureReason.pop();
+            String childXpath = f("(//md-select[contains(@id, 'container.route-manifest.failure-reason-detail')])[%d]", (i+1));
+            selectValueFromMdSelectByMdSelectXpath(childXpath, childFailureReason.getDescription());
+            pause200ms();
+        }
+
         clickButtonOnMdDialogByAriaLabel("Update");
         clickButtonOnMdDialogByAriaLabel("Proceed");
         pause2s();
