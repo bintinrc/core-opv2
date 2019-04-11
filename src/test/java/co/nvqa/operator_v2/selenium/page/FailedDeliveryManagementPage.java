@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.commons.model.driver.FailureReason;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -26,7 +26,7 @@ public class FailedDeliveryManagementPage extends CommonParcelManagementPage
         super(webDriver, MD_VIRTUAL_REPEAT);
     }
 
-    public void verifyFailedDeliveryOrderIsListed(Order order)
+    public void verifyFailedDeliveryOrderIsListed(Order order, FailureReason expectedFailureReason)
     {
         String trackingId = order.getTrackingId();
         String orderType = order.getType();
@@ -40,10 +40,10 @@ public class FailedDeliveryManagementPage extends CommonParcelManagementPage
         assertEquals("Order Type", orderType, actualOrderType);
 
         String actualFailureComments = getTextOnTable(1, COLUMN_CLASS_DATA_FAILURE_COMMENTS);
-        assertEquals("Failure Comments", TestConstants.DRIVER_DELIVERY_FAIL_STRING, actualFailureComments);
+        assertEquals("Failure Comments", expectedFailureReason.getDescription(), actualFailureComments);
 
         String actualFailureReason = getTextOnTable(1, COLUMN_CLASS_DATA_FAILURE_REASON);
-        assertThat("Failure Comments", actualFailureReason, isOneOf("RECOVERY", "Normal FDM - Ignore"));
+        assertEquals("Failure Reason", actualFailureReason, expectedFailureReason.getFailureReasonCodeDescription());
     }
 
     public void verifyCsvFileDownloadedSuccessfully(String trackingId)

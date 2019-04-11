@@ -98,7 +98,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     @Then("^DB Operator verify transaction_failure_reason record for the created order$")
     public void dbOperatorVerifyTransactionFailureReasonForTheCreatedOrder()
     {
-        FailureReason failureReason = get(KEY_FAILURE_REASON);
+        FailureReason failureReason = get(KEY_SELECTED_FAILURE_REASON);
         Order orderAfterDelivery = get(KEY_CREATED_ORDER_AFTER_DELIVERY);
         List<Transaction> transactions = orderAfterDelivery.getTransactions();
         Transaction deliveryTransaction = transactions.stream()

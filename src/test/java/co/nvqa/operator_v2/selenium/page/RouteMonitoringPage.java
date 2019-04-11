@@ -2,12 +2,12 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.Route;
+import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RouteMonitoringFilters;
 import co.nvqa.operator_v2.model.RouteMonitoringParams;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
@@ -83,21 +83,21 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
         String actualRouteId = getTextOnTable(1, COLUMN_CLASS_DATA_ROUTE_ID);
         String actualInboundHub = getTextOnTable(1, COLUMN_CLASS_DATA_HUB_NAME);
 
-        Assert.assertEquals("Route ID", String.valueOf(routeId), actualRouteId);
-        Assert.assertThat("Hub", actualInboundHub, isOneOf(routeMonitoringFilters.getHubs()));
+        assertEquals("Route ID", String.valueOf(routeId), actualRouteId);
+        assertThat("Hub", actualInboundHub, isOneOf(routeMonitoringFilters.getHubs()));
     }
 
     public void verify1DeliverySuccessAtRouteManifest(Route route, Order order)
     {
-        verify1DeliverySuccessOrFailAtRouteManifest(route, order, true);
+        verify1DeliverySuccessOrFailAtRouteManifest(route, order, null, true);
     }
 
-    public void verify1DeliveryFailAtRouteManifest(Route route, Order order)
+    public void verify1DeliveryFailAtRouteManifest(Route route, Order order, FailureReason expectedFailureReason)
     {
-        verify1DeliverySuccessOrFailAtRouteManifest(route, order, false);
+        verify1DeliverySuccessOrFailAtRouteManifest(route, order, expectedFailureReason, false);
     }
 
-    private void verify1DeliverySuccessOrFailAtRouteManifest(Route route, Order order, boolean verifyDeliverySuccess)
+    private void verify1DeliverySuccessOrFailAtRouteManifest(Route route, Order order, FailureReason expectedFailureReason, boolean verifyDeliverySuccess)
     {
         searchTableByRouteIdUntilFound(route.getId());
         clickActionButtonOnTable(1, ACTION_BUTTON_VIEW_ROUTE_MANIFEST);
@@ -115,7 +115,7 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
             }
             else
             {
-                routeManifestPage.verify1DeliveryIsFailed(route, order);
+                routeManifestPage.verify1DeliveryIsFailed(route, order, expectedFailureReason);
             }
         }
         finally
@@ -169,22 +169,22 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
 
         if(expectedRouteMonitoringParams.getRouteId()!=null)
         {
-            Assert.assertThat("Route ID", actualRouteMonitoringParams.getRouteId(), equalTo(expectedRouteMonitoringParams.getRouteId()));
+            assertThat("Route ID", actualRouteMonitoringParams.getRouteId(), equalTo(expectedRouteMonitoringParams.getRouteId()));
         }
 
         if(expectedRouteMonitoringParams.getTotalWaypoint()!=null)
         {
-            Assert.assertThat("Total WP", actualRouteMonitoringParams.getTotalWaypoint(), equalTo(expectedRouteMonitoringParams.getTotalWaypoint()));
+            assertThat("Total WP", actualRouteMonitoringParams.getTotalWaypoint(), equalTo(expectedRouteMonitoringParams.getTotalWaypoint()));
         }
 
         if(expectedRouteMonitoringParams.getCompletionPercentage()!=null)
         {
-            Assert.assertThat("Completion %", actualRouteMonitoringParams.getCompletionPercentage(), equalTo(expectedRouteMonitoringParams.getCompletionPercentage()));
+            assertThat("Completion %", actualRouteMonitoringParams.getCompletionPercentage(), equalTo(expectedRouteMonitoringParams.getCompletionPercentage()));
         }
 
         if(expectedRouteMonitoringParams.getPendingCount()!=null)
         {
-            Assert.assertThat("Pending Count", actualRouteMonitoringParams.getPendingCount(), equalTo(expectedRouteMonitoringParams.getPendingCount()));
+            assertThat("Pending Count", actualRouteMonitoringParams.getPendingCount(), equalTo(expectedRouteMonitoringParams.getPendingCount()));
         }
 
         if(expectedRouteMonitoringParams.getSuccessCount()!=null)
@@ -193,17 +193,17 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
                     actualRouteMonitoringParams.getSuccessCount(),
                     actualRouteMonitoringParams.getEarlyCount(),
                     actualRouteMonitoringParams.getLateCount());
-            Assert.assertThat("Success Count or Early WP or Late WP", actualValues, hasItem(expectedRouteMonitoringParams.getSuccessCount()));
+            assertThat("Success Count or Early WP or Late WP", actualValues, hasItem(expectedRouteMonitoringParams.getSuccessCount()));
         }
 
         if(expectedRouteMonitoringParams.getFailedCount()!=null)
         {
-            Assert.assertThat("Valid Failed", actualRouteMonitoringParams.getFailedCount(), equalTo(expectedRouteMonitoringParams.getFailedCount()));
+            assertThat("Valid Failed", actualRouteMonitoringParams.getFailedCount(), equalTo(expectedRouteMonitoringParams.getFailedCount()));
         }
 
         if(expectedRouteMonitoringParams.getCmiCount()!=null)
         {
-            Assert.assertThat("Invalid Failed", actualRouteMonitoringParams.getCmiCount(), equalTo(expectedRouteMonitoringParams.getCmiCount()));
+            assertThat("Invalid Failed", actualRouteMonitoringParams.getCmiCount(), equalTo(expectedRouteMonitoringParams.getCmiCount()));
         }
     }
 
@@ -232,7 +232,7 @@ public class RouteMonitoringPage extends OperatorV2SimplePage
 
         public RouteMonitoringParams getRouteMonitoringParams(int rowIndex)
         {
-            Assert.assertThat("Number of rows", getRowsCount(), greaterThanOrEqualTo(rowIndex));
+            assertThat("Number of rows", getRowsCount(), greaterThanOrEqualTo(rowIndex));
             moveToElementWithXpath(String.format("//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))][%d]/td[starts-with(@class, '%s')]", MD_VIRTUAL_REPEAT, rowIndex, COLUMN_CLASS_LATE_WP));
 
             RouteMonitoringParams routeMonitoringParams = new RouteMonitoringParams();

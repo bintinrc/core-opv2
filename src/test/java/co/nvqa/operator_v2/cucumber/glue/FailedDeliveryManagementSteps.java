@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.operator_v2.model.RtsDetails;
 import co.nvqa.operator_v2.selenium.page.FailedDeliveryManagementPage;
 import cucumber.api.java.en.Then;
@@ -33,7 +34,8 @@ public class FailedDeliveryManagementSteps extends AbstractSteps
     public void operatorVerifyTheFailedDeliveryOrderIsListedOnFailedDeliveryOrderList()
     {
         Order order = get(KEY_CREATED_ORDER);
-        failedDeliveryManagementPage.verifyFailedDeliveryOrderIsListed(order);
+        FailureReason selectedFailureReason = get(KEY_SELECTED_FAILURE_REASON);
+        failedDeliveryManagementPage.verifyFailedDeliveryOrderIsListed(order, selectedFailureReason);
     }
 
     @When("^Operator download CSV file of failed delivery order on Failed Delivery orders list$")

@@ -152,8 +152,10 @@ Feature: Global Inbound
     Given API Driver get pickup/delivery waypoint of the created order
     Given API Operator Van Inbound parcel
     Given API Operator start the route
-    Given API Driver failed the delivery of the created parcel with following parameters:
-      | failureReasonCodeId | <failureReasonCodeId> |
+    Given API Driver failed the delivery of the created parcel using data below:
+      | failureReasonFindMode  | findAdvance           |
+      | failureReasonCodeId    | <failureReasonCodeId> |
+      | failureReasonIndexMode | FIRST                 |
     When Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below and check alert:
       | hubName    | {hub-name}             |

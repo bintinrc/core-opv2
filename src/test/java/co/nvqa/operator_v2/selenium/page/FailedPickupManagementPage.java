@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -34,13 +34,13 @@ public class FailedPickupManagementPage extends OperatorV2SimplePage
         super(webDriver);
     }
 
-    public void verifyTheFailedC2cOrReturnOrderIsListed(String trackingId)
+    public void verifyTheFailedC2cOrReturnOrderIsListed(String trackingId, FailureReason expectedFailureReason)
     {
         searchTableByTrackingId(trackingId);
         String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
         assertEquals("Tracking ID", trackingId, actualTrackingId);
         String actualFailureComments = getTextOnTable(1, COLUMN_CLASS_DATA_FAILURE_COMMENTS);
-        assertEquals("Failure Comments", TestConstants.DRIVER_PICKUP_FAIL_STRING, actualFailureComments);
+        assertEquals("Failure Comments", expectedFailureReason.getDescription(), actualFailureComments);
     }
 
     public void downloadCsvFile(String trackingId)

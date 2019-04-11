@@ -1,13 +1,11 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.factory.FailureReason;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.Route;
+import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.operator_v2.model.RouteManifestWaypointDetails;
-import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -39,22 +37,23 @@ public class RouteManifestPage extends OperatorV2SimplePage
 
     public void verify1DeliverySuccessAtRouteManifest(Route route, Order order)
     {
-        verify1DeliverySuccessOrFailAtRouteManifest(route, order, true);
+        verify1DeliverySuccessOrFailAtRouteManifest(route, order, null, true);
     }
 
-    public void verify1DeliveryFailAtRouteManifest(Route route, Order order)
+    public void verify1DeliveryFailAtRouteManifest(Route route, Order order, FailureReason expectedFailureReason)
     {
-        verify1DeliverySuccessOrFailAtRouteManifest(route, order, false);
+        verify1DeliverySuccessOrFailAtRouteManifest(route, order, expectedFailureReason, false);
     }
 
-    private void verify1DeliverySuccessOrFailAtRouteManifest(Route route, Order order, boolean verifyDeliverySuccess)
+    private void verify1DeliverySuccessOrFailAtRouteManifest(Route route, Order order, FailureReason expectedFailureReason, boolean verifyDeliverySuccess)
     {
-        if (verifyDeliverySuccess)
+        if(verifyDeliverySuccess)
         {
             verify1DeliveryIsSuccess(route, order);
-        } else
+        }
+        else
         {
-            verify1DeliveryIsFailed(route, order);
+            verify1DeliveryIsFailed(route, order, expectedFailureReason);
         }
     }
 
@@ -64,36 +63,36 @@ public class RouteManifestPage extends OperatorV2SimplePage
 
         String actualRouteId = getText("//div[contains(@class,'route-detail')]/div[text()='Route ID']/following-sibling::div");
         String actualWaypointSuccessCount = getText("//div[text()='Waypoint Type']/following-sibling::table//td[contains(@ng-class, 'column.Success.value')]");
-        Assert.assertEquals("Route ID", String.valueOf(route.getId()), actualRouteId);
-        Assert.assertEquals("Waypoint Success Count", "1", actualWaypointSuccessCount);
+        assertEquals("Route ID", String.valueOf(route.getId()), actualRouteId);
+        assertEquals("Waypoint Success Count", "1", actualWaypointSuccessCount);
 
         searchTableByTrackingId(order.getTrackingId());
-        Assert.assertFalse(String.format("Order with Tracking ID = '%s' not found on table.", order.getTrackingId()), isTableEmpty());
+        assertFalse(f("Order with Tracking ID = '%s' not found on table.", order.getTrackingId()), isTableEmpty());
 
         String actualStatus = getTextOnTable(1, COLUMN_STATUS);
         String actualCountDelivery = getTextOnTable(1, COLUMN_COUNT_DELIVERY);
-        Assert.assertEquals("Status", "Success", actualStatus);
-        Assert.assertEquals("Count Delivery", "1", actualCountDelivery);
+        assertEquals("Status", "Success", actualStatus);
+        assertEquals("Count Delivery", "1", actualCountDelivery);
     }
 
-    public void verify1DeliveryIsFailed(Route route, Order order)
+    public void verify1DeliveryIsFailed(Route route, Order order, FailureReason expectedFailureReason)
     {
         waitUntilPageLoaded();
 
         String actualRouteId = getText("//div[contains(@class,'route-detail')]/div[text()='Route ID']/following-sibling::div");
         String actualWaypointSuccessCount = getText("//div[text()='Waypoint Type']/following-sibling::table//td[contains(@ng-class, 'column.Fail.value')]");
-        Assert.assertEquals("Route ID", String.valueOf(route.getId()), actualRouteId);
-        Assert.assertEquals("Waypoint Failed Count", "1", actualWaypointSuccessCount);
+        assertEquals("Route ID", String.valueOf(route.getId()), actualRouteId);
+        assertEquals("Waypoint Failed Count", "1", actualWaypointSuccessCount);
 
         searchTableByTrackingId(order.getTrackingId());
-        Assert.assertFalse(String.format("Order with Tracking ID = '%s' not found on table.", order.getTrackingId()), isTableEmpty());
+        assertFalse(String.format("Order with Tracking ID = '%s' not found on table.", order.getTrackingId()), isTableEmpty());
 
         String actualStatus = getTextOnTable(1, COLUMN_STATUS);
         String actualCountDelivery = getTextOnTable(1, COLUMN_COUNT_DELIVERY);
         String actualComments = getTextOnTable(1, COLUMN_COMMENTS);
-        Assert.assertEquals("Status", "Fail", actualStatus);
-        Assert.assertEquals("Count Delivery", "1", actualCountDelivery);
-        Assert.assertEquals("Comments", TestConstants.DRIVER_DELIVERY_FAIL_STRING, actualComments);
+        assertEquals("Status", "Fail", actualStatus);
+        assertEquals("Count Delivery", "1", actualCountDelivery);
+        assertEquals("Comments", expectedFailureReason.getDescription(), actualComments);
     }
 
     public void verifyWaypointDetails(RouteManifestWaypointDetails expectedWaypointDetails)
@@ -106,33 +105,39 @@ public class RouteManifestPage extends OperatorV2SimplePage
         expectedWaypointDetails.setDelivery(null);
 
         waitUntilPageLoaded();
-        if (StringUtils.isNotBlank(expectedWaypointDetails.getTrackingIds()))
+
+        if(StringUtils.isNotBlank(expectedWaypointDetails.getTrackingIds()))
         {
             waypointsTable.filterByColumn("trackingIds", String.valueOf(expectedWaypointDetails.getTrackingIds()));
-        } else if (expectedWaypointDetails.getId() != null)
+        }
+        else if(expectedWaypointDetails.getId()!=null)
         {
             waypointsTable.filterByColumn("id", String.valueOf(expectedWaypointDetails.getId()));
-        } else if (StringUtils.isNotBlank(expectedWaypointDetails.getAddress()))
+        }
+        else if(StringUtils.isNotBlank(expectedWaypointDetails.getAddress()))
         {
             waypointsTable.filterByColumn("address", String.valueOf(expectedWaypointDetails.getAddress()));
         }
+
         RouteManifestWaypointDetails actualWaypointDetails = waypointsTable.readEntity(1);
         expectedWaypointDetails.compareWithActual(actualWaypointDetails);
-        if (expectedReservation != null || expectedPickup != null || expectedDelivery != null)
+
+        if(expectedReservation!=null || expectedPickup!=null || expectedDelivery!=null)
         {
             waypointsTable.clickActionButton(1, "details");
             waypointDetailsDialog.waitUntilVisible();
-            if (expectedReservation != null)
+
+            if(expectedReservation!=null)
             {
                 RouteManifestWaypointDetails.Reservation actualReservation = waypointDetailsDialog.reservationsTable.readEntity(1);
                 expectedReservation.compareWithActual(actualReservation);
             }
-            if (expectedPickup != null)
+            if(expectedPickup!=null)
             {
                 RouteManifestWaypointDetails.Pickup actualPickup = waypointDetailsDialog.pickupsTable.readEntity(1);
                 expectedPickup.compareWithActual(actualPickup);
             }
-            if (expectedDelivery != null)
+            if(expectedDelivery!=null)
             {
                 RouteManifestWaypointDetails.Delivery actualDelivery = waypointDetailsDialog.deliveryTable.readEntity(1);
                 expectedDelivery.compareWithActual(actualDelivery);
@@ -144,8 +149,8 @@ public class RouteManifestPage extends OperatorV2SimplePage
     {
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
         clickButtonOnMdDialogByAriaLabel("Failure");
-        selectValueFromMdSelectById("container.route-manifest.choose-failure-reason", failureReason.getParent().getName());
-        selectValueFromMdSelectById("container.route-manifest.failure-reason-detail", failureReason.getName());
+        selectValueFromMdSelectById("container.route-manifest.choose-failure-reason", failureReason.getParent().getDescription());
+        selectValueFromMdSelectById("container.route-manifest.failure-reason-detail", failureReason.getDescription());
         clickButtonOnMdDialogByAriaLabel("Update");
         clickButtonOnMdDialogByAriaLabel("Proceed");
         pause2s();

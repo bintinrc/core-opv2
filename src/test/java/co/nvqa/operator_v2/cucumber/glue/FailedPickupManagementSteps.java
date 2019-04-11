@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.operator_v2.selenium.page.FailedPickupManagementPage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
@@ -31,7 +32,8 @@ public class FailedPickupManagementSteps extends AbstractSteps
     public void operatorVerifyTheFailedPickupC2cOrReturnOrderIsListedOnFailedPickupOrderList()
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        failedPickupManagementPage.verifyTheFailedC2cOrReturnOrderIsListed(trackingId);
+        FailureReason selectedFailureReason = get(KEY_SELECTED_FAILURE_REASON);
+        failedPickupManagementPage.verifyTheFailedC2cOrReturnOrderIsListed(trackingId, selectedFailureReason);
     }
 
     @When("^Operator download CSV file of failed pickup C2C/Return order on Failed Pickup orders list$")
