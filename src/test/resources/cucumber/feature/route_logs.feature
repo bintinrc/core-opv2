@@ -279,7 +279,6 @@ Feature: Route Logs
       | status             | Fail                       |
       | deliveriesCount    | 0                          |
       | pickupsCount       | 0                          |
-#      | comments           | KEY_FAILURE_REASON         |
       | reservation.id     | KEY_CREATED_RESERVATION_ID |
       | reservation.status | Fail                       |
 

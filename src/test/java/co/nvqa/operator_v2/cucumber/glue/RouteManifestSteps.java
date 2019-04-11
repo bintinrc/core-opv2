@@ -1,16 +1,15 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.factory.FailureReason;
-import co.nvqa.commons.factory.FailureReasonFactory;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.Route;
+import co.nvqa.commons.model.driver.FailureReason;
+import co.nvqa.commons.util.factory.FailureReasonFactory;
 import co.nvqa.operator_v2.model.RouteManifestWaypointDetails;
 import co.nvqa.operator_v2.selenium.page.RouteManifestPage;
 import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -52,7 +51,8 @@ public class RouteManifestSteps extends AbstractSteps
     {
         Route route = get(KEY_CREATED_ROUTE);
         Order order = get(KEY_ORDER_DETAILS);
-        routeManifestPage.verify1DeliveryFailAtRouteManifest(route, order);
+        FailureReason selectedFailureReason = get(KEY_SELECTED_FAILURE_REASON);
+        routeManifestPage.verify1DeliveryFailAtRouteManifest(route, order, selectedFailureReason);
     }
 
     @Then("^Operator verify waypoint at Route Manifest using data below:$")
@@ -69,11 +69,10 @@ public class RouteManifestSteps extends AbstractSteps
     @When("^Operator fail (delivery|pickup|reservation) waypoint from Route Manifest page$")
     public void operatorFailDeliveryWaypointFromRouteManifestPage(String waypointType)
     {
-        FailureReason failureReason = StringUtils.equalsIgnoreCase(waypointType, "pickup") ?
-                FailureReasonFactory.getPickupFailureReason() :
-                FailureReasonFactory.getDeliveryFailureReason();
+        String mode = "Pickup".equalsIgnoreCase(waypointType)? "Pickup" : "Delivery";
+        FailureReason failureReason = FailureReasonFactory.findAdvance("Normal", mode, "*", "FIRST");
         routeManifestPage.failDeliveryWaypoint(failureReason);
-        put(KEY_FAILURE_REASON, failureReason.getName().replace(" - Normal", "").trim());
+        put(KEY_SELECTED_FAILURE_REASON, failureReason);
     }
 
     @When("^Operator success (delivery|pickup|reservation) waypoint from Route Manifest page$")
