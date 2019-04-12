@@ -65,4 +65,11 @@ public class SalesSteps extends AbstractSteps
         List<SalesPerson> listOfSalesPerson = get(KEY_LIST_OF_SALES_PERSON);
         salesPage.verifySalesPersonCreatedSuccessfully(listOfSalesPerson);
     }
+
+    @Then("^Operator verifies all filters on Sales page works fine$")
+    public void operatorVerifiesAllFiltersOnSalesPageWorksFine()
+    {
+        List<SalesPerson> listOfSalesPerson = get(KEY_LIST_OF_SALES_PERSON);
+        salesPage.verifiesAllFiltersWorksFine(listOfSalesPerson);
+    }
 }

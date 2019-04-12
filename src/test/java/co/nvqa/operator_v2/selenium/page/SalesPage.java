@@ -15,9 +15,10 @@ public class SalesPage extends OperatorV2SimplePage
     private static final String MD_VIRTUAL_REPEAT = "data in getTableData()";
     private static final String SAMPLE_CSV_FILENAME = "sample-data-sales-person-upload.csv";
 
-    public static final String COLUMN_CLASS_DATA_SALES_CODE = "code";
-    public static final String COLUMN_CLASS_DATA_SALES_NAME = "name";
-    public static final String COLUMN_CLASS_FILTER_SALES_CODE = "code";
+    private static final String COLUMN_CLASS_DATA_SALES_CODE = "code";
+    private static final String COLUMN_CLASS_DATA_SALES_NAME = "name";
+    private static final String COLUMN_CLASS_FILTER_SALES_CODE = "code";
+    private static final String COLUMN_CLASS_FILTER_SALES_NAME = "name";
 
     public SalesPage(WebDriver webDriver)
     {
@@ -65,9 +66,50 @@ public class SalesPage extends OperatorV2SimplePage
         }
     }
 
+    public void verifiesAllFiltersWorksFine(List<SalesPerson> listOfSalesPerson)
+    {
+        for(SalesPerson salesPerson : listOfSalesPerson)
+        {
+            String[] filters = {"code", "name"};
+
+            for(String filter : filters)
+            {
+                if("code".equals(filter))
+                {
+                    searchTableByCode(salesPerson.getCode());
+                }
+                else if("name".equals(filter))
+                {
+                    searchTableByName(salesPerson.getName());
+                }
+
+                boolean isTableEmpty = isTableEmpty();
+                assertFalse("Table is empty.", isTableEmpty);
+                String actualCode = getTextOnTable(1, COLUMN_CLASS_DATA_SALES_CODE);
+                String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_SALES_NAME);
+                assertEquals("Sales Code", salesPerson.getCode(), actualCode);
+                assertEquals("Sales Name", salesPerson.getName(), actualName);
+
+                if("code".equals(filter))
+                {
+                    clearSearchTableCustom1(COLUMN_CLASS_FILTER_SALES_CODE);
+                }
+                else if("name".equals(filter))
+                {
+                    clearSearchTableCustom1(COLUMN_CLASS_FILTER_SALES_NAME);
+                }
+            }
+        }
+    }
+
     public void searchTableByCode(String salesPersonCode)
     {
         searchTableCustom1(COLUMN_CLASS_FILTER_SALES_CODE, salesPersonCode);
+    }
+
+    public void searchTableByName(String salesPersonName)
+    {
+        searchTableCustom1(COLUMN_CLASS_FILTER_SALES_NAME, salesPersonName);
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)

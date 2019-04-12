@@ -18,6 +18,15 @@ Feature: Sales
     When Operator refresh page
     Then Operator verifies all Sales Persons created successfully
 
+  @DeleteSalesPerson
+  Scenario: Operator verifies all filters on Sales page works fine (uid:b4b7bc22-0374-4426-a24d-b4aa3890a78d)
+    Given Operator go to menu Shipper -> Sales
+    When Operator upload CSV contains multiple Sales Persons on Sales page using data below:
+      | numberOfSalesPerson | 1 |
+    When Operator refresh page
+    Then Operator verifies all Sales Persons created successfully
+    Then Operator verifies all filters on Sales page works fine
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
