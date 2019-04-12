@@ -8,7 +8,6 @@ import com.google.common.collect.ImmutableMap;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import io.cucumber.datatable.DataTable;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -58,13 +57,11 @@ public class AllOrdersSteps extends AbstractSteps
     }
 
     @When("^Operator find order on All Orders page using this criteria below:$")
-    public void operatorFindOrderOnAllOrdersPageUsingThisCriteriaBelow(DataTable dataTable)
+    public void operatorFindOrderOnAllOrdersPageUsingThisCriteriaBelow(Map<String, String> dataTableAsMap)
     {
-        Map<String, String> mapOfData = dataTable.asMap(String.class, String.class);
-
-        AllOrdersPage.Category category = AllOrdersPage.Category.findByValue(mapOfData.get("category"));
-        AllOrdersPage.SearchLogic searchLogic = AllOrdersPage.SearchLogic.findByValue(mapOfData.get("searchLogic"));
-        String searchTerm = mapOfData.get("searchTerm");
+        AllOrdersPage.Category category = AllOrdersPage.Category.findByValue(dataTableAsMap.get("category"));
+        AllOrdersPage.SearchLogic searchLogic = AllOrdersPage.SearchLogic.findByValue(dataTableAsMap.get("searchLogic"));
+        String searchTerm = dataTableAsMap.get("searchTerm");
 
         /*
           Replace searchTerm value to value on ScenarioStorage.

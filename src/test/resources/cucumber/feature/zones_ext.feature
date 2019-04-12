@@ -6,7 +6,7 @@ Feature: Zones Ext
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator view multiple selected Polygon (uid:b2341f2c-a5af-45f7-839c-a820c0cc6c34)
-    Given Operator go to menu "Routing" -> "Zones"
+    Given Operator go to menu Routing -> Zones
     When Operator click View Selected Polygons for zone "{zone-name}"
     And Operator remove zone "{zone-name-2}" if it is added on View Selected Polygons page
     And Operator add new "{zone-name-2}" zone on View Selected Polygons page
