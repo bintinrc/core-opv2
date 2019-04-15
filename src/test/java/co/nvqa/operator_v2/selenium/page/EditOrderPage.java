@@ -15,7 +15,6 @@ import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
@@ -45,7 +44,8 @@ public class EditOrderPage extends OperatorV2SimplePage
         eventsTable = new EventsTable(webDriver);
     }
 
-    public EventsTable eventsTable(){
+    public EventsTable eventsTable()
+    {
         return eventsTable;
     }
 
@@ -71,11 +71,11 @@ public class EditOrderPage extends OperatorV2SimplePage
     public void editOrderInstructions(String pickupInstruction, String deliveryInstruction)
     {
         waitUntilVisibilityOfMdDialogByTitle("Edit Instructions");
-        if (pickupInstruction != null)
+        if(pickupInstruction!=null)
         {
             sendKeysByAriaLabel("Pickup Instruction", pickupInstruction);
         }
-        if (deliveryInstruction != null)
+        if(deliveryInstruction!=null)
         {
             sendKeysByAriaLabel("Delivery Instruction", deliveryInstruction);
         }
@@ -114,26 +114,26 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public void verifyDeliveryRouteInfo(Route route)
     {
-        assertThat("Delivery Route Id", deliveryDetailsBox.getRouteId(), Matchers.equalTo(String.valueOf(route.getId())));
-        if (CollectionUtils.isNotEmpty(route.getWaypoints()))
+        assertThat("Delivery Route Id", deliveryDetailsBox.getRouteId(), equalTo(String.valueOf(route.getId())));
+        if(CollectionUtils.isNotEmpty(route.getWaypoints()))
         {
             String expectedWaypointId = String.valueOf(route.getWaypoints().get(0).getId());
-            assertThat("Delivery Waypoint ID", deliveryDetailsBox.getWaypointId(), Matchers.equalTo(expectedWaypointId));
+            assertThat("Delivery Waypoint ID", deliveryDetailsBox.getWaypointId(), equalTo(expectedWaypointId));
         }
         String expectedDriver = route.getDriver().getFirstName() + " " + route.getDriver().getLastName();
-        assertThat("Delivery Driver", deliveryDetailsBox.getDriver(), Matchers.equalTo(expectedDriver));
+        assertThat("Delivery Driver", deliveryDetailsBox.getDriver(), equalTo(expectedDriver));
     }
 
     public void verifyPickupRouteInfo(Route route)
     {
-        assertThat("Pickup Route Id", pickupDetailsBox.getRouteId(), Matchers.equalTo(String.valueOf(route.getId())));
-        if (CollectionUtils.isNotEmpty(route.getWaypoints()))
+        assertThat("Pickup Route Id", pickupDetailsBox.getRouteId(), equalTo(String.valueOf(route.getId())));
+        if(CollectionUtils.isNotEmpty(route.getWaypoints()))
         {
             String expectedWaypointId = String.valueOf(route.getWaypoints().get(0).getId());
-            assertThat("Pickup Waypoint ID", pickupDetailsBox.getWaypointId(), Matchers.equalTo(expectedWaypointId));
+            assertThat("Pickup Waypoint ID", pickupDetailsBox.getWaypointId(), equalTo(expectedWaypointId));
         }
         String expectedDriver = route.getDriver().getFirstName() + " " + route.getDriver().getLastName();
-        assertThat("Pickup Driver", pickupDetailsBox.getDriver(), Matchers.equalTo(expectedDriver));
+        assertThat("Pickup Driver", pickupDetailsBox.getDriver(), equalTo(expectedDriver));
     }
 
     public void printAirwayBill()
@@ -154,15 +154,15 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         assertEquals("From Name", order.getFromName(), airwayBill.getFromName());
         assertEquals("From Contact", order.getFromContact(), airwayBill.getFromContact());
-        assertThat("From Address", airwayBill.getFromAddress(), Matchers.containsString(order.getFromAddress1()));
-        assertThat("From Address", airwayBill.getFromAddress(), Matchers.containsString(order.getFromAddress2()));
-        assertThat("Postcode In From Address", airwayBill.getFromAddress(), Matchers.containsString(order.getFromPostcode()));
+        assertThat("From Address", airwayBill.getFromAddress(), containsString(order.getFromAddress1()));
+        assertThat("From Address", airwayBill.getFromAddress(), containsString(order.getFromAddress2()));
+        assertThat("Postcode In From Address", airwayBill.getFromAddress(), containsString(order.getFromPostcode()));
 
         assertEquals("To Name", order.getToName(), airwayBill.getToName());
         assertEquals("To Contact", order.getToContact(), airwayBill.getToContact());
-        assertThat("To Address", airwayBill.getToAddress(), Matchers.containsString(order.getToAddress1()));
-        assertThat("To Address", airwayBill.getToAddress(), Matchers.containsString(order.getToAddress2()));
-        assertThat("Postcode In To Address", airwayBill.getToAddress(), Matchers.containsString(order.getToPostcode()));
+        assertThat("To Address", airwayBill.getToAddress(), containsString(order.getToAddress1()));
+        assertThat("To Address", airwayBill.getToAddress(), containsString(order.getToAddress2()));
+        assertThat("Postcode In To Address", airwayBill.getToAddress(), containsString(order.getToPostcode()));
 
         assertEquals("COD", Optional.ofNullable(order.getCod()).orElse(new Cod()).getGoodsAmount(), airwayBill.getCod());
         assertEquals("Comments", order.getInstruction(), airwayBill.getComments());
@@ -183,13 +183,13 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public void verifyOrderInstructions(String expectedPickupInstructions, String expectedDeliveryInstructions)
     {
-        if (expectedPickupInstructions != null)
+        if(expectedPickupInstructions!=null)
         {
             String actualPickupInstructions = getText("//div[label[text()='Pick Up Instructions']]/p");
-            assertThat("Pick Up Instructions", expectedPickupInstructions, Matchers.equalToIgnoringCase(actualPickupInstructions));
+            assertThat("Pick Up Instructions", expectedPickupInstructions, equalToIgnoringCase(actualPickupInstructions));
         }
 
-        if (expectedDeliveryInstructions != null)
+        if(expectedDeliveryInstructions!=null)
         {
             assertEquals("Delivery Instructions", expectedDeliveryInstructions, deliveryDetailsBox.getDeliveryInstructions());
         }
@@ -212,7 +212,7 @@ public class EditOrderPage extends OperatorV2SimplePage
     public void verifyInboundIsSucceed()
     {
         String actualLatestEvent = getTextOnTableEvent(1, COLUMN_CLASS_DATA_NAME_ON_TABLE_EVENT);
-        assertThat("Different Result Returned", actualLatestEvent, Matchers.isOneOf("Van Inbound Scan", "DRIVER INBOUND SCAN"));
+        assertThat("Different Result Returned", actualLatestEvent, isOneOf("Van Inbound Scan", "DRIVER INBOUND SCAN"));
     }
 
     public void verifyOrderInfoIsCorrect(Order order)
@@ -220,9 +220,9 @@ public class EditOrderPage extends OperatorV2SimplePage
         String expectedTrackingId = order.getTrackingId();
 
         assertEquals("Tracking ID", expectedTrackingId, getTrackingId());
-        assertThat("Status", getStatus(), Matchers.equalToIgnoringCase(order.getStatus()));
-        assertThat("Granular Status", getGranularStatus(), Matchers.equalToIgnoringCase(order.getGranularStatus().replaceFirst("_", " ")));
-        assertThat("Shipper ID", getShipperId(), Matchers.containsString(String.valueOf(order.getShipper().getId())));
+        assertThat("Status", getStatus(), equalToIgnoringCase(order.getStatus()));
+        assertThat("Granular Status", getGranularStatus(), equalToIgnoringCase(order.getGranularStatus().replaceFirst("_", " ")));
+        assertThat("Shipper ID", getShipperId(), containsString(String.valueOf(order.getShipper().getId())));
         assertEquals("Order Type", order.getType(), getOrderType());
         assertEquals("Size", order.getParcelSize(), getSize());
         assertEquals("Weight", order.getWeight(), getWeight(), 0.0);
@@ -238,22 +238,22 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public void verifyOrderStatus(String expectedStatus)
     {
-        assertThat("Status", getStatus(), Matchers.equalToIgnoringCase(expectedStatus));
+        assertThat("Status", getStatus(), equalToIgnoringCase(expectedStatus));
     }
 
     public void verifyOrderGranularStatus(String expectedGranularStatus)
     {
-        assertThat("Granular Status", getGranularStatus(), Matchers.equalToIgnoringCase(expectedGranularStatus));
+        assertThat("Granular Status", getGranularStatus(), equalToIgnoringCase(expectedGranularStatus));
     }
 
     public void verifyOrderDeliveryTitle(String expectedDeliveryTitle)
     {
-        assertThat("Delivery Title", getDeliveryTitle(), Matchers.equalToIgnoringCase(expectedDeliveryTitle));
+        assertThat("Delivery Title", getDeliveryTitle(), equalToIgnoringCase(expectedDeliveryTitle));
     }
 
     public void verifyOrderDeliveryStatus(String expectedDeliveryStatus)
     {
-        assertThat("Delivery Status", getDeliveryStatus(), Matchers.equalToIgnoringCase(expectedDeliveryStatus));
+        assertThat("Delivery Status", getDeliveryStatus(), equalToIgnoringCase(expectedDeliveryStatus));
     }
 
     public void verifyOrderIsForceSuccessedSuccessfully(Order order)
@@ -261,14 +261,14 @@ public class EditOrderPage extends OperatorV2SimplePage
         String expectedTrackingId = order.getTrackingId();
 
         assertEquals("Tracking ID", expectedTrackingId, getTrackingId());
-        assertThat("Status", getStatus(), Matchers.equalToIgnoringCase("Completed"));
-        assertThat("Granular Status", getGranularStatus(), Matchers.equalToIgnoringCase("Completed"));
+        assertThat("Status", getStatus(), equalToIgnoringCase("Completed"));
+        assertThat("Granular Status", getGranularStatus(), equalToIgnoringCase("Completed"));
 
         Long shipperId = order.getShipper().getId();
 
-        if (shipperId != null)
+        if(shipperId!=null)
         {
-            assertThat("Shipper ID", getShipperId(), Matchers.containsString(String.valueOf(shipperId)));
+            assertThat("Shipper ID", getShipperId(), containsString(String.valueOf(shipperId)));
         }
 
         assertEquals("Order Type", order.getType(), getOrderType());
@@ -286,21 +286,21 @@ public class EditOrderPage extends OperatorV2SimplePage
         assertEquals("From Email", order.getFromEmail(), getFromEmail());
         assertEquals("From Contact", order.getFromContact(), getFromContact());
         String fromAddress = getFromAddress();
-        assertThat("From Address", fromAddress, Matchers.containsString(order.getFromAddress1()));
-        assertThat("From Address", fromAddress, Matchers.containsString(order.getFromAddress2()));
+        assertThat("From Address", fromAddress, containsString(order.getFromAddress1()));
+        assertThat("From Address", fromAddress, containsString(order.getFromAddress2()));
 
         // Delivery
         assertEquals("To Name", order.getToName(), getToName());
         assertEquals("To Email", order.getToEmail(), getToEmail());
         assertEquals("To Contact", order.getToContact(), getToContact());
         String toAddress = getToAddress();
-        assertThat("To Address", toAddress, Matchers.containsString(order.getToAddress1()));
-        assertThat("To Address", toAddress, Matchers.containsString(order.getToAddress2()));
+        assertThat("To Address", toAddress, containsString(order.getToAddress1()));
+        assertThat("To Address", toAddress, containsString(order.getToAddress2()));
     }
 
     public void verifyOrderIsGlobalInboundedSuccessfully(Order order, GlobalInboundParams globalInboundParams, Double expectedOrderCost, String expectedStatus, List<String> expectedGranularStatus, String expectedDeliveryStatus)
     {
-        if (isElementExistFast("//nv-icon-text-button[@name='container.order.edit.show-more']"))
+        if(isElementExistFast("//nv-icon-text-button[@name='container.order.edit.show-more']"))
         {
             clickNvIconTextButtonByName("container.order.edit.show-more");
         }
@@ -308,21 +308,21 @@ public class EditOrderPage extends OperatorV2SimplePage
         String expectedTrackingId = order.getTrackingId();
         assertEquals("Tracking ID", expectedTrackingId, getTrackingId());
 
-        if (StringUtils.isNotBlank(expectedStatus))
+        if(StringUtils.isNotBlank(expectedStatus))
         {
-            assertThat(String.format("Status - [Tracking ID = %s]", expectedTrackingId), getStatus(), Matchers.equalToIgnoringCase(expectedStatus));
+            assertThat(String.format("Status - [Tracking ID = %s]", expectedTrackingId), getStatus(), equalToIgnoringCase(expectedStatus));
         }
 
-        if (CollectionUtils.isNotEmpty(expectedGranularStatus))
+        if(CollectionUtils.isNotEmpty(expectedGranularStatus))
         {
-            assertThat(String.format("Granular Status - [Tracking ID = %s]", expectedTrackingId), getGranularStatus(), Matchers.isIn(expectedGranularStatus));
+            assertThat(String.format("Granular Status - [Tracking ID = %s]", expectedTrackingId), getGranularStatus(), isIn(expectedGranularStatus));
         }
 
         assertEquals("Pickup Status", "SUCCESS", getPickupStatus());
 
-        if (StringUtils.isNotBlank(expectedDeliveryStatus))
+        if(StringUtils.isNotBlank(expectedDeliveryStatus))
         {
-            assertThat("Delivery Status", getDeliveryStatus(), Matchers.equalToIgnoringCase(expectedDeliveryStatus));
+            assertThat("Delivery Status", getDeliveryStatus(), equalToIgnoringCase(expectedDeliveryStatus));
         }
 
         // There is an issue where after Global Inbound the new Size is not applied. KH need to fix this.
@@ -332,12 +332,12 @@ public class EditOrderPage extends OperatorV2SimplePage
             Assert.assertEquals("Size", getParcelSizeAsLongString(globalInboundParams.getOverrideSize()), getSize());
         }*/
 
-        if (globalInboundParams.getOverrideWeight() != null)
+        if(globalInboundParams.getOverrideWeight()!=null)
         {
             assertEquals("Weight", globalInboundParams.getOverrideWeight(), getWeight());
         }
 
-        if (globalInboundParams.getOverrideDimHeight() != null && globalInboundParams.getOverrideDimWidth() != null && globalInboundParams.getOverrideDimLength() != null)
+        if(globalInboundParams.getOverrideDimHeight()!=null && globalInboundParams.getOverrideDimWidth()!=null && globalInboundParams.getOverrideDimLength()!=null)
         {
             Dimension actualDimension = getDimension();
             assertEquals("Dimension - Height", globalInboundParams.getOverrideDimHeight(), actualDimension.getHeight());
@@ -345,12 +345,12 @@ public class EditOrderPage extends OperatorV2SimplePage
             assertEquals("Dimension - Length", globalInboundParams.getOverrideDimLength(), actualDimension.getLength());
         }
 
-        if (expectedOrderCost != null)
+        if(expectedOrderCost!=null)
         {
             Double total = getTotal();
             String totalAsString = null;
 
-            if (total != null)
+            if(total!=null)
             {
                 totalAsString = NO_TRAILING_ZERO_DF.format(total);
             }
@@ -367,7 +367,8 @@ public class EditOrderPage extends OperatorV2SimplePage
                 assertEquals("Latest Event Name", "HUB INBOUND SCAN", orderEvent.getName());
                 assertEquals("Latest Event Hub Name", globalInboundParams.getHubName(), orderEvent.getHubName());
             }, "Check the last event params", 10, 5);
-        } catch (RuntimeException | AssertionError ex)
+        }
+        catch (RuntimeException | AssertionError ex)
         {
             NvLogger.warn("Ignore this Assertion error for now because the event sometimes is not created right away.", ex);
         }
@@ -419,7 +420,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         Double weight = null;
         String actualText = getText("//label[text()='Weight']/following-sibling::p");
 
-        if (!actualText.contains("-"))
+        if(!actualText.contains("-"))
         {
             String temp = actualText.replace("kg", "").trim();
             weight = Double.parseDouble(temp);
@@ -434,7 +435,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         Double cod = null;
         String actualText = getText("//label[text()='Cash on Delivery']/following-sibling::p");
 
-        if (!actualText.contains("-"))
+        if(!actualText.contains("-"))
         {
             String temp = actualText.substring(3); //Remove currency text (e.g. SGD)
             cod = Double.parseDouble(temp);
@@ -448,7 +449,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         Dimension dimension = new Dimension();
         String actualText = getText("//label[text()='Dimensions']/following-sibling::p");
 
-        if (!actualText.contains("-") && !actualText.contains("x x cm") && !actualText.contains("(L) x (B) x (H) cm"))
+        if(!actualText.contains("-") && !actualText.contains("x x cm") && !actualText.contains("(L) x (B) x (H) cm"))
         {
             String temp = actualText.replace("cm", "");
             String[] dims = temp.split("x");
@@ -469,7 +470,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         Double total = null;
         String actualText = getText("//label[text()='Total']/following-sibling::p");
 
-        if (!actualText.contains("-"))
+        if(!actualText.contains("-"))
         {
             String temp = actualText.substring(3); //Remove currency text (e.g. SGD)
             total = Double.parseDouble(temp);

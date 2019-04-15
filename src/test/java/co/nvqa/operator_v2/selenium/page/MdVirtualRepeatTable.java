@@ -65,6 +65,6 @@ public class MdVirtualRepeatTable<T extends DataEntity> extends AbstractTable<T>
     @Override
     protected String getTableLocator()
     {
-        return String.format("//nv-table[.//tr[@md-virtual-repeat='%s']]", mdVirtualRepeat);
+        return f("//nv-table[.//tr[@md-virtual-repeat='%s']]", mdVirtualRepeat);
     }
 }
