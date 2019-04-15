@@ -143,12 +143,14 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public AbstractTable filterByColumn(String columnId, String value)
+    public AbstractTable<T> filterByColumn(String columnId, String value)
     {
         Preconditions.checkArgument(StringUtils.isNotBlank(columnId), "'columnId' cannot be null or blank string.");
         String columnLocator = columnLocators.get(columnId);
         Preconditions.checkArgument(StringUtils.isNotBlank(columnLocator), "Locator for columnId [" + columnId + "] was not defined.");
-        searchTableCustom1(columnLocator, value);
+        executeInContext(getTableLocator(), () -> searchTableCustom1(columnLocator, value));
         return this;
     }
+
+    protected abstract String getTableLocator();
 }
