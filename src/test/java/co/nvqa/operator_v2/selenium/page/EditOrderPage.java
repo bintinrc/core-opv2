@@ -45,6 +45,10 @@ public class EditOrderPage extends OperatorV2SimplePage
         eventsTable = new EventsTable(webDriver);
     }
 
+    public EventsTable eventsTable(){
+        return eventsTable;
+    }
+
     public void clickMenu(String parentMenuName, String childMenuName)
     {
         clickf("//md-menu-bar/md-menu/button[contains(text(), '%s')]", parentMenuName);
@@ -232,6 +236,26 @@ public class EditOrderPage extends OperatorV2SimplePage
         verifyPickupAndDeliveryInfo(order);
     }
 
+    public void verifyOrderStatus(String expectedStatus)
+    {
+        assertThat("Status", getStatus(), Matchers.equalToIgnoringCase(expectedStatus));
+    }
+
+    public void verifyOrderGranularStatus(String expectedGranularStatus)
+    {
+        assertThat("Granular Status", getGranularStatus(), Matchers.equalToIgnoringCase(expectedGranularStatus));
+    }
+
+    public void verifyOrderDeliveryTitle(String expectedDeliveryTitle)
+    {
+        assertThat("Delivery Title", getDeliveryTitle(), Matchers.equalToIgnoringCase(expectedDeliveryTitle));
+    }
+
+    public void verifyOrderDeliveryStatus(String expectedDeliveryStatus)
+    {
+        assertThat("Delivery Status", getDeliveryStatus(), Matchers.equalToIgnoringCase(expectedDeliveryStatus));
+    }
+
     public void verifyOrderIsForceSuccessedSuccessfully(Order order)
     {
         String expectedTrackingId = order.getTrackingId();
@@ -347,6 +371,11 @@ public class EditOrderPage extends OperatorV2SimplePage
         {
             NvLogger.warn("Ignore this Assertion error for now because the event sometimes is not created right away.", ex);
         }
+    }
+
+    public String getDeliveryTitle()
+    {
+        return getText("//*[@id='delivery-details']/div/div[1]/h5");
     }
 
     public String getShipperId()
@@ -476,7 +505,7 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public String getDeliveryStatus()
     {
-        return getText("//div[h5[text()='Delivery']]/following-sibling::div/h5[contains(text(), Status)]").split(":")[1].trim();
+        return getText("//*[@id='delivery-details']/div/div[2]/h5").split(":")[1].trim();
     }
 
     public String getToName()
@@ -559,16 +588,16 @@ public class EditOrderPage extends OperatorV2SimplePage
      */
     public static class EventsTable extends NgRepeatTable<OrderEvent>
     {
-        private static final String NG_REPEAT = "event in getTableData()";
-        private static final String DATE_TIME = "eventTime";
-        private static final String EVENT_TAGS = "tags";
-        private static final String EVENT_NAME = "name";
-        private static final String USER_TYPE = "userType";
-        private static final String USER_ID = "user";
-        private static final String SCAN_ID = "scanId";
-        private static final String ROUTE_ID = "routeId";
-        private static final String HUB_NAME = "hubName";
-        private static final String DESCRIPTION = "description";
+        public static final String NG_REPEAT = "event in getTableData()";
+        public static final String DATE_TIME = "eventTime";
+        public static final String EVENT_TAGS = "tags";
+        public static final String EVENT_NAME = "name";
+        public static final String USER_TYPE = "userType";
+        public static final String USER_ID = "user";
+        public static final String SCAN_ID = "scanId";
+        public static final String ROUTE_ID = "routeId";
+        public static final String HUB_NAME = "hubName";
+        public static final String DESCRIPTION = "description";
 
         public EventsTable(WebDriver webDriver)
         {

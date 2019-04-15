@@ -61,4 +61,10 @@ public class NgRepeatTable<T extends DataEntity> extends AbstractTable<T>
     {
         throw new UnsupportedOperationException("Not implemented yet");
     }
+
+    @Override
+    protected String getTableLocator()
+    {
+        return String.format("//nv-table[.//tr[@ng-repeat='%s']]", ngRepeat);
+    }
 }

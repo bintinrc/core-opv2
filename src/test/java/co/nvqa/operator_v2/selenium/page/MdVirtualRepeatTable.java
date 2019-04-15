@@ -61,4 +61,10 @@ public class MdVirtualRepeatTable<T extends DataEntity> extends AbstractTable<T>
     {
         clickf("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", mdVirtualRepeat, rowNumber);
     }
+
+    @Override
+    protected String getTableLocator()
+    {
+        return String.format("//nv-table[.//tr[@md-virtual-repeat='%s']]", mdVirtualRepeat);
+    }
 }
