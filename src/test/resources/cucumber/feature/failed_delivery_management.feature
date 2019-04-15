@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @FailedDeliveryManagement @Saas @Inbound @Debug
+@OperatorV2 @OperatorV2Part2 @FailedDeliveryManagement @Saas @Inbound
 Feature: Failed Delivery Management
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
@@ -228,14 +228,14 @@ Feature: Failed Delivery Management
       | startTime | <startTime>   |
       | endTime   | <endTime>     |
     Examples:
-      | hiptest-uid | reason                   | timeslot   | status  | granularStatus          | deliveryTitle    | deliveryStatus | startTime                          | endTime                            |
-      |             | Unable to find address   | 9AM - 6PM  | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 09:00:00 | {{next-1-day-yyyy-MM-dd}} 18:00:00 |
-      |             | Item refused at doorstep | 9AM - 10PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 09:00:00 | {{next-1-day-yyyy-MM-dd}} 22:00:00 |
-      |             | Refused to pay COD       | 9AM - 12PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 09:00:00 | {{next-1-day-yyyy-MM-dd}} 12:00:00 |
-      |             | Customer delayed beyond  | 12PM - 3PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 12:00:00 | {{next-1-day-yyyy-MM-dd}} 15:00:00 |
-      |             | Cancelled by shipper     | 3PM - 6PM  | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 15:00:00 | {{next-1-day-yyyy-MM-dd}} 18:00:00 |
-      |             | Nobody at address        | 6PM - 10PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 18:00:00 | {{next-1-day-yyyy-MM-dd}} 22:00:00 |
-      |             | Other Reason             | 6PM - 10PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 18:00:00 | {{next-1-day-yyyy-MM-dd}} 22:00:00 |
+      | hiptest-uid                              | reason                   | timeslot   | status  | granularStatus          | deliveryTitle    | deliveryStatus | startTime                          | endTime                            |
+      | uid:0d252b42-2157-4eec-adab-c0c27e9d82bd | Unable to find address   | 9AM - 6PM  | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 09:00:00 | {{next-1-day-yyyy-MM-dd}} 18:00:00 |
+      | uid:c0a682fa-de75-458d-8253-630321b926fc | Item refused at doorstep | 9AM - 10PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 09:00:00 | {{next-1-day-yyyy-MM-dd}} 22:00:00 |
+      | uid:d557fa51-2bd4-46b2-9046-d90b241e2f32 | Refused to pay COD       | 9AM - 12PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 09:00:00 | {{next-1-day-yyyy-MM-dd}} 12:00:00 |
+      | uid:42a986e9-53fc-4f46-8da1-4e4e4cbc28ad | Customer delayed beyond  | 12PM - 3PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 12:00:00 | {{next-1-day-yyyy-MM-dd}} 15:00:00 |
+      | uid:6179f485-cdd8-4ec5-bdf9-671040ecb1e8 | Cancelled by shipper     | 3PM - 6PM  | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 15:00:00 | {{next-1-day-yyyy-MM-dd}} 18:00:00 |
+      | uid:1a22bef5-2081-4e75-8ba2-101ea269ea55 | Nobody at address        | 6PM - 10PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 18:00:00 | {{next-1-day-yyyy-MM-dd}} 22:00:00 |
+      | uid:ca740d8c-8660-40c1-bb2e-f206d8e9e363 | Other Reason             | 6PM - 10PM | Transit | En-route to Sorting Hub | Return to Sender | PENDING        | {{next-1-day-yyyy-MM-dd}} 18:00:00 | {{next-1-day-yyyy-MM-dd}} 22:00:00 |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
