@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestUtils;
+import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
@@ -11,12 +12,14 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.Matchers;
 
 import java.util.Map;
 import java.util.Optional;
 
+import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
+
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -46,11 +49,11 @@ public class EditOrderSteps extends AbstractSteps
         Order order = get(KEY_CREATED_ORDER);
         Order orderEdited = SerializationUtils.clone(order);
 
-        int newParcelSizeId = (StandardTestUtils.getParcelSizeIdByLongString(orderEdited.getParcelSize())+1)%4;
+        int newParcelSizeId = (StandardTestUtils.getParcelSizeIdByLongString(orderEdited.getParcelSize()) + 1) % 4;
         orderEdited.setParcelSize(StandardTestUtils.getParcelSizeAsLongString(newParcelSizeId));
 
         Dimension dimension = orderEdited.getDimensions();
-        dimension.setWeight(Optional.ofNullable(dimension.getWeight()).orElse(0.0)+1.0);
+        dimension.setWeight(Optional.ofNullable(dimension.getWeight()).orElse(0.0) + 1.0);
 
         editOrderPage.editOrderDetails(orderEdited);
         put("orderEdited", orderEdited);
@@ -85,14 +88,14 @@ public class EditOrderSteps extends AbstractSteps
         Order order = get(KEY_CREATED_ORDER);
         String pickupInstruction = get(KEY_PICKUP_INSTRUCTION);
 
-        if(StringUtils.isNotBlank(pickupInstruction))
+        if (StringUtils.isNotBlank(pickupInstruction))
         {
             pickupInstruction = order.getInstruction() + ", " + pickupInstruction;
         }
 
         String deliveryInstruction = get(KEY_DELIVERY_INSTRUCTION);
 
-        if(StringUtils.isNotBlank(deliveryInstruction))
+        if (StringUtils.isNotBlank(deliveryInstruction))
         {
             deliveryInstruction = order.getInstruction() + ", " + deliveryInstruction;
         }
@@ -147,11 +150,16 @@ public class EditOrderSteps extends AbstractSteps
     @Then("^Operator verify the order is added to the (.+) route on Edit Order page$")
     public void operatorVerifyTheOrderIsAddedToTheRouteOnEditOrderPage(String type)
     {
-        switch(type.toUpperCase())
+        switch (type.toUpperCase())
         {
-            case "DELIVERY": editOrderPage.verifyDeliveryRouteInfo(get(KEY_CREATED_ROUTE)); break;
-            case "PICKUP": editOrderPage.verifyPickupRouteInfo(get(KEY_CREATED_ROUTE)); break;
-            default: throw new IllegalArgumentException("Unknown route type: " + type);
+            case "DELIVERY":
+                editOrderPage.verifyDeliveryRouteInfo(get(KEY_CREATED_ROUTE));
+                break;
+            case "PICKUP":
+                editOrderPage.verifyPickupRouteInfo(get(KEY_CREATED_ROUTE));
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown route type: " + type);
         }
     }
 
@@ -163,21 +171,76 @@ public class EditOrderSteps extends AbstractSteps
 
         try
         {
-            if(StringUtils.isNoneBlank(startDateTime))
+            if (StringUtils.isNoneBlank(startDateTime))
             {
                 editOrderPage.verifyDeliveryStartDateTime(startDateTime);
             }
 
             String endDateTime = mapOfData.get("endDateTime");
 
-            if(StringUtils.isNoneBlank(endDateTime))
+            if (StringUtils.isNoneBlank(endDateTime))
             {
                 editOrderPage.verifyDeliveryEndDateTime(endDateTime);
             }
-        }
-        catch(AssertionError | RuntimeException ex)
+        } catch (AssertionError | RuntimeException ex)
         {
             NvLogger.warn("Skip delivery start date & end date verification because it's to complicated.", ex);
+        }
+    }
+
+    @Then("^Operator verify order status is \"(.+)\" on Edit Order page$")
+    public void operatorVerifyOrderStatusOnEditOrderPage(String expectedValue)
+    {
+        editOrderPage.verifyOrderStatus(expectedValue);
+    }
+
+    @Then("^Operator verify order granular status is \"(.+)\" on Edit Order page$")
+    public void operatorVerifyOrderGranularStatusOnEditOrderPage(String expectedValue)
+    {
+        editOrderPage.verifyOrderGranularStatus(expectedValue);
+    }
+
+    @Then("^Operator verify order delivery title is \"(.+)\" on Edit Order page$")
+    public void operatorVerifyOrderDeliveryTitleOnEditOrderPage(String expectedValue)
+    {
+        editOrderPage.verifyOrderDeliveryTitle(expectedValue);
+    }
+
+    @Then("^Operator verify order delivery status is \"(.+)\" on Edit Order page$")
+    public void operatorVerifyOrderDeliveryStatusOnEditOrderPage(String expectedValue)
+    {
+        editOrderPage.verifyOrderDeliveryStatus(expectedValue);
+    }
+
+    @Then("^Operator verify RTS event displayed on Edit Order page with following properties:$")
+    public void operatorVerifyRtsEventOnEditOrderPage(Map<String, String> mapOfData)
+    {
+        Map<String, String> mapOfTokens = createDefaultTokens();
+        mapOfData = replaceDataTableTokens(mapOfData, mapOfTokens);
+
+        OrderEvent orderEvent = editOrderPage.eventsTable().filterByColumn(EVENT_NAME, "RTS").readEntity(1);
+        assertThat("Event Name", orderEvent.getName(), Matchers.equalToIgnoringCase("RTS"));
+
+        String value = mapOfData.get("eventTags");
+        if (value != null)
+        {
+            assertThat("Event Tags", orderEvent.getTags(), Matchers.equalToIgnoringCase(value));
+        }
+
+        value = mapOfData.get("reason");
+        if (value != null)
+        {
+            assertThat("Reason", orderEvent.getDescription(), Matchers.containsString("Reason: Return to sender: " + value));
+        }
+        value = mapOfData.get("startTime");
+        if (value != null)
+        {
+            assertThat("Start Time", orderEvent.getDescription(), Matchers.containsString("Start Time: " + value));
+        }
+        value = mapOfData.get("endTime");
+        if (value != null)
+        {
+            assertThat("End Time", orderEvent.getDescription(), Matchers.containsString("End Time: " + value));
         }
     }
 }
