@@ -2,7 +2,7 @@ package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.Pair;
 import co.nvqa.commons.util.JsonUtils;
-import co.nvqa.commons.util.NvAssert;
+import co.nvqa.commons.util.NvAssertions;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvMatchers;
 import co.nvqa.commons.util.NvTestRuntimeException;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * @author Sergey Mishanin
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public abstract class DataEntity<T extends DataEntity> implements NvAssert, NvMatchers
+public abstract class DataEntity<T extends DataEntity> implements NvAssertions, NvMatchers
 {
     private static final CsvTranslators.CsvUnescaper UNESCAPER = new CsvTranslators.CsvUnescaper();
 
