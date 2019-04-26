@@ -4,7 +4,6 @@ import co.nvqa.commons.model.pricing.Script;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
 import co.nvqa.operator_v2.util.TestConstants;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -45,10 +44,10 @@ public class TimeBoundedScriptsPage extends OperatorV2SimplePage
 
         String expectedDuration = YYYY_MM_DD_SDF.format(script.getVersionEffectiveStartDate())+" - "+YYYY_MM_DD_SDF.format(script.getVersionEffectiveEndDate());
 
-        Assert.assertEquals("Parent Script Name", parentScript.getName(), actualParentScriptName);
-        Assert.assertEquals("Child Script Name 1", script.getName(), actualChildScriptName1);
-        Assert.assertEquals("Child Script Status 1", "Active", actualChildScriptStatus1);
-        Assert.assertEquals("Child Script Status 1", expectedDuration, actualChildScriptDuration1);
+        assertEquals("Parent Script Name", parentScript.getName(), actualParentScriptName);
+        assertEquals("Child Script Name 1", script.getName(), actualChildScriptName1);
+        assertEquals("Child Script Status 1", "Active", actualChildScriptStatus1);
+        assertEquals("Child Script Status 1", expectedDuration, actualChildScriptDuration1);
         cancelManageTimeBoundedScripts();
     }
 

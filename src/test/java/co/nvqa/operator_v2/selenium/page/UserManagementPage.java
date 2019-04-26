@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.model.UserManagement;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -40,13 +39,13 @@ public class UserManagementPage extends OperatorV2SimplePage {
         sendKeys("//input[@type='text'][@ng-model='ctrl.keyword']",userManagement.getEmail());
         clickNvApiTextButtonByNameAndWaitUntilDone("Load Selected Users");
         String actualGrantType = getTextOnTable(1,  COLUMN_DATA_TITLE_GRANT_TYPE);
-        Assert.assertEquals("Different Grant Type Returned", userManagement.getGrantType(), actualGrantType);
+        assertEquals("Different Grant Type Returned", userManagement.getGrantType(), actualGrantType);
         String actualFirstName = getTextOnTable(1, COLUMN_DATA_TITLE_FIRST_NAME);
-        Assert.assertEquals("Different First Name Returned", userManagement.getFirstName(), actualFirstName);
+        assertEquals("Different First Name Returned", userManagement.getFirstName(), actualFirstName);
         String actualLastName = getTextOnTable(1, COLUMN_DATA_TITLE_LAST_NAME);
-        Assert.assertEquals("Different Last Name Returned", userManagement.getLastName(), actualLastName);
+        assertEquals("Different Last Name Returned", userManagement.getLastName(), actualLastName);
         String actualRole = getTextOnTable(1, COLUMN_DATA_TITLE_ROLE);
-        Assert.assertThat("Different Roles Returned", actualRole, Matchers.containsString(userManagement.getRoles()));
+        assertThat("Different Roles Returned", actualRole, Matchers.containsString(userManagement.getRoles()));
     }
 
     public void editUser(UserManagement userManagement, UserManagement userManagementEdited) {
@@ -79,7 +78,7 @@ public class UserManagementPage extends OperatorV2SimplePage {
         clickNvApiTextButtonByNameAndWaitUntilDone("Load Selected Users");
         pause500ms();
         String actualRole = getTextOnTable(1, COLUMN_DATA_TITLE_ROLE);
-        Assert.assertThat("Different Roles Returned", actualRole, Matchers.containsString(userManagement.getRoles()));
+        assertThat("Different Roles Returned", actualRole, Matchers.containsString(userManagement.getRoles()));
     }
 
     public void clickGrantTypeFilter() {
@@ -99,7 +98,7 @@ public class UserManagementPage extends OperatorV2SimplePage {
             if(count==10) {
                 break;
             }
-            Assert.assertEquals("Different Grant Type Returned.", userManagement.getGrantType(), we.getText());
+            assertEquals("Different Grant Type Returned.", userManagement.getGrantType(), we.getText());
             count += 1;
         }
     }

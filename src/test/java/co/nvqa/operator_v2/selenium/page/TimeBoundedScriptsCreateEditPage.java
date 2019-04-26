@@ -4,7 +4,6 @@ import co.nvqa.commons.model.pricing.Script;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
 import co.nvqa.operator_v2.util.TestConstants;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
@@ -46,7 +45,7 @@ public class TimeBoundedScriptsCreateEditPage extends OperatorV2SimplePage
         updateAceEditorValue(script.getSource());
         clickNvApiTextButtonByNameAndWaitUntilDone("container.pricing-scripts.check-syntax");
         String actualSyntaxInfo = getAttribute("//div[contains(@class, 'hint') and contains(@class, 'nv-hint') and contains(@class, 'info')]", "text");
-        Assert.assertEquals("Syntax Info", "No errors found. You may proceed to verify or save the draft.", actualSyntaxInfo);
+        assertEquals("Syntax Info", "No errors found. You may proceed to verify or save the draft.", actualSyntaxInfo);
     }
 
     private void activateParameters(List<String> activeParameters)
@@ -88,7 +87,7 @@ public class TimeBoundedScriptsCreateEditPage extends OperatorV2SimplePage
 
     public void verifyScriptIsDeleted(Script script)
     {
-        Assert.assertTrue("Table is not empty. Script is not deleted successfully.", isTableEmpty());
+        assertTrue("Table is not empty. Script is not deleted successfully.", isTableEmpty());
     }
 
     public void selectAction(int actionType)

@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.util.TestConstants;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -102,18 +101,18 @@ public class SamedayRouteEnginePage extends OperatorV2SimplePage
     {
         // Check the waypoint have correct tracking ID.
         String trackingIdData =  getTextOnTableWithMdVirtualRepeat(1,"tracking_id","route in ctrl.routeResponse.solution.routes" );
-        Assert.assertEquals(trackingId, trackingIdData);
+        assertEquals(trackingId, trackingIdData);
 
         String trackingIdData2= getTextOnTableWithMdVirtualRepeat(2,"tracking_id","route in ctrl.routeResponse.solution.routes" );
-        Assert.assertEquals(trackingId, trackingIdData2);
+        assertEquals(trackingId, trackingIdData2);
 
         // Check the number of waypoint.
         String waypointTotal= getText("//md-dialog[contains(@class, 'nv-route-detail-dialog')]/md-dialog-content/div[1]/div[2]/p");
-        Assert.assertEquals(String.valueOf(2), waypointTotal);
+        assertEquals(String.valueOf(2), waypointTotal);
 
         // Check waypoint is pickup and delivery.
-        Assert.assertEquals("PICKUP", getTextOnTableWithMdVirtualRepeat(1, "type", "route in ctrl.routeResponse.solution.routes"));
-        Assert.assertEquals("DELIVERY", getTextOnTableWithMdVirtualRepeat(2, "type", "route in ctrl.routeResponse.solution.routes" ));
+        assertEquals("PICKUP", getTextOnTableWithMdVirtualRepeat(1, "type", "route in ctrl.routeResponse.solution.routes"));
+        assertEquals("DELIVERY", getTextOnTableWithMdVirtualRepeat(2, "type", "route in ctrl.routeResponse.solution.routes" ));
     }
 
     public void downloadCsvOnWaypointDetails(String trackingId) throws IOException
@@ -142,7 +141,7 @@ public class SamedayRouteEnginePage extends OperatorV2SimplePage
         lines.forEach((String str)->
         {
             String [] columnData = str.split(",");
-            Assert.assertFalse("Shouldn't have break in the exported csv",columnData[1].startsWith("break"));
+            assertFalse("Shouldn't have break in the exported csv",columnData[1].startsWith("break"));
         });
     }
 
@@ -156,7 +155,7 @@ public class SamedayRouteEnginePage extends OperatorV2SimplePage
     public void verifyUnroutedDetailDialog()
     {
         String unroutedCount = getText("//md-dialog[contains(@class, 'nv-unrouted-detail-dialog')]/md-dialog-content/div[1]/div[1]/p/b");
-        Assert.assertEquals("1", unroutedCount);
+        assertEquals("1", unroutedCount);
     }
 
     public void changeTheSuggestedDate(String suggestedDate)

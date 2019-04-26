@@ -7,7 +7,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.io.BufferedReader;
@@ -101,7 +100,7 @@ public class DriverReportPage extends OperatorV2SimplePage
         }
 
         String assertionErrorInfo = String.format("ZipEntry with name = '%s' on file = '%s' does not contain Route with ID = '%d'.", driverReportFilename, generatedCsvReportFilename, expectedRouteId);
-        Assert.assertTrue(assertionErrorInfo, expectedRouteIdFound);
+        assertTrue(assertionErrorInfo, expectedRouteIdFound);
     }
 
     public void clickButtonGenerateDriverRouteExcelReport()
@@ -155,7 +154,7 @@ public class DriverReportPage extends OperatorV2SimplePage
             throw new NvTestRuntimeException(ex);
         }
 
-        String assertionErrorInfo = String.format("Sheet with name = '%s' on file = '%s' does not contain Route with ID = '%d'.", driverName, generatedExcelReportFilename, expectedRouteId);
-        Assert.assertTrue(assertionErrorInfo, expectedRouteIdFound);
+        String assertionErrorInfo = f("Sheet with name = '%s' on file = '%s' does not contain Route with ID = '%d'.", driverName, generatedExcelReportFilename, expectedRouteId);
+        assertTrue(assertionErrorInfo, expectedRouteIdFound);
     }
 }

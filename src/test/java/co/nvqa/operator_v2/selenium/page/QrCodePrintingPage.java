@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.util.TestUtils;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
@@ -28,7 +27,7 @@ public class QrCodePrintingPage extends OperatorV2SimplePage
         File qrCodeFile = saveCanvasAsPngFile("//canvas[@class='qrcode']");
         String qrCodeText = TestUtils.getTextFromQrCodeImage(qrCodeFile);
         String linkText = getText("//nv-qrcode//div[@class='text']");
-        Assert.assertEquals("QR Code text does not equal with expected text.", text, qrCodeText);
-        Assert.assertEquals("QR Code Text & Link Text is different.", qrCodeText, linkText);
+        assertEquals("QR Code text does not equal with expected text.", text, qrCodeText);
+        assertEquals("QR Code Text & Link Text is different.", qrCodeText, linkText);
     }
 }

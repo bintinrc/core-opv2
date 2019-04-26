@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AbstractApiOperatorPortalSteps;
 import co.nvqa.commons.model.core.CreateDriverV2Request;
+import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.support.DateUtil;
@@ -47,6 +48,20 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     @Given("^Operator V2 cleaning Tag Management by calling API endpoint directly$")
     public void cleaningTagManagement()
     {
+        Order order1 = new Order();
+        order1.setId(1L);
+        order1.setComments("No");
+
+        Order order2 = new Order();
+        order2.setId(1L);
+        order2.setComments("Yes");
+
+        assertAll("Heading error message.",
+                () -> assertEquals("assertEquals failed", 10, 11),
+                () -> assertNotEquals("assertNotEquals failed", 10, 10),
+                () -> assertThat("assertThat containsString failed", "daniel", containsString("ani2")),
+                () -> assertThatExt("assertThatExt failed", order1, sameBeanAs(order2)));
+
         String tagName = TagManagementSteps.DEFAULT_TAG_NAME;
 
         try

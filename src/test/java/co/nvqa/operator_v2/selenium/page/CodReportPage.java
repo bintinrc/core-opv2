@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -46,10 +45,10 @@ public class CodReportPage extends OperatorV2SimplePage
         String actualShipperName = getTextOnTable(indexOfOrderInTable, COLUMN_CLASS_DATA_SHIPPER_NAME);
         Double actualGoodsAmount = Double.parseDouble(getTextOnTable(indexOfOrderInTable, COLUMN_CLASS_DATA_GOODS_AMOUNT));
 
-        Assert.assertEquals("Tracking ID", order.getTrackingId(), actualTrackingId);
-        Assert.assertThat("Granular Status", actualGranularStatus, Matchers.equalToIgnoringCase(order.getGranularStatus().replace("_", " ")));
-        Assert.assertEquals("Shipper Name", order.getShipper().getName(), actualShipperName);
-        Assert.assertEquals("COD Amount", order.getCod().getGoodsAmount(), actualGoodsAmount);
+        assertEquals("Tracking ID", order.getTrackingId(), actualTrackingId);
+        assertThat("Granular Status", actualGranularStatus, Matchers.equalToIgnoringCase(order.getGranularStatus().replace("_", " ")));
+        assertEquals("Shipper Name", order.getShipper().getName(), actualShipperName);
+        assertEquals("COD Amount", order.getCod().getGoodsAmount(), actualGoodsAmount);
     }
 
     private int findOrderRowIndexInTable(String trackingId)

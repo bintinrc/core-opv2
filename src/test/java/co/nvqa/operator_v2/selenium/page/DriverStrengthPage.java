@@ -4,7 +4,6 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.util.SingletonStorage;
 import co.nvqa.operator_v2.util.TestConstants;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -48,7 +47,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage
             f.delete();
         }
 
-        Assert.assertTrue(isFileExisted);
+        assertTrue(isFileExisted);
     }
 
     public void filteredBy(String type)
@@ -68,7 +67,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage
 
         List<WebElement> listDriver = findElementsByXpath("//tr[@md-virtual-repeat='driver in getTableData()']");
         pause100ms();
-        Assert.assertTrue(listDriver.size() > 0);
+        assertTrue(listDriver.size() > 0);
     }
 
     public void findZoneAndType()
@@ -115,7 +114,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage
             }
         }
 
-        Assert.assertTrue(isFound);
+        assertTrue(isFound);
     }
 
     public void changeComingStatus()
@@ -124,7 +123,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage
         String before = getComingStatusState(firstDriver);
         changeComingStatusState(firstDriver);
         String after = getComingStatusState(firstDriver);
-        Assert.assertTrue(!before.equals(after));
+        assertTrue(!before.equals(after));
     }
 
     public void clickViewContactButton()
@@ -134,7 +133,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage
 
         String expectedLicenseNo = "D" + SingletonStorage.getInstance().getTmpId();
         String actualLicenseNo = getText("//div[@aria-hidden='false']/md-menu-content/md-menu-item[@class='contact-info-details' and @role='menuitem']/div[2]/div[2]");
-        Assert.assertEquals("License No. is not equal.", expectedLicenseNo, actualLicenseNo);
+        assertEquals("License No. is not equal.", expectedLicenseNo, actualLicenseNo);
         closeModal();
     }
 
@@ -187,7 +186,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage
         sendKeys("//th[contains(@class, 'username')]/nv-search-input-filter/md-input-container/div/input", expectedUsername);
 
         String actualUsername = getTextOnTable(1, COLUMN_CLASS_DATA_USERNAME);
-        Assert.assertEquals(expectedUsername, actualUsername);
+        assertEquals(expectedUsername, actualUsername);
     }
 
     public void searchingNewDriver()
@@ -222,7 +221,7 @@ public class DriverStrengthPage extends OperatorV2SimplePage
         // Check first row does not contain deleted driver.
         String expectedDriverUsername = "D"+ SingletonStorage.getInstance().getTmpId();
         String actualDriverUsername = getTextOnTable(1, COLUMN_CLASS_DATA_USERNAME);
-        Assert.assertNotEquals(expectedDriverUsername, actualDriverUsername);
+        assertNotEquals(expectedDriverUsername, actualDriverUsername);
     }
 
     private void changeComingStatusState(WebElement el)

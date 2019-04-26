@@ -6,7 +6,6 @@ import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
 import co.nvqa.operator_v2.util.TestConstants;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.text.DecimalFormat;
@@ -51,7 +50,7 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
         updateAceEditorValue(script.getSource());
         clickNvApiTextButtonByNameAndWaitUntilDone("container.pricing-scripts.check-syntax");
         String actualSyntaxInfo = getAttribute("//div[contains(@class, 'hint') and contains(@class, 'nv-hint') and contains(@class, 'info')]", "text");
-        Assert.assertEquals("Syntax Info", "No errors found. You may proceed to verify or save the draft.", actualSyntaxInfo);
+        assertEquals("Syntax Info", "No errors found. You may proceed to verify or save the draft.", actualSyntaxInfo);
     }
 
     private void saveDraft()
@@ -129,13 +128,13 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
         actualCodFee = actualCodFee.substring(4);
         actualHandlingFee = actualHandlingFee.substring(4);
 
-        Assert.assertEquals("Grand Total", RUN_CHECK_RESULT_DF.format(runCheckResult.getGrandTotal()), actualGrandTotal);
-        Assert.assertEquals("GST", RUN_CHECK_RESULT_DF.format(runCheckResult.getGst()), actualGst);
-        Assert.assertEquals("Delivery Fee", RUN_CHECK_RESULT_DF.format(runCheckResult.getDeliveryFee()), actualDeliveryFee);
-        Assert.assertEquals("Insurance Fee", RUN_CHECK_RESULT_DF.format(runCheckResult.getInsuranceFee()), actualInsuranceFee);
-        Assert.assertEquals("COD Fee", RUN_CHECK_RESULT_DF.format(runCheckResult.getCodFee()), actualCodFee);
-        Assert.assertEquals("Handling Fee", RUN_CHECK_RESULT_DF.format(runCheckResult.getHandlingFee()), actualHandlingFee);
-        Assert.assertEquals("Comments", runCheckResult.getComments(), actualComments);
+        assertEquals("Grand Total", RUN_CHECK_RESULT_DF.format(runCheckResult.getGrandTotal()), actualGrandTotal);
+        assertEquals("GST", RUN_CHECK_RESULT_DF.format(runCheckResult.getGst()), actualGst);
+        assertEquals("Delivery Fee", RUN_CHECK_RESULT_DF.format(runCheckResult.getDeliveryFee()), actualDeliveryFee);
+        assertEquals("Insurance Fee", RUN_CHECK_RESULT_DF.format(runCheckResult.getInsuranceFee()), actualInsuranceFee);
+        assertEquals("COD Fee", RUN_CHECK_RESULT_DF.format(runCheckResult.getCodFee()), actualCodFee);
+        assertEquals("Handling Fee", RUN_CHECK_RESULT_DF.format(runCheckResult.getHandlingFee()), actualHandlingFee);
+        assertEquals("Comments", runCheckResult.getComments(), actualComments);
     }
 
     public void validateDraftAndReleaseScript(Script script, VerifyDraftParams verifyDraftParams)

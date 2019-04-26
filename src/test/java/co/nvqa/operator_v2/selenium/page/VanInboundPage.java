@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 
@@ -26,7 +25,7 @@ public class VanInboundPage extends OperatorV2SimplePage
 
     public void verifyVanInboundSucceed() {
         String actualMessage = getText("//div[contains(@class,\"status-box\")]/h1");
-        Assert.assertEquals("Tracking ID is invalid", "SUCCESS", actualMessage);
+        assertEquals("Tracking ID is invalid", "SUCCESS", actualMessage);
     }
 
     public void startRoute(String trackingId) {
@@ -39,11 +38,11 @@ public class VanInboundPage extends OperatorV2SimplePage
 
     public void verifyInvalidTrackingId(String trackingId) {
         String expectedTrackingId = findElementByXpath("//tr[@ng-repeat='trackingId in ctrl.invalidTrackingIds track by $index'][1]/td").getText().trim();
-        Assert.assertEquals("Tracking ID is valid", trackingId, expectedTrackingId);
+        assertEquals("Tracking ID is valid", trackingId, expectedTrackingId);
     }
 
     public void verifyTrackingIdEmpty() {
         String actualMessage = getText("//div[contains(@class,\"status-box\")]/h1");
-        Assert.assertEquals("Tracking ID is invalid","EMPTY", actualMessage);
+        assertEquals("Tracking ID is invalid","EMPTY", actualMessage);
     }
 }

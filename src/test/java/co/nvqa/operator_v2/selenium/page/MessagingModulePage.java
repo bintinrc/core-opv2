@@ -4,7 +4,6 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.SmsCampaignCsv;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -94,8 +93,8 @@ public class MessagingModulePage extends OperatorV2SimplePage
     public void verifyThatPageReset()
     {
         pause1s();
-        Assert.assertFalse(isElementExist("//md-card[contains(@class,'sms-editor')]"));
-        Assert.assertFalse(isElementExist("//md-dialog[contains(@class,'nv-partial-failed-upload-csv')"));
+        assertFalse(isElementExist("//md-card[contains(@class,'sms-editor')]"));
+        assertFalse(isElementExist("//md-dialog[contains(@class,'nv-partial-failed-upload-csv')"));
     }
 
     public void composeSms(String name, String trackingId)
@@ -105,9 +104,9 @@ public class MessagingModulePage extends OperatorV2SimplePage
         cache.put("sms-date", smsDate);
         //check the uploaded file name is correct
         String uploadedFileName = getText("//div[contains(@class,'uploaded-info')]//div[1]/p/b");
-        Assert.assertEquals(SMS_CAMPAIGN_FILE_NAME, uploadedFileName);
+        assertEquals(SMS_CAMPAIGN_FILE_NAME, uploadedFileName);
         String totalRecords = getText("//div[contains(@class,'uploaded-info')]//div[2]/p/b");
-        Assert.assertEquals("1", totalRecords);
+        assertEquals("1", totalRecords);
         //entry the template
         String template = "Hallo {{name}}, your parcel with tracking id {{tracking_id}} is ready to be delivered. sms-date: "+smsDate;
         sendKeys("//textarea[@name='message']", template);
@@ -116,7 +115,7 @@ public class MessagingModulePage extends OperatorV2SimplePage
         pause1s();
         String expectedMessage = "Hallo "+name+", your parcel with tracking id "+trackingId+" is ready to be delivered. sms-date: "+smsDate;
         String actualMessage = findElementByXpath("//md-input-container[@model='ctrl.messagePreview']/textarea[@name='preview']").getAttribute("value");
-        Assert.assertEquals(expectedMessage, actualMessage);
+        assertEquals(expectedMessage, actualMessage);
     }
 
     public void composeSmsWithUrlShortener()
@@ -124,9 +123,9 @@ public class MessagingModulePage extends OperatorV2SimplePage
         waitUntilVisibilityOfElementLocated("//md-card[contains(@class,'sms-editor')]");
         //check the uploaded file name is correct
         String uploadedFileName = getText("//div[contains(@class,'uploaded-info')]//div[1]/p/b");
-        Assert.assertEquals(SMS_CAMPAIGN_FILE_NAME, uploadedFileName);
+        assertEquals(SMS_CAMPAIGN_FILE_NAME, uploadedFileName);
         String totalRecords = getText("//div[contains(@class,'uploaded-info')]//div[2]/p/b");
-        Assert.assertEquals("1", totalRecords);
+        assertEquals("1", totalRecords);
         //entry the template
         String template = "email : {{email}}";
         sendKeys("//textarea[@name='message']", template);
@@ -142,7 +141,7 @@ public class MessagingModulePage extends OperatorV2SimplePage
         pause10s();
         String actualValue = getAttribute("//textarea[@name='preview']", "value");
         String expectedValue = "http://qa.nnj.vn";
-        Assert.assertThat("The produced sms using ninja url shortener is failed", actualValue, Matchers.containsString(expectedValue));
+        assertThat("The produced sms using ninja url shortener is failed", actualValue, Matchers.containsString(expectedValue));
     }
 
     public void waitForSmsToBeProcessed()
@@ -155,7 +154,7 @@ public class MessagingModulePage extends OperatorV2SimplePage
         click("//nv-api-text-button[@text='container.sms.send-messages']");
         waitUntilVisibilityOfElementLocated("//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
         WebElement successToast = getToast();
-        Assert.assertEquals("Successfully sent 1 SMS", successToast.getText());
+        assertEquals("Successfully sent 1 SMS", successToast.getText());
     }
 
     public void searchSmsSentHistory(String trackingId)
@@ -168,7 +167,7 @@ public class MessagingModulePage extends OperatorV2SimplePage
     {
         waitUntilVisibilityOfElementLocated("//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
         WebElement failedToast = getToast();
-        Assert.assertEquals("Order with trackingId "+trackingId+" not found!", failedToast.getText());
+        assertEquals("Order with trackingId "+trackingId+" not found!", failedToast.getText());
     }
 
     public void verifySmsHistoryTrackingIdValid(String trackingId, String contactNumber)
@@ -177,14 +176,14 @@ public class MessagingModulePage extends OperatorV2SimplePage
         String smsDate = (String)cache.get("sms-date");
         //assert that tracking id is equal
         WebElement trackingIdElement = findElementByXpath("//md-card[contains(@class,'sms-history')]/md-card-content/div/span");
-        Assert.assertEquals("Tracking id: "+trackingId, trackingIdElement.getText());
+        assertEquals("Tracking id: "+trackingId, trackingIdElement.getText());
 
         //check the contact number
         String number=  getTextOnTableWithMdVirtualRepeat(1,"to-number", MD_VIRTUAL_REPEAT);
-        Assert.assertEquals("Contact Number", contactNumber, number);
+        assertEquals("Contact Number", contactNumber, number);
 
         //check sms-date on the message field
         String message =  getTextOnTableWithMdVirtualRepeat(1,"message", MD_VIRTUAL_REPEAT);
-        Assert.assertThat("It contain sms-date woth same date", message, Matchers.containsString(smsDate));
+        assertThat("It contain sms-date with same date", message, Matchers.containsString(smsDate));
     }
 }

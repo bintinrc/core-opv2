@@ -4,7 +4,6 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -73,7 +72,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
         NvLogger.info("FILE_NAME = " + fileName);
         List<DriverTypeParams> actualDriverTypeParams = DriverTypeParams.fromCsvFile(pathName, true);
 
-        Assert.assertThat("Unexpected number of lines in CSV file", actualDriverTypeParams.size(), greaterThanOrEqualTo(expectedDriverTypeParams.size()));
+        assertThat("Unexpected number of lines in CSV file", actualDriverTypeParams.size(), greaterThanOrEqualTo(expectedDriverTypeParams.size()));
 
         Map<Long, DriverTypeParams> actualMap = actualDriverTypeParams.stream().collect(Collectors.toMap(
                 DriverTypeParams::getDriverTypeId,
@@ -84,12 +83,12 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
         {
             DriverTypeParams actualParams = actualMap.get(expectedParams.getDriverTypeId());
 
-            Assert.assertThat("Driver Type with Id", actualParams, notNullValue());
-            Assert.assertEquals("Driver Type Name", expectedParams.getDriverTypeName(), actualParams.getDriverTypeName());
-            Assert.assertEquals(DELIVERY_TYPE, expectedParams.getDeliveryType(), actualParams.getDeliveryType());
-            Assert.assertEquals(PRIORITY_LEVEL, expectedParams.getPriorityLevel(), actualParams.getPriorityLevel());
-            Assert.assertEquals(RESERVATION_SIZE, expectedParams.getReservationSize(), actualParams.getReservationSize());
-            Assert.assertEquals(PARCEL_SIZE, expectedParams.getParcelSize(), actualParams.getParcelSize());
+            assertThat("Driver Type with Id", actualParams, notNullValue());
+            assertEquals("Driver Type Name", expectedParams.getDriverTypeName(), actualParams.getDriverTypeName());
+            assertEquals(DELIVERY_TYPE, expectedParams.getDeliveryType(), actualParams.getDeliveryType());
+            assertEquals(PRIORITY_LEVEL, expectedParams.getPriorityLevel(), actualParams.getPriorityLevel());
+            assertEquals(RESERVATION_SIZE, expectedParams.getReservationSize(), actualParams.getReservationSize());
+            assertEquals(PARCEL_SIZE, expectedParams.getParcelSize(), actualParams.getParcelSize());
         }
     }
 
@@ -97,14 +96,15 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
     {
         List<DriverTypeParams> filterResults = driverTypesTable.getAllDriverTypeParams();
 
-        filterResults.forEach(driverTypeParams -> {
-            if (StringUtils.isNotBlank(filterParams.getDeliveryType()))
+        filterResults.forEach(driverTypeParams ->
+        {
+            if(StringUtils.isNotBlank(filterParams.getDeliveryType()))
             {
-                Assert.assertThat(DELIVERY_TYPE,
+                assertThat(DELIVERY_TYPE,
                         driverTypeParams.getDeliveryTypes(),
                         anyOf(hasItemsIgnoreCase(filterParams.getDeliveryTypes()), hasItemIgnoreCase("All")));
             }
-            if (StringUtils.isNotBlank(filterParams.getPriorityLevel()))
+            if(StringUtils.isNotBlank(filterParams.getPriorityLevel()))
             {
                 List<String> expectedItems = filterParams.getPriorityLevels().stream().map(item -> {
                     if (!StringUtils.containsAny(item,"Only", "All", "Both"))
@@ -113,27 +113,19 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
                     }
                     return item;
                 }).collect(Collectors.toList());
-                Assert.assertThat(PRIORITY_LEVEL,
-                        driverTypeParams.getPriorityLevels(),
-                        anyOf(hasItemsIgnoreCase(expectedItems), hasItemIgnoreCase("All")));
+                assertThat(PRIORITY_LEVEL, driverTypeParams.getPriorityLevels(), anyOf(hasItemsIgnoreCase(expectedItems), hasItemIgnoreCase("All")));
             }
-            if (StringUtils.isNotBlank(filterParams.getReservationSize()))
+            if(StringUtils.isNotBlank(filterParams.getReservationSize()))
             {
-                Assert.assertThat(RESERVATION_SIZE,
-                        driverTypeParams.getReservationSizes(),
-                        anyOf(hasItemsIgnoreCase(filterParams.getReservationSizes()), hasItemIgnoreCase("All")));
+                assertThat(RESERVATION_SIZE, driverTypeParams.getReservationSizes(), anyOf(hasItemsIgnoreCase(filterParams.getReservationSizes()), hasItemIgnoreCase("All")));
             }
             if (StringUtils.isNotBlank(filterParams.getParcelSize()))
             {
-                Assert.assertThat(PARCEL_SIZE,
-                        driverTypeParams.getParcelSizes(),
-                        anyOf(hasItemsIgnoreCase(filterParams.getParcelSizes()), hasItemIgnoreCase("All")));
+                assertThat(PARCEL_SIZE, driverTypeParams.getParcelSizes(), anyOf(hasItemsIgnoreCase(filterParams.getParcelSizes()), hasItemIgnoreCase("All")));
             }
             if (StringUtils.isNotBlank(filterParams.getTimeslot()))
             {
-                Assert.assertThat(TIMESLOT,
-                        driverTypeParams.getTimeslots(),
-                        anyOf(hasItemsIgnoreCase(filterParams.getTimeslots()), hasItemIgnoreCase("All")));
+                assertThat(TIMESLOT, driverTypeParams.getTimeslots(), anyOf(hasItemsIgnoreCase(filterParams.getTimeslots()), hasItemIgnoreCase("All")));
             }
         });
     }
@@ -157,39 +149,39 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
     {
         searchingCreatedDriver(expectedDriverTypeParams.getDriverTypeName());
         DriverTypeParams actualDriverTypeParams = driverTypesTable.getDriverTypeParams(1);
-        if (expectedDriverTypeParams.getDriverTypeId() != null)
+        if(expectedDriverTypeParams.getDriverTypeId()!=null)
         {
-            Assert.assertThat("Driver Type ID", actualDriverTypeParams.getDriverTypeId(), equalTo(expectedDriverTypeParams.getDriverTypeId()));
+            assertThat("Driver Type ID", actualDriverTypeParams.getDriverTypeId(), equalTo(expectedDriverTypeParams.getDriverTypeId()));
         }
-        if (expectedDriverTypeParams.getDriverTypeName() != null)
+        if(expectedDriverTypeParams.getDriverTypeName()!=null)
         {
-            Assert.assertThat("Driver Type Name", actualDriverTypeParams.getDriverTypeName(), equalToIgnoringCase(expectedDriverTypeParams.getDriverTypeName()));
+            assertThat("Driver Type Name", actualDriverTypeParams.getDriverTypeName(), equalToIgnoringCase(expectedDriverTypeParams.getDriverTypeName()));
         }
-        if (expectedDriverTypeParams.getDeliveryType() != null)
+        if(expectedDriverTypeParams.getDeliveryType()!=null)
         {
-            Assert.assertThat(DELIVERY_TYPE, actualDriverTypeParams.getDeliveryType(), equalToIgnoringCase(expectedDriverTypeParams.getDeliveryType()));
+            assertThat(DELIVERY_TYPE, actualDriverTypeParams.getDeliveryType(), equalToIgnoringCase(expectedDriverTypeParams.getDeliveryType()));
         }
-        if (expectedDriverTypeParams.getPriorityLevel() != null)
+        if(expectedDriverTypeParams.getPriorityLevel()!=null)
         {
             String expectedPriorityLevel = expectedDriverTypeParams.getPriorityLevel();
-            if (!StringUtils.containsAny(expectedPriorityLevel, "Only", "All", "Both"))
+            if(!StringUtils.containsAny(expectedPriorityLevel, "Only", "All", "Both"))
             {
                 expectedPriorityLevel += " Only";
             }
 
-            Assert.assertThat(PRIORITY_LEVEL, actualDriverTypeParams.getPriorityLevel(), equalToIgnoringCase(expectedPriorityLevel));
+            assertThat(PRIORITY_LEVEL, actualDriverTypeParams.getPriorityLevel(), equalToIgnoringCase(expectedPriorityLevel));
         }
-        if (expectedDriverTypeParams.getReservationSize() != null)
+        if(expectedDriverTypeParams.getReservationSize()!=null)
         {
-            Assert.assertThat(RESERVATION_SIZE, actualDriverTypeParams.getReservationSize(), equalToIgnoringCase(expectedDriverTypeParams.getReservationSize()));
+            assertThat(RESERVATION_SIZE, actualDriverTypeParams.getReservationSize(), equalToIgnoringCase(expectedDriverTypeParams.getReservationSize()));
         }
-        if (expectedDriverTypeParams.getParcelSize() != null)
+        if(expectedDriverTypeParams.getParcelSize()!=null)
         {
-            Assert.assertThat(PARCEL_SIZE, actualDriverTypeParams.getParcelSize(), equalToIgnoringCase(expectedDriverTypeParams.getParcelSize()));
+            assertThat(PARCEL_SIZE, actualDriverTypeParams.getParcelSize(), equalToIgnoringCase(expectedDriverTypeParams.getParcelSize()));
         }
-        if (expectedDriverTypeParams.getTimeslot() != null)
+        if (expectedDriverTypeParams.getTimeslot()!=null)
         {
-            Assert.assertThat(TIMESLOT, actualDriverTypeParams.getTimeslot(), equalToIgnoringCase(expectedDriverTypeParams.getTimeslot()));
+            assertThat(TIMESLOT, actualDriverTypeParams.getTimeslot(), equalToIgnoringCase(expectedDriverTypeParams.getTimeslot()));
         }
     }
 
@@ -252,7 +244,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
             waitUntilVisibilityOfElementLocated(String.format("//tr[@md-virtual-repeat='%s']", MD_VIRTUAL_REPEAT));
             int rowsCount = getRowsCount();
             List<DriverTypeParams> params = new ArrayList<>(rowsCount);
-            for (int rowIndex = 1; rowIndex <= rowsCount; rowIndex++)
+            for(int rowIndex=1; rowIndex<=rowsCount; rowIndex++)
             {
                 params.add(getDriverTypeParams(rowIndex));
             }
@@ -354,7 +346,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
 
         public AddDriverTypeDialog setName(String name)
         {
-            if (StringUtils.isNotBlank(name))
+            if(StringUtils.isNotBlank(name))
             {
                 sendKeysByAriaLabel(FIELD_NAME_LOCATOR, name);
             }
@@ -539,23 +531,23 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
         {
             waitUntilVisible();
             setName(driverTypeParams.getDriverTypeName());
-            if (StringUtils.isNotBlank(driverTypeParams.getDeliveryType()))
+            if(StringUtils.isNotBlank(driverTypeParams.getDeliveryType()))
             {
                 selectDeliveryType(driverTypeParams.getDeliveryTypes());
             }
-            if (StringUtils.isNotBlank(driverTypeParams.getPriorityLevel()))
+            if(StringUtils.isNotBlank(driverTypeParams.getPriorityLevel()))
             {
                 selectPriorityLevel(driverTypeParams.getPriorityLevels());
             }
-            if (StringUtils.isNotBlank(driverTypeParams.getReservationSize()))
+            if(StringUtils.isNotBlank(driverTypeParams.getReservationSize()))
             {
                 selectReservationSize(driverTypeParams.getReservationSizes());
             }
-            if (StringUtils.isNotBlank(driverTypeParams.getParcelSize()))
+            if(StringUtils.isNotBlank(driverTypeParams.getParcelSize()))
             {
                 selectParcelSize(driverTypeParams.getParcelSizes());
             }
-            if (StringUtils.isNotBlank(driverTypeParams.getTimeslot()))
+            if(StringUtils.isNotBlank(driverTypeParams.getTimeslot()))
             {
                 selectTimeslot(driverTypeParams.getTimeslots());
             }

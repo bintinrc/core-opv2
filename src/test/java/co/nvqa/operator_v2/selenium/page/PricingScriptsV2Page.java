@@ -8,7 +8,6 @@ import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
@@ -65,14 +64,14 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
         wait10sUntil(()->!isTableEmpty(ACTIVE_TAB_XPATH), "Drafts table is empty. New script failed to created.");
 
         String actualId = getTextOnTableDrafts(1, COLUMN_CLASS_DATA_ID_ON_TABLE_DRAFTS);
-        Assert.assertNotNull("Script ID is empty. Script is not created.", actualId);
+        assertNotNull("Script ID is empty. Script is not created.", actualId);
         script.setId(Long.parseLong(actualId));
 
         String actualScriptName = getTextOnTableDrafts(1, COLUMN_CLASS_DATA_NAME_ON_TABLE_DRAFTS);
         String actualDescription = getTextOnTableDrafts(1, COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE_DRAFTS);
 
-        Assert.assertEquals("Script Name", script.getName(), actualScriptName);
-        Assert.assertEquals("Script Description", script.getDescription(), actualDescription);
+        assertEquals("Script Name", script.getName(), actualScriptName);
+        assertEquals("Script Description", script.getDescription(), actualDescription);
     }
 
     public void deleteDraftScript(Script script)
@@ -85,7 +84,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
     {
         clickTabItem(TAB_DRAFTS);
         searchTableDraftsByScriptName(script.getName());
-        Assert.assertTrue("Drafts Table is not empty. The Draft Script is not deleted successfully.", isTableEmpty(ACTIVE_TAB_XPATH));
+        assertTrue("Drafts Table is not empty. The Draft Script is not deleted successfully.", isTableEmpty(ACTIVE_TAB_XPATH));
     }
 
     public void runCheckDraftScript(Script script, RunCheckParams runCheckParams)
@@ -127,9 +126,9 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
         String actualScriptName = getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_NAME_ON_TABLE_DRAFTS);
         String actualDescription = getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_DESCRIPTION_ON_TABLE_DRAFTS);
 
-        Assert.assertEquals("Script ID", String.valueOf(script.getId()), actualId);
-        Assert.assertEquals("Script Name", script.getName(), actualScriptName);
-        Assert.assertEquals("Script Description", script.getDescription(), actualDescription);
+        assertEquals("Script ID", String.valueOf(script.getId()), actualId);
+        assertEquals("Script Name", script.getName(), actualScriptName);
+        assertEquals("Script Description", script.getDescription(), actualDescription);
     }
 
     public void linkShippers(Script script, Shipper shipper)
@@ -146,18 +145,23 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
         selectValueFromNvAutocomplete("ctrl.view.textShipper", shipperName);
 
         List<String> listOfLinkedShippers = getLinkedShipperNames();
-        Assert.assertThat(String.format("Shipper '%s' is not added to table.", shipperName), listOfLinkedShippers, Matchers.hasItem(shipperName));
+        assertThat(String.format("Shipper '%s' is not added to table.", shipperName), listOfLinkedShippers, Matchers.hasItem(shipperName));
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
     }
 
-    private List<String> getLinkedShipperNames(){
+    private List<String> getLinkedShipperNames()
+    {
         return findElementsByXpath("//tr[@ng-repeat='shipper in $data']/td/div[1]").stream()
-                .map(we -> {
+                .map(we ->
+                {
                     String text = we.getText().trim();
                     Matcher m = SHIPPER_SELECT_VALUE_PATTERN.matcher(text);
-                    if (m.matches()){
+                    if(m.matches())
+                    {
                         return m.group(2).trim();
-                    } else {
+                    }
+                    else
+                    {
                         return "";
                     }
                 })
@@ -177,7 +181,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
         waitUntilInvisibilityOfElementLocated("//md-dialog//md-dialog-content/div/md-progress-circular");
 
         List<String> listOfLinkedShippers = getLinkedShipperNames();
-        Assert.assertThat(String.format("Shipper '%s' is not added to table.", shipperName), listOfLinkedShippers, Matchers.hasItem(shipperName));
+        assertThat(String.format("Shipper '%s' is not added to table.", shipperName), listOfLinkedShippers, Matchers.hasItem(shipperName));
         clickButtonOnMdDialogByAriaLabel("Cancel");
     }
 
@@ -191,7 +195,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
     {
         clickTabItem(TAB_ACTIVE_SCRIPTS);
         searchTableActiveScriptsByScriptName(script.getName());
-        Assert.assertTrue("Active Scripts Table is not empty. The Active Script is not deleted successfully.", isTableEmpty(ACTIVE_TAB_XPATH));
+        assertTrue("Active Scripts Table is not empty. The Active Script is not deleted successfully.", isTableEmpty(ACTIVE_TAB_XPATH));
     }
 
     public void goToEditActiveScript(Script script)

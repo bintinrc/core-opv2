@@ -5,7 +5,6 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
-import org.junit.Assert;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -108,7 +107,7 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
     public void verifyCodInfoIsCorrect(RouteCashInboundCod routeCashInboundCod)
     {
         String actualRouteId = getTextOnTable(1, COLUMN_CLASS_DATA_ROUTE_ID);
-        Assert.assertEquals("Route Cash Inbound - COD - Route ID", String.valueOf(routeCashInboundCod.getRouteId()), actualRouteId);
+        assertEquals("Route Cash Inbound - COD - Route ID", String.valueOf(routeCashInboundCod.getRouteId()), actualRouteId);
 
         String expectedAmountCollected = DECIMAL_FORMAT.format(routeCashInboundCod.getAmountCollected());
 
@@ -128,10 +127,10 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
         }
 
         String actualAmountCollected = getTextOnTable(1, COLUMN_CLASS_DATA_AMOUNT_COLLECTED);
-        Assert.assertEquals("Route Cash Inbound - COD - Amount Collected", expectedAmountCollected, actualAmountCollected);
+        assertEquals("Route Cash Inbound - COD - Amount Collected", expectedAmountCollected, actualAmountCollected);
 
         String actualReceiptNumber = getTextOnTable(1, COLUMN_CLASS_DATA_RECEIPT_NO);
-        Assert.assertEquals("Route Cash Inbound - COD - Receipt Number", routeCashInboundCod.getReceiptNumber(), actualReceiptNumber);
+        assertEquals("Route Cash Inbound - COD - Receipt Number", routeCashInboundCod.getReceiptNumber(), actualReceiptNumber);
     }
 
     public void deleteCod(RouteCashInboundCod routeCashInboundCod)
@@ -161,7 +160,7 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
             isTableEmpty = isTableEmpty();
         }
 
-        Assert.assertTrue("Table should be empty.", isTableEmpty);
+        assertTrue("Table should be empty.", isTableEmpty);
     }
 
     public void downloadCsvFile()
@@ -189,7 +188,7 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
           First attempt to check after button 'Fetch COD' is clicked.
          */
         boolean isTableEmpty = isTableEmpty();
-        Assert.assertTrue("Table should not be empty.", !isTableEmpty);
+        assertTrue("Table should not be empty.", !isTableEmpty);
 
         /*
           If the table is not empty, then filter table by receiptNo
@@ -197,7 +196,7 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
          */
         searchTable(routeCashInboundCod.getReceiptNumber());
         isTableEmpty = isTableEmpty();
-        Assert.assertTrue("Table should not be empty.", !isTableEmpty);
+        assertTrue("Table should not be empty.", !isTableEmpty);
     }
 
     public void waitUntilToastErrorDisappear()

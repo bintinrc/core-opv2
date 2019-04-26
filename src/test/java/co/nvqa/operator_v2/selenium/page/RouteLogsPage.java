@@ -7,8 +7,6 @@ import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.operator_v2.model.CreateRouteParams;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.util.TestConstants;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Arrays;
@@ -204,12 +202,12 @@ public class RouteLogsPage extends OperatorV2SimplePage
 
         createdRoute.setRoutePassword(actualRoutePassword);
 
-        Assert.assertEquals("Route Date", YYYY_MM_DD_SDF.format(createRouteParams.getRouteDate()), actualRouteDate);
-        Assert.assertEquals("Route ID", String.valueOf(createdRouteId), actualRouteId);
-        Assert.assertEquals("Driver Name", createRouteParams.getNinjaDriverName(), actualDriverName);
-        Assert.assertEquals("Hub Name", createRouteParams.getHubName(), actualHubName);
-        Assert.assertEquals("Zone Name", createRouteParams.getZoneName(), actualZoneName);
-        Assert.assertEquals("Comments", createRouteParams.getComments(), actualComments);
+        assertEquals("Route Date", YYYY_MM_DD_SDF.format(createRouteParams.getRouteDate()), actualRouteDate);
+        assertEquals("Route ID", String.valueOf(createdRouteId), actualRouteId);
+        assertEquals("Driver Name", createRouteParams.getNinjaDriverName(), actualDriverName);
+        assertEquals("Hub Name", createRouteParams.getHubName(), actualHubName);
+        assertEquals("Zone Name", createRouteParams.getZoneName(), actualZoneName);
+        assertEquals("Comments", createRouteParams.getComments(), actualComments);
     }
 
     public void bulkEditDetails(List<CreateRouteParams> listOfCreateRouteParams)
@@ -247,12 +245,12 @@ public class RouteLogsPage extends OperatorV2SimplePage
     {
         waitUntilVisibilityOfToast("Routes Merged");
         String toastBottomText = getToastBottomText();
-        Assert.assertNotNull("Failed to merge transactions of multiple routes.", toastBottomText);
+        assertNotNull("Failed to merge transactions of multiple routes.", toastBottomText);
         waitUntilInvisibilityOfToast("Routes Merged", false);
 
         String[] arrayOfRouteIdAsString = listOfCreateRouteParams.stream().map(createRouteParams -> String.valueOf(createRouteParams.getCreatedRoute().getId())).toArray(String[]::new);
         String[] actualMergedRoutes = toastBottomText.replaceFirst("Route ", "").split(", ");
-        Assert.assertThat("Expected Tracking ID not found.", Arrays.asList(actualMergedRoutes), Matchers.hasItems(arrayOfRouteIdAsString));
+        assertThat("Expected Tracking ID not found.", Arrays.asList(actualMergedRoutes), hasItems(arrayOfRouteIdAsString));
     }
 
     public void optimiseMultipleRoutes(List<CreateRouteParams> listOfCreateRouteParams)
@@ -271,8 +269,8 @@ public class RouteLogsPage extends OperatorV2SimplePage
         {
             String actualRouteId = getText(String.format("//tr[@ng-repeat='route in optimizedRoutes'][%d]/td[1]", i));
             String actualStatus = getText(String.format("//tr[@ng-repeat='route in optimizedRoutes'][%d]/td[2]", i));
-            Assert.assertThat("Route ID not found in optimised list.", actualRouteId, Matchers.isOneOf(arrayOfRouteIdAsString));
-            Assert.assertEquals(String.format("Route ID = %s", actualRouteId), "Optimized", actualStatus);
+            assertThat("Route ID not found in optimised list.", actualRouteId, isOneOf(arrayOfRouteIdAsString));
+            assertEquals(String.format("Route ID = %s", actualRouteId), "Optimized", actualStatus);
         }
     }
 
@@ -304,8 +302,8 @@ public class RouteLogsPage extends OperatorV2SimplePage
                 }
             }
 
-            Assert.assertNotNull(String.format("Route password for Route ID = %d not found on PDF.", expectedRouteId), selectedRoutePassword);
-            Assert.assertEquals(String.format("Route Password for Route ID = %d", expectedRouteId), route.getRoutePassword(), selectedRoutePassword.getRoutePassword());
+            assertNotNull(String.format("Route password for Route ID = %d not found on PDF.", expectedRouteId), selectedRoutePassword);
+            assertEquals(String.format("Route Password for Route ID = %d", expectedRouteId), route.getRoutePassword(), selectedRoutePassword.getRoutePassword());
         }
     }
 
@@ -343,9 +341,9 @@ public class RouteLogsPage extends OperatorV2SimplePage
 
                 try
                 {
-                    Assert.assertFalse("Table is empty.", isTableEmpty);
+                    assertFalse("Table is empty.", isTableEmpty);
                     String actualRouteStatus = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
-                    Assert.assertEquals("Route Status", "ARCHIVED", actualRouteStatus);
+                    assertEquals("Route Status", "ARCHIVED", actualRouteStatus);
                 }
                 catch(AssertionError ex)
                 {
@@ -411,7 +409,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
 
                 try
                 {
-                    Assert.assertTrue(String.format("Route with ID = %d is still exists on table.", routeId), isTableEmpty);
+                    assertTrue(String.format("Route with ID = %d is still exists on table.", routeId), isTableEmpty);
                 }
                 catch(AssertionError ex)
                 {
@@ -565,7 +563,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
     {
         searchTableByRouteId(routeId);
         String actualRouteId = getTextOnTable(1, COLUMN_CLASS_DATA_ROUTE_ID, XpathTextMode.EXACT);
-        Assert.assertEquals("Route ID not found in table.", String.valueOf(routeId), actualRouteId);
+        assertEquals("Route ID not found in table.", String.valueOf(routeId), actualRouteId);
         pause200ms();
     }
 
@@ -589,7 +587,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
         setFilterAndLoadSelection(filterRouteDateFrom, filterRouteDateTo, filterHubName);
         searchTableByRouteId(routeId);
         String actualRouteStatus = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
-        Assert.assertEquals("Track is not routed.","IN_PROGRESS", actualRouteStatus);
+        assertEquals("Track is not routed.","IN_PROGRESS", actualRouteStatus);
     }
 
     private void checkMultipleRows(List<CreateRouteParams> listOfCreateRouteParams)

@@ -3,8 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.util.TestUtils;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
@@ -84,26 +82,26 @@ public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage
 
     public void verifyDeliveryTimeChanged(String trackingId) {
         String actualRes = getTextOnTableWithNgRepeatUsingDataTitle(1, COLUMN_DATA_TITLE_TRACKING_ID, NG_REPEAT);
-        Assert.assertEquals("Tracking ID is not existed on the success table.", trackingId, actualRes);
+        assertEquals("Tracking ID is not existed on the success table.", trackingId, actualRes);
     }
 
     public void invalidTrackingIdVerification() {
         String actualMessage = getTextOnTableWithNgRepeatUsingDataTitle(1, COLUMN_DATA_TITLE_ERROR, NG_REPEAT_ERROR);
-        Assert.assertEquals("Tracking ID is valid.","INVALID_TRACKING_ID", actualMessage);
+        assertEquals("Tracking ID is valid.","INVALID_TRACKING_ID", actualMessage);
     }
 
     public void invalidStateOrderVerification() {
         String actualMessage = getTextOnTableWithNgRepeatUsingDataTitle(1, COLUMN_DATA_TITLE_ERROR, NG_REPEAT_ERROR);
-        Assert.assertThat("Tracking ID is valid.", actualMessage, Matchers.startsWith("INVALID_STATE"));
+        assertThat("Tracking ID is valid.", actualMessage, startsWith("INVALID_STATE"));
     }
 
     public void dateIndicatedIncorectlyVerification() {
         String actualMessage = getTextOnTableWithNgRepeatUsingDataTitle(1, COLUMN_DATA_TITLE_ERROR, NG_REPEAT_ERROR);
-        Assert.assertEquals("Tracking ID is valid.", "Start and End Date not indicated correctly", actualMessage);
+        assertEquals("Tracking ID is valid.", "Start and End Date not indicated correctly", actualMessage);
     }
 
     public void startDateLaterVerification() {
         String actualMessage = getTextOnTableWithNgRepeatUsingDataTitle(1, COLUMN_DATA_TITLE_ERROR, NG_REPEAT_ERROR);
-        Assert.assertEquals("Tracking ID is valid.","Start Date is later than End Date", actualMessage);
+        assertEquals("Tracking ID is valid.","Start Date is later than End Date", actualMessage);
     }
 }

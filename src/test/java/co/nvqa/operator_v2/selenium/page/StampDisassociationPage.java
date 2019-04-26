@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -34,16 +33,16 @@ public class StampDisassociationPage extends OperatorV2SimplePage
 
     public void verifyLabelText(String expectedLabelText)
     {
-        Assert.assertEquals("Label Text", expectedLabelText, getText(LOCATOR_TEXT_LABEL));
+        assertEquals("Label Text", expectedLabelText, getText(LOCATOR_TEXT_LABEL));
     }
 
     public void verifyOrderDetails(Order order)
     {
         String expectedOrderId = String.format("#%d - %s", order.getId(), order.getTrackingId());
         String actualOrderId = getText(LOCATOR_TEXT_ORDER_ID);
-        Assert.assertEquals("Order ID", expectedOrderId, actualOrderId);
+        assertEquals("Order ID", expectedOrderId, actualOrderId);
 
         String actualDeliveryAddress = StringUtils.normalizeSpace(getText(LOCATOR_TEXT_DELIVERY_ADDRESS));
-        Assert.assertEquals("Delivery Address", order.buildCompleteToAddress(), actualDeliveryAddress);
+        assertEquals("Delivery Address", order.buildCompleteToAddress(), actualDeliveryAddress);
     }
 }

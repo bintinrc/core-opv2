@@ -5,8 +5,6 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
@@ -39,7 +37,8 @@ public class BulkAddressVerificationPage extends OperatorV2SimplePage
         try
         {
             FileUtils.writeLines(file, csvLines);
-        } catch (IOException ex)
+        }
+        catch (IOException ex)
         {
             NvLogger.warnf("File '%s' failed to write. Cause: %s", file.getAbsolutePath(), ex.getMessage());
         }
@@ -52,29 +51,29 @@ public class BulkAddressVerificationPage extends OperatorV2SimplePage
         uploadCsv(file);
 
         int actualSuccessfulMatches = successfulMatchesTable.getRowsCount();
-        Assert.assertEquals("Number of successful matches", jaroScores.size(), actualSuccessfulMatches);
+        assertEquals("Number of successful matches", jaroScores.size(), actualSuccessfulMatches);
 
         Map<Long, JaroScore> jsMapByWaypointId = jaroScores.stream().collect(Collectors.toMap(
                 JaroScore::getWaypointId,
                 jaroScore -> jaroScore
         ));
 
-        for (int rowIndex = 1; rowIndex <= actualSuccessfulMatches; rowIndex++)
+        for(int rowIndex=1; rowIndex<=actualSuccessfulMatches; rowIndex++)
         {
             String actualWaypointID = successfulMatchesTable.getWaypointId(rowIndex);
             JaroScore jaroScore = jsMapByWaypointId.get(Long.parseLong(actualWaypointID));
-            Assert.assertThat("[" + rowIndex + "] Unexpected Waypoint ID " + actualWaypointID, jaroScore, Matchers.notNullValue());
-            Assert.assertEquals("[" + rowIndex + "] Waypoint ID", String.valueOf(jaroScore.getWaypointId()), actualWaypointID);
-            Assert.assertThat("[" + rowIndex + " Address] ", successfulMatchesTable.getAddress(rowIndex), Matchers.equalToIgnoringCase(jaroScore.getAddress1()));
+            assertThat("[" + rowIndex + "] Unexpected Waypoint ID " + actualWaypointID, jaroScore, notNullValue());
+            assertEquals("[" + rowIndex + "] Waypoint ID", String.valueOf(jaroScore.getWaypointId()), actualWaypointID);
+            assertThat("[" + rowIndex + " Address] ", successfulMatchesTable.getAddress(rowIndex), equalToIgnoringCase(jaroScore.getAddress1()));
             String expectedCoordinates =
                     StringUtils.left(String.valueOf(jaroScore.getLatitude()), 6) +
                             "," +
                             StringUtils.left(String.valueOf(jaroScore.getLongitude()), 6);
-            Assert.assertThat("[" + rowIndex + " Coordinates] ", successfulMatchesTable.getCoordinates(rowIndex), Matchers.equalToIgnoringCase(expectedCoordinates));
+            assertThat("[" + rowIndex + " Coordinates] ", successfulMatchesTable.getCoordinates(rowIndex), equalToIgnoringCase(expectedCoordinates));
         }
 
         updateSuccessfulMatches();
-        String toastMessage = String.format("%d Waypoint(s) Updated", jaroScores.size());
+        String toastMessage = f("%d Waypoint(s) Updated", jaroScores.size());
         waitUntilInvisibilityOfToast(toastMessage);
 
     }

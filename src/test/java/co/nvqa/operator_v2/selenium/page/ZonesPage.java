@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.Zone;
-import org.junit.Assert;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -110,20 +109,20 @@ public class ZonesPage extends OperatorV2SimplePage
     private void verifyZoneInfoIsCorrect(Zone zone)
     {
         String actualShortName = getTextOnTable(1, COLUMN_CLASS_DATA_SHORT_NAME);
-        Assert.assertEquals("Zone Short Name", zone.getShortName(), actualShortName);
+        assertEquals("Zone Short Name", zone.getShortName(), actualShortName);
 
         String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
-        Assert.assertEquals("Zone Name", zone.getName(), actualName);
+        assertEquals("Zone Name", zone.getName(), actualName);
 
         String actualHubName = getTextOnTable(1, COLUMN_CLASS_DATA_HUB_NAME);
-        Assert.assertEquals("Zone Hub Name", zone.getHubName(), actualHubName);
+        assertEquals("Zone Hub Name", zone.getHubName(), actualHubName);
 
         String expectedLatLong = zone.getLatitude()+", "+zone.getLongitude();
         String actualLatLong = getTextOnTable(1, COLUMN_CLASS_DATA_LAT_LONG);
-        Assert.assertEquals("Zone Lat/Long", expectedLatLong, actualLatLong);
+        assertEquals("Zone Lat/Long", expectedLatLong, actualLatLong);
 
         String actualDescription = getTextOnTable(1, COLUMN_CLASS_DATA_DESCRIPTION);
-        Assert.assertEquals("Zone Description", zone.getDescription(), actualDescription);
+        assertEquals("Zone Description", zone.getDescription(), actualDescription);
     }
 
     public void deleteZone(Zone zone)
@@ -167,7 +166,7 @@ public class ZonesPage extends OperatorV2SimplePage
         clickRefreshCache();
         searchTableByName(zone.getName());
         boolean isTableEmpty = isTableEmpty();
-        Assert.assertTrue("Zone still exist in table. Fail to delete DP Vault.", isTableEmpty);
+        assertTrue("Zone still exist in table. Fail to delete DP Vault.", isTableEmpty);
     }
 
     public void verifyAllFiltersWorkFine(Zone zone)

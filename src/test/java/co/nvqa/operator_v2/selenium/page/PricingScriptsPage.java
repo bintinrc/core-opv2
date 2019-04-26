@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
-import org.junit.Assert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
@@ -247,25 +246,25 @@ public class PricingScriptsPage extends OperatorV2SimplePage
         String expectedComments = mapOfData.get("comments");
 
         String actualTotal = getText("//md-input-container/label[text()='Grand Total']/following-sibling::div[1]");
-        Assert.assertEquals("Total", expectedTotal, actualTotal);
+        assertEquals("Total", expectedTotal, actualTotal);
 
         /*String actualGst = getText("//md-input-container[label[text()='GST']]/div[@class='readonly ng-binding']");
         Assert.assertEquals("GST", expectedGst, actualGst);*/
 
         String actualCodFee = getText("//md-input-container/label[text()='COD Fee']/following-sibling::div[1]");
-        Assert.assertEquals("COD Fee", expectedCodFee, actualCodFee);
+        assertEquals("COD Fee", expectedCodFee, actualCodFee);
 
         String actualInsuranceFee = getText("//md-input-container/label[text()='Insurance Fee']/following-sibling::div[1]");
-        Assert.assertEquals("Insurance Fee", expectedInsuranceFee, actualInsuranceFee);
+        assertEquals("Insurance Fee", expectedInsuranceFee, actualInsuranceFee);
 
         String actualDeliveryFee = getText("//md-input-container/label[text()='Delivery Fee']/following-sibling::div[1]");
-        Assert.assertEquals("Delivery Fee", expectedDeliveryFee, actualDeliveryFee);
+        assertEquals("Delivery Fee", expectedDeliveryFee, actualDeliveryFee);
 
         String actualHandlingFee = getText("//md-input-container/label[text()='Handling Fee']/following-sibling::div[1]");
-        Assert.assertEquals("Handling Fee", expectedHandlingFee, actualHandlingFee);
+        assertEquals("Handling Fee", expectedHandlingFee, actualHandlingFee);
 
         String actualComments = getText("//md-input-container/label[text()='Comments']/following-sibling::div[1]");
-        Assert.assertEquals("Comments", expectedComments, actualComments);
+        assertEquals("Comments", expectedComments, actualComments);
     }
 
     public void clickButtonCancel()

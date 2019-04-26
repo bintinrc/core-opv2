@@ -7,7 +7,6 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -747,7 +746,7 @@ public class OperatorV2SimplePage extends SimplePage
         }
         else
         {
-            Assert.assertEquals(selectName + " select is disabled and current value is not equal to expected", value, getMdSelectValue(mdSelectNgModel));
+            assertEquals(selectName + " select is disabled and current value is not equal to expected", value, getMdSelectValue(mdSelectNgModel));
         }
     }
 

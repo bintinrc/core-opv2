@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.ThirdPartyShipper;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -86,17 +85,17 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
         else
         {
             String actualId = getTextOnTable(1, COLUMN_CLASS_DATA_ID);
-            Assert.assertEquals("Third Party Shipper - Code", String.valueOf(thirdPartyShipper.getId()), actualId);
+            assertEquals("Third Party Shipper - Code", String.valueOf(thirdPartyShipper.getId()), actualId);
         }
 
         String actualCode = getTextOnTable(1, COLUMN_CLASS_DATA_CODE);
-        Assert.assertEquals("Third Party Shipper - Code", thirdPartyShipper.getCode(), actualCode);
+        assertEquals("Third Party Shipper - Code", thirdPartyShipper.getCode(), actualCode);
 
         String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
-        Assert.assertEquals("Third Party Shipper - Name", thirdPartyShipper.getName(), actualName);
+        assertEquals("Third Party Shipper - Name", thirdPartyShipper.getName(), actualName);
 
         String actualUrl = getTextOnTable(1, COLUMN_CLASS_DATA_URL);
-        Assert.assertEquals("Third Party Shipper - URL", thirdPartyShipper.getUrl(), actualUrl);
+        assertEquals("Third Party Shipper - URL", thirdPartyShipper.getUrl(), actualUrl);
     }
 
     public void deleteThirdPartyShipper(ThirdPartyShipper thirdPartyShipper)
@@ -113,7 +112,7 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
     {
         searchTableByCode(thirdPartyShipper.getCode());
         boolean isTableEmpty = isTableEmpty();
-        Assert.assertTrue(String.format("Third Party Shipper still exist in table. Fail to delete Third Party Shipper (code = %s).", thirdPartyShipper.getCode()), isTableEmpty);
+        assertTrue(f("Third Party Shipper still exist in table. Fail to delete Third Party Shipper (code = %s).", thirdPartyShipper.getCode()), isTableEmpty);
     }
 
     public void verifyAllFiltersWorkFine(ThirdPartyShipper thirdPartyShipper)

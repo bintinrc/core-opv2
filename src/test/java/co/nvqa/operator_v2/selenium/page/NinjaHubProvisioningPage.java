@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.util.TestUtils;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
@@ -26,6 +25,6 @@ public class NinjaHubProvisioningPage extends OperatorV2SimplePage
     {
         String qrCodeText = TestUtils.getTextFromQrCodeImage(qrCodeFile);
         String linkText = getText("//nv-qrcode//div[@class='text']");
-        Assert.assertEquals("QR Code Text & Link Text is different.", qrCodeText, linkText);
+        assertEquals("QR Code Text & Link Text is different.", qrCodeText, linkText);
     }
 }

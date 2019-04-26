@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -35,7 +34,7 @@ public class VehicleTypeManagementPage extends OperatorV2SimplePage
     {
         searchTable(expectedVehicleTypeName);
         String actualVehicleTypeName = getTextOnTable(1, COLUMN_DATA_TITLE_NAME);
-        Assert.assertEquals("Different Result Returned",expectedVehicleTypeName,actualVehicleTypeName);
+        assertEquals("Different Result Returned",expectedVehicleTypeName,actualVehicleTypeName);
     }
 
     public void verifyVehicleTypeNotExist(String expectedVehicleTypeName)
@@ -43,7 +42,7 @@ public class VehicleTypeManagementPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfElementLocated(String.format("//tr[@ng-repeat='%s'][1]", NG_REPEAT));
         searchTable(expectedVehicleTypeName);
         boolean isTableEmpty = isTableEmpty();
-        Assert.assertTrue("Vehicle name still exist on table.", isTableEmpty);
+        assertTrue("Vehicle name still exist on table.", isTableEmpty);
     }
 
     public void editVehicleType(String oldName, String newName)

@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.RoleManagement;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -40,9 +39,9 @@ public class RoleManagementPage extends OperatorV2SimplePage {
         searchTable(roleManagement.getRoleName());
 
         String actualName = getTextOnTable(1, COLUMN_DATA_TITLE_NAME);
-        Assert.assertEquals("Different Role Name Returned", roleManagement.getRoleName(), actualName);
+        assertEquals("Different Role Name Returned", roleManagement.getRoleName(), actualName);
         String actualDesc = getTextOnTable(1, COLUMN_DATA_TITLE_DESC);
-        Assert.assertEquals("Different Description Returned", roleManagement.getDesc(), actualDesc);
+        assertEquals("Different Description Returned", roleManagement.getDesc(), actualDesc);
     }
 
     public void deleteRole() {
@@ -54,7 +53,7 @@ public class RoleManagementPage extends OperatorV2SimplePage {
     public void verifyRoleIsDeleted(RoleManagement roleManagement) {
         waitUntilVisibilityOfElementLocated("//table[@ng-table='ctrl.allRoleParams']/tbody/tr");
         searchTable(roleManagement.getRoleName());
-        Assert.assertFalse("Row is exist.", isElementExistWait1Second("//table[@ng-table='ctrl.allRoleParams']/tbody/tr"));
+        assertFalse("Row is exist.", isElementExistWait1Second("//table[@ng-table='ctrl.allRoleParams']/tbody/tr"));
     }
 
     public void editRole(RoleManagement roleManagement, RoleManagement roleManagementEdited) {

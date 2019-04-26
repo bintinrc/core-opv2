@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RecoveryTicket;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -105,7 +104,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     {
         pause1s();
         String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
-        Assert.assertEquals("Ticket with this tracking ID is not created", trackingId, actualTrackingId);
+        assertEquals("Ticket with this tracking ID is not created", trackingId, actualTrackingId);
     }
 
     public void clickCreateNewTicketButton()

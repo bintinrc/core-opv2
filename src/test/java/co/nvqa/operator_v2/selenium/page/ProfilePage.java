@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -53,6 +52,6 @@ public class ProfilePage extends OperatorV2SimplePage {
         clickProfileButton();
         String currentCountry = getCurrentCountry();
         closeProfile();
-        Assert.assertTrue(String.format("Current country is %s not %s", currentCountry, country), currentCountry.equalsIgnoreCase(country));
+        assertTrue(f("Current country is %s not %s", currentCountry, country), currentCountry.equalsIgnoreCase(country));
     }
 }

@@ -4,7 +4,6 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.util.SingletonStorage;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -72,7 +71,7 @@ public class DpPage extends OperatorV2SimplePage
         while(!isFileExists && counter<MAX_RETRY);
 
         TestUtils.deleteFile(pathname);
-        Assert.assertTrue(pathname + " not exist.", isFileExists);
+        assertTrue(pathname + " not exist.", isFileExists);
     }
 
     public void search(String type)
@@ -117,7 +116,7 @@ public class DpPage extends OperatorV2SimplePage
 
         String expectedValue = String.format(prefix, SingletonStorage.getInstance().getTmpId());
         String actualValue = getTextOnTable(ngRepeat, 1, columnClass);
-        Assert.assertEquals(expectedValue, actualValue);
+        assertEquals(expectedValue, actualValue);
     }
 
     public void verifyResult(String type)
@@ -175,7 +174,7 @@ public class DpPage extends OperatorV2SimplePage
         searchTable(expectedValue);
         pause100ms();
         String actualValue = getTextOnTable(ngRepeat, 1, columnClass);
-        Assert.assertEquals(expectedValue, actualValue);
+        assertEquals(expectedValue, actualValue);
     }
 
     public void clickAddBtn(String type)
@@ -284,7 +283,7 @@ public class DpPage extends OperatorV2SimplePage
         //Verify searching results.
         String expectedValue = findElementByXpath("//input[@placeholder='" + placeHolder + "'][@ng-model='searchText']").getAttribute("value");
         String actualValue = getTextOnTable(ngRepeat, 1, columnClass);
-        Assert.assertEquals(expectedValue, actualValue);
+        assertEquals(expectedValue, actualValue);
 
         pause100ms();
         click("//nv-icon-button[@name='Edit']");

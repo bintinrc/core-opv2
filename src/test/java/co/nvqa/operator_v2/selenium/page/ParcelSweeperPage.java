@@ -1,8 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.Color;
 
@@ -47,18 +45,18 @@ public class ParcelSweeperPage extends OperatorV2SimplePage
     {
         if (routeId != null)
         {
-            Assert.assertEquals("Unexpected Route ID", String.valueOf(routeId), getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h4"));
+            assertEquals("Unexpected Route ID", String.valueOf(routeId), getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h4"));
         }
 
         if (StringUtils.isNotBlank(driverName))
         {
-            Assert.assertThat("Unexpected Route ID", getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h5"), Matchers.equalToIgnoringCase(driverName));
+            assertThat("Unexpected Route ID", getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h5"), equalToIgnoringCase(driverName));
         }
 
         if (StringUtils.isNotBlank(color))
         {
             Color actualColor = Color.fromString(getCssValue(LOCATOR_ROUTE_INFO_CONTAINER, "background-color"));
-            Assert.assertEquals("Unexpected Route Info Container color", color, actualColor.asHex());
+            assertEquals("Unexpected Route Info Container color", color, actualColor.asHex());
         }
     }
 
@@ -66,13 +64,13 @@ public class ParcelSweeperPage extends OperatorV2SimplePage
     {
         if (StringUtils.isNotBlank(zoneName))
         {
-            Assert.assertThat("Unexpected Zone Name", getText(LOCATOR_ZONE_INFO_CONTAINER + "//h4"), Matchers.equalToIgnoringCase(zoneName));
+            assertThat("Unexpected Zone Name", getText(LOCATOR_ZONE_INFO_CONTAINER + "//h4"), equalToIgnoringCase(zoneName));
         }
 
         if (StringUtils.isNotBlank(color))
         {
             Color actualColor = Color.fromString(getCssValue(LOCATOR_ZONE_INFO_CONTAINER, "background-color"));
-            Assert.assertEquals("Unexpected Zone Info Container color", color, actualColor.asHex());
+            assertEquals("Unexpected Zone Info Container color", color, actualColor.asHex());
         }
     }
 
@@ -80,13 +78,13 @@ public class ParcelSweeperPage extends OperatorV2SimplePage
     {
         if (StringUtils.isNotBlank(hubName))
         {
-            Assert.assertThat("Unexpected Destination Hub Name", getText(LOCATOR_DESTINATION_HUB_CONTAINER + "//h4"), Matchers.equalToIgnoringCase(hubName));
+            assertThat("Unexpected Destination Hub Name", getText(LOCATOR_DESTINATION_HUB_CONTAINER + "//h4"), equalToIgnoringCase(hubName));
         }
 
         if (StringUtils.isNotBlank(color))
         {
             Color actualColor = Color.fromString(getCssValue(LOCATOR_ZONE_INFO_CONTAINER, "background-color"));
-            Assert.assertEquals("Unexpected Zone Info Container color", color, actualColor.asHex());
+            assertEquals("Unexpected Zone Info Container color", color, actualColor.asHex());
         }
     }
 }

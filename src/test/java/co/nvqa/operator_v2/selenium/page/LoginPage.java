@@ -4,7 +4,6 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.WebDriver;
@@ -154,6 +153,6 @@ public class LoginPage extends OperatorV2SimplePage
     {
         pause1s();
         String currentUrl = getCurrentUrl();
-        Assert.assertThat("Default Operator Portal URL not loaded.", currentUrl, Matchers.containsString(TestConstants.OPERATOR_PORTAL_LOGIN_URL));
+        assertThat("Default Operator Portal URL not loaded.", currentUrl, Matchers.containsString(TestConstants.OPERATOR_PORTAL_LOGIN_URL));
     }
 }

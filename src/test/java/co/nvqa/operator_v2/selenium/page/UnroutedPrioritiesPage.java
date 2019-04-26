@@ -2,8 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.util.NvTestRuntimeException;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.text.ParseException;
@@ -42,22 +40,22 @@ public class UnroutedPrioritiesPage extends OperatorV2SimplePage
         String trackingId = order.getTrackingId();
 
         searchTableByTrackingId(trackingId);
-        Assert.assertFalse(String.format("Order (ID = %d - Tracking ID = %s) not found on table.", orderId, trackingId), isTableEmpty());
+        assertFalse(f("Order (ID = %d - Tracking ID = %s) not found on table.", orderId, trackingId), isTableEmpty());
 
         String actualTrackingId = getTextOnTable(1, COLUMN_ClASS_DATA_TRACKING_ID);
         String actualShipperName = getTextOnTable(1, COLUMN_ClASS_DATA_SHIPPER_NAME);
         String actualGranularStatus = getTextOnTable(1, COLUMN_ClASS_DATA_GRANULAR_STATUS);
         String actualTransactionEndTime = getTextOnTable(1, COLUMN_ClASS_DATA_TRANSACTION_END_TIME);
 
-        Assert.assertEquals("Tracking ID", order.getTrackingId(), actualTrackingId);
-        Assert.assertEquals("Shipper Name", order.getShipper().getName(), actualShipperName);
-        Assert.assertThat("Granular Status", actualGranularStatus, Matchers.equalToIgnoringCase(order.getGranularStatus().replace("_", " ")));
+        assertEquals("Tracking ID", order.getTrackingId(), actualTrackingId);
+        assertEquals("Shipper Name", order.getShipper().getName(), actualShipperName);
+        assertThat("Granular Status", actualGranularStatus, equalToIgnoringCase(order.getGranularStatus().replace("_", " ")));
 
         try
         {
             Date transactionEndDate = ISO_8601_WITHOUT_MILLISECONDS.parse(order.getTransactions().get(order.getTransactions().size()-1).getEndTime());
             String expectedTransactionEndDate = TRANSACTION_END_DATE_SDF.format(transactionEndDate);
-            Assert.assertEquals("Transaction End Time", expectedTransactionEndDate, actualTransactionEndTime);
+            assertEquals("Transaction End Time", expectedTransactionEndDate, actualTransactionEndTime);
         }
         catch(ParseException ex)
         {
@@ -71,7 +69,7 @@ public class UnroutedPrioritiesPage extends OperatorV2SimplePage
         String trackingId = order.getTrackingId();
 
         searchTableByTrackingId(trackingId);
-        Assert.assertTrue(String.format("Order (ID = %d - Tracking ID = %s) should not be listed on table.", orderId, trackingId), isTableEmpty());
+        assertTrue(String.format("Order (ID = %d - Tracking ID = %s) should not be listed on table.", orderId, trackingId), isTableEmpty());
     }
 
     public void searchTableByTrackingId(String trackingId)

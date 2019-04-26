@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ThirdPartyOrderMapping;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -84,9 +83,9 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
     public void verifyOrderMappingRecord(ThirdPartyOrderMapping expectedOrderMapping)
     {
         searchTableByTrackingIdUntilFound(expectedOrderMapping.getTrackingId());
-        Assert.assertEquals("Third Party Order Tracking ID", expectedOrderMapping.getTrackingId(), getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID));
-        Assert.assertEquals("Third Party Order 3PL Tracking ID", expectedOrderMapping.getThirdPlTrackingId(), getTextOnTable(1, COLUMN_CLASS_DATA_THIRD_PARTY_TRACKING_ID));
-        Assert.assertEquals("Third Party Order 3PL Provider", expectedOrderMapping.getShipperName(), getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER_NAME));
+        assertEquals("Third Party Order Tracking ID", expectedOrderMapping.getTrackingId(), getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID));
+        assertEquals("Third Party Order 3PL Tracking ID", expectedOrderMapping.getThirdPlTrackingId(), getTextOnTable(1, COLUMN_CLASS_DATA_THIRD_PARTY_TRACKING_ID));
+        assertEquals("Third Party Order 3PL Provider", expectedOrderMapping.getShipperName(), getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER_NAME));
     }
 
     public void verifyOrderMappingRecords(List<ThirdPartyOrderMapping> expectedOrderMappings)
@@ -129,7 +128,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         searchTableByTrackingId(thirdPartyOrderMapping.getTrackingId());
         boolean isTableEmpty = isTableEmpty();
         message = "Third Party Order Mapping still exist in table. " + message;
-        Assert.assertTrue(message, isTableEmpty);
+        assertTrue(message, isTableEmpty);
     }
 
     public void searchTableByTrackingId(String trackingId)
@@ -343,16 +342,16 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         public void verifyUploadResultsData(List<ThirdPartyOrderMapping> expectedOrderMappings)
         {
             List<ThirdPartyOrderMapping> orderMappings = readMappingUploadResults();
-            Assert.assertEquals("Unexpected number of created order mappings", expectedOrderMappings.size(), orderMappings.size());
+            assertEquals("Unexpected number of created order mappings", expectedOrderMappings.size(), orderMappings.size());
 
             for(int i=0; i<expectedOrderMappings.size(); i++)
             {
                 ThirdPartyOrderMapping expectedOrderMapping = expectedOrderMappings.get(i);
                 ThirdPartyOrderMapping actualOrderMapping = orderMappings.get(i);
-                Assert.assertEquals("Upload Results dialog: Third Party Order [" + i + 1 + "] Tracking ID", expectedOrderMapping.getTrackingId(), actualOrderMapping.getTrackingId());
-                Assert.assertEquals("Upload Results dialog: Third Party Order [" + i + 1 + "] 3PL Tracking ID", expectedOrderMapping.getThirdPlTrackingId(), actualOrderMapping.getThirdPlTrackingId());
-                Assert.assertEquals("Upload Results dialog: Third Party Order [" + i + 1 + "] 3PL Shipper ID", expectedOrderMapping.getShipperId(), actualOrderMapping.getShipperId());
-                Assert.assertEquals("Upload Results dialog: Third Party Order [" + i + 1 + "] Upload Status", expectedOrderMapping.getStatus(), actualOrderMapping.getStatus());
+                assertEquals("Upload Results dialog: Third Party Order [" + i + 1 + "] Tracking ID", expectedOrderMapping.getTrackingId(), actualOrderMapping.getTrackingId());
+                assertEquals("Upload Results dialog: Third Party Order [" + i + 1 + "] 3PL Tracking ID", expectedOrderMapping.getThirdPlTrackingId(), actualOrderMapping.getThirdPlTrackingId());
+                assertEquals("Upload Results dialog: Third Party Order [" + i + 1 + "] 3PL Shipper ID", expectedOrderMapping.getShipperId(), actualOrderMapping.getShipperId());
+                assertEquals("Upload Results dialog: Third Party Order [" + i + 1 + "] Upload Status", expectedOrderMapping.getStatus(), actualOrderMapping.getStatus());
             }
         }
 

@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.DpVault;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -78,25 +77,25 @@ public class DpVaultManagementPage extends OperatorV2SimplePage
     private void verifyDpVaultInfoIsCorrect(DpVault dpVault)
     {
         String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
-        Assert.assertEquals("DP Vault Name", dpVault.getName(), actualName);
+        assertEquals("DP Vault Name", dpVault.getName(), actualName);
 
         String expectedAddress = dpVault.getAddress1()+' '+dpVault.getAddress2()+' '+dpVault.getCity()+' '+dpVault.getCountry();
         String actualAddress = getTextOnTable(1, COLUMN_CLASS_DATA_ADDRESS);
-        Assert.assertEquals("DP Vault Address", expectedAddress, actualAddress);
+        assertEquals("DP Vault Address", expectedAddress, actualAddress);
 
         String expectedLatLong = "("+dpVault.getLatitude()+", "+dpVault.getLongitude()+')';
         String actualLatLong = getTextOnTable(1, COLUMN_CLASS_DATA_LAT_LONG);
-        Assert.assertEquals("DP Vault Lat/Long", expectedLatLong, actualLatLong);
+        assertEquals("DP Vault Lat/Long", expectedLatLong, actualLatLong);
 
         String actualDpName = getTextOnTable(1, COLUMN_CLASS_DATA_DP_NAME);
-        Assert.assertEquals("DP Vault DP Name", dpVault.getDpName(), actualDpName);
+        assertEquals("DP Vault DP Name", dpVault.getDpName(), actualDpName);
     }
 
     public void verifyDpVaultIsDeletedSuccessfully(DpVault dpVault)
     {
         searchTableByName(dpVault.getName());
         boolean isTableEmpty = isTableEmpty();
-        Assert.assertTrue("DP Vault still exist in table. Fail to delete DP Vault.", isTableEmpty);
+        assertTrue("DP Vault still exist in table. Fail to delete DP Vault.", isTableEmpty);
     }
 
     public void verifyAllFiltersWorkFine(DpVault dpVault)

@@ -4,7 +4,6 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.OrderCreationV2Template;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
@@ -78,15 +77,15 @@ public class OrderCreationV2Page extends OperatorV2SimplePage
         String trackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
         String orderRefNo = getTextOnTable(1, COLUMN_CLASS_DATA_ORDER_REF_NO);
 
-        Assert.assertEquals("Status", "SUCCESS", status);
-        Assert.assertEquals("Message", expectedMessage, message);
+        assertEquals("Status", "SUCCESS", status);
+        assertEquals("Message", expectedMessage, message);
 
         if(validateTrackingId)
         {
-            Assert.assertThat("Tracking ID", trackingId, Matchers.endsWith(expectedTrackingIdEndsWith)); // Tracking ID not displayed when using V2.
+            assertThat("Tracking ID", trackingId, Matchers.endsWith(expectedTrackingIdEndsWith)); // Tracking ID not displayed when using V2.
         }
 
-        Assert.assertEquals("Order Ref No", expectedOrderRefNo, orderRefNo);
+        assertEquals("Order Ref No", expectedOrderRefNo, orderRefNo);
     }
 
     public void verifyOrderIsNotCreated()
@@ -95,9 +94,9 @@ public class OrderCreationV2Page extends OperatorV2SimplePage
         String message = getTextOnTable(1, COLUMN_CLASS_DATA_MESSAGE);
         String trackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
 
-        Assert.assertEquals("Status", "FAIL", status);
-        Assert.assertThat("Message", message, Matchers.startsWith("Invalid requested tracking ID"));
-        Assert.assertThat("Tracking ID", trackingId, Matchers.isEmptyString());
+        assertEquals("Status", "FAIL", status);
+        assertThat("Message", message, Matchers.startsWith("Invalid requested tracking ID"));
+        assertThat("Tracking ID", trackingId, Matchers.isEmptyString());
     }
 
     private String normalize(Object value)

@@ -6,7 +6,6 @@ import co.nvqa.operator_v2.model.RouteCleaningReportParcelInfo;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Date;
@@ -107,7 +106,7 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
         String pathName = StandardTestConstants.TEMP_DIR + fileName;
         List<RouteCleaningReportCodInfo> actualCodInfoRecords = RouteCleaningReportCodInfo.fromCsvFile(RouteCleaningReportCodInfo.class, pathName, true);
 
-        Assert.assertThat("Unexpected number of lines in CSV file", actualCodInfoRecords.size(), greaterThanOrEqualTo(expectedCodInfoRecords.size()));
+        assertThat("Unexpected number of lines in CSV file", actualCodInfoRecords.size(), greaterThanOrEqualTo(expectedCodInfoRecords.size()));
 
         Map<Long, RouteCleaningReportCodInfo> actualMap = actualCodInfoRecords.stream().collect(Collectors.toMap(
                 RouteCleaningReportCodInfo::getRouteId,
@@ -148,7 +147,7 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
         String pathName = StandardTestConstants.TEMP_DIR + fileName;
         List<RouteCleaningReportParcelInfo> actualParcelInfoRecords = RouteCleaningReportParcelInfo.fromCsvFile(RouteCleaningReportParcelInfo.class, pathName, true);
 
-        Assert.assertThat("Unexpected number of lines in CSV file", actualParcelInfoRecords.size(), greaterThanOrEqualTo(expectedParcelInfoRecords.size()));
+        assertThat("Unexpected number of lines in CSV file", actualParcelInfoRecords.size(), greaterThanOrEqualTo(expectedParcelInfoRecords.size()));
 
         Map<String, RouteCleaningReportParcelInfo> actualMap = actualParcelInfoRecords.stream().collect(Collectors.toMap(
                 RouteCleaningReportParcelInfo::getTrackingId,
@@ -173,19 +172,19 @@ public class RouteCleaningReportPage extends OperatorV2SimplePage
     {
         if(expectedCodInfo.getCodInbound()!=null)
         {
-            Assert.assertThat("COD Inbound", actualCodInfo.getCodInbound(), Matchers.equalTo(expectedCodInfo.getCodInbound()));
+            assertThat("COD Inbound", actualCodInfo.getCodInbound(), Matchers.equalTo(expectedCodInfo.getCodInbound()));
         }
         if(expectedCodInfo.getCodExpected()!=null)
         {
-            Assert.assertThat("COD Expected", actualCodInfo.getCodInbound(), Matchers.equalTo(expectedCodInfo.getCodInbound()));
+            assertThat("COD Expected", actualCodInfo.getCodInbound(), Matchers.equalTo(expectedCodInfo.getCodInbound()));
         }
         if(expectedCodInfo.getRouteId()!=null)
         {
-            Assert.assertThat("Route ID", actualCodInfo.getRouteId(), Matchers.equalTo(expectedCodInfo.getRouteId()));
+            assertThat("Route ID", actualCodInfo.getRouteId(), Matchers.equalTo(expectedCodInfo.getRouteId()));
         }
         if(StringUtils.isNotBlank(expectedCodInfo.getDriverName()))
         {
-            Assert.assertThat("Driver Name", actualCodInfo.getDriverName(), Matchers.equalTo(expectedCodInfo.getDriverName()));
+            assertThat("Driver Name", actualCodInfo.getDriverName(), Matchers.equalTo(expectedCodInfo.getDriverName()));
         }
     }
 

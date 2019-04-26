@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.WaypointDetails;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -226,7 +225,7 @@ public class LatLngCleanupPage extends OperatorV2SimplePage
 
         public EditWaypointDetailsDialog validateWaypoitWasFound()
         {
-            Assert.assertFalse("Waypoint Id cannot be found", isElementVisible(LOCATOR_MESSAGE_WAYPOINT_NOT_FOUND));
+            assertFalse("Waypoint Id cannot be found", isElementVisible(LOCATOR_MESSAGE_WAYPOINT_NOT_FOUND));
             return this;
         }
 

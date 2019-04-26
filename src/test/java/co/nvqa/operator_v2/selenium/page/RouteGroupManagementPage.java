@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.model.RouteGroupJobDetails;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.text.SimpleDateFormat;
@@ -57,7 +56,7 @@ public class RouteGroupManagementPage extends OperatorV2SimplePage
         searchTable(filterRouteGroupName);
         pause100ms();
         String actualName = getTextOnTable(1, RouteGroupManagementPage.COLUMN_CLASS_DATA_NAME);
-        Assert.assertTrue("Route Group name not matched.", actualName.startsWith(filterRouteGroupName)); //Route Group name is concatenated with description.
+        assertTrue("Route Group name not matched.", actualName.startsWith(filterRouteGroupName)); //Route Group name is concatenated with description.
 
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
         setRouteGroupNameValue(newRouteGroupName);

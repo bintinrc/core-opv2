@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -55,10 +54,10 @@ public class ShipmentScanningPage extends OperatorV2SimplePage
     public void checkOrderInShipment(String orderId)
     {
         String rack = getText(XPATH_RACK_SECTOR);
-        Assert.assertTrue("order is " + rack, !rack.equalsIgnoreCase("INVALID") && !rack.equalsIgnoreCase("DUPLICATE"));
+        assertTrue("order is " + rack, !rack.equalsIgnoreCase("INVALID") && !rack.equalsIgnoreCase("DUPLICATE"));
 
         WebElement orderWe = getWebDriver().findElement(By.xpath(String.format("//td[contains(@class, 'tracking-id')][contains(text(), '%s')]", orderId)));
         boolean orderExist = orderWe!=null;
-        Assert.assertTrue("order " + orderId + " doesn't exist in shipment", orderExist);
+        assertTrue("order " + orderId + " doesn't exist in shipment", orderExist);
     }
 }

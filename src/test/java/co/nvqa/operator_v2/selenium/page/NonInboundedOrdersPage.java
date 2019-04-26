@@ -4,8 +4,6 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.NonInboundedOrder;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -81,7 +79,7 @@ public class NonInboundedOrdersPage extends OperatorV2SimplePage
 
         List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='order in ctrl.orders']/td[1]");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
-        Assert.assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, Matchers.hasItems(trackingIds.toArray(new String[]{})));
+        assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, hasItems(trackingIds.toArray(new String[]{})));
 
         sendKeysById("container.order.edit.cancellation-reason", String.format("This order is canceled by automation to test 'Cancel Order' feature on Non Inbounded Orders page. Canceled at %s.", CREATED_DATE_SDF.format(new Date())));
 
@@ -117,7 +115,7 @@ public class NonInboundedOrdersPage extends OperatorV2SimplePage
         String pathName = StandardTestConstants.TEMP_DIR + fileName;
         List<NonInboundedOrder> actualOrdersDetails = NonInboundedOrder.fromCsvFile(NonInboundedOrder.class, pathName, true);
 
-        Assert.assertThat("Unexpected number of lines in CSV file", actualOrdersDetails.size(), greaterThanOrEqualTo(trackingIds.size()));
+        assertThat("Unexpected number of lines in CSV file", actualOrdersDetails.size(), greaterThanOrEqualTo(trackingIds.size()));
 
         Map<String, NonInboundedOrder> actualMap = actualOrdersDetails.stream().collect(Collectors.toMap(
                 NonInboundedOrder::getTrackingId,

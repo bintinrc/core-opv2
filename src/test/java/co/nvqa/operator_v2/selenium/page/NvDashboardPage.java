@@ -2,8 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Address;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -55,6 +53,6 @@ public class NvDashboardPage extends OperatorV2SimplePage
                 .map(StringUtils::normalizeSpace)
                 .collect(Collectors.toList());
         String expectedAddress = address.to1LineAddressWithPostcode().replaceAll(",", "").toUpperCase();
-        Assert.assertThat("List of available addresses", addresses, Matchers.hasItem(expectedAddress));
+        assertThat("List of available addresses", addresses, hasItem(expectedAddress));
     }
 }

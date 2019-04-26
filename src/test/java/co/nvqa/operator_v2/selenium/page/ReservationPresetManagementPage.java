@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.model.ReservationGroup;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.ACTION_DELETE;
@@ -74,7 +73,7 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage
     public void verifyGroupDeleted(String groupName)
     {
         reservationPresetTable.filterByColumn(COLUMN_NAME, groupName);
-        Assert.assertTrue("Group with Name [" + groupName + "] was not deleted", reservationPresetTable.isTableEmpty());
+        assertTrue("Group with Name [" + groupName + "] was not deleted", reservationPresetTable.isTableEmpty());
     }
 
     /**
@@ -104,7 +103,7 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage
 
         public AddNewGroupDialog setName(String value)
         {
-            if (StringUtils.isNotBlank(value))
+            if(StringUtils.isNotBlank(value))
             {
                 sendKeysById("commons.name", value);
             }
@@ -113,7 +112,7 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage
 
         public AddNewGroupDialog setDriver(String value)
         {
-            if (StringUtils.isNotBlank(value))
+            if(StringUtils.isNotBlank(value))
             {
                 selectValueFromNvAutocompleteByPossibleOptions("ctrl.driversSelectionOptions", value);
             }
@@ -122,7 +121,7 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage
 
         public AddNewGroupDialog setHub(String value)
         {
-            if (StringUtils.isNotBlank(value))
+            if(StringUtils.isNotBlank(value))
             {
                 selectValueFromNvAutocompleteByPossibleOptions("ctrl.hubsSelectionOptions", value);
             }

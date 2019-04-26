@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.RecoveryTicketsScanning;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -46,7 +45,7 @@ public class RecoveryTicketsScanningPage extends OperatorV2SimplePage {
 
     public void verifyDetailsTicket(String trackingId) {
         String actualTrackingId = getTextOnTable(1, "trackingId");
-        Assert.assertEquals("Ticket with this tracking ID is not created", trackingId, actualTrackingId);
+        assertEquals("Ticket with this tracking ID is not created", trackingId, actualTrackingId);
     }
 
     public void clickCreateTicketButton() {
@@ -61,7 +60,7 @@ public class RecoveryTicketsScanningPage extends OperatorV2SimplePage {
 
     public void verifyTicketIsNotMade() {
         String actualResult = findElementByXpath("//table/tbody/tr[contains(@ng-if,'ctrl.tickets.length')]/td").getText();
-        Assert.assertEquals("Ticket is created", "No created ticket", actualResult);
+        assertEquals("Ticket is created", "No created ticket", actualResult);
     }
 
     public void verifyDialogueAndSave() {

@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.DpCompany;
 import co.nvqa.operator_v2.model.DpCompanyAgent;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -72,23 +71,23 @@ public class DpCompanyAgentPage extends OperatorV2SimplePage
     private void verifyDpCompanyInfoIsCorrect(DpCompanyAgent dpCompanyAgent)
     {
         String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
-        Assert.assertEquals("DP Company Agent Name", dpCompanyAgent.getName(), actualName);
+        assertEquals("DP Company Agent Name", dpCompanyAgent.getName(), actualName);
 
         String actualEmail = getTextOnTable(1, COLUMN_CLASS_DATA_EMAIL);
-        Assert.assertEquals("DP Company Agent Email", dpCompanyAgent.getEmail(), actualEmail);
+        assertEquals("DP Company Agent Email", dpCompanyAgent.getEmail(), actualEmail);
 
         String actualContact = getTextOnTable(1, COLUMN_CLASS_DATA_CONTACT_NO);
-        Assert.assertEquals("DP Company Agent Contact", dpCompanyAgent.getContact(), actualContact);
+        assertEquals("DP Company Agent Contact", dpCompanyAgent.getContact(), actualContact);
 
         String actualUnlockCode = getTextOnTable(1, COLUMN_CLASS_DATA_UNLOCK_CODE);
-        Assert.assertEquals("DP Company Agent Unlock Code", dpCompanyAgent.getUnlockCode(), actualUnlockCode);
+        assertEquals("DP Company Agent Unlock Code", dpCompanyAgent.getUnlockCode(), actualUnlockCode);
     }
 
     public void verifyDpCompanyAgentIsDeletedSuccessfully(DpCompanyAgent dpCompanyAgent)
     {
         searchTableByName(dpCompanyAgent.getName());
         boolean isTableEmpty = isTableEmpty();
-        Assert.assertTrue("DP Company Agent still exist in table. Fail to delete DP Company Agent.", isTableEmpty);
+        assertTrue("DP Company Agent still exist in table. Fail to delete DP Company Agent.", isTableEmpty);
     }
 
     public void backToDpCompanyManagementPage(DpCompany dpCompany)

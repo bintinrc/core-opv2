@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.DpCompany;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -108,30 +107,30 @@ public class DpCompanyManagementPage extends OperatorV2SimplePage
     private void verifyDpCompanyInfoIsCorrect(DpCompany dpCompany)
     {
         String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
-        Assert.assertEquals("DP Company Name", dpCompany.getName(), actualName);
+        assertEquals("DP Company Name", dpCompany.getName(), actualName);
 
         String actualEmail = getTextOnTable(1, COLUMN_CLASS_DATA_EMAIL);
-        Assert.assertEquals("DP Company Email", dpCompany.getEmail(), actualEmail);
+        assertEquals("DP Company Email", dpCompany.getEmail(), actualEmail);
 
         String actualContact = getTextOnTable(1, COLUMN_CLASS_DATA_CONTACT_NO);
-        Assert.assertEquals("DP Company Contact", dpCompany.getContact(), actualContact);
+        assertEquals("DP Company Contact", dpCompany.getContact(), actualContact);
 
         String actualDropOffWebhookUrl = getTextOnTable(1, COLUMN_CLASS_DATA_DROP_OFF_WEBHOOK_URL);
-        Assert.assertEquals("DP Company Drop Off Webhook URL", dpCompany.getDropOffWebhookUrl(), actualDropOffWebhookUrl);
+        assertEquals("DP Company Drop Off Webhook URL", dpCompany.getDropOffWebhookUrl(), actualDropOffWebhookUrl);
 
         String actualCollectWebhookUrl = getTextOnTable(1, COLUMN_CLASS_DATA_COLLECT_WEBHOOK_URL);
-        Assert.assertEquals("DP Company Collect Webhook URL", dpCompany.getCollectWebhookUrl(), actualCollectWebhookUrl);
+        assertEquals("DP Company Collect Webhook URL", dpCompany.getCollectWebhookUrl(), actualCollectWebhookUrl);
 
         String expectedIntegrated = getIntegratedAsString(dpCompany.isIntegrated());
         String actualIntegrated = getTextOnTable(1, COLUMN_CLASS_DATA_INTEGRATED);
-        Assert.assertEquals("DP Company Integrated", expectedIntegrated, actualIntegrated);
+        assertEquals("DP Company Integrated", expectedIntegrated, actualIntegrated);
     }
 
     public void verifyDpCompanyIsDeletedSuccessfully(DpCompany dpCompany)
     {
         searchTableByName(dpCompany.getName());
         boolean isTableEmpty = isTableEmpty();
-        Assert.assertTrue("DP Company still exist in table. Fail to delete DP Company.", isTableEmpty);
+        assertTrue("DP Company still exist in table. Fail to delete DP Company.", isTableEmpty);
     }
 
     public void verifyAllFiltersWorkFine(DpCompany dpCompany)
