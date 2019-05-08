@@ -1079,6 +1079,10 @@ public class OperatorV2SimplePage extends SimplePage
         return element.isDisplayed()? element : null;
     }
 
+    public void refreshPage_v1(){
+        getWebDriver().navigate().refresh();
+    }
+
     public void refreshPage()
     {
         acceptAlertDialogIfAppear();

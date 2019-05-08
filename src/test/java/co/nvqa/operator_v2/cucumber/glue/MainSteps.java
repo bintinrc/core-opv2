@@ -48,6 +48,12 @@ public class MainSteps extends AbstractSteps
         mainPage.verifyTheMainPageIsLoaded();
     }
 
+    @Given("^Operator refresh page v1$")
+    public void operatorRefreshPage_v1()
+    {
+        mainPage.refreshPage_v1();
+    }
+
     @Given("^Operator refresh page$")
     public void operatorRefreshPage()
     {

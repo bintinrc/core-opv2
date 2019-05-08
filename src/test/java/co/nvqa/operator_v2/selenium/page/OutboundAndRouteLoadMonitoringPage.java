@@ -39,6 +39,9 @@ public class OutboundAndRouteLoadMonitoringPage extends OperatorV2SimplePage imp
         clickCheckboxByAriaLabel(label);
     }
 
+    public void clickOnTab(String label){
+        click(f("//md-tab-item/span[contains(text(), '%s')]", label));
+    }
     public void selectFiltersAndClickLoadSelection(Date fromDate, Date toDate, String zoneName, String hubName) {
         setMdDatepicker("fromModel", fromDate);
         setMdDatepicker("toModel", toDate);
@@ -52,13 +55,20 @@ public class OutboundAndRouteLoadMonitoringPage extends OperatorV2SimplePage imp
     }
 
     public void verifyRouteIdExists(String routeId) {
-        String actualRouteId = getTextOnTable(1, COLUMN_CLASS_DATA_ID);
+        searchTableByRouteId(routeId);
+        String actualRouteId = getText("//td[@class='id']//span[@class='highlight']");
         assertEquals("Route ID is not found.",routeId, actualRouteId);
     }
 
+    public void searchTableByRouteId(String routeId)
+    {
+        searchTableCustom1("id", routeId);
+    }
+
+
     public void verifyRouteIdDoesNotExists(String routeId) {
-        String actualRouteId = getTextOnTable(1, COLUMN_CLASS_DATA_ID);
-        assertNotEquals("Route ID is not found.",routeId, actualRouteId);
+        searchTableByRouteId(routeId);
+        assertTrue("Route id not found", isTableEmpty());
     }
 
     public void verifyStatusInProgress() {

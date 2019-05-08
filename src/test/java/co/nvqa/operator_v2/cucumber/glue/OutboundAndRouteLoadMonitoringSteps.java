@@ -22,7 +22,6 @@ public class OutboundAndRouteLoadMonitoringSteps extends AbstractSteps {
     public void operatorVerifiesTheRouteIsExist() {
         Long routeId = get(KEY_CREATED_ROUTE_ID);
         outboundAndRouteLoadMonitoringPage.verifyRouteIdExists(routeId.toString());
-        outboundAndRouteLoadMonitoringPage.verifyRouteIdExists(routeId.toString());
     }
 
     @When("Operator enable filter Show only {string}")
@@ -33,7 +32,16 @@ public class OutboundAndRouteLoadMonitoringSteps extends AbstractSteps {
     @Then("Operator verifies the created route is gone from table")
     public void operatorVerifiesTheCreatedRouteIsGoneFromTable() {
         Long routeId = get(KEY_CREATED_ROUTE_ID);
-        outboundAndRouteLoadMonitoringPage.searchTableByRouteId(routeId);
         outboundAndRouteLoadMonitoringPage.verifyRouteIdDoesNotExists(routeId.toString());
+    }
+
+    @Then("Change tab to {string}")
+    public void changeTabTo(String arg0) {
+        outboundAndRouteLoadMonitoringPage.clickOnTab(arg0);
+    }
+
+    @Then("Operator waits for {int} seconds")
+    public void operatorWaitsForSeconds(int arg0) {
+        pause(arg0*1000);
     }
 }
