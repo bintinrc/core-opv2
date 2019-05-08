@@ -6,6 +6,7 @@ import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -129,5 +130,23 @@ public class OutboundAndRouteLoadMonitoringPage extends OperatorV2SimplePage imp
 
     public void clickActionButtonOnTable(int rowNumber, String actionButtonName) {
         clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
+    }
+
+    public void verifyRouteIdAndInfo() {
+    }
+
+    public void clickInTableByClass(String className) {
+        click(f("//td[@class='%s']/a", className));
+    }
+
+    public void verifyTrackingIds(List<String> ids) {
+        Integer found = 0;
+        List<String> actualIds = getTextOfElementsTrimmed("//md-dialog-content//td[@class='tracking-id']");
+        for (int idx=0; idx<ids.size(); idx++){
+            String tranId = ids.get(idx);
+            if(actualIds.stream().anyMatch(str -> str.trim().equals(tranId)))
+                found++;
+        }
+        assertTrue("All match found", found==ids.size());
     }
 }
