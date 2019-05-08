@@ -44,4 +44,10 @@ public class OutboundAndRouteLoadMonitoringSteps extends AbstractSteps {
     public void operatorWaitsForSeconds(int arg0) {
         pause(arg0*1000);
     }
+
+    @Then("Operator verifies the created route is still displayed on table")
+    public void operatorVerifiesTheCreatedRouteIsStillDisplayedOnTable() {
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
+        outboundAndRouteLoadMonitoringPage.verifyRouteIdExists(routeId.toString());
+    }
 }

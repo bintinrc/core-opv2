@@ -13,26 +13,26 @@ Feature: Outbound Monitoring
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
 
-  Scenario: Operator verifies the created route is exist and will gone from table when filter Show only "Partially loaded route" is enable
-    Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                  |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
-      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound multiple parcels using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add multiple parcels to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    Then Operator waits for 10 seconds
-    Then Operator refresh page
-    Given Operator go to menu New Features -> Outbound/Route Load Monitoring
-    Then Change tab to "Route Load Monitoring"
-    Then Operator verifies the route is exist
-    When Operator enable filter Show only "Partially loaded route"
-    Then Operator verifies the created route is gone from table
+#  Scenario: Operator verifies the created route is exist and will gone from table when filter Show only "Partially loaded route" is enable
+#    Given API Shipper create multiple V4 orders using data below:
+#      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                  |
+#      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+#      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+#    And API Operator Global Inbound multiple parcels using data below:
+#      | globalInboundRequest | { "hubId":{hub-id} } |
+#    And API Operator create new route using data below:
+#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+#    And API Operator add multiple parcels to the route using data below:
+#      | addParcelToRouteRequest | { "type":"DD" } |
+#    Then Operator waits for 10 seconds
+#    Then Operator refresh page
+#    Given Operator go to menu New Features -> Outbound/Route Load Monitoring
+#    Then Change tab to "Route Load Monitoring"
+#    Then Operator verifies the route is exist
+#    When Operator enable filter Show only "Partially loaded route"
+#    Then Operator verifies the created route is gone from table
 
-
+#
 #  Scenario: Operator verifies the created route is exist and will still be displayed on table when filter Show only "Partially loaded route" is enable
 #    Given Operator go to menu Shipper Support -> Blocked Dates
 #    Given API Shipper create multiple V4 orders using data below:
@@ -49,7 +49,10 @@ Feature: Outbound Monitoring
 #    And API Driver get pickup/delivery waypoints of created orders
 #    And API Operator Van Inbound multiple parcels
 #    And API Operator start the route
+#    Then Operator waits for 10 seconds
+#    Then Operator refresh page
 #    Given Operator go to menu New Features -> Outbound/Route Load Monitoring
+#    Then Change tab to "Route Load Monitoring"
 #    Then Operator verifies the route is exist
 #    When Operator enable filter Show only "Partially loaded route"
 #    Then Operator verifies the created route is still displayed on table
@@ -132,6 +135,6 @@ Feature: Outbound Monitoring
 #    # Implement this step: Then Operator verifies the Transaction Log contains all created Tracking ID
 
 
-#  @KillBrowser @ShouldAlwaysRun
-#  Scenario: Kill Browser
-#    Given no-op
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op
