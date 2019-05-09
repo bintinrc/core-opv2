@@ -59,7 +59,41 @@ Feature: Outbound Monitoring
 
 
 
-  Scenario: Operator verifies route contains 2 Parcels Assigned, 0 Parcels Loaded, 0 Parcels Passed Back and 2 Missing Parcels
+#
+
+    # Implement this step: TO BE DONE
+    # Note, please verify this:
+    # - Driver Name is correct: You can get the expected driver name from this properties {ninja-driver-name}
+    # - Parcels AssScenario: Operator verifies route contains 2 Parcels Assigned, 0 Parcels Loaded, 0 Parcels Passed Back and 2 Missing Parcels
+    ##    Given Operator go to menu Shipper Support -> Blocked Dates
+    ##    Given API Shipper create multiple V4 orders using data below:
+    ##      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                  |
+    ##      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+    ##      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    ##    And API Operator Global Inbound multiple parcels using data below:
+    ##      | globalInboundRequest | { "hubId":{hub-id} } |
+    ##    And API Operator create new route using data below:
+    ##      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    ##    And API Operator add multiple parcels to the route using data below:
+    ##      | addParcelToRouteRequest | { "type":"DD" } |
+    ##    Then Operator waits for 10 seconds
+    ##    Then Operator refresh page
+    ##    Given Operator go to menu New Features -> Outbound/Route Load Monitoring
+    ##    Then Change tab to "Route Load Monitoring"
+    ##    When Operator finds the created route
+    ##    Then Operator verifies the route is exist and the info in the row is correct.
+    ##    When Operator clicks the number on Parcels Assigned column
+    ##    Then Operator verifies the Transaction Log contains all created Tracking ID
+    ##    When Operator clicks the number on Missing Parcels column
+    ##    Then Operator verifies the Transaction Log contains all created Tracking IDigned = 2
+    # - Parcels Loaded = 0
+    # - Parcels Passed Back = 0
+    # - Parcels Missing Parcels = 2
+
+
+
+
+  Scenario: Operator verifies route contains 2 Parcels Assigned, 2 Parcels Loaded, 2 Parcels Passed Back and 0 Missing Parcels
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                  |
@@ -71,6 +105,10 @@ Feature: Outbound Monitoring
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoints of created orders
+    And API Operator Van Inbound multiple parcels
+    And API Operator start the route
     Then Operator waits for 10 seconds
     Then Operator refresh page
     Given Operator go to menu New Features -> Outbound/Route Load Monitoring
@@ -79,69 +117,20 @@ Feature: Outbound Monitoring
     Then Operator verifies the route is exist and the info in the row is correct.
     When Operator clicks the number on Parcels Assigned column
     Then Operator verifies the Transaction Log contains all created Tracking ID
-    When Operator clicks the number on Missing Parcels column
+    When Operator clicks the number on Parcels Loaded column
+    Then Operator verifies the Transaction Log contains all created Tracking ID
+    When Operator clicks the number on Parcels Passed Back column
     Then Operator verifies the Transaction Log contains all created Tracking ID
 
-    # Implement this step:
 
     # Implement this step:
     # Note, please verify this:
     # - Driver Name is correct: You can get the expected driver name from this properties {ninja-driver-name}
     # - Parcels Assigned = 2
-    # - Parcels Loaded = 0
-    # - Parcels Passed Back = 0
-    # - Parcels Missing Parcels = 2
+    # - Parcels Loaded = 2
+    # - Parcels Passed Back = 2
+    # - Parcels Missing Parcels = 0
 
-    #
-
-    # Implement this step:
-    # Note: To get the list of created Tracking ID, use this code below on this step Java implementation:
-    # List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
-
-    # Implement this step:
-
-    # Implement this step:
-
-
-#  Scenario: Operator verifies route contains 2 Parcels Assigned, 2 Parcels Loaded, 2 Parcels Passed Back and 0 Missing Parcels
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given API Shipper create multiple V4 orders using data below:
-#      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                  |
-#      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
-#      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-#    And API Operator Global Inbound multiple parcels using data below:
-#      | globalInboundRequest | { "hubId":{hub-id} } |
-#    And API Operator create new route using data below:
-#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-#    And API Operator add multiple parcels to the route using data below:
-#      | addParcelToRouteRequest | { "type":"DD" } |
-#    And API Driver collect all his routes
-#    And API Driver get pickup/delivery waypoints of created orders
-#    And API Operator Van Inbound multiple parcels
-#    And API Operator start the route
-#    Given Operator go to menu New Features -> Outbound/Route Load Monitoring
-#
-#    # Implement this step: When Operator finds the created route
-#
-#    # Implement this step: Then Operator verifies the route is exist and the info in the row is correct.
-#    # Note, please verify this:
-#    # - Driver Name is correct: You can get the expected driver name from this properties {ninja-driver-name}
-#    # - Parcels Assigned = 2
-#    # - Parcels Loaded = 2
-#    # - Parcels Passed Back = 2
-#    # - Parcels Missing Parcels = 0
-#
-#    # Implement this step: When Operator clicks the number on Parcels Assigned column
-#
-#    # Implement this step: Then Operator verifies the Transaction Log contains all created Tracking ID
-#
-#    # Implement this step: When Operator clicks the number on Parcels Loaded column
-#
-#    # Implement this step: Then Operator verifies the Transaction Log contains all created Tracking ID
-#
-#    # Implement this step: When Operator clicks the number on Parcels Passed Back column
-#
-#    # Implement this step: Then Operator verifies the Transaction Log contains all created Tracking ID
 
 
   @KillBrowser @ShouldAlwaysRun

@@ -79,4 +79,14 @@ public class OutboundAndRouteLoadMonitoringSteps extends AbstractSteps {
     public void operatorClicksTheNumberOnMissingParcelsColumn() {
         outboundAndRouteLoadMonitoringPage.clickInTableByClass("missing_parcels_count");
     }
+
+    @When("Operator clicks the number on Parcels Loaded column")
+    public void operatorClicksTheNumberOnParcelsLoadedColumn() {
+        outboundAndRouteLoadMonitoringPage.clickInTableByClass("van_parcels_count");
+    }
+
+    @When("Operator clicks the number on Parcels Passed Back column")
+    public void operatorClicksTheNumberOnParcelsPassedBackColumn() {
+        outboundAndRouteLoadMonitoringPage.clickInTableByClass("truck_parcels_count");
+    }
 }
