@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.cucumber.ScenarioStorage;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
+import co.nvqa.operator_v2.util.TestConstants;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Date;
@@ -132,9 +133,41 @@ public class OutboundAndRouteLoadMonitoringPage extends OperatorV2SimplePage imp
         clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
     }
 
-    public void verifyRouteIdAndInfo() {
+    private String getTextOnTable(String columnClass){
+        return getText(f("//td[@class='%s']", columnClass));
     }
 
+    public void verifyRouteIdAndInfo(String routeId, Integer assigned, Integer loaded, Integer passedBack, Integer missing) {
+        String actualRouteId = getTextOnTable("id");
+        assertEquals("RouteId must match", routeId, actualRouteId);
+        ////# Note, please verify this:
+        ////# - Driver Name is correct: You can get the expected driver name from this properties {ninja-driver-name}
+        ////# - Parcels Assigned = 2
+        ////# - Parcels Loaded = 2
+        ////# - Parcels Passed Back = 2
+        ////# - Parcels Missing Parcels = 0
+        String driverName = TestConstants.NINJA_DRIVER_NAME;
+        String actualName = getTextOnTable("driver_name");
+        assertEquals("Driver name must match", driverName,actualName);
+
+        String actualParcelsAssigned = getTextOnTable("total_parcels_count");
+        assertEquals("Parcels Assigned must match", actualParcelsAssigned,assigned.toString());
+
+        String actualParcelsLoaded = getTextOnTable("van_parcels_count");
+        assertEquals("Parcels Loaded must match", actualParcelsLoaded, loaded.toString());
+
+        String actualParcelsPassedBack = getTextOnTable("truck_parcels_count");
+        assertEquals("Parcels Passed Back  must match", actualParcelsPassedBack, passedBack.toString());
+
+
+        String actualParcelsMissingParcels  = getTextOnTable("missing_parcels_count");
+        assertEquals("Parcels Missing must match", actualParcelsMissingParcels,missing.toString());
+    }
+
+
+
+
+    //TODO: Should be moved to common
     public void clickInTableByClass(String className) {
         click(f("//td[@class='%s']/a", className));
     }
@@ -147,6 +180,7 @@ public class OutboundAndRouteLoadMonitoringPage extends OperatorV2SimplePage imp
             if(actualIds.stream().anyMatch(str -> str.trim().equals(tranId)))
                 found++;
         }
-        assertTrue("All match found", found==ids.size());
+        assertEquals("Tracking IDs must match", found, ids.size());
+        closeModal();
     }
 }
