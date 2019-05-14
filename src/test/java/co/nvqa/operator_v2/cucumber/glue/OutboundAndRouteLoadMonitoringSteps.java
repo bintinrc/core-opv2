@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.selenium.page.OutboundAndRouteLoadMonitoringPage;
+import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -61,7 +62,14 @@ public class OutboundAndRouteLoadMonitoringSteps extends AbstractSteps {
 
     @Then("Operator verifies the route is exist and the info in the row is correct.")
     public void operatorVerifiesTheRouteIsExistAndTheInfoInTheRowIsCorrect() {
-        outboundAndRouteLoadMonitoringPage.verifyRouteIdAndInfo();
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
+        outboundAndRouteLoadMonitoringPage.verifyRouteIdAndInfo(routeId.toString(), 2,0,0,2);
+    }
+
+    @Then("Operator verifies the route is exist and the info in the row is correct with 0 missing.")
+    public void operatorVerifiesTheRouteIsExistAndTheInfoInTheRowIsCorrectWith0Missing() {
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
+        outboundAndRouteLoadMonitoringPage.verifyRouteIdAndInfo(routeId.toString(), 2, 2, 2, 0);
     }
 
     @When("Operator clicks the number on Parcels Assigned column")
