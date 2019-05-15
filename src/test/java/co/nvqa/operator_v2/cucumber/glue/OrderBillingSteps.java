@@ -2,11 +2,12 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.OrderBillingPage;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 
 import java.text.ParseException;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Kateryna Skakunova
@@ -20,34 +21,33 @@ public class OrderBillingSteps extends AbstractSteps {
         orderBillingPage = new OrderBillingPage(getWebDriver());
     }
 
-    @Given("^Operator selects start date = \"([^\"]*)\" and end date = \"([^\"]*)\"$")
-    public void operatorSelectsRangeDate(String startDate, String endDate) {
-        put(KEY_ORDER_BILLING_START_DATE, startDate);
-        put(KEY_ORDER_BILLING_END_DATE, endDate);
+    @Then("^Operator verifies attached CSV file in received email$")
+    public void operatorVerifiesAttachedCSVFileInReceivedEmail() {
+        orderBillingPage.verifyOrderBillingAttachment(get(KEY_ORDER_BILLING_START_DATE), get(KEY_ORDER_BILLING_END_DATE));
+    }
+
+    @When("^Operator generates success billings for data:$")
+    public void operatorGeneratesSuccessBillingsForData(Map<String, String> mapOfData) {
         try {
-            orderBillingPage.selectBetweenDates(YYYY_MM_DD_SDF.parse(startDate), YYYY_MM_DD_SDF.parse(endDate));
+            if (Objects.nonNull(mapOfData.get("startDate"))) {
+                String startDate = mapOfData.get("startDate");
+                put(KEY_ORDER_BILLING_START_DATE, startDate);
+                orderBillingPage.selectStartDate(YYYY_MM_DD_SDF.parse(startDate));
+            }
+            if (Objects.nonNull(mapOfData.get("endDate"))) {
+                String endDate = mapOfData.get("endDate");
+                put(KEY_ORDER_BILLING_END_DATE, endDate);
+                orderBillingPage.selectEndDate(YYYY_MM_DD_SDF.parse(endDate));
+            }
         } catch (ParseException e) {
             throw new NvTestRuntimeException("Failed to parse date.", e);
         }
-    }
-
-    @And("^Operator ticks \"([^\"]*)\" checkbox$")
-    public void operatorTicks(String option) {
-        orderBillingPage.tickGenerateTheseFilesOption(option);
-    }
-
-    @And("^Operator fills \"Email Address\" field with \"([^\"]*)\"$")
-    public void operatorFillsEmailFieldWith(String emailAddressValue) {
-        orderBillingPage.setEmailAddress(emailAddressValue);
-    }
-
-    @And("^Operator clicks \"Generate Success Billing\" button$")
-    public void operatorClicksGenerateButton() {
+        if (Objects.nonNull(mapOfData.get("generateFile"))) {
+            orderBillingPage.tickGenerateTheseFilesOption(mapOfData.get("generateFile"));
+        }
+        if (Objects.nonNull(mapOfData.get("emailAddress"))) {
+            orderBillingPage.setEmailAddress(mapOfData.get("emailAddress"));
+        }
         orderBillingPage.clickGenerateSuccessBillingsButton();
-    }
-
-    @Then("^Operator verifies attached CSV file in received email$")
-    public void operatorVerifiesAttachedCSVFileInReceivedEmail() {
-        orderBillingPage.orderBillingAttachment(get(KEY_ORDER_BILLING_START_DATE), get(KEY_ORDER_BILLING_END_DATE));
     }
 }

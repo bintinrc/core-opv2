@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.StandardTestConstants;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 /**
@@ -29,7 +31,8 @@ public class ImplantedManifestOrder extends DataEntity<ImplantedManifestOrder>{
     }
 
     public void setScannedAt(String scannedAt) {
-        this.scannedAt = DateUtil.getDate(scannedAt, DateUtil.DATE_TIME_FORMATTER.withZone(DateUtil.SINGAPORE_ZONE_ID));
+        this.scannedAt = DateUtil.getDate(scannedAt, DateUtil.DATE_TIME_FORMATTER
+                .withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)));
     }
 
     public String getDestination() {

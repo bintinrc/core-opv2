@@ -98,4 +98,19 @@ public class ImplantedManifestSteps extends AbstractSteps {
         }
     }
 
+    @When("^Operator creates Manifest for Hub ([^\"]*) and scan barcodes$")
+    public void operatorSelectsCreateManifestForHubHubNameAndScanBarcodes(String hubName){
+        put(KEY_IMPLANTED_MANIFEST_HUB_NAME, hubName);
+        implantedManifestPage.selectHub(hubName);
+
+        implantedManifestPage.clickCreateManifestButtonToInitiateCreation();
+
+        List<Order> orders = getListOfCreatedOrders();
+        Map<String, ZonedDateTime> barcodeToScannedAtTime = new HashMap<>();
+        for (Order order : orders) {
+            String trackingId = order.getTrackingId();
+            implantedManifestPage.scanBarCodeAndSaveTime(barcodeToScannedAtTime, trackingId);
+        }
+        put(KEY_IMPLANTED_MANIFEST_ORDER_SCANNED_AT, barcodeToScannedAtTime);
+    }
 }

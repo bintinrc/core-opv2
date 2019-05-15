@@ -2,11 +2,13 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.ImplantedManifestOrder;
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebDriver;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
@@ -93,7 +95,7 @@ public class ImplantedManifestPage extends OperatorV2SimplePage {
 
     public void scanBarCodeAndSaveTime(Map<String, ZonedDateTime> barcodeToScannedAtTime, String barcode) {
         sendKeysAndEnterByAriaLabel("scan_barcode", barcode);
-        barcodeToScannedAtTime.put(barcode, DateUtil.getDate(DateUtil.SINGAPORE_ZONE_ID));
+        barcodeToScannedAtTime.put(barcode, DateUtil.getDate(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)));
         String xpathToBarCode = "//input[@aria-label='scan_barcode' and contains(@class,'ng-empty')]";
         waitUntilVisibilityOfElementLocated(xpathToBarCode);
     }

@@ -26,8 +26,11 @@ public class OrderBillingPage extends OperatorV2SimplePage {
         super(webDriver);
     }
 
-    public void selectBetweenDates(Date startDate, Date endDate) {
+    public void selectStartDate(Date startDate) {
         setMdDatepicker("ctrl.data.startDate", startDate);
+    }
+
+    public void selectEndDate(Date endDate) {
         setMdDatepicker("ctrl.data.endDate", endDate);
     }
 
@@ -43,7 +46,7 @@ public class OrderBillingPage extends OperatorV2SimplePage {
         clickButtonByAriaLabelAndWaitUntilDone("Generate Success Billings");
     }
 
-    public void orderBillingAttachment(String startDate, String endDate) {
+    public void verifyOrderBillingAttachment(String startDate, String endDate) {
         pause5s();
 
         GmailClient gmailClient = new GmailClient();
