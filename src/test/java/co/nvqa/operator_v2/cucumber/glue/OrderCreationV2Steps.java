@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Address;
+import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.operator_v2.model.OrderCreationV2Template;
 import co.nvqa.operator_v2.selenium.page.OrderCreationV2Page;
@@ -22,7 +23,7 @@ import java.util.Map;
 public class OrderCreationV2Steps extends AbstractSteps
 {
     private OrderCreationV2Page orderCreationV2Page;
-
+    String ORDER_KEY = "orderCreationV2Template";
     public OrderCreationV2Steps()
     {
     }
@@ -69,6 +70,7 @@ public class OrderCreationV2Steps extends AbstractSteps
         operatorCreateOrderByUploadingCsvOnOrderCreationV2PageUsingDataBelow(dataTable);
     }
 
+    //TODO: should move to page
     private void operatorCreateOrderByUploadingCsvOnOrderCreationV2PageUsingDataBelow(DataTable dataTable)
     {
         Long shipperV2OrV3Id = null;
@@ -93,6 +95,7 @@ public class OrderCreationV2Steps extends AbstractSteps
 
         String orderType = order.getOrderType();
         String trackingRefNo = TestUtils.generateTrackingRefNo();
+        System.out.println(" TrackID :  "+trackingRefNo);
 
         String fromEmail = null;
         String fromName = null;
@@ -125,6 +128,7 @@ public class OrderCreationV2Steps extends AbstractSteps
         Address toAddress = generateAddress("RANDOM");
 
         order.setOrderNo(trackingRefNo);
+//     //   assertEquals("Tracking ID match0", trackingRefNo, trackingRefNo);
         order.setShipperOrderNo("SORN-"+trackingRefNo);
         order.setToFirstName(toName);
         order.setToLastName("");
@@ -156,6 +160,7 @@ public class OrderCreationV2Steps extends AbstractSteps
         order.setFromCountry(fromAddress.getCountry());
         order.setMultiParcelRefNo("");
 
+        System.out.println("Getting orderNo :   "+order.getOrderNo());
         orderCreationV2Page.uploadCsv(order);
         put("orderCreationV2Template", order);
     }
@@ -165,6 +170,7 @@ public class OrderCreationV2Steps extends AbstractSteps
     {
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
         orderCreationV2Page.verifyOrderV2IsCreatedSuccessfully(orderCreationV2Template);
+        pause(15*1000);
     }
 
     @Then("^Operator verify order V3 is created successfully on Order Creation V2 page$")
@@ -172,5 +178,12 @@ public class OrderCreationV2Steps extends AbstractSteps
     {
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
         orderCreationV2Page.verifyOrderV3IsCreatedSuccessfully(orderCreationV2Template);
+    }
+    @When("^Operator Pop Open Order Weight update CSV on Order Creation V2 page$")
+    public void downloadOrderWeightUpdateSampleCsvFile()
+    {
+        orderCreationV2Page.downloadOrderWeightUpdateSampleCsvFile();
+        pause(15*1000);
+
     }
 }

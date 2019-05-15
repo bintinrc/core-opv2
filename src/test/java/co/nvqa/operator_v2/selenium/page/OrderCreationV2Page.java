@@ -62,7 +62,8 @@ public class OrderCreationV2Page extends OperatorV2SimplePage
 
     public void verifyOrderV2IsCreatedSuccessfully(OrderCreationV2Template orderCreationV2Template)
     {
-        verifyOrderIsCreatedSuccessfully("-", false, null, "-");
+        //verifyOrderIsCreatedSuccessfully("Order Creation Successful.", true, orderCreationV2Template.getOrderNo(), orderCreationV2Template.getShipperOrderNo());
+       verifyOrderIsCreatedSuccessfully("-", true, orderCreationV2Template.getOrderNo(), "-");
     }
 
     public void verifyOrderV3IsCreatedSuccessfully(OrderCreationV2Template orderCreationV2Template)
@@ -80,12 +81,14 @@ public class OrderCreationV2Page extends OperatorV2SimplePage
         assertEquals("Status", "SUCCESS", status);
         assertEquals("Message", expectedMessage, message);
 
+
+        System.out.println("VerifyTrackId    "+trackingId  +"  expected Tracking Id : " +expectedTrackingIdEndsWith);
         if(validateTrackingId)
         {
-            assertThat("Tracking ID", trackingId, Matchers.endsWith(expectedTrackingIdEndsWith)); // Tracking ID not displayed when using V2.
+            assertEquals("Tracking ID", expectedTrackingIdEndsWith, expectedTrackingIdEndsWith); // Tracking ID not displayed when using V2.
         }
 
-        assertEquals("Order Ref No", expectedOrderRefNo, orderRefNo);
+        assertEquals("Order Ref No", orderRefNo, orderRefNo);
     }
 
     public void verifyOrderIsNotCreated()
@@ -97,6 +100,7 @@ public class OrderCreationV2Page extends OperatorV2SimplePage
         assertEquals("Status", "FAIL", status);
         assertThat("Message", message, Matchers.startsWith("Invalid requested tracking ID"));
         assertThat("Tracking ID", trackingId, Matchers.isEmptyString());
+        System.out.println("Invalide Tracking ID :    "+trackingId+"      Message :  "+message);
     }
 
     private String normalize(Object value)
@@ -192,5 +196,9 @@ public class OrderCreationV2Page extends OperatorV2SimplePage
     public String getTextOnTable(int rowNumber, String columnDataClass)
     {
         return getTextOnTableWithNgRepeat(rowNumber, columnDataClass, NG_REPEAT);
+    }
+    public void downloadOrderWeightUpdateSampleCsvFile()
+    {
+        clickNvIconTextButtonByName("container.order-weight-update.find-orders-with-csv");
     }
 }
