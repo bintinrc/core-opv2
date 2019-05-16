@@ -1,11 +1,11 @@
-@OperatorV2 @OperatorV2Part1 @ImplantedManifest
+@OperatorV2 @OperatorV2Part1 @ImplantedManifest @CWF
 Feature: Implanted Manifest
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator Should be able to download CSV file and verifies the file contains all scanned orders with correct info
+  Scenario: Operator Should be able to download CSV file and verifies the file contains all scanned orders with correct info (uid:b217b429-96b6-4407-b486-bae6eab1147c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -16,7 +16,7 @@ Feature: Implanted Manifest
     And Operator clicks "Download CSV File" on Implanted Manifest
     Then Operator verifies the file is downloaded successfully and contains all scanned orders with correct info
 
-  Scenario: Operator Should be able to scan all created orders
+  Scenario: Operator Should be able to scan all created orders (uid:8458b84d-321a-4811-9b8e-12565c1fbf99)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                  |
