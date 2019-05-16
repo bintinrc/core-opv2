@@ -15,32 +15,21 @@ Feature: Order Creation V2
     When Operator uploading invalid CSV file on Order Creation V2 page
     Then Operator verify Order is not created by Creation V2 page
 
-
-  Scenario Outline: Operator create order V2 on Order Creation V2 (<hiptest-uid> )
+  Scenario Outline: Operator create order V2 on Order Creation V2 (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Order -> Order Creation V2
     When Operator create order V2 by uploading CSV on Order Creation V2 page using data below:
-      | orderCreationV2Template | { "shipper_id":{shipper-v2-legacy-id}, "order_type":"Normal", "parcel_size":1, "weight":2, "length":3, "width":5, "height":7, "delivery_date":"{{cur_date}}", "delivery_timewindow_id":1, "max_delivery_days":3, "pickup_date":"{{cur_date}}", "pickup_timewindow_id":1 } |
+      | orderCreationV2Template | { "shipper_id":{shipper-v2-legacy-id}, "order_type":"<orderType>", "parcel_size":1, "weight":2, "length":3, "width":5, "height":7, "delivery_date":"{{cur_date}}", "delivery_timewindow_id":1, "max_delivery_days":3, "pickup_date":"{{cur_date}}", "pickup_timewindow_id":1 } |
     Then Operator verify order V2 is created successfully on Order Creation V2 page
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Special Pages -> Order Weight Update
-    When Operator Pop Open Order Weight update CSV on Order Creation V2 page
     Examples:
       | Note   | hiptest-uid                              | orderType |
       | Normal | uid:e58a4c81-1b83-4115-bbee-584764277d30 | Normal    |
-     # | Return | uid:d3d37cf1-32e9-4e08-bc8c-b407e9e2930d | Return    |
-     # | C2C    | uid:bed66e60-2242-4987-a487-7ff54f8a4d02 | C2C       |
-
-
-
-
-    
-
-
+      | Return | uid:d3d37cf1-32e9-4e08-bc8c-b407e9e2930d | Return    |
+#      | C2C    | uid:bed66e60-2242-4987-a487-7ff54f8a4d02 | C2C       |
 
 #  Scenario Outline: Operator create order V3 on Order Creation V2 (<hiptest-uid>)
 #    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given Operator go to menu Order -> Order Creation V3
+#    Given Operator go to menu Order -> Order Creation V2
 #    When Operator create order V3 by uploading CSV on Order Creation V2 page using data below:
 #      | orderCreationV2Template | { "shipper_id":{shipper-v3-id}, "order_type":"<orderType>", "parcel_size":1, "weight":2, "length":3, "width":5, "height":7, "delivery_date":"{{cur_date}}", "delivery_timewindow_id":1, "max_delivery_days":3, "pickup_date":"{{cur_date}}", "pickup_timewindow_id":1 } |
 #    Then Operator verify order V3 is created successfully on Order Creation V2 page
