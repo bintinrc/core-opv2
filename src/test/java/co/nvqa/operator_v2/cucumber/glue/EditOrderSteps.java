@@ -6,6 +6,7 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
+import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -14,6 +15,7 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -242,5 +244,19 @@ public class EditOrderSteps extends AbstractSteps
         {
             assertThat("End Time", orderEvent.getDescription(), Matchers.containsString("End Time: " + value));
         }
+    }
+
+    @Then("^Operator verifies orders are tagged on Edit order page$")
+    public void operatorVerifiesOrdersAreTaggedOnEditOrderPage() {
+        String tagLabel = get(KEY_ORDER_TAG);
+        List<Order> lists = get(KEY_LIST_OF_CREATED_ORDER);
+
+        lists.forEach(order ->
+        {
+            getWebDriver().navigate().to(f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, order.getId()));
+            String actualTagName = editOrderPage.getTag();
+            assertEquals(f("Order tag is not equal to tag set on Order Level Tag Management page for order Id - %s", order.getId()),
+                    tagLabel, actualTagName);
+        });
     }
 }

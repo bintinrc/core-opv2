@@ -7,12 +7,7 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
 import java.util.Date;
@@ -674,6 +669,23 @@ public class OperatorV2SimplePage extends SimplePage
     public void removeNvFilterBoxByMainTitle(String mainTitle)
     {
         click(f("//*[self::nv-filter-text-box or self::nv-filter-box][@main-title='%s']//button[i[text()='close']]", mainTitle));
+    }
+
+    public List<String> getSelectedValuesFromNvFilterBox(String mainTitle)
+    {
+        List<WebElement> listOfWe = findElementsByXpath(f("//*[self::nv-filter-text-box or self::nv-filter-box][@main-title='%s']//nv-icon-text-button[@ng-repeat='item in selectedOptions']//div", mainTitle));
+
+        if(listOfWe!=null)
+        {
+            return listOfWe.stream().map(this::getTextTrimmed).collect(Collectors.toList());
+        }
+
+        return null;
+    }
+
+    public void removeSelectedValueFromNvFilterBoxByAriaLabel(String nvFilterMainTitle, String buttonAriaLabel)
+    {
+        clickf("//*[self::nv-filter-text-box or self::nv-filter-box][@main-title='%s']//button[@aria-label='%s']/i[text()='close']", nvFilterMainTitle, buttonAriaLabel);
     }
 
     public void selectValueFromNvAutocompleteByPossibleOptions(String possibleOptions, String value)

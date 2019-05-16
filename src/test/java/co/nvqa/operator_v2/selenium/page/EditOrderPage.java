@@ -399,6 +399,11 @@ public class EditOrderPage extends OperatorV2SimplePage
         return getText("//label[text()='Granular']/following-sibling::h3");
     }
 
+    public String getTag()
+    {
+        return getText("//nv-tag[@ng-repeat='tag in ctrl.orderTags']/*");
+    }
+
     @SuppressWarnings("unused")
     public String getLatestEvent()
     {
