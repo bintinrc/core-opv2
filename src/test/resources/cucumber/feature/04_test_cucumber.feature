@@ -16,8 +16,7 @@ Feature: Test Cucumber
       | id   | 3      |
       | name | Test 3 |
 
-
-    Scenario: Test Cucumber API
+  Scenario: Test Cucumber API
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator create new shipper address V2 using data below:
