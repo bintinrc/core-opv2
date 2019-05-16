@@ -5,8 +5,6 @@ import co.nvqa.commons.util.Box;
 import co.nvqa.commons.util.GmailClient;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import org.apache.commons.io.IOUtils;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.w3c.dom.Document;
@@ -26,7 +24,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author Niko Susanto
  */
 @SuppressWarnings("WeakerAccess")
-public class ReportsPage extends OperatorV2SimplePage {
+public class ReportsPage extends OperatorV2SimplePage
+{
     private static final String CSV_FILENAME_PATTERN = "cod-report";
 
     private static final String NG_REPEAT = "cod in $data";
@@ -35,16 +34,19 @@ public class ReportsPage extends OperatorV2SimplePage {
     public static final String COLUMN_CLASS_DATA_SHIPPER_NAME = "shipper_name";
     public static final String COLUMN_CLASS_DATA_GOODS_AMOUNT = "goods_amount";
 
-    public ReportsPage(WebDriver webDriver) {
+    public ReportsPage(WebDriver webDriver)
+    {
         super(webDriver);
     }
 
-    public void filterCodReportsBy(String mode, Date date) {
+    public void filterCodReportsBy(String mode, Date date)
+    {
         clickToggleButton("ctrl.codReport.mode", mode);
         setMdDatepicker("ctrl.codReport.date", date);
     }
 
-    public void generateCodReports() {
+    public void generateCodReports()
+    {
         click("//md-card[.//span[text()=\"COD Report\"]]//nv-api-text-button");
         waitUntilInvisibilityOfToast("COD report is being prepared", false);
         pause5s();
@@ -61,7 +63,6 @@ public class ReportsPage extends OperatorV2SimplePage {
         gmailClient.readUnseenMessage(message ->
         {
             String subject = message.getSubject();
-            System.out.println("Subject: "+subject);
 
             if(subject.equals("[Report] COD") && !isFound.get())
             {
@@ -69,9 +70,7 @@ public class ReportsPage extends OperatorV2SimplePage {
 
                 DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder builder = builderFactory.newDocumentBuilder();
-                String docTypeHtml = "<!DOCTYPE html [\n" +
-                        "    <!ENTITY nbsp \"&#160;\"> \n" +
-                        "]>";
+                String docTypeHtml = "<!DOCTYPE html [\n    <!ENTITY nbsp \"&#160;\"> \n]>";
                 String html = docTypeHtml+((MimeMultipart) message.getContent()).getBodyPart(1).getContent().toString();
                 Document xmlDocument = builder.parse(IOUtils.toInputStream(html, "UTF-8"));
                 xmlDocument.normalizeDocument();
@@ -94,10 +93,10 @@ public class ReportsPage extends OperatorV2SimplePage {
         String actualShipperName = getTextOnTable(indexOfOrderInTable, COLUMN_CLASS_DATA_SHIPPER_NAME);
         Double actualGoodsAmount = Double.parseDouble(getTextOnTable(indexOfOrderInTable, COLUMN_CLASS_DATA_GOODS_AMOUNT));
 
-        Assert.assertEquals("Tracking ID", order.getTrackingId(), actualTrackingId);
-        Assert.assertThat("Granular Status", actualGranularStatus, Matchers.equalToIgnoringCase(order.getGranularStatus().replace("_", " ")));
-        Assert.assertEquals("Shipper Name", order.getShipper().getName(), actualShipperName);
-        Assert.assertEquals("COD Amount", order.getCod().getGoodsAmount(), actualGoodsAmount);
+        assertEquals("Tracking ID", order.getTrackingId(), actualTrackingId);
+        assertThat("Granular Status", actualGranularStatus, equalToIgnoringCase(order.getGranularStatus().replace("_", " ")));
+        assertEquals("Shipper Name", order.getShipper().getName(), actualShipperName);
+        assertEquals("COD Amount", order.getCod().getGoodsAmount(), actualGoodsAmount);
     }
 
     private int findOrderRowIndexInTable(String trackingId)

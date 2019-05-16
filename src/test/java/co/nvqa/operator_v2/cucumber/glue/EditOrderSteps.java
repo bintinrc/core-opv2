@@ -72,15 +72,19 @@ public class EditOrderSteps extends AbstractSteps
     public void operatorEnterOrderInstructionsOnEditOrderPage(Map<String, String> data)
     {
         String pickupInstruction = data.get("pickupInstruction");
-        if (pickupInstruction != null)
+
+        if(pickupInstruction!=null)
         {
             put(KEY_PICKUP_INSTRUCTION, pickupInstruction);
         }
+
         String deliveryInstruction = data.getOrDefault("deliveryInstruction", "");
-        if (deliveryInstruction != null)
+
+        if(deliveryInstruction!=null)
         {
             put(KEY_DELIVERY_INSTRUCTION, deliveryInstruction);
         }
+
         editOrderPage.editOrderInstructions(pickupInstruction, deliveryInstruction);
     }
 
@@ -90,14 +94,14 @@ public class EditOrderSteps extends AbstractSteps
         Order order = get(KEY_CREATED_ORDER);
         String pickupInstruction = get(KEY_PICKUP_INSTRUCTION);
 
-        if (StringUtils.isNotBlank(pickupInstruction))
+        if(StringUtils.isNotBlank(pickupInstruction))
         {
             pickupInstruction = order.getInstruction() + ", " + pickupInstruction;
         }
 
         String deliveryInstruction = get(KEY_DELIVERY_INSTRUCTION);
 
-        if (StringUtils.isNotBlank(deliveryInstruction))
+        if(StringUtils.isNotBlank(deliveryInstruction))
         {
             deliveryInstruction = order.getInstruction() + ", " + deliveryInstruction;
         }
@@ -152,7 +156,7 @@ public class EditOrderSteps extends AbstractSteps
     @Then("^Operator verify the order is added to the (.+) route on Edit Order page$")
     public void operatorVerifyTheOrderIsAddedToTheRouteOnEditOrderPage(String type)
     {
-        switch (type.toUpperCase())
+        switch(type.toUpperCase())
         {
             case "DELIVERY":
                 editOrderPage.verifyDeliveryRouteInfo(get(KEY_CREATED_ROUTE));
@@ -173,18 +177,19 @@ public class EditOrderSteps extends AbstractSteps
 
         try
         {
-            if (StringUtils.isNoneBlank(startDateTime))
+            if(StringUtils.isNoneBlank(startDateTime))
             {
                 editOrderPage.verifyDeliveryStartDateTime(startDateTime);
             }
 
             String endDateTime = mapOfData.get("endDateTime");
 
-            if (StringUtils.isNoneBlank(endDateTime))
+            if(StringUtils.isNoneBlank(endDateTime))
             {
                 editOrderPage.verifyDeliveryEndDateTime(endDateTime);
             }
-        } catch (AssertionError | RuntimeException ex)
+        }
+        catch (AssertionError | RuntimeException ex)
         {
             NvLogger.warn("Skip delivery start date & end date verification because it's to complicated.", ex);
         }
@@ -224,39 +229,45 @@ public class EditOrderSteps extends AbstractSteps
         assertThat("Event Name", orderEvent.getName(), Matchers.equalToIgnoringCase("RTS"));
 
         String value = mapOfData.get("eventTags");
-        if (value != null)
+
+        if(value!=null)
         {
             assertThat("Event Tags", orderEvent.getTags(), Matchers.equalToIgnoringCase(value));
         }
 
         value = mapOfData.get("reason");
-        if (value != null)
+
+        if(value!=null)
         {
             assertThat("Reason", orderEvent.getDescription(), Matchers.containsString("Reason: Return to sender: " + value));
         }
+
         value = mapOfData.get("startTime");
-        if (value != null)
+
+        if(value!=null)
         {
             assertThat("Start Time", orderEvent.getDescription(), Matchers.containsString("Start Time: " + value));
         }
+
         value = mapOfData.get("endTime");
-        if (value != null)
+
+        if(value!=null)
         {
             assertThat("End Time", orderEvent.getDescription(), Matchers.containsString("End Time: " + value));
         }
     }
 
     @Then("^Operator verifies orders are tagged on Edit order page$")
-    public void operatorVerifiesOrdersAreTaggedOnEditOrderPage() {
+    public void operatorVerifiesOrdersAreTaggedOnEditOrderPage()
+    {
         String tagLabel = get(KEY_ORDER_TAG);
         List<Order> lists = get(KEY_LIST_OF_CREATED_ORDER);
 
         lists.forEach(order ->
         {
-            getWebDriver().navigate().to(f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, order.getId()));
+            navigateTo(f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, order.getId()));
             String actualTagName = editOrderPage.getTag();
-            assertEquals(f("Order tag is not equal to tag set on Order Level Tag Management page for order Id - %s", order.getId()),
-                    tagLabel, actualTagName);
+            assertEquals(f("Order tag is not equal to tag set on Order Level Tag Management page for order Id - %s", order.getId()), tagLabel, actualTagName);
         });
     }
 }

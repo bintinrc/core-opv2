@@ -16,13 +16,14 @@ import java.util.Map;
 /**
  * @author Kateryna Skakunova
  */
-public class ImplantedManifestPage extends OperatorV2SimplePage {
+public class ImplantedManifestPage extends OperatorV2SimplePage
+{
+    private static final String CSV_FILENAME_FORMAT = "implanted-manifest-%s.csv";
 
     private ImplantedManifestOrderTable implantedManifestOrderTable;
 
-    private static final String CSV_FILENAME_FORMAT = "implanted-manifest-%s.csv";
-
-    public ImplantedManifestPage(WebDriver webDriver) {
+    public ImplantedManifestPage(WebDriver webDriver)
+    {
         super(webDriver);
         implantedManifestOrderTable = new ImplantedManifestOrderTable(webDriver);
     }
@@ -30,16 +31,18 @@ public class ImplantedManifestPage extends OperatorV2SimplePage {
     /**
      * Accessor for Manifest table
      */
-    public static class ImplantedManifestOrderTable extends MdVirtualRepeatTable<ImplantedManifestOrder> {
+    public static class ImplantedManifestOrderTable extends MdVirtualRepeatTable<ImplantedManifestOrder>
+    {
         public static final String MD_VIRTUAL_REPEAT = "scan in getTableData()";
-        public static final String COLUMN_TRACKING_ID = "trackingId";
-        public static final String COLUMN_SCANNED_AT = "scannedAt";
-        public static final String COLUMN_DESTINATION = "destination";
-        public static final String COLUMN_ADDRESSEE = "addressee";
-        public static final String COLUMN_RACK_SECTOR = "rackSector";
-        public static final String COLUMN_DELIVERY_BY = "deliveryBy";
+        private static final String COLUMN_TRACKING_ID = "trackingId";
+        private static final String COLUMN_SCANNED_AT = "scannedAt";
+        private static final String COLUMN_DESTINATION = "destination";
+        private static final String COLUMN_ADDRESSEE = "addressee";
+        private static final String COLUMN_RACK_SECTOR = "rackSector";
+        private static final String COLUMN_DELIVERY_BY = "deliveryBy";
 
-        public ImplantedManifestOrderTable(WebDriver webDriver) {
+        private ImplantedManifestOrderTable(WebDriver webDriver)
+        {
             super(webDriver);
             setColumnLocators(ImmutableMap.<String, String>builder()
                     .put(COLUMN_TRACKING_ID, "tracking-id")
@@ -56,25 +59,30 @@ public class ImplantedManifestPage extends OperatorV2SimplePage {
         }
     }
 
-    public void clickActionXForRow(int rowNumber) {
+    public void clickActionXForRow(int rowNumber)
+    {
         implantedManifestOrderTable.clickActionButton(rowNumber, "close");
     }
 
-    public void clickCreateManifestButtonToInitiateCreation() {
+    public void clickCreateManifestButtonToInitiateCreation()
+    {
         waitUntilInvisibilityOfElementLocated("//button[@aria-label='container.implanted-manifest.create-manifest' and @disabled='disabled']");
         clickNvApiTextButtonByNameAndWaitUntilDone("container.implanted-manifest.create-manifest");
     }
 
-    public void clickDownloadCsvFile() {
+    public void clickDownloadCsvFile()
+    {
         clickNvApiTextButtonByNameAndWaitUntilDone("Download CSV File");
     }
 
-    public void clickRemoveAllButtonAndConfirm() {
+    public void clickRemoveAllButtonAndConfirm()
+    {
         clickButtonByAriaLabelAndWaitUntilDone("Remove All");
         clickButtonByAriaLabelAndWaitUntilDone("Delete");
     }
 
-    public void csvDownloadSuccessfullyAndContainsOrderInfo(Order order, String hubName) {
+    public void csvDownloadSuccessfullyAndContainsOrderInfo(Order order, String hubName)
+    {
         String csvFileName = f(CSV_FILENAME_FORMAT, hubName);
 
         String trackingId = order.getTrackingId();
@@ -87,55 +95,64 @@ public class ImplantedManifestPage extends OperatorV2SimplePage {
         verifyFileDownloadedSuccessfully(csvFileName, expectedText);
     }
 
-    public void removeOrderByScan(String barcode) {
+    public void removeOrderByScan(String barcode)
+    {
         sendKeysAndEnterByAriaLabel("remove_scan_barcode", barcode);
         String xpathToBarCode = "//input[@aria-label='remove_scan_barcode' and contains(@class,'ng-empty')]";
         waitUntilVisibilityOfElementLocated(xpathToBarCode);
     }
 
-    public void scanBarCodeAndSaveTime(Map<String, ZonedDateTime> barcodeToScannedAtTime, String barcode) {
+    public void scanBarCodeAndSaveTime(Map<String, ZonedDateTime> barcodeToScannedAtTime, String barcode)
+    {
         sendKeysAndEnterByAriaLabel("scan_barcode", barcode);
         barcodeToScannedAtTime.put(barcode, DateUtil.getDate(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)));
         String xpathToBarCode = "//input[@aria-label='scan_barcode' and contains(@class,'ng-empty')]";
         waitUntilVisibilityOfElementLocated(xpathToBarCode);
     }
 
-    public void selectHub(String destinationHub) {
+    public void selectHub(String destinationHub)
+    {
         pause2s();
         selectValueFromMdSelectWithSearch("model", destinationHub);
     }
 
-    public void verifyRowsCountEqualsOrdersCountInManifestTable(int ordersCount) {
-        assertEquals("Rows count in Implanted Manifest table is not equal to order count", ordersCount,
-                implantedManifestOrderTable.getRowsCount());
+    public void verifyRowsCountEqualsOrdersCountInManifestTable(int ordersCount)
+    {
+        assertEquals("Rows count in Implanted Manifest table is not equal to order count", ordersCount, implantedManifestOrderTable.getRowsCount());
     }
 
-    public void verifyManifestTableIsEmpty() {
+    public void verifyManifestTableIsEmpty()
+    {
         waitUntilVisibilityOfElementLocated("//h5[text()='0 order(s) in manifest']");
         assertTrue("Manifest table is not empty. Orders were not removed by \"Remove All\" button click", isTableEmpty());
     }
 
-    public void verifyInfoInManifestTableForOrder(Order order, Map<String, ZonedDateTime> barcodeToScannedAtTime) {
+    public void verifyInfoInManifestTableForOrder(Order order, Map<String, ZonedDateTime> barcodeToScannedAtTime)
+    {
         String trackingId = order.getTrackingId();
         ZonedDateTime scannedAt = barcodeToScannedAtTime.get(trackingId).truncatedTo(ChronoUnit.SECONDS);
-        String destination = order.getToAddress1() + (order.getToAddress2().trim().isEmpty() ? "" : " " + order.getToAddress2());
+        String destination = order.getToAddress1() + (order.getToAddress2().trim().isEmpty()? "" : " " + order.getToAddress2());
         String rackSector = order.getRackSector();
         String addressee = order.getToName();
 
         boolean recordFound = false;
-        for (int i = 1; i <= implantedManifestOrderTable.getRowsCount(); i++) {
+
+        for(int i=1; i<=implantedManifestOrderTable.getRowsCount(); i++)
+        {
             ImplantedManifestOrder implantedManifestOrder = implantedManifestOrderTable.readEntity(i);
-            if (trackingId.equals(implantedManifestOrder.getTrackingId())) {
+
+            if(trackingId.equals(implantedManifestOrder.getTrackingId()))
+            {
                 recordFound = true;
                 LocalDateTime scannedAtLocalExpected = scannedAt.toLocalDateTime();
                 LocalDateTime scannedAtLocalActual = implantedManifestOrder.getScannedAt().toLocalDateTime();
-                assertThat("'Scanned At' value in Implant Manifest table is not in expected range", scannedAtLocalExpected,
-                        isOneOf(scannedAtLocalActual, scannedAtLocalActual.plusSeconds(1L), scannedAtLocalActual.minusSeconds(1L)));
+                assertThat("'Scanned At' value in Implant Manifest table is not in expected range", scannedAtLocalExpected, isOneOf(scannedAtLocalActual, scannedAtLocalActual.plusSeconds(1L), scannedAtLocalActual.minusSeconds(1L)));
                 assertEquals("'Destination' value in Implant Manifest table", destination, implantedManifestOrder.getDestination());
                 assertEquals("'Rack Sector' value in Implant Manifest table", rackSector, implantedManifestOrder.getRackSector());
                 assertEquals("'Addressee' value in Implant Manifest table", addressee, implantedManifestOrder.getAddressee());
             }
         }
+
         assertTrue(f("No record with tracking Id %s in Manifest table", order.getTrackingId()), recordFound);
     }
 }

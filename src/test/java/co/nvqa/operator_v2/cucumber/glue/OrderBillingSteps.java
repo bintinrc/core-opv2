@@ -12,42 +12,58 @@ import java.util.Objects;
 /**
  * @author Kateryna Skakunova
  */
-public class OrderBillingSteps extends AbstractSteps {
-
+public class OrderBillingSteps extends AbstractSteps
+{
     private OrderBillingPage orderBillingPage;
 
+    public OrderBillingSteps()
+    {
+    }
+
     @Override
-    public void init() {
+    public void init()
+    {
         orderBillingPage = new OrderBillingPage(getWebDriver());
     }
 
     @Then("^Operator verifies attached CSV file in received email$")
-    public void operatorVerifiesAttachedCSVFileInReceivedEmail() {
+    public void operatorVerifiesAttachedCSVFileInReceivedEmail()
+    {
         orderBillingPage.verifyOrderBillingAttachment(get(KEY_ORDER_BILLING_START_DATE), get(KEY_ORDER_BILLING_END_DATE));
     }
 
     @When("^Operator generates success billings for data:$")
-    public void operatorGeneratesSuccessBillingsForData(Map<String, String> mapOfData) {
-        try {
-            if (Objects.nonNull(mapOfData.get("startDate"))) {
+    public void operatorGeneratesSuccessBillingsForData(Map<String, String> mapOfData)
+    {
+        try
+        {
+            if(Objects.nonNull(mapOfData.get("startDate")))
+            {
                 String startDate = mapOfData.get("startDate");
                 put(KEY_ORDER_BILLING_START_DATE, startDate);
                 orderBillingPage.selectStartDate(YYYY_MM_DD_SDF.parse(startDate));
             }
-            if (Objects.nonNull(mapOfData.get("endDate"))) {
+            if(Objects.nonNull(mapOfData.get("endDate")))
+            {
                 String endDate = mapOfData.get("endDate");
                 put(KEY_ORDER_BILLING_END_DATE, endDate);
                 orderBillingPage.selectEndDate(YYYY_MM_DD_SDF.parse(endDate));
             }
-        } catch (ParseException e) {
+        }
+        catch(ParseException e)
+        {
             throw new NvTestRuntimeException("Failed to parse date.", e);
         }
-        if (Objects.nonNull(mapOfData.get("generateFile"))) {
+
+        if(Objects.nonNull(mapOfData.get("generateFile")))
+        {
             orderBillingPage.tickGenerateTheseFilesOption(mapOfData.get("generateFile"));
         }
-        if (Objects.nonNull(mapOfData.get("emailAddress"))) {
+        if(Objects.nonNull(mapOfData.get("emailAddress")))
+        {
             orderBillingPage.setEmailAddress(mapOfData.get("emailAddress"));
         }
+
         orderBillingPage.clickGenerateSuccessBillingsButton();
     }
 }

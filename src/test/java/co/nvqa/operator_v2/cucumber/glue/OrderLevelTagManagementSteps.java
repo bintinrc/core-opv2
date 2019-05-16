@@ -12,46 +12,58 @@ import java.util.Objects;
 /**
  * @author Kateryna Skakunova
  */
-public class OrderLevelTagManagementSteps extends AbstractSteps {
-
+public class OrderLevelTagManagementSteps extends AbstractSteps
+{
     private OrderLevelTagManagementPage orderLevelTagManagementPage;
 
-    public OrderLevelTagManagementSteps() {
+    public OrderLevelTagManagementSteps()
+    {
     }
 
     @Override
-    public void init() {
+    public void init()
+    {
         orderLevelTagManagementPage = new OrderLevelTagManagementPage(getWebDriver());
     }
 
     @And("^Operator selects orders created$")
-    public void operatorSelectsOrdersCreated() {
+    public void operatorSelectsOrdersCreated()
+    {
         List<Order> lists = get(KEY_LIST_OF_CREATED_ORDER);
-        lists.forEach(order ->
-                orderLevelTagManagementPage.selectOrderInTable(String.valueOf(order.getId())));
+        lists.forEach(order -> orderLevelTagManagementPage.selectOrderInTable(String.valueOf(order.getId())));
     }
 
     @And("^Operator tags order with \"([^\"]*)\"$")
-    public void operatorTagsOrderWith(String tagLabel) {
+    public void operatorTagsOrderWith(String tagLabel)
+    {
         put(KEY_ORDER_TAG, tagLabel);
         orderLevelTagManagementPage.clickTagSelectedOrdersButton();
         orderLevelTagManagementPage.tagSelectedOrdersAndSave(tagLabel);
     }
 
     @When("^Operator selects filter and clicks Load Selection on Order Level Tag Management page using data below:$")
-    public void operatorSelectsFilterAndClicksLoadSelectionOnOrderLevelTagManagementPageUsingDataBelow(Map<String, String> mapOfData) {
-            if (Objects.nonNull(mapOfData.get("shipperName"))){
-                orderLevelTagManagementPage.selectShipperValue(mapOfData.get("shipperName"));
-            }
-            if (Objects.nonNull(mapOfData.get("status"))){
-                orderLevelTagManagementPage.selectUniqueStatusValue(mapOfData.get("status"));
-            }
-            if (Objects.nonNull(mapOfData.get("granularStatus"))){
-                orderLevelTagManagementPage.selectUniqueGranularStatusValue(mapOfData.get("granularStatus"));
-            }
-            if (Objects.nonNull(mapOfData.get("masterShipper"))){
-                orderLevelTagManagementPage.selectMasterShipperValue(mapOfData.get("masterShipper"));
-            }
-            orderLevelTagManagementPage.clickLoadSelectionButton();
+    public void operatorSelectsFilterAndClicksLoadSelectionOnOrderLevelTagManagementPageUsingDataBelow(Map<String, String> mapOfData)
+    {
+        if(Objects.nonNull(mapOfData.get("shipperName")))
+        {
+            orderLevelTagManagementPage.selectShipperValue(mapOfData.get("shipperName"));
+        }
+
+        if(Objects.nonNull(mapOfData.get("status")))
+        {
+            orderLevelTagManagementPage.selectUniqueStatusValue(mapOfData.get("status"));
+        }
+
+        if(Objects.nonNull(mapOfData.get("granularStatus")))
+        {
+            orderLevelTagManagementPage.selectUniqueGranularStatusValue(mapOfData.get("granularStatus"));
+        }
+
+        if(Objects.nonNull(mapOfData.get("masterShipper")))
+        {
+            orderLevelTagManagementPage.selectMasterShipperValue(mapOfData.get("masterShipper"));
+        }
+
+        orderLevelTagManagementPage.clickLoadSelectionButton();
     }
 }

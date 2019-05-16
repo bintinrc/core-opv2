@@ -178,7 +178,6 @@ public class EditOrderPage extends OperatorV2SimplePage
     {
         transactionsTable.searchByTxnType(txnType);
         assertEquals(txnType + " Priority Level", String.valueOf(priorityLevel), transactionsTable.getPriorityLevel(1));
-
     }
 
     public void verifyOrderInstructions(String expectedPickupInstructions, String expectedDeliveryInstructions)
