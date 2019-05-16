@@ -91,7 +91,7 @@ public class ImplantedManifestPage extends OperatorV2SimplePage
         String destination = order.getToAddress1() + " " + order.getToAddress2();
         String rackSector = order.getRackSector();
         String addressee = order.getToName();
-        String expectedText = String.format("\"%s\",\"%s\",\"%s\"", destination, addressee, rackSector);
+        String expectedText = f("\"%s\",\"%s\",\"%s\"", destination, addressee, rackSector);
         verifyFileDownloadedSuccessfully(csvFileName, expectedText);
     }
 
@@ -124,6 +124,7 @@ public class ImplantedManifestPage extends OperatorV2SimplePage
     public void verifyManifestTableIsEmpty()
     {
         waitUntilVisibilityOfElementLocated("//h5[text()='0 order(s) in manifest']");
+        scrollToBottom();
         assertTrue("Manifest table is not empty. Orders were not removed by \"Remove All\" button click", isTableEmpty());
     }
 
@@ -154,5 +155,10 @@ public class ImplantedManifestPage extends OperatorV2SimplePage
         }
 
         assertTrue(f("No record with tracking Id %s in Manifest table", order.getTrackingId()), recordFound);
+    }
+
+    public void scrollToBottom()
+    {
+        scrollIntoView("//button[@aria-label='Create Manifest']");
     }
 }

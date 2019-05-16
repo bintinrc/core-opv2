@@ -74,6 +74,7 @@ public class ImplantedManifestSteps extends AbstractSteps
     public void operatorVerifiesAllScannedOrdersIsListedOnManifestTableAndTheInfoIsCorrect()
     {
         List<Order> orders = getListOfCreatedOrders();
+        implantedManifestPage.scrollToBottom();
 
         for(Order order : orders)
         {

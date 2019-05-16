@@ -32,7 +32,7 @@ public class OrderBillingSteps extends AbstractSteps
         orderBillingPage.verifyOrderBillingAttachment(get(KEY_ORDER_BILLING_START_DATE), get(KEY_ORDER_BILLING_END_DATE));
     }
 
-    @When("^Operator generates success billings for data:$")
+    @When("^Operator generates success billings using data below:$")
     public void operatorGeneratesSuccessBillingsForData(Map<String, String> mapOfData)
     {
         try
