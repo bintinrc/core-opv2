@@ -26,7 +26,7 @@ Feature: Implanted Manifest
     When Operator creates Manifest for Hub {hub-name} and scan barcodes
     Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
 
-  Scenario: Operator Should be able to scan all created orders and then remove all scanned orders by using "Remove order by scan"
+  Scenario: Operator Should be able to scan all created orders and then remove all scanned orders by using "Remove order by scan" (uid:6fa1c9f5-bb0b-49b1-8e48-f605688d8ce8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -37,7 +37,7 @@ Feature: Implanted Manifest
     And Operator do "Remove order by Scan" for all created orders on Implanted Manifest page
     Then Operator verifies all scanned orders is removed from the Manifest table
 
-  Scenario: Operator Should be able to scan all created orders and then remove all scanned orders by using "Remove All" button
+  Scenario: Operator Should be able to scan all created orders and then remove all scanned orders by using "Remove All" button (uid:004ebaaa-751f-43aa-96bb-9badf85f15f1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -48,7 +48,7 @@ Feature: Implanted Manifest
     And Operator clicks "Remove All" button on Implanted Manifest page
     Then Operator verifies all scanned orders is removed from the Manifest table
 
-  Scenario: Operator Should be able to scan all created orders and then remove all scanned orders by using "Actions X" button on Manifest table
+  Scenario: Operator Should be able to scan all created orders and then remove all scanned orders by using "Actions X" button on Manifest table (uid:2f38603b-7227-490f-86cc-3c4743d65062)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |

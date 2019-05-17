@@ -5,7 +5,7 @@ Feature:  Order Level Tag Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator should be able to search multiple order with filters and tag them with ABC
+  Scenario: Operator should be able to search multiple order with filters and tag them with ABC (uid:be3a184c-521d-46e2-8a69-ee2a951d492e)
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
