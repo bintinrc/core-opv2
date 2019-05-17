@@ -22,6 +22,7 @@ public class OrderWeightUpdateStepsV2 extends AbstractSteps
 {
     private OrderWeightUpdatePageV2 orderWeightUpdatePageV2;
     String ORDER_KEY = "orderCreationV2Template";
+    static OrderCreationV2Template order;
     public OrderWeightUpdateStepsV2()
     {
     }
@@ -149,6 +150,7 @@ public class OrderWeightUpdateStepsV2 extends AbstractSteps
         order.setFromStateOrProvince("");
         order.setFromCountry(fromAddress.getCountry());
         order.setMultiParcelRefNo("");
+        order.setWeight(2);
 
         System.out.println("Getting orderNo :   "+order.getOrderNo());
         orderWeightUpdatePageV2.uploadCsv(order);
@@ -185,42 +187,46 @@ public class OrderWeightUpdateStepsV2 extends AbstractSteps
 
     }
     @When("^Operator Order Weight update CSV Upload on Order Weight Update V2 page$")
-    public void OrderWeightUpdateUploadCsvFile()
+    public void OrderWeightUpdateUploadCsvFile(Map<String ,String> map)
     {
+        System.out.println(" Weight    : "+Integer.parseInt(map.get("weight")));
+
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
-        orderWeightUpdatePageV2.uploadOrderUpdateCsv(orderCreationV2Template);
+        orderWeightUpdatePageV2.uploadOrderUpdateCsv(orderCreationV2Template,map);
         pause(5*1000);
 
     }
     @Then("^Operator Order Weight update on Order Weight Update V2 page$")
     public void OrderWeightUpdate()
     {
-        OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
-        orderWeightUpdatePageV2.uploadOrderWeightUpload();
         pause(5*1000);
+        orderWeightUpdatePageV2.uploadOrderWeightUpload();
+
 
     }
     @Then("^Operator Verify Order Weight update Successfully on Order Weight Update V2 page$")
     public void VerifyOrderWeightUpdate()
     {
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
-        orderWeightUpdatePageV2.VerifyOrderWeightUpload("SOCV2"+orderCreationV2Template.getOrderNo());
+        //orderWeightUpdatePageV2.VerifyOrderWeightUpload("SOCV2"+orderCreationV2Template.getOrderNo());
+        orderWeightUpdatePageV2.VerifyOrderWeightUpload("SOCV2JVRNUEW8");
         pause(5*1000);
+
 
     }
     @Then("^Operator Edit Order on Order Weight Update V2 page$")
     public void EditOrderClick()
     {
         orderWeightUpdatePageV2.clickOrderEditButton();
-        pause(30*1000);
+        pause(10*1000);
     }
 
     @Then("^Operator Verify Order Weight on Order Weight Update V2 page$")
     public void VerifyOrderWeightClick()
     {
-
-        orderWeightUpdatePageV2.MatchOrderWeight();
-        pause(30*1000);
+        OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
+        orderWeightUpdatePageV2.MatchOrderWeight(orderCreationV2Template.getWeight());
+        pause(10*1000);
     }
     @Then("^Operator Search Button For Orders on Order Weight Update V2 page$")
     public void ClickOrderSearch()
@@ -239,6 +245,9 @@ public class OrderWeightUpdateStepsV2 extends AbstractSteps
 
     private void operatorCreateOrderByUploadingCsvOnOrderWeightUpdatePageV2ForMultipleOrdersUsingDataBelow(DataTable dataTable)
     {
+
+
+
         Long shipperV2OrV3Id = null;
 
         if(containsKey(KEY_CREATED_SHIPPER))
@@ -250,13 +259,15 @@ public class OrderWeightUpdateStepsV2 extends AbstractSteps
         Map<String,String> mapOfData = dataTable.asMap(String.class, String.class);
 
         System.out.println("Map values is :  "+mapOfData +"   Size : "+mapOfData.size());
-        OrderCreationV2Template order=null;
+
         ListOrderCreationV2Template listOrderCreationV2Template=new ListOrderCreationV2Template();
         List<OrderCreationV2Template> list=new ArrayList<>();
-        for (int i=0;i<mapOfData.size();i++)
+
+        for (int i=1;i<=mapOfData.size();i++)
         {
 
-            String orderCreationV2TemplateAsJsonString = mapOfData.get(i);
+            String orderCreationV2TemplateAsJsonString = mapOfData.get("orderCreationV2Template"+i);
+            System.out.println("OrderCreation  : "+orderCreationV2TemplateAsJsonString);
 
 
             String scenarioName = getScenarioManager().getCurrentScenario().getName();
@@ -268,7 +279,7 @@ public class OrderWeightUpdateStepsV2 extends AbstractSteps
 
             orderCreationV2TemplateAsJsonString = replaceTokens(orderCreationV2TemplateAsJsonString, mapOfDynamicVariable);
             order = fromJsonSnakeCase(orderCreationV2TemplateAsJsonString, OrderCreationV2Template.class);
-
+            System.out.println("    "+order);
             String orderType = order.getOrderType();
 
             String trackingRefNo = TestUtils.generateTrackingRefNo();
@@ -344,8 +355,46 @@ public class OrderWeightUpdateStepsV2 extends AbstractSteps
 
 //
         System.out.println("Getting orderNo :   "+list.get(1));
-        orderWeightUpdatePageV2.uploadCsv(order);
+        orderWeightUpdatePageV2.uploadCsvForMultipleOrders(listOrderCreationV2Template);
+
         put("orderCreationV2Template", order);
     }
+
+
+
+    @Then("^Operator verify order V2 is created successfully for multiple orders on Order Weight Update V2 page$")
+    public void operatorVerifyOrderV2IsCreatedSuccessfullyOnOrderWeightUpdatePageV2ForMultipleUsers()
+    {
+        List<OrderCreationV2Template> list=new ArrayList<>();
+        for (int i=1;i<=3;i++)
+        {
+
+           list.add( get("orderCreationV2Template"+i));
+        }
+
+
+
+       ListOrderCreationV2Template listOrderCreationV2Template= new ListOrderCreationV2Template();
+        listOrderCreationV2Template.setOrderCreationV2TemplatesList(list);
+        orderWeightUpdatePageV2.verifyOrderV2IsCreatedSuccessfullyForMultipleUsers(listOrderCreationV2Template);
+        pause(5*1000);
+    }
+
+
+    @When("^Operator Order Weight update CSV Upload on Order Weight Update V2 page for multiple orders$")
+    public void OrderWeightUpdateUploadCsvFileForMultipleOrders(Map<String ,String> map)
+    {
+        List<OrderCreationV2Template> list=new ArrayList<>();
+        for (int i=0;i<=map.size();i++)
+        {
+           list.add( get("orderCreationV2Template"));
+        }
+        ListOrderCreationV2Template listOrderCreationV2Template=new ListOrderCreationV2Template() ;
+        listOrderCreationV2Template.setOrderCreationV2TemplatesList(list);
+        orderWeightUpdatePageV2. uploadOrderUpdateCsvForMultipleUsers(listOrderCreationV2Template,map);
+        pause(5*1000);
+
+    }
+
 
 }

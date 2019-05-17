@@ -61,6 +61,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
     {
         clickTabItem(TAB_DRAFTS);
         searchTableDraftsByScriptName(script.getName());
+
         wait10sUntil(()->!isTableEmpty(ACTIVE_TAB_XPATH), "Drafts table is empty. New script failed to created.");
 
         String actualId = getTextOnTableDrafts(1, COLUMN_CLASS_DATA_ID_ON_TABLE_DRAFTS);

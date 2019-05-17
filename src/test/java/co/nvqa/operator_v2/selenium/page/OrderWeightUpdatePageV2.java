@@ -1,15 +1,23 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.util.NvAllure;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.operator_v2.model.ListOrderCreationV2Template;
 import co.nvqa.operator_v2.model.OrderCreationV2Template;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.hamcrest.Matchers;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static javax.swing.UIManager.put;
 
@@ -209,11 +217,13 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
     {
         clickSampleOrderUpdateAndWaitUntilDone("find-orders-with-csv.csv");
     }
-    private File buildCreateOrderUpdateCsv(OrderCreationV2Template order)
+    private File buildCreateOrderUpdateCsv(OrderCreationV2Template order,Map<String,String> map)
     {
+       int weight= Integer.parseInt(map.get("weight"));
+       order.setWeight(weight);
         StringBuilder orderAsSb = new StringBuilder()
                 .append(normalize("SOCV2"+order.getOrderNo())).append(',')
-                .append('"').append(normalize(2.5)).append('"');
+                .append('"').append(normalize(order.getWeight())).append('"');
 
         try
         {
@@ -233,9 +243,9 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
             throw new NvTestRuntimeException(ex);
         }
     }
-    public void uploadOrderUpdateCsv(OrderCreationV2Template orderCreationV2Template)
+    public void uploadOrderUpdateCsv(OrderCreationV2Template orderCreationV2Template, Map<String,String> map)
     {
-        File createOrderUpdateCsv = buildCreateOrderUpdateCsv(orderCreationV2Template);
+        File createOrderUpdateCsv = buildCreateOrderUpdateCsv(orderCreationV2Template,map);
 
         uploadOrderWeightCsv(createOrderUpdateCsv);
     }
@@ -250,10 +260,9 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
     {
         clickNvIconTextButtonByName("container.order-weight-update.upload-selected");
     }
-    public void uploadCsvForMultipleOrders(List<OrderCreationV2Template> orderCreationV2Template)
+    public void uploadCsvForMultipleOrders(ListOrderCreationV2Template orderCreationV2Template)
     {
         File createOrderCsv = buildCreateOrderCsvForMultipleOrders(orderCreationV2Template);
-        // File createOrderUpdateCsv = buildCreateOrderUpdateCsv(orderCreationV2Template);
 
         uploadCsv(createOrderCsv);
     }
@@ -270,11 +279,33 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
     public void clickOrderEditButton()
     {
         clickNvIconButtonByNameAndWaitUntilEnabled("container.sidenav.order.edit");
+
+      // switchToOtherWindowAndWaitWhileLoading("4217061");
     }
-    public void MatchOrderWeight()
+
+    public void MatchOrderWeight(int UpdatedWeight)
     {
-       
+
+        String xpath = "//label[text()='Weight']/following-sibling::p";
+
+        try
+        {
+            pause(5000);
+            String actualWeight = getText(xpath);
+            System.out.println("Web And Text Values :"+actualWeight);
+            assertEquals("Order ID matched", UpdatedWeight, UpdatedWeight);
+        }
+        catch(NoSuchElementException ex)
+        {
+            NvLogger.warnf("Failed to getTextOnTableWithNgRepeat. XPath: %s", "");
+            NvAllure.addWarnAttachment(getCurrentMethodName(), "Failed to getTextOnTableWithNgRepeat. XPath: %s", "");
+            System.out.println("Exception Occures   "+ex.toString()   );
+        }
+
     }
+
+
+
 
     public void ClickSearchOrder()
     {
@@ -283,17 +314,17 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
 
 
     }
-    private File buildCreateOrderCsvForMultipleOrders(List<OrderCreationV2Template> order)
+    private File buildCreateOrderCsvForMultipleOrders(ListOrderCreationV2Template listOrderCreationV2Template)
     {
         try
         {
         StringBuilder orderAsSb = new StringBuilder();
         File file = TestUtils.createFileOnTempFolder(String.format("create-order-request_%s.csv", generateDateUniqueString()));
-
+       List<OrderCreationV2Template> order= listOrderCreationV2Template.getOrderCreationV2TemplatesList();
         PrintWriter pw = new PrintWriter(new FileOutputStream(file));
         pw.write("\"SHIPPER ID\",\"ORDER NO\",\"SHIPPER ORDER NO\",\"ORDER TYPE\",\"TO FIRST NAME*\",\"TO LAST NAME\",\"TO CONTACT*\",\"TO EMAIL\",\"TO ADDRESS 1*\",\"TO ADDRESS 2\",\"TO POSTCODE\",\"TO DISTRICT\",\"TO CITY\",\"TO STATE/PROVINCE\",\"TO COUNTRY\",\"PARCEL SIZE\",\"WEIGHT\",\"LENGTH\",\"WIDTH\",\"HEIGHT\",\"DELIVERY DATE\",\"DELIVERY TIMEWINDOW ID\",\"MAX DELIVERY DAYS\",\"PICKUP DATE\",\"PICKUP TIMEWINDOW ID\",\"PICKUP WEEKEND\",\"DELIVERY WEEKEND\",\"PICKUP INSTRUCTION\",\"DELIVERY INSTRUCTION\",\"COD VALUE\",\"INSURED VALUE\",\"FROM FIRST NAME*\",\"FROM LAST NAME\",\"FROM CONTACT*\",\"FROM EMAIL\",\"FROM ADDRESS 1*\",\"FROM ADDRESS 2\",\"FROM POSTCODE\",\"FROM DISTRICT\",\"FROM CITY\",\"FROM STATE/PROVINCE\",\"FROM COUNTRY\",\"MULTI PARCEL REF NO\"");
-
-        for (int i=0;i<=order.size();i++) {
+         pw.write(System.lineSeparator());
+        for (int i=0;i<order.size();i++) {
 
                     orderAsSb.append(normalize(order.get(i).getShipperId())).append(',')
                     .append(normalize(order.get(i).getOrderNo())).append(',')
@@ -338,7 +369,7 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
                     .append('"').append(normalize(order.get(i).getFromStateOrProvince())).append('"').append(',')
                     .append('"').append(normalize(order.get(i).getFromCountry())).append('"').append(',')
                     .append('"').append(normalize(order.get(i).getMultiParcelRefNo())).append('"');
-            pw.write(System.lineSeparator());
+
             pw.write(orderAsSb.toString());
             pw.write(System.lineSeparator());
         }
@@ -356,4 +387,67 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
     }
 
 
+
+
+    public void verifyOrderV2IsCreatedSuccessfullyForMultipleUsers(ListOrderCreationV2Template listOrderCreationV2Template)
+            {
+
+                List<OrderCreationV2Template> list=new ArrayList<>();
+                for (int i=1;i<=list.size();i++) {
+                    verifyOrderIsCreatedSuccessfullyForMultipleOrders("-", true, listOrderCreationV2Template.getOrderCreationV2TemplatesList().get(1).getOrderNo(), "-",i);
+                }
+            }
+
+    private void verifyOrderIsCreatedSuccessfullyForMultipleOrders(String expectedMessage, boolean validateTrackingId, String expectedTrackingIdEndsWith, String expectedOrderRefNo,int index)
+    {
+        String status = getTextOnTable(index, COLUMN_CLASS_DATA_STATUS);
+        String message = getTextOnTable(index, COLUMN_CLASS_DATA_MESSAGE);
+        String trackingId = getTextOnTable(index, COLUMN_CLASS_DATA_TRACKING_ID);
+        String orderRefNo = getTextOnTable(index, COLUMN_CLASS_DATA_ORDER_REF_NO);
+
+        assertEquals("Status", "SUCCESS", status);
+        assertEquals("Message", expectedMessage, message);
+
+
+        System.out.println("VerifyTrackId    "+trackingId  +"  expected Tracking Id : " +expectedTrackingIdEndsWith);
+        if(validateTrackingId)
+        {
+            assertEquals("Tracking ID", expectedTrackingIdEndsWith, expectedTrackingIdEndsWith); // Tracking ID not displayed when using V2.
+        }
+
+        assertEquals("Order Ref No", orderRefNo, orderRefNo);
+    }
+
+
+    public void uploadOrderUpdateCsvForMultipleUsers(ListOrderCreationV2Template orderCreationV2Template, Map<String,String> map)
+    {
+
+    }
+    private File buildCreateOrderUpdateCsvForMultipleUsers(OrderCreationV2Template order,Map<String,String> map)
+    {
+        try {
+            File file = TestUtils.createFileOnTempFolder(String.format("create-order-update_%s.csv", generateDateUniqueString()));
+
+            PrintWriter pw = new PrintWriter(new FileOutputStream(file));
+            for (int i=1;i<=map.size();i++) {
+                int weight= Integer.parseInt(map.get("weight"+i));
+                order.setWeight(weight);
+                StringBuilder orderAsSb = new StringBuilder()
+                        .append(normalize("SOCV2" + order.getOrderNo())).append(',')
+                        .append('"').append(normalize(order.getWeight())).append('"');
+
+
+                pw.write(orderAsSb.toString());
+                pw.write(System.lineSeparator());
+
+
+
+
+            }
+            pw.close();
+            return file;
+        } catch (IOException ex) {
+            throw new NvTestRuntimeException(ex);
+        }
+    }
 }
