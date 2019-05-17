@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Lanang Jati
- * <p>
  * Modified by Daniel Joi Partogi Hutapea.
  * Modified by Sergey Mishanin.
+ *
+ * @author Lanang Jati
  */
 @SuppressWarnings("WeakerAccess")
 @ScenarioScoped

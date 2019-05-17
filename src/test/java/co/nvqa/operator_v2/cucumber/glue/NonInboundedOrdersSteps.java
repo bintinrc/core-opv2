@@ -5,6 +5,7 @@ import co.nvqa.operator_v2.model.NonInboundedOrder;
 import co.nvqa.operator_v2.selenium.page.NonInboundedOrdersPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
@@ -15,6 +16,7 @@ import java.util.Map;
 /**
  * @author Sergey Mishanin
  */
+@ScenarioScoped
 public class NonInboundedOrdersSteps extends AbstractSteps
 {
     private NonInboundedOrdersPage nonInboundedOrdersPage;

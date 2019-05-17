@@ -5,6 +5,7 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.UnroutedPrioritiesPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.Map;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@ScenarioScoped
 public class UnroutedPrioritiesSteps extends AbstractSteps
 {
     private UnroutedPrioritiesPage unroutedPrioritiesPage;

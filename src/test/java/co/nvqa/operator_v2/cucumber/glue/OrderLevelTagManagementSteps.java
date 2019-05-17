@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.selenium.page.OrderLevelTagManagementPage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import java.util.Objects;
 /**
  * @author Kateryna Skakunova
  */
+@ScenarioScoped
 public class OrderLevelTagManagementSteps extends AbstractSteps
 {
     private OrderLevelTagManagementPage orderLevelTagManagementPage;
