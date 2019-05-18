@@ -554,11 +554,12 @@ public class OperatorV2SimplePage extends SimplePage
     {
         String text = null;
         String xpath = f("//tr[@ng-repeat='%s'][%d]/td[starts-with(@%s, \"%s\")]", ngRepeat, rowNumber, columnAttributeName, attributeValue);
-
+        System.out.println(" Values    :  "+rowNumber  +"  , "+columnAttributeName+"  ,   "+attributeValue+"  ,  "+ngRepeat +"    Xpath :  "+xpath);
         try
         {
             WebElement we = findElementByXpath(xpath);
             text = we.getText().trim();
+            System.out.println("Web And Text Values :"+text +"   ------  "+we .toString() );
         }
         catch(NoSuchElementException ex)
         {
@@ -1159,4 +1160,18 @@ public class OperatorV2SimplePage extends SimplePage
         waitUntilVisibilityOfElementLocated("//div[@aria-hidden='false']/md-menu-content");
         clickf("//div[@aria-hidden='false']/md-menu-content/md-menu-item/button/span[contains(text(), '%s')]", childMenuName);
     }
+
+    public void clickSampleOrderUpdateAndWaitUntilDone(String name)
+    {
+        String xpathExpression = f("//a[@filename='%s']", name);
+        click(xpathExpression);
+       // waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
+    }
+    public void clickNvButtonUploadByNameAndWaitUntilDone(String name)
+    {
+        String xpathExpression = f("//nv-api-text-button[@name='%s']", name);
+        click(xpathExpression);
+        waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'saving')]/md-progress-circular");
+    }
+
 }

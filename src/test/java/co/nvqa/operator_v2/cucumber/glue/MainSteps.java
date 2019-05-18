@@ -34,7 +34,7 @@ public class MainSteps extends AbstractSteps
     public void operatorGoToMenuWithoutQuote(String parentMenuName, String childMenuName)
     {
         operatorGoToMenu(parentMenuName, childMenuName);
-        pause(5*1000);
+        pause(3*1000);
     }
 
     @Given("^Operator go to this URL \"([^\"]*)\"$")
