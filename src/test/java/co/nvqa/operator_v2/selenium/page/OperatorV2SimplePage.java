@@ -788,7 +788,12 @@ public class OperatorV2SimplePage extends SimplePage
         sendKeys(searchBoxXpath, value);
         pause100ms();
         String optionXpath = menuContainerXpath + "//md-option";
-        click(optionXpath);
+        try
+        {
+            click(optionXpath);
+        } catch (NoSuchElementException ex){
+            throw new IllegalArgumentException(String.format("MdSelect Options were not found for search value [%s]", value), ex);
+        }
         pause100ms();
     }
 
