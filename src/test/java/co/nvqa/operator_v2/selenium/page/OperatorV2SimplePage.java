@@ -83,7 +83,9 @@ public class OperatorV2SimplePage extends SimplePage
     {
         clickf("//nv-icon-text-button[@name='%s']", name);
     }
-
+    public void clickToSelectMultiOrderWeightUpdate(String button){
+        click(button);
+    }
     public void clickNvIconTextButtonByNameAndWaitUntilDone(String name)
     {
         String xpathExpression = f("//nv-icon-text-button[@name='%s']", name);

@@ -263,7 +263,7 @@ public class OrderWeightUpdateStepsV2 extends AbstractSteps
     @Then("^Operator Order Weight update on Order Weight Update V2 page$")
     public void OrderWeightUpdate()
     {
-        pause(5*1000);
+        pause(2000);
         orderWeightUpdatePageV2.uploadOrderWeightUpload();
 
 
@@ -301,13 +301,56 @@ public class OrderWeightUpdateStepsV2 extends AbstractSteps
 
     }
 
+    @Given("^API create multiple V4 orders using data below:$")
+    public void shipperCreateMultipleV4Orders(Map<String,String> dataTableAsMap)
+    {
+        int numberOfOrder = Integer.parseInt(dataTableAsMap.getOrDefault("numberOfOrder", "1"));
+        System.out.println("Muliti order"+ numberOfOrder);
+        for(int i=0; i<numberOfOrder; i++)
+        {
+            apiCreateV4MultiOrder(dataTableAsMap);
+        }
+        put("numberOfOrder", numberOfOrder);
+    }
 
     @When("^Operator create order V2 by uploading CSV on Order Weight Update V2 page for multiple orders using data below:$")
     public void operatorCreateOrderV2ByUploadingCsvOnOrderWeightUpdatePageV2ForMultipleOrderUsingDataBelow(DataTable dataTable)
     {
         operatorCreateOrderByUploadingCsvOnOrderWeightUpdatePageV2ForMultipleOrdersUsingDataBelow(dataTable);
     }
+    @When("^Operator Multiple Order Weight update CSV Upload on Order Weight Update V2 page$")
+    public void multiOrderWeightUpdateUploadCsvFile(List listWeight)
+    {
 
+        List<String> listOfCreatedTrackingId = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+
+        if (listOfCreatedTrackingId == null || listOfCreatedTrackingId.isEmpty())
+        {
+            throw new RuntimeException("List of created Tracking ID should not be null or empty.");
+        }
+        //orderWeightUpdatePageV2.uploadMultiOrderUpdateCsv(listOfCreatedTrackingId,listWeight);
+        put("orderMultiweight", listWeight);
+        Long OrderId  =get(KEY_CREATED_ORDER_ID);
+        String OrderTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        orderWeightUpdatePageV2.uploadMultiOrderUpdateCsv(listOfCreatedTrackingId,listWeight);
+        pause(5*1000);
+
+    }
+    @Then("^Operator verify all orders Weights Updated  on All Orders page with correct info$")
+    public void operatorVerifyAllOrdersInCsvIsFoundOnAllOrdersPageWithCorrectInfo()
+    {
+        List<Order> listOfCreatedOrder = containsKey(KEY_LIST_OF_ORDER_DETAILS) ? get(KEY_LIST_OF_ORDER_DETAILS) : get(KEY_LIST_OF_CREATED_ORDER);
+
+        orderWeightUpdatePageV2.verifyAllOrdersInCsvIsFoundWithCorrectInfo(listOfCreatedOrder);
+    }
+    private void apiCreateV4MultiOrder(Map<String, String> dataTableAsMap)
+    {
+        OrderRequestV4 requestOrder = buildOrderRequestV4(dataTableAsMap);
+        OrderRequestV4 createdOrder = getOrderCreateClientV4().createOrder(requestOrder, "4.1");
+        String trackingNumber = createdOrder.getTrackingNumber();
+        Order order = retrieveOrderFromCore(trackingNumber);
+        storeOrderToScenarioStorage(order);
+    }
     private void operatorCreateOrderByUploadingCsvOnOrderWeightUpdatePageV2ForMultipleOrdersUsingDataBelow(DataTable dataTable)
     {
 

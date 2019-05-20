@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.util.NvAllure;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
@@ -204,6 +205,53 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
             throw new NvTestRuntimeException(ex);
         }
     }
+    public void verifyAllOrdersInCsvIsFoundWithCorrectInfo(List<Order> listOfCreatedOrder)
+    {
+        pause100ms();
+        listOfCreatedOrder.forEach(this::verifyOrderInfoOnTableOrderIsCorrect);
+
+    }
+
+    public void verifyOrderInfoOnTableOrderIsCorrect(Order order)
+    {
+        String trackingId = order.getTrackingId();
+        String orderId = ""+order.getId();
+        filterTableOrderByTrackingId(trackingId);
+        System.out.println("TrackID ==>"+ trackingId );
+        System.out.println("orderId ==>"+ orderId );
+            pause(10*1000);
+//        String actualTrackingId = getTextOnTableOrder(1, COLUMN_CLASS_DATA_TRACKING_ID_ON_TABLE_ORDER);
+//        String actualFromName = getTextOnTableOrder(1, COLUMN_CLASS_DATA_FROM_NAME_ON_TABLE_ORDER);
+//        String actualFromContact = getTextOnTableOrder(1, COLUMN_CLASS_DATA_FROM_CONTACT_ON_TABLE_ORDER);
+//        String actualFromAddress = getTextOnTableOrder(1, COLUMN_CLASS_DATA_FROM_ADDRESS_ON_TABLE_ORDER);
+//        String actualFromPostcode = getTextOnTableOrder(1, COLUMN_CLASS_DATA_FROM_POSTCODE_ON_TABLE_ORDER);
+//        String actualToName = getTextOnTableOrder(1, COLUMN_CLASS_DATA_TO_NAME_ON_TABLE_ORDER);
+//        String actualToContact = getTextOnTableOrder(1, COLUMN_CLASS_DATA_TO_CONTACT_ON_TABLE_ORDER);
+//        String actualToAddress = getTextOnTableOrder(1, COLUMN_CLASS_DATA_TO_ADDRESS_ON_TABLE_ORDER);
+//        String actualToPostcode = getTextOnTableOrder(1, COLUMN_CLASS_DATA_TO_POSTCODE_ON_TABLE_ORDER);
+//        String actualGranularStatus = getTextOnTableOrder(1, COLUMN_CLASS_DATA_GRANULAR_STATUS_ON_TABLE_ORDER);
+//
+//        assertEquals("Tracking ID", trackingId, actualTrackingId);
+//
+//        assertEquals("From Name", order.getFromName(), actualFromName);
+//        assertEquals("From Contact", order.getFromContact(), actualFromContact);
+//        assertThat("From Address", actualFromAddress, containsString(order.getFromAddress1()));
+//        assertThat("From Address", actualFromAddress, containsString(order.getFromAddress2()));
+//        assertEquals("From Postcode", order.getFromPostcode(), actualFromPostcode);
+//
+//        assertEquals("To Name", order.getToName(), actualToName);
+//        assertEquals("To Contact", order.getToContact(), actualToContact);
+//        assertThat("To Address", actualToAddress, containsString(order.getToAddress1()));
+//        assertThat("To Address", actualToAddress, containsString(order.getToAddress2()));
+//        assertEquals("To Postcode", order.getToPostcode(), actualToPostcode);
+//
+//        assertThat("Granular Status", actualGranularStatus, equalToIgnoringCase(order.getGranularStatus().replaceAll("_", " ")));
+    }
+    public void filterTableOrderByTrackingId(String trackingId)
+    {
+        searchTableCustom1("tracking-id", trackingId);
+    }
+
 
     public String getTextOnTable(int rowNumber, String columnDataClass)
     {
@@ -243,11 +291,54 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
             throw new NvTestRuntimeException(ex);
         }
     }
+    private File buildMultiCreateOrderUpdateCsv(List<String> trackIds,List listWeight)
+    {
+
+        try
+        {
+            File file = TestUtils.createFileOnTempFolder(String.format("create-mutli-order-update_%s.csv", generateDateUniqueString()));
+
+            PrintWriter pw = new PrintWriter(new FileOutputStream(file));
+            //pw.write("\"SHIPPER ID\",\"ORDER NO\",\"SHIPPER ORDER NO\",\"ORDER TYPE\",\"TO FIRST NAME*\",\"TO LAST NAME\",\"TO CONTACT*\",\"TO EMAIL\",\"TO ADDRESS 1*\",\"TO ADDRESS 2\",\"TO POSTCODE\",\"TO DISTRICT\",\"TO CITY\",\"TO STATE/PROVINCE\",\"TO COUNTRY\",\"PARCEL SIZE\",\"WEIGHT\",\"LENGTH\",\"WIDTH\",\"HEIGHT\",\"DELIVERY DATE\",\"DELIVERY TIMEWINDOW ID\",\"MAX DELIVERY DAYS\",\"PICKUP DATE\",\"PICKUP TIMEWINDOW ID\",\"PICKUP WEEKEND\",\"DELIVERY WEEKEND\",\"PICKUP INSTRUCTION\",\"DELIVERY INSTRUCTION\",\"COD VALUE\",\"INSURED VALUE\",\"FROM FIRST NAME*\",\"FROM LAST NAME\",\"FROM CONTACT*\",\"FROM EMAIL\",\"FROM ADDRESS 1*\",\"FROM ADDRESS 2\",\"FROM POSTCODE\",\"FROM DISTRICT\",\"FROM CITY\",\"FROM STATE/PROVINCE\",\"FROM COUNTRY\",\"MULTI PARCEL REF NO\"");
+            //pw.write(System.lineSeparator());
+
+            for (int i=0;i<trackIds.size();i++)
+            {
+                StringBuilder orderAsSb = new StringBuilder()
+                .append(normalize(trackIds.get(i))).append(',')
+                    .append('"').append(normalize(listWeight.get(i))).append('"');
+                pw.write(orderAsSb.toString());
+                pw.write(System.lineSeparator());
+
+            }
+            pause(2000);
+
+            pw.close();
+
+            return file;
+        }
+        catch(IOException ex)
+        {
+            throw new NvTestRuntimeException(ex);
+        }
+    }
     public void uploadOrderUpdateCsv(String OrderTrackingNo,Map<String,String> map)
     {
         File createOrderUpdateCsv = buildCreateOrderUpdateCsv(OrderTrackingNo,map);
 
         uploadOrderWeightCsv(createOrderUpdateCsv);
+    }
+    public void uploadMultiOrderUpdateCsv(List<String> trackId ,List listWeight)
+    {
+        File createOrderUpdateCsv = buildMultiCreateOrderUpdateCsv(trackId,listWeight);
+
+        uploadOrderWeightCsv(createOrderUpdateCsv);
+        pause(1000);
+        clickToSelectMultiOrderWeightUpdate("/html/body/div[1]/md-content/div/div/md-content/md-content/div[2]/div/div/nv-table/div/div[1]/table/thead/tr/th[7]/md-menu/button");
+        clickToSelectMultiOrderWeightUpdate("//*[@class='md-open-menu-container md-whiteframe-z2 md-active md-clickable']/md-menu-content/md-menu-item[1]/button");
+        pause(5*1000);
+        clickToSelectMultiOrderWeightUpdate("//nv-icon-text-button[@name='container.order-weight-update.upload-selected']");
+
     }
     public void uploadOrderWeightCsv(File createOrderUpdateCsv)
     {
