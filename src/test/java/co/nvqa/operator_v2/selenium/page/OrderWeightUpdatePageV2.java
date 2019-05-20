@@ -217,13 +217,13 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
     {
         clickSampleOrderUpdateAndWaitUntilDone("find-orders-with-csv.csv");
     }
-    private File buildCreateOrderUpdateCsv(OrderCreationV2Template order,Map<String,String> map)
+    private File buildCreateOrderUpdateCsv(String OrderTrackingNo,Map<String,String> map)
     {
        int weight= Integer.parseInt(map.get("weight"));
-       order.setWeight(weight);
+
         StringBuilder orderAsSb = new StringBuilder()
-                .append(normalize("SOCV2"+order.getOrderNo())).append(',')
-                .append('"').append(normalize(order.getWeight())).append('"');
+                .append(normalize(OrderTrackingNo)).append(',')
+                .append('"').append(normalize(weight)).append('"');
 
         try
         {
@@ -243,9 +243,9 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
             throw new NvTestRuntimeException(ex);
         }
     }
-    public void uploadOrderUpdateCsv(OrderCreationV2Template orderCreationV2Template, Map<String,String> map)
+    public void uploadOrderUpdateCsv(String OrderTrackingNo,Map<String,String> map)
     {
-        File createOrderUpdateCsv = buildCreateOrderUpdateCsv(orderCreationV2Template,map);
+        File createOrderUpdateCsv = buildCreateOrderUpdateCsv(OrderTrackingNo,map);
 
         uploadOrderWeightCsv(createOrderUpdateCsv);
     }
@@ -276,24 +276,24 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
     {
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
     }
-    public void clickOrderEditButton()
+    public void clickOrderEditButton(String OrderId)
     {
         clickNvIconButtonByNameAndWaitUntilEnabled("container.sidenav.order.edit");
 
-      // switchToOtherWindowAndWaitWhileLoading("4217061");
+      switchToOtherWindowAndWaitWhileLoading(OrderId);
     }
 
-    public void MatchOrderWeight(int UpdatedWeight)
+    public void MatchOrderWeight(String UpdatedWeight)
     {
 
         String xpath = "//label[text()='Weight']/following-sibling::p";
 
         try
         {
-            pause(5000);
+            pause(2000);
             String actualWeight = getText(xpath);
             System.out.println("Web And Text Values :"+actualWeight);
-            assertEquals("Order ID matched", UpdatedWeight, UpdatedWeight);
+            assertEquals("Order ID matched", actualWeight, UpdatedWeight+" kg");
         }
         catch(NoSuchElementException ex)
         {
@@ -370,6 +370,8 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
                     .append('"').append(normalize(order.get(i).getFromCountry())).append('"').append(',')
                     .append('"').append(normalize(order.get(i).getMultiParcelRefNo())).append('"');
 
+
+            System.out.println("Order At the File created   : "+order.get(i).getOrderNo() );
             pw.write(orderAsSb.toString());
             pw.write(System.lineSeparator());
         }
@@ -392,8 +394,8 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
     public void verifyOrderV2IsCreatedSuccessfullyForMultipleUsers(ListOrderCreationV2Template listOrderCreationV2Template)
             {
 
-                List<OrderCreationV2Template> list=new ArrayList<>();
-                for (int i=1;i<=list.size();i++) {
+
+                for (int i=1;i<=listOrderCreationV2Template.size();i++) {
                     verifyOrderIsCreatedSuccessfullyForMultipleOrders("-", true, listOrderCreationV2Template.getOrderCreationV2TemplatesList().get(1).getOrderNo(), "-",i);
                 }
             }
@@ -407,6 +409,7 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
 
         assertEquals("Status", "SUCCESS", status);
         assertEquals("Message", expectedMessage, message);
+        System.out.println("Colum "+index+"        "+trackingId);
 
 
         System.out.println("VerifyTrackId    "+trackingId  +"  expected Tracking Id : " +expectedTrackingIdEndsWith);
@@ -421,20 +424,41 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
 
     public void uploadOrderUpdateCsvForMultipleUsers(ListOrderCreationV2Template orderCreationV2Template, Map<String,String> map)
     {
+        File createOrderUpdateCsv = buildCreateOrderUpdateCsvForMultipleUsers(orderCreationV2Template,map);
+
+        uploadOrderWeightCsv(createOrderUpdateCsv);
 
     }
-    private File buildCreateOrderUpdateCsvForMultipleUsers(OrderCreationV2Template order,Map<String,String> map)
+    private File buildCreateOrderUpdateCsvForMultipleUsers(ListOrderCreationV2Template order,Map<String,String> map)
     {
         try {
+            System.out.println("ListOrderCreation :-   "+order.size());
             File file = TestUtils.createFileOnTempFolder(String.format("create-order-update_%s.csv", generateDateUniqueString()));
-
+            List list=new ArrayList();
             PrintWriter pw = new PrintWriter(new FileOutputStream(file));
-            for (int i=1;i<=map.size();i++) {
-                int weight= Integer.parseInt(map.get("weight"+i));
-                order.setWeight(weight);
+            OrderCreationV2Template orderCreationV2Template=new OrderCreationV2Template();
+
+
+
+
+
+
+            for (int i=0;i<map.size();i++) {
+                int weight= Integer.parseInt(map.get("weight"+(i+1)));
+//
+//                System.out.println("Weight  ........ "+weight);
+//
+//                    orderCreationV2Template.setWeight(weight);
+//                    list.add(orderCreationV2Template);
+//
+//
+//
+//                order.setOrderCreationV2TemplatesList(list);
+//                order.getOrderCreationV2TemplatesList().get(i).setWeight(weight);
+
                 StringBuilder orderAsSb = new StringBuilder()
-                        .append(normalize("SOCV2" + order.getOrderNo())).append(',')
-                        .append('"').append(normalize(order.getWeight())).append('"');
+                        .append(normalize("SOCV2" + order.getOrderCreationV2TemplatesList().get(i).getOrderNo())).append(',')
+                        .append('"').append(normalize(weight)).append('"');
 
 
                 pw.write(orderAsSb.toString());
