@@ -16,7 +16,8 @@ Feature: Test Cucumber
       | id   | 3      |
       | name | Test 3 |
 
-  Scenario: Test Cucumber API
+    @CWF @RT
+  Scenario: Dummy scenario for Reject Reservation
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator create new shipper address V2 using data below:
@@ -26,3 +27,6 @@ Feature: Test Cucumber
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator add reservation pick-up to the route
     And API Operator start the route
+    And API Driver collect all his routes
+    And API Driver get Reservation Job
+    And API Driver reject Reservation
