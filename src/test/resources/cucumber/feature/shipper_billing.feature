@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @ShipperBilling @Saas @Debug
+@OperatorV2 @OperatorV2Part2 @ShipperBilling @Saas
 Feature: Shipper Pickups
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
