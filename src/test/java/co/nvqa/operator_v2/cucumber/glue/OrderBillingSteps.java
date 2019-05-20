@@ -26,10 +26,16 @@ public class OrderBillingSteps extends AbstractSteps
         orderBillingPage = new OrderBillingPage(getWebDriver());
     }
 
-    @Then("^Operator verifies attached CSV file in received email$")
-    public void operatorVerifiesAttachedCSVFileInReceivedEmail()
+    @Then("^Operator verifies zip attached with multiple CSV files in received email$")
+    public void operatorVerifiesAttachedZipFileInReceivedEmail()
     {
-        orderBillingPage.verifyOrderBillingAttachment(get(KEY_ORDER_BILLING_START_DATE), get(KEY_ORDER_BILLING_END_DATE));
+        orderBillingPage.verifyOrderBillingZipAttachment(get(KEY_ORDER_BILLING_START_DATE), get(KEY_ORDER_BILLING_END_DATE));
+    }
+
+    @Then("^Operator verifies attached CSV file in received email$")
+    public void operatorVerifiesAttachedCsvFileInReceivedEmail()
+    {
+        orderBillingPage.verifyOrderBillingCsvAttachment(get(KEY_CREATED_ORDER));
     }
 
     @When("^Operator generates success billings using data below:$")
@@ -54,7 +60,10 @@ public class OrderBillingSteps extends AbstractSteps
         {
             throw new NvTestRuntimeException("Failed to parse date.", e);
         }
-
+        if(Objects.nonNull(mapOfData.get("shipper")))
+        {
+            orderBillingPage.setSpecificShipper(mapOfData.get("shipper"));
+        }
         if(Objects.nonNull(mapOfData.get("generateFile")))
         {
             orderBillingPage.tickGenerateTheseFilesOption(mapOfData.get("generateFile"));
