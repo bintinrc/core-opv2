@@ -23,12 +23,10 @@ import java.util.Map;
 import static javax.swing.UIManager.put;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
-{
+public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage {
     private static final String NG_REPEAT = "row in $data";
     private static final String CSV_FILENAME_PATTERN = "sample_csv";
 
@@ -37,55 +35,46 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
     public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking_id";
     public static final String COLUMN_CLASS_DATA_ORDER_REF_NO = "order_ref_no";
 
-    public OrderWeightUpdatePageV2(WebDriver webDriver)
-    {
+    public OrderWeightUpdatePageV2(WebDriver webDriver) {
         super(webDriver);
     }
 
-    public void downloadSampleCsvFile()
-    {
+    public void downloadSampleCsvFile() {
         clickNvApiTextButtonByNameAndWaitUntilDone("Download sample CSV file");
     }
 
-    public void verifyCsvFileDownloadedSuccessfully()
-    {
+    public void verifyCsvFileDownloadedSuccessfully() {
         verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN));
     }
 
-    public void uploadInvalidCsv()
-    {
+    public void uploadInvalidCsv() {
         uploadCsv(buildInvalidCsvFile());
     }
 
-    public void uploadCsv(OrderCreationV2Template orderCreationV2Template)
-    {
+    public void uploadCsv(OrderCreationV2Template orderCreationV2Template) {
         File createOrderCsv = buildCreateOrderCsv(orderCreationV2Template);
         // File createOrderUpdateCsv = buildCreateOrderUpdateCsv(orderCreationV2Template);
 
         uploadCsv(createOrderCsv);
     }
 
-    public void uploadCsv(File createOrderCsv)
-    {
+    public void uploadCsv(File createOrderCsv) {
         clickNvIconTextButtonByName("Create Order");
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'file-select')]");
         sendKeysByAriaLabel("Choose", createOrderCsv.getAbsolutePath());
         clickNvButtonSaveByNameAndWaitUntilDone("Submit");
     }
 
-    public void verifyOrderV2IsCreatedSuccessfully(OrderCreationV2Template orderCreationV2Template)
-    {
+    public void verifyOrderV2IsCreatedSuccessfully(OrderCreationV2Template orderCreationV2Template) {
 
         verifyOrderIsCreatedSuccessfully("-", true, orderCreationV2Template.getOrderNo(), "-");
     }
 
-    public void verifyOrderV3IsCreatedSuccessfully(OrderCreationV2Template orderCreationV2Template)
-    {
+    public void verifyOrderV3IsCreatedSuccessfully(OrderCreationV2Template orderCreationV2Template) {
         verifyOrderIsCreatedSuccessfully("Order Creation Successful.", true, orderCreationV2Template.getOrderNo(), orderCreationV2Template.getShipperOrderNo());
     }
 
-    private void verifyOrderIsCreatedSuccessfully(String expectedMessage, boolean validateTrackingId, String expectedTrackingIdEndsWith, String expectedOrderRefNo)
-    {
+    private void verifyOrderIsCreatedSuccessfully(String expectedMessage, boolean validateTrackingId, String expectedTrackingIdEndsWith, String expectedOrderRefNo) {
         String status = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
         String message = getTextOnTable(1, COLUMN_CLASS_DATA_MESSAGE);
         String trackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
@@ -95,17 +84,15 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
         assertEquals("Message", expectedMessage, message);
 
 
-        System.out.println("VerifyTrackId    "+trackingId  +"  expected Tracking Id : " +expectedTrackingIdEndsWith);
-        if(validateTrackingId)
-        {
+        System.out.println("VerifyTrackId    " + trackingId + "  expected Tracking Id : " + expectedTrackingIdEndsWith);
+        if (validateTrackingId) {
             assertEquals("Tracking ID", expectedTrackingIdEndsWith, expectedTrackingIdEndsWith); // Tracking ID not displayed when using V2.
         }
 
         assertEquals("Order Ref No", orderRefNo, orderRefNo);
     }
 
-    public void verifyOrderIsNotCreated()
-    {
+    public void verifyOrderIsNotCreated() {
         String status = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
         String message = getTextOnTable(1, COLUMN_CLASS_DATA_MESSAGE);
         String trackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
@@ -113,18 +100,15 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
         assertEquals("Status", "FAIL", status);
         assertThat("Message", message, Matchers.startsWith("Invalid requested tracking ID"));
         assertThat("Tracking ID", trackingId, Matchers.isEmptyString());
-        System.out.println("Invalide Tracking ID :    "+trackingId+"      Message :  "+message);
+        System.out.println("Invalide Tracking ID :    " + trackingId + "      Message :  " + message);
     }
 
-    private String normalize(Object value)
-    {
-        return value==null ? "" : String.valueOf(value);
+    private String normalize(Object value) {
+        return value == null ? "" : String.valueOf(value);
     }
 
-    private File buildInvalidCsvFile()
-    {
-        try
-        {
+    private File buildInvalidCsvFile() {
+        try {
             File file = TestUtils.createFileOnTempFolder(String.format("invalid-create-order-request_%s.csv", generateDateUniqueString()));
 
             PrintWriter pw = new PrintWriter(new FileOutputStream(file));
@@ -133,15 +117,12 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
             pw.close();
 
             return file;
-        }
-        catch(IOException ex)
-        {
+        } catch (IOException ex) {
             throw new NvTestRuntimeException(ex);
         }
     }
 
-    private File buildCreateOrderCsv(OrderCreationV2Template order)
-    {
+    private File buildCreateOrderCsv(OrderCreationV2Template order) {
         StringBuilder orderAsSb = new StringBuilder()
                 .append(normalize(order.getShipperId())).append(',')
                 .append(normalize(order.getOrderNo())).append(',')
@@ -187,8 +168,7 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
                 .append('"').append(normalize(order.getFromCountry())).append('"').append(',')
                 .append('"').append(normalize(order.getMultiParcelRefNo())).append('"');
 
-        try
-        {
+        try {
             File file = TestUtils.createFileOnTempFolder(String.format("create-order-request_%s.csv", generateDateUniqueString()));
 
             PrintWriter pw = new PrintWriter(new FileOutputStream(file));
@@ -199,27 +179,46 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
             pw.close();
 
             return file;
-        }
-        catch(IOException ex)
-        {
+        } catch (IOException ex) {
             throw new NvTestRuntimeException(ex);
         }
     }
-    public void verifyAllOrdersInCsvIsFoundWithCorrectInfo(List<Order> listOfCreatedOrder)
-    {
+
+    public void verifyAllOrdersInCsvIsFoundWithCorrectInfo(List<Order> listOfCreatedOrder, List orderWeight) {
         pause100ms();
-        listOfCreatedOrder.forEach(this::verifyOrderInfoOnTableOrderIsCorrect);
+        for (int i = 0; i < orderWeight.size(); i++) {
+            String trackingId = listOfCreatedOrder.get(i).getTrackingId();
+            String orderId = "" + listOfCreatedOrder.get(i).getId();
+            String Weight = String.valueOf(orderWeight.get(i));
+            filterTableOrderByTrackingId(trackingId);
+            pause100ms();
+            clickNvIconButtonByNameAndWaitUntilEnabled("container.sidenav.order.edit");
+            switchToOtherWindowAndWaitWhileLoading(orderId);
+            String xpath = "//label[text()='Weight']/following-sibling::p";
+            pause(2000);
+            String actualWeight = getText(xpath);
+            System.out.println("Web And Text Values :" + actualWeight);
+            assertEquals("Order ID matched", actualWeight, Weight + " kg");
+            pause(5 * 1000);
+            switchToOtherWindow("order");
+            pause(1000);
+            System.out.println("Weight get from storge===>" + orderWeight.get(i));
+            System.out.println("list tracking id==>" + trackingId);
+            System.out.println("list tracking id==>" + orderId);
+
+        }
+        //listOfCreatedOrder.forEach(this::verifyOrderInfoOnTableOrderIsCorrect);
+
 
     }
 
-    public void verifyOrderInfoOnTableOrderIsCorrect(Order order)
-    {
+    public void verifyOrderInfoOnTableOrderIsCorrect(Order order) {
         String trackingId = order.getTrackingId();
-        String orderId = ""+order.getId();
+        String orderId = "" + order.getId();
         filterTableOrderByTrackingId(trackingId);
-        System.out.println("TrackID ==>"+ trackingId );
-        System.out.println("orderId ==>"+ orderId );
-            pause(10*1000);
+        System.out.println("TrackID ==>" + trackingId);
+        System.out.println("orderId ==>" + orderId);
+        pause(10 * 1000);
 //        String actualTrackingId = getTextOnTableOrder(1, COLUMN_CLASS_DATA_TRACKING_ID_ON_TABLE_ORDER);
 //        String actualFromName = getTextOnTableOrder(1, COLUMN_CLASS_DATA_FROM_NAME_ON_TABLE_ORDER);
 //        String actualFromContact = getTextOnTableOrder(1, COLUMN_CLASS_DATA_FROM_CONTACT_ON_TABLE_ORDER);
@@ -247,34 +246,32 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
 //
 //        assertThat("Granular Status", actualGranularStatus, equalToIgnoringCase(order.getGranularStatus().replaceAll("_", " ")));
     }
-    public void filterTableOrderByTrackingId(String trackingId)
-    {
+
+    public void filterTableOrderByTrackingId(String trackingId) {
         searchTableCustom1("tracking-id", trackingId);
     }
 
 
-    public String getTextOnTable(int rowNumber, String columnDataClass)
-    {
+    public String getTextOnTable(int rowNumber, String columnDataClass) {
         return getTextOnTableWithNgRepeat(rowNumber, columnDataClass, NG_REPEAT);
     }
-    public void downloadOrderWeightUpdateSampleCsvFile()
-    {
+
+    public void downloadOrderWeightUpdateSampleCsvFile() {
         clickNvIconTextButtonByName("container.order-weight-update.find-orders-with-csv");
     }
-    public void downloadOrderUpdateCsvFile()
-    {
+
+    public void downloadOrderUpdateCsvFile() {
         clickSampleOrderUpdateAndWaitUntilDone("find-orders-with-csv.csv");
     }
-    private File buildCreateOrderUpdateCsv(String OrderTrackingNo,Map<String,String> map)
-    {
-       int weight= Integer.parseInt(map.get("weight"));
+
+    private File buildCreateOrderUpdateCsv(String OrderTrackingNo, Map<String, String> map) {
+        int weight = Integer.parseInt(map.get("weight"));
 
         StringBuilder orderAsSb = new StringBuilder()
                 .append(normalize(OrderTrackingNo)).append(',')
                 .append('"').append(normalize(weight)).append('"');
 
-        try
-        {
+        try {
             File file = TestUtils.createFileOnTempFolder(String.format("create-order-update_%s.csv", generateDateUniqueString()));
 
             PrintWriter pw = new PrintWriter(new FileOutputStream(file));
@@ -285,28 +282,24 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
             pw.close();
 
             return file;
-        }
-        catch(IOException ex)
-        {
+        } catch (IOException ex) {
             throw new NvTestRuntimeException(ex);
         }
     }
-    private File buildMultiCreateOrderUpdateCsv(List<String> trackIds,List listWeight)
-    {
 
-        try
-        {
+    private File buildMultiCreateOrderUpdateCsv(List<String> trackIds, List listWeight) {
+
+        try {
             File file = TestUtils.createFileOnTempFolder(String.format("create-mutli-order-update_%s.csv", generateDateUniqueString()));
 
             PrintWriter pw = new PrintWriter(new FileOutputStream(file));
             //pw.write("\"SHIPPER ID\",\"ORDER NO\",\"SHIPPER ORDER NO\",\"ORDER TYPE\",\"TO FIRST NAME*\",\"TO LAST NAME\",\"TO CONTACT*\",\"TO EMAIL\",\"TO ADDRESS 1*\",\"TO ADDRESS 2\",\"TO POSTCODE\",\"TO DISTRICT\",\"TO CITY\",\"TO STATE/PROVINCE\",\"TO COUNTRY\",\"PARCEL SIZE\",\"WEIGHT\",\"LENGTH\",\"WIDTH\",\"HEIGHT\",\"DELIVERY DATE\",\"DELIVERY TIMEWINDOW ID\",\"MAX DELIVERY DAYS\",\"PICKUP DATE\",\"PICKUP TIMEWINDOW ID\",\"PICKUP WEEKEND\",\"DELIVERY WEEKEND\",\"PICKUP INSTRUCTION\",\"DELIVERY INSTRUCTION\",\"COD VALUE\",\"INSURED VALUE\",\"FROM FIRST NAME*\",\"FROM LAST NAME\",\"FROM CONTACT*\",\"FROM EMAIL\",\"FROM ADDRESS 1*\",\"FROM ADDRESS 2\",\"FROM POSTCODE\",\"FROM DISTRICT\",\"FROM CITY\",\"FROM STATE/PROVINCE\",\"FROM COUNTRY\",\"MULTI PARCEL REF NO\"");
             //pw.write(System.lineSeparator());
 
-            for (int i=0;i<trackIds.size();i++)
-            {
+            for (int i = 0; i < trackIds.size(); i++) {
                 StringBuilder orderAsSb = new StringBuilder()
-                .append(normalize(trackIds.get(i))).append(',')
-                    .append('"').append(normalize(listWeight.get(i))).append('"');
+                        .append(normalize(trackIds.get(i))).append(',')
+                        .append('"').append(normalize(listWeight.get(i))).append('"');
                 pw.write(orderAsSb.toString());
                 pw.write(System.lineSeparator());
 
@@ -316,183 +309,164 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
             pw.close();
 
             return file;
-        }
-        catch(IOException ex)
-        {
+        } catch (IOException ex) {
             throw new NvTestRuntimeException(ex);
         }
     }
-    public void uploadOrderUpdateCsv(String OrderTrackingNo,Map<String,String> map)
-    {
-        File createOrderUpdateCsv = buildCreateOrderUpdateCsv(OrderTrackingNo,map);
+
+    public void uploadOrderUpdateCsv(String OrderTrackingNo, Map<String, String> map) {
+        File createOrderUpdateCsv = buildCreateOrderUpdateCsv(OrderTrackingNo, map);
 
         uploadOrderWeightCsv(createOrderUpdateCsv);
     }
-    public void uploadMultiOrderUpdateCsv(List<String> trackId ,List listWeight)
-    {
-        File createOrderUpdateCsv = buildMultiCreateOrderUpdateCsv(trackId,listWeight);
+
+    public void uploadMultiOrderUpdateCsv(List<String> trackId, List listWeight) {
+        File createOrderUpdateCsv = buildMultiCreateOrderUpdateCsv(trackId, listWeight);
 
         uploadOrderWeightCsv(createOrderUpdateCsv);
         pause(1000);
         clickToSelectMultiOrderWeightUpdate("/html/body/div[1]/md-content/div/div/md-content/md-content/div[2]/div/div/nv-table/div/div[1]/table/thead/tr/th[7]/md-menu/button");
         clickToSelectMultiOrderWeightUpdate("//*[@class='md-open-menu-container md-whiteframe-z2 md-active md-clickable']/md-menu-content/md-menu-item[1]/button");
-        pause(5*1000);
+        pause(5 * 1000);
         clickToSelectMultiOrderWeightUpdate("//nv-icon-text-button[@name='container.order-weight-update.upload-selected']");
 
     }
-    public void uploadOrderWeightCsv(File createOrderUpdateCsv)
-    {
+
+    public void uploadOrderWeightCsv(File createOrderUpdateCsv) {
         clickNvIconTextButtonByName("container.order-weight-update.find-orders-with-csv");
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'order-find-by-csv nv-dataset-dialog md-nvYellow-theme md-transition-in')]");
         sendKeysByAriaLabel("Choose", createOrderUpdateCsv.getAbsolutePath());
         clickNvButtonUploadByNameAndWaitUntilDone("commons.upload");
     }
-    public void uploadOrderWeightUpload()
-    {
+
+    public void uploadOrderWeightUpload() {
         clickNvIconTextButtonByName("container.order-weight-update.upload-selected");
     }
-    public void uploadCsvForMultipleOrders(ListOrderCreationV2Template orderCreationV2Template)
-    {
+
+    public void uploadCsvForMultipleOrders(ListOrderCreationV2Template orderCreationV2Template) {
         File createOrderCsv = buildCreateOrderCsvForMultipleOrders(orderCreationV2Template);
 
         uploadCsv(createOrderCsv);
     }
 
-    public void VerifyOrderWeightUpload(String searchTrackingId)
-    {
+    public void VerifyOrderWeightUpload(String searchTrackingId) {
         sendKeys("//nv-table[@param='ctrl.ordersTableParam']//th[contains(@class, 'tracking-id')]/nv-search-input-filter/md-input-container/div/input", searchTrackingId);
     }
 
-    public void clickOrderSearchButton()
-    {
+    public void clickOrderSearchButton() {
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
     }
-    public void clickOrderEditButton(String OrderId)
-    {
+
+    public void clickOrderEditButton(String OrderId) {
         clickNvIconButtonByNameAndWaitUntilEnabled("container.sidenav.order.edit");
 
-      switchToOtherWindowAndWaitWhileLoading(OrderId);
+        switchToOtherWindowAndWaitWhileLoading(OrderId);
     }
 
-    public void MatchOrderWeight(String UpdatedWeight)
-    {
+    public void MatchOrderWeight(String UpdatedWeight) {
 
         String xpath = "//label[text()='Weight']/following-sibling::p";
 
-        try
-        {
+        try {
             pause(2000);
             String actualWeight = getText(xpath);
-            System.out.println("Web And Text Values :"+actualWeight);
-            assertEquals("Order ID matched", actualWeight, UpdatedWeight+" kg");
-        }
-        catch(NoSuchElementException ex)
-        {
+            System.out.println("Web And Text Values :" + actualWeight);
+            assertEquals("Order ID matched", actualWeight, UpdatedWeight + " kg");
+        } catch (NoSuchElementException ex) {
             NvLogger.warnf("Failed to getTextOnTableWithNgRepeat. XPath: %s", "");
             NvAllure.addWarnAttachment(getCurrentMethodName(), "Failed to getTextOnTableWithNgRepeat. XPath: %s", "");
-            System.out.println("Exception Occures   "+ex.toString()   );
+            System.out.println("Exception Occures   " + ex.toString());
         }
 
     }
 
 
-
-
-    public void ClickSearchOrder()
-    {
+    public void ClickSearchOrder() {
         clickNvIconTextButtonByName("container.order-weight-update.find-orders-with-csv");
 //        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'order-find-by-csv nv-dataset-dialog md-nvYellow-theme md-transition-in')]");
 
 
     }
-    private File buildCreateOrderCsvForMultipleOrders(ListOrderCreationV2Template listOrderCreationV2Template)
-    {
-        try
-        {
-        StringBuilder orderAsSb = new StringBuilder();
-        File file = TestUtils.createFileOnTempFolder(String.format("create-order-request_%s.csv", generateDateUniqueString()));
-       List<OrderCreationV2Template> order= listOrderCreationV2Template.getOrderCreationV2TemplatesList();
-        PrintWriter pw = new PrintWriter(new FileOutputStream(file));
-        pw.write("\"SHIPPER ID\",\"ORDER NO\",\"SHIPPER ORDER NO\",\"ORDER TYPE\",\"TO FIRST NAME*\",\"TO LAST NAME\",\"TO CONTACT*\",\"TO EMAIL\",\"TO ADDRESS 1*\",\"TO ADDRESS 2\",\"TO POSTCODE\",\"TO DISTRICT\",\"TO CITY\",\"TO STATE/PROVINCE\",\"TO COUNTRY\",\"PARCEL SIZE\",\"WEIGHT\",\"LENGTH\",\"WIDTH\",\"HEIGHT\",\"DELIVERY DATE\",\"DELIVERY TIMEWINDOW ID\",\"MAX DELIVERY DAYS\",\"PICKUP DATE\",\"PICKUP TIMEWINDOW ID\",\"PICKUP WEEKEND\",\"DELIVERY WEEKEND\",\"PICKUP INSTRUCTION\",\"DELIVERY INSTRUCTION\",\"COD VALUE\",\"INSURED VALUE\",\"FROM FIRST NAME*\",\"FROM LAST NAME\",\"FROM CONTACT*\",\"FROM EMAIL\",\"FROM ADDRESS 1*\",\"FROM ADDRESS 2\",\"FROM POSTCODE\",\"FROM DISTRICT\",\"FROM CITY\",\"FROM STATE/PROVINCE\",\"FROM COUNTRY\",\"MULTI PARCEL REF NO\"");
-         pw.write(System.lineSeparator());
-        for (int i=0;i<order.size();i++) {
 
-                    orderAsSb.append(normalize(order.get(i).getShipperId())).append(',')
-                    .append(normalize(order.get(i).getOrderNo())).append(',')
-                    .append('"').append(normalize(order.get(i).getShipperOrderNo())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getOrderType())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getToFirstName())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getToLastName())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getToContact())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getToEmail())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getToAddress1())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getToAddress2())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getToPostcode())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getToDistrict())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getToCity())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getToStateOrProvince())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getToCountry())).append('"').append(',')
-                    .append(normalize(order.get(i).getParcelSize())).append(',')
-                    .append(normalize(order.get(i).getWeight())).append(',')
-                    .append(normalize(order.get(i).getLength())).append(',')
-                    .append(normalize(order.get(i).getWidth())).append(',')
-                    .append(normalize(order.get(i).getHeight())).append(',')
-                    .append('"').append(normalize(order.get(i).getDeliveryDate())).append('"').append(',')
-                    .append(normalize(order.get(i).getDeliveryTimewindowId())).append(',')
-                    .append(normalize(order.get(i).getMaxDeliveryDays())).append(',')
-                    .append('"').append(normalize(order.get(i).getPickupDate())).append('"').append(',')
-                    .append(normalize(order.get(i).getPickupTimewindowId())).append(',')
-                    .append('"').append(normalize(order.get(i).isPickupWeekend()).toUpperCase()).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).isDeliveryWeekend()).toUpperCase()).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getPickupInstruction())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getDeliveryInstruction())).append('"').append(',')
-                    .append(normalize(order.get(i).getCodValue())).append(',')
-                    .append(normalize(order.get(i).getInsuredValue())).append(',')
-                    .append('"').append(normalize(order.get(i).getFromFirstName())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getFromLastName())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getFromContact())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getFromEmail())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getFromAddress1())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getFromAddress2())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getFromPostcode())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getFromDistrict())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getFromCity())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getFromStateOrProvince())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getFromCountry())).append('"').append(',')
-                    .append('"').append(normalize(order.get(i).getMultiParcelRefNo())).append('"');
-
-
-            System.out.println("Order At the File created   : "+order.get(i).getOrderNo() );
-            pw.write(orderAsSb.toString());
+    private File buildCreateOrderCsvForMultipleOrders(ListOrderCreationV2Template listOrderCreationV2Template) {
+        try {
+            StringBuilder orderAsSb = new StringBuilder();
+            File file = TestUtils.createFileOnTempFolder(String.format("create-order-request_%s.csv", generateDateUniqueString()));
+            List<OrderCreationV2Template> order = listOrderCreationV2Template.getOrderCreationV2TemplatesList();
+            PrintWriter pw = new PrintWriter(new FileOutputStream(file));
+            pw.write("\"SHIPPER ID\",\"ORDER NO\",\"SHIPPER ORDER NO\",\"ORDER TYPE\",\"TO FIRST NAME*\",\"TO LAST NAME\",\"TO CONTACT*\",\"TO EMAIL\",\"TO ADDRESS 1*\",\"TO ADDRESS 2\",\"TO POSTCODE\",\"TO DISTRICT\",\"TO CITY\",\"TO STATE/PROVINCE\",\"TO COUNTRY\",\"PARCEL SIZE\",\"WEIGHT\",\"LENGTH\",\"WIDTH\",\"HEIGHT\",\"DELIVERY DATE\",\"DELIVERY TIMEWINDOW ID\",\"MAX DELIVERY DAYS\",\"PICKUP DATE\",\"PICKUP TIMEWINDOW ID\",\"PICKUP WEEKEND\",\"DELIVERY WEEKEND\",\"PICKUP INSTRUCTION\",\"DELIVERY INSTRUCTION\",\"COD VALUE\",\"INSURED VALUE\",\"FROM FIRST NAME*\",\"FROM LAST NAME\",\"FROM CONTACT*\",\"FROM EMAIL\",\"FROM ADDRESS 1*\",\"FROM ADDRESS 2\",\"FROM POSTCODE\",\"FROM DISTRICT\",\"FROM CITY\",\"FROM STATE/PROVINCE\",\"FROM COUNTRY\",\"MULTI PARCEL REF NO\"");
             pw.write(System.lineSeparator());
-        }
+            for (int i = 0; i < order.size(); i++) {
 
+                orderAsSb.append(normalize(order.get(i).getShipperId())).append(',')
+                        .append(normalize(order.get(i).getOrderNo())).append(',')
+                        .append('"').append(normalize(order.get(i).getShipperOrderNo())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getOrderType())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getToFirstName())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getToLastName())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getToContact())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getToEmail())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getToAddress1())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getToAddress2())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getToPostcode())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getToDistrict())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getToCity())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getToStateOrProvince())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getToCountry())).append('"').append(',')
+                        .append(normalize(order.get(i).getParcelSize())).append(',')
+                        .append(normalize(order.get(i).getWeight())).append(',')
+                        .append(normalize(order.get(i).getLength())).append(',')
+                        .append(normalize(order.get(i).getWidth())).append(',')
+                        .append(normalize(order.get(i).getHeight())).append(',')
+                        .append('"').append(normalize(order.get(i).getDeliveryDate())).append('"').append(',')
+                        .append(normalize(order.get(i).getDeliveryTimewindowId())).append(',')
+                        .append(normalize(order.get(i).getMaxDeliveryDays())).append(',')
+                        .append('"').append(normalize(order.get(i).getPickupDate())).append('"').append(',')
+                        .append(normalize(order.get(i).getPickupTimewindowId())).append(',')
+                        .append('"').append(normalize(order.get(i).isPickupWeekend()).toUpperCase()).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).isDeliveryWeekend()).toUpperCase()).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getPickupInstruction())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getDeliveryInstruction())).append('"').append(',')
+                        .append(normalize(order.get(i).getCodValue())).append(',')
+                        .append(normalize(order.get(i).getInsuredValue())).append(',')
+                        .append('"').append(normalize(order.get(i).getFromFirstName())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getFromLastName())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getFromContact())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getFromEmail())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getFromAddress1())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getFromAddress2())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getFromPostcode())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getFromDistrict())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getFromCity())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getFromStateOrProvince())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getFromCountry())).append('"').append(',')
+                        .append('"').append(normalize(order.get(i).getMultiParcelRefNo())).append('"');
+
+
+                System.out.println("Order At the File created   : " + order.get(i).getOrderNo());
+                pw.write(orderAsSb.toString());
+                pw.write(System.lineSeparator());
+            }
 
 
             pw.close();
 
             return file;
-        }
-        catch(IOException ex)
-        {
+        } catch (IOException ex) {
             throw new NvTestRuntimeException(ex);
         }
     }
 
 
+    public void verifyOrderV2IsCreatedSuccessfullyForMultipleUsers(ListOrderCreationV2Template listOrderCreationV2Template) {
 
 
-    public void verifyOrderV2IsCreatedSuccessfullyForMultipleUsers(ListOrderCreationV2Template listOrderCreationV2Template)
-            {
+        for (int i = 1; i <= listOrderCreationV2Template.size(); i++) {
+            verifyOrderIsCreatedSuccessfullyForMultipleOrders("-", true, listOrderCreationV2Template.getOrderCreationV2TemplatesList().get(1).getOrderNo(), "-", i);
+        }
+    }
 
-
-                for (int i=1;i<=listOrderCreationV2Template.size();i++) {
-                    verifyOrderIsCreatedSuccessfullyForMultipleOrders("-", true, listOrderCreationV2Template.getOrderCreationV2TemplatesList().get(1).getOrderNo(), "-",i);
-                }
-            }
-
-    private void verifyOrderIsCreatedSuccessfullyForMultipleOrders(String expectedMessage, boolean validateTrackingId, String expectedTrackingIdEndsWith, String expectedOrderRefNo,int index)
-    {
+    private void verifyOrderIsCreatedSuccessfullyForMultipleOrders(String expectedMessage, boolean validateTrackingId, String expectedTrackingIdEndsWith, String expectedOrderRefNo, int index) {
         String status = getTextOnTable(index, COLUMN_CLASS_DATA_STATUS);
         String message = getTextOnTable(index, COLUMN_CLASS_DATA_MESSAGE);
         String trackingId = getTextOnTable(index, COLUMN_CLASS_DATA_TRACKING_ID);
@@ -500,12 +474,11 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
 
         assertEquals("Status", "SUCCESS", status);
         assertEquals("Message", expectedMessage, message);
-        System.out.println("Colum "+index+"        "+trackingId);
+        System.out.println("Colum " + index + "        " + trackingId);
 
 
-        System.out.println("VerifyTrackId    "+trackingId  +"  expected Tracking Id : " +expectedTrackingIdEndsWith);
-        if(validateTrackingId)
-        {
+        System.out.println("VerifyTrackId    " + trackingId + "  expected Tracking Id : " + expectedTrackingIdEndsWith);
+        if (validateTrackingId) {
             assertEquals("Tracking ID", expectedTrackingIdEndsWith, expectedTrackingIdEndsWith); // Tracking ID not displayed when using V2.
         }
 
@@ -513,29 +486,24 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
     }
 
 
-    public void uploadOrderUpdateCsvForMultipleUsers(ListOrderCreationV2Template orderCreationV2Template, Map<String,String> map)
-    {
-        File createOrderUpdateCsv = buildCreateOrderUpdateCsvForMultipleUsers(orderCreationV2Template,map);
+    public void uploadOrderUpdateCsvForMultipleUsers(ListOrderCreationV2Template orderCreationV2Template, Map<String, String> map) {
+        File createOrderUpdateCsv = buildCreateOrderUpdateCsvForMultipleUsers(orderCreationV2Template, map);
 
         uploadOrderWeightCsv(createOrderUpdateCsv);
 
     }
-    private File buildCreateOrderUpdateCsvForMultipleUsers(ListOrderCreationV2Template order,Map<String,String> map)
-    {
+
+    private File buildCreateOrderUpdateCsvForMultipleUsers(ListOrderCreationV2Template order, Map<String, String> map) {
         try {
-            System.out.println("ListOrderCreation :-   "+order.size());
+            System.out.println("ListOrderCreation :-   " + order.size());
             File file = TestUtils.createFileOnTempFolder(String.format("create-order-update_%s.csv", generateDateUniqueString()));
-            List list=new ArrayList();
+            List list = new ArrayList();
             PrintWriter pw = new PrintWriter(new FileOutputStream(file));
-            OrderCreationV2Template orderCreationV2Template=new OrderCreationV2Template();
+            OrderCreationV2Template orderCreationV2Template = new OrderCreationV2Template();
 
 
-
-
-
-
-            for (int i=0;i<map.size();i++) {
-                int weight= Integer.parseInt(map.get("weight"+(i+1)));
+            for (int i = 0; i < map.size(); i++) {
+                int weight = Integer.parseInt(map.get("weight" + (i + 1)));
 //
 //                System.out.println("Weight  ........ "+weight);
 //
@@ -554,8 +522,6 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage
 
                 pw.write(orderAsSb.toString());
                 pw.write(System.lineSeparator());
-
-
 
 
             }
