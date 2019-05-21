@@ -19,10 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Modified by Daniel Joi Partogi Hutapea.
  *
  * @author Lanang Jati
- *
- * Modified by Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
 public class ShipmentLinehaulSteps extends AbstractSteps

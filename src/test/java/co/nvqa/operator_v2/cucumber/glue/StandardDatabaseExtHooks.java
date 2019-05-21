@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.UserManagement;
 import cucumber.api.java.After;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,6 +18,7 @@ import java.util.Set;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@ScenarioScoped
 public class StandardDatabaseExtHooks extends AbstractDatabaseSteps<StandardScenarioManager> implements ScenarioStorageKeys
 {
     public StandardDatabaseExtHooks()

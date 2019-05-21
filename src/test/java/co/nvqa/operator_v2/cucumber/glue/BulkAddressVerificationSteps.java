@@ -6,6 +6,7 @@ import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.other.LatLong;
 import co.nvqa.operator_v2.selenium.page.BulkAddressVerificationPage;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
  *
  * @author Sergey Mishanin
  */
+@ScenarioScoped
 public class BulkAddressVerificationSteps extends AbstractSteps
 {
     private BulkAddressVerificationPage bulkAddressVerificationPage;

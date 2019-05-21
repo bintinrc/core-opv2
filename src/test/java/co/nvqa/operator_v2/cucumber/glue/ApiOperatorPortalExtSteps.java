@@ -56,12 +56,6 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         order2.setId(1L);
         order2.setComments("Yes");
 
-        assertAll("Heading error message.",
-                () -> assertEquals("assertEquals failed", 10, 11),
-                () -> assertNotEquals("assertNotEquals failed", 10, 10),
-                () -> assertThat("assertThat containsString failed", "daniel", containsString("ani2")),
-                () -> assertThatExt("assertThatExt failed", order1, sameBeanAs(order2)));
-
         String tagName = TagManagementSteps.DEFAULT_TAG_NAME;
 
         try

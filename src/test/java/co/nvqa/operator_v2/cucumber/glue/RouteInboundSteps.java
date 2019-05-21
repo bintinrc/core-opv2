@@ -13,6 +13,7 @@ import co.nvqa.operator_v2.selenium.page.RouteInboundPage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
  *
  * @author Daniel Joi Partogi Hutapea
  */
+@ScenarioScoped
 public class RouteInboundSteps extends AbstractSteps
 {
     private static final String FETCH_BY_ROUTE_ID = "FETCH_BY_ROUTE_ID";

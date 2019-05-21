@@ -9,10 +9,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * Modified by Daniel Joi Partogi Hutapea.
  *
  * @author Lanang Jati
- *
- * Modified by Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
 public class ShipmentInboundScanningSteps extends AbstractSteps

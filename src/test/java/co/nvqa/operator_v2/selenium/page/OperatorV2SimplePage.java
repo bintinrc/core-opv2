@@ -679,6 +679,23 @@ public class OperatorV2SimplePage extends SimplePage
         click(f("//*[self::nv-filter-text-box or self::nv-filter-box][@main-title='%s']//button[i[text()='close']]", mainTitle));
     }
 
+    public List<String> getSelectedValuesFromNvFilterBox(String mainTitle)
+    {
+        List<WebElement> listOfWe = findElementsByXpath(f("//*[self::nv-filter-text-box or self::nv-filter-box][@main-title='%s']//nv-icon-text-button[@ng-repeat='item in selectedOptions']//div", mainTitle));
+
+        if(listOfWe!=null)
+        {
+            return listOfWe.stream().map(this::getTextTrimmed).collect(Collectors.toList());
+        }
+
+        return null;
+    }
+
+    public void removeSelectedValueFromNvFilterBoxByAriaLabel(String nvFilterMainTitle, String buttonAriaLabel)
+    {
+        clickf("//*[self::nv-filter-text-box or self::nv-filter-box][@main-title='%s']//button[@aria-label='%s']/i[text()='close']", nvFilterMainTitle, buttonAriaLabel);
+    }
+
     public void selectValueFromNvAutocompleteByPossibleOptions(String possibleOptions, String value)
     {
         selectValueFromNvAutocompleteBy("possible-options", possibleOptions, value);
@@ -774,7 +791,12 @@ public class OperatorV2SimplePage extends SimplePage
         sendKeys(searchBoxXpath, value);
         pause100ms();
         String optionXpath = menuContainerXpath + "//md-option";
-        click(optionXpath);
+        try
+        {
+            click(optionXpath);
+        } catch (NoSuchElementException ex){
+            throw new IllegalArgumentException(String.format("MdSelect Options were not found for search value [%s]", value), ex);
+        }
         pause100ms();
     }
 

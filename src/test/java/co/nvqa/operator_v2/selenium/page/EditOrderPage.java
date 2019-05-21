@@ -178,7 +178,6 @@ public class EditOrderPage extends OperatorV2SimplePage
     {
         transactionsTable.searchByTxnType(txnType);
         assertEquals(txnType + " Priority Level", String.valueOf(priorityLevel), transactionsTable.getPriorityLevel(1));
-
     }
 
     public void verifyOrderInstructions(String expectedPickupInstructions, String expectedDeliveryInstructions)
@@ -397,6 +396,11 @@ public class EditOrderPage extends OperatorV2SimplePage
     public String getGranularStatus()
     {
         return getText("//label[text()='Granular']/following-sibling::h3");
+    }
+
+    public String getTag()
+    {
+        return getText("//nv-tag[@ng-repeat='tag in ctrl.orderTags']/*");
     }
 
     @SuppressWarnings("unused")

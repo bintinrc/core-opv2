@@ -8,6 +8,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import java.util.Map;
  *
  * @author Sergey Mishanin
  */
+@ScenarioScoped
 public class DpAdministrationSteps extends AbstractSteps
 {
     private DpAdministrationPage dpAdminPage;
