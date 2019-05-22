@@ -9,7 +9,11 @@ import co.nvqa.operator_v2.util.TestConstants;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.WebDriver;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,6 +25,8 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
+
+import static co.nvqa.commons.util.StandardTestUtils.pause7s;
 
 /**
  * @author Kateryna Skakunova
@@ -76,7 +82,7 @@ public class OrderBillingPage extends OperatorV2SimplePage {
     }
 
     private String getOrderBillingAttachmentFromEmail() {
-        pause5s();
+        pause7s();
 
         GmailClient gmailClient = new GmailClient();
         AtomicBoolean isFound = new AtomicBoolean();
@@ -163,47 +169,16 @@ public class OrderBillingPage extends OperatorV2SimplePage {
     private boolean isLineFoundAndValidatedInCsv(String line, Order order) {
         String trackingId = order.getTrackingId();
         if (!line.startsWith("\"Shipper ID") && line.contains(trackingId)) {
-            String shipperId = order.getShipper().getClientId();
-            String shipperName = order.getShipper().getShortName();
-            String billingName = order.getShipper().getBillingName();
-            String shipperOrderRef = order.getShipper().getExternalRef();
-            String orderGranularStatus = order.getGranularStatus();
-//        String customerName = order.get
-//        String deliveryTypeName = order.getDeliveryType(); ??
-//        String DeliveryTypeID = order.getD
-            String parcelSizeID = order.getParcelSize();
-            String parcelWeight = String.valueOf(order.getParcelWeight());
-            String createTime = order.getCreatedAt().toString();
-            String deliveryDate = order.getDeliveryDate();
-            String fromCity = order.getFromCity();
-//        String FromBillingZone = order.get
-//        String OriginHub = order.get
-//        String ToProvince = order.get
-            String toCity = order.getToCity();
-            String toDistrict = order.getToDistrict();
-            String toAddress = order.getToAddress1() + " " + order.getToAddress2();
+            String shipperOrderRefNo = order.getShipperOrderRefNo();
+            String toName = order.getToName();
+            String toAddress = order.getToAddress1() + " " + order.getToCountry() + " " + order.getToPostcode();
             String toPostcode = order.getToPostcode();
-//        String ToBillingZone = order.get
-            String destinationHub = order.getDestinationHub();
-//        String DeliveryFee = order.getDe
-//        String CODCollected = order.getCOD
-//        String CODFee = order.get
-//        String InsuredValue = order.getI
-//        String InsuranceFee = order.get
-//        String HandlingFee = order.get
-//        String GST = order.get
-//        String Total = order.getTot
-//        String ScriptID = order.getSc
-//        String ScriptVersion = order.getSc
-//        String LastCalculatedDate = order.get
-            assertThat("", line, containsString(f("\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",",
-                    shipperId, shipperName, billingName, trackingId, shipperOrderRef, orderGranularStatus)));
-            assertThat("", line, containsString(f("\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",",
-                    parcelSizeID, parcelWeight, createTime, deliveryDate, fromCity)));
-            assertThat("", line, containsString(f("\"%s\",\"%s\",\"%s\",\"%s\",",
-                    toCity, toDistrict, toAddress, toPostcode)));
-            assertThat("", line, containsString(f("\"%s\",",
-                    destinationHub)));
+            assertThat("Success Billings Csv file does not contains expected information", line, containsString(f("\"%s\",",
+                    toName)));
+            assertThat("Success Billings Csv file does not contains expected information", line, containsString(f("\"%s\",",
+                    shipperOrderRefNo)));
+            assertThat("Success Billings Csv file does not contains expected information", line, containsString(f("\"%s\",\"%s\",",
+                    toAddress, toPostcode)));
             return true;
         } else {
             return false;

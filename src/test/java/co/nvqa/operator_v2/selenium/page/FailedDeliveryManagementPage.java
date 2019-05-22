@@ -60,7 +60,7 @@ public class FailedDeliveryManagementPage extends CommonParcelManagementPage
         assertEquals("Tracking ID", trackingId, actualTrackingId);
 
         List<String> actualTags = getTextOfElements(ORDER_TAGS_LIST_XPATH);
-        assertEquals("Tags", actualTags, orderTags);
+        assertEquals("Tags", orderTags, actualTags);
     }
 
     public void verifyCsvFileDownloadedSuccessfully(String trackingId)

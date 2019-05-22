@@ -44,7 +44,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps
     public void operatorVerifyTheFailedDeliveryOrderIsListedAndTaggedOnFailedDeliveryOrderList()
     {
         Order order = get(KEY_CREATED_ORDER);
-        List<String> orderTag = Collections.singletonList(KEY_ORDER_TAG);
+        List<String> orderTag = Collections.singletonList(get(KEY_ORDER_TAG));
         FailureReason selectedFailureReason = get(KEY_SELECTED_FAILURE_REASON);
         failedDeliveryManagementPage.verifyFailedDeliveryOrderIsListed(order, selectedFailureReason);
         failedDeliveryManagementPage.verifyFailedDeliveryOrderIsTagged(order, orderTag);
