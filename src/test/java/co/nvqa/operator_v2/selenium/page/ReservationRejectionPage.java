@@ -25,7 +25,8 @@ public class ReservationRejectionPage extends OperatorV2SimplePage
 
     private ReservationRejectionEntityTable reservationRejectionEntityTable;
 
-    public ReservationRejectionPage(WebDriver webDriver) {
+    public ReservationRejectionPage(WebDriver webDriver)
+    {
         super(webDriver);
         reservationRejectionEntityTable = new ReservationRejectionEntityTable(webDriver);
     }
@@ -37,14 +38,14 @@ public class ReservationRejectionPage extends OperatorV2SimplePage
     {
         public static final String MD_VIRTUAL_REPEAT = "rejectedReservation in getTableData()";
 
-        public static final String COLUMN_TIME_REJECTED = "timeRejected";
-        public static final String COLUMN_PICKUP_INFO = "pickupInfo";
-        public static final String COLUMN_PRIORITY_LEVEL = "priorityLevel";
-        public static final String COLUMN_TIMESLOT = "timeslot";
-        public static final String COLUMN_REASON_FOR_REJECTION = "reasonForRejection";
-        public static final String COLUMN_DRIVER_INFO = "driverInfo";
-        public static final String COLUMN_ROUTE = "route";
-        public static final String COLUMN_HUB = "hub";
+        static final String COLUMN_TIME_REJECTED = "timeRejected";
+        static final String COLUMN_PICKUP_INFO = "pickupInfo";
+        static final String COLUMN_PRIORITY_LEVEL = "priorityLevel";
+        static final String COLUMN_TIMESLOT = "timeslot";
+        static final String COLUMN_REASON_FOR_REJECTION = "reasonForRejection";
+        static final String COLUMN_DRIVER_INFO = "driverInfo";
+        static final String COLUMN_ROUTE = "route";
+        static final String COLUMN_HUB = "hub";
 
         private ReservationRejectionEntityTable(WebDriver webDriver)
         {
@@ -66,29 +67,31 @@ public class ReservationRejectionPage extends OperatorV2SimplePage
         }
     }
 
-    public ReservationRejectionEntity filterTableByReasonForRejection(String rejectionReason) {
-        return reservationRejectionEntityTable
-                .filterByColumn(COLUMN_REASON_FOR_REJECTION, rejectionReason).readEntity(1);
+    public ReservationRejectionEntity filterTableByReasonForRejection(String rejectionReason)
+    {
+        return reservationRejectionEntityTable.filterByColumn(COLUMN_REASON_FOR_REJECTION, rejectionReason).readEntity(1);
     }
 
-    public ReservationRejectionEntity filterTableByPickup(String address) {
-        return reservationRejectionEntityTable
-                .filterByColumn(COLUMN_PICKUP_INFO, address).readEntity(1);
+    public ReservationRejectionEntity filterTableByPickup(String address)
+    {
+        return reservationRejectionEntityTable.filterByColumn(COLUMN_PICKUP_INFO, address).readEntity(1);
     }
 
     public void clickActionFailPickupForRow(int rowNumber)
-        {
+    {
         reservationRejectionEntityTable.clickActionButton(rowNumber, "failPickup");
-        }
+    }
 
-        public void failPickUpInPopup(){
-            waitUntilVisibilityOfMdDialogByTitle(FAIL_PICKUP_MD_DIALOG_TITLE);
-            selectValueFromMdSelect("model", FAIL_PICKUP_MD_DIALOG_REASON_FOR_FAILURE);
-            clickButtonOnMdDialogByAriaLabel(FAIL_PICKUP_MD_DIALOG_BUTTON_ARIA_LABEL);
-            waitUntilInvisibilityOfMdDialogByTitle(FAIL_PICKUP_MD_DIALOG_TITLE);
-        }
+    public void failPickUpInPopup()
+    {
+        waitUntilVisibilityOfMdDialogByTitle(FAIL_PICKUP_MD_DIALOG_TITLE);
+        selectValueFromMdSelect("model", FAIL_PICKUP_MD_DIALOG_REASON_FOR_FAILURE);
+        clickButtonOnMdDialogByAriaLabel(FAIL_PICKUP_MD_DIALOG_BUTTON_ARIA_LABEL);
+        waitUntilInvisibilityOfMdDialogByTitle(FAIL_PICKUP_MD_DIALOG_TITLE);
+    }
 
-    public void validateReservationInTable(String pickupInfo, RejectReservationRequest rejectReservationRequest, ReservationRejectionEntity reservationRejectionEntity){
+    public void validateReservationInTable(String pickupInfo, RejectReservationRequest rejectReservationRequest, ReservationRejectionEntity reservationRejectionEntity)
+    {
         ZonedDateTime timeRejectionExpected = DateUtil.getDate(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
 
         assertThat("Time Rejection is not as expected in Reservation Rejection",
@@ -102,12 +105,14 @@ public class ReservationRejectionPage extends OperatorV2SimplePage
                 String.valueOf(rejectReservationRequest.getRouteId()), reservationRejectionEntity.getRoute());
     }
 
-    public void verifyRecordIsNotPresentInTableByPickup(String pickup){
+    public void verifyRecordIsNotPresentInTableByPickup(String pickup)
+    {
         reservationRejectionEntityTable.filterByColumn(COLUMN_PICKUP_INFO, pickup);
         assertTrue(reservationRejectionEntityTable.isTableEmpty());
     }
 
-    public void verifyToastAboutFailedPickupIsPresent(){
+    public void verifyToastAboutFailedPickupIsPresent()
+    {
         waitUntilVisibilityOfToast(FAIL_PICKUP_TOAST_MESSAGE);
     }
 }

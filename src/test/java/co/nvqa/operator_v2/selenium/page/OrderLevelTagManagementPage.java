@@ -88,7 +88,9 @@ public class OrderLevelTagManagementPage extends OperatorV2SimplePage
 
     public void selectOrdersInTable()
     {
-        for(int rowIndex = 1; rowIndex <= getRowsCountOfTableWithMdVirtualRepeat(TABLE_DATA); rowIndex++) {
+        int numberOfRows = getRowsCountOfTableWithMdVirtualRepeat(TABLE_DATA);
+        for(int rowIndex=1; rowIndex<=numberOfRows; rowIndex++)
+        {
             checkRowWithMdVirtualRepeat(rowIndex, TABLE_DATA);
         }
     }

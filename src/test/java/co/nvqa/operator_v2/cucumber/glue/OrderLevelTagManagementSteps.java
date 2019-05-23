@@ -45,7 +45,9 @@ public class OrderLevelTagManagementSteps extends AbstractSteps
     @And("^Operator uploads CSV with orders created$")
     public void operatorUploadsCsvOrdersCreated()
     {
-        List<String> trackingIds = ((List<Order>) get(KEY_LIST_OF_CREATED_ORDER)).stream().map(Order::getTrackingId)
+        List<String> trackingIds = this.<List<Order>>get(KEY_LIST_OF_CREATED_ORDER)
+                .stream()
+                .map(Order::getTrackingId)
                 .collect(Collectors.toList());
         orderLevelTagManagementPage.uploadFindOrdersCsvWithOrderInfo(trackingIds);
     }

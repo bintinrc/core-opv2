@@ -9,11 +9,11 @@ import co.nvqa.operator_v2.util.TestConstants;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.WebDriver;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,12 +26,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import static co.nvqa.commons.util.StandardTestUtils.pause7s;
-
 /**
  * @author Kateryna Skakunova
  */
-public class OrderBillingPage extends OperatorV2SimplePage {
+public class OrderBillingPage extends OperatorV2SimplePage
+{
     private static final String REPORT_ATTACHMENT_FILE_EXTENSION = ".csv";
     private static final String REPORT_ATTACHMENT_NAME_PATTERN = "https://.*ninjavan.*billing.*zip";
     private static final String REPORT_EMAIL_SUBJECT = "Success Billings CSV";
@@ -42,46 +41,56 @@ public class OrderBillingPage extends OperatorV2SimplePage {
     private static final String FILTER_SHIPPER_SELECTED_SHIPPERS_BUTTON_ARIA_LABEL = "Selected Shippers";
     private static final String FILTER_GENERATE_FILE_CHECKBOX_PATTERN = "//md-input-container[@label = '%s']/md-checkbox";
 
-    public OrderBillingPage(WebDriver webDriver) {
+    public OrderBillingPage(WebDriver webDriver)
+    {
         super(webDriver);
     }
 
-    public void selectStartDate(Date startDate) {
+    public void selectStartDate(Date startDate)
+    {
         setMdDatepicker(FILTER_START_DATE_MDDATEPICKERNGMODEL, startDate);
     }
 
-    public void selectEndDate(Date endDate) {
+    public void selectEndDate(Date endDate)
+    {
         setMdDatepicker(FILTER_END_DATE_MDDATEPICKERNGMODEL, endDate);
     }
 
-    public void setSpecificShipper(String shipper) {
+    public void setSpecificShipper(String shipper)
+    {
         clickButtonByAriaLabelAndWaitUntilDone(FILTER_SHIPPER_SELECTED_SHIPPERS_BUTTON_ARIA_LABEL);
         selectValueFromNvAutocompleteByItemTypes(FILTER_SHIPPER_SELECTED_SHIPPERS_NVAUTOCOMPLETE_ITEMTYPES, shipper);
     }
 
-    public void tickGenerateTheseFilesOption(String option) {
+    public void tickGenerateTheseFilesOption(String option)
+    {
         click(f(FILTER_GENERATE_FILE_CHECKBOX_PATTERN, option));
     }
 
-    public void setEmailAddress(String emailAddress) {
+    public void setEmailAddress(String emailAddress)
+    {
         sendKeysAndEnterByAriaLabel("Email", emailAddress);
     }
 
-    public void clickGenerateSuccessBillingsButton() {
+    public void clickGenerateSuccessBillingsButton()
+    {
         clickButtonByAriaLabelAndWaitUntilDone("Generate Success Billings");
     }
 
-    public void verifyOrderBillingZipAttachment(String startDate, String endDate) {
+    public void verifyOrderBillingZipAttachment(String startDate, String endDate)
+    {
         String attachmentUrl = getOrderBillingAttachmentFromEmail();
         verifyListOfFilesInZip(attachmentUrl, startDate, endDate);
     }
 
-    public void verifyOrderBillingCsvAttachment(Order order) {
+    public void verifyOrderBillingCsvAttachment(Order order)
+    {
         String attachmentUrl = getOrderBillingAttachmentFromEmail();
         verifyCsvFileInZip(attachmentUrl, order);
     }
 
-    private String getOrderBillingAttachmentFromEmail() {
+    private String getOrderBillingAttachmentFromEmail()
+    {
         pause7s();
 
         GmailClient gmailClient = new GmailClient();
@@ -99,7 +108,8 @@ public class OrderBillingPage extends OperatorV2SimplePage {
 
                 String attachmentUrl;
 
-                if (matcher.find()) {
+                if(matcher.find())
+                {
                     attachmentUrl = matcher.group();
                     NvLogger.infof("Success Billings file received in mail - %s", attachmentUrl);
                     attachmentUrlList.add(attachmentUrl);
@@ -111,76 +121,94 @@ public class OrderBillingPage extends OperatorV2SimplePage {
 
         assertTrue(f("No email with '%s' subject in the mailbox", REPORT_EMAIL_SUBJECT), isFound.get());
 
-        String url = attachmentUrlList.stream().filter(urlItem -> urlItem.endsWith(".zip")).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No Zip file in attachment"));
-
-        return url;
+        return attachmentUrlList.stream()
+                                      .filter(urlItem -> urlItem.endsWith(".zip"))
+                                      .findFirst()
+                                      .orElseThrow(() -> new IllegalArgumentException("No Zip file in attachment"));
     }
 
-    private void verifyListOfFilesInZip(String url, String startDate, String endDate) {
-        try (ZipInputStream zipIs = new ZipInputStream(new URL(url).openStream())) {
+    private void verifyListOfFilesInZip(String url, String startDate, String endDate)
+    {
+        try(ZipInputStream zipIs = new ZipInputStream(new URL(url).openStream()))
+        {
             int filesNumber = 0;
             ZipEntry zEntry;
 
-            while ((zEntry = zipIs.getNextEntry()) != null) {
+            while((zEntry=zipIs.getNextEntry())!=null)
+            {
                 String fileName = zEntry.getName();
                 String assertMessage = f("One of the files in Success Billings zip is wrong. Expected to have: startDate = %s, endDate = %s, extension = %s. But was %s", startDate, endDate, REPORT_ATTACHMENT_FILE_EXTENSION, fileName);
                 assertTrue(assertMessage, fileName.contains(startDate) && fileName.contains(endDate) && fileName.endsWith(REPORT_ATTACHMENT_FILE_EXTENSION));
                 filesNumber++;
             }
             NvLogger.infof("Total number of files in Success Billings - %s", filesNumber);
-        } catch (IOException e) {
-            NvLogger.errorf("Could not read file from %s. Cause: %s", url, e);
-            throw new RuntimeException(e.getMessage());
+        }
+        catch(IOException ex)
+        {
+            NvLogger.errorf("Could not read file from %s. Cause: %s", url, ex);
+            throw new NvTestRuntimeException(ex.getMessage());
         }
     }
 
-    private void verifyCsvFileInZip(String url, Order order) {
+    private void verifyCsvFileInZip(String url, Order order)
+    {
         boolean isOrderFound = false;
         String zipName = "order_billing.zip";
         String pathToZip = TestConstants.TEMP_DIR + "order_billing_" + DateUtil.getTimestamp() + "/";
-        try {
+
+        try
+        {
             FileUtils.copyURLToFile(new URL(url), new File(pathToZip + zipName));
-        } catch (IOException e) {
-            throw new NvTestRuntimeException("Could not get file from " + url, e);
+        }
+        catch(IOException ex)
+        {
+            throw new NvTestRuntimeException("Could not get file from " + url, ex);
         }
 
-        try (ZipFile zipFile = new ZipFile(pathToZip + zipName)) {
+        try(ZipFile zipFile = new ZipFile(pathToZip + zipName))
+        {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
-            while (entries.hasMoreElements()) {
+            while (entries.hasMoreElements())
+            {
                 ZipEntry entry = entries.nextElement();
-                    InputStream is = zipFile.getInputStream(entry);
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                    while (reader.ready()) {
-                        String line = reader.readLine();
-                        isOrderFound = isLineFoundAndValidatedInCsv(line, order);
-                        if (isOrderFound) {
-                            break;
-                        }
+                InputStream is = zipFile.getInputStream(entry);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+
+                while(reader.ready())
+                {
+                    String line = reader.readLine();
+                    isOrderFound = isLineFoundAndValidatedInCsv(line, order);
+                    if(isOrderFound)
+                    {
+                        break;
+                    }
                 }
             }
-        } catch (IOException e) {
-            throw new NvTestRuntimeException("Could not read from file " + url, e);
+        }
+        catch(IOException ex)
+        {
+            throw new NvTestRuntimeException("Could not read from file " + url, ex);
         }
         assertTrue(f("Order with %s trackingId is not found in CSV received in email (%s)", order.getTrackingId(), url), isOrderFound);
     }
 
-    private boolean isLineFoundAndValidatedInCsv(String line, Order order) {
+    private boolean isLineFoundAndValidatedInCsv(String line, Order order)
+    {
         String trackingId = order.getTrackingId();
-        if (!line.startsWith("\"Shipper ID") && line.contains(trackingId)) {
+        if(!line.startsWith("\"Shipper ID") && line.contains(trackingId))
+        {
             String shipperOrderRefNo = order.getShipperOrderRefNo();
             String toName = order.getToName();
             String toAddress = order.getToAddress1() + " " + order.getToCountry() + " " + order.getToPostcode();
             String toPostcode = order.getToPostcode();
-            assertThat("Success Billings Csv file does not contains expected information", line, containsString(f("\"%s\",",
-                    toName)));
-            assertThat("Success Billings Csv file does not contains expected information", line, containsString(f("\"%s\",",
-                    shipperOrderRefNo)));
-            assertThat("Success Billings Csv file does not contains expected information", line, containsString(f("\"%s\",\"%s\",",
-                    toAddress, toPostcode)));
+            assertThat("Success Billings Csv file does not contains expected information", line, containsString(f("\"%s\",", toName)));
+            assertThat("Success Billings Csv file does not contains expected information", line, containsString(f("\"%s\",", shipperOrderRefNo)));
+            assertThat("Success Billings Csv file does not contains expected information", line, containsString(f("\"%s\",\"%s\",", toAddress, toPostcode)));
             return true;
-        } else {
+        }
+        else
+        {
             return false;
         }
     }
