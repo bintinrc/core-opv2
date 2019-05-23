@@ -26,7 +26,7 @@ import static javax.swing.UIManager.put;
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage {
+public class OrderWeightUpdatePage extends OperatorV2SimplePage {
     private static final String NG_REPEAT = "row in $data";
     private static final String CSV_FILENAME_PATTERN = "sample_csv";
 
@@ -35,7 +35,7 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage {
     public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking_id";
     public static final String COLUMN_CLASS_DATA_ORDER_REF_NO = "order_ref_no";
 
-    public OrderWeightUpdatePageV2(WebDriver webDriver) {
+    public OrderWeightUpdatePage(WebDriver webDriver) {
         super(webDriver);
     }
 
@@ -191,7 +191,7 @@ public class OrderWeightUpdatePageV2 extends OperatorV2SimplePage {
             String orderId = "" + listOfCreatedOrder.get(i).getId();
             String Weight = String.valueOf(orderWeight.get(i));
             filterTableOrderByTrackingId(trackingId);
-            pause100ms();
+            pause5s();
             clickNvIconButtonByNameAndWaitUntilEnabled("container.sidenav.order.edit");
             switchToOtherWindowAndWaitWhileLoading(orderId);
             String xpath = "//label[text()='Weight']/following-sibling::p";

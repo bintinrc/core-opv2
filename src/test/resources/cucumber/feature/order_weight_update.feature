@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @OrderWeightUpdateV2
+@OperatorV2 @OperatorV2Part2 @OrderWeightUpdate
 Feature: Order Weight Update V2
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
