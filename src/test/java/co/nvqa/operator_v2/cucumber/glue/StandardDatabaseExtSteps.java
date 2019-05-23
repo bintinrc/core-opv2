@@ -184,7 +184,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
         if(shipmentInfo!=null)
         {
-            getShipmentJdbc().deleteShipment(shipmentInfo.getId());
+            getHubJdbc().deleteShipment(shipmentInfo.getId());
         }
     }
 }
