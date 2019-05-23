@@ -4,6 +4,8 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.driver.FailureReason;
 import org.openqa.selenium.WebDriver;
 
+import java.util.List;
+
 /**
  *
  * @author Daniel Joi Partogi Hutapea
@@ -20,6 +22,8 @@ public class FailedDeliveryManagementPage extends CommonParcelManagementPage
     public static final String COLUMN_CLASS_DATA_FAILURE_REASON = "_failure-reason-code-descriptions";
 
     public static final String ACTION_BUTTON_RESCHEDULE_NEXT_DAY = "container.failed-delivery-management.reschedule-next-day";
+
+    public static final String ORDER_TAGS_LIST_XPATH = "//nv-table//tr[not(contains(@class, 'last-row'))][1]/td[normalize-space(@class)='_order-tags']/nv-fdm-pills/div";
 
     public FailedDeliveryManagementPage(WebDriver webDriver)
     {
@@ -44,6 +48,19 @@ public class FailedDeliveryManagementPage extends CommonParcelManagementPage
 
         String actualFailureReason = getTextOnTable(1, COLUMN_CLASS_DATA_FAILURE_REASON);
         assertEquals("Failure Reason", actualFailureReason, expectedFailureReason.getFailureReasonCodeDescription());
+    }
+
+    public void verifyFailedDeliveryOrderIsTagged(Order order, List<String> orderTags)
+    {
+        String trackingId = order.getTrackingId();
+
+        searchTableByTrackingId(trackingId);
+
+        String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
+        assertEquals("Tracking ID", trackingId, actualTrackingId);
+
+        List<String> actualTags = getTextOfElements(ORDER_TAGS_LIST_XPATH);
+        assertEquals("Tags", orderTags, actualTags);
     }
 
     public void verifyCsvFileDownloadedSuccessfully(String trackingId)

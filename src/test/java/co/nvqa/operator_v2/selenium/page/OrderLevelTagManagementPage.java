@@ -2,8 +2,10 @@ package co.nvqa.operator_v2.selenium.page;
 
 import org.openqa.selenium.WebDriver;
 
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author Kateryna Skakunova
@@ -76,12 +78,19 @@ public class OrderLevelTagManagementPage extends OperatorV2SimplePage
         clickNvIconTextButtonByNameAndWaitUntilDone("Load Selection");
     }
 
-    public void selectOrderInTable(String keyword)
+    public void searchAndSelectOrderInTable(String keyword)
     {
         searchTableCustom1(TABLE_DATA_ORDER_ID_COLUMN_CLASS, keyword);
         wait10sUntil(() -> getRowsCountOfTableWithMdVirtualRepeat(TABLE_DATA) == 1);
         checkRowWithMdVirtualRepeat(1, TABLE_DATA);
         clearSearchTableCustom1(TABLE_DATA_ORDER_ID_COLUMN_CLASS);
+    }
+
+    public void selectOrdersInTable()
+    {
+        for(int rowIndex = 1; rowIndex <= getRowsCountOfTableWithMdVirtualRepeat(TABLE_DATA); rowIndex++) {
+            checkRowWithMdVirtualRepeat(rowIndex, TABLE_DATA);
+        }
     }
 
     public void clickTagSelectedOrdersButton()
@@ -94,5 +103,19 @@ public class OrderLevelTagManagementPage extends OperatorV2SimplePage
         sendKeysByAriaLabel("tag-0", tagLabel);
         clickButtonOnMdDialogByAriaLabel("Save");
         waitUntilInvisibilityOfMdDialog();
+    }
+
+    public void uploadFindOrdersCsvWithOrderInfo(List<String> trackingIds)
+    {
+        clickNvIconTextButtonByNameAndWaitUntilDone("container.order-level-tag-management.find-orders-with-csv");
+        waitUntilVisibilityOfElementLocated("//md-dialog//h2[text()='Find Orders with CSV']");
+
+        String csvContents = trackingIds.stream().collect(Collectors.joining(System.lineSeparator()));
+        File csvFile = createFile(f("find-orders-with-csv.csv", generateDateUniqueString()), csvContents);
+
+        sendKeysByAriaLabel("Choose", csvFile.getAbsolutePath());
+        waitUntilVisibilityOfElementLocated(f("//div[@class='upload-button-holder']/span[contains(text(), '%s')]", csvFile.getName()));
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.upload");
+        waitUntilInvisibilityOfToast(f("Matches with file shown in table"));
     }
 }

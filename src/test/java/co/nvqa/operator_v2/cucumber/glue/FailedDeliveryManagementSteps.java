@@ -10,6 +10,8 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +38,16 @@ public class FailedDeliveryManagementSteps extends AbstractSteps
         Order order = get(KEY_CREATED_ORDER);
         FailureReason selectedFailureReason = get(KEY_SELECTED_FAILURE_REASON);
         failedDeliveryManagementPage.verifyFailedDeliveryOrderIsListed(order, selectedFailureReason);
+    }
+
+    @Then("^Operator verifies the failed delivery order is listed and tagged on Failed Delivery orders list$")
+    public void operatorVerifyTheFailedDeliveryOrderIsListedAndTaggedOnFailedDeliveryOrderList()
+    {
+        Order order = get(KEY_CREATED_ORDER);
+        List<String> orderTag = Collections.singletonList(get(KEY_ORDER_TAG));
+        FailureReason selectedFailureReason = get(KEY_SELECTED_FAILURE_REASON);
+        failedDeliveryManagementPage.verifyFailedDeliveryOrderIsListed(order, selectedFailureReason);
+        failedDeliveryManagementPage.verifyFailedDeliveryOrderIsTagged(order, orderTag);
     }
 
     @When("^Operator download CSV file of failed delivery order on Failed Delivery orders list$")
