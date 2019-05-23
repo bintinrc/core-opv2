@@ -24,7 +24,6 @@ Feature: Outbound Monitoring
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    Then Operator waits for 10 seconds
     Then Operator refresh page
     Given Operator go to menu New Features -> Outbound/Route Load Monitoring
     Then Change tab to "Route Load Monitoring"
@@ -49,7 +48,7 @@ Feature: Outbound Monitoring
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound multiple parcels
     And API Operator start the route
-    Then Operator waits for 10 seconds
+
     Then Operator refresh page
     Given Operator go to menu New Features -> Outbound/Route Load Monitoring
     Then Change tab to "Route Load Monitoring"
@@ -70,18 +69,14 @@ Feature: Outbound Monitoring
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add multiple parcels to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    Then Operator waits for 10 seconds
     Then Operator refresh page
     Given Operator go to menu New Features -> Outbound/Route Load Monitoring
     Then Change tab to "Route Load Monitoring"
     When Operator finds the created route
     Then Operator verifies the route is exist and the info in the row is correct.
     When Operator clicks the number on Parcels Assigned column
-    Then Operator waits for 2 seconds
     Then Operator verifies the Transaction Log contains all created Tracking ID
-    Then Operator waits for 2 seconds
     When Operator clicks the number on Missing Parcels column
-    Then Operator waits for 2 seconds
     Then Operator verifies the Transaction Log contains all created Tracking ID
 
 
@@ -101,22 +96,17 @@ Feature: Outbound Monitoring
     And API Driver get pickup/delivery waypoints of created orders
     And API Operator Van Inbound multiple parcels
     And API Operator start the route
-    Then Operator waits for 10 seconds
     Then Operator refresh page
     Given Operator go to menu New Features -> Outbound/Route Load Monitoring
     Then Change tab to "Route Load Monitoring"
     When Operator finds the created route
     Then Operator verifies the route is exist and the info in the row is correct with 0 missing.
     When Operator clicks the number on Parcels Assigned column
-    Then Operator waits for 2 seconds
+
     Then Operator verifies the Transaction Log contains all created Tracking ID
-    Then Operator waits for 2 seconds
     When Operator clicks the number on Parcels Loaded column
-    Then Operator waits for 2 seconds
     Then Operator verifies the Transaction Log contains all created Tracking ID
-    Then Operator waits for 2 seconds
     When Operator clicks the number on Parcels Passed Back column
-    Then Operator waits for 2 seconds
     Then Operator verifies the Transaction Log contains all created Tracking ID
 
 

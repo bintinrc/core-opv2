@@ -75,26 +75,31 @@ public class OutboundAndRouteLoadMonitoringSteps extends AbstractSteps {
     @When("Operator clicks the number on Parcels Assigned column")
     public void operatorClicksTheNumberOnParcelsAssignedColumn() {
         outboundAndRouteLoadMonitoringPage.clickInTableByClass("total_parcels_count");
+        pause(2*1000);
     }
 
     @Then("Operator verifies the Transaction Log contains all created Tracking ID")
     public void operatorVerifiesTheTransactionLogContainsAllCreatedTrackingID() {
         List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
         outboundAndRouteLoadMonitoringPage.verifyTrackingIds(trackingIds);
+        pause(2*1000);
     }
 
     @When("Operator clicks the number on Missing Parcels column")
     public void operatorClicksTheNumberOnMissingParcelsColumn() {
         outboundAndRouteLoadMonitoringPage.clickInTableByClass("missing_parcels_count");
+        pause(2*1000);
     }
 
     @When("Operator clicks the number on Parcels Loaded column")
     public void operatorClicksTheNumberOnParcelsLoadedColumn() {
         outboundAndRouteLoadMonitoringPage.clickInTableByClass("van_parcels_count");
+        pause(2*1000);
     }
 
     @When("Operator clicks the number on Parcels Passed Back column")
     public void operatorClicksTheNumberOnParcelsPassedBackColumn() {
         outboundAndRouteLoadMonitoringPage.clickInTableByClass("truck_parcels_count");
+        pause(2*1000);
     }
 }

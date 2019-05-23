@@ -55,15 +55,21 @@ public class PricingScriptsV2Steps extends AbstractSteps
         script.setDescription(description);
         script.setSource(source);
         script.setActiveParameters(listOfActiveParameters);
+
+        System.out.println("List of active Parameters   : "+listOfActiveParameters+"    :  "+script.toString());
+
         pricingScriptsV2Page.createDraft(script);
 
         put(KEY_CREATED_PRICING_SCRIPT, script);
+
+
     }
 
     @Then("^Operator verify the new Script is created successfully on Drafts$")
     public void operatorVerifyTheNewScriptIsCreatedSuccessfullyOnDrafts()
     {
         Script script = get(KEY_CREATED_PRICING_SCRIPT);
+
         pricingScriptsV2Page.verifyTheNewScriptIsCreatedOnDrafts(script);
     }
 

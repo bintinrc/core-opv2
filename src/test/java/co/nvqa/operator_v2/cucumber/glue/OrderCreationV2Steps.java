@@ -165,6 +165,7 @@ public class OrderCreationV2Steps extends AbstractSteps
     {
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
         orderCreationV2Page.verifyOrderV2IsCreatedSuccessfully(orderCreationV2Template);
+        pause(5*000);
     }
 
     @Then("^Operator verify order V3 is created successfully on Order Creation V2 page$")
