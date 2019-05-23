@@ -471,22 +471,6 @@ public class OrderWeightUpdateStepsV2 extends AbstractSteps {
         pause(5 * 1000);
 
     }
-
-    @Given("^API create order using data below:$")
-    public void apiCreateOrderV4UsingDataBelow(Map<String, String> dataTableAsMap) {
-        apiCreateV4Order(dataTableAsMap);
-    }
-
-    private void apiCreateV4Order(Map<String, String> dataTableAsMap) {
-        OrderRequestV4 requestOrder = buildOrderRequestV4(dataTableAsMap);
-        OrderRequestV4 createdOrder = getOrderCreateClientV4().createOrder(requestOrder, "4.1");
-        String trackingNumber = createdOrder.getTrackingNumber();
-        Order order = retrieveOrderFromCore(trackingNumber);
-        storeOrderToScenarioStorage(order);
-        System.out.println("Order Id====>" + get(KEY_CREATED_ORDER_ID));
-        System.out.println("Tracking Id====>" + get(KEY_CREATED_ORDER_TRACKING_ID));
-    }
-
     private synchronized String getShipperAccessToken(String shipperVersion) {
         shipperVersion = shipperVersion.toUpperCase();
         String shipperAccessToken = null;

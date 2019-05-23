@@ -7,8 +7,8 @@ Feature: Order Weight Update V2
 
   Scenario Outline: Operator create order V2 on Order Weight Update V2
     Given Operator go to menu Order -> All Orders
-    Given API create order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                  |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Special Pages -> Order Weight Update
     When Operator Order Weight update CSV Upload on Order Weight Update V2 page
