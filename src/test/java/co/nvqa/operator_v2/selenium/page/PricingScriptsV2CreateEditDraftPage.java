@@ -150,8 +150,7 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
         }
 
         clickNvIconTextButtonByName("container.pricing-scripts.validate");
-        //waitUntilVisibilityOfElementLocated("//p[text()='No validation errors found.']");
-        pause(5*1000);
+        waitUntilVisibilityOfElementLocated("//p[text()='No validation errors found.']");
         clickNvIconTextButtonByNameAndWaitUntilDone("Release Script");
     }
 

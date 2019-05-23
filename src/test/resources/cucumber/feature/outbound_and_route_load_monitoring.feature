@@ -12,7 +12,6 @@ Feature: Outbound Monitoring
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-
   Scenario: Operator verifies the created route is exist and will gone from table when filter Show only "Partially loaded route" is enable
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -30,7 +29,6 @@ Feature: Outbound Monitoring
     Then Operator verifies the route is exist
     When Operator enable filter Show only "Partially loaded route"
     Then Operator verifies the created route is gone from table
-
 
   Scenario: Operator verifies the created route is exist and will still be displayed on table when filter Show only "Partially loaded route" is enable
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -56,7 +54,6 @@ Feature: Outbound Monitoring
     When Operator enable filter Show only "Partially loaded route"
     Then Operator verifies the created route is still displayed on table
 
-
   Scenario: Operator verifies route contains 2 Parcels Assigned, 0 Parcels Loaded, 0 Parcels Passed Back and 2 Missing Parcels
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
@@ -78,7 +75,6 @@ Feature: Outbound Monitoring
     Then Operator verifies the Transaction Log contains all created Tracking ID
     When Operator clicks the number on Missing Parcels column
     Then Operator verifies the Transaction Log contains all created Tracking ID
-
 
   Scenario: Operator verifies route contains 2 Parcels Assigned, 2 Parcels Loaded, 2 Parcels Passed Back and 0 Missing Parcels
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -102,23 +98,11 @@ Feature: Outbound Monitoring
     When Operator finds the created route
     Then Operator verifies the route is exist and the info in the row is correct with 0 missing.
     When Operator clicks the number on Parcels Assigned column
-
     Then Operator verifies the Transaction Log contains all created Tracking ID
     When Operator clicks the number on Parcels Loaded column
     Then Operator verifies the Transaction Log contains all created Tracking ID
     When Operator clicks the number on Parcels Passed Back column
     Then Operator verifies the Transaction Log contains all created Tracking ID
-
-
-    # Implement this step:
-    # Note, please verify this:
-    # - Driver Name is correct: You can get the expected driver name from this properties {ninja-driver-name}
-    # - Parcels Assigned = 2
-    # - Parcels Loaded = 2
-    # - Parcels Passed Back = 2
-    # - Parcels Missing Parcels = 0
-
-
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

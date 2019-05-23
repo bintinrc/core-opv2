@@ -83,9 +83,7 @@ public class OperatorV2SimplePage extends SimplePage
     {
         clickf("//nv-icon-text-button[@name='%s']", name);
     }
-    public void clickToSelectMultiOrderWeightUpdate(String button){
-        click(button);
-    }
+
     public void clickNvIconTextButtonByNameAndWaitUntilDone(String name)
     {
         String xpathExpression = f("//nv-icon-text-button[@name='%s']", name);
@@ -556,12 +554,11 @@ public class OperatorV2SimplePage extends SimplePage
     {
         String text = null;
         String xpath = f("//tr[@ng-repeat='%s'][%d]/td[starts-with(@%s, \"%s\")]", ngRepeat, rowNumber, columnAttributeName, attributeValue);
-        System.out.println(" Values    :  "+rowNumber  +"  , "+columnAttributeName+"  ,   "+attributeValue+"  ,  "+ngRepeat +"    Xpath :  "+xpath);
+
         try
         {
             WebElement we = findElementByXpath(xpath);
             text = we.getText().trim();
-            System.out.println("Web And Text Values :"+text +"   ------  "+we .toString() );
         }
         catch(NoSuchElementException ex)
         {
@@ -1179,23 +1176,10 @@ public class OperatorV2SimplePage extends SimplePage
         return StandardTestUtils.convertTimeFrom24sHourTo12HoursAmPm(the24HourTime);
     }
 
-    public void clickMdMenuItem(String parentMenuName, String childMenuName){
+    public void clickMdMenuItem(String parentMenuName, String childMenuName)
+    {
         clickf("//md-menu-bar/md-menu/button[*[contains(text(), '%s')]]", parentMenuName);
         waitUntilVisibilityOfElementLocated("//div[@aria-hidden='false']/md-menu-content");
         clickf("//div[@aria-hidden='false']/md-menu-content/md-menu-item/button/span[contains(text(), '%s')]", childMenuName);
     }
-
-    public void clickSampleOrderUpdateAndWaitUntilDone(String name)
-    {
-        String xpathExpression = f("//a[@filename='%s']", name);
-        click(xpathExpression);
-       // waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
-    }
-    public void clickNvButtonUploadByNameAndWaitUntilDone(String name)
-    {
-        String xpathExpression = f("//nv-api-text-button[@name='%s']", name);
-        click(xpathExpression);
-        waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'saving')]/md-progress-circular");
-    }
-
 }

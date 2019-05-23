@@ -68,6 +68,8 @@ public class OrderWeightUpdateStepsV2 extends AbstractSteps {
     @Inject
     private StandardApiOperatorPortalSteps standardApiOperatorPortalSteps;
 
+    public static final String KEY_ORDER_WEIGHT = "KEY_ORDER_WEIGHT";
+
     public OrderWeightUpdateStepsV2() {
     }
 
