@@ -25,10 +25,10 @@ Feature: Order Billing
     Given API Driver deliver the created parcel successfully
     Given Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
-    | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
-    | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
-    | generateFile | Orders consolidated by shipper (1 file per shipper) |
-    | emailAddress | qa@ninjavan.co                                      |
+      | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
+      | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
+      | generateFile | Orders consolidated by shipper (1 file per shipper) |
+      | emailAddress | qa@ninjavan.co                                      |
     Then Operator verifies zip attached with multiple CSV files in received email
 
   @DeleteOrArchiveRoute
