@@ -23,7 +23,9 @@ public class ReservationRejectionSteps extends AbstractSteps {
     public void operatorVerifiesTheReservationIsListedOnTheTableWithCorrectInformation() {
         RejectReservationRequest rejectReservationRequest = get(KEY_REJECT_RESERVATION_REQUEST);
         Address address = get(KEY_CREATED_ADDRESS);
-        String pickupInfo = address.getAddress1() + " " + address.getAddress2() + " " + address.getCountry() + " " + address.getPostcode();
+        String address2 = address.getAddress2().isEmpty() ? "" : " " + address.getAddress2();
+        String pickupInfo = address.getAddress1() + address2 + " " + address.getCountry() + " " + address.getPostcode();
+
         ReservationRejectionEntity entity = reservationRejectionPage
                 .filterTableByReasonForRejection(rejectReservationRequest.getRejectionReason());
         reservationRejectionPage.validateReservationInTable(pickupInfo, rejectReservationRequest, entity);
@@ -32,7 +34,8 @@ public class ReservationRejectionSteps extends AbstractSteps {
     @And("^Operator fails the pickup$")
     public void operatorFailsThePickup() {
         Address address = get(KEY_CREATED_ADDRESS);
-        String pickupInfo = address.getAddress1() + " " + address.getAddress2() + " " + address.getCountry() + " " + address.getPostcode();
+        String address2 = address.getAddress2().isEmpty() ? "" : " " + address.getAddress2();
+        String pickupInfo = address.getAddress1() + address2 + " " + address.getCountry() + " " + address.getPostcode();
 
         reservationRejectionPage.filterTableByPickup(pickupInfo);
         reservationRejectionPage.clickActionFailPickupForRow(1);
@@ -42,9 +45,10 @@ public class ReservationRejectionSteps extends AbstractSteps {
     @Then("^Operator verifies pickup failed successfully$")
     public void operatorVerifiesPickupFailedSuccessfully() {
         Address address = get(KEY_CREATED_ADDRESS);
-                String pickupInfo = address.getAddress1() + " " + address.getAddress2() + " " + address.getCountry() + " " + address.getPostcode();
+        String address2 = address.getAddress2().isEmpty() ? "" : " " + address.getAddress2();
+        String pickupInfo = address.getAddress1() + address2 + " " + address.getCountry() + " " + address.getPostcode();
+
         reservationRejectionPage.verifyToastAboutFailedPickupIsPresent();
         reservationRejectionPage.verifyRecordIsNotPresentInTableByPickup(pickupInfo);
     }
 }
-

@@ -5,7 +5,7 @@ Feature: Order Billing
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator should be able to generate Success Billing for all shippers
+  Scenario: Operator should be able to generate Success Billing for all shippers (uid:ebb58abd-fde5-41d1-ab59-895129ffc41d)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
@@ -30,7 +30,7 @@ Feature: Order Billing
     | emailAddress | qa@ninjavan.co                                      |
     Then Operator verifies zip attached with multiple CSV files in received email
 
-  Scenario: Operator should be able to generate Success Billing for specific shipper
+  Scenario: Operator should be able to generate Success Billing for specific shipper (uid:4a8f64ca-7c7b-4138-be27-512d0a01931b)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |

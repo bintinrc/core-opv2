@@ -20,7 +20,7 @@ Feature:  Order Level Tag Management
     And Operator tags order with "ABC"
     Then Operator verifies orders are tagged on Edit order page
 
-  Scenario: Operator should be able to find multiple orders with CSV and tag them with ABC
+  Scenario: Operator should be able to find multiple orders with CSV and tag them with ABC (uid:69549d4a-b030-4f64-8eeb-6cb5dee8eca4)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -32,7 +32,7 @@ Feature:  Order Level Tag Management
     And Operator tags order with "ABC"
     Then Operator verifies orders are tagged on Edit order page
 
-  Scenario: Operator verify the failed delivery order that already tagged is show correct tag on Failed Delivery Management page
+  Scenario: Operator verify the failed delivery order that already tagged is show correct tag on Failed Delivery Management page (uid:5b489e54-c8ff-45db-b9fd-4cd2873e3374)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 1                                                                                                                                                                                                                                                                                                                                |

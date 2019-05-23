@@ -5,7 +5,7 @@ Feature: Reservation Preset Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator should be able to find rejected Reservation on Reservation Rejection page
+  Scenario: Operator should be able to find rejected Reservation on Reservation Rejection page (uid:b40f142b-c87b-4630-9562-43521bd5cde0)
     Given Operator go to menu Order -> All Orders
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -22,7 +22,7 @@ Feature: Reservation Preset Management
     When Operator go to menu Pick Ups -> Reservation Rejection
     Then Operator verifies the Reservation is listed on the table with correct information
 
-Scenario: Operator should be able to Fail pickup a Rejected Reservation on Reservation Rejection page
+Scenario: Operator should be able to Fail pickup a Rejected Reservation on Reservation Rejection page (uid:e637b2b9-2520-489d-8790-1886d3758373)
   Given Operator go to menu Order -> All Orders
   Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
