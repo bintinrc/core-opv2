@@ -59,4 +59,24 @@ public class ReservationRejectionSteps extends AbstractSteps
         reservationRejectionPage.verifyToastAboutFailedPickupIsPresent();
         reservationRejectionPage.verifyRecordIsNotPresentInTableByPickup(pickupInfo);
     }
+
+    @And("^Operator reassigns RSVN to new route$")
+    public void operatorReassignsRSVNToNewRoute() {
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
+        Address address = get(KEY_CREATED_ADDRESS);
+        String address1 = address.getAddress1();
+
+        reservationRejectionPage.filterTableByPickup(address1);
+        reservationRejectionPage.clickActionReassignReservationForRow(1);
+        reservationRejectionPage.reassignReservationInPopup(String.valueOf(routeId));
+    }
+
+    @And("^Operator verifies RSVN reassigned successfully$")
+    public void operatorVerifiesRSVNReassignedSuccessfully() {
+        Address address = get(KEY_CREATED_ADDRESS);
+        String address1 = address.getAddress1();
+
+        reservationRejectionPage.verifyToastAboutReassignReservationIsPresent();
+        reservationRejectionPage.verifyRecordIsNotPresentInTableByPickup(address1);
+    }
 }
