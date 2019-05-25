@@ -12,7 +12,7 @@ Feature: Order Weight Update V2
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Special Pages -> Order Weight Update
     When Operator Order Weight update CSV Upload on Order Weight Update V2 page
-      | weight | 4 |
+      | new-weight-in-double-format | 2.5 |
     Then Operator Order Weight update on Order Weight Update V2 page
     When Operator go to menu Order -> All Orders
     When Operator find order on All Orders page using this criteria below:
@@ -22,10 +22,12 @@ Feature: Order Weight Update V2
     Then Operator filter the result table by Tracking ID on All Orders page and verify order info is correct
     Then Operator Edit Order on Order Weight Update V2 page
     Then Operator Verify Order Weight on Order Weight Update V2 page
+
     Examples:a
       | Note   | hiptest-uid                              | orderType |
       | Normal | uid:e58a4c81-1b83-4115-bbee-584764277d30 | Normal    |
   Scenario: Operator Create multiple orders with CSV on All Orders page
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu menu Order -> All Orders
     Given API create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
@@ -33,9 +35,9 @@ Feature: Order Weight Update V2
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Special Pages -> Order Weight Update
     When Operator Multiple Order Weight update CSV Upload on Order Weight Update V2 page
-      | 4 |
-      | 5 |
-      | 6 |
+      | 4.5 |
+      | 5.2 |
+      | 6.1 |
     Given Operator go to menu menu Order -> All Orders
     When Operator find order on All Orders page using this criteria below:
       | category    | Tracking / Stamp ID |

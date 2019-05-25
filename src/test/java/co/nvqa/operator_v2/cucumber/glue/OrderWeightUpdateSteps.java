@@ -233,8 +233,8 @@ public class OrderWeightUpdateSteps extends AbstractSteps {
 
     @When("^Operator Order Weight update CSV Upload on Order Weight Update V2 page$")
     public void OrderWeightUpdateUploadCsvFile(Map<String, String> map) {
-        System.out.println(" Weight    : " + Integer.parseInt(map.get("weight")));
-        put(KEY_ORDER_WEIGHT, map.get("weight"));
+        //System.out.println(" Weight    : " + Integer.parseInt(map.get("weight")));
+        put(KEY_ORDER_WEIGHT, map.get("new-weight-in-double-format"));
         System.out.println("Order Id====>" + get(KEY_CREATED_ORDER_ID));
         System.out.println("Tracking Id====>" + get(KEY_CREATED_ORDER_TRACKING_ID));
         Long OrderId = get(KEY_CREATED_ORDER_ID);
@@ -273,7 +273,7 @@ public class OrderWeightUpdateSteps extends AbstractSteps {
     public void VerifyOrderWeightClick() {
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
         orderWeightUpdatePage.MatchOrderWeight(get(KEY_ORDER_WEIGHT));
-        pause(10 * 1000);
+        pause(2 * 1000);
     }
 
     @Then("^Operator Search Button For Orders on Order Weight Update V2 page$")

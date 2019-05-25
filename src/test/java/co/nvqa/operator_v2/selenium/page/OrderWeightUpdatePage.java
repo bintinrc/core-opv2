@@ -265,7 +265,7 @@ public class OrderWeightUpdatePage extends OperatorV2SimplePage {
     }
 
     private File buildCreateOrderUpdateCsv(String OrderTrackingNo, Map<String, String> map) {
-        int weight = Integer.parseInt(map.get("weight"));
+        Double weight = Double.parseDouble(map.get("new-weight-in-double-format"));
 
         StringBuilder orderAsSb = new StringBuilder()
                 .append(normalize(OrderTrackingNo)).append(',')
@@ -340,6 +340,8 @@ public class OrderWeightUpdatePage extends OperatorV2SimplePage {
     }
 
     public void uploadOrderWeightUpload() {
+        clickToSelectMultiOrderWeightUpdate("/html/body/div[1]/md-content/div/div/md-content/md-content/div[2]/div/div/nv-table/div/div[1]/table/thead/tr/th[7]/md-menu/button");
+        clickToSelectMultiOrderWeightUpdate("//*[@class='md-open-menu-container md-whiteframe-z2 md-active md-clickable']/md-menu-content/md-menu-item[1]/button");
         clickNvIconTextButtonByName("container.order-weight-update.upload-selected");
     }
 
@@ -361,6 +363,7 @@ public class OrderWeightUpdatePage extends OperatorV2SimplePage {
         clickNvIconButtonByNameAndWaitUntilEnabled("container.sidenav.order.edit");
 
         switchToOtherWindowAndWaitWhileLoading(OrderId);
+
     }
 
     public void MatchOrderWeight(String UpdatedWeight) {
@@ -370,8 +373,9 @@ public class OrderWeightUpdatePage extends OperatorV2SimplePage {
         try {
             pause(2000);
             String actualWeight = getText(xpath);
-            System.out.println("Web And Text Values :" + actualWeight);
-            assertEquals("Order ID matched", actualWeight, UpdatedWeight + " kg");
+            assertEquals("Order Weight Matched", actualWeight, UpdatedWeight + " kg");
+            pause2s();
+            switchToOtherWindow("order");
         } catch (NoSuchElementException ex) {
             NvLogger.warnf("Failed to getTextOnTableWithNgRepeat. XPath: %s", "");
             NvAllure.addWarnAttachment(getCurrentMethodName(), "Failed to getTextOnTableWithNgRepeat. XPath: %s", "");
