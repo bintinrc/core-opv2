@@ -6,10 +6,12 @@ import co.nvqa.operator_v2.model.ReservationRejectionEntity;
 import co.nvqa.operator_v2.selenium.page.ReservationRejectionPage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
  * @author Kateryna Skakunova
  */
+@ScenarioScoped
 public class ReservationRejectionSteps extends AbstractSteps
 {
     private ReservationRejectionPage reservationRejectionPage;
