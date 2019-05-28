@@ -3,10 +3,9 @@
 # reload RVM & hiptest-publisher
 # source ~/.rvm/scripts/rvm
 
-rvmFile="~/.rvm/scripts/rvm"
+rvmFile=~/.rvm/scripts/rvm
 
-if [[ -f "$rvmFile" ]]
-then
+if [[ -f "$rvmFile" ]]; then
     source ${rvmFile}
 fi
 

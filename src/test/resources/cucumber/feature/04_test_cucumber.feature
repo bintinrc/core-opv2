@@ -30,9 +30,10 @@ Feature: Test Cucumber
     Given API Driver collect all his routes
     Given API Driver get Reservation Job
     Given API Driver reject Reservation
-    Given API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator reassign reservation to the route using data below:
-      | hubId    | {hub-id}          |
-      | driverId | {ninja-driver-id} |
-    Given API Operator start the route
+    Given DB Operator get Booking ID of Reservation
+    Given API Operator fail the reservation using data below:
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 7           |
+      | failureReasonIndexMode | FIRST       |
+
+#curl 'https://api-qa.ninjavan.co/sg/overwatch/1.1/bookings/353481' -X DELETE -H 'Accept: application/json, text/plain, */*' -H 'Referer: https://operatorv2-qa.ninjavan.co/' -H 'Origin: https://operatorv2-qa.ninjavan.co' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36' -H 'Authorization: Bearer zo9Wp8GfNRw4XF4baOgrbuOZnfYcFEJcCAv1oVRh' -H 'timezone: Asia/Singapore' -H 'Content-Type: application/json; charset=UTF-8' --data-binary '{"failure_reason_id":76,"failure_reason":"Rejected - no AWB"}' --compressed
