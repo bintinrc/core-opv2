@@ -34,6 +34,7 @@ public class OrderWeightUpdatePage extends OperatorV2SimplePage {
     public static final String COLUMN_CLASS_DATA_MESSAGE = "message";
     public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking_id";
     public static final String COLUMN_CLASS_DATA_ORDER_REF_NO = "order_ref_no";
+    public static final String GET_WEIGHT_VALUE ="//label[text()='Weight']/following-sibling::p";
 
     public OrderWeightUpdatePage(WebDriver webDriver) {
         super(webDriver);
@@ -191,23 +192,17 @@ public class OrderWeightUpdatePage extends OperatorV2SimplePage {
             String orderId = "" + listOfCreatedOrder.get(i).getId();
             String Weight = String.valueOf(orderWeight.get(i));
             filterTableOrderByTrackingId(trackingId);
-            pause5s();
+            pause4s();
             clickNvIconButtonByNameAndWaitUntilEnabled("container.sidenav.order.edit");
             switchToOtherWindowAndWaitWhileLoading(orderId);
-            String xpath = "//label[text()='Weight']/following-sibling::p";
             pause(2000);
-            String actualWeight = getText(xpath);
-            System.out.println("Web And Text Values :" + actualWeight);
-            assertEquals("Order ID matched", actualWeight, Weight + " kg");
+            String actualWeight = getText(GET_WEIGHT_VALUE);
+            assertEquals("Updated weight matched", actualWeight, Weight + " kg");
             pause(5 * 1000);
             switchToOtherWindow("order");
             pause(1000);
-            System.out.println("Weight get from storge===>" + orderWeight.get(i));
-            System.out.println("list tracking id==>" + trackingId);
-            System.out.println("list tracking id==>" + orderId);
 
         }
-        //listOfCreatedOrder.forEach(this::verifyOrderInfoOnTableOrderIsCorrect);
 
 
     }
@@ -367,19 +362,18 @@ public class OrderWeightUpdatePage extends OperatorV2SimplePage {
     }
 
     public void MatchOrderWeight(String UpdatedWeight) {
-
-        String xpath = "//label[text()='Weight']/following-sibling::p";
-
         try {
             pause(2000);
-            String actualWeight = getText(xpath);
-            assertEquals("Order Weight Matched", actualWeight, UpdatedWeight + " kg");
+            String actualWeight = getText(GET_WEIGHT_VALUE);
+
+
+            assertEquals("Order Weight Matched", actualWeight, f("%s kg",UpdatedWeight));
             pause2s();
             switchToOtherWindow("order");
-        } catch (NoSuchElementException ex) {
+        }
+        catch (NoSuchElementException ex) {
             NvLogger.warnf("Failed to getTextOnTableWithNgRepeat. XPath: %s", "");
             NvAllure.addWarnAttachment(getCurrentMethodName(), "Failed to getTextOnTableWithNgRepeat. XPath: %s", "");
-            System.out.println("Exception Occures   " + ex.toString());
         }
 
     }
