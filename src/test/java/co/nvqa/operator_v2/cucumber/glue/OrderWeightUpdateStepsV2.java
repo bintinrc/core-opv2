@@ -4,9 +4,7 @@ import co.nvqa.commons.client.auth.AuthClient;
 import co.nvqa.commons.client.dp.Dp3plClient;
 import co.nvqa.commons.client.order_create.OrderCreateClientV2;
 import co.nvqa.commons.client.order_create.OrderCreateClientV4;
-import co.nvqa.commons.cucumber.StandardScenarioManager;
 import co.nvqa.commons.cucumber.StandardScenarioStorageKeys;
-import co.nvqa.commons.cucumber.glue.AbstractApiOperatorPortalSteps;
 import co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
 import co.nvqa.commons.database.CoreJdbc;
 import co.nvqa.commons.model.auth.AuthResponse;
@@ -22,7 +20,7 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.ListOrderCreationV2Template;
 import co.nvqa.operator_v2.model.OrderCreationV2Template;
-import co.nvqa.operator_v2.selenium.page.OrderWeightUpdatePage;
+import co.nvqa.operator_v2.selenium.page.OrderWeightUpdatePageV2;
 import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -31,13 +29,14 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import io.cucumber.datatable.DataTable;
 
 import javax.inject.Inject;
+import java.lang.reflect.TypeVariable;
 import java.util.*;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class OrderWeightUpdateSteps extends AbstractSteps    {
+public class OrderWeightUpdateStepsV2 extends AbstractSteps {
     private String apiBaseUrl;
 
     private String shipperV2ClientId;
@@ -63,24 +62,20 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
     private String dbUrlCore;
     private CoreJdbc coreJdbc;
 
-    private OrderWeightUpdatePage orderWeightUpdatePage;
+    private OrderWeightUpdatePageV2 orderWeightUpdatePageV2;
     String ORDER_KEY = "orderCreationV2Template";
     static OrderCreationV2Template order;
     @Inject
     private StandardApiOperatorPortalSteps standardApiOperatorPortalSteps;
-<<<<<<< HEAD:src/test/java/co/nvqa/operator_v2/cucumber/glue/OrderWeightUpdateSteps.java
-    public OrderWeightUpdateSteps() {
-=======
 
     public static final String KEY_ORDER_WEIGHT = "KEY_ORDER_WEIGHT";
 
     public OrderWeightUpdateStepsV2() {
->>>>>>> operator-v2:src/test/java/co/nvqa/operator_v2/cucumber/glue/OrderWeightUpdateStepsV2.java
     }
 
     @Override
     public void init() {
-        orderWeightUpdatePage = new OrderWeightUpdatePage(getWebDriver());
+        orderWeightUpdatePageV2 = new OrderWeightUpdatePageV2(getWebDriver());
         this.apiBaseUrl = StandardTestConstants.API_BASE_URL;
 
         this.shipperV2ClientId = get(KEY_SHIPPER_V2_CLIENT_ID);
@@ -101,17 +96,17 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
 
     @When("^Operator download Sample CSV file on Order Weight Update V2 page$")
     public void operatorDownloadSampleCsvFileOnOrderWeightUpdatePageV2() {
-        orderWeightUpdatePage.downloadSampleCsvFile();
+        orderWeightUpdatePageV2.downloadSampleCsvFile();
     }
 
     @Then("^Operator verify Sample CSV file on Order Weight Update V2 page downloaded successfully$")
     public void operatorVerifySampleCsvFileOnOrderWeightUpdatePageV2DownloadedSuccessfully() {
-        orderWeightUpdatePage.verifyCsvFileDownloadedSuccessfully();
+        orderWeightUpdatePageV2.verifyCsvFileDownloadedSuccessfully();
     }
 
     @When("^Operator uploading invalid CSV file on Order Weight Update V2 page$")
     public void operatorUploadingInvalidCsvFileOnOrderWeightUpdatePageV2() {
-        orderWeightUpdatePage.uploadInvalidCsv();
+        orderWeightUpdatePageV2.uploadInvalidCsv();
     }
 
     @When("^Operator create order V2 by uploading CSV on Order Weight Update V2 page using data below:$")
@@ -207,14 +202,14 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
         order.setWeight(2);
 
         System.out.println("Getting orderNo :   " + order.getOrderNo());
-        orderWeightUpdatePage.uploadCsv(order);
+        orderWeightUpdatePageV2.uploadCsv(order);
         put("orderCreationV2Template", order);
     }
 
     @Then("^Operator verify order V2 is created successfully on Order Weight Update V2 page$")
     public void operatorVerifyOrderV2IsCreatedSuccessfullyOnOrderWeightUpdatePageV2() {
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
-        orderWeightUpdatePage.verifyOrderV2IsCreatedSuccessfully(orderCreationV2Template);
+        orderWeightUpdatePageV2.verifyOrderV2IsCreatedSuccessfully(orderCreationV2Template);
         pause(5 * 1000);
     }
 
@@ -222,33 +217,32 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
     public void operatorVerifyOrderV3IsCreatedSuccessfullyOnOrderWeightUpdatePageV2() {
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
 
-        orderWeightUpdatePage.verifyOrderV3IsCreatedSuccessfully(orderCreationV2Template);
+        orderWeightUpdatePageV2.verifyOrderV3IsCreatedSuccessfully(orderCreationV2Template);
     }
 
     @When("^Operator Pop Open Order Weight update CSV on Order Weight Update V2 page$")
     public void downloadOrderWeightUpdateSampleCsvFile() {
-        orderWeightUpdatePage.downloadOrderWeightUpdateSampleCsvFile();
+        orderWeightUpdatePageV2.downloadOrderWeightUpdateSampleCsvFile();
         //pause(15*1000);
 
     }
 
     @When("^Operator Download Sample Csv Order Weight update CSV on Order Weight Update V2 page$")
     public void downloadSampleCsvOrderWeightUpdateSampleCsvFile() {
-        orderWeightUpdatePage.downloadOrderUpdateCsvFile();
+        orderWeightUpdatePageV2.downloadOrderUpdateCsvFile();
         pause(10 * 1000);
 
     }
 
     @When("^Operator Order Weight update CSV Upload on Order Weight Update V2 page$")
     public void OrderWeightUpdateUploadCsvFile(Map<String, String> map) {
-        //System.out.println(" Weight    : " + Integer.parseInt(map.get("weight")));
-        put(KEY_ORDER_WEIGHT, map.get("new-weight-in-double-format"));
+        System.out.println(" Weight    : " + Integer.parseInt(map.get("weight")));
+        put(KEY_ORDER_WEIGHT, map.get("weight"));
         System.out.println("Order Id====>" + get(KEY_CREATED_ORDER_ID));
         System.out.println("Tracking Id====>" + get(KEY_CREATED_ORDER_TRACKING_ID));
-        System.out.println("map Id====>" + map.get("new-weight-in-double-format"));
         Long OrderId = get(KEY_CREATED_ORDER_ID);
         String OrderTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        orderWeightUpdatePage.uploadOrderUpdateCsv(OrderTrackingId, map);
+        orderWeightUpdatePageV2.uploadOrderUpdateCsv(OrderTrackingId, map);
         pause(5 * 1000);
 
     }
@@ -256,7 +250,7 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
     @Then("^Operator Order Weight update on Order Weight Update V2 page$")
     public void OrderWeightUpdate() {
         pause(2000);
-        orderWeightUpdatePage.uploadOrderWeightUpload();
+        orderWeightUpdatePageV2.uploadOrderWeightUpload();
 
 
     }
@@ -264,8 +258,8 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
     @Then("^Operator Verify Order Weight update Successfully on Order Weight Update V2 page$")
     public void VerifyOrderWeightUpdate() {
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
-        //orderWeightUpdatePage.VerifyOrderWeightUpload("SOCV2"+orderCreationV2Template.getOrderNo());
-        orderWeightUpdatePage.VerifyOrderWeightUpload("SOCV2JVRNUEW8");
+        //orderWeightUpdatePageV2.VerifyOrderWeightUpload("SOCV2"+orderCreationV2Template.getOrderNo());
+        orderWeightUpdatePageV2.VerifyOrderWeightUpload("SOCV2JVRNUEW8");
         pause(5 * 1000);
 
 
@@ -273,31 +267,21 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
 
     @Then("^Operator Edit Order on Order Weight Update V2 page$")
     public void EditOrderClick() {
-       // String OrderId  = ""+String.valueOf(get(KEY_CREATED_ORDER_ID));
-        orderWeightUpdatePage.clickOrderEditButton("" + get(KEY_CREATED_ORDER_ID));
+        //String OrderId  = String.valueOf(get(KEY_CREATED_ORDER_ID));
+        orderWeightUpdatePageV2.clickOrderEditButton("" + get(KEY_CREATED_ORDER_ID));
         pause(10 * 1000);
     }
 
     @Then("^Operator Verify Order Weight on Order Weight Update V2 page$")
     public void VerifyOrderWeightClick() {
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
-
-        Long orderId = get(KEY_CREATED_ORDER_ID);
-        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        String methodInfo = f("%s - [Tracking ID = %s]", getCurrentMethodName(), trackingId);
-
-        retryIfAssertionErrorOrRuntimeExceptionOccurred(()->
-                {
-                    //Order orderDetails = getOrderClient().getOrder(orderId);
-                    //assertEquals("Order Weight Matched", orderDetails.getWeight(),f("%s kg",get(KEY_ORDER_WEIGHT)));
-
-                }, methodInfo);
-        pause(2 * 1000);
+        orderWeightUpdatePageV2.MatchOrderWeight(get(KEY_ORDER_WEIGHT));
+        pause(10 * 1000);
     }
 
     @Then("^Operator Search Button For Orders on Order Weight Update V2 page$")
     public void ClickOrderSearch() {
-        orderWeightUpdatePage.clickOrderSearchButton();
+        orderWeightUpdatePageV2.clickOrderSearchButton();
         pause(5 * 1000);
 
     }
@@ -325,11 +309,11 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
         if (listOfCreatedTrackingId == null || listOfCreatedTrackingId.isEmpty()) {
             throw new RuntimeException("List of created Tracking ID should not be null or empty.");
         }
-        //orderWeightUpdatePage.uploadMultiOrderUpdateCsv(listOfCreatedTrackingId,listWeight);
+        //orderWeightUpdatePageV2.uploadMultiOrderUpdateCsv(listOfCreatedTrackingId,listWeight);
         put("orderMultiweight", listWeight);
         Long OrderId = get(KEY_CREATED_ORDER_ID);
         String OrderTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        orderWeightUpdatePage.uploadMultiOrderUpdateCsv(listOfCreatedTrackingId, listWeight);
+        orderWeightUpdatePageV2.uploadMultiOrderUpdateCsv(listOfCreatedTrackingId, listWeight);
         pause(5 * 1000);
 
     }
@@ -338,7 +322,7 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
     public void operatorVerifyAllOrdersInCsvIsFoundOnAllOrdersPageWithCorrectInfo() {
         List<Order> listOfCreatedOrder = containsKey(KEY_LIST_OF_ORDER_DETAILS) ? get(KEY_LIST_OF_ORDER_DETAILS) : get(KEY_LIST_OF_CREATED_ORDER);
         List weight = get("orderMultiweight");
-        orderWeightUpdatePage.verifyAllOrdersInCsvIsFoundWithCorrectInfo(listOfCreatedOrder, weight);
+        orderWeightUpdatePageV2.verifyAllOrdersInCsvIsFoundWithCorrectInfo(listOfCreatedOrder, weight);
     }
 
     private void apiCreateV4MultiOrder(Map<String, String> dataTableAsMap) {
@@ -454,7 +438,7 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
 
 //
         System.out.println("Getting orderNo :   " + list.get(1).getOrderNo());
-        orderWeightUpdatePage.uploadCsvForMultipleOrders(listOrderCreationV2Template);
+        orderWeightUpdatePageV2.uploadCsvForMultipleOrders(listOrderCreationV2Template);
 
 
     }
@@ -472,7 +456,7 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
 
         ListOrderCreationV2Template listOrderCreationV2Template = new ListOrderCreationV2Template();
         listOrderCreationV2Template.setOrderCreationV2TemplatesList(list);
-        orderWeightUpdatePage.verifyOrderV2IsCreatedSuccessfullyForMultipleUsers(listOrderCreationV2Template);
+        orderWeightUpdatePageV2.verifyOrderV2IsCreatedSuccessfullyForMultipleUsers(listOrderCreationV2Template);
         pause(5 * 1000);
     }
 
@@ -485,7 +469,7 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
         }
         ListOrderCreationV2Template listOrderCreationV2Template = new ListOrderCreationV2Template();
         listOrderCreationV2Template.setOrderCreationV2TemplatesList(list);
-        orderWeightUpdatePage.uploadOrderUpdateCsvForMultipleUsers(listOrderCreationV2Template, map);
+        orderWeightUpdatePageV2.uploadOrderUpdateCsvForMultipleUsers(listOrderCreationV2Template, map);
         pause(5 * 1000);
 
     }

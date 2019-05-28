@@ -327,6 +327,10 @@ public class OrderWeightUpdatePage extends OperatorV2SimplePage {
 
     }
 
+    public void clickToSelectMultiOrderWeightUpdate(String button){
+        click(button);
+    }
+
     public void uploadOrderWeightCsv(File createOrderUpdateCsv) {
         clickNvIconTextButtonByName("container.order-weight-update.find-orders-with-csv");
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'order-find-by-csv nv-dataset-dialog md-nvYellow-theme md-transition-in')]");
@@ -528,5 +532,19 @@ public class OrderWeightUpdatePage extends OperatorV2SimplePage {
         } catch (IOException ex) {
             throw new NvTestRuntimeException(ex);
         }
+    }
+
+    public void clickSampleOrderUpdateAndWaitUntilDone(String name)
+    {
+        String xpathExpression = f("//a[@filename='%s']", name);
+        click(xpathExpression);
+        // waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
+    }
+
+    public void clickNvButtonUploadByNameAndWaitUntilDone(String name)
+    {
+        String xpathExpression = f("//nv-api-text-button[@name='%s']", name);
+        click(xpathExpression);
+        waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'saving')]/md-progress-circular");
     }
 }

@@ -9,6 +9,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author Kateryna Skakunova
@@ -28,11 +29,27 @@ public class OrderLevelTagManagementSteps extends AbstractSteps
         orderLevelTagManagementPage = new OrderLevelTagManagementPage(getWebDriver());
     }
 
-    @And("^Operator selects orders created$")
+    @And("^Operator searches and selects orders created$")
     public void operatorSelectsOrdersCreated()
     {
         List<Order> lists = get(KEY_LIST_OF_CREATED_ORDER);
-        lists.forEach(order -> orderLevelTagManagementPage.selectOrderInTable(String.valueOf(order.getId())));
+        lists.forEach(order -> orderLevelTagManagementPage.searchAndSelectOrderInTable(String.valueOf(order.getId())));
+    }
+
+    @And("^Operator selects orders created$")
+    public void operatorSelectsOrdersInTable()
+    {
+        orderLevelTagManagementPage.selectOrdersInTable();
+    }
+
+    @And("^Operator uploads CSV with orders created$")
+    public void operatorUploadsCsvOrdersCreated()
+    {
+        List<String> trackingIds = this.<List<Order>>get(KEY_LIST_OF_CREATED_ORDER)
+                .stream()
+                .map(Order::getTrackingId)
+                .collect(Collectors.toList());
+        orderLevelTagManagementPage.uploadFindOrdersCsvWithOrderInfo(trackingIds);
     }
 
     @And("^Operator tags order with \"([^\"]*)\"$")
