@@ -123,6 +123,101 @@ Feature: Edit Order
 #    When Operator Edit Cash Collection Details on Edit Order page
 #    When Operator Edit Cash Collection Details on Edit Order page successfully
 
+  @CloseNewWindows
+  Scenario: Operator should be able to update Stamp ID from Edit Order page ()
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    When Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    When Operator switch to Edit Order's window
+    When Operator change Stamp ID of the created order to "GENERATED" on Edit order page
+
+  @CloseNewWindows
+  Scenario: Operator should be able to update order status from Pending/Pending to Transit/Arrived at Sorting Hub on Edit Order page ()
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    When Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    When Operator switch to Edit Order's window
+    When Operator update status of the created order on Edit order page using data below:
+      | status                        | Transit                |
+      | granularStatus                | Arrived at Sorting Hub |
+      | lastPickupTransactionStatus   | Success                |
+      | lastDeliveryTransactionStatus | Pending                |
+    When Operator verify the created order info is correct on Edit Order page
+
+  @CloseNewWindows
+  Scenario: Operator should be able to update order status from Pending/Pending to Completed/Completed on Edit Order page ()
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    When Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    When Operator switch to Edit Order's window
+    When Operator update status of the created order on Edit order page using data below:
+      | status                        | Completed |
+      | granularStatus                | Completed |
+      | lastPickupTransactionStatus   | Success   |
+      | lastDeliveryTransactionStatus | Success   |
+    When Operator verify the created order info is correct on Edit Order page
+    And Operator verify color of order header on Edit Order page is "GREEN"
+
+  @CloseNewWindows
+  Scenario: Operator should be able to update order status from Pending/Pending to Cancelled/Cancelled on Edit Order page ()
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    When Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    When Operator switch to Edit Order's window
+    When Operator update status of the created order on Edit order page using data below:
+      | status                        | Cancelled |
+      | granularStatus                | Cancelled |
+      | lastPickupTransactionStatus   | Cancelled |
+      | lastDeliveryTransactionStatus | Cancelled |
+    When Operator verify the created order info is correct on Edit Order page
+    And Operator verify color of order header on Edit Order page is "RED"
+
+  @CloseNewWindows
+  Scenario: Operator should be able to update order status from Transit/Arrived at Sorting Hub to Pending/Pending on Edit Order page ()
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id-2} } |
+    When Operator go to menu Order -> All Orders
+    When Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    When Operator switch to Edit Order's window
+    When Operator update status of the created order on Edit order page using data below:
+      | status                        | Pending        |
+      | granularStatus                | Pending Pickup |
+      | lastPickupTransactionStatus   | Pending        |
+      | lastDeliveryTransactionStatus | Pending        |
+    When Operator verify the created order info is correct on Edit Order page
+
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

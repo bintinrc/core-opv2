@@ -2,11 +2,13 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -14,6 +16,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 
 import java.util.List;
 import java.util.Map;
@@ -73,14 +76,14 @@ public class EditOrderSteps extends AbstractSteps
     {
         String pickupInstruction = data.get("pickupInstruction");
 
-        if(pickupInstruction!=null)
+        if (pickupInstruction != null)
         {
             put(KEY_PICKUP_INSTRUCTION, pickupInstruction);
         }
 
         String deliveryInstruction = data.getOrDefault("deliveryInstruction", "");
 
-        if(deliveryInstruction!=null)
+        if (deliveryInstruction != null)
         {
             put(KEY_DELIVERY_INSTRUCTION, deliveryInstruction);
         }
@@ -94,14 +97,14 @@ public class EditOrderSteps extends AbstractSteps
         Order order = get(KEY_CREATED_ORDER);
         String pickupInstruction = get(KEY_PICKUP_INSTRUCTION);
 
-        if(StringUtils.isNotBlank(pickupInstruction))
+        if (StringUtils.isNotBlank(pickupInstruction))
         {
             pickupInstruction = order.getInstruction() + ", " + pickupInstruction;
         }
 
         String deliveryInstruction = get(KEY_DELIVERY_INSTRUCTION);
 
-        if(StringUtils.isNotBlank(deliveryInstruction))
+        if (StringUtils.isNotBlank(deliveryInstruction))
         {
             deliveryInstruction = order.getInstruction() + ", " + deliveryInstruction;
         }
@@ -156,7 +159,7 @@ public class EditOrderSteps extends AbstractSteps
     @Then("^Operator verify the order is added to the (.+) route on Edit Order page$")
     public void operatorVerifyTheOrderIsAddedToTheRouteOnEditOrderPage(String type)
     {
-        switch(type.toUpperCase())
+        switch (type.toUpperCase())
         {
             case "DELIVERY":
                 editOrderPage.verifyDeliveryRouteInfo(get(KEY_CREATED_ROUTE));
@@ -177,19 +180,18 @@ public class EditOrderSteps extends AbstractSteps
 
         try
         {
-            if(StringUtils.isNoneBlank(startDateTime))
+            if (StringUtils.isNoneBlank(startDateTime))
             {
                 editOrderPage.verifyDeliveryStartDateTime(startDateTime);
             }
 
             String endDateTime = mapOfData.get("endDateTime");
 
-            if(StringUtils.isNoneBlank(endDateTime))
+            if (StringUtils.isNoneBlank(endDateTime))
             {
                 editOrderPage.verifyDeliveryEndDateTime(endDateTime);
             }
-        }
-        catch (AssertionError | RuntimeException ex)
+        } catch (AssertionError | RuntimeException ex)
         {
             NvLogger.warn("Skip delivery start date & end date verification because it's to complicated.", ex);
         }
@@ -230,28 +232,28 @@ public class EditOrderSteps extends AbstractSteps
 
         String value = mapOfData.get("eventTags");
 
-        if(value!=null)
+        if (value != null)
         {
             assertThat("Event Tags", orderEvent.getTags(), Matchers.equalToIgnoringCase(value));
         }
 
         value = mapOfData.get("reason");
 
-        if(value!=null)
+        if (value != null)
         {
             assertThat("Reason", orderEvent.getDescription(), Matchers.containsString("Reason: Return to sender: " + value));
         }
 
         value = mapOfData.get("startTime");
 
-        if(value!=null)
+        if (value != null)
         {
             assertThat("Start Time", orderEvent.getDescription(), Matchers.containsString("Start Time: " + value));
         }
 
         value = mapOfData.get("endTime");
 
-        if(value!=null)
+        if (value != null)
         {
             assertThat("End Time", orderEvent.getDescription(), Matchers.containsString("End Time: " + value));
         }
@@ -269,5 +271,70 @@ public class EditOrderSteps extends AbstractSteps
             String actualTagName = editOrderPage.getTag();
             assertEquals(f("Order tag is not equal to tag set on Order Level Tag Management page for order Id - %s", order.getId()), tagLabel, actualTagName);
         });
+    }
+
+    @When("^Operator change Stamp ID of the created order to \"(.+)\" on Edit order page$")
+    public void operatorEditStampIdOnEditOrderPage(String stampId)
+    {
+        if (StringUtils.equalsIgnoreCase(stampId, "GENERATED"))
+        {
+            stampId = TestUtils.generateDateUniqueString();
+        }
+
+        NvLogger.warn(stampId);
+        editOrderPage.editOrderStamp(stampId);
+    }
+
+    @When("^Operator update status of the created order on Edit order page using data below:$")
+    public void operatorUpdateStatusOnEditOrderPage(Map<String, String> mapOfData)
+    {
+        Order order = get(KEY_CREATED_ORDER);
+        String value = mapOfData.get("status");
+        if (StringUtils.isNotBlank(value))
+        {
+            order.setStatus(value);
+        }
+        value = mapOfData.get("granularStatus");
+        if (StringUtils.isNotBlank(value))
+        {
+            order.setGranularStatus(value);
+        }
+        value = mapOfData.get("lastPickupTransactionStatus");
+        if (StringUtils.isNotBlank(value))
+        {
+            Transaction transaction = order.getLastPickupTransaction();
+            Assertions.assertNotNull(transaction, "Last Pickup Transaction");
+            transaction.setStatus(value.toUpperCase());
+        }
+        value = mapOfData.get("lastDeliveryTransactionStatus");
+        if (StringUtils.isNotBlank(value))
+        {
+            Transaction transaction = order.getLastDeliveryTransaction();
+            Assertions.assertNotNull(transaction, "Last Delivery Transaction");
+            transaction.setStatus(value.toUpperCase());
+        }
+        editOrderPage.updateOrderStatus(order);
+    }
+
+    @Then("^Operator verify the created order info is correct on Edit Order page$")
+    public void operatorVerifyOrderInfoOnEditOrderPage()
+    {
+        Order order = get(KEY_CREATED_ORDER);
+        editOrderPage.verifyOrderInfoIsCorrect(order);
+    }
+
+    @Then("^Operator verify color of order header on Edit Order page is \"(.+)\"$")
+    public void operatorVerifyColorOfOrderHeaderOnEditOrderPage(String color)
+    {
+        switch (color.toLowerCase())
+        {
+            case "green":
+                color = "rgba(28, 111, 52, 1)";
+                break;
+            case "red":
+                color = "rgba(193, 36, 68, 1)";
+                break;
+        }
+        editOrderPage.verifyOrderHeaderColor(color);
     }
 }
