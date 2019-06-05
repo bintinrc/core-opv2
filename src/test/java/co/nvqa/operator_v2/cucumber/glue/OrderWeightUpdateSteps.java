@@ -68,14 +68,8 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
     static OrderCreationV2Template order;
     @Inject
     private StandardApiOperatorPortalSteps standardApiOperatorPortalSteps;
-<<<<<<< HEAD:src/test/java/co/nvqa/operator_v2/cucumber/glue/OrderWeightUpdateSteps.java
-    public OrderWeightUpdateSteps() {
-=======
-
     public static final String KEY_ORDER_WEIGHT = "KEY_ORDER_WEIGHT";
-
-    public OrderWeightUpdateStepsV2() {
->>>>>>> operator-v2:src/test/java/co/nvqa/operator_v2/cucumber/glue/OrderWeightUpdateStepsV2.java
+    public OrderWeightUpdateSteps() {
     }
 
     @Override
