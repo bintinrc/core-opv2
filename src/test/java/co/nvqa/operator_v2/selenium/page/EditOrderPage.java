@@ -265,6 +265,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public void verifyEvent(Order order, String hubName, String hubId, String eventNameExpected)
     {
+        ZonedDateTime eventDateExpected = DateUtil.getDate(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
+
         int rowWithExpectedEvent = 1;
         for (int i = 1; i <= eventsTable.getRowsCount(); i++) {
             String eventNameActual = getTextOnTableEvent(i, EVENT_NAME);
@@ -273,14 +275,10 @@ public class EditOrderPage extends OperatorV2SimplePage
             }
         }
         OrderEvent eventRow = eventsTable.readEntity(rowWithExpectedEvent);
-        assertEquals("Different Result Returned", hubName, eventRow.getHubName());
-        assertThat("", eventRow.getDescription(), containsString(f("Parcel inbound at Origin Hub - %s", hubName)));
-        assertThat("", eventRow.getDescription(), containsString(f("Scanned at Hub %s", hubId)));
-//        assertEquals("Different Result Returned", f("Arrived at Origin Hub: \"Parcel inbound at Origin Hub - %s " +
-//                        "", hubName, hubId), eventRow.getDescription());
-        ZonedDateTime eventDateExpected = DateUtil.getDate(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
-
-        assertThat("Different Result Returned",
+        assertEquals("Different Result Returned for hub name", hubName, eventRow.getHubName());
+        assertThat("Different Result Returned for event description", eventRow.getDescription(), containsString(f("Parcel inbound at Origin Hub - %s", hubName)));
+        assertThat("Different Result Returned for event description", eventRow.getDescription(), containsString(f("Scanned at Hub %s", hubId)));
+        assertThat("Different Result Returned for event time",
                 eventRow.getEventTime(),
                 containsString(DateUtil.displayDate(eventDateExpected)));
     }
