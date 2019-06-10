@@ -185,6 +185,12 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     {
         ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
 
+        if(shipmentInfo!=null)
+        {
+            getHubJdbc().deleteShipment(shipmentInfo.getId());
+        }
+    }
+
     @Given("DB Operator verifies warehouse_sweeps record")
     public void dbOperatorVerifiesWareHouseSweepsRecord(Map<String, String> mapOfData) {
         String trackingId = mapOfData.get("trackingId");
