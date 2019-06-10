@@ -15,6 +15,7 @@ import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.WordUtils;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
@@ -92,6 +93,43 @@ public class EditOrderPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfMdDialogByTitle("Edit Priority Level");
     }
 
+    public void editOrderStamp(String stampId)
+    {
+        clickMenu("Order Settings", "Edit Order Stamp");
+        waitUntilVisibilityOfMdDialogByTitle("Edit Order Stamp");
+        sendKeysById("commons.stamp-id", stampId);
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.save");
+        waitUntilInvisibilityOfToast(String.format("Stamp ID updated successfully: %s", stampId), true);
+        waitUntilInvisibilityOfMdDialogByTitle("Edit Order Stamp");
+    }
+
+    public void updateOrderStatus(Order order)
+    {
+        clickMenu("Order Settings", "Update Status");
+        waitUntilVisibilityOfMdDialogByTitle("Update Status");
+        if (StringUtils.isNotBlank(order.getStatus()))
+        {
+            selectValueFromMdSelectById("commons.status", order.getStatus());
+        }
+        if (StringUtils.isNotBlank(order.getGranularStatus()))
+        {
+            selectValueFromMdSelectById("commons.model.granular-status", order.getGranularStatus());
+        }
+        Transaction transaction = order.getLastPickupTransaction();
+        if (transaction != null && StringUtils.isNotBlank(transaction.getStatus()))
+        {
+            selectValueFromMdSelectById("container.order.edit.last-pickup-transaction-status", WordUtils.capitalizeFully(transaction.getStatus()));
+        }
+        transaction = order.getLastDeliveryTransaction();
+        if (transaction != null && StringUtils.isNotBlank(transaction.getStatus()))
+        {
+            selectValueFromMdSelectById("container.order.edit.last-delivery-transaction-status", WordUtils.capitalizeFully(transaction.getStatus()));
+        }
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
+        waitUntilInvisibilityOfToast("Status Updated", true);
+        waitUntilInvisibilityOfMdDialogByTitle("Update Status");
+    }
+
     public void addToRoute(long routeId, String type)
     {
         clickMenu("Pickup", "Add To Route");
@@ -105,6 +143,11 @@ public class EditOrderPage extends OperatorV2SimplePage
     public void verifyDeliveryStartDateTime(String expectedDate)
     {
         assertEquals("Delivery Start Date/Time", expectedDate, deliveryDetailsBox.getStartDateTime());
+    }
+
+    public void verifyOrderHeaderColor(String color)
+    {
+        assertEquals("Order Header Color", color, getCssValue("//div[@class='header-holder']/div", "background-color"));
     }
 
     public void verifyDeliveryEndDateTime(String expectedDate)
