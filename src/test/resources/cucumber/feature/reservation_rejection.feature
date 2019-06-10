@@ -43,7 +43,7 @@ Feature: Reservation Preset Management
     Then Operator verifies pickup failed successfully
 
   @DeleteOrArchiveRoute
-  Scenario: Operator should be able to Re-assign a Rejected Reservation on Reservation Rejection page
+  Scenario: Operator should be able to Re-assign a Rejected Reservation on Reservation Rejection page (uid:b1698d74-da98-4320-837b-d00e3bd340e5)
     Given API Operator create new route using data below:
     | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator create new shipper address V2 using data below:
