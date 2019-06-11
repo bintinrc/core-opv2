@@ -647,10 +647,11 @@ public class DpAdministrationPage extends OperatorV2SimplePage
                 setCity(value);
             }
             value = dpParams.getCountry();
-            if (StringUtils.isNotBlank(value))
+            //Country is removed from page.
+            /*if (StringUtils.isNotBlank(value))
             {
                 setCountry(value);
-            }
+            }*/
             value = dpParams.getPostcode();
             if (StringUtils.isNotBlank(value))
             {
