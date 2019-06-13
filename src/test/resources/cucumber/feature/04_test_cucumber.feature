@@ -16,7 +16,6 @@ Feature: Test Cucumber
       | id   | 3      |
       | name | Test 3 |
 
-    @CWF @RT
   Scenario: Dummy scenario for Reject Reservation
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
