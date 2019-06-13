@@ -126,6 +126,11 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         //Service Type
         // TO-DO: Add 'Parcel Delivery', 'Return', 'Marketplace', 'Ninja Pack', 'Bulky', 'International' and 'Marketplace International'.
+        if("Normal".equals(shipper.getType()))
+        {
+            clickToggleButtonByLabel("Marketplace", "No");
+            clickToggleButtonByLabel("Marketplace International", "No");
+        }
 
         if(isCreateForm)
         {
