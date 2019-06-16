@@ -202,7 +202,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         List<Map<String, Object>> warehouseSweepRecordsFiltered = new ArrayList<>();
         int counter = 0;
         while (warehouseSweepRecordsFiltered.size() != 1){
-            if (counter > 3) {
+            if (counter > 30) {
                 throw new AssertionFailedError(f("No record found in Warehouse_sweeps table with tracking id %s", trackingId));
             }
             warehouseSweepRecordsFiltered = dbWarehouseSweepsRequest(trackingId);

@@ -77,20 +77,25 @@ public class NinjaPackTidGeneratorPage extends OperatorV2SimplePage {
 
     public void verifyXlsx(String parcelSizeText, String serviceScope){
         ParcelSize parcelSize = ParcelSize.fromFullName(parcelSizeText);
-
         ZonedDateTime time = DateUtil.getDate(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
+        int retry = 0;
+        while (true){
+            if (retry == 3) break;
+            findFileOrRetry(parcelSize, time, serviceScope);
+            time = time.minusSeconds(1);
+            retry++;
+        }
+    }
 
+    private void findFileOrRetry(ParcelSize parcelSize, ZonedDateTime time, String serviceScope){
         String timeFormatted = DateTimeFormatter.ofPattern(XLSX_DATE_FORMAT).format(time);
-
         try {
             verifyFileDownloadedSuccessfully(f(XLSX_GENERATED_TID_FILENAME_PATTERN, timeFormatted),
                     f(XLSX_GENERATED_TID_EXPECTED_TEXT, parcelSize.getShortName(), serviceScope));
         }
         catch (AssertionFailedError assertError){
-            if (assertError.getMessage().contains("not exists")){
-                verifyFileDownloadedSuccessfully(f(XLSX_GENERATED_TID_FILENAME_PATTERN,
-                        DateTimeFormatter.ofPattern(XLSX_DATE_FORMAT).format(time.minusSeconds(1)),
-                        f(XLSX_GENERATED_TID_EXPECTED_TEXT, parcelSize.getShortName(), serviceScope)));
+            if (!assertError.getMessage().contains("not exists")){
+                throw new AssertionFailedError(assertError.getMessage());
             }
         }
     }

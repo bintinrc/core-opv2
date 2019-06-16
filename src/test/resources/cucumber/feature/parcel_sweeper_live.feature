@@ -5,7 +5,7 @@ Feature: Parcel Sweeper Live
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: On scan invalid tracking id errors displayed on Parcel Sweeper Live page (uid:715d3ff8-92f8-47c3-be4d-f795ef275948)
+  Scenario: Parcel Sweeper Live - Order Not Found - Invalid Tracking ID (uid:5699c5ca-a546-42c4-b29d-0b25ad512360)
     Given Operator go to menu Order -> All Orders
     Given Operator go to menu Routing -> Parcel Sweeper Live
   When Operator provides data on Parcel Sweeper Live page:
@@ -19,7 +19,7 @@ Feature: Parcel Sweeper Live
     | destinationHub       | NOT FOUND     |
     | destinationHub_color | #f45050       |
 
-  Scenario: On scan valid tracking id errors displayed on Parcel Sweeper Live page ?????
+  Scenario: Parcel Sweeper Live - Order Not Found - Pending Pickup (uid:d59c536f-3671-46b8-883c-6785a524a38a)
     Given Operator go to menu Order -> All Orders
     Given Operator go to menu Routing -> Parcel Sweeper Live
     Given API Shipper create V4 order using data below:
@@ -48,7 +48,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Pending Pickup" on Edit Order page
 
   @DeleteOrArchiveRoute
-  Scenario: Parcel Sweeper Live - Van En-Route to Pickup
+  Scenario: Parcel Sweeper Live - Van En-Route to Pickup (uid:be9ed0d6-276b-4368-bf9a-47dc0a8bec27)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
