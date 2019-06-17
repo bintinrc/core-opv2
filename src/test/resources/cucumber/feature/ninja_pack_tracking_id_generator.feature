@@ -1,4 +1,4 @@
-@NinjaPackTIDGenerator
+@NinjaPackTrackingIdGenerator
 Feature: Ninja Pack Tracking ID Generator
 
   @LaunchBrowser @ShouldAlwaysRun

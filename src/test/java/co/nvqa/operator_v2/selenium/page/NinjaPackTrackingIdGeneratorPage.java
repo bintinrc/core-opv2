@@ -10,18 +10,18 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Stream;
 
-public class NinjaPackTidGeneratorPage extends OperatorV2SimplePage {
+public class NinjaPackTrackingIdGeneratorPage extends OperatorV2SimplePage {
 
     private final static String SERVICE_SCOPE_ID = "Service Scope";
     private final static String PARCEL_SIZE_ID = "Parcel Size";
-    private final static String XLSX_GENERATED_TID_FILENAME_PATTERN = "ninja_pack_tracking_id_%s.xlsx";
-    private final static String XLSX_GENERATED_TID_EXPECTED_TEXT = "si><t>%s</t></si><si><t>%s</t></si>";
+    private final static String XLSX_GENERATED_TRACKING_ID_FILENAME_PATTERN = "ninja_pack_tracking_id_%s.xlsx";
+    private final static String XLSX_GENERATED_TRACKING_ID_EXPECTED_TEXT = "si><t>%s</t></si><si><t>%s</t></si>";
     private final static String XLSX_DATE_FORMAT = "yyyy-MM-dd HH_mm_ss";
 
     private final static String CONFIRMATION_POPUP_XPATH = "//md-dialog[contains(@class, 'ninja-pack-tid-generator-confirmation-dialog')]";
     private final static String GENERATED_SUCCESSFULLY_TOAST_TEXT = "Tracking ID generated successfully";
 
-    public NinjaPackTidGeneratorPage(WebDriver webDriver) {
+    public NinjaPackTrackingIdGeneratorPage(WebDriver webDriver) {
         super(webDriver);
     }
 
@@ -78,25 +78,26 @@ public class NinjaPackTidGeneratorPage extends OperatorV2SimplePage {
     public void verifyXlsx(String parcelSizeText, String serviceScope){
         ParcelSize parcelSize = ParcelSize.fromFullName(parcelSizeText);
         ZonedDateTime time = DateUtil.getDate(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
-        int retry = 0;
-        while (true){
-            if (retry == 3) break;
-            findFileOrRetry(parcelSize, time, serviceScope);
+        boolean isFound = false;
+        for (int i = 0; i < 3; i++){
+            if (isFound) break;
+            isFound = findFile(parcelSize, time, serviceScope);
             time = time.minusSeconds(1);
-            retry++;
         }
     }
 
-    private void findFileOrRetry(ParcelSize parcelSize, ZonedDateTime time, String serviceScope){
+    private boolean findFile(ParcelSize parcelSize, ZonedDateTime time, String serviceScope){
         String timeFormatted = DateTimeFormatter.ofPattern(XLSX_DATE_FORMAT).format(time);
         try {
-            verifyFileDownloadedSuccessfully(f(XLSX_GENERATED_TID_FILENAME_PATTERN, timeFormatted),
-                    f(XLSX_GENERATED_TID_EXPECTED_TEXT, parcelSize.getShortName(), serviceScope));
+            verifyFileDownloadedSuccessfully(f(XLSX_GENERATED_TRACKING_ID_FILENAME_PATTERN, timeFormatted),
+                    f(XLSX_GENERATED_TRACKING_ID_EXPECTED_TEXT, parcelSize.getShortName(), serviceScope));
+            return true;
         }
         catch (AssertionFailedError assertError){
             if (!assertError.getMessage().contains("not exists")){
                 throw new AssertionFailedError(assertError.getMessage());
             }
         }
+        return false;
     }
 }
