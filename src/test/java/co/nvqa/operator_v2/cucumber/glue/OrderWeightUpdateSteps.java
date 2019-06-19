@@ -83,9 +83,6 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
         this.shipperV4ClientId = get(KEY_SHIPPER_V4_CLIENT_ID);
         this.shipperV4ClientSecret = get(KEY_SHIPPER_V4_CLIENT_SECRET);
 
-        this.shipperGrabClientId = get(KEY_SHIPPER_GRAB_CLIENT_ID);
-        this.shipperGrabClientSecret = get(KEY_SHIPPER_GRAB_CLIENT_SECRET);
-
         this.dbDriver = StandardTestConstants.DB_DRIVER;
         this.dbUser = StandardTestConstants.DB_USER;
         this.dbPass = StandardTestConstants.DB_PASS;
@@ -502,12 +499,6 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
                 shipperClientSecret = shipperV4ClientSecret;
                 break;
             }
-            case "GRAB": {
-                shipperAccessToken = get(StandardScenarioStorageKeys.KEY_SHIPPER_GRAB_ACCESS_TOKEN);
-                shipperClientId = shipperGrabClientId;
-                shipperClientSecret = shipperGrabClientSecret;
-                break;
-            }
         }
 
         if (shipperAccessToken == null) {
@@ -522,9 +513,6 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
                     break;
                 case "V4":
                     put(KEY_SHIPPER_V4_ACCESS_TOKEN, shipperAccessToken);
-                    break;
-                case "grab":
-                    put(KEY_SHIPPER_GRAB_ACCESS_TOKEN, shipperAccessToken);
                     break;
             }
         }
