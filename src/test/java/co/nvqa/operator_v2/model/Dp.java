@@ -1,9 +1,12 @@
 package co.nvqa.operator_v2.model;
 
+import co.nvqa.commons.model.core.hub.Hub;
+import co.nvqa.commons.util.factory.HubFactory;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Sergey Mishanin
@@ -34,6 +37,8 @@ public class Dp extends DataEntity<Dp>
     private String postcode;
     private String directions;
     private String activity;
+    private Double latitude;
+    private Double longitude;
 
     public Dp()
     {
@@ -42,6 +47,9 @@ public class Dp extends DataEntity<Dp>
     public Dp(Map<String, ?> dataMap)
     {
         fromMap(dataMap);
+        Hub hub = HubFactory.getRandomHub();
+        setLatitude(Optional.ofNullable(getLatitude()).orElse(hub.getLatitude()));
+        setLongitude(Optional.ofNullable(getLongitude()).orElse(hub.getLongitude()));
     }
 
     public Long getId()
@@ -338,5 +346,25 @@ public class Dp extends DataEntity<Dp>
     public void setCapBuffer(String capBuffer)
     {
         this.capBuffer = capBuffer;
+    }
+
+    public Double getLatitude()
+    {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude)
+    {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude()
+    {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude)
+    {
+        this.longitude = longitude;
     }
 }

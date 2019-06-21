@@ -411,7 +411,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         {
             super(webDriver);
             setColumnLocators(ImmutableMap.<String, String>builder()
-                    .put("id", "dpms_id")
+                    .put("id", "id")
                     .put("name", "name")
                     .put("shortName", "short_name")
                     .put("hub", "hub")
@@ -445,7 +445,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         static final String LOCATOR_FIELD_CAP_BUFFER = "Cap Buffer *";
         static final String LOCATOR_FIELD_CONTACT_NO = "Contact No. *";
         static final String LOCATOR_FIELD_ADDRESS_LINE_1 = "Address Line 1 *";
-        static final String LOCATOR_FIELD_ADDRESS_LINE_2 = "Address Line 2 *";
+        static final String LOCATOR_FIELD_ADDRESS_LINE_2 = "Address Line 2";
         static final String LOCATOR_FIELD_UNIT_NO = "Unit No. *";
         static final String LOCATOR_FIELD_FLOOR_NO = "Floor No. *";
         static final String LOCATOR_FIELD_CITY = "City *";
@@ -469,97 +469,163 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setName(String value)
         {
-            sendKeysByAriaLabel(LOCATOR_FIELD_NAME, value);
+            if(StringUtils.isNotBlank(value))
+            {
+                sendKeysByAriaLabel(LOCATOR_FIELD_NAME, value);
+            }
             return this;
         }
 
         public AddDpDialog setShortName(String value)
         {
-            sendKeysByAriaLabel(LOCATOR_FIELD_SHORT_NAME, value);
+            if(StringUtils.isNotBlank(value))
+            {
+                sendKeysByAriaLabel(LOCATOR_FIELD_SHORT_NAME, value);
+            }
             return this;
         }
 
         public AddDpDialog setType(String value)
         {
-            selectValueFromMdSelectById(LOCATOR_FIELD_TYPE, value);
+            if(StringUtils.isNotBlank(value))
+            {
+                selectValueFromMdSelectById(LOCATOR_FIELD_TYPE, value);
+            }
             return this;
         }
 
         public AddDpDialog setService(String value)
         {
-            selectValueFromMdSelectById(LOCATOR_FIELD_SERVICE, value);
+            if(StringUtils.isNotBlank(value))
+            {
+                selectValueFromMdSelectById(LOCATOR_FIELD_SERVICE, value);
+            }
             return this;
         }
 
         public AddDpDialog setCanShipperLodgeIn(Boolean value)
         {
-            toggleMdSwitchById(LOCATOR_FIELD_CAN_SHIPPER_LODGE_IN, value);
+            if(value!=null)
+            {
+                toggleMdSwitchById(LOCATOR_FIELD_CAN_SHIPPER_LODGE_IN, value);
+            }
             return this;
         }
 
         public AddDpDialog setCanCustomerCollect(Boolean value)
         {
-            toggleMdSwitchById(LOCATOR_FIELD_CAN_CUSTOMER_COLLECT, value);
+            if(value!=null)
+            {
+                toggleMdSwitchById(LOCATOR_FIELD_CAN_CUSTOMER_COLLECT, value);
+            }
             return this;
         }
 
         public AddDpDialog setMaxCap(String value)
         {
-            sendKeysByAriaLabel(LOCATOR_FIELD_MAX_CAP, value);
+            if(StringUtils.isNotBlank(value))
+            {
+                sendKeysByAriaLabel(LOCATOR_FIELD_MAX_CAP, value);
+            }
             return this;
         }
 
         public AddDpDialog setCapBuffer(String value)
         {
-            sendKeysByAriaLabel(LOCATOR_FIELD_CAP_BUFFER, value);
+            if(StringUtils.isNotBlank(value))
+            {
+                sendKeysByAriaLabel(LOCATOR_FIELD_CAP_BUFFER, value);
+            }
             return this;
         }
 
         public AddDpDialog setContactNo(String value)
         {
-            sendKeysByAriaLabel(LOCATOR_FIELD_CONTACT_NO, value);
+            if(StringUtils.isNotBlank(value))
+            {
+                sendKeysByAriaLabel(LOCATOR_FIELD_CONTACT_NO, value);
+            }
             return this;
         }
 
         public AddDpDialog setAddressLine1(String value)
         {
-            sendKeysByAriaLabel(LOCATOR_FIELD_ADDRESS_LINE_1, value);
+            if(StringUtils.isNotBlank(value))
+            {
+                sendKeysByAriaLabel(LOCATOR_FIELD_ADDRESS_LINE_1, value);
+            }
             return this;
         }
 
         public AddDpDialog setAddressLine2(String value)
         {
-            sendKeysByAriaLabel(LOCATOR_FIELD_ADDRESS_LINE_2, value);
+            if(StringUtils.isNotBlank(value))
+            {
+                sendKeysByAriaLabel(LOCATOR_FIELD_ADDRESS_LINE_2, value);
+            }
             return this;
         }
 
         public AddDpDialog setUnitNo(String value)
         {
-            sendKeysByAriaLabel(LOCATOR_FIELD_UNIT_NO, value);
+            if(StringUtils.isNotBlank(value))
+            {
+                sendKeysByAriaLabel(LOCATOR_FIELD_UNIT_NO, value);
+            }
             return this;
         }
 
         public AddDpDialog setFloorNo(String value)
         {
-            sendKeysByAriaLabel(LOCATOR_FIELD_FLOOR_NO, value);
+            if(StringUtils.isNotBlank(value))
+            {
+                sendKeysByAriaLabel(LOCATOR_FIELD_FLOOR_NO, value);
+            }
             return this;
         }
 
         public AddDpDialog setCity(String value)
         {
-            sendKeysByAriaLabel(LOCATOR_FIELD_CITY, value);
+            if(StringUtils.isNotBlank(value))
+            {
+                sendKeysByAriaLabel(LOCATOR_FIELD_CITY, value);
+            }
             return this;
         }
 
         public AddDpDialog setCountry(String value)
         {
-            sendKeysByAriaLabel(LOCATOR_FIELD_COUNTRY, value);
+            if(StringUtils.isNotBlank(value))
+            {
+                sendKeysByAriaLabel(LOCATOR_FIELD_COUNTRY, value);
+            }
             return this;
         }
 
         public AddDpDialog setPostcode(String value)
         {
-            sendKeysByAriaLabel(LOCATOR_FIELD_POSTCODE, value);
+            if(StringUtils.isNotBlank(value))
+            {
+                sendKeysByAriaLabel(LOCATOR_FIELD_POSTCODE, value);
+            }
+            return this;
+        }
+
+        public AddDpDialog setLatitude(Double value)
+        {
+            if(value!=null)
+            {
+                sendKeysByAriaLabel("Latitude *", String.valueOf(value));
+            }
+            return this;
+        }
+
+        public AddDpDialog setLongitude(Double value)
+        {
+            if(value!=null)
+            {
+                sendKeysByAriaLabel("Longitude *", String.valueOf(value));
+            }
             return this;
         }
 
@@ -569,100 +635,35 @@ public class DpAdministrationPage extends OperatorV2SimplePage
             return this;
         }
 
+        public void fillForm(Dp dpParams)
+        {
+            waitUntilVisible();
+            setName(dpParams.getName());
+            setShortName(dpParams.getShortName());
+            setType(dpParams.getType());
+            setService(dpParams.getService());
+            setCanShipperLodgeIn(dpParams.getCanShipperLodgeIn());
+            setCanCustomerCollect(dpParams.getCanCustomerCollect());
+            setMaxCap(dpParams.getMaxCap());
+            setCapBuffer(dpParams.getCapBuffer());
+            setContactNo(dpParams.getContactNo());
+            setAddressLine1(dpParams.getAddress1());
+            setAddressLine2(dpParams.getAddress2());
+            setUnitNo(dpParams.getUnitNo());
+            setFloorNo(dpParams.getFloorNo());
+            setCity(dpParams.getCity());
+            //setCountry(dpParams.getCountry());
+            setPostcode(dpParams.getPostcode());
+            setLatitude(dpParams.getLatitude());
+            setLongitude(dpParams.getLongitude());
+            setDirections(dpParams.getDirections());
+            submitForm();
+        }
+
         public void submitForm()
         {
             clickNvButtonSaveByNameAndWaitUntilDone(locatorButtonSubmit);
             waitUntilInvisibilityOfMdDialogByTitle(dialogTittle);
-        }
-
-        public void fillForm(Dp dpParams)
-        {
-            waitUntilVisible();
-            String value = dpParams.getName();
-            if (StringUtils.isNotBlank(value))
-            {
-                setName(value);
-            }
-            value = dpParams.getShortName();
-            if (StringUtils.isNotBlank(value))
-            {
-                setShortName(value);
-            }
-            value = dpParams.getType();
-            if (StringUtils.isNotBlank(value))
-            {
-                setType(value);
-            }
-            value = dpParams.getService();
-            if (StringUtils.isNotBlank(value))
-            {
-                setService(value);
-            }
-            if (dpParams.getCanShipperLodgeIn() != null)
-            {
-                setCanShipperLodgeIn(dpParams.getCanShipperLodgeIn());
-            }
-            if (dpParams.getCanCustomerCollect() != null)
-            {
-                setCanCustomerCollect(dpParams.getCanCustomerCollect());
-            }
-            value = dpParams.getMaxCap();
-            if (StringUtils.isNotBlank(value))
-            {
-                setMaxCap(value);
-            }
-            value = dpParams.getCapBuffer();
-            if (StringUtils.isNotBlank(value))
-            {
-                setCapBuffer(value);
-            }
-            value = dpParams.getContactNo();
-            if (StringUtils.isNotBlank(value))
-            {
-                setContactNo(value);
-            }
-            value = dpParams.getAddress1();
-            if (StringUtils.isNotBlank(value))
-            {
-                setAddressLine1(value);
-            }
-            value = dpParams.getAddress2();
-            if (StringUtils.isNotBlank(value))
-            {
-                setAddressLine2(value);
-            }
-            value = dpParams.getUnitNo();
-            if (StringUtils.isNotBlank(value))
-            {
-                setUnitNo(value);
-            }
-            value = dpParams.getFloorNo();
-            if (StringUtils.isNotBlank(value))
-            {
-                setFloorNo(value);
-            }
-            value = dpParams.getCity();
-            if (StringUtils.isNotBlank(value))
-            {
-                setCity(value);
-            }
-            value = dpParams.getCountry();
-            //Country is removed from page.
-            /*if (StringUtils.isNotBlank(value))
-            {
-                setCountry(value);
-            }*/
-            value = dpParams.getPostcode();
-            if (StringUtils.isNotBlank(value))
-            {
-                setPostcode(value);
-            }
-            value = dpParams.getDirections();
-            if (StringUtils.isNotBlank(value))
-            {
-                setDirections(value);
-            }
-            submitForm();
         }
     }
 
