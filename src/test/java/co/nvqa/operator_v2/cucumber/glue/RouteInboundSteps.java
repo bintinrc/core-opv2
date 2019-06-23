@@ -32,6 +32,7 @@ public class RouteInboundSteps extends AbstractSteps
     private static final String FETCH_BY_ROUTE_ID = "FETCH_BY_ROUTE_ID";
     private static final String FETCH_BY_TRACKING_ID = "FETCH_BY_TRACKING_ID";
     private static final String FETCH_BY_DRIVER = "FETCH_BY_DRIVER";
+    private static final String KEY_ROUTE_INBOUND_COMMENT = "KEY_ROUTE_INBOUND_COMMENT";
 
     private RouteInboundPage routeInboundPage;
 
@@ -319,6 +320,20 @@ public class RouteInboundSteps extends AbstractSteps
     public void operatorClickContinueToInboundButtonOnRouteInboundPage()
     {
         routeInboundPage.clickContinueToInbound();
+    }
+
+    @When("^Operator add route inbound comment \"(.+)\"  on Route Inbound page$")
+    public void operatorAddRouteInboundCommentOnRouteInboundPage(String comment)
+    {
+        routeInboundPage.addRoutInboundComment(comment);
+        put(KEY_ROUTE_INBOUND_COMMENT, comment);
+    }
+
+    @When("^Operator verify route inbound comment on Route Inbound page$")
+    public void operatorVerifyRouteInboundCommentOnRouteInboundPage()
+    {
+        String expectedComment = get(KEY_ROUTE_INBOUND_COMMENT);
+        routeInboundPage.verifyRouteInboundComment(expectedComment);
     }
 
     @And("^Operator scan a tracking ID of created order on Route Inbound page$")
