@@ -239,7 +239,7 @@ Feature: Global Inbound
       | startDateTime | {{next-2-working-days-yyyy-MM-dd}} 09:00:00 |
       | endDateTime   | {{next-4-working-days-yyyy-MM-dd}} 22:00:00 |
 
-  Scenario: Inbound parcel picked up from DP
+  Scenario: Inbound parcel picked up from DP (uid:a47074f8-0007-450c-b21d-febcee419fa5)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                       |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -252,10 +252,11 @@ Feature: Global Inbound
     When Operator go to menu Order -> All Orders
     Then Operator verify order info after Global Inbound
 
-  Scenario: Operator should be able to Inbound an International Order and verify the alert info is correct
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
-      | v4OrderRequest    | { "international":{ "portation":"Export" }, "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"15:00", "end_time":"18:00"}}} |
+#  API to create International parcel still have an issue.
+#  Scenario: Operator should be able to Inbound an International Order and verify the alert info is correct
+#    Given API Shipper create V4 order using data below:
+#      | generateFromAndTo | RANDOM |
+#      | v4OrderRequest    | { "international":{ "portation":"Export" }, "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"15:00", "end_time":"18:00"}}} |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
