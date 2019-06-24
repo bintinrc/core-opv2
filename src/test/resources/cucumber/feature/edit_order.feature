@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @EditOrder @Saas
+@OperatorV2 @OperatorV2Part2 @EditOrder @Saas @CWF @SIT
 Feature: Edit Order
 
   @LaunchBrowser @ShouldAlwaysRun

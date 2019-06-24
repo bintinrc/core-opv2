@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @BulkAddToRoute @Saas
+@OperatorV2 @OperatorV2Part2 @BulkAddToRoute @Saas @CWF @SIT
 Feature: Add Parcel To Route
 
   @LaunchBrowser @ShouldAlwaysRun

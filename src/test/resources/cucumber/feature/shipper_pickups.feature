@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @ShipperPickups @Saas
+@OperatorV2 @OperatorV2Part2 @ShipperPickups @Saas @CWF @SIT
 Feature: Shipper Pickups
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless

@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @CreateRouteGroups @Saas
+@OperatorV2 @OperatorV2Part2 @CreateRouteGroups @Saas @CWF @SIT
 Feature: Transactions
 
   @LaunchBrowser @ShouldAlwaysRun

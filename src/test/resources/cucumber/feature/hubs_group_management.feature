@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @HubGroupsManagement
+@OperatorV2 @OperatorV2Part1 @HubGroupsManagement @CWF @SIT
 Feature: Hubs Group Management
 
   @LaunchBrowser @ShouldAlwaysRun

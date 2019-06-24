@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @AllShippers @Saas
+@OperatorV2 @OperatorV2Part2 @AllShippers @Saas @CWF @SIT
 Feature: All Shippers
 
   @LaunchBrowser @ShouldAlwaysRun @EnableClearCache @ForceNotHeadless

@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @ReservationPresetManagement
+@OperatorV2 @OperatorV2Part2 @ReservationPresetManagement @CWF @SIT
 Feature: Reservation Preset Management
 
   @LaunchBrowser @ShouldAlwaysRun

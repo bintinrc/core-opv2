@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @RouteCashInbound @Saas
+@OperatorV2 @OperatorV2Part2 @RouteCashInbound @Saas @CWF @SIT
 Feature: Route Cash Inbound
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless

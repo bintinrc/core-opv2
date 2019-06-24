@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @AllOrders @Saas
+@OperatorV2 @OperatorV2Part2 @AllOrders @Saas @CWF @SIT
 Feature: All Orders
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless

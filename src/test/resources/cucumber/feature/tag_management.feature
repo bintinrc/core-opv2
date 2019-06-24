@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @TagManagement @Saas
+@OperatorV2 @OperatorV2Part1 @TagManagement @Saas @CWF @SIT
 Feature: Tag Management
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless

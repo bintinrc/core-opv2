@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @OrderCreationV2
+@OperatorV2 @OperatorV2Part2 @OrderCreationV2 @CWF @SIT
 Feature: Order Creation V2
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless

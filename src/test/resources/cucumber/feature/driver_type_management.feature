@@ -1,4 +1,4 @@
-@OperatorV2Disabled @OperatorV2Part1Disabled @DriverTypeManagement @Saas
+@OperatorV2Disabled @OperatorV2Part1Disabled @DriverTypeManagement @Saas @CWF @SIT
 Feature: Driver Type Management
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless

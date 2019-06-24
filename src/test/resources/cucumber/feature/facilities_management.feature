@@ -1,4 +1,4 @@
-@OperatorV2Disabled @OperatorV2Part2Disabled @HubsAdministration @Saas
+@OperatorV2Disabled @OperatorV2Part2Disabled @HubsAdministration @Saas @CWF @SIT
 Feature: Hubs Administration
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless

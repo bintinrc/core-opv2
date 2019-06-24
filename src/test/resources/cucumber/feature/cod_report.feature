@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @CodReport @Saas
+@OperatorV2 @OperatorV2Part2 @CodReport @Saas @CWF @SIT
 Feature: COD Report
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless

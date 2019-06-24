@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @RoleManagement @Saas
+@OperatorV2 @OperatorV2Part1 @RoleManagement @Saas @CWF
 Feature: Role Management
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -28,6 +28,7 @@ Feature: Role Management
     When Operator deletes the role on Role Management page
     Then Operator verifies the role is deleted
 
+  @SIT
   Scenario: Operator edits role in role management page (uid:9fb611e0-d6e5-4048-9b55-578581b0fe71)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Access Control -> Role Management

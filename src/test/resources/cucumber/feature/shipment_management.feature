@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @ShipmentManagement
+@OperatorV2 @OperatorV2Part2 @ShipmentManagement @CWF @SIT
 Feature: Shipment Management
 
   @LaunchBrowser @ShouldAlwaysRun
