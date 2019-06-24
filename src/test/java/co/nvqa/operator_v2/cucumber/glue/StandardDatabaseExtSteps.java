@@ -22,9 +22,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
-import org.opentest4j.AssertionFailedError;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -191,44 +189,34 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         }
     }
 
-    @Given("DB Operator verifies warehouse_sweeps record")
-    public void dbOperatorVerifiesWareHouseSweepsRecord(Map<String, String> mapOfData) {
+    @Given("^DB Operator verifies warehouse_sweeps record$")
+    public void dbOperatorVerifiesWareHouseSweepsRecord(Map<String, String> mapOfData)
+    {
         String trackingId = mapOfData.get("trackingId");
         String hubId = mapOfData.get("hubId");
-        if (StringUtils.equalsIgnoreCase(trackingId, "CREATED")) {
+
+        if(StringUtils.equalsIgnoreCase(trackingId, "CREATED"))
+        {
             trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         }
+
         Order order = get(KEY_CREATED_ORDER);
-        List<Map<String, Object>> warehouseSweepRecordsFiltered = new ArrayList<>();
-        int counter = 0;
-        while (warehouseSweepRecordsFiltered.size() != 1){
-            if (counter > 30) {
-                throw new AssertionFailedError(f("No record found in Warehouse_sweeps table with tracking id %s", trackingId));
-            }
-            warehouseSweepRecordsFiltered = dbWarehouseSweepsRequest(trackingId);
-            counter++;
-        }
+
+        final String finalTrackingId = trackingId;
+
+        List<Map<String, Object>> warehouseSweepRecordsFiltered = retryIfExpectedExceptionOccurred(()->
+        {
+            List<Map<String, Object>> warehouseSweepRecords = getCoreJdbc().findWarehouseSweepRecord();
+            List<Map<String, Object>> warehouseSweepRecordsFilteredTemp = warehouseSweepRecords.stream()
+                    .filter(record -> record.get("scan").equals(finalTrackingId))
+                    .collect(Collectors.toList());
+
+            assertEquals(f("Expected 1 record in Warehouse_sweeps table with tracking ID %s", finalTrackingId), 1, warehouseSweepRecordsFilteredTemp.size());
+            return warehouseSweepRecordsFilteredTemp;
+        }, getCurrentMethodName(), NvLogger::warn, 500, 30, AssertionError.class);
 
         Map<String, Object> warehouseSweepRecord = warehouseSweepRecordsFiltered.get(0);
-        assertEquals(f("Expected hub_id in Warehouse_sweeps table"),
-                String.valueOf(warehouseSweepRecord.get("hub_id")), hubId);
-        assertEquals(f("Expected order_id in Warehouse_sweeps table"),
-                String.valueOf(warehouseSweepRecord.get("order_id")), String.valueOf(order.getId()));
-    }
-
-    private List<Map<String, Object>> dbWarehouseSweepsRequest(String finalTrackingId){
-        List<Map<String, Object>> warehouseSweepRecordsFiltered = new ArrayList<>();
-        try {
-            List<Map<String, Object>> warehouseSweepRecords = getCoreJdbc().findWarehouseSweepRecord();
-            warehouseSweepRecordsFiltered = warehouseSweepRecords.stream()
-                    .filter(record -> record.get("scan").equals(finalTrackingId)).collect(Collectors.toList());
-
-            assertEquals(f("Expected 1 record in Warehouse_sweeps table with tracking id %s", finalTrackingId),
-                    1, warehouseSweepRecordsFiltered.size());
-        }
-        catch (AssertionFailedError assertError){
-            NvLogger.infof(assertError.getMessage());
-        }
-        return warehouseSweepRecordsFiltered;
+        assertEquals(f("Expected hub_id in Warehouse_sweeps table"), String.valueOf(warehouseSweepRecord.get("hub_id")), hubId);
+        assertEquals(f("Expected order_id in Warehouse_sweeps table"), String.valueOf(warehouseSweepRecord.get("order_id")), String.valueOf(order.getId()));
     }
 }
