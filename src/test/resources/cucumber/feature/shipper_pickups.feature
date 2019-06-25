@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @ShipperPickups @Saas @CWF
+@OperatorV2 @OperatorV2Part2 @ShipperPickups @Saas
 Feature: Shipper Pickups
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
@@ -327,7 +327,6 @@ Feature: Shipper Pickups
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | priorityLevel | 2 |
 
-  @SIT
   Scenario: Operator should be able to edit the Priority Level of multiple reservation on Shipper Pickups page (uid:1ef31434-423d-417c-955e-051d5b203a65)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create multiple shipper addresses V2 using data below:
@@ -345,7 +344,6 @@ Feature: Shipper Pickups
     Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
       | priorityLevel | 2 |
 
-  @SIT
   Scenario: Operator should be able to edit the Priority Level of multiple reservation on Shipper Pickups page using "Set To All" option (uid:f68f5816-325a-425f-9dc8-656cfe75038d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create multiple shipper addresses V2 using data below:
