@@ -1,4 +1,4 @@
-@OperatorV2Disabled @OperatorV2Part2Disabled @HubsAdministration @Saas @CWF @SIT
+@OperatorV2Disabled @OperatorV2Part2Disabled @FacilitiesManagement @Saas
 Feature: Facilities Management
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless

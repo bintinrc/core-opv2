@@ -15,7 +15,7 @@ Feature: Shipment Management
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
 
-  @DeleteShipment @SIT
+  @DeleteShipment
   Scenario: Edit Shipment (uid:5fbdb7d5-0a54-42de-bd8e-960ad26ff43e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -30,7 +30,7 @@ Feature: Shipment Management
       | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     Then Operator verify parameters of the created shipment on Shipment Management page
 
-  @DeleteShipment @SIT
+  @DeleteShipment
   Scenario: Open Shipment Details (uid:d4072972-d4f1-446f-aaed-62a5c43ab03d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -81,7 +81,7 @@ Feature: Shipment Management
     Given API Operator download the Shipment AWB PDF
     Then Operator verify that the data consist is correct
 
-  @DeleteShipment @SIT
+  @DeleteShipment
   Scenario: Cancel Shipment (uid:9618d764-8b09-49a3-9cec-07e7d726faee)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management

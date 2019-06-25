@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @DpAdministrationV2 @CWF
+@OperatorV2 @OperatorV2Part1 @DpAdministrationV2
 Feature: DP Administration
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
@@ -136,7 +136,7 @@ Feature: DP Administration
       | clientSecret | p@ssw0rd  |
     Then Operator verify new DP User params
 
-  @DeleteDpAndPartner @SIT
+  @DeleteDpAndPartner
   Scenario: Operator should be able to update a DP User on DP Administration page (uid:d3b89b0d-ff97-494c-bcd3-b2a6a6b9de00)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
@@ -163,7 +163,7 @@ Feature: DP Administration
       | emailId   | GENERATED |
     Then Operator verify new DP User params
 
-  @DeleteDpAndPartner @SIT
+  @DeleteDpAndPartner
   Scenario: Operator should be able to download and verify DP Users CSV file on DP Administration page (uid:235c47f3-3af8-4a13-9eff-a1d724698b4b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:

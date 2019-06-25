@@ -31,7 +31,7 @@ public class MainPage extends OperatorV2SimplePage
         MAP_OF_END_URL.put("DP Company Management", "dp-company");
         MAP_OF_END_URL.put("DP Vault Management", "dp-station");
         MAP_OF_END_URL.put("Driver Report", "driver-reports");
-        MAP_OF_END_URL.put("Hubs Administration", "hub");
+        MAP_OF_END_URL.put("Facilities Management", "hub");
         MAP_OF_END_URL.put("Linehaul Management", "linehaul");
         MAP_OF_END_URL.put("Messaging Module", "sms");
         MAP_OF_END_URL.put("Non Inbounded Orders", "non-inbounded-list");

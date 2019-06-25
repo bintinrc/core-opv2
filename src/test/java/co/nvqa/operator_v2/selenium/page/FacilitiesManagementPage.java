@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.operator_v2.FacilitiesManagement;
-import org.hamcrest.Matchers;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Optional;
@@ -13,7 +12,7 @@ import java.util.Optional;
 @SuppressWarnings("WeakerAccess")
 public class FacilitiesManagementPage extends OperatorV2SimplePage
 {
-    private static final String NG_REPEAT = "hub in $data";
+    private static final String MD_VIRTUAL_REPEAT = "hub in getTableData()";
     private static final String CSV_FILENAME = "hubs.csv";
 
     public static final String COLUMN_CLASS_DATA_ID = "id";
@@ -21,9 +20,9 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
     public static final String COLUMN_CLASS_DATA_DISPLAY_NAME = "short-name";
     public static final String COLUMN_CLASS_DATA_CITY = "city";
     public static final String COLUMN_CLASS_DATA_COUNTRY = "country";
-    public static final String COLUMN_CLASS_DATA_LAT_LONG = "latlng";
+    public static final String COLUMN_CLASS_DATA_LAT_LONG = "_latlng";
 
-    private static final String ACTION_BUTTON_EDIT = "Edit";
+    private static final String ACTION_BUTTON_EDIT = "commons.edit";
 
     public FacilitiesManagementPage(WebDriver webDriver)
     {
@@ -112,25 +111,24 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
         facilitiesManagement.setId(actualFacilitiesManagement.getId());
         assertEquals("Hub Name", facilitiesManagement.getName(), actualFacilitiesManagement.getName());
         assertEquals("Display Name", facilitiesManagement.getDisplayName(), actualFacilitiesManagement.getDisplayName());
-        assertThat("City", actualFacilitiesManagement.getCity(), Matchers.equalToIgnoringCase(facilitiesManagement.getCity()));
-        assertThat("Country", actualFacilitiesManagement.getCountry(), Matchers.equalToIgnoringCase(facilitiesManagement.getCountry()));
+        assertThat("City", actualFacilitiesManagement.getCity(), equalToIgnoringCase(facilitiesManagement.getCity()));
+        assertThat("Country", actualFacilitiesManagement.getCountry(), equalToIgnoringCase(facilitiesManagement.getCountry()));
         assertEquals("Latitude", facilitiesManagement.getLatitude(), actualFacilitiesManagement.getLatitude());
         assertEquals("Longitude", facilitiesManagement.getLongitude(), actualFacilitiesManagement.getLongitude());
     }
 
-    public void searchTable(String keyword)
+    public void searchTable(String hubName)
     {
-        super.searchTable(keyword);
-        pause1s();
+        searchTableCustom2("name", hubName);
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)
     {
-        return getTextOnTableWithNgRepeat(rowNumber, columnDataClass, NG_REPEAT);
+        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
     }
 
     public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
     {
-        clickActionButtonOnTableWithNgRepeat(rowNumber, actionButtonName, NG_REPEAT);
+        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
     }
 }
