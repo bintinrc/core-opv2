@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @Reports @CWF @SIT
+@OperatorV2 @OperatorV2Part2 @Reports
 Feature: Order Creation V4
 
   @LaunchBrowser @ShouldAlwaysRun

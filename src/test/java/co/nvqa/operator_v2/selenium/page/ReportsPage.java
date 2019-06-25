@@ -48,7 +48,10 @@ public class ReportsPage extends OperatorV2SimplePage
     public void generateCodReports()
     {
         click("//md-card[.//span[text()=\"COD Report\"]]//nv-api-text-button");
-        waitUntilInvisibilityOfToast("COD report is being prepared", false);
+
+        // The Toast is not disappear automatically, so no need to wait for it.
+        //waitUntilInvisibilityOfToast("COD report is being prepared", false);
+
         pause5s();
     }
 
