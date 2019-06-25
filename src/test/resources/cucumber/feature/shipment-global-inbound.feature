@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @ShipmentGlobalInbound @CWF
+@OperatorV2 @OperatorV2Part1 @ShipmentGlobalInbound
 Feature: Shipment Global Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -28,7 +28,7 @@ Feature: Shipment Global Inbound
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
 
-  @DeleteShipment @SIT
+  @DeleteShipment
   Scenario Outline: Operator shouldn't be able to scan <Note> Order in Shipment Global Inbound Page (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -189,7 +189,7 @@ Feature: Shipment Global Inbound
     When Operator go to menu Order -> All Orders
     Then Operator verify order info after Global Inbound
 
-  @DeleteShipment @SIT
+  @DeleteShipment
   Scenario: Scan the order in Shipment Global Inbound by Overriding the Size, Weight, and Dimension (uid:16365f1f-98d1-4a78-9f7b-e3dedcfa6107)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
