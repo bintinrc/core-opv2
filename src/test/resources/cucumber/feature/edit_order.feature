@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @EditOrder @Saas @CWF
+@OperatorV2 @OperatorV2Part2 @EditOrder @Saas
 Feature: Edit Order
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -176,7 +176,7 @@ Feature: Edit Order
     When Operator verify the created order info is correct on Edit Order page
     And Operator verify color of order header on Edit Order page is "GREEN"
 
-  @CloseNewWindows @SIT
+  @CloseNewWindows
   Scenario: Operator should be able to update order status from Pending/Pending to Cancelled/Cancelled on Edit Order page ()
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -196,7 +196,7 @@ Feature: Edit Order
     When Operator verify the created order info is correct on Edit Order page
     And Operator verify color of order header on Edit Order page is "RED"
 
-  @CloseNewWindows @SIT
+  @CloseNewWindows
   Scenario: Operator should be able to update order status from Transit/Arrived at Sorting Hub to Pending/Pending on Edit Order page ()
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
