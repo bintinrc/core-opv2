@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @RouteMonitoring @Saas @CWF
+@OperatorV2 @OperatorV2Part2 @RouteMonitoring @Saas
 Feature: Route Monitoring
 
   @LaunchBrowser @ShouldAlwaysRun @EnableClearCache
@@ -81,7 +81,7 @@ Feature: Route Monitoring
       | failedCount          | 0   |
       | cmiCount             | 0   |
 
-  @DeleteOrArchiveRoute @SIT
+  @DeleteOrArchiveRoute
   Scenario: Operator verify the route is contains 1 Total Wp, 100% Complete, 0 Pending, 0 Success, 1 Valid Failed, 0 Invalid Failed (uid:8c18582a-b2d9-49fb-b785-292db5093b0f)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
