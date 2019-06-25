@@ -23,7 +23,7 @@ public class FailedDeliveryManagementPage extends CommonParcelManagementPage
 
     public static final String ACTION_BUTTON_RESCHEDULE_NEXT_DAY = "container.failed-delivery-management.reschedule-next-day";
 
-    public static final String ORDER_TAGS_LIST_XPATH = "//nv-table//tr[not(contains(@class, 'last-row'))][1]/td[normalize-space(@class)='_order-tags']/nv-fdm-pills/div";
+    public static final String ORDER_TAGS_LIST_XPATH = "//nv-table//tr[not(contains(@class, 'last-row'))][1]/td[normalize-space(@class)='_order-tags']/nv-order-tags-pills/div";
 
     public FailedDeliveryManagementPage(WebDriver webDriver)
     {
