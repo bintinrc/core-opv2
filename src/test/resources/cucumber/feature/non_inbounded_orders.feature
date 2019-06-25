@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @NonInboundedOrders @Saas @CWF
+@OperatorV2 @OperatorV2Part1 @NonInboundedOrders @Saas
 Feature: Non Inbounded Orders
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
@@ -16,7 +16,6 @@ Feature: Non Inbounded Orders
     Then Operator verify following parameters of the created order on Non Inbounded Orders page:
       | granularStatus | Pending Pickup |
 
-  @SIT
   Scenario: Operator should not find Global Inbounded order on page Non Inbounded Orders (uid:d5b6160c-1642-4063-aed0-b8571a90572b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:

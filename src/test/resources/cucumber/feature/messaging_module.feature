@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @MessagingModule @ShouldAlwaysRun @CWF @SIT
+@OperatorV2 @OperatorV2Part2 @MessagingModule @ShouldAlwaysRun
 Feature: Messaging Module
 
   @LaunchBrowser

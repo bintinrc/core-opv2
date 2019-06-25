@@ -96,7 +96,7 @@ Feature: Route Logs
     When Operator merge transactions of multiple routes
     Then Operator verify transactions of multiple routes is merged successfully
 
-  @DeleteOrArchiveRoute @SIT
+  @DeleteOrArchiveRoute
   Scenario: Operator optimise multiple routes from page Route Logs (uid:1d9cf7fa-f3ae-4d45-b36c-11065c73ee18)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
@@ -136,7 +136,7 @@ Feature: Route Logs
     When Operator print passwords of multiple routes
     Then Operator verify printed passwords of selected routes info is correct
 
-  @DeleteOrArchiveRoute @SIT
+  @DeleteOrArchiveRoute
   Scenario: Operator print multiple routes from page Route Logs (uid:8ef03526-1856-434b-b7c7-65ebc6ff0b22)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs

@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @RecoveryTicketsScanning @Saas @CWF @SIT
+@OperatorV2 @OperatorV2Part2 @RecoveryTicketsScanning @Saas
 Feature: Recovery Tickets Scanning
 
   @LaunchBrowser @ShouldAlwaysRun

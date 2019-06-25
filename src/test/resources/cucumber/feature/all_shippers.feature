@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @AllShippers @Saas @CWF
+@OperatorV2 @OperatorV2Part2 @AllShippers @Saas
 Feature: All Shippers
 
   @LaunchBrowser @ShouldAlwaysRun @EnableClearCache @ForceNotHeadless
@@ -182,7 +182,7 @@ Feature: All Shippers
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the shipper is deleted successfully
 
-  @ResetWindow @SIT
+  @ResetWindow
   Scenario: Operator create new Shipper with basic settings and then update the Shopify settings (uid:d20c7d44-cd01-44a4-8e19-07e86465168d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -211,7 +211,7 @@ Feature: All Shippers
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the shipper is deleted successfully
 
-  @ResetWindow @SIT
+  @ResetWindow
   Scenario: Operator create new Shipper with basic settings and then update the Magento settings (uid:a32a3f0f-c48b-4c46-8739-40c4b9ff80ad)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers

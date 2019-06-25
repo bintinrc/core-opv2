@@ -1,11 +1,11 @@
-@OperatorV2 @OperatorV2Part2 @DriverStrengthV2 @Saas @CWF @SIT
+@OperatorV2 @OperatorV2Part2 @DriverStrengthV2 @Saas @CWF
 Feature: Driver Strength
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver
+  @DeleteDriver @SIT
   Scenario: Operator should be able to add a new Driver (uid:70921910-cb0a-4283-93ad-34431fd86b98)
     Given Operator go to menu Fleet -> Driver Strength
     When Operator create new Driver on Driver Strength page using data below:

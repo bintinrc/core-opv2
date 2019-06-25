@@ -130,7 +130,6 @@ Feature: Shipper Pickups
       | shipperId     | {shipper-v4-legacy-id}       |
       | reservationId | GET_FROM_CREATED_RESERVATION |
 
-  @SIT
   Scenario: Operator should be able to create/duplicate single reservation on Shipper Pickups page (uid:37a2c9b1-7f8f-41e8-a0a9-52f57b69bcdc)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
