@@ -166,7 +166,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         assertThatIfExpectedValueNotNull("DP Name", expectedDpParams.getName(), actualDpParams.getName(), equalTo(expectedDpParams.getName()));
         assertThatIfExpectedValueNotNull("DP Short Name", expectedDpParams.getShortName(), actualDpParams.getShortName(), equalTo(expectedDpParams.getShortName()));
         assertThatIfExpectedValueNotNull("DP Hub", expectedDpParams.getHub(), actualDpParams.getHub(), equalTo(expectedDpParams.getHub()));
-        assertThatIfExpectedValueNotNull("DP Address", expectedDpParams.getAddress(), actualDpParams.getAddress(), equalTo(expectedDpParams.getAddress()));
+        assertThatIfExpectedValueNotNull("DP Address", expectedDpParams.getAddress(), actualDpParams.getAddress(), startsWith(expectedDpParams.getAddress()));
         assertThatIfExpectedValueNotNull("DP Directions", expectedDpParams.getDirections(), actualDpParams.getDirections(), equalTo(expectedDpParams.getDirections()));
         assertThatIfExpectedValueNotNull("DP Activity", expectedDpParams.getActivity(), actualDpParams.getDirections(), equalTo(expectedDpParams.getActivity()));
         expectedDpParams.setId(actualDpParams.getId());

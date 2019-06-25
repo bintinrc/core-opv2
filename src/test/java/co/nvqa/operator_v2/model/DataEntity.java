@@ -235,8 +235,8 @@ public abstract class DataEntity<T extends DataEntity> implements NvAssertions, 
         }
         catch(Exception ex)
         {
-            String message = String.format("Could not set %s property to %s data entity", property, this.getClass().getName());
-            NvLogger.error(message);
+            String message = String.format("Could not set %s property to %s data entity.", property, this.getClass().getName());
+            NvLogger.warn(message, ex);
         }
     }
 
