@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @CreateRouteGroups @Saas @CWF
+@OperatorV2 @OperatorV2Part2 @CreateRouteGroups
 Feature: Create Route Groups
 
   @LaunchBrowser @ShouldAlwaysRun

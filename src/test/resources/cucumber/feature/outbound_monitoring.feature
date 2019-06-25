@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @OutboundMonitoring @Saas @CWF @SIT
+@OperatorV2 @OperatorV2Part1 @OutboundMonitoring @Saas @CWF
 Feature: Outbound Monitoring
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -25,7 +25,7 @@ Feature: Outbound Monitoring
     When Operator search on Route ID Header Table on Outbound Monitoring Page
     Then Operator verify the route ID is exist on Outbound Monitoring Page
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @SIT
   Scenario: Operator verifies the In Progress Outbound Status on Outbound Monitoring Page (uid:7974395f-d4c7-4a18-bec7-a203136377df)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -114,7 +114,7 @@ Feature: Outbound Monitoring
     When Operator click on comment icon on chosen route ID on Outbound Monitoring Page
     Then Operator verifies the comment table on the chosen route ID is changed
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @CloseNewWindows @DeleteOrArchiveRoute @SIT
   Scenario: Operator should be able to Pull out order from route on Outbound Monitoring page (uid:a0b72c03-6596-454c-a697-00a02ed7984a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:

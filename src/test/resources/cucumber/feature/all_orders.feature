@@ -64,7 +64,7 @@ Feature: All Orders
     Then Operator verify the order is Force Successed successfully
     Then API Operator verify order info after Force Successed
 
-  @DeleteOrArchiveRoute @SIT
+  @DeleteOrArchiveRoute
   Scenario: Operator RTS failed delivery order on next day on All Orders page (uid:dc7a87b5-0743-4995-bd9f-b4e22e792a38)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:

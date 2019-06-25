@@ -18,7 +18,7 @@ Feature: Route Monitoring
       | zones     | [{zone-name}]                    |
     Then Operator verify the created route is exist and has correct info
 
-  @DeleteOrArchiveRoute @SIT
+  @DeleteOrArchiveRoute
   Scenario: Operator verify the route is contains 1 Total Wp, 0% Complete, 1 Pending, 0 Success, 0 Valid Failed, 0 Invalid Failed (uid:d7ef288f-e914-4d98-8325-32225e2c6a35)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |

@@ -94,7 +94,7 @@ Feature: Shipment Management
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Cancelled |
 
-  @DeleteFilersPreset @SIT
+  @DeleteFilersPreset
   Scenario: Save Shipment filters as preset (uid:1c96e7a3-8636-4ece-ad4f-722baaa6d4ea)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management

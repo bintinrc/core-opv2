@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @AgedParcelManagement @Saas @Inbound @CWF @SIT
+@OperatorV2 @OperatorV2Part2 @AgedParcelManagement @Saas @Inbound
 Feature: Aged Parcel Management
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
