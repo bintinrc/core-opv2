@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @OrderLevelTagManagement @CWF @SIT
+@OperatorV2 @OperatorV2Part1 @OrderLevelTagManagement @CWF
 Feature:  Order Level Tag Management
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -32,7 +32,7 @@ Feature:  Order Level Tag Management
     And Operator tags order with "ABC"
     Then Operator verifies orders are tagged on Edit order page
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @SIT
   Scenario: Operator verify the failed delivery order that already tagged is show correct tag on Failed Delivery Management page (uid:5b489e54-c8ff-45db-b9fd-4cd2873e3374)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create multiple V4 orders using data below:

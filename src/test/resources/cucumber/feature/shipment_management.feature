@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @ShipmentManagement @CWF @SIT
+@OperatorV2 @OperatorV2Part2 @ShipmentManagement @CWF
 Feature: Shipment Management
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -15,7 +15,7 @@ Feature: Shipment Management
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
 
-  @DeleteShipment
+  @DeleteShipment @SIT
   Scenario: Edit Shipment (uid:5fbdb7d5-0a54-42de-bd8e-960ad26ff43e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -30,7 +30,7 @@ Feature: Shipment Management
       | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     Then Operator verify parameters of the created shipment on Shipment Management page
 
-  @DeleteShipment
+  @DeleteShipment @SIT
   Scenario: Open Shipment Details (uid:d4072972-d4f1-446f-aaed-62a5c43ab03d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -61,7 +61,7 @@ Feature: Shipment Management
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Completed |
 
-  @DeleteShipment
+  @DeleteShipment @SIT
   Scenario: Print Master AWB (uid:6edf77ea-9bd7-49f5-a9e5-d520fd5d1a73)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -81,7 +81,7 @@ Feature: Shipment Management
     Given API Operator download the Shipment AWB PDF
     Then Operator verify that the data consist is correct
 
-  @DeleteShipment
+  @DeleteShipment @SIT
   Scenario: Cancel Shipment (uid:9618d764-8b09-49a3-9cec-07e7d726faee)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -94,7 +94,7 @@ Feature: Shipment Management
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Cancelled |
 
-  @DeleteFilersPreset
+  @DeleteFilersPreset @SIT
   Scenario: Save Shipment filters as preset (uid:1c96e7a3-8636-4ece-ad4f-722baaa6d4ea)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -108,7 +108,7 @@ Feature: Shipment Management
     Then Operator select created filters preset on Shipment Management page
     And Operator verify parameters of selected filters preset on Shipment Management page
 
-  @DeleteFilersPreset
+  @DeleteFilersPreset @SIT
   Scenario: Delete Shipment filters as preset (uid:e4cc014b-ce6a-47d3-bd00-a1b27fd5a60f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management

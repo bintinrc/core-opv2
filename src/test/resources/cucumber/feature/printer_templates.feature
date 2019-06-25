@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @PrinterTemplates @CWF @SIT
+@OperatorV2 @OperatorV2Part1 @PrinterTemplates
 Feature: Printer Templates
 
   @LaunchBrowser @ShouldAlwaysRun

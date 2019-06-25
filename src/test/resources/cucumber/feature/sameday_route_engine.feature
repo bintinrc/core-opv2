@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @SamedayRouteEngine @CWF @SIT
+@OperatorV2 @OperatorV2Part2 @SamedayRouteEngine
 Feature: Sameday Route Engine
 
   @LaunchBrowser @ShouldAlwaysRun

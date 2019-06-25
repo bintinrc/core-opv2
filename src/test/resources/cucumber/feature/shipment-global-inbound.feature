@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @ShipmentGlobalInbound @CWF @SIT
+@OperatorV2 @OperatorV2Part1 @ShipmentGlobalInbound @CWF
 Feature: Shipment Global Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -28,7 +28,7 @@ Feature: Shipment Global Inbound
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
 
-  @DeleteShipment
+  @DeleteShipment @SIT
   Scenario Outline: Operator shouldn't be able to scan <Note> Order in Shipment Global Inbound Page (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -46,9 +46,9 @@ Feature: Shipment Global Inbound
     And Operator input the Invalid Tracking ID Status inside the shipment
     Then Operator will get the alert of <message> shown
     Examples:
-      | Note      | hiptest-uid                                | status    | message         |
-      | Completed | (uid:9ba2d3f4-c559-44d0-b052-a55eca91f579) | Completed | ORDER_COMPLETED |
-      | Cancelled | (uid:9a8c7c5f-38e2-472d-8d1a-db9f1c3ff47c) | Cancelled | ORDER_CANCELLED |
+      | Note      | hiptest-uid                              | status    | message         |
+      | Completed | uid:9ba2d3f4-c559-44d0-b052-a55eca91f579 | Completed | ORDER_COMPLETED |
+      | Cancelled | uid:9a8c7c5f-38e2-472d-8d1a-db9f1c3ff47c | Cancelled | ORDER_CANCELLED |
 
   @DeleteShipment
   Scenario: Operator shouldn't be able to scan Invalid Order in Shipment Global Inbound Page (uid:ad39bc1d-0ef6-4cc1-8ef0-4003b6bef546)
@@ -189,7 +189,7 @@ Feature: Shipment Global Inbound
     When Operator go to menu Order -> All Orders
     Then Operator verify order info after Global Inbound
 
-  @DeleteShipment
+  @DeleteShipment @SIT
   Scenario: Scan the order in Shipment Global Inbound by Overriding the Size, Weight, and Dimension (uid:16365f1f-98d1-4a78-9f7b-e3dedcfa6107)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |

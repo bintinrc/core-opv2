@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @VehicleTypeManagement @Saas @CWF @SIT
+@OperatorV2 @OperatorV2Part1 @VehicleTypeManagement @Saas
 Feature: Vehicle Type Management
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless

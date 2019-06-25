@@ -1,5 +1,5 @@
 @OperatorV2Disabled @OperatorV2Part2Disabled @HubsAdministration @Saas @CWF @SIT
-Feature: Hubs Administration
+Feature: Facilities Management
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
   Scenario: Login to Operator Portal V2

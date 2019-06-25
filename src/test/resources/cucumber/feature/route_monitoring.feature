@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @RouteMonitoring @Saas @CWF @SIT
+@OperatorV2 @OperatorV2Part2 @RouteMonitoring @Saas @CWF
 Feature: Route Monitoring
 
   @LaunchBrowser @ShouldAlwaysRun @EnableClearCache
@@ -18,7 +18,7 @@ Feature: Route Monitoring
       | zones     | [{zone-name}]                    |
     Then Operator verify the created route is exist and has correct info
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @SIT
   Scenario: Operator verify the route is contains 1 Total Wp, 0% Complete, 1 Pending, 0 Success, 0 Valid Failed, 0 Invalid Failed (uid:d7ef288f-e914-4d98-8325-32225e2c6a35)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
@@ -49,7 +49,7 @@ Feature: Route Monitoring
       | failedCount          | 0 |
       | cmiCount             | 0 |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @SIT
   Scenario: Operator verify the route is contains 1 Total Wp, 100% Complete, 0 Pending, 1 Success, 0 Valid Failed, 0 Invalid Failed (uid:e7a88ac5-2019-4396-bf6f-041e3dad71be)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
@@ -81,7 +81,7 @@ Feature: Route Monitoring
       | failedCount          | 0   |
       | cmiCount             | 0   |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @SIT
   Scenario: Operator verify the route is contains 1 Total Wp, 100% Complete, 0 Pending, 0 Success, 1 Valid Failed, 0 Invalid Failed (uid:8c18582a-b2d9-49fb-b785-292db5093b0f)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |

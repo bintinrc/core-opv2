@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @RouteLogs @Saas @CWF @SIT
+@OperatorV2 @OperatorV2Part2 @RouteLogs @Saas @CWF
 Feature: Route Logs
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
@@ -53,7 +53,7 @@ Feature: Route Logs
       | vehicleName     | {vehicle-name}                   |
     Then Operator verify multiple routes is bulk edited successfully
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @SIT
   Scenario: Operator edit driver type of multiple routes from page Route Logs (uid:62941cfd-9c85-429e-879d-a4fdd68f9c13)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
@@ -96,7 +96,7 @@ Feature: Route Logs
     When Operator merge transactions of multiple routes
     Then Operator verify transactions of multiple routes is merged successfully
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @SIT
   Scenario: Operator optimise multiple routes from page Route Logs (uid:1d9cf7fa-f3ae-4d45-b36c-11065c73ee18)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
@@ -136,7 +136,7 @@ Feature: Route Logs
     When Operator print passwords of multiple routes
     Then Operator verify printed passwords of selected routes info is correct
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @SIT
   Scenario: Operator print multiple routes from page Route Logs (uid:8ef03526-1856-434b-b7c7-65ebc6ff0b22)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
@@ -393,7 +393,7 @@ Feature: Route Logs
       | delivery.status        | Fail                          |
       | delivery.failureReason | 1                             |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @SIT
   Scenario: Operator Trigger Force Finish a pending waypoint (Reservation/Transaction) from route manifest - Success Transaction DD (uid:8f755436-4f6f-4461-9bb8-2675efbd3806)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

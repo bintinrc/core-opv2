@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @ParcelSweeper @CWF @SIT
+@OperatorV2 @OperatorV2Part2 @ParcelSweeper
 Feature: Parcel Sweeper
 
   @LaunchBrowser @ShouldAlwaysRun
