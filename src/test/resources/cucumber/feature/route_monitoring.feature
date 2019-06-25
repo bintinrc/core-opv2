@@ -49,7 +49,7 @@ Feature: Route Monitoring
       | failedCount          | 0 |
       | cmiCount             | 0 |
 
-  @DeleteOrArchiveRoute @SIT
+  @DeleteOrArchiveRoute
   Scenario: Operator verify the route is contains 1 Total Wp, 100% Complete, 0 Pending, 1 Success, 0 Valid Failed, 0 Invalid Failed (uid:e7a88ac5-2019-4396-bf6f-041e3dad71be)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |

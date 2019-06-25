@@ -25,7 +25,7 @@ Feature: Outbound Monitoring
     When Operator search on Route ID Header Table on Outbound Monitoring Page
     Then Operator verify the route ID is exist on Outbound Monitoring Page
 
-  @DeleteOrArchiveRoute @SIT
+  @DeleteOrArchiveRoute
   Scenario: Operator verifies the In Progress Outbound Status on Outbound Monitoring Page (uid:7974395f-d4c7-4a18-bec7-a203136377df)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
