@@ -333,7 +333,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     public void pullOutFromRoute(List<String> listOfExpectedTrackingId)
     {
         applyActionToOrdersByTrackingId(listOfExpectedTrackingId, PULL_FROM_ROUTE);
-        selectTypeFromPullSelectedFromRouteDialog(listOfExpectedTrackingId, "Delivery");
+        //selectTypeFromPullSelectedFromRouteDialog(listOfExpectedTrackingId, "Delivery");
         clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.pull-orders-from-routes");
         waitUntilInvisibilityOfToast("updated");
     }
@@ -350,7 +350,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='processedTransactionData in ctrl.processedTransactionsData']/td[@ng-if='ctrl.settings.showTrackingId']");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
         assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
-        listOfExpectedTrackingId.forEach(trackingId -> selectValueFromMdSelectByMdSelectXpath(f("//tr[@ng-repeat='processedTransactionData in ctrl.processedTransactionsData']/td[text()='%s']/following-sibling::td//md-select", trackingId), type));
+        //listOfExpectedTrackingId.forEach(trackingId -> selectValueFromMdSelectByMdSelectXpath(f("//tr[@ng-repeat='processedTransactionData in ctrl.processedTransactionsData']/td[text()='%s']/following-sibling::td//md-checkbox", trackingId), type));
     }
 
     public void applyActionToOrdersByTrackingId(@SuppressWarnings("unused") List<String> listOfExpectedTrackingId, AllOrdersAction action)
@@ -396,7 +396,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         selectAllShown("ctrl.ordersTableParam");
         applyActionsMenu.chooseItem(ADD_TO_ROUTE);
 
-        List<WebElement> listOfWe = findElementsByXpath("//tr[@md-virtual-repeat='order in ctrl.formData.orders']/td[1]");
+        List<WebElement> listOfWe = findElementsByXpath("//div[@md-virtual-repeat='order in ctrl.formData.orders']/div[@class='table-tracking-id']");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
         assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 

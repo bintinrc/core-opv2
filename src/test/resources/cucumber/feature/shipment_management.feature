@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @ShipmentManagement @CWF
+@OperatorV2 @OperatorV2Part2 @ShipmentManagement
 Feature: Shipment Management
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -61,7 +61,7 @@ Feature: Shipment Management
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Completed |
 
-  @DeleteShipment @SIT
+  @DeleteShipment
   Scenario: Print Master AWB (uid:6edf77ea-9bd7-49f5-a9e5-d520fd5d1a73)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
