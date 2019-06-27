@@ -6,15 +6,17 @@ import co.nvqa.operator_v2.model.WaypointPerformance;
 import co.nvqa.operator_v2.model.WaypointReservationInfo;
 import co.nvqa.operator_v2.model.WaypointShipperInfo;
 import com.google.common.collect.ImmutableMap;
+import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static co.nvqa.operator_v2.selenium.page.RouteInboundPage.ShippersTable.VIEW_ORDERS;
-import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -24,6 +26,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
     private ShippersTable shippersTable;
     private ReservationsTable reservationsTable;
     private OrdersTable ordersTable;
+    private RouteInboundCommentsDialog routeInboundCommentsDialog;
 
     public RouteInboundPage(WebDriver webDriver)
     {
@@ -31,6 +34,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
         shippersTable = new ShippersTable(webDriver);
         reservationsTable = new ReservationsTable(webDriver);
         ordersTable = new OrdersTable(webDriver);
+        routeInboundCommentsDialog = new RouteInboundCommentsDialog(webDriver);
     }
 
     public void fetchRouteByRouteId(String hubName, long routeId)
@@ -48,7 +52,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
     private void dismissDriverAttendanceDialog()
     {
-        if(isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Driver Attendance']"))
+        if (isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Driver Attendance']"))
         {
             click("//md-dialog[./md-dialog-content/h2[text()='Driver Attendance']]//button[@aria-label='Yes']");
         }
@@ -75,7 +79,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
         String continueBtnXpath = "//md-card-content[.//label[text()='Search by driver']]/nv-api-text-button[@name='container.route-inbound.continue']/button";
         click(continueBtnXpath);
 
-        if(isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Choose a route']"))
+        if (isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Choose a route']"))
         {
             String routeIdProceedButton = String.format("//tr[@ng-repeat='routeId in ctrl.routeIds'][td[text()='%d']]//button", routeId);
             moveToElementWithXpath(routeIdProceedButton); //This needed to make sure the button is clicked if there are many routes.
@@ -158,7 +162,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
         List<WaypointShipperInfo> actualShippersInfo = shippersTable.readAllEntities();
         assertEquals("Shippers count", expectedShippersInfo.size(), actualShippersInfo.size());
 
-        for(int i=0; i<actualShippersInfo.size(); i++)
+        for (int i = 0; i < actualShippersInfo.size(); i++)
         {
             expectedShippersInfo.get(i).compareWithActual(actualShippersInfo.get(i));
         }
@@ -185,11 +189,67 @@ public class RouteInboundPage extends OperatorV2SimplePage
                 ));
         assertEquals("Orders count", expectedOrdersInfo.size(), actualOrdersInfo.size());
 
-        expectedOrdersInfo.forEach(expectedOrderInfo -> {
+        expectedOrdersInfo.forEach(expectedOrderInfo ->
+        {
             WaypointOrderInfo actualOrderInfo = actualOrdersInfoMap.get(expectedOrderInfo.getTrackingId());
             assertThat("Order with Tracking ID = " + expectedOrderInfo.getTrackingId() + " was not found", actualOrderInfo, notNullValue());
             expectedOrderInfo.compareWithActual(actualOrderInfo);
         });
+    }
+
+    public void addRoutInboundComment(String comment)
+    {
+        click("//a[contains(@ng-click,'ctrl.routeInboundComments')]");
+        routeInboundCommentsDialog
+                .waitUntilVisible()
+                .enterComment(comment)
+                .clickAddButton();
+        pause3s();
+    }
+
+    public void verifyRouteInboundComment(String expectedComment)
+    {
+        String actualComment = getText("//div[@ng-if='ctrl.hasComments()']");
+        Pattern commentPattern = Pattern.compile("Comment by (.+):(.+)");
+        Matcher matcher = commentPattern.matcher(actualComment.trim());
+        if (matcher.find())
+        {
+            String commentText = matcher.group(2).trim();
+            Assert.assertEquals("Route Inbound Comment text", expectedComment, commentText);
+        } else
+        {
+            Assert.fail(String.format("Route Inbound Comment text [%s] has unexpected format", actualComment));
+        }
+    }
+
+    public static class RouteInboundCommentsDialog extends OperatorV2SimplePage
+    {
+        static final String DIALOG_TITLE = "Route Inbound Comments";
+        static final String LOCATOR_FIELD_NEW_COMMENT = "container.route-inbound.enter-route-comment-here";
+        static final String LOCATOR_BUTTON_ADD = "Add";
+
+        public RouteInboundCommentsDialog(WebDriver webDriver)
+        {
+            super(webDriver);
+        }
+
+        public RouteInboundCommentsDialog waitUntilVisible()
+        {
+            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+            return this;
+        }
+
+        public RouteInboundCommentsDialog enterComment(String value)
+        {
+            sendKeysById(LOCATOR_FIELD_NEW_COMMENT, value);
+            return this;
+        }
+
+        public RouteInboundCommentsDialog clickAddButton()
+        {
+            clickNvIconTextButtonByNameAndWaitUntilDone(LOCATOR_BUTTON_ADD);
+            return this;
+        }
     }
 
     /**
