@@ -215,4 +215,16 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         reservationGroup.setId(group.getId());
         put(KEY_CREATED_RESERVATION_GROUP_ID, reservationGroup.getId());
     }
+
+    @Given("^API Operator verify order info after Return PP transaction added to route$")
+    public void apiOperatorVerifyOrderInfoAfterReturnPpTransactionAddedToRoute()
+    {
+        Order order = get(KEY_CREATED_ORDER);
+        Long orderId = order.getId();
+        pause2s();
+        String methodInfo = f("%s - [Order ID = %d]", getCurrentMethodName(), orderId);
+        Order latestOrderInfo = retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> getOrderClient().getOrder(orderId), methodInfo);
+        assertEquals(f("Granular Status - [Tracking ID = %s]", latestOrderInfo.getTrackingId()), "VAN_ENROUTE_TO_PICKUP", latestOrderInfo.getGranularStatus());
+        assertEquals(f("Status - [Tracking ID = %s]", latestOrderInfo.getTrackingId()),"TRANSIT", latestOrderInfo.getStatus());
+    }
 }

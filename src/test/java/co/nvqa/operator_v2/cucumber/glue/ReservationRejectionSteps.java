@@ -6,10 +6,12 @@ import co.nvqa.operator_v2.model.ReservationRejectionEntity;
 import co.nvqa.operator_v2.selenium.page.ReservationRejectionPage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
  * @author Kateryna Skakunova
  */
+@ScenarioScoped
 public class ReservationRejectionSteps extends AbstractSteps
 {
     private ReservationRejectionPage reservationRejectionPage;
@@ -58,5 +60,25 @@ public class ReservationRejectionSteps extends AbstractSteps
 
         reservationRejectionPage.verifyToastAboutFailedPickupIsPresent();
         reservationRejectionPage.verifyRecordIsNotPresentInTableByPickup(pickupInfo);
+    }
+
+    @And("^Operator reassigns RSVN to new route$")
+    public void operatorReassignsRSVNToNewRoute() {
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
+        Address address = get(KEY_CREATED_ADDRESS);
+        String address1 = address.getAddress1();
+
+        reservationRejectionPage.filterTableByPickup(address1);
+        reservationRejectionPage.clickActionReassignReservationForRow(1);
+        reservationRejectionPage.reassignReservationInPopup(String.valueOf(routeId));
+    }
+
+    @And("^Operator verifies RSVN reassigned successfully$")
+    public void operatorVerifiesRSVNReassignedSuccessfully() {
+        Address address = get(KEY_CREATED_ADDRESS);
+        String address1 = address.getAddress1();
+
+        reservationRejectionPage.verifyToastAboutReassignReservationIsPresent();
+        reservationRejectionPage.verifyRecordIsNotPresentInTableByPickup(address1);
     }
 }

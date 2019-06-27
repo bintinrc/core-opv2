@@ -6,8 +6,10 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.pdf.AirwayBill;
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.PdfUtils;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -18,8 +20,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
 import org.openqa.selenium.WebDriver;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -255,6 +261,26 @@ public class EditOrderPage extends OperatorV2SimplePage
     {
         String actualLatestEvent = getTextOnTableEvent(1, COLUMN_CLASS_DATA_NAME_ON_TABLE_EVENT);
         assertThat("Different Result Returned", actualLatestEvent, isOneOf("Van Inbound Scan", "DRIVER INBOUND SCAN"));
+    }
+
+    public void verifyEvent(Order order, String hubName, String hubId, String eventNameExpected)
+    {
+        ZonedDateTime eventDateExpected = DateUtil.getDate(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
+
+        int rowWithExpectedEvent = 1;
+        for (int i = 1; i <= eventsTable.getRowsCount(); i++) {
+            String eventNameActual = getTextOnTableEvent(i, EVENT_NAME);
+            if (eventNameExpected.equals(eventNameActual)){
+                rowWithExpectedEvent = i;
+            }
+        }
+        OrderEvent eventRow = eventsTable.readEntity(rowWithExpectedEvent);
+        assertEquals("Different Result Returned for hub name", hubName, eventRow.getHubName());
+        assertThat("Different Result Returned for event description", eventRow.getDescription(), containsString(f("Parcel inbound at Origin Hub - %s", hubName)));
+        assertThat("Different Result Returned for event description", eventRow.getDescription(), containsString(f("Scanned at Hub %s", hubId)));
+        assertThat("Different Result Returned for event time",
+                eventRow.getEventTime(),
+                containsString(DateUtil.displayDate(eventDateExpected)));
     }
 
     public void verifyOrderInfoIsCorrect(Order order)

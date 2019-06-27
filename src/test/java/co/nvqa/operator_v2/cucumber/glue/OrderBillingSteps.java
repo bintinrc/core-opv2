@@ -4,6 +4,7 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.OrderBillingPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.text.ParseException;
 import java.util.Map;
@@ -12,6 +13,7 @@ import java.util.Objects;
 /**
  * @author Kateryna Skakunova
  */
+@ScenarioScoped
 public class OrderBillingSteps extends AbstractSteps
 {
     private OrderBillingPage orderBillingPage;

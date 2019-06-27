@@ -337,4 +337,19 @@ public class EditOrderSteps extends AbstractSteps
         }
         editOrderPage.verifyOrderHeaderColor(color);
     }
+
+    @Then("^Operator verifies event is present for order on Edit order page$")
+    public void operatorVerifiesEventIsPresentOnEditOrderPage(Map<String, String> mapOfData)
+    {
+        String event = mapOfData.get("eventName");
+        String hubName = mapOfData.get("hubName");
+        String hubId = mapOfData.get("hubId");
+        List<Order> lists = get(KEY_LIST_OF_CREATED_ORDER);
+
+        lists.forEach(order ->
+        {
+            navigateTo(f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, order.getId()));
+            editOrderPage.verifyEvent(order, hubName, hubId, event);
+        });
+    }
 }

@@ -21,7 +21,11 @@ public class ReservationRejectionPage extends OperatorV2SimplePage
     private static final String FAIL_PICKUP_MD_DIALOG_TITLE = "Fail Pickup";
     private static final String FAIL_PICKUP_MD_DIALOG_BUTTON_ARIA_LABEL = "Fail Pickup";
     private static final String FAIL_PICKUP_MD_DIALOG_REASON_FOR_FAILURE = "Testing the app - Hyperlocal";
-    private static final String FAIL_PICKUP_TOAST_MESSAGE = "Pick up has been failed";
+    private static final String FAIL_PICKUP_TOAST_MESSAGE_SUCCESSFULLY = "Pick up has been failed";
+
+    private static final String REASSIGN_RESERVATION_MD_DIALOG_TITLE = "Reassign Reservation";
+    private static final String REASSIGN_RESERVATION_MD_DIALOG_BUTTON_ARIA_LABEL = "Reassign";
+    private static final String REASSIGN_RESERVATION_TOAST_MESSAGE_SUCCESSFULLY = "Reassigned Successfully";
 
     private ReservationRejectionEntityTable reservationRejectionEntityTable;
 
@@ -62,6 +66,7 @@ public class ReservationRejectionPage extends OperatorV2SimplePage
                     .build()
             );
             setActionButtonsLocators(ImmutableMap.of("failPickup", "//button[@aria-label='Fail Pickup']"));
+            setActionButtonsLocators(ImmutableMap.of("reassignReservation", "//button[@aria-label='Reassign Reservation']"));
             setEntityClass(ReservationRejectionEntity.class);
             setMdVirtualRepeat(MD_VIRTUAL_REPEAT);
         }
@@ -89,6 +94,17 @@ public class ReservationRejectionPage extends OperatorV2SimplePage
         clickButtonOnMdDialogByAriaLabel(FAIL_PICKUP_MD_DIALOG_BUTTON_ARIA_LABEL);
         waitUntilInvisibilityOfMdDialogByTitle(FAIL_PICKUP_MD_DIALOG_TITLE);
     }
+    public void clickActionReassignReservationForRow(int rowNumber)
+    {
+        reservationRejectionEntityTable.clickActionButton(rowNumber, "reassignReservation");
+    }
+
+    public void reassignReservationInPopup(String routeForReassigning){
+        waitUntilVisibilityOfMdDialogByTitle(REASSIGN_RESERVATION_MD_DIALOG_TITLE);
+        selectValueFromMdAutocomplete("Search or Select...", routeForReassigning);
+        clickButtonOnMdDialogByAriaLabel(REASSIGN_RESERVATION_MD_DIALOG_BUTTON_ARIA_LABEL);
+        waitUntilInvisibilityOfMdDialogByTitle(REASSIGN_RESERVATION_MD_DIALOG_TITLE);
+    }
 
     public void validateReservationInTable(String pickupInfo, RejectReservationRequest rejectReservationRequest, ReservationRejectionEntity reservationRejectionEntity)
     {
@@ -113,6 +129,11 @@ public class ReservationRejectionPage extends OperatorV2SimplePage
 
     public void verifyToastAboutFailedPickupIsPresent()
     {
-        waitUntilVisibilityOfToast(FAIL_PICKUP_TOAST_MESSAGE);
+        waitUntilVisibilityOfToast(FAIL_PICKUP_TOAST_MESSAGE_SUCCESSFULLY);
+    }
+
+    public void verifyToastAboutReassignReservationIsPresent()
+    {
+        waitUntilVisibilityOfToast(REASSIGN_RESERVATION_TOAST_MESSAGE_SUCCESSFULLY);
     }
 }
