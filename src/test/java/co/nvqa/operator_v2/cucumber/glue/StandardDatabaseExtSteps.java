@@ -189,6 +189,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Given("^DB Operator verifies warehouse_sweeps record$")
     public void dbOperatorVerifiesWareHouseSweepsRecord(Map<String, String> mapOfData)
     {

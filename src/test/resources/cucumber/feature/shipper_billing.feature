@@ -13,8 +13,8 @@ Feature: Shipper Billing
       | amount      | 10                                            |
       | reason      | Bank Transfer                                 |
       | comment     | Add Amount for testing purposes {{unique-id}} |
-    Then Given API Ninja Dash username "{shipper-v4-prepaid-email}", password "{shipper-v4-prepaid-password}"
-    And API Dash user verify created record in shipper billing history
+    Given API Ninja Dash init with username = "{shipper-v4-prepaid-email}" and password = "{shipper-v4-prepaid-password}"
+    Then API Dash user verify created record in shipper billing history
 
   Scenario: Deduct Amount For Prepaid Shipper (uid:2d72f9c0-3ec1-47bb-848a-98b73912d439)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -25,8 +25,8 @@ Feature: Shipper Billing
       | amount      | 10                                               |
       | reason      | Bank Transfer                                    |
       | comment     | Deduct Amount for testing purposes {{unique-id}} |
-    Then Given API Ninja Dash username "{shipper-v4-prepaid-email}", password "{shipper-v4-prepaid-password}"
-    And API Dash user verify created record in shipper billing history
+    Given API Ninja Dash init with username = "{shipper-v4-prepaid-email}" and password = "{shipper-v4-prepaid-password}"
+    Then API Dash user verify created record in shipper billing history
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
