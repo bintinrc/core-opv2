@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @AllOrders @Saas @CWF
+@OperatorV2 @OperatorV2Part2 @AllOrders @Saas
 Feature: All Orders
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
@@ -102,7 +102,7 @@ Feature: All Orders
     When Operator cancel multiple orders on All Orders page
     Then API Operator verify multiple orders info after Canceled
 
-  @DeleteOrArchiveRoute @SIT
+  @DeleteOrArchiveRoute
   Scenario: Operator pull out multiple orders from route on All Orders page (uid:ec25528a-5be8-4026-9680-731a066f95cb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
@@ -122,7 +122,7 @@ Feature: All Orders
     When Operator pull out multiple orders from route on All Orders page
     Then API Operator verify multiple orders is pulled out from route
 
-  @DeleteOrArchiveRoute @SIT
+  @DeleteOrArchiveRoute
   Scenario: Operator add multiple orders to route on All Orders page (uid:c8d93bf5-a2d9-40bf-9346-9278299d3bd3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
@@ -163,7 +163,6 @@ Feature: All Orders
     When Operator resume order on All Orders page
     Then Operator verify order status is "Pending Pickup"
 
-  @SIT
   Scenario: Operator should not be able to pull out unrouted order on All Orders page (uid:e932221d-ebcd-4df9-9902-2d3086d913da)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
