@@ -75,7 +75,7 @@ public class CodReportPage extends OperatorV2SimplePage
         String granularStatus = order.getGranularStatus().replace("_", " ").toLowerCase();
         String shipperName = order.getShipper().getName();
         String codAmount = NO_TRAILING_ZERO_DF.format(order.getCod().getGoodsAmount());
-        String expectedText = String.format("\"%s\",\"%s\",\"%s\",%s", trackingId, granularStatus, shipperName, codAmount);
+        String expectedText = f("\"%s\",\"%s\",\"%s\",%s", trackingId, granularStatus, shipperName, codAmount);
         verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN), expectedText, true);
     }
 

@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @CodReport @Saas @CWF @SIT
+@OperatorV2 @OperatorV2Part2 @CodReport @Saas @CWF
 Feature: COD Report
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
@@ -42,7 +42,7 @@ Feature: COD Report
     When API Operator get order details
     Then Operator verify the downloaded COD Report data is correct
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @SIT
   Scenario: Operator is able to download Driver CODs For A Route Day and verify the data is correct (uid:92b275ec-79ee-4162-bd72-2923736f5460)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
