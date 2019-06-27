@@ -25,7 +25,7 @@ Feature: Create Route Groups
     When Operator wait until 'Route Group Management' page is loaded
     Then Operator V2 clean up 'Route Groups'
 
-  @DeleteOrArchiveRoute @SIT
+  @DeleteOrArchiveRoute
   Scenario: Operator Filter RTS Transaction (uid:52a86349-8c4c-4ae7-ab22-eea3af31ebff)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -61,7 +61,7 @@ Feature: Create Route Groups
       | startDateTime | {gradle-next-1-day-yyyy-MM-dd} 12:00:00 |
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 15:00:00 |
 
-  @DeleteOrArchiveRoute @SIT
+  @DeleteOrArchiveRoute
   Scenario: Operator Filter Routed Transaction (uid:ab4c851f-876e-4cdc-8315-90ab4fa0cdc8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
