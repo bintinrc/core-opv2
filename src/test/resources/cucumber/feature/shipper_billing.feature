@@ -1,5 +1,5 @@
-@OperatorV2 @OperatorV2Part2 @ShipperBilling @Saas
-Feature: Shipper Pickups
+@OperatorV2 @OperatorV2Part1 @ShipperBilling @Saas
+Feature: Shipper Billing
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
   Scenario: Login to Operator Portal V2

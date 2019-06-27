@@ -102,6 +102,7 @@ Feature: All Orders
     When Operator cancel multiple orders on All Orders page
     Then API Operator verify multiple orders info after Canceled
 
+  @DeleteOrArchiveRoute
   Scenario: Operator pull out multiple orders from route on All Orders page (uid:ec25528a-5be8-4026-9680-731a066f95cb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:

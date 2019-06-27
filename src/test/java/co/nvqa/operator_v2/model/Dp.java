@@ -26,6 +26,7 @@ public class Dp extends DataEntity<Dp>
     private String maxCap;
     private String capBuffer;
     private String contactNo;
+    private Long hubId;
     private String hub;
     private String address;
     private String address1;
@@ -104,6 +105,16 @@ public class Dp extends DataEntity<Dp>
     public void setShortName(String shortName)
     {
         this.shortName = shortName;
+    }
+
+    public Long getHubId()
+    {
+        return hubId;
+    }
+
+    public void setHubId(Long hubId)
+    {
+        this.hubId = hubId;
     }
 
     public String getHub()

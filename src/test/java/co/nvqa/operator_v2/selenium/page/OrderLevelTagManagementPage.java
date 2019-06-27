@@ -113,7 +113,7 @@ public class OrderLevelTagManagementPage extends OperatorV2SimplePage
         waitUntilVisibilityOfElementLocated("//md-dialog//h2[text()='Find Orders with CSV']");
 
         String csvContents = trackingIds.stream().collect(Collectors.joining(System.lineSeparator()));
-        File csvFile = createFile(f("find-orders-with-csv.csv", generateDateUniqueString()), csvContents);
+        File csvFile = createFile(f("find-orders-with-csv-%s.csv", generateDateUniqueString()), csvContents);
 
         sendKeysByAriaLabel("Choose", csvFile.getAbsolutePath());
         waitUntilVisibilityOfElementLocated(f("//div[@class='upload-button-holder']/span[contains(text(), '%s')]", csvFile.getName()));

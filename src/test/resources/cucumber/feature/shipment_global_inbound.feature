@@ -46,9 +46,9 @@ Feature: Shipment Global Inbound
     And Operator input the Invalid Tracking ID Status inside the shipment
     Then Operator will get the alert of <message> shown
     Examples:
-      | Note      | hiptest-uid                                | status    | message         |
-      | Completed | (uid:9ba2d3f4-c559-44d0-b052-a55eca91f579) | Completed | ORDER_COMPLETED |
-      | Cancelled | (uid:9a8c7c5f-38e2-472d-8d1a-db9f1c3ff47c) | Cancelled | ORDER_CANCELLED |
+      | Note      | hiptest-uid                              | status    | message         |
+      | Completed | uid:9ba2d3f4-c559-44d0-b052-a55eca91f579 | Completed | ORDER_COMPLETED |
+      | Cancelled | uid:9a8c7c5f-38e2-472d-8d1a-db9f1c3ff47c | Cancelled | ORDER_CANCELLED |
 
   @DeleteShipment
   Scenario: Operator shouldn't be able to scan Invalid Order in Shipment Global Inbound Page (uid:ad39bc1d-0ef6-4cc1-8ef0-4003b6bef546)

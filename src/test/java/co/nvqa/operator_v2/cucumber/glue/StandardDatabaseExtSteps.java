@@ -11,6 +11,7 @@ import co.nvqa.commons.model.entity.InboundScanEntity;
 import co.nvqa.commons.model.entity.OrderEventEntity;
 import co.nvqa.commons.model.entity.RouteDriverTypeEntity;
 import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.CreateRouteParams;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DriverInfo;
@@ -186,5 +187,36 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         {
             getHubJdbc().deleteShipment(shipmentInfo.getId());
         }
+    }
+
+    @Given("^DB Operator verifies warehouse_sweeps record$")
+    public void dbOperatorVerifiesWareHouseSweepsRecord(Map<String, String> mapOfData)
+    {
+        String trackingId = mapOfData.get("trackingId");
+        String hubId = mapOfData.get("hubId");
+
+        if(StringUtils.equalsIgnoreCase(trackingId, "CREATED"))
+        {
+            trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        }
+
+        Order order = get(KEY_CREATED_ORDER);
+
+        final String finalTrackingId = trackingId;
+
+        List<Map<String, Object>> warehouseSweepRecordsFiltered = retryIfExpectedExceptionOccurred(()->
+        {
+            List<Map<String, Object>> warehouseSweepRecords = getCoreJdbc().findWarehouseSweepRecord();
+            List<Map<String, Object>> warehouseSweepRecordsFilteredTemp = warehouseSweepRecords.stream()
+                    .filter(record -> record.get("scan").equals(finalTrackingId))
+                    .collect(Collectors.toList());
+
+            assertEquals(f("Expected 1 record in Warehouse_sweeps table with tracking ID %s", finalTrackingId), 1, warehouseSweepRecordsFilteredTemp.size());
+            return warehouseSweepRecordsFilteredTemp;
+        }, getCurrentMethodName(), NvLogger::warn, 500, 30, AssertionError.class);
+
+        Map<String, Object> warehouseSweepRecord = warehouseSweepRecordsFiltered.get(0);
+        assertEquals(f("Expected hub_id in Warehouse_sweeps table"), String.valueOf(warehouseSweepRecord.get("hub_id")), hubId);
+        assertEquals(f("Expected order_id in Warehouse_sweeps table"), String.valueOf(warehouseSweepRecord.get("order_id")), String.valueOf(order.getId()));
     }
 }

@@ -1,5 +1,5 @@
 @OperatorV2 @OperatorV2Part2 @BulkAddToRoute @Saas
-Feature: Add Parcel To Route
+Feature: Bulk Add To Route
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
