@@ -217,6 +217,186 @@ Feature: Edit Order
       | lastDeliveryTransactionStatus | Pending        |
     When Operator verify the created order info is correct on Edit Order page
 
+  @DeleteOrArchiveRoute @CloseNewWindows
+  Scenario: Cancel Order - Pending Pickup
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Order -> All Orders
+    And Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    And Operator switch to Edit Order's window
+    Then Operator verify order status is "Pending" on Edit Order page
+    And Operator verify order granular status is "Pending Pickup" on Edit Order page
+    And Operator cancel order on Edit order page using data below:
+      | cancellationReason | Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    And API Operator get order details
+    Then Operator verify order status is "Cancelled" on Edit Order page
+    And Operator verify order granular status is "Cancelled" on Edit Order page
+    And Operator verify order summary on Edit order page using data below:
+      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    And API Operator verify Pickup transaction of the created order using data below:
+      | status   | CANCELLED                                                                          |
+      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    And API Operator verify Delivery transaction of the created order using data below:
+      | status   | CANCELLED                                                                          |
+      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status  | CANCELLED |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | CANCELLED |
+    And Operator verify order event on Edit order page using data below:
+      | name | CANCEL |
+    And DB Operator verify Pickup waypoint of the created order using data below:
+      | status | PENDING |
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | PENDING |
+    And DB Operator verify Jaro Scores of the created order after cancel
+
+  @DeleteOrArchiveRoute @CloseNewWindows
+  Scenario: Cancel Order - Van En-route to Pickup
+    When Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator start the route
+    And Operator go to menu Order -> All Orders
+    And Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    And Operator switch to Edit Order's window
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Van En-route to Pickup" on Edit Order page
+    And Operator cancel order on Edit order page using data below:
+      | cancellationReason | Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    And API Operator get order details
+    Then Operator verify order status is "Cancelled" on Edit Order page
+    And Operator verify order granular status is "Cancelled" on Edit Order page
+    And Operator verify order summary on Edit order page using data below:
+      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    And API Operator verify Pickup transaction of the created order using data below:
+      | status   | CANCELLED                                                                          |
+      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    And API Operator verify Delivery transaction of the created order using data below:
+      | status   | CANCELLED                                                                          |
+      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status  | CANCELLED |
+      | routeId |           |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | CANCELLED |
+    And Operator verify order event on Edit order page using data below:
+      | name | CANCEL |
+    And Operator verify order event on Edit order page using data below:
+      | name    | PULL OUT OF ROUTE    |
+      | routeId | KEY_CREATED_ROUTE_ID |
+    And DB Operator verify Pickup waypoint of the created order using data below:
+      | status | PENDING |
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | PENDING |
+    And DB Operator verify Jaro Scores of the created order after cancel
+
+  @DeleteOrArchiveRoute @CloseNewWindows
+  Scenario: Cancel Order - Pickup Fail
+    When Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator start the route
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Driver failed the C2C/Return order pickup
+    And Operator go to menu Order -> All Orders
+    And Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    And Operator switch to Edit Order's window
+    Then Operator verify order status is "Pickup Fail" on Edit Order page
+    And Operator verify order granular status is "Pickup Fail" on Edit Order page
+    When Operator cancel order on Edit order page using data below:
+      | cancellationReason | Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    And API Operator get order details
+    Then Operator verify order status is "Cancelled" on Edit Order page
+    And Operator verify order granular status is "Cancelled" on Edit Order page
+    And Operator verify order summary on Edit order page using data below:
+      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    And API Operator verify Pickup transaction of the created order using data below:
+      | status   | CANCELLED                                                                          |
+      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    And API Operator verify Delivery transaction of the created order using data below:
+      | status   | CANCELLED                                                                          |
+      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status  | FAIL                 |
+      | routeId | KEY_CREATED_ROUTE_ID |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | CANCELLED |
+    And Operator verify order event on Edit order page using data below:
+      | name | CANCEL |
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | PENDING |
+    And DB Operator verify Jaro Scores of the created order after cancel
+
+  @DeleteOrArchiveRoute @CloseNewWindows
+  Scenario: Cancel Order - Staging
+    When Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    When API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-next-1-day-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-next-1-day-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add reservation pick-up to the route
+    And API Operator start the route
+    And API Driver collect all his routes
+    And API Driver get Reservation Job
+    And API Driver get estimated price of hyperlocal order
+    Then API Driver success reservation while creating hyperlocal order
+    And API Operator verify hyperlocal order created
+    And Operator go to menu Order -> All Orders
+    And Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    And Operator switch to Edit Order's window
+    Then Operator verify order status is "Staging" on Edit Order page
+    And Operator verify order granular status is "Staging" on Edit Order page
+    And Operator cancel order on Edit order page using data below:
+      | cancellationReason | Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    When API Operator get order details
+    Then Operator verify order status is "Cancelled" on Edit Order page
+    And Operator verify order granular status is "Cancelled" on Edit Order page
+    And Operator verify order summary on Edit order page using data below:
+      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    And API Operator verify Pickup transaction of the created order using data below:
+      | status   | CANCELLED                                                                          |
+      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    And API Operator verify Delivery transaction of the created order using data below:
+      | status   | CANCELLED                                                                          |
+      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    And Operator verify Pickup transaction on Edit order page using data below:
+      | status | CANCELLED |
+    And Operator verify Delivery transaction on Edit order page using data below:
+      | status | CANCELLED |
+    And Operator verify order event on Edit order page using data below:
+      | name | CANCEL |
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | PENDING |
+    And DB Operator verify Jaro Scores of the created order after cancel
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

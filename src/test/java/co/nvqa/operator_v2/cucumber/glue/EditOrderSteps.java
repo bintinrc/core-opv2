@@ -352,4 +352,60 @@ public class EditOrderSteps extends AbstractSteps
             editOrderPage.verifyEvent(order, hubName, hubId, event);
         });
     }
+
+    @Then("^Operator cancel order on Edit order page using data below:$")
+    public void operatorCancelOrderOnEditOrderPage(Map<String, String> mapOfData)
+    {
+        String cancellationReason = mapOfData.get("cancellationReason");
+        editOrderPage.cancelOrder(cancellationReason);
+        put(KEY_CANCELLATION_REASON, cancellationReason);
+    }
+
+    @Then("^Operator verify order event on Edit order page using data below:$")
+    public void operatorVerifyOrderEventOnEditOrderPage(Map<String, String> mapOfData)
+    {
+        mapOfData = resolveKeyValues(mapOfData);
+        List<OrderEvent> events = editOrderPage.eventsTable().readAllEntities();
+        OrderEvent expectedEvent = new OrderEvent();
+        expectedEvent.fromMap(mapOfData);
+        OrderEvent actualEvent = events.stream()
+                .filter(event -> StringUtils.equalsIgnoreCase(event.getName(), expectedEvent.getName()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(f("There is no [%s] event on Edit Order page", expectedEvent.getName())));
+
+        expectedEvent.compareWithActual(actualEvent);
+    }
+
+    @Then("^Operator verify (.+) transaction on Edit order page using data below:$")
+    public void operatorVerifyTransactionOnEditOrderPage(String transactionType, Map<String, String> mapOfData)
+    {
+        mapOfData = resolveKeyValues(mapOfData);
+        int rowIndex = transactionType.equalsIgnoreCase("Delivery") ? 2 : 1;
+
+        String value = mapOfData.get("status");
+        if (StringUtils.isNotBlank(value))
+        {
+            assertEquals(f("%s transaction status", transactionType), value, editOrderPage.transactionsTable().getStatus(rowIndex));
+        }
+
+
+        if (mapOfData.containsKey("routeID"))
+        {
+            value = mapOfData.get("routeId") == null ? "" : String.valueOf(mapOfData.get("routeId"));
+            assertEquals(f("%s transaction Route Id", transactionType), value, editOrderPage.transactionsTable().getRouteId(rowIndex));
+        }
+    }
+
+    @Then("^Operator verify order summary on Edit order page using data below:$")
+    public void operatorVerifyOrderSummaryOnEditOrderPage(Map<String, String> mapOfData)
+    {
+        mapOfData = resolveKeyValues(mapOfData);
+        Order expectedOrder = new Order();
+
+        if (mapOfData.containsKey("comments")){
+            expectedOrder.setComments(mapOfData.get("comments"));
+        }
+
+        editOrderPage.verifyOrderSummary(expectedOrder);
+    }
 }
