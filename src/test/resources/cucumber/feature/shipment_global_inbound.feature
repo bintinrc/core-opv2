@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @ShipmentGlobalInbound
+@OperatorV2 @OperatorV2Part1 @ShipmentGlobalInbound @Shipment
 Feature: Shipment Global Inbound
 
   @LaunchBrowser @ShouldAlwaysRun

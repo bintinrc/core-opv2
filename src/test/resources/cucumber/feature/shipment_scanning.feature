@@ -1,4 +1,4 @@
-@OperatorV2Disabled @OperatorV2Part2Disabled @ShipmentScanning @ShouldAlwaysRun
+@OperatorV2Disabled @OperatorV2Part2Disabled @ShipmentScanning @ShouldAlwaysRun @Shipment
 Feature: Shipment Scanning
 
   @LaunchBrowser
