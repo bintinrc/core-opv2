@@ -36,10 +36,7 @@ public class ShipmentGlobalInboundPage extends OperatorV2SimplePage
 
     public void selectShipmentDestinationHub(String hubName)
     {
-        waitUntilInvisibilityOfElementLocated(LOADING_XPATH);
-        clickMdSelectValue(SELECT_HUB_TEXT);
-        sendKeysForMdSelectHeaderInput(hubName);
-        click(MD_OPTION_HUB_FIRST_ELEMENT);
+        selectValueFromMdSelectById("container.global-inbound.hub", hubName);
     }
 
     public void selectShipmentType(String shipmentType)
@@ -64,7 +61,7 @@ public class ShipmentGlobalInboundPage extends OperatorV2SimplePage
     public void inputScannedTrackingId(String trackingId, boolean orderIsValid)
     {
         sendKeysAndEnter(SCANNER_FIELD_XPATH, trackingId);
-        closeToast();
+        //closeToast();
 
         if(orderIsValid)
         {
