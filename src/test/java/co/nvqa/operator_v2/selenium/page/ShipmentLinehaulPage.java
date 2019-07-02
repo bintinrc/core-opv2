@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvLogger;
-import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.Linehaul;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.WebDriver;
@@ -131,7 +130,7 @@ public class ShipmentLinehaulPage extends OperatorV2SimplePage
         for(String hub : hubs)
         {
             clickAddHubButton();
-            selectValueFromMdSelectById("select-hub-"+index, hub);
+            selectValueFromMdSelectByName("select-hub-"+index, hub);
             index++;
         }
     }
@@ -143,8 +142,7 @@ public class ShipmentLinehaulPage extends OperatorV2SimplePage
 
     public void chooseWorkingDays(List<String> days)
     {
-        //selectValueFromMdSelectByIdContains("select-days-of-week", days);
-        throw new NvTestRuntimeException("Tristania please help me (Daniel) to fix this.");
+        selectMultipleValuesFromMdSelectById("select-days-of-week", days);
     }
 
     public List<WebElement> grabListOfLinehaulWebElements()

@@ -11,11 +11,11 @@ Feature: Shipment Linehaul
     Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
     Given op click create linehaul button
     When create new linehaul:
-      | name      | JKT-AUTO            |
-      | comment   | Created at          |
-      | hubs      | 30JKB,DOJO,EASTGW   |
-      | frequency | Weekly              |
-      | days      | Monday,Friday       |
+      | name      | JKT-AUTO                   |
+      | comment   | Created at                 |
+      | hubs      | {hub-name},{hub-name-2},GW |
+      | frequency | Weekly                     |
+      | days      | Monday,Friday              |
     Then linehaul exist
     When op click delete linehaul button
     Then linehaul deleted
@@ -28,19 +28,19 @@ Feature: Shipment Linehaul
     Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
     Given op click create linehaul button
     When create new linehaul:
-      | name      | JKT-AUTO            |
-      | comment   | Created at          |
-      | hubs      | 30JKB,DOJO,EASTGW   |
-      | frequency | Weekly              |
-      | days      | Monday,Friday       |
+      | name      | JKT-AUTO                   |
+      | comment   | Created at                 |
+      | hubs      | {hub-name},{hub-name-2},GW |
+      | frequency | Weekly                     |
+      | days      | Monday,Friday              |
     Then linehaul exist
     When op click edit action button
     When edit linehaul with:
-      | name      | JKT-AUTO EDITED    |
-      | comment   | Created at         |
-      | hubs      | 30JKB,EASTGW       |
-      | frequency | Weekly             |
-      | days      | Monday,Friday      |
+      | name      | JKT-AUTO EDITED         |
+      | comment   | Created at              |
+      | hubs      | {hub-name},{hub-name-2} |
+      | frequency | Weekly                  |
+      | days      | Monday,Friday           |
     Then linehaul edited
     When op click delete linehaul button
     Then linehaul deleted
@@ -53,11 +53,11 @@ Feature: Shipment Linehaul
     Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
     Given op click create linehaul button
     When create new linehaul:
-      | name      | JKT-AUTO            |
-      | comment   | Created at          |
-      | hubs      | 30JKB,DOJO,EASTGW   |
-      | frequency | Weekly              |
-      | days      | Monday,Friday       |
+      | name      | JKT-AUTO                   |
+      | comment   | Created at                 |
+      | hubs      | {hub-name},{hub-name-2},GW |
+      | frequency | Weekly                     |
+      | days      | Monday,Friday              |
     Then linehaul exist
     When op click delete linehaul button
     Then linehaul deleted
@@ -70,11 +70,11 @@ Feature: Shipment Linehaul
     Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
     Given op click create linehaul button
     When create new linehaul:
-      | name      | JKT-AUTO            |
-      | comment   | Created at          |
-      | hubs      | 30JKB,DOJO,EASTGW   |
-      | frequency | Weekly              |
-      | days      | Monday,Friday       |
+      | name      | JKT-AUTO                   |
+      | comment   | Created at                 |
+      | hubs      | {hub-name},{hub-name-2},GW |
+      | frequency | Weekly                     |
+      | days      | Monday,Friday              |
     Then linehaul exist
     Then Schedule is right
     Then op click tab LINEHAUL ENTRIES
@@ -91,11 +91,11 @@ Feature: Shipment Linehaul
     Then op wait until 'Linehaul Date' tab on 'Linehaul Management' page is loaded
     Given op click create linehaul button
     When create new linehaul:
-      | name      | JKT-AUTO            |
-      | comment   | Created at          |
-      | hubs      | 30JKB,DOJO,EASTGW   |
-      | frequency | Weekly              |
-      | days      | Monday,Friday       |
+      | name      | JKT-AUTO                   |
+      | comment   | Created at                 |
+      | hubs      | {hub-name},{hub-name-2},GW |
+      | frequency | Weekly                     |
+      | days      | Monday,Friday              |
     Given op click tab LINEHAUL ENTRIES
     Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
     Then linehaul exist
@@ -114,22 +114,22 @@ Feature: Shipment Linehaul
     Then op wait until 'Linehaul Date' tab on 'Linehaul Management' page is loaded
     Given op click create linehaul button
     When create new linehaul:
-      | name      | JKT-AUTO            |
-      | comment   | Created at          |
-      | hubs      | 30JKB,DOJO,EASTGW   |
-      | frequency | Weekly              |
-      | days      | Monday,Friday       |
+      | name      | JKT-AUTO                   |
+      | comment   | Created at                 |
+      | hubs      | {hub-name},{hub-name-2},GW |
+      | frequency | Weekly                     |
+      | days      | Monday,Friday              |
     Given op click tab LINEHAUL ENTRIES
     Then op wait until 'Linehaul Entries' tab on 'Linehaul Management' page is loaded
     Then linehaul exist
     Then Schedule is right
     When op click edit linehaul button on schedule
     When edit linehaul with:
-      | name      | JKT-AUTO EDITED    |
-      | comment   | Created at         |
-      | hubs      | 30JKB,EASTGW       |
-      | frequency | Weekly             |
-      | days      | Monday,Friday      |
+      | name      | JKT-AUTO EDITED         |
+      | comment   | Created at              |
+      | hubs      | {hub-name},{hub-name-2} |
+      | frequency | Weekly                  |
+      | days      | Monday,Friday           |
     Then linehaul edited
     When op click delete linehaul button
     Then linehaul deleted
