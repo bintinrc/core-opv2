@@ -17,15 +17,21 @@ import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.DriverTypeParams;
 import co.nvqa.operator_v2.model.ShipmentInfo;
+import com.google.common.collect.ImmutableList;
 import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.Matchers;
+import org.junit.Assert;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps.TRANSACTION_TYPE_PICKUP;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -55,7 +61,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
         Long driverTypeId = driverTypeParams.getDriverTypeId();
 
-        for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
+        for (CreateRouteParams createRouteParams : listOfCreateRouteParams)
         {
             long routeId = createRouteParams.getCreatedRoute().getId();
             List<RouteDriverTypeEntity> listOfRouteDriverTypeEntity = getRouteJdbc().findRouteDriverTypeByRouteIdAndNotDeleted(routeId);
@@ -81,6 +87,62 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         });
     }
 
+    @Then("^DB Operator verify Jaro Scores of the created order after cancel$")
+    public void dbOperatorVerifyJaroScoresAfterCancel()
+    {
+        Order order = get(KEY_ORDER_DETAILS);
+        String trackingId = order.getTrackingId();
+
+        List<Transaction> transactions = order.getTransactions();
+
+        ImmutableList.of(TRANSACTION_TYPE_PICKUP, TRANSACTION_TYPE_DELIVERY).forEach(transactionType ->
+        {
+            Optional<Transaction> transactionOptional = transactions.stream().filter(t -> transactionType.equals(t.getType())).findFirst();
+
+            if (transactionOptional.isPresent())
+            {
+                Transaction transaction = transactionOptional.get();
+                Long waypointId = transaction.getWaypointId();
+                if (waypointId != null)
+                {
+                    List<JaroScore> jaroScores = getCoreJdbc().getJaroScores(waypointId);
+                    assertEquals("Number of rows in DB", 1, jaroScores.size());
+                    jaroScores.forEach(jaroScore ->
+                            Assert.assertEquals(f("order jaro score is archived for the %s waypoint ", transactionType), new Integer(1), jaroScore.getArchived()));
+                }
+            } else
+            {
+                fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
+            }
+        });
+    }
+
+    @Then("^DB Operator verify (.+) waypoint of the created order using data below:$")
+    public void dbOperatorVerifyWaypoint(String transactionType, Map<String, String> data)
+    {
+        Order order = get(KEY_ORDER_DETAILS);
+        String trackingId = order.getTrackingId();
+
+        List<Transaction> transactions = order.getTransactions();
+
+        Optional<Transaction> transactionOptional = transactions.stream().filter(t -> StringUtils.equalsIgnoreCase(t.getType(), transactionType)).findFirst();
+
+        if (transactionOptional.isPresent())
+        {
+            Transaction transaction = transactionOptional.get();
+            Long waypointId = transaction.getWaypointId();
+            Assert.assertNotNull(f("%s waypoint Id", transactionType), waypointId);
+
+            Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
+            if (data.containsKey("status")){
+                assertThat(f("%s waypoint [%d] status", transactionType, waypointId), actualWaypoint.getStatus(), Matchers.equalToIgnoringCase(data.get("status")));
+            }
+        } else
+        {
+            fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
+        }
+    }
+
     @Then("^DB Operator verify the last order_events record for the created order:$")
     public void operatorVerifyTheLastOrderEventParams(Map<String, String> mapOfData)
     {
@@ -90,7 +152,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         OrderEventEntity theLastOrderEvent = orderEvents.get(0);
         String value = mapOfData.get("type");
 
-        if(StringUtils.isNotBlank(value))
+        if (StringUtils.isNotBlank(value))
         {
             assertEquals("Type", Integer.parseInt(value), theLastOrderEvent.getType());
         }
@@ -119,14 +181,14 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
         String value = mapOfData.get("hubId");
 
-        if(StringUtils.isNotBlank(value))
+        if (StringUtils.isNotBlank(value))
         {
             assertEquals("Hub ID", Long.valueOf(value), theLastInboundScan.getHubId());
         }
 
         value = mapOfData.get("type");
 
-        if(StringUtils.isNotBlank(value))
+        if (StringUtils.isNotBlank(value))
         {
             assertEquals("Type", Short.valueOf(value), theLastInboundScan.getType());
         }
@@ -137,7 +199,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     {
         DpPartner dpPartner = get(KEY_DP_PARTNER);
 
-        if(dpPartner!=null)
+        if (dpPartner != null)
         {
             getDpJdbc().deleteDpPartner(dpPartner.getName());
         }
@@ -148,7 +210,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     {
         DpPartner dpPartner = get(KEY_DP_PARTNER);
 
-        if(dpPartner!=null)
+        if (dpPartner != null)
         {
             getDpJdbc().deleteDp(dpPartner.getName());
             getDpJdbc().deleteDpPartner(dpPartner.getName());
@@ -160,7 +222,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     {
         DpPartner dpPartner = get(KEY_DP_PARTNER);
 
-        if(dpPartner!=null)
+        if (dpPartner != null)
         {
             getDpJdbc().deleteDpUser(dpPartner.getName());
             getDpJdbc().deleteDp(dpPartner.getName());
@@ -183,7 +245,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     {
         ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
 
-        if(shipmentInfo!=null)
+        if (shipmentInfo != null)
         {
             getHubJdbc().deleteShipment(shipmentInfo.getId());
         }
@@ -196,7 +258,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         String trackingId = mapOfData.get("trackingId");
         String hubId = mapOfData.get("hubId");
 
-        if(StringUtils.equalsIgnoreCase(trackingId, "CREATED"))
+        if (StringUtils.equalsIgnoreCase(trackingId, "CREATED"))
         {
             trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         }
@@ -205,7 +267,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
         final String finalTrackingId = trackingId;
 
-        List<Map<String, Object>> warehouseSweepRecordsFiltered = retryIfExpectedExceptionOccurred(()->
+        List<Map<String, Object>> warehouseSweepRecordsFiltered = retryIfExpectedExceptionOccurred(() ->
         {
             List<Map<String, Object>> warehouseSweepRecords = getCoreJdbc().findWarehouseSweepRecord();
             List<Map<String, Object>> warehouseSweepRecordsFilteredTemp = warehouseSweepRecords.stream()

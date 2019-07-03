@@ -40,6 +40,7 @@ public class EditOrderPage extends OperatorV2SimplePage
     private DeliveryDetailsBox deliveryDetailsBox;
     private PickupDetailsBox pickupDetailsBox;
     private EventsTable eventsTable;
+    private CancelOrderDialog cancelOrderDialog;
 
     public EditOrderPage(WebDriver webDriver)
     {
@@ -49,11 +50,16 @@ public class EditOrderPage extends OperatorV2SimplePage
         deliveryDetailsBox = new DeliveryDetailsBox(webDriver);
         pickupDetailsBox = new PickupDetailsBox(webDriver);
         eventsTable = new EventsTable(webDriver);
+        cancelOrderDialog = new CancelOrderDialog(webDriver);
     }
 
     public EventsTable eventsTable()
     {
         return eventsTable;
+    }
+
+    public TransactionsTable transactionsTable(){
+        return transactionsTable;
     }
 
     public void clickMenu(String parentMenuName, String childMenuName)
@@ -185,11 +191,28 @@ public class EditOrderPage extends OperatorV2SimplePage
         assertThat("Pickup Driver", pickupDetailsBox.getDriver(), equalTo(expectedDriver));
     }
 
+    public void verifyOrderSummary(Order order)
+    {
+        assertEquals("Order Summary: Comments", order.getComments(), getOrderComments());
+    }
+
+    public String getOrderComments(){
+        return getText("//div[@class='data-block'][label[.='Comments']]/p");
+    }
+
     public void printAirwayBill()
     {
         clickMenu("View/Print", "Print Airway Bill");
         waitUntilInvisibilityOfToast("Attempting to download", true);
         waitUntilInvisibilityOfToast("Downloading");
+    }
+
+    public void cancelOrder(String cancellationReason){
+        clickMenu("Order Settings", "Cancel Order");
+        cancelOrderDialog.waitUntilVisibility()
+                .enterCancellationReason(cancellationReason)
+                .submit();
+        waitUntilInvisibilityOfToast("1 order(s) cancelled");
     }
 
     public void verifyAirwayBillContentsIsCorrect(Order order)
@@ -622,6 +645,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         private static final String COLUMN_CLASS_PRIORITY_LEVEL = "priority-level";
         private static final String COLUMN_CLASS_TXN_TYPE = "type";
         private static final String COLUMN_CLASS_STATUS = "status";
+        private static final String COLUMN_CLASS_ROUTE_ID = "route-id";
 
         public TransactionsTable(WebDriver webDriver)
         {
@@ -640,6 +664,11 @@ public class EditOrderPage extends OperatorV2SimplePage
         }
 
         @SuppressWarnings("unused")
+        public String getRouteId(int rowNumber)
+        {
+            return getTextOnTable(rowNumber, COLUMN_CLASS_ROUTE_ID);
+        }
+
         public String getTxnType(int rowNumber)
         {
             return getTextOnTable(rowNumber, COLUMN_CLASS_TXN_TYPE);
@@ -689,6 +718,39 @@ public class EditOrderPage extends OperatorV2SimplePage
                     .put(DESCRIPTION, "_description")
                     .build());
             setEntityClass(OrderEvent.class);
+        }
+    }
+
+    /**
+     * Accessor for Cancel dialog
+     */
+    public static class CancelOrderDialog extends OperatorV2SimplePage
+    {
+        private static final String DIALOG_TITLE = "Cancel Order";
+        private static final String FIELD_CANCELLATION_REASON_LOCATOR = "container.order.edit.cancellation-reason";
+        private static final String BUTTON_CANCEL_ORDER_LOCATOR = "container.order.edit.cancel-order";
+
+        public CancelOrderDialog(WebDriver webDriver)
+        {
+            super(webDriver);
+        }
+
+        public CancelOrderDialog waitUntilVisibility()
+        {
+            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+            return this;
+        }
+
+        public CancelOrderDialog enterCancellationReason(String cancellationReason)
+        {
+            sendKeysByName(FIELD_CANCELLATION_REASON_LOCATOR, cancellationReason);
+            return this;
+        }
+
+        public void submit()
+        {
+            clickNvApiTextButtonByNameAndWaitUntilDone(BUTTON_CANCEL_ORDER_LOCATOR);
+            waitUntilInvisibilityOfMdDialogByTitle(DIALOG_TITLE);
         }
     }
 
