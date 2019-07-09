@@ -1,4 +1,4 @@
-@OperatorV2Disabled @OperatorV2Part2Disabled @ShipmentLinehaul @Shipment
+@OperatorV2 @OperatorV2Part2 @ShipmentLinehaul @Shipment
 Feature: Shipment Linehaul
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -19,7 +19,7 @@ Feature: Shipment Linehaul
     Then linehaul exist
     When op click delete linehaul button
     Then linehaul deleted
-    Then op click edit linhaul filter
+    Then op click edit linehaul filter
 
   Scenario: Edit Linehaul (uid:85dbd34f-25ea-4ada-accc-884a8098f8e2)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -40,11 +40,11 @@ Feature: Shipment Linehaul
       | comment   | Created at              |
       | hubs      | {hub-name},{hub-name-2} |
       | frequency | Weekly                  |
-      | days      | Monday,Friday           |
+      | days      | Monday                  |
     Then linehaul edited
     When op click delete linehaul button
     Then linehaul deleted
-    Then op click edit linhaul filter
+    Then op click edit linehaul filter
 
   Scenario: Delete Linehaul (uid:89bc519c-6f5d-4f99-864a-2dbba4c52c22)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -61,7 +61,7 @@ Feature: Shipment Linehaul
     Then linehaul exist
     When op click delete linehaul button
     Then linehaul deleted
-    Then op click edit linhaul filter
+    Then op click edit linehaul filter
 
   Scenario: Check linehaul schedule (uid:8b178ed7-6da6-4207-8cb6-f75327533ba2)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -82,7 +82,7 @@ Feature: Shipment Linehaul
     When Operator click "Load All Selection" on Linehaul Management page
     When op click delete linehaul button
     Then linehaul deleted
-    Then op click edit linhaul filter
+    Then op click edit linehaul filter
 
   Scenario: Create linehaul on linehaul schedule page (uid:fe37a8e4-b435-45ef-8411-8bd0a37450d0)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -105,7 +105,7 @@ Feature: Shipment Linehaul
     When Operator click "Load All Selection" on Linehaul Management page
     When op click delete linehaul button
     Then linehaul deleted
-    Then op click edit linhaul filter
+    Then op click edit linehaul filter
 
   Scenario: Edit Linehaul on linehaul schedule page (uid:e24343fb-3ca4-4109-8221-873e88744351)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -129,11 +129,11 @@ Feature: Shipment Linehaul
       | comment   | Created at              |
       | hubs      | {hub-name},{hub-name-2} |
       | frequency | Weekly                  |
-      | days      | Monday,Friday           |
+      | days      | Monday                  |
     Then linehaul edited
     When op click delete linehaul button
     Then linehaul deleted
-    Then op click edit linhaul filter
+    Then op click edit linehaul filter
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -162,6 +162,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
 
     private void fillLinehaulForm(Map<String, String> arg1)
     {
+        pause3s();
         linehaul = JsonHelper.mapToObject(arg1, Linehaul.class);
         linehaul.setComment(linehaul.getComment() + " " + CREATED_DATE_SDF.format(new Date()));
         shipmentLinehaulPage.fillLinehaulNameFT(linehaul.getName());
@@ -254,7 +255,7 @@ public class ShipmentLinehaulSteps extends AbstractSteps
         shipmentLinehaulPage.clickEditLinehaulAtDate(linehaulId);
     }
 
-    @Given("^op click edit linhaul filter$")
+    @Given("^op click edit linehaul filter$")
     public void op_click_edit_filter()
     {
         shipmentLinehaulPage.clickEditSearchFilterButton();

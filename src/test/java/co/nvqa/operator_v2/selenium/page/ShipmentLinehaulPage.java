@@ -34,8 +34,8 @@ public class ShipmentLinehaulPage extends OperatorV2SimplePage
     private static final String XPATH_TABLE_ITEM = "//tr[@md-virtual-repeat='linehaul in getTableData()']";
     private static final String XPATH_LINEHAUL_ENTRIES_TAB = "//md-tab-item/span[text()='Linehaul Entries']";
     private static final String XPATH_LINEHAUL_DATE_TAB = "//md-tab-item/span[text()='Linehaul Date']";
-    private static final String XPATH_SCHEDULE_MONTH = "//md-select[contains(@aria-label,'Month:')]";
-    private static final String XPATH_SCHEDULE_YEAR = "//md-select[contains(@aria-label,'Year:')]";
+    //private static final String XPATH_SCHEDULE_MONTH = "//md-select[contains(@aria-label,'Month:')]";
+    //private static final String XPATH_SCHEDULE_YEAR = "//md-select[contains(@aria-label,'Year:')]";
     //public static final String XPATH_LOAD_ALL_SHIPMENT_BUTTON = "//button[@aria-label='Load Selection']";
     public static final String XPATH_EDIT_SEARCH_FILTER_BUTTON = "//button[contains(@aria-label, 'Edit Filter')]";
 
@@ -99,11 +99,8 @@ public class ShipmentLinehaulPage extends OperatorV2SimplePage
 
     public void search(String value)
     {
-        sendKeys(XPATH_SEARCH, value);
-        pause500ms();
-        NvLogger.info("Waiting until 'Loading more results...' disappear.");
+        searchTableCustom1("id", value);
         waitUntilInvisibilityOfElementLocated("//h5[text()='Loading more results...']");
-        NvLogger.info("'Loading more results...' is disappeared.");
     }
 
     public void fillLinehaulNameFT(String name)
@@ -176,10 +173,10 @@ public class ShipmentLinehaulPage extends OperatorV2SimplePage
 
     public void clickLinehaulScheduleDate(Calendar date)
     {
-        selectValueFromMdSelectByIdContains(XPATH_SCHEDULE_MONTH, TestUtils.integerToMonth(date.get(Calendar.MONTH)));
-        pause3s();
-        selectValueFromMdSelectByIdContains(XPATH_SCHEDULE_YEAR, String.valueOf(date.get(Calendar.YEAR)));
-        pause3s();
+        selectValueFromMdSelect("calendar.month", TestUtils.integerToMonth(date.get(Calendar.MONTH)));
+        pause1s();
+        selectValueFromMdSelect("calendar.year", String.valueOf(date.get(Calendar.YEAR)));
+        pause1s();
         click("//div[@tabindex='" + date.get(Calendar.DAY_OF_MONTH) + "']");
     }
 
