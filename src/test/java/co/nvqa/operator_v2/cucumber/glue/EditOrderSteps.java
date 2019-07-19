@@ -361,6 +361,18 @@ public class EditOrderSteps extends AbstractSteps
         put(KEY_CANCELLATION_REASON, cancellationReason);
     }
 
+    @And("Operator does the Manually Complete Order from Edit Order Page")
+    public void operatorDoesTheManuallyCompleteOrderFromEditOrderPage()
+    {
+        editOrderPage.manuallyCompleteOrder();
+    }
+
+    @And("Operator selects the Route Tags of \"([^\"]*)\" from the Route Finder")
+    public void operatorSelectTheRouteTagsOfFromTheRouteFinder(String routeTag)
+    {
+        editOrderPage.addToRouteFromRouteTag(routeTag);
+    }
+
     @Then("^Operator verify order event on Edit order page using data below:$")
     public void operatorVerifyOrderEventOnEditOrderPage(Map<String, String> mapOfData)
     {
@@ -407,5 +419,17 @@ public class EditOrderSteps extends AbstractSteps
         }
 
         editOrderPage.verifyOrderSummary(expectedOrder);
+    }
+
+    @Then("Operator verifies the status of the order will be Completed")
+    public void operatorVerifiesTheStatusOfTheOrderWillBeCompleted()
+    {
+        editOrderPage.verifyOrderStatus("Completed");
+    }
+
+    @Then("Operator verifies the route is tagged to the order")
+    public void operatorVerifiesTheRouteIsTaggedToTheOrder()
+    {
+        editOrderPage.verifiesOrderIsTaggedToTheRecommendedRouteId();
     }
 }

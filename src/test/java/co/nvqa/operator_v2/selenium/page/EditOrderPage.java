@@ -115,6 +115,15 @@ public class EditOrderPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfMdDialogByTitle("Edit Order Stamp");
     }
 
+    public void manuallyCompleteOrder()
+    {
+        clickMenu("Order Settings", "Manually Complete Order");
+        waitUntilVisibilityOfElementLocated("//md-dialog-content[contains(@id,'dialogContent')]");
+        click("//button[contains(@id,'button-api-text') and contains(@aria-label,'Complete Order')]");
+        waitUntilVisibilityOfToast("The order has been completed");
+        waitUntilInvisibilityOfToast("The order has been completed");
+    }
+
     public void updateOrderStatus(Order order)
     {
         clickMenu("Order Settings", "Update Status");
@@ -150,6 +159,16 @@ public class EditOrderPage extends OperatorV2SimplePage
                 .enterRouteId(routeId)
                 .selectType(type)
                 .submit();
+    }
+
+    public void addToRouteFromRouteTag(String routeTag)
+    {
+        clickMenu("Delivery", "Add To Route");
+        addToRouteDialog
+                .waitUntilVisibility()
+                .selectRouteTags(routeTag)
+                .submit();
+        waitUntilInvisibilityOfToast(true);
     }
 
     public void verifyDeliveryStartDateTime(String expectedDate)
@@ -636,6 +655,12 @@ public class EditOrderPage extends OperatorV2SimplePage
         return getTextOnTableWithNgRepeat(rowNumber, columnDataClass, NG_REPEAT_TABLE_EVENT);
     }
 
+    public void verifiesOrderIsTaggedToTheRecommendedRouteId()
+    {
+        String actualRouteId = transactionsTable.getRouteId(2);
+        assertTrue("Order is not tagged to any route: ", actualRouteId != null && !actualRouteId.equalsIgnoreCase(""));
+    }
+
     /**
      * Accessor for Reservations table
      */
@@ -663,7 +688,6 @@ public class EditOrderPage extends OperatorV2SimplePage
             return getTextOnTable(rowNumber, COLUMN_CLASS_STATUS);
         }
 
-        @SuppressWarnings("unused")
         public String getRouteId(int rowNumber)
         {
             return getTextOnTable(rowNumber, COLUMN_CLASS_ROUTE_ID);
@@ -763,6 +787,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         private static final String FIELD_ROUTE_LOCATOR = "ctrl.formData.orders[0].routeId";
         private static final String FIELD_TYPE_LOCATOR = "model";
         private static final String BUTTON_ADD_TO_ROUTE_LOCATOR = "container.order.edit.add-to-route";
+        private static final String ROUTE_TAGS_OPTION_ID = "container.order.edit.route-tags";
 
         public AddToRouteDialog(WebDriver webDriver)
         {
@@ -784,6 +809,14 @@ public class EditOrderPage extends OperatorV2SimplePage
         public AddToRouteDialog selectType(String type)
         {
             selectValueFromMdSelect(FIELD_TYPE_LOCATOR, type);
+            return this;
+        }
+
+        public AddToRouteDialog selectRouteTags(String routeTag)
+        {
+            selectValueFromMdSelectById(ROUTE_TAGS_OPTION_ID, routeTag);
+            click("//input[contains(@id,'container.order.edit.route')]");
+            click("//nv-api-text-button[@name='container.order.edit.suggest-route']/button[contains(@id,'button-api-text')]");
             return this;
         }
 

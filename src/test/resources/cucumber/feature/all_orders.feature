@@ -175,6 +175,37 @@ Feature: All Orders
     When Operator apply "Pull From Route" action and expect to see "Selection Error"
     Then Operator verify Selection Error dialog for invalid Pull From Order action
 
+  Scenario: Operator should be able to Search Order with Exact tracking ID (uid:1fedac5b-a277-4507-a298-074928598676)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Order -> All Orders
+    When Operator open page of the created order from All Orders page
+    Then Operator verifies tha searched Tracking ID is the same to the created one
+
+  Scenario: Operator should be able to Add Parcel to Route Using Tag Filter (uid:f95e0857-d2a9-47f1-b12f-c960287d47c4)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given Operator go to menu Order -> All Orders
+    When Operator open page of the created order from All Orders page
+    And Operator selects the Route Tags of "FLT" from the Route Finder
+    Then Operator verifies the route is tagged to the order
+
+  Scenario: Operator Should be Able to Manually Complete Order from Edit Order page (uid:5e43345d-6e61-422e-89c6-051aafe4ccb1)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Order -> All Orders
+    When Operator open page of the created order from All Orders page
+    And Operator does the Manually Complete Order from Edit Order Page
+    Then Operator verifies the status of the order will be Completed
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

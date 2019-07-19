@@ -285,4 +285,11 @@ public class AllOrdersSteps extends AbstractSteps
         allOrdersPage.specificSearch(AllOrdersPage.Category.TRACKING_OR_STAMP_ID, AllOrdersPage.SearchLogic.EXACTLY_MATCHES, trackingId);
         allOrdersPage.switchToEditOrderWindow(createdOrder.getId());
     }
+
+    @Then("Operator verifies tha searched Tracking ID is the same to the created one")
+    public void operatorVerifiesThaSearchedTrackingIDIsTheSameToTheCreatedOne()
+    {
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        allOrdersPage.verifiesTrackingIdIsCorrect(trackingId);
+    }
 }

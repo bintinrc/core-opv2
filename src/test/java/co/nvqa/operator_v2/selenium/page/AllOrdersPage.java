@@ -527,6 +527,12 @@ public class AllOrdersPage extends OperatorV2SimplePage
         specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, trackingId);
     }
 
+    public void verifiesTrackingIdIsCorrect(String trackingId)
+    {
+        String actualTrackingId = getText("//div[@id='header']//label[text()='Tracking ID']/following-sibling::h3");
+        assertEquals("Tracking ID is Not the same: ", actualTrackingId, trackingId);
+    }
+
     public void specificSearch(Category category, SearchLogic searchLogic, String searchTerm)
     {
         String mainWindowHandle = getWebDriver().getWindowHandle();
