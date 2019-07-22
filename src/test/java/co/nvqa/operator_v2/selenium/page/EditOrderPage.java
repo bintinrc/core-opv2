@@ -69,6 +69,13 @@ public class EditOrderPage extends OperatorV2SimplePage
         clickf("//div[@aria-hidden='false']/md-menu-content/md-menu-item/button/span[contains(text(), '%s')]", childMenuName);
     }
 
+    public boolean isMenuItemEnabled(String parentMenuName, String childMenuName)
+    {
+        clickf("//md-menu-bar/md-menu/button[contains(text(), '%s')]", parentMenuName);
+        waitUntilVisibilityOfElementLocated("//div[@aria-hidden='false']/md-menu-content");
+        return isElementEnabled(f("//div[@aria-hidden='false']/md-menu-content/md-menu-item/button[span[contains(text(), '%s')]]", childMenuName));
+    }
+
     public void editOrderDetails(Order order)
     {
         String parcelSize = getParcelSizeShortStringByLongString(order.getParcelSize());

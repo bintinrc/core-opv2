@@ -16,6 +16,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.List;
@@ -431,5 +432,11 @@ public class EditOrderSteps extends AbstractSteps
     public void operatorVerifiesTheRouteIsTaggedToTheOrder()
     {
         editOrderPage.verifiesOrderIsTaggedToTheRecommendedRouteId();
+    }
+    
+    @Then("^Operator verify menu item \"(.+)\" > \"(.+)\" is disabled on Edit order page$")
+    public void operatorVerifyMenuItemIsDisabledOnEditOrderPage(String parentMenuItem, String childMenuItem)
+    {
+        Assert.assertFalse(f("%s > %s menu item is enabled", parentMenuItem, childMenuItem), editOrderPage.isMenuItemEnabled(parentMenuItem, childMenuItem));
     }
 }
