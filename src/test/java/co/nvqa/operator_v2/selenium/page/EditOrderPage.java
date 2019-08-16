@@ -8,6 +8,7 @@ import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.pdf.AirwayBill;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
@@ -20,10 +21,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
 import org.openqa.selenium.WebDriver;
 
+import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
 
@@ -41,6 +42,7 @@ public class EditOrderPage extends OperatorV2SimplePage
     private PickupDetailsBox pickupDetailsBox;
     private EventsTable eventsTable;
     private CancelOrderDialog cancelOrderDialog;
+    private EditPickupDetailsDialog editPickupDetailsDialog;
 
     public EditOrderPage(WebDriver webDriver)
     {
@@ -51,6 +53,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         pickupDetailsBox = new PickupDetailsBox(webDriver);
         eventsTable = new EventsTable(webDriver);
         cancelOrderDialog = new CancelOrderDialog(webDriver);
+        editPickupDetailsDialog = new EditPickupDetailsDialog(webDriver);
     }
 
     public EventsTable eventsTable()
@@ -399,13 +402,7 @@ public class EditOrderPage extends OperatorV2SimplePage
     public void verifyPickupAndDeliveryInfo(Order order)
     {
         // Pickup
-        assertEquals("From Name", order.getFromName(), getFromName());
-        assertEquals("From Email", order.getFromEmail(), getFromEmail());
-        assertEquals("From Contact", order.getFromContact(), getFromContact());
-        String fromAddress = getFromAddress();
-        assertThat("From Address", fromAddress, containsString(order.getFromAddress1()));
-        assertThat("From Address", fromAddress, containsString(order.getFromAddress2()));
-
+        verifyPickupInfo(order);
         // Delivery
         assertEquals("To Name", order.getToName(), getToName());
         assertEquals("To Email", order.getToEmail(), getToEmail());
@@ -415,7 +412,17 @@ public class EditOrderPage extends OperatorV2SimplePage
         assertThat("To Address", toAddress, containsString(order.getToAddress2()));
     }
 
-    public void verifyOrderIsGlobalInboundedSuccessfully(Order order, GlobalInboundParams globalInboundParams, Double expectedOrderCost, String expectedStatus, List<String> expectedGranularStatus, String expectedDeliveryStatus)
+    public void verifyPickupInfo(Order order) {
+        // Pickup
+        assertEquals("From Name", order.getFromName(), getFromName());
+        assertEquals("From Email", order.getFromEmail(), getFromEmail());
+        assertEquals("From Contact", order.getFromContact(), getFromContact());
+        String fromAddress = getFromAddress();
+        assertThat("From Address", fromAddress, containsString(order.getFromAddress1()));
+        assertThat("From Address", fromAddress, containsString(order.getFromAddress2()));
+    }
+
+        public void verifyOrderIsGlobalInboundedSuccessfully(Order order, GlobalInboundParams globalInboundParams, Double expectedOrderCost, String expectedStatus, List<String> expectedGranularStatus, String expectedDeliveryStatus)
     {
         if(isElementExistFast("//nv-icon-text-button[@name='container.order.edit.show-more']"))
         {
@@ -489,6 +496,17 @@ public class EditOrderPage extends OperatorV2SimplePage
         {
             NvLogger.warn("Ignore this Assertion error for now because the event sometimes is not created right away.", ex);
         }
+    }
+
+    public void verifyPickupDetailsInTransaction(Order order, String txnType){
+        transactionsTable.searchByTxnType(txnType);
+        assertEquals("From Name", order.getFromName(), transactionsTable.getName(1));
+        assertEquals("From Email", order.getFromEmail(), transactionsTable.getEmail(1));
+        assertEquals("From Contact", order.getFromContact(), transactionsTable.getContact(1));
+        String fromAddress = transactionsTable.getAddress(1);
+        assertThat("From Address", fromAddress, containsString(order.getFromAddress1()));
+        assertThat("From Address", fromAddress, containsString(order.getFromAddress2()));
+
     }
 
     public String getDeliveryTitle()
@@ -668,6 +686,37 @@ public class EditOrderPage extends OperatorV2SimplePage
         assertTrue("Order is not tagged to any route: ", actualRouteId != null && !actualRouteId.equalsIgnoreCase(""));
     }
 
+    public void updatePickupDetails(Map<String, String> mapOfData)
+    {
+        String senderName = mapOfData.get("senderName");
+        String senderContact = mapOfData.get("senderContact");
+        String senderEmail = mapOfData.get("senderEmail");
+        String internalNotes = mapOfData.get("internalNotes");
+        String pickupDate = mapOfData.get("pickupDate");
+        String pickupTimeslot = mapOfData.get("pickupTimeslot");
+        String country = mapOfData.get("country");
+        String city = mapOfData.get("city");
+        String address1 = mapOfData.get("address1");
+        String address2 = mapOfData.get("address2");
+        String postalCode = mapOfData.get("postalCode");
+
+        editPickupDetailsDialog
+                .updateSenderName(senderName)
+                .updateSenderContact(senderContact)
+                .updateSenderEmail(senderEmail)
+                .updateInternalNotes(internalNotes)
+                .updatePickupDate(pickupDate)
+                .updatePickupTimeslot(pickupTimeslot)
+                .clickChangeAddress()
+                .updateCountry(country)
+                .updateCity(city)
+                .updateAddress1(address1)
+                .updateAddress2(address2)
+                .updatePostalCode(postalCode)
+                .clickSaveChanges();
+        editPickupDetailsDialog.confirmPickupDetailsUpdated();
+    }
+
     /**
      * Accessor for Reservations table
      */
@@ -678,6 +727,10 @@ public class EditOrderPage extends OperatorV2SimplePage
         private static final String COLUMN_CLASS_TXN_TYPE = "type";
         private static final String COLUMN_CLASS_STATUS = "status";
         private static final String COLUMN_CLASS_ROUTE_ID = "route-id";
+        private static final String COLUMN_CLASS_NAME = "name";
+        private static final String COLUMN_CLASS_CONTACT = "contact";
+        private static final String COLUMN_CLASS_EMAIL = "email";
+        private static final String COLUMN_CLASS_ADDRESS = "_address";
 
         public TransactionsTable(WebDriver webDriver)
         {
@@ -705,6 +758,26 @@ public class EditOrderPage extends OperatorV2SimplePage
             return getTextOnTable(rowNumber, COLUMN_CLASS_TXN_TYPE);
         }
 
+        public String getName(int rowNumber)
+        {
+            return getTextOnTable(rowNumber, COLUMN_CLASS_NAME);
+        }
+
+        public String getContact(int rowNumber)
+        {
+            return getTextOnTable(rowNumber, COLUMN_CLASS_CONTACT);
+        }
+
+        public String getEmail(int rowNumber)
+        {
+            return getTextOnTable(rowNumber, COLUMN_CLASS_EMAIL);
+        }
+
+        public String getAddress(int rowNumber)
+        {
+            return getTextOnTable(rowNumber, COLUMN_CLASS_ADDRESS);
+        }
+
         private String getTextOnTable(int rowNumber, String columnDataClass)
         {
             String text = getTextOnTableWithNgRepeat(rowNumber, columnDataClass, NG_REPEAT);
@@ -718,7 +791,7 @@ public class EditOrderPage extends OperatorV2SimplePage
     }
 
     /**
-     * Accessor for Reservations table
+     * Accessor for Events table
      */
     public static class EventsTable extends NgRepeatTable<OrderEvent>
     {
@@ -749,6 +822,54 @@ public class EditOrderPage extends OperatorV2SimplePage
                     .put(DESCRIPTION, "_description")
                     .build());
             setEntityClass(OrderEvent.class);
+        }
+
+        public void verifyUpdateAddressEventDescription(Order order, String eventDescription) {
+            String fromAddress1Pattern = f("From Address 1 .* (to|new value) %s.*", order.getFromAddress1());
+            String fromAddress2Pattern = f(".* From Address 2 .* (to|new value) %s.*", order.getFromAddress2());
+            String fromPostcodePattern = f(".* From Postcode .* (to|new value) %s.*", order.getFromPostcode());
+            String fromCityPattern = f(".* From City .* (to|new value) %s.*", order.getFromCity());
+            String fromCountryPattern = f(".* From Country .* (to|new value) %s.*", order.getFromCountry());
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", fromAddress1Pattern, eventDescription),
+                    eventDescription.matches(fromAddress1Pattern));
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", fromAddress2Pattern, eventDescription),
+                    eventDescription.matches(fromAddress2Pattern));
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", fromPostcodePattern, eventDescription),
+                    eventDescription.matches(fromPostcodePattern));
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", fromCityPattern, eventDescription),
+                    eventDescription.matches(fromCityPattern));
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", fromCountryPattern, eventDescription),
+                    eventDescription.matches(fromCountryPattern));
+        }
+
+        public void verifyUpdateContactInformationEventDescription(Order order, String eventDescription) {
+            String fromNamePattern = f("From Name .* (to|new value) %s.*", order.getFromName());
+            String fromEmailPattern = f(".* From Email .* (to|new value) %s.*", order.getFromEmail());
+            String fromContactPattern = f(".* From Contact .* (to|new value) \\%s.*", order.getFromContact());
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", fromNamePattern, eventDescription),
+                    eventDescription.matches(fromNamePattern));
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", fromEmailPattern, eventDescription),
+                    eventDescription.matches(fromEmailPattern));
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", fromContactPattern, eventDescription),
+                    eventDescription.matches(fromContactPattern));
+        }
+
+        public void verifyUpdateSlaEventDescription(Order order, String eventDescription) {
+            String fromPickUpStartTimePattern = f("Pickup Start Time .* (to|new value) %s %s.*",
+                    order.getPickupDate(), order.getPickupTimeslot().getStartTime());
+            String fromPickUpEndTimePattern = f(".* Pickup End Time .* (to|new value) %s %s.*",
+                    order.getPickupDate(), order.getPickupTimeslot().getEndTime());
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", fromPickUpStartTimePattern, eventDescription),
+                    eventDescription.matches(fromPickUpStartTimePattern));
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", fromPickUpEndTimePattern, eventDescription),
+                    eventDescription.matches(fromPickUpEndTimePattern));
+        }
+
+        public void verifyVerifyAddressEventDescription(Order order, String eventDescription) {
+            String addressPattern = f("Address: %s, %s, %s, %s, %s.*", order.getFromAddress1(), order.getFromAddress2(),
+                    order.getFromCity(), order.getFromCountry(), order.getFromPostcode());
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", addressPattern, eventDescription),
+                    eventDescription.matches(addressPattern));
         }
     }
 
@@ -933,6 +1054,153 @@ public class EditOrderPage extends OperatorV2SimplePage
         {
 
             return getText(WAYPOINT_ID_LOCATOR);
+        }
+    }
+
+    /**
+     * Accessor for Edit Pickup Details dialog
+     */
+    public static class EditPickupDetailsDialog extends OperatorV2SimplePage
+    {
+        private static final String DIALOG_TITLE = "Edit Pickup Details";
+        private static final String SENDER_NAME_ARIA_LABEL = "Sender Name";
+        private static final String SENDER_CONTACT_ARIA_LABEL = "Sender Contact";
+        private static final String SENDER_EMAIL_ARIA_LABEL = "Sender Email";
+        private static final String INTERNAL_NOTES_ARIA_LABEL = "Internal Notes";
+        private static final String PICKUP_DATE_ID = "commons.model.pickup-date";
+        private static final String PICKUP_TIMESLOT_ARIA_LABEL = "Pickup Timeslot";
+        private static final String COUNTRY_ARIA_LABEL = "Country";
+        private static final String COUNTRY_XPATH = "//input[@aria-label='Country' and @aria-hidden='false']";
+        private static final String CITY_ARIA_LABEL = "City";
+        private static final String ADDRESS_1_ARIA_LABEL = "Address 1";
+        private static final String ADDRESS_2_ARIA_LABEL = "Address 2";
+        private static final String POSTAL_CODE_ARIA_LABEL = "Postal Code";
+        private static final String CHANGE_ADDRESS_BUTTON_ARIA_LABEL = "Change Address";
+        private static final String SAVE_CHANGES_BUTTON_ARIA_LABEL = "Save changes";
+        private static final String UPDATE_PICKUP_DETAILS_SUCCESSFUL_TOAST_MESSAGE = "Pickup Details Updated";
+
+        public EditPickupDetailsDialog(WebDriver webDriver)
+        {
+            super(webDriver);
+        }
+
+        public EditPickupDetailsDialog waitUntilVisibility()
+        {
+            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+            return this;
+        }
+
+        public EditPickupDetailsDialog waitUntilAddressCanBeChanged()
+        {
+            waitUntilVisibilityOfElementLocated(COUNTRY_XPATH);
+            return this;
+        }
+
+        public EditPickupDetailsDialog updateSenderName(String text)
+        {
+            if (Objects.nonNull(text)) {
+                sendKeysByAriaLabel(SENDER_NAME_ARIA_LABEL, text);
+            }
+            return this;
+        }
+
+        public EditPickupDetailsDialog updateSenderContact(String text)
+        {
+            if (Objects.nonNull(text)) {
+                sendKeysByAriaLabel(SENDER_CONTACT_ARIA_LABEL, text);
+            }
+            return this;
+        }
+
+        public EditPickupDetailsDialog updateSenderEmail(String text)
+        {
+            if (Objects.nonNull(text)) {
+                sendKeysByAriaLabel(SENDER_EMAIL_ARIA_LABEL, text);
+            }
+            return this;
+        }
+
+        public EditPickupDetailsDialog updateInternalNotes(String text)
+        {
+            if (Objects.nonNull(text)) {
+                sendKeysByAriaLabel(INTERNAL_NOTES_ARIA_LABEL, text);
+            }
+            return this;
+        }
+
+        public EditPickupDetailsDialog updatePickupDate(String textDate)
+        {
+            if (Objects.nonNull(textDate)) {
+                try {
+                    setMdDatepickerById(PICKUP_DATE_ID, YYYY_MM_DD_SDF.parse(textDate));
+                } catch(ParseException e)
+                {
+                    throw new NvTestRuntimeException("Failed to parse date.", e);
+                }
+            }
+            return this;
+        }
+
+        public EditPickupDetailsDialog updatePickupTimeslot(String value)
+        {
+            if (Objects.nonNull(value)) {
+                selectValueFromMdSelectByAriaLabel(PICKUP_TIMESLOT_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public EditPickupDetailsDialog clickChangeAddress(){
+                clickButtonByAriaLabel(CHANGE_ADDRESS_BUTTON_ARIA_LABEL);
+                waitUntilAddressCanBeChanged();
+                return this;
+        }
+
+        public EditPickupDetailsDialog updateCountry(String value)
+        {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(COUNTRY_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public EditPickupDetailsDialog updateCity(String value)
+        {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(CITY_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public EditPickupDetailsDialog updateAddress1(String value)
+        {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(ADDRESS_1_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public EditPickupDetailsDialog updateAddress2(String value)
+        {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(ADDRESS_2_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public EditPickupDetailsDialog updatePostalCode(String value)
+        {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(POSTAL_CODE_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public void clickSaveChanges(){
+            clickButtonByAriaLabelAndWaitUntilDone(SAVE_CHANGES_BUTTON_ARIA_LABEL);
+        }
+
+        public void confirmPickupDetailsUpdated(){
+            waitUntilVisibilityOfToast(UPDATE_PICKUP_DETAILS_SUCCESSFUL_TOAST_MESSAGE);
         }
     }
 }
