@@ -134,7 +134,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
             Assert.assertNotNull(f("%s waypoint Id", transactionType), waypointId);
 
             Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
-            if (data.containsKey("status")){
+            if (data.containsKey("status"))
+            {
                 assertThat(f("%s waypoint [%d] status", transactionType, waypointId), actualWaypoint.getStatus(), Matchers.equalToIgnoringCase(data.get("status")));
             }
         } else
@@ -156,6 +157,45 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         {
             assertEquals("Type", Integer.parseInt(value), theLastOrderEvent.getType());
         }
+    }
+
+    @Then("^DB Operator verify (-?\\d+) order_events record for the created order:$")
+    public void operatorVerifyOrderEventParams(int index, Map<String, String> mapOfData)
+    {
+        Long orderId = get(KEY_CREATED_ORDER_ID);
+        List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+        assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
+        if (index <= 0)
+        {
+            index = orderEvents.size() + index;
+        }
+        OrderEventEntity theLastOrderEvent = orderEvents.get(index - 1);
+        String value = mapOfData.get("type");
+
+        if (StringUtils.isNotBlank(value))
+        {
+            assertEquals("Type", Integer.parseInt(value), theLastOrderEvent.getType());
+        }
+    }
+
+    @Then("^DB Operator verify order_events record for the created order:$")
+    public void operatorVerifyOrderEventRecordParams(Map<String, String> mapOfData)
+    {
+        Long orderId = get(KEY_CREATED_ORDER_ID);
+        List<OrderEventEntity> orderEvents = getEventsJdbc().getOrderEvents(orderId);
+        assertThat(f("Order %d events list", orderId), orderEvents, not(empty()));
+        String value = mapOfData.get("type");
+
+        boolean recordFound = orderEvents.stream()
+                .anyMatch(record ->
+                {
+                    if (StringUtils.isNotBlank(value))
+                    {
+                        return Integer.parseInt(value) == record.getType();
+                    }
+                    return false;
+                });
+        assertTrue(f("Event record %s for order %d was not found", mapOfData.toString(), orderId), recordFound);
     }
 
     @Then("^DB Operator verify transaction_failure_reason record for the created order$")
