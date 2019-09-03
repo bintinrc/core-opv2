@@ -54,6 +54,7 @@ public class ReservationsSteps extends AbstractSteps
 
         put("shipperName", shipperName);
         put("reservation", KEY_CREATED_RESERVATION);
+        put(KEY_CREATED_RESERVATION, reservation);
     }
 
     @Then("^Operator verify the new Reservation is created successfully$")

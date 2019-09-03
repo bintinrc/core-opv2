@@ -390,8 +390,8 @@ public class EditOrderSteps extends AbstractSteps
         expectedEvent.compareWithActual(actualEvent);
     }
 
-    @Then("^Operator verify \"(.+)\" order event description on Edit order page$")
-    public void operatorVerifyOrderEventOnEditOrderPage(String expectedEventName)
+    @Then("^Operator verify (Pickup|Delivery) \"(.+)\" order event description on Edit order page$")
+    public void operatorVerifyOrderEventOnEditOrderPage(String type, String expectedEventName)
     {
         Order order = get(KEY_CREATED_ORDER);
         List<OrderEvent> events = editOrderPage.eventsTable().readAllEntities();
@@ -400,17 +400,33 @@ public class EditOrderSteps extends AbstractSteps
                 .findFirst()
                 .orElseThrow(() -> new AssertionError(f("There is no [%s] event on Edit Order page", expectedEventName)));
         String eventDescription = actualEvent.getDescription();
-        if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE ADDRESS")){
-            editOrderPage.eventsTable().verifyUpdateAddressEventDescription(order, eventDescription);
+        if (StringUtils.equalsIgnoreCase(type, "Pickup")) {
+            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE ADDRESS")) {
+                editOrderPage.eventsTable().verifyUpdatePickupAddressEventDescription(order, eventDescription);
+            }
+            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE CONTACT INFORMATION")) {
+                editOrderPage.eventsTable().verifyUpdatePickupContactInformationEventDescription(order, eventDescription);
+            }
+            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE SLA")) {
+                editOrderPage.eventsTable().verifyUpdatePickupSlaEventDescription(order, eventDescription);
+            }
+            if (StringUtils.equalsIgnoreCase(expectedEventName, "VERIFY ADDRESS")) {
+                editOrderPage.eventsTable().verifyPickupAddressEventDescription(order, eventDescription);
+            }
         }
-        if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE CONTACT INFORMATION")){
-            editOrderPage.eventsTable().verifyUpdateContactInformationEventDescription(order, eventDescription);
-        }
-        if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE SLA")) {
-            editOrderPage.eventsTable().verifyUpdateSlaEventDescription(order, eventDescription);
-        }
-        if (StringUtils.equalsIgnoreCase(expectedEventName, "VERIFY ADDRESS")) {
-            editOrderPage.eventsTable().verifyVerifyAddressEventDescription(order, eventDescription);
+        else {
+            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE ADDRESS")) {
+                editOrderPage.eventsTable().verifyUpdateDeliveryAddressEventDescription(order, eventDescription);
+            }
+            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE CONTACT INFORMATION")) {
+                editOrderPage.eventsTable().verifyUpdateDeliveryContactInformationEventDescription(order, eventDescription);
+            }
+            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE SLA")) {
+                editOrderPage.eventsTable().verifyUpdateDeliverySlaEventDescription(order, eventDescription);
+            }
+            if (StringUtils.equalsIgnoreCase(expectedEventName, "VERIFY ADDRESS")) {
+                editOrderPage.eventsTable().verifyDeliveryAddressEventDescription(order, eventDescription);
+            }
         }
     }
 
@@ -498,17 +514,63 @@ public class EditOrderSteps extends AbstractSteps
         put(KEY_CREATED_ORDER, order);
     }
 
-    @Then("Operator verifies Pickup Details are updated on Edit Order Page")
+    @Then("^Operator update Delivery Details on Edit Order Page$")
+    public void operatorUpdateDeliveryDetailsOnEditOrderPage(Map<String, String> mapOfData)
+    {
+        Map<String, String> mapOfTokens = createDefaultTokens();
+        mapOfData = replaceDataTableTokens(mapOfData, mapOfTokens);
+        editOrderPage.updateDeliveryDetails(mapOfData);
+        Order order = get(KEY_CREATED_ORDER);
+        String recipientName = mapOfData.get("recipientName");
+        String recipientContact = mapOfData.get("recipientContact");
+        String recipientEmail = mapOfData.get("recipientEmail");
+        String internalNotes = mapOfData.get("internalNotes");
+        String changeSchedule = mapOfData.get("changeSchedule");
+        String deliveryDate = mapOfData.get("deliveryDate");
+        String deliveryTimeslot = mapOfData.get("deliveryTimeslot");
+        String country = mapOfData.get("country");
+        String city = mapOfData.get("city");
+        String address1 = mapOfData.get("address1");
+        String address2 = mapOfData.get("address2");
+        String postalCode = mapOfData.get("postalCode");
+
+        if (Objects.nonNull(recipientName)) {order.setToName(recipientName);}
+        if (Objects.nonNull(recipientContact)) {order.setToContact(recipientContact);}
+        if (Objects.nonNull(recipientEmail)) {order.setToEmail(recipientEmail);}
+//        if (Objects.nonNull(internalNotes)) {order.setComments(internalNotes);}
+        if (Objects.nonNull(deliveryDate)) {order.setDeliveryDate(deliveryDate);}
+        if (Objects.nonNull(deliveryTimeslot)) {order.setDeliveryTimeslot(deliveryTimeslot);}
+        if (Objects.nonNull(address1)) {order.setToAddress1(address1);}
+        if (Objects.nonNull(address2)) {order.setToAddress2(address2);}
+        if (Objects.nonNull(postalCode)) {order.setToPostcode(postalCode);}
+        if (Objects.nonNull(city)) {order.setToCity(city);}
+        if (Objects.nonNull(country)) {order.setToCountry(country);}
+        put(KEY_CREATED_ORDER, order);
+    }
+
+    @Then("^Operator verifies Pickup Details are updated on Edit Order Page$")
     public void operatorVerifiesPickupDetailsUpdated()
     {
         Order order = get(KEY_CREATED_ORDER);
         editOrderPage.verifyPickupInfo(order);
     }
 
-    @Then("Operator verifies \"(.+)\" Transaction is updated on Edit Order Page")
-    public void operatorVerifiesPickupTransactionUpdated(String txnType)
+    @Then("^Operator verifies Delivery Details are updated on Edit Order Page$")
+    public void operatorVerifiesDeliveryDetailsUpdated()
     {
         Order order = get(KEY_CREATED_ORDER);
-        editOrderPage.verifyPickupDetailsInTransaction(order, txnType);
+        editOrderPage.verifyDeliveryInfo(order);
+    }
+
+    @Then("^Operator verifies (Pickup|Delivery) Transaction is updated on Edit Order Page$")
+    public void operatorVerifiesTransactionUpdated(String txnType)
+    {
+        Order order = get(KEY_CREATED_ORDER);
+        if (StringUtils.equalsIgnoreCase(txnType, "Pickup")) {
+            editOrderPage.verifyPickupDetailsInTransaction(order, txnType);
+        }
+        else {
+            editOrderPage.verifyDeliveryDetailsInTransaction(order, txnType);
+        }
     }
 }

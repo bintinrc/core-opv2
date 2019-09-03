@@ -74,6 +74,7 @@ public class ShipperPickupsSteps extends AbstractSteps
     {
         Date fromDate = resolveFilterDate(mapOfData.getOrDefault("fromDate", "TODAY"));
         Date toDate = resolveFilterDate(mapOfData.getOrDefault("toDate", "TOMORROW"));
+        Map<String,String> dataTableAsMapReplaced = replaceDataTableTokens(mapOfData, mapOfData);
         shipperPickupsPage.filtersForm().filterReservationDate(fromDate, toDate);
         String value = mapOfData.get("hub");
         if (StringUtils.isNotBlank(value))
@@ -84,6 +85,16 @@ public class ShipperPickupsSteps extends AbstractSteps
         if (StringUtils.isNotBlank(value))
         {
             shipperPickupsPage.filtersForm().filterByZone(value);
+        }
+        value = mapOfData.get("type");
+        if (StringUtils.isNotBlank(value))
+        {
+            shipperPickupsPage.filtersForm().filterByType(value);
+        }
+        value = dataTableAsMapReplaced.get("shipperName");
+        if (StringUtils.isNotBlank(value))
+        {
+            shipperPickupsPage.filtersForm().filterByShipper(value);
         }
         shipperPickupsPage.filtersForm().clickButtonLoadSelection();
     }
@@ -380,5 +391,26 @@ public class ShipperPickupsSteps extends AbstractSteps
     {
         List<Address> addresses = get(KEY_LIST_OF_CREATED_ADDRESSES);
         shipperPickupsPage.editPriorityLevel(addresses, priorityLevel, true);
+    }
+
+    @And("^Operator finish reservation with failure$")
+    public void operatorFinishReservationWithFailure()
+    {
+        shipperPickupsPage.finishReservationWithFailure();
+    }
+
+    @And("^Operator finish reservation with success")
+    public void operatorFinishReservationWithSuccess()
+    {
+        shipperPickupsPage.finishReservationWithSuccess();
+    }
+
+    @Then("^Operator verifies reservation is finished using data below:$")
+    public void operatorVerifiesReservationIsFailed(Map<String,String> dataTableAsMap)
+    {
+        String color = dataTableAsMap.get("backgroundColor");
+        String status = dataTableAsMap.get("status");
+        shipperPickupsPage.verifyFinishedReservationHighlighted(color);
+        shipperPickupsPage.verifyFinishedReservationHasStatus(status);
     }
 }
