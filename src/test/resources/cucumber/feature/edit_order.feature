@@ -663,6 +663,46 @@ Feature: Edit Order
     And Operator verify order granular status is "On Hold" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
+  @CloseNewWindows @DeleteOrArchiveRoute
+  Scenario: Operator Edit Pickup Details on Edit Order page (uid:bdf1d848-7fdc-4df8-8794-2e2d6f560692)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    Then Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    When Operator switch to Edit Order's window
+    And Operator click Pickup -> Edit Pickup Details on Edit Order page
+    And Operator update Pickup Details on Edit Order Page
+      | senderName        | test sender name         |
+      | senderContact     | +9727894434              |
+      | senderEmail       | test@mail.com            |
+      | internalNotes     | test internalNotes       |
+      | pickupDate        | {{next-1-day-yyyy-MM-dd}}|
+      | pickupTimeslot    | 9AM - 12PM               |
+      | country           | Singapore                |
+      | city              | Singapore                |
+      | address1          | 116 Keng Lee Rd          |
+      | address2          | 15                       |
+      | postalCode        | 308402                   |
+    Then Operator verify "UPDATE ADDRESS" order event description on Edit order page
+    And Operator verify "UPDATE CONTACT INFORMATION" order event description on Edit order page
+    And Operator verify "UPDATE SLA" order event description on Edit order page
+    And Operator verify "VERIFY ADDRESS" order event description on Edit order page
+    And Operator verifies Pickup Details are updated on Edit Order Page
+    And Operator verifies "PICKUP" Transaction is updated on Edit Order Page
+    And DB Operator verifies pickup info is updated in order record
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 7    |
+      | 17   |
+      | 11   |
+      | 12   |
+    And DB Operator verify '17' order_events record for the created order
+    And DB Operator verify Pickup transaction record is updated for the created order
+    And DB Operator verify Pickup waypoint record is updated
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
