@@ -9,10 +9,10 @@ import org.openqa.selenium.support.Color;
  */
 public class ParcelSweeperPage extends OperatorV2SimplePage
 {
-    public static final String LOCATOR_SPINNER = "//md-progress-circular";
-    public static final String LOCATOR_ROUTE_INFO_CONTAINER = "//div[contains(@class, 'route-info-container')]";
-    public static final String LOCATOR_ZONE_INFO_CONTAINER = "//div[contains(@class, 'zone-info-container')]";
-    public static final String LOCATOR_DESTINATION_HUB_CONTAINER = "//div[contains(@class, 'destination-hub-container')]";
+    private static final String LOCATOR_SPINNER = "//md-progress-circular";
+    private static final String LOCATOR_ROUTE_INFO_CONTAINER = "//div[contains(@class, 'route-info-container')]";
+    private static final String LOCATOR_ZONE_INFO_CONTAINER = "//div[contains(@class, 'zone-info-container')]";
+    private static final String LOCATOR_DESTINATION_HUB_CONTAINER = "//div[contains(@class, 'destination-hub-container')]";
 
     public ParcelSweeperPage(WebDriver webDriver)
     {
