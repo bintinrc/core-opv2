@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Assertions;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
@@ -389,6 +390,30 @@ public class EditOrderSteps extends AbstractSteps
         expectedEvent.compareWithActual(actualEvent);
     }
 
+    @Then("^Operator verify \"(.+)\" order event description on Edit order page$")
+    public void operatorVerifyOrderEventOnEditOrderPage(String expectedEventName)
+    {
+        Order order = get(KEY_CREATED_ORDER);
+        List<OrderEvent> events = editOrderPage.eventsTable().readAllEntities();
+        OrderEvent actualEvent = events.stream()
+                .filter(event -> StringUtils.equalsIgnoreCase(event.getName(), expectedEventName))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(f("There is no [%s] event on Edit Order page", expectedEventName)));
+        String eventDescription = actualEvent.getDescription();
+        if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE ADDRESS")){
+            editOrderPage.eventsTable().verifyUpdateAddressEventDescription(order, eventDescription);
+        }
+        if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE CONTACT INFORMATION")){
+            editOrderPage.eventsTable().verifyUpdateContactInformationEventDescription(order, eventDescription);
+        }
+        if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE SLA")) {
+            editOrderPage.eventsTable().verifyUpdateSlaEventDescription(order, eventDescription);
+        }
+        if (StringUtils.equalsIgnoreCase(expectedEventName, "VERIFY ADDRESS")) {
+            editOrderPage.eventsTable().verifyVerifyAddressEventDescription(order, eventDescription);
+        }
+    }
+
     @Then("^Operator verify (.+) transaction on Edit order page using data below:$")
     public void operatorVerifyTransactionOnEditOrderPage(String transactionType, Map<String, String> mapOfData)
     {
@@ -438,5 +463,52 @@ public class EditOrderSteps extends AbstractSteps
     public void operatorVerifyMenuItemIsDisabledOnEditOrderPage(String parentMenuItem, String childMenuItem)
     {
         Assert.assertFalse(f("%s > %s menu item is enabled", parentMenuItem, childMenuItem), editOrderPage.isMenuItemEnabled(parentMenuItem, childMenuItem));
+    }
+
+    @Then("^Operator update Pickup Details on Edit Order Page$")
+    public void operatorUpdatePickupDetailsOnEditOrderPage(Map<String, String> mapOfData)
+    {
+        Map<String, String> mapOfTokens = createDefaultTokens();
+        mapOfData = replaceDataTableTokens(mapOfData, mapOfTokens);
+        editOrderPage.updatePickupDetails(mapOfData);
+        Order order = get(KEY_CREATED_ORDER);
+        String senderName = mapOfData.get("senderName");
+        String senderContact = mapOfData.get("senderContact");
+        String senderEmail = mapOfData.get("senderEmail");
+        String internalNotes = mapOfData.get("internalNotes");
+        String pickupDate = mapOfData.get("pickupDate");
+        String pickupTimeslot = mapOfData.get("pickupTimeslot");
+        String country = mapOfData.get("country");
+        String city = mapOfData.get("city");
+        String address1 = mapOfData.get("address1");
+        String address2 = mapOfData.get("address2");
+        String postalCode = mapOfData.get("postalCode");
+
+        if (Objects.nonNull(senderName)) {order.setFromName(senderName);}
+        if (Objects.nonNull(senderContact)) {order.setFromContact(senderContact);}
+        if (Objects.nonNull(senderEmail)) {order.setFromEmail(senderEmail);}
+//        if (Objects.nonNull(internalNotes)) {order.setComments(internalNotes);}
+        if (Objects.nonNull(pickupDate)) {order.setPickupDate(pickupDate);}
+        if (Objects.nonNull(pickupTimeslot)) {order.setPickupTimeslot(pickupTimeslot);}
+        if (Objects.nonNull(address1)) {order.setFromAddress1(address1);}
+        if (Objects.nonNull(address2)) {order.setFromAddress2(address2);}
+        if (Objects.nonNull(postalCode)) {order.setFromPostcode(postalCode);}
+        if (Objects.nonNull(city)) {order.setFromCity(city);}
+        if (Objects.nonNull(country)) {order.setFromCountry(country);}
+        put(KEY_CREATED_ORDER, order);
+    }
+
+    @Then("Operator verifies Pickup Details are updated on Edit Order Page")
+    public void operatorVerifiesPickupDetailsUpdated()
+    {
+        Order order = get(KEY_CREATED_ORDER);
+        editOrderPage.verifyPickupInfo(order);
+    }
+
+    @Then("Operator verifies \"(.+)\" Transaction is updated on Edit Order Page")
+    public void operatorVerifiesPickupTransactionUpdated(String txnType)
+    {
+        Order order = get(KEY_CREATED_ORDER);
+        editOrderPage.verifyPickupDetailsInTransaction(order, txnType);
     }
 }
