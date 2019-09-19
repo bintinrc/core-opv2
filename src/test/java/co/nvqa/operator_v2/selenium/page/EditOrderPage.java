@@ -1339,21 +1339,6 @@ public class EditOrderPage extends OperatorV2SimplePage
             waitUntilVisibilityOfElementLocated(COUNTRY_XPATH);
             return this;
         }
-//
-//
-//
-//        String recipientName = mapOfData.get("recipientName");
-//        String recipientContact = mapOfData.get("recipientContact");
-//        String recipientEmail = mapOfData.get("recipientEmail");
-//        String internalNotes = mapOfData.get("internalNotes");
-//        String changeSchedule = mapOfData.get("changeSchedule");
-//        String deliveryDate = mapOfData.get("deliveryDate");
-//        String deliveryTimeslot = mapOfData.get("deliveryTimeslot");
-//        String country = mapOfData.get("country");
-//        String city = mapOfData.get("city");
-//        String address1 = mapOfData.get("address1");
-//        String address2 = mapOfData.get("address2");
-//        String postalCode = mapOfData.get("postalCode");
 
         public EditDeliveryDetailsDialog updateRecipientName(String text)
         {

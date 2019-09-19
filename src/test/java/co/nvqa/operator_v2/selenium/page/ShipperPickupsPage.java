@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.FinishReservationDialog.SELECT_FAILURE_REASON_DETAIL_ID_STARTS_WITH;
 import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.*;
 
 /**
