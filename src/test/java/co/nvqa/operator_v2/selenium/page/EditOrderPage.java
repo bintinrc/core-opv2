@@ -19,12 +19,17 @@ import com.google.common.collect.ImmutableMap;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
 
@@ -44,6 +49,11 @@ public class EditOrderPage extends OperatorV2SimplePage
     private CancelOrderDialog cancelOrderDialog;
     private EditPickupDetailsDialog editPickupDetailsDialog;
     private EditDeliveryDetailsDialog editDeliveryDetailsDialog;
+    private DpDropOffSettingDialog dpDropOffSettingDialog;
+    private DeleteOrderDialog deleteOrderDialog;
+    private PickupRescheduleDialog pickupRescheduleDialog;
+    private DeliveryRescheduleDialog deliveryRescheduleDialog;
+    private PullFromRouteDialog pullFromRouteDialog;
 
     public EditOrderPage(WebDriver webDriver)
     {
@@ -54,8 +64,13 @@ public class EditOrderPage extends OperatorV2SimplePage
         pickupDetailsBox = new PickupDetailsBox(webDriver);
         eventsTable = new EventsTable(webDriver);
         cancelOrderDialog = new CancelOrderDialog(webDriver);
+        deliveryRescheduleDialog = new DeliveryRescheduleDialog(webDriver);
         editPickupDetailsDialog = new EditPickupDetailsDialog(webDriver);
         editDeliveryDetailsDialog = new EditDeliveryDetailsDialog(webDriver);
+        dpDropOffSettingDialog = new DpDropOffSettingDialog(webDriver);
+        deleteOrderDialog = new DeleteOrderDialog(webDriver);
+        pickupRescheduleDialog = new PickupRescheduleDialog(webDriver);
+        pullFromRouteDialog = new PullFromRouteDialog(webDriver);
     }
 
     public EventsTable eventsTable()
@@ -124,6 +139,27 @@ public class EditOrderPage extends OperatorV2SimplePage
         sendKeysById("commons.stamp-id", stampId);
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.save");
         waitUntilInvisibilityOfToast(String.format("Stamp ID updated successfully: %s", stampId), true);
+        waitUntilInvisibilityOfMdDialogByTitle("Edit Order Stamp");
+    }
+
+    public void editOrderStampToExisting(String existingStampId, String trackingId)
+    {
+        clickMenu("Order Settings", "Edit Order Stamp");
+        waitUntilVisibilityOfMdDialogByTitle("Edit Order Stamp");
+        sendKeysById("commons.stamp-id", existingStampId);
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.save");
+        waitUntilInvisibilityOfToast(String.format("Stamp %s exists in order %s", existingStampId, trackingId), true);
+        waitUntilVisibilityOfMdDialogByTitle("Edit Order Stamp");
+        clickButtonByAriaLabelAndWaitUntilDone("Cancel");
+        waitUntilInvisibilityOfMdDialogByTitle("Edit Order Stamp");
+    }
+
+    public void removeOrderStamp()
+    {
+        clickMenu("Order Settings", "Edit Order Stamp");
+        waitUntilVisibilityOfMdDialogByTitle("Edit Order Stamp");
+        clickButtonByAriaLabelAndWaitUntilDone("Remove");
+        waitUntilInvisibilityOfToast("Stamp ID removed successfully", true);
         waitUntilInvisibilityOfMdDialogByTitle("Edit Order Stamp");
     }
 
@@ -514,6 +550,11 @@ public class EditOrderPage extends OperatorV2SimplePage
         assertThat("From Address", fromAddress, containsString(order.getFromAddress2()));
     }
 
+    public void verifyRouteIdInTransactionTable(String routeId, String txnType){
+        transactionsTable.searchByTxnType(txnType);
+        assertEquals("Route ID", routeId, transactionsTable.getRouteId(1));
+    }
+
     public void verifyDeliveryDetailsInTransaction(Order order, String txnType){
         transactionsTable.searchByTxnType(txnType);
         assertEquals("To Name", order.getToName(), transactionsTable.getName(1));
@@ -684,6 +725,11 @@ public class EditOrderPage extends OperatorV2SimplePage
         return getText("//div[@id='delivery-details']/div[2]/div/div/div[2]/div[3]/span");
     }
 
+    public String getStampId()
+    {
+        return getText("//div[@class='data-block']/label[text()='Stamp ID']/following-sibling::p");
+    }
+
     public void waitUntilInvisibilityOfLoadingOrder()
     {
         waitUntilInvisibilityOfElementLocated("//md-content[@loading-message='Loading order...']/div[contains(@class, 'loading')]");
@@ -763,6 +809,75 @@ public class EditOrderPage extends OperatorV2SimplePage
                 .updatePostalCode(postalCode)
                 .clickSaveChanges();
         editDeliveryDetailsDialog.confirmPickupDetailsUpdated();
+    }
+
+    public void reschedulePickup(Map<String, String> mapOfData)
+    {
+        String senderName = mapOfData.get("senderName");
+        String senderContact = mapOfData.get("senderContact");
+        String senderEmail = mapOfData.get("senderEmail");
+        String pickupDate = mapOfData.get("pickupDate");
+        String pickupTimeslot = mapOfData.get("pickupTimeslot");
+        String country = mapOfData.get("country");
+        String city = mapOfData.get("city");
+        String address1 = mapOfData.get("address1");
+        String address2 = mapOfData.get("address2");
+        String postalCode = mapOfData.get("postalCode");
+
+        pickupRescheduleDialog
+                .waitUntilVisibility()
+                .updateSenderName(senderName)
+                .updateSenderContact(senderContact)
+                .updateSenderEmail(senderEmail)
+                .updatePickupDate(pickupDate)
+                .updatePickupTimeslot(pickupTimeslot)
+                .clickChangeAddress()
+                .updateCountry(country)
+                .updateCity(city)
+                .updateAddress1(address1)
+                .updateAddress2(address2)
+                .updatePostalCode(postalCode)
+                .clickSaveChanges();
+        pickupRescheduleDialog.confirmPickupRescheduledUpdated();
+    }
+
+    public void rescheduleDelivery(Map<String, String> mapOfData)
+    {
+        String recipientName = mapOfData.get("recipientName");
+        String recipientContact = mapOfData.get("recipientContact");
+        String recipientEmail = mapOfData.get("recipientEmail");
+        String deliveryDate = mapOfData.get("deliveryDate");
+        String deliveryTimeslot = mapOfData.get("deliveryTimeslot");
+        String country = mapOfData.get("country");
+        String city = mapOfData.get("city");
+        String address1 = mapOfData.get("address1");
+        String address2 = mapOfData.get("address2");
+        String postalCode = mapOfData.get("postalCode");
+
+        deliveryRescheduleDialog
+                .waitUntilVisibility()
+                .updateRecipientName(recipientName)
+                .updateRecipientContact(recipientContact)
+                .updateRecipientEmail(recipientEmail)
+                .updateDeliveryDate(deliveryDate)
+                .updateDeliveryTimeslot(deliveryTimeslot)
+                .clickChangeAddress()
+                .updateCountry(country)
+                .updateCity(city)
+                .updateAddress1(address1)
+                .updateAddress2(address2)
+                .updatePostalCode(postalCode)
+                .clickSaveChanges();
+        deliveryRescheduleDialog.confirmOrderDeliveryRescheduledUpdated();
+    }
+
+    public void pullOutParcelFromTheRoute(Order order, String txnType, Long routeId){
+        String trackingId = order.getTrackingId();
+
+        pullFromRouteDialog.waitUntilVisibility();
+        pullFromRouteDialog.isToPullCheckboxChecked();
+        pullFromRouteDialog.clickPullFromRouteButton();
+        pullFromRouteDialog.confirmPulledFromRouteMessageDisplayed(trackingId, routeId);
     }
 
     /**
@@ -969,6 +1084,31 @@ public class EditOrderPage extends OperatorV2SimplePage
         }
     }
 
+    public void tagOrderToDP(String dpId) {
+        dpDropOffSettingDialog.selectDpValue(dpId);
+        List<String> dpDropOffDates = dpDropOffSettingDialog.getListOfDropOffDates();
+        dpDropOffSettingDialog.selectDropOffDateValue(dpDropOffDates.get((int)(Math.random() * dpDropOffDates.size())));
+        dpDropOffSettingDialog.saveChanges();
+        dpDropOffSettingDialog.confirmOrderIsTagged();
+    }
+
+    public void untagOrderFromDP() {
+        dpDropOffSettingDialog.clearSelectedDropOffValue();
+        dpDropOffSettingDialog.saveChanges();
+        dpDropOffSettingDialog.confirmOrderIsTagged();
+    }
+
+    public boolean deliveryIsIndicatedWithIcon() {
+        return deliveryDetailsBox.isNinjaCollectTagPresent();
+    }
+
+    public void deleteOrder() {
+        deleteOrderDialog.waitUntilVisibility();
+        deleteOrderDialog.enterPassword();
+        deleteOrderDialog.clickDeleteOrderButton();
+        deleteOrderDialog.confirmOrderIsDeleted();
+    }
+
     /**
      * Accessor for Cancel dialog
      */
@@ -1064,6 +1204,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         private static final String WAYPOINT_ID_LOCATOR = BOX_LOCATOR + "//div[label[text()='Waypoint ID']]/p";
         private static final String START_DATE_TIME_LOCATOR = BOX_LOCATOR + "//div[label[text()='Start Date / Time']]/p";
         private static final String END_DATE_TIME_LOCATOR = BOX_LOCATOR + "//div[label[text()='End Date / Time']]/p";
+        private static final String NV_TAG_LOCATOR = "//nv-tag[@name='commons.ninja-collect']";
 
         public DeliveryDetailsBox(WebDriver webDriver)
         {
@@ -1103,6 +1244,10 @@ public class EditOrderPage extends OperatorV2SimplePage
         public String getEndDateTime()
         {
             return getText(END_DATE_TIME_LOCATOR);
+        }
+
+        public boolean isNinjaCollectTagPresent(){
+            return isElementExist(NV_TAG_LOCATOR);
         }
     }
 
@@ -1450,6 +1595,384 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public void confirmPickupDetailsUpdated(){
             waitUntilVisibilityOfToast(UPDATE_DELIVERY_DETAILS_SUCCESSFUL_TOAST_MESSAGE);
+        }
+    }
+
+    /**
+     * Accessor for DP Drop Off Setting dialog
+     */
+    public static class DpDropOffSettingDialog extends OperatorV2SimplePage {
+        private static final String DIALOG_TITLE = "DP Drop Off Setting";
+        private static final String DP_LIST = "//nv-autocomplete[@item-types='DP']";
+        private static final String DROP_OFF_DATE_SELECT_LOCATOR = "container.order.edit.edit-dp-management-dropoff-date";
+        private static final String SAVE_CHANGES_BUTTON_ARIA_LABEL = "Save changes";
+        private static final String TAG_DP_DONE_SUCCESSFULLY_TOAST_MESSAGE = "Tagging to DP done successfully";
+        private static final String DP_CLEAR_SELECTED_BUTTON_LOCATOR = "//button/md-icon[@md-svg-icon='md-close']";
+
+        public DpDropOffSettingDialog(WebDriver webDriver) {
+            super(webDriver);
+        }
+
+        public DpDropOffSettingDialog waitUntilVisibility() {
+            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+            return this;
+        }
+
+        private List<String> getListOfDropOffDates(){
+            waitUntilVisibilityOfElementLocated("//md-select[@placeholder='Drop Off Date']");
+            clickAndWaitUntilDone("//md-select[@placeholder='Drop Off Date']");
+            waitUntilVisibilityOfElementLocated("//md-option[@aria-hidden='false']");
+            List<String> listOfDropOffDates = findElementsBy(By.xpath("//md-option[@aria-hidden='false']")).stream()
+                    .map(WebElement::getText).collect(Collectors.toList());
+            Actions actions = new Actions(getWebDriver());
+            actions.sendKeys(Keys.ESCAPE).build().perform();
+            return listOfDropOffDates;
+        }
+
+        public void selectDpValue(String value){
+            selectValueFromMdAutocomplete("", value);
+        }
+
+        public void selectDropOffDateValue(String value){
+            selectValueFromMdSelectById(DROP_OFF_DATE_SELECT_LOCATOR, value);
+        }
+
+        public void clearSelectedDropOffValue(){
+            clickAndWaitUntilDone(DP_CLEAR_SELECTED_BUTTON_LOCATOR);
+        }
+
+        public void saveChanges(){
+            clickButtonByAriaLabel(SAVE_CHANGES_BUTTON_ARIA_LABEL);
+            waitUntilInvisibilityOfMdDialogByTitle(DIALOG_TITLE);
+        }
+
+        public void confirmOrderIsTagged() {
+            waitUntilInvisibilityOfToast(TAG_DP_DONE_SUCCESSFULLY_TOAST_MESSAGE, true);
+        }
+    }
+
+    /**
+     * Accessor for Delete Order dialog
+     */
+    public static class DeleteOrderDialog extends OperatorV2SimplePage {
+        private static final String DIALOG_TITLE = "Delete Order";
+        private static final String PASSWORD = "1234567890";
+        private static final String ENTER_PASSWORD_FIELD_ARIA_LABEL = "Password";
+        private static final String DELETE_NV_API_TEXT_BUTTON_LOCATOR = "container.order.edit.delete-order";
+        private static final String DELETE_ORDER_BUTTON_LOCATOR = "//button/[@aria-label='Delete Order' and @aria-hidden='false']";
+        private static final String DELETE_ORDER_DONE_SUCCESSFULLY_TOAST_MESSAGE = "Order Deleted";
+
+        public DeleteOrderDialog(WebDriver webDriver) {
+            super(webDriver);
+        }
+
+        public DeleteOrderDialog waitUntilVisibility() {
+            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+            return this;
+        }
+
+        private void enterPassword() {
+            sendKeysByAriaLabel(ENTER_PASSWORD_FIELD_ARIA_LABEL, PASSWORD);
+        }
+
+        private void clickDeleteOrderButton(){
+            waitUntilVisibilityOfElementLocated(DELETE_ORDER_BUTTON_LOCATOR);
+            clickNvApiTextButtonByNameAndWaitUntilDone(DELETE_NV_API_TEXT_BUTTON_LOCATOR);
+        }
+
+        public void confirmOrderIsDeleted() {
+            waitUntilInvisibilityOfToast(DELETE_ORDER_DONE_SUCCESSFULLY_TOAST_MESSAGE, true);
+        }
+    }
+
+    /**
+     * Accessor for Pickup Reschedule dialog
+     */
+    public static class PickupRescheduleDialog extends OperatorV2SimplePage {
+        private static final String DIALOG_TITLE = "Pickup Reschedule";
+        private static final String SENDER_NAME_ARIA_LABEL = "Sender Name";
+        private static final String SENDER_CONTACT_ARIA_LABEL = "Sender Contact";
+        private static final String SENDER_EMAIL_ARIA_LABEL = "Sender Email";
+        private static final String PICKUP_DATE_ID = "commons.model.pickup-date";
+        private static final String PICKUP_TIMESLOT_ARIA_LABEL = "Pickup Timeslot";
+        private static final String COUNTRY_ARIA_LABEL = "Country";
+        private static final String COUNTRY_XPATH = "//input[@aria-label='Country' and @aria-hidden='false']";
+        private static final String CITY_ARIA_LABEL = "City";
+        private static final String ADDRESS_1_ARIA_LABEL = "Address 1";
+        private static final String ADDRESS_2_ARIA_LABEL = "Address 2";
+        private static final String POSTAL_CODE_ARIA_LABEL = "Postal Code";
+        private static final String CHANGE_ADDRESS_BUTTON_ARIA_LABEL = "Change Address";
+        private static final String SAVE_CHANGES_BUTTON_ARIA_LABEL = "Save changes";
+        private static final String ORDER_RESCHEDULED_SUCCESSFUL_TOAST_MESSAGE = "Order Rescheduled Successfully";
+
+        public PickupRescheduleDialog(WebDriver webDriver) {
+            super(webDriver);
+        }
+
+        public PickupRescheduleDialog waitUntilVisibility() {
+            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+            return this;
+        }
+
+        public PickupRescheduleDialog waitUntilAddressCanBeChanged() {
+            waitUntilVisibilityOfElementLocated(COUNTRY_XPATH);
+            return this;
+        }
+
+        public PickupRescheduleDialog updateSenderName(String text) {
+            if (Objects.nonNull(text)) {
+                sendKeysByAriaLabel(SENDER_NAME_ARIA_LABEL, text);
+            }
+            return this;
+        }
+
+        public PickupRescheduleDialog updateSenderContact(String text) {
+            if (Objects.nonNull(text)) {
+                sendKeysByAriaLabel(SENDER_CONTACT_ARIA_LABEL, text);
+            }
+            return this;
+        }
+
+        public PickupRescheduleDialog updateSenderEmail(String text) {
+            if (Objects.nonNull(text)) {
+                sendKeysByAriaLabel(SENDER_EMAIL_ARIA_LABEL, text);
+            }
+            return this;
+        }
+
+        public PickupRescheduleDialog updatePickupDate(String textDate) {
+            if (Objects.nonNull(textDate)) {
+                try {
+                    setMdDatepickerById(PICKUP_DATE_ID, YYYY_MM_DD_SDF.parse(textDate));
+                } catch (ParseException e) {
+                    throw new NvTestRuntimeException("Failed to parse date.", e);
+                }
+            }
+            return this;
+        }
+
+        public PickupRescheduleDialog updatePickupTimeslot(String value) {
+            if (Objects.nonNull(value)) {
+                selectValueFromMdSelectByAriaLabel(PICKUP_TIMESLOT_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public PickupRescheduleDialog clickChangeAddress() {
+            clickButtonByAriaLabel(CHANGE_ADDRESS_BUTTON_ARIA_LABEL);
+            waitUntilAddressCanBeChanged();
+            return this;
+        }
+
+        public PickupRescheduleDialog updateCountry(String value) {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(COUNTRY_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public PickupRescheduleDialog updateCity(String value) {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(CITY_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public PickupRescheduleDialog updateAddress1(String value) {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(ADDRESS_1_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public PickupRescheduleDialog updateAddress2(String value) {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(ADDRESS_2_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public PickupRescheduleDialog updatePostalCode(String value) {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(POSTAL_CODE_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public void clickSaveChanges() {
+            clickButtonByAriaLabelAndWaitUntilDone(SAVE_CHANGES_BUTTON_ARIA_LABEL);
+        }
+
+        public void confirmPickupRescheduledUpdated() {
+            waitUntilVisibilityOfToast(ORDER_RESCHEDULED_SUCCESSFUL_TOAST_MESSAGE);
+        }
+    }
+
+    /**
+     * Accessor for Delivery Reschedule dialog
+     */
+    public static class DeliveryRescheduleDialog extends OperatorV2SimplePage {
+        private static final String DIALOG_TITLE = "Delivery Reschedule";
+        private static final String RECIPIENT_NAME_ARIA_LABEL = "Recipient Name";
+        private static final String RECIPIENT_CONTACT_ARIA_LABEL = "Recipient Contact";
+        private static final String RECIPIENT_EMAIL_ARIA_LABEL = "Recipient Email";
+        private static final String DELIVERY_DATE_ID = "commons.model.delivery-date";
+        private static final String DELIVERY_TIMESLOT_ARIA_LABEL = "Delivery Timeslot";
+        private static final String COUNTRY_ARIA_LABEL = "Country";
+        private static final String COUNTRY_XPATH = "//input[@aria-label='Country' and @aria-hidden='false']";
+        private static final String CITY_ARIA_LABEL = "City";
+        private static final String ADDRESS_1_ARIA_LABEL = "Address 1";
+        private static final String ADDRESS_2_ARIA_LABEL = "Address 2";
+        private static final String POSTAL_CODE_ARIA_LABEL = "Postal Code";
+        private static final String CHANGE_ADDRESS_BUTTON_ARIA_LABEL = "Change Address";
+        private static final String SAVE_CHANGES_BUTTON_ARIA_LABEL = "Save changes";
+        private static final String ORDER_RESCHEDULED_SUCCESSFUL_TOAST_MESSAGE = "Order Rescheduled Successfully";
+
+        public DeliveryRescheduleDialog(WebDriver webDriver)
+        {
+            super(webDriver);
+        }
+
+        public DeliveryRescheduleDialog waitUntilVisibility()
+        {
+            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+            return this;
+        }
+
+        public DeliveryRescheduleDialog waitUntilAddressCanBeChanged()
+        {
+            waitUntilVisibilityOfElementLocated(COUNTRY_XPATH);
+            return this;
+        }
+
+        public DeliveryRescheduleDialog updateRecipientName(String text)
+        {
+            if (Objects.nonNull(text)) {
+                sendKeysByAriaLabel(RECIPIENT_NAME_ARIA_LABEL, text);
+            }
+            return this;
+        }
+
+        public DeliveryRescheduleDialog updateRecipientContact(String text)
+        {
+            if (Objects.nonNull(text)) {
+                sendKeysByAriaLabel(RECIPIENT_CONTACT_ARIA_LABEL, text);
+            }
+            return this;
+        }
+
+        public DeliveryRescheduleDialog updateRecipientEmail(String text)
+        {
+            if (Objects.nonNull(text)) {
+                sendKeysByAriaLabel(RECIPIENT_EMAIL_ARIA_LABEL, text);
+            }
+            return this;
+        }
+
+        public DeliveryRescheduleDialog updateDeliveryDate(String textDate)
+        {
+            if (Objects.nonNull(textDate)) {
+                try {
+                    setMdDatepickerById(DELIVERY_DATE_ID, YYYY_MM_DD_SDF.parse(textDate));
+                } catch(ParseException e)
+                {
+                    throw new NvTestRuntimeException("Failed to parse date.", e);
+                }
+            }
+            return this;
+        }
+
+        public DeliveryRescheduleDialog updateDeliveryTimeslot(String value)
+        {
+            if (Objects.nonNull(value)) {
+                selectValueFromMdSelectByAriaLabel(DELIVERY_TIMESLOT_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public DeliveryRescheduleDialog clickChangeAddress(){
+            clickButtonByAriaLabel(CHANGE_ADDRESS_BUTTON_ARIA_LABEL);
+            waitUntilAddressCanBeChanged();
+            return this;
+        }
+
+        public DeliveryRescheduleDialog updateCountry(String value)
+        {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(COUNTRY_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public DeliveryRescheduleDialog updateCity(String value)
+        {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(CITY_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public DeliveryRescheduleDialog updateAddress1(String value)
+        {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(ADDRESS_1_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public DeliveryRescheduleDialog updateAddress2(String value)
+        {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(ADDRESS_2_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public DeliveryRescheduleDialog updatePostalCode(String value)
+        {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(POSTAL_CODE_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public void clickSaveChanges(){
+            clickButtonByAriaLabelAndWaitUntilDone(SAVE_CHANGES_BUTTON_ARIA_LABEL);
+        }
+
+        public void confirmOrderDeliveryRescheduledUpdated(){
+            waitUntilVisibilityOfToast(ORDER_RESCHEDULED_SUCCESSFUL_TOAST_MESSAGE);
+        }
+    }
+
+    /**
+     * Accessor for Pull from Route Dialog
+     */
+    public static class PullFromRouteDialog extends OperatorV2SimplePage {
+        private static final String DIALOG_TITLE = "Pull from Route";
+        private static final String TO_PULL_CHECKBOX_LOCATOR = "//md-input-container[contains(@class,'to-pull-checkbox')]/md-checkbox[@aria-checked='true']";
+        private static final String PULL_FROM_ROUTE_NV_API_TEXT_BUTTON_NAME = "container.order.edit.pull-from-route";
+        private static final String PULL_FROM_ROUTE_SUCCESSFUL_TOAST_MESSAGE_PATTERN = "%s has been pulled from route %d successfully";
+
+        public PullFromRouteDialog(WebDriver webDriver) {
+            super(webDriver);
+        }
+
+        public PullFromRouteDialog waitUntilVisibility() {
+            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+            return this;
+        }
+
+        public boolean isToPullCheckboxChecked(){
+            return isElementExist(TO_PULL_CHECKBOX_LOCATOR);
+        }
+
+        public void clickPullFromRouteButton(){
+            clickNvApiTextButtonByNameAndWaitUntilDone(PULL_FROM_ROUTE_NV_API_TEXT_BUTTON_NAME);
+        }
+
+        public void confirmPulledFromRouteMessageDisplayed(String trackingId, Long routeId){
+            waitUntilInvisibilityOfToast(f(PULL_FROM_ROUTE_SUCCESSFUL_TOAST_MESSAGE_PATTERN, trackingId, routeId), true);
         }
     }
 }

@@ -62,6 +62,7 @@ public class AllOrdersSteps extends AbstractSteps
         AllOrdersPage.Category category = AllOrdersPage.Category.findByValue(dataTableAsMap.get("category"));
         AllOrdersPage.SearchLogic searchLogic = AllOrdersPage.SearchLogic.findByValue(dataTableAsMap.get("searchLogic"));
         String searchTerm = dataTableAsMap.get("searchTerm");
+        String searchBy = searchTerm;
 
         /*
           Replace searchTerm value to value on ScenarioStorage.
@@ -72,8 +73,27 @@ public class AllOrdersSteps extends AbstractSteps
         }
 
         String mainWindowHandle = allOrdersPage.getWebDriver().getWindowHandle();
-        allOrdersPage.specificSearch(category, searchLogic, searchTerm);
+        if (StringUtils.equalsIgnoreCase(searchBy, "KEY_STAMP_ID")) {
+            allOrdersPage.specificSearch(category, searchLogic, searchTerm, ((Order) get(KEY_CREATED_ORDER)).getTrackingId());
+        } else {
+            allOrdersPage.specificSearch(category, searchLogic, searchTerm);
+        }
         put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
+    }
+
+    @When("^Operator can't find order on All Orders page using this criteria below:$")
+    public void operatorCantFindOrderOnAllOrdersPageUsingThisCriteriaBelow(Map<String, String> dataTableAsMap)
+    {
+        AllOrdersPage.Category category = AllOrdersPage.Category.findByValue(dataTableAsMap.get("category"));
+        AllOrdersPage.SearchLogic searchLogic = AllOrdersPage.SearchLogic.findByValue(dataTableAsMap.get("searchLogic"));
+        String searchTerm = dataTableAsMap.get("searchTerm");
+
+        if (containsKey(searchTerm))
+        {
+            searchTerm = get(searchTerm);
+        }
+
+        allOrdersPage.searchWithoutResult(category, searchLogic, searchTerm);
     }
 
     @When("^Operator filter the result table by Tracking ID on All Orders page and verify order info is correct$")
@@ -293,5 +313,11 @@ public class AllOrdersSteps extends AbstractSteps
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         allOrdersPage.verifiesTrackingIdIsCorrect(trackingId);
+    }
+
+    @Then("^Operator verifies All Orders Page is displayed$")
+    public void operatorVerifiesAllOrdersPageIsDispalyed()
+    {
+        allOrdersPage.verifyItsCurrentPage();
     }
 }

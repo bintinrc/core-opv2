@@ -280,11 +280,37 @@ public class EditOrderSteps extends AbstractSteps
     {
         if (StringUtils.equalsIgnoreCase(stampId, "GENERATED"))
         {
-            stampId = TestUtils.generateDateUniqueString();
+            stampId = "NVSGSTAMP" + TestUtils.generateAlphaNumericString(7);
         }
-
         NvLogger.warn(stampId);
         editOrderPage.editOrderStamp(stampId);
+        Order order = get(KEY_CREATED_ORDER);
+        order.setStampId(stampId);
+        put(KEY_STAMP_ID, stampId);
+    }
+
+    @When("^Operator unable to change Stamp ID of the created order to \"(.+)\" on Edit order page$")
+    public void operatorUnableToEditStampIdToExistingOnEditOrderPage(String stampId)
+    {
+        /*
+          Replace searchTerm value to value on ScenarioStorage.
+         */
+        String trackingIdOfExistingOrder = get(KEY_TRACKING_ID_BY_ACCESSING_STAMP_ID);
+        if (containsKey(stampId))
+    {
+        if (StringUtils.equalsIgnoreCase(stampId, "KEY_ANOTHER_ORDER_TRACKING_ID")) {
+            trackingIdOfExistingOrder = get(stampId);
+            stampId = get(stampId);
+
+        }
+    }
+        editOrderPage.editOrderStampToExisting(stampId, trackingIdOfExistingOrder);
+    }
+
+    @When("^Operator remove Stamp ID of the created order on Edit order page$")
+    public void operatorRemoveStampIdOnEditOrderPage()
+    {
+        editOrderPage.removeOrderStamp();
     }
 
     @When("^Operator update status of the created order on Edit order page using data below:$")
@@ -441,9 +467,7 @@ public class EditOrderSteps extends AbstractSteps
         {
             assertEquals(f("%s transaction status", transactionType), value, editOrderPage.transactionsTable().getStatus(rowIndex));
         }
-
-
-        if (mapOfData.containsKey("routeID"))
+        if (mapOfData.containsKey("routeId"))
         {
             value = mapOfData.get("routeId") == null ? "" : String.valueOf(mapOfData.get("routeId"));
             assertEquals(f("%s transaction Route Id", transactionType), value, editOrderPage.transactionsTable().getRouteId(rowIndex));
@@ -571,6 +595,118 @@ public class EditOrderSteps extends AbstractSteps
         }
         else {
             editOrderPage.verifyDeliveryDetailsInTransaction(order, txnType);
+        }
+    }
+
+    @Then("^Operator tags order to \"(.+)\" DP on Edit Order Page$")
+    public void operatorTagOrderToDP(String dpId)
+    {
+        editOrderPage.tagOrderToDP(dpId);
+    }
+
+    @Then("^Operator untags order from DP on Edit Order Page$")
+    public void operatorUnTagOrderFromDP()
+    {
+        editOrderPage.untagOrderFromDP();
+    }
+
+    @Then("^Operator verifies delivery (is|is not) indicated by 'Ninja Collect' icon on Edit Order Page$")
+    public void deliveryIsIndicatedByIcon(String indicationValue)
+    {
+        if (Objects.equals(indicationValue, "is")) {
+            assertTrue("Expected that Delivery is indicated by 'Ninja Collect' icon on Edit Order Page",
+                    editOrderPage.deliveryIsIndicatedWithIcon());
+        }
+        else if (Objects.equals(indicationValue, "is not")) {
+            assertFalse("Expected that Delivery is not indicated by 'Ninja Collect' icon on Edit Order Page",
+                    editOrderPage.deliveryIsIndicatedWithIcon());
+        }
+    }
+
+    @Then("^Operator delete order on Edit Order Page$")
+    public void operatorDeleteOrder()
+    {
+        editOrderPage.deleteOrder();
+    }
+
+    @Then("^Operator reschedule Pickup on Edit Order Page$")
+    public void operatorReschedulePickupOnEditOrderPage(Map<String, String> mapOfData)
+    {
+        Map<String, String> mapOfTokens = createDefaultTokens();
+        mapOfData = replaceDataTableTokens(mapOfData, mapOfTokens);
+        editOrderPage.reschedulePickup(mapOfData);
+        Order order = get(KEY_CREATED_ORDER);
+        String senderName = mapOfData.get("senderName");
+        String senderContact = mapOfData.get("senderContact");
+        String senderEmail = mapOfData.get("senderEmail");
+        String pickupDate = mapOfData.get("pickupDate");
+        String pickupTimeslot = mapOfData.get("pickupTimeslot");
+        String country = mapOfData.get("country");
+        String city = mapOfData.get("city");
+        String address1 = mapOfData.get("address1");
+        String address2 = mapOfData.get("address2");
+        String postalCode = mapOfData.get("postalCode");
+
+        if (Objects.nonNull(senderName)) {order.setFromName(senderName);}
+        if (Objects.nonNull(senderContact)) {order.setFromContact(senderContact);}
+        if (Objects.nonNull(senderEmail)) {order.setFromEmail(senderEmail);}
+        if (Objects.nonNull(pickupDate)) {order.setPickupDate(pickupDate);}
+        if (Objects.nonNull(pickupTimeslot)) {order.setPickupTimeslot(pickupTimeslot);}
+        if (Objects.nonNull(address1)) {order.setFromAddress1(address1);}
+        if (Objects.nonNull(address2)) {order.setFromAddress2(address2);}
+        if (Objects.nonNull(postalCode)) {order.setFromPostcode(postalCode);}
+        if (Objects.nonNull(city)) {order.setFromCity(city);}
+        if (Objects.nonNull(country)) {order.setFromCountry(country);}
+        put(KEY_CREATED_ORDER, order);
+    }
+
+    @Then("^Operator reschedule Delivery on Edit Order Page$")
+    public void operatorRescheduleDeliveryOnEditOrderPage(Map<String, String> mapOfData)
+    {
+        Map<String, String> mapOfTokens = createDefaultTokens();
+        mapOfData = replaceDataTableTokens(mapOfData, mapOfTokens);
+        editOrderPage.rescheduleDelivery(mapOfData);
+        Order order = get(KEY_CREATED_ORDER);
+        String recipientName = mapOfData.get("recipientName");
+        String recipientContact = mapOfData.get("recipientContact");
+        String recipientEmail = mapOfData.get("recipientEmail");
+        String deliveryDate = mapOfData.get("deliveryDate");
+        String deliveryTimeslot = mapOfData.get("deliveryTimeslot");
+        String country = mapOfData.get("country");
+        String city = mapOfData.get("city");
+        String address1 = mapOfData.get("address1");
+        String address2 = mapOfData.get("address2");
+        String postalCode = mapOfData.get("postalCode");
+
+        if (Objects.nonNull(recipientName)) {order.setToName(recipientName);}
+        if (Objects.nonNull(recipientContact)) {order.setToContact(recipientContact);}
+        if (Objects.nonNull(recipientEmail)) {order.setToEmail(recipientEmail);}
+        if (Objects.nonNull(deliveryDate)) {order.setDeliveryDate(deliveryDate);}
+        if (Objects.nonNull(deliveryTimeslot)) {order.setDeliveryTimeslot(deliveryTimeslot);}
+        if (Objects.nonNull(address1)) {order.setToAddress1(address1);}
+        if (Objects.nonNull(address2)) {order.setToAddress2(address2);}
+        if (Objects.nonNull(postalCode)) {order.setToPostcode(postalCode);}
+        if (Objects.nonNull(city)) {order.setToCity(city);}
+        if (Objects.nonNull(country)) {order.setToCountry(country);}
+        put(KEY_CREATED_ORDER, order);
+    }
+
+    @Then("^Operator pull out parcel from the route for (Pickup|Delivery) on Edit Order page$")
+    public void operatorPullsOrderFromRouteOnEditOrderPage(String txnType)
+    {
+        Order createdOrder = get(KEY_CREATED_ORDER);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
+        editOrderPage.pullOutParcelFromTheRoute(createdOrder, txnType, routeId);
+    }
+
+    @When("^Operator verify next order info on Edit order page:$")
+    public void operatorVerifyOrderInfoOnEditOrderPage(Map<String, String> mapOfData)
+    {
+        mapOfData = resolveKeyValues(mapOfData);
+        String fieldToValidate = mapOfData.get("stampId");
+        if (StringUtils.isNotBlank(fieldToValidate))
+        {
+            assertEquals("StampId value is not as expected", fieldToValidate, editOrderPage.getStampId());
         }
     }
 }
