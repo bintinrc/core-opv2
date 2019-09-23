@@ -43,6 +43,7 @@ public class EditOrderPage extends OperatorV2SimplePage
     private EventsTable eventsTable;
     private CancelOrderDialog cancelOrderDialog;
     private EditPickupDetailsDialog editPickupDetailsDialog;
+    private EditDeliveryDetailsDialog editDeliveryDetailsDialog;
 
     public EditOrderPage(WebDriver webDriver)
     {
@@ -54,6 +55,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         eventsTable = new EventsTable(webDriver);
         cancelOrderDialog = new CancelOrderDialog(webDriver);
         editPickupDetailsDialog = new EditPickupDetailsDialog(webDriver);
+        editDeliveryDetailsDialog = new EditDeliveryDetailsDialog(webDriver);
     }
 
     public EventsTable eventsTable()
@@ -404,12 +406,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         // Pickup
         verifyPickupInfo(order);
         // Delivery
-        assertEquals("To Name", order.getToName(), getToName());
-        assertEquals("To Email", order.getToEmail(), getToEmail());
-        assertEquals("To Contact", order.getToContact(), getToContact());
-        String toAddress = getToAddress();
-        assertThat("To Address", toAddress, containsString(order.getToAddress1()));
-        assertThat("To Address", toAddress, containsString(order.getToAddress2()));
+        verifyDeliveryInfo(order);
     }
 
     public void verifyPickupInfo(Order order) {
@@ -420,6 +417,15 @@ public class EditOrderPage extends OperatorV2SimplePage
         String fromAddress = getFromAddress();
         assertThat("From Address", fromAddress, containsString(order.getFromAddress1()));
         assertThat("From Address", fromAddress, containsString(order.getFromAddress2()));
+    }
+
+    public void verifyDeliveryInfo(Order order) {
+        assertEquals("To Name", order.getToName(), getToName());
+        assertEquals("To Email", order.getToEmail(), getToEmail());
+        assertEquals("To Contact", order.getToContact(), getToContact());
+        String toAddress = getToAddress();
+        assertThat("To Address", toAddress, containsString(order.getToAddress1()));
+        assertThat("To Address", toAddress, containsString(order.getToAddress2()));
     }
 
         public void verifyOrderIsGlobalInboundedSuccessfully(Order order, GlobalInboundParams globalInboundParams, Double expectedOrderCost, String expectedStatus, List<String> expectedGranularStatus, String expectedDeliveryStatus)
@@ -506,7 +512,16 @@ public class EditOrderPage extends OperatorV2SimplePage
         String fromAddress = transactionsTable.getAddress(1);
         assertThat("From Address", fromAddress, containsString(order.getFromAddress1()));
         assertThat("From Address", fromAddress, containsString(order.getFromAddress2()));
+    }
 
+    public void verifyDeliveryDetailsInTransaction(Order order, String txnType){
+        transactionsTable.searchByTxnType(txnType);
+        assertEquals("To Name", order.getToName(), transactionsTable.getName(1));
+        assertEquals("To Email", order.getToEmail(), transactionsTable.getEmail(1));
+        assertEquals("To Contact", order.getToContact(), transactionsTable.getContact(1));
+        String toAddress = transactionsTable.getAddress(1);
+        assertThat("To Address", toAddress, containsString(order.getToAddress1()));
+        assertThat("To Address", toAddress, containsString(order.getToAddress2()));
     }
 
     public String getDeliveryTitle()
@@ -717,6 +732,39 @@ public class EditOrderPage extends OperatorV2SimplePage
         editPickupDetailsDialog.confirmPickupDetailsUpdated();
     }
 
+    public void updateDeliveryDetails(Map<String, String> mapOfData)
+    {
+        String recipientName = mapOfData.get("recipientName");
+        String recipientContact = mapOfData.get("recipientContact");
+        String recipientEmail = mapOfData.get("recipientEmail");
+        String internalNotes = mapOfData.get("internalNotes");
+        String changeSchedule = mapOfData.get("changeSchedule");
+        String deliveryDate = mapOfData.get("deliveryDate");
+        String deliveryTimeslot = mapOfData.get("deliveryTimeslot");
+        String country = mapOfData.get("country");
+        String city = mapOfData.get("city");
+        String address1 = mapOfData.get("address1");
+        String address2 = mapOfData.get("address2");
+        String postalCode = mapOfData.get("postalCode");
+
+        editDeliveryDetailsDialog
+                .updateRecipientName(recipientName)
+                .updateRecipientContact(recipientContact)
+                .updateRecipientEmail(recipientEmail)
+                .updateInternalNotes(internalNotes)
+                .clickChangeSchedule()
+                .updateDeliveryDate(deliveryDate)
+                .updateDeliveryTimeslot(deliveryTimeslot)
+                .clickChangeAddress()
+                .updateCountry(country)
+                .updateCity(city)
+                .updateAddress1(address1)
+                .updateAddress2(address2)
+                .updatePostalCode(postalCode)
+                .clickSaveChanges();
+        editDeliveryDetailsDialog.confirmPickupDetailsUpdated();
+    }
+
     /**
      * Accessor for Reservations table
      */
@@ -824,7 +872,7 @@ public class EditOrderPage extends OperatorV2SimplePage
             setEntityClass(OrderEvent.class);
         }
 
-        public void verifyUpdateAddressEventDescription(Order order, String eventDescription) {
+        public void verifyUpdatePickupAddressEventDescription(Order order, String eventDescription) {
             String fromAddress1Pattern = f("From Address 1 .* (to|new value) %s.*", order.getFromAddress1());
             String fromAddress2Pattern = f(".* From Address 2 .* (to|new value) %s.*", order.getFromAddress2());
             String fromPostcodePattern = f(".* From Postcode .* (to|new value) %s.*", order.getFromPostcode());
@@ -842,7 +890,25 @@ public class EditOrderPage extends OperatorV2SimplePage
                     eventDescription.matches(fromCountryPattern));
         }
 
-        public void verifyUpdateContactInformationEventDescription(Order order, String eventDescription) {
+        public void verifyUpdateDeliveryAddressEventDescription(Order order, String eventDescription) {
+            String toAddress1Pattern = f("To Address 1 .* (to|new value) %s.*", order.getToAddress1());
+            String toAddress2Pattern = f(".* To Address 2 .* (to|new value) %s.*", order.getToAddress2());
+            String toPostcodePattern = f(".* To Postcode .* (to|new value) %s.*", order.getToPostcode());
+            String toCityPattern = f(".* To City .* (to|new value) %s.*", order.getToCity());
+            String toCountryPattern = f(".* To Country .* (to|new value) %s.*", order.getToCountry());
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", toAddress1Pattern, eventDescription),
+                    eventDescription.matches(toAddress1Pattern));
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", toAddress2Pattern, eventDescription),
+                    eventDescription.matches(toAddress2Pattern));
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", toPostcodePattern, eventDescription),
+                    eventDescription.matches(toPostcodePattern));
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", toCityPattern, eventDescription),
+                    eventDescription.matches(toCityPattern));
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", toCountryPattern, eventDescription),
+                    eventDescription.matches(toCountryPattern));
+        }
+
+        public void verifyUpdatePickupContactInformationEventDescription(Order order, String eventDescription) {
             String fromNamePattern = f("From Name .* (to|new value) %s.*", order.getFromName());
             String fromEmailPattern = f(".* From Email .* (to|new value) %s.*", order.getFromEmail());
             String fromContactPattern = f(".* From Contact .* (to|new value) \\%s.*", order.getFromContact());
@@ -854,7 +920,19 @@ public class EditOrderPage extends OperatorV2SimplePage
                     eventDescription.matches(fromContactPattern));
         }
 
-        public void verifyUpdateSlaEventDescription(Order order, String eventDescription) {
+        public void verifyUpdateDeliveryContactInformationEventDescription(Order order, String eventDescription) {
+            String toNamePattern = f("To Name .* (to|new value) %s.*", order.getToName());
+            String toEmailPattern = f(".* To Email .* (to|new value) %s.*", order.getToEmail());
+            String toContactPattern = f(".* To Contact .* (to|new value) \\%s.*", order.getToContact());
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", toNamePattern, eventDescription),
+                    eventDescription.matches(toNamePattern));
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", toEmailPattern, eventDescription),
+                    eventDescription.matches(toEmailPattern));
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", toContactPattern, eventDescription),
+                    eventDescription.matches(toContactPattern));
+        }
+
+        public void verifyUpdatePickupSlaEventDescription(Order order, String eventDescription) {
             String fromPickUpStartTimePattern = f("Pickup Start Time .* (to|new value) %s %s.*",
                     order.getPickupDate(), order.getPickupTimeslot().getStartTime());
             String fromPickUpEndTimePattern = f(".* Pickup End Time .* (to|new value) %s %s.*",
@@ -865,9 +943,27 @@ public class EditOrderPage extends OperatorV2SimplePage
                     eventDescription.matches(fromPickUpEndTimePattern));
         }
 
-        public void verifyVerifyAddressEventDescription(Order order, String eventDescription) {
+        public void verifyUpdateDeliverySlaEventDescription(Order order, String eventDescription) {
+            String deliveryStartTimePattern = f("Delivery Start Time .* (to|new value) %s %s.*",
+                    order.getDeliveryDate(), order.getDeliveryTimeslot().getStartTime());
+            String deliveryEndTimePattern = f(".* Delivery End Time .* (to|new value) %s %s.*",
+                    order.getDeliveryDate(), order.getDeliveryTimeslot().getEndTime());
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", deliveryStartTimePattern, eventDescription),
+                    eventDescription.matches(deliveryStartTimePattern));
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", deliveryEndTimePattern, eventDescription),
+                    eventDescription.matches(deliveryEndTimePattern));
+        }
+
+        public void verifyPickupAddressEventDescription(Order order, String eventDescription) {
             String addressPattern = f("Address: %s, %s, %s, %s, %s.*", order.getFromAddress1(), order.getFromAddress2(),
                     order.getFromCity(), order.getFromCountry(), order.getFromPostcode());
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", addressPattern, eventDescription),
+                    eventDescription.matches(addressPattern));
+        }
+
+        public void verifyDeliveryAddressEventDescription(Order order, String eventDescription) {
+            String addressPattern = f("Address: %s, %s, %s, %s, %s.*", order.getToAddress1(), order.getToAddress2(),
+                    order.getToCity(), order.getToCountry(), order.getToPostcode());
             assertTrue(f("'%s' pattern is not present in the '%s' event description", addressPattern, eventDescription),
                     eventDescription.matches(addressPattern));
         }
@@ -1201,6 +1297,159 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public void confirmPickupDetailsUpdated(){
             waitUntilVisibilityOfToast(UPDATE_PICKUP_DETAILS_SUCCESSFUL_TOAST_MESSAGE);
+        }
+    }
+
+    /**
+     * Accessor for Edit Delivery Details dialog
+     */
+    public static class EditDeliveryDetailsDialog extends OperatorV2SimplePage
+    {
+        private static final String DIALOG_TITLE = "Edit Delivery Details";
+        private static final String RECIPIENT_NAME_ARIA_LABEL = "Recipient Name";
+        private static final String RECIPIENT_CONTACT_ARIA_LABEL = "Recipient Contact";
+        private static final String RECIPIENT_EMAIL_ARIA_LABEL = "Recipient Email";
+        private static final String INTERNAL_NOTES_ARIA_LABEL = "Internal Notes";
+        private static final String CHANGE_SCHEDULE_CHECKBOX_ARIA_LABEL = "//md-checkbox[@aria-label='Change Schedule']";
+        private static final String DELIVERY_DATE_ID = "commons.model.delivery-date";
+        private static final String DELIVERY_TIMESLOT_ARIA_LABEL = "Delivery Timeslot";
+        private static final String COUNTRY_ARIA_LABEL = "Country";
+        private static final String COUNTRY_XPATH = "//input[@aria-label='Country' and @aria-hidden='false']";
+        private static final String CITY_ARIA_LABEL = "City";
+        private static final String ADDRESS_1_ARIA_LABEL = "Address 1";
+        private static final String ADDRESS_2_ARIA_LABEL = "Address 2";
+        private static final String POSTAL_CODE_ARIA_LABEL = "Postal Code";
+        private static final String CHANGE_ADDRESS_BUTTON_ARIA_LABEL = "Change Address";
+        private static final String SAVE_CHANGES_BUTTON_ARIA_LABEL = "Save changes";
+        private static final String UPDATE_DELIVERY_DETAILS_SUCCESSFUL_TOAST_MESSAGE = "Delivery Details Updated";
+
+        public EditDeliveryDetailsDialog(WebDriver webDriver)
+        {
+            super(webDriver);
+        }
+
+        public EditDeliveryDetailsDialog waitUntilVisibility()
+        {
+            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+            return this;
+        }
+
+        public EditDeliveryDetailsDialog waitUntilAddressCanBeChanged()
+        {
+            waitUntilVisibilityOfElementLocated(COUNTRY_XPATH);
+            return this;
+        }
+
+        public EditDeliveryDetailsDialog updateRecipientName(String text)
+        {
+            if (Objects.nonNull(text)) {
+                sendKeysByAriaLabel(RECIPIENT_NAME_ARIA_LABEL, text);
+            }
+            return this;
+        }
+
+        public EditDeliveryDetailsDialog updateRecipientContact(String text)
+        {
+            if (Objects.nonNull(text)) {
+                sendKeysByAriaLabel(RECIPIENT_CONTACT_ARIA_LABEL, text);
+            }
+            return this;
+        }
+
+        public EditDeliveryDetailsDialog updateRecipientEmail(String text)
+        {
+            if (Objects.nonNull(text)) {
+                sendKeysByAriaLabel(RECIPIENT_EMAIL_ARIA_LABEL, text);
+            }
+            return this;
+        }
+
+        public EditDeliveryDetailsDialog updateInternalNotes(String text)
+        {
+            if (Objects.nonNull(text)) {
+                sendKeysByAriaLabel(INTERNAL_NOTES_ARIA_LABEL, text);
+            }
+            return this;
+        }
+
+        public EditDeliveryDetailsDialog clickChangeSchedule(){
+            click(CHANGE_SCHEDULE_CHECKBOX_ARIA_LABEL);
+            return this;
+        }
+
+        public EditDeliveryDetailsDialog updateDeliveryDate(String textDate)
+        {
+            if (Objects.nonNull(textDate)) {
+                try {
+                    setMdDatepickerById(DELIVERY_DATE_ID, YYYY_MM_DD_SDF.parse(textDate));
+                } catch(ParseException e)
+                {
+                    throw new NvTestRuntimeException("Failed to parse date.", e);
+                }
+            }
+            return this;
+        }
+
+        public EditDeliveryDetailsDialog updateDeliveryTimeslot(String value)
+        {
+            if (Objects.nonNull(value)) {
+                selectValueFromMdSelectByAriaLabel(DELIVERY_TIMESLOT_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public EditDeliveryDetailsDialog clickChangeAddress(){
+            clickButtonByAriaLabel(CHANGE_ADDRESS_BUTTON_ARIA_LABEL);
+            waitUntilAddressCanBeChanged();
+            return this;
+        }
+
+        public EditDeliveryDetailsDialog updateCountry(String value)
+        {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(COUNTRY_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public EditDeliveryDetailsDialog updateCity(String value)
+        {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(CITY_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public EditDeliveryDetailsDialog updateAddress1(String value)
+        {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(ADDRESS_1_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public EditDeliveryDetailsDialog updateAddress2(String value)
+        {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(ADDRESS_2_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public EditDeliveryDetailsDialog updatePostalCode(String value)
+        {
+            if (Objects.nonNull(value)) {
+                sendKeysByAriaLabel(POSTAL_CODE_ARIA_LABEL, value);
+            }
+            return this;
+        }
+
+        public void clickSaveChanges(){
+            clickButtonByAriaLabelAndWaitUntilDone(SAVE_CHANGES_BUTTON_ARIA_LABEL);
+        }
+
+        public void confirmPickupDetailsUpdated(){
+            waitUntilVisibilityOfToast(UPDATE_DELIVERY_DETAILS_SUCCESSFUL_TOAST_MESSAGE);
         }
     }
 }
