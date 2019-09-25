@@ -687,21 +687,61 @@ Feature: Edit Order
       | address1          | 116 Keng Lee Rd          |
       | address2          | 15                       |
       | postalCode        | 308402                   |
-    Then Operator verify "UPDATE ADDRESS" order event description on Edit order page
-    And Operator verify "UPDATE CONTACT INFORMATION" order event description on Edit order page
-    And Operator verify "UPDATE SLA" order event description on Edit order page
-    And Operator verify "VERIFY ADDRESS" order event description on Edit order page
+    Then Operator verify Pickup "UPDATE ADDRESS" order event description on Edit order page
+    And Operator verify Pickup "UPDATE CONTACT INFORMATION" order event description on Edit order page
+    And Operator verify Pickup "UPDATE SLA" order event description on Edit order page
+    And Operator verify Pickup "VERIFY ADDRESS" order event description on Edit order page
     And Operator verifies Pickup Details are updated on Edit Order Page
-    And Operator verifies "PICKUP" Transaction is updated on Edit Order Page
+    And Operator verifies Pickup Transaction is updated on Edit Order Page
     And DB Operator verifies pickup info is updated in order record
     And DB Operator verify the order_events record exists for the created order with type:
       | 7    |
       | 17   |
       | 11   |
       | 12   |
-    And DB Operator verify '17' order_events record for the created order
+    And DB Operator verify Pickup '17' order_events record for the created order
     And DB Operator verify Pickup transaction record is updated for the created order
     And DB Operator verify Pickup waypoint record is updated
+
+  @CloseNewWindows @DeleteOrArchiveRoute
+  Scenario: Operator Edit Delivery Details on Edit Order page (uid:9157049d-153c-4a69-a80d-bbede3ff98f0)
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    Then Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    When Operator switch to Edit Order's window
+    And Operator click Delivery -> Edit Delivery Details on Edit Order page
+    And Operator update Delivery Details on Edit Order Page
+      | recipientName        | test sender name         |
+      | recipientContact     | +9727894434              |
+      | recipientEmail       | test@mail.com            |
+      | internalNotes        | test internalNotes       |
+      | deliveryDate         | {{next-1-day-yyyy-MM-dd}}|
+      | deliveryTimeslot     | 9AM - 12PM               |
+      | country              | Singapore                |
+      | city                 | Singapore                |
+      | address1             | 116 Keng Lee Rd          |
+      | address2             | 15                       |
+      | postalCode           | 308402                   |
+    Then Operator verify Delivery "UPDATE ADDRESS" order event description on Edit order page
+    And Operator verify Delivery "UPDATE CONTACT INFORMATION" order event description on Edit order page
+    And Operator verify Delivery "UPDATE SLA" order event description on Edit order page
+    And Operator verify Delivery "VERIFY ADDRESS" order event description on Edit order page
+    And Operator verifies Delivery Details are updated on Edit Order Page
+    And Operator verifies Delivery Transaction is updated on Edit Order Page
+    And DB Operator verifies delivery info is updated in order record
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 7    |
+      | 17   |
+      | 11   |
+      | 12   |
+    And DB Operator verify Delivery '17' order_events record for the created order
+    And DB Operator verify Delivery transaction record is updated for the created order
+    And DB Operator verify Delivery waypoint record is updated
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
