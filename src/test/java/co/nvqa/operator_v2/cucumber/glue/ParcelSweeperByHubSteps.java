@@ -73,13 +73,13 @@ public class ParcelSweeperByHubSteps extends AbstractSteps
     @Then("^Operator verify Route ID on Parcel Sweeper By Hub page using data below:$")
     public void operatorVerifyRouteIDOnParcelSweeperPageUsingDataBelow(Map<String, String> mapOfData)
     {
-        Long routeId = null;
+        String routeId = null;
         String value = mapOfData.get("routeId");
         if (StringUtils.isNotBlank(value))
         {
             routeId = value.equalsIgnoreCase("GENERATED") ?
-                    get(KEY_CREATED_ROUTE_ID) :
-                    Long.valueOf(value);
+                    String.valueOf((Long)get(KEY_CREATED_ROUTE_ID)):
+                    value;
         }
 
         String driverName = mapOfData.get("driverName");

@@ -282,6 +282,8 @@ public class AllOrdersSteps extends AbstractSteps
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         Order createdOrder = get(KEY_CREATED_ORDER);
+        String mainWindowHandle = allOrdersPage.getWebDriver().getWindowHandle();
+        put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
         allOrdersPage.specificSearch(AllOrdersPage.Category.TRACKING_OR_STAMP_ID, AllOrdersPage.SearchLogic.EXACTLY_MATCHES, trackingId);
         allOrdersPage.switchToEditOrderWindow(createdOrder.getId());
     }

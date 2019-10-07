@@ -60,11 +60,11 @@ public class ParcelSweeperByHubPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfMdDialogByTitle("Set Prefix");
     }
 
-    public void verifyRouteInfo(Long routeId, String driverName, String color)
+    public void verifyRouteInfo(String routeId, String driverName, String color)
     {
         if (routeId != null)
         {
-            assertEquals("Unexpected Route ID", String.valueOf(routeId), getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h4"));
+            assertEquals("Unexpected Route ID", routeId, getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h4"));
         }
 
         if (StringUtils.isNotBlank(driverName))
@@ -88,7 +88,7 @@ public class ParcelSweeperByHubPage extends OperatorV2SimplePage
             {
                 zoneName = matcher.group(1).trim();
             }
-            assertThat("Unexpected Zone Name", getText(LOCATOR_ZONE_INFO_CONTAINER + "//h4"), equalToIgnoringCase(zoneName));
+            assertThat("Unexpected Zone Name", getText(LOCATOR_ZONE_INFO_CONTAINER + "//*[self::h4 or self::h5]"), equalToIgnoringCase(zoneName));
         }
 
         if (StringUtils.isNotBlank(color))
