@@ -47,7 +47,7 @@ Feature: Parcel Sweeper By Hub
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @DeleteOrArchiveRoute @CloseNewWindows @Debug
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Parcel Routing Sweep by Hub - RTS Order
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:

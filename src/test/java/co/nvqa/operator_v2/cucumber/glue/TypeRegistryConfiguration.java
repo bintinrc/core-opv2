@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -40,6 +41,18 @@ public class TypeRegistryConfiguration implements TypeRegistryConfigurer
                 false)
         );
 
+        typeRegistry.defineParameterType(new ParameterType<>(
+                "integers",
+                "(-?[0-9]+(,\\s*-?[0-9]+)*)",
+                List.class,
+                this::transformIntegers
+        ));
+
+    }
+
+    private List<Integer> transformIntegers(String integers) {
+        List<String> integersAsString = Arrays.asList(integers.split(","));
+        return integersAsString.stream().map(s -> Integer.valueOf(s.trim())).collect(Collectors.toList());
     }
 
     @Override

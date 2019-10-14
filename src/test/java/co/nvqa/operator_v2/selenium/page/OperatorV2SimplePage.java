@@ -7,11 +7,18 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -75,7 +82,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickNvIconTextButtonByName(String name)
     {
-        clickf("//nv-icon-text-button[@name='%s']", name);
+        clickf("//nv-icon-text-button[@name='%s']//button", name);
     }
 
     public void clickNvIconTextButtonByNameAndWaitUntilDone(String name)
@@ -185,6 +192,36 @@ public class OperatorV2SimplePage extends SimplePage
     public void waitUntilVisibilityOfToast(String containsMessage)
     {
         waitUntilVisibilityOfElementLocated(f("//div[@id='toast-container']//div[contains(text(), '%s')]", containsMessage));
+    }
+
+    public Map<String, String> waitUntilVisibilityAndGetErrorToastData()
+    {
+        Map<String, String> toastData = new HashMap<>();
+        String xpath = "//div[@class='toast-message']";
+        waitUntilVisibilityOfElementLocated(xpath);
+
+        String childXpath = xpath + "//strong[1]";
+        if (isElementExistFast(childXpath))
+        {
+            toastData.put("status", StringUtils.trim(getText(childXpath)));
+        }
+        childXpath = xpath + "//strong[2]";
+        if (isElementExistFast(childXpath))
+        {
+            toastData.put("url", StringUtils.trim(getText(childXpath)));
+        }
+        childXpath = xpath + "//strong[3]";
+        if (isElementExistFast(childXpath))
+        {
+            toastData.put("errorCode", StringUtils.trim(getText(childXpath)));
+        }
+        childXpath = xpath + "//strong[4]";
+        if (isElementExistFast(childXpath))
+        {
+            toastData.put("errorMessage", StringUtils.trim(getText(childXpath)));
+        }
+
+        return toastData;
     }
 
     public void waitUntilInvisibilityOfToast()
@@ -743,7 +780,8 @@ public class OperatorV2SimplePage extends SimplePage
         {
             String selectedItemXpath = "//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches'][contains(@class,'selected')]";
             String item = getText(selectedItemXpath).trim();
-            while (!StringUtils.startsWithIgnoreCase(item, value)){
+            while (!StringUtils.startsWithIgnoreCase(item, value))
+            {
                 we.sendKeys(Keys.DOWN);
                 pause100ms();
                 item = getText(selectedItemXpath).trim();
