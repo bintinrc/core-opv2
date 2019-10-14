@@ -350,7 +350,7 @@ Feature: Route Inbound
       | errorMessage | Route not found! |
 
   @DeleteOrArchiveRoute
-  Scenario: Get Route Details by Route ID - Route with no Waypoints (uid:)
+  Scenario: Get Route Details by Route ID - Route not assigned to a Driver (uid:)
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id} } |
     Given Operator go to menu Inbounding -> Route Inbound
