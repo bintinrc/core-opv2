@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.model.WaypointReservationInfo;
 import co.nvqa.operator_v2.model.WaypointShipperInfo;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Assert;
+import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Date;
@@ -195,6 +196,31 @@ public class RouteInboundPage extends OperatorV2SimplePage
             assertThat("Order with Tracking ID = " + expectedOrderInfo.getTrackingId() + " was not found", actualOrderInfo, notNullValue());
             expectedOrderInfo.compareWithActual(actualOrderInfo);
         });
+    }
+
+    public void verifyErrorMessage(String status, String url, String errorCode, String errorMessage)
+    {
+        Map<String, String> toastData = waitUntilVisibilityAndGetErrorToastData();
+
+        if (StringUtils.isNotBlank(status))
+        {
+            assertThat("Error toast status", toastData.get("status"), equalToIgnoringCase(status));
+        }
+
+        if (StringUtils.isNotBlank(url))
+        {
+            assertThat("Error toast url", toastData.get("url"), equalToIgnoringCase(url));
+        }
+
+        if (StringUtils.isNotBlank(errorCode))
+        {
+            assertThat("Error toast code", toastData.get("errorCode"), equalToIgnoringCase(errorCode));
+        }
+
+        if (StringUtils.isNotBlank(errorMessage))
+        {
+            assertThat("Error toast status", toastData.get("errorMessage"), equalToIgnoringCase(errorMessage));
+        }
     }
 
     public void addRoutInboundComment(String comment)

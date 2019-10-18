@@ -19,6 +19,7 @@ public class DriverInfo extends DataEntity<DriverInfo>
     private String licenseNumber;
     private String type;
     private Integer codLimit;
+    private String employmentStartDate;
     private String vehicleLicenseNumber;
     private Integer vehicleCapacity;
     private String contactType;
@@ -302,6 +303,16 @@ public class DriverInfo extends DataEntity<DriverInfo>
         return zoneId!=null || zoneMin!=null || zoneMax!=null || zoneCost!=null;
     }
 
+    public String getEmploymentStartDate()
+    {
+        return employmentStartDate;
+    }
+
+    public void setEmploymentStartDate(String employmentStartDate)
+    {
+        this.employmentStartDate = employmentStartDate;
+    }
+
     public void fromDriver(Driver driver)
     {
         setUuid(driver.getUuid());
@@ -311,6 +322,7 @@ public class DriverInfo extends DataEntity<DriverInfo>
         setLicenseNumber(driver.getLicenseNumber());
         setType(driver.getDriverType());
         setCodLimit(driver.getCodLimit());
+        setEmploymentStartDate(driver.getEmploymentStartDate());
 
         if(CollectionUtils.isNotEmpty(driver.getVehicles()))
         {

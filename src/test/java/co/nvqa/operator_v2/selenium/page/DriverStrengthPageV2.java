@@ -1,14 +1,14 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.DriverInfo;
+import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
-import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_CONTACT_INFO;
-import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_DELETE;
-import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.ACTION_EDIT;
-import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.COLUMN_USERNAME;
+import java.text.ParseException;
+
+import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTable.*;
 
 /**
  * @author Sergey Mishanin
@@ -16,6 +16,7 @@ import static co.nvqa.operator_v2.selenium.page.DriverStrengthPageV2.DriversTabl
 @SuppressWarnings("WeakerAccess")
 public class DriverStrengthPageV2 extends OperatorV2SimplePage
 {
+    private static final String LOCATOR_SPINNER = "//md-progress-circular";
     public static final String LOCATOR_BUTTON_LOAD_EVERYTHING = "container.driver-strength.load-everything";
 
     private AddDriverDialog addDriverDialog;
@@ -32,76 +33,97 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
         contactDetailsMenu = new ContactDetailsMenu(webDriver);
     }
 
-    public DriversTable driversTable(){
+    public DriversTable driversTable()
+    {
         return driversTable;
     }
 
     public void clickAddNewDriver()
     {
-        clickNvIconTextButtonByName("Add New Driver");
+        waitUntilVisibilityOfElementLocated("//nv-icon-text-button[@name='Add New Driver']//button");
+        click("//nv-icon-text-button[@name='Add New Driver']//button");
     }
 
-    public void addNewDriver(DriverInfo driverInfo){
+    public void addNewDriver(DriverInfo driverInfo)
+    {
+        waitUntilInvisibilityOfElementLocated(LOCATOR_SPINNER);
         clickAddNewDriver();
         addDriverDialog.fillForm(driverInfo);
     }
 
-    public void editDriver(String username, DriverInfo newDriverInfo){
+    public void editDriver(String username, DriverInfo newDriverInfo)
+    {
         filterBy(COLUMN_USERNAME, username);
         driversTable.clickActionButton(1, ACTION_EDIT);
         editDriverDialog.fillForm(newDriverInfo);
     }
 
-    public void filterBy(String columnName, String value){
-        if (isElementExist(String.format("//*[@name='%s']", LOCATOR_BUTTON_LOAD_EVERYTHING), 0)){
+    public void filterBy(String columnName, String value)
+    {
+        if (isElementExist(String.format("//*[@name='%s']", LOCATOR_BUTTON_LOAD_EVERYTHING), 0))
+        {
             clickNvIconTextButtonByNameAndWaitUntilDone(LOCATOR_BUTTON_LOAD_EVERYTHING);
         }
         driversTable.filterByColumn(columnName, value);
     }
 
-    public void verifyContactDetails(String username, DriverInfo expectedContactDetails){
+    public void verifyContactDetails(String username, DriverInfo expectedContactDetails)
+    {
         filterBy(COLUMN_USERNAME, username);
         driversTable.clickActionButton(1, ACTION_CONTACT_INFO);
         DriverInfo actualContactDetails = contactDetailsMenu.readData();
-        if (StringUtils.isNotBlank(expectedContactDetails.getLicenseNumber())){
+        if (StringUtils.isNotBlank(expectedContactDetails.getLicenseNumber()))
+        {
             assertThat("License Number", actualContactDetails.getLicenseNumber(), equalTo(expectedContactDetails.getLicenseNumber()));
         }
-        if (StringUtils.isNotBlank(expectedContactDetails.getContact())){
+        if (StringUtils.isNotBlank(expectedContactDetails.getContact()))
+        {
             assertThat("Contact", actualContactDetails.getContact(), equalTo(expectedContactDetails.getContact()));
         }
-        if (StringUtils.isNotBlank(expectedContactDetails.getContactType())){
+        if (StringUtils.isNotBlank(expectedContactDetails.getContactType()))
+        {
             assertThat("Contact Type", actualContactDetails.getContactType(), containsString(expectedContactDetails.getContactType()));
         }
-        if (StringUtils.isNotBlank(expectedContactDetails.getComments())){
+        if (StringUtils.isNotBlank(expectedContactDetails.getComments()))
+        {
             assertThat("Comments", actualContactDetails.getComments(), equalTo(expectedContactDetails.getComments()));
         }
     }
 
-    public void verifyDriverInfo(DriverInfo expectedDriverInfo){
+    public void verifyDriverInfo(DriverInfo expectedDriverInfo)
+    {
         filterBy(COLUMN_USERNAME, expectedDriverInfo.getUsername());
         DriverInfo actualDriverInfo = driversTable.readEntity(1);
-        if (expectedDriverInfo.getId() != null){
+        if (expectedDriverInfo.getId() != null)
+        {
             assertThat("Id", actualDriverInfo.getId(), equalTo(expectedDriverInfo.getId()));
         }
-        if (StringUtils.isNotBlank(expectedDriverInfo.getUsername())){
+        if (StringUtils.isNotBlank(expectedDriverInfo.getUsername()))
+        {
             assertThat("Username", actualDriverInfo.getUsername(), equalTo(expectedDriverInfo.getUsername()));
         }
-        if (StringUtils.isNotBlank(expectedDriverInfo.getFirstName())){
+        if (StringUtils.isNotBlank(expectedDriverInfo.getFirstName()))
+        {
             assertThat("First Name", actualDriverInfo.getFirstName(), equalTo(expectedDriverInfo.getFirstName()));
         }
-        if (StringUtils.isNotBlank(expectedDriverInfo.getLastName())){
+        if (StringUtils.isNotBlank(expectedDriverInfo.getLastName()))
+        {
             assertThat("Last Name", actualDriverInfo.getLastName(), equalTo(expectedDriverInfo.getLastName()));
         }
-        if (StringUtils.isNotBlank(expectedDriverInfo.getType())){
+        if (StringUtils.isNotBlank(expectedDriverInfo.getType()))
+        {
             assertThat("Type", actualDriverInfo.getType(), equalTo(expectedDriverInfo.getType()));
         }
-        if (expectedDriverInfo.getZoneMin() != null){
+        if (expectedDriverInfo.getZoneMin() != null)
+        {
             assertThat("Min", actualDriverInfo.getZoneMin(), equalTo(expectedDriverInfo.getZoneMin()));
         }
-        if (expectedDriverInfo.getZoneMax() != null){
+        if (expectedDriverInfo.getZoneMax() != null)
+        {
             assertThat("Max", actualDriverInfo.getZoneMax(), equalTo(expectedDriverInfo.getZoneMax()));
         }
-        if (StringUtils.isNotBlank(expectedDriverInfo.getComments())){
+        if (StringUtils.isNotBlank(expectedDriverInfo.getComments()))
+        {
             assertThat("Comments", actualDriverInfo.getComments(), equalTo(expectedDriverInfo.getComments()));
         }
     }
@@ -126,6 +148,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
 
         public static final String DIALOG_TITLE = "Add Driver";
         public static final String LOCATOR_FIELD_FIRST_NAME = "First Name";
+        public static final String LOCATOR_FIELD_EMPLOYMENT_START_DATE = "employment-start-date";
         public static final String LOCATOR_FIELD_LAST_NAME = "Last Name";
         public static final String LOCATOR_FIELD_DRIVER_LICENSE_NUMBER = "Driver License Number";
         public static final String LOCATOR_FIELD_DRIVER_COD_LIMIT = "COD Limit";
@@ -173,6 +196,19 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
             return this;
         }
 
+        public AddDriverDialog setEmploymentStartDate(String value)
+        {
+            try
+            {
+                setMdDatepickerById(LOCATOR_FIELD_EMPLOYMENT_START_DATE, TestUtils.MD_DATEPICKER_SDF.parse(value));
+            } catch (ParseException e)
+            {
+                throw new RuntimeException("Incorrect value for Employment Satrt Field", e);
+            }
+
+            return this;
+        }
+
         public AddDriverDialog setDriverLicenseNumber(String value)
         {
             fillIfNotNull(LOCATOR_FIELD_DRIVER_LICENSE_NUMBER, value);
@@ -196,7 +232,8 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
         public AddDriverDialog addContact(String contactType, String contact)
         {
             clickNvIconTextButtonByName(LOCATOR_CONTACTS_BUTTON_ADD_MORE_CONTACTS);
-            if (StringUtils.isNotBlank(contactType)){
+            if (StringUtils.isNotBlank(contactType))
+            {
                 selectValueFromMdSelectById(LOCATOR_CONTACTS_FIELD_CONTACT_TYPE, contactType);
             }
             fillIfNotNull(LOCATOR_CONTACTS_FIELD_CONTACT, contact);
@@ -205,8 +242,10 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
 
         public AddDriverDialog addZone(String zoneId, Integer min, Integer max, Integer cost)
         {
+            scrollIntoView("//nv-icon-text-button[@name='Add More Zones']");
             clickNvIconTextButtonByName(LOCATOR_ZONES_BUTTON_ADD_MORE_ZONES);
-            if (StringUtils.isNotBlank(zoneId)){
+            if (StringUtils.isNotBlank(zoneId))
+            {
                 selectValueFromMdSelectById(LOCATOR_ZONES_FIELD_ZONE_ID, zoneId);
             }
             fillIfNotNull(LOCATOR_ZONES_FIELD_MIN, min);
@@ -246,13 +285,17 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
             setLastName(driverInfo.getLastName());
             setDriverLicenseNumber(driverInfo.getLicenseNumber());
             setCodLimit(driverInfo.getCodLimit());
-            if (driverInfo.hasVehicleInfo()){
+            setEmploymentStartDate(driverInfo.getEmploymentStartDate());
+            if (driverInfo.hasVehicleInfo())
+            {
                 addVehicle(driverInfo.getVehicleLicenseNumber(), driverInfo.getVehicleCapacity());
             }
-            if (driverInfo.hasContactsInfo()){
+            if (driverInfo.hasContactsInfo())
+            {
                 addContact(driverInfo.getContactType(), driverInfo.getContact());
             }
-            if (driverInfo.hasZoneInfo()){
+            if (driverInfo.hasZoneInfo())
+            {
                 addZone(driverInfo.getZoneId(), driverInfo.getZoneMin(), driverInfo.getZoneMax(), driverInfo.getZoneCost());
             }
             setUsername(driverInfo.getUsername());
@@ -305,7 +348,8 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
             if (isElementExistFast(LOCATOR_COMMENTS))
             {
                 return getText(LOCATOR_COMMENTS);
-            } else {
+            } else
+            {
                 return null;
             }
         }
@@ -344,7 +388,8 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
 
         public EditDriverDialog editContact(String contactType, String contact)
         {
-            if (StringUtils.isNotBlank(contactType)){
+            if (StringUtils.isNotBlank(contactType))
+            {
                 selectValueFromMdSelectById(LOCATOR_CONTACTS_FIELD_CONTACT_TYPE, contactType);
             }
             fillIfNotNull(LOCATOR_CONTACTS_FIELD_CONTACT, contact);
@@ -353,7 +398,9 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
 
         public EditDriverDialog editZone(String zoneId, Integer min, Integer max, Integer cost)
         {
-            if (StringUtils.isNotBlank(zoneId)){
+            scrollIntoView("//nv-container-box[@label='Preferred Zones + Capacity']");
+            if (StringUtils.isNotBlank(zoneId))
+            {
                 selectValueFromMdSelectById(LOCATOR_ZONES_FIELD_ZONE_ID, zoneId);
             }
             fillIfNotNull(LOCATOR_ZONES_FIELD_MIN, min);
@@ -369,27 +416,33 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
             setLastName(driverInfo.getLastName());
             setDriverLicenseNumber(driverInfo.getLicenseNumber());
             setCodLimit(driverInfo.getCodLimit());
-            if (driverInfo.hasVehicleInfo()){
-                if (isElementExistFast(LOCATOR_VEHICLES_BUTTON_REMOVE)){
+            if (driverInfo.hasVehicleInfo())
+            {
+                if (isElementExistFast(LOCATOR_VEHICLES_BUTTON_REMOVE))
+                {
                     editVehicle(driverInfo.getVehicleLicenseNumber(), driverInfo.getVehicleCapacity());
                 } else
                 {
                     addVehicle(driverInfo.getVehicleLicenseNumber(), driverInfo.getVehicleCapacity());
                 }
             }
-            if (driverInfo.hasContactsInfo()){
+            if (driverInfo.hasContactsInfo())
+            {
                 if (isElementExistFast(LOCATOR_CONTACTS_BUTTON_REMOVE))
                 {
                     editContact(driverInfo.getContactType(), driverInfo.getContact());
-                } else {
+                } else
+                {
                     addContact(driverInfo.getContactType(), driverInfo.getContact());
                 }
             }
-            if (driverInfo.hasZoneInfo()){
+            if (driverInfo.hasZoneInfo())
+            {
                 if (isElementExistFast(LOCATOR_ZONES_BUTTON_REMOVE))
                 {
                     editZone(driverInfo.getZoneId(), driverInfo.getZoneMin(), driverInfo.getZoneMax(), driverInfo.getZoneCost());
-                } else {
+                } else
+                {
                     addZone(driverInfo.getZoneId(), driverInfo.getZoneMin(), driverInfo.getZoneMax(), driverInfo.getZoneCost());
                 }
             }
@@ -410,6 +463,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
         public static final String COLUMN_USERNAME = "username";
         public static final String COLUMN_TYPE = "type";
         public static final String COLUMN_ZONE = "zoneId";
+        public static final String COLUMN_EMPLOYMENT_START_DATE = "employmentStartName";
 
         public static final String ACTION_EDIT = "edit";
         public static final String ACTION_DELETE = "delete";
@@ -430,6 +484,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
                     .put("zoneMin", "zone-preferences-min-waypoints")
                     .put("zoneMax", "zone-preferences-max-waypoints")
                     .put("comments", "comments")
+                    .put(COLUMN_EMPLOYMENT_START_DATE, "_employment-start-date")
                     .build()
             );
             setActionButtonsLocators(ImmutableMap.of(ACTION_CONTACT_INFO, "//button[@aria-label='Contact Info']", ACTION_EDIT, "Edit", ACTION_DELETE, "Delete"));

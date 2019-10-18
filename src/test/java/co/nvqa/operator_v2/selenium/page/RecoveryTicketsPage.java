@@ -174,6 +174,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void selectOrderOutcomeDamaged(String orderOutcomeDamaged)
     {
+        scrollIntoView("//*[@id='orderOutcome(Damaged)']");
         selectValueFromMdSelectById("orderOutcome(Damaged)", orderOutcomeDamaged);
     }
 
