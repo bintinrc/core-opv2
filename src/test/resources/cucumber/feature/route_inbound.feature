@@ -363,6 +363,123 @@ Feature: Route Inbound
       | errorCode    | 103088                            |
       | errorMessage | Route is not assigned to a driver |
 
+  @DeleteOrArchiveRoute
+  Scenario: Get Route Details by Tracking ID - Order's Transactions are Routed: more than 1 route_id (<hiptest-uid>)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver deliver the created parcel successfully
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inbounding -> Route Inbound
+    When Operator get Route Summary Details on Route Inbound page using data below:
+      | hubName      | {hub-name}                    |
+      | fetchBy      | FETCH_BY_TRACKING_ID          |
+      | fetchByValue | KEY_CREATED_ORDER_TRACKING_ID |
+    Then Operator verify the Route Summary Details is correct using data below:
+      | routeId     | GET_FROM_CREATED_ROUTE |
+      | driverName  | {ninja-driver-name}    |
+      | hubName     | {hub-name}             |
+      | routeDate   | GET_FROM_CREATED_ROUTE |
+      | wpPending   | 0                      |
+      | wpPartial   | 0                      |
+      | wpFailed    | 0                      |
+      | wpCompleted | 1                      |
+      | wpTotal     | 1                      |
+
+  @DeleteOrArchiveRoute
+  Scenario: Get Route Details by Tracking ID - Order's Transactions are Routed: only 1 route_id (<hiptest-uid>)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver deliver the created parcel successfully
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inbounding -> Route Inbound
+    When Operator get Route Summary Details on Route Inbound page using data below:
+      | hubName      | {hub-name}                    |
+      | fetchBy      | FETCH_BY_TRACKING_ID          |
+      | fetchByValue | KEY_CREATED_ORDER_TRACKING_ID |
+      | routeId      | GET_FROM_CREATED_ROUTE[1]     |
+    Then Operator verify the Route Summary Details is correct using data below:
+      | routeId     | GET_FROM_CREATED_ROUTE[1] |
+      | driverName  | {ninja-driver-name}       |
+      | hubName     | {hub-name}                |
+      | routeDate   | GET_FROM_CREATED_ROUTE    |
+      | wpPending   | 1                         |
+      | wpPartial   | 0                         |
+      | wpFailed    | 0                         |
+      | wpCompleted | 0                         |
+      | wpTotal     | 1                         |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inbounding -> Route Inbound
+    When Operator get Route Summary Details on Route Inbound page using data below:
+      | hubName      | {hub-name}                    |
+      | fetchBy      | FETCH_BY_TRACKING_ID          |
+      | fetchByValue | KEY_CREATED_ORDER_TRACKING_ID |
+      | routeId      | GET_FROM_CREATED_ROUTE[2]     |
+    Then Operator verify the Route Summary Details is correct using data below:
+      | routeId     | GET_FROM_CREATED_ROUTE[2] |
+      | driverName  | {ninja-driver-name}       |
+      | hubName     | {hub-name}                |
+      | routeDate   | GET_FROM_CREATED_ROUTE    |
+      | wpPending   | 0                         |
+      | wpPartial   | 0                         |
+      | wpFailed    | 0                         |
+      | wpCompleted | 1                         |
+      | wpTotal     | 1                         |
+
+  @DeleteOrArchiveRoute
+  Scenario: Get Route Details by Tracking ID - Order is not Routed (<hiptest-uid>)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inbounding -> Route Inbound
+    When Operator get Route Summary Details on Route Inbound page using data below:
+      | hubName      | {hub-name}                    |
+      | fetchBy      | FETCH_BY_TRACKING_ID          |
+      | fetchByValue | KEY_CREATED_ORDER_TRACKING_ID |
+    Then Operator verify error message displayed on Route Inbound:
+      | status       | 400 Bad Request            |
+      | errorCode    | 103096                     |
+      | errorMessage | Order is not on any route! |
+
+  @DeleteOrArchiveRoute
+  Scenario: Get Route Details by Tracking ID - Order not Found (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inbounding -> Route Inbound
+    When Operator get Route Summary Details on Route Inbound page using data below:
+      | hubName      | {hub-name}           |
+      | fetchBy      | FETCH_BY_TRACKING_ID |
+      | fetchByValue | SOMEWRONGTRACKINGID  |
+    Then Operator verify error message displayed on Route Inbound:
+      | status       | 404 Not Found    |
+      | errorCode    | 103014           |
+      | errorMessage | Order not found! |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

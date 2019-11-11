@@ -59,13 +59,18 @@ public class RouteInboundPage extends OperatorV2SimplePage
         }
     }
 
-    public void fetchRouteByTrackingId(String hubName, String trackingId)
+    public void fetchRouteByTrackingId(String hubName, String trackingId, Long routeId)
     {
         selectValueFromNvAutocomplete("ctrl.hubSelection.searchText", hubName);
         sendKeysById("tracking-id", trackingId);
 
         String continueBtnXpath = "//md-card-content[./label[text()='Scan a tracking ID']]/nv-api-text-button[@name='container.route-inbound.continue']/button";
         click(continueBtnXpath);
+
+        if (routeId != null){
+            pause1s();
+            clickf("//tr[@ng-repeat='routeId in ctrl.routeIds'][td[.='%d']]//button", routeId);
+        }
 
         dismissDriverAttendanceDialog();
 
