@@ -20,10 +20,11 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -49,25 +50,63 @@ public class RouteInboundSteps extends AbstractSteps
     @When("^Operator get Route Summary Details on Route Inbound page using data below:$")
     public void operatorGetRouteDetailsOnRouteInboundPageUsingDataBelow(Map<String, String> mapOfData)
     {
+        mapOfData = resolveKeyValues(mapOfData);
         String hubName = mapOfData.get("hubName");
         String fetchBy = mapOfData.get("fetchBy");
         String fetchByValue = mapOfData.get("fetchByValue");
+        Long routeId;
 
-        switch(fetchBy.toUpperCase())
+        switch (fetchBy.toUpperCase())
         {
             case FETCH_BY_ROUTE_ID:
-                Long routeId = "GET_FROM_CREATED_ROUTE".equals(fetchByValue) ? get(KEY_CREATED_ROUTE_ID) : Long.parseLong(fetchByValue);
+                routeId = "GET_FROM_CREATED_ROUTE".equals(fetchByValue) ? get(KEY_CREATED_ROUTE_ID) : Long.parseLong(fetchByValue);
                 routeInboundPage.fetchRouteByRouteId(hubName, routeId);
                 break;
             case FETCH_BY_TRACKING_ID:
                 String trackingId = "GET_FROM_CREATED_ROUTE".equals(fetchByValue) ? get(KEY_CREATED_ORDER_TRACKING_ID) : fetchByValue;
-                routeInboundPage.fetchRouteByTrackingId(hubName, trackingId);
+                routeId = null;
+                String routeIdValue = mapOfData.get("routeId");
+                if (StringUtils.isNotBlank(routeIdValue))
+                {
+                    routeId = getRouteId(routeIdValue);
+                }
+                routeInboundPage.fetchRouteByTrackingId(hubName, trackingId, routeId);
                 break;
             case FETCH_BY_DRIVER:
                 routeId = get(KEY_CREATED_ROUTE_ID);
                 routeInboundPage.fetchRouteByDriver(hubName, fetchByValue, routeId);
                 break;
         }
+    }
+
+    private Long getRouteId(String value)
+    {
+        Pattern p = Pattern.compile("(GET_FROM_CREATED_ROUTE)(\\[\\s*)(\\d+)(\\s*])");
+        Matcher m = p.matcher(value);
+        if (m.matches())
+        {
+            List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
+            System.out.println(value);
+            System.out.println(routeIds);
+            return routeIds.get(Integer.parseInt(m.group(3)) - 1);
+        } else if (StringUtils.equals(value, "GET_FROM_CREATED_ROUTE"))
+        {
+            return get(KEY_CREATED_ROUTE_ID);
+        } else
+        {
+            return get(value);
+        }
+    }
+
+    @When("^Operator verify error message displayed on Route Inbound:$")
+    public void checkErrorMessage(Map<String, String> data)
+    {
+        String status = data.get("status");
+        String url = data.get("url");
+        String errorCode = data.get("errorCode");
+        String errorMessage = data.get("errorMessage");
+
+        routeInboundPage.verifyErrorMessage(status, url, errorCode, errorMessage);
     }
 
     @Then("^Operator verify the Route Summary Details is correct using data below:$")
@@ -78,32 +117,21 @@ public class RouteInboundSteps extends AbstractSteps
         String hubName = mapOfData.get("hubName");
         String routeDateAsString = mapOfData.get("routeDate");
 
-        Long routeId;
-
-        if("GET_FROM_CREATED_ROUTE".equals(routeIdAsString))
-        {
-            routeId = get(KEY_CREATED_ROUTE_ID);
-        }
-        else
-        {
-            routeId = Long.parseLong(routeIdAsString);
-        }
+        Long routeId = getRouteId(routeIdAsString);
 
         Date routeDate;
 
         try
         {
-            if("GET_FROM_CREATED_ROUTE".equals(routeDateAsString))
+            if ("GET_FROM_CREATED_ROUTE".equals(routeDateAsString))
             {
                 Route route = get(KEY_CREATED_ROUTE);
                 routeDate = ISO_8601_WITHOUT_MILLISECONDS.parse(route.getCreatedAt());
-            }
-            else
+            } else
             {
                 routeDate = ISO_8601_WITHOUT_MILLISECONDS.parse(routeDateAsString);
             }
-        }
-        catch(ParseException ex)
+        } catch (ParseException ex)
         {
             throw new NvTestRuntimeException("Failed to parse route date.", ex);
         }
@@ -152,85 +180,80 @@ public class RouteInboundSteps extends AbstractSteps
             WaypointReservationInfo reservationInfo = new WaypointReservationInfo();
             String value = data.get("reservationId");
 
-            if(StringUtils.equalsIgnoreCase("GET_FROM_CREATED_RESERVATION", value))
+            if (StringUtils.equalsIgnoreCase("GET_FROM_CREATED_RESERVATION", value))
             {
                 value = String.valueOf(get(KEY_CREATED_RESERVATION_ID));
-            }
-            else if(StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_RESERVATION_"))
+            } else if (StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_RESERVATION_"))
             {
                 int index = Integer.parseInt(value.replace("GET_FROM_CREATED_RESERVATION_", "").trim()) - 1;
                 value = String.valueOf(((List<Object>) get(KEY_LIST_OF_CREATED_RESERVATION_IDS)).get(index));
             }
 
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 reservationInfo.setReservationId(value);
             }
 
             value = data.get("location");
 
-            if(StringUtils.equalsIgnoreCase("GET_FROM_CREATED_ADDRESS", value))
+            if (StringUtils.equalsIgnoreCase("GET_FROM_CREATED_ADDRESS", value))
             {
                 reservationInfo.setLocation((Address) get(KEY_CREATED_ADDRESS));
-            }
-            else if(StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_ADDRESS_"))
+            } else if (StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_ADDRESS_"))
             {
                 int index = Integer.parseInt(value.replace("GET_FROM_CREATED_ADDRESS_", "").trim()) - 1;
                 reservationInfo.setLocation(((List<Address>) get(KEY_LIST_OF_CREATED_ADDRESSES)).get(index));
-            }
-            else if(StringUtils.isNotBlank(value))
+            } else if (StringUtils.isNotBlank(value))
             {
                 reservationInfo.setLocation(value);
             }
 
             value = data.get("readyToLatestTime");
 
-            if(StringUtils.equalsIgnoreCase("GET_FROM_CREATED_RESERVATION", value))
+            if (StringUtils.equalsIgnoreCase("GET_FROM_CREATED_RESERVATION", value))
             {
                 Reservation reservation = get(KEY_CREATED_RESERVATION);
                 value = reservation.getReadyDatetime() + " - " + reservation.getLatestDatetime();
-            }
-            else if(StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_RESERVATION_"))
+            } else if (StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_RESERVATION_"))
             {
                 int index = Integer.parseInt(value.replace("GET_FROM_CREATED_RESERVATION_", "").trim()) - 1;
                 Reservation reservation = ((List<Reservation>) get(KEY_LIST_OF_CREATED_RESERVATIONS)).get(index);
                 value = reservation.getReadyDatetime() + " - " + reservation.getLatestDatetime();
             }
 
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 //reservationInfo.setReadyToLatestTime(value);
             }
 
             value = data.get("approxVolume");
 
-            if(StringUtils.equalsIgnoreCase("GET_FROM_CREATED_RESERVATION", value))
+            if (StringUtils.equalsIgnoreCase("GET_FROM_CREATED_RESERVATION", value))
             {
                 Reservation reservation = get(KEY_CREATED_RESERVATION);
                 value = reservation.getApproxVolume();
-            }
-            else if(StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_RESERVATION_"))
+            } else if (StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_RESERVATION_"))
             {
                 int index = Integer.parseInt(value.replace("GET_FROM_CREATED_RESERVATION_", "").trim()) - 1;
                 Reservation reservation = ((List<Reservation>) get(KEY_LIST_OF_CREATED_RESERVATIONS)).get(index);
                 value = reservation.getApproxVolume();
             }
 
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 reservationInfo.setApproxVolume(value);
             }
 
             value = data.get("status");
 
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 reservationInfo.setStatus(value);
             }
 
             value = data.get("receivedParcels");
 
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 reservationInfo.setReceivedParcels(value);
             }
@@ -250,62 +273,59 @@ public class RouteInboundSteps extends AbstractSteps
             WaypointOrderInfo orderInfo = new WaypointOrderInfo();
             String value = data.get("trackingId");
 
-            if(StringUtils.equalsIgnoreCase("GET_FROM_CREATED_ORDER", value))
+            if (StringUtils.equalsIgnoreCase("GET_FROM_CREATED_ORDER", value))
             {
                 value = String.valueOf(get(KEY_CREATED_ORDER_TRACKING_ID));
-            }
-            else if(StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_ORDER_"))
+            } else if (StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_ORDER_"))
             {
                 int index = Integer.parseInt(value.replace("GET_FROM_CREATED_ORDER_", "").trim()) - 1;
                 value = String.valueOf(((List<Object>) get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID)).get(index));
             }
 
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 orderInfo.setTrackingId(value);
             }
 
             value = data.get("location");
 
-            if(StringUtils.equalsIgnoreCase("GET_FROM_CREATED_ORDER", value))
+            if (StringUtils.equalsIgnoreCase("GET_FROM_CREATED_ORDER", value))
             {
                 Order order = get(KEY_CREATED_ORDER);
                 orderInfo.setLocation(order);
-            }
-            else if(StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_ORDER_"))
+            } else if (StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_ORDER_"))
             {
                 int index = Integer.parseInt(value.replace("GET_FROM_CREATED_ORDER_", "").trim()) - 1;
                 orderInfo.setLocation(((List<Order>) get(KEY_LIST_OF_CREATED_ORDER)).get(index));
-            }
-            else if(StringUtils.isNotBlank(value))
+            } else if (StringUtils.isNotBlank(value))
             {
                 orderInfo.setLocation(value);
             }
 
             value = data.get("type");
 
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 orderInfo.setType(value);
             }
 
             value = data.get("status");
 
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 orderInfo.setStatus(value);
             }
 
             value = data.get("cmiCount");
 
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 orderInfo.setCmiCount(value);
             }
 
             value = data.get("routeInboundStatus");
 
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 orderInfo.setRouteInboundStatus(value);
             }
