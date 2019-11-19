@@ -744,7 +744,7 @@ Feature: Edit Order
     And DB Operator verify Delivery waypoint record is updated
 
   @CloseNewWindows
-  Scenario: Operator Tag Order to DP
+  Scenario: Operator Tag Order to DP (uid:63a2e093-e497-4369-b75c-86acbcf5d099)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -780,7 +780,7 @@ Feature: Edit Order
       | 18    |
 
   @CloseNewWindows
-  Scenario: Operator Untag/Remove order from DP
+  Scenario: Operator Untag/Remove order from DP (uid:b8827dd0-a733-4724-a0d2-b9e777d4c1a3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -809,7 +809,7 @@ Feature: Edit Order
       | 35    |
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Operator reschedule fail pickup
+  Scenario: Operator reschedule fail pickup (uid:ae4caac7-69d1-4cb0-adff-b3fb10ed23e9)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
       | v4OrderRequest | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -847,7 +847,7 @@ Feature: Edit Order
   | granularStatus | Pending Pickup |
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Operator reschedule fail delivery
+  Scenario: Operator reschedule fail delivery (uid:72abb7c8-affc-4d26-9fba-22512acf7359)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -888,7 +888,7 @@ Feature: Edit Order
       | granularStatus | Arrived at Sorting Hub |
 
   @CloseNewWindows
-  Scenario: Operator delete order
+  Scenario: Operator delete order (uid:9a593a7f-bbfa-43c0-88f9-568d34afc158)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
@@ -901,7 +901,7 @@ Feature: Edit Order
     Then DB Operator verifies order is deleted
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Operator pull out parcel from a route (OPV2) - PICKUP
+  Scenario: Operator pull out parcel from a route (OPV2) - PICKUP (uid:ed1e8f6c-0483-463f-866a-fb1eec3cd2f6)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -927,7 +927,7 @@ Feature: Edit Order
       | status | PENDING |
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Operator pull out parcel from a route (OPV2) - DELIVERY
+  Scenario: Operator pull out parcel from a route (OPV2) - DELIVERY (uid:b4262bec-47f3-4e1b-a714-575e388656ef)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -954,7 +954,7 @@ Feature: Edit Order
     And DB Operator verifies waypoint for Delivery transaction is deleted from route_waypoint table
 
   @CloseNewWindows
-  Scenario: Update Stamp ID - Update Stamp ID with New Stamp ID
+  Scenario: Update Stamp ID - Update Stamp ID with New Stamp ID (uid:a9c0a02d-1909-4bcc-8a94-3f19217defc0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -973,7 +973,7 @@ Feature: Edit Order
     When Operator switch to Edit Order's window
 
   @CloseNewWindows
-  Scenario: Update Stamp ID - Update Stamp ID with Another Order's Tracking ID
+  Scenario: Update Stamp ID - Update Stamp ID with Another Order's Tracking ID (uid:6892e437-71de-425a-8d50-bb8d2022ab70)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -991,7 +991,7 @@ Feature: Edit Order
       | stampId | - |
 
   @CloseNewWindows
-  Scenario: Update Stamp ID - Update Stamp ID with Stamp ID that have been used before
+  Scenario: Update Stamp ID - Update Stamp ID with Stamp ID that have been used before (uid:a3e412f4-b821-49c8-83ee-9fc882f17dea)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -1005,7 +1005,7 @@ Feature: Edit Order
       | stampId | - |
 
   @CloseNewWindows
-  Scenario: Remove Stamp ID
+  Scenario: Remove Stamp ID (uid:81f446cb-790a-4751-bc57-427a038e3474)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

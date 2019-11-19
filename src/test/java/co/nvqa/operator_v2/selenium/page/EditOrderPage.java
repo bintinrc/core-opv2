@@ -1659,7 +1659,6 @@ public class EditOrderPage extends OperatorV2SimplePage
         private static final String PASSWORD = "1234567890";
         private static final String ENTER_PASSWORD_FIELD_ARIA_LABEL = "Password";
         private static final String DELETE_NV_API_TEXT_BUTTON_LOCATOR = "container.order.edit.delete-order";
-        private static final String DELETE_ORDER_BUTTON_LOCATOR = "//button/[@aria-label='Delete Order' and @aria-hidden='false']";
         private static final String DELETE_ORDER_DONE_SUCCESSFULLY_TOAST_MESSAGE = "Order Deleted";
 
         public DeleteOrderDialog(WebDriver webDriver) {
@@ -1676,7 +1675,6 @@ public class EditOrderPage extends OperatorV2SimplePage
         }
 
         private void clickDeleteOrderButton(){
-            waitUntilVisibilityOfElementLocated(DELETE_ORDER_BUTTON_LOCATOR);
             clickNvApiTextButtonByNameAndWaitUntilDone(DELETE_NV_API_TEXT_BUTTON_LOCATOR);
         }
 

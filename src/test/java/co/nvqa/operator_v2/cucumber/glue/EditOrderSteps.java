@@ -297,13 +297,12 @@ public class EditOrderSteps extends AbstractSteps
          */
         String trackingIdOfExistingOrder = get(KEY_TRACKING_ID_BY_ACCESSING_STAMP_ID);
         if (containsKey(stampId))
-    {
-        if (StringUtils.equalsIgnoreCase(stampId, "KEY_ANOTHER_ORDER_TRACKING_ID")) {
-            trackingIdOfExistingOrder = get(stampId);
+            {
+            if (StringUtils.equalsIgnoreCase(stampId, "KEY_ANOTHER_ORDER_TRACKING_ID")) {
+                trackingIdOfExistingOrder = get(stampId);
+            }
             stampId = get(stampId);
-
-        }
-    }
+            }
         editOrderPage.editOrderStampToExisting(stampId, trackingIdOfExistingOrder);
     }
 
