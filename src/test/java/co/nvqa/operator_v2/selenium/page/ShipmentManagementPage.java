@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.pdf.ShipmentAirwayBill;
 import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
@@ -37,6 +38,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     public static final String LOCATOR_FIELD_START_HUB = "start-hub";
     public static final String LOCATOR_FIELD_END_HUB = "end-hub";
     public static final String LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON = "Create";
+    public static final String LOCATOR_CREATE_ANOTHER_SHIPMENT_CONFIRMATION_BUTTON = "Create Another";
     public static final String LOCATOR_COMMENT_TEXT_AREA = "container.shipment-management.comments-optional";
     public static final String LOCATOR_SELCT_FILTERS_PRESET = "commons.preset.load-filter-preset";
 
@@ -74,18 +76,21 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
 
     public void selectStartHub(String hubName)
     {
+        pause200ms();
         selectValueFromMdSelectById(LOCATOR_FIELD_START_HUB, hubName);
         pause200ms();
     }
 
     public void selectEndHub(String hubName)
     {
+        pause200ms();
         selectValueFromMdSelectById(LOCATOR_FIELD_END_HUB, hubName);
         pause200ms();
     }
 
     public void fillFieldComments(String comments)
     {
+        pause200ms();
         sendKeysById(LOCATOR_COMMENT_TEXT_AREA, comments);
         pause200ms();
     }
@@ -163,7 +168,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         assertEquals("shipment(" + source + ") not exist", "tr", scan.getTagName());
     }
 
-    public void createShipment(ShipmentInfo shipmentInfo)
+    public void createShipment(ShipmentInfo shipmentInfo, boolean isNextOrder)
     {
         clickNvIconTextButtonByName(LOCATOR_CREATE_SHIPMENT_BUTTON);
 
@@ -171,16 +176,34 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         pause200ms();
 
         selectStartHub(shipmentInfo.getOrigHubName());
+        pause200ms();
         selectEndHub(shipmentInfo.getDestHubName());
+        pause200ms();
         fillFieldComments(shipmentInfo.getComments());
 
-        clickNvApiTextButtonByNameAndWaitUntilDone(LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
+        if (isNextOrder)
+        {
+            clickNvApiTextButtonByNameAndWaitUntilDone(LOCATOR_CREATE_ANOTHER_SHIPMENT_CONFIRMATION_BUTTON);
+        } else
+        {
+            clickNvApiTextButtonByNameAndWaitUntilDone(LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
+        }
 
         String toastMessage = getToastTopText();
         assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage, allOf(containsString("Shipment"), containsString("created")));
         long shipmentId = Long.parseLong(toastMessage.split(" ")[1]);
         confirmToast(toastMessage, false);
         shipmentInfo.setId(shipmentId);
+    }
+
+    public Long createAnotherShipment() {
+        clickNvApiTextButtonByNameAndWaitUntilDone(LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
+        String toastMessage = getToastTopText();
+        assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage, allOf(containsString("Shipment"), containsString("created")));
+        long shipmentId = Long.parseLong(toastMessage.split(" ")[1]);
+        confirmToast(toastMessage, false);
+
+        return shipmentId;
     }
 
     public void editShipment(ShipmentInfo shipmentInfo)
@@ -239,6 +262,13 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
         ShipmentInfo actualShipmentInfo = shipmentsTable.readEntity(1);
         expectedShipmentInfo.compareWithActual(actualShipmentInfo);
+    }
+
+    public void validateShipmentId(Long shipmentId)
+    {
+        shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
+        String expectedShipmentId = getText("//td[@nv-table-highlight='filter.id']");
+        assertEquals("Shipment ID is not the same : ", expectedShipmentId, String.valueOf(shipmentId));
     }
 
     public void verifyOpenedShipmentDetailsPageIsTrue(Long shipmentId, String trackingId)

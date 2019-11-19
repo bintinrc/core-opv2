@@ -245,6 +245,39 @@ Feature: Shipment Global Inbound
     And Operator input the Invalid Tracking ID Status inside the shipment
     Then Operator will get the alert of CMI Condition shown
 
+  Scenario Outline: Shipment Global Inbound with Priority Level - <scenarioName> (<hiptest-uid>)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id-2} } |
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Operator put created parcel to shipment
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    And Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
+    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
+    When Operator select the destination hub {hub-name-2} of the shipment
+    And Operator select the shipment type
+    And Operator select the created shipment by Shipment ID
+    And Operator click the add shipment button then continue
+    Given API Operator update priority level of an order to = "<priorityLevel>"
+    And Operator input the scanned Tracking ID inside the shipment
+    Then API Operator verify order info after Global Inbound
+    Then Operator verifies priority level info is correct using data below:
+      | priorityLevel           | <priorityLevel>           |
+      | priorityLevelColorAsHex | <priorityLevelColorAsHex> |
+    And Operator go to menu Inter-Hub -> Shipment Management
+    And Operator filter Shipment Status = Completed on Shipment Management page
+    And Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify inbounded Shipment exist on Shipment Management page
+    Examples:
+      | Note         | scenarioName | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
+      | Level 0      | Level 0      | uid:34f8948e-a40d-45e8-a2e3-fe9ca43f56f2 | 0             | #e8e8e8                 |
+      | Level 1      | Level 1      | uid:c6f7d1db-da65-46ec-9816-5951fed5e20b | 1             | #ffff00                 |
+      | Level 2 - 90 | Level 2 - 90 | uid:e5a32972-575a-43c5-8ec8-99e0c4fa9f1c | 42            | #ffa500                 |
+      | Level > 90   | Level > 90   | uid:12e7d971-fe8a-46b5-a714-a65ae12bd96b | 91            | #ff0000                 |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

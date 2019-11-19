@@ -951,7 +951,7 @@ public class OperatorV2SimplePage extends SimplePage
     public void selectValueFromMdSelectById(String mdSelectId, String value)
     {
         clickf(".//md-select[starts-with(@id, '%s')]", mdSelectId);
-        pause100ms();
+        pause1s();
         clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,\"%s\") or contains(./div/text(),\"%<s\")]", value);
         pause50ms();
     }
@@ -959,7 +959,7 @@ public class OperatorV2SimplePage extends SimplePage
     public void selectByIndexFromMdSelectById(String mdSelectId, int index)
     {
         clickf("//md-select[starts-with(@id, '%s')]", mdSelectId);
-        pause100ms();
+        pause1s();
         clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[%d]", index);
         pause50ms();
     }

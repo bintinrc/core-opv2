@@ -62,6 +62,8 @@ public class ShipmentManagementSteps extends AbstractSteps
     @When("^Operator filter ([^\"]*) = ([^\"]*) on Shipment Management page$")
     public void fillSearchFilter(String filter, String value)
     {
+//        final String mawb = get("tanias'mawb");
+
         shipmentManagementPage.addFilter(filter, value);
         putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, filter, value);
     }
@@ -102,6 +104,12 @@ public class ShipmentManagementSteps extends AbstractSteps
     public void operatorCreateShipmentOnShipmentManagementPageUsingDataBelow(Map<String, String> mapOfData)
     {
         List<Order> listOfOrders;
+        boolean isNextOrder = false;
+
+        if (get("isNextOrder") != null)
+        {
+            isNextOrder = get("isNextOrder");
+        }
 
         if(containsKey(KEY_LIST_OF_CREATED_ORDER))
         {
@@ -120,15 +128,31 @@ public class ShipmentManagementSteps extends AbstractSteps
         shipmentInfo.fromMap(mapOfData);
         shipmentInfo.setOrdersCount(listOfOrders.size());
 
-        shipmentManagementPage.createShipment(shipmentInfo);
+        shipmentManagementPage.createShipment(shipmentInfo, isNextOrder);
 
         if(StringUtils.isBlank(shipmentInfo.getShipmentType()))
         {
             shipmentInfo.setShipmentType("AIR_HAUL");
         }
 
+//        final String mawb = ("AUTO".equalsIgnoreCase(shipmentInfo.getMawb()) && !StringUtils.isBlank(shipmentInfo.getMawb())) ? "AUTO-" + randomLong(0000000, 9999999) : null;
+//        put("tanias'mawb", mawb);
+//        shipmentInfo.setMawb(mawb);
+
         put(KEY_SHIPMENT_INFO, shipmentInfo);
         put(KEY_CREATED_SHIPMENT_ID, shipmentInfo.getId());
+
+        if (isNextOrder)
+        {
+            Long secondShipmentId = shipmentManagementPage.createAnotherShipment();
+            shipmentInfo.setId(secondShipmentId);
+            Long shipmentIdBefore = get(KEY_CREATED_SHIPMENT_ID);
+            List<Long> listOfShipmentId = new ArrayList<>();
+            listOfShipmentId.add(shipmentIdBefore);
+            listOfShipmentId.add(secondShipmentId);
+
+            put(KEY_LIST_OF_CREATED_SHIPMENT_ID, listOfShipmentId);
+        }
     }
 
     @When("^Operator edit Shipment on Shipment Management page using data below:$")
@@ -144,6 +168,16 @@ public class ShipmentManagementSteps extends AbstractSteps
     {
         ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
         shipmentManagementPage.validateShipmentInfo(shipmentInfo.getId(), shipmentInfo);
+    }
+
+    @Then("Operator verify parameters of the created multiple shipment on Shipment Management page")
+    public void operatorVerifyParametersOfTheCreatedMultipleShipmentOnShipmentManagementPage()
+    {
+        List<Long> shipmentId = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
+        for (Long shipmentIds : shipmentId)
+        {
+            shipmentManagementPage.validateShipmentId(shipmentIds);
+        }
     }
 
     @Then("^Operator verify the following parameters of the created shipment on Shipment Management page:$")
@@ -248,5 +282,11 @@ public class ShipmentManagementSteps extends AbstractSteps
         byte[] shipmentAirwayBill = get(KEY_SHIPMENT_AWB);
         ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
         shipmentManagementPage.downloadPdfAndVerifyTheDataIsCorrect(shipmentInfo, shipmentAirwayBill);
+    }
+
+    @Given("Operator intends to create a new Shipment directly from the Shipment Toast")
+    public void operatorIntendsToCreateANewShipmentDirectlyFromTheShipmentToast() {
+        boolean isNextOrder = true;
+        put("isNextOrder", isNextOrder);
     }
 }

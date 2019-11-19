@@ -16,6 +16,17 @@ Feature: Shipment Management
     Then Operator verify parameters of the created shipment on Shipment Management page
 
   @DeleteShipment
+  Scenario: Create Shipment with New Flow - With Create Another (uid:fe26bb22-0fef-4036-b3fe-a4975ca058e8)
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given Operator intends to create a new Shipment directly from the Shipment Toast
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created multiple shipment on Shipment Management page
+
+  @DeleteShipment
   Scenario: Edit Shipment (uid:5fbdb7d5-0a54-42de-bd8e-960ad26ff43e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -93,6 +104,24 @@ Feature: Shipment Management
     And Operator cancel the created shipment on Shipment Management page
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Cancelled |
+
+  @DeleteShipment
+  Scenario Outline: Shipment Searching by Filters - <scenarioName> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator filter <filterName> = <filterValue> on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    Examples:
+      | Note                                            | scenarioName                                     | hiptest-uid                              | filterName      | filterValue  |
+      | Searching Shipment by Start Hub                 | Searching Shipment by Start Hub                  | uid:54a19c29-6f50-41b6-a248-2565513bf3d4 | Start Hub       | {hub-name}   |
+      | Searching Shipment by End Hub                   | Searching Shipment by End Hub                    | uid:359d17e1-60e8-45cd-a7d4-5380c2814cfe | End Hub         | {hub-name-2} |
+      | Searching Shipment by Shipment Type             | Searching Shipment by Shipment Type              | uid:7e524790-c0f5-4f99-a36b-51a0a6428013 | Shipment Type   | Air Haul     |
+      | Searching Shipment by Shipment Status - PENDING | Searching Shipment by Shipment Status - PENDING  | uid:48d0c501-d985-469d-bf08-77da6b623b05 | Shipment Status | Pending      |
 
   @DeleteFilersPreset
   Scenario: Save Shipment filters as preset (uid:1c96e7a3-8636-4ece-ad4f-722baaa6d4ea)
