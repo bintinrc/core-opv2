@@ -112,6 +112,19 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         clickButtonByAriaLabel("Create New Ticket");
     }
 
+    public void clickEditButton() {clickButtonByAriaLabel("Edit");}
+
+    public void clickCancelTicket() {clickButtonByAriaLabel("Cancel Ticket");}
+
+    public void clickDeleteButton() {clickButtonByAriaLabel("Delete");}
+
+    public void verifyTicketStatus(String expectedStatus)
+    {
+        clickEditButton();
+        String status = getTicketStatusText();
+        assertEquals(expectedStatus.toLowerCase(),status.toLowerCase());
+
+    }
     public void selectEntrySource(String entrySource)
     {
         selectValueFromMdSelectById("entry-source", entrySource);

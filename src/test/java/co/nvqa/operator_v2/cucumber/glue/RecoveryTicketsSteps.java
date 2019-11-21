@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -90,5 +91,34 @@ public class RecoveryTicketsSteps extends AbstractSteps
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         boolean isTicketCreated = recoveryTicketsPage.verifyTicketIsExist(trackingId);
         assertTrue(f("Ticket '%s' does not created.", trackingId), isTicketCreated);
+    }
+
+    @Then("Operator searches the created ticket and clicks on Edit button")
+    public void operatorSearchesAndEditsTheTicket() {
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        recoveryTicketsPage.searchTableByTrackingId(trackingId);
+        pause2s();
+        recoveryTicketsPage.clickEditButton();
+    }
+
+    @Then("Operator clicks on Cancel Ticket")
+    public void operatorClicksOnCancelTicket() {
+        recoveryTicketsPage.clickCancelTicket();
+    }
+
+    @And("Operator clicks on Delete on pop up")
+    public void operatorClicksOnDeleteOnPopUp() {
+        recoveryTicketsPage.clickDeleteButton();
+        pause1s();
+    }
+
+    @Then("Operator verifies that the status of ticket is     \"([^\"]*)\'  ")
+    public void verifyStatusOfTicketIsCancelled(String status) {
+
+    }
+
+    @Then("Operator verifies that the status of ticket is {string}")
+    public void operatorVerifiesThatTheStatusOfTicketIs(String expectedStatus) {
+        recoveryTicketsPage.verifyTicketStatus(expectedStatus);
     }
 }

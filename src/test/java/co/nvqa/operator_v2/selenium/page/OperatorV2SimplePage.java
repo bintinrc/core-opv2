@@ -1257,4 +1257,11 @@ public class OperatorV2SimplePage extends SimplePage
         waitUntilVisibilityOfElementLocated("//div[@aria-hidden='false']/md-menu-content");
         clickf("//div[@aria-hidden='false']/md-menu-content/md-menu-item/button/span[contains(text(), '%s')]", childMenuName);
     }
+
+    public String getTicketStatusText()
+    {
+        String xpathExpression= "//md-select[contains(@aria-label,'Ticket Status')]";
+        String status = getText(xpathExpression).trim();
+        return status;
+    }
 }

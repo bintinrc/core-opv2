@@ -5,6 +5,7 @@ Feature: Recovery Tickets
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+
   Scenario: Create damage ticket on Recovery Tickets menu (uid:43d733f5-61e2-4877-82c2-ae1ac3220a2b)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -13,7 +14,7 @@ Feature: Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
       | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | {hub-name}         |
+      | investigatingHub        | {hub-name}         | 
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
@@ -43,6 +44,32 @@ Feature: Recovery Tickets
       | ticketNotes             | GENERATED          |
     Then Operator verify ticket is created successfully on page Recovery Tickets
 
+  Scenario: Delete damaged recovery ticket
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | DAMAGED            |
+      | ticketSubType           | IMPROPER PACKAGING |
+      | parcelLocation          | DAMAGED RACK       |
+      | liability               | NV DRIVER          |
+      | damageDescription       | GENERATED          |
+      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    And Operator searches the created ticket and clicks on Edit button
+    And Operator clicks on Cancel Ticket
+    And Operator clicks on Delete on pop up
+    Then Operator verifies that the status of ticket is "Cancelled"
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
+
+
+
