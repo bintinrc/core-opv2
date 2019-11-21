@@ -743,6 +743,285 @@ Feature: Edit Order
     And DB Operator verify Delivery transaction record is updated for the created order
     And DB Operator verify Delivery waypoint record is updated
 
+  @CloseNewWindows
+  Scenario: Operator Tag Order to DP (uid:63a2e093-e497-4369-b75c-86acbcf5d099)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Then Operator go to menu Order -> All Orders
+    And Operator open page of the created order from All Orders page
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator click Delivery -> DP Drop Off Setting on Edit Order page
+    And Operator tags order to "12356" DP on Edit Order Page
+    Then Operator verifies delivery is indicated by 'Ninja Collect' icon on Edit Order Page
+    When DB Operator get DP address by ID = "12356"
+    Then DB Operator verifies orders record using data below:
+      | toAddress1 | GET_FROM_CREATED_ORDER |
+      | toAddress2 | GET_FROM_CREATED_ORDER |
+      | toPostcode | GET_FROM_CREATED_ORDER |
+      | toCity     | GET_FROM_CREATED_ORDER |
+      | toCountry  | GET_FROM_CREATED_ORDER |
+      | toState    |                        |
+      | toDistrict |                        |
+    Then DB Operator verify next Delivery transaction values are updated for the created order:
+      | distribution_point_id | 12356 |
+      | address1              | GET_FROM_CREATED_ORDER      |
+      | address2              | GET_FROM_CREATED_ORDER      |
+      | postcode              | GET_FROM_CREATED_ORDER      |
+      | city                  | GET_FROM_CREATED_ORDER      |
+      | country               | GET_FROM_CREATED_ORDER      |
+    And Operator verifies Delivery Details are updated on Edit Order Page
+    And DB Operator verify Delivery waypoint record is updated
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 18    |
+
+  @CloseNewWindows
+  Scenario: Operator Untag/Remove order from DP (uid:b8827dd0-a733-4724-a0d2-b9e777d4c1a3)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    When Operator go to menu Order -> All Orders
+    When Operator open page of the created order from All Orders page
+    And Operator click Delivery -> DP Drop Off Setting on Edit Order page
+    And Operator tags order to "12356" DP on Edit Order Page
+    And Operator click Delivery -> DP Drop Off Setting on Edit Order page
+    And Operator untags order from DP on Edit Order Page
+    Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
+#  initially city is ""
+    Then DB Operator verify next Delivery transaction values are updated for the created order:
+      | distribution_point_id | null |
+      | address1              | GET_FROM_CREATED_ORDER      |
+      | address2              | GET_FROM_CREATED_ORDER      |
+      | postcode              | GET_FROM_CREATED_ORDER      |
+      | city                  | GET_FROM_CREATED_ORDER      |
+      | country               | GET_FROM_CREATED_ORDER      |
+    And DB Operator verifies delivery info is updated in order record
+    And Operator verifies Delivery Details are updated on Edit Order Page
+    And DB Operator verify Delivery waypoint record is updated
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 35    |
+
+  @CloseNewWindows @DeleteOrArchiveRoute
+  Scenario: Operator reschedule fail pickup (uid:ae4caac7-69d1-4cb0-adff-b3fb10ed23e9)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Routing -> Route Logs
+    When Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator open Route Manifest of created route from Route Logs page
+    When Operator fail pickup waypoint from Route Manifest page
+    When Operator go to menu Order -> All Orders
+    When Operator open page of the created order from All Orders page
+    And Operator click Order Settings -> Reschedule Order on Edit Order page
+    When Operator reschedule Pickup on Edit Order Page
+    | senderName        | test sender name         |
+    | senderContact     | +9727894434              |
+    | senderEmail       | test@mail.com            |
+    | internalNotes     | test internalNotes       |
+    | pickupDate        | {{next-1-day-yyyy-MM-dd}}|
+    | pickupTimeslot    | 9AM - 12PM               |
+    | country           | Singapore                |
+    | city              | Singapore                |
+    | address1          | 116 Keng Lee Rd          |
+    | address2          | 15                       |
+    | postalCode        | 308402                   |
+  And DB Operator verifies pickup info is updated in order record
+  And DB Operator verify Pickup waypoint record for Pending transaction
+  And DB Operator verifies orders record using data below:
+  | status         | Pending        |
+  | granularStatus | Pending Pickup |
+
+  @CloseNewWindows @DeleteOrArchiveRoute
+  Scenario: Operator reschedule fail delivery (uid:72abb7c8-affc-4d26-9fba-22512acf7359)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator set tags of the new created route to [{route-tag-id}]
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Routing -> Route Logs
+    When Operator set filter using data below and click 'Load Selection'
+      | routeDateFrom | YESTERDAY  |
+      | routeDateTo   | TODAY      |
+      | hubName       | {hub-name} |
+    And Operator open Route Manifest of created route from Route Logs page
+    When Operator fail delivery waypoint from Route Manifest page
+    When Operator go to menu Order -> All Orders
+    When Operator open page of the created order from All Orders page
+    And Operator click Order Settings -> Reschedule Order on Edit Order page
+    When Operator reschedule Delivery on Edit Order Page
+      | recipientName        | test recipient name      |
+      | recipientContact     | +9727894434              |
+      | recipientEmail       | test@mail.com            |
+      | internalNotes        | test internalNotes       |
+      | deliveryDate         | {{next-1-day-yyyy-MM-dd}}|
+      | deliveryTimeslot     | 9AM - 12PM               |
+      | country              | Singapore                |
+      | city                 | Singapore                |
+      | address1             | 116 Keng Lee Rd          |
+      | address2             | 15                       |
+      | postalCode           | 308402                   |
+    And DB Operator verifies delivery info is updated in order record
+    And DB Operator verify Delivery waypoint record for Pending transaction
+    And DB Operator verifies orders record using data below:
+      | status         | Transit                |
+      | granularStatus | Arrived at Sorting Hub |
+
+  @CloseNewWindows
+  Scenario: Operator delete order (uid:9a593a7f-bbfa-43c0-88f9-568d34afc158)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    When Operator open page of the created order from All Orders page
+    And Operator click Order Settings -> Delete Order on Edit Order page
+    And Operator delete order on Edit Order Page
+    And Operator verifies All Orders Page is displayed
+    Then DB Operator verifies order is deleted
+
+  @CloseNewWindows @DeleteOrArchiveRoute
+  Scenario: Operator pull out parcel from a route (OPV2) - PICKUP (uid:ed1e8f6c-0483-463f-866a-fb1eec3cd2f6)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator start the route
+    And API Operator get order details
+    When Operator go to menu Order -> All Orders
+    When Operator open page of the created order from All Orders page
+    And Operator click Pickup -> Pull from Route on Edit Order page
+    And Operator pull out parcel from the route for Delivery on Edit Order page
+    Then Operator verify Pickup transaction on Edit order page using data below:
+      | routeId |           |
+    And Operator verify order event on Edit order page using data below:
+      | name    | PULL OUT OF ROUTE |
+    And DB Operator verify order_events record for the created order:
+      | type | 33 |
+    Then DB Operator verify next Pickup transaction values are updated for the created order:
+      | routeId | null |
+    And DB Operator verify Pickup waypoint of the created order using data below:
+      | status | PENDING |
+
+  @CloseNewWindows @DeleteOrArchiveRoute
+  Scenario: Operator pull out parcel from a route (OPV2) - DELIVERY (uid:b4262bec-47f3-4e1b-a714-575e388656ef)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator start the route
+    And API Operator get order details
+    Then Operator go to menu Order -> All Orders
+    And Operator open page of the created order from All Orders page
+    When Operator click Delivery -> Pull from Route on Edit Order page
+    And Operator pull out parcel from the route for Delivery on Edit Order page
+    Then Operator verify Delivery transaction on Edit order page using data below:
+      | routeId |   |
+    Then Operator verify order event on Edit order page using data below:
+      | name    | PULL OUT OF ROUTE |
+    And DB Operator verify order_events record for the created order:
+      | type | 33 |
+    Then DB Operator verify next Delivery transaction values are updated for the created order:
+      | routeId | null |
+    And DB Operator verify Delivery waypoint of the created order using data below:
+      | status | PENDING |
+    And DB Operator verifies waypoint for Delivery transaction is deleted from route_waypoint table
+
+  @CloseNewWindows
+  Scenario: Update Stamp ID - Update Stamp ID with New Stamp ID (uid:a9c0a02d-1909-4bcc-8a94-3f19217defc0)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of the created order from All Orders page
+    When Operator change Stamp ID of the created order to "GENERATED" on Edit order page
+    Then Operator verify next order info on Edit order page:
+      | stampId | KEY_STAMP_ID |
+    And DB Core Operator gets Order by Stamp ID
+    When Operator go to menu Order -> All Orders
+    Then Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID |
+      | searchLogic | contains            |
+      | searchTerm  | KEY_STAMP_ID        |
+    When Operator switch to Edit Order's window
+
+  @CloseNewWindows
+  Scenario: Update Stamp ID - Update Stamp ID with Another Order's Tracking ID (uid:6892e437-71de-425a-8d50-bb8d2022ab70)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    When Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    When Operator switch to Edit Order's window
+    And DB Core Operator gets random trackingId
+    When Operator unable to change Stamp ID of the created order to "KEY_ANOTHER_ORDER_TRACKING_ID" on Edit order page
+    And Operator refresh page
+    Then Operator verify next order info on Edit order page:
+      | stampId | - |
+
+  @CloseNewWindows
+  Scenario: Update Stamp ID - Update Stamp ID with Stamp ID that have been used before (uid:a3e412f4-b821-49c8-83ee-9fc882f17dea)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of the created order from All Orders page
+    And DB Core Operator gets order with Stamp ID
+    And Operator unable to change Stamp ID of the created order to "KEY_LAST_STAMP_ID" on Edit order page
+    And Operator refresh page
+    Then Operator verify next order info on Edit order page:
+      | stampId | - |
+
+  @CloseNewWindows
+  Scenario: Remove Stamp ID (uid:81f446cb-790a-4751-bc57-427a038e3474)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of the created order from All Orders page
+    When Operator change Stamp ID of the created order to "GENERATED" on Edit order page
+    And Operator remove Stamp ID of the created order on Edit order page
+    And Operator verify next order info on Edit order page:
+      | stampId | - |
+    When Operator go to menu Order -> All Orders
+    Then Operator can't find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_STAMP_ID                  |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

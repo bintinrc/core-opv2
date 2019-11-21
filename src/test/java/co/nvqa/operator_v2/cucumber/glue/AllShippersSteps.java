@@ -631,4 +631,10 @@ public class AllShippersSteps extends AbstractSteps
         address.getMilkrunSettings().clear();
         address.setMilkRun(false);
     }
+
+    @Then("^Operator verifies All Shippers Page is displayed$")
+    public void operatorVerifiesAllOrdersPageIsDispalyed()
+    {
+        allShippersPage.waitUntilPageLoaded();
+    }
 }

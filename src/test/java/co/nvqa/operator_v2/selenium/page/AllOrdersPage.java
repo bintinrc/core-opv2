@@ -5,8 +5,10 @@ import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction;
 import co.nvqa.operator_v2.util.TestUtils;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 import java.io.File;
 import java.util.Date;
@@ -133,6 +135,12 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         super.waitUntilPageLoaded();
         waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading...']");
+    }
+
+    public void verifyItsCurrentPage()
+    {
+        super.waitUntilPageLoaded();
+        assertTrue(getWebDriver().getCurrentUrl().endsWith("/order"));
     }
 
     public void downloadSampleCsvFile()
@@ -558,6 +566,47 @@ public class AllOrdersPage extends OperatorV2SimplePage
         pause100ms();
         getWebDriver().switchTo().window(mainWindowHandle); // Force selenium to go back to the last active tab/window if new tab/window is opened.
         waitUntilInvisibilityOfElementLocated(searchButtonXpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
+    }
+
+    public void specificSearch(Category category, SearchLogic searchLogic, String searchTerm, String trackingId)
+    {
+        String mainWindowHandle = getWebDriver().getWindowHandle();
+        waitUntilPageLoaded();
+
+        selectValueFromMdSelectByIdContains("category", category.getValue());
+        selectValueFromMdSelectByIdContains("search-logic", searchLogic.getValue());
+        sendKeys("//input[starts-with(@id, 'fl-input') or starts-with(@id, 'searchTerm')]", searchTerm);
+        pause3s(); // Wait until the page finished matching the tracking ID.
+        String matchedTrackingIdXpathExpression = String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope//span[text()='%s']", trackingId);
+        String searchButtonXpathExpression = "//nv-api-text-button[@name='commons.search']";
+
+        if(isElementExistFast(matchedTrackingIdXpathExpression))
+        {
+            click(matchedTrackingIdXpathExpression);
+            waitUntilNewWindowOrTabOpened();
+        }
+        else
+        {
+            click(searchButtonXpathExpression);
+        }
+
+        pause100ms();
+        getWebDriver().switchTo().window(mainWindowHandle); // Force selenium to go back to the last active tab/window if new tab/window is opened.
+        waitUntilInvisibilityOfElementLocated(searchButtonXpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
+    }
+
+    public void searchWithoutResult(Category category, SearchLogic searchLogic, String searchTerm){
+        waitUntilPageLoaded();
+        selectValueFromMdSelectByIdContains("category", category.getValue());
+        selectValueFromMdSelectByIdContains("search-logic", searchLogic.getValue());
+        sendKeys("//input[starts-with(@id, 'fl-input') or starts-with(@id, 'searchTerm')]", searchTerm);
+        pause3s(); // Wait until the page finished matching the tracking ID.
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.search");
+        Actions actions = new Actions(getWebDriver());
+        actions.sendKeys(Keys.ESCAPE).build().perform();
+        clickNvApiTextButtonByNameAndWaitUntilDone("commons.search");
+        pause100ms();
+        waitUntilVisibilityOfElementLocated("//div[@ng-message='noResult']");
     }
 
     public void filterTableOrderByTrackingId(String trackingId)

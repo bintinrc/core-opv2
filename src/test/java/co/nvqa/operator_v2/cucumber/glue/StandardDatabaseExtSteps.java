@@ -23,10 +23,12 @@ import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import io.cucumber.datatable.DataTable;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.hamcrest.Matchers;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
+import org.opentest4j.AssertionFailedError;
 
 import java.time.*;
 import java.util.List;
@@ -141,54 +143,57 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     public void dbOperatorVerifyPickupWaypointRecordUpdated() {
         String transactionType = "Pickup";
         Order order = get(KEY_CREATED_ORDER);
-        String trackingId = order.getTrackingId();
 
         List<Transaction> transactions = order.getTransactions();
 
-        Optional<Transaction> transactionOptional = transactions.stream().filter(t -> StringUtils.equalsIgnoreCase(t.getType(), transactionType)).findFirst();
+        Transaction transaction = transactions.stream()
+                .filter(t -> StringUtils.equalsIgnoreCase(t.getType(), transactionType)).findFirst()
+                .orElseThrow(() -> new AssertionFailedError(f("%s transaction not found for order ID = '%s'.", transactionType, order.getId())));
 
-        if (transactionOptional.isPresent()) {
-            Transaction transaction = transactionOptional.get();
-            Long waypointId = transaction.getWaypointId();
-            Assert.assertNotNull(f("%s waypoint Id", transactionType), waypointId);
+        validatePickupInWaypointRecord(order, transactionType, transaction.getWaypointId());
+    }
 
-            Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
-            assertEquals(f("%s waypoint [%d] city", transactionType, waypointId), order.getFromCity(), actualWaypoint.getCity());
-            assertEquals(f("%s waypoint [%d] country", transactionType, waypointId), order.getFromCountry(), actualWaypoint.getCountry());
-            assertEquals(f("%s waypoint [%d] address1", transactionType, waypointId), order.getFromAddress1(), actualWaypoint.getAddress1());
-            assertEquals(f("%s waypoint [%d] address2", transactionType, waypointId), order.getFromAddress2(), actualWaypoint.getAddress2());
-            assertEquals(f("%s waypoint [%d] postcode", transactionType, waypointId), order.getFromPostcode(), actualWaypoint.getPostcode());
-            assertEquals(f("%s waypoint [%d] timewindowId", transactionType, waypointId), order.getPickupTimeslot().getId(), Integer.parseInt(actualWaypoint.getTimeWindowId()));
-        } else {
-            fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
-        }
+    @Then("^DB Operator verify Pickup waypoint record for (.+) transaction$")
+    public void dbOperatorVerifyNewPickupWaypointRecordCreated(String transactionStatus) {
+        Order order = get(KEY_CREATED_ORDER);
+        String transactionType = "PP";
+        List<TransactionEntity> transactions = getCoreJdbc().findTransactionByOrderIdAndType(order.getId(), transactionType);
+
+        TransactionEntity transaction = transactions.stream()
+                .filter(t -> StringUtils.equalsIgnoreCase(t.getType(), transactionType) &&
+                        StringUtils.equalsIgnoreCase(t.getStatus(), transactionStatus)).findFirst()
+                .orElseThrow(() -> new AssertionFailedError(f("%s transaction in %s status not found for order ID = '%s'.",
+                        transactionType, transactionStatus, order.getId())));
+
+        validatePickupInWaypointRecord(order, transactionType, transaction.getWaypointId());
     }
 
     @Then("^DB Operator verify Delivery waypoint record is updated$")
     public void dbOperatorVerifyDeliveryWaypointRecordUpdated() {
         String transactionType = "Delivery";
         Order order = get(KEY_CREATED_ORDER);
-        String trackingId = order.getTrackingId();
-
         List<Transaction> transactions = order.getTransactions();
 
-        Optional<Transaction> transactionOptional = transactions.stream().filter(t -> StringUtils.equalsIgnoreCase(t.getType(), transactionType)).findFirst();
+        Transaction transaction = transactions.stream()
+                .filter(t -> StringUtils.equalsIgnoreCase(t.getType(), transactionType)).findFirst()
+                .orElseThrow(() -> new AssertionFailedError(f("%s transaction not found for order ID = '%s'.", transactionType, order.getId())));
 
-        if (transactionOptional.isPresent()) {
-            Transaction transaction = transactionOptional.get();
-            Long waypointId = transaction.getWaypointId();
-            Assert.assertNotNull(f("%s waypoint Id", transactionType), waypointId);
+            validateDeliveryInWaypointRecord(order, transactionType, transaction.getWaypointId());
+    }
 
-            Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
-            assertEquals(f("%s waypoint [%d] city", transactionType, waypointId), order.getToCity(), actualWaypoint.getCity());
-            assertEquals(f("%s waypoint [%d] country", transactionType, waypointId), order.getToCountry(), actualWaypoint.getCountry());
-            assertEquals(f("%s waypoint [%d] address1", transactionType, waypointId), order.getToAddress1(), actualWaypoint.getAddress1());
-            assertEquals(f("%s waypoint [%d] address2", transactionType, waypointId), order.getToAddress2(), actualWaypoint.getAddress2());
-            assertEquals(f("%s waypoint [%d] postcode", transactionType, waypointId), order.getToPostcode(), actualWaypoint.getPostcode());
-            assertEquals(f("%s waypoint [%d] timewindowId", transactionType, waypointId), order.getDeliveryTimeslot().getId(), Integer.parseInt(actualWaypoint.getTimeWindowId()));
-        } else {
-            fail(f("%s transaction not found for tracking ID = '%s'.", transactionType, trackingId));
-        }
+    @Then("^DB Operator verify Delivery waypoint record for (.+) transaction$")
+    public void dbOperatorVerifyNewDeliveryWaypointRecordCreated(String transactionStatus) {
+        Order order = get(KEY_CREATED_ORDER);
+        String transactionType = "DD";
+        List<TransactionEntity> transactions = getCoreJdbc().findTransactionByOrderIdAndType(order.getId(), transactionType);
+
+        TransactionEntity transaction = transactions.stream()
+                .filter(t -> StringUtils.equalsIgnoreCase(t.getType(), transactionType) &&
+                        StringUtils.equalsIgnoreCase(t.getStatus(), transactionStatus)).findFirst()
+                .orElseThrow(() -> new AssertionFailedError(f("%s transaction in %s status not found for order ID = '%s'.",
+                        transactionType, transactionStatus, order.getId())));
+
+        validateDeliveryInWaypointRecord(order, transactionType, transaction.getWaypointId());
     }
 
     @Then("^DB Operator verify the last order_events record for the created order:$")
@@ -385,6 +390,72 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
                 DateUtil.displayDateTime(entityEndDateTime));
     }
 
+    @Then("^DB Operator verify next Delivery transaction values are updated for the created order:$")
+    public void dbOperatorVerifyTransactionRecordUpdatedForTheCreatedOrderForParameters(Map<String, String> mapOfData)
+    {
+        Order order = get(KEY_CREATED_ORDER);
+        String type = "DD";
+        List<TransactionEntity> transactions = getCoreJdbc().findTransactionByOrderIdAndType(order.getId(), type);
+
+        assertThat(f("There is more than 1 %s transaction for orderId %d", type, order.getId()), transactions, hasSize(1));
+        TransactionEntity entity = transactions.get(0);
+        put(KEY_WAYPOINT_ID, entity.getWaypointId());
+        String distributionPointId = mapOfData.get("distribution_point_id");
+        String address1 = Objects.equals(mapOfData.get("address1"), "GET_FROM_CREATED_ORDER") ? order.getToAddress1() :
+                mapOfData.get("address1");
+        String address2 = Objects.equals(mapOfData.get("address2"), "GET_FROM_CREATED_ORDER") ? order.getToAddress2() :
+                mapOfData.get("address2");
+        String city = Objects.equals(mapOfData.get("city"), "GET_FROM_CREATED_ORDER") ? order.getToCity() :
+                mapOfData.get("city");
+        String country = Objects.equals(mapOfData.get("country"), "GET_FROM_CREATED_ORDER") ? order.getToCountry() :
+                mapOfData.get("country");
+        String postcode = Objects.equals(mapOfData.get("postcode"), "GET_FROM_CREATED_ORDER") ? order.getToPostcode() :
+                mapOfData.get("postcode");
+        String routeId = mapOfData.get("routeId");
+        if (Objects.nonNull(distributionPointId)){
+            Integer distributionPointIdInt = Objects.equals(distributionPointId, "null") ? null : NumberUtils.createInteger(distributionPointId);
+            assertEquals("DistributionPointId in Transaction entity is not as expected in db", distributionPointIdInt, entity.getDistributionPointId());
+        }
+        if (Objects.nonNull(address1)){
+            assertEquals("Address1 in Transaction entity is not as expected in db", address1, entity.getAddress1());
+        }
+        if (Objects.nonNull(address2)){
+            assertEquals("Address2 in Transaction entity is not as expected in db", address2, entity.getAddress2());
+        }
+        if (Objects.nonNull(city)){
+            assertEquals("City in Transaction entity is not as expected in db", city, entity.getCity());
+        }
+        if (Objects.nonNull(country)){
+            assertEquals("Country in Transaction entity is not as expected in db", country, entity.getCountry());
+        }
+        if (Objects.nonNull(postcode)){
+            assertEquals("Postcode in Transaction entity is not as expected in db", postcode, entity.getPostcode());
+        }
+        if (Objects.nonNull(routeId)){
+            Integer routeIdInt = Objects.equals(routeId, "null") ? null : NumberUtils.createInteger(routeId);
+            assertEquals("RouteId in Transaction entity is not as expected in db", routeIdInt, entity.getRouteId());
+        }
+    }
+
+    @Then("^DB Operator verify next Pickup transaction values are updated for the created order:$")
+    public void dbOperatorVerifyPickupTransactionRecordUpdatedForTheCreatedOrderForParameters(Map<String, String> mapOfData)
+    {
+        Order order = get(KEY_CREATED_ORDER);
+        String type = "PP";
+        List<TransactionEntity> transactions = getCoreJdbc().findTransactionByOrderIdAndType(order.getId(), type);
+
+        assertThat(f("There is more than 1 %s transaction for orderId %d", type, order.getId()), transactions, hasSize(1));
+        TransactionEntity entity = transactions.get(0);
+        put(KEY_WAYPOINT_ID, entity.getWaypointId());
+
+        String routeId = mapOfData.get("routeId");
+        if (Objects.nonNull(routeId)){
+            Integer routeIdInt = Objects.equals(mapOfData.get("routeId"), "null") ? null :
+                    NumberUtils.createInteger(mapOfData.get("routeId"));
+            assertEquals("RouteId in Transaction entity is not as expected in db", routeIdInt, entity.getRouteId());
+        }
+    }
+
     @Then("^DB Operator verify the last inbound_scans record for the created order:$")
     public void dbOperatorVerifyTheLastInboundScansRecord(Map<String, String> mapOfData)
     {
@@ -501,27 +572,27 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     public void dbOperatorVerifiesPickupInfoInOrderRecord(){
         Order order = get(KEY_CREATED_ORDER);
         final String finalTrackingId = order.getTrackingId();
-        List<Map<String, Object>> pickupInfoRecordsFiltered = retryIfExpectedExceptionOccurred(() ->
+        List<Order> pickupInfoRecordsFiltered = retryIfExpectedExceptionOccurred(() ->
         {
-            List<Map<String, Object>> pickupInfoRecords = getCoreJdbc().getOrderByTrackingId(finalTrackingId);
-            List<Map<String, Object>> pickupInfoRecordsTemp = pickupInfoRecords.stream()
-                    .filter(record -> record.get("tracking_id").equals(finalTrackingId))
+            List<Order> pickupInfoRecords = getCoreJdbc().getOrderByTrackingId(finalTrackingId);
+            List<Order> pickupInfoRecordsTemp = pickupInfoRecords.stream()
+                    .filter(record -> record.getTrackingId().equals(finalTrackingId))
                     .collect(Collectors.toList());
 
             assertEquals(f("Expected 1 record in Orders table with tracking ID %s", finalTrackingId), 1, pickupInfoRecordsTemp.size());
             return pickupInfoRecordsTemp;
         }, getCurrentMethodName(), NvLogger::warn, 500, 30, AssertionError.class);
 
-        Map<String, Object> pickupInfoRecord = pickupInfoRecordsFiltered.get(0);
+        Order pickupInfoRecord = pickupInfoRecordsFiltered.get(0);
 
-        assertEquals(f("Expected %s in %s table", "from_address1", "orders"), order.getFromAddress1(), String.valueOf(pickupInfoRecord.get("from_address1")));
-        assertEquals(f("Expected %s in %s table", "from_address2", "orders"), order.getFromAddress2(), String.valueOf(pickupInfoRecord.get("from_address2")));
-        assertEquals(f("Expected %s in %s table", "from_postcode", "orders"), order.getFromPostcode(), String.valueOf(pickupInfoRecord.get("from_postcode")));
-        assertEquals(f("Expected %s in %s table", "from_city", "orders"), order.getFromCity(), String.valueOf(pickupInfoRecord.get("from_city")));
-        assertEquals(f("Expected %s in %s table", "from_country", "orders"), order.getFromCountry(), String.valueOf(pickupInfoRecord.get("from_country")));
-        assertEquals(f("Expected %s in %s table", "from_name", "orders"), order.getFromName(), String.valueOf(pickupInfoRecord.get("from_name")));
-        assertEquals(f("Expected %s in %s table", "from_email", "orders"), order.getFromEmail(), String.valueOf(pickupInfoRecord.get("from_email")));
-        assertEquals(f("Expected %s in %s table", "from_contact", "orders"), order.getFromContact(), String.valueOf(pickupInfoRecord.get("from_contact")));
+        assertEquals(f("Expected %s in %s table", "from_address1", "orders"), order.getFromAddress1(), pickupInfoRecord.getFromAddress1());
+        assertEquals(f("Expected %s in %s table", "from_address2", "orders"), order.getFromAddress2(), pickupInfoRecord.getFromAddress2());
+        assertEquals(f("Expected %s in %s table", "from_postcode", "orders"), order.getFromPostcode(), pickupInfoRecord.getFromPostcode());
+        assertEquals(f("Expected %s in %s table", "from_city", "orders"), order.getFromCity(), pickupInfoRecord.getFromCity());
+        assertEquals(f("Expected %s in %s table", "from_country", "orders"), order.getFromCountry(), pickupInfoRecord.getFromCountry());
+        assertEquals(f("Expected %s in %s table", "from_name", "orders"), order.getFromName(), pickupInfoRecord.getFromName());
+        assertEquals(f("Expected %s in %s table", "from_email", "orders"), order.getFromEmail(), pickupInfoRecord.getFromEmail());
+        assertEquals(f("Expected %s in %s table", "from_contact", "orders"), order.getFromContact(), pickupInfoRecord.getFromContact());
     }
 
     @SuppressWarnings("unchecked")
@@ -529,27 +600,27 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     public void dbOperatorVerifiesDeliveryInfoInOrderRecord(){
         Order order = get(KEY_CREATED_ORDER);
         final String finalTrackingId = order.getTrackingId();
-        List<Map<String, Object>> deliveryInfoRecordsFiltered = retryIfExpectedExceptionOccurred(() ->
+        List<Order> deliveryInfoRecordsFiltered = retryIfExpectedExceptionOccurred(() ->
         {
-            List<Map<String, Object>> deliveryInfoRecords = getCoreJdbc().getOrderByTrackingId(finalTrackingId);
-            List<Map<String, Object>> deliveryInfoRecordsTemp = deliveryInfoRecords.stream()
-                    .filter(record -> record.get("tracking_id").equals(finalTrackingId))
+            List<Order> deliveryInfoRecords = getCoreJdbc().getOrderByTrackingId(finalTrackingId);
+            List<Order> deliveryInfoRecordsTemp = deliveryInfoRecords.stream()
+                    .filter(record -> record.getTrackingId().equals(finalTrackingId))
                     .collect(Collectors.toList());
 
             assertEquals(f("Expected 1 record in Orders table with tracking ID %s", finalTrackingId), 1, deliveryInfoRecordsTemp.size());
             return deliveryInfoRecordsTemp;
         }, getCurrentMethodName(), NvLogger::warn, 500, 30, AssertionError.class);
 
-        Map<String, Object> deliveryInfoRecord = deliveryInfoRecordsFiltered.get(0);
+        Order deliveryInfoRecord = deliveryInfoRecordsFiltered.get(0);
 
-        assertEquals(f("Expected %s in %s table", "to_address1", "orders"), order.getToAddress1(), String.valueOf(deliveryInfoRecord.get("to_address1")));
-        assertEquals(f("Expected %s in %s table", "to_address2", "orders"), order.getToAddress2(), String.valueOf(deliveryInfoRecord.get("to_address2")));
-        assertEquals(f("Expected %s in %s table", "to_postcode", "orders"), order.getToPostcode(), String.valueOf(deliveryInfoRecord.get("to_postcode")));
-        assertEquals(f("Expected %s in %s table", "to_city", "orders"), order.getToCity(), String.valueOf(deliveryInfoRecord.get("to_city")));
-        assertEquals(f("Expected %s in %s table", "to_country", "orders"), order.getToCountry(), String.valueOf(deliveryInfoRecord.get("to_country")));
-        assertEquals(f("Expected %s in %s table", "to_name", "orders"), order.getToName(), String.valueOf(deliveryInfoRecord.get("to_name")));
-        assertEquals(f("Expected %s in %s table", "to_email", "orders"), order.getToEmail(), String.valueOf(deliveryInfoRecord.get("to_email")));
-        assertEquals(f("Expected %s in %s table", "to_contact", "orders"), order.getToContact(), String.valueOf(deliveryInfoRecord.get("to_contact")));
+        assertEquals(f("Expected %s in %s table", "to_address1", "orders"), order.getToAddress1(), deliveryInfoRecord.getToAddress1());
+        assertEquals(f("Expected %s in %s table", "to_address2", "orders"), Objects.nonNull(order.getToAddress2()) ? order.getToAddress2() : "", deliveryInfoRecord.getToAddress2());
+        assertEquals(f("Expected %s in %s table", "to_postcode", "orders"), order.getToPostcode(), deliveryInfoRecord.getToPostcode());
+        assertEquals(f("Expected %s in %s table", "to_city", "orders"), Objects.isNull(order.getToCity()) ? "" : order.getToCity(), deliveryInfoRecord.getToCity());
+        assertEquals(f("Expected %s in %s table", "to_country", "orders"), order.getToCountry(), deliveryInfoRecord.getToCountry());
+        assertEquals(f("Expected %s in %s table", "to_name", "orders"), order.getToName(), deliveryInfoRecord.getToName());
+        assertEquals(f("Expected %s in %s table", "to_email", "orders"), order.getToEmail(), deliveryInfoRecord.getToEmail());
+        assertEquals(f("Expected %s in %s table", "to_contact", "orders"), order.getToContact(), deliveryInfoRecord.getToContact());
     }
 
     @Given("^DB Operator verifies reservation record using data below:$")
@@ -572,6 +643,126 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         if (Objects.nonNull(mapOfData.get("status"))) {
             String status = mapOfData.get("status");
             assertEquals(f("Expected %s in %s table", "status", "waypoints"), status, waypoint.getStatus());
+        }
+    }
+
+    @Given("^DB Operator verifies orders record using data below:$")
+    public void dbOperatorVerifiesOrdersRecord(Map<String, String> mapOfData) {
+        Order order = get(KEY_CREATED_ORDER);
+        final String finalTrackingId = order.getTrackingId();
+        List<Order> orderRecordsFiltered = retryIfExpectedExceptionOccurred(() ->
+        {
+            List<Order> orderRecords = getCoreJdbc().getOrderByTrackingId(finalTrackingId);
+            List<Order> orderRecordsTemp = orderRecords.stream()
+                    .filter(record -> record.getTrackingId().equals(finalTrackingId))
+                    .collect(Collectors.toList());
+
+            assertEquals(f("Expected 1 record in Orders table with tracking ID %s", finalTrackingId), 1, orderRecordsTemp.size());
+            return orderRecordsTemp;
+        }, getCurrentMethodName(), NvLogger::warn, 500, 30, AssertionError.class);
+
+        Order orderRecord = orderRecordsFiltered.get(0);
+
+        if (Objects.nonNull(mapOfData.get("status"))) {
+            String status = mapOfData.get("status");
+            assertEquals(f("Expected %s in %s table", "status", "orders"), status, orderRecord.getStatus());
+        }
+        if (Objects.nonNull(mapOfData.get("granularStatus"))) {
+            String granularStatus = mapOfData.get("granularStatus");
+            assertEquals(f("Expected %s in %s table", "granularStatus", "orders"), granularStatus, orderRecord.getGranularStatus());
+        }
+        if (Objects.nonNull(mapOfData.get("toAddress1"))) {
+            String toAddress1 = Objects.equals(mapOfData.get("toAddress1"), "GET_FROM_CREATED_ORDER") ? order.getToAddress1() :
+                    mapOfData.get("toAddress1");
+            assertEquals(f("Expected %s in %s table", "to_address1", "orders"), toAddress1, orderRecord.getToAddress1());
+        }
+        if (Objects.nonNull(mapOfData.get("toAddress2"))) {
+            String toAddress2 = Objects.equals(mapOfData.get("toAddress2"), "GET_FROM_CREATED_ORDER") ? order.getToAddress2() :
+                    mapOfData.get("toAddress2");
+            assertEquals(f("Expected %s in %s table", "to_address2", "orders"), toAddress2, orderRecord.getToAddress2());
+        }
+        if (Objects.nonNull(mapOfData.get("toPostcode"))) {
+            String toPostcode = Objects.equals(mapOfData.get("toPostcode"), "GET_FROM_CREATED_ORDER") ? order.getToPostcode() :
+                    mapOfData.get("toPostcode");
+            assertEquals(f("Expected %s in %s table", "to_postcode", "orders"), toPostcode, orderRecord.getToPostcode());
+        }
+        if (Objects.nonNull(mapOfData.get("toCity"))) {
+            String toCity = Objects.equals(mapOfData.get("toCity"), "GET_FROM_CREATED_ORDER") ? order.getToCity() :
+                    mapOfData.get("toCity");
+            assertEquals(f("Expected %s in %s table", "to_city", "orders"), toCity, orderRecord.getToCity());
+        }
+        if (Objects.nonNull(mapOfData.get("toCountry"))) {
+            String toCountry = Objects.equals(mapOfData.get("toCountry"), "GET_FROM_CREATED_ORDER") ? order.getToCountry() :
+                    mapOfData.get("toCountry");
+            assertEquals(f("Expected %s in %s table", "to_country", "orders"), toCountry, orderRecord.getToCountry());
+        }
+        if (Objects.nonNull(mapOfData.get("toState"))) {
+            String toState = Objects.equals(mapOfData.get("toState"), "GET_FROM_CREATED_ORDER") ? order.getToState() :
+                    mapOfData.get("toState");
+            assertEquals(f("Expected %s in %s table", "to_state", "orders"), toState, orderRecord.getToState());
+        }
+        if (Objects.nonNull(mapOfData.get("toDistrict"))) {
+            String toDistrict = Objects.equals(mapOfData.get("toDistrict"), "GET_FROM_CREATED_ORDER") ? order.getToDistrict() :
+                    mapOfData.get("toDistrict");
+            assertEquals(f("Expected %s in %s table", "to_district", "orders"), toDistrict, orderRecord.getToDistrict());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Given("^DB Operator verifies order is deleted$")
+    public void dbOperatorVerifiesOrderIsDeleted() {
+        Order order = get(KEY_CREATED_ORDER);
+        final String finalTrackingId = order.getTrackingId();
+        retryIfExpectedExceptionOccurred(() ->
+        {
+            List<Order> orderRecords = getCoreJdbc().getOrderByTrackingId(finalTrackingId);
+
+            assertEquals(f("Expected 0 record in Orders table with tracking ID %s", finalTrackingId), 0, orderRecords.size());
+            return orderRecords;
+        }, getCurrentMethodName(), NvLogger::warn, 500, 30, AssertionError.class);
+    }
+
+    @Given("^DB Operator verifies waypoint for (Pickup|Delivery) transaction is deleted from route_waypoint table$")
+    public void dbOperatorVerifiesWaypointIsDeleted(String txnType) {
+        Order order = get(KEY_CREATED_ORDER);
+        final String waypointId = String.valueOf(order.getTransactions().stream()
+                .filter(transaction -> StringUtils.equalsIgnoreCase(transaction.getType(), txnType))
+                .findFirst().orElseThrow(() -> new IllegalArgumentException(f("No %s transaction for %d order", txnType, order.getId())))
+                .getWaypointId());
+        retryIfExpectedExceptionOccurred(() ->
+        {
+            List<Map<String, Object>> waypointRecords = getCoreJdbc().getWaypointRecords(waypointId);
+
+            assertEquals(f("Expected 0 record in route_waypoint table with waypoint ID %s", waypointId), 0, waypointRecords.size());
+            return waypointRecords;
+        }, getCurrentMethodName(), NvLogger::warn, 500, 30, AssertionError.class);
+    }
+
+    private void validatePickupInWaypointRecord(Order order, String transactionType, long waypointId) {
+        Assert.assertNotNull(f("%s waypoint Id", transactionType), waypointId);
+
+        Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
+        assertEquals(f("%s waypoint [%d] city", transactionType, waypointId), order.getFromCity(), actualWaypoint.getCity());
+        assertEquals(f("%s waypoint [%d] country", transactionType, waypointId), order.getFromCountry(), actualWaypoint.getCountry());
+        assertEquals(f("%s waypoint [%d] address1", transactionType, waypointId), order.getFromAddress1(), actualWaypoint.getAddress1());
+        assertEquals(f("%s waypoint [%d] address2", transactionType, waypointId), order.getFromAddress2(), actualWaypoint.getAddress2());
+        assertEquals(f("%s waypoint [%d] postcode", transactionType, waypointId), order.getFromPostcode(), actualWaypoint.getPostcode());
+        assertEquals(f("%s waypoint [%d] timewindowId", transactionType, waypointId), order.getPickupTimeslot().getId(), Integer.parseInt(actualWaypoint.getTimeWindowId()));
+    }
+
+    private void validateDeliveryInWaypointRecord(Order order, String transactionType, long waypointId) {
+        Assert.assertNotNull(f("%s waypoint Id", transactionType), waypointId);
+
+        Waypoint actualWaypoint = getCoreJdbc().getWaypoint(waypointId);
+        assertEquals(f("%s waypoint [%d] city", transactionType, waypointId), Objects.isNull(order.getToCity()) ? "" :
+                order.getToCity(), actualWaypoint.getCity());
+        assertEquals(f("%s waypoint [%d] country", transactionType, waypointId), order.getToCountry(), actualWaypoint.getCountry());
+        assertEquals(f("%s waypoint [%d] address1", transactionType, waypointId), order.getToAddress1(), actualWaypoint.getAddress1());
+        assertEquals(f("%s waypoint [%d] address2", transactionType, waypointId), order.getToAddress2(), actualWaypoint.getAddress2());
+        assertEquals(f("%s waypoint [%d] postcode", transactionType, waypointId), order.getToPostcode(), actualWaypoint.getPostcode());
+        if (Objects.nonNull(order.getDeliveryTimeslot())) {
+            assertEquals(f("%s waypoint [%d] timewindowId", transactionType, waypointId), order.getDeliveryTimeslot().getId(),
+                    Integer.parseInt(actualWaypoint.getTimeWindowId()));
         }
     }
 }
