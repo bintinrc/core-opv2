@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @ShipmentManagement @Shipment @MiddleMile
+@OperatorV2 @OperatorV2Part2 @ShipmentManagement @Shipment @MiddleMile @ForceNotHeadless
 Feature: Shipment Management
 
   @LaunchBrowser @ShouldAlwaysRun
