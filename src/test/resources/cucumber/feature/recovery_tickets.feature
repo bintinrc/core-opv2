@@ -14,7 +14,7 @@ Feature: Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
       | investigatingDepartment | Fleet (First Mile) |
-      | investigatingHub        | {hub-name}         | 
+      | investigatingHub        | {hub-name}         |
       | ticketType              | DAMAGED            |
       | ticketSubType           | IMPROPER PACKAGING |
       | parcelLocation          | DAMAGED RACK       |
