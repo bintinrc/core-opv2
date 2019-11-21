@@ -215,7 +215,6 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         fillFieldComments(shipmentInfo.getComments());
 
         clickButtonSaveChangesOnEditShipmentDialog(shipmentInfo.getId());
-        waitUntilVisibilityOfToast(f("Shipment %s updated", shipmentInfo.getId()));
     }
 
     public void clickActionButton(Long shipmentId, String actionButton)
