@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @ShipmentLinehaul @Shipment
+@OperatorV2 @OperatorV2Part2 @ShipmentLinehaul
 Feature: Shipment Linehaul
 
   @LaunchBrowser @ShouldAlwaysRun

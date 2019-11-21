@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.ShipmentScanningPage;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -42,5 +43,11 @@ public class ShipmentScanningSteps extends AbstractSteps
         shipmentScanningPage.clickSelectShipment();
         shipmentScanningPage.scanBarcode(trackingId);
         shipmentScanningPage.checkOrderInShipment(trackingId);
+    }
+
+    @And("Operator close the shipment which has been created")
+    public void operatorCloseTheShipmentWhichHasBeenCreated()
+    {
+        shipmentScanningPage.closeShipment();
     }
 }

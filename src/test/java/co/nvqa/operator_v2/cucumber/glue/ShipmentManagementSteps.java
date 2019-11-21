@@ -289,4 +289,10 @@ public class ShipmentManagementSteps extends AbstractSteps
         boolean isNextOrder = true;
         put("isNextOrder", isNextOrder);
     }
+
+    @When("Operator click Force Success Button")
+    public void operatorClickForceSuccessButton()
+    {
+        shipmentManagementPage.forceSuccessShipment();
+    }
 }

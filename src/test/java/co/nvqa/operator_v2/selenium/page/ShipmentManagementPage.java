@@ -348,6 +348,16 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         assertEquals("Contains has a different number: ", shipmentInfo.getOrdersCount(), sab.getContains());
     }
 
+    public void forceSuccessShipment()
+    {
+        click("//button[contains(@aria-label,'Force')]");
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@aria-describedby,'dialogContent')]");
+        click("//button[contains(@aria-label,'Confirm')]");
+
+        String toastMessage = getToastTopText();
+        assertThat("Toast message not contains Shipment Completion", toastMessage, allOf(containsString("Force"), containsString("Success")));
+    }
+
     /**
      * Accessor for Shipments table
      */

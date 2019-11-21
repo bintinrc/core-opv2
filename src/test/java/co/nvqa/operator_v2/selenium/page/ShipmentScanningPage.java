@@ -4,6 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import static org.hamcrest.Matchers.allOf;
+
 /**
  *
  * @author Lanang Jati
@@ -51,13 +53,24 @@ public class ShipmentScanningPage extends OperatorV2SimplePage
         sendKeysAndEnter(XPATH_BARCODE_SCAN, trackingId);
     }
 
-    public void checkOrderInShipment(String orderId)
+    public void checkOrderInShipment(String trackingId)
     {
-        String rack = getText(XPATH_RACK_SECTOR);
-        assertTrue("order is " + rack, !rack.equalsIgnoreCase("INVALID") && !rack.equalsIgnoreCase("DUPLICATE"));
+//        String rack = getText(XPATH_RACK_SECTOR);
+//        assertTrue("order is " + rack, !rack.equalsIgnoreCase("INVALID") && !rack.equalsIgnoreCase("DUPLICATE"));
 
-        WebElement orderWe = getWebDriver().findElement(By.xpath(String.format("//td[contains(@class, 'tracking-id')][contains(text(), '%s')]", orderId)));
+        WebElement orderWe = getWebDriver().findElement(By.xpath(String.format("//td[contains(@class, 'tracking-id')][contains(text(), '%s')]", trackingId)));
         boolean orderExist = orderWe!=null;
-        assertTrue("order " + orderId + " doesn't exist in shipment", orderExist);
+        assertTrue("order " + trackingId + " doesn't exist in shipment", orderExist);
+    }
+
+    public void closeShipment()
+    {
+        pause300ms();
+        click("//nv-icon-text-button[contains(@name,'close-shipment')]/button[contains(@class,'close-shipment')]");
+        waitUntilVisibilityOfElementLocated("//md-dialog[md-dialog-content[contains(@id,'dialogContent')]]");
+        click("//button[contains(@class,'md-primary') and @aria-label='Close Shipment']");
+
+        String toastMessage = getToastTopText();
+        assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage, allOf(containsString("Shipment"), containsString("closed")));
     }
 }
