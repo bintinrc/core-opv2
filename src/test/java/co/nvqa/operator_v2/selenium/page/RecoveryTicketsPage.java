@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RecoveryTicket;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -17,6 +18,8 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public static final String TICKET_TYPE_DAMAGED = "DAMAGED";
     public static final String TICKET_TYPE_MISSING = "MISSING";
+    public static final String TICKET_TYPE_PARCEL_EXCEPTION = "PARCEL EXCEPTION";
+    public static final String TICKET_TYPE_SHIPPER_ISSUE = "SHIPPER ISSUE";
 
     public RecoveryTicketsPage(WebDriver webDriver)
     {
@@ -62,6 +65,25 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
                 setTicketNotes(recoveryTicket.getTicketNotes());
                 break;
             }
+            case TICKET_TYPE_PARCEL_EXCEPTION:
+            {
+                selectTicketSubType(recoveryTicket.getTicketSubType());
+                selectOrderOutcomeInaccurateAddress(recoveryTicket.getOrderOutcomeInaccurateAddress());
+                setExceptionReason(recoveryTicket.getExceptionReason());
+                setCustZendeskId(recoveryTicket.getCustZendeskId());
+                setShipperZendeskId(recoveryTicket.getShipperZendeskId());
+                setTicketNotes(recoveryTicket.getTicketNotes());
+                break;
+            }
+            case TICKET_TYPE_SHIPPER_ISSUE:
+            {
+                selectTicketSubType(recoveryTicket.getTicketSubType());
+                selectOrderOutcomeDuplicateParcel(recoveryTicket.getOrderOutcomeDuplicateParcel());
+                setIssueDescription(recoveryTicket.getIssueDescription());
+                setCustZendeskId(recoveryTicket.getCustZendeskId());
+                setShipperZendeskId(recoveryTicket.getShipperZendeskId());
+                setTicketNotes(recoveryTicket.getTicketNotes());
+            }
         }
 
         retryIfRuntimeExceptionOccurred(()->
@@ -76,6 +98,27 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
         clickCreateTicketOnCreateNewTicketDialog();
         waitUntilInvisibilityOfToast("Ticket created");
+    }
+
+    public void editTicketSettings(RecoveryTicket recoveryTicket)
+    {
+        waitUntilPageLoaded();
+        pause2s();
+        selectTicketStatus(recoveryTicket.getTicketStatus());
+        selectOrderOutcome(recoveryTicket.getOrderOutcome());
+        selectAssignTo(recoveryTicket.getAssignTo());
+        setEnterNewInstruction(recoveryTicket.getEnterNewInstruction());
+        clickButtonByAriaLabel("Update Ticket");
+    }
+
+    public void editAdditionalSettings(RecoveryTicket recoveryTicket)
+    {
+        waitUntilPageLoaded();
+        pause2s();
+        setCustomerZendeskId(recoveryTicket.getCustZendeskId());
+        setShipZendeskId(recoveryTicket.getCustZendeskId());
+        setTicketComments(recoveryTicket.getTicketComments());
+        clickButtonByAriaLabel("Update Ticket");
     }
 
     public boolean verifyTicketIsExist(String trackingId)
@@ -107,21 +150,11 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         assertEquals("Ticket with this tracking ID is not created", trackingId, actualTrackingId);
     }
 
-    public void clickCreateNewTicketButton()
-    {
-        clickButtonByAriaLabel("Create New Ticket");
-    }
-
-    public void clickEditButton() {clickButtonByAriaLabel("Edit");}
-
-    public void clickCancelTicket() {clickButtonByAriaLabel("Cancel Ticket");}
-
-    public void clickDeleteButton() {clickButtonByAriaLabel("Delete");}
-
     public void verifyTicketStatus(String expectedStatus)
     {
-        clickEditButton();
-        String status = getTicketStatusText();
+        clickButtonByAriaLabel("Edit");
+        pause2s();
+        String status = getTextById("ticket-status");
         assertEquals(expectedStatus.toLowerCase(),status.toLowerCase());
 
     }
@@ -129,6 +162,25 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     {
         selectValueFromMdSelectById("entry-source", entrySource);
     }
+
+    public void selectTicketStatus(String ticketStatus)
+    {
+        selectValueFromMdSelectByIdContains("ticket-status" , ticketStatus);
+    }
+
+    public void selectOrderOutcome(String orderOutcome)
+    {
+        selectValueFromMdSelectByIdContains("order-outcome", orderOutcome);
+    }
+
+    public void selectAssignTo(String assignTo)
+    {
+        selectValueFromMdSelectByIdContains("assign-to" , assignTo);
+    }
+
+    public void setEnterNewInstruction(String enterNewInstruction) { sendKeysByAriaLabel("Enter New Instruction", enterNewInstruction); }
+
+    public void setTicketComments(String ticketComments) {sendKeysByAriaLabel("Ticket Comments" , ticketComments);}
 
     public void selectInvestigatingDepartment(String investigatingDepartment)
     {
@@ -165,6 +217,16 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         sendKeysById("damageDescription", damageDescription);
     }
 
+    public void setExceptionReason(String exceptionReason)
+    {
+        sendKeysById("exceptionReason", exceptionReason);
+    }
+
+    public void setIssueDescription(String issueDescription)
+    {
+        sendKeysById("issueDescription", issueDescription);
+    }
+
     public void setParcelDescription(String parcelDescription)
     {
         sendKeysById("parcelDescription", parcelDescription);
@@ -180,6 +242,16 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         sendKeysById("customer-zendesk-id", custZendeskId);
     }
 
+    public void setCustomerZendeskId(String customerZendeskId)
+    {
+        sendKeysByAriaLabel("Customer Zendesk ID", customerZendeskId);
+    }
+
+    public void setShipZendeskId(String shipperZendeskId)
+    {
+        sendKeysByAriaLabel("Shipper Zendesk ID", shipperZendeskId);
+    }
+
     public void setShipperZendeskId(String shipperZendeskId)
     {
         sendKeysById("shipper-zendesk-id", shipperZendeskId);
@@ -189,6 +261,18 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     {
         scrollIntoView("//*[@id='orderOutcome(Damaged)']");
         selectValueFromMdSelectById("orderOutcome(Damaged)", orderOutcomeDamaged);
+    }
+
+    public void selectOrderOutcomeInaccurateAddress(String orderOutcomeInaccurateAddress)
+    {
+        scrollIntoView("//*[@id='orderOutcome(InaccurateAddress)']");
+        selectValueFromMdSelectById("orderOutcome(InaccurateAddress)",orderOutcomeInaccurateAddress);
+    }
+
+    public void selectOrderOutcomeDuplicateParcel(String orderOutcomeDuplicateParcel)
+    {
+        scrollIntoView("//*[@id='orderOutcome(DuplicateParcel)']");
+        selectValueFromMdSelectById("orderOutcome(DuplicateParcel)",orderOutcomeDuplicateParcel);
     }
 
     public void selectOrderOutcomeMissing(String orderOutcomeMissing)

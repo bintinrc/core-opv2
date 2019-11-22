@@ -1258,10 +1258,32 @@ public class OperatorV2SimplePage extends SimplePage
         clickf("//div[@aria-hidden='false']/md-menu-content/md-menu-item/button/span[contains(text(), '%s')]", childMenuName);
     }
 
-    public String getTicketStatusText()
+    public String getTextById(String id)
     {
-        String xpathExpression= "//md-select[contains(@aria-label,'Ticket Status')]";
-        String status = getText(xpathExpression).trim();
-        return status;
+        String xpathExpression = f("//md-select[contains(@id,'%s')]",id);
+        String text = getText(xpathExpression).trim();
+        return text;
     }
+
+    public String getTextByIdForInputFields(String id)
+    {
+        String xpathExpression = f("//input[contains(@id,'%s')]/preceding-sibling::div",id);
+        String text = getText(xpathExpression).trim();
+        return text;
+    }
+
+    public String getInnerTextByIdForInputFields(String id)
+    {
+        String xpathExpression = f("//input[contains(@id,'%s')]/preceding-sibling::div",id);
+        String text = getAttribute(xpathExpression, "innerText").trim();
+        return text;
+    }
+
+    public String getTextByClassInTable(String id)
+    {
+        String xpathExpression = f("//td[@class='%s']",id);
+        String text = getText(xpathExpression).replace("▸","").trim();
+        return text;
+    }
+
 }

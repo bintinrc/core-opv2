@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage;
 import cucumber.api.java.en.And;
@@ -48,6 +49,11 @@ public class RecoveryTicketsSteps extends AbstractSteps
         String shipperZendeskId = mapOfData.get("shipperZendeskId");
         String ticketNotes = mapOfData.get("ticketNotes");
         String parcelDescription = mapOfData.get("parcelDescription");
+        String exceptionReason = mapOfData.get("exceptionReason");
+        String orderOutcomeInaccurateAddress = mapOfData.get("orderOutcomeInaccurateAddress");
+        String orderOutcomeDuplicateParcel = mapOfData.get("orderOutcomeDuplicateParcel");
+        String issueDescription = mapOfData.get("issueDescription");
+
 
         if("GENERATED".equals(damageDescription))
         {
@@ -62,6 +68,16 @@ public class RecoveryTicketsSteps extends AbstractSteps
         if("GENERATED".equals(parcelDescription))
         {
             parcelDescription = f("This parcel description is created by automation at %s.", CREATED_DATE_SDF.format(new Date()));
+        }
+
+        if("GENERATED".equals(exceptionReason))
+        {
+            exceptionReason = f("This exception reason is created by automation at %s.", CREATED_DATE_SDF.format(new Date()));
+        }
+
+        if("GENERATED".equals(issueDescription))
+        {
+            issueDescription = f("This issue description is created by automation at %s.", CREATED_DATE_SDF.format(new Date()));
         }
 
         RecoveryTicket recoveryTicket = new RecoveryTicket();
@@ -80,6 +96,10 @@ public class RecoveryTicketsSteps extends AbstractSteps
         recoveryTicket.setShipperZendeskId(shipperZendeskId);
         recoveryTicket.setTicketNotes(ticketNotes);
         recoveryTicket.setParcelDescription(parcelDescription);
+        recoveryTicket.setExceptionReason(exceptionReason);
+        recoveryTicket.setOrderOutcomeInaccurateAddress(orderOutcomeInaccurateAddress);
+        recoveryTicket.setOrderOutcomeDuplicateParcel(orderOutcomeDuplicateParcel);
+        recoveryTicket.setIssueDescription(issueDescription);
 
         recoveryTicketsPage.createTicket(recoveryTicket);
         put("recoveryTicket", recoveryTicket);
@@ -94,31 +114,112 @@ public class RecoveryTicketsSteps extends AbstractSteps
     }
 
     @Then("Operator searches the created ticket and clicks on Edit button")
-    public void operatorSearchesAndEditsTheTicket() {
+    public void searchAndEditTicket() {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         recoveryTicketsPage.searchTableByTrackingId(trackingId);
+        pause3s();
+        recoveryTicketsPage.clickButtonByAriaLabel("Edit");
         pause2s();
-        recoveryTicketsPage.clickEditButton();
     }
 
     @Then("Operator clicks on Cancel Ticket")
-    public void operatorClicksOnCancelTicket() {
-        recoveryTicketsPage.clickCancelTicket();
+    public void clickCancelTicket() {
+        recoveryTicketsPage.clickButtonByAriaLabel("Cancel Ticket");
     }
 
     @And("Operator clicks on Delete on pop up")
     public void operatorClicksOnDeleteOnPopUp() {
-        recoveryTicketsPage.clickDeleteButton();
+        recoveryTicketsPage.clickButtonByAriaLabel("Delete");
         pause1s();
-    }
-
-    @Then("Operator verifies that the status of ticket is     \"([^\"]*)\'  ")
-    public void verifyStatusOfTicketIsCancelled(String status) {
-
     }
 
     @Then("Operator verifies that the status of ticket is {string}")
     public void operatorVerifiesThatTheStatusOfTicketIs(String expectedStatus) {
         recoveryTicketsPage.verifyTicketStatus(expectedStatus);
+        recoveryTicketsPage.clickButtonByAriaLabel("Cancel");
+        pause2s();
+    }
+
+    @And("Operator updates the ticket")
+    public void updateTicket() {
+        recoveryTicketsPage.clickButtonByAriaLabel("Update Ticket");
+        pause5s();
+    }
+
+    @Then("Operator edits the ticket settings with below data and verifies it:")
+    public void editTicketSettings(Map<String,String> mapOfData) {
+        String ticketStatus = mapOfData.get("ticketStatus");
+        String orderOutcome = mapOfData.get("orderOutcome");
+        String assignTo = mapOfData.get("assignTo");
+        String enterNewInstruction = mapOfData.get("enterNewInstruction");
+
+        if("GENERATED".equals(enterNewInstruction))
+        {
+            enterNewInstruction = f("This instruction is created by automation at %s.", CREATED_DATE_SDF.format(new Date()));
+        }
+
+        RecoveryTicket recoveryTicket = new RecoveryTicket();
+        recoveryTicket.setTicketStatus(ticketStatus);
+        recoveryTicket.setOrderOutcome(orderOutcome);
+        recoveryTicket.setAssignTo(assignTo);
+        recoveryTicket.setEnterNewInstruction(enterNewInstruction);
+
+        recoveryTicketsPage.editTicketSettings(recoveryTicket);
+        pause5s();
+        recoveryTicketsPage.clickButtonByAriaLabel("Edit");
+        pause2s();
+        assertEquals(recoveryTicket.getTicketStatus().toLowerCase(),recoveryTicketsPage.getTextById("ticket-status").toLowerCase());
+        assertEquals(recoveryTicket.getOrderOutcome().toLowerCase(),recoveryTicketsPage.getTextById("order-outcome").toLowerCase());
+        assertEquals(recoveryTicket.getAssignTo().toLowerCase(),recoveryTicketsPage.getTextById("assign-to").toLowerCase());
+        assertEquals(recoveryTicket.getEnterNewInstruction().toLowerCase(),recoveryTicketsPage.getTextByIdForInputFields("last-instruction").toLowerCase());
+        recoveryTicketsPage.clickButtonByAriaLabel("Cancel");
+        pause2s();
+    }
+
+    @Then("Operator edits the Additional settings with below data and verifies it:")
+    public void editAdditionalSettings(Map<String,String> mapOfData) {
+        recoveryTicketsPage.clickButtonByAriaLabel("Edit");
+        String customerZendeskId = mapOfData.get("customerZendeskId");
+        String shipperZendeskId = mapOfData.get("shipperZendeskId");
+        String ticketComments = mapOfData.get("ticketComments");
+
+        if("RANDOM".equals(customerZendeskId))
+        {
+            customerZendeskId = f(String.valueOf(System.currentTimeMillis()/1000));
+        }
+
+        if("RANDOM".equals(shipperZendeskId))
+        {
+            shipperZendeskId = f(String.valueOf(System.currentTimeMillis()/1000));
+        }
+
+        if("GENERATED".equals(ticketComments))
+        {
+            ticketComments = f("This ticket comment is created by automation at %s.", CREATED_DATE_SDF.format(new Date()));
+        }
+
+        RecoveryTicket recoveryTicket = new RecoveryTicket();
+        recoveryTicket.setCustZendeskId(customerZendeskId);
+        recoveryTicket.setShipperZendeskId(shipperZendeskId);
+        recoveryTicket.setTicketComments(ticketComments);
+
+        recoveryTicketsPage.editAdditionalSettings(recoveryTicket);
+        pause3s();
+        recoveryTicketsPage.clickButtonByAriaLabel("Edit");
+        pause3s();
+        assertEquals(recoveryTicket.getCustZendeskId().trim(),recoveryTicketsPage.getInnerTextByIdForInputFields("customer-zendesk-id").trim());
+        assertEquals(recoveryTicket.getShipperZendeskId().trim(),recoveryTicketsPage.getInnerTextByIdForInputFields("shipper-zendesk-id").trim());
+        //Commenting the below assertion because of JIRA TICKETING-173(https://jira.ninjavan.co/browse/TICKETING-173)
+        //assertEquals(recoveryTicket.getTicketComments().toLowerCase(),recoveryTicketsPage.getTextByClassInTable("comments").toLowerCase());
+        recoveryTicketsPage.clickButtonByAriaLabel("Cancel");
+        pause2s();
+    }
+
+    @Then("Operator changes the ticket status to {string}")
+    public void changeTicketStatus(String status) {
+        recoveryTicketsPage.selectTicketStatus(status);
+        pause2s();
+        recoveryTicketsPage.clickButtonByAriaLabel("Keep");
+        pause2s();
     }
 }

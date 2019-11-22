@@ -21,6 +21,15 @@ public class RecoveryTicket
     private String custZendeskId;
     private String shipperZendeskId;
     private String parcelDescription;
+    private String ticketStatus;
+    private String orderOutcome;
+    private String assignTo;
+    private String enterNewInstruction;
+    private String ticketComments;
+    private String exceptionReason;
+    private String orderOutcomeInaccurateAddress;
+    private String orderOutcomeDuplicateParcel;
+    private String issueDescription;
 
     public RecoveryTicket()
     {
@@ -91,6 +100,8 @@ public class RecoveryTicket
         return parcelLocation;
     }
 
+
+
     public void setParcelLocation(String parcelLocation)
     {
         this.parcelLocation = parcelLocation;
@@ -114,6 +125,40 @@ public class RecoveryTicket
     public void setDamageDescription(String damageDescription)
     {
         this.damageDescription = damageDescription;
+    }
+
+    public void setExceptionReason(String exceptionReason) {this.exceptionReason = exceptionReason;}
+
+    public String getExceptionReason() { return exceptionReason; }
+
+    public void setOrderOutcomeInaccurateAddress(String orderOutcomeInaccurateAddress)
+    {
+        this.orderOutcomeInaccurateAddress=orderOutcomeInaccurateAddress;
+    }
+
+    public String getOrderOutcomeInaccurateAddress()
+    {
+        return orderOutcomeInaccurateAddress;
+    }
+
+    public void setOrderOutcomeDuplicateParcel(String orderOutcomeDuplicateParcel)
+    {
+        this.orderOutcomeDuplicateParcel=orderOutcomeDuplicateParcel;
+    }
+
+    public String getOrderOutcomeDuplicateParcel()
+    {
+        return orderOutcomeDuplicateParcel;
+    }
+
+    public void setIssueDescription(String issueDescription)
+    {
+        this.issueDescription=issueDescription;
+    }
+
+    public String getIssueDescription()
+    {
+        return issueDescription;
     }
 
     public String getOrderOutcomeDamaged()
@@ -175,4 +220,55 @@ public class RecoveryTicket
     {
         this.parcelDescription = parcelDescription;
     }
+
+    public void setTicketStatus(String ticketStatus)
+    {
+        this.ticketStatus = ticketStatus;
+    }
+
+    public String getTicketStatus()
+    {
+        return ticketStatus;
+    }
+
+    public void setOrderOutcome(String orderOutcome)
+    {
+        this.orderOutcome = orderOutcome;
+    }
+
+    public String getOrderOutcome()
+    {
+        return orderOutcome;
+    }
+
+    public void setAssignTo(String assignTo)
+    {
+        this.assignTo = assignTo;
+    }
+
+    public String getAssignTo()
+    {
+        return assignTo;
+    }
+
+    public void setEnterNewInstruction(String enterNewInstruction)
+    {
+        this.enterNewInstruction = enterNewInstruction;
+    }
+
+    public String getEnterNewInstruction()
+    {
+        return enterNewInstruction;
+    }
+
+    public void setTicketComments(String ticketComments)
+    {
+        this.ticketComments = ticketComments;
+    }
+
+    public String getTicketComments()
+    {
+        return ticketComments;
+    }
+
 }
