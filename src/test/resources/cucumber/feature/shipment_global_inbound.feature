@@ -263,20 +263,20 @@ Feature: Shipment Global Inbound
     Given API Operator update priority level of an order to = "<priorityLevel>"
     And Operator input the scanned Tracking ID inside the shipment
     Then API Operator verify order info after Global Inbound
-    Then Operator verifies priority level info is correct using data below:
-      | priorityLevel           | <priorityLevel>           |
-      | priorityLevelColorAsHex | <priorityLevelColorAsHex> |
+    Then Operator verifies priority level in Shipment Global Inbound info is correct using data below:
+      | priorityLevel      | <priorityLevel>      |
+      | priorityLevelColor | <priorityLevelColor> |
     And Operator go to menu Inter-Hub -> Shipment Management
     And Operator filter Shipment Status = Completed on Shipment Management page
     And Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
     Examples:
-      | Note         | scenarioName | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
-      | Level 0      | Level 0      | uid:34f8948e-a40d-45e8-a2e3-fe9ca43f56f2 | 0             | #e8e8e8                 |
-      | Level 1      | Level 1      | uid:c6f7d1db-da65-46ec-9816-5951fed5e20b | 1             | #ffff00                 |
-      | Level 2 - 90 | Level 2 - 90 | uid:e5a32972-575a-43c5-8ec8-99e0c4fa9f1c | 42            | #ffa500                 |
-      | Level > 90   | Level > 90   | uid:12e7d971-fe8a-46b5-a714-a65ae12bd96b | 91            | #ff0000                 |
+      | Note         | scenarioName | hiptest-uid                              | priorityLevel | priorityLevelColor |
+      | Level 0      | Level 0      | uid:34f8948e-a40d-45e8-a2e3-fe9ca43f56f2 | 0             |                    |
+      | Level 1      | Level 1      | uid:c6f7d1db-da65-46ec-9816-5951fed5e20b | 1             | yellow             |
+      | Level 2 - 90 | Level 2 - 90 | uid:e5a32972-575a-43c5-8ec8-99e0c4fa9f1c | 42            | orange             |
+      | Level > 90   | Level > 90   | uid:12e7d971-fe8a-46b5-a714-a65ae12bd96b | 91            | red                |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

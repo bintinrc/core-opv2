@@ -93,6 +93,15 @@ public class ShipmentGlobalInboundSteps extends AbstractSteps
         put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
     }
 
+    @Then("Operator verifies priority level in Shipment Global Inbound info is correct using data below:")
+    public void operatorVerifiesPriorityLevelInShipmentGlobalInboundInfoIsCorrectUsingDataBelow(Map<String, String> mapOfData)
+    {
+        int expectedPriorityLevel = Integer.parseInt(mapOfData.get("priorityLevel"));
+        String expectedPriorityLevelColor = mapOfData.get("priorityLevelColor");
+
+        shipmentGlobalInboundPage.verifiesPriorityLevelInfoIsCorrect(expectedPriorityLevel, expectedPriorityLevelColor);
+    }
+
     private GlobalInboundParams buildGlobalInboundParams(Map<String, String> mapOfData)
     {
         String hubName = mapOfData.get("hubName");

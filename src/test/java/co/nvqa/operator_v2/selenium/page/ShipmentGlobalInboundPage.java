@@ -29,6 +29,9 @@ public class ShipmentGlobalInboundPage extends OperatorV2SimplePage
     private static final String ADD_SHIPMENT_ICON_ARIA_LABEL = "Add Shipment ID";
     private static final String CONTINUE_BUTTON_ARIA_LABEL = "Continue";
 
+    private static final String DEFAULT_PRIORITY_COLOR_XPATH = "//div[contains(@class,'priority-container')]";
+    private static final String WARNING_PRIORITY_COLOR_XPATH = "//div[contains(@class,'priority-container') and contains(@class,'%s')]";
+
     public ShipmentGlobalInboundPage(WebDriver webDriver)
     {
         super(webDriver);
@@ -77,6 +80,19 @@ public class ShipmentGlobalInboundPage extends OperatorV2SimplePage
         {
             assertEquals("Toast text", toastText, getToastTopText());
             waitUntilInvisibilityOfToast(toastText, false);
+        }
+    }
+
+    public void verifiesPriorityLevelInfoIsCorrect(int expectedPriorityLevel, String expectedPriorityLevelColor)
+    {
+        String actualPriorityLevel = getText("//div[contains(text(), 'Priority Level')]/following-sibling::div[1]/span");
+
+        assertEquals("Priority Level", String.valueOf(expectedPriorityLevel), actualPriorityLevel);
+        if (expectedPriorityLevelColor == "" || expectedPriorityLevelColor.isEmpty() || expectedPriorityLevelColor == null)
+        {
+            isElementExist(DEFAULT_PRIORITY_COLOR_XPATH);
+        } else {
+            isElementExist(f(WARNING_PRIORITY_COLOR_XPATH, expectedPriorityLevelColor));
         }
     }
 
