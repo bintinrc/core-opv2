@@ -13,9 +13,14 @@ hs_err_pid*
 */build
 .allure
 out
+/gradle
+*.properties
 
 .idea
 *.iml
 
 /hiptest
 chromedriver
+
+.bat
+gradlew

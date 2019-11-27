@@ -28,6 +28,9 @@ import java.util.stream.Collectors;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class OperatorV2SimplePage extends SimplePage
 {
+    private static final String XPATH_FOR_MDSELECT_CONTAINS_ID="//md-select[contains(@id,'%s')]";
+    private static final String XPATH_FOR_INPUT_FIELDS_IN_EDIT_RECOVERY = "//input[contains(@id,'%s')]/preceding-sibling::div";
+
     public OperatorV2SimplePage(WebDriver webDriver)
     {
         super(webDriver);
@@ -1256,5 +1259,26 @@ public class OperatorV2SimplePage extends SimplePage
         clickf("//md-menu-bar/md-menu/button[*[contains(text(), '%s')]]", parentMenuName);
         waitUntilVisibilityOfElementLocated("//div[@aria-hidden='false']/md-menu-content");
         clickf("//div[@aria-hidden='false']/md-menu-content/md-menu-item/button/span[contains(text(), '%s')]", childMenuName);
+    }
+
+    public String getTextById(String id)
+    {
+        String xpathExpression = f(XPATH_FOR_MDSELECT_CONTAINS_ID,id);
+        String text = getText(xpathExpression).trim();
+        return text;
+    }
+
+    public String getTextByIdForInputFields(String id)
+    {
+        String xpathExpression = f(XPATH_FOR_INPUT_FIELDS_IN_EDIT_RECOVERY,id);
+        String text = getText(xpathExpression).trim();
+        return text;
+    }
+
+    public String getInnerTextByIdForInputFields(String id)
+    {
+        String xpathExpression = f(XPATH_FOR_INPUT_FIELDS_IN_EDIT_RECOVERY,id);
+        String text = getAttribute(xpathExpression, "innerText").trim();
+        return text;
     }
 }
