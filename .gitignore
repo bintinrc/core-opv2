@@ -19,3 +19,6 @@ out
 
 /hiptest
 chromedriver
+
+.bat
+gradlew

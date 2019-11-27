@@ -4,6 +4,7 @@ import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage;
 import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -108,6 +109,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
     @Then("^Operator verify ticket is created successfully on page Recovery Tickets$")
     public void verifyTicketIsCreateSuccessfully()
     {
+        pause10s();
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         boolean isTicketCreated = recoveryTicketsPage.verifyTicketIsExist(trackingId);
         assertTrue(f("Ticket '%s' does not created.", trackingId), isTicketCreated);
@@ -130,7 +132,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
     @And("Operator clicks on Delete on pop up")
     public void operatorClicksOnDeleteOnPopUp() {
         recoveryTicketsPage.clickButtonByAriaLabel("Delete");
-        pause1s();
+        pause2s();
     }
 
     @Then("Operator verifies that the status of ticket is {string}")
@@ -219,7 +221,75 @@ public class RecoveryTicketsSteps extends AbstractSteps
     public void changeTicketStatus(String status) {
         recoveryTicketsPage.selectTicketStatus(status);
         pause2s();
+        recoveryTicketsPage.clickButtonByAriaLabel("Update Ticket");
+        pause1s();
+    }
+
+    @Then("Operator chooses the ticket status as {string}")
+    public void ticketStatusFilter(String status) {
+        recoveryTicketsPage.chooseTicketStatusFilter(status);
+        pause2s();
+
+    }
+
+    @And("Operator clicks on Edit Filters button")
+    public void clickEditFiltersButton() {
+        recoveryTicketsPage.clickButtonByAriaLabel("Edit Filter");
+        pause2s();
+    }
+
+    @When("Operator removes all ticket status filters")
+    public void removeAllTicketStatusAndTrackingIdFilters() {
+        recoveryTicketsPage.waitUntilPageLoaded();
+        String xpathExpressionForTrackingIdFilter = "//p[text()='Tracking IDs']/parent::div/following-sibling::div//button[@aria-label='Clear All']";
+        recoveryTicketsPage.clickButtonByAriaLabel("Clear All Selections");
+        if(recoveryTicketsPage.isElementVisible(xpathExpressionForTrackingIdFilter))
+        {
+            recoveryTicketsPage.click(xpathExpressionForTrackingIdFilter);
+
+        }
+        recoveryTicketsPage.click("//p[text()='Ticket Status']/parent::div/following-sibling::div//button[@aria-label='Clear All']");
+    }
+
+    @And("Operator enters the tracking id and verifies that is exists")
+    public void operatorEntersTheTrackingIdAndVerifiesThatIsExists() {
+        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        recoveryTicketsPage.scrollIntoView("//span[text()='Tracking ID']/..//input");
+        recoveryTicketsPage.sendKeys("//span[text()='Tracking ID']/..//input",trackingId);
+        pause2s();
+        boolean doesTicketExist = recoveryTicketsPage.verifyTicketExistsInTheCorrectStatusFilter(trackingId);
+        assertTrue(f("Ticket '%s' exists in correct filer",trackingId), doesTicketExist);
+        pause2s();
+    }
+
+    @Then("Operator changes the ticket status to Resloved")
+    public void changeTicketStatusToResloved() {
+        recoveryTicketsPage.selectTicketStatus("RESOLVED");
+        pause2s();
         recoveryTicketsPage.clickButtonByAriaLabel("Keep");
         pause2s();
+    }
+
+    @Then("Operator chooses all the ticket status filters")
+    public void chooseAllTheTicketStatusFilters() {
+        recoveryTicketsPage.chooseAllTicketStatusFilters();
+    }
+
+    @Then("Operator chooses Entry Source Filter as {string}")
+    public void chooseEntrySourceFilter(String entrySource) {
+        recoveryTicketsPage.addFilter(entrySource);
+    }
+
+    @When("Operator enters the wrong Tracking Id")
+    public void entersWrongTrackingId() {
+        String trackingId = "NVSGTEST"+f(String.valueOf(System.currentTimeMillis()/1000));
+        recoveryTicketsPage.searchTableByTrackingId(trackingId);
+    }
+
+    @Then("No Results should be displayed")
+    public void noResultsShouldDisplayed() {
+        String expectedResult = "No Results Found";
+        String actualresult = recoveryTicketsPage.displayNoResults();
+        assertEquals(expectedResult.toLowerCase().trim(),actualresult.trim().toLowerCase());
     }
 }

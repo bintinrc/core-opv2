@@ -2,8 +2,10 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RecoveryTicket;
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 /**
  *
@@ -20,6 +22,9 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     public static final String TICKET_TYPE_MISSING = "MISSING";
     public static final String TICKET_TYPE_PARCEL_EXCEPTION = "PARCEL EXCEPTION";
     public static final String TICKET_TYPE_SHIPPER_ISSUE = "SHIPPER ISSUE";
+    private static final String xpathForFilters = "//p[text()='%s']/parent::div/following-sibling::div//input";
+    public static final String xpathForFilterOption = "//span[text()='%s']";
+    public static final String xpathLoadSelection = "//button[@aria-label='Load Selection']";
 
     public RecoveryTicketsPage(WebDriver webDriver)
     {
@@ -100,6 +105,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast("Ticket created");
     }
 
+
     public void editTicketSettings(RecoveryTicket recoveryTicket)
     {
         waitUntilPageLoaded();
@@ -129,9 +135,10 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         return trackingId.equals(actualTrackingId);
     }
 
-    public void removeFilterTicketSubType()
+    public boolean verifyTicketExistsInTheCorrectStatusFilter(String trackingId)
     {
-        click("//nv-filter-box[@main-title='Ticket Sub Type']//button[@aria-label='Remove Filter']");
+        String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
+        return trackingId.equals(actualTrackingId);
     }
 
     public void enterTrackingId(String trackingId)
@@ -141,6 +148,42 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         sendKeysAndEnterByAriaLabel("Type in here..", trackingId);
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
         pause1s();
+    }
+
+    public void chooseTicketStatusFilter(String status)
+    {
+        click(f(xpathForFilters,"Ticket Status"));
+        pause2s();
+        click(f(xpathForFilterOption,status));
+        altClick(xpathLoadSelection);
+        pause1s();
+    }
+
+    public void addFilter(String entrySource)
+    {
+        clickButtonByAriaLabel("Clear All Selections");
+        pause2s();
+        click("//input[@aria-label='Select Filter']");
+        click(f(xpathForFilterOption,"Entry Source"));
+        click("//label[text()='Add Filter']/..//i[text()='arrow_drop_down']");
+        pause1s();
+        click(f(xpathForFilters,"Entry Source"));
+        click(f(xpathForFilterOption,entrySource));
+        altClick(xpathLoadSelection);
+        pause1s();
+    }
+
+    public void chooseAllTicketStatusFilters()
+    {
+        click(f(xpathForFilters,"Ticket Status"));
+        pause2s();
+        click(f(xpathForFilterOption,"IN PROGRESS"));
+        click(f(xpathForFilterOption,"ON HOLD"));
+        click(f(xpathForFilterOption,"PENDING"));
+        click(f(xpathForFilterOption,"PENDING SHIPPER"));
+        click(f(xpathForFilterOption,"CANCELLED"));
+        click(f(xpathForFilterOption,"RESOLVED"));
+        altClick(xpathLoadSelection);
     }
 
     public void verifyTicketIsMade(String trackingId)
@@ -156,8 +199,8 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         pause2s();
         String status = getTextById("ticket-status");
         assertEquals(expectedStatus.toLowerCase(),status.toLowerCase());
-
     }
+
     public void selectEntrySource(String entrySource)
     {
         selectValueFromMdSelectById("entry-source", entrySource);
@@ -303,7 +346,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         pause1s();
 
         // Click load selection.
-        altClick("//button[@aria-label='Load Selection']");
+        altClick(xpathLoadSelection);
     }
 
     public void waitUntilPageLoaded()
@@ -316,4 +359,21 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     {
         return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
     }
+
+    public String displayNoResults()
+    {
+        pause2s();
+        String actualResult = getText("//table[contains(@class,'noStripe')]//h5");
+        return actualResult;
+    }
+
+    public String getTextByClassInTable(String id)
+    {
+        String xpathExpression = f("//td[@class='%s']",id);
+        scrollIntoView(f(xpathExpression,id));
+        pause2s();
+        String text = getText(xpathExpression).replace("▸","").trim();
+        return text;
+    }
+
 }

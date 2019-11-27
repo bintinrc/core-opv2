@@ -28,6 +28,9 @@ import java.util.stream.Collectors;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class OperatorV2SimplePage extends SimplePage
 {
+    private static final String xpathForMDSlelectContainsId="//md-select[contains(@id,'%s')]";
+    private static final String xpathForInputFieldsInEditRecovery = "//input[contains(@id,'%s')]/preceding-sibling::div";
+
     public OperatorV2SimplePage(WebDriver webDriver)
     {
         super(webDriver);
@@ -1260,30 +1263,22 @@ public class OperatorV2SimplePage extends SimplePage
 
     public String getTextById(String id)
     {
-        String xpathExpression = f("//md-select[contains(@id,'%s')]",id);
+        String xpathExpression = f(xpathForMDSlelectContainsId,id);
         String text = getText(xpathExpression).trim();
         return text;
     }
 
     public String getTextByIdForInputFields(String id)
     {
-        String xpathExpression = f("//input[contains(@id,'%s')]/preceding-sibling::div",id);
+        String xpathExpression = f(xpathForInputFieldsInEditRecovery,id);
         String text = getText(xpathExpression).trim();
         return text;
     }
 
     public String getInnerTextByIdForInputFields(String id)
     {
-        String xpathExpression = f("//input[contains(@id,'%s')]/preceding-sibling::div",id);
+        String xpathExpression = f(xpathForInputFieldsInEditRecovery,id);
         String text = getAttribute(xpathExpression, "innerText").trim();
         return text;
     }
-
-    public String getTextByClassInTable(String id)
-    {
-        String xpathExpression = f("//td[@class='%s']",id);
-        String text = getText(xpathExpression).replace("▸","").trim();
-        return text;
-    }
-
 }
