@@ -18,13 +18,13 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking-id";
 
-    public static final String TICKET_TYPE_DAMAGED = "DAMAGED";
-    public static final String TICKET_TYPE_MISSING = "MISSING";
-    public static final String TICKET_TYPE_PARCEL_EXCEPTION = "PARCEL EXCEPTION";
-    public static final String TICKET_TYPE_SHIPPER_ISSUE = "SHIPPER ISSUE";
-    private static final String xpathForFilters = "//p[text()='%s']/parent::div/following-sibling::div//input";
-    public static final String xpathForFilterOption = "//span[text()='%s']";
-    public static final String xpathLoadSelection = "//button[@aria-label='Load Selection']";
+    private static final String TICKET_TYPE_DAMAGED = "DAMAGED";
+    private static final String TICKET_TYPE_MISSING = "MISSING";
+    private static final String TICKET_TYPE_PARCEL_EXCEPTION = "PARCEL EXCEPTION";
+    private static final String TICKET_TYPE_SHIPPER_ISSUE = "SHIPPER ISSUE";
+    private static final String XPATH_FOR_FILTERS = "//p[text()='%s']/parent::div/following-sibling::div//input";
+    private static final String XPATH_FOR_FILTER_OPTION = "//span[text()='%s']";
+    private static final String XPATH_LOAD_SELECTION = "//button[@aria-label='Load Selection']";
 
     public RecoveryTicketsPage(WebDriver webDriver)
     {
@@ -152,10 +152,10 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void chooseTicketStatusFilter(String status)
     {
-        click(f(xpathForFilters,"Ticket Status"));
+        click(f(XPATH_FOR_FILTERS,"Ticket Status"));
         pause2s();
-        click(f(xpathForFilterOption,status));
-        altClick(xpathLoadSelection);
+        click(f(XPATH_FOR_FILTER_OPTION,status));
+        altClick(XPATH_LOAD_SELECTION);
         pause1s();
     }
 
@@ -164,26 +164,26 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         clickButtonByAriaLabel("Clear All Selections");
         pause2s();
         click("//input[@aria-label='Select Filter']");
-        click(f(xpathForFilterOption,"Entry Source"));
+        click(f(XPATH_FOR_FILTER_OPTION,"Entry Source"));
         click("//label[text()='Add Filter']/..//i[text()='arrow_drop_down']");
         pause1s();
-        click(f(xpathForFilters,"Entry Source"));
-        click(f(xpathForFilterOption,entrySource));
-        altClick(xpathLoadSelection);
+        click(f(XPATH_FOR_FILTERS,"Entry Source"));
+        click(f(XPATH_FOR_FILTER_OPTION,entrySource));
+        altClick(XPATH_LOAD_SELECTION);
         pause1s();
     }
 
     public void chooseAllTicketStatusFilters()
     {
-        click(f(xpathForFilters,"Ticket Status"));
+        click(f(XPATH_FOR_FILTERS,"Ticket Status"));
         pause2s();
-        click(f(xpathForFilterOption,"IN PROGRESS"));
-        click(f(xpathForFilterOption,"ON HOLD"));
-        click(f(xpathForFilterOption,"PENDING"));
-        click(f(xpathForFilterOption,"PENDING SHIPPER"));
-        click(f(xpathForFilterOption,"CANCELLED"));
-        click(f(xpathForFilterOption,"RESOLVED"));
-        altClick(xpathLoadSelection);
+        click(f(XPATH_FOR_FILTER_OPTION,"IN PROGRESS"));
+        click(f(XPATH_FOR_FILTER_OPTION,"ON HOLD"));
+        click(f(XPATH_FOR_FILTER_OPTION,"PENDING"));
+        click(f(XPATH_FOR_FILTER_OPTION,"PENDING SHIPPER"));
+        click(f(XPATH_FOR_FILTER_OPTION,"CANCELLED"));
+        click(f(XPATH_FOR_FILTER_OPTION,"RESOLVED"));
+        altClick(XPATH_LOAD_SELECTION);
     }
 
     public void verifyTicketIsMade(String trackingId)
@@ -346,7 +346,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         pause1s();
 
         // Click load selection.
-        altClick(xpathLoadSelection);
+        altClick(XPATH_LOAD_SELECTION);
     }
 
     public void waitUntilPageLoaded()
