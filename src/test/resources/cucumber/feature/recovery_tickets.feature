@@ -1,6 +1,6 @@
 @OperatorV2 @OperatorV2Part1 @RecoveryTickets @Saas
 Feature: Recovery Tickets
-
+  
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
