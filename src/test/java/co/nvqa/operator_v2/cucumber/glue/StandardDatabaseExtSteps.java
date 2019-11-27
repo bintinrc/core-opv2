@@ -412,6 +412,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         String postcode = Objects.equals(mapOfData.get("postcode"), "GET_FROM_CREATED_ORDER") ? order.getToPostcode() :
                 mapOfData.get("postcode");
         String routeId = mapOfData.get("routeId");
+        String priorityLevel = mapOfData.get("priorityLevel");
         if (Objects.nonNull(distributionPointId)){
             Integer distributionPointIdInt = Objects.equals(distributionPointId, "null") ? null : NumberUtils.createInteger(distributionPointId);
             assertEquals("DistributionPointId in Transaction entity is not as expected in db", distributionPointIdInt, entity.getDistributionPointId());
@@ -435,11 +436,17 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
             Integer routeIdInt = Objects.equals(routeId, "null") ? null : NumberUtils.createInteger(routeId);
             assertEquals("RouteId in Transaction entity is not as expected in db", routeIdInt, entity.getRouteId());
         }
+        if (Objects.nonNull(priorityLevel)){
+            Integer priorityLevelInt = Objects.equals(priorityLevel, "null") ? null : NumberUtils.createInteger(priorityLevel);
+            assertEquals("PriorityLevel in Transaction entity is not as expected in db", priorityLevelInt, entity.getPriorityLevel());
+        }
     }
 
     @Then("^DB Operator verify next Pickup transaction values are updated for the created order:$")
     public void dbOperatorVerifyPickupTransactionRecordUpdatedForTheCreatedOrderForParameters(Map<String, String> mapOfData)
     {
+        Map<String, String> mapOfTokens = createDefaultTokens();
+        mapOfData = replaceDataTableTokens(mapOfData, mapOfTokens);
         Order order = get(KEY_CREATED_ORDER);
         String type = "PP";
         List<TransactionEntity> transactions = getCoreJdbc().findTransactionByOrderIdAndType(order.getId(), type);
@@ -449,10 +456,24 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         put(KEY_WAYPOINT_ID, entity.getWaypointId());
 
         String routeId = mapOfData.get("routeId");
+        String priorityLevel = mapOfData.get("priorityLevel");
+        String status = mapOfData.get("status");
+        String serviceEndTime = mapOfData.get("serviceEndTime");
         if (Objects.nonNull(routeId)){
             Integer routeIdInt = Objects.equals(mapOfData.get("routeId"), "null") ? null :
                     NumberUtils.createInteger(mapOfData.get("routeId"));
-            assertEquals("RouteId in Transaction entity is not as expected in db", routeIdInt, entity.getRouteId());
+            assertEquals("RouteId in DB Transaction entity is not as expected", routeIdInt, entity.getRouteId());
+        }
+        if (Objects.nonNull(priorityLevel)){
+            Integer priorityLevelInt = Objects.equals(mapOfData.get("priorityLevel"), "null") ? null :
+                    NumberUtils.createInteger(mapOfData.get("priorityLevel"));
+            assertEquals("PriorityLevel in DB Transaction entity is not as expected", priorityLevelInt, entity.getPriorityLevel());
+        }
+        if (Objects.nonNull(status)){
+            assertEquals("Status in DB Transaction entity is not as expected", status, entity.getStatus());
+        }
+        if (Objects.nonNull(serviceEndTime)){
+            assertEquals("Service End Time in DB Transaction entity is not as expected", serviceEndTime, DateUtil.SDF_YYYY_MM_DD.format(entity.getServiceEndTime()));
         }
     }
 
@@ -460,6 +481,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     public void dbOperatorVerifyTheLastInboundScansRecord(Map<String, String> mapOfData)
     {
         Long orderId = get(KEY_CREATED_ORDER_ID);
+        Order order = get(KEY_CREATED_ORDER);
         List<InboundScanEntity> inboundScans = getCoreJdbc().findInboundScansByOrderId(orderId);
         InboundScanEntity theLastInboundScan = inboundScans.get(inboundScans.size() - 1);
 
@@ -475,6 +497,14 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         if (StringUtils.isNotBlank(value))
         {
             assertEquals("Type", Short.valueOf(value), theLastInboundScan.getType());
+        }
+
+        String trackingId = "GET_FROM_CREATED_ORDER".equalsIgnoreCase(mapOfData.get("trackingId")) ? order.getTrackingId() :
+                mapOfData.get("trackingId");
+
+        if (StringUtils.isNotBlank(trackingId))
+        {
+            assertEquals("TrackingId", trackingId, theLastInboundScan.getScan());
         }
     }
 
