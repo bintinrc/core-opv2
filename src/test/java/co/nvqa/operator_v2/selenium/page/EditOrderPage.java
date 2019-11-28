@@ -595,6 +595,17 @@ public class EditOrderPage extends OperatorV2SimplePage
         return getText("//nv-tag[@ng-repeat='tag in ctrl.orderTags']/*");
     }
 
+    public List<String> getTags()
+    {
+        List<String> tags = new ArrayList<>();
+        List<WebElement> listOfTags = findElementsByXpath("//div[@id='order-tags-container']/nv-tag/span");
+        for(WebElement we : listOfTags)
+        {
+            tags.add(we.getText());
+        }
+        return tags;
+    }
+
     @SuppressWarnings("unused")
     public String getLatestEvent()
     {
