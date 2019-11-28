@@ -5,7 +5,7 @@ Feature: Order Tag Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Add Tags to Order
+  Scenario: Add Tags to Order (uid:91100421-447c-4e9b-8ac0-b4614dff8ddd)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -26,7 +26,7 @@ Feature: Order Tag Management
     And DB Operator verify order_events record for the created order:
       | type | 48 |
 
-  Scenario: Remove Tags x`from Order
+  Scenario: Remove Tags from Order (uid:17d845d9-5acf-45d7-bba8-4ecd55d295c1)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -58,7 +58,7 @@ Feature: Order Tag Management
     And DB Operator verify order_events record for the created order:
       | type | 48 |
 
-  Scenario: Update Tags from Order
+  Scenario: Update Tags from Order (uid:7a99d8b5-6b5b-4b3f-bce0-e32017a328f9)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

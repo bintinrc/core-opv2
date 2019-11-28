@@ -96,7 +96,8 @@ public class OrderTagManagementPage extends OperatorV2SimplePage
         clickButtonByAriaLabel("Action");
         clickButtonByAriaLabel("Remove Tags");
 
-        for (int i = 0; i < orderTag.size(); i++) {
+        for (int i = 0; i < orderTag.size(); i++)
+        {
             sendKeysAndEnter("//md-autocomplete//input[@aria-autocomplete='list']", String.valueOf(orderTag.get(i)));
         }
 
