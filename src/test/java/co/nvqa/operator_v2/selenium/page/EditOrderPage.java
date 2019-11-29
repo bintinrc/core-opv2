@@ -1093,6 +1093,22 @@ public class EditOrderPage extends OperatorV2SimplePage
             assertTrue(f("'%s' pattern is not present in the '%s' event description", addressPattern, eventDescription),
                     eventDescription.matches(addressPattern));
         }
+
+        public void verifyVerifyUpdateCashDescription(Order order, String eventDescription)
+        {
+            String cashPattern = null;
+            if (String.valueOf(order.getCod().getGoodsAmount()) == null)
+            {
+                cashPattern = f("Cash On Delivery changed from 0 to .*", order.getCod().getGoodsAmount());
+                assertTrue(f("'%s' pattern is not present in the '%s' event description", cashPattern, eventDescription),
+                        eventDescription.matches(cashPattern));
+            } else
+            {
+                cashPattern = f("Cash On Delivery changed from %s to .*", order.getCod().getGoodsAmount());
+                assertTrue(f("'%s' pattern is not present in the '%s' event description", cashPattern, eventDescription),
+                        eventDescription.matches(cashPattern));
+            }
+        }
     }
 
     public void tagOrderToDP(String dpId) {
@@ -1983,5 +1999,51 @@ public class EditOrderPage extends OperatorV2SimplePage
         public void confirmPulledFromRouteMessageDisplayed(String trackingId, Long routeId){
             waitUntilInvisibilityOfToast(f(PULL_FROM_ROUTE_SUCCESSFUL_TOAST_MESSAGE_PATTERN, trackingId, routeId), true);
         }
+    }
+
+    public void changeCopValue (Integer copValue)
+    {
+        click("//input[@id='Amount']");
+        webDriver.findElement(By.id("Amount")).sendKeys(String.valueOf(copValue));
+        clickNvApiTextButtonByName("commons.save-changes");
+    }
+
+    public void changeCodValue (Integer codValue)
+    {
+        click("//input[@id='Amount']");
+        webDriver.findElement(By.id("Amount")).sendKeys(String.valueOf(codValue));
+        clickNvApiTextButtonByName("commons.save-changes");
+    }
+
+    public void verifyCopUpdated(Integer copValue)
+    {
+        assertEquals("COP Value", "COP SGD"+(copValue/100), getText("//nv-tag/span[contains(text(),'COP SGD')]"));
+    }
+
+    public void verifyCodUpdated(Integer codValue)
+    {
+        assertEquals("COD Value", "COD SGD"+(codValue/100), getText("//nv-tag/span[contains(text(),'COD SGD')]"));
+    }
+
+    public void changeCopToggleToYes()
+    {
+        click("//div[label[@label = 'Cash on Pickup']]//button[@aria-label='Yes']");
+    }
+
+    public void changeCopToggleToNo()
+    {
+        click("//div[label[@label = 'Cash on Pickup']]//button[@aria-label='No']");
+        clickNvApiTextButtonByName("commons.save-changes");
+    }
+
+    public void changeCodToggleToYes()
+    {
+        click("//div[label[@label = 'Cash on Delivery']]//button[@aria-label='Yes']");
+    }
+
+    public void changeCodToggleToNo()
+    {
+        click("//div[label[@label = 'Cash on Delivery']]//button[@aria-label='No']");
+        clickNvApiTextButtonByName("commons.save-changes");
     }
 }
