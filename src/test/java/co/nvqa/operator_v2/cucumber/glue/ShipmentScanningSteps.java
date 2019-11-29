@@ -7,6 +7,8 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
+import java.util.List;
+
 /**
  *
  * @author Lanang Jati
@@ -49,5 +51,24 @@ public class ShipmentScanningSteps extends AbstractSteps
     public void operatorCloseTheShipmentWhichHasBeenCreated()
     {
         shipmentScanningPage.closeShipment();
+    }
+
+    @When("^Operator scan multiple created order to shipment in hub ([^\"]*)$")
+    public void aPIShipperTagsMultipleParcelsAsPerTheBelowTag(String hub)
+    {
+        List<String> trackingIds = (get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID));
+        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+        String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
+                ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
+                ((Shipments)get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
+
+        shipmentScanningPage.selectHub(hub);
+        shipmentScanningPage.selectShipmentType(shipmentType);
+        shipmentScanningPage.selectShipmentId(shipmentId);
+        shipmentScanningPage.clickSelectShipment();
+
+        for (int i = 0; i < trackingIds.size(); i++) {
+            shipmentScanningPage.scanBarcode(trackingIds.get(i));
+        }
     }
 }
