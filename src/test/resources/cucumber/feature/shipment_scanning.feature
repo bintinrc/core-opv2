@@ -20,7 +20,7 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     When Operator scan the created order to shipment in hub {hub-name}
 
-  Scenario: Scan multiple orders to shipment
+  Scenario: Scan multiple orders to shipment (uid:d3759781-3a4f-4ae5-8f44-229b72ac9bff)
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
