@@ -234,6 +234,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
 
     @And("Operator clicks on Edit Filters button")
     public void clickEditFiltersButton() {
+        pause2s();
         recoveryTicketsPage.clickButtonByAriaLabel("Edit Filter");
         pause2s();
     }
@@ -257,6 +258,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
         recoveryTicketsPage.scrollIntoView("//span[text()='Tracking ID']/..//input");
         recoveryTicketsPage.sendKeys("//span[text()='Tracking ID']/..//input",trackingId);
         pause2s();
+        recoveryTicketsPage.waitUntilInvisibilityOfElementLocated("//*[contains(text(),'Loading more results')]");
         boolean doesTicketExist = recoveryTicketsPage.verifyTicketExistsInTheCorrectStatusFilter(trackingId);
         assertTrue(f("Ticket '%s' exists in correct filer",trackingId), doesTicketExist);
         pause2s();
@@ -291,5 +293,30 @@ public class RecoveryTicketsSteps extends AbstractSteps
         String expectedResult = "No Results Found";
         String actualresult = recoveryTicketsPage.displayNoResults();
         assertEquals(expectedResult.toLowerCase().trim(),actualresult.trim().toLowerCase());
+    }
+
+    @Then("Operator chooses Investigating Hub filter as {string}")
+    public void chooseInvestigatingHubFilter(String hub) {
+        recoveryTicketsPage.addInvestigatingHubFilter(hub);
+    }
+
+    @Then("Operator chooses Investigating Dept Filter as {string}")
+    public void chooseInvestigatingDeptFilter(String dept) {
+        recoveryTicketsPage.addInvestigatingDeptFilter(dept);
+    }
+
+    @Then("Operator chooses Show Unassigned Filter as {string}")
+    public void chooseShowUnassignedFilter(String unassignedFilter) {
+        recoveryTicketsPage.showUnassignedFilter(unassignedFilter);
+    }
+
+    @And("Operator assigns the ticket to {string}")
+    public void operatorAssignsTheTicketTo(String assignTo) {
+        recoveryTicketsPage.assignToTicket(assignTo);
+    }
+
+    @Then("Operator chooses Resolved Tickets Filter as {string}")
+    public void chooseResolvedTicketsFilter(String filter) {
+        recoveryTicketsPage.resolvedTicketsFilter(filter);
     }
 }

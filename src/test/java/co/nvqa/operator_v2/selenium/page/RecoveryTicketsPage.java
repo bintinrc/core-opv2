@@ -25,6 +25,10 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     private static final String XPATH_FOR_FILTERS = "//p[text()='%s']/parent::div/following-sibling::div//input";
     private static final String XPATH_FOR_FILTER_OPTION = "//span[text()='%s']";
     private static final String XPATH_LOAD_SELECTION = "//button[@aria-label='Load Selection']";
+    private static final String XPATH_SELECT_FILTER = "//input[@aria-label='Select Filter']";
+    private static final String XPATH_ARROW_DROPDOWN = "//label[text()='Add Filter']/..//i[text()='arrow_drop_down']";
+    private static final String XPATH_SHOW_UNASSIGNED_RESOLVED_TICKET = "//span[text()='%s']/parent::button";
+    private static final String XPATH_REMOVE_TRACKINGID_FILTER = "//p[text()='Tracking IDs']/../following-sibling::div//button[@aria-label='Clear All']";
 
     public RecoveryTicketsPage(WebDriver webDriver)
     {
@@ -163,14 +167,87 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     {
         clickButtonByAriaLabel("Clear All Selections");
         pause2s();
-        click("//input[@aria-label='Select Filter']");
+        click(XPATH_SELECT_FILTER);
         click(f(XPATH_FOR_FILTER_OPTION,"Entry Source"));
-        click("//label[text()='Add Filter']/..//i[text()='arrow_drop_down']");
+        click(XPATH_ARROW_DROPDOWN);
         pause1s();
         click(f(XPATH_FOR_FILTERS,"Entry Source"));
         click(f(XPATH_FOR_FILTER_OPTION,entrySource));
         altClick(XPATH_LOAD_SELECTION);
         pause1s();
+    }
+
+    public void addInvestigatingHubFilter(String hub)
+    {
+        clickButtonByAriaLabel("Clear All Selections");
+        pause2s();
+        click(XPATH_SELECT_FILTER);
+        click(f(XPATH_FOR_FILTER_OPTION,"Investigating Hub"));
+        click(XPATH_ARROW_DROPDOWN);
+        pause1s();
+        click(f(XPATH_FOR_FILTERS,"Investigating Hub"));
+        sendKeys(f(XPATH_FOR_FILTERS,"Investigating Hub"),hub);
+        click(f(XPATH_FOR_FILTER_OPTION,hub));
+        altClick(XPATH_LOAD_SELECTION);
+        pause1s();
+    }
+
+    public void addInvestigatingDeptFilter(String dept)
+    {
+        clickButtonByAriaLabel("Clear All Selections");
+        pause2s();
+        click(XPATH_SELECT_FILTER);
+        click(f(XPATH_FOR_FILTER_OPTION,"Investigating Dept."));
+        click(XPATH_ARROW_DROPDOWN);
+        pause1s();
+        click(f(XPATH_FOR_FILTERS,"Investigating Dept."));
+        sendKeysAndEnter(f(XPATH_FOR_FILTERS,"Investigating Dept."),dept);
+        pause2s();
+        altClick(XPATH_LOAD_SELECTION);
+        pause1s();
+    }
+
+    public void showUnassignedFilter(String show)
+    {
+        clickButtonByAriaLabel("Clear All Selections");
+        pause2s();
+        if(isElementVisible(XPATH_REMOVE_TRACKINGID_FILTER))
+        {
+            click(XPATH_REMOVE_TRACKINGID_FILTER);
+        }
+        click(XPATH_SELECT_FILTER);
+        click(f(XPATH_FOR_FILTER_OPTION,"Show Unassigned"));
+        click(XPATH_ARROW_DROPDOWN);
+        pause1s();
+        click(f(XPATH_SHOW_UNASSIGNED_RESOLVED_TICKET,show));
+        pause1s();
+        altClick(XPATH_LOAD_SELECTION);
+        pause1s();
+    }
+
+    public void resolvedTicketsFilter(String filter)
+    {
+        clickButtonByAriaLabel("Clear All Selections");
+        pause2s();
+        if(isElementVisible(XPATH_REMOVE_TRACKINGID_FILTER))
+        {
+            click(XPATH_REMOVE_TRACKINGID_FILTER);
+        }
+        click(XPATH_SELECT_FILTER);
+        click(f(XPATH_FOR_FILTER_OPTION,"Resolved Tickets"));
+        click(XPATH_ARROW_DROPDOWN);
+        pause1s();
+        click(f(XPATH_SHOW_UNASSIGNED_RESOLVED_TICKET,filter));
+        pause1s();
+        altClick(XPATH_LOAD_SELECTION);
+        pause1s();
+    }
+
+    public void assignToTicket(String assignTo)
+    {
+        waitUntilPageLoaded();
+        selectAssignTo(assignTo);
+        clickButtonByAriaLabel("Update Ticket");
     }
 
     public void chooseAllTicketStatusFilters()
