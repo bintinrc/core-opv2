@@ -43,6 +43,16 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
         checkSessionScan(shipmentId);
     }
 
+    public void inboundScanningUsingMawb(Long shipmentId, String mawb, String label, String hub)
+    {
+        selectHub(hub);
+        click(grabXpathButton(label));
+        clickStartInbound();
+
+        inputShipmentToInboundUsingMawb(mawb);
+        checkSessionScan(shipmentId);
+    }
+
     public void clickStartInbound(){
         clickNvIconTextButtonByNameAndWaitUntilDone("container.inbound-scanning.start-inbound");
     }
@@ -71,6 +81,11 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
     public void inputShipmentToInbound(Long shipmentId)
     {
         sendKeysAndEnter(XPATH_SCAN_INPUT, String.valueOf(shipmentId));
+    }
+
+    public void inputShipmentToInboundUsingMawb(String mawb)
+    {
+        sendKeysAndEnter(XPATH_SCAN_INPUT, mawb);
     }
 
     public void checkSessionScan(Long shipmentId)

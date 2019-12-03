@@ -45,6 +45,25 @@ Feature: Shipment Management
     Then Operator verify parameters of the created shipment on Shipment Management page
 
   @DeleteShipment
+  Scenario: Edit Shipment with New Flow with/without Master AWB - Edit Shipment with Master AWB edited (uid:65b8fe8c-7939-412b-85cd-dede814b0316)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator click "Load All Selection" on Shipment Management page
+    When Operator edit Shipment on Shipment Management page using data below:
+      | destHubName | {hub-name-2}                                                         |
+      | origHubName | {hub-name}                                                           |
+      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+
+  @DeleteShipment
   Scenario: Open Shipment Details (uid:d4072972-d4f1-446f-aaed-62a5c43ab03d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -109,6 +128,20 @@ Feature: Shipment Management
       | status | Cancelled |
 
   @DeleteShipment
+  Scenario: Edit Shipment with Status Cancelled (uid:29897303-c985-4a11-836f-c42d20ff7a46)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    And Operator click "Load All Selection" on Shipment Management page
+    And Operator cancel the created shipment on Shipment Management page
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | status | Cancelled |
+    When Operator edits and verifies that the cancelled shipment cannot be edited
+
+  @DeleteShipment
   Scenario Outline: Shipment Searching by Filters - <scenarioName> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -125,6 +158,26 @@ Feature: Shipment Management
       | Searching Shipment by End Hub                   | Searching Shipment by End Hub                    | uid:359d17e1-60e8-45cd-a7d4-5380c2814cfe | End Hub         | {hub-name-2} |
       | Searching Shipment by Shipment Type             | Searching Shipment by Shipment Type              | uid:7e524790-c0f5-4f99-a36b-51a0a6428013 | Shipment Type   | Air Haul     |
       | Searching Shipment by Shipment Status - PENDING | Searching Shipment by Shipment Status - PENDING  | uid:48d0c501-d985-469d-bf08-77da6b623b05 | Shipment Status | Pending      |
+
+  @DeleteShipment
+  Scenario: Shipment Searching by Filters - Searching Shipment by MAWB (uid:8179dd7c-e0fb-4795-8085-e3c3844ad9b8)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator click "Load All Selection" on Shipment Management page
+    When Operator edit Shipment on Shipment Management page using data below:
+      | destHubName | {hub-name-2}                                                         |
+      | origHubName | {hub-name}                                                           |
+      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter shipment based on MAWB value on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
 
   @DeleteShipment
   Scenario: Shipment Searching by Filters - Searching Shipment by Shipment Status - CLOSED (uid:965abd28-43c7-4896-b950-4a2562951a7a)
