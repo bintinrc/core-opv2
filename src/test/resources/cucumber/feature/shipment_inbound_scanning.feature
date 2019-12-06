@@ -17,6 +17,32 @@ Feature: Shipment Inbound Scanning
     Then Operator verify inbounded Shipment exist on Shipment Management page
 
   @DeleteShipment
+  Scenario: MAWB Scanning - Van-Inbound (uid:6ce411fc-29fe-42ee-8568-ad37aa9a3a2d)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator click "Load All Selection" on Shipment Management page
+    When Operator edit Shipment on Shipment Management page using data below:
+      | destHubName | {hub-name-2}                                                         |
+      | origHubName | {hub-name}                                                           |
+      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page using MAWB
+    When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Transit on Shipment Management page
+    When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
+    When Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify inbounded Shipment exist on Shipment Management page
+
+  @DeleteShipment
   Scenario: Shipment inbound to transit hub (uid:12758688-5e0d-4121-9b27-e11765138648)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
@@ -44,6 +70,32 @@ Feature: Shipment Inbound Scanning
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
+    When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Completed on Shipment Management page
+    When Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
+    When Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify inbounded Shipment exist on Shipment Management page
+
+  @DeleteShipment
+  Scenario: MAWB Scanning - Hub-Inbound (uid:5116c91f-a5e0-4094-be0d-73115b5c19a3)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator click "Load All Selection" on Shipment Management page
+    When Operator edit Shipment on Shipment Management page using data below:
+      | destHubName | {hub-name-2}                                                         |
+      | origHubName | {hub-name}                                                           |
+      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page using MAWB
     When Operator go to menu Inter-Hub -> Shipment Management
     When Operator filter Shipment Status = Completed on Shipment Management page
     When Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page

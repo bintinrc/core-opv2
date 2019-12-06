@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
+import co.nvqa.operator_v2.util.KeyConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -62,10 +63,17 @@ public class ShipmentManagementSteps extends AbstractSteps
     @When("^Operator filter ([^\"]*) = ([^\"]*) on Shipment Management page$")
     public void fillSearchFilter(String filter, String value)
     {
-//        final String mawb = get("tanias'mawb");
-
-        shipmentManagementPage.addFilter(filter, value);
+        shipmentManagementPage.addFilter(filter, value, false);
         putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, filter, value);
+    }
+
+    @When("^Operator filter shipment based on MAWB value on Shipment Management page$")
+    public void fillSearchFilterMawb()
+    {
+        final String mawb = get(KeyConstants.KEY_MAWB);
+
+        shipmentManagementPage.addFilter("MAWB", mawb, true);
+        putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, "MAWB", mawb);
     }
 
     @Given("^Operator click Edit filter on Shipment Management page$")
@@ -161,6 +169,10 @@ public class ShipmentManagementSteps extends AbstractSteps
         ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
         shipmentInfo.fromMap(mapOfData);
         shipmentManagementPage.editShipment(shipmentInfo);
+
+        if (shipmentInfo.getMawb() != null || !shipmentInfo.getMawb().isEmpty()) {
+            put(KeyConstants.KEY_MAWB, shipmentInfo.getMawb());
+        }
     }
 
     @Then("^Operator verify parameters of the created shipment on Shipment Management page$")
@@ -215,6 +227,12 @@ public class ShipmentManagementSteps extends AbstractSteps
     {
         ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
         shipmentManagementPage.cancelShipment(shipmentInfo.getId());
+    }
+
+    @When("Operator edits and verifies that the cancelled shipment cannot be edited")
+    public void operatorEditsAndVerifiesThatTheCancelledShipmentCannotBeEdited()
+    {
+        shipmentManagementPage.editCancelledShipment();
     }
 
     @And("^Operator open the Master AWB of the created shipment on Shipment Management Page$")

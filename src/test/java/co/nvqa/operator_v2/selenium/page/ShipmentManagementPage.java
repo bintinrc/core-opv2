@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.pdf.ShipmentAirwayBill;
 import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.commons.util.StandardTestConstants;
-import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
@@ -24,6 +23,7 @@ import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.Shipments
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.COLUMN_SHIPMENT_ID;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.is;
 
 /**
  * @author Lanang Jati
@@ -40,6 +40,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     public static final String LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON = "Create";
     public static final String LOCATOR_CREATE_ANOTHER_SHIPMENT_CONFIRMATION_BUTTON = "Create Another";
     public static final String LOCATOR_COMMENT_TEXT_AREA = "container.shipment-management.comments-optional";
+    public static final String LOCATOR_MAWB_TEXT_AREA = "master-awb";
     public static final String LOCATOR_SELCT_FILTERS_PRESET = "commons.preset.load-filter-preset";
 
     public static final String XPATH_EDIT_SEARCH_FILTER_BUTTON = "//button[contains(@aria-label, 'Edit Filter')]";
@@ -65,6 +66,17 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     public void clickButtonLoadSelection()
     {
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
+    }
+
+    public void clickButtonSaveChangesOnEditShipmentDialogWithMawb(Long shipmentId)
+    {
+        clickNvIconTextButtonByNameAndWaitUntilDone("Save Changes");
+        pause1s();
+
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@aria-describedby,'dialogContent') and not (contains(@class,'shipment-edit'))]");
+        click("//button[@aria-label='Save']");
+
+        waitUntilInvisibilityOfElementLocated(f("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s updated']", shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
     }
 
     public void clickButtonSaveChangesOnEditShipmentDialog(Long shipmentId)
@@ -95,6 +107,13 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         pause200ms();
     }
 
+    public void fillFieldMawb(String mawb)
+    {
+        pause200ms();
+        sendKeysById(LOCATOR_MAWB_TEXT_AREA, mawb);
+        pause200ms();
+    }
+
     public void switchToOtherWindow()
     {
         waitUntilNewWindowOrTabOpened();
@@ -106,10 +125,15 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         }
     }
 
-    public void addFilter(String filterLabel, String value)
+    public void addFilter(String filterLabel, String value, boolean isMawb)
     {
         selectValueFromNvAutocompleteByItemTypesAndDismiss("filters", filterLabel);
-        selectValueFromNvAutocompleteByItemTypesAndDismiss(filterLabel, value);
+        if (!isMawb)
+        {
+            selectValueFromNvAutocompleteByItemTypesAndDismiss(filterLabel, value);
+        } else {
+            sendKeys("//input[@ng-model='search' and contains(@id,'input')]", value);
+        }
         pause1s();
     }
 
@@ -214,7 +238,21 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         selectEndHub(shipmentInfo.getDestHubName());
         fillFieldComments(shipmentInfo.getComments());
 
-        clickButtonSaveChangesOnEditShipmentDialog(shipmentInfo.getId());
+        if (shipmentInfo.getMawb() == null || shipmentInfo.getMawb().isEmpty())
+        {
+            clickButtonSaveChangesOnEditShipmentDialog(shipmentInfo.getId());
+        } else {
+            fillFieldMawb(shipmentInfo.getMawb());
+            clickButtonSaveChangesOnEditShipmentDialogWithMawb(shipmentInfo.getId());
+        }
+    }
+
+    public void editCancelledShipment()
+    {
+        shipmentsTable.clickActionButton(1, ACTION_EDIT);
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'shipment-edit')]");
+        isElementExist("//textarea[@ng-readonly='readOnly']");
+        click("//button[@aria-label='OK']");
     }
 
     public void clickActionButton(Long shipmentId, String actionButton)
