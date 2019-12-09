@@ -168,7 +168,7 @@ Feature: Shipment Management
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     When Operator click "Load All Selection" on Shipment Management page
-    When Operator edit Shipment on Shipment Management page using data below:
+    When Operator edit Shipment on Shipment Management page including MAWB using data below:
       | destHubName | {hub-name-2}                                                         |
       | origHubName | {hub-name}                                                           |
       | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
