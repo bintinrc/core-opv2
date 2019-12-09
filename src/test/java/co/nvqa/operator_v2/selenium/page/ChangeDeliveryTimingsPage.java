@@ -39,11 +39,11 @@ public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage
 
     public void uploadCsvCampaignFile(List<ChangeDeliveryTiming> listOfChangeDeliveryTimings) {
         File csvResultFile = createDeliveryTimingChanging(listOfChangeDeliveryTimings);
-        clickNvIconTextButtonByName("Upload CSV");
+        clickNvApiTextButtonByName("Upload CSV");
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'file-select')]");
         sendKeysByAriaLabel("Choose", csvResultFile.getAbsolutePath());
         clickNvButtonSaveByNameAndWaitUntilDone("Upload CSV");
-        waitUntilInvisibilityOfToast("Delivery Time Updated");
+        waitUntilInvisibilityOfToast(f("%d order(s) updated", listOfChangeDeliveryTimings.size()));
     }
 
     private File createDeliveryTimingChanging(List<ChangeDeliveryTiming> listOfChangeDeliveryTimings) {
