@@ -169,10 +169,15 @@ public class ShipmentManagementSteps extends AbstractSteps
         ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
         shipmentInfo.fromMap(mapOfData);
         shipmentManagementPage.editShipment(shipmentInfo);
+    }
 
-        if (shipmentInfo.getMawb() != null || !shipmentInfo.getMawb().isEmpty()) {
-            put(KeyConstants.KEY_MAWB, shipmentInfo.getMawb());
-        }
+    @When("^Operator edit Shipment on Shipment Management page including MAWB using data below:$")
+    public void operatorEditShipmentOnShipmentManagementPageIncludingMawbUsingDataBelow(Map<String, String> mapOfData)
+    {
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+        shipmentInfo.fromMap(mapOfData);
+        shipmentManagementPage.editShipment(shipmentInfo);
+        put(KeyConstants.KEY_MAWB, shipmentInfo.getMawb());
     }
 
     @Then("^Operator verify parameters of the created shipment on Shipment Management page$")
