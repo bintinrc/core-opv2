@@ -22,6 +22,7 @@ public class StampDisassociationPage extends OperatorV2SimplePage
     }
 
     public void enterStampId(String trackingId){
+        waitUntilPageLoaded();
         sendKeysAndEnterById(LOCATOR_FIELD_STAMP_ID, trackingId);
     }
 
@@ -44,5 +45,15 @@ public class StampDisassociationPage extends OperatorV2SimplePage
 
         String actualDeliveryAddress = StringUtils.normalizeSpace(getText(LOCATOR_TEXT_DELIVERY_ADDRESS));
         assertEquals("Delivery Address", order.buildCompleteToAddress(), actualDeliveryAddress);
+    }
+
+    public void checkAlert(String expectedAlert)
+    {
+        assertEquals("Not Found Alert", expectedAlert, getText("//div[contains(@class, 'order-details-container flex-100')]"));
+    }
+
+    public void clickOnTheDisassociateStampButton()
+    {
+        clickButtonByAriaLabel("Disassociate Stamp");
     }
 }
