@@ -1120,7 +1120,7 @@ public class OperatorV2SimplePage extends SimplePage
     public void searchTableCustom1(String columnClass, String keywords)
     {
         sendKeys(f(".//th[contains(@class, '%s')]/nv-search-input-filter/md-input-container/div/input", columnClass), keywords);
-        pause200ms();
+        pause400ms();
     }
 
     public void searchTableCustom2(String columnClass, String keywords)
