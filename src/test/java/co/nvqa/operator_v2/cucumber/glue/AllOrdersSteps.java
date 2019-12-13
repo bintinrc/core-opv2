@@ -320,4 +320,12 @@ public class AllOrdersSteps extends AbstractSteps
     {
         allOrdersPage.verifyItsCurrentPage();
     }
+
+    @When("^Operator RTS multiple orders on next day on All Orders page$")
+    public void operatorRtsMultipleOrdersOnNextDayOnAllOrdersPage()
+    {
+        List<Order> listOfCreatedOrder = get(KEY_LIST_OF_CREATED_ORDER);
+        List<String> listOfTrackingIds = listOfCreatedOrder.stream().map(Order::getTrackingId).collect(Collectors.toList());
+        allOrdersPage.rtsMultipleOrderNextDay(listOfTrackingIds);
+    }
 }

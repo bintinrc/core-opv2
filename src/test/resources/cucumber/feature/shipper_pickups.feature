@@ -360,6 +360,117 @@ Feature: Shipper Pickups
     Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
       | priorityLevel | 2 |
 
+  Scenario: Operator filters using Waypoint Status filter - PENDING (uid:ece39130-5b50-4025-afc2-9cf08aea30c0)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filters using data below and click Load Selection on Shipper Pickups page:
+      | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
+      | reservationDateEnd   | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName          | {shipper-v4-name}                |
+      | waypointStatus       | PENDING                          |
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName  | {shipper-v4-name}            |
+      | approxVolume | Less than 10 Parcels         |
+      | comments     | GET_FROM_CREATED_RESERVATION |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator filters using Waypoint Status filter - ROUTED (uid:4c0f6b60-7c52-4d93-98ac-30c642318fbf)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add reservation pick-up to the route
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filters using data below and click Load Selection on Shipper Pickups page:
+      | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
+      | reservationDateEnd   | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName          | {shipper-v4-name}                |
+      | waypointStatus       | ROUTED                           |
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName  | {shipper-v4-name}            |
+      | approxVolume | Less than 10 Parcels         |
+      | comments     | GET_FROM_CREATED_RESERVATION |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator filters using Waypoint Status filter - SUCCESS (uid:90724128-68ff-4b66-a30a-8f9808aa0f37)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add reservation pick-up to the route
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filters using data below and click Load Selection on Shipper Pickups page:
+      | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
+      | reservationDateEnd   | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName          | {shipper-v4-name}                |
+      | waypointStatus       | ROUTED                           |
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName  | {shipper-v4-name}            |
+      | approxVolume | Less than 10 Parcels         |
+      | comments     | GET_FROM_CREATED_RESERVATION |
+    When Operator finish reservation with success
+    Then Operator verifies reservation is finished using data below:
+      | backgroundColor | #90ee90 |
+      | status          | SUCCESS |
+    When Operator refresh page
+    When Operator set filters using data below and click Load Selection on Shipper Pickups page:
+      | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
+      | reservationDateEnd   | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName          | {shipper-v4-name}                |
+      | waypointStatus       | SUCCESS                          |
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName  | {shipper-v4-name}            |
+      | approxVolume | Less than 10 Parcels         |
+      | comments     | GET_FROM_CREATED_RESERVATION |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator filters using Waypoint Status filter - FAIL (uid:3de9fd64-efa9-4dad-bb91-e78cf1a7a65d)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    Given API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add reservation pick-up to the route
+    Given Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator set filters using data below and click Load Selection on Shipper Pickups page:
+      | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
+      | reservationDateEnd   | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName          | {shipper-v4-name}                |
+      | waypointStatus       | ROUTED                           |
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName  | {shipper-v4-name}            |
+      | approxVolume | Less than 10 Parcels         |
+      | comments     | GET_FROM_CREATED_RESERVATION |
+    When Operator finish reservation with failure
+    Then Operator verifies reservation is finished using data below:
+      | backgroundColor | #ffc0cb |
+      | status          | FAIL    |
+    When Operator refresh page
+    When Operator set filters using data below and click Load Selection on Shipper Pickups page:
+      | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
+      | reservationDateEnd   | {gradle-next-1-day-yyyy-MM-dd}   |
+      | shipperName          | {shipper-v4-name}                |
+      | waypointStatus       | FAIL                          |
+    Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName  | {shipper-v4-name}            |
+      | approxVolume | Less than 10 Parcels         |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
