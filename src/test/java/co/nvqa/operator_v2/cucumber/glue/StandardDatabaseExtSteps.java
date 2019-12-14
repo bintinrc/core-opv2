@@ -459,20 +459,20 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         String priorityLevel = mapOfData.get("priorityLevel");
         String status = mapOfData.get("status");
         String serviceEndTime = mapOfData.get("serviceEndTime");
-        if (Objects.nonNull(routeId)){
+        if (routeId != null && routeId != "" && !(routeId.isEmpty())){
             Integer routeIdInt = Objects.equals(mapOfData.get("routeId"), "null") ? null :
                     NumberUtils.createInteger(mapOfData.get("routeId"));
             assertEquals("RouteId in DB Transaction entity is not as expected", routeIdInt, entity.getRouteId());
         }
-        if (Objects.nonNull(priorityLevel)){
+        if (priorityLevel != null && priorityLevel != "" && !(priorityLevel.isEmpty())){
             Integer priorityLevelInt = Objects.equals(mapOfData.get("priorityLevel"), "null") ? null :
                     NumberUtils.createInteger(mapOfData.get("priorityLevel"));
             assertEquals("PriorityLevel in DB Transaction entity is not as expected", priorityLevelInt, entity.getPriorityLevel());
         }
-        if (Objects.nonNull(status)){
+        if (status != null && status != "" && !(status.isEmpty())){
             assertEquals("Status in DB Transaction entity is not as expected", status, entity.getStatus());
         }
-        if (Objects.nonNull(serviceEndTime)){
+        if (serviceEndTime != null && serviceEndTime != "" && !(serviceEndTime.isEmpty())){
             assertEquals("Service End Time in DB Transaction entity is not as expected", serviceEndTime, DateUtil.SDF_YYYY_MM_DD.format(entity.getServiceEndTime()));
         }
     }
