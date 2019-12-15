@@ -1022,6 +1022,25 @@ Feature: Edit Order
       | searchLogic | contains                      |
       | searchTerm  | KEY_STAMP_ID                  |
 
+  @CloseNewWindows
+  Scenario: Operator Edit Priority Level (uid:2d80a8b7-a7e3-4bf5-9284-5853f85d77b4)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of the created order from All Orders page
+    When Operator change Priority Level to "2" on Edit Order page
+    Then Operator verify Delivery Priority Level is "2" on Edit Order page
+    And DB Operator verify next Delivery transaction values are updated for the created order:
+      | priorityLevel | 2 |
+    And DB Operator verify next Pickup transaction values are updated for the created order:
+      | priorityLevel | 0 |
+    And DB Operator verify order_events record for the created order:
+      | type | 17 |
+    And Operator verify order event on Edit order page using data below:
+      | name    | UPDATE SLA |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

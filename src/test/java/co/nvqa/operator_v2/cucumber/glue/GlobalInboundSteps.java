@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.GlobalInboundPage;
@@ -85,12 +86,23 @@ public class GlobalInboundSteps extends AbstractSteps
     @When("^Operator global inbounds parcel using data below and check alert:$")
     public void operatorGlobalInboundsParcelUsingThisDataBelowAndCheckAlert(Map<String, String> mapOfData)
     {
+        Order order = get(KEY_CREATED_ORDER);
         GlobalInboundParams globalInboundParams = buildGlobalInboundParams(mapOfData);
         String toastText = mapOfData.get("toastText");
         String rackInfo = mapOfData.get("rackInfo");
         String rackColor = mapOfData.get("rackColor");
         String weightWarning = mapOfData.get("weightWarning");
-        globalInboundPage.globalInboundAndCheckAlert(globalInboundParams, toastText, rackInfo, rackColor, weightWarning);
+        String destinationHub = mapOfData.get("destinationHub");
+        String rackSector = mapOfData.get("rackSector");
+        if("GET_FROM_CREATED_ORDER".equalsIgnoreCase(destinationHub))
+        {
+            destinationHub = order.getDestinationHub();
+        }
+        if("GET_FROM_CREATED_ORDER".equalsIgnoreCase(rackSector))
+        {
+            rackSector = order.getRackSector();
+        }
+        globalInboundPage.globalInboundAndCheckAlert(globalInboundParams, toastText, rackInfo, rackColor, weightWarning, rackSector, destinationHub);
         put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
     }
 

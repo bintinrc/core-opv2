@@ -132,7 +132,8 @@ public class GlobalInboundPage extends OperatorV2SimplePage
         pause500ms();
     }
 
-    public void globalInboundAndCheckAlert(GlobalInboundParams globalInboundParams, String toastText, String rackInfo, String rackColor, String weightWarning)
+    public void globalInboundAndCheckAlert(GlobalInboundParams globalInboundParams, String toastText, String rackInfo,
+                                           String rackColor, String weightWarning, String rackSector, String destinationHub)
     {
         globalInbound(globalInboundParams);
 
@@ -161,6 +162,16 @@ public class GlobalInboundPage extends OperatorV2SimplePage
                 NvLogger.infof("Color as Hex: %s", color.asHex());
                 assertThat("Unexpected Rack Sector color", color.asHex(), equalToIgnoringCase(rackColor));
             }
+            if(StringUtils.isNotBlank(rackSector))
+            {
+                String xpath = f("//div[contains(@class, 'rack-container')]/descendant::*[normalize-space(text())='%s']", rackSector);
+                assertNotNull("Rack Sector", waitUntilVisibilityOfElementLocated(xpath));
+            }
+            if(StringUtils.isNotBlank(destinationHub))
+            {
+                String xpath = f("//div[contains(@class, 'rack-container')]/descendant::*[normalize-space(text())='Hub: %s']", destinationHub);
+                assertNotNull("Destination Hub", waitUntilVisibilityOfElementLocated(xpath));
+            }
         }, "globalInboundAndCheckAlert");
 
         if(StringUtils.isNotBlank(toastText))
@@ -173,7 +184,7 @@ public class GlobalInboundPage extends OperatorV2SimplePage
     public void verifiesPriorityLevelInfoIsCorrect(int expectedPriorityLevel, String expectedPriorityLevelColorAsHex)
     {
         String actualPriorityLevel = getText("//div[contains(text(), 'Priority Level')]/following-sibling::div[1]/span");
-        Color actualPriorityLevelColor = getBackgroundColor("//div[div[contains(text(), 'Priority Level')]]");
+        Color actualPriorityLevelColor = getBackgroundColor("//div[contains(@class,'priority-container')][descendant::div[contains(text(), 'Priority Level')]]");
 
         assertEquals("Priority Level", String.valueOf(expectedPriorityLevel), actualPriorityLevel);
         assertEquals("Priority Level Color", expectedPriorityLevelColorAsHex, actualPriorityLevelColor.asHex());

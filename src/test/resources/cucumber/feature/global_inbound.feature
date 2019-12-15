@@ -252,6 +252,48 @@ Feature: Global Inbound
     When Operator go to menu Order -> All Orders
     Then Operator verify order info after Global Inbound
 
+  @CloseNewWindows
+  Scenario Outline: Operator global inbounds the created order with Priority Level (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of the created order from All Orders page
+    When Operator change Priority Level to "<priorityLevel>" on Edit Order page
+    And Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below and check alert:
+      | hubName        | {hub-name}             |
+      | trackingId     | GET_FROM_CREATED_ORDER |
+      | rackSector     | GET_FROM_CREATED_ORDER |
+      | destinationHub | GET_FROM_CREATED_ORDER |
+    Then API Operator verify order info after Global Inbound
+    Then Operator verifies priority level info is correct using data below:
+      | priorityLevel           | <priorityLevel>           |
+      | priorityLevelColorAsHex | <priorityLevelColorAsHex> |
+    Then DB Operator verify next Pickup transaction values are updated for the created order:
+      | status         | Success                     |
+      | serviceEndTime | {{current-date-yyyy-MM-dd}} |
+      | priorityLevel  | 0                           |
+    And DB Operator verify next Delivery transaction values are updated for the created order:
+      | priorityLevel | <priorityLevel> |
+    And DB Operator verify order_events record for the created order:
+      | type | 26 |
+    When Operator go to menu Order -> All Orders
+    Then Operator verify following order info parameters after Global Inbound
+      | orderStatus    | Transit                |
+      | granularStatus | Arrived at Sorting Hub |
+    And DB Operator verify the last inbound_scans record for the created order:
+      | hubId      | {hub-id}               |
+      | trackingId | GET_FROM_CREATED_ORDER |
+      | type       | 2                      |
+    Examples:
+      | Note         | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
+      | Level 0      | uid:36826dfd-6a1b-45d8-873f-8005b77ea4b6 | 0             | #e8e8e8                 |
+      | Level 1      | uid:9004241a-7037-40c6-8f83-b8f67f717847 | 1             | #ffff00                 |
+      | Level 2 - 90 | uid:6e523c1e-1aa8-4eed-9032-42642067b4d1 | 50            | #ffa500                 |
+      | Level > 90   | uid:ffdb3be9-171d-4edc-af85-20e479704862 | 100           | #ff0000                 |
+
 #  API to create International parcel still have an issue.
 #  Scenario: Operator should be able to Inbound an International Order and verify the alert info is correct
 #    Given API Shipper create V4 order using data below:
