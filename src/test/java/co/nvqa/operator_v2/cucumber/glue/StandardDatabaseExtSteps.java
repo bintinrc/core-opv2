@@ -676,6 +676,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Given("^DB Operator verifies orders record using data below:$")
     public void dbOperatorVerifiesOrdersRecord(Map<String, String> mapOfData) {
         Order order = get(KEY_CREATED_ORDER);
@@ -752,6 +753,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         }, getCurrentMethodName(), NvLogger::warn, 500, 30, AssertionError.class);
     }
 
+    @SuppressWarnings("unchecked")
     @Given("^DB Operator verifies waypoint for (Pickup|Delivery) transaction is deleted from route_waypoint table$")
     public void dbOperatorVerifiesWaypointIsDeleted(String txnType) {
         Order order = get(KEY_CREATED_ORDER);

@@ -480,6 +480,172 @@ Feature: Route Inbound
       | errorCode    | 103014           |
       | errorMessage | Order not found! |
 
+  @DeleteOrArchiveRoute @DeleteDriver
+  Scenario: Get Route Details by Driver Name - Number of route_id = 1 (uid:)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{driver-type-name}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"driver.{{TIMESTAMP}}@ninjavan.co"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_CREATED_DRIVER_ID} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And Operator go to menu Inbounding -> Route Inbound
+    And Operator get Route Summary Details on Route Inbound page using data below:
+      | hubName      | {hub-name}                     |
+      | fetchBy      | FETCH_BY_DRIVER                |
+      | fetchByValue | {KEY_CREATED_DRIVER.firstName} |
+    Then Operator verify the Route Summary Details is correct using data below:
+      | routeId     | {KEY_CREATED_ROUTE_ID}                                      |
+      | driverName  | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} |
+      | hubName     | {hub-name}                                                  |
+      | routeDate   | GET_FROM_CREATED_ROUTE                                      |
+      | wpPending   | 1                                                           |
+      | wpPartial   | 0                                                           |
+      | wpFailed    | 0                                                           |
+      | wpCompleted | 0                                                           |
+      | wpTotal     | 1                                                           |
+
+  @DeleteOrArchiveRoute @DeleteDriver
+  Scenario: Get Route Details by Driver Name - Number of route_id > 1 (uid:)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"employmentStartDate":"{gradle-current-date-yyyy-MM-dd}","firstName":"{{RANDOM_FIRST_NAME}}","lastName":"{{RANDOM_LAST_NAME}}","licenseNumber":"D{{TIMESTAMP}}","driverType":"{driver-type-name}","availability":false,"codLimit":100,"maxOnDemandJobs":1,"vehicles":[{"capacity":100,"active":true,"vehicleType":"{vehicle-type}","ownVehicle":false,"vehicleNo":"D{{TIMESTAMP}}"}],"contacts":[{"active":true,"type":"{contact-type-name}","details":"driver.{{TIMESTAMP}}@ninjavan.co"}],"zonePreferences":[{"latitude":{{RANDOM_LATITUDE}},"longitude":{{RANDOM_LONGITUDE}},"rank":1,"zoneId":{zone-id},"minWaypoints":1,"maxWaypoints":1,"cost":1}],"tags":{"RESUPPLY":false},"username":"D{{TIMESTAMP}}","password":"D00{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","hub":null}} |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_CREATED_DRIVER_ID} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_CREATED_DRIVER_ID} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And Operator go to menu Inbounding -> Route Inbound
+    And Operator get Route Summary Details on Route Inbound page using data below:
+      | hubName      | {hub-name}                        |
+      | fetchBy      | FETCH_BY_DRIVER                   |
+      | fetchByValue | {KEY_CREATED_DRIVER.firstName}    |
+      | routeId      | {KEY_LIST_OF_CREATED_ROUTE_ID[2]} |
+    Then Operator verify the Route Summary Details is correct using data below:
+      | routeId     | {KEY_LIST_OF_CREATED_ROUTE_ID[2]}                           |
+      | driverName  | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} |
+      | hubName     | {hub-name}                                                  |
+      | routeDate   | GET_FROM_CREATED_ROUTE                                      |
+      | wpPending   | 1                                                           |
+      | wpPartial   | 0                                                           |
+      | wpFailed    | 0                                                           |
+      | wpCompleted | 0                                                           |
+      | wpTotal     | 1                                                           |
+
+  @DeleteOrArchiveRoute
+  Scenario Outline: Inbound Cash for COD - Inbound Cash Only (uid:)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":<cashOnDelivery>, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver deliver the created parcel successfully
+    Given Operator go to menu Inbounding -> Route Inbound
+    When Operator get Route Summary Details on Route Inbound page using data below:
+      | hubName      | {hub-name}                    |
+      | fetchBy      | FETCH_BY_TRACKING_ID          |
+      | fetchByValue | KEY_CREATED_ORDER_TRACKING_ID |
+    Then Operator verify the Route Summary Details is correct using data below:
+      | routeId     | {KEY_CREATED_ROUTE_ID} |
+      | driverName  | {ninja-driver-name}    |
+      | hubName     | {hub-name}             |
+      | routeDate   | GET_FROM_CREATED_ROUTE |
+      | wpPending   | 0                      |
+      | wpPartial   | 0                      |
+      | wpFailed    | 0                      |
+      | wpCompleted | 1                      |
+      | wpTotal     | 1                      |
+    When Operator click 'Continue To Inbound' button on Route Inbound page
+    Then Operator verify 'Money to collect' value is "<cashOnDelivery>" on Route Inbound page
+    And Operator open Money Collection dialog on Route Inbound page
+    Then Operator verify 'Expected Total' value is "<cashOnDelivery>" on Money Collection dialog
+    And Operator verify 'Outstanding amount' value is "<cashOnDelivery>" on Money Collection dialog
+    When Operator submit following values on Money Collection dialog:
+      | cashCollected   | <cashCollected>   |
+      | creditCollected | <creditCollected> |
+      | receiptId       | <receiptId>       |
+    Then Operator verify 'Money to collect' value is "Fully Collected" on Route Inbound page
+    And Operator open Money Collection dialog on Route Inbound page
+    And Operator verify 'Outstanding amount' value is "Fully Collected" on Money Collection dialog
+
+    Examples:
+      | Title                            | cashCollected | creditCollected | receiptId | cashOnDelivery |
+      | Inbound Cash Only                | 23.57         |                 |           | 23.57          |
+      | Inbound Credit Only              |               | 23.57           | 123       | 23.57          |
+      | Inbound Split Into Cash & Credit | 10.0          | 13.57           | 123       | 23.57          |
+
+  @DeleteOrArchiveRoute
+  Scenario Outline: Inbound Cash for COP - Inbound Cash Only (uid:)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                         |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{"is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator update parcel COP to <cashOnPickup>
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver deliver the created parcel successfully
+    Given Operator go to menu Inbounding -> Route Inbound
+    When Operator get Route Summary Details on Route Inbound page using data below:
+      | hubName      | {hub-name}                    |
+      | fetchBy      | FETCH_BY_TRACKING_ID          |
+      | fetchByValue | KEY_CREATED_ORDER_TRACKING_ID |
+    Then Operator verify the Route Summary Details is correct using data below:
+      | routeId     | {KEY_CREATED_ROUTE_ID} |
+      | driverName  | {ninja-driver-name}    |
+      | hubName     | {hub-name}             |
+      | routeDate   | GET_FROM_CREATED_ROUTE |
+      | wpPending   | 0                      |
+      | wpPartial   | 0                      |
+      | wpFailed    | 0                      |
+      | wpCompleted | 1                      |
+      | wpTotal     | 1                      |
+    When Operator click 'Continue To Inbound' button on Route Inbound page
+    Then Operator verify 'Money to collect' value is "<cashOnPickup>" on Route Inbound page
+    And Operator open Money Collection dialog on Route Inbound page
+    Then Operator verify 'Expected Total' value is "<cashOnPickup>" on Money Collection dialog
+    And Operator verify 'Outstanding amount' value is "<cashOnPickup>" on Money Collection dialog
+    When Operator submit following values on Money Collection dialog:
+      | cashCollected   | <cashCollected>   |
+      | creditCollected | <creditCollected> |
+      | receiptId       | <receiptId>       |
+    Then Operator verify 'Money to collect' value is "Fully Collected" on Route Inbound page
+    And Operator open Money Collection dialog on Route Inbound page
+    And Operator verify 'Outstanding amount' value is "Fully Collected" on Money Collection dialog
+
+    Examples:
+      | Title                            | cashCollected | creditCollected | receiptId | cashOnPickup |
+      | Inbound Cash Only                | 23.57         |                 |           | 23.57        |
+      | Inbound Credit Only              |               | 23.57           | 123       | 23.57        |
+      | Inbound Split Into Cash & Credit | 10.0          | 13.57           | 123       | 23.57        |
+
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

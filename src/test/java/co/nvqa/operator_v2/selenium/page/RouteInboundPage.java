@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.CollectionSummary;
+import co.nvqa.operator_v2.model.MoneyCollection;
 import co.nvqa.operator_v2.model.WaypointOrderInfo;
 import co.nvqa.operator_v2.model.WaypointPerformance;
 import co.nvqa.operator_v2.model.WaypointReservationInfo;
@@ -28,6 +29,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
     private ReservationsTable reservationsTable;
     private OrdersTable ordersTable;
     private RouteInboundCommentsDialog routeInboundCommentsDialog;
+    private MoneyCollectionDialog moneyCollectionDialog;
 
     public RouteInboundPage(WebDriver webDriver)
     {
@@ -36,9 +38,10 @@ public class RouteInboundPage extends OperatorV2SimplePage
         reservationsTable = new ReservationsTable(webDriver);
         ordersTable = new OrdersTable(webDriver);
         routeInboundCommentsDialog = new RouteInboundCommentsDialog(webDriver);
+        moneyCollectionDialog = new MoneyCollectionDialog(webDriver);
     }
 
-    public void fetchRouteByRouteId(String hubName, long routeId)
+    public void fetchRouteByRouteId(String hubName, Long routeId)
     {
         selectValueFromNvAutocomplete("ctrl.hubSelection.searchText", hubName);
         sendKeysById("route-id", String.valueOf(routeId));
@@ -67,9 +70,9 @@ public class RouteInboundPage extends OperatorV2SimplePage
         String continueBtnXpath = "//md-card-content[./label[text()='Scan a tracking ID']]/nv-api-text-button[@name='container.route-inbound.continue']/button";
         click(continueBtnXpath);
 
-        if (routeId != null){
-            pause1s();
-            clickf("//tr[@ng-repeat='routeId in ctrl.routeIds'][td[.='%d']]//button", routeId);
+        if (routeId != null)
+        {
+            selectRoute(routeId);
         }
 
         dismissDriverAttendanceDialog();
@@ -77,7 +80,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfElementLocated(continueBtnXpath + "//md-progress-circular");
     }
 
-    public void fetchRouteByDriver(String hubName, String driverName, long routeId)
+    public void fetchRouteByDriver(String hubName, String driverName, Long routeId)
     {
         selectValueFromNvAutocomplete("ctrl.hubSelection.searchText", hubName);
         selectValueFromNvAutocomplete("ctrl.driverSearch.searchText", driverName);
@@ -85,6 +88,18 @@ public class RouteInboundPage extends OperatorV2SimplePage
         String continueBtnXpath = "//md-card-content[.//label[text()='Search by driver']]/nv-api-text-button[@name='container.route-inbound.continue']/button";
         click(continueBtnXpath);
 
+        if (routeId != null)
+        {
+            selectRoute(routeId);
+        }
+
+        dismissDriverAttendanceDialog();
+
+        waitUntilInvisibilityOfElementLocated(continueBtnXpath + "//md-progress-circular");
+    }
+
+    public void selectRoute(Long routeId)
+    {
         if (isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Choose a route']"))
         {
             String routeIdProceedButton = String.format("//tr[@ng-repeat='routeId in ctrl.routeIds'][td[text()='%d']]//button", routeId);
@@ -92,10 +107,6 @@ public class RouteInboundPage extends OperatorV2SimplePage
             pause200ms();
             click(routeIdProceedButton);
         }
-
-        dismissDriverAttendanceDialog();
-
-        waitUntilInvisibilityOfElementLocated(continueBtnXpath + "//md-progress-circular");
     }
 
     public void verifyRouteSummaryInfoIsCorrect(long expectedRouteId, String expectedDriverName, String expectedHubName, Date expectedRouteDate, WaypointPerformance expectedWaypointPerformance, CollectionSummary expectedCollectionSummary)
@@ -106,7 +117,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
         String actualRouteDate = getText("//div[./label[text()='Date']]/h3/span");
 
         assertEquals("Route ID", String.valueOf(expectedRouteId), actualRouteId);
-        assertEquals("Driver Name", actualDriverName.replaceAll(" ", ""), expectedDriverName.replaceAll(" ", ""));
+        assertEquals("Driver Name", expectedDriverName.replaceAll(" ", ""), actualDriverName.replaceAll(" ", ""));
         assertEquals("Hub Name", expectedHubName, actualHubName);
         assertEquals("Route Date", YYYY_MM_DD_SDF.format(expectedRouteDate), actualRouteDate);
 
@@ -156,6 +167,28 @@ public class RouteInboundPage extends OperatorV2SimplePage
         sendKeysAndEnterById("tracking-id", trackingId);
         String xpath = "//tr[@ng-repeat=\"row in ctrl.inboundingHistory | orderBy:'createdAt':true\"]/td[normalize-space(text())='%s']";
         waitUntilVisibilityOfElementLocated(xpath, trackingId);
+    }
+
+    public MoneyCollectionDialog openMoneyCollectionDialog()
+    {
+        click("//div[contains(@class,'big-button')][./*[normalize-space(.)='Money to collect']]");
+        return moneyCollectionDialog;
+    }
+
+    public MoneyCollectionDialog moneyCollectionDialog()
+    {
+        return moneyCollectionDialog;
+    }
+
+    public String getMoneyToCollectValue()
+    {
+        if (isElementVisible("//*[@ng-if='ctrl.remainingCashToCollect <= 0'][.='done']"))
+        {
+            return "Fully Collected";
+        } else
+        {
+            return getText("//*[@ng-if='ctrl.remainingCashToCollect > 0']").replace("$", "").trim();
+        }
     }
 
     public void openViewOrdersOrReservationsDialog(int index)
@@ -280,6 +313,87 @@ public class RouteInboundPage extends OperatorV2SimplePage
         {
             clickNvIconTextButtonByNameAndWaitUntilDone(LOCATOR_BUTTON_ADD);
             return this;
+        }
+    }
+
+    public static class MoneyCollectionDialog extends OperatorV2SimplePage
+    {
+        static final String DIALOG_TITLE = "Money Collection";
+
+        public MoneyCollectionDialog(WebDriver webDriver)
+        {
+            super(webDriver);
+        }
+
+        public String getExpectedTotal()
+        {
+            return getText("//*[@label='container.route-inbound.expected-total']/div").replace("S$", "").trim();
+        }
+
+        public String getOutstandingAmount()
+        {
+            if (isElementVisible("//*[@ng-if='ctrl.inputForm.outstandingAmount <= 0']/p[.='Fully Collected']"))
+            {
+                return "Fully Collected";
+            } else
+            {
+                return getText("//*[@label='container.route-inbound.outstanding-amount']/div").replace("S$", "").trim();
+            }
+        }
+
+        public MoneyCollectionDialog setCashCollected(Double cashCollected)
+        {
+            sendKeysById("cash-collected", String.valueOf(cashCollected));
+            return this;
+        }
+
+        public MoneyCollectionDialog setCreditCollected(Double creditCollected)
+        {
+            sendKeysById("credit-collected", String.valueOf(creditCollected));
+            return this;
+        }
+
+        public MoneyCollectionDialog setReceiptNo(String receiptNo)
+        {
+            sendKeysById("receipt-number", receiptNo);
+            return this;
+        }
+
+        public MoneyCollectionDialog setReceiptId(String receiptId)
+        {
+            sendKeysById("receipt-or-transaction-id", receiptId);
+            return this;
+        }
+
+        public MoneyCollectionDialog fillForm(MoneyCollection data)
+        {
+            if (data.getCashCollected() != null)
+            {
+                setCashCollected(data.getCashCollected());
+            }
+
+            if (data.getCreditCollected() != null)
+            {
+                setCreditCollected(data.getCreditCollected());
+            }
+
+            if (StringUtils.isNotBlank(data.getReceiptNo()))
+            {
+                setReceiptNo(data.getReceiptNo());
+            }
+
+            if (StringUtils.isNotBlank(data.getReceiptId()))
+            {
+                setReceiptId(data.getReceiptId());
+            }
+
+            return this;
+        }
+
+        public void save()
+        {
+            clickNvApiTextButtonByName("commons.save");
+            waitUntilInvisibilityOfMdDialogByTitle(DIALOG_TITLE);
         }
     }
 
