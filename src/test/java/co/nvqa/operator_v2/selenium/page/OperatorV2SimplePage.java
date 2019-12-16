@@ -49,7 +49,9 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickButtonByAriaLabel(String ariaLabel)
     {
-        clickf("//button[@aria-label='%s']", ariaLabel);
+        String xpath = f("//button[@aria-label='%s']", ariaLabel);
+        scrollIntoView(xpath, true);
+        click(xpath);
     }
 
     public void clickButtonByAriaLabelAndWaitUntilDone(String ariaLabel)
@@ -775,6 +777,11 @@ public class OperatorV2SimplePage extends SimplePage
     public void selectValueFromMdAutocomplete(String placeholder, String value)
     {
         String xpathExpression = f("//md-autocomplete[@placeholder='%s']//input", placeholder);
+        selectValueFromMdAutocompleteByXpath(xpathExpression, value);
+    }
+
+    public void selectValueFromMdAutocompleteByXpath(String xpathExpression, String value)
+    {
         WebElement we = waitUntilElementIsClickable(xpathExpression);
         we.sendKeys(value);
         pause1s();
