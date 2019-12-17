@@ -14,7 +14,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Sergey Mishanin
@@ -81,6 +80,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfElementLocated(LOCATOR_SPINNER);
         clickNvIconTextButtonByName(LOCATOR_BUTTON_ADD_DP);
     }
+
     public void clickAddDpUserButton()
     {
         waitUntilInvisibilityOfElementLocated(LOCATOR_SPINNER);
@@ -100,7 +100,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
     public void editPartner(String dpPartnerName, DpPartner newDpPartnerParams)
     {
-        dpPartnersTable.filterByColumn( "name", dpPartnerName);
+        dpPartnersTable.filterByColumn("name", dpPartnerName);
         dpPartnersTable.clickActionButton(1, "edit");
         editPartnerDialog.fillForm(newDpPartnerParams);
     }
@@ -114,13 +114,13 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
     public void openViewDpsScreen(String dpPartnerName)
     {
-        dpPartnersTable.filterByColumn( "name", dpPartnerName);
+        dpPartnersTable.filterByColumn("name", dpPartnerName);
         dpPartnersTable.clickActionButton(1, "View DPs");
     }
 
     public void openViewUsersScreen(String dpName)
     {
-        dpTable.filterByColumn( "name", dpName);
+        dpTable.filterByColumn("name", dpName);
         dpTable.clickActionButton(1, "View DPs");
     }
 
@@ -147,7 +147,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
     public void verifyDpPartnerParams(DpPartner expectedDpPartnerParams)
     {
-        dpPartnersTable.filterByColumn( "name", expectedDpPartnerParams.getName());
+        dpPartnersTable.filterByColumn("name", expectedDpPartnerParams.getName());
         DpPartner actualDpPartner = dpPartnersTable.readEntity(1);
         assertThatIfExpectedValueNotNull("DP Partner ID", expectedDpPartnerParams.getId(), actualDpPartner.getId(), equalTo(expectedDpPartnerParams.getId()));
         assertThatIfExpectedValueNotNull("DP Partner Name", expectedDpPartnerParams.getName(), actualDpPartner.getName(), equalTo(expectedDpPartnerParams.getName()));
@@ -160,7 +160,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
     public void verifyDpParams(Dp expectedDpParams)
     {
-        dpTable.filterByColumn( "name", expectedDpParams.getName());
+        dpTable.filterByColumn("name", expectedDpParams.getName());
         Dp actualDpParams = dpTable.readEntity(1);
         assertThatIfExpectedValueNotNull("DP ID", expectedDpParams.getId(), actualDpParams.getId(), equalTo(expectedDpParams.getId()));
         assertThatIfExpectedValueNotNull("DP Name", expectedDpParams.getName(), actualDpParams.getName(), equalTo(expectedDpParams.getName()));
@@ -174,7 +174,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
     public void verifyDpUserParams(DpUser expectedDpUserParams)
     {
-        dpUsersTable.filterByColumn( DpUsersTable.COLUMN_USERNAME, expectedDpUserParams.getClientId());
+        dpUsersTable.filterByColumn(DpUsersTable.COLUMN_USERNAME, expectedDpUserParams.getClientId());
         DpUser actualDpUserParams = dpUsersTable.readEntity(1);
 
         assertThatIfExpectedValueNotNull("DP User Username", expectedDpUserParams.getClientId(), actualDpUserParams.getClientId(), equalTo(expectedDpUserParams.getClientId()));
@@ -199,7 +199,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
                 (params1, params2) -> params1
         ));
 
-        for(DpPartner expectedDpPartner : expectedDpPartners)
+        for (DpPartner expectedDpPartner : expectedDpPartners)
         {
             DpPartner actualDpPartner = actualMap.get(expectedDpPartner.getId());
             assertEquals("DP Partner ID", expectedDpPartner.getId(), actualDpPartner.getId());
@@ -226,7 +226,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
                 (params1, params2) -> params1
         ));
 
-        for(Dp expectedDp : expectedDpParams)
+        for (Dp expectedDp : expectedDpParams)
         {
             Dp actualDp = actualMap.get(expectedDp.getId());
 
@@ -254,7 +254,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
                 params -> params
         ));
 
-        for(DpUser expectedDpUserParams : expectedDpUsersParams)
+        for (DpUser expectedDpUserParams : expectedDpUsersParams)
         {
             DpUser actualDpUser = actualMap.get(expectedDpUserParams.getClientId());
 
@@ -435,22 +435,24 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         protected String locatorButtonSubmit;
 
         static final String DIALOG_TITLE = "Add Distribution Point";
-        static final String LOCATOR_FIELD_NAME = "Name *";
+        static final String LOCATOR_FIELD_NAME = "Name";
         static final String LOCATOR_FIELD_SHORT_NAME = "Shortname";
         static final String LOCATOR_FIELD_TYPE = "type";
         static final String LOCATOR_FIELD_SERVICE = "service";
         static final String LOCATOR_FIELD_CAN_SHIPPER_LODGE_IN = "can-shipper-lodge-in?";
         static final String LOCATOR_FIELD_CAN_CUSTOMER_COLLECT = "can-customer-collect?";
-        static final String LOCATOR_FIELD_MAX_CAP = "Max Cap *";
-        static final String LOCATOR_FIELD_CAP_BUFFER = "Cap Buffer *";
-        static final String LOCATOR_FIELD_CONTACT_NO = "Contact No. *";
-        static final String LOCATOR_FIELD_ADDRESS_LINE_1 = "Address Line 1 *";
+        static final String LOCATOR_FIELD_MAX_CAP = "Max Cap";
+        static final String LOCATOR_FIELD_CAP_BUFFER = "Cap Buffer";
+        static final String LOCATOR_FIELD_CONTACT_NO = "Contact No.";
+        static final String LOCATOR_FIELD_ADDRESS_LINE_1 = "Address Line 1";
         static final String LOCATOR_FIELD_ADDRESS_LINE_2 = "Address Line 2";
-        static final String LOCATOR_FIELD_UNIT_NO = "Unit No. *";
-        static final String LOCATOR_FIELD_FLOOR_NO = "Floor No. *";
-        static final String LOCATOR_FIELD_CITY = "City *";
-        static final String LOCATOR_FIELD_COUNTRY = "Country *";
-        static final String LOCATOR_FIELD_POSTCODE = "Postcode *";
+        static final String LOCATOR_FIELD_UNIT_NO = "Unit No.";
+        static final String LOCATOR_FIELD_FLOOR_NO = "Floor No.";
+        static final String LOCATOR_FIELD_CITY = "City";
+        static final String LOCATOR_FIELD_COUNTRY = "Country";
+        static final String LOCATOR_FIELD_POSTCODE = "Postcode";
+        static final String LOCATOR_FIELD_LATITUDE = "Latitude";
+        static final String LOCATOR_FIELD_LONGITUDE = "Longitude";
         static final String LOCATOR_FIELD_DIRECTIONS = "Directions";
         static final String LOCATOR_BUTTON_SUBMIT = "Submit";
 
@@ -469,7 +471,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setName(String value)
         {
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 sendKeysByAriaLabel(LOCATOR_FIELD_NAME, value);
             }
@@ -478,7 +480,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setShortName(String value)
         {
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 sendKeysByAriaLabel(LOCATOR_FIELD_SHORT_NAME, value);
             }
@@ -487,7 +489,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setType(String value)
         {
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 selectValueFromMdSelectById(LOCATOR_FIELD_TYPE, value);
             }
@@ -496,7 +498,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setService(String value)
         {
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 selectValueFromMdSelectById(LOCATOR_FIELD_SERVICE, value);
             }
@@ -505,7 +507,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setCanShipperLodgeIn(Boolean value)
         {
-            if(value!=null)
+            if (value != null)
             {
                 toggleMdSwitchById(LOCATOR_FIELD_CAN_SHIPPER_LODGE_IN, value);
             }
@@ -514,7 +516,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setCanCustomerCollect(Boolean value)
         {
-            if(value!=null)
+            if (value != null)
             {
                 toggleMdSwitchById(LOCATOR_FIELD_CAN_CUSTOMER_COLLECT, value);
             }
@@ -523,7 +525,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setMaxCap(String value)
         {
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 sendKeysByAriaLabel(LOCATOR_FIELD_MAX_CAP, value);
             }
@@ -532,7 +534,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setCapBuffer(String value)
         {
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 sendKeysByAriaLabel(LOCATOR_FIELD_CAP_BUFFER, value);
             }
@@ -541,7 +543,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setContactNo(String value)
         {
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 sendKeysByAriaLabel(LOCATOR_FIELD_CONTACT_NO, value);
             }
@@ -550,7 +552,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setAddressLine1(String value)
         {
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 sendKeysByAriaLabel(LOCATOR_FIELD_ADDRESS_LINE_1, value);
             }
@@ -559,7 +561,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setAddressLine2(String value)
         {
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 sendKeysByAriaLabel(LOCATOR_FIELD_ADDRESS_LINE_2, value);
             }
@@ -568,7 +570,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setUnitNo(String value)
         {
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 sendKeysByAriaLabel(LOCATOR_FIELD_UNIT_NO, value);
             }
@@ -577,7 +579,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setFloorNo(String value)
         {
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 sendKeysByAriaLabel(LOCATOR_FIELD_FLOOR_NO, value);
             }
@@ -586,7 +588,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setCity(String value)
         {
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 sendKeysByAriaLabel(LOCATOR_FIELD_CITY, value);
             }
@@ -595,7 +597,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setCountry(String value)
         {
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 sendKeysByAriaLabel(LOCATOR_FIELD_COUNTRY, value);
             }
@@ -604,7 +606,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setPostcode(String value)
         {
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 sendKeysByAriaLabel(LOCATOR_FIELD_POSTCODE, value);
             }
@@ -613,18 +615,18 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
         public AddDpDialog setLatitude(Double value)
         {
-            if(value!=null)
+            if (value != null)
             {
-                sendKeysByAriaLabel("Latitude *", String.valueOf(value));
+                sendKeysByAriaLabel(LOCATOR_FIELD_LATITUDE, String.valueOf(value));
             }
             return this;
         }
 
         public AddDpDialog setLongitude(Double value)
         {
-            if(value!=null)
+            if (value != null)
             {
-                sendKeysByAriaLabel("Longitude *", String.valueOf(value));
+                sendKeysByAriaLabel(LOCATOR_FIELD_LONGITUDE, String.valueOf(value));
             }
             return this;
         }

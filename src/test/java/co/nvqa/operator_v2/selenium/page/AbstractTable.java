@@ -92,7 +92,7 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
             text = getTextOnTable(rowNumber, columnLocator);
         }
 
-        return StringUtils.trimToEmpty(StringUtils.strip(StringUtils.normalizeSpace(text.trim()), "-"));
+        return StringUtils.trimToEmpty(StringUtils.strip(StringUtils.normalizeSpace(text), "-"));
     }
 
     public abstract void clickActionButton(int rowNumber, String actionId);

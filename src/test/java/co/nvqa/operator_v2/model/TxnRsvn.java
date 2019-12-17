@@ -11,6 +11,7 @@ public class TxnRsvn extends DataEntity<TxnRsvn>
     private Long sequence;
     private Long id;
     private Long orderId;
+    private String waypointId;
     private String trackingId;
     private String type;
     private String shipper;
@@ -183,5 +184,15 @@ public class TxnRsvn extends DataEntity<TxnRsvn>
     public void setComments(String comments)
     {
         this.comments = comments;
+    }
+
+    public String getWaypointId()
+    {
+        return waypointId;
+    }
+
+    public void setWaypointId(String waypointId)
+    {
+        this.waypointId = waypointId;
     }
 }
