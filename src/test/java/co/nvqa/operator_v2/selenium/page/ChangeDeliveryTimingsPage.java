@@ -44,6 +44,7 @@ public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage
         sendKeysByAriaLabel("Choose", csvResultFile.getAbsolutePath());
         clickNvButtonSaveByNameAndWaitUntilDone("Upload CSV");
         waitUntilInvisibilityOfToast("Change delivery timings", false);
+        waitUntilInvisibilityOfToast(f("%d order(s) updated", listOfChangeDeliveryTimings.size()));
     }
 
     private File createDeliveryTimingChanging(List<ChangeDeliveryTiming> listOfChangeDeliveryTimings) {
