@@ -1,10 +1,8 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage;
 import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -222,7 +220,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
         recoveryTicketsPage.selectTicketStatus(status);
         pause2s();
         recoveryTicketsPage.clickButtonByAriaLabel("Update Ticket");
-        pause1s();
+        recoveryTicketsPage.waitUntilInvisibilityOfMdDialogByTitle("Edit Ticket");
     }
 
     @Then("Operator chooses the ticket status as {string}")
@@ -234,7 +232,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
 
     @And("Operator clicks on Edit Filters button")
     public void clickEditFiltersButton() {
-        recoveryTicketsPage.clickButtonByAriaLabel("Edit Filter");
+        recoveryTicketsPage.clickNvIconTextButtonByName("Edit Filter");
         pause2s();
     }
 

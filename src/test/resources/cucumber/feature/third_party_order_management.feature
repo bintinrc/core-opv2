@@ -1,7 +1,7 @@
 @OperatorV2 @OperatorV2Part1 @ThirdPartyOrderManagement
 Feature: Third Party Order Management
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @WIP
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -41,6 +41,7 @@ Feature: Third Party Order Management
     When Operator RTS single order on next day on All Orders page
     Then API Operator Verify 3pl Order Info After Rts-ed on next day
 
+    @WIP
   Scenario: Return To Sender (RTS) Third Party Order - through OPv2, bulk RTS (uid:fbd7e87d-a57d-42ed-b747-2c0c6319fcb7)
       Given API Shipper create multiple V4 orders using data below:
         | numberOfOrder     | 2      |
@@ -66,6 +67,6 @@ Feature: Third Party Order Management
 #    When Operator complete the new mapping order
 #    Then Operator verify the new mapping order is completed
 
-  @KillBrowser
+  @KillBrowser @WIP
   Scenario: Kill Browser
     Given no-op
