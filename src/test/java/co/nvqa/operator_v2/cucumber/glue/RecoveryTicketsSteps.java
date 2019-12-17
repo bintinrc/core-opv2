@@ -234,8 +234,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
 
     @And("Operator clicks on Edit Filters button")
     public void clickEditFiltersButton() {
-        pause2s();
-        recoveryTicketsPage.clickButtonByAriaLabel("Edit Filter");
+        recoveryTicketsPage.clickNvIconTextButtonByName("Edit Filter");
         pause2s();
     }
 
