@@ -2,6 +2,7 @@
 
 Feature: Recovery Tickets
 
+  @mytest
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
@@ -690,6 +691,204 @@ Feature: Recovery Tickets
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator enters the wrong Tracking Id
     Then No Results should be displayed
+
+  Scenario: Search Tickets using Investigating Hub filter (uid:aef2de95-45b3-41d0-92dd-878ee47fbd16)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource                    | DRIVER TURN        |
+      | investigatingDepartment        | Fleet (First Mile) |
+      | investigatingHub               | {hub-name}         |
+      | ticketType                     | SHIPPER ISSUE      |
+      | ticketSubType                  | DUPLICATE PARCEL   |
+      | orderOutcomeDuplicateParcel    | RTS                |
+      | issueDescription               | GENERATED          |
+      | custZendeskId                  | 1                  |
+      | shipperZendeskId               | 1                  |
+      | ticketNotes                    | GENERATED          |
+    Then Operator chooses Investigating Hub filter as "{hub-name}"
+    And Operator enters the tracking id and verifies that is exists
+
+  Scenario: Search tickets using Investigating Dept filter - Investigating Debt using Fleet(First Mile) (uid:3c66c37b-cac9-49de-b320-da3dea5aa29c)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+     Then Operator chooses Investigating Dept Filter as "Fleet (First Mile)"
+     And Operator enters the tracking id and verifies that is exists
+
+  Scenario: Search tickets using Investigating Dept filter - Investigating Debt using Fleet(Last Mile) (uid:9d0fc24c-0e6b-48e9-b20e-128be682d30d)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Fleet (Last Mile) |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    Then Operator chooses Investigating Dept Filter as "Fleet (Last Mile)"
+    And Operator enters the tracking id and verifies that is exists
+
+  Scenario: Search tickets using Investigating Dept filter - Investigating Debt using Freight(Middle Mile) (uid:c96985ab-fa55-457b-b8e7-68777b7a65ca)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT    |
+      | investigatingDepartment | Freight (Middle Mile) |
+      | investigatingHub        | {hub-name}            |
+      | ticketType              | MISSING               |
+      | orderOutcomeMissing     | LOST - DECLARED       |
+      | parcelDescription       | GENERATED             |
+      | custZendeskId           | 1                     |
+      | shipperZendeskId        | 1                     |
+      | ticketNotes             | GENERATED             |
+    Then Operator chooses Investigating Dept Filter as "Freight (Middle Mile)"
+    And Operator enters the tracking id and verifies that is exists
+
+  Scenario: Search tickets using Investigating Dept filter - Investigating Debt using Sort(Warehouse) (uid:17f45a47-439f-4bde-8b82-ed8233470ea4)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT    |
+      | investigatingDepartment | Sort (Warehouse)      |
+      | investigatingHub        | {hub-name}            |
+      | ticketType              | MISSING               |
+      | orderOutcomeMissing     | LOST - DECLARED       |
+      | parcelDescription       | GENERATED             |
+      | custZendeskId           | 1                     |
+      | shipperZendeskId        | 1                     |
+      | ticketNotes             | GENERATED             |
+    Then Operator chooses Investigating Dept Filter as "Sort (Warehouse)"
+    And Operator enters the tracking id and verifies that is exists
+
+  Scenario: Search tickets using Investigating Dept filter - Investigating Debt using Recovery (uid:70c6a756-a2f4-435d-951b-d310faff1914)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT    |
+      | investigatingDepartment | Recovery              |
+      | investigatingHub        | {hub-name}            |
+      | ticketType              | MISSING               |
+      | orderOutcomeMissing     | LOST - DECLARED       |
+      | parcelDescription       | GENERATED             |
+      | custZendeskId           | 1                     |
+      | shipperZendeskId        | 1                     |
+      | ticketNotes             | GENERATED             |
+    Then Operator chooses Investigating Dept Filter as "Recovery"
+    And Operator enters the tracking id and verifies that is exists
+
+  Scenario: Filter Show Unassigned - Show Unssigned (uid:fbb8cbe6-d351-4a2c-b2ba-54b646e49caa)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT    |
+      | investigatingDepartment | Recovery              |
+      | investigatingHub        | {hub-name}            |
+      | ticketType              | MISSING               |
+      | orderOutcomeMissing     | LOST - DECLARED       |
+      | parcelDescription       | GENERATED             |
+      | custZendeskId           | 1                     |
+      | shipperZendeskId        | 1                     |
+      | ticketNotes             | GENERATED             |
+    Then Operator chooses Show Unassigned Filter as "Yes"
+    And Operator enters the tracking id and verifies that is exists
+
+   Scenario: Filter Show Unassigned - Hide Unassigned (uid:4cbed082-41fc-4477-8874-0750233dd850)
+     Given API Shipper create V4 order using data below:
+       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+     Given Operator go to menu Shipper Support -> Blocked Dates
+     Given Operator go to menu Recovery -> Recovery Tickets
+     When Operator create new ticket on page Recovery Tickets using data below:
+       | entrySource             | CUSTOMER COMPLAINT    |
+       | investigatingDepartment | Recovery              |
+       | investigatingHub        | {hub-name}            |
+       | ticketType              | MISSING               |
+       | orderOutcomeMissing     | LOST - DECLARED       |
+       | parcelDescription       | GENERATED             |
+       | custZendeskId           | 1                     |
+       | shipperZendeskId        | 1                     |
+       | ticketNotes             | GENERATED             |
+     And Operator searches the created ticket and clicks on Edit button
+     And Operator assigns the ticket to "NikoSusanto"
+     And Operator clicks on Edit Filters button
+     Then Operator chooses Show Unassigned Filter as "No"
+     And Operator enters the tracking id and verifies that is exists
+
+   Scenario: Filter Resolved Tickets - Resolved Tickets Hide (uid:7fd14edc-7cac-4e85-9e11-b568cab31262)
+     Given API Shipper create V4 order using data below:
+       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+     Given Operator go to menu Shipper Support -> Blocked Dates
+     Given Operator go to menu Recovery -> Recovery Tickets
+     When Operator create new ticket on page Recovery Tickets using data below:
+       | entrySource             | CUSTOMER COMPLAINT    |
+       | investigatingDepartment | Fleet (First Mile)    |
+       | investigatingHub        | {hub-name}            |
+       | ticketType              | MISSING               |
+       | orderOutcomeMissing     | LOST - DECLARED       |
+       | parcelDescription       | GENERATED             |
+       | custZendeskId           | 1                     |
+       | shipperZendeskId        | 1                     |
+       | ticketNotes             | GENERATED             |
+     Then Operator chooses Resolved Tickets Filter as "Hide"
+     And Operator enters the tracking id and verifies that is exists
+
+  Scenario: Filter Resolved Tickets - Resolved Tickets Shown (uid:92bb38a7-c412-4a92-a4fe-33d8c0deef26)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT    |
+      | investigatingDepartment | Recovery              |
+      | investigatingHub        | {hub-name}            |
+      | ticketType              | MISSING               |
+      | orderOutcomeMissing     | LOST - DECLARED       |
+      | parcelDescription       | GENERATED             |
+      | custZendeskId           | 1                     |
+      | shipperZendeskId        | 1                     |
+      | ticketNotes             | GENERATED             |
+    And Operator searches the created ticket and clicks on Edit button
+    And Operator changes the ticket status to Resloved
+    And Operator updates the ticket
+    And Operator clicks on Edit Filters button
+    Then Operator chooses Resolved Tickets Filter as "Show"
+    And Operator enters the tracking id and verifies that is exists
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
