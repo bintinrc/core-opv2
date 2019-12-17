@@ -1023,6 +1023,118 @@ Feature: Edit Order
       | searchTerm  | KEY_STAMP_ID                  |
 
   @CloseNewWindows
+  Scenario: Edit Cash Collection Details - Edit Cash on Pickup PP (uid:7563a418-d677-4bf8-b03e-e2c99750002f)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{"cash_on_delivery":23.57, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    Then Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    When Operator switch to Edit Order's window
+    And Operator click Order Settings -> Edit Cash Collection Details on Edit Order page
+    And Operator change the COP value to "100"
+    And Operator refresh page
+    Then Operator verify COP value is updated to "100"
+    And Operator verify "UPDATE CASH" order event description on Edit order page
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 15    |
+
+  @CloseNewWindows
+  Scenario: Edit Cash Collection Details - Edit Cash on Delivery DD (uid:d698b8cb-1ba6-4547-9f95-620b7d7ae7b2)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"cash_on_delivery":23.57, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    Then Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    When Operator switch to Edit Order's window
+    And Operator click Order Settings -> Edit Cash Collection Details on Edit Order page
+    And Operator change the COD value to "100"
+    And Operator refresh page
+    Then Operator verify COD value is updated to "100"
+    And Operator verify "UPDATE CASH" order event description on Edit order page
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 15    |
+
+  @CloseNewWindows
+  Scenario: Edit Cash Collection Details - Add Cash on Pickup PP (uid:ccf868b7-5317-478d-b6da-e519c757db62)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{"is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    Then Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    When Operator switch to Edit Order's window
+    And Operator click Order Settings -> Edit Cash Collection Details on Edit Order page
+    And Operator change Cash on Pickup toggle to yes
+    And Operator change the COP value to "100"
+    And Operator refresh page
+    Then Operator verify COP value is updated to "100"
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 15    |
+
+  @CloseNewWindows
+  Scenario: Edit Cash Collection Details - Add Cash on Delivery DD (uid:55f9301a-df97-4f61-9b4b-6454e069765c)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    Then Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    When Operator switch to Edit Order's window
+    And Operator click Order Settings -> Edit Cash Collection Details on Edit Order page
+    And Operator change Cash on Delivery toggle to yes
+    And Operator change the COD value to "100"
+    And Operator refresh page
+    Then Operator verify COD value is updated to "100"
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 15    |
+
+  @CloseNewWindows
+  Scenario: Edit Cash Collection Details - Remove Cash on Pickup PP (uid:5592dc3e-23ae-4b83-9a10-beb52431d116)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{"cash_on_delivery":23.57, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    Then Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    When Operator switch to Edit Order's window
+    And Operator click Order Settings -> Edit Cash Collection Details on Edit Order page
+    And Operator change Cash on Pickup toggle to no
+    And Operator refresh page
+    And Operator verify "UPDATE CASH" order event description on Edit order page
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 15    |
+
+  @CloseNewWindows
+  Scenario: Edit Cash Collection Details - Remove Cash on Delivery DD (uid:2fb62b3f-b2fc-499a-a5dd-89069a556c1a)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"cash_on_delivery":23.57, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Order -> All Orders
+    Then Operator find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID           |
+      | searchLogic | contains                      |
+      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
+    When Operator switch to Edit Order's window
+    And Operator click Order Settings -> Edit Cash Collection Details on Edit Order page
+    And Operator change Cash on Delivery toggle to no
+    And Operator refresh page
+    And Operator verify "UPDATE CASH" order event description on Edit order page
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 15    |
+
+  @CloseNewWindows
   Scenario: Operator Edit Priority Level (uid:2d80a8b7-a7e3-4bf5-9284-5853f85d77b4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:

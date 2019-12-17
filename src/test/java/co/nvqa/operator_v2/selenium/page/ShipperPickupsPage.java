@@ -752,6 +752,13 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
             Color actualPriorityLevelColor = getBackgroundColor(f("//tr[@md-virtual-repeat='%s'][%d]", MD_VIRTUAL_REPEAT, rowNumber));
             return actualPriorityLevelColor.asHex();
         }
+
+        public String getBackgroundColorOfRow(int rowNumber)
+        {
+            waitUntilVisibilityOfElementLocated(f("//tr[@md-virtual-repeat='%s'][%d]", MD_VIRTUAL_REPEAT, rowNumber));
+            Color actualPriorityLevelColor = getBackgroundColor(f("//tr[@md-virtual-repeat='%s'][%d]", MD_VIRTUAL_REPEAT, rowNumber));
+            return actualPriorityLevelColor.asHex();
+        }
     }
 
     /**
@@ -810,6 +817,16 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
                 valuesSelected.stream()
                         .filter(valueSelected -> !valueSelected.equals(reservationType))
                         .forEach(valueSelected -> removeSelectedValueFromNvFilterBoxByAriaLabel("Reservation Types", valueSelected));
+            }
+        }
+
+        public void filterByStatus(String waypointStatus)
+        {
+            if(waypointStatus != null)
+            {
+                clickButtonByAriaLabel("ROUTED");
+                clickButtonByAriaLabel("PENDING");
+                selectValueFromNvAutocompleteByItemTypesAndDismiss("Waypoint Status", waypointStatus);
             }
         }
 

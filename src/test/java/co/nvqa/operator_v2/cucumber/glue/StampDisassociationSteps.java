@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.selenium.page.StampDisassociationPage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
@@ -42,5 +43,24 @@ public class StampDisassociationSteps extends AbstractSteps
     public void operatorVerifyTheLabelSaysOnStampDisassociationPage(String labelText)
     {
         stampDisassociationPage.verifyLabelText(labelText);
+    }
+
+    @And("^Operator enter Invalid Stamp ID on Stamp Disassociation page$")
+    public void operatorEnterInvalidStampID()
+    {
+        String trackingId = "INVALID_TR_ID";
+        stampDisassociationPage.enterStampId(trackingId);
+    }
+
+    @Then("Operator will get the ([^\"]*) alert")
+    public void operatorWillGetTheAlertOfMessageShown(String toastText)
+    {
+        stampDisassociationPage.checkAlert(toastText);
+    }
+
+    @When("Operator click on the Disassociate Stamp button")
+    public void operatorClickOnTheDisassociateStampButton()
+    {
+        stampDisassociationPage.clickOnTheDisassociateStampButton();
     }
 }

@@ -158,7 +158,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     public void findOrdersWithCsv(List<String> listOfTrackingId)
     {
         clickNvIconTextButtonByName("container.order.list.find-orders-with-csv");
-        waitUntilVisibilityOfElementLocated("//md-dialog//h2[text()='Find Orders with CSV']");
+        waitUntilVisibilityOfElementLocated("//md-dialog//h2[contains(text(),'Find Orders with CSV')]");
 
         String csvContents = listOfTrackingId.stream().collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
         File csvFile = createFile(String.format("find-orders-with-csv_%s.csv", generateDateUniqueString()), csvContents);
@@ -284,6 +284,31 @@ public class AllOrdersPage extends OperatorV2SimplePage
         setMdDatepickerById("commons.model.delivery-date", TestUtils.getNextDate(1));
         selectValueFromMdSelectById("commons.timeslot", "3PM - 6PM");
         clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.set-order-to-rts");
+        waitUntilInvisibilityOfToast("updated");
+    }
+
+    public void rtsMultipleOrderNextDay(List<String> listOfExpectedTrackingId)
+    {
+        clearFilterTableOrderByTrackingId();
+        selectAllShown("ctrl.ordersTableParam");
+        applyActionsMenu.chooseItem(SET_RTS_TO_SELECTED);
+
+        List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='order in ctrl.orders']/td[1]");
+        List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
+        assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+
+        setMdDatepickerById("commons.model.delivery-date", TestUtils.getNextDate(1));
+        selectValueFromMdSelectById("commons.timeslot", "3PM - 6PM");
+
+        if(listOfActualTrackingIds.size()==1)
+        {
+            clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.set-order-to-rts");
+        }
+        else
+        {
+            clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.set-orders-to-rts");
+        }
+
         waitUntilInvisibilityOfToast("updated");
     }
 
