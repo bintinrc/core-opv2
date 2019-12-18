@@ -5,6 +5,7 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.operator_v2.model.MoneyCollection;
 import co.nvqa.operator_v2.model.WaypointOrderInfo;
 import co.nvqa.operator_v2.model.WaypointPerformance;
 import co.nvqa.operator_v2.model.WaypointReservationInfo;
@@ -15,6 +16,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Assertions;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -54,26 +56,19 @@ public class RouteInboundSteps extends AbstractSteps
         String hubName = mapOfData.get("hubName");
         String fetchBy = mapOfData.get("fetchBy");
         String fetchByValue = mapOfData.get("fetchByValue");
-        Long routeId;
+        String routeIdValue = mapOfData.get("routeId");
+        Long routeId = getRouteId(routeIdValue);
 
         switch (fetchBy.toUpperCase())
         {
             case FETCH_BY_ROUTE_ID:
-                routeId = "GET_FROM_CREATED_ROUTE".equals(fetchByValue) ? get(KEY_CREATED_ROUTE_ID) : Long.parseLong(fetchByValue);
                 routeInboundPage.fetchRouteByRouteId(hubName, routeId);
                 break;
             case FETCH_BY_TRACKING_ID:
                 String trackingId = "GET_FROM_CREATED_ROUTE".equals(fetchByValue) ? get(KEY_CREATED_ORDER_TRACKING_ID) : fetchByValue;
-                routeId = null;
-                String routeIdValue = mapOfData.get("routeId");
-                if (StringUtils.isNotBlank(routeIdValue))
-                {
-                    routeId = getRouteId(routeIdValue);
-                }
                 routeInboundPage.fetchRouteByTrackingId(hubName, trackingId, routeId);
                 break;
             case FETCH_BY_DRIVER:
-                routeId = get(KEY_CREATED_ROUTE_ID);
                 routeInboundPage.fetchRouteByDriver(hubName, fetchByValue, routeId);
                 break;
         }
@@ -81,20 +76,26 @@ public class RouteInboundSteps extends AbstractSteps
 
     private Long getRouteId(String value)
     {
+        if (StringUtils.isBlank(value))
+        {
+            return get(KEY_CREATED_ROUTE_ID);
+        }
+        if (StringUtils.isNumeric(value))
+        {
+            return Long.valueOf(value);
+        }
         Pattern p = Pattern.compile("(GET_FROM_CREATED_ROUTE)(\\[\\s*)(\\d+)(\\s*])");
         Matcher m = p.matcher(value);
         if (m.matches())
         {
             List<Long> routeIds = get(KEY_LIST_OF_CREATED_ROUTE_ID);
-            System.out.println(value);
-            System.out.println(routeIds);
             return routeIds.get(Integer.parseInt(m.group(3)) - 1);
         } else if (StringUtils.equals(value, "GET_FROM_CREATED_ROUTE"))
         {
             return get(KEY_CREATED_ROUTE_ID);
         } else
         {
-            return get(value);
+            return null;
         }
     }
 
@@ -112,6 +113,7 @@ public class RouteInboundSteps extends AbstractSteps
     @Then("^Operator verify the Route Summary Details is correct using data below:$")
     public void operatorVerifyTheRouteSummaryDetailsIsCorrectUsingDataBelow(Map<String, String> mapOfData)
     {
+        mapOfData = resolveKeyValues(mapOfData);
         String routeIdAsString = mapOfData.get("routeId");
         String driverName = mapOfData.get("driverName");
         String hubName = mapOfData.get("hubName");
@@ -379,5 +381,39 @@ public class RouteInboundSteps extends AbstractSteps
     public void operatorOpenFailedWaypointsInfoDialogOnRouteInboundPage()
     {
         routeInboundPage.openFailedWaypointsDialog();
+    }
+
+    @When("^Operator open Money Collection dialog on Route Inbound page$")
+    public void operatorOpenMoneyCollectionDialogOnRouteInboundPage()
+    {
+        routeInboundPage.openMoneyCollectionDialog();
+    }
+
+    @Then("^Operator verify 'Money to collect' value is \"(.+)\" on Route Inbound page$")
+    public void operatorVerifyMoneyToCollectValueOnRouteInboundPage(String expectedValue)
+    {
+        String actualValue = routeInboundPage.getMoneyToCollectValue();
+        Assertions.assertEquals(expectedValue, actualValue, "Money to collect value");
+    }
+
+    @Then("^Operator verify 'Expected Total' value is \"(.+)\" on Money Collection dialog$")
+    public void operatorVerifyExpectedTotalValueOnMoneyCollectionDialog(String expectedValue)
+    {
+        String actualValue = routeInboundPage.moneyCollectionDialog().getExpectedTotal();
+        Assertions.assertEquals(expectedValue, actualValue, "Expected Total value");
+    }
+
+    @Then("^Operator verify 'Outstanding amount' value is \"(.+)\" on Money Collection dialog$")
+    public void operatorVerifyOutstandingAmountValueOnMoneyCollectionDialog(String expectedValue)
+    {
+        String actualValue = routeInboundPage.moneyCollectionDialog().getOutstandingAmount();
+        Assertions.assertEquals(expectedValue, actualValue, "Outstanding Amount value");
+    }
+
+    @Then("^Operator submit following values on Money Collection dialog:$")
+    public void operatorSubmitValuesOnMoneyCollectionDialog(Map<String, String> mapOfData)
+    {
+        MoneyCollection moneyCollection = new MoneyCollection(mapOfData);
+        routeInboundPage.moneyCollectionDialog().fillForm(moneyCollection).save();
     }
 }
