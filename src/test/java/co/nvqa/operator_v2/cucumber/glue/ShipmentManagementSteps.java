@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
 import co.nvqa.operator_v2.util.KeyConstants;
@@ -12,9 +13,13 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -74,6 +79,19 @@ public class ShipmentManagementSteps extends AbstractSteps
 
         shipmentManagementPage.addFilter("MAWB", mawb, true);
         putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, "MAWB", mawb);
+    }
+
+    @When("Operator filter shipment based on {string} Date on Shipment Management page")
+    public void fillSearchFilterByDate(String dateFieldName)
+    {
+        LocalDateTime today = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+        String dateOfToday = formatter.format(today);
+        String dateOfTomorrow = formatter.format(today.plusDays(1));
+
+        shipmentManagementPage.selectValueFromNvAutocompleteByItemTypesAndDismiss("filters", dateFieldName);
+        shipmentManagementPage.changeDate(dateOfToday, true);
+        shipmentManagementPage.changeDate(dateOfTomorrow, false);
     }
 
     @Given("^Operator click Edit filter on Shipment Management page$")
@@ -148,6 +166,7 @@ public class ShipmentManagementSteps extends AbstractSteps
 //        shipmentInfo.setMawb(mawb);
 
         put(KEY_SHIPMENT_INFO, shipmentInfo);
+        put(KEY_CREATED_SHIPMENT, shipmentInfo);
         put(KEY_CREATED_SHIPMENT_ID, shipmentInfo.getId());
 
         if (isNextOrder)
@@ -185,6 +204,13 @@ public class ShipmentManagementSteps extends AbstractSteps
     {
         ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
         shipmentManagementPage.validateShipmentInfo(shipmentInfo.getId(), shipmentInfo);
+    }
+
+    @Then("^Operator verify parameters of the created shipment via API on Shipment Management page$")
+    public void operatorVerifyParametersOfTheCreatedShipmentViaApiOnShipmentManagementPage()
+    {
+        Shipments shipment = get(KEY_CREATED_SHIPMENT);
+        shipmentManagementPage.validateShipmentId(shipment.getShipment().getId());
     }
 
     @Then("Operator verify parameters of the created multiple shipment on Shipment Management page")
@@ -317,5 +343,30 @@ public class ShipmentManagementSteps extends AbstractSteps
     public void operatorClickForceSuccessButton()
     {
         shipmentManagementPage.forceSuccessShipment();
+    }
+
+    @And("Operator create CSV \"([^\"]*)\" file which has multiple valid Tracking ID in it and upload the CSV")
+    public void createAndUploadCsvMultipleTrackingId(String fileName) throws FileNotFoundException
+    {
+        List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+        int numberOfOrder = orders.size();
+        shipmentManagementPage.createAndUploadCsv(orders, fileName, numberOfOrder, shipmentInfo);
+    }
+
+    @And("Operator create CSV \"([^\"]*)\" file which has duplicated Tracking ID in it and upload the CSV")
+    public void createAndUploadCsvDuplicatedTrackingId(String fileName) throws FileNotFoundException
+    {
+        List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+        int numberOfOrder = orders.size();
+        shipmentManagementPage.createAndUploadCsv(orders, fileName, true, true, numberOfOrder, shipmentInfo);
+    }
+
+    @And("Operator create CSV \"([^\"]*)\" file which has invalid Tracking ID in it and upload the CSV")
+    public void createAndUploadCsvInvalidTrackingId(String fileName) throws FileNotFoundException
+    {
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+        shipmentManagementPage.createAndUploadCsv(fileName, shipmentInfo);
     }
 }

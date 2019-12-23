@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @ShipmentInboundScanning @Shipment @MiddleMile @ForceNotHeadless
+@ShipmentInboundScanning @Shipment @MiddleMile @ForceNotHeadless
 Feature: Shipment Inbound Scanning
 
   @LaunchBrowser @ShouldAlwaysRun
