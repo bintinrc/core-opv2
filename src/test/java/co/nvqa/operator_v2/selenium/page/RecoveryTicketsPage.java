@@ -3,12 +3,8 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-
-import java.util.List;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
@@ -25,6 +21,10 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     private static final String XPATH_FOR_FILTERS = "//p[text()='%s']/parent::div/following-sibling::div//input";
     private static final String XPATH_FOR_FILTER_OPTION = "//span[text()='%s']";
     private static final String XPATH_LOAD_SELECTION = "//button[@aria-label='Load Selection']";
+    private static final String XPATH_SELECT_FILTER = "//input[@aria-label='Select Filter']";
+    private static final String XPATH_ARROW_DROPDOWN = "//label[text()='Add Filter']/..//i[text()='arrow_drop_down']";
+    private static final String XPATH_SHOW_UNASSIGNED_RESOLVED_TICKET = "//span[text()='%s']/parent::button";
+    private static final String XPATH_REMOVE_TRACKINGID_FILTER = "//p[text()='Tracking IDs']/../following-sibling::div//button[@aria-label='Clear All']";
 
     public RecoveryTicketsPage(WebDriver webDriver)
     {
@@ -38,13 +38,13 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         String ticketType = recoveryTicket.getTicketType();
 
         clickButtonByAriaLabel("Create New Ticket");
-        sendKeysById("trackingId", trackingId+" "); // Add 1 <SPACE> character at the end of tracking ID to make the textbox get trigged and request tracking ID validation to backend.
+        sendKeysById("trackingId", trackingId + " "); // Add 1 <SPACE> character at the end of tracking ID to make the textbox get trigged and request tracking ID validation to backend.
         selectEntrySource(recoveryTicket.getEntrySource());
         selectInvestigatingDepartment(recoveryTicket.getInvestigatingDepartment());
         selectInvestigatingHub(recoveryTicket.getInvestigatingHub());
         selectTicketType(ticketType);
 
-        switch(ticketType)
+        switch (ticketType)
         {
             case TICKET_TYPE_DAMAGED:
             {
@@ -91,9 +91,9 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
             }
         }
 
-        retryIfRuntimeExceptionOccurred(()->
+        retryIfRuntimeExceptionOccurred(() ->
         {
-            if(isElementExistWait1Second("//button[@aria-label='Create Ticket'][@disabled='disabled']"))
+            if (isElementExistWait1Second("//button[@aria-label='Create Ticket'][@disabled='disabled']"))
             {
                 sendKeys("//input[@aria-label='Tracking ID']", trackingId);
                 pause100ms();
@@ -152,9 +152,9 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void chooseTicketStatusFilter(String status)
     {
-        click(f(XPATH_FOR_FILTERS,"Ticket Status"));
+        click(f(XPATH_FOR_FILTERS, "Ticket Status"));
         pause2s();
-        click(f(XPATH_FOR_FILTER_OPTION,status));
+        click(f(XPATH_FOR_FILTER_OPTION, status));
         altClick(XPATH_LOAD_SELECTION);
         pause1s();
     }
@@ -163,26 +163,99 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     {
         clickButtonByAriaLabel("Clear All Selections");
         pause2s();
-        click("//input[@aria-label='Select Filter']");
-        click(f(XPATH_FOR_FILTER_OPTION,"Entry Source"));
-        click("//label[text()='Add Filter']/..//i[text()='arrow_drop_down']");
+        click(XPATH_SELECT_FILTER);
+        click(f(XPATH_FOR_FILTER_OPTION, "Entry Source"));
+        click(XPATH_ARROW_DROPDOWN);
         pause1s();
-        click(f(XPATH_FOR_FILTERS,"Entry Source"));
-        click(f(XPATH_FOR_FILTER_OPTION,entrySource));
+        click(f(XPATH_FOR_FILTERS, "Entry Source"));
+        click(f(XPATH_FOR_FILTER_OPTION, entrySource));
         altClick(XPATH_LOAD_SELECTION);
         pause1s();
     }
 
+    public void addInvestigatingHubFilter(String hub)
+    {
+        clickButtonByAriaLabel("Clear All Selections");
+        pause2s();
+        click(XPATH_SELECT_FILTER);
+        click(f(XPATH_FOR_FILTER_OPTION, "Investigating Hub"));
+        click(XPATH_ARROW_DROPDOWN);
+        pause1s();
+        click(f(XPATH_FOR_FILTERS, "Investigating Hub"));
+        sendKeys(f(XPATH_FOR_FILTERS, "Investigating Hub"), hub);
+        click(f(XPATH_FOR_FILTER_OPTION, hub));
+        altClick(XPATH_LOAD_SELECTION);
+        pause1s();
+    }
+
+    public void addInvestigatingDeptFilter(String dept)
+    {
+        clickButtonByAriaLabel("Clear All Selections");
+        pause2s();
+        click(XPATH_SELECT_FILTER);
+        click(f(XPATH_FOR_FILTER_OPTION, "Investigating Dept."));
+        click(XPATH_ARROW_DROPDOWN);
+        pause1s();
+        click(f(XPATH_FOR_FILTERS, "Investigating Dept."));
+        sendKeysAndEnter(f(XPATH_FOR_FILTERS, "Investigating Dept."), dept);
+        pause2s();
+        altClick(XPATH_LOAD_SELECTION);
+        pause1s();
+    }
+
+    public void showUnassignedFilter(String show)
+    {
+        clickButtonByAriaLabel("Clear All Selections");
+        pause2s();
+        if (isElementVisible(XPATH_REMOVE_TRACKINGID_FILTER))
+        {
+            click(XPATH_REMOVE_TRACKINGID_FILTER);
+        }
+        click(XPATH_SELECT_FILTER);
+        click(f(XPATH_FOR_FILTER_OPTION, "Show Unassigned"));
+        click(XPATH_ARROW_DROPDOWN);
+        pause1s();
+        click(f(XPATH_SHOW_UNASSIGNED_RESOLVED_TICKET, show));
+        pause1s();
+        altClick(XPATH_LOAD_SELECTION);
+        pause1s();
+    }
+
+    public void resolvedTicketsFilter(String filter)
+    {
+        clickButtonByAriaLabel("Clear All Selections");
+        pause2s();
+        if (isElementVisible(XPATH_REMOVE_TRACKINGID_FILTER))
+        {
+            click(XPATH_REMOVE_TRACKINGID_FILTER);
+        }
+        click(XPATH_SELECT_FILTER);
+        click(f(XPATH_FOR_FILTER_OPTION, "Resolved Tickets"));
+        click(XPATH_ARROW_DROPDOWN);
+        pause1s();
+        click(f(XPATH_SHOW_UNASSIGNED_RESOLVED_TICKET, filter));
+        pause1s();
+        altClick(XPATH_LOAD_SELECTION);
+        pause1s();
+    }
+
+    public void assignToTicket(String assignTo)
+    {
+        waitUntilPageLoaded();
+        selectAssignTo(assignTo);
+        clickButtonByAriaLabel("Update Ticket");
+    }
+
     public void chooseAllTicketStatusFilters()
     {
-        click(f(XPATH_FOR_FILTERS,"Ticket Status"));
+        click(f(XPATH_FOR_FILTERS, "Ticket Status"));
         pause2s();
-        click(f(XPATH_FOR_FILTER_OPTION,"IN PROGRESS"));
-        click(f(XPATH_FOR_FILTER_OPTION,"ON HOLD"));
-        click(f(XPATH_FOR_FILTER_OPTION,"PENDING"));
-        click(f(XPATH_FOR_FILTER_OPTION,"PENDING SHIPPER"));
-        click(f(XPATH_FOR_FILTER_OPTION,"CANCELLED"));
-        click(f(XPATH_FOR_FILTER_OPTION,"RESOLVED"));
+        click(f(XPATH_FOR_FILTER_OPTION, "IN PROGRESS"));
+        click(f(XPATH_FOR_FILTER_OPTION, "ON HOLD"));
+        click(f(XPATH_FOR_FILTER_OPTION, "PENDING"));
+        click(f(XPATH_FOR_FILTER_OPTION, "PENDING SHIPPER"));
+        click(f(XPATH_FOR_FILTER_OPTION, "CANCELLED"));
+        click(f(XPATH_FOR_FILTER_OPTION, "RESOLVED"));
         altClick(XPATH_LOAD_SELECTION);
     }
 
@@ -198,7 +271,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         clickButtonByAriaLabel("Edit");
         pause2s();
         String status = getTextById("ticket-status");
-        assertEquals(expectedStatus.toLowerCase(),status.toLowerCase());
+        assertEquals(expectedStatus.toLowerCase(), status.toLowerCase());
     }
 
     public void selectEntrySource(String entrySource)
@@ -208,7 +281,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void selectTicketStatus(String ticketStatus)
     {
-        selectValueFromMdSelectByIdContains("ticket-status" , ticketStatus);
+        selectValueFromMdSelectByIdContains("ticket-status", ticketStatus);
     }
 
     public void selectOrderOutcome(String orderOutcome)
@@ -218,12 +291,18 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void selectAssignTo(String assignTo)
     {
-        selectValueFromMdSelectByIdContains("assign-to" , assignTo);
+        selectValueFromMdSelectByIdContains("assign-to", assignTo);
     }
 
-    public void setEnterNewInstruction(String enterNewInstruction) { sendKeysByAriaLabel("Enter New Instruction", enterNewInstruction); }
+    public void setEnterNewInstruction(String enterNewInstruction)
+    {
+        sendKeysByAriaLabel("Enter New Instruction", enterNewInstruction);
+    }
 
-    public void setTicketComments(String ticketComments) {sendKeysByAriaLabel("Ticket Comments" , ticketComments);}
+    public void setTicketComments(String ticketComments)
+    {
+        sendKeysByAriaLabel("Ticket Comments", ticketComments);
+    }
 
     public void selectInvestigatingDepartment(String investigatingDepartment)
     {
@@ -309,13 +388,13 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     public void selectOrderOutcomeInaccurateAddress(String orderOutcomeInaccurateAddress)
     {
         scrollIntoView("//*[@id='orderOutcome(InaccurateAddress)']");
-        selectValueFromMdSelectById("orderOutcome(InaccurateAddress)",orderOutcomeInaccurateAddress);
+        selectValueFromMdSelectById("orderOutcome(InaccurateAddress)", orderOutcomeInaccurateAddress);
     }
 
     public void selectOrderOutcomeDuplicateParcel(String orderOutcomeDuplicateParcel)
     {
         scrollIntoView("//*[@id='orderOutcome(DuplicateParcel)']");
-        selectValueFromMdSelectById("orderOutcome(DuplicateParcel)",orderOutcomeDuplicateParcel);
+        selectValueFromMdSelectById("orderOutcome(DuplicateParcel)", orderOutcomeDuplicateParcel);
     }
 
     public void selectOrderOutcomeMissing(String orderOutcomeMissing)
@@ -369,10 +448,10 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public String getTextByClassInTable(String id)
     {
-        String xpathExpression = f("//td[@class='%s']",id);
-        scrollIntoView(f(xpathExpression,id));
+        String xpathExpression = f("//td[@class='%s']", id);
+        scrollIntoView(f(xpathExpression, id));
         pause2s();
-        String text = getText(xpathExpression).replace("▸","").trim();
+        String text = getText(xpathExpression).replace("▸", "").trim();
         return text;
     }
 

@@ -61,6 +61,7 @@ public class ShipperPickupsSteps extends AbstractSteps
             Date reservationDateEnd = YYYY_MM_DD_SDF.parse(dataTableAsMap.get("reservationDateEnd"));
             shipperPickupsPage.filtersForm().filterReservationDate(reservationDateStart, reservationDateEnd);
             shipperPickupsPage.filtersForm().filterByShipper(dataTableAsMap.get("shipperName"));
+            shipperPickupsPage.filtersForm().filterByStatus(dataTableAsMap.get("waypointStatus"));
             shipperPickupsPage.filtersForm().clickButtonLoadSelection();
         }
         catch(ParseException ex)

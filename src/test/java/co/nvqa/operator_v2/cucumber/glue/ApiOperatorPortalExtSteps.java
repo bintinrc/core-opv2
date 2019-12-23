@@ -169,8 +169,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         put(KEY_DP_USER, dpUser);
     }
 
-    @When("^API Operator create new Driver on Driver Strength page using data below:$")
-    public void apiOperatorCreateNewDriverOnDriverStrengthPageUsingDataBelow(Map<String, String> mapOfData)
+    @When("^API Operator create new Driver using data below:$")
+    public void apiOperatorCreateNewDriverUsingDataBelow(Map<String, String> mapOfData)
     {
         String dateUniqueString = TestUtils.generateDateUniqueString();
 
@@ -190,6 +190,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         driverInfo.fromDriver(driverCreateRequest.getDriver());
 
         put(KEY_CREATED_DRIVER, driverInfo);
+        put(KEY_CREATED_DRIVER_ID, driverInfo.getId());
         put(KEY_CREATED_DRIVER_UUID, driverInfo.getUuid());
     }
 

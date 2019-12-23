@@ -5,7 +5,6 @@ import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -85,12 +84,11 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
         String fromDateStr;
         String toDateStr;
 
-        if(StringUtils.equalsIgnoreCase("today", dates))
+        if (StringUtils.equalsIgnoreCase("today", dates))
         {
             fromDateStr = DATE_FILTER_SDF_2.format(new Date());
             toDateStr = fromDateStr;
-        }
-        else
+        } else
         {
             String[] datesStr = dates.split(";");
             fromDateStr = StringUtils.normalizeSpace(datesStr[0]);
@@ -128,14 +126,13 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
 
     public void removeFilter(String filterName)
     {
-        if(filterName.contains("time"))
+        if (filterName.contains("time"))
         {
-            if(isElementExist("//div[div[p[text()='" + filterName + "']]]/div/nv-icon-button/button"))
+            if (isElementExist("//div[div[p[text()='" + filterName + "']]]/div/nv-icon-button/button"))
             {
                 click("//div[div[p[text()='" + filterName + "']]]/div/nv-icon-button/button");
             }
-        }
-        else
+        } else
         {
             click("//div[div[p[text()='" + filterName + "']]]/div/div/nv-icon-button/button");
         }
@@ -164,8 +161,8 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
     {
         data.forEach((filter, value) ->
         {
-            String xpath = String.format(XPATH_TRANSACTION_FILTERS + XPATH_FILTER_BY_TITLE, filter);
-            if(!isElementExistFast(xpath))
+            String xpath = f(XPATH_TRANSACTION_FILTERS + XPATH_FILTER_BY_TITLE, filter);
+            if (!isElementExistFast(xpath))
             {
                 executeInContext(XPATH_TRANSACTION_FILTERS, () -> selectValueFromNvAutocompleteBySearchTextAndDismiss("::searchText", filter));
             }
@@ -177,8 +174,8 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
     {
         data.forEach((filter, value) ->
         {
-            String xpath = String.format(XPATH_GENERAL_FILTERS + XPATH_FILTER_BY_TITLE, filter);
-            if(!isElementExistFast(xpath))
+            String xpath = f(XPATH_GENERAL_FILTERS + XPATH_FILTER_BY_TITLE, filter);
+            if (!isElementExistFast(xpath))
             {
                 executeInContext(XPATH_GENERAL_FILTERS, () -> selectValueFromNvAutocompleteBySearchTextAndDismiss("::searchText", filter));
             }
@@ -198,11 +195,7 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
 
     public void searchByTrackingId(String trackingId)
     {
-        //-- get checkbox relative to the tracking id cell
-        WebElement textbox = findElementByXpath("//input[@ng-model='searchText' and @tabindex='13']");
-        textbox.clear();
-        textbox.sendKeys(trackingId);
-        pause100ms();
+        txnRsvnTable.filterByColumn(COLUMN_TRACKING_ID, trackingId);
     }
 
     public void selectAllShown()
@@ -253,6 +246,7 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
                     .put("sequence", "sequence")
                     .put("id", "id")
                     .put("orderId", "order-id")
+                    .put("waypointId", "waypoint-id")
                     .put(COLUMN_TRACKING_ID, "tracking-id")
                     .put(COLUMN_TYPE, "type")
                     .put("shipper", "shipper")

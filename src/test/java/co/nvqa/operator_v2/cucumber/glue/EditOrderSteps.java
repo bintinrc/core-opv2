@@ -708,4 +708,71 @@ public class EditOrderSteps extends AbstractSteps
             assertEquals("StampId value is not as expected", fieldToValidate, editOrderPage.getStampId());
         }
     }
+
+    @When("Operator change the COP value to {string}")
+    public void OperatorChangeTheCopValue(String copValue)
+    {
+        Integer copValueToString = Integer.parseInt(copValue);
+        editOrderPage.changeCopValue(copValueToString);
+    }
+
+    @When("Operator change the COD value to {string}")
+    public void OperatorChangeTheCodValue(String codValue)
+    {
+        Integer codValueToString = Integer.parseInt(codValue);
+        editOrderPage.changeCodValue(codValueToString);
+    }
+
+    @Then("Operator verify COP value is updated to {string}")
+    public void VerifyCopUpdated(String copValue)
+    {
+        Integer copValueToString = Integer.parseInt(copValue);
+        editOrderPage.verifyCopUpdated(copValueToString);
+    }
+
+    @Then("Operator verify COD value is updated to {string}")
+    public void VerifyCodUpdated(String codValue)
+    {
+        Integer codValueToString = Integer.parseInt(codValue);
+        editOrderPage.verifyCodUpdated(codValueToString);
+    }
+
+    @Then("^Operator verify \"(.+)\" order event description on Edit order page$")
+    public void OperatorVerifyOrderEvent(String expectedEventName)
+    {
+        Order order = get(KEY_CREATED_ORDER);
+        List<OrderEvent> events = editOrderPage.eventsTable().readAllEntities();
+        OrderEvent actualEvent = events.stream()
+                .filter(event -> StringUtils.equalsIgnoreCase(event.getName(), expectedEventName))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(f("There is no [%s] event on Edit Order page", expectedEventName)));
+        String eventDescription = actualEvent.getDescription();
+        if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE CASH")) {
+            editOrderPage.eventsTable().verifyVerifyUpdateCashDescription(order, eventDescription);
+        }
+    }
+
+    @When("Operator change Cash on Pickup toggle to yes")
+    public void ChangeCopToggleToYes()
+    {
+        editOrderPage.changeCopToggleToYes();
+    }
+
+    @When("Operator change Cash on Delivery toggle to yes")
+    public void ChangeCodToggleToYes()
+    {
+        editOrderPage.changeCodToggleToYes();
+    }
+
+    @When("Operator change Cash on Delivery toggle to no")
+    public void ChangeCodToggleToNo()
+    {
+        editOrderPage.changeCodToggleToNo();
+    }
+
+    @When("Operator change Cash on Pickup toggle to no")
+    public void ChangeCopToggleToNo()
+    {
+        editOrderPage.changeCopToggleToNo();
+    }
 }

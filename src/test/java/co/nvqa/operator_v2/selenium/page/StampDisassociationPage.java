@@ -15,6 +15,7 @@ public class StampDisassociationPage extends OperatorV2SimplePage
     public static final String LOCATOR_TEXT_ORDER_ID = "//md-card//h5";
     public static final String LOCATOR_TEXT_DELIVERY_ADDRESS = "//md-card-content/div[5]";
     public static final String LOCATOR_TEXT_LABEL = "//md-card//nv-tag/span";
+    public static final String LOCATOR_ALERT = "//div[contains(@class, 'order-details-container flex-100')]";
 
     public StampDisassociationPage(WebDriver webDriver)
     {
@@ -22,6 +23,7 @@ public class StampDisassociationPage extends OperatorV2SimplePage
     }
 
     public void enterStampId(String trackingId){
+        waitUntilPageLoaded();
         sendKeysAndEnterById(LOCATOR_FIELD_STAMP_ID, trackingId);
     }
 
@@ -44,5 +46,15 @@ public class StampDisassociationPage extends OperatorV2SimplePage
 
         String actualDeliveryAddress = StringUtils.normalizeSpace(getText(LOCATOR_TEXT_DELIVERY_ADDRESS));
         assertEquals("Delivery Address", order.buildCompleteToAddress(), actualDeliveryAddress);
+    }
+
+    public void checkAlert(String expectedAlert)
+    {
+        assertEquals("Not Found Alert", expectedAlert, getText(LOCATOR_ALERT));
+    }
+
+    public void clickOnTheDisassociateStampButton()
+    {
+        clickButtonByAriaLabel("Disassociate Stamp");
     }
 }

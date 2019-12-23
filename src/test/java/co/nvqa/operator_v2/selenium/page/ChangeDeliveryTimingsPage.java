@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage
 {
-    private static final String CSV_FILENAME_PATTERN = "sample_csv";
+    private static final String CSV_FILENAME_PATTERN = "sample_change_delivery_timings";
     private static final String COMMA = ",";
     private static final String CSV_CAMPAIGN_HEADER = "tracking_id,start_date,end_date,timewindow";
     private static final String NG_REPEAT = "success in $data";
@@ -30,7 +30,7 @@ public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage
     }
 
     public void downloadSampleCSVFile() {
-        clickNvApiTextButtonByName("Download sample CSV file");
+        clickNvIconTextButtonByName("commons.download-sample-excel");
     }
 
     public void csvSampleDownloadSuccessful() {
@@ -39,11 +39,12 @@ public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage
 
     public void uploadCsvCampaignFile(List<ChangeDeliveryTiming> listOfChangeDeliveryTimings) {
         File csvResultFile = createDeliveryTimingChanging(listOfChangeDeliveryTimings);
-        clickNvIconTextButtonByName("Upload CSV");
+        clickNvApiTextButtonByName("Upload CSV");
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'file-select')]");
         sendKeysByAriaLabel("Choose", csvResultFile.getAbsolutePath());
         clickNvButtonSaveByNameAndWaitUntilDone("Upload CSV");
-        waitUntilInvisibilityOfToast("Delivery Time Updated");
+        waitUntilInvisibilityOfToast("Change delivery timings", false);
+        waitUntilInvisibilityOfToast(f("%d order(s) updated", listOfChangeDeliveryTimings.size()));
     }
 
     private File createDeliveryTimingChanging(List<ChangeDeliveryTiming> listOfChangeDeliveryTimings) {
