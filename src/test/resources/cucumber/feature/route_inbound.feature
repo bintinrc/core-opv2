@@ -6,7 +6,7 @@ Feature: Route Inbound
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator get route details by Route ID/Tracking ID/Driver (<hiptest-uid>)
+  Scenario Outline: Operator get route details by <Title> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -38,10 +38,10 @@ Feature: Route Inbound
       | wpCompleted | 1                      |
       | wpTotal     | 1                      |
     Examples:
-      | Note                 | hiptest-uid                              | fetchBy              | fetchByValue           |
-      | FETCH_BY_ROUTE_ID    | uid:78b7f331-22b8-4ba4-926b-48fee23ca396 | FETCH_BY_ROUTE_ID    | GET_FROM_CREATED_ROUTE |
-      | FETCH_BY_TRACKING_ID | uid:1254810b-984b-41e0-826d-de3a0a70efec | FETCH_BY_TRACKING_ID | GET_FROM_CREATED_ROUTE |
-      | FETCH_BY_DRIVER      | uid:d8922f44-3b18-4243-84ce-fd2f13adb663 | FETCH_BY_DRIVER      | {ninja-driver-name}    |
+      | Title       | hiptest-uid                              | fetchBy              | fetchByValue                    |
+      | Route ID    | uid:78b7f331-22b8-4ba4-926b-48fee23ca396 | FETCH_BY_ROUTE_ID    | {KEY_CREATED_ROUTE_ID}          |
+      | Tracking ID | uid:1254810b-984b-41e0-826d-de3a0a70efec | FETCH_BY_TRACKING_ID | {KEY_CREATED_ORDER_TRACKING_ID} |
+      | Driver      | uid:d8922f44-3b18-4243-84ce-fd2f13adb663 | FETCH_BY_DRIVER      | {ninja-driver-name}             |
 
   @DeleteOrArchiveRoute
   Scenario: View waypoint performance of Pending Waypoints on Route Inbound page (uid:10f08a94-963c-4964-8c01-759f23f53767)

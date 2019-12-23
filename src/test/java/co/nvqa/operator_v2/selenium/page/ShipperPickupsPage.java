@@ -101,8 +101,8 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         }
 
         // Remove multiple [SPACE] chars from String value.
-        actualPickupAddress = StringUtils.normalizeSpace(actualPickupAddress).trim();
-        pickupAddress = StringUtils.normalizeSpace(pickupAddress).trim();
+        actualPickupAddress = StringUtils.normalizeSpace(actualPickupAddress);
+        pickupAddress = StringUtils.normalizeSpace(pickupAddress);
         assertThat("Pickup Address", actualPickupAddress, startsWith(pickupAddress));
 
         assertThatIfExpectedValueNotBlank("Shipper Name", shipperName, reservationsTable.getShipperNameAndContact(1), startsWith(shipperName));
