@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @ShipmentManagement @Shipment @MiddleMile @ForceNotHeadless
+@ShipmentManagement @Shipment @MiddleMile @ForceNotHeadless
 Feature: Shipment Management
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -226,6 +226,8 @@ Feature: Shipment Management
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
     When Operator filter Shipment Status = Transit on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
 
   @DeleteShipment
   Scenario: Shipment Searching by Filters - Searching Shipment by Shipment Status - COMPLETED (uid:3af194bb-8f21-42b6-9dc7-f85c4453f12f)
@@ -260,7 +262,127 @@ Feature: Shipment Management
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
 
-  @DeleteFilersPreset
+  @DeleteShipment
+  Scenario: Upload Bulk Orders to a Shipment - Edit Shipment with bulk Valid Tracking ID data (uid:14b61e26-9171-4ae5-8415-5d41b39606be)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 3      |
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}}|
+    When Operator create CSV "{csv-upload-file-name}" file which has multiple valid Tracking ID in it and upload the CSV
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    And Operator open the shipment detail for the created shipment on Shipment Management Page
+    Then Operator verify the Shipment Details Page opened is for the created shipment
+
+  @DeleteShipment
+  Scenario: Upload Bulk Orders to a Shipment - Edit Shipment with bulk Duplicate Tracking ID data (uid:bb924c07-22ca-4610-be61-780c4493b630)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 3      |
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}}|
+    When Operator create CSV "{csv-upload-file-name}" file which has duplicated Tracking ID in it and upload the CSV
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    And Operator open the shipment detail for the created shipment on Shipment Management Page
+    Then Operator verify the Shipment Details Page opened is for the created shipment
+
+  @DeleteShipment
+  Scenario: Upload Bulk Orders to a Shipment - Edit Shipment with bulk Invalid Tracking ID data (uid:74490a21-535d-4762-9613-20e6a19dcb72)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    When Operator create CSV "{csv-upload-file-name}" file which has invalid Tracking ID in it and upload the CSV
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+
+  @DeleteShipment
+  Scenario Outline: Shipment Searching by Date Filters - <scenarioName>
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator filter shipment based on "<filterName>" Date on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    Examples:
+      | Note                                  | scenarioName                          | hiptest-uid                              | filterName      |
+      | Searching Shipment by ETA (Date Time) | Searching Shipment by ETA (Date Time) | uid:46bbfa39-a68c-420e-9409-21d0693a5b1c | ETA (Date Time) |
+      | Searching Shipment by Shipment Date   | Searching Shipment by Shipment Date   | uid:cf67741d-692b-4b62-a1bf-09b5718731a6 | Shipment Date   |
+
+  @DeleteShipment
+  Scenario: Shipment Searching by Filters - Searching Shipment by Shipment Completion (uid:104d33e8-833d-4e13-a831-aaec8bc53ed8)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id-2} } |
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Operator put created parcel to shipment
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    And Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
+    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
+    When Operator select the destination hub {hub-name-2} of the shipment
+    And Operator select the shipment type
+    And Operator select the created shipment by Shipment ID
+    And Operator click the add shipment button then continue
+    And Operator input the scanned Tracking ID inside the shipment
+    And Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter shipment based on "Shipment Completion Date Time" Date on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment via API on Shipment Management page
+
+  @DeleteShipment
+  Scenario: Shipment Searching by Filters - Searching Shipment by Transit Date Time (uid:3ac44e9f-7700-4be3-8a23-3012b4eabba3)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    When Operator scan the created order to shipment in hub {hub-name}
+    And Operator close the shipment which has been created
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
+    When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter shipment based on "Transit Date Time" Date on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+
+  @DeleteShipment
   Scenario: Shipment Searching by Filters - Searching Shipment by Last Inbound Hub (uid:e635eac5-8178-457d-807d-48df17e7de46)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:

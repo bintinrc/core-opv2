@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.pdf.ShipmentAirwayBill;
 import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.commons.util.StandardTestConstants;
@@ -9,6 +10,9 @@ import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +27,6 @@ import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.Shipments
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.COLUMN_SHIPMENT_ID;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.is;
 
 /**
  * @author Lanang Jati
@@ -50,6 +53,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     public static final String XPATH_CLEAR_FILTER_BUTTON = "//button[@aria-label='Clear All Selections']";
     public static final String XPATH_CLEAR_FILTER_VALUE = "//button[@aria-label='Clear All']";
     private ShipmentsTable shipmentsTable;
+
+    private static final String FILEPATH = TestConstants.TEMP_DIR;
 
     public ShipmentManagementPage(WebDriver webDriver)
     {
@@ -135,6 +140,15 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
             sendKeys("//input[@ng-model='search' and contains(@id,'input')]", value);
         }
         pause1s();
+    }
+
+    public void changeDate(String date, boolean isToday) {
+        String datepickerXpath = "//md-datepicker[@name='%s']//input";
+        if (isToday) {
+            sendKeys(f(datepickerXpath, "fromDateField"), date);
+        } else {
+            sendKeys(f(datepickerXpath, "toDateField"), date);
+        }
     }
 
     public long saveFiltersAsPreset(String presetName)
@@ -393,6 +407,81 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
 
         String toastMessage = getToastTopText();
         assertThat("Toast message not contains Shipment Completion", toastMessage, allOf(containsString("Force"), containsString("Success")));
+    }
+
+    public void createAndUploadCsv(List<Order> orders, String fileName, boolean isValid, boolean isDuplicated, int numberOfOrder, ShipmentInfo shipmentInfo) throws FileNotFoundException
+    {
+        StringBuilder bulkData = new StringBuilder();
+        if (isValid) {
+            for (int i = 0; i < orders.size(); i++) {
+                bulkData.append(orders.get(i).getTrackingId());
+                if (i + 1 < orders.size()) {
+                    bulkData.append("\n");
+                }
+            }
+            if (isDuplicated) {
+                bulkData.append("\n");
+                bulkData.append(orders.get(0).getTrackingId());
+            }
+        }
+
+        final String filePath = FILEPATH + fileName + ".csv";
+        System.out.println("Upload CSV : " + filePath);
+        PrintWriter writer = new PrintWriter(new FileOutputStream(filePath, false));
+
+        if (isValid)
+        {
+            writer.print(bulkData);
+        } else {
+            writer.print("TS");
+        }
+        writer.close();
+
+        uploadFile(fileName, numberOfOrder, isValid, isDuplicated, shipmentInfo);
+        pause1s();
+        click("//md-toolbar[@title='Upload Results']//button[@aria-label='Cancel']");
+        pause1s();
+        click("//md-toolbar[@title='Edit Shipment']//button[@aria-label='Cancel']");
+    }
+
+    public void createAndUploadCsv(List<Order> orders, String fileName, int numberOfOrder, ShipmentInfo shipmentInfo) throws FileNotFoundException
+    {
+        createAndUploadCsv(orders, fileName, true, false, numberOfOrder, shipmentInfo);
+    }
+
+    public void createAndUploadCsv(String fileName, ShipmentInfo shipmentInfo) throws FileNotFoundException
+    {
+        createAndUploadCsv(null, fileName, false, false, 0, shipmentInfo);
+    }
+
+    private void uploadFile(String fileName, int numberOfOrder, boolean isValid, boolean isDuplicated, ShipmentInfo shipmentInfo) {
+        //-- click Choose File
+        final String filePath = FILEPATH + fileName + ".csv";
+        clickActionButton(shipmentInfo.getId(), ACTION_EDIT);
+        findElementByXpath("//input[contains(@id,'file')]").sendKeys(filePath);
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'shipment-upload-order-result')]");
+
+        int actualNumberOfOrder = Integer.parseInt(getText("//input[contains(@id,'container.shipment-management.uploaded-orders')]/preceding-sibling::div"));
+        int successfulOrder = Integer.parseInt(getText("//input[contains(@id,'container.shipment-management.successful')]/preceding-sibling::div"));
+        int failedOrder = Integer.parseInt(getText("//input[contains(@id,'container.shipment-management.failed')]/preceding-sibling::div"));
+        pause1s();
+        if (isValid) {
+            if (isDuplicated) {
+                assertEquals("Number of Order is not the same", actualNumberOfOrder, numberOfOrder+1);
+                assertEquals("Failed Order(s) : ", failedOrder, 1);
+                String actualFailedReason = getTextOnTableWithNgRepeat(1, "reason", "row in ctrl.uploadResult.failedUpload");
+                assertEquals("Failure reason is different : ", actualFailedReason, "DUPLICATE");
+            } else {
+                assertEquals("Number of Order is not the same", actualNumberOfOrder, numberOfOrder);
+                assertEquals("Failed Order(s) : ", failedOrder, 0);
+            }
+            assertEquals("Successful Order(s) : ", successfulOrder, numberOfOrder);
+
+        } else {
+            assertEquals("Number of Order is not the same", actualNumberOfOrder, 1);
+            assertEquals("Successful Order(s) : ", successfulOrder, 0);
+            assertEquals("Failed Order(s) : ", failedOrder, 1);
+        }
     }
 
     /**
