@@ -7,6 +7,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import io.cucumber.datatable.DataTable;
+import org.junit.platform.commons.util.StringUtils;
 
 import java.util.Date;
 import java.util.Map;
@@ -42,12 +43,16 @@ public class ReservationsSteps extends AbstractSteps
         String shipperName = mapOfData.get("shipperName");
         String timeslot = mapOfData.get("timeslot");
         String approxVolume = mapOfData.get("approxVolume");
+        String priorityLevel = mapOfData.get("priorityLevel");
         String comments = f("Please ignore this Automation test reservation. Created at %s by scenario \"%s\".", createdDate, scenarioName);
 
         Reservation reservation = new Reservation();
         reservation.setAddressId(address.getId());
         reservation.setApproxVolume(approxVolume);
         reservation.setComments(comments);
+        if (StringUtils.isNotBlank(priorityLevel)){
+            reservation.setPriorityLevel(Integer.parseInt(priorityLevel));
+        }
 
         reservationsPage.waitUntilReservationsLoaded();
         reservationsPage.createNewReservation(shipperName, address, reservation, timeslot);

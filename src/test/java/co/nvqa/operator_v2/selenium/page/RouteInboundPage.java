@@ -6,10 +6,14 @@ import co.nvqa.operator_v2.model.WaypointOrderInfo;
 import co.nvqa.operator_v2.model.WaypointPerformance;
 import co.nvqa.operator_v2.model.WaypointReservationInfo;
 import co.nvqa.operator_v2.model.WaypointShipperInfo;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.NvAutocomplete;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Assert;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import java.util.Date;
 import java.util.List;
@@ -31,9 +35,16 @@ public class RouteInboundPage extends OperatorV2SimplePage
     private RouteInboundCommentsDialog routeInboundCommentsDialog;
     private MoneyCollectionDialog moneyCollectionDialog;
 
+    @FindBy(xpath = "//nv-autocomplete[@search-text='ctrl.hubSelection.searchText']")
+    public NvAutocomplete selectHub;
+
+    @FindBy(xpath = "//nv-autocomplete[@search-text='ctrl.driverSearch.searchText']")
+    public NvAutocomplete selectDriver;
+
     public RouteInboundPage(WebDriver webDriver)
     {
         super(webDriver);
+        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
         shippersTable = new ShippersTable(webDriver);
         reservationsTable = new ReservationsTable(webDriver);
         ordersTable = new OrdersTable(webDriver);
@@ -43,7 +54,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
     public void fetchRouteByRouteId(String hubName, Long routeId)
     {
-        selectValueFromNvAutocomplete("ctrl.hubSelection.searchText", hubName);
+        selectHub.selectValue(hubName);
         sendKeysById("route-id", String.valueOf(routeId));
 
         String continueBtnXpath = "//md-card-content[./label[text()='Enter the route ID']]/nv-api-text-button[@name='container.route-inbound.continue']/button";
@@ -64,7 +75,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
     public void fetchRouteByTrackingId(String hubName, String trackingId, Long routeId)
     {
-        selectValueFromNvAutocomplete("ctrl.hubSelection.searchText", hubName);
+        selectHub.selectValue(hubName);
         sendKeysById("tracking-id", trackingId);
 
         String continueBtnXpath = "//md-card-content[./label[text()='Scan a tracking ID']]/nv-api-text-button[@name='container.route-inbound.continue']/button";
@@ -82,8 +93,8 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
     public void fetchRouteByDriver(String hubName, String driverName, Long routeId)
     {
-        selectValueFromNvAutocomplete("ctrl.hubSelection.searchText", hubName);
-        selectValueFromNvAutocomplete("ctrl.driverSearch.searchText", driverName);
+        selectHub.selectValue(hubName);
+        selectDriver.selectValue(driverName);
 
         String continueBtnXpath = "//md-card-content[.//label[text()='Search by driver']]/nv-api-text-button[@name='container.route-inbound.continue']/button";
         click(continueBtnXpath);

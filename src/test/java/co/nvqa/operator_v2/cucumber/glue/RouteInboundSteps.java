@@ -62,6 +62,7 @@ public class RouteInboundSteps extends AbstractSteps
         switch (fetchBy.toUpperCase())
         {
             case FETCH_BY_ROUTE_ID:
+                routeId = routeId != null ? routeId : Long.valueOf(fetchByValue);
                 routeInboundPage.fetchRouteByRouteId(hubName, routeId);
                 break;
             case FETCH_BY_TRACKING_ID:

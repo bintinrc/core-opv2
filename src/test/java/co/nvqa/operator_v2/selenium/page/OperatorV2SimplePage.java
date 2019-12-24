@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class OperatorV2SimplePage extends SimplePage
 {
-    private static final String XPATH_FOR_MDSELECT_CONTAINS_ID="//md-select[contains(@id,'%s')]";
+    private static final String XPATH_FOR_MDSELECT_CONTAINS_ID = "//md-select[contains(@id,'%s')]";
     private static final String XPATH_FOR_INPUT_FIELDS_IN_EDIT_RECOVERY = "//input[contains(@id,'%s')]/preceding-sibling::div";
 
     public OperatorV2SimplePage(WebDriver webDriver)
@@ -128,9 +128,9 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickNvButtonSaveByNameAndWaitUntilDone(String name)
     {
-        String xpathExpression = f("//nv-button-save[@name='%s']", name);
+        String xpathExpression = f("//nv-button-save[@name='%s']/button", name);
         click(xpathExpression);
-        waitUntilInvisibilityOfElementLocated(xpathExpression + "/button/div[contains(@class,'saving')]/md-progress-circular");
+        waitUntilInvisibilityOfElementLocated(xpathExpression + "/div[contains(@class,'saving')]/md-progress-circular");
     }
 
     public void clickButtonOnMdDialogByAriaLabel(String ariaLabel)
@@ -735,16 +735,17 @@ public class OperatorV2SimplePage extends SimplePage
 
     private WebElement selectValueFromNvAutocompleteBy(String nvAutocompleteAttribute, String nvAutocompleteAttributeValue, String value)
     {
-        String xpathExpression = f(".//nv-autocomplete[@%s='%s']//input", nvAutocompleteAttribute, nvAutocompleteAttributeValue);
-        WebElement we = findElementByXpath(xpathExpression);
+        String baseXpath = f(".//nv-autocomplete[@%s='%s']", nvAutocompleteAttribute, nvAutocompleteAttributeValue);
+        String inputXpath = baseXpath + "//input";
+        WebElement inputElement = findElementByXpath(inputXpath);
 
-        if (!we.getAttribute("value").isEmpty())
+        if (!inputElement.getAttribute("value").isEmpty())
         {
-            we.clear();
+            inputElement.clear();
             pause200ms();
         }
 
-        we.sendKeys(value);
+        inputElement.sendKeys(value);
         pause1s();
 
         /*
@@ -764,9 +765,9 @@ public class OperatorV2SimplePage extends SimplePage
             }
         }, "Check if the value is not found on NV Autocomplete", 500, 5);
 
-        we.sendKeys(Keys.RETURN);
+        inputElement.sendKeys(Keys.RETURN);
         pause200ms();
-        return we;
+        return inputElement;
     }
 
     public String getNvAutocompleteValue(String searchTextAttribute)
@@ -1270,21 +1271,21 @@ public class OperatorV2SimplePage extends SimplePage
 
     public String getTextById(String id)
     {
-        String xpathExpression = f(XPATH_FOR_MDSELECT_CONTAINS_ID,id);
+        String xpathExpression = f(XPATH_FOR_MDSELECT_CONTAINS_ID, id);
         String text = getText(xpathExpression).trim();
         return text;
     }
 
     public String getTextByIdForInputFields(String id)
     {
-        String xpathExpression = f(XPATH_FOR_INPUT_FIELDS_IN_EDIT_RECOVERY,id);
+        String xpathExpression = f(XPATH_FOR_INPUT_FIELDS_IN_EDIT_RECOVERY, id);
         String text = getText(xpathExpression).trim();
         return text;
     }
 
     public String getInnerTextByIdForInputFields(String id)
     {
-        String xpathExpression = f(XPATH_FOR_INPUT_FIELDS_IN_EDIT_RECOVERY,id);
+        String xpathExpression = f(XPATH_FOR_INPUT_FIELDS_IN_EDIT_RECOVERY, id);
         String text = getAttribute(xpathExpression, "innerText").trim();
         return text;
     }
