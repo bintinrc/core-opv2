@@ -1,36 +1,35 @@
 package co.nvqa.operator_v2.selenium.elements;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 public class NvAutocomplete extends PageElement
 {
     public NvAutocomplete(WebDriver webDriver, WebElement webElement)
     {
         super(webDriver, webElement);
+        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    private WebElement getInputElement()
+    public NvAutocomplete(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
     {
-        return webElement.findElement(By.xpath(".//input"));
+        super(webDriver, searchContext, webElement);
+        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
+
+    @FindBy(xpath = ".//input")
+    public PageElement inputElement;
 
     public void selectValue(String value)
     {
-        WebElement inputElement = getInputElement();
-
-        if (!inputElement.getAttribute("value").isEmpty())
-        {
-            inputElement.clear();
-            pause200ms();
-        }
-
-        inputElement.sendKeys(value);
+        inputElement.clearAndSendKeys(value);
         pause1s();
 
         /*
@@ -52,10 +51,15 @@ public class NvAutocomplete extends PageElement
 
         inputElement.sendKeys(Keys.RETURN);
         pause200ms();
+        String suggestionsId = inputElement.getAttribute("aria-owns");
+        if (isElementVisible(f("//ul[@id='%s']", suggestionsId), 0))
+        {
+            inputElement.sendKeys(Keys.ESCAPE);
+        }
     }
 
     public String getValue()
     {
-        return getValue(getInputElement());
+        return getValue(inputElement.getWebElement());
     }
 }

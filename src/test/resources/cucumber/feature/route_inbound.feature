@@ -645,7 +645,6 @@ Feature: Route Inbound
       | Inbound Credit Only              | uid:4ac68703-abe7-4789-9eff-f5d384858597 |               | 23.57           | 123       | 23.57        |
       | Inbound Split Into Cash & Credit | uid:817bc91a-9e94-4e0b-aeb8-08dbcec5e57f | 10.0          | 13.57           | 123       | 23.57        |
 
-
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
