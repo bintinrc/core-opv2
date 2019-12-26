@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.elements;
 
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
@@ -11,11 +12,19 @@ import java.lang.reflect.Field;
 public class CustomFieldDecorator extends DefaultFieldDecorator
 {
     private WebDriver webDriver;
+    private SearchContext searchContext;
 
     public CustomFieldDecorator(WebDriver webDriver)
     {
         super(new DefaultElementLocatorFactory(webDriver));
         this.webDriver = webDriver;
+    }
+
+    public CustomFieldDecorator(WebDriver webDriver, SearchContext searchContext)
+    {
+        super(new DefaultElementLocatorFactory(searchContext));
+        this.webDriver = webDriver;
+        this.searchContext = searchContext;
     }
 
     @Override
@@ -62,7 +71,13 @@ public class CustomFieldDecorator extends DefaultFieldDecorator
     {
         try
         {
-            return clazz.getConstructor(WebDriver.class, WebElement.class).newInstance(webDriver, element);
+            if (searchContext != null)
+            {
+                return clazz.getConstructor(WebDriver.class, SearchContext.class, WebElement.class).newInstance(webDriver, searchContext, element);
+            } else
+            {
+                return clazz.getConstructor(WebDriver.class, WebElement.class).newInstance(webDriver, element);
+            }
         } catch (Exception e)
         {
             throw new AssertionError("WebElement can't be represented as " + clazz, e);

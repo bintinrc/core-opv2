@@ -2,7 +2,14 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RecoveryTicket;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.NvAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.NvFilterBooleanBox;
+import co.nvqa.operator_v2.selenium.elements.NvFilterBox;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -10,6 +17,8 @@ import org.openqa.selenium.WebDriver;
 @SuppressWarnings("WeakerAccess")
 public class RecoveryTicketsPage extends OperatorV2SimplePage
 {
+
+
     private static final String MD_VIRTUAL_REPEAT = "ticket in getTableData()";
 
     public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking-id";
@@ -21,14 +30,33 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     private static final String XPATH_FOR_FILTERS = "//p[text()='%s']/parent::div/following-sibling::div//input";
     private static final String XPATH_FOR_FILTER_OPTION = "//span[text()='%s']";
     private static final String XPATH_LOAD_SELECTION = "//button[@aria-label='Load Selection']";
-    private static final String XPATH_SELECT_FILTER = "//input[@aria-label='Select Filter']";
-    private static final String XPATH_ARROW_DROPDOWN = "//label[text()='Add Filter']/..//i[text()='arrow_drop_down']";
-    private static final String XPATH_SHOW_UNASSIGNED_RESOLVED_TICKET = "//span[text()='%s']/parent::button";
     private static final String XPATH_REMOVE_TRACKINGID_FILTER = "//p[text()='Tracking IDs']/../following-sibling::div//button[@aria-label='Clear All']";
+
+    @FindBy(xpath = "//nv-filter-box[@main-title='Ticket Status']")
+    public NvFilterBox ticketStatusFilter;
+
+    @FindBy(xpath = "//nv-filter-box[@main-title='Entry Source']")
+    public NvFilterBox entrySourceFilter;
+
+    @FindBy(xpath = "//nv-filter-box[@main-title='Investigating Hub']")
+    public NvFilterBox investigationHubFilter;
+
+    @FindBy(xpath = "//nv-filter-box[@main-title='Investigating Dept.']")
+    public NvFilterBox investigationDeptFilter;
+
+    @FindBy(xpath = "//nv-filter-boolean-box[@main-title='Show Unassigned']")
+    public NvFilterBooleanBox showUnassignedFilter;
+
+    @FindBy(xpath = "//nv-filter-boolean-box[@main-title='Resolved Tickets']")
+    public NvFilterBooleanBox resolverTicketsFilter;
+
+    @FindBy(xpath = "//nv-autocomplete[@placeholder='filter.select-filter']")
+    public NvAutocomplete addFilter;
 
     public RecoveryTicketsPage(WebDriver webDriver)
     {
         super(webDriver);
+        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void createTicket(RecoveryTicket recoveryTicket)
@@ -163,12 +191,9 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     {
         clickButtonByAriaLabel("Clear All Selections");
         pause2s();
-        click(XPATH_SELECT_FILTER);
-        click(f(XPATH_FOR_FILTER_OPTION, "Entry Source"));
-        click(XPATH_ARROW_DROPDOWN);
+        addFilter.selectValue("Entry Source");
         pause1s();
-        click(f(XPATH_FOR_FILTERS, "Entry Source"));
-        click(f(XPATH_FOR_FILTER_OPTION, entrySource));
+        entrySourceFilter.selectFilter(entrySource);
         altClick(XPATH_LOAD_SELECTION);
         pause1s();
     }
@@ -177,13 +202,9 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     {
         clickButtonByAriaLabel("Clear All Selections");
         pause2s();
-        click(XPATH_SELECT_FILTER);
-        click(f(XPATH_FOR_FILTER_OPTION, "Investigating Hub"));
-        click(XPATH_ARROW_DROPDOWN);
+        addFilter.selectValue("Investigating Hub");
         pause1s();
-        click(f(XPATH_FOR_FILTERS, "Investigating Hub"));
-        sendKeys(f(XPATH_FOR_FILTERS, "Investigating Hub"), hub);
-        click(f(XPATH_FOR_FILTER_OPTION, hub));
+        investigationHubFilter.selectFilter(hub);
         altClick(XPATH_LOAD_SELECTION);
         pause1s();
     }
@@ -192,13 +213,9 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     {
         clickButtonByAriaLabel("Clear All Selections");
         pause2s();
-        click(XPATH_SELECT_FILTER);
-        click(f(XPATH_FOR_FILTER_OPTION, "Investigating Dept."));
-        click(XPATH_ARROW_DROPDOWN);
+        addFilter.selectValue("Investigating Dept.");
         pause1s();
-        click(f(XPATH_FOR_FILTERS, "Investigating Dept."));
-        sendKeysAndEnter(f(XPATH_FOR_FILTERS, "Investigating Dept."), dept);
-        pause2s();
+        investigationDeptFilter.selectFilter(dept);
         altClick(XPATH_LOAD_SELECTION);
         pause1s();
     }
@@ -211,12 +228,9 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         {
             click(XPATH_REMOVE_TRACKINGID_FILTER);
         }
-        click(XPATH_SELECT_FILTER);
-        click(f(XPATH_FOR_FILTER_OPTION, "Show Unassigned"));
-        click(XPATH_ARROW_DROPDOWN);
+        addFilter.selectValue("Show Unassigned");
         pause1s();
-        click(f(XPATH_SHOW_UNASSIGNED_RESOLVED_TICKET, show));
-        pause1s();
+        showUnassignedFilter.selectFilter(StringUtils.equalsIgnoreCase("yes", show));
         altClick(XPATH_LOAD_SELECTION);
         pause1s();
     }
@@ -229,11 +243,9 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         {
             click(XPATH_REMOVE_TRACKINGID_FILTER);
         }
-        click(XPATH_SELECT_FILTER);
-        click(f(XPATH_FOR_FILTER_OPTION, "Resolved Tickets"));
-        click(XPATH_ARROW_DROPDOWN);
+        addFilter.selectValue("Resolved Tickets");
         pause1s();
-        click(f(XPATH_SHOW_UNASSIGNED_RESOLVED_TICKET, filter));
+        resolverTicketsFilter.selectFilter(StringUtils.equalsIgnoreCase("show", filter));
         pause1s();
         altClick(XPATH_LOAD_SELECTION);
         pause1s();
@@ -244,18 +256,17 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         waitUntilPageLoaded();
         selectAssignTo(assignTo);
         clickButtonByAriaLabel("Update Ticket");
+        waitUntilInvisibilityOfToast();
     }
 
     public void chooseAllTicketStatusFilters()
     {
-        click(f(XPATH_FOR_FILTERS, "Ticket Status"));
-        pause2s();
-        click(f(XPATH_FOR_FILTER_OPTION, "IN PROGRESS"));
-        click(f(XPATH_FOR_FILTER_OPTION, "ON HOLD"));
-        click(f(XPATH_FOR_FILTER_OPTION, "PENDING"));
-        click(f(XPATH_FOR_FILTER_OPTION, "PENDING SHIPPER"));
-        click(f(XPATH_FOR_FILTER_OPTION, "CANCELLED"));
-        click(f(XPATH_FOR_FILTER_OPTION, "RESOLVED"));
+        ticketStatusFilter.selectFilter("IN PROGRESS");
+        ticketStatusFilter.selectFilter("PENDING");
+        ticketStatusFilter.selectFilter("PENDING SHIPPER");
+        ticketStatusFilter.selectFilter("CANCELLED");
+        ticketStatusFilter.selectFilter("RESOLVED");
+
         altClick(XPATH_LOAD_SELECTION);
     }
 

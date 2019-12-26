@@ -1,8 +1,6 @@
 @OperatorV2 @OperatorV2Part1 @RecoveryTickets @Saas
-
 Feature: Recovery Tickets
 
-  @mytest
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
@@ -52,16 +50,16 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                    | ROUTE CLEANING     |
-      | investigatingDepartment        | Fleet (First Mile) |
-      | investigatingHub               | {hub-name}         |
-      | ticketType                     | PARCEL EXCEPTION   |
-      | ticketSubType                  | INACCURATE ADDRESS |
-      | orderOutcomeInaccurateAddress  | RTS                |
-      | exceptionReason                | GENERATED          |
-      | custZendeskId                  | 1                  |
-      | shipperZendeskId               | 1                  |
-      | ticketNotes                    | GENERATED          |
+      | entrySource                   | ROUTE CLEANING     |
+      | investigatingDepartment       | Fleet (First Mile) |
+      | investigatingHub              | {hub-name}         |
+      | ticketType                    | PARCEL EXCEPTION   |
+      | ticketSubType                 | INACCURATE ADDRESS |
+      | orderOutcomeInaccurateAddress | RTS                |
+      | exceptionReason               | GENERATED          |
+      | custZendeskId                 | 1                  |
+      | shipperZendeskId              | 1                  |
+      | ticketNotes                   | GENERATED          |
     Then Operator verify ticket is created successfully on page Recovery Tickets
 
   Scenario: Create shipper issue ticket on Recovery Tickets menu (uid:5571d314-7b79-4376-9f7a-bab503424680)
@@ -71,16 +69,16 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                    | DRIVER TURN        |
-      | investigatingDepartment        | Fleet (First Mile) |
-      | investigatingHub               | {hub-name}         |
-      | ticketType                     | SHIPPER ISSUE      |
-      | ticketSubType                  | DUPLICATE PARCEL   |
-      | orderOutcomeDuplicateParcel    | RTS                |
-      | issueDescription               | GENERATED          |
-      | custZendeskId                  | 1                  |
-      | shipperZendeskId               | 1                  |
-      | ticketNotes                    | GENERATED          |
+      | entrySource                 | DRIVER TURN        |
+      | investigatingDepartment     | Fleet (First Mile) |
+      | investigatingHub            | {hub-name}         |
+      | ticketType                  | SHIPPER ISSUE      |
+      | ticketSubType               | DUPLICATE PARCEL   |
+      | orderOutcomeDuplicateParcel | RTS                |
+      | issueDescription            | GENERATED          |
+      | custZendeskId               | 1                  |
+      | shipperZendeskId            | 1                  |
+      | ticketNotes                 | GENERATED          |
     Then Operator verify ticket is created successfully on page Recovery Tickets
 
   Scenario: Delete damaged recovery ticket (uid:700caae8-5879-49a8-b94d-32fa97ecfc7b)
@@ -107,6 +105,7 @@ Feature: Recovery Tickets
     And Operator clicks on Delete on pop up
     Then Operator verifies that the status of ticket is "Cancelled"
 
+  @issue=TICKETING-173
   Scenario: Edit all field and additional setting for recovery ticket type --> Damaged (uid:2799adb1-5d83-45d3-b0f7-3230b851a25c)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -128,14 +127,14 @@ Feature: Recovery Tickets
       | ticketNotes             | GENERATED          |
     And Operator searches the created ticket and clicks on Edit button
     Then Operator edits the ticket settings with below data and verifies it:
-      | ticketStatus            | IN PROGRESS        |
-      | orderOutcome            | NV LIABLE - FULL   |
-      | assignTo                | NikoSusanto        |
-      | enterNewInstruction     | GENERATED          |
+      | ticketStatus        | IN PROGRESS      |
+      | orderOutcome        | NV LIABLE - FULL |
+      | assignTo            | NikoSusanto      |
+      | enterNewInstruction | GENERATED        |
     Then Operator edits the Additional settings with below data and verifies it:
-      | customerZendeskId       | RANDOM             |
-      | shipperZendeskId        | RANDOM             |
-      | ticketComments          | GENERATED          |
+      | customerZendeskId | RANDOM    |
+      | shipperZendeskId  | RANDOM    |
+      | ticketComments    | GENERATED |
 
   Scenario: Edit all field and additional setting for recovery ticket type --> Missing (uid:883d157a-2edd-4ae9-aa87-c3a006786746)
     Given API Shipper create V4 order using data below:
@@ -155,14 +154,14 @@ Feature: Recovery Tickets
       | ticketNotes             | GENERATED          |
     And Operator searches the created ticket and clicks on Edit button
     Then Operator edits the ticket settings with below data and verifies it:
-      | ticketStatus            | IN PROGRESS        |
-      | orderOutcome            | FOUND - INBOUND    |
-      | assignTo                | NikoSusanto        |
-      | enterNewInstruction     | GENERATED          |
+      | ticketStatus        | IN PROGRESS     |
+      | orderOutcome        | FOUND - INBOUND |
+      | assignTo            | NikoSusanto     |
+      | enterNewInstruction | GENERATED       |
     Then Operator edits the Additional settings with below data and verifies it:
-      | customerZendeskId       | RANDOM             |
-      | shipperZendeskId        | RANDOM             |
-      | ticketComments          | GENERATED          |
+      | customerZendeskId | RANDOM    |
+      | shipperZendeskId  | RANDOM    |
+      | ticketComments    | GENERATED |
 
   Scenario: Edit all field and additional setting for recovery ticket type --> Parcel Exception (uid:19e4f152-9201-4a16-85a5-3c328d9f6638)
     Given API Shipper create V4 order using data below:
@@ -171,26 +170,26 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                    | ROUTE CLEANING     |
-      | investigatingDepartment        | Fleet (First Mile) |
-      | investigatingHub               | {hub-name}         |
-      | ticketType                     | PARCEL EXCEPTION   |
-      | ticketSubType                  | INACCURATE ADDRESS |
-      | orderOutcomeInaccurateAddress  | RTS                |
-      | exceptionReason                | GENERATED          |
-      | custZendeskId                  | 1                  |
-      | shipperZendeskId               | 1                  |
-      | ticketNotes                    | GENERATED          |
+      | entrySource                   | ROUTE CLEANING     |
+      | investigatingDepartment       | Fleet (First Mile) |
+      | investigatingHub              | {hub-name}         |
+      | ticketType                    | PARCEL EXCEPTION   |
+      | ticketSubType                 | INACCURATE ADDRESS |
+      | orderOutcomeInaccurateAddress | RTS                |
+      | exceptionReason               | GENERATED          |
+      | custZendeskId                 | 1                  |
+      | shipperZendeskId              | 1                  |
+      | ticketNotes                   | GENERATED          |
     And Operator searches the created ticket and clicks on Edit button
     Then Operator edits the ticket settings with below data and verifies it:
-      | ticketStatus            | IN PROGRESS        |
-      | orderOutcome            | RESUME DELIVERY    |
-      | assignTo                | NikoSusanto        |
-      | enterNewInstruction     | GENERATED          |
+      | ticketStatus        | IN PROGRESS     |
+      | orderOutcome        | RESUME DELIVERY |
+      | assignTo            | NikoSusanto     |
+      | enterNewInstruction | GENERATED       |
     Then Operator edits the Additional settings with below data and verifies it:
-      | customerZendeskId       | RANDOM             |
-      | shipperZendeskId        | RANDOM             |
-      | ticketComments          | GENERATED          |
+      | customerZendeskId | RANDOM    |
+      | shipperZendeskId  | RANDOM    |
+      | ticketComments    | GENERATED |
 
   Scenario: Edit all field and additional setting for recovery ticket type --> Shipper Issue (uid:c1ad3626-da33-416e-9e67-4fede917fa5d)
     Given API Shipper create V4 order using data below:
@@ -199,26 +198,26 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                    | DRIVER TURN        |
-      | investigatingDepartment        | Fleet (First Mile) |
-      | investigatingHub               | {hub-name}         |
-      | ticketType                     | SHIPPER ISSUE      |
-      | ticketSubType                  | DUPLICATE PARCEL   |
-      | orderOutcomeDuplicateParcel    | RTS                |
-      | issueDescription               | GENERATED          |
-      | custZendeskId                  | 1                  |
-      | shipperZendeskId               | 1                  |
-      | ticketNotes                    | GENERATED          |
+      | entrySource                 | DRIVER TURN        |
+      | investigatingDepartment     | Fleet (First Mile) |
+      | investigatingHub            | {hub-name}         |
+      | ticketType                  | SHIPPER ISSUE      |
+      | ticketSubType               | DUPLICATE PARCEL   |
+      | orderOutcomeDuplicateParcel | RTS                |
+      | issueDescription            | GENERATED          |
+      | custZendeskId               | 1                  |
+      | shipperZendeskId            | 1                  |
+      | ticketNotes                 | GENERATED          |
     And Operator searches the created ticket and clicks on Edit button
     Then Operator edits the ticket settings with below data and verifies it:
-      | ticketStatus            | IN PROGRESS        |
-      | orderOutcome            | RTS                |
-      | assignTo                | NikoSusanto        |
-      | enterNewInstruction     | GENERATED          |
+      | ticketStatus        | IN PROGRESS |
+      | orderOutcome        | RTS         |
+      | assignTo            | NikoSusanto |
+      | enterNewInstruction | GENERATED   |
     Then Operator edits the Additional settings with below data and verifies it:
-      | customerZendeskId       | RANDOM             |
-      | shipperZendeskId        | RANDOM             |
-      | ticketComments          | GENERATED          |
+      | customerZendeskId | RANDOM    |
+      | shipperZendeskId  | RANDOM    |
+      | ticketComments    | GENERATED |
 
   Scenario: Update ticket status to Resolved --> Damaged (uid:922222d2-b127-438c-bd64-512a32725364)
     Given API Shipper create V4 order using data below:
@@ -272,16 +271,16 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                    | ROUTE CLEANING     |
-      | investigatingDepartment        | Fleet (First Mile) |
-      | investigatingHub               | {hub-name}         |
-      | ticketType                     | PARCEL EXCEPTION   |
-      | ticketSubType                  | INACCURATE ADDRESS |
-      | orderOutcomeInaccurateAddress  | RTS                |
-      | exceptionReason                | GENERATED          |
-      | custZendeskId                  | 1                  |
-      | shipperZendeskId               | 1                  |
-      | ticketNotes                    | GENERATED          |
+      | entrySource                   | ROUTE CLEANING     |
+      | investigatingDepartment       | Fleet (First Mile) |
+      | investigatingHub              | {hub-name}         |
+      | ticketType                    | PARCEL EXCEPTION   |
+      | ticketSubType                 | INACCURATE ADDRESS |
+      | orderOutcomeInaccurateAddress | RTS                |
+      | exceptionReason               | GENERATED          |
+      | custZendeskId                 | 1                  |
+      | shipperZendeskId              | 1                  |
+      | ticketNotes                   | GENERATED          |
     And Operator searches the created ticket and clicks on Edit button
     Then Operator changes the ticket status to Resloved
     And Operator updates the ticket
@@ -294,16 +293,16 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                    | DRIVER TURN        |
-      | investigatingDepartment        | Fleet (First Mile) |
-      | investigatingHub               | {hub-name}         |
-      | ticketType                     | SHIPPER ISSUE      |
-      | ticketSubType                  | DUPLICATE PARCEL   |
-      | orderOutcomeDuplicateParcel    | RTS                |
-      | issueDescription               | GENERATED          |
-      | custZendeskId                  | 1                  |
-      | shipperZendeskId               | 1                  |
-      | ticketNotes                    | GENERATED          |
+      | entrySource                 | DRIVER TURN        |
+      | investigatingDepartment     | Fleet (First Mile) |
+      | investigatingHub            | {hub-name}         |
+      | ticketType                  | SHIPPER ISSUE      |
+      | ticketSubType               | DUPLICATE PARCEL   |
+      | orderOutcomeDuplicateParcel | RTS                |
+      | issueDescription            | GENERATED          |
+      | custZendeskId               | 1                  |
+      | shipperZendeskId            | 1                  |
+      | ticketNotes                 | GENERATED          |
     And Operator searches the created ticket and clicks on Edit button
     Then Operator changes the ticket status to Resloved
     And Operator updates the ticket
@@ -426,48 +425,48 @@ Feature: Recovery Tickets
     And Operator enters the tracking id and verifies that is exists
 
   Scenario: Filter ticket status - Ticket status using Resolved (uid:69adae83-2738-4dbd-83a1-93c0d910f546)
-      Given API Shipper create V4 order using data below:
-        | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-        | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-      Given Operator go to menu Shipper Support -> Blocked Dates
-      Given Operator go to menu Recovery -> Recovery Tickets
-      When Operator create new ticket on page Recovery Tickets using data below:
-        | entrySource             | CUSTOMER COMPLAINT |
-        | investigatingDepartment | Fleet (First Mile) |
-        | investigatingHub        | {hub-name}         |
-        | ticketType              | MISSING            |
-        | orderOutcomeMissing     | LOST - DECLARED    |
-        | parcelDescription       | GENERATED          |
-        | custZendeskId           | 1                  |
-        | shipperZendeskId        | 1                  |
-        | ticketNotes             | GENERATED          |
-      And Operator searches the created ticket and clicks on Edit button
-      And Operator changes the ticket status to Resloved
-      And Operator updates the ticket
-      And Operator clicks on Edit Filters button
-      When Operator removes all ticket status filters
-      Then Operator chooses the ticket status as "RESOLVED"
-      And Operator enters the tracking id and verifies that is exists
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    And Operator searches the created ticket and clicks on Edit button
+    And Operator changes the ticket status to Resloved
+    And Operator updates the ticket
+    And Operator clicks on Edit Filters button
+    When Operator removes all ticket status filters
+    Then Operator chooses the ticket status as "RESOLVED"
+    And Operator enters the tracking id and verifies that is exists
 
   Scenario: Filter ticket status - Ticket status using All Parameter filter (uid:83096c63-1e9c-45a5-a390-89f0a4f90833)
-      Given API Shipper create V4 order using data below:
-        | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-        | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-      Given Operator go to menu Shipper Support -> Blocked Dates
-      Given Operator go to menu Recovery -> Recovery Tickets
-      When Operator create new ticket on page Recovery Tickets using data below:
-        | entrySource             | CUSTOMER COMPLAINT |
-        | investigatingDepartment | Fleet (First Mile) |
-        | investigatingHub        | {hub-name}         |
-        | ticketType              | MISSING            |
-        | orderOutcomeMissing     | LOST - DECLARED    |
-        | parcelDescription       | GENERATED          |
-        | custZendeskId           | 1                  |
-        | shipperZendeskId        | 1                  |
-        | ticketNotes             | GENERATED          |
-      When Operator removes all ticket status filters
-      Then Operator chooses all the ticket status filters
-      And Operator enters the tracking id and verifies that is exists
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    When Operator removes all ticket status filters
+    Then Operator chooses all the ticket status filters
+    And Operator enters the tracking id and verifies that is exists
 
   Scenario: Filter Entry Source - Customer Complaint (uid:79dc5341-9d29-41f9-b7cd-4a675c5c10f7)
     Given API Shipper create V4 order using data below:
@@ -542,18 +541,18 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | MISSING INBOUND CONTEST   |
-      | investigatingDepartment | Fleet (First Mile)        |
-      | investigatingHub        | {hub-name}                |
-      | ticketType              | DAMAGED                   |
-      | ticketSubType           | IMPROPER PACKAGING        |
-      | parcelLocation          | DAMAGED RACK              |
-      | liability               | NV DRIVER                 |
-      | damageDescription       | GENERATED                 |
-      | orderOutcomeDamaged     | NV LIABLE - FULL          |
-      | custZendeskId           | 1                         |
-      | shipperZendeskId        | 1                         |
-      | ticketNotes             | GENERATED                 |
+      | entrySource             | MISSING INBOUND CONTEST |
+      | investigatingDepartment | Fleet (First Mile)      |
+      | investigatingHub        | {hub-name}              |
+      | ticketType              | DAMAGED                 |
+      | ticketSubType           | IMPROPER PACKAGING      |
+      | parcelLocation          | DAMAGED RACK            |
+      | liability               | NV DRIVER               |
+      | damageDescription       | GENERATED               |
+      | orderOutcomeDamaged     | NV LIABLE - FULL        |
+      | custZendeskId           | 1                       |
+      | shipperZendeskId        | 1                       |
+      | ticketNotes             | GENERATED               |
     Then Operator chooses Entry Source Filter as "MISSING INBOUND CONTEST"
     And Operator enters the tracking id and verifies that is exists
 
@@ -674,16 +673,16 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                    | DRIVER TURN        |
-      | investigatingDepartment        | Fleet (First Mile) |
-      | investigatingHub               | {hub-name}         |
-      | ticketType                     | SHIPPER ISSUE      |
-      | ticketSubType                  | DUPLICATE PARCEL   |
-      | orderOutcomeDuplicateParcel    | RTS                |
-      | issueDescription               | GENERATED          |
-      | custZendeskId                  | 1                  |
-      | shipperZendeskId               | 1                  |
-      | ticketNotes                    | GENERATED          |
+      | entrySource                 | DRIVER TURN        |
+      | investigatingDepartment     | Fleet (First Mile) |
+      | investigatingHub            | {hub-name}         |
+      | ticketType                  | SHIPPER ISSUE      |
+      | ticketSubType               | DUPLICATE PARCEL   |
+      | orderOutcomeDuplicateParcel | RTS                |
+      | issueDescription            | GENERATED          |
+      | custZendeskId               | 1                  |
+      | shipperZendeskId            | 1                  |
+      | ticketNotes                 | GENERATED          |
     Then Operator verify ticket is created successfully on page Recovery Tickets
 
   Scenario: Filter Tracking IDs - Tracking ID Wrong (uid:44200a8f-f811-4d0f-b0d8-56261db78603)
@@ -699,16 +698,16 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource                    | DRIVER TURN        |
-      | investigatingDepartment        | Fleet (First Mile) |
-      | investigatingHub               | {hub-name}         |
-      | ticketType                     | SHIPPER ISSUE      |
-      | ticketSubType                  | DUPLICATE PARCEL   |
-      | orderOutcomeDuplicateParcel    | RTS                |
-      | issueDescription               | GENERATED          |
-      | custZendeskId                  | 1                  |
-      | shipperZendeskId               | 1                  |
-      | ticketNotes                    | GENERATED          |
+      | entrySource                 | DRIVER TURN        |
+      | investigatingDepartment     | Fleet (First Mile) |
+      | investigatingHub            | {hub-name}         |
+      | ticketType                  | SHIPPER ISSUE      |
+      | ticketSubType               | DUPLICATE PARCEL   |
+      | orderOutcomeDuplicateParcel | RTS                |
+      | issueDescription            | GENERATED          |
+      | custZendeskId               | 1                  |
+      | shipperZendeskId            | 1                  |
+      | ticketNotes                 | GENERATED          |
     Then Operator chooses Investigating Hub filter as "{hub-name}"
     And Operator enters the tracking id and verifies that is exists
 
@@ -728,8 +727,8 @@ Feature: Recovery Tickets
       | custZendeskId           | 1                  |
       | shipperZendeskId        | 1                  |
       | ticketNotes             | GENERATED          |
-     Then Operator chooses Investigating Dept Filter as "Fleet (First Mile)"
-     And Operator enters the tracking id and verifies that is exists
+    Then Operator chooses Investigating Dept Filter as "Fleet (First Mile)"
+    And Operator enters the tracking id and verifies that is exists
 
   Scenario: Search tickets using Investigating Dept filter - Investigating Debt using Fleet(Last Mile) (uid:9d0fc24c-0e6b-48e9-b20e-128be682d30d)
     Given API Shipper create V4 order using data below:
@@ -739,7 +738,7 @@ Feature: Recovery Tickets
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
       | entrySource             | CUSTOMER COMPLAINT |
-      | investigatingDepartment | Fleet (Last Mile) |
+      | investigatingDepartment | Fleet (Last Mile)  |
       | investigatingHub        | {hub-name}         |
       | ticketType              | MISSING            |
       | orderOutcomeMissing     | LOST - DECLARED    |
@@ -776,15 +775,15 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT    |
-      | investigatingDepartment | Sort (Warehouse)      |
-      | investigatingHub        | {hub-name}            |
-      | ticketType              | MISSING               |
-      | orderOutcomeMissing     | LOST - DECLARED       |
-      | parcelDescription       | GENERATED             |
-      | custZendeskId           | 1                     |
-      | shipperZendeskId        | 1                     |
-      | ticketNotes             | GENERATED             |
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Sort (Warehouse)   |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
     Then Operator chooses Investigating Dept Filter as "Sort (Warehouse)"
     And Operator enters the tracking id and verifies that is exists
 
@@ -795,15 +794,15 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT    |
-      | investigatingDepartment | Recovery              |
-      | investigatingHub        | {hub-name}            |
-      | ticketType              | MISSING               |
-      | orderOutcomeMissing     | LOST - DECLARED       |
-      | parcelDescription       | GENERATED             |
-      | custZendeskId           | 1                     |
-      | shipperZendeskId        | 1                     |
-      | ticketNotes             | GENERATED             |
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
     Then Operator chooses Investigating Dept Filter as "Recovery"
     And Operator enters the tracking id and verifies that is exists
 
@@ -814,58 +813,58 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT    |
-      | investigatingDepartment | Recovery              |
-      | investigatingHub        | {hub-name}            |
-      | ticketType              | MISSING               |
-      | orderOutcomeMissing     | LOST - DECLARED       |
-      | parcelDescription       | GENERATED             |
-      | custZendeskId           | 1                     |
-      | shipperZendeskId        | 1                     |
-      | ticketNotes             | GENERATED             |
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
     Then Operator chooses Show Unassigned Filter as "Yes"
     And Operator enters the tracking id and verifies that is exists
 
-   Scenario: Filter Show Unassigned - Hide Unassigned (uid:4cbed082-41fc-4477-8874-0750233dd850)
-     Given API Shipper create V4 order using data below:
-       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-     Given Operator go to menu Shipper Support -> Blocked Dates
-     Given Operator go to menu Recovery -> Recovery Tickets
-     When Operator create new ticket on page Recovery Tickets using data below:
-       | entrySource             | CUSTOMER COMPLAINT    |
-       | investigatingDepartment | Recovery              |
-       | investigatingHub        | {hub-name}            |
-       | ticketType              | MISSING               |
-       | orderOutcomeMissing     | LOST - DECLARED       |
-       | parcelDescription       | GENERATED             |
-       | custZendeskId           | 1                     |
-       | shipperZendeskId        | 1                     |
-       | ticketNotes             | GENERATED             |
-     And Operator searches the created ticket and clicks on Edit button
-     And Operator assigns the ticket to "NikoSusanto"
-     And Operator clicks on Edit Filters button
-     Then Operator chooses Show Unassigned Filter as "No"
-     And Operator enters the tracking id and verifies that is exists
+  Scenario: Filter Show Unassigned - Hide Unassigned (uid:4cbed082-41fc-4477-8874-0750233dd850)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    And Operator searches the created ticket and clicks on Edit button
+    And Operator assigns the ticket to "NikoSusanto"
+    And Operator clicks on Edit Filters button
+    Then Operator chooses Show Unassigned Filter as "No"
+    And Operator enters the tracking id and verifies that is exists
 
-   Scenario: Filter Resolved Tickets - Resolved Tickets Hide (uid:7fd14edc-7cac-4e85-9e11-b568cab31262)
-     Given API Shipper create V4 order using data below:
-       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-     Given Operator go to menu Shipper Support -> Blocked Dates
-     Given Operator go to menu Recovery -> Recovery Tickets
-     When Operator create new ticket on page Recovery Tickets using data below:
-       | entrySource             | CUSTOMER COMPLAINT    |
-       | investigatingDepartment | Fleet (First Mile)    |
-       | investigatingHub        | {hub-name}            |
-       | ticketType              | MISSING               |
-       | orderOutcomeMissing     | LOST - DECLARED       |
-       | parcelDescription       | GENERATED             |
-       | custZendeskId           | 1                     |
-       | shipperZendeskId        | 1                     |
-       | ticketNotes             | GENERATED             |
-     Then Operator chooses Resolved Tickets Filter as "Hide"
-     And Operator enters the tracking id and verifies that is exists
+  Scenario: Filter Resolved Tickets - Resolved Tickets Hide (uid:7fd14edc-7cac-4e85-9e11-b568cab31262)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    Then Operator chooses Resolved Tickets Filter as "Hide"
+    And Operator enters the tracking id and verifies that is exists
 
   Scenario: Filter Resolved Tickets - Resolved Tickets Shown (uid:92bb38a7-c412-4a92-a4fe-33d8c0deef26)
     Given API Shipper create V4 order using data below:
@@ -874,15 +873,15 @@ Feature: Recovery Tickets
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Recovery -> Recovery Tickets
     When Operator create new ticket on page Recovery Tickets using data below:
-      | entrySource             | CUSTOMER COMPLAINT    |
-      | investigatingDepartment | Recovery              |
-      | investigatingHub        | {hub-name}            |
-      | ticketType              | MISSING               |
-      | orderOutcomeMissing     | LOST - DECLARED       |
-      | parcelDescription       | GENERATED             |
-      | custZendeskId           | 1                     |
-      | shipperZendeskId        | 1                     |
-      | ticketNotes             | GENERATED             |
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Recovery           |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
     And Operator searches the created ticket and clicks on Edit button
     And Operator changes the ticket status to Resloved
     And Operator updates the ticket

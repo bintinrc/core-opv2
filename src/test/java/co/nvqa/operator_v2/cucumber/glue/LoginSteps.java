@@ -4,22 +4,22 @@ import co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
 import co.nvqa.operator_v2.selenium.page.LoginPage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
 import co.nvqa.operator_v2.util.TestConstants;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 
 /**
- *
  * @author Soewandi Wirjawan
  */
 @ScenarioScoped
 public class LoginSteps extends AbstractSteps
 {
-    @Inject private Provider<StandardApiOperatorPortalSteps> providerOfStandardApiOperatorPortalSteps;
+    @Inject
+    private Provider<StandardApiOperatorPortalSteps> providerOfStandardApiOperatorPortalSteps;
     private LoginPage loginPage;
     private MainPage mainPage;
 
@@ -39,12 +39,11 @@ public class LoginSteps extends AbstractSteps
     {
         loginPage.loadPage();
 
-        if(TestConstants.OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES)
+        if (TestConstants.OPERATOR_PORTAL_FORCE_LOGIN_BY_INJECTING_COOKIES)
         {
             String operatorAccessToken = providerOfStandardApiOperatorPortalSteps.get().getOperatorAccessToken();
             loginPage.forceLogin(operatorAccessToken);
-        }
-        else
+        } else
         {
             loginPage.clickLoginButton();
             loginPage.enterCredential(username, password);
