@@ -30,8 +30,30 @@ public class LoginPage extends OperatorV2SimplePage
 
     public void loadPage()
     {
-        getWebDriver().get(TestConstants.OPERATOR_PORTAL_LOGIN_URL);
-        waitUntilPageLoaded();
+        boolean loaded = false;
+        do {
+            try {
+                getWebDriver().get(TestConstants.OPERATOR_PORTAL_LOGIN_URL);
+                waitUntilPageLoaded();
+                loaded = true;
+            } catch (Exception ex){
+                executeScript("window.open()");
+                String currentWindowHandle = getWebDriver().getWindowHandle();
+                String newWindowHandle = null;
+
+                for(String windowHandle : getWebDriver().getWindowHandles())
+                {
+                    if(!windowHandle.equals(currentWindowHandle))
+                    {
+                        newWindowHandle = windowHandle;
+                        break;
+                    }
+                }
+
+                getWebDriver().close();
+                getWebDriver().switchTo().window(newWindowHandle);
+            }
+        } while (!loaded);
     }
 
     public void forceLogin(String operatorBearerToken)
