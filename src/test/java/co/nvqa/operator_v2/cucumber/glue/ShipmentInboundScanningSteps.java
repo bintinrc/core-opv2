@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.selenium.page.ShipmentInboundScanningPage;
 import co.nvqa.operator_v2.util.KeyConstants;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -33,7 +34,15 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
     public void inboundScanning(String label, String hub)
     {
         Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
-        scanningPage.inboundScanning(shipmentId, label, hub);
+
+        if ("orderDestHubName".equalsIgnoreCase(hub))
+        {
+            Order order = get(KEY_CREATED_ORDER);
+            hub = order.getDestinationHub();
+            scanningPage.inboundScanningPreciseHub(shipmentId, label, hub);
+        } else {
+            scanningPage.inboundScanning(shipmentId, label, hub);
+        }
     }
 
     @When("Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page using MAWB")
@@ -41,6 +50,13 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
     {
         Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         String mawb = get(KeyConstants.KEY_MAWB);
+
+        if ("orderDestHubName".equalsIgnoreCase(hub))
+        {
+            Order order = get(KEY_CREATED_ORDER);
+            hub = order.getDestinationHub();
+        }
+
         scanningPage.inboundScanningUsingMawb(shipmentId, mawb, label, hub);
     }
 

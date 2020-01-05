@@ -33,9 +33,28 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
         selectValueFromMdSelectWithSearch("placeholder", "Inbound Hub", hubName);
     }
 
+    public void selectPreciseHub(String hubName)
+    {
+        click("//md-select[contains(@name,'inbound-hub')]");
+        pause1s();
+        sendKeys("//input[@ng-model='searchTerm']", hubName);
+        pause1s();
+        click(f("//md-option[div[text()=' %s ']]", hubName));
+    }
+
     public void inboundScanning(Long shipmentId, String label, String hub)
     {
         selectHub(hub);
+        click(grabXpathButton(label));
+        clickStartInbound();
+
+        inputShipmentToInbound(shipmentId);
+        checkSessionScan(shipmentId);
+    }
+
+    public void inboundScanningPreciseHub(Long shipmentId, String label, String hub)
+    {
+        selectPreciseHub(hub);
         click(grabXpathButton(label));
         clickStartInbound();
 

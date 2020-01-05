@@ -62,9 +62,15 @@ public class ParcelSweeperPage extends OperatorV2SimplePage
 
     public void verifyZoneInfo(String zoneName, String color)
     {
-        if (StringUtils.isNotBlank(zoneName))
-        {
-            assertThat("Unexpected Zone Name", getText(LOCATOR_ZONE_INFO_CONTAINER + "//h4"), equalToIgnoringCase(zoneName));
+        if (StringUtils.isNotBlank(zoneName)) {
+            String zoneShortName = getText(LOCATOR_ZONE_INFO_CONTAINER + "//h4");
+            String zoneFullName = getText(LOCATOR_ZONE_INFO_CONTAINER + "//h5");
+            if (!("NIL".equalsIgnoreCase(zoneName)))
+            {
+                assertThat("Unexpected Zone Name", zoneShortName + " " + zoneFullName, equalToIgnoringCase(zoneName));
+            } else {
+                assertThat("Unexpected Zone Name", "NIL", equalToIgnoringCase(zoneName));
+            }
         }
 
         if (StringUtils.isNotBlank(color))

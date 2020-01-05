@@ -68,6 +68,12 @@ public class ShipmentManagementSteps extends AbstractSteps
     @When("^Operator filter ([^\"]*) = ([^\"]*) on Shipment Management page$")
     public void fillSearchFilter(String filter, String value)
     {
+        if ("orderDestHubName".equalsIgnoreCase(value))
+        {
+            Order order = get(KEY_CREATED_ORDER);
+            value = order.getDestinationHub();
+        }
+
         shipmentManagementPage.addFilter(filter, value, false);
         putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, filter, value);
     }

@@ -42,6 +42,15 @@ public class ShipmentGlobalInboundPage extends OperatorV2SimplePage
         selectValueFromMdSelectById("container.global-inbound.hub", hubName);
     }
 
+    public void selectShipmentDestinationHubPrecise(String hubName)
+    {
+        click(".//md-select[starts-with(@id,'container.global-inbound.hub')]");
+        pause1s();
+        sendKeys("//div[contains(@class,'md-active md-clickable')]//input[@ng-model='searchTerm']", hubName);
+        pause1s();
+        click(f("//md-option[div[text()=' %s ']]", hubName));
+    }
+
     public void selectShipmentType(String shipmentType)
     {
         clickMdSelectValue(SHIPMENT_TYPE_TEXT);

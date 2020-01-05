@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
@@ -33,7 +34,14 @@ public class ShipmentGlobalInboundSteps extends AbstractSteps
     @When("^Operator select the destination hub ([^\"]*) of the shipment$")
     public void operatorSelectTheDestinationHubOfTheShipment(String hubName)
     {
-        shipmentGlobalInboundPage.selectShipmentDestinationHub(hubName);
+        if ("orderDestHubName".equalsIgnoreCase(hubName))
+        {
+            Order order = get(KEY_CREATED_ORDER);
+            hubName = order.getDestinationHub();
+            shipmentGlobalInboundPage.selectShipmentDestinationHubPrecise(hubName);
+        } else {
+            shipmentGlobalInboundPage.selectShipmentDestinationHub(hubName);
+        }
     }
 
     @And("Operator select the shipment type")
