@@ -41,6 +41,11 @@ public class OperatorV2SimplePage extends SimplePage
         getWebDriver().navigate().to(url);
     }
 
+    public void waitWhilePageIsLoading(){
+        waitUntilInvisibilityOfElementLocated("//div[@class='md-half-circle']");
+        waitUntilPageLoaded();
+    }
+
     public void clickAndWaitUntilDone(String xpathExpression)
     {
         click(xpathExpression);

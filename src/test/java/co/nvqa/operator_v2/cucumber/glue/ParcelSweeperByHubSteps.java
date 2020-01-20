@@ -78,7 +78,7 @@ public class ParcelSweeperByHubSteps extends AbstractSteps
         if (StringUtils.isNotBlank(value))
         {
             routeId = value.equalsIgnoreCase("GENERATED") ?
-                    String.valueOf((Long)get(KEY_CREATED_ROUTE_ID)):
+                    String.valueOf((Long) get(KEY_CREATED_ROUTE_ID)) :
                     value;
         }
 
@@ -111,6 +111,7 @@ public class ParcelSweeperByHubSteps extends AbstractSteps
     @Then("^Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:$")
     public void operatorVerifyDestinationHubOnParcelSweeperPageUsingDataBelow(Map<String, String> mapOfData)
     {
+        mapOfData = resolveKeyValues(mapOfData);
         String hubName = mapOfData.get("hubName");
         if (StringUtils.equalsAnyIgnoreCase(hubName, "GLOBAL INBOUND"))
         {

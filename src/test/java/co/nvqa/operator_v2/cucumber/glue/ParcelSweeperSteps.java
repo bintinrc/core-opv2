@@ -44,30 +44,20 @@ public class ParcelSweeperSteps extends AbstractSteps
     @Given("^Operator sweep parcel using data below:$")
     public void operatorSweepParcelUsingDataBelow(Map<String, String> mapOfData)
     {
+        mapOfData = resolveKeyValues(mapOfData);
         String hubName = mapOfData.get("hubName");
         parcelSweeperPage.selectHub(hubName);
 
         String trackingId = mapOfData.get("trackingId");
-        if (StringUtils.equalsIgnoreCase(trackingId, "CREATED"))
-        {
-            trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        }
         parcelSweeperPage.enterTrackingId(trackingId);
     }
 
     @Then("^Operator verify Route ID on Parcel Sweeper page using data below:$")
     public void operatorVerifyRouteIDOnParcelSweeperPageUsingDataBelow(Map<String, String> mapOfData)
     {
-        Long routeId = null;
-        String value = mapOfData.get("routeId");
-        if (StringUtils.isNotBlank(value))
-        {
-            routeId = value.equalsIgnoreCase("GENERATED") ?
-                    get(KEY_CREATED_ROUTE_ID) :
-                    Long.valueOf(value);
-
-        }
-
+        parcelSweeperPage.pause10s();
+        mapOfData = resolveKeyValues(mapOfData);
+        String routeId = mapOfData.get("routeId");
         String driverName = mapOfData.get("driverName");
         String color = mapOfData.get("color");
         parcelSweeperPage.verifyRouteInfo(routeId, driverName, color);

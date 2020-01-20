@@ -34,15 +34,8 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
     public void inboundScanning(String label, String hub)
     {
         Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
-
-        if ("orderDestHubName".equalsIgnoreCase(hub))
-        {
-            Order order = get(KEY_CREATED_ORDER);
-            hub = order.getDestinationHub();
-            scanningPage.inboundScanningPreciseHub(shipmentId, label, hub);
-        } else {
-            scanningPage.inboundScanning(shipmentId, label, hub);
-        }
+        hub = resolveValue(hub);
+        scanningPage.inboundScanning(shipmentId, label, hub);
     }
 
     @When("Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page using MAWB")
