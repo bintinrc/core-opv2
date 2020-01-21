@@ -1,8 +1,12 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.MdSelect;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 /**
  * @author Sergey Mishanin
@@ -14,17 +18,22 @@ public class ParcelSweeperPage extends OperatorV2SimplePage
     private static final String LOCATOR_ZONE_INFO_CONTAINER = "//div[contains(@class, 'zone-info-container')]";
     private static final String LOCATOR_DESTINATION_HUB_CONTAINER = "//div[contains(@class, 'destination-hub-container')]";
 
+    @FindBy(xpath = "//md-select[starts-with(@id,'commons.hub')]")
+    public MdSelect hub;
+
     public ParcelSweeperPage(WebDriver webDriver)
     {
         super(webDriver);
+        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void selectHub(String hubName)
     {
         pause3s();
-        selectValueFromMdSelectById("commons.hub", hubName);
+        hub.selectValue(hubName);
         clickNvIconTextButtonByNameAndWaitUntilDone("Continue");
         waitUntilInvisibilityOfElementLocated(LOCATOR_SPINNER);
+        waitWhilePageIsLoading();
     }
 
     public void enterTrackingId(String trackingId)
@@ -41,11 +50,11 @@ public class ParcelSweeperPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfMdDialogByTitle("Set Prefix");
     }
 
-    public void verifyRouteInfo(Long routeId, String driverName, String color)
+    public void verifyRouteInfo(String routeId, String driverName, String color)
     {
         if (routeId != null)
         {
-            assertEquals("Unexpected Route ID", String.valueOf(routeId), getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h4"));
+            assertEquals("Unexpected Route ID", routeId, getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h4"));
         }
 
         if (StringUtils.isNotBlank(driverName))
@@ -62,13 +71,15 @@ public class ParcelSweeperPage extends OperatorV2SimplePage
 
     public void verifyZoneInfo(String zoneName, String color)
     {
-        if (StringUtils.isNotBlank(zoneName)) {
+        if (StringUtils.isNotBlank(zoneName))
+        {
             String zoneShortName = getText(LOCATOR_ZONE_INFO_CONTAINER + "//h4");
             String zoneFullName = getText(LOCATOR_ZONE_INFO_CONTAINER + "//h5");
             if (!("NIL".equalsIgnoreCase(zoneName)))
             {
                 assertThat("Unexpected Zone Name", zoneShortName + " " + zoneFullName, equalToIgnoringCase(zoneName));
-            } else {
+            } else
+            {
                 assertThat("Unexpected Zone Name", "NIL", equalToIgnoringCase(zoneName));
             }
         }

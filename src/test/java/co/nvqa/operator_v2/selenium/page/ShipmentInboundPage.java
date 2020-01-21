@@ -1,6 +1,13 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.MdAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
+import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 /**
  * @author Tristania Siagian
@@ -8,39 +15,40 @@ import org.openqa.selenium.WebDriver;
 public class ShipmentInboundPage extends OperatorV2SimplePage
 {
     private static final String LOCATOR_SPINNER = "//md-progress-circular";
-    private static final String SHIPMENT_ID_SELECTION_XPATH = ".//md-autocomplete-wrap/input[starts-with(@id, 'input')]";
-    private static final String SHIPMENT_ID_XPATH = "//li[@ng-click='$mdAutocompleteCtrl.select($index)']";
-    private static final String HUB_COMBOBOX_XPATH = "//md-select[contains(@name,'commons.hub')]";
-    private static final String HUB_COMBOBOX_TEXTAREA_XPATH = "//input[@ng-model='searchTerm']";
-    private static final String SELECTED_HUB_NAME_XPATH = "//md-option[div[text()=' %s ']]";
+
+    @FindBy(xpath = "//md-select[starts-with(@id,'commons.hub')]")
+    public MdSelect hub;
+
+    @FindBy(xpath = "//md-autocomplete[@placeholder='Shipment ID']")
+    public MdAutocomplete shipmentIdSelector;
+
+    @FindBy(xpath = "//div[contains(@class,'validation-message error')]/p")
+    public PageElement shipmentIdValidationMessage;
 
     public ShipmentInboundPage(WebDriver webDriver)
     {
         super(webDriver);
+        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void selectHubAndShipmentId(String hubName, String shipmentId)
     {
         pause3s();
-        selectValueFromMdSelectById("commons.hub", hubName);
-        waitUntilVisibilityOfElementLocated(SHIPMENT_ID_SELECTION_XPATH);
-        sendKeys(SHIPMENT_ID_SELECTION_XPATH, shipmentId);
-        click(SHIPMENT_ID_XPATH);
+        hub.selectValue(hubName);
+        shipmentIdSelector.selectValue(shipmentId);
         pause1s();
     }
 
-    public void selectPreciseHubAndShipmentId(String hubName, String shipmentId)
+    public void selectHubShipmentIdAndCheckErrorMessage(String hubName, String shipmentId, String errorMessage)
     {
         pause3s();
-        click(HUB_COMBOBOX_XPATH);
+        hub.selectValue(hubName);
+        shipmentIdSelector.waitUntilClickable();
+        shipmentIdSelector.enterSearchTerm(shipmentId);
+        shipmentIdSelector.selectItem("No Shipment ID");
         pause1s();
-        sendKeys(HUB_COMBOBOX_TEXTAREA_XPATH, hubName);
-        pause1s();
-        click(f(SELECTED_HUB_NAME_XPATH, hubName));
-        waitUntilVisibilityOfElementLocated(SHIPMENT_ID_SELECTION_XPATH);
-        sendKeys(SHIPMENT_ID_SELECTION_XPATH, shipmentId);
-        click(SHIPMENT_ID_XPATH);
-        pause1s();
+        shipmentIdValidationMessage.waitUntilClickable();
+        Assert.assertEquals("Shipment ID validation message", errorMessage, shipmentIdValidationMessage.getText());
     }
 
     public void clickContinueButton()

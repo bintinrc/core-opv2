@@ -19,16 +19,16 @@ Feature: Parcel Sweeper
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper
     When Operator sweep parcel using data below:
-      | hubName    | {hub-name} |
-      | trackingId | CREATED    |
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | orderId    | CREATED             |
-      | driverName | {ninja-driver-name} |
-      | color      | #73deec             |
+      | routeId    | {KEY_CREATED_ROUTE_ID} |
+      | driverName | {ninja-driver-name}    |
+      | color      | #73deec                |
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color | #73deec |
+      | color    | #73deec            |
 
   @DeleteOrArchiveRoute
   Scenario: Operator sweep routed Normal Order with valid Tracking ID, using same Hub as the order and using Prefix on Parcel Sweeper page (uid:576854df-f1e2-4ce5-8ba8-1ce3ce3ceeb7)
@@ -52,7 +52,7 @@ Feature: Parcel Sweeper
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color | #73deec |
+      | color    | #73deec            |
 
   Scenario: Operator sweep un-routed Normal Order with valid Tracking ID and using same Hub as the order on Parcel Sweeper page (uid:b0176b84-e65d-4ea8-98a3-cdb63489bbdc)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -64,8 +64,8 @@ Feature: Parcel Sweeper
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper
     When Operator sweep parcel using data below:
-      | hubName    | {hub-name} |
-      | trackingId | CREATED    |
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | orderId    | NOT ROUTED |
       | driverName | NIL        |
@@ -73,7 +73,7 @@ Feature: Parcel Sweeper
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color | #73deec |
+      | color    | #73deec            |
 
   @DeleteOrArchiveRoute
   Scenario: Operator sweep routed Normal Order with valid Tracking ID and using different Hub from the order on Parcel Sweeper page (uid:efc0b89e-e890-4796-bf57-276cec76388a)
@@ -90,8 +90,8 @@ Feature: Parcel Sweeper
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper
     When Operator sweep parcel using data below:
-      | hubName    | {hub-name-2} |
-      | trackingId | CREATED      |
+      | hubName    | {hub-name-2}                    |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | orderId    | CREATED             |
       | driverName | {ninja-driver-name} |
@@ -99,7 +99,7 @@ Feature: Parcel Sweeper
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color | #73deec |
+      | color    | #73deec            |
     Then Operator verify Destination Hub on Parcel Sweeper page using data below:
       | hubName | {hub-name} |
       | color   | #73deec    |
@@ -114,8 +114,8 @@ Feature: Parcel Sweeper
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper
     When Operator sweep parcel using data below:
-      | hubName    | {hub-name-2} |
-      | trackingId | CREATED      |
+      | hubName    | {hub-name-2}                    |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | orderId    | NOT ROUTED |
       | driverName | NIL        |
@@ -123,7 +123,7 @@ Feature: Parcel Sweeper
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color | #73deec |
+      | color    | #73deec            |
     Then Operator verify Destination Hub on Parcel Sweeper page using data below:
       | hubName | GLOBAL INBOUND |
       | color   | #73deec        |
