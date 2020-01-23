@@ -565,6 +565,23 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         }
     }
 
+    @After(value = "@DeleteHubAppUser")
+    public void deleteHubAppUser()
+    {
+        if (get(KEY_CREATED_HUB_APP_USERNAME) != null)
+        {
+            getHubJdbc().deleteHubAppUser(get(KEY_CREATED_HUB_APP_USERNAME));
+            getAuthJdbc().softDeleteOauthClientByClientId(get(KEY_CREATED_HUB_APP_USERNAME));
+        }
+    }
+
+    @Given("DB Operator gets the newest existed username for Hub App")
+    public void dbOperatorGetsTheNewestExistedUsernameForHubApp()
+    {
+        String username = getHubJdbc().getExistedUsername();
+        put(KEY_EXISTED_HUB_APP_USERNAME, username);
+    }
+
     @SuppressWarnings("unchecked")
     @Given("^DB Operator verifies warehouse_sweeps record$")
     public void dbOperatorVerifiesWareHouseSweepsRecord(Map<String, String> mapOfData)
