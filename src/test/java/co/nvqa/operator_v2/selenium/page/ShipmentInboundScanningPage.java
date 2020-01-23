@@ -1,7 +1,11 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.MdSelect;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import java.util.Date;
 import java.util.List;
@@ -23,38 +27,23 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
     public static final String XPATH_SCANNING_SESSION_CHANGE = XPATH_SCANNING_SESSION + "[contains(@class,'changed')]";
     public static final String XPATH_CHANGE_DATE_BUTTON = "//button[@aria-label='Change Date']";
 
+    @FindBy(xpath = "//md-select[contains(@id,'inbound-hub')]")
+    public MdSelect inboundHub;
+
     public ShipmentInboundScanningPage(WebDriver webDriver)
     {
         super(webDriver);
+        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void selectHub(String hubName)
     {
-        selectValueFromMdSelectWithSearch("placeholder", "Inbound Hub", hubName);
-    }
-
-    public void selectPreciseHub(String hubName)
-    {
-        click("//md-select[contains(@name,'inbound-hub')]");
-        pause1s();
-        sendKeys("//input[@ng-model='searchTerm']", hubName);
-        pause1s();
-        click(f("//md-option[div[text()=' %s ']]", hubName));
+        inboundHub.selectValue(hubName);
     }
 
     public void inboundScanning(Long shipmentId, String label, String hub)
     {
         selectHub(hub);
-        click(grabXpathButton(label));
-        clickStartInbound();
-
-        inputShipmentToInbound(shipmentId);
-        checkSessionScan(shipmentId);
-    }
-
-    public void inboundScanningPreciseHub(Long shipmentId, String label, String hub)
-    {
-        selectPreciseHub(hub);
         click(grabXpathButton(label));
         clickStartInbound();
 

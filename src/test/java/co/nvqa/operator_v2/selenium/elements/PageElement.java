@@ -41,6 +41,11 @@ public class PageElement extends SimplePage
         return getAttribute(webElement, attributeName);
     }
 
+    public String getText()
+    {
+        return getText(webElement);
+    }
+
     public void clear()
     {
         webElement.clear();
@@ -74,6 +79,11 @@ public class PageElement extends SimplePage
         {
             resetImplicitTimeout();
         }
+    }
+
+    public void waitUntilClickable()
+    {
+        waitUntilElementIsClickable(webElement);
     }
 
 }

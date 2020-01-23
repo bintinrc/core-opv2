@@ -1,9 +1,10 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.selenium.page.ShipmentInboundPage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
+
+import java.util.Map;
 
 /**
  * @author Tristania Siagian
@@ -26,14 +27,18 @@ public class ShipmentInboundSteps extends AbstractSteps
     public void operatorSelectsTheHubAndTheShipmentId(String hubName)
     {
         String shipmentIdAsString = Long.toString(get(KEY_CREATED_SHIPMENT_ID));
+        hubName = resolveValue(hubName);
+        shipmentInboundPage.selectHubAndShipmentId(hubName, shipmentIdAsString);
+    }
 
-        if ("orderDestHubName".equalsIgnoreCase(hubName)) {
-            Order order = get(KEY_CREATED_ORDER);
-            hubName = order.getDestinationHub();
-            shipmentInboundPage.selectPreciseHubAndShipmentId(hubName, shipmentIdAsString);
-        } else {
-            shipmentInboundPage.selectHubAndShipmentId(hubName, shipmentIdAsString);
-        }
+    @When("Operator selects Hub and Shipment ID and check error message:")
+    public void operatorSelectsHubAndShipmentIdAndCheckErrorMessage(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+        String hubName = data.get("hub");
+        String shipmentId = data.get("shipmentId");
+        String errorMessage = data.get("errorMessage");
+        shipmentInboundPage.selectHubShipmentIdAndCheckErrorMessage(hubName, shipmentId, errorMessage);
     }
 
     @And("Operator clicks on Continue Button in Shipment Inbound Page")
@@ -43,15 +48,13 @@ public class ShipmentInboundSteps extends AbstractSteps
     }
 
     @And("Operator inputs the {string} Tracking ID in the Shipment Inbound Page")
-    public void operatorInputsTheTrackingID(String trackingIdOrigin)
+    public void operatorInputsTheTrackingID(String trackingId)
     {
-        String trackingId;
+        trackingId = resolveValue(trackingId);
 
-        if ("CREATED".equalsIgnoreCase(trackingIdOrigin))
+        if ("RANDOM".equalsIgnoreCase(trackingId))
         {
-            trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        } else {
-            trackingId = "RANDOMTID" + randomLong(0,99999);
+            trackingId = "RANDOMTID" + randomLong(0, 99999);
         }
 
         shipmentInboundPage.enterTrackingId(trackingId);

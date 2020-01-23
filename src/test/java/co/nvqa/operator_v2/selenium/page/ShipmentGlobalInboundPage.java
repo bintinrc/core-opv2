@@ -1,54 +1,45 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.GlobalInboundParams;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.MdSelect;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 /**
- *
- * @author Tristania Siagian
+ * @author Tristania Siagian, Sergey Mishanin
  */
 public class ShipmentGlobalInboundPage extends OperatorV2SimplePage
 {
     private static final String MD_SELECT_VALUE_SELECTION_XPATH = "//md-select-value[contains(@id,'select_value_label')]/span[contains(text(),'%s')]";
     private static final String MD_SELECT_HEADER_INPUT_XPATH = "//md-select-header[not(contains(@class,'ng-hide'))]/input[contains(@ng-model,'searchTerm')]";
-    private static final String MD_OPTION_HUB_FIRST_ELEMENT = "//md-select-header[not(contains(@class,'ng-hide'))]/following-sibling::md-option[contains(@ng-repeat,'filter:searchTerm')][1]";
-    private static final String MD_OPTION_SHIPMENT_ID_FIRST_ELEMENT = "//md-select-header[not(contains(@class,'ng-hide'))]/following-sibling::md-option[contains(@ng-repeat,'filter:searchTerm') and @value='%s'][1]";
     private static final String MD_OPTION_SHIPMENT_TYPE_SELECTION_XPATH = "//md-option[contains(@value,'%s')]";
-    private static final String INPUT_SHIPMENT_ID_XPATH = "//div[contains(@class,'md-scroll-mask')]/following-sibling::div[contains(@id,'select_container')]//md-select-header/input[contains(@ng-model,'searchTerm')]";
-    private static final String SHIPMENT_INPUT_LIST_XPATH = "//div[@ng-repeat='shipment in ctrl.data.selectedShipmentIds']/span[text()='%s']";
     private static final String SCANNER_FIELD_XPATH = "//input[@aria-label='Scan a new parcel / Enter a tracking ID']";
     private static final String LAST_HUB_SHOWN_XPATH = "//h3[@ng-if='!ctrl.state.ready']";
     private static final String LATEST_SCANNED_TRACKING_ID_XPATH = "//div[text()=' Last Scanned : %s ']";
     private static final String TOAST_TEXT_XPATH = "//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div[text()='%s']";
-    private static final String LOADING_XPATH = "//div[contains(@class, 'loading-sheet')]/md-progress-circular";
 
-    private static final String SELECT_HUB_TEXT = "Select Hub";
     private static final String SHIPMENT_TYPE_TEXT = "Shipment Type";
-    private static final String SELECT_SHIPMENT_IDS_TEXT = "Select Shipment ID(s)";
-    private static final String ADD_SHIPMENT_ICON_ARIA_LABEL = "Add Shipment ID";
     private static final String CONTINUE_BUTTON_ARIA_LABEL = "Continue";
 
     private static final String DEFAULT_PRIORITY_COLOR_XPATH = "//div[contains(@class,'priority-container')]";
     private static final String WARNING_PRIORITY_COLOR_XPATH = "//div[contains(@class,'priority-container') and contains(@class,'%s')]";
 
+    @FindBy(id = "container.global-inbound.hub")
+    public MdSelect globalInboundHub;
+
     public ShipmentGlobalInboundPage(WebDriver webDriver)
     {
         super(webDriver);
+        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void selectShipmentDestinationHub(String hubName)
     {
-        selectValueFromMdSelectById("container.global-inbound.hub", hubName);
-    }
-
-    public void selectShipmentDestinationHubPrecise(String hubName)
-    {
-        click(".//md-select[starts-with(@id,'container.global-inbound.hub')]");
-        pause1s();
-        sendKeys("//div[contains(@class,'md-active md-clickable')]//input[@ng-model='searchTerm']", hubName);
-        pause1s();
-        click(f("//md-option[div[text()=' %s ']]", hubName));
+        pause3s();
+        globalInboundHub.selectValue(hubName);
     }
 
     public void selectShipmentType(String shipmentType)
@@ -64,8 +55,6 @@ public class ShipmentGlobalInboundPage extends OperatorV2SimplePage
 
     public void clickAddShipmentThenContinue(Long shipmentId)
     {
-        //clickButtonByAriaLabel(ADD_SHIPMENT_ICON_ARIA_LABEL);
-        //isElementExistWait3Seconds(f(SHIPMENT_INPUT_LIST_XPATH, String.valueOf(shipmentId)));
         clickButtonByAriaLabel(CONTINUE_BUTTON_ARIA_LABEL);
         waitUntilVisibilityOfElementLocated(SCANNER_FIELD_XPATH);
     }
@@ -73,9 +62,8 @@ public class ShipmentGlobalInboundPage extends OperatorV2SimplePage
     public void inputScannedTrackingId(String trackingId, boolean orderIsValid)
     {
         sendKeysAndEnter(SCANNER_FIELD_XPATH, trackingId);
-        //closeToast();
 
-        if(orderIsValid)
+        if (orderIsValid)
         {
             waitUntilVisibilityOfElementLocated(LAST_HUB_SHOWN_XPATH);
             waitUntilVisibilityOfElementLocated(f(LATEST_SCANNED_TRACKING_ID_XPATH, trackingId));
@@ -85,7 +73,7 @@ public class ShipmentGlobalInboundPage extends OperatorV2SimplePage
     public void checkAlert(String toastText)
     {
         waitUntilVisibilityOfElementLocated(TOAST_TEXT_XPATH, toastText);
-        if(StringUtils.isNotBlank(toastText))
+        if (StringUtils.isNotBlank(toastText))
         {
             assertEquals("Toast text", toastText, getToastTopText());
             waitUntilInvisibilityOfToast(toastText, false);
@@ -100,7 +88,8 @@ public class ShipmentGlobalInboundPage extends OperatorV2SimplePage
         if (expectedPriorityLevelColor == "" || expectedPriorityLevelColor.isEmpty() || expectedPriorityLevelColor == null)
         {
             isElementExist(DEFAULT_PRIORITY_COLOR_XPATH);
-        } else {
+        } else
+        {
             isElementExist(f(WARNING_PRIORITY_COLOR_XPATH, expectedPriorityLevelColor));
         }
     }
@@ -128,16 +117,15 @@ public class ShipmentGlobalInboundPage extends OperatorV2SimplePage
 
     private void overrideSize(String overrideSize)
     {
-        if(overrideSize==null)
+        if (overrideSize == null)
         {
-            if(isElementExistFast("//nv-icon-text-button[@name='container.global-inbound.manual']"))
+            if (isElementExistFast("//nv-icon-text-button[@name='container.global-inbound.manual']"))
             {
                 clickNvIconTextButtonByName("container.global-inbound.manual");
             }
-        }
-        else
+        } else
         {
-            if(isElementExistFast("//nv-icon-text-button[@name='container.global-inbound.retain']"))
+            if (isElementExistFast("//nv-icon-text-button[@name='container.global-inbound.retain']"))
             {
                 clickNvIconTextButtonByName("container.global-inbound.retain");
                 selectValueFromMdSelectById("size", overrideSize);
@@ -167,11 +155,10 @@ public class ShipmentGlobalInboundPage extends OperatorV2SimplePage
 
     private void setOverrideValue(String inputId, Double value)
     {
-        if(value==null)
+        if (value == null)
         {
             clearf("//input[@id='%s']", inputId);
-        }
-        else
+        } else
         {
             sendKeysById(inputId, NO_TRAILING_ZERO_DF.format(value));
         }
