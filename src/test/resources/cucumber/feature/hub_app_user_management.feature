@@ -1,4 +1,4 @@
-@HubAppUserManagement @Shipment @MiddleMile @ForceNotHeadless @CWF
+@HubAppUserManagement @Shipment @MiddleMile @ForceNotHeadless
 Feature: Hub App User Management
 
   @LaunchBrowser @ShouldAlwaysRun
