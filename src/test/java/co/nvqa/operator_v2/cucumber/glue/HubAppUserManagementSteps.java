@@ -2,11 +2,17 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.HubAppUser;
 import co.nvqa.operator_v2.selenium.page.HubAppUserManagementPage;
+import co.nvqa.operator_v2.util.KeyConstants;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Tristania Siagian
@@ -28,6 +34,9 @@ public class HubAppUserManagementSteps extends AbstractSteps
     @When("Operator create new Hub App User with details:")
     public void operatorCreateNewHubAppUser(List<HubAppUser> hubAppUsers)
     {
+        LocalDateTime today = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+
         for (HubAppUser hubAppUser : hubAppUsers)
         {
             hubAppUserManagementPage.clickAddHubUserButton();
@@ -38,20 +47,63 @@ public class HubAppUserManagementSteps extends AbstractSteps
             if ("DUPLICATED".equalsIgnoreCase(hubAppUser.getUsername()))
             {
                 hubAppUserManagementPage.fillUsername(get(KEY_EXISTED_HUB_APP_USERNAME));
+                put(KeyConstants.KEY_IS_INVALID, true);
             } else if ("RANDOM".equalsIgnoreCase(hubAppUser.getUsername())) {
+                String username = "AUTO" + generateRequestedTrackingNumber();
+                hubAppUserManagementPage.fillUsername(username);
+                put(KEY_CREATED_HUB_APP_USERNAME, username);
+                put(KeyConstants.KEY_IS_INVALID, false);
+            }
+
+            hubAppUserManagementPage.fillPassword(hubAppUser.getPassword());
+            hubAppUserManagementPage.selectEmploymentType(hubAppUser.getEmploymentType());
+
+            hubAppUser.setEmploymentStartDate(formatter.format(today));
+            hubAppUserManagementPage.selectEmploymentStartDate(hubAppUser.getEmploymentStartDate());
+
+            hubAppUserManagementPage.selectHubForHubAppUser(hubAppUser.getHub());
+            hubAppUserManagementPage.fillWareHouseTeamFormation(hubAppUser.getWarehouseTeamFormation());
+            hubAppUserManagementPage.fillPosition(hubAppUser.getPosition());
+            hubAppUserManagementPage.fillComments(hubAppUser.getComments());
+            hubAppUserManagementPage.clickCreateHubUserButton(get(KeyConstants.KEY_IS_INVALID));
+        }
+        if (hubAppUsers.size() > 1) {
+            put(KEY_LIST_OF_CREATED_HUB_APP_DETAILS, hubAppUsers);
+        } else {
+            put(KEY_CREATED_HUB_APP_DETAILS, hubAppUsers);
+        }
+    }
+
+    @When("Operator create new Hub App User with negative scenarios using details:")
+    public void operatorCreateNewHubAppUserNegativeScenario(List<HubAppUser> hubAppUsers)
+    {
+        for (HubAppUser hubAppUser : hubAppUsers)
+        {
+            hubAppUserManagementPage.clickAddHubUserButton();
+            hubAppUserManagementPage.fillFirstName(hubAppUser.getFirstName());
+            hubAppUserManagementPage.fillLastName(hubAppUser.getLastName());
+            hubAppUserManagementPage.fillContact(hubAppUser.getContact());
+
+            if ("RANDOM".equalsIgnoreCase(hubAppUser.getUsername())) {
                 hubAppUserManagementPage.fillUsername("AUTO" + generateRequestedTrackingNumber());
             }
 
             hubAppUserManagementPage.fillPassword(hubAppUser.getPassword());
             hubAppUserManagementPage.selectEmploymentType(hubAppUser.getEmploymentType());
-            hubAppUserManagementPage.selectEmploymentStartDate(hubAppUser.getEmploymentStartDate());
-            hubAppUserManagementPage.selectHubForHubAppUser(hubAppUser.getHub());
+
+            if (!("".equalsIgnoreCase(hubAppUser.getEmploymentStartDate()))) {
+                hubAppUserManagementPage.selectEmploymentStartDate(hubAppUser.getEmploymentStartDate());
+            }
+
+            if (!("".equalsIgnoreCase(hubAppUser.getHub()))) {
+                hubAppUserManagementPage.selectHubForHubAppUser(hubAppUser.getHub());
+            }
+
             hubAppUserManagementPage.fillWareHouseTeamFormation(hubAppUser.getWarehouseTeamFormation());
             hubAppUserManagementPage.fillPosition(hubAppUser.getPosition());
             hubAppUserManagementPage.fillComments(hubAppUser.getComments());
-            hubAppUserManagementPage.clickCreateHubUserButton();
+            hubAppUserManagementPage.clickCreateHubUserButton(true);
         }
-        put(KEY_CREATED_HUB_APP_DETAILS, hubAppUsers);
     }
 
     @And("Operator Load all the Hub App User")
@@ -61,16 +113,27 @@ public class HubAppUserManagementSteps extends AbstractSteps
     }
 
     @Then("Operator verifies that the newly created Hub App User will be shown")
-    public void operatorVerifiesThatTheNewlyCreatedHubAppUserWillBeShown()
-    {
-        HubAppUser hubAppUser = get(KEY_CREATED_HUB_APP_DETAILS);
-        hubAppUserManagementPage.checkTheHubAppUserIsCreated(hubAppUser);
+    public void operatorVerifiesThatTheNewlyCreatedHubAppUserWillBeShown() {
+        if (get(KEY_LIST_OF_CREATED_HUB_APP_DETAILS) == null) {
+            List<HubAppUser> hubAppUser = get(KEY_CREATED_HUB_APP_DETAILS);
+            String username = get(KEY_CREATED_HUB_APP_USERNAME);
+            hubAppUserManagementPage.checkTheHubAppUserIsCreated(username, hubAppUser.get(0));
+        } else {
+            List<HubAppUser> hubAppUsersToList = get(KEY_LIST_OF_CREATED_HUB_APP_DETAILS);
+            List<String> username = get(KEY_LIST_OF_CREATED_HUB_APP_USERNAME);
+            for (HubAppUser hubAppUser : hubAppUsersToList) {
+                int index = 0;
+                hubAppUserManagementPage.checkTheHubAppUserIsCreated(username.get(index), hubAppUser);
+                index++;
+            }
+        }
     }
 
     @Then("Operator verifies that there will be a duplication error toast shown")
     public void operatorVerifiesThatThereWillBeADuplicationErrorToastShown()
     {
-        hubAppUserManagementPage.verifiesDuplicationErrorToastShown();
+        String existedUsername = get(KEY_EXISTED_HUB_APP_USERNAME);
+        hubAppUserManagementPage.verifiesDuplicationErrorToastShown(existedUsername);
     }
 
     @Then("Operator verifies that there will be UI error of empty field of {string} shown")
