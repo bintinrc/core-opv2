@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.HubAppUser;
-import org.apache.poi.ss.formula.functions.T;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 
@@ -15,6 +14,13 @@ import java.util.Locale;
 public class HubAppUserManagementPage extends OperatorV2SimplePage
 {
     private static final String ADD_HUB_USER_BUTTON_XPATH = "//button[@id='btnAddUser']";
+    private static final String FILTER_XPATH = "//div[@id='%s']";
+    private static final String EMPLOYMENT_START_DATE_FILTER_XPATH = "//span[@id='employment_start_date']";
+    private static final String START_DATE_INPUT_XPATH = "//div[contains(@class,'calendar-range-left')]//td[@title='%s']";
+    private static final String ACTIVE_EMPLOYMENT_FILTER_XPATH = "//li[text()='ACTIVE']";
+    private static final String INACTIVE_EMPLOYMENT_FILTER_XPATH = "//li[text()='INACTIVE']";
+    private static final String UNSELECTABLE_FILTER = "//div[@id='%s']//span[@unselectable='on']";
+
     private static final String ADD_HUB_USER_DIALOG_XPATH = "//div[contains(@id,'rcDialogTitle')]";
     private static final String EMPLOYMENT_TYPE_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='employment_type']";
     private static final String FULL_TIME_EMPLOYMENT_TYPE_XPATH = "//li[text()='FULL_TIME']";
@@ -45,6 +51,7 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     private static final String WAREHOUSE_TEAM_FORMATION_ID = "team";
     private static final String POSITION_ID = "position";
     private static final String COMMENT_ID = "comment";
+    private static final String STATUS_ID = "is_active";
 
     private static final String USERNAME_CLASS = "username";
     private static final String HUB_CLASS = "hub_id";
@@ -188,6 +195,77 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
         getWebDriver().switchTo().parentFrame();
     }
 
+    public void selectFilter(String filterName, HubAppUser hubAppUser)
+    {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+
+        switch (filterName)
+        {
+            case "hub" :
+                click(f(FILTER_XPATH, HUB_CLASS));
+                waitUntilVisibilityOfElementLocated(f(HUB_SELECTION_XPATH, hubAppUser.getHub()));
+                click(f(HUB_SELECTION_XPATH, hubAppUser.getHub()));
+                break;
+
+            case "employment type" :
+                click(f(FILTER_XPATH, EMPLOYMENT_TYPE_CLASS));
+                waitUntilVisibilityOfElementLocated(FULL_TIME_EMPLOYMENT_TYPE_XPATH);
+                click(FULL_TIME_EMPLOYMENT_TYPE_XPATH);
+                break;
+
+            case "employment start date" :
+                LocalDateTime today = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy", Locale.ENGLISH);
+
+                click(EMPLOYMENT_START_DATE_FILTER_XPATH);
+                waitUntilVisibilityOfElementLocated(f(START_DATE_INPUT_XPATH, formatter.format(today)));
+                click(f(START_DATE_INPUT_XPATH, formatter.format(today)));
+                click(f(START_DATE_INPUT_XPATH, formatter.format(today)));
+                break;
+
+            case "status" :
+                click(f(FILTER_XPATH, STATUS_ID));
+                waitUntilVisibilityOfElementLocated(ACTIVE_EMPLOYMENT_FILTER_XPATH);
+                click(ACTIVE_EMPLOYMENT_FILTER_XPATH);
+                break;
+
+            case "multiple" :
+                click(f(FILTER_XPATH, HUB_CLASS));
+                waitUntilVisibilityOfElementLocated(f(HUB_SELECTION_XPATH, hubAppUser.getHub()));
+                click(f(HUB_SELECTION_XPATH, hubAppUser.getHub()));
+
+                pause1s();
+                click(f(FILTER_XPATH, EMPLOYMENT_TYPE_CLASS));
+                waitUntilVisibilityOfElementLocated(FULL_TIME_EMPLOYMENT_TYPE_XPATH);
+                click(FULL_TIME_EMPLOYMENT_TYPE_XPATH);
+
+                pause1s();
+                click(f(FILTER_XPATH, STATUS_ID));
+                waitUntilVisibilityOfElementLocated(ACTIVE_EMPLOYMENT_FILTER_XPATH);
+                click(ACTIVE_EMPLOYMENT_FILTER_XPATH);
+                break;
+        }
+
+        getWebDriver().switchTo().parentFrame();
+    }
+
+    public void selectFilterWithoutCreatingHubAppUser()
+    {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+
+        pause1s();
+        click(f(FILTER_XPATH, EMPLOYMENT_TYPE_CLASS));
+        waitUntilVisibilityOfElementLocated(FULL_TIME_EMPLOYMENT_TYPE_XPATH);
+        click(FULL_TIME_EMPLOYMENT_TYPE_XPATH);
+
+        pause1s();
+        click(f(FILTER_XPATH, STATUS_ID));
+        waitUntilVisibilityOfElementLocated(ACTIVE_EMPLOYMENT_FILTER_XPATH);
+        click(ACTIVE_EMPLOYMENT_FILTER_XPATH);
+
+        getWebDriver().switchTo().parentFrame();
+    }
+
     public void verifiesDuplicationErrorToastShown(String existedUsername)
     {
         waitUntilVisibilityOfElementLocated(ERROR_TOAST_DUPLICATION_USERNAME_XPATH, existedUsername);
@@ -202,13 +280,14 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
         getWebDriver().switchTo().parentFrame();
     }
 
-    public void checkTheHubAppUserIsCreated(String username, HubAppUser hubAppUser)
+    public void checkTheHubAppUserIsCreated(HubAppUser hubAppUser)
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-        sendKeys(USERNAME_TABLE_FILTER_XPATH, username);
+        sendKeys(USERNAME_TABLE_FILTER_XPATH, hubAppUser.getUsername());
+        waitUntilVisibilityOfElementLocated(f(TABLE_RESULT_XPATH, USERNAME_CLASS, "mark"));
 
         String actualUsernameShown = getText(f(TABLE_RESULT_XPATH, USERNAME_CLASS, "mark"));
-        assertEquals("Username is different : ", username, actualUsernameShown);
+        assertEquals("Username is different : ", hubAppUser.getUsername(), actualUsernameShown);
 
         String actualHubShown = getText(f(TABLE_RESULT_XPATH, HUB_CLASS, "span"));
         assertEquals("Hub is different : ", hubAppUser.getHub(), actualHubShown);
@@ -228,6 +307,15 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
         String actualEmploymentStartDateShown = getText(f(TABLE_RESULT_XPATH, EMPLOYMENT_START_DATE_CLASS, "span"));
         assertEquals("Employment Start Date is different : ", hubAppUser.getEmploymentStartDate(), actualEmploymentStartDateShown);
 
+        getWebDriver().switchTo().parentFrame();
+    }
+
+    public void verifiesUnselectedFilter()
+    {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+        isElementExistFast(f(UNSELECTABLE_FILTER, HUB_CLASS));
+        isElementExistFast(f(UNSELECTABLE_FILTER, EMPLOYMENT_TYPE_CLASS));
+        isElementExistFast(f(UNSELECTABLE_FILTER, STATUS_ID));
         getWebDriver().switchTo().parentFrame();
     }
 }

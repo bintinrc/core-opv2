@@ -6,11 +6,9 @@ import co.nvqa.operator_v2.util.KeyConstants;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import org.apache.commons.collections.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -50,8 +48,8 @@ public class HubAppUserManagementSteps extends AbstractSteps
                 put(KeyConstants.KEY_IS_INVALID, true);
             } else if ("RANDOM".equalsIgnoreCase(hubAppUser.getUsername())) {
                 String username = "AUTO" + generateRequestedTrackingNumber();
+                hubAppUser.setUsername(username);
                 hubAppUserManagementPage.fillUsername(username);
-                put(KEY_CREATED_HUB_APP_USERNAME, username);
                 put(KeyConstants.KEY_IS_INVALID, false);
             }
 
@@ -116,14 +114,12 @@ public class HubAppUserManagementSteps extends AbstractSteps
     public void operatorVerifiesThatTheNewlyCreatedHubAppUserWillBeShown() {
         if (get(KEY_LIST_OF_CREATED_HUB_APP_DETAILS) == null) {
             List<HubAppUser> hubAppUser = get(KEY_CREATED_HUB_APP_DETAILS);
-            String username = get(KEY_CREATED_HUB_APP_USERNAME);
-            hubAppUserManagementPage.checkTheHubAppUserIsCreated(username, hubAppUser.get(0));
+            hubAppUserManagementPage.checkTheHubAppUserIsCreated(hubAppUser.get(0));
         } else {
             List<HubAppUser> hubAppUsersToList = get(KEY_LIST_OF_CREATED_HUB_APP_DETAILS);
-            List<String> username = get(KEY_LIST_OF_CREATED_HUB_APP_USERNAME);
             for (HubAppUser hubAppUser : hubAppUsersToList) {
                 int index = 0;
-                hubAppUserManagementPage.checkTheHubAppUserIsCreated(username.get(index), hubAppUser);
+                hubAppUserManagementPage.checkTheHubAppUserIsCreated(hubAppUser);
                 index++;
             }
         }
@@ -140,5 +136,30 @@ public class HubAppUserManagementSteps extends AbstractSteps
     public void operatorVerifiesThatThereWillBeUIErrorOfEmptyFieldOfShown(String errorMessage)
     {
         hubAppUserManagementPage.emptyErrorMessage(errorMessage);
+    }
+
+    @When("Operator fills the {string} filter and select the value based on created Hub App User")
+    public void operatorFillsTheFilterAndSelectTheValueBasedOnCreatedHubAppUser(String filterName)
+    {
+        List<HubAppUser> hubAppUser = get(KEY_CREATED_HUB_APP_DETAILS);
+        hubAppUserManagementPage.selectFilter(filterName, hubAppUser.get(0));
+    }
+
+    @When("Operator fills the filter without creating Hub App User")
+    public void operatorFillsTheFilterWithoutCreatingHubAppUser()
+    {
+        hubAppUserManagementPage.selectFilterWithoutCreatingHubAppUser();
+    }
+
+    @And("Operator clicks on the clear filter button on the Hub App User Management Page")
+    public void operatorClicksOnTheClearFilterButtonOnTheHubAppUserManagementPage()
+    {
+        hubAppUserManagementPage.clickClearFilters();
+    }
+
+    @Then("Operator verifies that the filter is blank")
+    public void operatorVerifiesThatTheFilterIsBlank()
+    {
+        hubAppUserManagementPage.verifiesUnselectedFilter();
     }
 }
