@@ -66,9 +66,13 @@ public class HubAppUserManagementSteps extends AbstractSteps
             hubAppUserManagementPage.clickCreateHubUserButton(get(KeyConstants.KEY_IS_INVALID));
         }
         if (hubAppUsers.size() > 1) {
-            put(KEY_LIST_OF_CREATED_HUB_APP_DETAILS, hubAppUsers);
+            for (HubAppUser hubAppUser : hubAppUsers) {
+                put(KEY_LIST_OF_CREATED_HUB_APP_DETAILS, hubAppUser);
+                put(KEY_LIST_OF_CREATED_HUB_APP_USERNAME, hubAppUser.getUsername());
+            }
         } else {
             put(KEY_CREATED_HUB_APP_DETAILS, hubAppUsers);
+            put(KEY_CREATED_HUB_APP_USERNAME, hubAppUsers.get(0).getUsername());
         }
     }
 
