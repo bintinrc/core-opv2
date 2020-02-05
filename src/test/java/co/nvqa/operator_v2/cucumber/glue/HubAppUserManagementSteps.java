@@ -48,6 +48,7 @@ public class HubAppUserManagementSteps extends AbstractSteps
                 put(KeyConstants.KEY_IS_INVALID, true);
             } else if ("RANDOM".equalsIgnoreCase(hubAppUser.getUsername())) {
                 String username = "AUTO" + generateRequestedTrackingNumber();
+                System.out.println(username);
                 hubAppUser.setUsername(username);
                 hubAppUserManagementPage.fillUsername(username);
                 put(KeyConstants.KEY_IS_INVALID, false);
@@ -63,7 +64,7 @@ public class HubAppUserManagementSteps extends AbstractSteps
             hubAppUserManagementPage.fillWareHouseTeamFormation(hubAppUser.getWarehouseTeamFormation());
             hubAppUserManagementPage.fillPosition(hubAppUser.getPosition());
             hubAppUserManagementPage.fillComments(hubAppUser.getComments());
-            hubAppUserManagementPage.clickCreateHubUserButton(get(KeyConstants.KEY_IS_INVALID));
+            hubAppUserManagementPage.clickCreateEditHubUserButton(get(KeyConstants.KEY_IS_INVALID));
         }
         if (hubAppUsers.size() > 1) {
             for (HubAppUser hubAppUser : hubAppUsers) {
@@ -104,7 +105,7 @@ public class HubAppUserManagementSteps extends AbstractSteps
             hubAppUserManagementPage.fillWareHouseTeamFormation(hubAppUser.getWarehouseTeamFormation());
             hubAppUserManagementPage.fillPosition(hubAppUser.getPosition());
             hubAppUserManagementPage.fillComments(hubAppUser.getComments());
-            hubAppUserManagementPage.clickCreateHubUserButton(true);
+            hubAppUserManagementPage.clickCreateEditHubUserButton(true);
         }
     }
 
@@ -165,5 +166,56 @@ public class HubAppUserManagementSteps extends AbstractSteps
     public void operatorVerifiesThatTheFilterIsBlank()
     {
         hubAppUserManagementPage.verifiesUnselectedFilter();
+    }
+
+    @And("Operator edits the existed Hub App User with details:")
+    public void operatorEditsTheExistedHubAppUserWithDetails(List<HubAppUser> hubAppUsers)
+    {
+        List<HubAppUser> existedHubAppUser = get(KEY_CREATED_HUB_APP_DETAILS);
+        hubAppUsers.get(0).setUsername(existedHubAppUser.get(0).getUsername());
+        hubAppUsers.get(0).setEmploymentStartDate(existedHubAppUser.get(0).getEmploymentStartDate());
+
+        for (HubAppUser hubAppUser : hubAppUsers)
+        {
+            hubAppUserManagementPage.clickEditHubAppUser();
+
+            pause1s();
+            hubAppUserManagementPage.fillFirstName(hubAppUser.getFirstName());
+            hubAppUserManagementPage.fillLastName(hubAppUser.getLastName());
+            if (hubAppUser.getLastName() == null || "".equalsIgnoreCase(hubAppUser.getLastName())) {
+                hubAppUser.setLastName(null);
+            }
+            hubAppUserManagementPage.fillContact(hubAppUser.getContact());
+            hubAppUserManagementPage.fillPassword(hubAppUser.getPassword());
+
+            hubAppUserManagementPage.selectEmploymentType(hubAppUser.getEmploymentType());
+            hubAppUserManagementPage.selectEmploymentActivity(hubAppUser.getEmploymentStatus());
+
+            hubAppUserManagementPage.selectHubForHubAppUser(hubAppUser.getHub());
+            hubAppUserManagementPage.fillWareHouseTeamFormation(hubAppUser.getWarehouseTeamFormation());
+            hubAppUserManagementPage.fillPosition(hubAppUser.getPosition());
+            hubAppUserManagementPage.fillComments(hubAppUser.getComments());
+            hubAppUserManagementPage.clickCreateEditHubUserButton(true, true);
+        }
+        if (hubAppUsers.size() > 1) {
+            for (HubAppUser hubAppUser : hubAppUsers) {
+                put(KEY_LIST_OF_CREATED_HUB_APP_DETAILS, hubAppUser);
+            }
+        } else {
+            put(KEY_CREATED_HUB_APP_DETAILS, hubAppUsers);
+        }
+    }
+
+    @And("Operator edits the existed Hub App User with negative scenario using details:")
+    public void operatorEditsTheExistedHubAppUserWithNegativeScenarioUsingDetails(List<HubAppUser> hubAppUsers)
+    {
+        for (HubAppUser hubAppUser : hubAppUsers)
+        {
+            hubAppUserManagementPage.clickEditHubAppUser();
+
+            pause1s();
+            hubAppUserManagementPage.fillFirstName(hubAppUser.getFirstName());
+            hubAppUserManagementPage.fillPosition(hubAppUser.getPosition());
+        }
     }
 }

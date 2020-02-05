@@ -21,7 +21,7 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     private static final String INACTIVE_EMPLOYMENT_FILTER_XPATH = "//li[text()='INACTIVE']";
     private static final String UNSELECTABLE_FILTER = "//div[@id='%s']//span[@unselectable='on']";
 
-    private static final String ADD_HUB_USER_DIALOG_XPATH = "//div[contains(@id,'rcDialogTitle')]";
+    private static final String ADD_EDIT_HUB_USER_DIALOG_XPATH = "//div[contains(@id,'rcDialogTitle')]";
     private static final String EMPLOYMENT_TYPE_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='employment_type']";
     private static final String FULL_TIME_EMPLOYMENT_TYPE_XPATH = "//li[text()='FULL_TIME']";
     private static final String PART_TIME_EMPLOYMENT_TYPE_XPATH = "//li[text()='PART_TIME']";
@@ -29,8 +29,10 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     private static final String EMPLOYMENT_START_DATE_XPATH = "//div[contains(@class,'ant-card-bordered')]//span[@id='employment_start_date']";
     private static final String TEXT_AREA_START_DATE_XPATH = "//div[contains(@class,'calendar-picker-container-placement-bottomLeft')]//input[@placeholder='Select date']";
     private static final String HUB_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='hub_id']";
-    private static final String CREATE_BUTTON_ADD_HUB_DIALOG_XPATH = "//button[@id='btnUpsertUser']";
+    private static final String CREATE_UPDATE_BUTTON_ADD_HUB_DIALOG_XPATH = "//button[@id='btnUpsertUser']";
     private static final String CLOSE_BUTTON_MODAL_XPATH = "//button[@aria-label='Close']";
+    private static final String EDIT_LINK_TEXT_XPATH = "//a[contains(@class, 'edit-user')]";
+    private static final String STATUS_COMBOBOX_XPATH = "//form[contains(@class,'StyledForm')]//div[@id='is_active']";
 
     private static final String CLEAR_FILTERS_BUTTON_XPATH = "//button[span[text()='Clear Filters']]";
     private static final String IFRAME_XPATH = "//iframe[contains(@src,'hub-user-management')]";
@@ -39,6 +41,7 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     private static final String TABLE_RESULT_XPATH = "//td[contains(@class,'%s')]/span/%s";
     private static final String LOAD_ICON_XPATH = "//div[contains(@class,'ant-spin-spinning')]";
     private static final String TOAST_HUB_APP_USER_CREATED_XPATH = "//div[contains(@class,'notification-notice-content')]//div[contains(text(),'Hub User has been created')]";
+    private static final String TOAST_HUB_APP_USER_UPDATED_XPATH = "//div[contains(@class,'notification-notice-content')]//div[contains(text(),'Hub User has been updated')]";
     private static final String ERROR_TOAST_DUPLICATION_USERNAME_XPATH = "//div[contains(@class,'toast-error')]//strong[text()='username %s already exists']";
     private static final String ERROR_TOAST_DUPLICATION_CLOSE_XPATH = "//i[text()='close']";
     private static final String ERROR_MESSAGE_EMPTY_FIELD_XPATH = "//div[@class='ant-form-explain']/span[text()='%s']";
@@ -71,28 +74,43 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
         waitUntilVisibilityOfElementLocated(LOAD_ALL_HUB_APP_USER_BUTTON_XPATH);
         click(ADD_HUB_USER_BUTTON_XPATH);
-        waitUntilVisibilityOfElementLocated(ADD_HUB_USER_DIALOG_XPATH);
+        waitUntilVisibilityOfElementLocated(ADD_EDIT_HUB_USER_DIALOG_XPATH);
         getWebDriver().switchTo().parentFrame();
     }
 
     public void fillFirstName(String firstName)
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-        sendKeysById(FIRST_NAME_ID, firstName);
+        if (firstName == null || "".equalsIgnoreCase(firstName)) {
+            sendKeysById(FIRST_NAME_ID, "a");
+            findElementByXpath(f("//input[@id='%s']", FIRST_NAME_ID)).sendKeys(Keys.BACK_SPACE);
+        } else {
+            sendKeysById(FIRST_NAME_ID, firstName);
+        }
         getWebDriver().switchTo().parentFrame();
     }
 
     public void fillLastName(String lastName)
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-        sendKeysById(LAST_NAME_ID, lastName);
+        if (lastName == null || "".equalsIgnoreCase(lastName)) {
+            sendKeysById(LAST_NAME_ID, "a");
+            findElementByXpath(f("//input[@id='%s']", LAST_NAME_ID)).sendKeys(Keys.BACK_SPACE);
+        } else {
+            sendKeysById(LAST_NAME_ID, lastName);
+        }
         getWebDriver().switchTo().parentFrame();
     }
 
     public void fillContact(String contact)
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-        sendKeysById(CONTACT_DETAIL_ID,contact);
+        if (contact == null || "".equalsIgnoreCase(contact)) {
+            sendKeysById(CONTACT_DETAIL_ID, "a");
+            findElementByXpath(f("//input[@id='%s']", CONTACT_DETAIL_ID)).sendKeys(Keys.BACK_SPACE);
+        } else {
+            sendKeysById(CONTACT_DETAIL_ID, contact);
+        }
         getWebDriver().switchTo().parentFrame();
     }
 
@@ -137,6 +155,22 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
         getWebDriver().switchTo().parentFrame();
     }
 
+    public void selectEmploymentActivity(String employmentActivity)
+    {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+        click(STATUS_COMBOBOX_XPATH);
+        if ("ACTIVE".equalsIgnoreCase(employmentActivity))
+        {
+            waitUntilVisibilityOfElementLocated(ACTIVE_EMPLOYMENT_FILTER_XPATH);
+            click(ACTIVE_EMPLOYMENT_FILTER_XPATH);
+        } else if ("INACTIVE".equalsIgnoreCase(employmentActivity))
+        {
+            waitUntilVisibilityOfElementLocated(INACTIVE_EMPLOYMENT_FILTER_XPATH);
+            click(INACTIVE_EMPLOYMENT_FILTER_XPATH);
+        }
+        getWebDriver().switchTo().parentFrame();
+    }
+
     public void selectHubForHubAppUser(String hubName)
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
@@ -149,33 +183,57 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     public void fillWareHouseTeamFormation(String warehouseTeamFormation)
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-        sendKeysById(WAREHOUSE_TEAM_FORMATION_ID, warehouseTeamFormation);
+        if (warehouseTeamFormation == null || "".equalsIgnoreCase(warehouseTeamFormation)) {
+            sendKeysById(WAREHOUSE_TEAM_FORMATION_ID, "a");
+            findElementByXpath(f("//input[@id='%s']", WAREHOUSE_TEAM_FORMATION_ID)).sendKeys(Keys.BACK_SPACE);
+        } else {
+            sendKeysById(WAREHOUSE_TEAM_FORMATION_ID, warehouseTeamFormation);
+        }
         getWebDriver().switchTo().parentFrame();
     }
 
     public void fillPosition(String position)
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-        sendKeysById(POSITION_ID, position);
+        if (position == null || "".equalsIgnoreCase(position)) {
+            sendKeysById(POSITION_ID, "a");
+            findElementByXpath(f("//input[@id='%s']", POSITION_ID)).sendKeys(Keys.BACK_SPACE);
+        } else {
+            sendKeysById(POSITION_ID, position);
+        }
         getWebDriver().switchTo().parentFrame();
     }
 
     public void fillComments(String comments)
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-        sendKeysById(COMMENT_ID, comments);
+        if (comments == null || "".equalsIgnoreCase(comments)) {
+            sendKeysById(COMMENT_ID, "a");
+            findElementByXpath(f("//input[@id='%s']", COMMENT_ID)).sendKeys(Keys.BACK_SPACE);
+        } else {
+            sendKeysById(COMMENT_ID, comments);
+        }
         getWebDriver().switchTo().parentFrame();
     }
 
-    public void clickCreateHubUserButton(boolean isInvalid)
+    public void clickCreateEditHubUserButton(boolean isInvalid, boolean isUpdated)
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-        click(CREATE_BUTTON_ADD_HUB_DIALOG_XPATH);
+        click(CREATE_UPDATE_BUTTON_ADD_HUB_DIALOG_XPATH);
+        if (isUpdated) {
+            waitUntilVisibilityOfElementLocated(TOAST_HUB_APP_USER_UPDATED_XPATH);
+            waitUntilInvisibilityOfElementLocated(TOAST_HUB_APP_USER_UPDATED_XPATH);
+        }
         if (!isInvalid) {
             waitUntilVisibilityOfElementLocated(TOAST_HUB_APP_USER_CREATED_XPATH);
             waitUntilInvisibilityOfElementLocated(TOAST_HUB_APP_USER_CREATED_XPATH);
         }
         getWebDriver().switchTo().parentFrame();
+    }
+
+    public void clickCreateEditHubUserButton(boolean isInvalid)
+    {
+        clickCreateEditHubUserButton(isInvalid, false);
     }
 
     public void clickAllHubAppUser()
@@ -316,6 +374,14 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
         isElementExistFast(f(UNSELECTABLE_FILTER, HUB_CLASS));
         isElementExistFast(f(UNSELECTABLE_FILTER, EMPLOYMENT_TYPE_CLASS));
         isElementExistFast(f(UNSELECTABLE_FILTER, STATUS_ID));
+        getWebDriver().switchTo().parentFrame();
+    }
+
+    public void clickEditHubAppUser()
+    {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+        click(EDIT_LINK_TEXT_XPATH);
+        waitUntilVisibilityOfElementLocated(ADD_EDIT_HUB_USER_DIALOG_XPATH);
         getWebDriver().switchTo().parentFrame();
     }
 }

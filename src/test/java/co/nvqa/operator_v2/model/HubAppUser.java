@@ -14,6 +14,7 @@ public class HubAppUser
     private String password;
     private String employmentType;
     private String employmentStartDate;
+    private String employmentStatus;
     private String hub;
     private String warehouseTeamFormation;
     private String position;
@@ -77,6 +78,14 @@ public class HubAppUser
 
     public void setEmploymentStartDate(String employmentStartDate) {
         this.employmentStartDate = employmentStartDate;
+    }
+
+    public String getEmploymentStatus() {
+        return employmentStatus;
+    }
+
+    public void setEmploymentStatus(String employmentStatus) {
+        this.employmentStatus = employmentStatus;
     }
 
     public String getHub() {
