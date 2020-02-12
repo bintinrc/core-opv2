@@ -1,4 +1,4 @@
-@ShipmentInboundScanning @Shipment @MiddleMile @ForceNotHeadless
+@ShipmentInboundScanning @Shipment @MiddleMile
 Feature: Shipment Inbound Scanning
 
   @LaunchBrowser @ShouldAlwaysRun

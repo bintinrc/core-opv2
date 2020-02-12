@@ -1,4 +1,4 @@
-@HubAppUserManagement @Shipment @MiddleMile @ForceNotHeadless
+@HubAppUserManagement @Shipment @MiddleMile
 Feature: Hub App User Management
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -51,7 +51,7 @@ Feature: Hub App User Management
     Then Operator verifies that the newly created Hub App User will be shown
 
   @DeleteHubAppUser
-  Scenario Outline: Search Hub User - By Filter
+  Scenario Outline: Search Hub User - By Filter - <scenarioName>
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Access Control -> Hub App User Management
     When Operator create new Hub App User with details:
