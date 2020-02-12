@@ -1,4 +1,4 @@
-@ShipmentInbound @Shipment @MiddleMile @test
+@ShipmentInbound @Shipment @MiddleMile @ForceNotHeadless @test
 Feature: Shipment Inbound
 
   @LaunchBrowser @ShouldAlwaysRun @test
