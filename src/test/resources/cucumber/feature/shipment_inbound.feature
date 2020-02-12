@@ -1,11 +1,11 @@
-@ShipmentInbound @Shipment @MiddleMile @ForceNotHeadless
+@ShipmentInbound @Shipment @MiddleMile @ForceNotHeadless @test
 Feature: Shipment Inbound
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @test
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteShipment @DeleteOrArchiveRoute @test
   Scenario: Shipment Inbound - Normal (Valid Tracking ID, Same Shipment) (uid:22256332-8766-4e7d-b14b-407e04141a5f)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
