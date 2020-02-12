@@ -38,6 +38,14 @@ public class ShipmentGlobalInboundSteps extends AbstractSteps
         shipmentGlobalInboundPage.selectShipmentDestinationHub(hubName);
     }
 
+    @When("^Operator select the destination hub ([^\"]*) of the shipment precisely$")
+    public void operatorSelectTheDestinationHubOfTheShipmentPrecisely(String hubName)
+    {
+        hubName = resolveValue(hubName);
+        shipmentGlobalInboundPage.waitWhilePageIsLoading();
+        shipmentGlobalInboundPage.selectShipmentDestinationHubPrecise(hubName);
+    }
+
     @And("Operator select the shipment type")
     public void operatorSelectTheShipmentType()
     {

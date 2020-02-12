@@ -33,6 +33,12 @@ public class MdSelect extends PageElement
         click(f("//md-option[div[contains(normalize-space(text()), '%s')]]", StringUtils.normalizeSpace(value)));
     }
 
+    public void selectPreciseValue(String value)
+    {
+        enterSearchTerm(value);
+        click(f("//md-option[div[text()=' JKB ']]", value));
+    }
+
     private void openMenu(){
         selectValueElement.waitUntilClickable();
         selectValueElement.moveAndClick();

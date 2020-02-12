@@ -42,6 +42,12 @@ public class ShipmentGlobalInboundPage extends OperatorV2SimplePage
         globalInboundHub.selectValue(hubName);
     }
 
+    public void selectShipmentDestinationHubPrecise(String hubName)
+    {
+        pause3s();
+        globalInboundHub.selectPreciseValue(hubName);
+    }
+
     public void selectShipmentType(String shipmentType)
     {
         clickMdSelectValue(SHIPMENT_TYPE_TEXT);

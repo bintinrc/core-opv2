@@ -18,7 +18,7 @@ Feature: Shipment Inbound
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
     Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment
+    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment precisely
     And Operator select the shipment type
     And Operator select the created shipment by Shipment ID
     And Operator click the add shipment button then continue
@@ -54,7 +54,7 @@ Feature: Shipment Inbound
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
     Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment
+    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment precisely
     And Operator select the shipment type
     And Operator select the created shipment by Shipment ID
     And Operator click the add shipment button then continue
@@ -90,7 +90,7 @@ Feature: Shipment Inbound
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
     Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment
+    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment precisely
     And Operator select the shipment type
     And Operator select the created shipment by Shipment ID
     And Operator click the add shipment button then continue
@@ -122,7 +122,7 @@ Feature: Shipment Inbound
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
     Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment
+    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment precisely
     And Operator select the shipment type
     And Operator select the created shipment by Shipment ID
     And Operator click the add shipment button then continue
@@ -160,7 +160,7 @@ Feature: Shipment Inbound
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
     Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment
+    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment precisely
     And Operator select the shipment type
     And Operator select the created shipment by Shipment ID
     And Operator click the add shipment button then continue
@@ -196,7 +196,7 @@ Feature: Shipment Inbound
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
     Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment
+    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment precisely
     And Operator select the shipment type
     And Operator select the created shipment by Shipment ID
     And Operator click the add shipment button then continue
@@ -221,7 +221,7 @@ Feature: Shipment Inbound
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
     Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment
+    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment precisely
     And Operator select the shipment type
     And Operator select the created shipment by Shipment ID
     And Operator click the add shipment button then continue
@@ -247,7 +247,7 @@ Feature: Shipment Inbound
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
     Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment
+    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment precisely
     And Operator select the shipment type
     And Operator select the created shipment by Shipment ID
     And Operator click the add shipment button then continue
