@@ -1,5 +1,7 @@
-package co.nvqa.operator_v2.selenium.elements;
+package co.nvqa.operator_v2.selenium.elements.nv;
 
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

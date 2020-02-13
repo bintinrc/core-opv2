@@ -208,15 +208,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     @Then("^Operator verify parameters of the created shipment on Shipment Management page$")
     public void operatorVerifyParametersOfTheCreatedShipmentOnShipmentManagementPage()
     {
-        ShipmentInfo shipmentInfo;
-
-        if (get(KEY_SHIPMENT_INFO) == null) {
-            Shipments shipments = get(KEY_CREATED_SHIPMENT);
-            shipmentInfo = new ShipmentInfo(shipments);
-        } else {
-            shipmentInfo = get(KEY_SHIPMENT_INFO);
-        }
-
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
         shipmentManagementPage.validateShipmentInfo(shipmentInfo.getId(), shipmentInfo);
     }
 
@@ -256,15 +248,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     @And("^Operator open the shipment detail for the created shipment on Shipment Management Page$")
     public void operatorOpenShipmentDetailsPageForCreatedShipmentOnShipmentManagementPage()
     {
-        ShipmentInfo shipmentInfo;
-
-        if (get(KEY_SHIPMENT_INFO) == null) {
-            Shipments shipments = get(KEY_CREATED_SHIPMENT);
-            shipmentInfo = new ShipmentInfo(shipments);
-        } else {
-            shipmentInfo = get(KEY_SHIPMENT_INFO);
-        }
-
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
         shipmentManagementPage.openShipmentDetailsPage(shipmentInfo.getId());
     }
 
@@ -299,15 +283,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     public void operatorVerifyShipmentDetailsPageOpenedIsForTheCreatedShipment()
     {
         Order order = get(KEY_CREATED_ORDER);
-        ShipmentInfo shipmentInfo;
-
-        if (get(KEY_SHIPMENT_INFO) == null) {
-            Shipments shipments = get(KEY_CREATED_SHIPMENT);
-            shipmentInfo = new ShipmentInfo(shipments);
-        } else {
-            shipmentInfo = get(KEY_SHIPMENT_INFO);
-        }
-
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
         shipmentManagementPage.verifyOpenedShipmentDetailsPageIsTrue(shipmentInfo.getId(), order.getTrackingId());
     }
 

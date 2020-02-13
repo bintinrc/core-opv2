@@ -10,6 +10,9 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.Date;
 import java.util.Map;
 
+import static co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.TicketsTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.TicketsTable.COLUMN_TRACKING_ID;
+
 /**
  * @author Daniel Joi Partogi Hutapea
  */
@@ -47,6 +50,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
         String orderOutcomeInaccurateAddress = mapOfData.get("orderOutcomeInaccurateAddress");
         String orderOutcomeDuplicateParcel = mapOfData.get("orderOutcomeDuplicateParcel");
         String issueDescription = mapOfData.get("issueDescription");
+        String rtsReason = mapOfData.get("rtsReason");
 
 
         if ("GENERATED".equals(damageDescription))
@@ -94,6 +98,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
         recoveryTicket.setOrderOutcomeInaccurateAddress(orderOutcomeInaccurateAddress);
         recoveryTicket.setOrderOutcomeDuplicateParcel(orderOutcomeDuplicateParcel);
         recoveryTicket.setIssueDescription(issueDescription);
+        recoveryTicket.setRtsReason(rtsReason);
 
         recoveryTicketsPage.createTicket(recoveryTicket);
         put("recoveryTicket", recoveryTicket);
@@ -114,7 +119,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         recoveryTicketsPage.searchTableByTrackingId(trackingId);
         pause3s();
-        recoveryTicketsPage.clickButtonByAriaLabel("Edit");
+        recoveryTicketsPage.ticketsTable.clickActionButton(1, ACTION_EDIT);
         pause2s();
     }
 
@@ -167,7 +172,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
 
         recoveryTicketsPage.editTicketSettings(recoveryTicket);
         pause5s();
-        recoveryTicketsPage.clickButtonByAriaLabel("Edit");
+        recoveryTicketsPage.ticketsTable.clickActionButton(1, ACTION_EDIT);
         pause2s();
         assertEquals(recoveryTicket.getTicketStatus().toLowerCase(), recoveryTicketsPage.getTextById("ticket-status").toLowerCase());
         assertEquals(recoveryTicket.getOrderOutcome().toLowerCase(), recoveryTicketsPage.getTextById("order-outcome").toLowerCase());
@@ -180,7 +185,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
     @Then("Operator edits the Additional settings with below data and verifies it:")
     public void editAdditionalSettings(Map<String, String> mapOfData)
     {
-        recoveryTicketsPage.clickButtonByAriaLabel("Edit");
+        recoveryTicketsPage.ticketsTable.clickActionButton(1, ACTION_EDIT);
         String customerZendeskId = mapOfData.get("customerZendeskId");
         String shipperZendeskId = mapOfData.get("shipperZendeskId");
         String ticketComments = mapOfData.get("ticketComments");
@@ -207,7 +212,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
 
         recoveryTicketsPage.editAdditionalSettings(recoveryTicket);
         pause3s();
-        recoveryTicketsPage.clickButtonByAriaLabel("Edit");
+        recoveryTicketsPage.ticketsTable.clickActionButton(1, ACTION_EDIT);
         pause3s();
         assertEquals(recoveryTicket.getCustZendeskId().trim(), recoveryTicketsPage.getInnerTextByIdForInputFields("customer-zendesk-id").trim());
         assertEquals(recoveryTicket.getShipperZendeskId().trim(), recoveryTicketsPage.getInnerTextByIdForInputFields("shipper-zendesk-id").trim());
@@ -231,7 +236,6 @@ public class RecoveryTicketsSteps extends AbstractSteps
     {
         recoveryTicketsPage.chooseTicketStatusFilter(status);
         pause2s();
-
     }
 
     @And("Operator clicks on Edit Filters button")
@@ -259,10 +263,9 @@ public class RecoveryTicketsSteps extends AbstractSteps
     public void operatorEntersTheTrackingIdAndVerifiesThatIsExists()
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        recoveryTicketsPage.scrollIntoView("//span[text()='Tracking ID']/..//input");
-        recoveryTicketsPage.sendKeys("//span[text()='Tracking ID']/..//input", trackingId);
+        recoveryTicketsPage.ticketsTable.filterByColumn(COLUMN_TRACKING_ID, trackingId);
         pause2s();
-        recoveryTicketsPage.waitUntilInvisibilityOfElementLocated("//*[contains(text(),'Loading more results')]");
+        recoveryTicketsPage.waitUntilInvisibilityOfElementLocated("//*[contains(text(),'Loading more results')]", 60);
         boolean doesTicketExist = recoveryTicketsPage.verifyTicketExistsInTheCorrectStatusFilter(trackingId);
         assertTrue(f("Ticket '%s' exists in correct filer", trackingId), doesTicketExist);
         pause2s();
@@ -286,7 +289,7 @@ public class RecoveryTicketsSteps extends AbstractSteps
     @Then("Operator chooses Entry Source Filter as {string}")
     public void chooseEntrySourceFilter(String entrySource)
     {
-        recoveryTicketsPage.addFilter(entrySource);
+        recoveryTicketsPage.chooseEntrySourceFilter(entrySource);
     }
 
     @When("Operator enters the wrong Tracking Id")

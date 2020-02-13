@@ -2,7 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
-import co.nvqa.operator_v2.selenium.elements.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -39,13 +39,13 @@ public class ShipmentGlobalInboundPage extends OperatorV2SimplePage
     public void selectShipmentDestinationHub(String hubName)
     {
         pause3s();
-        globalInboundHub.selectValue(hubName);
+        globalInboundHub.searchAndSelectValue(hubName);
     }
 
     public void selectShipmentDestinationHubPrecise(String hubName)
     {
         pause3s();
-        globalInboundHub.selectPreciseValue(hubName);
+        globalInboundHub.selectValue(hubName);
     }
 
     public void selectShipmentType(String shipmentType)

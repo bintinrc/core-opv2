@@ -279,7 +279,6 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     public void openShipmentDetailsPage(Long shipmentId)
     {
         shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
-        pause3s();
         shipmentsTable.clickActionButton(1, ACTION_DETAILS);
         pause100ms();
         switchToOtherWindow();

@@ -1,7 +1,14 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.operator_v2.FacilitiesManagement;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
+import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import java.util.Optional;
 
@@ -24,9 +31,34 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
 
     private static final String ACTION_BUTTON_EDIT = "commons.edit";
 
+    @FindBy(css="[id^='container.hub-list.hub-name']")
+    public TextBox hubName;
+
+    @FindBy(css="[id^='container.hub-list.display-name']")
+    public TextBox displayName;
+
+    @FindBy(css="[id='container.hub-list.facility-type']")
+    public MdSelect facilityType;
+
+    @FindBy(css="[id^='container.hub-list.city']")
+    public TextBox city;
+
+    @FindBy(css="[id^='container.hub-list.country']")
+    public TextBox country;
+
+    @FindBy(css="[id^='container.hub-list.latitude']")
+    public TextBox latitude;
+
+    @FindBy(css="[id^='container.hub-list.longitude']")
+    public TextBox longitude;
+
+    @FindBy(name="Submit")
+    public NvButtonSave submit;
+
     public FacilitiesManagementPage(WebDriver webDriver)
     {
         super(webDriver);
+        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void downloadCsvFile()
@@ -44,13 +76,16 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
     {
         waitUntilInvisibilityOfElementLocated("//div[text()='Loading hubs...']");
         clickNvIconTextButtonByName("Add Hub");
-        sendKeysById("container.hub-list.hub-name", facilitiesManagement.getName());
-        sendKeysById("container.hub-list.display-name", facilitiesManagement.getDisplayName());
-        sendKeysById("container.hub-list.city", facilitiesManagement.getCity());
-        sendKeysById("container.hub-list.country", facilitiesManagement.getCountry());
-        sendKeysById("container.hub-list.latitude", String.valueOf(facilitiesManagement.getLatitude()));
-        sendKeysById("container.hub-list.longitude", String.valueOf(facilitiesManagement.getLongitude()));
-        clickNvButtonSaveByNameAndWaitUntilDone("Submit");
+        hubName.setValue(facilitiesManagement.getName());
+        displayName.setValue(facilitiesManagement.getDisplayName());
+        if (StringUtils.isNotBlank(facilitiesManagement.getType())){
+            facilityType.selectValue(facilitiesManagement.getType());
+        }
+        city.setValue(facilitiesManagement.getCity());
+        country.setValue(facilitiesManagement.getCountry());
+        latitude.setValue(String.valueOf(facilitiesManagement.getLatitude()));
+        longitude.setValue(String.valueOf(facilitiesManagement.getLongitude()));
+        submit.clickAndWaitUntilDone();
     }
 
     public void updateHub(String searchHubsKeyword, FacilitiesManagement facilitiesManagement)

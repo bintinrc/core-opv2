@@ -1,14 +1,5 @@
 package co.nvqa.operator_v2.model;
 
-import co.nvqa.commons.model.core.hub.Shipments;
-import co.nvqa.commons.util.StandardTestConstants;
-import co.nvqa.operator_v2.util.KeyConstants;
-
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-
 /**
  *
  * @author Sergey Mishanin
@@ -16,10 +7,6 @@ import java.util.Locale;
 @SuppressWarnings("unused")
 public class ShipmentInfo extends DataEntity<ShipmentInfo>
 {
-
-    private static final DateTimeFormatter FE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-    private static final DateTimeFormatter BE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-
     private String shipmentType;
     private Long id;
     private String createdAt;
@@ -36,41 +23,6 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo>
 
     public ShipmentInfo()
     {
-    }
-
-    public ShipmentInfo (Shipments shipments)
-    {
-        setShipmentType(shipments.getShipment().getShipmentType());
-        setId(shipments.getShipment().getId());
-        setCreatedAt(normalisedDate(shipments.getShipment().getCreatedAt()));
-        setTransitAt(normalisedDate(shipments.getShipment().getTransitAt()));
-        setStatus(shipments.getShipment().getStatus());
-        setOrigHubName(shipments.getShipment().getOrigHubName());
-        setCurrHubName(shipments.getShipment().getCurrHubName());
-        setDestHubName(shipments.getShipment().getDestHubName());
-        setArrivalDatetime(normalisedDate(shipments.getShipment().getArrivalDatetime()));
-        setCompletedAt(normalisedDate(shipments.getShipment().getCompletedAt()));
-        setOrdersCount(Math.toIntExact(shipments.getShipment().getOrdersCount()));
-        setComments(shipments.getShipment().getComments());
-        setMawb(shipments.getShipment().getMawb());
-    }
-
-    private String normalisedDate(String originDate)
-    {
-        if (originDate == null)
-        {
-            return null;
-        }
-
-        final ZonedDateTime zdt = ZonedDateTime.parse(originDate, BE_FORMATTER);
-        ZonedDateTime normalisedZdt = zdt
-                .withZoneSameInstant(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
-
-        int nano = normalisedZdt.getNano();
-        if (nano >= 500_000L) {
-            normalisedZdt = normalisedZdt.plusSeconds(1L);
-        }
-        return normalisedZdt.format(FE_FORMATTER);
     }
 
     public String getShipmentType()
