@@ -30,7 +30,10 @@ public class ShipmentScanningPage extends OperatorV2SimplePage
 
     public void selectHub(String hubName)
     {
-        selectValueFromMdSelectById("commons.hub", hubName);
+        clickf(".//md-select[starts-with(@id, '%s')]", "commons.hub");
+        pause1s();
+        clickf("//md-option[div[text()=' %s ']]", hubName);
+        pause50ms();
     }
 
     public void selectShipmentId(Long shipmentId)
@@ -72,5 +75,39 @@ public class ShipmentScanningPage extends OperatorV2SimplePage
 
         String toastMessage = getToastTopText();
         assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage, allOf(containsString("Shipment"), containsString("closed")));
+    }
+
+    public void removeOrderFromShipment(String firstTrackingId)
+    {
+        pause1s();
+        sendKeys("//nv-search-input-filter[@search-text='filter.trackingId']//input", firstTrackingId);
+        click("//td[@class='deliver-by']/following-sibling::td//button[contains(@id,'button-remove-parcel')]");
+        waitUntilVisibilityOfElementLocated("//md-dialog-content[contains(@id,'dialogContent')]");
+        click("//button[@aria-label='Delete']");
+        waitUntilVisibilityOfToast(f("Success delete order tracking ID %s", firstTrackingId));
+        waitUntilInvisibilityOfToast();
+    }
+
+    public void verifiesTheSumOfOrderIsDecreased(int expectedSumOfOrder)
+    {
+        String actualSumOfOrder = getText("//nv-icon-text-button[@label='container.shipment-scanning.remove-all']/preceding-sibling::h5").substring(0,1);
+        int actualSumOfOrderAsInt = Integer.parseInt(actualSumOfOrder);
+        assertEquals("Sum Of Order is not the same : ", expectedSumOfOrder, actualSumOfOrderAsInt);
+    }
+
+    public void removeAllOrdersFromShipment()
+    {
+        pause1s();
+        click("//nv-icon-text-button[@label='container.shipment-scanning.remove-all']");
+        waitUntilVisibilityOfElementLocated("//md-dialog-content[contains(@id,'dialogContent')]");
+        click("//button[@aria-label='Remove']");
+        pause1s();
+    }
+
+    public void verifiesTheSumOfOrderIsZero()
+    {
+        String actualSumOfOrder = getText("//nv-icon-text-button[@label='container.shipment-scanning.remove-all']/preceding-sibling::h5").substring(0,1);
+        int actualSumOfOrderAsInt = Integer.parseInt(actualSumOfOrder);
+        assertEquals("Sum Of Order is not the same : ", 0, actualSumOfOrderAsInt);
     }
 }
