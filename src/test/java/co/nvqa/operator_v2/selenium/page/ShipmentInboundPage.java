@@ -1,8 +1,8 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
-import co.nvqa.operator_v2.selenium.elements.MdAutocomplete;
-import co.nvqa.operator_v2.selenium.elements.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
@@ -34,7 +34,7 @@ public class ShipmentInboundPage extends OperatorV2SimplePage
     public void selectHubAndShipmentId(String hubName, String shipmentId)
     {
         pause3s();
-        hub.selectValue(hubName);
+        hub.searchAndSelectValue(hubName);
         shipmentIdSelector.selectValue(shipmentId);
         pause1s();
     }
@@ -42,7 +42,7 @@ public class ShipmentInboundPage extends OperatorV2SimplePage
     public void selectHubShipmentIdAndCheckErrorMessage(String hubName, String shipmentId, String errorMessage)
     {
         pause3s();
-        hub.selectValue(hubName);
+        hub.searchAndSelectValue(hubName);
         shipmentIdSelector.waitUntilClickable();
         shipmentIdSelector.enterSearchTerm(shipmentId);
         shipmentIdSelector.selectItem("No Shipment ID");

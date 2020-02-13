@@ -3,13 +3,19 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RecoveryTicket;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
-import co.nvqa.operator_v2.selenium.elements.NvAutocomplete;
-import co.nvqa.operator_v2.selenium.elements.NvFilterBooleanBox;
-import co.nvqa.operator_v2.selenium.elements.NvFilterBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBooleanBox;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterFreeTextBox;
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import static co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.TicketsTable.ACTION_EDIT;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -17,8 +23,6 @@ import org.openqa.selenium.support.PageFactory;
 @SuppressWarnings("WeakerAccess")
 public class RecoveryTicketsPage extends OperatorV2SimplePage
 {
-
-
     private static final String MD_VIRTUAL_REPEAT = "ticket in getTableData()";
 
     public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking-id";
@@ -29,8 +33,12 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     private static final String TICKET_TYPE_SHIPPER_ISSUE = "SHIPPER ISSUE";
     private static final String XPATH_FOR_FILTERS = "//p[text()='%s']/parent::div/following-sibling::div//input";
     private static final String XPATH_FOR_FILTER_OPTION = "//span[text()='%s']";
-    private static final String XPATH_LOAD_SELECTION = "//button[@aria-label='Load Selection']";
     private static final String XPATH_REMOVE_TRACKINGID_FILTER = "//p[text()='Tracking IDs']/../following-sibling::div//button[@aria-label='Clear All']";
+
+    public TicketsTable ticketsTable;
+
+    @FindBy(xpath = "//nv-filter-free-text-box[@main-title='Tracking IDs']")
+    public NvFilterFreeTextBox trackingIdFilter;
 
     @FindBy(xpath = "//nv-filter-box[@main-title='Ticket Status']")
     public NvFilterBox ticketStatusFilter;
@@ -53,9 +61,28 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     @FindBy(xpath = "//nv-autocomplete[@placeholder='filter.select-filter']")
     public NvAutocomplete addFilter;
 
+    @FindBy(css = "[id^='order-outcome']")
+    public MdSelect orderOutcome;
+
+    @FindBy(css = "[id^='investigating-dept']")
+    public MdSelect investigatingDept;
+
+    @FindBy(css = "[id^='investigating-hub']")
+    public MdSelect investigatingHub;
+
+    @FindBy(css = "[id^='commons.rts-reason']")
+    public MdSelect rtsReason;
+
+    @FindBy(css = "[id^='container.recovery-tickets.ticket-status']")
+    public MdSelect ticketStatus;
+
+    @FindBy(name = "commons.load-selection")
+    public NvApiTextButton loadSelection;
+
     public RecoveryTicketsPage(WebDriver webDriver)
     {
         super(webDriver);
+        ticketsTable = new TicketsTable(webDriver);
         PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
@@ -82,7 +109,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
                 selectParcelLocation(recoveryTicket.getParcelLocation());
                 selectLiability(recoveryTicket.getLiability());
                 setDamageDescription(recoveryTicket.getDamageDescription());
-                selectOrderOutcomeDamaged(recoveryTicket.getOrderOutcomeDamaged());
+                selectOrderOutcome(recoveryTicket.getOrderOutcomeDamaged());
 
                 setCustZendeskId(recoveryTicket.getCustZendeskId());
                 setShipperZendeskId(recoveryTicket.getShipperZendeskId());
@@ -91,7 +118,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
             }
             case TICKET_TYPE_MISSING:
             {
-                selectOrderOutcomeMissing(recoveryTicket.getOrderOutcomeMissing());
+                selectOrderOutcome(recoveryTicket.getOrderOutcomeMissing());
                 setParcelDescription(recoveryTicket.getParcelDescription());
                 setCustZendeskId(recoveryTicket.getCustZendeskId());
                 setShipperZendeskId(recoveryTicket.getShipperZendeskId());
@@ -101,7 +128,11 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
             case TICKET_TYPE_PARCEL_EXCEPTION:
             {
                 selectTicketSubType(recoveryTicket.getTicketSubType());
-                selectOrderOutcomeInaccurateAddress(recoveryTicket.getOrderOutcomeInaccurateAddress());
+                selectOrderOutcome(recoveryTicket.getOrderOutcomeInaccurateAddress());
+                if (StringUtils.isNotBlank(recoveryTicket.getRtsReason()))
+                {
+                    selectRtsReason(recoveryTicket.getRtsReason());
+                }
                 setExceptionReason(recoveryTicket.getExceptionReason());
                 setCustZendeskId(recoveryTicket.getCustZendeskId());
                 setShipperZendeskId(recoveryTicket.getShipperZendeskId());
@@ -111,7 +142,11 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
             case TICKET_TYPE_SHIPPER_ISSUE:
             {
                 selectTicketSubType(recoveryTicket.getTicketSubType());
-                selectOrderOutcomeDuplicateParcel(recoveryTicket.getOrderOutcomeDuplicateParcel());
+                selectOrderOutcome(recoveryTicket.getOrderOutcomeDuplicateParcel());
+                if (StringUtils.isNotBlank(recoveryTicket.getRtsReason()))
+                {
+                    selectRtsReason(recoveryTicket.getRtsReason());
+                }
                 setIssueDescription(recoveryTicket.getIssueDescription());
                 setCustZendeskId(recoveryTicket.getCustZendeskId());
                 setShipperZendeskId(recoveryTicket.getShipperZendeskId());
@@ -180,21 +215,19 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void chooseTicketStatusFilter(String status)
     {
-        click(f(XPATH_FOR_FILTERS, "Ticket Status"));
-        pause2s();
-        click(f(XPATH_FOR_FILTER_OPTION, status));
-        altClick(XPATH_LOAD_SELECTION);
+        ticketStatusFilter.selectFilter(status);
+        loadSelection.clickAndWaitUntilDone();
         pause1s();
     }
 
-    public void addFilter(String entrySource)
+    public void chooseEntrySourceFilter(String entrySource)
     {
         clickButtonByAriaLabel("Clear All Selections");
         pause2s();
         addFilter.selectValue("Entry Source");
         pause1s();
         entrySourceFilter.selectFilter(entrySource);
-        altClick(XPATH_LOAD_SELECTION);
+        loadSelection.clickAndWaitUntilDone();
         pause1s();
     }
 
@@ -205,7 +238,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         addFilter.selectValue("Investigating Hub");
         pause1s();
         investigationHubFilter.selectFilter(hub);
-        altClick(XPATH_LOAD_SELECTION);
+        loadSelection.clickAndWaitUntilDone();
         pause1s();
     }
 
@@ -216,7 +249,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         addFilter.selectValue("Investigating Dept.");
         pause1s();
         investigationDeptFilter.selectFilter(dept);
-        altClick(XPATH_LOAD_SELECTION);
+        loadSelection.clickAndWaitUntilDone();
         pause1s();
     }
 
@@ -231,7 +264,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         addFilter.selectValue("Show Unassigned");
         pause1s();
         showUnassignedFilter.selectFilter(StringUtils.equalsIgnoreCase("yes", show));
-        altClick(XPATH_LOAD_SELECTION);
+        loadSelection.clickAndWaitUntilDone();
         pause1s();
     }
 
@@ -247,7 +280,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         pause1s();
         resolverTicketsFilter.selectFilter(StringUtils.equalsIgnoreCase("show", filter));
         pause1s();
-        altClick(XPATH_LOAD_SELECTION);
+        loadSelection.clickAndWaitUntilDone();
         pause1s();
     }
 
@@ -267,7 +300,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         ticketStatusFilter.selectFilter("CANCELLED");
         ticketStatusFilter.selectFilter("RESOLVED");
 
-        altClick(XPATH_LOAD_SELECTION);
+        loadSelection.clickAndWaitUntilDone();
     }
 
     public void verifyTicketIsMade(String trackingId)
@@ -279,7 +312,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void verifyTicketStatus(String expectedStatus)
     {
-        clickButtonByAriaLabel("Edit");
+        ticketsTable.clickActionButton(1, ACTION_EDIT);
         pause2s();
         String status = getTextById("ticket-status");
         assertEquals(expectedStatus.toLowerCase(), status.toLowerCase());
@@ -290,14 +323,14 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         selectValueFromMdSelectById("entry-source", entrySource);
     }
 
-    public void selectTicketStatus(String ticketStatus)
+    public void selectTicketStatus(String ticketStatusValue)
     {
-        selectValueFromMdSelectByIdContains("ticket-status", ticketStatus);
+        ticketStatus.selectValue(ticketStatusValue);
     }
 
-    public void selectOrderOutcome(String orderOutcome)
+    public void selectOrderOutcome(String orderOutcomeValue)
     {
-        selectValueFromMdSelectByIdContains("order-outcome", orderOutcome);
+        orderOutcome.selectValue(orderOutcomeValue);
     }
 
     public void selectAssignTo(String assignTo)
@@ -317,12 +350,17 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void selectInvestigatingDepartment(String investigatingDepartment)
     {
-        selectValueFromMdSelectById("investigating-dept", investigatingDepartment);
+        investigatingDept.selectValue(investigatingDepartment);
     }
 
-    public void selectInvestigatingHub(String investigatingHub)
+    public void selectInvestigatingHub(String investigatingHubValue)
     {
-        selectValueFromMdSelectById("investigating-hub", investigatingHub);
+        investigatingHub.searchAndSelectValue(investigatingHubValue);
+    }
+
+    public void selectRtsReason(String rtsReasonValue)
+    {
+        rtsReason.selectValue(rtsReasonValue);
     }
 
     public void selectTicketType(String ticketType)
@@ -390,29 +428,6 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         sendKeysById("shipper-zendesk-id", shipperZendeskId);
     }
 
-    public void selectOrderOutcomeDamaged(String orderOutcomeDamaged)
-    {
-        scrollIntoView("//*[@id='orderOutcome(Damaged)']");
-        selectValueFromMdSelectById("orderOutcome(Damaged)", orderOutcomeDamaged);
-    }
-
-    public void selectOrderOutcomeInaccurateAddress(String orderOutcomeInaccurateAddress)
-    {
-        scrollIntoView("//*[@id='orderOutcome(InaccurateAddress)']");
-        selectValueFromMdSelectById("orderOutcome(InaccurateAddress)", orderOutcomeInaccurateAddress);
-    }
-
-    public void selectOrderOutcomeDuplicateParcel(String orderOutcomeDuplicateParcel)
-    {
-        scrollIntoView("//*[@id='orderOutcome(DuplicateParcel)']");
-        selectValueFromMdSelectById("orderOutcome(DuplicateParcel)", orderOutcomeDuplicateParcel);
-    }
-
-    public void selectOrderOutcomeMissing(String orderOutcomeMissing)
-    {
-        selectValueFromMdSelectById("orderOutcome(Missing)", orderOutcomeMissing);
-    }
-
     public void setComments(String comments)
     {
         sendKeys("//textarea[@aria-label='Comments']", comments);
@@ -431,12 +446,11 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         pause1s();
 
         // Fill tracking ID by filling it and press ENTER.
-        sendKeys("//div[@class='main-title']//p[text()='Tracking IDs']/../..//input", trackingId);
-        altClick("//div[@class='main-title']//p[text()='Tracking IDs']/../..//input");
+        trackingIdFilter.setValue(trackingId);
         pause1s();
 
         // Click load selection.
-        altClick(XPATH_LOAD_SELECTION);
+        loadSelection.clickAndWaitUntilDone();
     }
 
     public void waitUntilPageLoaded()
@@ -457,13 +471,24 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         return actualResult;
     }
 
-    public String getTextByClassInTable(String id)
+    /**
+     * Accessor for Recovery Tickets table
+     */
+    public static class TicketsTable extends MdVirtualRepeatTable<RecoveryTicket>
     {
-        String xpathExpression = f("//td[@class='%s']", id);
-        scrollIntoView(f(xpathExpression, id));
-        pause2s();
-        String text = getText(xpathExpression).replace("▸", "").trim();
-        return text;
-    }
+        public static final String COLUMN_TRACKING_ID = "trackingId";
+        public static final String ACTION_EDIT = "edit";
 
+        public TicketsTable(WebDriver webDriver)
+        {
+            super(webDriver);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                    .put(COLUMN_TRACKING_ID, "tracking-id")
+                    .build()
+            );
+            setEntityClass(RecoveryTicket.class);
+            setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "Edit"));
+            setMdVirtualRepeat("ticket in getTableData()");
+        }
+    }
 }

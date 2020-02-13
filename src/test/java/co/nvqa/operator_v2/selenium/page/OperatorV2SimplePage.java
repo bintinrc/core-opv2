@@ -432,7 +432,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public void clickActionButtonOnTableWithMdVirtualRepeat(int rowNumber, String actionButtonName, String mdVirtualRepeat, XpathTextMode xpathTextMode, String nvTableParam)
     {
-        String actionButtonXpath = f("//nv-icon-button[@name='%s']", actionButtonName);
+        String actionButtonXpath = f("//nv-icon-button[@name='%s']/button", actionButtonName);
         try
         {
             clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, mdVirtualRepeat, xpathTextMode, nvTableParam, actionButtonXpath);
@@ -467,8 +467,7 @@ public class OperatorV2SimplePage extends SimplePage
                     xpathExpression = f("%s//tr[@md-virtual-repeat='%s'][%d]/td[starts-with(@class, 'actions')]%s", nvTableXpathExpression, mdVirtualRepeat, rowNumber, actionButtonXpath);
             }
 
-            WebElement we = findElementByXpath(xpathExpression);
-            moveAndClick(we);
+            simpleClick(xpathExpression);
         } catch (NoSuchElementException ex)
         {
             throw new RuntimeException(f("Cannot find action button '%s' on table.", actionButtonXpath), ex);

@@ -6,7 +6,6 @@ import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
- *
  * @author Soewandi Wirjawan
  */
 @ScenarioScoped

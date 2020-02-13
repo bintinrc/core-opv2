@@ -1,6 +1,8 @@
-package co.nvqa.operator_v2.selenium.elements;
+package co.nvqa.operator_v2.selenium.elements.nv;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;

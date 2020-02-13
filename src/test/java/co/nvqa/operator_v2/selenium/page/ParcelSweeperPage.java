@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
-import co.nvqa.operator_v2.selenium.elements.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.Color;
@@ -30,7 +30,7 @@ public class ParcelSweeperPage extends OperatorV2SimplePage
     public void selectHub(String hubName)
     {
         pause3s();
-        hub.selectValue(hubName);
+        hub.searchAndSelectValue(hubName);
         clickNvIconTextButtonByNameAndWaitUntilDone("Continue");
         waitUntilInvisibilityOfElementLocated(LOCATOR_SPINNER);
         waitWhilePageIsLoading();

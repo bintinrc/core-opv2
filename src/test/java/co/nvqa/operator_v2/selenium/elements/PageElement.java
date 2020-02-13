@@ -36,6 +36,16 @@ public class PageElement extends SimplePage
         moveAndClick(webElement);
     }
 
+    public void click()
+    {
+        webElement.click();
+    }
+
+    public void jsClick()
+    {
+        executeScript("arguments[0].click()", webElement);
+    }
+
     public String getAttribute(String attributeName)
     {
         return getAttribute(webElement, attributeName);
@@ -81,9 +91,23 @@ public class PageElement extends SimplePage
         }
     }
 
+    public void scrollIntoView(){
+        scrollIntoView(webElement, false);
+    }
+
     public void waitUntilClickable()
     {
         waitUntilElementIsClickable(webElement);
+    }
+
+    public void waitUntilClickable(int timeoutInSeconds)
+    {
+        waitUntilElementIsClickable(webElement, timeoutInSeconds);
+    }
+
+    public void waitUntilInvisible()
+    {
+        waitUntilInvisibilityOfElementLocated(webElement);
     }
 
 }

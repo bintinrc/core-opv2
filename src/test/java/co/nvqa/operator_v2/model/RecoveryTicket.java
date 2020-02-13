@@ -1,10 +1,9 @@
 package co.nvqa.operator_v2.model;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
-public class RecoveryTicket
+public class RecoveryTicket extends DataEntity<RecoveryTicket>
 {
     private String trackingId;
     private String entrySource;
@@ -30,6 +29,7 @@ public class RecoveryTicket
     private String orderOutcomeInaccurateAddress;
     private String orderOutcomeDuplicateParcel;
     private String issueDescription;
+    private String rtsReason;
 
     public RecoveryTicket()
     {
@@ -101,7 +101,6 @@ public class RecoveryTicket
     }
 
 
-
     public void setParcelLocation(String parcelLocation)
     {
         this.parcelLocation = parcelLocation;
@@ -127,13 +126,19 @@ public class RecoveryTicket
         this.damageDescription = damageDescription;
     }
 
-    public void setExceptionReason(String exceptionReason) {this.exceptionReason = exceptionReason;}
+    public void setExceptionReason(String exceptionReason)
+    {
+        this.exceptionReason = exceptionReason;
+    }
 
-    public String getExceptionReason() { return exceptionReason; }
+    public String getExceptionReason()
+    {
+        return exceptionReason;
+    }
 
     public void setOrderOutcomeInaccurateAddress(String orderOutcomeInaccurateAddress)
     {
-        this.orderOutcomeInaccurateAddress=orderOutcomeInaccurateAddress;
+        this.orderOutcomeInaccurateAddress = orderOutcomeInaccurateAddress;
     }
 
     public String getOrderOutcomeInaccurateAddress()
@@ -143,7 +148,7 @@ public class RecoveryTicket
 
     public void setOrderOutcomeDuplicateParcel(String orderOutcomeDuplicateParcel)
     {
-        this.orderOutcomeDuplicateParcel=orderOutcomeDuplicateParcel;
+        this.orderOutcomeDuplicateParcel = orderOutcomeDuplicateParcel;
     }
 
     public String getOrderOutcomeDuplicateParcel()
@@ -153,7 +158,7 @@ public class RecoveryTicket
 
     public void setIssueDescription(String issueDescription)
     {
-        this.issueDescription=issueDescription;
+        this.issueDescription = issueDescription;
     }
 
     public String getIssueDescription()
@@ -271,4 +276,13 @@ public class RecoveryTicket
         return ticketComments;
     }
 
+    public String getRtsReason()
+    {
+        return rtsReason;
+    }
+
+    public void setRtsReason(String rtsReason)
+    {
+        this.rtsReason = rtsReason;
+    }
 }

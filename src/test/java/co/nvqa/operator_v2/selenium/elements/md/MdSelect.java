@@ -1,5 +1,7 @@
-package co.nvqa.operator_v2.selenium.elements;
+package co.nvqa.operator_v2.selenium.elements.md;
 
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -27,27 +29,32 @@ public class MdSelect extends PageElement
     @FindBy(xpath = "//div[contains(@class,'md-active md-clickable')]//input[@ng-model='searchTerm']")
     public PageElement searchInput;
 
+    private static final String MD_OPTION_LOCATOR = "//div[contains(@class,'md-select-menu-container')][@aria-hidden='false']//md-option[div[contains(normalize-space(text()), '%s')]]";
+
+    public void searchAndSelectValue(String value)
+    {
+        enterSearchTerm(value);
+        click(f(MD_OPTION_LOCATOR, StringUtils.normalizeSpace(value)));
+    }
+
     public void selectValue(String value)
     {
-        enterSearchTerm(value);
-        click(f("//md-option[div[contains(normalize-space(text()), '%s')]]", StringUtils.normalizeSpace(value)));
+        openMenu();
+        click(f(MD_OPTION_LOCATOR, StringUtils.normalizeSpace(value)));
     }
 
-    public void selectPreciseValue(String value)
+    private void openMenu()
     {
-        enterSearchTerm(value);
-        click(f("//md-option[div[text()=' JKB ']]", value));
-    }
-
-    private void openMenu(){
         selectValueElement.waitUntilClickable();
+        selectValueElement.scrollIntoView();
         selectValueElement.moveAndClick();
         pause1s();
     }
 
-    private void enterSearchTerm(String value){
+    private void enterSearchTerm(String value)
+    {
         openMenu();
-        searchInput.clearAndSendKeys(value);
+        searchInput.sendKeys(value);
         pause1s();
     }
 

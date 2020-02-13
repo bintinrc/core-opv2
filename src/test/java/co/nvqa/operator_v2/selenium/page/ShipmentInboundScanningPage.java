@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
-import co.nvqa.operator_v2.selenium.elements.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -38,7 +38,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
 
     public void selectHub(String hubName)
     {
-        inboundHub.selectValue(hubName);
+        inboundHub.searchAndSelectValue(hubName);
     }
 
     public void inboundScanning(Long shipmentId, String label, String hub)

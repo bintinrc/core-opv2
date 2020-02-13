@@ -62,8 +62,11 @@ public class FacilitiesManagementSteps extends AbstractSteps
     @When("^Operator create new Hub on page Hubs Administration using data below:$")
     public void operatorCreateNewHubOnPageHubsAdministrationUsingDataBelow(Map<String,String> mapOfData)
     {
+        mapOfData = resolveKeyValues(mapOfData);
+
         String name = mapOfData.get("name");
         String displayName = mapOfData.get("displayName");
+        String type = mapOfData.get("type");
         String city = mapOfData.get("city");
         String country = mapOfData.get("country");
         String latitude = mapOfData.get("latitude");
@@ -107,6 +110,7 @@ public class FacilitiesManagementSteps extends AbstractSteps
         FacilitiesManagement facilitiesManagement = new FacilitiesManagement();
         facilitiesManagement.setName(name);
         facilitiesManagement.setDisplayName(displayName);
+        facilitiesManagement.setType(type);
         facilitiesManagement.setCity(city);
         facilitiesManagement.setCountry(country);
         facilitiesManagement.setLatitude(Double.parseDouble(latitude));

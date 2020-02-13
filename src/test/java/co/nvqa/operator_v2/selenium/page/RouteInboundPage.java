@@ -7,7 +7,7 @@ import co.nvqa.operator_v2.model.WaypointPerformance;
 import co.nvqa.operator_v2.model.WaypointReservationInfo;
 import co.nvqa.operator_v2.model.WaypointShipperInfo;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
-import co.nvqa.operator_v2.selenium.elements.NvAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Assert;
 import org.junit.platform.commons.util.StringUtils;

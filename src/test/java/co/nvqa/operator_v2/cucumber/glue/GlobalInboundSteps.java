@@ -78,6 +78,7 @@ public class GlobalInboundSteps extends AbstractSteps
     @When("^Operator global inbounds parcel using data below:$")
     public void operatorGlobalInboundsParcelUsingThisDataBelow(Map<String, String> mapOfData)
     {
+        mapOfData = resolveKeyValues(mapOfData);
         GlobalInboundParams globalInboundParams = buildGlobalInboundParams(mapOfData);
         globalInboundPage.successfulGlobalInbound(globalInboundParams);
         put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
