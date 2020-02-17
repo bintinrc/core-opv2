@@ -102,4 +102,10 @@ public class ShipmentScanningSteps extends AbstractSteps
     {
         shipmentScanningPage.verifiesTheSumOfOrderIsZero();
     }
+
+    @And("Operator verifies that the row of the added order is red highlighted")
+    public void operatorVerifiesThatTheRowOfTheAddedOrderIsRedHighlighted()
+    {
+        shipmentScanningPage.verifiesOrderIsRedHighlighted();
+    }
 }

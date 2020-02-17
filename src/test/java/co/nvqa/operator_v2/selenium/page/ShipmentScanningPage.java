@@ -110,4 +110,10 @@ public class ShipmentScanningPage extends OperatorV2SimplePage
         int actualSumOfOrderAsInt = Integer.parseInt(actualSumOfOrder);
         assertEquals("Sum Of Order is not the same : ", 0, actualSumOfOrderAsInt);
     }
+
+    public void verifiesOrderIsRedHighlighted()
+    {
+        isElementExist("//tr[contains(@class,'highlight')]");
+        isElementExist("//div[contains(@class,'error-border')]");
+    }
 }
