@@ -336,4 +336,10 @@ public class RecoveryTicketsSteps extends AbstractSteps
     {
         recoveryTicketsPage.resolvedTicketsFilter(filter);
     }
+
+    @When("Operator clears all filters on Recovery Tickets page")
+    public void clearAllFilters()
+    {
+        recoveryTicketsPage.clearAllSelections.click();
+    }
 }

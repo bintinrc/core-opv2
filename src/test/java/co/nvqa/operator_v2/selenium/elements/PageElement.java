@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.elements;
 
 import co.nvqa.common_selenium.page.SimplePage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -76,6 +77,10 @@ public class PageElement extends SimplePage
         return webElement;
     }
 
+    public SearchContext getSearchContext(){
+        return searchContext;
+    }
+
     public boolean isDisplayedFast()
     {
         try
@@ -110,4 +115,11 @@ public class PageElement extends SimplePage
         waitUntilInvisibilityOfElementLocated(webElement);
     }
 
+    public boolean isEnabled(){
+        return webElement.isEnabled();
+    }
+
+    public WebElement findElement(By by){
+        return webElement.findElement(by);
+    }
 }

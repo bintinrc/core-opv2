@@ -9,6 +9,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBooleanBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterFreeTextBox;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
@@ -79,6 +80,12 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     @FindBy(name = "commons.load-selection")
     public NvApiTextButton loadSelection;
 
+    @FindBy(name = "Clear All Selections")
+    public NvIconTextButton clearAllSelections;
+
+    @FindBy(name = "Create New Ticket")
+    public NvIconTextButton createNewTicket;
+
     public RecoveryTicketsPage(WebDriver webDriver)
     {
         super(webDriver);
@@ -92,7 +99,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         String trackingId = recoveryTicket.getTrackingId();
         String ticketType = recoveryTicket.getTicketType();
 
-        clickButtonByAriaLabel("Create New Ticket");
+        createNewTicket.click();
         sendKeysById("trackingId", trackingId + " "); // Add 1 <SPACE> character at the end of tracking ID to make the textbox get trigged and request tracking ID validation to backend.
         selectEntrySource(recoveryTicket.getEntrySource());
         selectInvestigatingDepartment(recoveryTicket.getInvestigatingDepartment());
@@ -222,7 +229,8 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void chooseEntrySourceFilter(String entrySource)
     {
-        clickButtonByAriaLabel("Clear All Selections");
+
+        clearAllSelections.click();
         pause2s();
         addFilter.selectValue("Entry Source");
         pause1s();
@@ -233,7 +241,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void addInvestigatingHubFilter(String hub)
     {
-        clickButtonByAriaLabel("Clear All Selections");
+        clearAllSelections.click();
         pause2s();
         addFilter.selectValue("Investigating Hub");
         pause1s();
@@ -244,7 +252,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void addInvestigatingDeptFilter(String dept)
     {
-        clickButtonByAriaLabel("Clear All Selections");
+        clearAllSelections.click();
         pause2s();
         addFilter.selectValue("Investigating Dept.");
         pause1s();
@@ -255,7 +263,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void showUnassignedFilter(String show)
     {
-        clickButtonByAriaLabel("Clear All Selections");
+        clearAllSelections.click();
         pause2s();
         if (isElementVisible(XPATH_REMOVE_TRACKINGID_FILTER))
         {
@@ -270,17 +278,9 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void resolvedTicketsFilter(String filter)
     {
-        clickButtonByAriaLabel("Clear All Selections");
-        pause2s();
-        if (isElementVisible(XPATH_REMOVE_TRACKINGID_FILTER))
-        {
-            click(XPATH_REMOVE_TRACKINGID_FILTER);
-        }
         addFilter.selectValue("Resolved Tickets");
         pause1s();
         resolverTicketsFilter.selectFilter(StringUtils.equalsIgnoreCase("show", filter));
-        pause1s();
-        loadSelection.clickAndWaitUntilDone();
         pause1s();
     }
 
@@ -294,6 +294,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void chooseAllTicketStatusFilters()
     {
+        ticketStatusFilter.clearAll();
         ticketStatusFilter.selectFilter("IN PROGRESS");
         ticketStatusFilter.selectFilter("PENDING");
         ticketStatusFilter.selectFilter("PENDING SHIPPER");
@@ -442,7 +443,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     public void searchTableByTrackingId(String trackingId)
     {
         // Remove default filters.
-        clickButtonByAriaLabel("Clear All Selections");
+        clearAllSelections.click();
         pause1s();
 
         // Fill tracking ID by filling it and press ENTER.
