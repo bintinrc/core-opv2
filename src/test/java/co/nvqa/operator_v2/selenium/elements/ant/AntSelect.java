@@ -35,13 +35,15 @@ public class AntSelect extends PageElement
         clickf("//li[contains(@class,'ant-select-dropdown-menu-item')][contains(normalize-space(text()), '%s')]", StringUtils.normalizeSpace(value));
     }
 
-    private void openMenu(){
+    private void openMenu()
+    {
         waitUntilClickable();
         jsClick();
         pause1s();
     }
 
-    private void enterSearchTerm(String value){
+    private void enterSearchTerm(String value)
+    {
         openMenu();
         searchInput.sendKeys(value);
         pause1s();
@@ -49,6 +51,8 @@ public class AntSelect extends PageElement
 
     public String getValue()
     {
-        return getValue(selectValueElement.getWebElement());
+        return selectValueElement.isDisplayedFast() ?
+                selectValueElement.getText() :
+                null;
     }
 }
