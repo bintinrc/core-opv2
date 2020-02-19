@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.operator_v2.model.MovementSchedule;
 import co.nvqa.operator_v2.selenium.page.MovementManagementPage;
 import co.nvqa.operator_v2.util.TestUtils;
+import cucumber.api.java.After;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -63,6 +64,9 @@ public class MovementManagementSteps extends AbstractSteps
     @When("Movement Management page is loaded")
     public void movementManagementPageIsLoaded()
     {
+        movementManagementPage.switchTo();
+        movementManagementPage.newCrossdockMovementSchedule.waitUntilClickable(60);
+        getWebDriver().navigate().refresh();
         movementManagementPage.switchTo();
         movementManagementPage.newCrossdockMovementSchedule.waitUntilClickable(60);
     }
@@ -221,5 +225,10 @@ public class MovementManagementSteps extends AbstractSteps
                 Assert.assertTrue(f("Row [%d] - Destination Hub name - doesn't contains [%s]", i+1, destinationHub), StringUtils.containsIgnoreCase(destinationHub, actualDestinationHub));
             }
         }
+    }
+
+    @After("@SwitchToDefaultContent")
+    public void closeScheduleDialog(){
+        getWebDriver().switchTo().defaultContent();
     }
 }

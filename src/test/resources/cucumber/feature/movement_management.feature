@@ -5,7 +5,7 @@ Feature: Movement Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveAndDeleteHubViaDb
+  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
   Scenario: Operator should be able to create a new Hub on page Hubs Administration (uid:c753d5ed-1026-408e-9c71-0e5b8f4e7aa3)
     Given Operator go to menu Hubs -> Facilities Management
     When Operator create new Hub on page Hubs Administration using data below:
@@ -22,7 +22,7 @@ Feature: Movement Management
     And Operator opens Add Movement Schedule dialog on Movement Management page
     Then Operator can select "{KEY_HUBS_ADMINISTRATION.name}" crossdock hub when create crossdock movement schedule
 
-  @ArchiveAndDeleteHubViaDb
+  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
   Scenario: Crossdock Hubs - Create New Crossdock Movement Schedule - apply all days - 1 movement scedule/day (uid:)
     Given Operator go to menu Hubs -> Facilities Management
     When Operator create new Hub on page Hubs Administration using data below:
@@ -57,7 +57,7 @@ Feature: Movement Management
       | destinationHub | {KEY_LIST_OF_HUBS_ADMINISTRATION[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @ArchiveAndDeleteHubViaDb
+  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
   Scenario: Crossdock Hubs - Create New Crossdock Movement Schedule - Origin Crossdock Hub same with Destination Crossdock Hub (uid:)
     Given Operator go to menu Hubs -> Facilities Management
     When Operator create new Hub on page Hubs Administration using data below:
@@ -76,7 +76,7 @@ Feature: Movement Management
       | originHub | {KEY_HUBS_ADMINISTRATION.name} |
     Then Operator can not select "{KEY_HUBS_ADMINISTRATION.name}" destination crossdock hub on Add Movement Schedule dialog
 
-  @ArchiveAndDeleteHubViaDb
+  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
   Scenario: Crossdock Hubs - Cancel Create New Crossdock Movement Schedule (uid:)
     Given Operator go to menu Hubs -> Facilities Management
     When Operator create new Hub on page Hubs Administration using data below:
@@ -112,7 +112,7 @@ Feature: Movement Management
     And Operator opens Add Movement Schedule dialog on Movement Management page
     Then Operator verify Add Movement Schedule form is empty
 
-  @ArchiveAndDeleteHubViaDb
+  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
   Scenario: Crossdock Hubs - Search Crossdock Movement Schedule - correct crossdock name (uid:)
     Given Operator go to menu Hubs -> Facilities Management
     When Operator create new Hub on page Hubs Administration using data below:
@@ -153,7 +153,7 @@ Feature: Movement Management
     Then Operator verify schedules list on Movement Management page using data below:
       | destinationHub | {KEY_LIST_OF_HUBS_ADMINISTRATION[2].name} |
 
-  @ArchiveAndDeleteHubViaDb
+  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
   Scenario: Crossdock Hubs - Search Crossdock Movement Schedule - wrong crossdock name (uid:)
     When Operator go to menu Inter-Hub -> Movement Management
     And Movement Management page is loaded
