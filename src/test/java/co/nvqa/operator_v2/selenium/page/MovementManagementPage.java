@@ -8,6 +8,7 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntCheckbox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
+import co.nvqa.operator_v2.selenium.elements.ant.AntTextWithLabel;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTimePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
 import org.apache.commons.collections4.CollectionUtils;
@@ -32,7 +33,10 @@ public class MovementManagementPage extends OperatorV2SimplePage
     private PageElement pageFrame;
 
     @FindBy(className = "ant-modal-wrap")
-    public AddMovementScheduleDialog addMovementScheduleDialog;
+    public AddMovementScheduleModal addMovementScheduleModal;
+
+    @FindBy(className = "ant-modal-wrap")
+    public MovementScheduleModal movementScheduleModal;
 
     @FindBy(id = "originHubId")
     public AntSelect originCrossdockHub;
@@ -55,6 +59,9 @@ public class MovementManagementPage extends OperatorV2SimplePage
     @FindBy(xpath = "(//th//input)[2]")
     public TextBox destinationCrossdockHubFilter;
 
+    @FindBy(xpath = "//div[@class='ant-popover-buttons']//button[.='Delete']")
+    public Button popoverDeleteButton;
+
     public MovementManagementPage(WebDriver webDriver)
     {
         super(webDriver);
@@ -68,7 +75,8 @@ public class MovementManagementPage extends OperatorV2SimplePage
 
     public void loadSchedules(String originHub, String destinationHub)
     {
-        if (editFilters.isDisplayedFast()){
+        if (editFilters.isDisplayedFast())
+        {
             editFilters.click();
         }
 
@@ -85,15 +93,15 @@ public class MovementManagementPage extends OperatorV2SimplePage
         loadSchedules.click();
     }
 
-    public static class AddMovementScheduleDialog extends AntModal
+    public static class AddMovementScheduleModal extends AntModal
     {
-        public AddMovementScheduleDialog(WebDriver webDriver, WebElement webElement)
+        public AddMovementScheduleModal(WebDriver webDriver, WebElement webElement)
         {
             super(webDriver, webElement);
             PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
         }
 
-        public AddMovementScheduleDialog(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+        public AddMovementScheduleModal(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
         {
             super(webDriver, searchContext, webElement);
             PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
@@ -209,6 +217,30 @@ public class MovementManagementPage extends OperatorV2SimplePage
 
         @FindBy(className = "destinationHubName")
         public PageElement destinationHubName;
+    }
+
+    public static class MovementScheduleModal extends AntModal
+    {
+        public MovementScheduleModal(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        public MovementScheduleModal(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+        {
+            super(webDriver, searchContext, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(xpath = ".//div[label[.='Origin Crossdock Hub']]")
+        public AntTextWithLabel originCrossdockHub;
+
+        @FindBy(xpath = ".//div[label[.='Destination Crossdock Hub']]")
+        public AntTextWithLabel destinationCrossdockHub;
+
+        @FindBy(xpath = ".//button[.='Edit Schedule']")
+        public Button editSchedule;
     }
 
 }

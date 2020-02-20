@@ -263,6 +263,19 @@ public class OperatorV2SimplePage extends SimplePage
         waitUntilInvisibilityOfElementLocated(xpathExpression);
     }
 
+    public void waitUntilInvisibilityOfNotification(String containsMessage, boolean waitUntilElementVisibleFirst){
+        String xpathExpression = StringUtils.isNotBlank(containsMessage)
+                ? f("//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message'][contains(text(),'%s')]", containsMessage)
+                : "//div[contains(@class,'ant-notification')]";
+
+        if (waitUntilElementVisibleFirst)
+        {
+            waitUntilVisibilityOfElementLocated(xpathExpression);
+        }
+
+        waitUntilInvisibilityOfElementLocated(xpathExpression);
+    }
+
     public void confirmToast(String containsMessage, boolean waitUntilElementVisibleFirst)
     {
         String xpathExpression = f("//div[@id='toast-container'][.//div[contains(text(), '%s')]]", containsMessage);
