@@ -19,7 +19,7 @@ Feature: Movement Management
     Then Operator verify a new Hub is created successfully on page Hubs Administration
     When Operator go to menu Inter-Hub -> Movement Management
     When Movement Management page is loaded
-    And Operator opens Add Movement Schedule dialog on Movement Management page
+    And Operator opens Add Movement Schedule modal on Movement Management page
     Then Operator can select "{KEY_HUBS_ADMINISTRATION.name}" crossdock hub when create crossdock movement schedule
 
   @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
@@ -71,7 +71,7 @@ Feature: Movement Management
     Then Operator verify a new Hub is created successfully on page Hubs Administration
     When Operator go to menu Inter-Hub -> Movement Management
     And Movement Management page is loaded
-    And Operator opens Add Movement Schedule dialog on Movement Management page
+    And Operator opens Add Movement Schedule modal on Movement Management page
     And Operator fill Add Movement Schedule form using data below:
       | originHub | {KEY_HUBS_ADMINISTRATION.name} |
     Then Operator can not select "{KEY_HUBS_ADMINISTRATION.name}" destination crossdock hub on Add Movement Schedule dialog
@@ -99,7 +99,7 @@ Feature: Movement Management
     Then Operator verify a new Hub is created successfully on page Hubs Administration
     When Operator go to menu Inter-Hub -> Movement Management
     And Movement Management page is loaded
-    And Operator opens Add Movement Schedule dialog on Movement Management page
+    And Operator opens Add Movement Schedule modal on Movement Management page
     And Operator fill Add Movement Schedule form using data below:
       | originHub      | {KEY_LIST_OF_HUBS_ADMINISTRATION[1].name} |
       | destinationHub | {KEY_LIST_OF_HUBS_ADMINISTRATION[2].name} |
@@ -109,7 +109,7 @@ Feature: Movement Management
       | endTime        | 18 h 30 m                                 |
     And Operator click "Cancel" button on Add Movement Schedule dialog
     Then Operator verifies Add Movement Schedule dialog is closed on Movement Management page
-    And Operator opens Add Movement Schedule dialog on Movement Management page
+    And Operator opens Add Movement Schedule modal on Movement Management page
     Then Operator verify Add Movement Schedule form is empty
 
   @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
@@ -165,6 +165,83 @@ Feature: Movement Management
     And Operator filters schedules list on Movement Management page using data below:
       | destinationHub | WRONG_HUB_NAME |
     Then Operator verify schedules list is empty on Movement Management page
+
+  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
+  Scenario: Crossdock Hubs - Delete Crossdock Movement Schedule (uid:)
+    Given Operator go to menu Hubs -> Facilities Management
+    When Operator create new Hub on page Hubs Administration using data below:
+      | name        | GENERATED     |
+      | displayName | GENERATED     |
+      | type        | Crossdock Hub |
+      | city        | GENERATED     |
+      | country     | GENERATED     |
+      | latitude    | GENERATED     |
+      | longitude   | GENERATED     |
+    Then Operator verify a new Hub is created successfully on page Hubs Administration
+    When Operator create new Hub on page Hubs Administration using data below:
+      | name        | GENERATED     |
+      | displayName | GENERATED     |
+      | type        | Crossdock Hub |
+      | city        | GENERATED     |
+      | country     | GENERATED     |
+      | latitude    | GENERATED     |
+      | longitude   | GENERATED     |
+    Then Operator verify a new Hub is created successfully on page Hubs Administration
+    When Operator go to menu Inter-Hub -> Movement Management
+    And Movement Management page is loaded
+    And Operator adds new Movement Schedule on Movement Management page using data below:
+      | originHub      | {KEY_LIST_OF_HUBS_ADMINISTRATION[1].name} |
+      | destinationHub | {KEY_LIST_OF_HUBS_ADMINISTRATION[2].name} |
+      | applyToAllDays | true                                      |
+      | startTime      | 15:15                                     |
+      | duration       | 1                                         |
+      | endTime        | 18 h 30 m                                 |
+    And Operator load schedules on Movement Management page using data below:
+      | originHub      | {KEY_LIST_OF_HUBS_ADMINISTRATION[1].name} |
+      | destinationHub | {KEY_LIST_OF_HUBS_ADMINISTRATION[2].name} |
+    Then Operator verifies a new schedule is created on Movement Management page
+    When Operator deletes created movement schedule on Movement Management page
+    And Operator load schedules on Movement Management page using data below:
+      | originHub      | {KEY_LIST_OF_HUBS_ADMINISTRATION[1].name} |
+      | destinationHub | {KEY_LIST_OF_HUBS_ADMINISTRATION[2].name} |
+    Then Operator verify schedules list is empty on Movement Management page
+
+  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
+  Scenario: Crossdock Hubs - View Crossdock Movement Schedule (uid:)
+    Given Operator go to menu Hubs -> Facilities Management
+    When Operator create new Hub on page Hubs Administration using data below:
+      | name        | GENERATED     |
+      | displayName | GENERATED     |
+      | type        | Crossdock Hub |
+      | city        | GENERATED     |
+      | country     | GENERATED     |
+      | latitude    | GENERATED     |
+      | longitude   | GENERATED     |
+    Then Operator verify a new Hub is created successfully on page Hubs Administration
+    When Operator create new Hub on page Hubs Administration using data below:
+      | name        | GENERATED     |
+      | displayName | GENERATED     |
+      | type        | Crossdock Hub |
+      | city        | GENERATED     |
+      | country     | GENERATED     |
+      | latitude    | GENERATED     |
+      | longitude   | GENERATED     |
+    Then Operator verify a new Hub is created successfully on page Hubs Administration
+    When Operator go to menu Inter-Hub -> Movement Management
+    And Movement Management page is loaded
+    And Operator adds new Movement Schedule on Movement Management page using data below:
+      | originHub      | {KEY_LIST_OF_HUBS_ADMINISTRATION[1].name} |
+      | destinationHub | {KEY_LIST_OF_HUBS_ADMINISTRATION[2].name} |
+      | applyToAllDays | true                                      |
+      | startTime      | 15:15                                     |
+      | duration       | 1                                         |
+      | endTime        | 18 h 30 m                                 |
+    And Operator load schedules on Movement Management page using data below:
+      | originHub      | {KEY_LIST_OF_HUBS_ADMINISTRATION[1].name} |
+      | destinationHub | {KEY_LIST_OF_HUBS_ADMINISTRATION[2].name} |
+    Then Operator verifies a new schedule is created on Movement Management page
+    When Operator open view modal of a created movement schedule on Movement Management page
+    And Operator verifies created movement schedule data on Movement Schedule modal on Movement Management page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
