@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @ParcelSweeperLive
+@OperatorV2 @OperatorV2Part2 @ParcelSweeperByHub
 Feature: Parcel Sweeper By Hub
 
   @LaunchBrowser @ShouldAlwaysRun
