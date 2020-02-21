@@ -600,7 +600,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
         List<Map<String, Object>> warehouseSweepRecordsFiltered = retryIfExpectedExceptionOccurred(() ->
         {
-            List<Map<String, Object>> warehouseSweepRecords = getCoreJdbc().findWarehouseSweepRecord();
+            List<Map<String, Object>> warehouseSweepRecords = getCoreJdbc().findWarehouseSweepRecord(finalTrackingId);
             List<Map<String, Object>> warehouseSweepRecordsFilteredTemp = warehouseSweepRecords.stream()
                     .filter(record -> record.get("scan").equals(finalTrackingId))
                     .collect(Collectors.toList());
