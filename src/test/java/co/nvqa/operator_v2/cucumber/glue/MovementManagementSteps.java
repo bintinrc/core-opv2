@@ -2,18 +2,15 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.operator_v2.model.MovementSchedule;
 import co.nvqa.operator_v2.selenium.page.MovementManagementPage;
-import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import cucumber.api.java.After;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 
-import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -145,25 +142,7 @@ public class MovementManagementSteps extends AbstractSteps
     {
         data = resolveKeyValues(data);
         MovementSchedule movementSchedule = new MovementSchedule();
-        movementSchedule.setOriginHub(data.get("originHub"));
-        movementSchedule.setDestinationHub(data.get("destinationHub"));
-        movementSchedule.setApplyToAllDays(Boolean.parseBoolean(data.get("applyToAllDays")));
-        if (movementSchedule.isApplyToAllDays())
-        {
-            addMovementScheduleData(movementSchedule, data, "Monday-Sunday");
-        } else
-        {
-            Map<String, String> finalData = data;
-            Arrays.stream(new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"})
-                    .forEach(day ->
-                    {
-                        Map<String, String> dayData = TestUtils.extractSubMap(day, finalData);
-                        if (MapUtils.isNotEmpty(dayData))
-                        {
-                            addMovementScheduleData(movementSchedule, dayData, day);
-                        }
-                    });
-        }
+        movementSchedule.fromMap(data);
         movementManagementPage.addMovementScheduleModal.fill(movementSchedule);
         put(KEY_CREATED_MOVEMENT_SCHEDULE, movementSchedule);
     }
@@ -217,19 +196,20 @@ public class MovementManagementSteps extends AbstractSteps
             if (StringUtils.isNotBlank(originHub))
             {
                 String actualOriginHub = movementManagementPage.schedulesTable.rows.get(i).originHubName.getText();
-                Assert.assertTrue(f("Row [%d] - Origin Hub name - doesn't contains [%s]", i+1, originHub), StringUtils.containsIgnoreCase(originHub, actualOriginHub));
+                Assert.assertTrue(f("Row [%d] - Origin Hub name - doesn't contains [%s]", i + 1, originHub), StringUtils.containsIgnoreCase(originHub, actualOriginHub));
             }
 
             if (StringUtils.isNotBlank(destinationHub))
             {
                 String actualDestinationHub = movementManagementPage.schedulesTable.rows.get(i).destinationHubName.getText();
-                Assert.assertTrue(f("Row [%d] - Destination Hub name - doesn't contains [%s]", i+1, destinationHub), StringUtils.containsIgnoreCase(destinationHub, actualDestinationHub));
+                Assert.assertTrue(f("Row [%d] - Destination Hub name - doesn't contains [%s]", i + 1, destinationHub), StringUtils.containsIgnoreCase(destinationHub, actualDestinationHub));
             }
         }
     }
 
     @After("@SwitchToDefaultContent")
-    public void closeScheduleDialog(){
+    public void closeScheduleDialog()
+    {
         getWebDriver().switchTo().defaultContent();
     }
 

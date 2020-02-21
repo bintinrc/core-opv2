@@ -40,6 +40,11 @@ public class MovementSchedule extends DataEntity<MovementSchedule>
         this.applyToAllDays = applyToAllDays;
     }
 
+    public void setApplyToAllDays(String applyToAllDays)
+    {
+        setApplyToAllDays(Boolean.parseBoolean(applyToAllDays));
+    }
+
     public List<Schedule> getSchedules()
     {
         return schedules;
@@ -50,19 +55,31 @@ public class MovementSchedule extends DataEntity<MovementSchedule>
         this.schedules = schedules;
     }
 
-    public void addSchedule(Schedule schedule){
-        if (schedules == null){
+    public void addSchedule(Schedule schedule)
+    {
+        if (schedules == null)
+        {
             schedules = new ArrayList<>();
         }
         schedules.add(schedule);
     }
 
+    public Schedule getSchedule(int index)
+    {
+        if (schedules == null || index >= schedules.size())
+        {
+            return null;
+        } else
+        {
+            return getSchedules().get(index);
+        }
+    }
+
     public static class Schedule extends DataEntity<Schedule>
     {
         private String day;
-        private String startTime;
-        private Integer duration;
-        private String endTime;
+
+        private List<Movement> movements;
 
         public String getDay()
         {
@@ -74,38 +91,76 @@ public class MovementSchedule extends DataEntity<MovementSchedule>
             this.day = day;
         }
 
-        public String getStartTime()
+        public List<Movement> getMovements()
         {
-            return startTime;
+            return movements;
         }
 
-        public void setStartTime(String startTime)
+        public void setMovements(List<Movement> movements)
         {
-            this.startTime = startTime;
+            this.movements = movements;
         }
 
-        public Integer getDuration()
+        public void addMovement(Movement movement)
         {
-            return duration;
+            if (movements == null)
+            {
+                movements = new ArrayList<>();
+            }
+            movements.add(movement);
         }
 
-        public void setDuration(Integer duration)
+        public Movement getMovement(int index)
         {
-            this.duration = duration;
+            if (movements == null || index >= movements.size())
+            {
+                return null;
+            } else
+            {
+                return getMovements().get(index);
+            }
         }
 
-        public void setDuration(String duration){
-            setDuration(Integer.valueOf(duration));
-        }
-
-        public String getEndTime()
+        public static class Movement extends DataEntity<Movement>
         {
-            return endTime;
-        }
+            private String startTime;
+            private Integer duration;
+            private String endTime;
 
-        public void setEndTime(String endTime)
-        {
-            this.endTime = endTime;
+            public String getStartTime()
+            {
+                return startTime;
+            }
+
+            public void setStartTime(String startTime)
+            {
+                this.startTime = startTime;
+            }
+
+            public Integer getDuration()
+            {
+                return duration;
+            }
+
+            public void setDuration(Integer duration)
+            {
+                this.duration = duration;
+            }
+
+            public void setDuration(String duration)
+            {
+                setDuration(Integer.valueOf(duration));
+            }
+
+            public String getEndTime()
+            {
+                return endTime;
+            }
+
+            public void setEndTime(String endTime)
+            {
+                this.endTime = endTime;
+            }
         }
     }
 }

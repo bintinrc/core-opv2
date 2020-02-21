@@ -19,6 +19,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.List;
+
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -91,6 +93,7 @@ public class MovementManagementPage extends OperatorV2SimplePage
         }
 
         loadSchedules.click();
+        originCrossdockHubFilter.waitUntilClickable();
     }
 
     public static class AddMovementScheduleModal extends AntModal
@@ -140,28 +143,27 @@ public class MovementManagementPage extends OperatorV2SimplePage
             {
                 movementSchedule.getSchedules().forEach(schedule ->
                 {
-                    MovementForm form = getMovementFormForDay(schedule.getDay());
-                    form.addAMovement.click();
+                    ScheduleForm form = getScheduleFormForDay(schedule.getDay());
                     form.fill(schedule);
                 });
             }
         }
 
-        public MovementForm getMovementFormForDay(String day)
+        public ScheduleForm getScheduleFormForDay(String day)
         {
             WebElement webElement = findElementByXpath(f("//div[contains(@class,'DailyMovementContainer')][.//span[.='%s']]", day));
-            return new MovementForm(getWebDriver(), getWebElement(), webElement);
+            return new ScheduleForm(getWebDriver(), getWebElement(), webElement);
         }
 
-        public static class MovementForm extends PageElement
+        public static class ScheduleForm extends PageElement
         {
-            public MovementForm(WebDriver webDriver, WebElement webElement)
+            public ScheduleForm(WebDriver webDriver, WebElement webElement)
             {
                 super(webDriver, webElement);
                 PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
             }
 
-            public MovementForm(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+            public ScheduleForm(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
             {
                 super(webDriver, searchContext, webElement);
                 PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
@@ -169,6 +171,9 @@ public class MovementManagementPage extends OperatorV2SimplePage
 
             @FindBy(xpath = ".//button[.='Add a Movement']")
             public Button addAMovement;
+
+            @FindBy(xpath = ".//button[.='Add Another Movement']")
+            public Button addAnotherMovement;
 
             @FindBy(xpath = "(.//span[@class='ant-time-picker'])[1]")
             public AntTimePicker startTime;
@@ -179,19 +184,62 @@ public class MovementManagementPage extends OperatorV2SimplePage
             @FindBy(xpath = "(.//span[@class='ant-time-picker'])[2]")
             public AntTimePicker endTime;
 
+            @FindBy(css = "div[class*='ScheduleMovementContainer']")
+            public List<MovementForm> movementForms;
+
             public void fill(MovementSchedule.Schedule schedule)
             {
-                if (isNotBlank(schedule.getStartTime()))
+                for (int i = 0; i < schedule.getMovements().size(); i++)
                 {
-                    startTime.setValue(schedule.getStartTime());
+                    if (i == 0)
+                    {
+                        addAMovement.click();
+                    } else
+                    {
+                        addAnotherMovement.click();
+                    }
+                    MovementSchedule.Schedule.Movement movement = schedule.getMovement(i);
+                    movementForms.get(i).fill(movement);
                 }
-                if (schedule.getDuration() != null)
+            }
+
+            public static class MovementForm extends PageElement
+            {
+                public MovementForm(WebDriver webDriver, WebElement webElement)
                 {
-                    duration.setValue(String.valueOf(schedule.getDuration()));
+                    super(webDriver, webElement);
+                    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
                 }
-                if (isNotBlank(schedule.getEndTime()))
+
+                public MovementForm(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
                 {
-                    endTime.setValue(schedule.getEndTime());
+                    super(webDriver, searchContext, webElement);
+                    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+                }
+
+                @FindBy(xpath = "(.//span[@class='ant-time-picker'])[1]")
+                public AntTimePicker startTime;
+
+                @FindBy(css = "input[id*='dayDuration']")
+                public TextBox duration;
+
+                @FindBy(xpath = "(.//span[@class='ant-time-picker'])[2]")
+                public AntTimePicker endTime;
+
+                public void fill(MovementSchedule.Schedule.Movement movement)
+                {
+                    if (isNotBlank(movement.getStartTime()))
+                    {
+                        startTime.setValue(movement.getStartTime());
+                    }
+                    if (movement.getDuration() != null)
+                    {
+                        duration.setValue(String.valueOf(movement.getDuration()));
+                    }
+                    if (isNotBlank(movement.getEndTime()))
+                    {
+                        endTime.setValue(movement.getEndTime());
+                    }
                 }
             }
         }

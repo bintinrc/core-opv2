@@ -1,8 +1,11 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AbstractApiOperatorPortalSteps;
+import co.nvqa.commons.cucumber.glue.AddressFactory;
+import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.CreateDriverV2Request;
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.support.DateUtil;
@@ -61,8 +64,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         try
         {
             getRouteClient().deleteTag(tagName);
-        }
-        catch (RuntimeException ex)
+        } catch (RuntimeException ex)
         {
             NvLogger.warnf("An error occurred when trying to delete tag with name = '%s'. Error: %s", tagName, ex.getMessage());
         }
@@ -84,7 +86,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         String value = mapOfData.getOrDefault("from", "TODAY");
         Date fromDate = null;
 
-        if("TODAY".equalsIgnoreCase(value))
+        if ("TODAY".equalsIgnoreCase(value))
         {
             Calendar fromCal = Calendar.getInstance();
             fromCal.setTime(getNextDate(-1));
@@ -92,8 +94,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
             fromCal.set(Calendar.MINUTE, 0);
             fromCal.set(Calendar.SECOND, 0);
             fromDate = fromCal.getTime();
-        }
-        else if(StringUtils.isNotBlank(value))
+        } else if (StringUtils.isNotBlank(value))
         {
             fromDate = Date.from(DateUtil.getDate(value).toInstant());
         }
@@ -101,7 +102,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         value = mapOfData.getOrDefault("to", "TODAY");
         Date toDate = null;
 
-        if("TODAY".equalsIgnoreCase(value))
+        if ("TODAY".equalsIgnoreCase(value))
         {
             Calendar toCal = Calendar.getInstance();
             toCal.setTime(new Date());
@@ -109,8 +110,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
             toCal.set(Calendar.MINUTE, 59);
             toCal.set(Calendar.SECOND, 59);
             toDate = toCal.getTime();
-        }
-        else if(StringUtils.isNotBlank(value))
+        } else if (StringUtils.isNotBlank(value))
         {
             toDate = Date.from(DateUtil.getDate(value).toInstant());
         }
@@ -118,7 +118,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         List<Integer> tags = null;
         value = mapOfData.get("tagIds");
 
-        if(StringUtils.isNotBlank(value))
+        if (StringUtils.isNotBlank(value))
         {
             tags = Arrays.stream(value.split(",")).map(tag -> Integer.parseInt(tag.trim())).collect(Collectors.toList());
         }
@@ -226,6 +226,69 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         String methodInfo = f("%s - [Order ID = %d]", getCurrentMethodName(), orderId);
         Order latestOrderInfo = retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> getOrderClient().getOrder(orderId), methodInfo);
         assertEquals(f("Granular Status - [Tracking ID = %s]", latestOrderInfo.getTrackingId()), "VAN_ENROUTE_TO_PICKUP", latestOrderInfo.getGranularStatus());
-        assertEquals(f("Status - [Tracking ID = %s]", latestOrderInfo.getTrackingId()),"TRANSIT", latestOrderInfo.getStatus());
+        assertEquals(f("Status - [Tracking ID = %s]", latestOrderInfo.getTrackingId()), "TRANSIT", latestOrderInfo.getStatus());
+    }
+
+    @Given("^API Operator creates new Hub using data below:$")
+    public void apiOperatorCreatesNewHubUsingDataBelow(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+
+        String name = data.get("name");
+        String displayName = data.get("displayName");
+        String facilityType = data.get("facilityType");
+        String city = data.get("city");
+        String country = data.get("country");
+        String latitude = data.get("latitude");
+        String longitude = data.get("longitude");
+
+        String uniqueCode = generateDateUniqueString();
+        Address address = AddressFactory.getRandomAddress();
+
+        if ("GENERATED".equals(name))
+        {
+            name = "HUB DO NOT USE " + uniqueCode;
+        }
+
+        if ("GENERATED".equals(displayName))
+        {
+            displayName = "Hub DNS " + uniqueCode;
+        }
+
+        if ("GENERATED".equals(city))
+        {
+            city = address.getCity();
+        }
+
+        if ("GENERATED".equals(country))
+        {
+            country = address.getCountry();
+        }
+
+        Hub randomHub = HubFactory.getRandomHub();
+
+        if ("GENERATED".equals(latitude))
+        {
+            latitude = String.valueOf(randomHub.getLatitude());
+        }
+
+        if ("GENERATED".equals(longitude))
+        {
+            longitude = String.valueOf(randomHub.getLongitude());
+        }
+
+        Hub hub = new Hub();
+        hub.setName(name);
+        hub.setCreatedAt(DateUtil.getTodayDateTime_ISO8601_LITE());
+        hub.setShortName(displayName);
+        hub.setCountry(country);
+        hub.setCity(city);
+        hub.setLatitude(Double.parseDouble(latitude));
+        hub.setLongitude(Double.parseDouble(longitude));
+        hub.setFacilityType(facilityType);
+        hub = getHubClient().create(hub);
+
+        put(KEY_CREATED_HUB, hub);
+        putInList(KEY_LIST_OF_CREATED_HUBS, hub);
     }
 }
