@@ -20,6 +20,7 @@ public class Button extends PageElement
     }
 
     public void click(){
-        moveAndClick();
+        waitUntilClickable();
+        super.moveAndClick();
     }
 }

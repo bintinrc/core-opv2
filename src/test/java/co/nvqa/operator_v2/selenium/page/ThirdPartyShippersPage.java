@@ -2,7 +2,13 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.ThirdPartyShipper;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 /**
  *
@@ -22,9 +28,13 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
     public static final String ACTION_BUTTON_EDIT = "Edit";
     public static final String ACTION_BUTTON_DELETE = "Delete";
 
+    @FindBy(css = "md-dialog")
+    public ConfirmDeleteDialog confirmDeleteDialog;
+
     public ThirdPartyShippersPage(WebDriver webDriver)
     {
         super(webDriver);
+        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void addThirdPartyShipper(ThirdPartyShipper thirdPartyShipper)
@@ -102,8 +112,9 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
     {
         searchTableByCode(thirdPartyShipper.getCode());
         clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
-        pause100ms();
-        clickButtonOnMdDialogByAriaLabel("Delete");
+        confirmDeleteDialog.waitUntilClickable();
+        pause1s();
+        confirmDeleteDialog.delete.click();
         waitUntilVisibilityOfElementLocated("//div[@id='toast-container']//div[contains(text(), 'deleted!')]");
         waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']//div[contains(text(), 'deleted!')]");
     }
@@ -169,5 +180,16 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
     public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
     {
         clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
+    }
+
+    public static class ConfirmDeleteDialog extends PageElement
+    {
+        public ConfirmDeleteDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(css = "button[aria-label='Delete']")
+        public Button delete;
     }
 }

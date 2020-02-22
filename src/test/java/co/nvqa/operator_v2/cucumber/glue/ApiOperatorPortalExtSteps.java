@@ -5,6 +5,7 @@ import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.CreateDriverV2Request;
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.ThirdPartyShippers;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.route.Route;
@@ -17,6 +18,7 @@ import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.ReservationGroup;
+import co.nvqa.operator_v2.model.ThirdPartyShipper;
 import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.After;
 import cucumber.api.java.en.And;
@@ -290,5 +292,39 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
 
         put(KEY_CREATED_HUB, hub);
         putInList(KEY_LIST_OF_CREATED_HUBS, hub);
+    }
+
+    @Given("^API Operator gets data of created Third Party shipper$")
+    public void apiOperatorGetsDataOfCreatedThirdPartyShipper()
+    {
+        ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
+        List<ThirdPartyShippers> thirdPartyShippers = getThirdPartyShippersClient().getAll();
+        ThirdPartyShippers apiData = thirdPartyShippers.stream()
+                .filter(shipper -> StringUtils.equals(shipper.getName(), thirdPartyShipper.getName()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException(f("Third Party Shipper with name [%s] was not found", thirdPartyShipper.getName())));
+        thirdPartyShipper.setId(apiData.getId());
+    }
+
+    @After("@DeleteThirdPartyShippers")
+    public void deleteThirdPartyShippers()
+    {
+        ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
+        if (thirdPartyShipper != null)
+        {
+            if (thirdPartyShipper.getId() != null)
+            {
+                try
+                {
+                    getThirdPartyShippersClient().delete(thirdPartyShipper.getId());
+                } catch (Throwable ex)
+                {
+                    NvLogger.warn(f("Could not delete Third Party Shipper [%s]", ex.getMessage()));
+                }
+            } else
+            {
+                NvLogger.warn(f("Could not delete Third Party Shipper [%s] - id was not defined", thirdPartyShipper.getName()));
+            }
+        }
     }
 }
