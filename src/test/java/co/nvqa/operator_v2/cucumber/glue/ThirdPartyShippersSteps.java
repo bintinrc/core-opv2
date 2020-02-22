@@ -8,7 +8,6 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -45,56 +44,56 @@ public class ThirdPartyShippersSteps extends AbstractSteps
         thirdPartyShipper.setUrl(url);
         thirdPartyShippersPage.addThirdPartyShipper(thirdPartyShipper);
 
-        put("thirdPartyShipper", thirdPartyShipper);
+        put(KEY_CREATED_THIRD_PARTY_SHIPPER, thirdPartyShipper);
     }
 
     @Then("^Operator verify the new Third Party Shipper is created successfully$")
     public void operatorVerifyTheNewThirdPartyShipperIsCreatedSuccessfully()
     {
-        ThirdPartyShipper thirdPartyShipper = get("thirdPartyShipper");
+        ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
         thirdPartyShippersPage.verifyThirdPartyShipperIsCreatedSuccessfully(thirdPartyShipper);
     }
 
     @When("^Operator update the new Third Party Shipper$")
     public void operatorUpdateTheNewThirdPartyShipper()
     {
-        ThirdPartyShipper thirdPartyShipper = get("thirdPartyShipper");
+        ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
 
         ThirdPartyShipper thirdPartyShipperEdited = new ThirdPartyShipper();
         thirdPartyShipperEdited.setId(thirdPartyShipper.getId());
-        thirdPartyShipperEdited.setName(thirdPartyShipper.getName()+" [EDITED]");
+        thirdPartyShipperEdited.setName(thirdPartyShipper.getName() + " [EDITED]");
         thirdPartyShipperEdited.setCode(generateThirdPartyShipperCode());
-        thirdPartyShipperEdited.setUrl(thirdPartyShipper.getUrl()+".sg");
+        thirdPartyShipperEdited.setUrl(thirdPartyShipper.getUrl() + ".sg");
 
         thirdPartyShippersPage.editThirdPartyShipper(thirdPartyShipper, thirdPartyShipperEdited);
-        put("thirdPartyShipperEdited", thirdPartyShipperEdited);
+        put(KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED, thirdPartyShipperEdited);
     }
 
     @Then("^Operator verify the new Third Party Shipper is updated successfully$")
     public void operatorVerifyTheNewThirdPartyShipperIsUpdatedSuccessfully()
     {
-        ThirdPartyShipper thirdPartyShipperEdited = get("thirdPartyShipperEdited");
+        ThirdPartyShipper thirdPartyShipperEdited = get(KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED);
         thirdPartyShippersPage.verifyThirdPartyShipperIsUpdatedSuccessfully(thirdPartyShipperEdited);
     }
 
     @When("^Operator delete the new Third Party Shipper$")
     public void operatorDeleteTheNewThirdPartyShipper()
     {
-        ThirdPartyShipper thirdPartyShipper = containsKey("thirdPartyShipperEdited") ? get("thirdPartyShipperEdited") : get("thirdPartyShipper");
+        ThirdPartyShipper thirdPartyShipper = containsKey(KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED) ? get(KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED) : get(KEY_CREATED_THIRD_PARTY_SHIPPER);
         thirdPartyShippersPage.deleteThirdPartyShipper(thirdPartyShipper);
     }
 
     @Then("^Operator verify the new Third Party Shipper is deleted successfully$")
     public void operatorVerifyTheNewThirdPartyShipperIsDeletedSuccessfully()
     {
-        ThirdPartyShipper thirdPartyShipper = containsKey("thirdPartyShipperEdited") ? get("thirdPartyShipperEdited") : get("thirdPartyShipper");
+        ThirdPartyShipper thirdPartyShipper = containsKey(KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED) ? get(KEY_CREATED_THIRD_PARTY_SHIPPER_EDITED) : get(KEY_CREATED_THIRD_PARTY_SHIPPER);
         thirdPartyShippersPage.verifyThirdPartyShipperIsDeletedSuccessfully(thirdPartyShipper);
     }
 
     @Then("^Operator check all filters on Third Party Shippers page work fine$")
     public void operatorCheckAllFiltersOnThirdPartyShippersPageWork()
     {
-        ThirdPartyShipper thirdPartyShipper = get("thirdPartyShipper");
+        ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
         thirdPartyShippersPage.verifyAllFiltersWorkFine(thirdPartyShipper);
     }
 
@@ -107,7 +106,7 @@ public class ThirdPartyShippersSteps extends AbstractSteps
     @When("^Operator verify Third Party Shippers CSV file downloaded successfully$")
     public void operatorVerifyThirdPartyShippersCsvFileDownloadedSuccessfully()
     {
-        ThirdPartyShipper thirdPartyShipper = get("thirdPartyShipper");
+        ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
         thirdPartyShippersPage.verifyCsvFileDownloadedSuccessfully(thirdPartyShipper);
     }
 }

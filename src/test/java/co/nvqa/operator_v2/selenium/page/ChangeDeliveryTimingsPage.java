@@ -43,8 +43,6 @@ public class ChangeDeliveryTimingsPage extends OperatorV2SimplePage
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'file-select')]");
         sendKeysByAriaLabel("Choose", csvResultFile.getAbsolutePath());
         clickNvButtonSaveByNameAndWaitUntilDone("Upload CSV");
-        waitUntilInvisibilityOfToast("Change delivery timings", false);
-        waitUntilInvisibilityOfToast(f("%d order(s) updated", listOfChangeDeliveryTimings.size()));
     }
 
     private File createDeliveryTimingChanging(List<ChangeDeliveryTiming> listOfChangeDeliveryTimings) {
