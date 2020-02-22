@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ContactType;
 import co.nvqa.operator_v2.selenium.page.ContactTypeManagementPage;
 import cucumber.api.java.en.Then;
@@ -10,9 +9,8 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.Map;
 
 /**
- *
  * @author Soewandi Wirjawan
- *
+ * <p>
  * Modified by Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -30,42 +28,16 @@ public class ContactTypeManagementSteps extends AbstractSteps
         contactTypeManagementPage = new ContactTypeManagementPage(getWebDriver());
     }
 
-    private String getFromCreatedContactTypeName(String searchContactTypesKeyword, ContactType contactType)
-    {
-        String result = searchContactTypesKeyword;
-
-        if("GET_FROM_CREATED_CONTACT_TYPE_NAME".equals(searchContactTypesKeyword))
-        {
-            String contactTypeName = null;
-
-            if(contactType!=null)
-            {
-                contactTypeName = contactType.getName();
-            }
-
-            if(contactTypeName!=null)
-            {
-                result = contactTypeName;
-            }
-            else
-            {
-                throw new NvTestRuntimeException("Could not find created hub.");
-            }
-        }
-
-        return result;
-    }
-
     @When("^Operator create new Contact Type on page Contact Type Management using data below:$")
-    public void operatorCreateNewContactTypeOnPageContactTypeManagementUsingDataBelow(Map<String,String> mapOfData)
+    public void operatorCreateNewContactTypeOnPageContactTypeManagementUsingDataBelow(Map<String, String> mapOfData)
     {
         String name = mapOfData.get("name");
 
         String uniqueCode = generateDateUniqueString();
 
-        if("GENERATED".equals(name))
+        if ("GENERATED".equals(name))
         {
-            name = "CONTACT_TYPE_DO_NOT_USE_"+uniqueCode;
+            name = "CONTACT_TYPE_DO_NOT_USE_" + uniqueCode;
         }
 
         ContactType contactType = new ContactType();
@@ -83,16 +55,15 @@ public class ContactTypeManagementSteps extends AbstractSteps
     }
 
     @When("^Operator update Contact Type on page Contact Type Management using data below:$")
-    public void operatorUpdateContactTypeOnPageContactTypeManagementUsingDataBelow(Map<String,String> mapOfData)
+    public void operatorUpdateContactTypeOnPageContactTypeManagementUsingDataBelow(Map<String, String> mapOfData)
     {
         ContactType contactType = get(KEY_CONTACT_TYPE);
 
+        mapOfData = resolveKeyValues(mapOfData);
         String searchContactTypesKeyword = mapOfData.get("searchContactTypesKeyword");
         String name = mapOfData.get("name");
 
-        searchContactTypesKeyword = getFromCreatedContactTypeName(searchContactTypesKeyword, contactType);
-
-        if(contactType==null)
+        if (contactType == null)
         {
             contactType = new ContactType();
             put(KEY_CONTACT_TYPE, contactType);
@@ -100,10 +71,10 @@ public class ContactTypeManagementSteps extends AbstractSteps
 
         String uniqueCode = generateDateUniqueString();
 
-        if("GENERATED".equals(name))
+        if ("GENERATED".equals(name))
         {
             String temp = contactType.getName();
-            name = temp==null? "CONTACT_TYPE_DO_NOT_USE_"+uniqueCode : temp + " [EDITED]";
+            name = temp == null ? "CONTACT_TYPE_DO_NOT_USE_" + uniqueCode : temp + " [EDITED]";
         }
 
         contactType.setName(name);
@@ -118,12 +89,11 @@ public class ContactTypeManagementSteps extends AbstractSteps
     }
 
     @When("^Operator delete Contact Type on page Contact Type Management using data below:$")
-    public void operatorDeleteContactTypeOnPageContactTypeManagementUsingDataBelow(Map<String,String> mapOfData)
+    public void operatorDeleteContactTypeOnPageContactTypeManagementUsingDataBelow(Map<String, String> mapOfData)
     {
-        ContactType contactType = get(KEY_CONTACT_TYPE);
+        mapOfData = resolveKeyValues(mapOfData);
 
         String searchContactTypesKeyword = mapOfData.get("searchContactTypesKeyword");
-        searchContactTypesKeyword = getFromCreatedContactTypeName(searchContactTypesKeyword, contactType);
         contactTypeManagementPage.deleteContactType(searchContactTypesKeyword);
 
         put("searchContactTypesKeyword", searchContactTypesKeyword);
@@ -137,10 +107,11 @@ public class ContactTypeManagementSteps extends AbstractSteps
     }
 
     @When("^Operator search Contact Type on page Contact Type Management using data below:$")
-    public void operatorSearchContactTypeOnPageContactTypeManagementUsingDataBelow(Map<String,String> mapOfData)
+    public void operatorSearchContactTypeOnPageContactTypeManagementUsingDataBelow(Map<String, String> mapOfData)
     {
+        mapOfData = resolveKeyValues(mapOfData);
         ContactType contactType = get(KEY_CONTACT_TYPE);
-        String searchContactTypesKeyword = getFromCreatedContactTypeName(mapOfData.get("searchContactTypesKeyword"), contactType);
+        String searchContactTypesKeyword = mapOfData.get("searchContactTypesKeyword");
         ContactType contactTypeSearchResult = contactTypeManagementPage.searchContactType(searchContactTypesKeyword);
         put(KEY_CONTACT_TYPE_SEARCH_RESULT, contactTypeSearchResult);
         put("searchContactTypesKeyword", searchContactTypesKeyword);

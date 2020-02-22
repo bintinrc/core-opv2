@@ -13,6 +13,7 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.factory.HubFactory;
+import co.nvqa.operator_v2.model.ContactType;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
@@ -324,6 +325,28 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
             } else
             {
                 NvLogger.warn(f("Could not delete Third Party Shipper [%s] - id was not defined", thirdPartyShipper.getName()));
+            }
+        }
+    }
+
+    @After("@DeleteContactTypes")
+    public void deleteContactTypes()
+    {
+        ContactType contactType = get(KEY_CONTACT_TYPE);
+        if (contactType != null)
+        {
+            if (contactType.getId() != null)
+            {
+                try
+                {
+                    getContactTypeClient().delete(contactType.getId());
+                } catch (Throwable ex)
+                {
+                    NvLogger.warn(f("Could not delete Driver Contact Type [%s]", ex.getMessage()));
+                }
+            } else
+            {
+                NvLogger.warn(f("Could not delete Driver Contact Type [%s] - id was not defined", contactType.getName()));
             }
         }
     }

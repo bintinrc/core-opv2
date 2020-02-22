@@ -1,12 +1,20 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.ContactType;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import java.util.Optional;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
@@ -21,9 +29,25 @@ public class ContactTypeManagementPage extends OperatorV2SimplePage
     private static final String ACTION_BUTTON_EDIT = "Edit";
     private static final String ACTION_BUTTON_DELETE = "Delete";
 
+    @FindBy(xpath = "//input[@type='text'][@ng-model='searchText']")
+    public TextBox searchInput;
+
+    @FindBy(xpath = "//md-dialog//input[@aria-label='Name']")
+    public TextBox name;
+
+    @FindBy(name = "Add Contact Type")
+    public NvIconTextButton addContactType;
+
+    @FindBy(name = "Submit")
+    public NvButtonSave submit;
+
+    @FindBy(css = "md-dialog")
+    public ConfirmDeleteDialog confirmDeleteDialog;
+
     public ContactTypeManagementPage(WebDriver webDriver)
     {
         super(webDriver);
+        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void downloadCsvFile()
@@ -39,9 +63,10 @@ public class ContactTypeManagementPage extends OperatorV2SimplePage
 
     public void createNewContactType(ContactType contactType)
     {
-        clickNvIconTextButtonByName("Add Contact Type");
-        sendKeysById("name", contactType.getName());
-        clickNvButtonSaveByNameAndWaitUntilDone("Submit");
+        waitUntilTableIsLoaded();
+        addContactType.moveAndClick();
+        name.setValue(contactType.getName());
+        submit.clickAndWaitUntilDone();
     }
 
     public void verifyContactTypeIsExistAndDataIsCorrect(ContactType contactType)
@@ -61,12 +86,19 @@ public class ContactTypeManagementPage extends OperatorV2SimplePage
         clickNvButtonSaveByNameAndWaitUntilDone("Submit");
     }
 
+    private void waitUntilTableIsLoaded()
+    {
+        waitUntilVisibilityOfElementLocated("//tr[@ng-repeat='contactType in $data']");
+    }
+
     public void deleteContactType(String searchContactTypesKeyword)
     {
         searchTable(searchContactTypesKeyword);
         assertFalse(String.format("Table is empty. Contact Type with keywords = '%s' not found.", searchContactTypesKeyword), isTableEmpty());
         clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
-        clickButtonOnMdDialogByAriaLabel("Delete");
+        pause1s();
+        confirmDeleteDialog.waitUntilClickable();
+        confirmDeleteDialog.delete.click();
         pause1s();
     }
 
@@ -93,8 +125,10 @@ public class ContactTypeManagementPage extends OperatorV2SimplePage
 
     public void searchTable(String keyword)
     {
-        super.searchTable(keyword);
-        pause1s();
+        //TODO page gets frozen if clear the search input using webdriver
+        refreshPage();
+        waitUntilTableIsLoaded();
+        searchInput.setValue(keyword);
     }
 
     public boolean isTableEmpty()
@@ -110,5 +144,16 @@ public class ContactTypeManagementPage extends OperatorV2SimplePage
     public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
     {
         clickActionButtonOnTableWithNgRepeat(rowNumber, actionButtonName, NG_REPEAT);
+    }
+
+    public static class ConfirmDeleteDialog extends PageElement
+    {
+        public ConfirmDeleteDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(css = "button[aria-label='Delete']")
+        public Button delete;
     }
 }
