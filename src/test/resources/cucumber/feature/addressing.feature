@@ -47,5 +47,5 @@ Feature: Addressing
     Then Operator verifies the address does not exist anymore on Addressing Page
 
   @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
+  Scenario: Kill Browser @Debug
     Given no-op
