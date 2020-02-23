@@ -3,34 +3,44 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.cucumber.ScenarioStorage;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
+import co.nvqa.operator_v2.model.DataEntity;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import com.google.common.collect.ImmutableMap;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.util.Date;
 
+import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.*;
+
 /**
- *
  * @author Tristania Siagian
  */
 @SuppressWarnings("WeakerAccess")
-public class OutboundMonitoringPage extends OperatorV2SimplePage implements ScenarioStorageKeys {
-    private static final String COLUMN_CLASS_FILTER_ROUTE_ID = "id";
-    private static final String COLUMN_CLASS_DATA_ID = "route-id";
-    private  static final String COLUMN_CLASS_DATA_STATUS = "outbound-status";
-    private  static final String COLUMN_CLASS_DATA_COMMENT = "comments";
-
-    private static final String ACTION_BUTTON_EDIT = "edit";
-    private static final String MD_VIRTUAL_REPEAT = "data in getTableData()";
-
+public class OutboundMonitoringPage extends OperatorV2SimplePage implements ScenarioStorageKeys
+{
     private ScenarioStorage scenarioStorage;
     private OutboundBreakroutePage outboundBreakroutePage;
 
-    public OutboundMonitoringPage(WebDriver webDriver, ScenarioStorage scenarioStorage) {
+    public RoutesTable routesTable;
+
+    @FindBy(tagName = "md-dialog")
+    public PutCommentsModal putCommentsModal;
+
+    public OutboundMonitoringPage(WebDriver webDriver, ScenarioStorage scenarioStorage)
+    {
         super(webDriver);
         this.scenarioStorage = scenarioStorage;
         outboundBreakroutePage = new OutboundBreakroutePage(getWebDriver());
+        routesTable = new RoutesTable(webDriver);
     }
 
-    public void selectFiltersAndClickLoadSelection(Date fromDate, Date toDate, String zoneName, String hubName) {
+    public void selectFiltersAndClickLoadSelection(Date fromDate, Date toDate, String zoneName, String hubName)
+    {
         setMdDatepicker("fromModel", fromDate);
         setMdDatepicker("toModel", toDate);
         selectValueFromNvAutocompleteByItemTypesAndDismiss("Zone Select", zoneName);
@@ -38,72 +48,120 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage implements Scen
         clickLoadSelection();
     }
 
-    public void clickLoadSelection() {
+    public void clickLoadSelection()
+    {
         clickNvApiTextButtonByNameAndWaitUntilDone("Load Selection");
     }
 
-    public void verifyRouteIdExists(String routeId) {
-        String actualRouteId = getTextOnTable(1, COLUMN_CLASS_DATA_ID);
-        assertEquals("Route ID is not found.",routeId, actualRouteId);
+    public void verifyRouteIdExists(String routeId)
+    {
+        String actualRouteId = routesTable.getColumnText(1, COLUMN_ROUTE_ID);
+        assertEquals("Route ID is not found.", routeId, actualRouteId);
     }
 
-    public void verifyStatusInProgress() {
-        String actualStatus = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
-        assertEquals("Route ID is not found.","In Progress", actualStatus);
+    public void verifyStatusInProgress()
+    {
+        String actualStatus = routesTable.getColumnText(1, COLUMN_OUTBOUND_STATUS);
+        assertEquals("Route ID is not found.", "In Progress", actualStatus);
     }
 
-    public void verifyStatusComplete() {
-        String actualStatus = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
-        assertEquals("Route ID is not found.","Complete", actualStatus);
+    public void verifyStatusComplete()
+    {
+        String actualStatus = routesTable.getColumnText(1, COLUMN_OUTBOUND_STATUS);
+        assertEquals("Route ID is not found.", "Complete", actualStatus);
     }
 
-    public void clickFlagButton() {
-        clickNvIconButtonByName("flag");
+    public void clickFlagButton()
+    {
+        routesTable.clickActionButton(1, ACTION_FLAG);
     }
 
-    public void verifyStatusMarked() {
-        String actualStatus = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
-        assertEquals("Route ID is not marked.","Marked", actualStatus);
+    public void verifyStatusMarked()
+    {
+        String actualStatus = routesTable.getColumnText(1, COLUMN_OUTBOUND_STATUS);
+        assertEquals("Route ID is not marked.", "Marked", actualStatus);
     }
 
-    public void clickCommentButtonAndSubmit() {
-        clickNvIconButtonByNameAndWaitUntilEnabled("comment");
-        sendKeysById("comments", "This comment is for test purpose.");
-        clickNvApiTextButtonByNameAndWaitUntilDone("Submit");
+    public void clickCommentButtonAndSubmit()
+    {
+        routesTable.clickActionButton(1, ACTION_COMMENT);
+        putCommentsModal.waitUntilVisible();
+        putCommentsModal.comments.setValue("This comment is for test purpose.");
+        putCommentsModal.submit.clickAndWaitUntilDone();
         pause1s();
     }
 
-    public void verifyCommentIsRight() {
-        String actualComment = getTextOnTable(1, COLUMN_CLASS_DATA_COMMENT);
-        assertEquals("Comment is different.","This comment is for test purpose.", actualComment);
+    public void verifyCommentIsRight()
+    {
+        String actualComment = routesTable.getColumnText(1, COLUMN_COMMENTS);
+        assertEquals("Comment is different.", "This comment is for test purpose.", actualComment);
     }
 
-    public void pullOutOrderFromRoute(Order order, long routeId) {
+    public void pullOutOrderFromRoute(Order order, long routeId)
+    {
         String mainWindowHandle = getWebDriver().getWindowHandle();
         scenarioStorage.put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
 
         searchTableByRouteId(routeId);
         assertFalse(String.format("Cannot find Route with ID = '%d' on table.", routeId), isTableEmpty());
-        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        routesTable.clickActionButton(1, ACTION_EDIT);
 
         switchToOutboundBreakrouteWindow(routeId);
         outboundBreakroutePage.pullOrderFromRoute(order.getTrackingId());
     }
 
-    public void searchTableByRouteId(long routeId) {
-        searchTableCustom1(COLUMN_CLASS_FILTER_ROUTE_ID, String.valueOf(routeId));
+    public void searchTableByRouteId(long routeId)
+    {
+        routesTable.filterByColumn(COLUMN_ROUTE_ID, String.valueOf(routeId));
     }
 
-    public void switchToOutboundBreakrouteWindow(long routeId) {
+    public void switchToOutboundBreakrouteWindow(long routeId)
+    {
         switchToOtherWindow("outbound-breakroute/" + routeId);
         outboundBreakroutePage.waitUntilElementDisplayed();
     }
 
-    public String getTextOnTable(int rowNumber, String columnDataClass) {
-        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
+    /**
+     * Accessor for Routes table
+     */
+    public static class RoutesTable extends MdVirtualRepeatTable<DataEntity<?>>
+    {
+        public static final String COLUMN_ROUTE_ID = "route-id";
+        public static final String COLUMN_OUTBOUND_STATUS = "outbound-status";
+        public static final String COLUMN_COMMENTS = "comments";
+        public static final String ACTION_FLAG = "flag";
+        public static final String ACTION_COMMENT = "comment";
+        public static final String ACTION_EDIT = "edit";
+
+        public RoutesTable(WebDriver webDriver)
+        {
+            super(webDriver);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                    .put(COLUMN_ROUTE_ID, "route-id")
+                    .put(COLUMN_OUTBOUND_STATUS, "outbound-status")
+                    .put(COLUMN_COMMENTS, "comments")
+                    .build()
+            );
+            setActionButtonsLocators(ImmutableMap.of(ACTION_FLAG, "flag", ACTION_COMMENT, "comment", ACTION_EDIT, "edit"));
+        }
     }
 
-    public void clickActionButtonOnTable(int rowNumber, String actionButtonName) {
-        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
+    public static class PutCommentsModal extends MdDialog
+    {
+        public PutCommentsModal(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        public PutCommentsModal(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+        {
+            super(webDriver, searchContext, webElement);
+        }
+
+        @FindBy(css = "[id ^= 'comments']")
+        public TextBox comments;
+
+        @FindBy(name = "Submit")
+        public NvApiTextButton submit;
     }
 }

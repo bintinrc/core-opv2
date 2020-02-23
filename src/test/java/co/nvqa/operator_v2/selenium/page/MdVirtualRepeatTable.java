@@ -6,10 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
 /**
- *
  * @author Sergey Mishanin
  */
-public class MdVirtualRepeatTable<T extends DataEntity> extends AbstractTable<T>
+public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable<T>
 {
     private String mdVirtualRepeat = "data in getTableData()";
 
@@ -28,6 +27,12 @@ public class MdVirtualRepeatTable<T extends DataEntity> extends AbstractTable<T>
         this.mdVirtualRepeat = mdVirtualRepeat;
     }
 
+    public void selectAllShown()
+    {
+        simpleClick("//md-menu/button[@aria-label='Selection']");
+        click("//md-menu-item/button[@aria-label='Select All Shown']");
+    }
+
     @Override
     protected String getTextOnTable(int rowNumber, String columnDataClass)
     {
@@ -40,11 +45,10 @@ public class MdVirtualRepeatTable<T extends DataEntity> extends AbstractTable<T>
         String actionButtonLocator = actionButtonsLocators.get(actionId);
         Preconditions.checkArgument(StringUtils.isNotBlank(actionButtonLocator), "Unknown action [" + actionId + "]");
 
-        if(StringUtils.startsWith(actionButtonLocator,  "/"))
+        if (StringUtils.startsWith(actionButtonLocator, "/"))
         {
             clickCustomActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonLocator, mdVirtualRepeat);
-        }
-        else
+        } else
         {
             clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonLocator, mdVirtualRepeat);
         }

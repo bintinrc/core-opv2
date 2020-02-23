@@ -1,10 +1,9 @@
 package co.nvqa.operator_v2.model;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
-public class DpTagging
+public class DpTagging extends DataEntity<DpTagging>
 {
     private String trackingId;
     private Long dpId;

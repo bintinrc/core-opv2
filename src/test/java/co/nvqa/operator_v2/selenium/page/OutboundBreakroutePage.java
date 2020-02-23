@@ -121,6 +121,7 @@ public class OutboundBreakroutePage extends OperatorV2SimplePage
                 if(trackingId.equals(rowTable.getTrackingId()))
                 {
                     rowTable.getPullBtnWe().click();
+                    pause1s();
                     clickButtonOnMdDialogByAriaLabel("Pull Out");
                     waitUntilInvisibilityOfToast("Success pullout tracking id "+trackingId);
                     trackingIdFound = true;
