@@ -1,9 +1,11 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.ShipperBillingRecord;
+import co.nvqa.operator_v2.selenium.elements.md.ContainerSwitch;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
 
 /**
  * @author Sergey Mishanin
@@ -23,6 +25,9 @@ public class ShipperBillingPage extends OperatorV2SimplePage
     private ReviewDetailsView reviewDetailsView;
     private BillingUpdatedDialog billingUpdatedDialog;
 
+    @FindBy(css = "div[model='ctrl.transferMode']")
+    public ContainerSwitch transferMode;
+
     public ShipperBillingPage(WebDriver webDriver)
     {
         super(webDriver);
@@ -37,7 +42,8 @@ public class ShipperBillingPage extends OperatorV2SimplePage
         sendKeysWithoutClear(SHIPPER_LOCATOR_LOCATOR, Keys.ENTER);
     }
 
-    public String readCurrency(){
+    public String readCurrency()
+    {
         String value = getText(CURRENCY_LOCATOR);
         return value.replaceAll("[+-]", "").trim();
     }
@@ -79,10 +85,10 @@ public class ShipperBillingPage extends OperatorV2SimplePage
         switch (billingRecordInfo.getType().toLowerCase().trim())
         {
             case "add":
-                chooseAddAmount();
+                transferMode.selectValue("+ Add");
                 break;
             case "deduct":
-                chooseDeductAmount();
+                transferMode.selectValue("- Deduct");
                 break;
             default:
                 throw new IllegalArgumentException(String.format("Unknown operation type [%s]. Can be 'add' or 'deduct'", billingRecordInfo.getType()));
@@ -190,12 +196,14 @@ public class ShipperBillingPage extends OperatorV2SimplePage
             return this;
         }
 
-        public String readReferenceNo(){
+        public String readReferenceNo()
+        {
             String value = getText(DIALOG_CONTENT_LOCATOR);
             return value.substring(value.lastIndexOf(":") + 1).trim();
         }
 
-        public void close(){
+        public void close()
+        {
             clickButtonByAriaLabel(OK_BUTTON_LOCATOR);
         }
     }

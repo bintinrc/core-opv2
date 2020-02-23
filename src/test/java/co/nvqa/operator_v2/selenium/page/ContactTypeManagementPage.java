@@ -1,16 +1,11 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.ContactType;
-import co.nvqa.operator_v2.selenium.elements.Button;
-import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
-import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.Optional;
 
@@ -47,7 +42,6 @@ public class ContactTypeManagementPage extends OperatorV2SimplePage
     public ContactTypeManagementPage(WebDriver webDriver)
     {
         super(webDriver);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void downloadCsvFile()
@@ -146,14 +140,4 @@ public class ContactTypeManagementPage extends OperatorV2SimplePage
         clickActionButtonOnTableWithNgRepeat(rowNumber, actionButtonName, NG_REPEAT);
     }
 
-    public static class ConfirmDeleteDialog extends PageElement
-    {
-        public ConfirmDeleteDialog(WebDriver webDriver, WebElement webElement)
-        {
-            super(webDriver, webElement);
-        }
-
-        @FindBy(css = "button[aria-label='Delete']")
-        public Button delete;
-    }
 }

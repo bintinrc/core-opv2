@@ -20,6 +20,7 @@ import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.ReservationGroup;
 import co.nvqa.operator_v2.model.ThirdPartyShipper;
+import co.nvqa.operator_v2.model.VehicleType;
 import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.After;
 import cucumber.api.java.en.And;
@@ -347,6 +348,40 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
             } else
             {
                 NvLogger.warn(f("Could not delete Driver Contact Type [%s] - id was not defined", contactType.getName()));
+            }
+        }
+    }
+
+    @Given("^API Operator gets data of created Vehicle Type$")
+    public void apiOperatorGetsDataOfCreatedVehicleType()
+    {
+        VehicleType vehicleType = get(KEY_CREATED_VEHICLE_TYPE);
+        List<co.nvqa.commons.model.core.VehicleType> vehicleTypes = getVehicleTypeClient().getAllVehicleType().getData().getVehicleTypes();
+        co.nvqa.commons.model.core.VehicleType apiData = vehicleTypes.stream()
+                .filter(type -> StringUtils.equals(type.getName(), vehicleType.getName()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException(f("Vehicle Type with name [%s] was not found", vehicleType.getName())));
+        vehicleType.setId(Long.valueOf(apiData.getId()));
+    }
+
+    @After("@DeleteVehicleTypes")
+    public void deleteVehicleTypes()
+    {
+        VehicleType vehicleType = get(KEY_CREATED_VEHICLE_TYPE);
+        if (vehicleType != null)
+        {
+            if (vehicleType.getId() != null)
+            {
+                try
+                {
+                    getVehicleTypeClient().delete(vehicleType.getId());
+                } catch (Throwable ex)
+                {
+                    NvLogger.warn(f("Could not delete Vehicle Type [%s]", ex.getMessage()));
+                }
+            } else
+            {
+                NvLogger.warn(f("Could not delete Vehicle Type [%s] - id was not defined", vehicleType.getName()));
             }
         }
     }

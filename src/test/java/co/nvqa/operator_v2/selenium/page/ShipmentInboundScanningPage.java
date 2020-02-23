@@ -1,11 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.Date;
 import java.util.List;
@@ -33,7 +31,6 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
     public ShipmentInboundScanningPage(WebDriver webDriver)
     {
         super(webDriver);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void selectHub(String hubName)

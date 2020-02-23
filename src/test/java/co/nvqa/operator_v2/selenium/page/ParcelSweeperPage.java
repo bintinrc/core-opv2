@@ -1,12 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 /**
  * @author Sergey Mishanin
@@ -24,7 +22,6 @@ public class ParcelSweeperPage extends OperatorV2SimplePage
     public ParcelSweeperPage(WebDriver webDriver)
     {
         super(webDriver);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void selectHub(String hubName)

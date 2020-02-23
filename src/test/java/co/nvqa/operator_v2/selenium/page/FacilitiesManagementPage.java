@@ -1,14 +1,12 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.operator_v2.FacilitiesManagement;
-import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.Optional;
 
@@ -58,7 +56,6 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
     public FacilitiesManagementPage(WebDriver webDriver)
     {
         super(webDriver);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void downloadCsvFile()
