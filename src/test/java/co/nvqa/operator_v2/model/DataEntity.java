@@ -233,7 +233,8 @@ public abstract class DataEntity<T extends DataEntity> implements NvAssertions, 
     private void setSimpleProperty(String property, Object value)
     {
         Class<?> clazz = this.getClass();
-        Method setter = findSetter(clazz, property, value.getClass());
+        Class<?> valueClass = value != null ? value.getClass() : Object.class;
+        Method setter = findSetter(clazz, property, valueClass);
 
         try
         {
@@ -246,7 +247,7 @@ public abstract class DataEntity<T extends DataEntity> implements NvAssertions, 
 
                 if (field != null)
                 {
-                    if (field.getType().isAssignableFrom(value.getClass()))
+                    if (field.getType().isAssignableFrom(valueClass))
                     {
                         FieldUtils.writeField(field, this, value, true);
                     }
