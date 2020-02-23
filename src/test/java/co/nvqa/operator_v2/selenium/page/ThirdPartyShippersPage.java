@@ -2,16 +2,10 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.ThirdPartyShipper;
-import co.nvqa.operator_v2.selenium.elements.Button;
-import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
-import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
@@ -34,7 +28,6 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
     public ThirdPartyShippersPage(WebDriver webDriver)
     {
         super(webDriver);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void addThirdPartyShipper(ThirdPartyShipper thirdPartyShipper)
@@ -78,7 +71,7 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
 
     private void verifyThirdPartyShipperInfoIsCorrect(ThirdPartyShipper thirdPartyShipper)
     {
-        if(thirdPartyShipper.getId()==null)
+        if (thirdPartyShipper.getId() == null)
         {
             String idAsString = getTextOnTable(1, COLUMN_CLASS_DATA_ID);
 
@@ -86,13 +79,11 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
             {
                 int id = Integer.parseInt(idAsString);
                 thirdPartyShipper.setId(id);
-            }
-            catch(NullPointerException | NumberFormatException ex)
+            } catch (NullPointerException | NumberFormatException ex)
             {
                 NvLogger.warn("Failed to parse ID to Integer.", ex);
             }
-        }
-        else
+        } else
         {
             String actualId = getTextOnTable(1, COLUMN_CLASS_DATA_ID);
             assertEquals("Third Party Shipper - Code", String.valueOf(thirdPartyShipper.getId()), actualId);
@@ -180,16 +171,5 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
     public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
     {
         clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
-    }
-
-    public static class ConfirmDeleteDialog extends PageElement
-    {
-        public ConfirmDeleteDialog(WebDriver webDriver, WebElement webElement)
-        {
-            super(webDriver, webElement);
-        }
-
-        @FindBy(css = "button[aria-label='Delete']")
-        public Button delete;
     }
 }

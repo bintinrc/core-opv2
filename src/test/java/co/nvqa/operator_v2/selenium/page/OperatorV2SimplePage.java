@@ -5,6 +5,7 @@ import co.nvqa.commons.util.NvAllure;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestUtils;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
@@ -14,6 +15,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.PageFactory;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -34,6 +36,7 @@ public class OperatorV2SimplePage extends SimplePage
     public OperatorV2SimplePage(WebDriver webDriver)
     {
         super(webDriver);
+        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void goToUrl(String url)
@@ -41,7 +44,8 @@ public class OperatorV2SimplePage extends SimplePage
         getWebDriver().navigate().to(url);
     }
 
-    public void waitWhilePageIsLoading(){
+    public void waitWhilePageIsLoading()
+    {
         waitUntilInvisibilityOfElementLocated("//div[@class='md-half-circle']");
         waitUntilPageLoaded();
     }
@@ -263,7 +267,8 @@ public class OperatorV2SimplePage extends SimplePage
         waitUntilInvisibilityOfElementLocated(xpathExpression);
     }
 
-    public void waitUntilInvisibilityOfNotification(String containsMessage, boolean waitUntilElementVisibleFirst){
+    public void waitUntilInvisibilityOfNotification(String containsMessage, boolean waitUntilElementVisibleFirst)
+    {
         String xpathExpression = StringUtils.isNotBlank(containsMessage)
                 ? f("//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message'][contains(text(),'%s')]", containsMessage)
                 : "//div[contains(@class,'ant-notification')]";

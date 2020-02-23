@@ -1,13 +1,11 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
-import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 /**
  * @author Tristania Siagian
@@ -28,7 +26,6 @@ public class ShipmentInboundPage extends OperatorV2SimplePage
     public ShipmentInboundPage(WebDriver webDriver)
     {
         super(webDriver);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void selectHubAndShipmentId(String hubName, String shipmentId)

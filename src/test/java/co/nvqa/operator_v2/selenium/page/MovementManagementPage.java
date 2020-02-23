@@ -67,7 +67,6 @@ public class MovementManagementPage extends OperatorV2SimplePage
     public MovementManagementPage(WebDriver webDriver)
     {
         super(webDriver);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void switchTo()

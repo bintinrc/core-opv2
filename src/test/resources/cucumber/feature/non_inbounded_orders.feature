@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @NonInboundedOrders @Saas @Debug
+@OperatorV2 @OperatorV2Part1 @NonInboundedOrders @Saas
 Feature: Non Inbounded Orders
 
   @LaunchBrowser @ShouldAlwaysRun

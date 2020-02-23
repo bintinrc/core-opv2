@@ -2,7 +2,6 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RecoveryTicket;
-import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
@@ -14,7 +13,6 @@ import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import static co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.TicketsTable.ACTION_EDIT;
 
@@ -90,7 +88,6 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     {
         super(webDriver);
         ticketsTable = new TicketsTable(webDriver);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void createTicket(RecoveryTicket recoveryTicket)

@@ -1,9 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.model.VehicleType;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
 
 /**
- *
  * @author Tristania Siagian
  */
 @SuppressWarnings("WeakerAccess")
@@ -16,25 +17,28 @@ public class VehicleTypeManagementPage extends OperatorV2SimplePage
     private static final String ACTION_BUTTON_EDIT = "Edit";
     private static final String ACTION_BUTTON_DEL = "Delete";
 
+    @FindBy(css = "md-dialog")
+    public ConfirmDeleteDialog confirmDeleteDialog;
+
     public VehicleTypeManagementPage(WebDriver webDriver)
     {
         super(webDriver);
     }
 
-    public void addNewVehicleType(String name)
+    public void addNewVehicleType(VehicleType vehicleType)
     {
         clickNvIconTextButtonByName("Add Vehicle Type");
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'vehicle-type-add')]");
-        sendKeysById("name", name);
+        sendKeysById("name", vehicleType.getName());
         clickNvButtonSaveByNameAndWaitUntilDone("Submit");
         pause5s(); //This pause is used to wait until the cache is synced to all node. Sometimes we got an error that says the new Vehicle Type is not found.
     }
 
-    public void verifyVehicleType(String expectedVehicleTypeName)
+    public void verifyVehicleType(VehicleType vehicleType)
     {
-        searchTable(expectedVehicleTypeName);
+        searchTable(vehicleType.getName());
         String actualVehicleTypeName = getTextOnTable(1, COLUMN_DATA_TITLE_NAME);
-        assertEquals("Different Result Returned",expectedVehicleTypeName,actualVehicleTypeName);
+        assertEquals("Vehicle Type name", vehicleType.getName(), actualVehicleTypeName);
     }
 
     public void verifyVehicleTypeNotExist(String expectedVehicleTypeName)
@@ -59,8 +63,8 @@ public class VehicleTypeManagementPage extends OperatorV2SimplePage
     {
         searchTable(name);
         clickActionButtonOnTable(1, ACTION_BUTTON_DEL);
-        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'md-nvRed-theme')]");
-        click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
+        confirmDeleteDialog.waitUntilClickable();
+        confirmDeleteDialog.delete.click();
         pause5s(); //This pause is used to wait until the cache is synced to all node. Sometimes we got an error that says the new Vehicle Type is not found.
     }
 
