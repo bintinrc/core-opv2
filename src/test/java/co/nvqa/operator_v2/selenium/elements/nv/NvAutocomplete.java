@@ -29,10 +29,14 @@ public class NvAutocomplete extends PageElement
     @FindBy(xpath = ".//input")
     public PageElement inputElement;
 
+    @FindBy(css = "md-progress-linear")
+    public PageElement progressBar;
+
     public void selectValue(String value)
     {
         inputElement.clearAndSendKeys(value);
         pause1s();
+        progressBar.waitUntilInvisible();
 
         /*
           Check if the value is not found on NV Autocomplete.

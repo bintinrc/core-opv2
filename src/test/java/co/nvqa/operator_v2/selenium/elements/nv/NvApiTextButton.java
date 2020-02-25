@@ -35,8 +35,14 @@ public class NvApiTextButton extends PageElement
         button.click();
     }
 
-    public void clickAndWaitUntilDone(){
-        click();
+    public void waitUntilDone()
+    {
         spinner.waitUntilInvisible();
+    }
+
+    public void clickAndWaitUntilDone()
+    {
+        click();
+        waitUntilDone();
     }
 }

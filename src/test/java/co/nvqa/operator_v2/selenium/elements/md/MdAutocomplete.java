@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.elements.md;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -41,6 +42,12 @@ public class MdAutocomplete extends PageElement
 
     public void selectItem(String value)
     {
-        click(f("//ul[contains(@class,'md-autocomplete-suggestions')]/li[contains(normalize-space(.),'%s')]", StringUtils.normalizeSpace(value)));
+        try
+        {
+            click(f("//ul[contains(@class,'md-autocomplete-suggestions')]/li[contains(normalize-space(.),'%s')]", StringUtils.normalizeSpace(value)));
+        } catch (NoSuchElementException ex)
+        {
+            throw new NoSuchElementException(f("Could not select value [%s] in md-autocomplete - Not Matched", value), ex);
+        }
     }
 }

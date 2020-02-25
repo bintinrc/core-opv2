@@ -2,43 +2,42 @@ package co.nvqa.operator_v2.selenium.elements.md;
 
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class MdDialog extends PageElement
+import java.util.Date;
+
+public class MdDatepicker extends PageElement
 {
-    public MdDialog(WebDriver webDriver, WebElement webElement)
+    public MdDatepicker(WebDriver webDriver, WebElement webElement)
     {
         super(webDriver, webElement);
         PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    public MdDialog(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+    public MdDatepicker(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
     {
         super(webDriver, searchContext, webElement);
         PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    @FindBy(name = "Cancel")
-    public NvIconButton close;
+    @FindBy(className = "md-datepicker-input")
+    public PageElement input;
 
-    @FindBy(xpath = ".//*[self::h2 or self::h4 or self::h5]")
-    public PageElement title;
+    @FindBy(xpath = "./parent::*")
+    public PageElement parent;
 
-    public void close()
+    public void setDate(Date date)
     {
-        close.moveAndClick();
+        setValue(MD_DATEPICKER_SDF.format(date));
     }
 
-    public boolean isDisplayed(){
-        return title.isDisplayedFast();
-    }
-
-    public void waitUntilVisible(){
-        title.waitUntilClickable();
+    public void setValue(String value)
+    {
+        input.clearAndSendKeys(value);
+        parent.jsClick();
     }
 }

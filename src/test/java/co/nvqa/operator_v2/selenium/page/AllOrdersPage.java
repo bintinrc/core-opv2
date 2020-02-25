@@ -3,12 +3,16 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
+import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
 import java.util.Date;
@@ -16,15 +20,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.ADD_TO_ROUTE;
-import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.CANCEL_SELECTED;
-import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.MANUALLY_COMPLETE_SELECTED;
-import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.PULL_FROM_ROUTE;
-import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.RESUME_SELECTED;
-import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.SET_RTS_TO_SELECTED;
+import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.*;
 
 /**
- *
  * @author Tristania Siagian
  */
 @SuppressWarnings("WeakerAccess")
@@ -46,6 +44,12 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     public static final String ACTION_BUTTON_PRINT_WAYBILL_ON_TABLE_ORDER = "container.order.list.print-waybill";
 
+    @FindBy(css = "md-autocomplete[md-input-name='searchTerm']")
+    public MdAutocomplete searchTerm;
+
+    @FindBy(name = "commons.search")
+    public NvApiTextButton search;
+
     public enum Category
     {
         TRACKING_OR_STAMP_ID("Tracking / Stamp ID"),
@@ -64,9 +68,9 @@ public class AllOrdersPage extends OperatorV2SimplePage
         {
             Category result = TRACKING_OR_STAMP_ID;
 
-            for(Category enumTemp : values())
+            for (Category enumTemp : values())
             {
-                if(enumTemp.getValue().equalsIgnoreCase(value))
+                if (enumTemp.getValue().equalsIgnoreCase(value))
                 {
                     result = enumTemp;
                     break;
@@ -98,9 +102,9 @@ public class AllOrdersPage extends OperatorV2SimplePage
         {
             SearchLogic result = EXACTLY_MATCHES;
 
-            for(SearchLogic enumTemp : values())
+            for (SearchLogic enumTemp : values())
             {
-                if(enumTemp.getValue().equalsIgnoreCase(value))
+                if (enumTemp.getValue().equalsIgnoreCase(value))
                 {
                     result = enumTemp;
                     break;
@@ -241,8 +245,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         {
             switchToEditOrderWindow(orderId);
             editOrderPage.verifyOrderInfoIsCorrect(order);
-        }
-        finally
+        } finally
         {
             closeAllWindows(mainWindowHandle);
         }
@@ -269,8 +272,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         {
             switchToEditOrderWindow(orderId);
             editOrderPage.verifyOrderIsForceSuccessedSuccessfully(order);
-        }
-        finally
+        } finally
         {
             closeAllWindows(mainWindowHandle);
         }
@@ -300,11 +302,10 @@ public class AllOrdersPage extends OperatorV2SimplePage
         setMdDatepickerById("commons.model.delivery-date", TestUtils.getNextDate(1));
         selectValueFromMdSelectById("commons.timeslot", "3PM - 6PM");
 
-        if(listOfActualTrackingIds.size()==1)
+        if (listOfActualTrackingIds.size() == 1)
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.set-order-to-rts");
-        }
-        else
+        } else
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.set-orders-to-rts");
         }
@@ -324,11 +325,10 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         sendKeysById("container.order.edit.cancellation-reason", String.format("This order is canceled by automation to test 'Cancel Selected' feature on All Orders page. Canceled at %s.", CREATED_DATE_SDF.format(new Date())));
 
-        if(listOfActualTrackingIds.size()==1)
+        if (listOfActualTrackingIds.size() == 1)
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-order");
-        }
-        else
+        } else
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-orders");
         }
@@ -351,11 +351,10 @@ public class AllOrdersPage extends OperatorV2SimplePage
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
         assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
-        if(listOfActualTrackingIds.size()==1)
+        if (listOfActualTrackingIds.size() == 1)
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.resume-order");
-        }
-        else
+        } else
         {
             clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.resume-orders");
         }
@@ -471,12 +470,11 @@ public class AllOrdersPage extends OperatorV2SimplePage
             String expectedEndTime = "";
             Integer timewindow = changeDeliveryTiming.getTimewindow();
 
-            if(timewindow==null)
+            if (timewindow == null)
             {
                 actualStartDate = actualStartDate.substring(0, 10);
                 actualEndDate = actualEndDate.substring(0, 10);
-            }
-            else
+            } else
             {
                 expectedStartTime = TestUtils.getStartTime(timewindow);
                 expectedEndTime = TestUtils.getEndTime(timewindow);
@@ -487,12 +485,11 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
             boolean isDateEmpty = isBlank(changeDeliveryTiming.getStartDate()) || isBlank(changeDeliveryTiming.getEndDate());
 
-            if(!isDateEmpty)
+            if (!isDateEmpty)
             {
                 assertEquals("Start Date does not match.", expectedStartDateWithTime, actualStartDate);
                 assertEquals("End Date does not match.", expectedEndDateWithTime, actualEndDate);
-            }
-            else
+            } else
             {
                 /*
                   If date is empty, check only the start/end time.
@@ -503,8 +500,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
                 assertEquals("Start Date does not match.", expectedStartDateWithTime, actualStartTime);
                 assertEquals("End Date does not match.", expectedEndDateWithTime, actualEndTime);
             }
-        }
-        finally
+        } finally
         {
             closeAllWindows(mainWindowHandle);
         }
@@ -512,7 +508,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     private String concatDateWithTime(String date, String time)
     {
-        if(time==null)
+        if (time == null)
         {
             time = "";
         }
@@ -530,8 +526,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
             switchToNewOpenedWindow(mainWindowHandle);
             editOrderPage.waitUntilInvisibilityOfLoadingOrder();
             editOrderPage.verifyInboundIsSucceed();
-        }
-        finally
+        } finally
         {
             closeAllWindows(mainWindowHandle);
         }
@@ -548,8 +543,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
         {
             switchToEditOrderWindow(orderId);
             editOrderPage.verifyOrderIsGlobalInboundedSuccessfully(order, globalInboundParams, expectedOrderCost, expectedStatus, expectedGranularStatus, expectedDeliveryStatus);
-        }
-        finally
+        } finally
         {
             closeAllWindows(mainWindowHandle);
         }
@@ -573,24 +567,18 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         selectValueFromMdSelectByIdContains("category", category.getValue());
         selectValueFromMdSelectByIdContains("search-logic", searchLogic.getValue());
-        sendKeys("//input[starts-with(@id, 'fl-input') or starts-with(@id, 'searchTerm')]", searchTerm);
-        pause3s(); // Wait until the page finished matching the tracking ID.
-        String matchedTrackingIdXpathExpression = String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope//span[text()='%s']", searchTerm);
-        String searchButtonXpathExpression = "//nv-api-text-button[@name='commons.search']";
-
-        if(isElementExistFast(matchedTrackingIdXpathExpression))
+        try
         {
-            click(matchedTrackingIdXpathExpression);
+            this.searchTerm.selectValue(searchTerm);
             waitUntilNewWindowOrTabOpened();
-        }
-        else
+        } catch (NoSuchElementException ex)
         {
-            click(searchButtonXpathExpression);
+            search.click();
         }
 
         pause100ms();
         getWebDriver().switchTo().window(mainWindowHandle); // Force selenium to go back to the last active tab/window if new tab/window is opened.
-        waitUntilInvisibilityOfElementLocated(searchButtonXpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
+        search.waitUntilDone();
     }
 
     public void specificSearch(Category category, SearchLogic searchLogic, String searchTerm, String trackingId)
@@ -605,12 +593,11 @@ public class AllOrdersPage extends OperatorV2SimplePage
         String matchedTrackingIdXpathExpression = String.format("//li[@md-virtual-repeat='item in $mdAutocompleteCtrl.matches']/md-autocomplete-parent-scope//span[text()='%s']", trackingId);
         String searchButtonXpathExpression = "//nv-api-text-button[@name='commons.search']";
 
-        if(isElementExistFast(matchedTrackingIdXpathExpression))
+        if (isElementExistFast(matchedTrackingIdXpathExpression))
         {
             click(matchedTrackingIdXpathExpression);
             waitUntilNewWindowOrTabOpened();
-        }
-        else
+        } else
         {
             click(searchButtonXpathExpression);
         }
@@ -620,7 +607,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfElementLocated(searchButtonXpathExpression + "/button/div[contains(@class,'show')]/md-progress-circular");
     }
 
-    public void searchWithoutResult(Category category, SearchLogic searchLogic, String searchTerm){
+    public void searchWithoutResult(Category category, SearchLogic searchLogic, String searchTerm)
+    {
         waitUntilPageLoaded();
         selectValueFromMdSelectByIdContains("category", category.getValue());
         selectValueFromMdSelectByIdContains("search-logic", searchLogic.getValue());
@@ -657,7 +645,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
             pause100ms();
             Set<String> windowHandlesTemp = getWebDriver().getWindowHandles();
 
-            if(windowHandlesTemp.size()<=1)
+            if (windowHandlesTemp.size() <= 1)
             {
                 throw new RuntimeException("WebDriver only contains 1 Window.");
             }
@@ -667,9 +655,9 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
         String newOpenedWindowHandle = null;
 
-        for(String windowHandle : windowHandles)
+        for (String windowHandle : windowHandles)
         {
-            if(!windowHandle.equals(mainWindowHandle))
+            if (!windowHandle.equals(mainWindowHandle))
             {
                 newOpenedWindowHandle = windowHandle; // Do not break, because we need to get the latest one.
             }
