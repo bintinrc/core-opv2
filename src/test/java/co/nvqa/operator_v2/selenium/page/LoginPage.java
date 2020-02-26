@@ -177,4 +177,12 @@ public class LoginPage extends OperatorV2SimplePage
         String currentUrl = getCurrentUrl();
         assertThat("Default Operator Portal URL not loaded.", currentUrl, Matchers.containsString(TestConstants.OPERATOR_PORTAL_LOGIN_URL));
     }
+
+    public void changeCountry(String countryName)
+    {
+        click("//button[contains(@ng-click,'$mdOpenMenu($event)') and @aria-label='Profile']");
+        waitUntilVisibilityOfElementLocated("//md-select[@ng-model='domain.current']/md-select-value[contains(@id,'select_value_label')]");
+        click("//md-select[@ng-model='domain.current']/md-select-value[contains(@id,'select_value_label')]");
+        click(f("//md-option[contains(@ng-repeat,'domain.all')]//span[text()='%s']", countryName));
+    }
 }

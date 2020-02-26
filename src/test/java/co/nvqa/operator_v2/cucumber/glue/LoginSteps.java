@@ -76,4 +76,10 @@ public class LoginSteps extends AbstractSteps
     {
         loginPage.backToLoginPage();
     }
+
+    @When("Operator change the country to {string}")
+    public void operatorChangeTheCountryTo(String countryName)
+    {
+        loginPage.changeCountry(countryName);
+    }
 }
