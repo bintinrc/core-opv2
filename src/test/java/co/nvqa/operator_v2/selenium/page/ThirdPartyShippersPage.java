@@ -3,9 +3,9 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.ThirdPartyShipper;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
@@ -21,6 +21,9 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
 
     public static final String ACTION_BUTTON_EDIT = "Edit";
     public static final String ACTION_BUTTON_DELETE = "Delete";
+
+    @FindBy(css = "md-dialog")
+    public ConfirmDeleteDialog confirmDeleteDialog;
 
     public ThirdPartyShippersPage(WebDriver webDriver)
     {
@@ -68,7 +71,7 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
 
     private void verifyThirdPartyShipperInfoIsCorrect(ThirdPartyShipper thirdPartyShipper)
     {
-        if(thirdPartyShipper.getId()==null)
+        if (thirdPartyShipper.getId() == null)
         {
             String idAsString = getTextOnTable(1, COLUMN_CLASS_DATA_ID);
 
@@ -76,13 +79,11 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
             {
                 int id = Integer.parseInt(idAsString);
                 thirdPartyShipper.setId(id);
-            }
-            catch(NullPointerException | NumberFormatException ex)
+            } catch (NullPointerException | NumberFormatException ex)
             {
                 NvLogger.warn("Failed to parse ID to Integer.", ex);
             }
-        }
-        else
+        } else
         {
             String actualId = getTextOnTable(1, COLUMN_CLASS_DATA_ID);
             assertEquals("Third Party Shipper - Code", String.valueOf(thirdPartyShipper.getId()), actualId);
@@ -102,8 +103,9 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
     {
         searchTableByCode(thirdPartyShipper.getCode());
         clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
-        pause100ms();
-        clickButtonOnMdDialogByAriaLabel("Delete");
+        confirmDeleteDialog.waitUntilClickable();
+        pause1s();
+        confirmDeleteDialog.delete.click();
         waitUntilVisibilityOfElementLocated("//div[@id='toast-container']//div[contains(text(), 'deleted!')]");
         waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']//div[contains(text(), 'deleted!')]");
     }

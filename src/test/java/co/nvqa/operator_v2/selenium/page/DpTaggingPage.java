@@ -2,59 +2,63 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.DpTagging;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
 public class DpTaggingPage extends OperatorV2SimplePage
 {
-    private static final String MD_VIRTUAL_REPEAT = "order in getTableData()";
+    public DpTaggingTable dpTaggingTable;
 
-    public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking-id";
-    public static final String COLUMN_CLASS_DATA_CURRENT_DP_ID = "current-dp-id";
+    @FindBy(name = "container.dp-tagging.assign-all")
+    public NvApiTextButton assignAll;
+
+    @FindBy(css = "nv-button-file-picker[label='Select File']")
+    public NvButtonFilePicker selectFile;
 
     public DpTaggingPage(WebDriver webDriver)
     {
         super(webDriver);
+        dpTaggingTable = new DpTaggingTable(webDriver);
     }
 
     public void uploadDpTaggingCsv(List<DpTagging> listOfDpTagging)
     {
+        pause2s();
         File dpTaggingCsv = buildCsv(listOfDpTagging);
-        sendKeysByAriaLabel("Choose", dpTaggingCsv.getAbsolutePath());
+        selectFile.setValue(dpTaggingCsv);
         waitUntilInvisibilityOfToast("File successfully uploaded");
     }
 
     public void uploadInvalidDpTaggingCsv()
     {
         File dpTaggingCsv = buildInvalidCsv();
-        sendKeysByAriaLabel("Choose", dpTaggingCsv.getAbsolutePath());
+        selectFile.setValue(dpTaggingCsv);
     }
 
     public void verifyDpTaggingCsvIsUploadedSuccessfully(List<DpTagging> listOfDpTagging)
     {
-        List<String> listOfTrackingIdsOnTable = new ArrayList<>();
-        int rowCount = getRowCount();
+        List<String> actualTracingIds = dpTaggingTable.readAllEntities().stream()
+                .map(DpTagging::getTrackingId)
+                .collect(Collectors.toList());
 
-        for(int i=0; i<rowCount; i++)
+        for (DpTagging dpTagging : listOfDpTagging)
         {
-            listOfTrackingIdsOnTable.add(getTextOnTable(i+1, COLUMN_CLASS_DATA_TRACKING_ID));
-        }
-
-        for(DpTagging dpTagging : listOfDpTagging)
-        {
-            assertThat("Tracking ID is not listed on table.", dpTagging.getTrackingId(), isIn(listOfTrackingIdsOnTable));
+            assertThat("Tracking ID is not listed on table.", dpTagging.getTrackingId(), isIn(actualTracingIds));
         }
     }
 
@@ -70,7 +74,7 @@ public class DpTaggingPage extends OperatorV2SimplePage
     {
         StringBuilder contentAsSb = new StringBuilder();
 
-        for(DpTagging dpTagging : listOfDpTagging)
+        for (DpTagging dpTagging : listOfDpTagging)
         {
             contentAsSb.append(dpTagging.getTrackingId()).append(',').append(dpTagging.getDpId()).append(System.lineSeparator());
         }
@@ -94,8 +98,7 @@ public class DpTaggingPage extends OperatorV2SimplePage
             pw.close();
 
             return file;
-        }
-        catch(IOException ex)
+        } catch (IOException ex)
         {
             throw new NvTestRuntimeException(ex);
         }
@@ -103,26 +106,34 @@ public class DpTaggingPage extends OperatorV2SimplePage
 
     public void checkAndAssignAll(boolean isMultipleOrders)
     {
-        selectAllShown("ctrl.deliveryResultsTableParams");
-        clickNvApiTextButtonByNameAndWaitUntilDone("container.dp-tagging.assign-all");
+        dpTaggingTable.selectAllShown();
+        assignAll.click();
 
-        if(isMultipleOrders)
+        if (isMultipleOrders)
         {
             waitUntilInvisibilityOfToast("DP tagging performed successfully");
-        }
-        else
+        } else
         {
             waitUntilInvisibilityOfToast("tagged successfully");
         }
     }
 
-    public int getRowCount()
+    /**
+     * Accessor for DP Tagging Tickets table
+     */
+    public static class DpTaggingTable extends MdVirtualRepeatTable<DpTagging>
     {
-        return getRowsCountOfTableWithMdVirtualRepeat(MD_VIRTUAL_REPEAT);
-    }
+        public static final String COLUMN_TRACKING_ID = "trackingId";
 
-    public String getTextOnTable(int rowNumber, String columnDataClass)
-    {
-        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
+        public DpTaggingTable(WebDriver webDriver)
+        {
+            super(webDriver);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                    .put(COLUMN_TRACKING_ID, "tracking-id")
+                    .build()
+            );
+            setEntityClass(DpTagging.class);
+            setMdVirtualRepeat("order in getTableData()");
+        }
     }
 }

@@ -1,12 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.GlobalInboundParams;
-import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 /**
  * @author Tristania Siagian, Sergey Mishanin
@@ -33,7 +31,6 @@ public class ShipmentGlobalInboundPage extends OperatorV2SimplePage
     public ShipmentGlobalInboundPage(WebDriver webDriver)
     {
         super(webDriver);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public void selectShipmentDestinationHub(String hubName)

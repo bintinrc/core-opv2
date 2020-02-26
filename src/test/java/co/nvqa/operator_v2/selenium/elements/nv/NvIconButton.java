@@ -9,15 +9,15 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class NvButtonSave extends PageElement
+public class NvIconButton extends PageElement
 {
-    public NvButtonSave(WebDriver webDriver, WebElement webElement)
+    public NvIconButton(WebDriver webDriver, WebElement webElement)
     {
         super(webDriver, webElement);
         PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    public NvButtonSave(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+    public NvIconButton(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
     {
         super(webDriver, searchContext, webElement);
         PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
@@ -26,17 +26,9 @@ public class NvButtonSave extends PageElement
     @FindBy(tagName = "button")
     private Button button;
 
-    @FindBy(xpath = ".//div[contains(@class,'saving')]/md-progress-circular")
-    private PageElement spinner;
-
     public void click()
     {
+        button.scrollIntoView();
         button.click();
-    }
-
-    public void clickAndWaitUntilDone(){
-        click();
-        pause100ms();
-        spinner.waitUntilInvisible();
     }
 }

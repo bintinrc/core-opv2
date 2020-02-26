@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @Anand
+@OperatorV2
 Feature: Parcel Tag
 
  @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless

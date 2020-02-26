@@ -1,19 +1,26 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AbstractApiOperatorPortalSteps;
+import co.nvqa.commons.cucumber.glue.AddressFactory;
+import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.CreateDriverV2Request;
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.ThirdPartyShippers;
+import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.factory.HubFactory;
+import co.nvqa.operator_v2.model.ContactType;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
 import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.model.ReservationGroup;
+import co.nvqa.operator_v2.model.ThirdPartyShipper;
+import co.nvqa.operator_v2.model.VehicleType;
 import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.After;
 import cucumber.api.java.en.And;
@@ -61,8 +68,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         try
         {
             getRouteClient().deleteTag(tagName);
-        }
-        catch (RuntimeException ex)
+        } catch (RuntimeException ex)
         {
             NvLogger.warnf("An error occurred when trying to delete tag with name = '%s'. Error: %s", tagName, ex.getMessage());
         }
@@ -84,7 +90,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         String value = mapOfData.getOrDefault("from", "TODAY");
         Date fromDate = null;
 
-        if("TODAY".equalsIgnoreCase(value))
+        if ("TODAY".equalsIgnoreCase(value))
         {
             Calendar fromCal = Calendar.getInstance();
             fromCal.setTime(getNextDate(-1));
@@ -92,8 +98,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
             fromCal.set(Calendar.MINUTE, 0);
             fromCal.set(Calendar.SECOND, 0);
             fromDate = fromCal.getTime();
-        }
-        else if(StringUtils.isNotBlank(value))
+        } else if (StringUtils.isNotBlank(value))
         {
             fromDate = Date.from(DateUtil.getDate(value).toInstant());
         }
@@ -101,7 +106,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         value = mapOfData.getOrDefault("to", "TODAY");
         Date toDate = null;
 
-        if("TODAY".equalsIgnoreCase(value))
+        if ("TODAY".equalsIgnoreCase(value))
         {
             Calendar toCal = Calendar.getInstance();
             toCal.setTime(new Date());
@@ -109,8 +114,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
             toCal.set(Calendar.MINUTE, 59);
             toCal.set(Calendar.SECOND, 59);
             toDate = toCal.getTime();
-        }
-        else if(StringUtils.isNotBlank(value))
+        } else if (StringUtils.isNotBlank(value))
         {
             toDate = Date.from(DateUtil.getDate(value).toInstant());
         }
@@ -118,7 +122,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         List<Integer> tags = null;
         value = mapOfData.get("tagIds");
 
-        if(StringUtils.isNotBlank(value))
+        if (StringUtils.isNotBlank(value))
         {
             tags = Arrays.stream(value.split(",")).map(tag -> Integer.parseInt(tag.trim())).collect(Collectors.toList());
         }
@@ -226,6 +230,159 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         String methodInfo = f("%s - [Order ID = %d]", getCurrentMethodName(), orderId);
         Order latestOrderInfo = retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> getOrderClient().getOrder(orderId), methodInfo);
         assertEquals(f("Granular Status - [Tracking ID = %s]", latestOrderInfo.getTrackingId()), "VAN_ENROUTE_TO_PICKUP", latestOrderInfo.getGranularStatus());
-        assertEquals(f("Status - [Tracking ID = %s]", latestOrderInfo.getTrackingId()),"TRANSIT", latestOrderInfo.getStatus());
+        assertEquals(f("Status - [Tracking ID = %s]", latestOrderInfo.getTrackingId()), "TRANSIT", latestOrderInfo.getStatus());
+    }
+
+    @Given("^API Operator creates new Hub using data below:$")
+    public void apiOperatorCreatesNewHubUsingDataBelow(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+
+        String name = data.get("name");
+        String displayName = data.get("displayName");
+        String facilityType = data.get("facilityType");
+        String city = data.get("city");
+        String country = data.get("country");
+        String latitude = data.get("latitude");
+        String longitude = data.get("longitude");
+
+        String uniqueCode = generateDateUniqueString();
+        Address address = AddressFactory.getRandomAddress();
+
+        if ("GENERATED".equals(name))
+        {
+            name = "HUB DO NOT USE " + uniqueCode;
+        }
+
+        if ("GENERATED".equals(displayName))
+        {
+            displayName = "Hub DNS " + uniqueCode;
+        }
+
+        if ("GENERATED".equals(city))
+        {
+            city = address.getCity();
+        }
+
+        if ("GENERATED".equals(country))
+        {
+            country = address.getCountry();
+        }
+
+        Hub randomHub = HubFactory.getRandomHub();
+
+        if ("GENERATED".equals(latitude))
+        {
+            latitude = String.valueOf(randomHub.getLatitude());
+        }
+
+        if ("GENERATED".equals(longitude))
+        {
+            longitude = String.valueOf(randomHub.getLongitude());
+        }
+
+        Hub hub = new Hub();
+        hub.setName(name);
+        hub.setCreatedAt(DateUtil.getTodayDateTime_ISO8601_LITE());
+        hub.setShortName(displayName);
+        hub.setCountry(country);
+        hub.setCity(city);
+        hub.setLatitude(Double.parseDouble(latitude));
+        hub.setLongitude(Double.parseDouble(longitude));
+        hub.setFacilityType(facilityType);
+        hub = getHubClient().create(hub);
+
+        put(KEY_CREATED_HUB, hub);
+        putInList(KEY_LIST_OF_CREATED_HUBS, hub);
+    }
+
+    @Given("^API Operator gets data of created Third Party shipper$")
+    public void apiOperatorGetsDataOfCreatedThirdPartyShipper()
+    {
+        ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
+        List<ThirdPartyShippers> thirdPartyShippers = getThirdPartyShippersClient().getAll();
+        ThirdPartyShippers apiData = thirdPartyShippers.stream()
+                .filter(shipper -> StringUtils.equals(shipper.getName(), thirdPartyShipper.getName()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException(f("Third Party Shipper with name [%s] was not found", thirdPartyShipper.getName())));
+        thirdPartyShipper.setId(apiData.getId());
+    }
+
+    @After("@DeleteThirdPartyShippers")
+    public void deleteThirdPartyShippers()
+    {
+        ThirdPartyShipper thirdPartyShipper = get(KEY_CREATED_THIRD_PARTY_SHIPPER);
+        if (thirdPartyShipper != null)
+        {
+            if (thirdPartyShipper.getId() != null)
+            {
+                try
+                {
+                    getThirdPartyShippersClient().delete(thirdPartyShipper.getId());
+                } catch (Throwable ex)
+                {
+                    NvLogger.warn(f("Could not delete Third Party Shipper [%s]", ex.getMessage()));
+                }
+            } else
+            {
+                NvLogger.warn(f("Could not delete Third Party Shipper [%s] - id was not defined", thirdPartyShipper.getName()));
+            }
+        }
+    }
+
+    @After("@DeleteContactTypes")
+    public void deleteContactTypes()
+    {
+        ContactType contactType = get(KEY_CONTACT_TYPE);
+        if (contactType != null)
+        {
+            if (contactType.getId() != null)
+            {
+                try
+                {
+                    getContactTypeClient().delete(contactType.getId());
+                } catch (Throwable ex)
+                {
+                    NvLogger.warn(f("Could not delete Driver Contact Type [%s]", ex.getMessage()));
+                }
+            } else
+            {
+                NvLogger.warn(f("Could not delete Driver Contact Type [%s] - id was not defined", contactType.getName()));
+            }
+        }
+    }
+
+    @Given("^API Operator gets data of created Vehicle Type$")
+    public void apiOperatorGetsDataOfCreatedVehicleType()
+    {
+        VehicleType vehicleType = get(KEY_CREATED_VEHICLE_TYPE);
+        List<co.nvqa.commons.model.core.VehicleType> vehicleTypes = getVehicleTypeClient().getAllVehicleType().getData().getVehicleTypes();
+        co.nvqa.commons.model.core.VehicleType apiData = vehicleTypes.stream()
+                .filter(type -> StringUtils.equals(type.getName(), vehicleType.getName()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException(f("Vehicle Type with name [%s] was not found", vehicleType.getName())));
+        vehicleType.setId(Long.valueOf(apiData.getId()));
+    }
+
+    @After("@DeleteVehicleTypes")
+    public void deleteVehicleTypes()
+    {
+        VehicleType vehicleType = get(KEY_CREATED_VEHICLE_TYPE);
+        if (vehicleType != null)
+        {
+            if (vehicleType.getId() != null)
+            {
+                try
+                {
+                    getVehicleTypeClient().delete(vehicleType.getId());
+                } catch (Throwable ex)
+                {
+                    NvLogger.warn(f("Could not delete Vehicle Type [%s]", ex.getMessage()));
+                }
+            } else
+            {
+                NvLogger.warn(f("Could not delete Vehicle Type [%s] - id was not defined", vehicleType.getName()));
+            }
+        }
     }
 }

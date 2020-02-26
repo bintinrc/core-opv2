@@ -1,42 +1,44 @@
-package co.nvqa.operator_v2.selenium.elements.nv;
+package co.nvqa.operator_v2.selenium.elements.md;
 
-import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class NvButtonSave extends PageElement
+public class MdDialog extends PageElement
 {
-    public NvButtonSave(WebDriver webDriver, WebElement webElement)
+    public MdDialog(WebDriver webDriver, WebElement webElement)
     {
         super(webDriver, webElement);
         PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    public NvButtonSave(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+    public MdDialog(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
     {
         super(webDriver, searchContext, webElement);
         PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    @FindBy(tagName = "button")
-    private Button button;
+    @FindBy(name = "Cancel")
+    public NvIconButton close;
 
-    @FindBy(xpath = ".//div[contains(@class,'saving')]/md-progress-circular")
-    private PageElement spinner;
+    @FindBy(css = "md-toolbar h4")
+    public PageElement title;
 
-    public void click()
+    public void close()
     {
-        button.click();
+        close.moveAndClick();
     }
 
-    public void clickAndWaitUntilDone(){
-        click();
-        pause100ms();
-        spinner.waitUntilInvisible();
+    public boolean isDisplayed(){
+        return title.isDisplayedFast();
+    }
+
+    public void waitUntilVisible(){
+        title.waitUntilClickable();
     }
 }

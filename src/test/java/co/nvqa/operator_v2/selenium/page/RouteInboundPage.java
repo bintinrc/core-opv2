@@ -6,14 +6,12 @@ import co.nvqa.operator_v2.model.WaypointOrderInfo;
 import co.nvqa.operator_v2.model.WaypointPerformance;
 import co.nvqa.operator_v2.model.WaypointReservationInfo;
 import co.nvqa.operator_v2.model.WaypointShipperInfo;
-import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Assert;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.Date;
 import java.util.List;
@@ -44,7 +42,6 @@ public class RouteInboundPage extends OperatorV2SimplePage
     public RouteInboundPage(WebDriver webDriver)
     {
         super(webDriver);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
         shippersTable = new ShippersTable(webDriver);
         reservationsTable = new ReservationsTable(webDriver);
         ordersTable = new OrdersTable(webDriver);

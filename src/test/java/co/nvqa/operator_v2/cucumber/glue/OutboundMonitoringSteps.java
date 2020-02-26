@@ -40,6 +40,7 @@ public class OutboundMonitoringSteps extends AbstractSteps {
     @Then("^Operator verify the route ID is exist on Outbound Monitoring Page$")
     public void verifyRouteIdExists() {
         long routeId = get(KEY_CREATED_ROUTE_ID);
+        outboundMonitoringPage.searchTableByRouteId(routeId);
         outboundMonitoringPage.verifyRouteIdExists(String.valueOf(routeId));
     }
 

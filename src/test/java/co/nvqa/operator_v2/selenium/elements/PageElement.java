@@ -1,9 +1,11 @@
 package co.nvqa.operator_v2.selenium.elements;
 
 import co.nvqa.common_selenium.page.SimplePage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.PageFactory;
 
 public class PageElement extends SimplePage
 {
@@ -23,12 +25,14 @@ public class PageElement extends SimplePage
     {
         this(webDriver);
         this.webElement = webElement;
+        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
     public PageElement(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
     {
         this(webDriver, searchContext);
         this.webElement = webElement;
+        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
     public void moveAndClick()
@@ -76,6 +80,10 @@ public class PageElement extends SimplePage
         return webElement;
     }
 
+    public SearchContext getSearchContext(){
+        return searchContext;
+    }
+
     public boolean isDisplayedFast()
     {
         try
@@ -110,4 +118,11 @@ public class PageElement extends SimplePage
         waitUntilInvisibilityOfElementLocated(webElement);
     }
 
+    public boolean isEnabled(){
+        return webElement.isEnabled();
+    }
+
+    public WebElement findElement(By by){
+        return webElement.findElement(by);
+    }
 }

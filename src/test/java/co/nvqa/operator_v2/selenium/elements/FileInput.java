@@ -5,22 +5,27 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
-public class Button extends PageElement
+public class FileInput extends PageElement
 {
-    public Button(WebDriver webDriver, WebElement webElement)
+    public FileInput(WebDriver webDriver, WebElement webElement)
     {
         super(webDriver, webElement);
         PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    public Button(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+    public FileInput(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
     {
         super(webDriver, searchContext, webElement);
         PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    public void click(){
-        waitUntilClickable();
-        super.moveAndClick();
+    public void setValue(String value)
+    {
+        sendKeys(value);
+    }
+
+    public String getValue()
+    {
+        return getValue(webElement);
     }
 }

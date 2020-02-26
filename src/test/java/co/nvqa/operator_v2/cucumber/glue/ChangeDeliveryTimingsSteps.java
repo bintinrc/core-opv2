@@ -42,8 +42,8 @@ public class ChangeDeliveryTimingsSteps extends AbstractSteps {
 
     @Then("^Operator uploads the CSV file on Change Delivery Timings page using data below:$")
     public void operatorUploadsTheCsvFileOnChangeDeliveryTimingsPageUsingDataBelow(Map<String,String> dataTableAsMap) {
+        dataTableAsMap = resolveKeyValues(dataTableAsMap);
         Map<String,String> mapOfTokens = createDefaultTokens();
-        mapOfTokens.put("tracking-id", get(KEY_CREATED_ORDER_TRACKING_ID));
         Map<String,String> dataTableAsMapReplaced = replaceDataTableTokens(dataTableAsMap, mapOfTokens);
 
         String trackingId = dataTableAsMapReplaced.get("trackingId");
