@@ -38,6 +38,10 @@ Feature: Edit Order
       | pickupInstruction   | new pickup instruction   |
       | deliveryInstruction | new delivery instruction |
     When Operator verify Order Instructions are updated on Edit Order Page
+    And DB Operator verify order_events record for the created order:
+      | type | 14 |
+    And Operator verify order event on Edit order page using data below:
+      | name    | UPDATE INSTRUCTION |
 
   @CloseNewWindows
   Scenario: Operator should be able to Manually Complete Order on Edit Order page (uid:eb872b68-ff7d-4b6d-b5da-98676774bb93)
