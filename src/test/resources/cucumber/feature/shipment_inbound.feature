@@ -17,12 +17,11 @@ Feature: Shipment Inbound
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment precisely
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator input the scanned Tracking ID inside the shipment
+    Given Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
+      | trackingId | GET_FROM_CREATED_ORDER             |
+    Then API Operator verify order info after Global Inbound
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}} |
     And API Operator add parcel to the route using data below:
@@ -53,12 +52,11 @@ Feature: Shipment Inbound
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment precisely
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator input the scanned Tracking ID inside the shipment
+    Given Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
+      | trackingId | GET_FROM_CREATED_ORDER             |
+    Then API Operator verify order info after Global Inbound
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -89,12 +87,11 @@ Feature: Shipment Inbound
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment precisely
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator input the scanned Tracking ID inside the shipment
+    Given Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
+      | trackingId | GET_FROM_CREATED_ORDER             |
+    Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Inbound
     When Operator selects the Hub = "{KEY_CREATED_ORDER.destinationHub}" and the Shipment ID
     And Operator clicks on Continue Button in Shipment Inbound Page
@@ -121,12 +118,11 @@ Feature: Shipment Inbound
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment precisely
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator input the scanned Tracking ID inside the shipment
+    Given Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
+      | trackingId | GET_FROM_CREATED_ORDER             |
+    Then API Operator verify order info after Global Inbound
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -159,12 +155,11 @@ Feature: Shipment Inbound
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment precisely
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator input the scanned Tracking ID inside the shipment
+    Given Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
+      | trackingId | GET_FROM_CREATED_ORDER             |
+    Then API Operator verify order info after Global Inbound
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -195,12 +190,11 @@ Feature: Shipment Inbound
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment precisely
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator input the scanned Tracking ID inside the shipment
+    Given Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
+      | trackingId | GET_FROM_CREATED_ORDER             |
+    Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Inbound
     When Operator selects Hub and Shipment ID and check error message:
       | hub          | {hub-name-2}              |
@@ -220,12 +214,11 @@ Feature: Shipment Inbound
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment precisely
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator input the scanned Tracking ID inside the shipment
+    Given Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
+      | trackingId | GET_FROM_CREATED_ORDER             |
+    Then API Operator verify order info after Global Inbound
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     And Operator go to menu Inter-Hub -> Shipment Inbound
     When Operator selects Hub and Shipment ID and check error message:
@@ -246,12 +239,11 @@ Feature: Shipment Inbound
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {KEY_CREATED_ORDER.destinationHub} of the shipment precisely
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator input the scanned Tracking ID inside the shipment
+    Given Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
+      | trackingId | GET_FROM_CREATED_ORDER             |
+    Then API Operator verify order info after Global Inbound
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{next-1-day-yyyy-MM-dd}} 16:00:00", "dateTime": "{{next-1-day-yyyy-MM-dd}}T16:00:00+00:00"} |
     And API Operator add parcel to the route using data below:

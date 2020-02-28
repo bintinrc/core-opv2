@@ -16,12 +16,11 @@ Feature: Shipment Global Inbound
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {hub-name-2} of the shipment
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator input the scanned Tracking ID inside the shipment
+    Given Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName    | {hub-name-2}           |
+      | trackingId | GET_FROM_CREATED_ORDER |
+    Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
     And Operator filter Shipment Status = Completed on Shipment Management page
     And Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
@@ -34,17 +33,16 @@ Feature: Shipment Global Inbound
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator force created order status to <status>
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    And API Operator put created parcel to shipment
+    And API Operator force created order status to <status>
+    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {hub-name-2} of the shipment
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator input the Invalid Tracking ID Status inside the shipment
-    Then Operator will get the alert of <message> shown
+    Given Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below and check alert:
+      | hubName    | {hub-name-2}           |
+      | trackingId | GET_FROM_CREATED_ORDER |
+      | toastText  | <message>              |
     Examples:
       | Note      | hiptest-uid                              | status    | message         |
       | Completed | uid:9ba2d3f4-c559-44d0-b052-a55eca91f579 | Completed | ORDER_COMPLETED |
@@ -56,13 +54,11 @@ Feature: Shipment Global Inbound
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {hub-name-2} of the shipment
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator input the Invalid Tracking ID inside the shipment
-    Then Operator will get the alert of Invalid Tracking ID shown
+    Given Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below and check alert:
+      | hubName    | {hub-name-2}           |
+      | trackingId | AUTOMATIONTESTING      |
+      | toastText  | Invalid Tracking ID    |
 
   @DeleteShipment
   Scenario: Scan the order in Shipment Global Inbound by Overriding the Size (uid:de2394ad-48f8-49a7-b243-b92abf4461c7)
@@ -75,16 +71,12 @@ Feature: Shipment Global Inbound
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {hub-name-2} of the shipment
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator change the data of the created Tracking ID with this data:
+    When Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
       | hubName      | {hub-name-2}           |
       | trackingId   | GET_FROM_CREATED_ORDER |
       | overrideSize | L                      |
-    And Operator input the scanned Tracking ID inside the shipment
+    Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
     And Operator filter Shipment Status = Completed on Shipment Management page
     And Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
@@ -105,24 +97,17 @@ Feature: Shipment Global Inbound
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {hub-name-2} of the shipment
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator change the data of the created Tracking ID with this data:
+    When Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
       | hubName        | {hub-name-2}           |
       | trackingId     | GET_FROM_CREATED_ORDER |
-      | overrideWeight | 10                     |
-    And Operator input the scanned Tracking ID inside the shipment
+      | overrideWeight | 7                      |
+    Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
     And Operator filter Shipment Status = Completed on Shipment Management page
     And Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
-    Then API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
 
   @DeleteShipment
   Scenario: Scan the order in Shipment Global Inbound by Overriding the Weight and recalculate the price (uid:e8fac24e-f492-4dda-9ff4-850c97aee69e)
@@ -135,27 +120,22 @@ Feature: Shipment Global Inbound
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {hub-name-2} of the shipment
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator change the data of the created Tracking ID with this data:
+    When Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
       | hubName        | {hub-name-2}           |
       | trackingId     | GET_FROM_CREATED_ORDER |
-      | overrideWeight | 10                     |
-    And Operator input the scanned Tracking ID inside the shipment
-    And Operator go to menu Inter-Hub -> Shipment Management
-    And Operator filter Shipment Status = Completed on Shipment Management page
-    And Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
-    And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify inbounded Shipment exist on Shipment Management page
+      | overrideWeight | 7                      |
     Then API Operator verify order info after Global Inbound
     When API Operator save current order cost
     When API Operator recalculate order price
     When API Operator verify the order price is updated
     When Operator go to menu Order -> All Orders
     Then Operator verify order info after Global Inbound
+    And Operator go to menu Inter-Hub -> Shipment Management
+    And Operator filter Shipment Status = Completed on Shipment Management page
+    And Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify inbounded Shipment exist on Shipment Management page
 
   @DeleteShipment
   Scenario: Scan the order in Shipment Global Inbound by Overriding the Dimension (uid:492a25c2-3687-4774-bd6d-98ef63e512b3)
@@ -168,18 +148,14 @@ Feature: Shipment Global Inbound
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {hub-name-2} of the shipment
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator change the data of the created Tracking ID with this data:
-      | hubName           | {hub-name-2}             |
+    When Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName           | {hub-name-2}           |
       | trackingId        | GET_FROM_CREATED_ORDER |
-      | overrideDimHeight | 5                      |
-      | overrideDimWidth  | 7                      |
-      | overrideDimLength | 9                      |
-    And Operator input the scanned Tracking ID inside the shipment
+      | overrideDimHeight | 2                      |
+      | overrideDimWidth  | 3                      |
+      | overrideDimLength | 5                      |
+    Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
     And Operator filter Shipment Status = Completed on Shipment Management page
     And Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
@@ -200,20 +176,16 @@ Feature: Shipment Global Inbound
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {hub-name-2} of the shipment
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator change the data of the created Tracking ID with this data:
+    When Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
       | hubName           | {hub-name-2}           |
       | trackingId        | GET_FROM_CREATED_ORDER |
       | overrideSize      | L                      |
-      | overrideWeight    | 10                     |
-      | overrideDimHeight | 5                      |
-      | overrideDimWidth  | 7                      |
-      | overrideDimLength | 9                      |
-    And Operator input the scanned Tracking ID inside the shipment
+      | overrideWeight    | 7                      |
+      | overrideDimHeight | 2                      |
+      | overrideDimWidth  | 3                      |
+      | overrideDimLength | 5                      |
+    Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
     And Operator filter Shipment Status = Completed on Shipment Management page
     And Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
@@ -231,20 +203,23 @@ Feature: Shipment Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    Given API Operator put created parcel to shipment
-    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    And Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {hub-name-2} of the shipment
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator input the Invalid Tracking ID Status inside the shipment
-    Then Operator will get the alert of CMI Condition shown
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Operator put created parcel to shipment
+    When Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below and check alert:
+      | hubName    | {hub-name-2}           |
+      | trackingId | GET_FROM_CREATED_ORDER |
+      | toastText  | CMI Condition          |
+      | rackInfo   | ALERT                  |
+    And API Operator verify order info after Global Inbound
+    When Operator go to menu Order -> All Orders
+    Then Operator verify order info after Global Inbound
+    And DB Operator verify the last order_events record for the created order:
+      | type | 26 |
 
+  @DeleteShipment
   Scenario Outline: Shipment Global Inbound with Priority Level - <scenarioName> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
@@ -255,28 +230,22 @@ Feature: Shipment Global Inbound
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {hub-name-2} of the shipment
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    Given API Operator update priority level of an order to = "<priorityLevel>"
-    And Operator input the scanned Tracking ID inside the shipment
+    When Operator go to menu Order -> All Orders
+    And Operator open page of the created order from All Orders page
+    When Operator change Priority Level to "<priorityLevel>" on Edit Order page
+    And Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below and check alert:
+      | hubName        | {hub-name-2}           |
+      | trackingId     | GET_FROM_CREATED_ORDER |
+      | rackSector     | GET_FROM_CREATED_ORDER |
+      | destinationHub | GET_FROM_CREATED_ORDER |
     Then API Operator verify order info after Global Inbound
-    Then Operator verifies priority level in Shipment Global Inbound info is correct using data below:
-      | priorityLevel      | <priorityLevel>      |
-      | priorityLevelColor | <priorityLevelColor> |
-    And Operator go to menu Inter-Hub -> Shipment Management
-    And Operator filter Shipment Status = Completed on Shipment Management page
-    And Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
-    And Operator click "Load All Selection" on Shipment Management page
-    Then Operator verify inbounded Shipment exist on Shipment Management page
     Examples:
-      | Note         | scenarioName | hiptest-uid                              | priorityLevel | priorityLevelColor |
-      | Level 0      | Level 0      | uid:34f8948e-a40d-45e8-a2e3-fe9ca43f56f2 | 0             |                    |
-      | Level 1      | Level 1      | uid:c6f7d1db-da65-46ec-9816-5951fed5e20b | 1             | yellow             |
-      | Level 2 - 90 | Level 2 - 90 | uid:e5a32972-575a-43c5-8ec8-99e0c4fa9f1c | 42            | orange             |
-      | Level > 90   | Level > 90   | uid:12e7d971-fe8a-46b5-a714-a65ae12bd96b | 91            | red                |
+      | Title  | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
+      | 0      | uid:36826dfd-6a1b-45d8-873f-8005b77ea4b6 | 0             | #e8e8e8                 |
+      | 1      | uid:9004241a-7037-40c6-8f83-b8f67f717847 | 1             | #ffff00                 |
+      | 2 - 90 | uid:6e523c1e-1aa8-4eed-9032-42642067b4d1 | 50            | #ffa500                 |
+      | > 90   | uid:ffdb3be9-171d-4edc-af85-20e479704862 | 100           | #ff0000                 |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -7,8 +7,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
 /**
+ *
+ * DEPRECATED
  * @author Tristania Siagian, Sergey Mishanin
  */
+
 public class ShipmentGlobalInboundPage extends OperatorV2SimplePage
 {
     private static final String MD_SELECT_VALUE_SELECTION_XPATH = "//md-select-value[contains(@id,'select_value_label')]/span[contains(text(),'%s')]";

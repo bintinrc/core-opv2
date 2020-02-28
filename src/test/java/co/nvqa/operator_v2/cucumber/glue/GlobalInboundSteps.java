@@ -87,6 +87,7 @@ public class GlobalInboundSteps extends AbstractSteps
     @When("^Operator global inbounds parcel using data below and check alert:$")
     public void operatorGlobalInboundsParcelUsingThisDataBelowAndCheckAlert(Map<String, String> mapOfData)
     {
+        pause1s();
         Order order = get(KEY_CREATED_ORDER);
         GlobalInboundParams globalInboundParams = buildGlobalInboundParams(mapOfData);
         String toastText = mapOfData.get("toastText");
