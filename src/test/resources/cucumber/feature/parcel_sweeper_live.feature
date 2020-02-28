@@ -128,9 +128,9 @@ Feature: Parcel Sweeper Live
       | addParcelToRouteRequest | { "type":"DD" } |
     When API Operator refresh created order data
     When Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator sweep parcel using data below:
-      | hubName    | {hub-name}                      |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator provides data on Parcel Sweeper Live page:
+      | hubName    | {hub-name} |
+      | trackingId | CREATED    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
       | driverName | {ninja-driver-name}    |
@@ -169,9 +169,9 @@ Feature: Parcel Sweeper Live
       | addParcelToRouteRequest | { "type":"DD" } |
     When API Operator refresh created order data
     When Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator sweep parcel using data below:
-      | hubName    | {hub-name-2}                    |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator provides data on Parcel Sweeper Live page:
+      | hubName    | {hub-name-2} |
+      | trackingId | CREATED    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
       | driverName | {ninja-driver-name}    |
@@ -205,9 +205,9 @@ Feature: Parcel Sweeper Live
       | addParcelToRouteRequest | { "type":"DD" } |
     When API Operator refresh created order data
     When Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator sweep parcel using data below:
-      | hubName    | {hub-name}                    |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator provides data on Parcel Sweeper Live page:
+      | hubName    | {hub-name} |
+      | trackingId | CREATED    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
       | driverName | -                      |
@@ -242,9 +242,9 @@ Feature: Parcel Sweeper Live
       | addParcelToRouteRequest | { "type":"DD" } |
     When API Operator refresh created order data
     When Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator sweep parcel using data below:
-      | hubName    | {hub-name-2}                    |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator provides data on Parcel Sweeper Live page:
+      | hubName    | {hub-name-2} |
+      | trackingId | CREATED      |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
       | driverName | -                      |
