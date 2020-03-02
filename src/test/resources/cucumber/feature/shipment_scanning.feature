@@ -1,4 +1,4 @@
-@ShipmentScanning @Shipment @MiddleMile @CWF
+@ShipmentScanning @Shipment @MiddleMile
 Feature: Shipment Scanning
 
   @LaunchBrowser @ShouldAlwaysRun

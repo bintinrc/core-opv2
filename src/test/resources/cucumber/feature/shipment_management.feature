@@ -269,12 +269,11 @@ Feature: Shipment Management
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
-    Given Operator go to menu Inter-Hub -> Shipment Global Inbound
-    When Operator select the destination hub {hub-name-2} of the shipment
-    And Operator select the shipment type
-    And Operator select the created shipment by Shipment ID
-    And Operator click the add shipment button then continue
-    And Operator input the scanned Tracking ID inside the shipment
+    Given Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName    | {hub-name-2}           |
+      | trackingId | GET_FROM_CREATED_ORDER |
+    Then API Operator verify order info after Global Inbound
     And Operator go to menu Inter-Hub -> Shipment Management
     When Operator filter shipment based on "Shipment Completion Date Time" Date on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page

@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.util.TestConstants;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -58,6 +59,16 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
         checkSessionScan(shipmentId);
     }
 
+    public void inboundScanningNegativeScenario(Long shipmentId, String label, String hub, String condition)
+    {
+        selectHub(hub);
+        click(grabXpathButton(label));
+        clickStartInbound();
+
+        inputShipmentToInbound(shipmentId);
+        checkAlert(shipmentId, condition);
+    }
+
     public void clickStartInbound(){
         clickNvIconTextButtonByNameAndWaitUntilDone("container.inbound-scanning.start-inbound");
     }
@@ -111,5 +122,36 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
     public void inputEndDate(Date date)
     {
         setMdDatepicker("ctrl.date", date);
+    }
+
+    private void checkAlert(Long shipmentId, String condition)
+    {
+        waitUntilVisibilityOfElementLocated("//input[contains(@ng-model,'ctrl.shipmentId')]/following-sibling::span");
+        String errorMessage = getText("//input[contains(@ng-model,'ctrl.shipmentId')]/following-sibling::span");
+        switch (condition) {
+            case "Completed" :
+                assertEquals("Error Message is not the same : ", errorMessage, f("shipment %d is in terminal state: [%s]", shipmentId, condition));
+                break;
+
+            case "Cancelled" :
+                assertEquals("Error Message is not the same : ", errorMessage, f("shipment %d is in terminal state: [%s]", shipmentId, condition));
+                break;
+
+            case "different country van" :
+                assertEquals("Error Message is not the same : ", errorMessage, f("Mismatched hub system ID: shipment origin hub system ID %s and scan hub system ID id are not the same.", TestConstants.COUNTRY_CODE.toLowerCase()));
+                break;
+
+            case "different country hub" :
+                assertEquals("Error Message is not the same : ", errorMessage, f("Mismatched hub system ID: shipment destination hub system ID %s and scan hub system ID id are not the same.", TestConstants.COUNTRY_CODE.toLowerCase()));
+                break;
+
+            case "pending shipment" :
+                assertEquals("Error Message is not the same : ", errorMessage, f("shipment %d is [Pending], please inbound into van first", shipmentId));
+                break;
+
+            case "closed shipment" :
+                assertEquals("Error Message is not the same : ", errorMessage, f("shipment %d is [Closed], please inbound into van first", shipmentId));
+                break;
+        }
     }
 }
