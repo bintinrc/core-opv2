@@ -189,4 +189,12 @@ public class GlobalInboundPage extends OperatorV2SimplePage
         assertEquals("Priority Level", String.valueOf(expectedPriorityLevel), actualPriorityLevel);
         assertEquals("Priority Level Color", expectedPriorityLevelColorAsHex, actualPriorityLevelColor.asHex());
     }
+
+    public void verifyPetsGlobalInbound(GlobalInboundParams globalInboundParams, String ticketType)
+    {
+        globalInbound(globalInboundParams);
+
+        String actualWarningText = getText("//p[@ng-if='!ctrl.data.setAsideRackSector']/following-sibling::h1");
+        assertEquals("Warning Text is not the same : ", actualWarningText, "RECOVERY " + ticketType.toUpperCase());
+    }
 }

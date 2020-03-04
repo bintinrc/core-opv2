@@ -55,6 +55,7 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
 
     @Then("^Operator provides data on Parcel Sweeper Live page:$")
     public void operatorProvidesDataOnParcelSweeperLivePage(Map<String, String> mapOfData) {
+        mapOfData = resolveKeyValues(mapOfData);
         parcelSweeperLivePage.selectHubToBegin(mapOfData.get("hubName"));
 
         String trackingId = mapOfData.get("trackingId");
