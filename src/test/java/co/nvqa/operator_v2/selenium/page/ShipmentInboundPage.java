@@ -36,12 +36,11 @@ public class ShipmentInboundPage extends OperatorV2SimplePage
         pause1s();
     }
 
-    public void selectHubShipmentIdAndCheckErrorMessage(String hubName, String shipmentId, String errorMessage)
+    public void selectHubShipmentIdAndCheckErrorMessage(String hubName, String errorMessage)
     {
         pause3s();
         hub.searchAndSelectValue(hubName);
         shipmentIdSelector.waitUntilClickable();
-        shipmentIdSelector.enterSearchTerm(shipmentId);
         shipmentIdSelector.selectItem("No Shipment ID");
         pause1s();
         shipmentIdValidationMessage.waitUntilClickable();
