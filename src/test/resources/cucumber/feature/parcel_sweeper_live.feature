@@ -314,10 +314,10 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     Examples:
       | scenarioName           | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
-      | No Priority (0)        | uid:36826dfd-6a1b-45d8-873f-8005b77ea4b6 | 0             | #e8e8e8                 |
-      | No Priority (1)        | uid:9004241a-7037-40c6-8f83-b8f67f717847 | 1             | #ffff00                 |
-      | Late Priority (2 - 90) | uid:6e523c1e-1aa8-4eed-9032-42642067b4d1 | 50            | #ffa500                 |
-      | Urgent Priority (91++) | uid:ffdb3be9-171d-4edc-af85-20e479704862 | 100           | #ff0000                 |
+      | No Priority (0)        | uid:9ab1cd71-5936-4033-b8eb-3d5f40e1c5e2 | 0             | #e8e8e8                 |
+      | No Priority (1)        | uid:c9f356cb-4558-463e-9d28-d3cc8570f69c | 1             | #ffff00                 |
+      | Late Priority (2 - 90) | uid:e166f436-b6c0-4cb2-b1f4-340220898063 | 50            | #ffa500                 |
+      | Urgent Priority (91++) | uid:8acf6dff-fca2-42ff-bc60-2b63b04f3d32 | 100           | #ff0000                 |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
