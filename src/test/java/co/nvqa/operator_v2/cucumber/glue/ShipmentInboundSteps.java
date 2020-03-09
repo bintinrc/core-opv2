@@ -36,9 +36,8 @@ public class ShipmentInboundSteps extends AbstractSteps
     {
         data = resolveKeyValues(data);
         String hubName = data.get("hub");
-        String shipmentId = data.get("shipmentId");
         String errorMessage = data.get("errorMessage");
-        shipmentInboundPage.selectHubShipmentIdAndCheckErrorMessage(hubName, shipmentId, errorMessage);
+        shipmentInboundPage.selectHubShipmentIdAndCheckErrorMessage(hubName, errorMessage);
     }
 
     @And("Operator clicks on Continue Button in Shipment Inbound Page")

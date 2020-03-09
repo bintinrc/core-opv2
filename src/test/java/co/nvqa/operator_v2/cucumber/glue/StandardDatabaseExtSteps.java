@@ -586,6 +586,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     @Given("^DB Operator verifies warehouse_sweeps record$")
     public void dbOperatorVerifiesWareHouseSweepsRecord(Map<String, String> mapOfData)
     {
+        mapOfData = resolveKeyValues(mapOfData);
         String trackingId = mapOfData.get("trackingId");
         String hubId = mapOfData.get("hubId");
 

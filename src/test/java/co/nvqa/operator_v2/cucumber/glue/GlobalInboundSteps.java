@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.GlobalInboundPage;
+import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
@@ -88,6 +89,7 @@ public class GlobalInboundSteps extends AbstractSteps
     public void operatorGlobalInboundsParcelUsingThisDataBelowAndCheckAlert(Map<String, String> mapOfData)
     {
         pause1s();
+        mapOfData = resolveKeyValues(mapOfData);
         Order order = get(KEY_CREATED_ORDER);
         GlobalInboundParams globalInboundParams = buildGlobalInboundParams(mapOfData);
         String toastText = mapOfData.get("toastText");
@@ -114,5 +116,15 @@ public class GlobalInboundSteps extends AbstractSteps
         int expectedPriorityLevel = Integer.parseInt(mapOfData.get("priorityLevel"));
         String expectedPriorityLevelColorAsHex = mapOfData.get("priorityLevelColorAsHex");
         globalInboundPage.verifiesPriorityLevelInfoIsCorrect(expectedPriorityLevel, expectedPriorityLevelColorAsHex);
+    }
+
+    @Then("Operator global inbound and verify the ticket's type of {string} shown in the Global Inbound Page with data:")
+    public void operatorVerifyTheTicketSTypeShownInTheGlobalInboundPage(String ticketType, Map<String, String> mapOfData)
+    {
+        mapOfData = resolveKeyValues(mapOfData);
+        GlobalInboundParams globalInboundParams = buildGlobalInboundParams(mapOfData);
+
+        globalInboundPage.verifyPetsGlobalInbound(globalInboundParams, ticketType);
+        put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
     }
 }
