@@ -5,6 +5,7 @@ import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.zone.Zone;
 import co.nvqa.operator_v2.selenium.page.ParcelSweeperLivePage;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
 
@@ -82,6 +83,14 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
             return zoneNameExpected;
         }
         else return zoneNameFromDataTable;
+    }
+
+    @When("^Operator verifies priority level dialog box shows correct priority level info using data below:$")
+    public void operatorVerifiesPriorityLevel(Map<String, String> mapOfData)
+    {
+        int expectedPriorityLevel = Integer.parseInt(mapOfData.get("priorityLevel"));
+        String expectedPriorityLevelColorAsHex = mapOfData.get("priorityLevelColorAsHex");
+        parcelSweeperLivePage.verifiesPriorityLevel(expectedPriorityLevel, expectedPriorityLevelColorAsHex);
     }
 
 }

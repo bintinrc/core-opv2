@@ -266,6 +266,59 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
+  @DeleteOrArchiveRoute
+  Scenario Outline: Parcel Sweeper Live - With Priority Level - <scenarioName> (<hiptest-uid>)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When API Operator refresh created order data
+    When Operator go to menu Order -> All Orders
+    And Operator open page of the created order from All Orders page
+    When Operator change Priority Level to "<priorityLevel>" on Edit Order page
+    When Operator go to menu Routing -> Parcel Sweeper Live
+    When Operator provides data on Parcel Sweeper Live page:
+      | hubName    | {hub-name} |
+      | trackingId | CREATED    |
+    Then Operator verify Route ID on Parcel Sweeper page using data below:
+      | routeId    | {KEY_CREATED_ROUTE_ID} |
+      | driverName | {ninja-driver-name}    |
+      | color      | #73deec                |
+    Then Operator verifies priority level dialog box shows correct priority level info using data below:
+      | priorityLevel           | <priorityLevel>             |
+      | priorityLevelColorAsHex | <priorityLevelColorAsHex>   |
+    When API Operator get all zones preferences
+    Then Operator verify Zone on Parcel Sweeper page using data below:
+      | zoneName | FROM CREATED ORDER |
+      | color    | #73deec            |
+    And DB Operator verifies warehouse_sweeps record
+      | trackingId | CREATED  |
+      | hubId      | {hub-id} |
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 31    |
+      | 27    |
+    And Operator verifies event is present for order on Edit order page
+      | eventName | PARCEL ROUTING SCAN |
+      | hubName   | {hub-name}          |
+      | hubId     | {hub-id}            |
+    And Operator verifies event is present for order on Edit order page
+      | eventName | OUTBOUND SCAN	    |
+      | hubName   | {hub-name}          |
+      | hubId     | {hub-id}            |
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    Examples:
+      | scenarioName           | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
+      | No Priority (0)        | uid:36826dfd-6a1b-45d8-873f-8005b77ea4b6 | 0             | #e8e8e8                 |
+      | No Priority (1)        | uid:9004241a-7037-40c6-8f83-b8f67f717847 | 1             | #ffff00                 |
+      | Late Priority (2 - 90) | uid:6e523c1e-1aa8-4eed-9032-42642067b4d1 | 50            | #ffa500                 |
+      | Urgent Priority (91++) | uid:ffdb3be9-171d-4edc-af85-20e479704862 | 100           | #ff0000                 |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
