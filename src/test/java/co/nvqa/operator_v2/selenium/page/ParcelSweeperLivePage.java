@@ -54,4 +54,14 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
         Color actualColor = Color.fromString(getCssValue(DESTINATION_HUB_DIV_XPATH, "background-color"));
         assertEquals("Expected another color for Route ID background", color, actualColor.asHex());
     }
+
+    public void verifiesPriorityLevel(int expectedPriorityLevel, String expectedPriorityLevelColorAsHex)
+    {
+        String actualPriorityLevel = getText("//div[contains(text(), 'Priority Level')]/following-sibling::div");
+        Color actualPriorityLevelColor = getBackgroundColor("//div[contains(@class,'priority-container')][descendant::div[contains(text(), 'Priority Level')]]");
+
+        assertEquals("Priority Level", String.valueOf(expectedPriorityLevel), actualPriorityLevel);
+        assertEquals("Priority Level Color", expectedPriorityLevelColorAsHex, actualPriorityLevelColor.asHex());
+    }
+
 }
