@@ -1,10 +1,14 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.TxnRsvn;
+import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,6 +33,15 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
 
     private Map<String, Consumer<String>> filterSetters;
     private TxnRsvnTable txnRsvnTable;
+
+    @FindBy(css = "th.column-checkbox md-menu")
+    public MdMenu selectionMenu;
+
+    @FindBy(css = "[id^='route-group']")
+    public MdSelect routeGroup;
+
+    @FindBy(name = "Add Transactions/Reservations")
+    public NvButtonSave addTransactionReservation;
 
     public CreateRouteGroupsPage(WebDriver webDriver)
     {
@@ -200,10 +213,7 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
 
     public void selectAllShown()
     {
-        clickButtonByAriaLabel("Selection");
-        pause100ms();
-        clickButtonByAriaLabel("Select All Shown");
-        pause100ms();
+        selectionMenu.selectOption("Select All Shown");
     }
 
     public void clickAddToRouteGroupButton()
@@ -213,12 +223,12 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
 
     public void selectRouteGroupOnAddToRouteGroupDialog(String routeGroupName)
     {
-        selectValueFromMdSelectById("route-group", routeGroupName);
+        routeGroup.searchAndSelectValue(routeGroupName);
     }
 
     public void clickAddTransactionsOnAddToRouteGroupDialog()
     {
-        clickNvButtonSaveByNameAndWaitUntilDone("Add Transactions/Reservations");
+        addTransactionReservation.clickAndWaitUntilDone();
         waitUntilInvisibilityOfToast("Added successfully");
     }
 

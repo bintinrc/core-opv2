@@ -3,15 +3,25 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.operator_v2.model.ReservationInfo;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.FindBy;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,7 +29,6 @@ import java.util.regex.Pattern;
 import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.*;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
@@ -40,7 +49,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     private FiltersForm filtersForm;
     private ReservationDetailsDialog reservationDetailsDialog;
     private EditRouteDialog editRouteDialog;
-    private FinishReservationDialog finishReservationDialog;
+
+    @FindBy(xpath = "//md-dialog[contains(@class,'shipper-pickups-finish-reservation-dialog')]")
+    public FinishReservationDialog finishReservationDialog;
 
     public ShipperPickupsPage(WebDriver webDriver)
     {
@@ -53,7 +64,6 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         filtersForm = new FiltersForm(webDriver);
         reservationDetailsDialog = new ReservationDetailsDialog(webDriver);
         editRouteDialog = new EditRouteDialog(webDriver);
-        finishReservationDialog = new FinishReservationDialog(webDriver);
     }
 
     public BulkRouteAssignmentDialog bulkRouteAssignmentDialog()
@@ -95,7 +105,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         String pickupAddress = reservationsTable.searchByPickupAddress(address);
         String actualPickupAddress = reservationsTable.getPickupAddress(1);
 
-        if(comments!=null && comments.length()>255)
+        if (comments != null && comments.length() > 255)
         {
             comments = comments.substring(0, 255) + "...";
         }
@@ -123,7 +133,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         Date readyDate = expectedReservationInfo.getReadyByDate();
         Date latestDate = expectedReservationInfo.getLatestByDate();
 
-        if(readyDate!=null && latestDate!=null)
+        if (readyDate != null && latestDate != null)
         {
             openFiltersForm();
             filtersForm.filterReservationDate(readyDate, latestDate);
@@ -149,9 +159,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
     private void assertDateIsEqualIfExpectedValueNotNullOrBlank(String message, String expected, String actual)
     {
-        if(StringUtils.isNotBlank(expected))
+        if (StringUtils.isNotBlank(expected))
         {
-            if(actual==null)
+            if (actual == null)
             {
                 actual = "";
             }
@@ -164,7 +174,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
     public void verifyReservationsInfo(List<ReservationInfo> expectedReservationsInfo, List<Address> addresses)
     {
-        for (int i=0; i<addresses.size(); i++)
+        for (int i = 0; i < addresses.size(); i++)
         {
             verifyReservationInfo(expectedReservationsInfo.get(i), addresses.get(i));
         }
@@ -311,35 +321,43 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         clickNvApiIconButtonByNameAndWaitUntilDone(REFRESH_BUTTON_ARIA_LABEL);
     }
 
-    public void finishReservationWithFailure(){
+    public void finishReservationWithFailure()
+    {
         reservationsTable.clickActionButton(1, ACTION_BUTTON_FINISH);
         finishReservationDialog.selectFailureAsReason();
 
-        List<String> failureReasons = finishReservationDialog.getFailureReasonsList();
-        int randomFailureReasonIndex = (int)(Math.random() * 7);
+
+        List<String> failureReasons = finishReservationDialog.failureReason.getOptions();
+        int randomFailureReasonIndex = (int) (Math.random() * 7);
         finishReservationDialog.selectFailureReason(failureReasons.get(randomFailureReasonIndex));
 
-        while (finishReservationDialog.isFailureReasonDetailExist()){
-            finishReservationDialog.selectFailureReasonDetail();
-        }
+        int detailsCount;
+        do
+        {
+            detailsCount = finishReservationDialog.failureReasonDetail.size();
+            finishReservationDialog.selectFailureReasonDetail(detailsCount - 1);
+        } while (finishReservationDialog.failureReasonDetail.size() > detailsCount);
 
         finishReservationDialog.clickOnUpdateButton();
         finishReservationDialog.proceedWithFailureInConfirmationPopUp();
     }
 
-    public void finishReservationWithSuccess(){
+    public void finishReservationWithSuccess()
+    {
         reservationsTable.clickActionButton(1, ACTION_BUTTON_FINISH);
         finishReservationDialog.selectSuccessAsReason();
         finishReservationDialog.proceedWithSuccessInConfirmationPopUp();
     }
 
-    public void verifyFinishedReservationHighlighted(String color){
+    public void verifyFinishedReservationHighlighted(String color)
+    {
         assertEquals("Expected another background color for finished reservation with failure",
                 color,
                 reservationsTable.getNotDefaultBackgroundColorOfRow(1));
     }
 
-    public void verifyFinishedReservationHasStatus(String status){
+    public void verifyFinishedReservationHasStatus(String status)
+    {
         assertEquals("Expected another reservation status for finished reservation with failure",
                 status,
                 reservationsTable.getReservationStatus(1));
@@ -436,7 +454,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
             selectValueFromNvAutocomplete(FIELD_NEW_ROUTE_LOCATOR, String.valueOf(routeId));
 
-            if(priorityLevel!=null)
+            if (priorityLevel != null)
             {
                 sendKeysById(FIELD_PRIORITY_LEVEL_LOCATOR, String.valueOf(priorityLevel));
             }
@@ -476,16 +494,15 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
             waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
             int rowsCount = 1;
 
-            if(setToAll)
+            if (setToAll)
             {
                 clickButtonByAriaLabel(BUTTON_SET_TO_ALL_ARIA_LABEL);
-            }
-            else
+            } else
             {
                 rowsCount = getRowsCountOfTableWithNgRepeat(RESERVATIONS_TABLE_NG_REPEAT);
             }
 
-            for(int index=1; index<=rowsCount; index++)
+            for (int index = 1; index <= rowsCount; index++)
             {
                 sendKeysToMdInputContainerOnTableWithNgRepeat(index, FIELD_PRIORITY_LEVEL_MODEL, RESERVATIONS_TABLE_NG_REPEAT, String.valueOf(priorityLevel));
             }
@@ -534,7 +551,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
             Route route = null;
             int rowsCount = getRowsCountOfTableWithNgRepeat("reservation in ctrl.data.reservations");
 
-            for(int index=1; index<=rowsCount; index++)
+            for (int index = 1; index <= rowsCount; index++)
             {
                 route = validateSuggestedRoute(index, validRoutes);
             }
@@ -550,7 +567,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
             Matcher m = p.matcher(suggestedRoute);
             AtomicLong routeId = new AtomicLong(0);
 
-            if(m.matches())
+            if (m.matches())
             {
                 routeId.set(Long.parseLong(m.group(1)));
             }
@@ -766,12 +783,16 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
      */
     public static class FiltersForm extends OperatorV2SimplePage
     {
-        private static final String FIELD_FROM_NG_MODEL = "fromModel";
-        private static final String FIELD_TO_NG_MODEL = "toModel";
         private static final String BUTTON_LOAD_SELECTION_NAME = "Load Selection";
         private static final String FIELD_SELECT_FILTER_PLACEHOLDER = "Select Filter";
         private static final String HUBS_ITEM_TYPE = "Hubs";
         private static final String ZONES_ITEM_TYPE = "Zones";
+
+        @FindBy(name = "fromDateField")
+        public MdDatepicker fromDateField;
+
+        @FindBy(name = "toDateField")
+        public MdDatepicker toDateField;
 
         public FiltersForm(WebDriver webDriver)
         {
@@ -780,8 +801,8 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
         public void filterReservationDate(Date fromDate, Date toDate)
         {
-            setMdDatepicker(FIELD_TO_NG_MODEL, toDate); // To Date should be select first.
-            setMdDatepicker(FIELD_FROM_NG_MODEL, fromDate);
+            toDateField.setDate(toDate); // To Date should be select first.
+            fromDateField.setDate(fromDate);
         }
 
         public void filterByHub(String hub)
@@ -805,14 +826,14 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         {
             List<String> valuesSelected = getSelectedValuesFromNvFilterBox("Reservation Types");
 
-            if((Objects.nonNull(valuesSelected) && !valuesSelected.contains(reservationType)) || valuesSelected.isEmpty())
+            if ((Objects.nonNull(valuesSelected) && !valuesSelected.contains(reservationType)) || valuesSelected.isEmpty())
             {
                 selectValueFromNvAutocompleteByItemTypesAndDismiss("Reservation Types", reservationType);
             }
 
             valuesSelected = getSelectedValuesFromNvFilterBox("Reservation Types");
 
-            if(Objects.nonNull(valuesSelected) && !valuesSelected.isEmpty())
+            if (Objects.nonNull(valuesSelected) && !valuesSelected.isEmpty())
             {
                 valuesSelected.stream()
                         .filter(valueSelected -> !valueSelected.equals(reservationType))
@@ -822,7 +843,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
         public void filterByStatus(String waypointStatus)
         {
-            if(waypointStatus != null)
+            if (waypointStatus != null)
             {
                 clickButtonByAriaLabel("ROUTED");
                 clickButtonByAriaLabel("PENDING");
@@ -839,98 +860,102 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     /**
      * Accessor for Finish reservation dialog
      */
-    public static class FinishReservationDialog extends OperatorV2SimplePage
+    public static class FinishReservationDialog extends MdDialog
     {
-        private static final String DIALOG_LOCATOR = "//md-dialog[contains(@class,'shipper-pickups-finish-reservation-dialog')]";
-        private static final String DIALOG_FAIL_RESERVATION_CONFIRMATION_LOCATOR = "//md-dialog[contains(@aria-label,'Fail Reservation')]";
-        private static final String DIALOG_SUCCESS_RESERVATION_CONFIRMATION_LOCATOR = "//md-dialog[contains(@aria-label,'Success Reservation')]";
-        private static final String BUTTON_SUCCESS_ARIA_LABEL = "Success";
-        private static final String BUTTON_FAILURE_ARIA_LABEL = "Failure";
-        private static final String BUTTON_PROCEED_WITH_FINISHING_RESERVATION_ARIA_LABEL = "Proceed";
-        private static final String BUTTON_UPDATE_FAILURE_ARIA_LABEL = "Update";
-        private static final String SELECT_FAILURE_REASON_ARIA_LABEL = "Choose a failure reason";
-        private static final String SELECT_FAILURE_REASON_ID_STARTS_WITH = "container.shipper-pickups.choose-failure-reason";
-        private static final String SELECT_FAILURE_REASON_DETAIL_ID_STARTS_WITH = "container.shipper-pickups.failure-reason-detail";
-        private static final String SELECT_OPTIONS_FAILURE_REASON_DETAIL = "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option/div";
-        private static final String SELECT_OPTIONS_FAILURE_REASON = "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option/div";
+        @FindBy(name = "commons.failure")
+        public NvIconTextButton failure;
 
-        public FinishReservationDialog(WebDriver webDriver)
+        @FindBy(name = "commons.success")
+        public NvIconTextButton success;
+
+        @FindBy(xpath = "//md-dialog[contains(@aria-label,'Success Reservation')]")
+        public ConfirmFinishReservationDialog successReservationDialog;
+
+        @FindBy(xpath = "//md-dialog[contains(@aria-label,'Fail Reservation')]")
+        public ConfirmFinishReservationDialog failReservationDialog;
+
+        @FindBy(css = "[id^='container.shipper-pickups.choose-failure-reason']")
+        public MdSelect failureReason;
+
+        @FindBy(css = "[id^='container.shipper-pickups.failure-reason-detail']")
+        public List<MdSelect> failureReasonDetail;
+
+        @FindBy(name = "commons.update")
+        public NvApiTextButton update;
+
+        public FinishReservationDialog(WebDriver webDriver, WebElement webElement)
         {
-            super(webDriver);
+            super(webDriver, webElement);
+        }
+
+        public FinishReservationDialog(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+        {
+            super(webDriver, searchContext, webElement);
         }
 
         public void selectFailureAsReason()
         {
-            waitUntilVisibilityOfElementLocated(DIALOG_LOCATOR);
-            clickButtonByAriaLabelAndWaitUntilDone(BUTTON_FAILURE_ARIA_LABEL);
+            waitUntilVisible();
+            failure.waitUntilClickable();
+            failure.click();
         }
 
         public void selectSuccessAsReason()
         {
-            waitUntilVisibilityOfElementLocated(DIALOG_LOCATOR);
-            clickButtonByAriaLabelAndWaitUntilDone(BUTTON_SUCCESS_ARIA_LABEL);
+            waitUntilVisible();
+            success.waitUntilClickable();
+            success.click();
         }
 
         public void clickOnUpdateButton()
         {
-            clickButtonByAriaLabelAndWaitUntilDone(BUTTON_UPDATE_FAILURE_ARIA_LABEL);
+            update.clickAndWaitUntilDone();
         }
 
         public void proceedWithFailureInConfirmationPopUp()
         {
-            waitUntilVisibilityOfElementLocated(DIALOG_FAIL_RESERVATION_CONFIRMATION_LOCATOR);
-            clickButtonByAriaLabelAndWaitUntilDone(BUTTON_PROCEED_WITH_FINISHING_RESERVATION_ARIA_LABEL);
+            failReservationDialog.waitUntilVisible();
+            failReservationDialog.proceed.click();
         }
 
         public void proceedWithSuccessInConfirmationPopUp()
         {
-            waitUntilVisibilityOfElementLocated(DIALOG_SUCCESS_RESERVATION_CONFIRMATION_LOCATOR);
-            clickButtonByAriaLabelAndWaitUntilDone(BUTTON_PROCEED_WITH_FINISHING_RESERVATION_ARIA_LABEL);
+            successReservationDialog.waitUntilVisible();
+            successReservationDialog.proceed.click();
         }
 
-        private List<String> getFailureReasonsList(){
-            clickf("//md-select[starts-with(@id,'%s')]", SELECT_FAILURE_REASON_ID_STARTS_WITH);
-            pause100ms();
-            List<String> textOfElements = getTextOfElements(SELECT_OPTIONS_FAILURE_REASON);
-            Actions actions = new Actions(getWebDriver());
-            actions.sendKeys(Keys.ESCAPE).build().perform();
-            pause300ms();
-            return textOfElements;
+        private void selectFailureReason(String value)
+        {
+            failureReason.selectValue(value);
         }
 
-        private List<String> getFailureReasonsDetailList(String elementId){
-            waitUntilVisibilityOfElementLocated(f("//md-select[starts-with(@id,'%s')]", elementId));
-            clickf("//md-select[starts-with(@id,'%s')]", elementId);
-            pause100ms();
-            List<String> textOfElements = getTextOfElements(SELECT_OPTIONS_FAILURE_REASON_DETAIL);
-            Actions actions = new Actions(getWebDriver());
-            actions.sendKeys(Keys.ESCAPE).build().perform();
-            pause300ms();
-            return textOfElements;
+        private void selectFailureReasonDetail(int index, String value)
+        {
+            failureReasonDetail.get(index).selectValue(value);
         }
 
-        private void selectFailureReason(String value){
-            selectValueFromMdSelectByAriaLabel(SELECT_FAILURE_REASON_ARIA_LABEL, value);
-        }
-
-        private void selectFailureReasonDetail(String elementId, String value){
-            selectValueFromMdSelectById(elementId, value);
-        }
-
-        private boolean isFailureReasonDetailExist(){
-            return isElementExist(f("//md-select[starts-with(@id,'%s')][md-select-value/span[contains(text(),'Failure reason detail')]]",
-                    SELECT_FAILURE_REASON_DETAIL_ID_STARTS_WITH));
-        }
-
-        public void selectFailureReasonDetail() {
-            List<WebElement> failureReasonDetailsList = getWebDriver()
-                    .findElements(By.xpath(f("//md-select[starts-with(@id,'%s')][md-select-value/span[contains(text(),'Failure reason detail')]]",
-                    SELECT_FAILURE_REASON_DETAIL_ID_STARTS_WITH)));
-            String elementId = failureReasonDetailsList.get(0).getAttribute("id");
-            List<String> failureReasonDetailsSecond = getFailureReasonsDetailList(elementId);
+        public void selectFailureReasonDetail(int index)
+        {
+            List<String> failureReasonDetailsSecond = failureReasonDetail.get(index).getOptions();
             int randomFailureReasonDetailsIndexSecond = (int) (Math.random() * failureReasonDetailsSecond.size());
-            selectFailureReasonDetail(elementId, failureReasonDetailsSecond.get(randomFailureReasonDetailsIndexSecond)
+            selectFailureReasonDetail(index, failureReasonDetailsSecond.get(randomFailureReasonDetailsIndexSecond)
                     .replace("'", "/'"));
+        }
+
+        public static class ConfirmFinishReservationDialog extends MdDialog
+        {
+            public ConfirmFinishReservationDialog(WebDriver webDriver, WebElement webElement)
+            {
+                super(webDriver, webElement);
+            }
+
+            public ConfirmFinishReservationDialog(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+            {
+                super(webDriver, searchContext, webElement);
+            }
+
+            @FindBy(css = "[aria-label='Proceed']")
+            public Button proceed;
         }
     }
 }

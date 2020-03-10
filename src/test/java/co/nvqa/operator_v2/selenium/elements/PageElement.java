@@ -72,6 +72,7 @@ public class PageElement extends SimplePage
 
     public void clearAndSendKeys(CharSequence keysToSend)
     {
+        waitUntilClickable();
         sendKeys(webElement, keysToSend);
     }
 
@@ -80,7 +81,8 @@ public class PageElement extends SimplePage
         return webElement;
     }
 
-    public SearchContext getSearchContext(){
+    public SearchContext getSearchContext()
+    {
         return searchContext;
     }
 
@@ -99,8 +101,14 @@ public class PageElement extends SimplePage
         }
     }
 
-    public void scrollIntoView(){
-        scrollIntoView(webElement, false);
+    public void scrollIntoView()
+    {
+        scrollIntoView(false);
+    }
+
+    public void scrollIntoView(boolean alignToTop)
+    {
+        scrollIntoView(webElement, alignToTop);
     }
 
     public void waitUntilClickable()
@@ -118,11 +126,18 @@ public class PageElement extends SimplePage
         waitUntilInvisibilityOfElementLocated(webElement);
     }
 
-    public boolean isEnabled(){
+    public boolean isEnabled()
+    {
         return webElement.isEnabled();
     }
 
-    public WebElement findElement(By by){
+    public WebElement findElement(By by)
+    {
         return webElement.findElement(by);
+    }
+
+    protected String escapeValue(String value)
+    {
+        return value.replace("'", "\\'");
     }
 }

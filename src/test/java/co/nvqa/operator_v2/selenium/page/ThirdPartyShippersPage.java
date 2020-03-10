@@ -103,9 +103,7 @@ public class ThirdPartyShippersPage extends OperatorV2SimplePage
     {
         searchTableByCode(thirdPartyShipper.getCode());
         clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
-        confirmDeleteDialog.waitUntilClickable();
-        pause1s();
-        confirmDeleteDialog.delete.click();
+        confirmDeleteDialog.confirmDelete();
         waitUntilVisibilityOfElementLocated("//div[@id='toast-container']//div[contains(text(), 'deleted!')]");
         waitUntilInvisibilityOfElementLocated("//div[@id='toast-container']//div[contains(text(), 'deleted!')]");
     }

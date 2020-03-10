@@ -9,8 +9,8 @@ Feature: Reservations
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
-    Given Operator go to menu Shipper Support -> Reservations
-    When Operator create new Reservation using data below:
+    When Operator go to menu Shipper Support -> Reservations
+    And Operator create new Reservation using data below:
       | shipperName  | {shipper-v4-name}   |
       | timeslot     | 9AM-12PM            |
       | approxVolume | Less than 3 Parcels |
@@ -21,9 +21,9 @@ Feature: Reservations
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Reservations
-    When Operator create new Reservation using data below:
+    And Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Shipper Support -> Reservations
+    And Operator create new Reservation using data below:
       | shipperName  | {shipper-v4-name}   |
       | timeslot     | 9AM-12PM            |
       | approxVolume | Less than 3 Parcels |
@@ -38,9 +38,9 @@ Feature: Reservations
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Reservations
-    When Operator create new Reservation using data below:
+    And Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Shipper Support -> Reservations
+    And Operator create new Reservation using data below:
       | shipperName  | {shipper-v4-name}   |
       | timeslot     | 9AM-12PM            |
       | approxVolume | Less than 3 Parcels |
@@ -53,14 +53,12 @@ Feature: Reservations
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Reservations
-    When Operator create new Reservation using data below:
+    And Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Shipper Support -> Reservations
+    And Operator create new Reservation using data below:
       | shipperName  | {shipper-v4-name}   |
       | timeslot     | 9AM-12PM            |
       | approxVolume | Less than 3 Parcels |
-    Then Operator verify the new Reservation is created successfully
-      | expectedTimeslotTextOnCalendar | 9:00 AM - 12:00 PM |
     Then Operator verify the new Reservation is created successfully
       | expectedTimeslotTextOnCalendar | 9:00 AM - 12:00 PM |
     When Operator update the new Reservation using data below:
@@ -75,53 +73,13 @@ Feature: Reservations
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
-    Then Operator go to menu Shipper Support -> Reservations
-    When Operator create new Reservation using data below:
-      | shipperName  | {shipper-v4-name}   |
-      | timeslot     | 9AM-12PM            |
-      | approxVolume | Less than 3 Parcels |
-    Then Operator verify the new Reservation is created successfully
-      | expectedTimeslotTextOnCalendar | 9:00 AM - 12:00 PM |
-    When API Operator create new route using data below:
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 3 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T09:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T12:00:00{gradle-timezone-XXX}" } |
+    And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add reservation pick-up to the route
-    Then Operator go to menu Pick Ups -> Shipper Pickups
-    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
-      | fromDate | TODAY      |
-      | toDate   | TOMORROW   |
-      | type     | Normal     |
-      | shipperName     | {shipper-v4-name}     |
-    And Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName  | {shipper-v4-name}            |
-      | approxVolume | Less than 3 Parcels          |
-      | comments     | GET_FROM_CREATED_RESERVATION |
-      | routeId      | GET_FROM_CREATED_ROUTE       |
-      | driverName   | {ninja-driver-name}          |
-    When Operator finish reservation with failure
-    Then Operator verifies reservation is finished using data below:
-      | backgroundColor | #ffc0cb |
-      | status          | FAIL    |
-    Then DB Operator verifies reservation record using data below:
-      | status | 2 |
-    And DB Operator verifies waypoint record using data below:
-      | status | Fail |
-
-  @DeleteOrArchiveRoute
-  Scenario: Operator finishes a normal reservation with success (uid:e6644334-79ee-413a-9d07-e5a7fbac14d3)
-    Given API Operator create new shipper address V2 using data below:
-      | shipperId       | {shipper-v4-id} |
-      | generateAddress | RANDOM          |
-    Then Operator go to menu Shipper Support -> Reservations
-    When Operator create new Reservation using data below:
-      | shipperName  | {shipper-v4-name}   |
-      | timeslot     | 9AM-12PM            |
-      | approxVolume | Less than 3 Parcels |
-    Then Operator verify the new Reservation is created successfully
-      | expectedTimeslotTextOnCalendar | 9:00 AM - 12:00 PM |
-    When API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add reservation pick-up to the route
-    Then Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | TODAY             |
       | toDate      | TOMORROW          |
@@ -133,11 +91,43 @@ Feature: Reservations
       | comments     | GET_FROM_CREATED_RESERVATION |
       | routeId      | GET_FROM_CREATED_ROUTE       |
       | driverName   | {ninja-driver-name}          |
-    When Operator finish reservation with success
+    When Operator finish reservation with failure
+    Then Operator verifies reservation is finished using data below:
+      | backgroundColor | #ffc0cb |
+      | status          | FAIL    |
+    And DB Operator verifies reservation record using data below:
+      | status | 2 |
+    And DB Operator verifies waypoint record using data below:
+      | status | Fail |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator finishes a normal reservation with success (uid:e6644334-79ee-413a-9d07-e5a7fbac14d3)
+    Given API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 3 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T09:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T12:00:00{gradle-timezone-XXX}" } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add reservation pick-up to the route
+    And Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | TODAY             |
+      | toDate      | TOMORROW          |
+      | type        | Normal            |
+      | shipperName | {shipper-v4-name} |
+    And Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | shipperName  | {shipper-v4-name}            |
+      | approxVolume | Less than 3 Parcels          |
+      | comments     | GET_FROM_CREATED_RESERVATION |
+      | routeId      | GET_FROM_CREATED_ROUTE       |
+      | driverName   | {ninja-driver-name}          |
+    And Operator finish reservation with success
     Then Operator verifies reservation is finished using data below:
       | backgroundColor | #90ee90 |
       | status          | SUCCESS |
-    Then DB Operator verifies reservation record using data below:
+    And DB Operator verifies reservation record using data below:
       | status | 1 |
     And DB Operator verifies waypoint record using data below:
       | status | Success |

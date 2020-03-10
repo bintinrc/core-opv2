@@ -24,6 +24,11 @@ public class TextBox extends PageElement
         clearAndSendKeys(value);
     }
 
+    public void setValue(Object value)
+    {
+        setValue(String.valueOf(value));
+    }
+
     public void jsSetValue(String value)
     {
         executeScript(f("arguments[0].value='%s'", value), webElement);

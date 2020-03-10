@@ -1,5 +1,7 @@
-@OperatorV2 @OperatorV2Part2 @ParcelSweeperByHub
+@OperatorV2Deprecated @OperatorV2Part2Deprecated @ParcelSweeperByHub
 Feature: Parcel Sweeper By Hub
+
+  # THIS FEATURE HAS BEEN DEPRECATED
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2

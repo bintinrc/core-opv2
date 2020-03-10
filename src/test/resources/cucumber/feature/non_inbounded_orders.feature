@@ -1,5 +1,7 @@
-@OperatorV2 @OperatorV2Part1 @NonInboundedOrders @Saas
+@OperatorV2Deprecated @NonInboundedOrders @Saas
 Feature: Non Inbounded Orders
+
+  # THIS FEATURE IS DEPRECATED
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2

@@ -96,8 +96,7 @@ public class AddressingPage extends OperatorV2SimplePage
     public void deleteAddress()
     {
         clickNvIconTextButtonByNameAndWaitUntilDone("Delete");
-        confirmDeleteDialog.waitUntilClickable();
-        confirmDeleteDialog.delete.click();
+        confirmDeleteDialog.confirmDelete();
         waitUntilInvisibilityOfToast("Success delete address");
     }
 

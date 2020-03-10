@@ -90,9 +90,7 @@ public class ContactTypeManagementPage extends OperatorV2SimplePage
         searchTable(searchContactTypesKeyword);
         assertFalse(String.format("Table is empty. Contact Type with keywords = '%s' not found.", searchContactTypesKeyword), isTableEmpty());
         clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
-        pause1s();
-        confirmDeleteDialog.waitUntilClickable();
-        confirmDeleteDialog.delete.click();
+        confirmDeleteDialog.confirmDelete();
         pause1s();
     }
 

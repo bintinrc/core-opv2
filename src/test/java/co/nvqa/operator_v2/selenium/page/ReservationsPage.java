@@ -2,12 +2,19 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Reservation;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.ContainerSwitch;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -18,6 +25,30 @@ import java.util.Locale;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class ReservationsPage extends OperatorV2SimplePage
 {
+    @FindBy(css = "nv-autocomplete[search-text='ctrl.shipperSearchText']")
+    public NvAutocomplete shipper;
+
+    @FindBy(css = "nv-autocomplete[search-text='ctrl.addressSearchText']")
+    public NvAutocomplete address;
+
+    @FindBy(css = "button[aria-label='Create Reservations']")
+    public Button createReservations;
+
+    @FindBy(css = "nv-button-timeslot")
+    public ContainerSwitch timeslot;
+
+    @FindBy(css = "[aria-label='Approx. Volume']")
+    public MdSelect approxVolume;
+
+    @FindBy(css = "[aria-label='Comments']")
+    public TextBox comments;
+
+    @FindBy(css = "[aria-label='Priority Level']")
+    public TextBox priorityLevel;
+
+    @FindBy(name = "Create Reservation")
+    public NvButtonSave createReservation;
+
     public ReservationsPage(WebDriver webDriver)
     {
         super(webDriver);
@@ -53,27 +84,22 @@ public class ReservationsPage extends OperatorV2SimplePage
     {
         String completeAddress = address.getAddress1() + ' ' + address.getAddress2();
 
-        selectValueFromNvAutocomplete("ctrl.shipperSearchText", shipperName);
-        retryIfRuntimeExceptionOccurred(() -> selectValueFromNvAutocomplete("ctrl.addressSearchText", completeAddress), "Select address");
+        shipper.selectValue(shipperName);
+        retryIfRuntimeExceptionOccurred(() -> this.address.selectValue(completeAddress), "Select address");
         waitUntilInvisibilityOfElementLocated(getNextDateCellXpath() + "//div[contains(@style, 'inherit')]/md-progress-circular");
         click(getNextDateCellXpath());
-        clickButtonByAriaLabel("Create Reservations");
+        createReservations.click();
         pause1s(); // Delay for sliding animation.
-        clickf("//form[@name='createForm']//button[@aria-label='%s']", timeslot);
-        selectValueFromMdSelect("ctrl.createForm.approxVolume", reservation.getApproxVolume());
-        sendKeys("//md-input-container[@form='createForm']//input[@aria-label='Comments']", reservation.getComments());
+        this.timeslot.selectValue(timeslot);
+        approxVolume.selectValue(reservation.getApproxVolume());
+        comments.setValue(reservation.getComments());
+
         if (reservation.getPriorityLevel() != null)
         {
-            sendKeysByAriaLabel("Priority Level", String.valueOf(reservation.getPriorityLevel()));
+            priorityLevel.setValue(reservation.getPriorityLevel());
         }
-        try
-        {
-            Thread.sleep(100000);
-        } catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-        clickNvButtonSaveByNameAndWaitUntilDone("Create Reservation");
+
+        createReservation.clickAndWaitUntilDone();
         waitUntilInvisibilityOfToast("Reservation Created Successfully");
     }
 
