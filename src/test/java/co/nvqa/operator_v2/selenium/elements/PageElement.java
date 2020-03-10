@@ -72,6 +72,7 @@ public class PageElement extends SimplePage
 
     public void clearAndSendKeys(CharSequence keysToSend)
     {
+        waitUntilClickable();
         sendKeys(webElement, keysToSend);
     }
 
@@ -102,7 +103,12 @@ public class PageElement extends SimplePage
 
     public void scrollIntoView()
     {
-        scrollIntoView(webElement, false);
+        scrollIntoView(false);
+    }
+
+    public void scrollIntoView(boolean alignToTop)
+    {
+        scrollIntoView(webElement, alignToTop);
     }
 
     public void waitUntilClickable()

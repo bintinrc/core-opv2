@@ -1,5 +1,7 @@
-@OperatorV2 @OperatorV2Part2 @ParcelSweeper
+@OperatorV2Deprecated @OperatorV2Part2Deprecated @ParcelSweeper
 Feature: Parcel Sweeper
+
+  # THIS FEATURE HAS BEEN DEPRECATED
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2

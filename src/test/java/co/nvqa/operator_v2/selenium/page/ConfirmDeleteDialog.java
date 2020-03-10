@@ -15,4 +15,12 @@ public class ConfirmDeleteDialog extends PageElement
 
     @FindBy(css = "button[aria-label='Delete']")
     public Button delete;
+
+    public void confirmDelete()
+    {
+        waitUntilClickable();
+        pause1s();
+        delete.click();
+        waitUntilInvisible();
+    }
 }

@@ -63,8 +63,7 @@ public class VehicleTypeManagementPage extends OperatorV2SimplePage
     {
         searchTable(name);
         clickActionButtonOnTable(1, ACTION_BUTTON_DEL);
-        confirmDeleteDialog.waitUntilClickable();
-        confirmDeleteDialog.delete.click();
+        confirmDeleteDialog.confirmDelete();
         pause5s(); //This pause is used to wait until the cache is synced to all node. Sometimes we got an error that says the new Vehicle Type is not found.
     }
 
