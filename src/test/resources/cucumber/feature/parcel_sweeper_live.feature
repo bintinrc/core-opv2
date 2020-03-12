@@ -319,6 +319,45 @@ Feature: Parcel Sweeper Live
       | Late Priority (2 - 90) | uid:e166f436-b6c0-4cb2-b1f4-340220898063 | 50            | #ffa500                 |
       | Urgent Priority (91++) | uid:8acf6dff-fca2-42ff-bc60-2b63b04f3d32 | 100           | #ff0000                 |
 
+  @DeleteOrArchiveRoute
+  Scenario: Parcel Sweeper Live - RTS Order
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator RTS created order:
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    And API Operator refresh created order data
+    When Operator go to menu Routing -> Parcel Sweeper Live
+    When Operator provides data on Parcel Sweeper Live page:
+      | hubName    | {hub-name} |
+      | trackingId | CREATED    |
+    Then Operator verify RTS label on Parcel Sweeper Live page
+    And Operator verify Route ID on Parcel Sweeper By Hub page using data below:
+      | orderId    | NOT ROUTED |
+      | driverName | NIL        |
+      | color      | #73deec    |
+    And API Operator get all zones preferences
+    And Operator verify Zone on Parcel Sweeper By Hub page using data below:
+      | zoneName | FROM CREATED ORDER |
+      | color    | #73deec            |
+    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
+      | hubName | GLOBAL INBOUND |
+      | color   | #73deec        |
+    And DB Operator verifies warehouse_sweeps record
+      | trackingId | CREATED  |
+      | hubId      | {hub-id} |
+    And DB Operator verify order_events record for the created order:
+      | type | 27 |
+    And Operator verifies event is present for order on Edit order page
+      | eventName | PARCEL ROUTING SCAN |
+      | hubName   | {hub-name}          |
+      | hubId     | {hub-id}            |
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

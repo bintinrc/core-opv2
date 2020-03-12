@@ -12,6 +12,9 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     private static final String DESTINATION_HUB_DIV_XPATH = "//div[contains(@class, 'destination-hub-container')]";
     private static final String DESTINATION_HUB_DIV_TEXT_XPATH = "//div[contains(@class,'destination-hub')]";
     private static final String SCAN_ERROR_CLASS_XPATH = "[contains(@ng-class,'scan-error')]";
+    private static final String PRIORITY_LEVEL_XPATH = "//div[contains(text(), 'Priority Level')]/following-sibling::div";
+    private static final String PRIORITY_LEVEL_COLOR_XPATH ="//div[contains(@class,'priority-container')][descendant::div[contains(text(), 'Priority Level')]]";
+    private static final String LOCATOR_RTS_INFO = "//div[@ng-if='ctrl.data.isRtsed']";
 
     public ParcelSweeperLivePage(WebDriver webDriver) {
         super(webDriver);
@@ -57,11 +60,23 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
 
     public void verifiesPriorityLevel(int expectedPriorityLevel, String expectedPriorityLevelColorAsHex)
     {
-        String actualPriorityLevel = getText("//div[contains(text(), 'Priority Level')]/following-sibling::div");
-        Color actualPriorityLevelColor = getBackgroundColor("//div[contains(@class,'priority-container')][descendant::div[contains(text(), 'Priority Level')]]");
+        String actualPriorityLevel = getText(PRIORITY_LEVEL_XPATH);
+        Color actualPriorityLevelColor = getBackgroundColor(PRIORITY_LEVEL_COLOR_XPATH);
 
         assertEquals("Priority Level", String.valueOf(expectedPriorityLevel), actualPriorityLevel);
         assertEquals("Priority Level Color", expectedPriorityLevelColorAsHex, actualPriorityLevelColor.asHex());
+    }
+
+    public void verifyRTSInfo(boolean isRTSed)
+    {
+        if (isRTSed)
+        {
+            assertTrue("RTS Label is not displayed", isElementVisible(LOCATOR_RTS_INFO));
+            assertThat("Unexpected text of RTS Label", getText(LOCATOR_RTS_INFO), equalToIgnoringCase("RTS"));
+        } else
+        {
+            assertFalse("RTS Label is displayed, but must not", isElementVisible(LOCATOR_RTS_INFO));
+        }
     }
 
 }

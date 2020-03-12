@@ -93,4 +93,10 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
         parcelSweeperLivePage.verifiesPriorityLevel(expectedPriorityLevel, expectedPriorityLevelColorAsHex);
     }
 
+    @Then("^Operator verify RTS label on Parcel Sweeper Live page$")
+    public void operatorVerifyRtsLabelOnParcelSweeperByHubPage()
+    {
+        parcelSweeperLivePage.verifyRTSInfo(true);
+    }
+
 }
