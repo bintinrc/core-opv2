@@ -119,6 +119,42 @@ Feature: Shipment Management
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify the Shipment Details Page opened is for the created shipment
 
+  Scenario: View and Edit Movement From Origin Hub (uid:97e0094c-0399-4cb1-bd3a-fc7dcdb270d8)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Movement Visualization
+    When Operator selects the Hub Type of "origin" on Movement Visualization Page
+    And Operator selects the Hub by name "{hub-relation-origin-hub-name}"
+    And API Operator gets all relations for "origin" Hub id "{hub-relation-origin-hub-id}"
+    And Operator clicks the selected Hub
+    Then Operator verifies the list of "origin" shown on Movement Visualization Page is the same to the endpoint fired
+    When Operator clicks the first result on the list shown on Movement Visualization Page
+    Then Operator verifies the relation of hub is right
+    When Operator clicks Edit Schedule Button on the Movement Schedule Modal
+    And Operator edits the selected Movement Schedule
+    And Operator close the View Schedule Modal on Movement Visualization Page
+    And Operator verifies the relation of hub is right
+    Then Operator verifies that the newly added relation is existed
+    When Operator clicks Edit Schedule Button on the Movement Schedule Modal
+    Then Operator deletes the newly added relation from Movement Visualization Page
+
+  Scenario: View and Edit Movement From Destination Hub (uid:c4f3eb6e-9a68-475e-af30-c5dda669d6d3)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Movement Visualization
+    When Operator selects the Hub Type of "destination" on Movement Visualization Page
+    And Operator selects the Hub by name "{hub-relation-destination-hub-name}"
+    And API Operator gets all relations for "destination" Hub id "{hub-relation-destination-hub-id}"
+    And Operator clicks the selected Hub
+    Then Operator verifies the list of "destination" shown on Movement Visualization Page is the same to the endpoint fired
+    When Operator clicks the first result on the list shown on Movement Visualization Page
+    Then Operator verifies the relation of hub is right
+    When Operator clicks Edit Schedule Button on the Movement Schedule Modal
+    And Operator edits the selected Movement Schedule
+    And Operator close the View Schedule Modal on Movement Visualization Page
+    And Operator verifies the relation of hub is right
+    Then Operator verifies that the newly added relation is existed
+    When Operator clicks Edit Schedule Button on the Movement Schedule Modal
+    Then Operator deletes the newly added relation from Movement Visualization Page
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
