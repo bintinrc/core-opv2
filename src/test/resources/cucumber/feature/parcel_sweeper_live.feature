@@ -320,7 +320,7 @@ Feature: Parcel Sweeper Live
       | Urgent Priority (91++) | uid:8acf6dff-fca2-42ff-bc60-2b63b04f3d32 | 100           | #ff0000                 |
 
   @DeleteOrArchiveRoute
-  Scenario: Parcel Sweeper Live - RTS Order
+  Scenario: Parcel Sweeper Live - RTS Order (uid:6603db76-fc8c-45ec-a4ab-52a47a9c13c8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
