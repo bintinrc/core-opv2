@@ -4,11 +4,18 @@ import co.nvqa.commons.model.driver.RejectReservationRequest;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.ReservationRejectionEntity;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import com.google.common.collect.ImmutableMap;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import static co.nvqa.operator_v2.selenium.page.ReservationRejectionPage.ReservationRejectionEntityTable.COLUMN_PICKUP_INFO;
 import static co.nvqa.operator_v2.selenium.page.ReservationRejectionPage.ReservationRejectionEntityTable.COLUMN_REASON_FOR_REJECTION;
@@ -28,6 +35,9 @@ public class ReservationRejectionPage extends OperatorV2SimplePage
     private static final String REASSIGN_RESERVATION_TOAST_MESSAGE_SUCCESSFULLY = "Reassigned Successfully";
 
     private ReservationRejectionEntityTable reservationRejectionEntityTable;
+
+    @FindBy(css = "md-dialog.reservation-rejection-form")
+    public RejectReservationDialog rejectReservationDialog;
 
     public ReservationRejectionPage(WebDriver webDriver)
     {
@@ -89,17 +99,16 @@ public class ReservationRejectionPage extends OperatorV2SimplePage
 
     public void failPickUpInPopup()
     {
-        waitUntilVisibilityOfMdDialogByTitle(FAIL_PICKUP_MD_DIALOG_TITLE);
-        selectValueFromMdSelect("model", FAIL_PICKUP_MD_DIALOG_REASON_FOR_FAILURE);
-        clickButtonOnMdDialogByAriaLabel(FAIL_PICKUP_MD_DIALOG_BUTTON_ARIA_LABEL);
-        waitUntilInvisibilityOfMdDialogByTitle(FAIL_PICKUP_MD_DIALOG_TITLE);
+        rejectReservationDialog.selectFailureReason();
     }
+
     public void clickActionReassignReservationForRow(int rowNumber)
     {
         reservationRejectionEntityTable.clickActionButton(rowNumber, "reassignReservation");
     }
 
-    public void reassignReservationInPopup(String routeForReassigning){
+    public void reassignReservationInPopup(String routeForReassigning)
+    {
         waitUntilVisibilityOfMdDialogByTitle(REASSIGN_RESERVATION_MD_DIALOG_TITLE);
         selectValueFromMdAutocomplete("Search or Select...", routeForReassigning);
         clickButtonOnMdDialogByAriaLabel(REASSIGN_RESERVATION_MD_DIALOG_BUTTON_ARIA_LABEL);
@@ -135,5 +144,55 @@ public class ReservationRejectionPage extends OperatorV2SimplePage
     public void verifyToastAboutReassignReservationIsPresent()
     {
         waitUntilVisibilityOfToast(REASSIGN_RESERVATION_TOAST_MESSAGE_SUCCESSFULLY);
+    }
+
+    public static class RejectReservationDialog extends MdDialog
+    {
+        public RejectReservationDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        public RejectReservationDialog(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+        {
+            super(webDriver, searchContext, webElement);
+        }
+
+        @FindBy(css = "[id^='container.reservation-rejection.reason-for-failure']")
+        public MdSelect reasonForFailure;
+
+        @FindBy(css = "[id^='container.reservation-rejection.failure-detail']")
+        public List<MdSelect> failureReasonDetail;
+
+        @FindBy(name = "Fail Pickup")
+        public NvApiTextButton failPickupButton;
+
+        public void selectFailureReason()
+        {
+            waitUntilVisible();
+
+            List<String> failureReasons = reasonForFailure.getOptions();
+            int randomFailureReasonIndex = (int) (Math.random() * 7);
+            reasonForFailure.selectValue(failureReasons.get(randomFailureReasonIndex));
+
+            int detailsCount;
+            do
+            {
+                detailsCount = failureReasonDetail.size();
+                selectFailureReasonDetail(detailsCount - 1);
+            } while (failureReasonDetail.size() > detailsCount);
+
+            failPickupButton.clickAndWaitUntilDone();
+            waitUntilInvisible();
+        }
+
+        public void selectFailureReasonDetail(int index)
+        {
+            List<String> failureReasonDetailsSecond = failureReasonDetail.get(index).getOptions();
+            int randomFailureReasonDetailsIndexSecond = (int) (Math.random() * failureReasonDetailsSecond.size());
+            failureReasonDetail.get(index)
+                    .selectValue(failureReasonDetailsSecond.get(randomFailureReasonDetailsIndexSecond).replace("'", "/'"));
+        }
+
     }
 }
