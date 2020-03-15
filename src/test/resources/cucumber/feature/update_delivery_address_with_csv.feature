@@ -1,7 +1,7 @@
 @OperatorV2 @OperatorV2Part1 @UpdateDeliveryAddressWithCSV
 Feature: Update Delivery Address with CSV
 
-  @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless @Debug
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -54,6 +54,6 @@ Feature: Update Delivery Address with CSV
       | {KEY_CREATED_ORDER_TRACKING_ID} | Require to fill in to.name, to.email, to.phone_number, to.address.address1, to.address.address2, to.address.postcode, to.address.city, to.address.country, to.address.state, to.address.district |
 
 
-  @KillBrowser @ShouldAlwaysRun @Debug
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
