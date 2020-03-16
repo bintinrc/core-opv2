@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.model;
 
+import co.nvqa.commons.model.DataEntity;
 import org.junit.platform.commons.util.StringUtils;
 
 import java.util.Map;

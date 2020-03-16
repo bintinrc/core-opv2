@@ -28,7 +28,11 @@ import org.openqa.selenium.interactions.Actions;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
@@ -78,7 +82,8 @@ public class EditOrderPage extends OperatorV2SimplePage
         return eventsTable;
     }
 
-    public TransactionsTable transactionsTable(){
+    public TransactionsTable transactionsTable()
+    {
         return transactionsTable;
     }
 
@@ -111,11 +116,11 @@ public class EditOrderPage extends OperatorV2SimplePage
     public void editOrderInstructions(String pickupInstruction, String deliveryInstruction)
     {
         waitUntilVisibilityOfMdDialogByTitle("Edit Instructions");
-        if(pickupInstruction!=null)
+        if (pickupInstruction != null)
         {
             sendKeysByAriaLabel("Pickup Instruction", pickupInstruction);
         }
-        if(deliveryInstruction!=null)
+        if (deliveryInstruction != null)
         {
             sendKeysByAriaLabel("Delivery Instruction", deliveryInstruction);
         }
@@ -125,7 +130,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public void editPriorityLevel(int priorityLevel)
     {
-        if (!getText("//label[text()='Current Priority']/following-sibling::h3").equalsIgnoreCase(String.valueOf(priorityLevel))) {
+        if (!getText("//label[text()='Current Priority']/following-sibling::h3").equalsIgnoreCase(String.valueOf(priorityLevel)))
+        {
             clickMenu("Order Settings", "Edit Priority Level");
             waitUntilVisibilityOfMdDialogByTitle("Edit Priority Level");
             sendKeysByAriaLabel("container.order.edit.delivery-priority-level", String.valueOf(priorityLevel));
@@ -239,7 +245,7 @@ public class EditOrderPage extends OperatorV2SimplePage
     public void verifyDeliveryRouteInfo(Route route)
     {
         assertThat("Delivery Route Id", deliveryDetailsBox.getRouteId(), equalTo(String.valueOf(route.getId())));
-        if(CollectionUtils.isNotEmpty(route.getWaypoints()))
+        if (CollectionUtils.isNotEmpty(route.getWaypoints()))
         {
             String expectedWaypointId = String.valueOf(route.getWaypoints().get(0).getId());
             assertThat("Delivery Waypoint ID", deliveryDetailsBox.getWaypointId(), equalTo(expectedWaypointId));
@@ -251,7 +257,7 @@ public class EditOrderPage extends OperatorV2SimplePage
     public void verifyPickupRouteInfo(Route route)
     {
         assertThat("Pickup Route Id", pickupDetailsBox.getRouteId(), equalTo(String.valueOf(route.getId())));
-        if(CollectionUtils.isNotEmpty(route.getWaypoints()))
+        if (CollectionUtils.isNotEmpty(route.getWaypoints()))
         {
             String expectedWaypointId = String.valueOf(route.getWaypoints().get(0).getId());
             assertThat("Pickup Waypoint ID", pickupDetailsBox.getWaypointId(), equalTo(expectedWaypointId));
@@ -265,7 +271,8 @@ public class EditOrderPage extends OperatorV2SimplePage
         assertEquals("Order Summary: Comments", order.getComments(), getOrderComments());
     }
 
-    public String getOrderComments(){
+    public String getOrderComments()
+    {
         return getText("//div[@class='data-block'][label[.='Comments']]/p");
     }
 
@@ -276,7 +283,8 @@ public class EditOrderPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast("Downloading");
     }
 
-    public void cancelOrder(String cancellationReason){
+    public void cancelOrder(String cancellationReason)
+    {
         clickMenu("Order Settings", "Cancel Order");
         cancelOrderDialog.waitUntilVisibility()
                 .enterCancellationReason(cancellationReason)
@@ -323,13 +331,13 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public void verifyOrderInstructions(String expectedPickupInstructions, String expectedDeliveryInstructions)
     {
-        if(expectedPickupInstructions!=null)
+        if (expectedPickupInstructions != null)
         {
             String actualPickupInstructions = getText("//div[label[text()='Pick Up Instructions']]/p");
             assertThat("Pick Up Instructions", expectedPickupInstructions, equalToIgnoringCase(actualPickupInstructions));
         }
 
-        if(expectedDeliveryInstructions!=null)
+        if (expectedDeliveryInstructions != null)
         {
             assertEquals("Delivery Instructions", expectedDeliveryInstructions, deliveryDetailsBox.getDeliveryInstructions());
         }
@@ -360,9 +368,11 @@ public class EditOrderPage extends OperatorV2SimplePage
         ZonedDateTime eventDateExpected = DateUtil.getDate(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
 
         int rowWithExpectedEvent = 1;
-        for (int i = 1; i <= eventsTable.getRowsCount(); i++) {
+        for (int i = 1; i <= eventsTable.getRowsCount(); i++)
+        {
             String eventNameActual = getTextOnTableEvent(i, EVENT_NAME);
-            if (eventNameExpected.equals(eventNameActual)){
+            if (eventNameExpected.equals(eventNameActual))
+            {
                 rowWithExpectedEvent = i;
             }
         }
@@ -426,7 +436,7 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         Long shipperId = order.getShipper().getId();
 
-        if(shipperId!=null)
+        if (shipperId != null)
         {
             assertThat("Shipper ID", getShipperId(), containsString(String.valueOf(shipperId)));
         }
@@ -447,7 +457,8 @@ public class EditOrderPage extends OperatorV2SimplePage
         verifyDeliveryInfo(order);
     }
 
-    public void verifyPickupInfo(Order order) {
+    public void verifyPickupInfo(Order order)
+    {
         // Pickup
         assertEquals("From Name", order.getFromName(), getFromName());
         assertEquals("From Email", order.getFromEmail(), getFromEmail());
@@ -457,7 +468,8 @@ public class EditOrderPage extends OperatorV2SimplePage
         assertThat("From Address", fromAddress, containsString(order.getFromAddress2()));
     }
 
-    public void verifyDeliveryInfo(Order order) {
+    public void verifyDeliveryInfo(Order order)
+    {
         assertEquals("To Name", order.getToName(), getToName());
         assertEquals("To Email", order.getToEmail(), getToEmail());
         assertEquals("To Contact", order.getToContact(), getToContact());
@@ -466,9 +478,9 @@ public class EditOrderPage extends OperatorV2SimplePage
         assertThat("To Address", toAddress, containsString(order.getToAddress2()));
     }
 
-        public void verifyOrderIsGlobalInboundedSuccessfully(Order order, GlobalInboundParams globalInboundParams, Double expectedOrderCost, String expectedStatus, List<String> expectedGranularStatus, String expectedDeliveryStatus)
+    public void verifyOrderIsGlobalInboundedSuccessfully(Order order, GlobalInboundParams globalInboundParams, Double expectedOrderCost, String expectedStatus, List<String> expectedGranularStatus, String expectedDeliveryStatus)
     {
-        if(isElementExistFast("//nv-icon-text-button[@name='container.order.edit.show-more']"))
+        if (isElementExistFast("//nv-icon-text-button[@name='container.order.edit.show-more']"))
         {
             clickNvIconTextButtonByName("container.order.edit.show-more");
         }
@@ -476,19 +488,19 @@ public class EditOrderPage extends OperatorV2SimplePage
         String expectedTrackingId = order.getTrackingId();
         assertEquals("Tracking ID", expectedTrackingId, getTrackingId());
 
-        if(StringUtils.isNotBlank(expectedStatus))
+        if (StringUtils.isNotBlank(expectedStatus))
         {
             assertThat(String.format("Status - [Tracking ID = %s]", expectedTrackingId), getStatus(), equalToIgnoringCase(expectedStatus));
         }
 
-        if(CollectionUtils.isNotEmpty(expectedGranularStatus))
+        if (CollectionUtils.isNotEmpty(expectedGranularStatus))
         {
             assertThat(String.format("Granular Status - [Tracking ID = %s]", expectedTrackingId), getGranularStatus(), isIn(expectedGranularStatus));
         }
 
         assertEquals("Pickup Status", "SUCCESS", getPickupStatus());
 
-        if(StringUtils.isNotBlank(expectedDeliveryStatus))
+        if (StringUtils.isNotBlank(expectedDeliveryStatus))
         {
             assertThat("Delivery Status", getDeliveryStatus(), equalToIgnoringCase(expectedDeliveryStatus));
         }
@@ -500,12 +512,12 @@ public class EditOrderPage extends OperatorV2SimplePage
             Assert.assertEquals("Size", getParcelSizeAsLongString(globalInboundParams.getOverrideSize()), getSize());
         }*/
 
-        if(globalInboundParams.getOverrideWeight()!=null)
+        if (globalInboundParams.getOverrideWeight() != null)
         {
             assertEquals("Weight", globalInboundParams.getOverrideWeight(), getWeight());
         }
 
-        if(globalInboundParams.getOverrideDimHeight()!=null && globalInboundParams.getOverrideDimWidth()!=null && globalInboundParams.getOverrideDimLength()!=null)
+        if (globalInboundParams.getOverrideDimHeight() != null && globalInboundParams.getOverrideDimWidth() != null && globalInboundParams.getOverrideDimLength() != null)
         {
             Dimension actualDimension = getDimension();
             assertEquals("Dimension - Height", globalInboundParams.getOverrideDimHeight(), actualDimension.getHeight());
@@ -513,12 +525,12 @@ public class EditOrderPage extends OperatorV2SimplePage
             assertEquals("Dimension - Length", globalInboundParams.getOverrideDimLength(), actualDimension.getLength());
         }
 
-        if(expectedOrderCost!=null)
+        if (expectedOrderCost != null)
         {
             Double total = getTotal();
             String totalAsString = null;
 
-            if(total!=null)
+            if (total != null)
             {
                 totalAsString = NO_TRAILING_ZERO_DF.format(total);
             }
@@ -535,14 +547,14 @@ public class EditOrderPage extends OperatorV2SimplePage
 //                assertEquals("Latest Event Name", "HUB INBOUND SCAN", orderEvent.getName());
 //                assertEquals("Latest Event Hub Name", globalInboundParams.getHubName(), orderEvent.getHubName());
 //            }, "Check the last event params", 10, 5);
-        }
-        catch (RuntimeException | AssertionError ex)
+        } catch (RuntimeException | AssertionError ex)
         {
             NvLogger.warn("Ignore this Assertion error for now because the event sometimes is not created right away.", ex);
         }
     }
 
-    public void verifyPickupDetailsInTransaction(Order order, String txnType){
+    public void verifyPickupDetailsInTransaction(Order order, String txnType)
+    {
         transactionsTable.searchByTxnType(txnType);
         assertEquals("From Name", order.getFromName(), transactionsTable.getName(1));
         assertEquals("From Email", order.getFromEmail(), transactionsTable.getEmail(1));
@@ -552,12 +564,14 @@ public class EditOrderPage extends OperatorV2SimplePage
         assertThat("From Address", fromAddress, containsString(order.getFromAddress2()));
     }
 
-    public void verifyRouteIdInTransactionTable(String routeId, String txnType){
+    public void verifyRouteIdInTransactionTable(String routeId, String txnType)
+    {
         transactionsTable.searchByTxnType(txnType);
         assertEquals("Route ID", routeId, transactionsTable.getRouteId(1));
     }
 
-    public void verifyDeliveryDetailsInTransaction(Order order, String txnType){
+    public void verifyDeliveryDetailsInTransaction(Order order, String txnType)
+    {
         transactionsTable.searchByTxnType(txnType);
         assertEquals("To Name", order.getToName(), transactionsTable.getName(1));
         assertEquals("To Email", order.getToEmail(), transactionsTable.getEmail(1));
@@ -601,7 +615,7 @@ public class EditOrderPage extends OperatorV2SimplePage
     {
         List<String> tags = new ArrayList<>();
         List<WebElement> listOfTags = findElementsByXpath("//div[@id='order-tags-container']/nv-tag/span");
-        for(WebElement we : listOfTags)
+        for (WebElement we : listOfTags)
         {
             tags.add(we.getText());
         }
@@ -629,7 +643,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         Double weight = null;
         String actualText = getText("//label[text()='Weight']/following-sibling::p");
 
-        if(!actualText.contains("-"))
+        if (!actualText.contains("-"))
         {
             String temp = actualText.replace("kg", "").trim();
             weight = Double.parseDouble(temp);
@@ -644,7 +658,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         Double cod = null;
         String actualText = getText("//label[text()='Cash on Delivery']/following-sibling::p");
 
-        if(!actualText.contains("-"))
+        if (!actualText.contains("-"))
         {
             String temp = actualText.substring(3); //Remove currency text (e.g. SGD)
             cod = Double.parseDouble(temp);
@@ -658,7 +672,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         Dimension dimension = new Dimension();
         String actualText = getText("//label[text()='Dimensions']/following-sibling::p");
 
-        if(!actualText.contains("-") && !actualText.contains("x x cm") && !actualText.contains("(L) x (B) x (H) cm"))
+        if (!actualText.contains("-") && !actualText.contains("x x cm") && !actualText.contains("(L) x (B) x (H) cm"))
         {
             String temp = actualText.replace("cm", "");
             String[] dims = temp.split("x");
@@ -679,7 +693,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         Double total = null;
         String actualText = getText("//label[text()='Total']/following-sibling::p");
 
-        if(!actualText.contains("-"))
+        if (!actualText.contains("-"))
         {
             String temp = actualText.substring(3); //Remove currency text (e.g. SGD)
             total = Double.parseDouble(temp);
@@ -884,7 +898,8 @@ public class EditOrderPage extends OperatorV2SimplePage
         deliveryRescheduleDialog.confirmOrderDeliveryRescheduledUpdated();
     }
 
-    public void pullOutParcelFromTheRoute(Order order, String txnType, Long routeId){
+    public void pullOutParcelFromTheRoute(Order order, String txnType, Long routeId)
+    {
         String trackingId = order.getTrackingId();
 
         pullFromRouteDialog.waitUntilVisibility();
@@ -1000,7 +1015,8 @@ public class EditOrderPage extends OperatorV2SimplePage
             setEntityClass(OrderEvent.class);
         }
 
-        public void verifyUpdatePickupAddressEventDescription(Order order, String eventDescription) {
+        public void verifyUpdatePickupAddressEventDescription(Order order, String eventDescription)
+        {
             String fromAddress1Pattern = f("From Address 1 .* (to|new value) %s.*", order.getFromAddress1());
             String fromAddress2Pattern = f(".* From Address 2 .* (to|new value) %s.*", order.getFromAddress2());
             String fromPostcodePattern = f(".* From Postcode .* (to|new value) %s.*", order.getFromPostcode());
@@ -1018,7 +1034,8 @@ public class EditOrderPage extends OperatorV2SimplePage
                     eventDescription.matches(fromCountryPattern));
         }
 
-        public void verifyUpdateDeliveryAddressEventDescription(Order order, String eventDescription) {
+        public void verifyUpdateDeliveryAddressEventDescription(Order order, String eventDescription)
+        {
             String toAddress1Pattern = f("To Address 1 .* (to|new value) %s.*", order.getToAddress1());
             String toAddress2Pattern = f(".* To Address 2 .* (to|new value) %s.*", order.getToAddress2());
             String toPostcodePattern = f(".* To Postcode .* (to|new value) %s.*", order.getToPostcode());
@@ -1036,7 +1053,8 @@ public class EditOrderPage extends OperatorV2SimplePage
                     eventDescription.matches(toCountryPattern));
         }
 
-        public void verifyUpdatePickupContactInformationEventDescription(Order order, String eventDescription) {
+        public void verifyUpdatePickupContactInformationEventDescription(Order order, String eventDescription)
+        {
             String fromNamePattern = f("From Name .* (to|new value) %s.*", order.getFromName());
             String fromEmailPattern = f(".* From Email .* (to|new value) %s.*", order.getFromEmail());
             String fromContactPattern = f(".* From Contact .* (to|new value) \\%s.*", order.getFromContact());
@@ -1048,7 +1066,8 @@ public class EditOrderPage extends OperatorV2SimplePage
                     eventDescription.matches(fromContactPattern));
         }
 
-        public void verifyUpdateDeliveryContactInformationEventDescription(Order order, String eventDescription) {
+        public void verifyUpdateDeliveryContactInformationEventDescription(Order order, String eventDescription)
+        {
             String toNamePattern = f("To Name .* (to|new value) %s.*", order.getToName());
             String toEmailPattern = f(".* To Email .* (to|new value) %s.*", order.getToEmail());
             String toContactPattern = f(".* To Contact .* (to|new value) \\%s.*", order.getToContact());
@@ -1060,7 +1079,8 @@ public class EditOrderPage extends OperatorV2SimplePage
                     eventDescription.matches(toContactPattern));
         }
 
-        public void verifyUpdatePickupSlaEventDescription(Order order, String eventDescription) {
+        public void verifyUpdatePickupSlaEventDescription(Order order, String eventDescription)
+        {
             String fromPickUpStartTimePattern = f("Pickup Start Time .* (to|new value) %s %s.*",
                     order.getPickupDate(), order.getPickupTimeslot().getStartTime());
             String fromPickUpEndTimePattern = f(".* Pickup End Time .* (to|new value) %s %s.*",
@@ -1071,7 +1091,8 @@ public class EditOrderPage extends OperatorV2SimplePage
                     eventDescription.matches(fromPickUpEndTimePattern));
         }
 
-        public void verifyUpdateDeliverySlaEventDescription(Order order, String eventDescription) {
+        public void verifyUpdateDeliverySlaEventDescription(Order order, String eventDescription)
+        {
             String deliveryStartTimePattern = f("Delivery Start Time .* (to|new value) %s %s.*",
                     order.getDeliveryDate(), order.getDeliveryTimeslot().getStartTime());
             String deliveryEndTimePattern = f(".* Delivery End Time .* (to|new value) %s %s.*",
@@ -1082,14 +1103,16 @@ public class EditOrderPage extends OperatorV2SimplePage
                     eventDescription.matches(deliveryEndTimePattern));
         }
 
-        public void verifyPickupAddressEventDescription(Order order, String eventDescription) {
+        public void verifyPickupAddressEventDescription(Order order, String eventDescription)
+        {
             String addressPattern = f("Address: %s, %s, %s, %s, %s.*", order.getFromAddress1(), order.getFromAddress2(),
                     order.getFromCity(), order.getFromCountry(), order.getFromPostcode());
             assertTrue(f("'%s' pattern is not present in the '%s' event description", addressPattern, eventDescription),
                     eventDescription.matches(addressPattern));
         }
 
-        public void verifyDeliveryAddressEventDescription(Order order, String eventDescription) {
+        public void verifyDeliveryAddressEventDescription(Order order, String eventDescription)
+        {
             String addressPattern = f("Address: %s, %s, %s, %s, %s.*", order.getToAddress1(), order.getToAddress2(),
                     order.getToCity(), order.getToCountry(), order.getToPostcode());
             assertTrue(f("'%s' pattern is not present in the '%s' event description", addressPattern, eventDescription),
@@ -1113,25 +1136,29 @@ public class EditOrderPage extends OperatorV2SimplePage
         }
     }
 
-    public void tagOrderToDP(String dpId) {
+    public void tagOrderToDP(String dpId)
+    {
         dpDropOffSettingDialog.selectDpValue(dpId);
         List<String> dpDropOffDates = dpDropOffSettingDialog.getListOfDropOffDates();
-        dpDropOffSettingDialog.selectDropOffDateValue(dpDropOffDates.get((int)(Math.random() * dpDropOffDates.size())));
+        dpDropOffSettingDialog.selectDropOffDateValue(dpDropOffDates.get((int) (Math.random() * dpDropOffDates.size())));
         dpDropOffSettingDialog.saveChanges();
         dpDropOffSettingDialog.confirmOrderIsTagged();
     }
 
-    public void untagOrderFromDP() {
+    public void untagOrderFromDP()
+    {
         dpDropOffSettingDialog.clearSelectedDropOffValue();
         dpDropOffSettingDialog.saveChanges();
         dpDropOffSettingDialog.confirmOrderIsTagged();
     }
 
-    public boolean deliveryIsIndicatedWithIcon() {
+    public boolean deliveryIsIndicatedWithIcon()
+    {
         return deliveryDetailsBox.isNinjaCollectTagPresent();
     }
 
-    public void deleteOrder() {
+    public void deleteOrder()
+    {
         deleteOrderDialog.waitUntilVisibility();
         deleteOrderDialog.enterPassword();
         deleteOrderDialog.clickDeleteOrderButton();
@@ -1275,7 +1302,8 @@ public class EditOrderPage extends OperatorV2SimplePage
             return getText(END_DATE_TIME_LOCATOR);
         }
 
-        public boolean isNinjaCollectTagPresent(){
+        public boolean isNinjaCollectTagPresent()
+        {
             return isElementExist(NV_TAG_LOCATOR);
         }
     }
@@ -1368,7 +1396,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditPickupDetailsDialog updateSenderName(String text)
         {
-            if (Objects.nonNull(text)) {
+            if (Objects.nonNull(text))
+            {
                 sendKeysByAriaLabel(SENDER_NAME_ARIA_LABEL, text);
             }
             return this;
@@ -1376,7 +1405,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditPickupDetailsDialog updateSenderContact(String text)
         {
-            if (Objects.nonNull(text)) {
+            if (Objects.nonNull(text))
+            {
                 sendKeysByAriaLabel(SENDER_CONTACT_ARIA_LABEL, text);
             }
             return this;
@@ -1384,7 +1414,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditPickupDetailsDialog updateSenderEmail(String text)
         {
-            if (Objects.nonNull(text)) {
+            if (Objects.nonNull(text))
+            {
                 sendKeysByAriaLabel(SENDER_EMAIL_ARIA_LABEL, text);
             }
             return this;
@@ -1392,7 +1423,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditPickupDetailsDialog updateInternalNotes(String text)
         {
-            if (Objects.nonNull(text)) {
+            if (Objects.nonNull(text))
+            {
                 sendKeysByAriaLabel(INTERNAL_NOTES_ARIA_LABEL, text);
             }
             return this;
@@ -1400,10 +1432,12 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditPickupDetailsDialog updatePickupDate(String textDate)
         {
-            if (Objects.nonNull(textDate)) {
-                try {
+            if (Objects.nonNull(textDate))
+            {
+                try
+                {
                     setMdDatepickerById(PICKUP_DATE_ID, YYYY_MM_DD_SDF.parse(textDate));
-                } catch(ParseException e)
+                } catch (ParseException e)
                 {
                     throw new NvTestRuntimeException("Failed to parse date.", e);
                 }
@@ -1413,21 +1447,24 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditPickupDetailsDialog updatePickupTimeslot(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 selectValueFromMdSelectByAriaLabel(PICKUP_TIMESLOT_ARIA_LABEL, value);
             }
             return this;
         }
 
-        public EditPickupDetailsDialog clickChangeAddress(){
-                clickButtonByAriaLabel(CHANGE_ADDRESS_BUTTON_ARIA_LABEL);
-                waitUntilAddressCanBeChanged();
-                return this;
+        public EditPickupDetailsDialog clickChangeAddress()
+        {
+            clickButtonByAriaLabel(CHANGE_ADDRESS_BUTTON_ARIA_LABEL);
+            waitUntilAddressCanBeChanged();
+            return this;
         }
 
         public EditPickupDetailsDialog updateCountry(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(COUNTRY_ARIA_LABEL, value);
             }
             return this;
@@ -1435,7 +1472,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditPickupDetailsDialog updateCity(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(CITY_ARIA_LABEL, value);
             }
             return this;
@@ -1443,7 +1481,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditPickupDetailsDialog updateAddress1(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(ADDRESS_1_ARIA_LABEL, value);
             }
             return this;
@@ -1451,7 +1490,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditPickupDetailsDialog updateAddress2(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(ADDRESS_2_ARIA_LABEL, value);
             }
             return this;
@@ -1459,17 +1499,20 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditPickupDetailsDialog updatePostalCode(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(POSTAL_CODE_ARIA_LABEL, value);
             }
             return this;
         }
 
-        public void clickSaveChanges(){
+        public void clickSaveChanges()
+        {
             clickButtonByAriaLabelAndWaitUntilDone(SAVE_CHANGES_BUTTON_ARIA_LABEL);
         }
 
-        public void confirmPickupDetailsUpdated(){
+        public void confirmPickupDetailsUpdated()
+        {
             waitUntilVisibilityOfToast(UPDATE_PICKUP_DETAILS_SUCCESSFUL_TOAST_MESSAGE);
         }
     }
@@ -1516,7 +1559,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditDeliveryDetailsDialog updateRecipientName(String text)
         {
-            if (Objects.nonNull(text)) {
+            if (Objects.nonNull(text))
+            {
                 sendKeysByAriaLabel(RECIPIENT_NAME_ARIA_LABEL, text);
             }
             return this;
@@ -1524,7 +1568,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditDeliveryDetailsDialog updateRecipientContact(String text)
         {
-            if (Objects.nonNull(text)) {
+            if (Objects.nonNull(text))
+            {
                 sendKeysByAriaLabel(RECIPIENT_CONTACT_ARIA_LABEL, text);
             }
             return this;
@@ -1532,7 +1577,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditDeliveryDetailsDialog updateRecipientEmail(String text)
         {
-            if (Objects.nonNull(text)) {
+            if (Objects.nonNull(text))
+            {
                 sendKeysByAriaLabel(RECIPIENT_EMAIL_ARIA_LABEL, text);
             }
             return this;
@@ -1540,23 +1586,27 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditDeliveryDetailsDialog updateInternalNotes(String text)
         {
-            if (Objects.nonNull(text)) {
+            if (Objects.nonNull(text))
+            {
                 sendKeysByAriaLabel(INTERNAL_NOTES_ARIA_LABEL, text);
             }
             return this;
         }
 
-        public EditDeliveryDetailsDialog clickChangeSchedule(){
+        public EditDeliveryDetailsDialog clickChangeSchedule()
+        {
             click(CHANGE_SCHEDULE_CHECKBOX_ARIA_LABEL);
             return this;
         }
 
         public EditDeliveryDetailsDialog updateDeliveryDate(String textDate)
         {
-            if (Objects.nonNull(textDate)) {
-                try {
+            if (Objects.nonNull(textDate))
+            {
+                try
+                {
                     setMdDatepickerById(DELIVERY_DATE_ID, YYYY_MM_DD_SDF.parse(textDate));
-                } catch(ParseException e)
+                } catch (ParseException e)
                 {
                     throw new NvTestRuntimeException("Failed to parse date.", e);
                 }
@@ -1566,13 +1616,15 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditDeliveryDetailsDialog updateDeliveryTimeslot(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 selectValueFromMdSelectByAriaLabel(DELIVERY_TIMESLOT_ARIA_LABEL, value);
             }
             return this;
         }
 
-        public EditDeliveryDetailsDialog clickChangeAddress(){
+        public EditDeliveryDetailsDialog clickChangeAddress()
+        {
             clickButtonByAriaLabel(CHANGE_ADDRESS_BUTTON_ARIA_LABEL);
             waitUntilAddressCanBeChanged();
             return this;
@@ -1580,7 +1632,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditDeliveryDetailsDialog updateCountry(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(COUNTRY_ARIA_LABEL, value);
             }
             return this;
@@ -1588,7 +1641,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditDeliveryDetailsDialog updateCity(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(CITY_ARIA_LABEL, value);
             }
             return this;
@@ -1596,7 +1650,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditDeliveryDetailsDialog updateAddress1(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(ADDRESS_1_ARIA_LABEL, value);
             }
             return this;
@@ -1604,7 +1659,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditDeliveryDetailsDialog updateAddress2(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(ADDRESS_2_ARIA_LABEL, value);
             }
             return this;
@@ -1612,17 +1668,20 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public EditDeliveryDetailsDialog updatePostalCode(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(POSTAL_CODE_ARIA_LABEL, value);
             }
             return this;
         }
 
-        public void clickSaveChanges(){
+        public void clickSaveChanges()
+        {
             clickButtonByAriaLabelAndWaitUntilDone(SAVE_CHANGES_BUTTON_ARIA_LABEL);
         }
 
-        public void confirmPickupDetailsUpdated(){
+        public void confirmPickupDetailsUpdated()
+        {
             waitUntilVisibilityOfToast(UPDATE_DELIVERY_DETAILS_SUCCESSFUL_TOAST_MESSAGE);
         }
     }
@@ -1630,7 +1689,8 @@ public class EditOrderPage extends OperatorV2SimplePage
     /**
      * Accessor for DP Drop Off Setting dialog
      */
-    public static class DpDropOffSettingDialog extends OperatorV2SimplePage {
+    public static class DpDropOffSettingDialog extends OperatorV2SimplePage
+    {
         private static final String DIALOG_TITLE = "DP Drop Off Setting";
         private static final String DP_LIST = "//nv-autocomplete[@item-types='DP']";
         private static final String DROP_OFF_DATE_SELECT_LOCATOR = "container.order.edit.edit-dp-management-dropoff-date";
@@ -1638,16 +1698,19 @@ public class EditOrderPage extends OperatorV2SimplePage
         private static final String TAG_DP_DONE_SUCCESSFULLY_TOAST_MESSAGE = "Tagging to DP done successfully";
         private static final String DP_CLEAR_SELECTED_BUTTON_LOCATOR = "//button/md-icon[@md-svg-icon='md-close']";
 
-        public DpDropOffSettingDialog(WebDriver webDriver) {
+        public DpDropOffSettingDialog(WebDriver webDriver)
+        {
             super(webDriver);
         }
 
-        public DpDropOffSettingDialog waitUntilVisibility() {
+        public DpDropOffSettingDialog waitUntilVisibility()
+        {
             waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
             return this;
         }
 
-        private List<String> getListOfDropOffDates(){
+        private List<String> getListOfDropOffDates()
+        {
             waitUntilVisibilityOfElementLocated("//md-select[@placeholder='Drop Off Date']");
             clickAndWaitUntilDone("//md-select[@placeholder='Drop Off Date']");
             waitUntilVisibilityOfElementLocated("//md-option[@aria-hidden='false']");
@@ -1658,24 +1721,29 @@ public class EditOrderPage extends OperatorV2SimplePage
             return listOfDropOffDates;
         }
 
-        public void selectDpValue(String value){
+        public void selectDpValue(String value)
+        {
             selectValueFromMdAutocomplete("", value);
         }
 
-        public void selectDropOffDateValue(String value){
+        public void selectDropOffDateValue(String value)
+        {
             selectValueFromMdSelectById(DROP_OFF_DATE_SELECT_LOCATOR, value);
         }
 
-        public void clearSelectedDropOffValue(){
+        public void clearSelectedDropOffValue()
+        {
             clickAndWaitUntilDone(DP_CLEAR_SELECTED_BUTTON_LOCATOR);
         }
 
-        public void saveChanges(){
+        public void saveChanges()
+        {
             clickButtonByAriaLabel(SAVE_CHANGES_BUTTON_ARIA_LABEL);
             waitUntilInvisibilityOfMdDialogByTitle(DIALOG_TITLE);
         }
 
-        public void confirmOrderIsTagged() {
+        public void confirmOrderIsTagged()
+        {
             waitUntilInvisibilityOfToast(TAG_DP_DONE_SUCCESSFULLY_TOAST_MESSAGE, true);
         }
     }
@@ -1683,31 +1751,37 @@ public class EditOrderPage extends OperatorV2SimplePage
     /**
      * Accessor for Delete Order dialog
      */
-    public static class DeleteOrderDialog extends OperatorV2SimplePage {
+    public static class DeleteOrderDialog extends OperatorV2SimplePage
+    {
         private static final String DIALOG_TITLE = "Delete Order";
         private static final String PASSWORD = "1234567890";
         private static final String ENTER_PASSWORD_FIELD_ARIA_LABEL = "Password";
         private static final String DELETE_NV_API_TEXT_BUTTON_LOCATOR = "container.order.edit.delete-order";
         private static final String DELETE_ORDER_DONE_SUCCESSFULLY_TOAST_MESSAGE = "Order Deleted";
 
-        public DeleteOrderDialog(WebDriver webDriver) {
+        public DeleteOrderDialog(WebDriver webDriver)
+        {
             super(webDriver);
         }
 
-        public DeleteOrderDialog waitUntilVisibility() {
+        public DeleteOrderDialog waitUntilVisibility()
+        {
             waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
             return this;
         }
 
-        private void enterPassword() {
+        private void enterPassword()
+        {
             sendKeysByAriaLabel(ENTER_PASSWORD_FIELD_ARIA_LABEL, PASSWORD);
         }
 
-        private void clickDeleteOrderButton(){
+        private void clickDeleteOrderButton()
+        {
             clickNvApiTextButtonByNameAndWaitUntilDone(DELETE_NV_API_TEXT_BUTTON_LOCATOR);
         }
 
-        public void confirmOrderIsDeleted() {
+        public void confirmOrderIsDeleted()
+        {
             waitUntilInvisibilityOfToast(DELETE_ORDER_DONE_SUCCESSFULLY_TOAST_MESSAGE, true);
         }
     }
@@ -1715,7 +1789,8 @@ public class EditOrderPage extends OperatorV2SimplePage
     /**
      * Accessor for Pickup Reschedule dialog
      */
-    public static class PickupRescheduleDialog extends OperatorV2SimplePage {
+    public static class PickupRescheduleDialog extends OperatorV2SimplePage
+    {
         private static final String DIALOG_TITLE = "Pickup Reschedule";
         private static final String SENDER_NAME_ARIA_LABEL = "Sender Name";
         private static final String SENDER_CONTACT_ARIA_LABEL = "Sender Contact";
@@ -1732,105 +1807,133 @@ public class EditOrderPage extends OperatorV2SimplePage
         private static final String SAVE_CHANGES_BUTTON_ARIA_LABEL = "Save changes";
         private static final String ORDER_RESCHEDULED_SUCCESSFUL_TOAST_MESSAGE = "Order Rescheduled Successfully";
 
-        public PickupRescheduleDialog(WebDriver webDriver) {
+        public PickupRescheduleDialog(WebDriver webDriver)
+        {
             super(webDriver);
         }
 
-        public PickupRescheduleDialog waitUntilVisibility() {
+        public PickupRescheduleDialog waitUntilVisibility()
+        {
             waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
             return this;
         }
 
-        public PickupRescheduleDialog waitUntilAddressCanBeChanged() {
+        public PickupRescheduleDialog waitUntilAddressCanBeChanged()
+        {
             waitUntilVisibilityOfElementLocated(COUNTRY_XPATH);
             return this;
         }
 
-        public PickupRescheduleDialog updateSenderName(String text) {
-            if (Objects.nonNull(text)) {
+        public PickupRescheduleDialog updateSenderName(String text)
+        {
+            if (Objects.nonNull(text))
+            {
                 sendKeysByAriaLabel(SENDER_NAME_ARIA_LABEL, text);
             }
             return this;
         }
 
-        public PickupRescheduleDialog updateSenderContact(String text) {
-            if (Objects.nonNull(text)) {
+        public PickupRescheduleDialog updateSenderContact(String text)
+        {
+            if (Objects.nonNull(text))
+            {
                 sendKeysByAriaLabel(SENDER_CONTACT_ARIA_LABEL, text);
             }
             return this;
         }
 
-        public PickupRescheduleDialog updateSenderEmail(String text) {
-            if (Objects.nonNull(text)) {
+        public PickupRescheduleDialog updateSenderEmail(String text)
+        {
+            if (Objects.nonNull(text))
+            {
                 sendKeysByAriaLabel(SENDER_EMAIL_ARIA_LABEL, text);
             }
             return this;
         }
 
-        public PickupRescheduleDialog updatePickupDate(String textDate) {
-            if (Objects.nonNull(textDate)) {
-                try {
+        public PickupRescheduleDialog updatePickupDate(String textDate)
+        {
+            if (Objects.nonNull(textDate))
+            {
+                try
+                {
                     setMdDatepickerById(PICKUP_DATE_ID, YYYY_MM_DD_SDF.parse(textDate));
-                } catch (ParseException e) {
+                } catch (ParseException e)
+                {
                     throw new NvTestRuntimeException("Failed to parse date.", e);
                 }
             }
             return this;
         }
 
-        public PickupRescheduleDialog updatePickupTimeslot(String value) {
-            if (Objects.nonNull(value)) {
+        public PickupRescheduleDialog updatePickupTimeslot(String value)
+        {
+            if (Objects.nonNull(value))
+            {
                 selectValueFromMdSelectByAriaLabel(PICKUP_TIMESLOT_ARIA_LABEL, value);
             }
             return this;
         }
 
-        public PickupRescheduleDialog clickChangeAddress() {
+        public PickupRescheduleDialog clickChangeAddress()
+        {
             clickButtonByAriaLabel(CHANGE_ADDRESS_BUTTON_ARIA_LABEL);
             waitUntilAddressCanBeChanged();
             return this;
         }
 
-        public PickupRescheduleDialog updateCountry(String value) {
-            if (Objects.nonNull(value)) {
+        public PickupRescheduleDialog updateCountry(String value)
+        {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(COUNTRY_ARIA_LABEL, value);
             }
             return this;
         }
 
-        public PickupRescheduleDialog updateCity(String value) {
-            if (Objects.nonNull(value)) {
+        public PickupRescheduleDialog updateCity(String value)
+        {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(CITY_ARIA_LABEL, value);
             }
             return this;
         }
 
-        public PickupRescheduleDialog updateAddress1(String value) {
-            if (Objects.nonNull(value)) {
+        public PickupRescheduleDialog updateAddress1(String value)
+        {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(ADDRESS_1_ARIA_LABEL, value);
             }
             return this;
         }
 
-        public PickupRescheduleDialog updateAddress2(String value) {
-            if (Objects.nonNull(value)) {
+        public PickupRescheduleDialog updateAddress2(String value)
+        {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(ADDRESS_2_ARIA_LABEL, value);
             }
             return this;
         }
 
-        public PickupRescheduleDialog updatePostalCode(String value) {
-            if (Objects.nonNull(value)) {
+        public PickupRescheduleDialog updatePostalCode(String value)
+        {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(POSTAL_CODE_ARIA_LABEL, value);
             }
             return this;
         }
 
-        public void clickSaveChanges() {
+        public void clickSaveChanges()
+        {
             clickButtonByAriaLabelAndWaitUntilDone(SAVE_CHANGES_BUTTON_ARIA_LABEL);
         }
 
-        public void confirmPickupRescheduledUpdated() {
+        public void confirmPickupRescheduledUpdated()
+        {
             waitUntilVisibilityOfToast(ORDER_RESCHEDULED_SUCCESSFUL_TOAST_MESSAGE);
         }
     }
@@ -1838,7 +1941,8 @@ public class EditOrderPage extends OperatorV2SimplePage
     /**
      * Accessor for Delivery Reschedule dialog
      */
-    public static class DeliveryRescheduleDialog extends OperatorV2SimplePage {
+    public static class DeliveryRescheduleDialog extends OperatorV2SimplePage
+    {
         private static final String DIALOG_TITLE = "Delivery Reschedule";
         private static final String RECIPIENT_NAME_ARIA_LABEL = "Recipient Name";
         private static final String RECIPIENT_CONTACT_ARIA_LABEL = "Recipient Contact";
@@ -1874,7 +1978,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public DeliveryRescheduleDialog updateRecipientName(String text)
         {
-            if (Objects.nonNull(text)) {
+            if (Objects.nonNull(text))
+            {
                 sendKeysByAriaLabel(RECIPIENT_NAME_ARIA_LABEL, text);
             }
             return this;
@@ -1882,7 +1987,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public DeliveryRescheduleDialog updateRecipientContact(String text)
         {
-            if (Objects.nonNull(text)) {
+            if (Objects.nonNull(text))
+            {
                 sendKeysByAriaLabel(RECIPIENT_CONTACT_ARIA_LABEL, text);
             }
             return this;
@@ -1890,7 +1996,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public DeliveryRescheduleDialog updateRecipientEmail(String text)
         {
-            if (Objects.nonNull(text)) {
+            if (Objects.nonNull(text))
+            {
                 sendKeysByAriaLabel(RECIPIENT_EMAIL_ARIA_LABEL, text);
             }
             return this;
@@ -1898,10 +2005,12 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public DeliveryRescheduleDialog updateDeliveryDate(String textDate)
         {
-            if (Objects.nonNull(textDate)) {
-                try {
+            if (Objects.nonNull(textDate))
+            {
+                try
+                {
                     setMdDatepickerById(DELIVERY_DATE_ID, YYYY_MM_DD_SDF.parse(textDate));
-                } catch(ParseException e)
+                } catch (ParseException e)
                 {
                     throw new NvTestRuntimeException("Failed to parse date.", e);
                 }
@@ -1911,13 +2020,15 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public DeliveryRescheduleDialog updateDeliveryTimeslot(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 selectValueFromMdSelectByAriaLabel(DELIVERY_TIMESLOT_ARIA_LABEL, value);
             }
             return this;
         }
 
-        public DeliveryRescheduleDialog clickChangeAddress(){
+        public DeliveryRescheduleDialog clickChangeAddress()
+        {
             clickButtonByAriaLabel(CHANGE_ADDRESS_BUTTON_ARIA_LABEL);
             waitUntilAddressCanBeChanged();
             return this;
@@ -1925,7 +2036,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public DeliveryRescheduleDialog updateCountry(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(COUNTRY_ARIA_LABEL, value);
             }
             return this;
@@ -1933,7 +2045,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public DeliveryRescheduleDialog updateCity(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(CITY_ARIA_LABEL, value);
             }
             return this;
@@ -1941,7 +2054,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public DeliveryRescheduleDialog updateAddress1(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(ADDRESS_1_ARIA_LABEL, value);
             }
             return this;
@@ -1949,7 +2063,8 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public DeliveryRescheduleDialog updateAddress2(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(ADDRESS_2_ARIA_LABEL, value);
             }
             return this;
@@ -1957,17 +2072,20 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         public DeliveryRescheduleDialog updatePostalCode(String value)
         {
-            if (Objects.nonNull(value)) {
+            if (Objects.nonNull(value))
+            {
                 sendKeysByAriaLabel(POSTAL_CODE_ARIA_LABEL, value);
             }
             return this;
         }
 
-        public void clickSaveChanges(){
+        public void clickSaveChanges()
+        {
             clickButtonByAriaLabelAndWaitUntilDone(SAVE_CHANGES_BUTTON_ARIA_LABEL);
         }
 
-        public void confirmOrderDeliveryRescheduledUpdated(){
+        public void confirmOrderDeliveryRescheduledUpdated()
+        {
             waitUntilVisibilityOfToast(ORDER_RESCHEDULED_SUCCESSFUL_TOAST_MESSAGE);
         }
     }
@@ -1975,42 +2093,48 @@ public class EditOrderPage extends OperatorV2SimplePage
     /**
      * Accessor for Pull from Route Dialog
      */
-    public static class PullFromRouteDialog extends OperatorV2SimplePage {
+    public static class PullFromRouteDialog extends OperatorV2SimplePage
+    {
         private static final String DIALOG_TITLE = "Pull from Route";
         private static final String TO_PULL_CHECKBOX_LOCATOR = "//md-input-container[contains(@class,'to-pull-checkbox')]/md-checkbox[@aria-checked='true']";
         private static final String PULL_FROM_ROUTE_NV_API_TEXT_BUTTON_NAME = "container.order.edit.pull-from-route";
         private static final String PULL_FROM_ROUTE_SUCCESSFUL_TOAST_MESSAGE_PATTERN = "%s has been pulled from route %d successfully";
 
-        public PullFromRouteDialog(WebDriver webDriver) {
+        public PullFromRouteDialog(WebDriver webDriver)
+        {
             super(webDriver);
         }
 
-        public PullFromRouteDialog waitUntilVisibility() {
+        public PullFromRouteDialog waitUntilVisibility()
+        {
             waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
             return this;
         }
 
-        public boolean isToPullCheckboxChecked(){
+        public boolean isToPullCheckboxChecked()
+        {
             return isElementExist(TO_PULL_CHECKBOX_LOCATOR);
         }
 
-        public void clickPullFromRouteButton(){
+        public void clickPullFromRouteButton()
+        {
             clickNvApiTextButtonByNameAndWaitUntilDone(PULL_FROM_ROUTE_NV_API_TEXT_BUTTON_NAME);
         }
 
-        public void confirmPulledFromRouteMessageDisplayed(String trackingId, Long routeId){
+        public void confirmPulledFromRouteMessageDisplayed(String trackingId, Long routeId)
+        {
             waitUntilInvisibilityOfToast(f(PULL_FROM_ROUTE_SUCCESSFUL_TOAST_MESSAGE_PATTERN, trackingId, routeId), true);
         }
     }
 
-    public void changeCopValue (Integer copValue)
+    public void changeCopValue(Integer copValue)
     {
         click("//input[@id='Amount']");
         webDriver.findElement(By.id("Amount")).sendKeys(String.valueOf(copValue));
         clickNvApiTextButtonByName("commons.save-changes");
     }
 
-    public void changeCodValue (Integer codValue)
+    public void changeCodValue(Integer codValue)
     {
         click("//input[@id='Amount']");
         webDriver.findElement(By.id("Amount")).sendKeys(String.valueOf(codValue));
@@ -2019,12 +2143,12 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public void verifyCopUpdated(Integer copValue)
     {
-        assertEquals("COP Value", "COP SGD"+(copValue/100), getText("//nv-tag/span[contains(text(),'COP SGD')]"));
+        assertEquals("COP Value", "COP SGD" + (copValue / 100), getText("//nv-tag/span[contains(text(),'COP SGD')]"));
     }
 
     public void verifyCodUpdated(Integer codValue)
     {
-        assertEquals("COD Value", "COD SGD"+(codValue/100), getText("//nv-tag/span[contains(text(),'COD SGD')]"));
+        assertEquals("COD Value", "COD SGD" + (codValue / 100), getText("//nv-tag/span[contains(text(),'COD SGD')]"));
     }
 
     public void changeCopToggleToYes()

@@ -1,9 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.cucumber.ScenarioStorage;
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
-import co.nvqa.operator_v2.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;

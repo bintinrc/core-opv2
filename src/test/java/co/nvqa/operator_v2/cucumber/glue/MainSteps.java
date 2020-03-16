@@ -58,4 +58,10 @@ public class MainSteps extends AbstractSteps
     {
         mainPage.refreshPage();
     }
+
+    @Then("^Toast \"(.+)\" is displayed$")
+    public void toastIsDisplayed(String message)
+    {
+        mainPage.waitUntilInvisibilityOfToast(message, true);
+    }
 }

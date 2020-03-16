@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.model;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 

@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.util.JsonUtils;
-import co.nvqa.operator_v2.model.DataEntity;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
@@ -17,12 +17,13 @@ import java.util.stream.IntStream;
  * @author Sergey Mishanin
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public abstract class AbstractTable<T extends DataEntity> extends OperatorV2SimplePage
+public abstract class AbstractTable<T extends DataEntity<?>> extends OperatorV2SimplePage
 {
     private Class<T> entityClass;
     protected Map<String, String> columnLocators = new HashMap<>();
     protected Map<String, String> actionButtonsLocators = new HashMap<>();
     protected Map<String, Function<Integer, String>> columnReaders = new HashMap<>();
+    protected Map<String, Function<String, String>> columnValueProcessors = new HashMap<>();
 
     public AbstractTable(WebDriver webDriver)
     {
@@ -59,6 +60,11 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
         this.columnReaders.putAll(columnReaders);
     }
 
+    public void setColumnValueProcessors(Map<String, Function<String, String>> columnValueProcessors)
+    {
+        this.columnValueProcessors = columnValueProcessors;
+    }
+
     protected abstract String getTextOnTable(int rowNumber, String columnDataClass);
 
     @SuppressWarnings("SameParameterValue")
@@ -83,13 +89,17 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
         Preconditions.checkArgument(StringUtils.isNotBlank(columnLocator), "Locator for columnId [" + columnId + "] was not defined.");
         String text;
 
-        if(columnReaders.containsKey(columnId))
+        if (columnReaders.containsKey(columnId))
         {
             text = columnReaders.get(columnId).apply(rowNumber);
-        }
-        else
+        } else
         {
             text = getTextOnTable(rowNumber, columnLocator);
+        }
+
+        if (columnValueProcessors.containsKey(columnId))
+        {
+            text = columnValueProcessors.get(columnId).apply(text);
         }
 
         return StringUtils.trimToEmpty(StringUtils.strip(StringUtils.normalizeSpace(text), "-"));
@@ -127,7 +137,7 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
     public List<T> readFirstEntities(int count)
     {
         int rowsCount = getRowsCount();
-        count = rowsCount>=count? count : rowsCount;
+        count = rowsCount >= count ? count : rowsCount;
         return IntStream.rangeClosed(1, count)
                 .mapToObj(this::readEntity)
                 .collect(Collectors.toList());
@@ -136,7 +146,7 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
     public List<String> readFirstRowsInColumn(String columnId, int count)
     {
         int rowsCount = getRowsCount();
-        count = rowsCount>=count? count : rowsCount;
+        count = rowsCount >= count ? count : rowsCount;
         return IntStream.rangeClosed(1, count)
                 .mapToObj(rowIndex -> this.getColumnText(rowIndex, columnId))
                 .collect(Collectors.toList());
@@ -153,4 +163,9 @@ public abstract class AbstractTable<T extends DataEntity> extends OperatorV2Simp
     }
 
     protected abstract String getTableLocator();
+
+    public boolean isEmpty()
+    {
+        return getRowsCount() == 0;
+    }
 }
