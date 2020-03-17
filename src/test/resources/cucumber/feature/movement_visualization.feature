@@ -19,7 +19,7 @@ Feature: Movement Visualization
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Visualization
     When Operator selects the Hub Type of "origin" on Movement Visualization Page
-    And Operator selects the Hub by name "JKT-CKG"
+    And Operator selects the Hub by name "{hub-relation-origin-hub-name}"
     And API Operator gets all relations for "origin" Hub id "{hub-relation-origin-hub-id}"
     And Operator clicks the selected Hub
     Then Operator verifies the list of "origin" shown on Movement Visualization Page is the same to the endpoint fired
@@ -29,7 +29,7 @@ Feature: Movement Visualization
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Visualization
     When Operator selects the Hub Type of "destination" on Movement Visualization Page
-    And Operator selects the Hub by name "JKT-CKG"
+    And Operator selects the Hub by name "{hub-relation-destination-hub-name}"
     And API Operator gets all relations for "destination" Hub id "{hub-relation-destination-hub-id}"
     And Operator clicks the selected Hub
     Then Operator verifies the list of "destination" shown on Movement Visualization Page is the same to the endpoint fired
@@ -40,7 +40,7 @@ Feature: Movement Visualization
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Visualization
     When Operator selects the Hub Type of "destination" on Movement Visualization Page
-    And Operator selects the Hub by name "JKT-CKG"
+    And Operator selects the Hub by name "{hub-relation-destination-hub-name}"
     And API Operator gets all relations for "destination" Hub id "{hub-relation-destination-hub-id}"
     And Operator clicks the selected Hub
     Then Operator verifies the list of "destination" shown on Movement Visualization Page is the same to the endpoint fired
