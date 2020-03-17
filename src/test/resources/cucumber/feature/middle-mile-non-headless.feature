@@ -1,4 +1,4 @@
-@ShipmentManagement @Shipment @ForceNotHeadless @MiddleMileNonHeadless
+@ForceNotHeadless @MiddleMileNonHeadless
 Feature: Shipment Management
 
   @LaunchBrowser @ShouldAlwaysRun

@@ -90,7 +90,7 @@ Feature: Shipment Management
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     And Operator click "Load All Selection" on Shipment Management page
-    And Operator force success the created shipment on Shipment Management page
+    When API Operator change the status of the shipment into "Completed"
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Completed |
 
@@ -103,7 +103,7 @@ Feature: Shipment Management
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     And Operator click "Load All Selection" on Shipment Management page
-    And Operator cancel the created shipment on Shipment Management page
+    When API Operator change the status of the shipment into "Cancelled"
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Cancelled |
 
@@ -116,7 +116,7 @@ Feature: Shipment Management
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     And Operator click "Load All Selection" on Shipment Management page
-    And Operator cancel the created shipment on Shipment Management page
+    When API Operator change the status of the shipment into "Cancelled"
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Cancelled |
     When Operator edits and verifies that the cancelled shipment cannot be edited
@@ -219,7 +219,8 @@ Feature: Shipment Management
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
-    When Operator click Force Success Button
+    When API Operator change the status of the shipment into "Completed"
+#    When Operator click Force Success Button
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator filter Shipment Status = Completed on Shipment Management page
@@ -235,7 +236,8 @@ Feature: Shipment Management
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     And Operator click "Load All Selection" on Shipment Management page
-    And Operator cancel the created shipment on Shipment Management page
+    When API Operator change the status of the shipment into "Cancelled"
+#    And Operator cancel the created shipment on Shipment Management page
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator filter Shipment Status = Cancelled on Shipment Management page
