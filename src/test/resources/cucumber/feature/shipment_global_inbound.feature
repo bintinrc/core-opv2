@@ -89,12 +89,12 @@ Feature: Shipment Global Inbound
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
+    And Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
     Given Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below and check alert:
-      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
-      | trackingId | AUTOMATIONTESTING                  |
-      | toastText  | Invalid Tracking ID                |
+      | hubName    | {hub-name-2}        |
+      | trackingId | AUTOMATIONTESTING   |
+      | toastText  | Invalid Tracking ID |
 
   @DeleteShipment
   Scenario: Scan the order in Shipment Global Inbound by Overriding the Size (uid:de2394ad-48f8-49a7-b243-b92abf4461c7)
@@ -349,7 +349,7 @@ Feature: Shipment Global Inbound
     When Operator go to menu Order -> All Orders
     Then Operator verify order info after Global Inbound
     And DB Operator verify the last order_events record for the created order:
-      | type | 26 |
+      | type | 1 |
 
   @DeleteShipment
   Scenario: Operator Inbound Parcel in Shipment - Size, Weight, and Dimension - Return Order - Update Dimension (uid:73eb512e-c31b-4142-9270-dc225bad61ff)
