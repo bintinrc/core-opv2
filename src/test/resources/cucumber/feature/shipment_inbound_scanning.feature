@@ -112,7 +112,8 @@ Feature: Shipment Inbound Scanning
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
-    When Operator click Force Success Button
+    When API Operator change the status of the shipment into "Completed"
+#    When Operator click Force Success Button
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page with Completed alert
 
@@ -126,7 +127,8 @@ Feature: Shipment Inbound Scanning
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
-    And Operator cancel the created shipment on Shipment Management page
+    When API Operator change the status of the shipment into "Cancelled"
+#    And Operator cancel the created shipment on Shipment Management page
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page with Cancelled alert
 
@@ -140,7 +142,8 @@ Feature: Shipment Inbound Scanning
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
-    When Operator click Force Success Button
+    When API Operator change the status of the shipment into "Completed"
+#    When Operator click Force Success Button
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page with Completed alert
 
@@ -154,7 +157,8 @@ Feature: Shipment Inbound Scanning
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
-    And Operator cancel the created shipment on Shipment Management page
+    When API Operator change the status of the shipment into "Cancelled"
+#    And Operator cancel the created shipment on Shipment Management page
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page with Cancelled alert
 
