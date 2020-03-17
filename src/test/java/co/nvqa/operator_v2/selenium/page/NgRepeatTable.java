@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.model.DataEntity;
+import co.nvqa.commons.model.DataEntity;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author Sergey Mishanin
  */
-public class NgRepeatTable<T extends DataEntity> extends AbstractTable<T>
+public class NgRepeatTable<T extends DataEntity<?>> extends AbstractTable<T>
 {
     private String ngRepeat;
 

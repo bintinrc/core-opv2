@@ -1,6 +1,5 @@
 package co.nvqa.operator_v2.selenium.elements.md;
 
-import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
@@ -8,7 +7,6 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,16 +16,14 @@ public class MdSelect extends PageElement
     public MdSelect(WebDriver webDriver, WebElement webElement)
     {
         super(webDriver, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
     public MdSelect(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
     {
         super(webDriver, searchContext, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
-    @FindBy(xpath = ".//md-select-value")
+    @FindBy(css = "md-select-value")
     public PageElement selectValueElement;
 
     @FindBy(xpath = "//div[contains(@class,'md-active md-clickable')]//input[@ng-model='searchTerm']")
@@ -56,7 +52,7 @@ public class MdSelect extends PageElement
     {
         selectValueElement.waitUntilClickable();
         selectValueElement.scrollIntoView();
-        selectValueElement.moveAndClick();
+        selectValueElement.jsClick();
         pause1s();
     }
 

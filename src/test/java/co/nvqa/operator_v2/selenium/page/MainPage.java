@@ -48,6 +48,7 @@ public class MainPage extends OperatorV2SimplePage
         MAP_OF_END_URL.put("Hubs Group Management", "hub-group");
         MAP_OF_END_URL.put("Outbound/Route Load Monitoring", "outbound-monitoring");
         MAP_OF_END_URL.put("Ninja Pack Tracking ID Generator", "ninja-pack-tid-generator");
+        MAP_OF_END_URL.put("Update Delivery Address with CSV", "order-delivery-update");
     }
 
     public MainPage(WebDriver webDriver)

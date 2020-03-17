@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.cucumber.glue.AbstractApiOperatorPortalSteps;
 import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
+import co.nvqa.commons.model.core.BulkOrderInfo;
 import co.nvqa.commons.model.core.CreateDriverV2Request;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.ThirdPartyShippers;
@@ -384,5 +385,12 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
                 NvLogger.warn(f("Could not delete Vehicle Type [%s] - id was not defined", vehicleType.getName()));
             }
         }
+    }
+
+    @Given("^API Operator retrieve information about Bulk Order with ID \"(.+)\"$")
+    public void apiOperatorRetrieveBulkOrderIdInfo(long bulkId)
+    {
+        BulkOrderInfo bulkOrderInfo = getOrderClient().retrieveBulkOrderInfo(bulkId);
+        put(KEY_CREATED_BULK_ORDER_INFO, bulkOrderInfo);
     }
 }
