@@ -39,7 +39,6 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     private static final String LOAD_ALL_HUB_APP_USER_BUTTON_XPATH = "//button[span[text()='Load Hub Users']]";
     private static final String USERNAME_TABLE_FILTER_XPATH = "//th[contains(@class,'username')]//input";
     private static final String TABLE_RESULT_XPATH = "//td[contains(@class,'%s')]/span/%s";
-    private static final String LOAD_ICON_XPATH = "//div[contains(@class,'ant-spin-spinning')]";
     private static final String TOAST_HUB_APP_USER_CREATED_XPATH = "//div[contains(@class,'notification-notice-content')]//div[contains(text(),'Hub User has been created')]";
     private static final String TOAST_HUB_APP_USER_UPDATED_XPATH = "//div[contains(@class,'notification-notice-content')]//div[contains(text(),'Hub User has been updated')]";
     private static final String ERROR_TOAST_DUPLICATION_USERNAME_XPATH = "//div[contains(@class,'toast-error')]//strong[text()='username %s already exists']";
@@ -240,9 +239,6 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
         click(LOAD_ALL_HUB_APP_USER_BUTTON_XPATH);
-        if (isElementExist(LOAD_ICON_XPATH)) {
-            waitUntilInvisibilityOfElementLocated(LOAD_ICON_XPATH);
-        }
         getWebDriver().switchTo().parentFrame();
     }
 
