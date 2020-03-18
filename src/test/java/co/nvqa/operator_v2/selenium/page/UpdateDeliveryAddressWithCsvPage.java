@@ -60,6 +60,9 @@ public class UpdateDeliveryAddressWithCsvPage extends OperatorV2SimplePage
         @FindBy(css = "[aria-label='Proceed']")
         public Button proceedButton;
 
+        @FindBy(css = "[aria-label='Close']")
+        public Button closeButton;
+
         public ConfirmUpdatesDialog(WebDriver webDriver, WebElement webElement)
         {
             super(webDriver, webElement);
