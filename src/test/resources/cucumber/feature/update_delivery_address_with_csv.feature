@@ -53,6 +53,28 @@ Feature: Update Delivery Address with CSV
       | trackingId                      | status                                                                                                                                                                                           |
       | {KEY_CREATED_ORDER_TRACKING_ID} | Require to fill in to.name, to.email, to.phone_number, to.address.address1, to.address.address2, to.address.postcode, to.address.city, to.address.country, to.address.state, to.address.district |
 
+  Scenario: Bulk update order delivery address with CSV - With technical issues
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu New Features -> Update Delivery Address with CSV
+    When Operator update delivery address of created orders on Update Delivery Address with CSV page with technical issues
+    When Operator confirm addresses update on Update Delivery Address with CSV page
+    Then Operator closes the modal for unsuccessful update
+
+  Scenario: Bulk update order delivery address with CSV - With technical issues and valid orders
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder       | 2           |
+      | generateFromAndTo   | RANDOM      |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu New Features -> Update Delivery Address with CSV
+    When Operator update delivery address of created orders on Update Delivery Address with CSV page with technical issues and valid orders
+    When Operator confirm addresses update on Update Delivery Address with CSV page
+    Then Operator closes the modal for unsuccessful update
+    And API Operator get order details
+    And Operator verify orders with technical issues info after address update
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
