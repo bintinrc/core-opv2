@@ -80,6 +80,9 @@ public class HubAppUserManagementSteps extends AbstractSteps
     @When("Operator create new Hub App User with negative scenarios using details:")
     public void operatorCreateNewHubAppUserNegativeScenario(List<HubAppUser> hubAppUsers)
     {
+        LocalDateTime today = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+
         for (HubAppUser hubAppUser : hubAppUsers)
         {
             hubAppUserManagementPage.clickAddHubUserButton();
@@ -95,6 +98,7 @@ public class HubAppUserManagementSteps extends AbstractSteps
             hubAppUserManagementPage.selectEmploymentType(hubAppUser.getEmploymentType());
 
             if (!("".equalsIgnoreCase(hubAppUser.getEmploymentStartDate()))) {
+                hubAppUser.setEmploymentStartDate(formatter.format(today));
                 hubAppUserManagementPage.selectEmploymentStartDate(hubAppUser.getEmploymentStartDate());
             }
 
