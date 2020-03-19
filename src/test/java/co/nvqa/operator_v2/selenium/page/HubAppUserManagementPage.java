@@ -27,7 +27,7 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     private static final String PART_TIME_EMPLOYMENT_TYPE_XPATH = "//li[text()='PART_TIME']";
     private static final String HUB_SELECTION_XPATH = "//li[text()='%s']";
     private static final String EMPLOYMENT_START_DATE_XPATH = "//div[contains(@class,'ant-card-bordered')]//span[@id='employment_start_date']";
-    private static final String TEXT_AREA_START_DATE_XPATH = "//div[contains(@class,'calendar-picker-container-placement-bottomLeft')]//input[@placeholder='Select date']";
+    private static final String RECENT_MONTH_XPATH = "//a[contains(@class,'month-select')]";
     private static final String HUB_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='hub_id']";
     private static final String CREATE_UPDATE_BUTTON_ADD_HUB_DIALOG_XPATH = "//button[@id='btnUpsertUser']";
     private static final String CLOSE_BUTTON_MODAL_XPATH = "//button[@aria-label='Close']";
@@ -44,6 +44,7 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     private static final String ERROR_TOAST_DUPLICATION_USERNAME_XPATH = "//div[contains(@class,'toast-error')]//strong[text()='username %s already exists']";
     private static final String ERROR_TOAST_DUPLICATION_CLOSE_XPATH = "//i[text()='close']";
     private static final String ERROR_MESSAGE_EMPTY_FIELD_XPATH = "//div[@class='ant-form-explain']/span[text()='%s']";
+    private static final String TEST_CALENDAR = "//td[@title='%s']/div";
 
     private static final String FIRST_NAME_ID = "first_name";
     private static final String LAST_NAME_ID = "last_name";
@@ -147,10 +148,10 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
         click(EMPLOYMENT_START_DATE_XPATH);
-        waitUntilVisibilityOfElementLocated(TEXT_AREA_START_DATE_XPATH);
-
-        sendKeys(TEXT_AREA_START_DATE_XPATH, startDate);
-        sendKeys(TEXT_AREA_START_DATE_XPATH, Keys.ENTER);
+        waitUntilVisibilityOfElementLocated(RECENT_MONTH_XPATH);
+        click(f(TEST_CALENDAR, startDate));
+//        sendKeys(RECENT_MONTH_XPATH, startDate);
+//        sendKeys(RECENT_MONTH_XPATH, Keys.ENTER);
         getWebDriver().switchTo().parentFrame();
     }
 

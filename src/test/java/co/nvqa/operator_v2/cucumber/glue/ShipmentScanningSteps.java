@@ -87,7 +87,7 @@ public class ShipmentScanningSteps extends AbstractSteps
     public void operatorVerifiesThatTheParcelsShownAreDecreased()
     {
         List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
-        int actualSumOfOrder = orders.size();
+        int actualSumOfOrder = orders.size()-1;
         shipmentScanningPage.verifiesTheSumOfOrderIsDecreased(actualSumOfOrder);
     }
 

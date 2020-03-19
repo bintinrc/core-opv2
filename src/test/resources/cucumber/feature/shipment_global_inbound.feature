@@ -189,7 +189,7 @@ Feature: Shipment Global Inbound
     When Operator go to menu Order -> All Orders
     Then Operator verify order info after Global Inbound
     And DB Operator verify the last order_events record for the created order:
-      | type | 26 |
+      | type | 1 |
 
   @DeleteShipment
   Scenario: Scan the order in Shipment Global Inbound by Overriding the Dimension (uid:492a25c2-3687-4774-bd6d-98ef63e512b3)

@@ -33,7 +33,8 @@ public class HubAppUserManagementSteps extends AbstractSteps
     public void operatorCreateNewHubAppUser(List<HubAppUser> hubAppUsers)
     {
         LocalDateTime today = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+        DateTimeFormatter calFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy", Locale.ENGLISH);
+        DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 
         for (HubAppUser hubAppUser : hubAppUsers)
         {
@@ -57,8 +58,8 @@ public class HubAppUserManagementSteps extends AbstractSteps
             hubAppUserManagementPage.fillPassword(hubAppUser.getPassword());
             hubAppUserManagementPage.selectEmploymentType(hubAppUser.getEmploymentType());
 
-            hubAppUser.setEmploymentStartDate(formatter.format(today));
-            hubAppUserManagementPage.selectEmploymentStartDate(hubAppUser.getEmploymentStartDate());
+            hubAppUser.setEmploymentStartDate(dataFormatter.format(today));
+            hubAppUserManagementPage.selectEmploymentStartDate(calFormatter.format(today));
 
             hubAppUserManagementPage.selectHubForHubAppUser(hubAppUser.getHub());
             hubAppUserManagementPage.fillWareHouseTeamFormation(hubAppUser.getWarehouseTeamFormation());
@@ -81,7 +82,8 @@ public class HubAppUserManagementSteps extends AbstractSteps
     public void operatorCreateNewHubAppUserNegativeScenario(List<HubAppUser> hubAppUsers)
     {
         LocalDateTime today = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+        DateTimeFormatter calFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy", Locale.ENGLISH);
+        DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 
         for (HubAppUser hubAppUser : hubAppUsers)
         {
@@ -98,8 +100,8 @@ public class HubAppUserManagementSteps extends AbstractSteps
             hubAppUserManagementPage.selectEmploymentType(hubAppUser.getEmploymentType());
 
             if (!("".equalsIgnoreCase(hubAppUser.getEmploymentStartDate()))) {
-                hubAppUser.setEmploymentStartDate(formatter.format(today));
-                hubAppUserManagementPage.selectEmploymentStartDate(hubAppUser.getEmploymentStartDate());
+                hubAppUser.setEmploymentStartDate(dataFormatter.format(today));
+                hubAppUserManagementPage.selectEmploymentStartDate(calFormatter.format(today));
             }
 
             if (!("".equalsIgnoreCase(hubAppUser.getHub()))) {

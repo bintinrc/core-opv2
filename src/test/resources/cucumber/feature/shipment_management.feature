@@ -89,8 +89,10 @@ Feature: Shipment Management
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    And Operator click "Load All Selection" on Shipment Management page
     When API Operator change the status of the shipment into "Completed"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Completed |
 
@@ -102,8 +104,10 @@ Feature: Shipment Management
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    And Operator click "Load All Selection" on Shipment Management page
     When API Operator change the status of the shipment into "Cancelled"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Cancelled |
 
@@ -115,8 +119,10 @@ Feature: Shipment Management
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    And Operator click "Load All Selection" on Shipment Management page
     When API Operator change the status of the shipment into "Cancelled"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Cancelled |
     When Operator edits and verifies that the cancelled shipment cannot be edited
