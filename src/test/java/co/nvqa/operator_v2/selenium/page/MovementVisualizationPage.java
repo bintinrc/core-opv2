@@ -22,6 +22,7 @@ public class MovementVisualizationPage extends OperatorV2SimplePage {
     public Button addAnotherMovementEditModal;
 
     private static final String ELEMENT_USING_ID_XPATH = "//%s[contains(@id,'%s')]";
+    private static final String MOVEMENT_VISUALIZATION_LOADED_XPATH = "//div[contains(@class,'MovementVisualizationSidebar')]";
     private static final String SELECT_HUB_TYPE_XPATH = "//input[@value='%s']";
 
     private static final String HUB_SELECTED_XPATH = "//div[contains(@class,'ant-select-dropdown')]//li[text()='%s']";
@@ -33,15 +34,16 @@ public class MovementVisualizationPage extends OperatorV2SimplePage {
     private static final String EDIT_BUTTON_ON_VIEW_SCHEDULE_XPATH = "//button[i[contains(@class,'anticon-edit')]]";
     private static final String RANDOM_CLICK_EDIT_MOVEMENT_MODAL_XPATH = "//div[contains(@class,'modal-title')]";
     private static final String SAVE_BUTTON_EDIT_MOVEMENT_MODAL_XPATH = "//button[contains(@class,'ant-btn')]/following-sibling::button[contains(@class,'btn-primary')]";
-    private static final String INPUT_TIME_EDIT_MOVEMENT_MODAL_XPATH = "//input[contains(@class,'ant-time-picker-panel-input')]";
+//    private static final String INPUT_TIME_EDIT_MOVEMENT_MODAL_XPATH = "//input[contains(@class,'ant-time-picker-panel-input')]";
+    private static final String INPUT_TIME_EDIT_MOVEMENT_MODAL_XPATH = "//div[contains(@class,'time-picker-panel-select')]//li[text()='13']";
     private static final String NOTIFICATION_EDIT_MOVEMENT_MODAL_XPATH = "//div[contains(@class,'notification-notice-message')]";
     private static final String CLOSE_BUTTON_VIEW_SCHEDULE_MODAL_XPATH = "//button[@aria-label='Close']";
     private static final String REMOVE_HREF_EDIT_MOVEMENT_MODAL_XPATH = "//div[contains(@class,'ScheduleMovementContainer')][3]//a[contains(@class,'RemoveLink')]";
     private static final String IFRAME_XPATH_MOVEMENT_VISUALIZATION = "//iframe[contains(@src,'movement-visualization')]";
     private static final String IFRAME_XPATH_MOVEMENT_MANAGEMENT = "//iframe[contains(@src,'movement')]";
 
-    private static final String ASSERTION_EDITED_START_TIME_XPATH = "//tr[5]/td[.='13:00'][1]";
-    private static final String ASSERTION_EDITED_DURATION_TIME_XPATH = "//tr[6]/td[.='00:13:00'][1]";
+    private static final String ASSERTION_EDITED_START_TIME_XPATH = "//tr[5]/td[contains(.,'13')][1]";
+    private static final String ASSERTION_EDITED_DURATION_TIME_XPATH = "//tr[6]/td[contains(.,'00:13')][1]";
 
     private static final String HUB_ID = "hub";
     private static final String CLEAR_FILTER_BUTTON_ID = "clear-filter-btn";
@@ -62,7 +64,8 @@ public class MovementVisualizationPage extends OperatorV2SimplePage {
 
     public void selectHubType(String hubType) {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH_MOVEMENT_VISUALIZATION));
-        pause1s();
+        waitUntilVisibilityOfElementLocated(MOVEMENT_VISUALIZATION_LOADED_XPATH);
+
         if ("origin".equalsIgnoreCase(hubType)) {
             click(f(SELECT_HUB_TYPE_XPATH, ORIGIN_VALUE));
         } else if ("destination".equalsIgnoreCase(hubType)) {
@@ -147,10 +150,12 @@ public class MovementVisualizationPage extends OperatorV2SimplePage {
         addAnotherMovementEditModal.click();
         click(f(ELEMENT_USING_ID_XPATH, INPUT_ELEMENT, START_TIME_EDIT_MOVEMENT_ID));
         pause1s();
-        sendKeys(INPUT_TIME_EDIT_MOVEMENT_MODAL_XPATH, "13:00");
+        click(INPUT_TIME_EDIT_MOVEMENT_MODAL_XPATH);
+//        sendKeys(INPUT_TIME_EDIT_MOVEMENT_MODAL_XPATH, "13:00");
         click(f(ELEMENT_USING_ID_XPATH, INPUT_ELEMENT, SELECT_TIME_EDIT_MOVEMENT_ID));
         pause1s();
-        sendKeys(INPUT_TIME_EDIT_MOVEMENT_MODAL_XPATH, "13 h 00 m");
+        click(INPUT_TIME_EDIT_MOVEMENT_MODAL_XPATH);
+//        sendKeys(INPUT_TIME_EDIT_MOVEMENT_MODAL_XPATH, "13 h 00 m");
         click(RANDOM_CLICK_EDIT_MOVEMENT_MODAL_XPATH);
         pause1s();
         click(SAVE_BUTTON_EDIT_MOVEMENT_MODAL_XPATH);

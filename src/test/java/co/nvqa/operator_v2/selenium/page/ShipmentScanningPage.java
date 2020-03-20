@@ -82,9 +82,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage
         pause1s();
         sendKeys("//nv-search-input-filter[@search-text='filter.trackingId']//input", firstTrackingId);
         pause1s();
-        click("//td[@class='deliver-by']/following-sibling::td//button[contains(@id,'button-remove-parcel')]");
-        pause2s();
-        click("//td[@class='deliver-by']/following-sibling::td//button[contains(@id,'button-remove-parcel')]");
+        waitUntilVisibilityOfElementLocated("//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
+        click("//tr[contains(@class,'last-row')]/preceding-sibling::tr//button[contains(@id,'remove')]");
         waitUntilVisibilityOfElementLocated("//md-dialog-content[contains(@id,'dialogContent')]");
         click("//button[@aria-label='Delete']");
         waitUntilVisibilityOfToast(f("Success delete order tracking ID %s", firstTrackingId));
@@ -103,9 +102,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage
         pause1s();
         click("//nv-icon-text-button[@label='container.shipment-scanning.remove-all']");
         waitUntilVisibilityOfElementLocated("//md-dialog-content[contains(@id,'dialogContent')]");
-        click("//button[@aria-label='Remove']");
-        pause2s();
-        click("//button[@aria-label='Remove']");
+        click("//button[@ng-click='dialog.hide()' and @aria-label='Remove']");
         pause1s();
     }
 
