@@ -325,6 +325,8 @@ Feature: Shipper Pickups
     And Operator set the Priority Level of the created reservation to "2" from Apply Action
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
       | priorityLevel | 2 |
+    And DB Operator verify reservation priority level
+      | priorityLevel | 2 |
 
   Scenario: Operator should be able to edit the Priority Level of multiple reservation on Shipper Pickups page (uid:1ef31434-423d-417c-955e-051d5b203a65)
     Given Operator go to menu Shipper Support -> Blocked Dates

@@ -826,4 +826,14 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
         assertEquals(f("Expected ticket status %s but actual ticket status %d", expectedStatus, ticketStatus),expectedStatus, ticketStatus);
     }
+
+    @Then("^DB Operator verify reservation priority level$")
+    public void dbOperatorReservationPriorityLevel(Map<String, Integer> mapOfData) throws SQLException, ClassNotFoundException
+    {
+        Long reservationId = get(KEY_CREATED_RESERVATION_ID);
+        Integer expectedPriorityLevel = mapOfData.get("priorityLevel");
+        Integer priorityLevel = getCoreJdbc().getReservationPriorityLevel(reservationId);
+
+        assertEquals(f("Expected Reservation Priority Level %s but actual Priority Level %d", expectedPriorityLevel, priorityLevel),expectedPriorityLevel, priorityLevel);
+    }
 }
