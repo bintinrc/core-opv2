@@ -297,6 +297,24 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         putInList(KEY_LIST_OF_CREATED_HUBS, hub);
     }
 
+    @Given("^API Operator disable created hub$")
+    public void apiOperatorDisableCreatedHub()
+    {
+        Hub hub = get(KEY_CREATED_HUB);
+        Hub newHub = getHubClient().disable(hub.getId());
+        hub.merge(newHub);
+    }
+
+    @Given("^API Operator activate created hub$")
+    public void apiOperatorActivateCreatedHub() throws InstantiationException, IllegalAccessException
+    {
+        Hub hub = get(KEY_CREATED_HUB);
+        Hub updateHub = hub.copy();
+        updateHub.setActivate(true);
+        Hub newHub = getHubClient().update(updateHub);
+        hub.merge(newHub);
+    }
+
     @Given("^API Operator gets data of created Third Party shipper$")
     public void apiOperatorGetsDataOfCreatedThirdPartyShipper()
     {

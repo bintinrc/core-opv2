@@ -21,6 +21,6 @@ public class Button extends PageElement
 
     public void click(){
         waitUntilClickable();
-        super.moveAndClick();
+        super.click();
     }
 }

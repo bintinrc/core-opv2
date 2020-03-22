@@ -5,6 +5,7 @@ Feature: Recovery Tickets
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @DeleteCreatedTickets
   Scenario: Create damage ticket on Recovery Tickets menu (uid:43d733f5-61e2-4877-82c2-ae1ac3220a2b)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -25,6 +26,7 @@ Feature: Recovery Tickets
       | ticketNotes             | GENERATED          |
     Then Operator verify ticket is created successfully on page Recovery Tickets
 
+  @DeleteCreatedTickets
   Scenario: Create missing ticket on Recovery Tickets menu (uid:dc66d575-0700-44c8-a4bc-2787a5616e64)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -43,6 +45,7 @@ Feature: Recovery Tickets
       | ticketNotes             | GENERATED          |
     Then Operator verify ticket is created successfully on page Recovery Tickets
 
+  @DeleteCreatedTickets
   Scenario: Create parcel exception ticket on Recovery Tickets menu (uid:22fe023b-3db9-4572-9ea2-11fc6d4bc8dc)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -63,6 +66,7 @@ Feature: Recovery Tickets
       | ticketNotes                   | GENERATED          |
     Then Operator verify ticket is created successfully on page Recovery Tickets
 
+  @DeleteCreatedTickets
   Scenario: Create shipper issue ticket on Recovery Tickets menu (uid:5571d314-7b79-4376-9f7a-bab503424680)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -83,6 +87,7 @@ Feature: Recovery Tickets
       | ticketNotes                 | GENERATED          |
     Then Operator verify ticket is created successfully on page Recovery Tickets
 
+  @DeleteCreatedTickets
   Scenario: Delete damaged recovery ticket (uid:700caae8-5879-49a8-b94d-32fa97ecfc7b)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -107,6 +112,7 @@ Feature: Recovery Tickets
     And Operator clicks on Delete on pop up
     Then Operator verifies that the status of ticket is "Cancelled"
 
+  @DeleteCreatedTickets
   Scenario: Edit all field and additional setting for recovery ticket type --> Damaged (uid:2799adb1-5d83-45d3-b0f7-3230b851a25c)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -137,6 +143,7 @@ Feature: Recovery Tickets
       | shipperZendeskId  | RANDOM    |
       | ticketComments    | GENERATED |
 
+  @DeleteCreatedTickets
   Scenario: Edit all field and additional setting for recovery ticket type --> Missing (uid:883d157a-2edd-4ae9-aa87-c3a006786746)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -164,6 +171,7 @@ Feature: Recovery Tickets
       | shipperZendeskId  | RANDOM    |
       | ticketComments    | GENERATED |
 
+  @DeleteCreatedTickets
   Scenario: Edit all field and additional setting for recovery ticket type --> Parcel Exception (uid:19e4f152-9201-4a16-85a5-3c328d9f6638)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -193,6 +201,7 @@ Feature: Recovery Tickets
       | shipperZendeskId  | RANDOM    |
       | ticketComments    | GENERATED |
 
+  @DeleteCreatedTickets
   Scenario: Edit all field and additional setting for recovery ticket type --> Shipper Issue (uid:c1ad3626-da33-416e-9e67-4fede917fa5d)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -222,6 +231,7 @@ Feature: Recovery Tickets
       | shipperZendeskId  | RANDOM    |
       | ticketComments    | GENERATED |
 
+  @DeleteCreatedTickets
   Scenario: Update ticket status to Resolved --> Damaged (uid:922222d2-b127-438c-bd64-512a32725364)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -246,6 +256,7 @@ Feature: Recovery Tickets
     And Operator updates the ticket
     Then Operator verifies that the status of ticket is "Resolved"
 
+  @DeleteCreatedTickets
   Scenario: Update ticket status to Resolved --> Missing (uid:da860206-73e3-4f47-8e69-11f3a9f6c75a)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -267,6 +278,7 @@ Feature: Recovery Tickets
     And Operator updates the ticket
     Then Operator verifies that the status of ticket is "Resolved"
 
+  @DeleteCreatedTickets
   Scenario: Update ticket status to Resolved --> Parcel Exception (uid:3dce292d-647d-40ee-974b-613c0ddfe960)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -290,6 +302,7 @@ Feature: Recovery Tickets
     And Operator updates the ticket
     Then Operator verifies that the status of ticket is "Resolved"
 
+  @DeleteCreatedTickets
   Scenario: Update ticket status to Resolved --> Shipper Issue (uid:25620406-8d3b-40c9-87b5-e373530d2144)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -313,6 +326,7 @@ Feature: Recovery Tickets
     And Operator updates the ticket
     Then Operator verifies that the status of ticket is "Resolved"
 
+  @DeleteCreatedTickets
   Scenario: Filter ticket status - Ticket status using Cancelled (uid:a6a23faa-1dc2-4dc9-9b34-839c70b51069)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -340,6 +354,7 @@ Feature: Recovery Tickets
     Then Operator chooses the ticket status as "CANCELLED"
     And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Filter ticket status - Ticket status using In Progress (uid:8e9bca26-06f1-4582-a10a-b1d6c52cc553)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -363,6 +378,7 @@ Feature: Recovery Tickets
     Then Operator chooses the ticket status as "IN PROGRESS"
     And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Filter ticket status - Ticket status using On Hold (uid:fddf9885-d797-40ce-a3d9-306cc06c8e21)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -407,6 +423,7 @@ Feature: Recovery Tickets
 #    Then Operator chooses the ticket status as "PENDING"
 #    And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Filter ticket status - Ticket status using Pending Shipper (uid:f3936002-7bd9-4d23-b1fc-33b6df1978d5)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -430,6 +447,7 @@ Feature: Recovery Tickets
     Then Operator chooses the ticket status as "PENDING SHIPPER"
     And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Filter ticket status - Ticket status using Resolved (uid:69adae83-2738-4dbd-83a1-93c0d910f546)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -454,6 +472,7 @@ Feature: Recovery Tickets
     Then Operator chooses the ticket status as "RESOLVED"
     And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Filter ticket status - Ticket status using All Parameter filter (uid:83096c63-1e9c-45a5-a390-89f0a4f90833)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -474,6 +493,7 @@ Feature: Recovery Tickets
     Then Operator chooses all the ticket status filters
     And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Filter Entry Source - Customer Complaint (uid:79dc5341-9d29-41f9-b7cd-4a675c5c10f7)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -496,6 +516,7 @@ Feature: Recovery Tickets
     Then Operator chooses Entry Source Filter as "CUSTOMER COMPLAINT"
     And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Filter Entry Source - Driver Turn (uid:8f3d2081-815f-4ea6-9bb2-d680272c9628)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -541,6 +562,7 @@ Feature: Recovery Tickets
 #    Then Operator chooses Entry Source Filter as "GENERAL"
 #    And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Filter Entry Source - Missing Inbound Content (uid:910cc360-52f8-4358-92ca-104b237ef2c8)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -563,6 +585,7 @@ Feature: Recovery Tickets
     Then Operator chooses Entry Source Filter as "MISSING INBOUND CONTEST"
     And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Filter Entry Source - Outbound Clean (uid:9a319d97-23b5-4cda-91fb-23f9f6f62b38)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -585,6 +608,7 @@ Feature: Recovery Tickets
     Then Operator chooses Entry Source Filter as "OUTBOUND CLEAN"
     And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Filter Entry Source - Recovery Scanning (uid:eed28e52-d4d9-441d-a49f-0ca0127f4a34)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -607,6 +631,7 @@ Feature: Recovery Tickets
     Then Operator chooses Entry Source Filter as "RECOVERY SCANNING"
     And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Filter Entry Source - Route Cleaning (uid:61569a5c-8d38-4c2d-b59e-967bb20002c7)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -629,6 +654,7 @@ Feature: Recovery Tickets
     Then Operator chooses Entry Source Filter as "ROUTE CLEANING"
     And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Filter Entry Source - Route Inbounding (uid:25fa96e2-6a73-410d-a10e-4bc58488190a)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -651,6 +677,7 @@ Feature: Recovery Tickets
     Then Operator chooses Entry Source Filter as "ROUTE INBOUNDING"
     And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Filter Entry Source - Shipper Complaint (uid:10323bf2-3239-4185-94db-70007271f90c)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -673,6 +700,7 @@ Feature: Recovery Tickets
     Then Operator chooses Entry Source Filter as "SHIPPER COMPLAINT"
     And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Filter Tracking IDs - Tracking ID Correct (uid:b3d8544e-5808-447d-b7d7-c7c800937f8d)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -699,6 +727,7 @@ Feature: Recovery Tickets
     When Operator enters the wrong Tracking Id
     Then No Results should be displayed
 
+  @DeleteCreatedTickets
   Scenario: Search Tickets using Investigating Hub filter (uid:aef2de95-45b3-41d0-92dd-878ee47fbd16)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -720,6 +749,7 @@ Feature: Recovery Tickets
     Then Operator chooses Investigating Hub filter as "{hub-name}"
     And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Search tickets using Investigating Dept filter - Investigating Debt using Fleet(First Mile) (uid:3c66c37b-cac9-49de-b320-da3dea5aa29c)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -739,6 +769,7 @@ Feature: Recovery Tickets
     Then Operator chooses Investigating Dept Filter as "Fleet (First Mile)"
     And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Search tickets using Investigating Dept filter - Investigating Debt using Fleet(Last Mile) (uid:9d0fc24c-0e6b-48e9-b20e-128be682d30d)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -758,6 +789,7 @@ Feature: Recovery Tickets
     Then Operator chooses Investigating Dept Filter as "Fleet (Last Mile)"
     And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Search tickets using Investigating Dept filter - Investigating Debt using Freight(Middle Mile) (uid:c96985ab-fa55-457b-b8e7-68777b7a65ca)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -777,6 +809,7 @@ Feature: Recovery Tickets
     Then Operator chooses Investigating Dept Filter as "Freight (Middle Mile)"
     And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Search tickets using Investigating Dept filter - Investigating Debt using Sort(Warehouse) (uid:17f45a47-439f-4bde-8b82-ed8233470ea4)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -796,6 +829,7 @@ Feature: Recovery Tickets
     Then Operator chooses Investigating Dept Filter as "Sort (Warehouse)"
     And Operator enters the tracking id and verifies that is exists
 
+  @DeleteCreatedTickets
   Scenario: Search tickets using Investigating Dept filter - Investigating Debt using Recovery (uid:70c6a756-a2f4-435d-951b-d310faff1914)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

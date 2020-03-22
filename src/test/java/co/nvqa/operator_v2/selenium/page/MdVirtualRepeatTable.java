@@ -1,20 +1,28 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.DataEntity;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 /**
  * @author Sergey Mishanin
  */
 public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable<T>
 {
+    @FindBy(css = "th.column-checkbox md-menu")
+    public MdMenu selectionMenu;
+
     private String mdVirtualRepeat = "data in getTableData()";
 
     public MdVirtualRepeatTable(WebDriver webDriver)
     {
         super(webDriver);
+        PageFactory.initElements(new CustomFieldDecorator(webDriver), this);
     }
 
     public String getMdVirtualRepeat()
@@ -29,8 +37,7 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
 
     public void selectAllShown()
     {
-        simpleClick("//md-menu/button[@aria-label='Selection']");
-        click("//md-menu-item/button[@aria-label='Select All Shown']");
+        selectionMenu.selectOption("Select All Shown");
     }
 
     @Override

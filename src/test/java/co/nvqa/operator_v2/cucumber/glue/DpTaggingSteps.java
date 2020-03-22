@@ -7,9 +7,9 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -48,6 +48,32 @@ public class DpTaggingSteps extends AbstractSteps
         put(KEY_DISTRIBUTION_POINT_ID, dpId);
     }
 
+    @When("^Operator untags created orders from DP with DPMS ID = \"([^\"]*)\" on DP Tagging page$")
+    public void operatorUntagsSingleOrder(String dpIdAsString)
+    {
+        List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        long dpId = Long.parseLong(dpIdAsString);
+
+        List<DpTagging> listOfDpTagging = trackingIds.stream().map(trackingId ->
+        {
+            DpTagging dpTagging = new DpTagging();
+            dpTagging.setTrackingId(trackingId);
+            dpTagging.setDpId(dpId);
+            return dpTagging;
+        }).collect(Collectors.toList());
+
+        dpTaggingPage.uploadDpTaggingCsv(listOfDpTagging);
+        dpTaggingPage.verifyDpTaggingCsvIsUploadedSuccessfully(listOfDpTagging);
+        dpTaggingPage.untagAll();
+        if (listOfDpTagging.size() == 1)
+        {
+            dpTaggingPage.waitUntilInvisibilityOfToast("1 Order(s) untagged successfully");
+        } else
+        {
+            dpTaggingPage.waitUntilInvisibilityOfToast("DP untagging performed successfully");
+        }
+    }
+
     @When("^Operator tags multiple orders to DP with DPMS ID = \"([^\"]*)\"$")
     public void operatorTagsMultipleOrdersToDpWithId(String dpIdAsString)
     {
@@ -56,7 +82,7 @@ public class DpTaggingSteps extends AbstractSteps
 
         List<DpTagging> listOfDpTagging = new ArrayList<>();
 
-        for(String trackingId : listOfTrackingId)
+        for (String trackingId : listOfTrackingId)
         {
             DpTagging dpTagging = new DpTagging();
             dpTagging.setTrackingId(trackingId);

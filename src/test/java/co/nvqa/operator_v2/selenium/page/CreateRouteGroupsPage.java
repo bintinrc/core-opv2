@@ -213,7 +213,7 @@ public class CreateRouteGroupsPage extends OperatorV2SimplePage
 
     public void selectAllShown()
     {
-        selectionMenu.selectOption("Select All Shown");
+        txnRsvnTable.selectAllShown();
     }
 
     public void clickAddToRouteGroupButton()
