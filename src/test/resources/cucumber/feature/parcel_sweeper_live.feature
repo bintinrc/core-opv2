@@ -359,7 +359,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
   @DeleteOrArchiveRoute
-  Scenario: Parcel Sweeper Live - On Hold Order - NON-MISSING TICKET
+  Scenario: Parcel Sweeper Live - On Hold Order - NON-MISSING TICKET (uid:b0baaa1e-e23d-43e3-8e0b-64f9e881b6f8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -409,7 +409,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "On Hold" on Edit Order page
 
   @DeleteOrArchiveRoute
-  Scenario: Parcel Sweeper Live - On Hold Order - MISSING TICKET
+  Scenario: Parcel Sweeper Live - On Hold Order - MISSING TICKET (uid:195348a0-3620-4ad9-aa6c-103783aef17e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -433,9 +433,9 @@ Feature: Parcel Sweeper Live
       | hubName    | {hub-name} |
       | trackingId | CREATED    |
     And Operator verify Route ID on Parcel Sweeper By Hub page using data below:
-      | orderId    | Not Routed   |
-      | driverName | NIL |
-      | color      | #73deec   |
+      | orderId    | Not Routed |
+      | driverName | NIL        |
+      | color      | #73deec    |
     And API Operator get all zones preferences
     And Operator verify Zone on Parcel Sweeper By Hub page using data below:
       | zoneName | FROM CREATED ORDER |
