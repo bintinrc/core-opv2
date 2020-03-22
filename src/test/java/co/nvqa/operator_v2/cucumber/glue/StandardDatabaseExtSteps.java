@@ -836,4 +836,15 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
         assertEquals(f("Expected Reservation Priority Level %s but actual Priority Level %d", expectedPriorityLevel, priorityLevel),expectedPriorityLevel, priorityLevel);
     }
+
+    @Then("^DB Operator verify new record is created in route_waypoints table with the correct details$")
+    public void dbOperatorVerifyRouteWaypointsTable() throws SQLException, ClassNotFoundException
+    {
+        Long reservationId = get(KEY_CREATED_RESERVATION_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
+        Long reservationWaypoint = getCoreJdbc().getReservationWaypoint(reservationId);
+        Long routeWaypoint = getCoreJdbc().getRouteWaypoint(routeId);
+
+        assertEquals(f("Waypoint ID in reservations DB %s but Waypoint ID in route_waypoint %d", reservationWaypoint, routeWaypoint),reservationWaypoint, routeWaypoint);
+    }
 }
