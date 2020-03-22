@@ -358,6 +358,107 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
+  @DeleteOrArchiveRoute
+  Scenario: Parcel Sweeper Live - On Hold Order - NON-MISSING TICKET
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | DAMAGED            |
+      | ticketSubType           | IMPROPER PACKAGING |
+      | parcelLocation          | DAMAGED RACK       |
+      | liability               | NV DRIVER          |
+      | damageDescription       | GENERATED          |
+      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    And API Operator refresh created order data
+    When Operator go to menu Routing -> Parcel Sweeper Live
+    When Operator provides data on Parcel Sweeper Live page:
+      | hubName    | {hub-name} |
+      | trackingId | CREATED    |
+    And Operator verify Route ID on Parcel Sweeper By Hub page using data below:
+      | orderId    | ON HOLD    |
+      | driverName | RECOVERY   |
+      | color      | #f45050    |
+    And API Operator get all zones preferences
+    And Operator verify Zone on Parcel Sweeper By Hub page using data below:
+      | zoneName | FROM CREATED ORDER |
+      | color    | #f45050            |
+    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
+      | hubName | -               |
+      | color   | #f45050         |
+    And DB Operator verifies warehouse_sweeps record
+      | trackingId | CREATED  |
+      | hubId      | {hub-id} |
+    And DB Operator verify order_events record for the created order:
+      | type | 27 |
+    And Operator verifies event is present for order on Edit order page
+      | eventName | PARCEL ROUTING SCAN |
+      | hubName   | {hub-name}          |
+      | hubId     | {hub-id}            |
+    And Operator verify order status is "On Hold" on Edit Order page
+    And Operator verify order granular status is "On Hold" on Edit Order page
+
+  @DeleteOrArchiveRoute
+  Scenario: Parcel Sweeper Live - On Hold Order - MISSING TICKET
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given Operator go to menu Recovery -> Recovery Tickets
+    When Operator create new ticket on page Recovery Tickets using data below:
+      | entrySource             | CUSTOMER COMPLAINT |
+      | investigatingDepartment | Fleet (First Mile) |
+      | investigatingHub        | {hub-name}         |
+      | ticketType              | MISSING            |
+      | orderOutcomeMissing     | LOST - DECLARED    |
+      | parcelDescription       | GENERATED          |
+      | custZendeskId           | 1                  |
+      | shipperZendeskId        | 1                  |
+      | ticketNotes             | GENERATED          |
+    And API Operator refresh created order data
+    When Operator go to menu Routing -> Parcel Sweeper Live
+    When Operator provides data on Parcel Sweeper Live page:
+      | hubName    | {hub-name} |
+      | trackingId | CREATED    |
+    And Operator verify Route ID on Parcel Sweeper By Hub page using data below:
+      | orderId    | Not Routed   |
+      | driverName | NIL |
+      | color      | #73deec   |
+    And API Operator get all zones preferences
+    And Operator verify Zone on Parcel Sweeper By Hub page using data below:
+      | zoneName | FROM CREATED ORDER |
+      | color    | #73deec            |
+    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
+      | hubName | GLOBAL INBOUND |
+      | color   | #73deec        |
+    And DB Operator verifies warehouse_sweeps record
+      | trackingId | CREATED  |
+      | hubId      | {hub-id} |
+    And DB Operator verify order_events record for the created order:
+      | type | 27 |
+    And Operator verifies event is present for order on Edit order page
+      | eventName | PARCEL ROUTING SCAN |
+      | hubName   | {hub-name}          |
+      | hubId     | {hub-id}            |
+    And Operator verify order event on Edit order page using data below:
+      | name    | TICKET RESOLVED       |
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And DB Operator verify ticket status
+      | status | 3 |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

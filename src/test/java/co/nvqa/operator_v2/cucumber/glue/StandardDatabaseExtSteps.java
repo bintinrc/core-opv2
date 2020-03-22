@@ -30,6 +30,7 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.opentest4j.AssertionFailedError;
 
+import java.sql.SQLException;
 import java.time.*;
 import java.util.List;
 import java.util.Map;
@@ -814,5 +815,15 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
             assertEquals(f("%s waypoint [%d] timewindowId", transactionType, waypointId), order.getDeliveryTimeslot().getId(),
                     Integer.parseInt(actualWaypoint.getTimeWindowId()));
         }
+    }
+
+    @Then("^DB Operator verify ticket status$")
+    public void dbOperatorVerifyTicketStatus(Map<String, Integer> mapOfData) throws SQLException, ClassNotFoundException
+    {
+        Long orderId = get(KEY_CREATED_ORDER_ID);
+        Integer expectedStatus = mapOfData.get("status");
+        Integer ticketStatus = getTicketsJdbc().getTicketStatus(orderId);
+
+        assertEquals(f("Expected ticket status %s but actual ticket status %d", expectedStatus, ticketStatus),expectedStatus, ticketStatus);
     }
 }
