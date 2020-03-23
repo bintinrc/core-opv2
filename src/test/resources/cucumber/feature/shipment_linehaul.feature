@@ -1,5 +1,7 @@
-@OperatorV2 @OperatorV2Part2 @ShipmentLinehaul
+@OperatorV2Deprecated @OperatorV2Part2Deprecated @ShipmentLinehaul
 Feature: Shipment Linehaul
+
+   # THIS FEATURE HAS BEEN DEPRECATED
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2

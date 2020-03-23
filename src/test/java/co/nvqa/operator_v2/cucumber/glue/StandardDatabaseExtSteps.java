@@ -30,6 +30,7 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.opentest4j.AssertionFailedError;
 
+import java.sql.SQLException;
 import java.time.*;
 import java.util.List;
 import java.util.Map;
@@ -814,5 +815,36 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
             assertEquals(f("%s waypoint [%d] timewindowId", transactionType, waypointId), order.getDeliveryTimeslot().getId(),
                     Integer.parseInt(actualWaypoint.getTimeWindowId()));
         }
+    }
+
+    @Then("^DB Operator verify ticket status$")
+    public void dbOperatorVerifyTicketStatus(Map<String, Integer> mapOfData) throws SQLException, ClassNotFoundException
+    {
+        Long orderId = get(KEY_CREATED_ORDER_ID);
+        Integer expectedStatus = mapOfData.get("status");
+        Integer ticketStatus = getTicketsJdbc().getTicketStatus(orderId);
+
+        assertEquals(f("Expected ticket status %s but actual ticket status %d", expectedStatus, ticketStatus),expectedStatus, ticketStatus);
+    }
+
+    @Then("^DB Operator verify reservation priority level$")
+    public void dbOperatorReservationPriorityLevel(Map<String, Integer> mapOfData) throws SQLException, ClassNotFoundException
+    {
+        Long reservationId = get(KEY_CREATED_RESERVATION_ID);
+        Integer expectedPriorityLevel = mapOfData.get("priorityLevel");
+        Integer priorityLevel = getCoreJdbc().getReservationPriorityLevel(reservationId);
+
+        assertEquals(f("Expected Reservation Priority Level %s but actual Priority Level %d", expectedPriorityLevel, priorityLevel),expectedPriorityLevel, priorityLevel);
+    }
+
+    @Then("^DB Operator verify new record is created in route_waypoints table with the correct details$")
+    public void dbOperatorVerifyRouteWaypointsTable() throws SQLException, ClassNotFoundException
+    {
+        Long reservationId = get(KEY_CREATED_RESERVATION_ID);
+        Long routeId = get(KEY_CREATED_ROUTE_ID);
+        Long reservationWaypoint = getCoreJdbc().getReservationWaypoint(reservationId);
+        Long routeWaypoint = getCoreJdbc().getRouteWaypoint(routeId);
+
+        assertEquals(f("Waypoint ID in reservations DB %s but Waypoint ID in route_waypoint %d", reservationWaypoint, routeWaypoint),reservationWaypoint, routeWaypoint);
     }
 }
