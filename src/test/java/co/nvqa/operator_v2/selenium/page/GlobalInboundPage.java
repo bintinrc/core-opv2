@@ -1,11 +1,18 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
+import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -13,6 +20,8 @@ import org.openqa.selenium.support.Color;
  */
 public class GlobalInboundPage extends OperatorV2SimplePage
 {
+    public static final String XPATH_ORDER_TAGS_ON_GLOBAL_INBOUND_PAGE = "//div[contains(@class,'order-tags-container')]//span";
+
     public GlobalInboundPage(WebDriver webDriver)
     {
         super(webDriver);
@@ -196,5 +205,39 @@ public class GlobalInboundPage extends OperatorV2SimplePage
 
         String actualWarningText = getText("//p[@ng-if='!ctrl.data.setAsideRackSector']/following-sibling::h1");
         assertEquals("Warning Text is not the same : ", actualWarningText, "RECOVERY " + ticketType.toUpperCase());
+    }
+
+    public void verifiesDetailsAreRightForGlobalInbound(DatabaseCheckingNinjaCollectConfirmed result, DpDetailsResponse dpDetails, String barcode, String source)
+    {
+        assertEquals("Barcode is not the same : ", result.getBarcode(), barcode);
+        assertEquals("DP ID is not the same : ", result.getDpId(), dpDetails.getId());
+        assertEquals("Status is not the same : ", result.getStatus(), "CONFIRMED");
+        if(source.equalsIgnoreCase("Fully Integrated"))
+        {
+            assertEquals("Source is not the same : ", result.getSource(), "FULLY_INTEGRATED_NINJA_COLLECT");
+        }
+        else if (source.equalsIgnoreCase("Semi Integrated"))
+        {
+            assertEquals("Source is not the same : ", result.getSource(), "SEMI_INTEGRATED_NINJA_COLLECT");
+        }
+    }
+
+    public void verifiesTagsOnOrder(List<String> expectedOrderTags)
+    {
+        List<String> tags = new ArrayList<>();
+        List<WebElement> listOfTags = findElementsByXpath(XPATH_ORDER_TAGS_ON_GLOBAL_INBOUND_PAGE);
+        for (WebElement we : listOfTags)
+        {
+            tags.add(we.getText());
+        }
+        assertEquals("Order tags is not equal to tags set on Order Tag Management page for order Id - %s", expectedOrderTags.stream().map(String::toLowerCase).sorted().collect(Collectors.toList()), tags.stream().map(String::toLowerCase).sorted().collect(Collectors.toList()));
+    }
+
+    public void unSuccessfulGlobalInbound(String recoveryTicketType, GlobalInboundParams globalInboundParams)
+    {
+        globalInbound(globalInboundParams);
+        String xpathRackSector = "//div[contains(@class,'rack-sector')]/h1";
+        String rackSector = getText(xpathRackSector);
+        assertEquals("Recovery Ticket Type rack sector is displayed", ("RECOVERY "+recoveryTicketType).toLowerCase(), rackSector.toLowerCase());
     }
 }
