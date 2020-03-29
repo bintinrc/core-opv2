@@ -62,6 +62,7 @@ Feature: Shipper Pickups
       | comments     | GET_FROM_CREATED_RESERVATION |
       | routeId      | GET_FROM_CREATED_ROUTE       |
       | driverName   | {ninja-driver-name}          |
+    And DB Operator verify new record is created in route_waypoints table with the correct details
 
   @DeleteOrArchiveRoute
   Scenario: Operator assign Reservation to Route on Shipper Pickups page (uid:992f1485-ef00-45cc-88d8-df36a3e4e77d)
@@ -87,6 +88,7 @@ Feature: Shipper Pickups
       | comments     | GET_FROM_CREATED_RESERVATION |
       | routeId      | GET_FROM_CREATED_ROUTE       |
       | driverName   | {ninja-driver-name}          |
+    And DB Operator verify new record is created in route_waypoints table with the correct details
 
   @DeleteOrArchiveRoute
   Scenario: Operator assign Reservation to Route with priority level on Shipper Pickups page (uid:4e1e8b2b-ddad-48c4-98ea-b1f5a5ef448c)
@@ -112,6 +114,7 @@ Feature: Shipper Pickups
       | routeId       | GET_FROM_CREATED_ROUTE       |
       | driverName    | {ninja-driver-name}          |
       | priorityLevel | 3                            |
+    And DB Operator verify new record is created in route_waypoints table with the correct details
 
   Scenario: Operator create and verify the reservations details is correct on Shipper Pickups page (uid:acc59c88-9da5-4990-9a48-26c23ba7e464)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -324,6 +327,8 @@ Feature: Shipper Pickups
       | shipperName          | {shipper-v4-name}                |
     And Operator set the Priority Level of the created reservation to "2" from Apply Action
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
+      | priorityLevel | 2 |
+    And DB Operator verify reservation priority level
       | priorityLevel | 2 |
 
   Scenario: Operator should be able to edit the Priority Level of multiple reservation on Shipper Pickups page (uid:1ef31434-423d-417c-955e-051d5b203a65)
