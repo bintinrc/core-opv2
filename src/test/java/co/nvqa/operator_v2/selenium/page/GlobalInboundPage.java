@@ -3,16 +3,29 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.FindBy;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 public class GlobalInboundPage extends OperatorV2SimplePage
 {
+    @FindBy(css = "h3.hub-info")
+    public PageElement destinationHub;
+
+    @FindBy(css = "h1.rack-info")
+    public PageElement rackInfo;
+
+    @FindBy(css = "div[ng-if='ctrl.data.setAsideGroup']")
+    public PageElement setAsideGroup;
+
+    @FindBy(css = "div[ng-if='ctrl.data.setAsideRackSector']")
+    public PageElement setAsideRackSector;
+
     public GlobalInboundPage(WebDriver webDriver)
     {
         super(webDriver);
@@ -20,32 +33,31 @@ public class GlobalInboundPage extends OperatorV2SimplePage
 
     private void selectHubAndDeviceId(String hubName, String deviceId)
     {
-        if(isElementExistFast("//h4[text()='Select the following to begin:']"))
+        if (isElementExistFast("//h4[text()='Select the following to begin:']"))
         {
             retryIfRuntimeExceptionOccurred(() ->
             {
                 selectValueFromNvAutocomplete("ctrl.hubSearchText", hubName);
                 pause500ms();
 
-                if(isElementExistFast("//nv-api-text-button[@name='Continue']/button[@disabled='disabled']"))
+                if (isElementExistFast("//nv-api-text-button[@name='Continue']/button[@disabled='disabled']"))
                 {
                     throw new NvTestRuntimeException("Hub is not loaded yet.");
                 }
             });
 
-            if(deviceId!=null)
+            if (deviceId != null)
             {
                 sendKeysToMdInputContainerByModel("ctrl.data.deviceId", deviceId);
             }
 
             clickNvApiTextButtonByNameAndWaitUntilDone("Continue");
-        }
-        else
+        } else
         {
             clickNvIconButtonByNameAndWaitUntilEnabled("commons.settings");
             selectValueFromNvAutocomplete("ctrl.hubSearchText", hubName);
 
-            if(deviceId!=null)
+            if (deviceId != null)
             {
                 sendKeysToMdInputContainerByModel("ctrl.data.deviceId", deviceId);
             }
@@ -56,16 +68,15 @@ public class GlobalInboundPage extends OperatorV2SimplePage
 
     private void overrideSize(String overrideSize)
     {
-        if(overrideSize==null)
+        if (overrideSize == null)
         {
-            if(isElementExistFast("//nv-icon-text-button[@name='container.global-inbound.manual']"))
+            if (isElementExistFast("//nv-icon-text-button[@name='container.global-inbound.manual']"))
             {
                 clickNvIconTextButtonByName("container.global-inbound.manual");
             }
-        }
-        else
+        } else
         {
-            if(isElementExistFast("//nv-icon-text-button[@name='container.global-inbound.retain']"))
+            if (isElementExistFast("//nv-icon-text-button[@name='container.global-inbound.retain']"))
             {
                 clickNvIconTextButtonByName("container.global-inbound.retain");
                 selectValueFromMdSelectById("size", overrideSize);
@@ -95,11 +106,10 @@ public class GlobalInboundPage extends OperatorV2SimplePage
 
     private void setOverrideValue(String inputId, Double value)
     {
-        if(value==null)
+        if (value == null)
         {
             clearf("//input[@id='%s']", inputId);
-        }
-        else
+        } else
         {
             sendKeysById(inputId, NO_TRAILING_ZERO_DF.format(value));
         }
@@ -139,19 +149,19 @@ public class GlobalInboundPage extends OperatorV2SimplePage
 
         retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
         {
-            if(StringUtils.isNotBlank(weightWarning))
+            if (StringUtils.isNotBlank(weightWarning))
             {
                 String message = getText("//div[contains(@class,'weight-diff-info')]/span");
                 assertEquals("Weight warning message", weightWarning, message);
             }
 
-            if(StringUtils.isNotBlank(rackInfo))
+            if (StringUtils.isNotBlank(rackInfo))
             {
                 String xpath = String.format("//h1[normalize-space(text())='%s']", rackInfo);
                 assertNotNull("rack info", waitUntilVisibilityOfElementLocated(xpath));
             }
 
-            if(StringUtils.isNotBlank(rackColor))
+            if (StringUtils.isNotBlank(rackColor))
             {
                 String xpath = "//div[contains(@class, 'rack-sector')]";
                 String actualStyle = getAttribute(xpath, "style");
@@ -162,19 +172,19 @@ public class GlobalInboundPage extends OperatorV2SimplePage
                 NvLogger.infof("Color as Hex: %s", color.asHex());
                 assertThat("Unexpected Rack Sector color", color.asHex(), equalToIgnoringCase(rackColor));
             }
-            if(StringUtils.isNotBlank(rackSector))
+            if (StringUtils.isNotBlank(rackSector))
             {
                 String xpath = f("//div[contains(@class, 'rack-container')]/descendant::*[normalize-space(text())='%s']", rackSector);
                 assertNotNull("Rack Sector", waitUntilVisibilityOfElementLocated(xpath));
             }
-            if(StringUtils.isNotBlank(destinationHub))
+            if (StringUtils.isNotBlank(destinationHub))
             {
                 String xpath = f("//div[contains(@class, 'rack-container')]/descendant::*[normalize-space(text())='Hub: %s']", destinationHub);
                 assertNotNull("Destination Hub", waitUntilVisibilityOfElementLocated(xpath));
             }
         }, "globalInboundAndCheckAlert");
 
-        if(StringUtils.isNotBlank(toastText))
+        if (StringUtils.isNotBlank(toastText))
         {
             assertEquals("Toast text", toastText, getToastTopText());
             waitUntilInvisibilityOfToast(toastText);

@@ -10,6 +10,8 @@ import co.nvqa.commons.model.core.ThirdPartyShippers;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.route.Route;
+import co.nvqa.commons.model.core.setaside.SetAsideRequest;
+import co.nvqa.commons.model.core.zone.Zone;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvLogger;
@@ -410,5 +412,24 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     {
         BulkOrderInfo bulkOrderInfo = getOrderClient().retrieveBulkOrderInfo(bulkId);
         put(KEY_CREATED_BULK_ORDER_INFO, bulkOrderInfo);
+    }
+
+    @Given("^API Operator get information about delivery routing hub of created order$")
+    public void apiOperatorGetDeliveryHubInformationForCreatedOrder()
+    {
+        Order order = get(KEY_CREATED_ORDER);
+        Long zoneId = order.getLastDeliveryTransaction().getRoutingZoneId();
+        Zone zone = getZoneClient().getZone(zoneId);
+        put(KEY_ORDER_ZONE_ID, zoneId);
+        put(KEY_ORDER_HUB_ID, zone.getHubId());
+    }
+
+    @Given("^API Operator enable Set Aside using data below:$")
+    public void apiOperatorEnableSetAside(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+        SetAsideRequest request = new SetAsideRequest();
+        request.fromMap(data);
+        getSetAsideClient().enable(request);
     }
 }

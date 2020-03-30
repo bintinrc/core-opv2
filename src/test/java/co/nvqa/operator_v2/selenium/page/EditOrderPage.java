@@ -13,6 +13,7 @@ import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
@@ -24,6 +25,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 
 import java.text.ParseException;
 import java.time.ZoneId;
@@ -43,6 +45,9 @@ import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_
 @SuppressWarnings("WeakerAccess")
 public class EditOrderPage extends OperatorV2SimplePage
 {
+    @FindBy(xpath = "//div[./label[.='Current DNR Group']]/p")
+    public PageElement currentDnrGroup;
+
     private static final String NG_REPEAT_TABLE_EVENT = "event in getTableData()";
     public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE_EVENT = "name";
     private TransactionsTable transactionsTable;

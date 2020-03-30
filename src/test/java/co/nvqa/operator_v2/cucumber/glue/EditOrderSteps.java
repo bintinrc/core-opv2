@@ -205,6 +205,14 @@ public class EditOrderSteps extends AbstractSteps
         editOrderPage.verifyOrderStatus(expectedValue);
     }
 
+    @Then("^Operator verify Current DNR Group is \"(.+)\" on Edit Order page$")
+    public void operatorVerifyCurrentDnrGroupOnEditOrderPage(String expected)
+    {
+        expected = resolveValue(expected);
+        String actual = editOrderPage.currentDnrGroup.getText();
+        Assert.assertThat("Current DNR Group", actual, Matchers.equalToIgnoringCase(expected));
+    }
+
     @Then("^Operator verify order granular status is \"(.+)\" on Edit Order page$")
     public void operatorVerifyOrderGranularStatusOnEditOrderPage(String expectedValue)
     {
