@@ -33,7 +33,7 @@ Feature: DP Tagging
     When Operator tags multiple orders to DP with DPMS ID = "{dpms-id}"
     Then API Operator verify multiple orders info after Operator assign delivery waypoint of the orders to the same DP
 
-  Scenario Outline: Operator untag single order from DP
+  Scenario Outline: Operator untag single order from DP (uid:5510afba-380a-4f3a-8e56-d5d02327a6a6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
@@ -50,7 +50,7 @@ Feature: DP Tagging
       | Normal | uid:        | Normal    | false            |
       | Return | uid:        | Return    | true             |
 
-  Scenario: Operator untag multiple order from DP
+  Scenario: Operator untag multiple order from DP (uid:4bb9c3f1-5e22-407b-be02-cfc794a98048)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |

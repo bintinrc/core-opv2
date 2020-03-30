@@ -1,7 +1,5 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
-import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
 import co.nvqa.commons.util.NvLogger;
@@ -224,11 +222,10 @@ public class GlobalInboundPage extends OperatorV2SimplePage
         assertEquals("Barcode is not the same : ", result.getBarcode(), barcode);
         assertEquals("DP ID is not the same : ", result.getDpId(), dpDetails.getId());
         assertEquals("Status is not the same : ", result.getStatus(), "CONFIRMED");
-        if(source.equalsIgnoreCase("Fully Integrated"))
+        if (source.equalsIgnoreCase("Fully Integrated"))
         {
             assertEquals("Source is not the same : ", result.getSource(), "FULLY_INTEGRATED_NINJA_COLLECT");
-        }
-        else if (source.equalsIgnoreCase("Semi Integrated"))
+        } else if (source.equalsIgnoreCase("Semi Integrated"))
         {
             assertEquals("Source is not the same : ", result.getSource(), "SEMI_INTEGRATED_NINJA_COLLECT");
         }
@@ -250,6 +247,6 @@ public class GlobalInboundPage extends OperatorV2SimplePage
         globalInbound(globalInboundParams);
         String xpathRackSector = "//div[contains(@class,'rack-sector')]/h1";
         String rackSector = getText(xpathRackSector);
-        assertEquals("Recovery Ticket Type rack sector is displayed", ("RECOVERY "+recoveryTicketType).toLowerCase(), rackSector.toLowerCase());
+        assertEquals("Recovery Ticket Type rack sector is displayed", ("RECOVERY " + recoveryTicketType).toLowerCase(), rackSector.toLowerCase());
     }
 }

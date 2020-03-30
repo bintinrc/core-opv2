@@ -330,7 +330,7 @@ Feature: Global Inbound
 #      | v4OrderRequest    | { "international":{ "portation":"Export" }, "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"15:00", "end_time":"18:00"}}} |
 
   @DisableSetAside
-  Scenario: Inbound parcel to be set aside - set aside by destination hub - parcel to set aside
+  Scenario: Inbound parcel to be set aside - set aside by destination hub - parcel to set aside (uid:379ff746-ea39-4aec-8e3f-4e63fd546c7c)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -367,7 +367,7 @@ Feature: Global Inbound
       | hubName | {hub-name}       |
 
   @DisableSetAside
-  Scenario: Inbound parcel to be set aside - set aside by destination hub -  parcel not to be set aside
+  Scenario: Inbound parcel to be set aside - set aside by destination hub -  parcel not to be set aside (uid:7891cc24-d92a-4d6f-b71a-1f4a3ac0d1a8)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -402,7 +402,7 @@ Feature: Global Inbound
       | hubName | {hub-name}       |
 
   @DisableSetAside
-  Scenario: Inbound parcel to be set aside - set aside by zone - parcel to set aside
+  Scenario: Inbound parcel to be set aside - set aside by zone - parcel to set aside (uid:d95802a1-e878-4f41-8321-8457018255fe)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -439,7 +439,7 @@ Feature: Global Inbound
       | hubName | {hub-name}       |
 
   @DisableSetAside
-  Scenario: Inbound parcel to be set aside - set aside by zone -  parcel not to be set aside
+  Scenario: Inbound parcel to be set aside - set aside by zone -  parcel not to be set aside (uid:706ad3d2-5018-440e-bfd3-1d8c67346e34)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |

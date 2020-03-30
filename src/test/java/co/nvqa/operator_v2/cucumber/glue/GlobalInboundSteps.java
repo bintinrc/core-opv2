@@ -1,8 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
-import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
 import co.nvqa.commons.util.NvLogger;
@@ -15,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 
-import java.util.List;
 import java.util.List;
 import java.util.Map;
 
@@ -46,8 +43,7 @@ public class GlobalInboundSteps extends AbstractSteps
             try
             {
                 result = Double.parseDouble(str);
-            }
-            catch(NumberFormatException ex)
+            } catch (NumberFormatException ex)
             {
                 NvLogger.warnf("Failed to parse String to Double. Cause: %s", ex.getMessage());
             }
