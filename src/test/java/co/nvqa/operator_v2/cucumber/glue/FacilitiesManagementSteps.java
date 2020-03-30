@@ -3,8 +3,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.hub.Hub;
-import co.nvqa.commons.model.operator_v2.FacilitiesManagement;
-import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.factory.HubFactory;
 import co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage;
 import cucumber.api.java.en.Then;
@@ -15,7 +13,6 @@ import org.hamcrest.Matchers;
 import java.util.Map;
 
 /**
- *
  * @author Soewandi Wirjawan
  */
 @ScenarioScoped
@@ -33,213 +30,198 @@ public class FacilitiesManagementSteps extends AbstractSteps
         facilitiesManagementPage = new FacilitiesManagementPage(getWebDriver());
     }
 
-    private String getFromCreatedHubName(String searchHubsKeyword, FacilitiesManagement facilitiesManagement)
-    {
-        String result = searchHubsKeyword;
-
-        if("GET_FROM_CREATED_HUB_NAME".equals(searchHubsKeyword))
-        {
-            String hubName = null;
-
-            if(facilitiesManagement!=null)
-            {
-                hubName = facilitiesManagement.getName();
-            }
-
-            if(hubName!=null)
-            {
-                result = hubName;
-            }
-            else
-            {
-                throw new NvTestRuntimeException("Could not find created hub.");
-            }
-        }
-
-        return result;
-    }
-
     @When("^Operator create new Hub on page Hubs Administration using data below:$")
-    public void operatorCreateNewHubOnPageHubsAdministrationUsingDataBelow(Map<String,String> mapOfData)
+    public void operatorCreateNewHubOnPageHubsAdministrationUsingDataBelow(Map<String, String> data)
     {
-        mapOfData = resolveKeyValues(mapOfData);
+        data = resolveKeyValues(data);
 
-        String name = mapOfData.get("name");
-        String displayName = mapOfData.get("displayName");
-        String type = mapOfData.get("type");
-        String city = mapOfData.get("city");
-        String country = mapOfData.get("country");
-        String latitude = mapOfData.get("latitude");
-        String longitude = mapOfData.get("longitude");
+        String name = data.get("name");
+        String displayName = data.get("displayName");
+        String type = data.get("type");
+        String city = data.get("city");
+        String country = data.get("country");
+        String latitude = data.get("latitude");
+        String longitude = data.get("longitude");
+        String facilityType = data.get("facilityType");
 
         String uniqueCode = generateDateUniqueString();
         Address address = AddressFactory.getRandomAddress();
 
-        if("GENERATED".equals(name))
+        if ("GENERATED".equals(name))
         {
-            name = "HUB DO NOT USE "+uniqueCode;
+            name = "HUB DO NOT USE " + uniqueCode;
         }
 
-        if("GENERATED".equals(displayName))
+        if ("GENERATED".equals(displayName))
         {
-            displayName = "Hub DNS "+uniqueCode;
+            displayName = "Hub DNS " + uniqueCode;
         }
 
-        if("GENERATED".equals(city))
+        if ("GENERATED".equals(city))
         {
             city = address.getCity();
         }
 
-        if("GENERATED".equals(country))
+        if ("GENERATED".equals(country))
         {
             country = address.getCountry();
         }
 
         Hub randomHub = HubFactory.getRandomHub();
 
-        if("GENERATED".equals(latitude))
+        if ("GENERATED".equals(latitude))
         {
             latitude = String.valueOf(randomHub.getLatitude());
         }
 
-        if("GENERATED".equals(longitude))
+        if ("GENERATED".equals(longitude))
         {
             longitude = String.valueOf(randomHub.getLongitude());
         }
 
-        FacilitiesManagement facilitiesManagement = new FacilitiesManagement();
-        facilitiesManagement.setName(name);
-        facilitiesManagement.setDisplayName(displayName);
-        facilitiesManagement.setType(type);
-        facilitiesManagement.setCity(city);
-        facilitiesManagement.setCountry(country);
-        facilitiesManagement.setLatitude(Double.parseDouble(latitude));
-        facilitiesManagement.setLongitude(Double.parseDouble(longitude));
-        facilitiesManagementPage.createNewHub(facilitiesManagement);
+        Hub hub = new Hub();
+        hub.setName(name);
+        hub.setShortName(displayName);
+        hub.setCountry(country);
+        hub.setCity(city);
+        hub.setLatitude(Double.parseDouble(latitude));
+        hub.setLongitude(Double.parseDouble(longitude));
+        hub.setFacilityType(facilityType);
 
-        put(KEY_HUBS_ADMINISTRATION, facilitiesManagement);
-        putInList(KEY_LIST_OF_HUBS_ADMINISTRATION, facilitiesManagement);
+        put(KEY_CREATED_HUB, hub);
+        putInList(KEY_LIST_OF_CREATED_HUBS, hub);
+
+        facilitiesManagementPage.createNewHub(hub);
     }
 
-    @Then("^Operator verify a new Hub is created successfully on page Hubs Administration$")
+    @Then("^Operator verify a new Hub is created successfully on Facilities Management page$")
     public void operatorVerifyANewHubIsCreatedSuccessfullyOnPageHubsAdministration()
     {
-        FacilitiesManagement facilitiesManagement = get(KEY_HUBS_ADMINISTRATION);
-        facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(facilitiesManagement);
+        Hub hub = get(KEY_CREATED_HUB);
+        facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
     }
 
     @When("^Operator update Hub on page Hubs Administration using data below:$")
-    public void operatorUpdateHubOnPageHubsAdministrationUsingDataBelow(Map<String,String> mapOfData)
+    public void operatorUpdateHubOnPageHubsAdministrationUsingDataBelow(Map<String, String> data)
     {
-        FacilitiesManagement facilitiesManagement = get(KEY_HUBS_ADMINISTRATION);
+        data = resolveKeyValues(data);
+        Hub hub = get(KEY_CREATED_HUB);
 
-        String searchHubsKeyword = mapOfData.get("searchHubsKeyword");
-        String name = mapOfData.get("name");
-        String displayName = mapOfData.get("displayName");
-        String city = mapOfData.get("city");
-        String country = mapOfData.get("country");
-        String latitude = mapOfData.get("latitude");
-        String longitude = mapOfData.get("longitude");
+        String searchHubsKeyword = data.get("searchHubsKeyword");
+        String name = data.get("name");
+        String displayName = data.get("displayName");
+        String city = data.get("city");
+        String country = data.get("country");
+        String latitude = data.get("latitude");
+        String longitude = data.get("longitude");
 
-        searchHubsKeyword = getFromCreatedHubName(searchHubsKeyword, facilitiesManagement);
-
-        if(facilitiesManagement==null)
+        if (hub == null)
         {
-            facilitiesManagement = new FacilitiesManagement();
-            put(KEY_HUBS_ADMINISTRATION, facilitiesManagement);
-            putInList(KEY_LIST_OF_HUBS_ADMINISTRATION, facilitiesManagement);
+            hub = new Hub();
+            put(KEY_CREATED_HUB, hub);
+            putInList(KEY_LIST_OF_CREATED_HUBS, hub);
         }
 
-        String uniqueCode = generateDateUniqueString();
         Address address = AddressFactory.getRandomAddress();
 
-        if("GENERATED".equals(name))
-        {
-            String temp = facilitiesManagement.getName();
-            name = temp==null? "HUB DO NOT USE "+uniqueCode : temp + " [E]";
-        }
-
-        if("GENERATED".equals(displayName))
-        {
-            String temp = facilitiesManagement.getDisplayName();
-            displayName = temp==null? "Hub DNS "+uniqueCode : temp + " [E]";
-        }
-
-        if("GENERATED".equals(city))
+        if ("GENERATED".equals(city))
         {
             city = address.getCity();
         }
 
-        if("GENERATED".equals(country))
+        if ("GENERATED".equals(country))
         {
             country = address.getCountry();
         }
 
         Hub randomHub = HubFactory.getRandomHub();
 
-        if("GENERATED".equals(latitude))
+        if ("GENERATED".equals(latitude))
         {
             latitude = String.valueOf(randomHub.getLatitude());
         }
 
-        if("GENERATED".equals(longitude))
+        if ("GENERATED".equals(longitude))
         {
             longitude = String.valueOf(randomHub.getLongitude());
         }
 
-        facilitiesManagement.setName(name);
-        facilitiesManagement.setDisplayName(displayName);
-        facilitiesManagement.setCity(city);
-        facilitiesManagement.setCountry(country);
-        facilitiesManagement.setLatitude(Double.parseDouble(latitude));
-        facilitiesManagement.setLongitude(Double.parseDouble(longitude));
+        hub.setName(name);
+        hub.setShortName(displayName);
+        hub.setCity(city);
+        hub.setCountry(country);
+        hub.setLatitude(Double.parseDouble(latitude));
+        hub.setLongitude(Double.parseDouble(longitude));
 
-        facilitiesManagementPage.updateHub(searchHubsKeyword, facilitiesManagement);
+        facilitiesManagementPage.updateHub(searchHubsKeyword, hub);
     }
 
-    @Then("^Operator verify Hub is updated successfully on page Hubs Administration$")
+    @Then("^Operator verify Hub is updated successfully on Facilities Management page$")
     public void operatorVerifyHubIsUpdatedSuccessfullyOnPageHubsAdministration()
     {
-        FacilitiesManagement facilitiesManagement = get(KEY_HUBS_ADMINISTRATION);
-        facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(facilitiesManagement);
+        Hub hub = get(KEY_CREATED_HUB);
+        facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
     }
 
     @When("^Operator search Hub on page Hubs Administration using data below:$")
-    public void operatorSearchHubOnPageHubsAdministrationUsingDataBelow(Map<String,String> mapOfData)
+    public void operatorSearchHubOnPageHubsAdministrationUsingDataBelow(Map<String, String> data)
     {
-        FacilitiesManagement facilitiesManagement = get(KEY_HUBS_ADMINISTRATION);
-        String searchHubsKeyword = getFromCreatedHubName(mapOfData.get("searchHubsKeyword"), facilitiesManagement);
-        FacilitiesManagement facilitiesManagementSearchResult = facilitiesManagementPage.searchHub(searchHubsKeyword);
+        data = resolveKeyValues(data);
+        String searchHubsKeyword = data.get("searchHubsKeyword");
+        Hub facilitiesManagementSearchResult = facilitiesManagementPage.searchHub(searchHubsKeyword);
         put(KEY_HUBS_ADMINISTRATION_SEARCH_RESULT, facilitiesManagementSearchResult);
         put("searchHubsKeyword", searchHubsKeyword);
     }
 
-    @Then("^Operator verify Hub is found on page Hubs Administration and contains correct info$")
+    @Then("^Operator verify Hub is found on Facilities Management page and contains correct info$")
     public void operatorVerifyHubIsFoundOnPageHubsAdministrationAndContainsCorrectInfo()
     {
         String searchHubsKeyword = get("searchHubsKeyword");
-        FacilitiesManagement expectedFacilitiesManagement = get(KEY_HUBS_ADMINISTRATION);
-        FacilitiesManagement actualFacilitiesManagement = get(KEY_HUBS_ADMINISTRATION_SEARCH_RESULT);
+        Hub expectedHub = get(KEY_CREATED_HUB);
+        Hub actualHub = get(KEY_HUBS_ADMINISTRATION_SEARCH_RESULT);
 
-        assertNotNull(f("Search Hub with keyword = '%s' found nothing.", searchHubsKeyword), actualFacilitiesManagement);
-        assertEquals("Hub Name", expectedFacilitiesManagement.getName(), actualFacilitiesManagement.getName());
-        assertEquals("Display Name", expectedFacilitiesManagement.getDisplayName(), actualFacilitiesManagement.getDisplayName());
-        assertThat("City", actualFacilitiesManagement.getCity(), Matchers.equalToIgnoringCase(expectedFacilitiesManagement.getCity()));
-        assertThat("Country", actualFacilitiesManagement.getCountry(), Matchers.equalToIgnoringCase(expectedFacilitiesManagement.getCountry()));
-        assertEquals("Latitude", expectedFacilitiesManagement.getLatitude(), actualFacilitiesManagement.getLatitude());
-        assertEquals("Longitude", expectedFacilitiesManagement.getLongitude(), actualFacilitiesManagement.getLongitude());
+        assertNotNull(f("Search Hub with keyword = '%s' found nothing.", searchHubsKeyword), actualHub);
+        assertEquals("Hub Name", expectedHub.getName(), actualHub.getName());
+        assertEquals("Display Name", expectedHub.getShortName(), actualHub.getShortName());
+        assertThat("City", expectedHub.getCity(), Matchers.equalToIgnoringCase(actualHub.getCity()));
+        assertThat("Country", expectedHub.getCountry(), Matchers.equalToIgnoringCase(actualHub.getCountry()));
+        assertEquals("Latitude", expectedHub.getLatitude(), actualHub.getLatitude());
+        assertEquals("Longitude", expectedHub.getLongitude(), actualHub.getLongitude());
     }
 
-    @When("^Operator download Hub CSV file on page Hubs Administration$")
+    @When("^Operator download Hub CSV file on Facilities Management page$")
     public void operatorDownloadHubCsvFileOnPageHubsAdministration()
     {
-        facilitiesManagementPage.downloadCsvFile();
+        facilitiesManagementPage.downloadCsvFile.clickAndWaitUntilDone();
     }
 
-    @Then("^Operator verify Hub CSV file is downloaded successfully on page Hubs Administration and contains correct info$")
+    @Then("^Operator verify Hub CSV file is downloaded successfully on Facilities Management page and contains correct info$")
     public void operatorVerifyHubCsvFileIsDownloadedSuccessfullyOnPageHubsAdministrationAndContainsCorrectInfo()
     {
-        FacilitiesManagement facilitiesManagement = get(KEY_HUBS_ADMINISTRATION);
-        facilitiesManagementPage.verifyCsvFileDownloadedSuccessfullyAndContainsCorrectInfo(facilitiesManagement);
+        Hub hub = get(KEY_CREATED_HUB);
+        facilitiesManagementPage.verifyCsvFileDownloadedSuccessfullyAndContainsCorrectInfo(hub);
+    }
+
+    @When("^Operator refresh hubs cache on Facilities Management page$")
+    public void operatorRefreshHubsCacheOnFacilitiesManagementPage()
+    {
+        facilitiesManagementPage.refresh.click();
+        facilitiesManagementPage.waitUntilInvisibilityOfToast("Hub cache refreshed!", true);
+    }
+
+    @When("^Operator disable created hub on Facilities Management page$")
+    public void operatorDisableCreatedHub()
+    {
+        Hub hub = get(KEY_CREATED_HUB);
+        facilitiesManagementPage.disableHub(hub.getName());
+        hub.setActive(false);
+    }
+
+    @When("^Operator activate created hub on Facilities Management page$")
+    public void operatorActivateCreatedHub()
+    {
+        Hub hub = get(KEY_CREATED_HUB);
+        facilitiesManagementPage.activateHub(hub.getName());
+        hub.setActive(true);
     }
 }

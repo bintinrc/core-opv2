@@ -73,9 +73,11 @@ public class AllOrdersSteps extends AbstractSteps
         }
 
         String mainWindowHandle = allOrdersPage.getWebDriver().getWindowHandle();
-        if (StringUtils.equalsIgnoreCase(searchBy, "KEY_STAMP_ID")) {
+        if (StringUtils.equalsIgnoreCase(searchBy, "KEY_STAMP_ID"))
+        {
             allOrdersPage.specificSearch(category, searchLogic, searchTerm, ((Order) get(KEY_CREATED_ORDER)).getTrackingId());
-        } else {
+        } else
+        {
             allOrdersPage.specificSearch(category, searchLogic, searchTerm);
         }
         put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
@@ -301,11 +303,23 @@ public class AllOrdersSteps extends AbstractSteps
     public void operatorOpenPageOfTheCreatedOrderFromAllOrdersPage()
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        Order createdOrder = get(KEY_CREATED_ORDER);
+        Long orderId = get(KEY_CREATED_ORDER_ID);
+        operatorOpenPageOfOrderFromAllOrdersPage(ImmutableMap.of(
+                "trackingId", trackingId,
+                "orderId", String.valueOf(orderId)
+        ));
+    }
+
+    @When("^Operator open page of an order from All Orders page using data below:$")
+    public void operatorOpenPageOfOrderFromAllOrdersPage(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+        String trackingId = data.get("trackingId");
+        Long orderId = Long.parseLong(data.get("orderId"));
         String mainWindowHandle = allOrdersPage.getWebDriver().getWindowHandle();
         put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
         allOrdersPage.specificSearch(AllOrdersPage.Category.TRACKING_OR_STAMP_ID, AllOrdersPage.SearchLogic.EXACTLY_MATCHES, trackingId);
-        allOrdersPage.switchToEditOrderWindow(createdOrder.getId());
+        allOrdersPage.switchToEditOrderWindow(orderId);
     }
 
     @Then("Operator verifies tha searched Tracking ID is the same to the created one")

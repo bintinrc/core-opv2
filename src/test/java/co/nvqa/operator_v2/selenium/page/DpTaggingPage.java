@@ -27,6 +27,9 @@ public class DpTaggingPage extends OperatorV2SimplePage
     @FindBy(name = "container.dp-tagging.assign-all")
     public NvApiTextButton assignAll;
 
+    @FindBy(name = "container.dp-tagging.untag-all")
+    public NvApiTextButton untagAll;
+
     @FindBy(css = "nv-button-file-picker[label='Select File']")
     public NvButtonFilePicker selectFile;
 
@@ -116,6 +119,12 @@ public class DpTaggingPage extends OperatorV2SimplePage
         {
             waitUntilInvisibilityOfToast("tagged successfully");
         }
+    }
+
+    public void untagAll()
+    {
+        dpTaggingTable.selectAllShown();
+        untagAll.click();
     }
 
     /**

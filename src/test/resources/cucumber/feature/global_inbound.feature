@@ -239,18 +239,47 @@ Feature: Global Inbound
       | startDateTime | {{next-2-working-days-yyyy-MM-dd}} 09:00:00 |
       | endDateTime   | {{next-4-working-days-yyyy-MM-dd}} 22:00:00 |
 
-  Scenario: Inbound parcel picked up from DP (uid:a47074f8-0007-450c-b21d-febcee419fa5)
+  Scenario: Inbound parcel picked up from DP - Pickup Pending (uid:a47074f8-0007-450c-b21d-febcee419fa5)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API DP lodge in an order to DP with ID = "{dp-id}" and Shipper Legacy ID = "{shipper-v4-legacy-id}"
-    And Operator go to menu Inbounding -> Global Inbound
-    Then Operator global inbounds parcel using data below:
+    When Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
       | hubName    | {hub-name}             |
       | trackingId | GET_FROM_CREATED_ORDER |
-    Then API Operator verify order info after Global Inbound
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
+    And DB Operator verify the last inbound_scans record for the created order:
+      | hubId   | {hub-id}                                   |
+      | orderId | {KEY_CREATED_ORDER_ID}                     |
+      | scan    | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | type    | 2                                          |
+    And DB Operator verify order_events record for the created order:
+      | type | 26 |
+    And DB Operator verify dp_qa_gl.dp_job_orders record using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | status     | SUCCESS                                    |
+    And DB Operator verify dp_qa_gl.dp_jobs record using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | status     | COMPLETED                                  |
+    And DB Operator verify dp_qa_gl.dp_reservations record using data below:
+      | trackingId  | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | barcode     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | status      | RELEASED                                   |
+      | releasedTo  | DRIVER                                     |
+      | collectedAt | {gradle-current-date-yyyy-MM-dd}           |
+      | releasedAt  | {gradle-current-date-yyyy-MM-dd}           |
     When Operator go to menu Order -> All Orders
-    Then Operator verify order info after Global Inbound
+    And Operator open page of an order from All Orders page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name    | HUB INBOUND SCAN |
+      | hubName | {hub-name}       |
 
   @CloseNewWindows
   Scenario Outline: Operator global inbounds the created order with Priority Level <Title> (<hiptest-uid>)
@@ -299,6 +328,150 @@ Feature: Global Inbound
 #    Given API Shipper create V4 order using data below:
 #      | generateFromAndTo | RANDOM |
 #      | v4OrderRequest    | { "international":{ "portation":"Export" }, "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"15:00", "end_time":"18:00"}}} |
+
+  @DisableSetAside
+  Scenario: Inbound parcel to be set aside - set aside by destination hub - parcel to set aside (uid:379ff746-ea39-4aec-8e3f-4e63fd546c7c)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator get information about delivery routing hub of created order
+    And API Operator enable Set Aside using data below:
+      | setAsideGroup           | {set-aside-group-id} |
+      | setAsideMaxDeliveryDays | 3                    |
+      | setAsideHubs            | {KEY_ORDER_HUB_ID}   |
+    When Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | {hub-name}             |
+      | trackingId | GET_FROM_CREATED_ORDER |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub     | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo           | SET ASIDE                          |
+      | setAsideGroup      | {set-aside-group-name}             |
+      | setAsideRackSector | {KEY_CREATED_ORDER.rackSector}     |
+    And DB Operator verify the last inbound_scans record for the created order:
+      | hubId   | {hub-id}                                   |
+      | orderId | {KEY_CREATED_ORDER_ID}                     |
+      | scan    | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | type    | 2                                          |
+    And DB Operator verify order_events record for the created order:
+      | type | 26 |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of an order from All Orders page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Current DNR Group is "{set-aside-group-name}" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name    | HUB INBOUND SCAN |
+      | hubName | {hub-name}       |
+
+  @DisableSetAside
+  Scenario: Inbound parcel to be set aside - set aside by destination hub -  parcel not to be set aside (uid:7891cc24-d92a-4d6f-b71a-1f4a3ac0d1a8)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator get information about delivery routing hub of created order
+    And API Operator enable Set Aside using data below:
+      | setAsideGroup           | {set-aside-group-id} |
+      | setAsideMaxDeliveryDays | 10                   |
+      | setAsideHubs            | {KEY_ORDER_HUB_ID}   |
+    When Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | {hub-name}             |
+      | trackingId | GET_FROM_CREATED_ORDER |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
+    And DB Operator verify the last inbound_scans record for the created order:
+      | hubId   | {hub-id}                                   |
+      | orderId | {KEY_CREATED_ORDER_ID}                     |
+      | scan    | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | type    | 2                                          |
+    And DB Operator verify order_events record for the created order:
+      | type | 26 |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of an order from All Orders page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Current DNR Group is "NORMAL" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name    | HUB INBOUND SCAN |
+      | hubName | {hub-name}       |
+
+  @DisableSetAside
+  Scenario: Inbound parcel to be set aside - set aside by zone - parcel to set aside (uid:d95802a1-e878-4f41-8321-8457018255fe)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator get information about delivery routing hub of created order
+    And API Operator enable Set Aside using data below:
+      | setAsideGroup           | {set-aside-group-id} |
+      | setAsideMaxDeliveryDays | 3                    |
+      | setAsideZones           | {KEY_ORDER_ZONE_ID}  |
+    When Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | {hub-name}             |
+      | trackingId | GET_FROM_CREATED_ORDER |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub     | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo           | SET ASIDE                          |
+      | setAsideGroup      | {set-aside-group-name}             |
+      | setAsideRackSector | {KEY_CREATED_ORDER.rackSector}     |
+    And DB Operator verify the last inbound_scans record for the created order:
+      | hubId   | {hub-id}                                   |
+      | orderId | {KEY_CREATED_ORDER_ID}                     |
+      | scan    | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | type    | 2                                          |
+    And DB Operator verify order_events record for the created order:
+      | type | 26 |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of an order from All Orders page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Current DNR Group is "{set-aside-group-name}" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name    | HUB INBOUND SCAN |
+      | hubName | {hub-name}       |
+
+  @DisableSetAside
+  Scenario: Inbound parcel to be set aside - set aside by zone -  parcel not to be set aside (uid:706ad3d2-5018-440e-bfd3-1d8c67346e34)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator get information about delivery routing hub of created order
+    And API Operator enable Set Aside using data below:
+      | setAsideGroup           | {set-aside-group-id} |
+      | setAsideMaxDeliveryDays | 10                   |
+      | setAsideZones           | {KEY_ORDER_ZONE_ID}  |
+    When Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | {hub-name}             |
+      | trackingId | GET_FROM_CREATED_ORDER |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
+    And DB Operator verify the last inbound_scans record for the created order:
+      | hubId   | {hub-id}                                   |
+      | orderId | {KEY_CREATED_ORDER_ID}                     |
+      | scan    | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | type    | 2                                          |
+    And DB Operator verify order_events record for the created order:
+      | type | 26 |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of an order from All Orders page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Current DNR Group is "NORMAL" on Edit Order page
+    And Operator verify order event on Edit order page using data below:
+      | name    | HUB INBOUND SCAN |
+      | hubName | {hub-name}       |
 
   Scenario: Inbound Fully Integrated DP Order (uid:b960288a-8f46-4503-98c4-8d87a64a5d13)
     Given Operator go to menu Order -> All Orders
