@@ -1,6 +1,10 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
+import co.nvqa.commons.model.dp.DpDetailsResponse;
+import co.nvqa.commons.model.dp.DpDetailsResponse;
+import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.GlobalInboundPage;
@@ -11,6 +15,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 
+import java.util.List;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,7 +46,8 @@ public class GlobalInboundSteps extends AbstractSteps
             try
             {
                 result = Double.parseDouble(str);
-            } catch (NumberFormatException ex)
+            }
+            catch(NumberFormatException ex)
             {
                 NvLogger.warnf("Failed to parse String to Double. Cause: %s", ex.getMessage());
             }
@@ -165,5 +172,29 @@ public class GlobalInboundSteps extends AbstractSteps
             actual = StringUtils.normalizeSpace(StringUtils.remove(actual, "Rack Sector:"));
             Assert.assertThat("Set Aside Rack Sector", actual, Matchers.equalToIgnoringCase(expected));
         }
+    }
+
+    @Then("Ninja Collect Operator verifies that all the details for Confirmed Status via {string} are right")
+    public void ninjaCollectOperatorVerifiesThatAllTheDetailsForConfirmedStatusViaAreRightAndIsFollowedByStatus(String source)
+    {
+        DatabaseCheckingNinjaCollectConfirmed dbCheckingResult = get(KEY_DATABASE_CHECKING_NINJA_COLLECT_CONFIRMED);
+        DpDetailsResponse dpDetails = get(KEY_DP_DETAILS);
+        String barcode = get(KEY_CREATED_ORDER_TRACKING_ID);
+        globalInboundPage.verifiesDetailsAreRightForGlobalInbound(dbCheckingResult, dpDetails, barcode, source);
+    }
+
+    @Then("Operator verifies tags on Global Inbound page")
+    public void operatorVerifiesTagsOnGlobalInboundPage(List<String> expectedOrderTags)
+    {
+        globalInboundPage.verifiesTagsOnOrder(expectedOrderTags);
+    }
+
+    @Then("Operator global inbounds {string} ticket using data below:")
+    public void operatorGlobalInboundsTicketUsingDataBelow(String recoveryTicketType, Map<String, String> mapOfData)
+    {
+        mapOfData = resolveKeyValues(mapOfData);
+        GlobalInboundParams globalInboundParams = buildGlobalInboundParams(mapOfData);
+        globalInboundPage.unSuccessfulGlobalInbound(recoveryTicketType, globalInboundParams);
+        put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
     }
 }

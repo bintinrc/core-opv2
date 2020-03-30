@@ -342,4 +342,11 @@ public class AllOrdersSteps extends AbstractSteps
         List<String> listOfTrackingIds = listOfCreatedOrder.stream().map(Order::getTrackingId).collect(Collectors.toList());
         allOrdersPage.rtsMultipleOrderNextDay(listOfTrackingIds);
     }
+
+    @Then("Operator verifies latest event is {string}")
+    public void operatorVerifiesLatestEventIs(String latestEvent)
+    {
+        Order createdOrder = get(KEY_CREATED_ORDER);
+        allOrdersPage.verifyLatestEvent(createdOrder, latestEvent);
+    }
 }
