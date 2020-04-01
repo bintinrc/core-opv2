@@ -715,4 +715,24 @@ public class AllOrdersPage extends OperatorV2SimplePage
             clickMdMenuItem(PARENT_MENU_NAME, action.getName());
         }
     }
+
+    public void verifyLatestEvent(Order order, String latestEvent)
+    {
+        String mainWindowHandle = getWebDriver().getWindowHandle();
+        Long orderId = order.getId();
+        String trackingId = order.getTrackingId();
+        specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, trackingId);
+
+        try
+        {
+            switchToEditOrderWindow(orderId);
+            String xpath = "//label[text()='Latest Event']/following-sibling::h3";
+            String actualLatestEvent = getText(xpath);
+            assertEquals("Latest Event is not the same", latestEvent.toLowerCase(), actualLatestEvent.toLowerCase());
+        }
+        finally
+        {
+            closeAllWindows(mainWindowHandle);
+        }
+    }
 }

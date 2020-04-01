@@ -205,6 +205,14 @@ public class EditOrderSteps extends AbstractSteps
         editOrderPage.verifyOrderStatus(expectedValue);
     }
 
+    @Then("^Operator verify Current DNR Group is \"(.+)\" on Edit Order page$")
+    public void operatorVerifyCurrentDnrGroupOnEditOrderPage(String expected)
+    {
+        expected = resolveValue(expected);
+        String actual = editOrderPage.currentDnrGroup.getText();
+        Assert.assertThat("Current DNR Group", actual, Matchers.equalToIgnoringCase(expected));
+    }
+
     @Then("^Operator verify order granular status is \"(.+)\" on Edit Order page$")
     public void operatorVerifyOrderGranularStatusOnEditOrderPage(String expectedValue)
     {
@@ -297,12 +305,13 @@ public class EditOrderSteps extends AbstractSteps
          */
         String trackingIdOfExistingOrder = get(KEY_TRACKING_ID_BY_ACCESSING_STAMP_ID);
         if (containsKey(stampId))
+        {
+            if (StringUtils.equalsIgnoreCase(stampId, "KEY_ANOTHER_ORDER_TRACKING_ID"))
             {
-            if (StringUtils.equalsIgnoreCase(stampId, "KEY_ANOTHER_ORDER_TRACKING_ID")) {
                 trackingIdOfExistingOrder = get(stampId);
             }
             stampId = get(stampId);
-            }
+        }
         editOrderPage.editOrderStampToExisting(stampId, trackingIdOfExistingOrder);
     }
 
@@ -425,31 +434,40 @@ public class EditOrderSteps extends AbstractSteps
                 .findFirst()
                 .orElseThrow(() -> new AssertionError(f("There is no [%s] event on Edit Order page", expectedEventName)));
         String eventDescription = actualEvent.getDescription();
-        if (StringUtils.equalsIgnoreCase(type, "Pickup")) {
-            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE ADDRESS")) {
+        if (StringUtils.equalsIgnoreCase(type, "Pickup"))
+        {
+            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE ADDRESS"))
+            {
                 editOrderPage.eventsTable().verifyUpdatePickupAddressEventDescription(order, eventDescription);
             }
-            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE CONTACT INFORMATION")) {
+            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE CONTACT INFORMATION"))
+            {
                 editOrderPage.eventsTable().verifyUpdatePickupContactInformationEventDescription(order, eventDescription);
             }
-            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE SLA")) {
+            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE SLA"))
+            {
                 editOrderPage.eventsTable().verifyUpdatePickupSlaEventDescription(order, eventDescription);
             }
-            if (StringUtils.equalsIgnoreCase(expectedEventName, "VERIFY ADDRESS")) {
+            if (StringUtils.equalsIgnoreCase(expectedEventName, "VERIFY ADDRESS"))
+            {
                 editOrderPage.eventsTable().verifyPickupAddressEventDescription(order, eventDescription);
             }
-        }
-        else {
-            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE ADDRESS")) {
+        } else
+        {
+            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE ADDRESS"))
+            {
                 editOrderPage.eventsTable().verifyUpdateDeliveryAddressEventDescription(order, eventDescription);
             }
-            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE CONTACT INFORMATION")) {
+            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE CONTACT INFORMATION"))
+            {
                 editOrderPage.eventsTable().verifyUpdateDeliveryContactInformationEventDescription(order, eventDescription);
             }
-            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE SLA")) {
+            if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE SLA"))
+            {
                 editOrderPage.eventsTable().verifyUpdateDeliverySlaEventDescription(order, eventDescription);
             }
-            if (StringUtils.equalsIgnoreCase(expectedEventName, "VERIFY ADDRESS")) {
+            if (StringUtils.equalsIgnoreCase(expectedEventName, "VERIFY ADDRESS"))
+            {
                 editOrderPage.eventsTable().verifyDeliveryAddressEventDescription(order, eventDescription);
             }
         }
@@ -479,7 +497,8 @@ public class EditOrderSteps extends AbstractSteps
         mapOfData = resolveKeyValues(mapOfData);
         Order expectedOrder = new Order();
 
-        if (mapOfData.containsKey("comments")){
+        if (mapOfData.containsKey("comments"))
+        {
             expectedOrder.setComments(mapOfData.get("comments"));
         }
 
@@ -497,7 +516,7 @@ public class EditOrderSteps extends AbstractSteps
     {
         editOrderPage.verifiesOrderIsTaggedToTheRecommendedRouteId();
     }
-    
+
     @Then("^Operator verify menu item \"(.+)\" > \"(.+)\" is disabled on Edit order page$")
     public void operatorVerifyMenuItemIsDisabledOnEditOrderPage(String parentMenuItem, String childMenuItem)
     {
@@ -523,17 +542,47 @@ public class EditOrderSteps extends AbstractSteps
         String address2 = mapOfData.get("address2");
         String postalCode = mapOfData.get("postalCode");
 
-        if (Objects.nonNull(senderName)) {order.setFromName(senderName);}
-        if (Objects.nonNull(senderContact)) {order.setFromContact(senderContact);}
-        if (Objects.nonNull(senderEmail)) {order.setFromEmail(senderEmail);}
+        if (Objects.nonNull(senderName))
+        {
+            order.setFromName(senderName);
+        }
+        if (Objects.nonNull(senderContact))
+        {
+            order.setFromContact(senderContact);
+        }
+        if (Objects.nonNull(senderEmail))
+        {
+            order.setFromEmail(senderEmail);
+        }
 //        if (Objects.nonNull(internalNotes)) {order.setComments(internalNotes);}
-        if (Objects.nonNull(pickupDate)) {order.setPickupDate(pickupDate);}
-        if (Objects.nonNull(pickupTimeslot)) {order.setPickupTimeslot(pickupTimeslot);}
-        if (Objects.nonNull(address1)) {order.setFromAddress1(address1);}
-        if (Objects.nonNull(address2)) {order.setFromAddress2(address2);}
-        if (Objects.nonNull(postalCode)) {order.setFromPostcode(postalCode);}
-        if (Objects.nonNull(city)) {order.setFromCity(city);}
-        if (Objects.nonNull(country)) {order.setFromCountry(country);}
+        if (Objects.nonNull(pickupDate))
+        {
+            order.setPickupDate(pickupDate);
+        }
+        if (Objects.nonNull(pickupTimeslot))
+        {
+            order.setPickupTimeslot(pickupTimeslot);
+        }
+        if (Objects.nonNull(address1))
+        {
+            order.setFromAddress1(address1);
+        }
+        if (Objects.nonNull(address2))
+        {
+            order.setFromAddress2(address2);
+        }
+        if (Objects.nonNull(postalCode))
+        {
+            order.setFromPostcode(postalCode);
+        }
+        if (Objects.nonNull(city))
+        {
+            order.setFromCity(city);
+        }
+        if (Objects.nonNull(country))
+        {
+            order.setFromCountry(country);
+        }
         put(KEY_CREATED_ORDER, order);
     }
 
@@ -557,17 +606,47 @@ public class EditOrderSteps extends AbstractSteps
         String address2 = mapOfData.get("address2");
         String postalCode = mapOfData.get("postalCode");
 
-        if (Objects.nonNull(recipientName)) {order.setToName(recipientName);}
-        if (Objects.nonNull(recipientContact)) {order.setToContact(recipientContact);}
-        if (Objects.nonNull(recipientEmail)) {order.setToEmail(recipientEmail);}
+        if (Objects.nonNull(recipientName))
+        {
+            order.setToName(recipientName);
+        }
+        if (Objects.nonNull(recipientContact))
+        {
+            order.setToContact(recipientContact);
+        }
+        if (Objects.nonNull(recipientEmail))
+        {
+            order.setToEmail(recipientEmail);
+        }
 //        if (Objects.nonNull(internalNotes)) {order.setComments(internalNotes);}
-        if (Objects.nonNull(deliveryDate)) {order.setDeliveryDate(deliveryDate);}
-        if (Objects.nonNull(deliveryTimeslot)) {order.setDeliveryTimeslot(deliveryTimeslot);}
-        if (Objects.nonNull(address1)) {order.setToAddress1(address1);}
-        if (Objects.nonNull(address2)) {order.setToAddress2(address2);}
-        if (Objects.nonNull(postalCode)) {order.setToPostcode(postalCode);}
-        if (Objects.nonNull(city)) {order.setToCity(city);}
-        if (Objects.nonNull(country)) {order.setToCountry(country);}
+        if (Objects.nonNull(deliveryDate))
+        {
+            order.setDeliveryDate(deliveryDate);
+        }
+        if (Objects.nonNull(deliveryTimeslot))
+        {
+            order.setDeliveryTimeslot(deliveryTimeslot);
+        }
+        if (Objects.nonNull(address1))
+        {
+            order.setToAddress1(address1);
+        }
+        if (Objects.nonNull(address2))
+        {
+            order.setToAddress2(address2);
+        }
+        if (Objects.nonNull(postalCode))
+        {
+            order.setToPostcode(postalCode);
+        }
+        if (Objects.nonNull(city))
+        {
+            order.setToCity(city);
+        }
+        if (Objects.nonNull(country))
+        {
+            order.setToCountry(country);
+        }
         put(KEY_CREATED_ORDER, order);
     }
 
@@ -589,10 +668,11 @@ public class EditOrderSteps extends AbstractSteps
     public void operatorVerifiesTransactionUpdated(String txnType)
     {
         Order order = get(KEY_CREATED_ORDER);
-        if (StringUtils.equalsIgnoreCase(txnType, "Pickup")) {
+        if (StringUtils.equalsIgnoreCase(txnType, "Pickup"))
+        {
             editOrderPage.verifyPickupDetailsInTransaction(order, txnType);
-        }
-        else {
+        } else
+        {
             editOrderPage.verifyDeliveryDetailsInTransaction(order, txnType);
         }
     }
@@ -612,11 +692,12 @@ public class EditOrderSteps extends AbstractSteps
     @Then("^Operator verifies delivery (is|is not) indicated by 'Ninja Collect' icon on Edit Order Page$")
     public void deliveryIsIndicatedByIcon(String indicationValue)
     {
-        if (Objects.equals(indicationValue, "is")) {
+        if (Objects.equals(indicationValue, "is"))
+        {
             assertTrue("Expected that Delivery is indicated by 'Ninja Collect' icon on Edit Order Page",
                     editOrderPage.deliveryIsIndicatedWithIcon());
-        }
-        else if (Objects.equals(indicationValue, "is not")) {
+        } else if (Objects.equals(indicationValue, "is not"))
+        {
             assertFalse("Expected that Delivery is not indicated by 'Ninja Collect' icon on Edit Order Page",
                     editOrderPage.deliveryIsIndicatedWithIcon());
         }
@@ -646,16 +727,46 @@ public class EditOrderSteps extends AbstractSteps
         String address2 = mapOfData.get("address2");
         String postalCode = mapOfData.get("postalCode");
 
-        if (Objects.nonNull(senderName)) {order.setFromName(senderName);}
-        if (Objects.nonNull(senderContact)) {order.setFromContact(senderContact);}
-        if (Objects.nonNull(senderEmail)) {order.setFromEmail(senderEmail);}
-        if (Objects.nonNull(pickupDate)) {order.setPickupDate(pickupDate);}
-        if (Objects.nonNull(pickupTimeslot)) {order.setPickupTimeslot(pickupTimeslot);}
-        if (Objects.nonNull(address1)) {order.setFromAddress1(address1);}
-        if (Objects.nonNull(address2)) {order.setFromAddress2(address2);}
-        if (Objects.nonNull(postalCode)) {order.setFromPostcode(postalCode);}
-        if (Objects.nonNull(city)) {order.setFromCity(city);}
-        if (Objects.nonNull(country)) {order.setFromCountry(country);}
+        if (Objects.nonNull(senderName))
+        {
+            order.setFromName(senderName);
+        }
+        if (Objects.nonNull(senderContact))
+        {
+            order.setFromContact(senderContact);
+        }
+        if (Objects.nonNull(senderEmail))
+        {
+            order.setFromEmail(senderEmail);
+        }
+        if (Objects.nonNull(pickupDate))
+        {
+            order.setPickupDate(pickupDate);
+        }
+        if (Objects.nonNull(pickupTimeslot))
+        {
+            order.setPickupTimeslot(pickupTimeslot);
+        }
+        if (Objects.nonNull(address1))
+        {
+            order.setFromAddress1(address1);
+        }
+        if (Objects.nonNull(address2))
+        {
+            order.setFromAddress2(address2);
+        }
+        if (Objects.nonNull(postalCode))
+        {
+            order.setFromPostcode(postalCode);
+        }
+        if (Objects.nonNull(city))
+        {
+            order.setFromCity(city);
+        }
+        if (Objects.nonNull(country))
+        {
+            order.setFromCountry(country);
+        }
         put(KEY_CREATED_ORDER, order);
     }
 
@@ -677,16 +788,46 @@ public class EditOrderSteps extends AbstractSteps
         String address2 = mapOfData.get("address2");
         String postalCode = mapOfData.get("postalCode");
 
-        if (Objects.nonNull(recipientName)) {order.setToName(recipientName);}
-        if (Objects.nonNull(recipientContact)) {order.setToContact(recipientContact);}
-        if (Objects.nonNull(recipientEmail)) {order.setToEmail(recipientEmail);}
-        if (Objects.nonNull(deliveryDate)) {order.setDeliveryDate(deliveryDate);}
-        if (Objects.nonNull(deliveryTimeslot)) {order.setDeliveryTimeslot(deliveryTimeslot);}
-        if (Objects.nonNull(address1)) {order.setToAddress1(address1);}
-        if (Objects.nonNull(address2)) {order.setToAddress2(address2);}
-        if (Objects.nonNull(postalCode)) {order.setToPostcode(postalCode);}
-        if (Objects.nonNull(city)) {order.setToCity(city);}
-        if (Objects.nonNull(country)) {order.setToCountry(country);}
+        if (Objects.nonNull(recipientName))
+        {
+            order.setToName(recipientName);
+        }
+        if (Objects.nonNull(recipientContact))
+        {
+            order.setToContact(recipientContact);
+        }
+        if (Objects.nonNull(recipientEmail))
+        {
+            order.setToEmail(recipientEmail);
+        }
+        if (Objects.nonNull(deliveryDate))
+        {
+            order.setDeliveryDate(deliveryDate);
+        }
+        if (Objects.nonNull(deliveryTimeslot))
+        {
+            order.setDeliveryTimeslot(deliveryTimeslot);
+        }
+        if (Objects.nonNull(address1))
+        {
+            order.setToAddress1(address1);
+        }
+        if (Objects.nonNull(address2))
+        {
+            order.setToAddress2(address2);
+        }
+        if (Objects.nonNull(postalCode))
+        {
+            order.setToPostcode(postalCode);
+        }
+        if (Objects.nonNull(city))
+        {
+            order.setToCity(city);
+        }
+        if (Objects.nonNull(country))
+        {
+            order.setToCountry(country);
+        }
         put(KEY_CREATED_ORDER, order);
     }
 
@@ -747,7 +888,8 @@ public class EditOrderSteps extends AbstractSteps
                 .findFirst()
                 .orElseThrow(() -> new AssertionError(f("There is no [%s] event on Edit Order page", expectedEventName)));
         String eventDescription = actualEvent.getDescription();
-        if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE CASH")) {
+        if (StringUtils.equalsIgnoreCase(expectedEventName, "UPDATE CASH"))
+        {
             editOrderPage.eventsTable().verifyVerifyUpdateCashDescription(order, eventDescription);
         }
     }
