@@ -33,7 +33,7 @@ public class HubAppUserManagementSteps extends AbstractSteps
     public void operatorCreateNewHubAppUser(List<HubAppUser> hubAppUsers)
     {
         LocalDateTime today = LocalDateTime.now();
-        DateTimeFormatter calFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy", Locale.ENGLISH);
+        DateTimeFormatter calFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
         DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 
         for (HubAppUser hubAppUser : hubAppUsers)
@@ -82,7 +82,7 @@ public class HubAppUserManagementSteps extends AbstractSteps
     public void operatorCreateNewHubAppUserNegativeScenario(List<HubAppUser> hubAppUsers)
     {
         LocalDateTime today = LocalDateTime.now();
-        DateTimeFormatter calFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy", Locale.ENGLISH);
+        DateTimeFormatter calFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
         DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 
         for (HubAppUser hubAppUser : hubAppUsers)
