@@ -1,4 +1,4 @@
-@ShipmentInbound @Shipment @MiddleMile @CWF
+@ShipmentInbound @Shipment @MiddleMile
 Feature: Shipment Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
