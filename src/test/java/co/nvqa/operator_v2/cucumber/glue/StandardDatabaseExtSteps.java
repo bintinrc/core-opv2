@@ -927,4 +927,13 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
 
         assertEquals(f("Waypoint ID in reservations DB %s but Waypoint ID in route_waypoint %d", reservationWaypoint, routeWaypoint), reservationWaypoint, routeWaypoint);
     }
+
+    @Then("^DB Operator verify the orders are deleted in core_qa_sg.order_batch_items DB$")
+    public void dbOperatorVerifyBatchIdIsDeleted() throws SQLException, ClassNotFoundException
+    {
+        Long batchId = get(KEY_CREATED_BATCH_ID);
+        Long result = getCoreJdbc().getBatchId(batchId);
+
+        assertEquals(f("%s Batch ID Is Not Deleted", batchId),result, null);
+    }
 }

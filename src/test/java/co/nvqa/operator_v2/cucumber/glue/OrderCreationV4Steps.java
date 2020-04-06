@@ -47,6 +47,8 @@ public class OrderCreationV4Steps extends AbstractSteps
     {
         OrderRequestV4 order = get(KEY_CREATED_ORDER);
         orderCreationV4Page.verifyOrderIsCreatedSuccessfully(order);
+        String batchId = orderCreationV4Page.getBatchId();
+        put(KEY_CREATED_BATCH_ORDER_ID,batchId);
     }
 
     @When("^Operator click \"Download Sample File\" button on Order Creation V4 page$")
