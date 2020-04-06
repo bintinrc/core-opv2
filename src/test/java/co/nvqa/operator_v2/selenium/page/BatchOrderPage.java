@@ -52,14 +52,12 @@ public class BatchOrderPage extends OperatorV2SimplePage
         String expectedStatus = order.getStatus()+System.lineSeparator()+order.getGranularStatus();
         Date expectedCreatedAt = order.getCreatedAt();
 
-
         String actualTrackingId = getTextOnTableOrder(COLUMN_CLASS_DATA_TRACKING_ID);
         String actualType = getTextOnTableOrder(COLUMN_CLASS_DATA_TYPE);
         String actualFrom = getTextOnTableOrder(COLUMN_CLASS_DATA_FROM);
         String actualTo = getTextOnTableOrder(COLUMN_CLASS_DATA_TO);
         String actualStatus = getTextOnTableOrder(COLUMN_CLASS_DATA_STATUS);
         String actualCreatedAt = getTextOnTableOrder(COLUMN_CLASS_DATA_CREATED_AT);
-
 
         assertEquals("Tracking ID", trackingId, actualTrackingId);
         assertEquals("Type", expectedType, actualType);
