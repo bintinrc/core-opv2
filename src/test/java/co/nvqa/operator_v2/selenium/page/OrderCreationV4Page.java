@@ -35,6 +35,7 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
 {
     private static final Map<String, String> MAP_OF_ADDITIONAL_CONFIGURATIONS_XPATH = new HashMap<>();
     private static final String CSV_FILENAME_PATTERN = "sample-ocv4";
+    private static final String XPATH_BATCH_ID = "//div/label[contains(text(),'Batch Id')]/following-sibling::p";
 
     static
     {
@@ -385,5 +386,11 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
         {
             return getText(XPATH_TOTAL_SUCCESS);
         }
+    }
+
+    public String getBatchId()
+    {
+        String batchId = getText(XPATH_BATCH_ID);
+        return  batchId;
     }
 }
