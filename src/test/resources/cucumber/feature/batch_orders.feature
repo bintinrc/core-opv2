@@ -5,7 +5,7 @@ Feature: Batch Orders
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Fetch orders by batch ID - valid batch ID
+  Scenario: Fetch orders by batch ID - valid batch ID (uid:857fbaa6-9d07-4cd0-9f49-91b046c2b332)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Order -> Order Creation V4
     When Operator create order V4 by uploading XLSX on Order Creation V4 page using data below:
@@ -18,12 +18,12 @@ Feature: Batch Orders
     Given API Operator retrieve information about Bulk Order
     Then Operator verify the list of orders are correct
 
-  Scenario: Fetch orders by batch ID - invalid batch ID
+  Scenario: Fetch orders by batch ID - invalid batch ID (uid:2b53139d-b1dc-47f5-b977-59eeacfa49d0)
     When Operator go to menu New Features -> Batch Order
     And Operator search invalid batch ID on Batch Orders page
     Then Operator verify the invalid batch ID error toast is shown
 
-  Scenario: Rollback orders by batch ID - Valid Orders Status
+  Scenario: Rollback orders by batch ID - Valid Orders Status (uid:6948951d-e50f-4c84-9622-4715471f5f50)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Order -> Order Creation V4
     When Operator create order V4 by uploading XLSX on Order Creation V4 page using data below:
