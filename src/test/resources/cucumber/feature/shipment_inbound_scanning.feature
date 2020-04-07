@@ -288,8 +288,6 @@ Feature: Shipment Inbound Scanning
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page with Cancelled alert
 
-#    -----
-
   @DeleteShipment
   Scenario: Validation INTO HUB Inbound When Shipment Status is COMPLETED/CANCELLED - INTO HUB When Shipment Status is COMPLETED and Selected Hub is Destination Hub (uid:bb3112b8-f13b-4249-a827-4a8e3e7f3e1c)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -429,8 +427,6 @@ Feature: Shipment Inbound Scanning
     Then Operator verify parameters of the created shipment on Shipment Management page
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page using MAWB with Cancelled alert
-
-#    -------
 
   @DeleteShipment
   Scenario: Validation VAN Inbound to Another Country (uid:2af4ac4d-cc0e-4e4d-ba8d-9c99953b7122)
