@@ -61,6 +61,21 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
         scanningPage.inboundScanningNegativeScenario(shipmentId, label, hub, condition);
     }
 
+    @When("^Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page using MAWB with ([^\"]*) alert$")
+    public void operatorInboundScanningShipmentIntoVanInHubHubNameOnShipmentInboundScanningPageUsingMAWBWithAlerts(String label, String hub, String condition)
+    {
+        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+        String mawb = get(KeyConstants.KEY_MAWB);
+
+        if ("orderDestHubName".equalsIgnoreCase(hub))
+        {
+            Order order = get(KEY_CREATED_ORDER);
+            hub = order.getDestinationHub();
+        }
+
+        scanningPage.inboundScanningUsingMawbWithAlerts(shipmentId, mawb, label, hub, condition);
+    }
+
     @When("^Operator change End Date on Shipment Inbound Scanning page$")
     public void clickChangeEndDateButton()
     {

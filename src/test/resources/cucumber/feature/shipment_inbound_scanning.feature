@@ -113,6 +113,11 @@ Feature: Shipment Inbound Scanning
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
     When API Operator change the status of the shipment into "Completed"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Completed on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
 #    When Operator click Force Success Button
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page with Completed alert
@@ -128,24 +133,190 @@ Feature: Shipment Inbound Scanning
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
     When API Operator change the status of the shipment into "Cancelled"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | status | Cancelled |
+#    And Operator cancel the created shipment on Shipment Management page
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page with Cancelled alert
+    
+  @DeleteShipment
+  Scenario: Validation INTO VAN Inbound When Shipment Status is COMPLETED/CANCELLED - INTO VAN When Shipment Status is COMPLETED and Selected Hub is Current/Origin Hub (uid:75c3175c-a529-49f3-bd36-b92b75c3e733)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given DB Operator gets Hub ID by Hub Name of created parcel
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    Given API Operator put created parcel to shipment
+    When API Operator change the status of the shipment into "Completed"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Completed on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+#    When Operator click Force Success Button
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Van in hub {KEY_DESTINATION_HUB} on Shipment Inbound Scanning page with Completed alert
+
+  @DeleteShipment
+  Scenario: Validation INTO VAN Inbound When Shipment Status is COMPLETED/CANCELLED - INTO VAN When Shipment Status is COMPLETED and Selected Hub is NOT Current/Origin Hub (uid:8ecb9c17-5027-44de-932d-48b8ba377ef4)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given DB Operator gets Hub ID by Hub Name of created parcel
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Operator put created parcel to shipment
+    When API Operator change the status of the shipment into "Completed"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Completed on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+#    When Operator click Force Success Button
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page with Completed alert
+
+  @DeleteShipment
+  Scenario: Validation INTO VAN Inbound When Shipment Status is COMPLETED/CANCELLED - INTO VAN When Shipment Status is CANCELLED and Selected Hub is Current/Origin Hub (uid:74f4765a-0e23-49af-b47d-8a2fe11dc28a)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given DB Operator gets Hub ID by Hub Name of created parcel
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    Given API Operator put created parcel to shipment
+    When API Operator change the status of the shipment into "Cancelled"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | status | Cancelled |
+#    And Operator cancel the created shipment on Shipment Management page
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Van in hub {KEY_DESTINATION_HUB} on Shipment Inbound Scanning page with Cancelled alert
+
+  @DeleteShipment
+  Scenario: Validation INTO VAN Inbound When Shipment Status is COMPLETED/CANCELLED - INTO VAN When Shipment Status is CANCELLED and Selected Hub is NOT Current/Origin Hub (uid:5f3c99bb-b472-4dcc-a679-10592524f372)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given DB Operator gets Hub ID by Hub Name of created parcel
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    Given API Operator put created parcel to shipment
+    When API Operator change the status of the shipment into "Cancelled"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | status | Cancelled |
 #    And Operator cancel the created shipment on Shipment Management page
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page with Cancelled alert
 
   @DeleteShipment
-  Scenario: Validation INTO HUB Inbound When Shipmnet Status is COMPLETED (uid:089726f8-ea16-4bc4-b758-11119fafc961)
+  Scenario: Validation INTO VAN Inbound When Shipment Status is COMPLETED/CANCELLED - Scan MAWB INTO VAN When ALL Shipment Status is COMPLETED and Selected Hub is Current/Origin Hub (uid:cee3046f-9789-4ac3-a494-dc6b2e512df2)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator create Shipment on Shipment Management page using data below:
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator click "Load All Selection" on Shipment Management page
+    When Operator edit Shipment on Shipment Management page including MAWB using data below:
+      | destHubName | {hub-name-2}                                                         |
+      | origHubName | {hub-name}                                                           |
+      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+    When API Operator change the status of the shipment into "Completed"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Completed on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
-    When API Operator change the status of the shipment into "Completed"
-#    When Operator click Force Success Button
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page with Completed alert
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-2} on Shipment Inbound Scanning page using MAWB with Completed alert
+
+  @DeleteShipment
+  Scenario: Validation INTO VAN Inbound When Shipment Status is COMPLETED/CANCELLED - Scan MAWB INTO VAN When ALL Shipment Status is COMPLETED and Selected Hub is NOT Current/Origin Hub (uid:fcbeb3b4-337b-4ba9-b5d0-d3c26e774004)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator click "Load All Selection" on Shipment Management page
+    When Operator edit Shipment on Shipment Management page including MAWB using data below:
+      | destHubName | {hub-name-2}                                                         |
+      | origHubName | {hub-name}                                                           |
+      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+    When API Operator change the status of the shipment into "Completed"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Completed on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page using MAWB with Completed alert
+
+  @DeleteShipment
+  Scenario: Validation INTO VAN Inbound When Shipment Status is COMPLETED/CANCELLED - Scan MAWB INTO VAN When ALL Shipment Status is CANCELLED and Selected Hub is Current/Origin Hub (uid:b1eeae5f-8781-4ce4-9cd1-e340beb48117)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator click "Load All Selection" on Shipment Management page
+    When Operator edit Shipment on Shipment Management page including MAWB using data below:
+      | destHubName | {hub-name-2}                                                         |
+      | origHubName | {hub-name}                                                           |
+      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+    When API Operator change the status of the shipment into "Cancelled"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Cancelled on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-2} on Shipment Inbound Scanning page using MAWB with Cancelled alert
+
+  @DeleteShipment
+  Scenario: Validation INTO VAN Inbound When Shipment Status is COMPLETED/CANCELLED - Scan MAWB INTO VAN When ALL Shipment Status is CANCELLED and Selected Hub is NOT Current/Origin Hub (uid:d2e59832-e955-416e-8845-dc1294eadfad)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator click "Load All Selection" on Shipment Management page
+    When Operator edit Shipment on Shipment Management page including MAWB using data below:
+      | destHubName | {hub-name-2}                                                         |
+      | origHubName | {hub-name}                                                           |
+      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+    When API Operator change the status of the shipment into "Cancelled"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Cancelled on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page using MAWB with Cancelled alert
 
   @DeleteShipment
   Scenario: Validation INTO HUB Inbound When Shipmnet Status is CANCELLED (uid:41c2949b-e96b-408e-ace6-1ef52119a7ee)
@@ -158,6 +329,11 @@ Feature: Shipment Inbound Scanning
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
     When API Operator change the status of the shipment into "Cancelled"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify the following parameters of the created shipment on Shipment Management page:
+      | status | Cancelled |
 #    And Operator cancel the created shipment on Shipment Management page
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page with Cancelled alert
