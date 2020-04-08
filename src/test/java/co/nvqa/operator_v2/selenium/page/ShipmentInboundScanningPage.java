@@ -66,6 +66,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
         clickStartInbound();
 
         inputShipmentToInbound(shipmentId);
+        pause2s();
         checkAlert(shipmentId, condition);
     }
 
