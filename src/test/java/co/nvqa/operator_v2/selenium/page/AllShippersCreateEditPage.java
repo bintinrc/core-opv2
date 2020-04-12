@@ -40,11 +40,12 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public static final String ACTION_BUTTON_SET_AS_DEFAULT = "Set as Default";
     public static final String LOCATOR_FIELD_OC_VERSION = "ctrl.data.basic.ocVersion";
-    public static final String LOCATOR_FIELD_PRICING_SCRIPT = "commons.pricing-script";
+    public static final String LOCATOR_FIELD_PRICING_SCRIPT = "container.shippers.pricing-billing-pricing-scripts";
     public static final String LOCATOR_FIELD_INDUSTRY = "ctrl.data.basic.industry";
-    public static final String LOCATOR_FIELD_SALES_PERSON = "container.shippers.oc-sales-person";
+    public static final String LOCATOR_FIELD_SALES_PERSON = "salesperson";
     public static final String LOCATOR_FIELD_CHANNEL = "ctrl.data.basic.shipperClassification";
     public static final String LOCATOR_FIELD_ACCOUNT_TYPE = "ctrl.data.basic.accountType";
+    public static final String ARIA_LABEL_SAVE_CHANGES = "Save Changes";
 
     public AllShippersCreateEditPage(WebDriver webDriver)
     {
@@ -54,6 +55,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void createNewShipper(Shipper shipper)
     {
         waitUntilPageLoaded("shippers/create");
+        pause2s();
         fillBasicSettingsForm(shipper);
         fillMoreSettingsForm(shipper);
 
@@ -61,6 +63,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         {
             fillMarketplaceSettingsForm(shipper);
         }
+
+        fillPricingAndBillingForm(shipper);
 
         clickNvIconTextButtonByName("container.shippers.create-shipper");
         waitUntilInvisibilityOfToast("All changes saved successfully");
@@ -179,7 +183,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         /*
           ===== PRICING & BILLING =====
          */
-        Pricing pricing = shipper.getPricing();
+     /*   Pricing pricing = shipper.getPricing();
 
         if(pricing!=null && StringUtils.isNotBlank(pricing.getScriptName()))
         {
@@ -191,6 +195,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         sendKeysById("Billing Contact", shipper.getBillingContact());
         sendKeysById("Billing Address", shipper.getBillingAddress());
         sendKeysById("Billing Postcode", shipper.getBillingPostcode());
+
+      */
     }
 
     private void fillMoreSettingsForm(Shipper shipper)
@@ -221,6 +227,32 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
             scrollIntoView("//md-select[contains(@id, 'commons.select')]", false);
             selectValueFromMdSelectByIdContains("commons.select", defaultPickupTimeSelector);
         }
+    }
+
+    private void fillPricingAndBillingForm(Shipper shipper)
+    {
+        /*  ===== PRICING & BILLING =====
+         */
+        Pricing pricing = shipper.getPricing();
+
+        if(pricing!=null)
+        {
+            clickTabItem(" Pricing and Billing");
+
+            if(pricing!=null && StringUtils.isNotBlank(pricing.getScriptName()))
+            {
+                click("//button[@aria-label='Add New Profile']");
+                pause2s();
+                selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT, pricing.getScriptName());
+                clickButtonByAriaLabel(ARIA_LABEL_SAVE_CHANGES);
+            }
+        }
+        // Billing
+        sendKeysById("Billing Name", shipper.getBillingName());
+        sendKeysById("Billing Contact", shipper.getBillingContact());
+        sendKeysById("Billing Address", shipper.getBillingAddress());
+        sendKeysById("Billing Postcode", shipper.getBillingPostcode());
+
     }
 
     private void addAddress(Address address)
@@ -914,14 +946,14 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void backToShipperList()
     {
-        clickNvIconTextButtonByName("container.shippers.back-to-shipper-list");
-
+        clickNvIconTextButtonByName("commons.discard-changes");
+        pause2s();
         if(isElementExistFast("//md-dialog//button[@aria-label='Leave']"))
         {
             clickButtonOnMdDialogByAriaLabel("Leave");
         }
 
-        waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading shippers...']");
+       // waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading shippers...']");
     }
 
     public void searchTableAddressByAddress(String address)

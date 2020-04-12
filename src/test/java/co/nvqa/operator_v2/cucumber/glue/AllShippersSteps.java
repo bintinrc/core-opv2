@@ -637,4 +637,47 @@ public class AllShippersSteps extends AbstractSteps
     {
         allShippersPage.waitUntilPageLoaded();
     }
+
+    @When("Operator clears all filters on All Shippers page")
+    public void operatorClearsAllFiltersOnAllShippersPage()
+    {
+        allShippersPage.clearAllSelections();
+    }
+
+    @And("Operator chooses {string} filter")
+    public void operatorChoosesFilter(String filter)
+    {
+        allShippersPage.chooseFilter(filter);
+    }
+
+    @Then("Operator searches the {string} field with {string} keyword")
+    public void OperatorSearchesTheFieldWithKeyword(String filter, String keyword)
+    {
+        allShippersPage.searchByFilterWithKeyword(filter, keyword);
+    }
+
+    @Then("Operator verifies that the results have keyword {string} in {string} column")
+    public void operatorVerifiesThatTheResultsHaveKeywordInColumn(String keyword, String column)
+    {
+        allShippersPage.verifiesResultsOfColumn(keyword, column);
+    }
+
+    @Then("Operator searches for Shippers with Active filter")
+    public void operatorSearchesForShippersWithActiveFilter()
+    {
+        allShippersPage.searchActiveFilter();
+    }
+
+    @And("Operator searches for keyword {string} in quick search filter")
+    public void operatorSearchesForShippersInQuickSearchFilter(String keyword)
+    {
+        allShippersPage.quickSearchShipper(keyword);
+    }
+
+    @And("Operator edits the created shipper")
+    public void operatorEditsTheCreatedShipper()
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+        allShippersPage.editShipper(shipper);
+    }
 }

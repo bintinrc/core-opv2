@@ -1,7 +1,7 @@
 @OperatorV2 @OperatorV2Part2 @AllShippers @Saas
 Feature: All Shippers
 
-  @LaunchBrowser @ShouldAlwaysRun @EnableClearCache @ForceNotHeadless
+  @LaunchBrowser @ShouldAlwaysRun @EnableClearCache @ForceNotHeadless @test
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -325,6 +325,90 @@ Feature: All Shippers
 #    When API Operator reload shipper's cache
 #    When Operator clear browser cache and reload All Shipper page
 #    Then Operator verify the shipper is deleted successfully
+
+  Scenario: Search Shipper By Filters - Filter shipper by liaison email
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator clears all filters on All Shippers page
+    And Operator chooses "Liaison Email" filter
+    Then Operator searches the "Liaison Email" field with "Ninja" keyword
+    Then Operator verifies that the results have keyword "Ninja" in "Liaison Email" column
+
+  Scenario: Search Shipper By Filters - Filter shipper by email
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator clears all filters on All Shippers page
+    And Operator chooses "Email" filter
+    Then Operator searches the "Email" field with "Ninja" keyword
+    Then Operator verifies that the results have keyword "Ninja" in "Email" column
+
+  Scenario: Search Shipper By Filters - Filter shipper by contact
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator clears all filters on All Shippers page
+    And Operator chooses "Contact" filter
+    Then Operator searches the "Contact" field with "12345" keyword
+    Then Operator verifies that the results have keyword "12345" in "Contact" column
+
+  Scenario: Search Shipper By Filters - Filter shipper by active
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator clears all filters on All Shippers page
+    And Operator chooses "Active" filter
+    Then Operator searches for Shippers with Active filter
+    Then Operator verifies that the results have keyword "Active" in "Status" column
+
+  Scenario: Search Shipper By Filters - Filter shipper by shipper
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator clears all filters on All Shippers page
+    And Operator chooses "Shipper" filter
+    Then Operator searches the "Shipper" field with "Ninja" keyword
+    Then Operator verifies that the results have keyword "Ninja" in "Name" column
+
+  Scenario: Search Shipper By Filters - Filter shipper by Industry
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator clears all filters on All Shippers page
+    And Operator chooses "Industry" filter
+    Then Operator searches the "Industry" field with "Fashion" keyword
+    Then Operator verifies that the results have keyword "Fashion" in "Industry" column
+
+  Scenario: Search Shipper By Filters - Filter shipper by Salesperson
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator clears all filters on All Shippers page
+    And Operator chooses "Salesperson" filter
+    Then Operator searches the "Salesperson" field with "TS1" keyword
+    Then Operator verifies that the results have keyword "TS1" in "Salesperson" column
+
+  Scenario: Search Shipper By Filters - Search shipper by quick search
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator clears all filters on All Shippers page
+    And Operator searches for keyword "Ninja" in quick search filter
+    Then Operator verifies that the results have keyword "Ninja" in "Name" column
+
+    @test
+  Scenario: Add New Shipper Pricing Profile
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                       |
+      | shipperType                  | Normal                     |
+      | ocVersion                    | v4                         |
+      | services                     | STANDARD                   |
+      | trackingType                 | Fixed                      |
+      | isAllowCod                   | true                       |
+      | isAllowCashPickup            | true                       |
+      | isPrepaid                    | true                       |
+      | isAllowStagedOrders          | true                       |
+      | isMultiParcelShipper         | true                       |
+      | isDisableDriverAppReschedule | true                       |
+      | pricingScriptName            | {pricing-script-name}      |
+      | industryName                 | {industry-name}            |
+      | salesPerson                  | {sales-person}             |
+    And Operator edits the created shipper
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
