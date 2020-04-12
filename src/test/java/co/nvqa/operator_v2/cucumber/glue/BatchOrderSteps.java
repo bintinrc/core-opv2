@@ -58,4 +58,22 @@ public class BatchOrderSteps extends AbstractSteps
     {
         batchOrdersPage.rollbackBatchOrder();
     }
+
+    @When("^Get created batch order$")
+    public void getCreatedBatchOrder()
+    {
+        BatchOrderInfo expectedBatchOrderInfo = get(KEY_CREATED_BATCH_ORDER_INFO);
+
+        Long orderId = expectedBatchOrderInfo.getOrders().get(0).getId();
+        put(KEY_CREATED_ORDER_ID, orderId);
+    }
+
+    @Then("^Operator verify the invalid order status error toast is shown$")
+    public void operatorVerifyTheInvalidOrderStatus()
+    {
+        BatchOrderInfo expectedBatchOrderInfo = get(KEY_CREATED_BATCH_ORDER_INFO);
+
+        String trackingId = expectedBatchOrderInfo.getOrders().get(0).getTrackingId();
+        batchOrdersPage.verifyTheInvalidStatusToast(trackingId);
+    }
 }
