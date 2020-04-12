@@ -4,7 +4,9 @@ import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.text.ParseException;
 
@@ -501,7 +503,8 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
         public void toggleComingStatus(int rowNumber)
         {
             String xpath = String.format(LOCATOR_COMING_TOGGLE, getMdVirtualRepeat(), rowNumber);
-            click(xpath);
+            WebElement element = webDriver.findElement(By.xpath(xpath));
+            element.click();
         }
     }
 }
