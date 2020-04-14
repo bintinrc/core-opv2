@@ -66,6 +66,17 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
         clickStartInbound();
 
         inputShipmentToInbound(shipmentId);
+        pause2s();
+        checkAlert(shipmentId, condition);
+    }
+
+    public void inboundScanningUsingMawbWithAlerts(Long shipmentId, String mawb, String label, String hub, String condition)
+    {
+        selectHub(hub);
+        click(grabXpathButton(label));
+        clickStartInbound();
+
+        inputShipmentToInboundUsingMawb(mawb);
         checkAlert(shipmentId, condition);
     }
 

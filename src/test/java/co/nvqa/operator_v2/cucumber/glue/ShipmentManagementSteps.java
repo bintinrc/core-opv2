@@ -235,7 +235,14 @@ public class ShipmentManagementSteps extends AbstractSteps
     @Then("^Operator verify the following parameters of the created shipment on Shipment Management page:$")
     public void operatorVerifyTheFollowingParametersOfTheCreatedShipmentOnShipmentManagementPage(Map<String, String> mapOfData)
     {
-        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+        ShipmentInfo shipmentInfo;
+
+        if (get(KEY_SHIPMENT_INFO) == null) {
+            Shipments shipments = get(KEY_CREATED_SHIPMENT);
+            shipmentInfo = new ShipmentInfo(shipments);
+        } else {
+            shipmentInfo = get(KEY_SHIPMENT_INFO);
+        }
         ShipmentInfo expectedShipmentInfo = new ShipmentInfo();
         expectedShipmentInfo.fromMap(mapOfData);
         shipmentManagementPage.validateShipmentInfo(shipmentInfo.getId(), expectedShipmentInfo);

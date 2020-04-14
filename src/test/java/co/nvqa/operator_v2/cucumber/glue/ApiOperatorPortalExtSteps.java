@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.cucumber.glue.AbstractApiOperatorPortalSteps;
 import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
+import co.nvqa.commons.model.core.BatchOrderInfo;
 import co.nvqa.commons.model.core.BulkOrderInfo;
 import co.nvqa.commons.model.core.CreateDriverV2Request;
 import co.nvqa.commons.model.core.Order;
@@ -431,5 +432,12 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         SetAsideRequest request = new SetAsideRequest();
         request.fromMap(data);
         getSetAsideClient().enable(request);
+    }
+
+    @Given("^API Operator retrieve information about Bulk Order$")
+    public void apiOperatorRetrieveBatchOrderIdInfo()
+    {
+        BatchOrderInfo batchOrderInfo = getOrderClient().retrieveBatchOrderInfo(Long.parseLong(get(KEY_CREATED_BATCH_ORDER_ID)));
+        put(KEY_CREATED_BATCH_ORDER_INFO, batchOrderInfo);
     }
 }

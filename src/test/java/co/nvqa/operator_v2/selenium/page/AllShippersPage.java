@@ -6,6 +6,8 @@ import co.nvqa.commons.model.shipper.v2.Shipper;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 
+import java.util.Set;
+
 /**
  * @author Daniel Joi Partogi Hutapea
  */
@@ -62,8 +64,21 @@ public class AllShippersPage extends OperatorV2SimplePage
     {
         waitUntilPageLoaded();
         clickNvIconTextButtonByName("container.shippers.create-shipper");
-        switchToOtherWindow("shippers/create");
         allShippersCreateEditPage.createNewShipper(shipper);
+    }
+
+    public void createNewShipperWithUpdatedPricingScript(Shipper shipper)
+    {
+        waitUntilPageLoaded();
+        clickNvIconTextButtonByName("container.shippers.create-shipper");
+        allShippersCreateEditPage.createNewShipperWithUpdatedPricingScript(shipper);
+    }
+
+    public void createNewShipperWithoutPricingScript(Shipper shipper)
+    {
+        waitUntilPageLoaded();
+        clickNvIconTextButtonByName("container.shippers.create-shipper");
+        allShippersCreateEditPage.createNewShipperWithoutPricingScript(shipper);
     }
 
     public void verifyNewShipperIsCreatedSuccessfully(Shipper shipper)
@@ -340,9 +355,28 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void editShipper(Shipper shipper)
     {
-        getWebDriver().switchTo().defaultContent();
-        click(ARIA_LABEL_LOAD_SELECTION);
+        quickSearchShipper(shipper.getName());
         pause2s();
-        searchTableByNameAndGoToEditPage(shipper);
+        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        pause5s();
     }
+
+    public void addNewPricingScript(Shipper shipper)
+    {
+        waitUntilPageLoaded();
+        allShippersCreateEditPage.addNewPricingScript(shipper);
+    }
+
+    public void editPricingScript(Shipper shipper)
+    {
+        waitUntilPageLoaded();
+        allShippersCreateEditPage.editPricingScript(shipper);
+    }
+
+    public void verifyPricingScriptIsActive()
+    {
+        waitUntilPageLoaded();
+        allShippersCreateEditPage.verifyPricingScriptIsActive();
+    }
+
 }

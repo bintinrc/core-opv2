@@ -75,6 +75,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage
 
         String toastMessage = getToastTopText();
         assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage, allOf(containsString("Shipment"), containsString("closed")));
+        waitUntilInvisibilityOfToast();
     }
 
     public void removeOrderFromShipment(String firstTrackingId)

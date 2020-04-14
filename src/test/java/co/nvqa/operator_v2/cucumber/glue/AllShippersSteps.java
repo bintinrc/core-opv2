@@ -680,4 +680,234 @@ public class AllShippersSteps extends AbstractSteps
         Shipper shipper = get(KEY_CREATED_SHIPPER);
         allShippersPage.editShipper(shipper);
     }
+
+    @Then("Operator adds new Shipper's Pricing Script")
+    public void OperatorAddsNewShippersPricingScript(Map<String, String> mapOfData)
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+        String pricingScriptName = mapOfData.get("pricingScriptName");
+        String discount = mapOfData.get("discount");
+        String comments = mapOfData.get("comments");
+
+        Pricing pricing = new Pricing();
+        pricing.setScriptName(pricingScriptName);
+        pricing.setDiscount(discount);
+        pricing.setComments(comments);
+
+        shipper.setPricing(pricing);
+
+        allShippersPage.addNewPricingScript(shipper);
+    }
+
+    @Then("Operator edits the Pending Pricing Script")
+    public void operatorEditsThePendingPricingScript(Map<String, String> mapOfData)
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+        String discount = mapOfData.get("discount");
+        String comments = mapOfData.get("comments");
+
+        Pricing pricing = new Pricing();
+        pricing.setDiscount(discount);
+        pricing.setComments(comments);
+
+        shipper.setPricing(pricing);
+
+        allShippersPage.editPricingScript(shipper);
+    }
+
+    @Then("Operator verifies that Pricing Script is active")
+    public void operatorVerifiesThatPricingScriptIsActive()
+    {
+        allShippersPage.verifyPricingScriptIsActive();
+    }
+
+    @When("Operator create new Shipper with basic settings and updates pricing script using data below:")
+    public void operatorCreateNewShipperWithBasicSettingsAndUpdatesPricingScriptUsingDataBelow(Map<String, String> mapOfData)
+    {
+        Boolean isShipperActive = Boolean.parseBoolean(mapOfData.get("isShipperActive"));
+        String shipperType = mapOfData.get("shipperType");
+        String ocVersion = mapOfData.get("ocVersion");
+        String servicesTemp = mapOfData.get("services");
+        String trackingType = mapOfData.get("trackingType");
+
+        List<String> listOfAvailableService;
+
+        if(servicesTemp==null || servicesTemp.isEmpty())
+        {
+            listOfAvailableService = new ArrayList<>();
+        }
+        else
+        {
+            listOfAvailableService = Stream.of(servicesTemp.split(",")).map(String::trim).collect(Collectors.toList());
+        }
+
+        Boolean isAllowCod = Boolean.parseBoolean(mapOfData.get("isAllowCod"));
+        Boolean isAllowCashPickup = Boolean.parseBoolean(mapOfData.get("isAllowCashPickup"));
+        Boolean isPrepaid = Boolean.parseBoolean(mapOfData.get("isPrepaid"));
+        Boolean isAllowStagedOrders = Boolean.parseBoolean(mapOfData.get("isAllowStagedOrders"));
+        Boolean isMultiParcelShipper = Boolean.parseBoolean(mapOfData.get("isMultiParcelShipper"));
+        Boolean isDisableDriverAppReschedule = Boolean.parseBoolean(mapOfData.get("isDisableDriverAppReschedule"));
+
+        String pricingScriptName = mapOfData.get("pricingScriptName");
+        String industryName = mapOfData.get("industryName");
+        String salesPerson = mapOfData.get("salesPerson");
+
+        String dateUniqueString = generateDateUniqueString();
+
+        // Shipper Details
+        Shipper shipper = new Shipper();
+        shipper.setActive(isShipperActive);
+        shipper.setType(shipperType);
+        shipper.setName("Dummy Shipper #" + dateUniqueString);
+        shipper.setShortName("DS-" + StringUtils.right(dateUniqueString, 13));
+        shipper.setContact(generatePhoneNumber(dateUniqueString));
+        shipper.setEmail("ds." + dateUniqueString + "@automation.co");
+        shipper.setShipperDashboardPassword("Ninjitsu89");
+
+        // Liaison Details
+        Address liaisonAddress = generateRandomAddress();
+
+        shipper.setLiaisonName("Liaison #" + dateUniqueString);
+        shipper.setLiaisonContact(generatePhoneNumber(dateUniqueString + "1"));
+        shipper.setLiaisonEmail("ln." + dateUniqueString + "@automation.co");
+        shipper.setLiaisonAddress(liaisonAddress.to1LineAddress() + " #" + dateUniqueString);
+        shipper.setLiaisonPostcode(liaisonAddress.getPostcode());
+
+        // Services
+        OrderCreate orderCreate = new OrderCreate();
+        orderCreate.setVersion(ocVersion);
+        orderCreate.setServicesAvailable(listOfAvailableService);
+        orderCreate.setTrackingType(trackingType);
+        orderCreate.setAllowCodService(isAllowCod);
+        orderCreate.setAllowCpService(isAllowCashPickup);
+        orderCreate.setIsPrePaid(isPrepaid);
+        orderCreate.setAllowStagedOrders(isAllowStagedOrders);
+        orderCreate.setIsMultiParcelShipper(isMultiParcelShipper);
+        shipper.setOrderCreate(orderCreate);
+
+        DistributionPoint distributionPoint = new DistributionPoint();
+        distributionPoint.setShipperLiteAllowRescheduleFirstAttempt(isDisableDriverAppReschedule);
+        shipper.setDistributionPoints(distributionPoint);
+
+        // Pricing
+        Pricing pricing = new Pricing();
+        pricing.setScriptName(pricingScriptName);
+        shipper.setPricing(pricing);
+
+        // Billing
+        Address billingAddress = generateRandomAddress();
+
+        shipper.setBillingName("Billing #" + dateUniqueString);
+        shipper.setBillingContact(generatePhoneNumber(dateUniqueString + "2"));
+        shipper.setBillingAddress(billingAddress.to1LineAddress() + " #" + dateUniqueString);
+        shipper.setBillingPostcode(billingAddress.getPostcode());
+
+        // Industry & Sales
+        shipper.setIndustryName(industryName);
+        shipper.setSalesPerson(salesPerson);
+        shipper.setAccountTypeId(6L);
+
+        Pickup pickupSettings = new Pickup();
+        pickupSettings.setDefaultStartTime("09:00");
+        pickupSettings.setDefaultEndTime("22:00");
+        if (mapOfData.containsKey("premiumPickupDailyLimit"))
+        {
+            pickupSettings.setPremiumPickupDailyLimit(Integer.valueOf(mapOfData.get("premiumPickupDailyLimit")));
+        }
+        shipper.setPickup(pickupSettings);
+
+        fillMarketplaceProperties(shipper, mapOfData);
+        generatePickupAddresses(shipper, mapOfData);
+
+        allShippersPage.createNewShipperWithUpdatedPricingScript(shipper);
+        put(KEY_CREATED_SHIPPER, shipper);
+    }
+
+    @When("Operator create new Shipper with basic settings and without Pricing profile using data below:")
+    public void operatorCreateNewShipperWithBasicSettingsAndWithoutPricingProfileUsingDataBelow(Map<String, String> mapOfData)
+    {
+        Boolean isShipperActive = Boolean.parseBoolean(mapOfData.get("isShipperActive"));
+        String shipperType = mapOfData.get("shipperType");
+        String ocVersion = mapOfData.get("ocVersion");
+        String servicesTemp = mapOfData.get("services");
+        String trackingType = mapOfData.get("trackingType");
+
+        List<String> listOfAvailableService;
+
+        if(servicesTemp==null || servicesTemp.isEmpty())
+        {
+            listOfAvailableService = new ArrayList<>();
+        }
+        else
+        {
+            listOfAvailableService = Stream.of(servicesTemp.split(",")).map(String::trim).collect(Collectors.toList());
+        }
+
+        Boolean isAllowCod = Boolean.parseBoolean(mapOfData.get("isAllowCod"));
+        Boolean isAllowCashPickup = Boolean.parseBoolean(mapOfData.get("isAllowCashPickup"));
+        Boolean isPrepaid = Boolean.parseBoolean(mapOfData.get("isPrepaid"));
+        Boolean isAllowStagedOrders = Boolean.parseBoolean(mapOfData.get("isAllowStagedOrders"));
+        Boolean isMultiParcelShipper = Boolean.parseBoolean(mapOfData.get("isMultiParcelShipper"));
+        Boolean isDisableDriverAppReschedule = Boolean.parseBoolean(mapOfData.get("isDisableDriverAppReschedule"));
+
+        String industryName = mapOfData.get("industryName");
+        String salesPerson = mapOfData.get("salesPerson");
+
+        String dateUniqueString = generateDateUniqueString();
+
+        // Shipper Details
+        Shipper shipper = new Shipper();
+        shipper.setActive(isShipperActive);
+        shipper.setType(shipperType);
+        shipper.setName("Dummy Shipper #" + dateUniqueString);
+        shipper.setShortName("DS-" + StringUtils.right(dateUniqueString, 13));
+        shipper.setContact(generatePhoneNumber(dateUniqueString));
+        shipper.setEmail("ds." + dateUniqueString + "@automation.co");
+        shipper.setShipperDashboardPassword("Ninjitsu89");
+
+        // Liaison Details
+        Address liaisonAddress = generateRandomAddress();
+
+        shipper.setLiaisonName("Liaison #" + dateUniqueString);
+        shipper.setLiaisonContact(generatePhoneNumber(dateUniqueString + "1"));
+        shipper.setLiaisonEmail("ln." + dateUniqueString + "@automation.co");
+        shipper.setLiaisonAddress(liaisonAddress.to1LineAddress() + " #" + dateUniqueString);
+        shipper.setLiaisonPostcode(liaisonAddress.getPostcode());
+
+        // Services
+        OrderCreate orderCreate = new OrderCreate();
+        orderCreate.setVersion(ocVersion);
+        orderCreate.setServicesAvailable(listOfAvailableService);
+        orderCreate.setTrackingType(trackingType);
+        orderCreate.setAllowCodService(isAllowCod);
+        orderCreate.setAllowCpService(isAllowCashPickup);
+        orderCreate.setIsPrePaid(isPrepaid);
+        orderCreate.setAllowStagedOrders(isAllowStagedOrders);
+        orderCreate.setIsMultiParcelShipper(isMultiParcelShipper);
+        shipper.setOrderCreate(orderCreate);
+
+        DistributionPoint distributionPoint = new DistributionPoint();
+        distributionPoint.setShipperLiteAllowRescheduleFirstAttempt(isDisableDriverAppReschedule);
+        shipper.setDistributionPoints(distributionPoint);
+
+        // Industry & Sales
+        shipper.setIndustryName(industryName);
+        shipper.setSalesPerson(salesPerson);
+        shipper.setAccountTypeId(6L);
+
+        Pickup pickupSettings = new Pickup();
+        pickupSettings.setDefaultStartTime("09:00");
+        pickupSettings.setDefaultEndTime("22:00");
+        if (mapOfData.containsKey("premiumPickupDailyLimit"))
+        {
+            pickupSettings.setPremiumPickupDailyLimit(Integer.valueOf(mapOfData.get("premiumPickupDailyLimit")));
+        }
+        shipper.setPickup(pickupSettings);
+
+        fillMarketplaceProperties(shipper, mapOfData);
+        generatePickupAddresses(shipper, mapOfData);
+
+        allShippersPage.createNewShipperWithoutPricingScript(shipper);
+        put(KEY_CREATED_SHIPPER, shipper);
+    }
 }
