@@ -34,14 +34,12 @@ public class AddOrderToRoutePage extends OperatorV2SimplePage
     public void setRouteId(String routeId)
     {
         moveToElementWithXpath(XPATH_ROUTE_ID);
-        pause1s();
         sendKeys(XPATH_ROUTE_ID,routeId);
     }
 
     public void setTransactionType()
     {
         moveToElementWithXpath(XPATH_TRANSACTION_TYPE);
-        pause1s();
         click(XPATH_TRANSACTION_TYPE);
         click(XPATH_TRANSACTION_TYPE_DELIVERY);
     }
@@ -65,7 +63,6 @@ public class AddOrderToRoutePage extends OperatorV2SimplePage
         click(XPATH_PREFIX);
         sendKeys(XPATH_PREFIX,"DD");
         click(XPATH_SAVE_BUTTON);
-        pause1s();
     }
 
     public void enterTrackingId(String trackingId)

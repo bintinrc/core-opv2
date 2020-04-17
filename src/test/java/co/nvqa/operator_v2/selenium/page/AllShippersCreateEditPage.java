@@ -55,13 +55,19 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public static final String LOCATOR_END_DATE = "container.shippers.pricing-billing-end-date";
     public static final String LOCATOR_START_DATE = "container.shippers.pricing-billing-start-date";
     public static final String XPATH_VALIDATION_ERROR = "//div[@class='error-box']//div[@class='content']";
+    public static final String XPATH_SHIPPER_INFORMATION = "//div[text()='Shipper Information']";
 
     public AllShippersCreateEditPage(WebDriver webDriver)
     {
         super(webDriver);
     }
 
-    public void createNewShipper(Shipper shipper)
+    public void waitUntilShipperCreateEditPageIsLoaded()
+    {
+        waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+    }
+
+    public String switchToNewWindow()
     {
         waitUntilNewWindowOrTabOpened();
         String currentWindowHandle = getWebDriver().getWindowHandle();
@@ -75,7 +81,14 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
             }
         }
 
-        waitUntilPageLoaded("shippers/create");
+        return currentWindowHandle;
+    }
+
+    public void createNewShipper(Shipper shipper)
+    {
+        String currentWindowHandle = switchToNewWindow();
+
+        waitUntilShipperCreateEditPageIsLoaded();
         pause2s();
         fillBasicSettingsForm(shipper);
         fillMoreSettingsForm(shipper);
@@ -96,19 +109,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void createNewShipperWithUpdatedPricingScript(Shipper shipper)
     {
-        waitUntilNewWindowOrTabOpened();
-        String currentWindowHandle = getWebDriver().getWindowHandle();
-        Set<String> windowHandles = getWebDriver().getWindowHandles();
+        String currentWindowHandle = switchToNewWindow();
 
-        for (String windowHandle : windowHandles)
-        {
-            if(!windowHandle.equalsIgnoreCase(currentWindowHandle))
-            {
-                getWebDriver().switchTo().window(windowHandle);
-            }
-        }
-
-        waitUntilPageLoaded("shippers/create");
+        waitUntilShipperCreateEditPageIsLoaded();
         pause2s();
         fillBasicSettingsForm(shipper);
         fillMoreSettingsForm(shipper);
@@ -131,19 +134,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void createNewShipperWithoutPricingScript(Shipper shipper)
     {
-        waitUntilNewWindowOrTabOpened();
-        String currentWindowHandle = getWebDriver().getWindowHandle();
-        Set<String> windowHandles = getWebDriver().getWindowHandles();
+        String currentWindowHandle = switchToNewWindow();
 
-        for (String windowHandle : windowHandles)
-        {
-            if(!windowHandle.equalsIgnoreCase(currentWindowHandle))
-            {
-                getWebDriver().switchTo().window(windowHandle);
-            }
-        }
-
-        waitUntilPageLoaded("shippers/create");
+        waitUntilShipperCreateEditPageIsLoaded();
         pause2s();
         fillBasicSettingsForm(shipper);
         fillMoreSettingsForm(shipper);
@@ -174,7 +167,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipper(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         fillBasicSettingsForm(shipper);
         clickNvIconTextButtonByName("Save Changes");
         waitUntilInvisibilityOfToast("All changes saved successfully");
@@ -511,7 +504,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void removeMilkrunReservarion(Shipper shipper, int addressIndex, int milkrunReservationIndex)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("More Settings");
 
         if(CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses()))
@@ -538,7 +531,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void removeAllMilkrunReservations(Shipper shipper, int addressIndex)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("More Settings");
         if(CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses()))
         {
@@ -556,7 +549,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void setPickupAddressesAsMilkrun(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("More Settings");
         if(CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses()))
         {
@@ -579,7 +572,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyNewShipperIsCreatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         String actualShipperStatus = getToggleButtonValue("ctrl.data.basic.status");
         String actualShipperType;
 
@@ -737,7 +730,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(Shipper shipper, Address address, Reservation reservation)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("More Settings");
         addAddress(address);
         setAsDefaultAddress(address);
@@ -794,7 +787,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperLabelPrinterSettings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("Basic Settings");
 
         LabelPrinter labelPrinter = shipper.getLabelPrinter();
@@ -808,7 +801,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperLabelPrinterSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("Basic Settings");
 
         LabelPrinter labelPrinter = shipper.getLabelPrinter();
@@ -824,7 +817,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperDistributionPointSettings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("More Settings");
 
         DistributionPoint distributionPoint = shipper.getDistributionPoints();
@@ -849,7 +842,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperDistributionPointSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("More Settings");
 
         DistributionPoint distributionPoint = shipper.getDistributionPoints();
@@ -883,7 +876,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperReturnsSettings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("More Settings");
 
         Return returnSettings = shipper.getReturns();
@@ -904,7 +897,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperReturnsSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("More Settings");
 
         Return returnSettings = shipper.getReturns();
@@ -932,7 +925,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperQoo10Settings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("Integrations");
 
         Qoo10 qoo10 = shipper.getQoo10();
@@ -947,7 +940,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperQoo10SettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("Integrations");
 
         Qoo10 qoo10 = shipper.getQoo10();
@@ -963,7 +956,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperShopifySettings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("Integrations");
 
         Shopify shopify = shipper.getShopify();
@@ -984,7 +977,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperShopifySettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("Integrations");
 
         Shopify shopify = shipper.getShopify();
@@ -1012,7 +1005,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperMagentoSettings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("Integrations");
 
         Magento magento = shipper.getMagento();
@@ -1028,7 +1021,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperMagentoSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("Integrations");
 
         Magento magento = shipper.getMagento();
@@ -1077,7 +1070,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         }
     }
 
-    public void waitUntilPageLoaded(String expectedUrlEndsWith)
+  /*  public void waitUntilPageLoaded(String expectedUrlEndsWith)
     {
         super.waitUntilPageLoaded();
 
@@ -1090,19 +1083,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         waitUntilInvisibilityOfElementLocated("//tab-content[@aria-hidden='false']//md-content[@ng-if='ctrl.state.loading === true']//md-progress-circular");
     }
-
+*/
     public void addNewPricingScript(Shipper shipper)
     {
-        String currentWindowHandle = getWebDriver().getWindowHandle();
-        Set<String> windowHandles = getWebDriver().getWindowHandles();
-
-        for (String windowHandle : windowHandles)
-        {
-            if(!windowHandle.equalsIgnoreCase(currentWindowHandle))
-            {
-                getWebDriver().switchTo().window(windowHandle);
-            }
-        }
+        String currentWindowHandle = switchToNewWindow();
 
         Pricing pricing = shipper.getPricing();
 
@@ -1137,16 +1121,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void editPricingScript(Shipper shipper)
     {
-        String currentWindowHandle = getWebDriver().getWindowHandle();
-        Set<String> windowHandles = getWebDriver().getWindowHandles();
-
-        for (String windowHandle : windowHandles)
-        {
-            if(!windowHandle.equalsIgnoreCase(currentWindowHandle))
-            {
-                getWebDriver().switchTo().window(windowHandle);
-            }
-        }
+        String currentWindowHandle = switchToNewWindow();
 
         Pricing pricing = shipper.getPricing();
 
@@ -1178,16 +1153,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyPricingScriptIsActive()
     {
-        String currentWindowHandle = getWebDriver().getWindowHandle();
-        Set<String> windowHandles = getWebDriver().getWindowHandles();
-
-        for (String windowHandle : windowHandles)
-        {
-            if(!windowHandle.equalsIgnoreCase(currentWindowHandle))
-            {
-                getWebDriver().switchTo().window(windowHandle);
-            }
-        }
+        String currentWindowHandle = switchToNewWindow();
 
         clickTabItem(" Pricing and Billing");
 

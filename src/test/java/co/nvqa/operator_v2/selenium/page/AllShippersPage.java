@@ -6,8 +6,6 @@ import co.nvqa.commons.model.shipper.v2.Shipper;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 
-import java.util.Set;
-
 /**
  * @author Daniel Joi Partogi Hutapea
  */
