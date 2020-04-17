@@ -157,11 +157,11 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
                 break;
 
             case "pending shipment" :
-                assertEquals("Error Message is not the same : ", errorMessage, f("shipment %d is [Pending], please inbound into van first", shipmentId));
+                assertTrue("Error Message is different : ", errorMessage.contains(f("shipment %d is [Pending]", shipmentId)));
                 break;
 
             case "closed shipment" :
-                assertEquals("Error Message is not the same : ", errorMessage, f("shipment %d is [Closed], please inbound into van first", shipmentId));
+                assertTrue("Error Message is not the same : ", errorMessage.contains(f("shipment %d is [Closed]", shipmentId)));
                 break;
         }
     }
