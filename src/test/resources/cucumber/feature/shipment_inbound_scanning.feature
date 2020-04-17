@@ -284,6 +284,200 @@ Feature: Shipment Inbound Scanning
     Then Operator verify inbounded Shipment exist on Shipment Management page
 
   @DeleteShipment
+  Scenario: Validation INTO HUB Inbound When Shipment Status is PENDING/CLOSED - INTO HUB When Shipment Status is PENDING and Selected Hub is Destination Hub (uid:b79cb4e8-7374-4334-b13b-a55404bf29c0)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
+    When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
+    When Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify inbounded Shipment exist on Shipment Management page
+
+  @DeleteShipment
+  Scenario: Validation INTO HUB Inbound When Shipment Status is PENDING/CLOSED - INTO HUB When Shipment Status is PENDING and Selected Hub is Not Destination Hub (uid:f7bfe41b-661a-425c-a618-0f928f032444)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page
+    When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
+    When Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify inbounded Shipment exist on Shipment Management page
+
+  @DeleteShipment @ForceSuccessOrder
+  Scenario: Validation INTO HUB Inbound When Shipment Status is PENDING/CLOSED - INTO HUB When Shipment Status is CLOSED and Selected Hub is Destination Hub (uid:c23346e9-9398-46e6-8316-00e5b6c4e30e)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    When Operator scan the created order to shipment in hub {hub-name}
+    And Operator close the shipment which has been created
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Closed on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page
+    When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
+    When Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify inbounded Shipment exist on Shipment Management page
+
+  @DeleteShipment @ForceSuccessOrder
+  Scenario: Validation INTO HUB Inbound When Shipment Status is PENDING/CLOSED - INTO HUB When Shipment Status is CLOSED and Selected Hub is Not Destination Hub (uid:0cd2c98f-f1cf-425c-9e4d-28a54042f933)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    When Operator scan the created order to shipment in hub {hub-name}
+    And Operator close the shipment which has been created
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Shipment Status = Closed on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page
+    When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
+    When Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify inbounded Shipment exist on Shipment Management page
+
+  @DeleteShipment
+  Scenario: Validation INTO HUB Inbound When Shipment Status is PENDING/CLOSED - Scan MAWB INTO HUB When ALL Shipment Status is PENDING and Selected Hub is Destination Hub (uid:b3327227-8d08-4fcb-87c1-6c461e63c5d7)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator click "Load All Selection" on Shipment Management page
+    When Operator edit Shipment on Shipment Management page including MAWB using data below:
+      | destHubName | {hub-name-2}                                                         |
+      | origHubName | {hub-name}                                                           |
+      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page using MAWB
+    When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
+    When Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify inbounded Shipment exist on Shipment Management page
+
+  @DeleteShipment
+  Scenario: Validation INTO HUB Inbound When Shipment Status is PENDING/CLOSED - Scan MAWB INTO HUB When ALL Shipment Status is PENDING and Selected Hub is Not Destination Hub (uid:b47c0670-f97b-4deb-ab8c-94fb4df0785b)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator click "Load All Selection" on Shipment Management page
+    When Operator edit Shipment on Shipment Management page including MAWB using data below:
+      | destHubName | {hub-name-2}                                                         |
+      | origHubName | {hub-name}                                                           |
+      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page using MAWB
+    When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
+    When Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify inbounded Shipment exist on Shipment Management page
+
+  @DeleteShipment @ForceSuccessOrder
+  Scenario: Validation INTO HUB Inbound When Shipment Status is PENDING/CLOSED - Scan MAWB INTO HUB When ALL Shipment Status is CLOSED and Selected Hub is Destination Hub (uid:ee38c210-79d2-4f3e-8700-f8d428682ddf)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator click "Load All Selection" on Shipment Management page
+    When Operator edit Shipment on Shipment Management page including MAWB using data below:
+      | destHubName | {hub-name-2}                                                         |
+      | origHubName | {hub-name}                                                           |
+      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    When Operator scan the created order to shipment in hub {hub-name}
+    And Operator close the shipment which has been created
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name-2} on Shipment Inbound Scanning page using MAWB
+    When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Last Inbound Hub = {hub-name-2} on Shipment Management page
+    When Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify inbounded Shipment exist on Shipment Management page
+
+  @DeleteShipment @ForceSuccessOrder
+  Scenario: Validation INTO HUB Inbound When Shipment Status is PENDING/CLOSED - Scan MAWB INTO HUB When ALL Shipment Status is CLOSED and Selected Hub is Not Destination Hub (uid:4cd63c1a-a502-4237-b5e6-a5d525528666)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator click "Load All Selection" on Shipment Management page
+    When Operator edit Shipment on Shipment Management page including MAWB using data below:
+      | destHubName | {hub-name-2}                                                         |
+      | origHubName | {hub-name}                                                           |
+      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    When Operator scan the created order to shipment in hub {hub-name}
+    And Operator close the shipment which has been created
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
+    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page using MAWB
+    When Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
+    When Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify inbounded Shipment exist on Shipment Management page
+
+  @DeleteShipment
   Scenario: Validation for Shipment Transit - Validation INTO VAN Inbound When Shipment Status id COMPLETED (uid:ed743693-ddba-49dc-b0e1-6a1af51ade9d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
