@@ -503,8 +503,8 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
         public void toggleComingStatus(int rowNumber)
         {
             String xpath = String.format(LOCATOR_COMING_TOGGLE, getMdVirtualRepeat(), rowNumber);
-            WebElement element = webDriver.findElement(By.xpath(xpath));
-            element.click();
+            waitUntilElementIsClickable(xpath);
+            click(xpath);
         }
     }
 }
