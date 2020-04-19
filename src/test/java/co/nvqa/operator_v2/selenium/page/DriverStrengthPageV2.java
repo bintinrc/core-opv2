@@ -4,9 +4,7 @@ import co.nvqa.operator_v2.model.DriverInfo;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.text.ParseException;
 
