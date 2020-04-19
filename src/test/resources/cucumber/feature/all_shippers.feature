@@ -326,6 +326,191 @@ Feature: All Shippers
 #    When Operator clear browser cache and reload All Shipper page
 #    Then Operator verify the shipper is deleted successfully
 
+  Scenario: Search Shipper By Filters - Filter shipper by liaison email (uid:c707e715-e501-4e21-92c1-325e6311107d)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator clears all filters on All Shippers page
+    And Operator chooses "Liaison Email" filter
+    Then Operator searches the "Liaison Email" field with "Ninja" keyword
+    Then Operator verifies that the results have keyword "Ninja" in "Liaison Email" column
+
+  Scenario: Search Shipper By Filters - Filter shipper by email (uid:7fdb0918-445b-468e-a073-2176a41380b8)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator clears all filters on All Shippers page
+    And Operator chooses "Email" filter
+    Then Operator searches the "Email" field with "Ninja" keyword
+    Then Operator verifies that the results have keyword "Ninja" in "Email" column
+
+  Scenario: Search Shipper By Filters - Filter shipper by contact (uid:290eaaf7-1de5-4fa3-ac83-10cd7ef14017)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator clears all filters on All Shippers page
+    And Operator chooses "Contact" filter
+    Then Operator searches the "Contact" field with "12345" keyword
+    Then Operator verifies that the results have keyword "12345" in "Contact" column
+
+  Scenario: Search Shipper By Filters - Filter shipper by active (uid:3759c2f5-aae6-4750-99d4-8ce7891cdcde)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator clears all filters on All Shippers page
+    And Operator chooses "Active" filter
+    Then Operator searches for Shippers with Active filter
+    Then Operator verifies that the results have keyword "Active" in "Status" column
+
+  Scenario: Search Shipper By Filters - Filter shipper by shipper (uid:d9277915-be40-416e-a261-56d922de63c2)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator clears all filters on All Shippers page
+    And Operator chooses "Shipper" filter
+    Then Operator searches the "Shipper" field with "Ninja" keyword
+    Then Operator verifies that the results have keyword "Ninja" in "Name" column
+
+  Scenario: Search Shipper By Filters - Filter shipper by Industry (uid:cf411a95-3671-41a8-aa7c-66bee60d6fd9)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator clears all filters on All Shippers page
+    And Operator chooses "Industry" filter
+    Then Operator searches the "Industry" field with "Fashion" keyword
+    Then Operator verifies that the results have keyword "Fashion" in "Industry" column
+
+  Scenario: Search Shipper By Filters - Filter shipper by Salesperson (uid:45ed77f2-8966-4418-ac10-adb43511733f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator clears all filters on All Shippers page
+    And Operator chooses "Salesperson" filter
+    Then Operator searches the "Salesperson" field with "TS1" keyword
+    Then Operator verifies that the results have keyword "TS1" in "Salesperson" column
+
+  Scenario: Search Shipper By Filters - Search shipper by quick search (uid:27555f18-3308-4b5a-b33b-2b1394c355c9)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator clears all filters on All Shippers page
+    And Operator searches for keyword "Ninja" in quick search filter
+    Then Operator verifies that the results have keyword "Ninja" in "Name" column
+
+  Scenario: Add New Shipper Pricing Profile (uid:e3bae772-87e8-4fbc-9698-c590871b4cdd)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                       |
+      | shipperType                  | Normal                     |
+      | ocVersion                    | v4                         |
+      | services                     | STANDARD                   |
+      | trackingType                 | Fixed                      |
+      | isAllowCod                   | true                       |
+      | isAllowCashPickup            | true                       |
+      | isPrepaid                    | true                       |
+      | isAllowStagedOrders          | true                       |
+      | isMultiParcelShipper         | true                       |
+      | isDisableDriverAppReschedule | true                       |
+      | pricingScriptName            | {pricing-script-name}      |
+      | industryName                 | {industry-name}            |
+      | salesPerson                  | {sales-person}             |
+    And Operator edits the created shipper
+    Then Operator adds new Shipper's Pricing Script
+      | pricingScriptName            | 2402 - New Script                 |
+      | discount                     | 20                                |
+      | comments                     | This is a test pricing script     |
+    When DB Operator soft delete shipper by Legacy ID
+    Then Operator verify the shipper is deleted successfully
+
+  Scenario: Edit Shipper Pricing Profile (uid:bbe028d2-f43d-4de1-a394-f53b68344aa5)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                       |
+      | shipperType                  | Normal                     |
+      | ocVersion                    | v4                         |
+      | services                     | STANDARD                   |
+      | trackingType                 | Fixed                      |
+      | isAllowCod                   | true                       |
+      | isAllowCashPickup            | true                       |
+      | isPrepaid                    | true                       |
+      | isAllowStagedOrders          | true                       |
+      | isMultiParcelShipper         | true                       |
+      | isDisableDriverAppReschedule | true                       |
+      | pricingScriptName            | {pricing-script-name}      |
+      | industryName                 | {industry-name}            |
+      | salesPerson                  | {sales-person}             |
+    And Operator edits the created shipper
+    Then Operator adds new Shipper's Pricing Script
+      | pricingScriptName            | 2402 - New Script                 |
+      | discount                     | 20                                |
+      | comments                     | This is a test pricing script     |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    And Operator edits the created shipper
+    Then Operator edits the Pending Pricing Script
+      | discount                     | 30                                |
+      | comments                     | Edited test pricing script        |
+    When DB Operator soft delete shipper by Legacy ID
+    Then Operator verify the shipper is deleted successfully
+
+  Scenario: Create a new Shipper - Pricing & Billing tab (uid:d86f2bd2-94ee-406c-b80e-224f54e00e0a)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                       |
+      | shipperType                  | Normal                     |
+      | ocVersion                    | v4                         |
+      | services                     | STANDARD                   |
+      | trackingType                 | Fixed                      |
+      | isAllowCod                   | true                       |
+      | isAllowCashPickup            | true                       |
+      | isPrepaid                    | true                       |
+      | isAllowStagedOrders          | true                       |
+      | isMultiParcelShipper         | true                       |
+      | isDisableDriverAppReschedule | true                       |
+      | pricingScriptName            | {pricing-script-name}      |
+      | industryName                 | {industry-name}            |
+      | salesPerson                  | {sales-person}             |
+    And Operator edits the created shipper
+    Then Operator verifies that Pricing Script is active
+    When DB Operator soft delete shipper by Legacy ID
+    Then Operator verify the shipper is deleted successfully
+
+  Scenario: Create a new Shipper - Pricing & Billing tab - Update the Pricing Profile before Created (uid:74107efb-4c18-4468-9c0c-cf4f12f3d5fb)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings and updates pricing script using data below:
+      | isShipperActive              | true                       |
+      | shipperType                  | Normal                     |
+      | ocVersion                    | v4                         |
+      | services                     | STANDARD                   |
+      | trackingType                 | Fixed                      |
+      | isAllowCod                   | true                       |
+      | isAllowCashPickup            | true                       |
+      | isPrepaid                    | true                       |
+      | isAllowStagedOrders          | true                       |
+      | isMultiParcelShipper         | true                       |
+      | isDisableDriverAppReschedule | true                       |
+      | pricingScriptName            | {pricing-script-name}      |
+      | industryName                 | {industry-name}            |
+      | salesPerson                  | {sales-person}             |
+    And Operator edits the created shipper
+    Then Operator verifies that Pricing Script is active
+    When DB Operator soft delete shipper by Legacy ID
+    Then Operator verify the shipper is deleted successfully
+
+  Scenario: Create a new Shipper - Pricing & Billing tab - No Pricing Profile (uid:1d0199fc-6fb9-4d54-a32d-65b701799c7f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings and without Pricing profile using data below:
+      | isShipperActive              | true                       |
+      | shipperType                  | Normal                     |
+      | ocVersion                    | v4                         |
+      | services                     | STANDARD                   |
+      | trackingType                 | Fixed                      |
+      | isAllowCod                   | true                       |
+      | isAllowCashPickup            | true                       |
+      | isPrepaid                    | true                       |
+      | isAllowStagedOrders          | true                       |
+      | isMultiParcelShipper         | true                       |
+      | isDisableDriverAppReschedule | true                       |
+      | industryName                 | {industry-name}            |
+      | salesPerson                  | {sales-person}             |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Shipper;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -25,6 +26,16 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
     public static final String ACTION_BUTTON_LOGIN = "container.shippers.shipper-dashboard-login";
+    public static final String ARIA_LABEL_CLEAR_ALL_SELECTIONS = "Clear All Selections";
+    public static final String XPATH_SELECT_FILTER = "//input[@aria-label='Select Filter']";
+    public static final String ARIA_LABEL_LOAD_SELECTION = "Load Selection";
+    public static final String XPATH_FOR_FILTER = "//span[text()='%s']/ancestor::li";
+    public static final String XPATH_FOR_INDIVIDUAL_FILTER = "//p[text()='%s']/parent::div/following-sibling::div//input";
+    public static final String XPATH_FOR_COLUMNS = "//table[@class='table-body']//tr[1]/td[@class='%s']";
+    public static final String XPATH_ACTIVE_FILTER = "//p[text()='Active']/parent::div/following-sibling::div//span[text()='Yes']/parent::button";
+    public static final String XPATH_HIDE_BUTTON = "//div[contains(text(),'Hide')]/following-sibling::i";
+    public static final String XPATH_SEARCH_TERM = "//input[@aria-label='Search term']";
+    public static final String XPATH_QUICK_SEARCH_AUTOCOMPLETE_LIST = "//ul[@class='md-autocomplete-suggestions']/li[1]";
 
     private final AllShippersCreateEditPage allShippersCreateEditPage;
 
@@ -52,6 +63,20 @@ public class AllShippersPage extends OperatorV2SimplePage
         waitUntilPageLoaded();
         clickNvIconTextButtonByName("container.shippers.create-shipper");
         allShippersCreateEditPage.createNewShipper(shipper);
+    }
+
+    public void createNewShipperWithUpdatedPricingScript(Shipper shipper)
+    {
+        waitUntilPageLoaded();
+        clickNvIconTextButtonByName("container.shippers.create-shipper");
+        allShippersCreateEditPage.createNewShipperWithUpdatedPricingScript(shipper);
+    }
+
+    public void createNewShipperWithoutPricingScript(Shipper shipper)
+    {
+        waitUntilPageLoaded();
+        clickNvIconTextButtonByName("container.shippers.create-shipper");
+        allShippersCreateEditPage.createNewShipperWithoutPricingScript(shipper);
     }
 
     public void verifyNewShipperIsCreatedSuccessfully(Shipper shipper)
@@ -249,4 +274,107 @@ public class AllShippersPage extends OperatorV2SimplePage
     {
         clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
     }
+
+    public void clearAllSelections()
+    {
+        pause1s();
+        clickButtonByAriaLabel(ARIA_LABEL_CLEAR_ALL_SELECTIONS);
+    }
+
+    public void chooseFilter(String filter)
+    {
+        click(XPATH_SELECT_FILTER);
+        clickf(XPATH_FOR_FILTER, filter);
+    }
+
+    public void searchByFilterWithKeyword(String filter, String keyword)
+    {
+        String xpathForFilter = f(XPATH_FOR_INDIVIDUAL_FILTER, filter);
+        click(xpathForFilter);
+        sendKeys(xpathForFilter, keyword);
+        pause1s();
+        sendKeysWithoutClear(xpathForFilter, Keys.RETURN);
+        if(isElementVisible(XPATH_HIDE_BUTTON))
+        {
+            click(XPATH_HIDE_BUTTON);
+        }
+        clickButtonByAriaLabel(ARIA_LABEL_LOAD_SELECTION);
+    }
+
+    public void searchActiveFilter()
+    {
+        click(XPATH_ACTIVE_FILTER);
+        clickButtonByAriaLabel(ARIA_LABEL_LOAD_SELECTION);
+    }
+
+
+    public void verifiesResultsOfColumn(String keyword, String column)
+    {
+        String columnXpath = null;
+        if(column.equalsIgnoreCase("Liaison Email"))
+        {
+            columnXpath = f(XPATH_FOR_COLUMNS, "liaison_email");
+        }
+        else if(column.equalsIgnoreCase("Email"))
+        {
+            columnXpath = f(XPATH_FOR_COLUMNS, "email");
+        }
+        else if(column.equalsIgnoreCase("Contact"))
+        {
+            columnXpath = f(XPATH_FOR_COLUMNS, "contact");
+        }
+        else if(column.equalsIgnoreCase("Status"))
+        {
+            columnXpath = f(XPATH_FOR_COLUMNS, "_status");
+        }
+        else if(column.equalsIgnoreCase("Industry"))
+        {
+            columnXpath = f(XPATH_FOR_COLUMNS, "_industry");
+        }
+        else if(column.equalsIgnoreCase("Salesperson"))
+        {
+            columnXpath = f(XPATH_FOR_COLUMNS, "sales_person");
+        }
+        else if(column.equalsIgnoreCase("Name"))
+        {
+            columnXpath = f(XPATH_FOR_COLUMNS, "name");
+        }
+        String text = getText(columnXpath);
+        assertTrue("The keyword is found on the respective column", text.toLowerCase().contains(keyword.toLowerCase()));
+    }
+
+    public void quickSearchShipper(String keyword)
+    {
+        moveToElementWithXpath(XPATH_SEARCH_TERM);
+        sendKeys(XPATH_SEARCH_TERM, keyword);
+        pause1s();
+        click(XPATH_QUICK_SEARCH_AUTOCOMPLETE_LIST);
+    }
+
+    public void editShipper(Shipper shipper)
+    {
+        quickSearchShipper(shipper.getName());
+        pause2s();
+        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        pause5s();
+    }
+
+    public void addNewPricingScript(Shipper shipper)
+    {
+        waitUntilPageLoaded();
+        allShippersCreateEditPage.addNewPricingScript(shipper);
+    }
+
+    public void editPricingScript(Shipper shipper)
+    {
+        waitUntilPageLoaded();
+        allShippersCreateEditPage.editPricingScript(shipper);
+    }
+
+    public void verifyPricingScriptIsActive()
+    {
+        waitUntilPageLoaded();
+        allShippersCreateEditPage.verifyPricingScriptIsActive();
+    }
+
 }

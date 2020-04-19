@@ -18,6 +18,7 @@ import co.nvqa.commons.model.shipper.v2.Shopify;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +28,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,20 +42,102 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public static final String ACTION_BUTTON_SET_AS_DEFAULT = "Set as Default";
     public static final String LOCATOR_FIELD_OC_VERSION = "ctrl.data.basic.ocVersion";
-    public static final String LOCATOR_FIELD_PRICING_SCRIPT = "commons.pricing-script";
+    public static final String LOCATOR_FIELD_PRICING_SCRIPT = "container.shippers.pricing-billing-pricing-scripts";
     public static final String LOCATOR_FIELD_INDUSTRY = "ctrl.data.basic.industry";
-    public static final String LOCATOR_FIELD_SALES_PERSON = "container.shippers.oc-sales-person";
+    public static final String LOCATOR_FIELD_SALES_PERSON = "salesperson";
     public static final String LOCATOR_FIELD_CHANNEL = "ctrl.data.basic.shipperClassification";
     public static final String LOCATOR_FIELD_ACCOUNT_TYPE = "ctrl.data.basic.accountType";
+    public static final String XPATH_SAVE_CHANGES_PRICING_SCRIPT = "//form//button[@aria-label='Save Changes']";
+    public static final String XPATH_DISCOUNT_VALUE = "//input[@id='discount-value']";
+    public static final String ARIA_LABEL_COMMENTS = "Comments";
+    public static final String XPATH_PRICING_PROFILE_STATUS = "//table[@class='table-body']//td[contains(text(),'New Script')]/following-sibling::td[contains(@class,'status')]";
+    public static final String XPATH_ACTIVE_PRICING_PROFILE_STATUS = "//table[@class='table-body']//td[@class='status']";
+    public static final String LOCATOR_END_DATE = "container.shippers.pricing-billing-end-date";
+    public static final String LOCATOR_START_DATE = "container.shippers.pricing-billing-start-date";
+    public static final String XPATH_VALIDATION_ERROR = "//div[@class='error-box']//div[@class='content']";
+    public static final String XPATH_SHIPPER_INFORMATION = "//div[text()='Shipper Information']";
 
     public AllShippersCreateEditPage(WebDriver webDriver)
     {
         super(webDriver);
     }
 
+    public void waitUntilShipperCreateEditPageIsLoaded()
+    {
+        waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+    }
+
+    public String switchToNewWindow()
+    {
+        waitUntilNewWindowOrTabOpened();
+        String currentWindowHandle = getWebDriver().getWindowHandle();
+        Set<String> windowHandles = getWebDriver().getWindowHandles();
+
+        for (String windowHandle : windowHandles)
+        {
+            if(!windowHandle.equalsIgnoreCase(currentWindowHandle))
+            {
+                getWebDriver().switchTo().window(windowHandle);
+            }
+        }
+
+        return currentWindowHandle;
+    }
+
     public void createNewShipper(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/create");
+        String currentWindowHandle = switchToNewWindow();
+
+        waitUntilShipperCreateEditPageIsLoaded();
+        pause2s();
+        fillBasicSettingsForm(shipper);
+        fillMoreSettingsForm(shipper);
+
+        if(shipper.getMarketplaceDefault()!=null)
+        {
+            fillMarketplaceSettingsForm(shipper);
+        }
+
+        fillPricingAndBillingForm(shipper);
+
+        clickNvIconTextButtonByName("container.shippers.create-shipper");
+        waitUntilInvisibilityOfToast("All changes saved successfully");
+        backToShipperList();
+        pause3s();
+        getWebDriver().switchTo().window(currentWindowHandle);
+    }
+
+    public void createNewShipperWithUpdatedPricingScript(Shipper shipper)
+    {
+        String currentWindowHandle = switchToNewWindow();
+
+        waitUntilShipperCreateEditPageIsLoaded();
+        pause2s();
+        fillBasicSettingsForm(shipper);
+        fillMoreSettingsForm(shipper);
+
+        if(shipper.getMarketplaceDefault()!=null)
+        {
+            fillMarketplaceSettingsForm(shipper);
+        }
+
+        fillPricingAndBillingForm(shipper);
+        updatePricingScript();
+
+        clickNvIconTextButtonByName("container.shippers.create-shipper");
+        waitUntilInvisibilityOfToast("All changes saved successfully");
+        backToShipperList();
+        pause3s();
+        getWebDriver().switchTo().window(currentWindowHandle);
+
+    }
+
+    public void createNewShipperWithoutPricingScript(Shipper shipper)
+    {
+        String currentWindowHandle = switchToNewWindow();
+
+        waitUntilShipperCreateEditPageIsLoaded();
+        pause2s();
         fillBasicSettingsForm(shipper);
         fillMoreSettingsForm(shipper);
 
@@ -63,14 +147,27 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         }
 
         clickNvIconTextButtonByName("container.shippers.create-shipper");
-        waitUntilInvisibilityOfToast("All changes saved successfully");
+        String errorText = getText(XPATH_VALIDATION_ERROR);
+        assertTrue("Error message is not displayed!", errorText.contains("Pricing and Billing"));
         backToShipperList();
         pause3s();
+        getWebDriver().switchTo().window(currentWindowHandle);
+    }
+
+    public void updatePricingScript()
+    {
+        click("//button[@aria-label='Edit Pending Profile']");
+        pause2s();
+        moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
+        sendKeys(XPATH_DISCOUNT_VALUE, "20");
+        sendKeysByAriaLabel(ARIA_LABEL_COMMENTS, "This is edited comment");
+        click(XPATH_SAVE_CHANGES_PRICING_SCRIPT);
+        pause1s();
     }
 
     public void updateShipper(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         fillBasicSettingsForm(shipper);
         clickNvIconTextButtonByName("Save Changes");
         waitUntilInvisibilityOfToast("All changes saved successfully");
@@ -179,7 +276,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         /*
           ===== PRICING & BILLING =====
          */
-        Pricing pricing = shipper.getPricing();
+     /*   Pricing pricing = shipper.getPricing();
 
         if(pricing!=null && StringUtils.isNotBlank(pricing.getScriptName()))
         {
@@ -191,6 +288,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         sendKeysById("Billing Contact", shipper.getBillingContact());
         sendKeysById("Billing Address", shipper.getBillingAddress());
         sendKeysById("Billing Postcode", shipper.getBillingPostcode());
+
+      */
     }
 
     private void fillMoreSettingsForm(Shipper shipper)
@@ -221,6 +320,32 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
             scrollIntoView("//md-select[contains(@id, 'commons.select')]", false);
             selectValueFromMdSelectByIdContains("commons.select", defaultPickupTimeSelector);
         }
+    }
+
+    private void fillPricingAndBillingForm(Shipper shipper)
+    {
+        /*  ===== PRICING & BILLING =====
+         */
+        Pricing pricing = shipper.getPricing();
+
+        if(pricing!=null)
+        {
+            clickTabItem(" Pricing and Billing");
+
+            if(pricing!=null && StringUtils.isNotBlank(pricing.getScriptName()))
+            {
+                click("//button[@aria-label='Add New Profile']");
+                pause2s();
+                selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT, pricing.getScriptName());
+                click(XPATH_SAVE_CHANGES_PRICING_SCRIPT);
+            }
+        }
+        // Billing
+        sendKeysById("Billing Name", shipper.getBillingName());
+        sendKeysById("Billing Contact", shipper.getBillingContact());
+        sendKeysById("Billing Address", shipper.getBillingAddress());
+        sendKeysById("Billing Postcode", shipper.getBillingPostcode());
+
     }
 
     private void addAddress(Address address)
@@ -379,7 +504,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void removeMilkrunReservarion(Shipper shipper, int addressIndex, int milkrunReservationIndex)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("More Settings");
 
         if(CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses()))
@@ -406,7 +531,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void removeAllMilkrunReservations(Shipper shipper, int addressIndex)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("More Settings");
         if(CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses()))
         {
@@ -424,7 +549,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void setPickupAddressesAsMilkrun(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("More Settings");
         if(CollectionUtils.isNotEmpty(shipper.getPickup().getReservationPickupAddresses()))
         {
@@ -447,7 +572,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyNewShipperIsCreatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         String actualShipperStatus = getToggleButtonValue("ctrl.data.basic.status");
         String actualShipperType;
 
@@ -605,7 +730,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void enableAutoReservationAndChangeShipperDefaultAddressToTheNewAddress(Shipper shipper, Address address, Reservation reservation)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("More Settings");
         addAddress(address);
         setAsDefaultAddress(address);
@@ -662,7 +787,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperLabelPrinterSettings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("Basic Settings");
 
         LabelPrinter labelPrinter = shipper.getLabelPrinter();
@@ -676,7 +801,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperLabelPrinterSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("Basic Settings");
 
         LabelPrinter labelPrinter = shipper.getLabelPrinter();
@@ -692,7 +817,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperDistributionPointSettings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("More Settings");
 
         DistributionPoint distributionPoint = shipper.getDistributionPoints();
@@ -717,7 +842,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperDistributionPointSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("More Settings");
 
         DistributionPoint distributionPoint = shipper.getDistributionPoints();
@@ -751,7 +876,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperReturnsSettings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("More Settings");
 
         Return returnSettings = shipper.getReturns();
@@ -772,7 +897,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperReturnsSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("More Settings");
 
         Return returnSettings = shipper.getReturns();
@@ -800,7 +925,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperQoo10Settings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("Integrations");
 
         Qoo10 qoo10 = shipper.getQoo10();
@@ -815,7 +940,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperQoo10SettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("Integrations");
 
         Qoo10 qoo10 = shipper.getQoo10();
@@ -831,7 +956,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperShopifySettings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("Integrations");
 
         Shopify shopify = shipper.getShopify();
@@ -852,7 +977,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperShopifySettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("Integrations");
 
         Shopify shopify = shipper.getShopify();
@@ -880,7 +1005,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updateShipperMagentoSettings(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("Integrations");
 
         Magento magento = shipper.getMagento();
@@ -896,7 +1021,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyShipperMagentoSettingsIsUpdatedSuccessfully(Shipper shipper)
     {
-        waitUntilPageLoaded("shippers/" + shipper.getLegacyId());
+        waitUntilShipperCreateEditPageIsLoaded();
         clickTabItem("Integrations");
 
         Magento magento = shipper.getMagento();
@@ -914,14 +1039,14 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void backToShipperList()
     {
-        clickNvIconTextButtonByName("container.shippers.back-to-shipper-list");
-
+        clickNvIconTextButtonByName("commons.discard-changes");
+        pause2s();
         if(isElementExistFast("//md-dialog//button[@aria-label='Leave']"))
         {
             clickButtonOnMdDialogByAriaLabel("Leave");
         }
 
-        waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading shippers...']");
+       // waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading shippers...']");
     }
 
     public void searchTableAddressByAddress(String address)
@@ -945,7 +1070,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         }
     }
 
-    public void waitUntilPageLoaded(String expectedUrlEndsWith)
+  /*  public void waitUntilPageLoaded(String expectedUrlEndsWith)
     {
         super.waitUntilPageLoaded();
 
@@ -957,5 +1082,86 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS, f("Current URL does not contain '%s'.", expectedUrlEndsWith));
 
         waitUntilInvisibilityOfElementLocated("//tab-content[@aria-hidden='false']//md-content[@ng-if='ctrl.state.loading === true']//md-progress-circular");
+    }
+*/
+    public void addNewPricingScript(Shipper shipper)
+    {
+        String currentWindowHandle = switchToNewWindow();
+
+        Pricing pricing = shipper.getPricing();
+
+        if(pricing!=null)
+        {
+            clickTabItem(" Pricing and Billing");
+
+            if(pricing!=null && StringUtils.isNotBlank(pricing.getScriptName()))
+            {
+                click("//button[@aria-label='Add New Profile']");
+                pause2s();
+                setMdDatepickerById("container.shippers.pricing-billing-start-date", TestUtils.getNextDate(1));
+                setMdDatepickerById("container.shippers.pricing-billing-end-date", TestUtils.getNextDate(10));
+                selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT, pricing.getScriptName());
+                moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
+                sendKeys(XPATH_DISCOUNT_VALUE, pricing.getDiscount());
+                sendKeysByAriaLabel(ARIA_LABEL_COMMENTS, pricing.getComments());
+                click(XPATH_SAVE_CHANGES_PRICING_SCRIPT);
+                pause1s();
+            }
+        }
+
+        String status = getText(XPATH_PRICING_PROFILE_STATUS);
+        assertEquals("Status is not Pending ", status, "Pending");
+
+        clickNvIconTextButtonByName("Save Changes");
+
+        backToShipperList();
+        pause3s();
+        getWebDriver().switchTo().window(currentWindowHandle);
+    }
+
+    public void editPricingScript(Shipper shipper)
+    {
+        String currentWindowHandle = switchToNewWindow();
+
+        Pricing pricing = shipper.getPricing();
+
+        if(pricing!=null)
+        {
+            clickTabItem(" Pricing and Billing");
+
+            if(pricing!=null && StringUtils.isNotBlank(pricing.getScriptName()))
+            {
+                click("//button[@aria-label='Edit Pending Profile']");
+                pause2s();
+                setMdDatepickerById(LOCATOR_END_DATE, TestUtils.getNextDate(15));
+                setMdDatepickerById(LOCATOR_START_DATE, TestUtils.getNextWorkingDay());
+                moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
+                sendKeys(XPATH_DISCOUNT_VALUE, pricing.getDiscount());
+                sendKeysByAriaLabel(ARIA_LABEL_COMMENTS, pricing.getComments());
+                click(XPATH_SAVE_CHANGES_PRICING_SCRIPT);
+                pause1s();
+            }
+        }
+
+        String status = getText(XPATH_PRICING_PROFILE_STATUS);
+        assertEquals("Status is not Pending ", status, "Pending");
+
+        backToShipperList();
+        pause3s();
+        getWebDriver().switchTo().window(currentWindowHandle);
+    }
+
+    public void verifyPricingScriptIsActive()
+    {
+        String currentWindowHandle = switchToNewWindow();
+
+        clickTabItem(" Pricing and Billing");
+
+        String status = getText(XPATH_ACTIVE_PRICING_PROFILE_STATUS);
+        assertEquals("Status is not Active ", status, "Active");
+
+        backToShipperList();
+        pause3s();
+        getWebDriver().switchTo().window(currentWindowHandle);
     }
 }
