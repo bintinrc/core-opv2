@@ -460,7 +460,7 @@ Feature: Parcel Sweeper Live
       | status | 3 |
 
   @DeleteOrArchiveRoute
-  Scenario: Add Parcel Sweeper Live - Pickup Fail
+  Scenario: Add Parcel Sweeper Live - Pickup Fail (uid:41b05d2e-ea25-48fc-81bd-b326321aca69)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -497,7 +497,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Pickup Fail" on Edit Order page
 
   @DeleteOrArchiveRoute
-  Scenario: Add Parcel Sweeper Live - En-route to Sorting Hub
+  Scenario: Add Parcel Sweeper Live - En-route to Sorting Hub (uid:5b520d7a-51d3-427a-89b7-43ec63e707f8)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -538,7 +538,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
 
-  Scenario: Add Parcel Sweeper Live - Arrived at Sorting Hub
+  Scenario: Add Parcel Sweeper Live - Arrived at Sorting Hub (uid:bcdec68a-2619-48e3-8043-43f7bfe266b7)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
