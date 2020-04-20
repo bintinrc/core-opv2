@@ -21,8 +21,8 @@ public class BatchOrderPage extends OperatorV2SimplePage
     public static final String COLUMN_CLASS_DATA_TO = "c_to";
     public static final String COLUMN_CLASS_DATA_STATUS = "status";
     public static final String COLUMN_CLASS_DATA_CREATED_AT = "c_created_at";
-
     private static final String ERROR_TOAST_INVALID_BATCH_ID_XPATH = "//div[contains(@class,'toast-error')]//strong[text()='Order batch with batch id %s not found!']";
+    private static final String ERROR_TOAST_INVALID_ORDER_STATUS_XPATH = "//div[contains(@class,'toast-error')]//strong[contains(text(),'delete order %s in Cancelled state. Order can only be deleted if in the following states : [Staging, Pending Pickup, Van en-route to pickup, Pickup fail]')]";
     private static final String ROLLBACK_BUTTON_XPATH = "//md-dialog-actions//button[@aria-label='Rollback']";
 
     public BatchOrderPage(WebDriver webDriver)
@@ -77,5 +77,10 @@ public class BatchOrderPage extends OperatorV2SimplePage
         clickButtonByAriaLabel("Rollback");
         sendKeysByAriaLabel("Password", "1234567890");
         click(ROLLBACK_BUTTON_XPATH);
+    }
+
+    public void verifyTheInvalidStatusToast(String trackingId)
+    {
+        waitUntilVisibilityOfElementLocated(ERROR_TOAST_INVALID_ORDER_STATUS_XPATH, trackingId);
     }
 }
