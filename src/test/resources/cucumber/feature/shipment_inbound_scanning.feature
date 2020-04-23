@@ -862,11 +862,9 @@ Feature: Shipment Inbound Scanning
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
-    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
     When Operator change the country to "Indonesia"
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
     When Operator change the country to "Singapore"
 
   @DeleteShipment
@@ -880,7 +878,7 @@ Feature: Shipment Inbound Scanning
       | status | Completed |
     When Operator change the country to "Indonesia"
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
     When Operator change the country to "Singapore"
 
   @DeleteShipment
@@ -894,7 +892,7 @@ Feature: Shipment Inbound Scanning
       | status | Cancelled |
     When Operator change the country to "Indonesia"
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
+    When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
     When Operator change the country to "Singapore"
 
   @DeleteShipment
@@ -1009,7 +1007,7 @@ Feature: Shipment Inbound Scanning
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page with pending shipment alert
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page
 
   @DeleteShipment
   Scenario: Validation INTO HUB Inbound when Status of Shipment in CLOSED (uid:b79f468e-0b95-40d2-9fab-1e236d285933)
@@ -1028,7 +1026,7 @@ Feature: Shipment Inbound Scanning
     When Operator scan the created order to shipment in hub {hub-name}
     And Operator close the shipment which has been created
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page with closed shipment alert
+    When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page
 
 #  Scenario: Change end date when inbound scanning (uid:6efa9d01-49d8-4515-b924-5805d34d587a)
 #    Given API Shipper create V4 order using data below:
