@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DpUser;
@@ -97,6 +98,7 @@ public class DpAdministrationSteps extends AbstractSteps
     {
         Dp expectedDpParams = get(KEY_DISTRIBUTION_POINT);
         dpAdminPage.verifyDpParams(expectedDpParams);
+        put(KEY_DISTRIBUTION_POINT_ID, expectedDpParams.getId());
     }
 
     @When("^Operator update created DP for the DP Partner on DP Administration page with the following attributes:$")
@@ -175,5 +177,13 @@ public class DpAdministrationSteps extends AbstractSteps
     {
         Dp dp = get(KEY_DISTRIBUTION_POINT);
         dpAdminPage.openViewUsersScreen(dp.getName());
+    }
+
+    @Then("^Operator verifies dp Params with database")
+    public void operatorVerifiesDpParamsWithDatabase()
+    {
+        DpDetailsResponse dbDpParams = get(KEY_DP_DB_DETAILS);
+        DpDetailsResponse apiDpParams = get(KEY_DP_DETAILS);
+        dpAdminPage.verifyDpParamsWithDB(dbDpParams, apiDpParams);
     }
 }

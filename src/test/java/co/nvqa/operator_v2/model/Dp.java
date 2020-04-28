@@ -41,6 +41,8 @@ public class Dp extends DataEntity<Dp>
     private String activity;
     private Double latitude;
     private Double longitude;
+    private String externalStoreId;
+    private String shipperId;
 
     public Dp()
     {
@@ -378,5 +380,25 @@ public class Dp extends DataEntity<Dp>
     public void setLongitude(Double longitude)
     {
         this.longitude = longitude;
+    }
+
+    public String getExternalStoreId()
+    {
+        return externalStoreId;
+    }
+
+    public void setExternalStoreId(String externalStoreId)
+    {
+        this.externalStoreId = externalStoreId;
+    }
+
+    public String getShipperId()
+    {
+        return shipperId;
+    }
+
+    public void setShipperId(String shipperId)
+    {
+        this.shipperId = shipperId;
     }
 }

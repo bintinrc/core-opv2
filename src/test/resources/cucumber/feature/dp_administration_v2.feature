@@ -52,23 +52,29 @@ Feature: DP Administration
       | restrictions | Created for test automation purposes |
     Given Operator go to menu Distribution Points -> DP Administration
     When Operator add new DP for the DP Partner on DP Administration page with the following attributes:
-      | name               | GENERATED                                                 |
-      | shortName          | TEST-DP                                                   |
-      | type               | Ninja Box                                                 |
-      | canShipperLodgeIn  | true                                                      |
-      | canCustomerCollect | true                                                      |
-      | maxCap             | 2                                                         |
-      | capBuffer          | 1                                                         |
-      | contactNo          | GENERATED                                                 |
-      | address1           | 1 JELEBU ROAD                                             |
-      | address2           | BUKIT PANJANG PLAZA, #01-32                               |
-      | unitNo             | 1                                                         |
-      | floorNo            | 1                                                         |
-      | city               | SG                                                        |
-      | country            | SG                                                        |
-      | postcode           | 677743                                                    |
-      | directions         | Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743 |
+      | name                   | GENERATED                                                 |
+      | shortName              | TEST-DP                                                   |
+      | contactNo              | GENERATED                                                 |
+      | externalStoreId        | TESTING-NewDP                                             |
+      | shipperId              | 129623                                                    |
+      | postcode               | 677743                                                    |
+      | city                   | SG                                                        |
+      | address1               | 1 JELEBU ROAD                                             |
+      | address2               | BUKIT PANJANG PLAZA, #01-32                               |
+      | floorNo                | 12                                                        |
+      | unitNo                 | 11                                                        |
+      | hub                    | JKB                                                       |
+      | type                   | Ninja Point                                               |
+      | directions             | Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743 |
+      | canShipperLodgeIn      | true                                                      |
+      | canCustomerCollect     | true                                                      |
+      | maxParcelStayDuration  | 2                                                         |
+      | maxCap                 | 1000000                                                   |
+      | capBuffer              | 1000000                                                   |
     Then Operator verify new DP params
+    When DB Operator fetches dp details
+    And API DP get the DP Details by DP ID
+    Then Operator verifies dp Params with database
 
   @DeleteDpAndPartner
   Scenario: Operator should be able to update a new DP on DP Administration page (uid:f3e7e39e-9b92-4ba4-a32f-6cb943b4a3e0)
@@ -84,10 +90,8 @@ Feature: DP Administration
     Given Operator go to menu Distribution Points -> DP Administration
     And Operator select View DPs action for created DP partner on DP Administration page
     When Operator update created DP for the DP Partner on DP Administration page with the following attributes:
-#      | shortName         | UPDATED-TEST-DP                                     | is not editable on the form
       | type              | Ninja Point                                         |
       | canShipperLodgeIn | false                                               |
-#      | canCustomerCollect | false                                               | causes 500 error
       | contactNo         | GENERATED                                           |
       | address1          | 311 NEW UPPER CHANGI ROAD                           |
       | address2          | BEDOK MALL, #B2-17/18                               |
@@ -96,6 +100,9 @@ Feature: DP Administration
       | postcode          | 467360                                              |
       | directions        | Home-Fix at Bedok Mall, #B2-17/18, Singapore 467360 |
     Then Operator verify new DP params
+    When DB Operator fetches dp details
+    And API DP get the DP Details by DP ID
+    Then Operator verifies dp Params with database
 
   @DeleteDpAndPartner
   Scenario: Operator should be able to download and verify DPs CSV file on DP Administration page (uid:2adb0efd-f26f-43a1-a250-008f74fe634b)
