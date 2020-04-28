@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
@@ -7,6 +8,7 @@ import co.nvqa.operator_v2.model.DpUser;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,45 @@ public class DpAdministrationPage extends OperatorV2SimplePage
     private static final String LOCATOR_BUTTON_ADD_DP_USER = "container.dp-administration.dp-users.add-title";
     private static final String LOCATOR_BUTTON_DOWNLOAD_CSV_FILE = "commons.download-csv";
     public static final String LOCATOR_SPINNER = "//md-progress-circular";
+
+    private static final String XPATH_PUDO_POINT_IFRAME = "//iframe[contains(@src,'pudo-point-form')]";
+    private static final String XPATH_SAVE_SETTINGS = "//span[text()='Save Settings']/parent::button";
+    private static final String XPATH_POINT_NAME = "//input[@id='name']";
+    private static final String XPATH_SHORT_NAME = "//input[@id='shortName']";
+    private static final String XPATH_CONTACT_NUMBER = "//input[@id='contact']";
+    private static final String XPATH_EXTERNAL_STORE_ID = "//input[@id='externalStoreId']";
+    private static final String XPATH_SHIPPER_ACCOUNT_ID = "//div[@id='shipperId']";
+    private static final String XPATH_INPUT_SHIPPER_ID = "//input[@id='shipperId']";
+    private static final String XPATH_POSTAL_CODE = "//input[@id='postalCode']";
+    private static final String XPATH_CITY = "//input[@id='city']";
+    private static final String XPATH_HUB_ID = "//div[@id='hubId']";
+    private static final String XPATH_INPUT_HUB_ID = "//input[@id='hubId']";
+    private static final String XPATH_POINT_ADDRESS_1 = "//input[@id='address1']";
+    private static final String XPATH_POINT_ADDRESS_2 = "//input[@id='address2']";
+    private static final String XPATH_FLOOR_NUMBER = "//input[@id='floorNumber']";
+    private static final String XPATH_UNIT_NUMBER = "//input[@id='unitNumber']";
+    private static final String XPATH_LATITUDE = "//input[@id='latitude']";
+    private static final String XPATH_LONGITUDE = "//input[@id='longitude']";
+    private static final String XPATH_TYPE = "//div[@id='type']";
+    private static final String XPATH_TYPE_OPTION = "//li[text()='%s']";
+    private static final String XPATH_DIRECTIONS = "//input[@id='directions']";
+    private static final String XPATH_ACTIVE_CHECKBOX = "//input[@id='isActive']";
+    private static final String XPATH_PUBLIC_CHECKBOX = "//input[@id='isPublic']";
+    private static final String XPATH_SEND_CHECKBOX = "//input[@id='isSend']";
+    private static final String XPATH_COLLECT_CHECKBOX = "//input[@id='isCollect']";
+    private static final String XPATH_MAXIMUM_CAPACITY = "//input[@id='actualMaxCapacity']";
+    private static final String XPATH_BUFFER_CAPACITY = "//input[@id='computedMaxCapacity']";
+    private static final String XPATH_MAXIMUM_PARCEL_STAY = "//input[@id='maxParcelStayDuration']";
+    private static final String XPATH_APPLY_ALL_DAYS = "(//span[text()='Apply to All Days']/ancestor::label//input)[%s]";
+    private static final String XPATH_OFFICIAL_FROM_HOURS = "//div[@id='reservationSlots.allWeek.startHour']";
+    private static final String XPATH_OFFICIAL_FROM_MINUTES = "//div[@id='reservationSlots.allWeek.startMinute']";
+    private static final String XPATH_OFFICIAL_TO_HOURS = "//div[@id='reservationSlots.allWeek.endHour']";
+    private static final String XPATH_OFFICIAL_TO_MINUTES = "//div[@id='reservationSlots.allWeek.endMinute']";
+    private static final String XPATH_OPERATING_FROM_HOURS = "//div[@id='operatingHours.allWeek.startHour']";
+    private static final String XPATH_OPERATING_FROM_MINUTES = "//div[@id='operatingHours.allWeek.startMinute']";
+    private static final String XPATH_OPERATING_TO_HOURS = "//div[@id='operatingHours.allWeek.endHour']";
+    private static final String XPATH_OPERATING_TO_MINUTES = "//div[@id='operatingHours.allWeek.endMinute']";
+    private static final String XPATH_SELECT_TIME = "//div[contains(@class,'select-dropdown')]/../div[not(contains(@class,'hidden'))]//li[text()='%s']";
 
     private AddPartnerDialog addPartnerDialog;
     private EditPartnerDialog editPartnerDialog;
@@ -109,7 +150,189 @@ public class DpAdministrationPage extends OperatorV2SimplePage
     {
         openViewDpsScreen(dpPartnerName);
         clickAddDpButton();
-        addDpDialog.fillForm(dpParams);
+        fillCreateDpForm(dpParams);
+    }
+
+    public void setNameCreateDpForm(String name)
+    {
+        sendKeys(XPATH_POINT_NAME, name);
+    }
+
+    public void setShortNameCreateDpForm(String shortName)
+    {
+        sendKeys(XPATH_SHORT_NAME, shortName);
+    }
+
+    public void setContactNumberCreateDpForm(String contactNumber)
+    {
+        sendKeys(XPATH_CONTACT_NUMBER, contactNumber);
+    }
+
+    public void setExternalStoreIdCreateDpForm(String externalStoreId)
+    {
+        sendKeys(XPATH_EXTERNAL_STORE_ID, externalStoreId);
+    }
+
+    public void setShipperAccountCreateDpForm(String shipperAccount)
+    {
+        click(XPATH_SHIPPER_ACCOUNT_ID);
+        sendKeysAndEnter(XPATH_INPUT_SHIPPER_ID, shipperAccount);
+    }
+
+    public void setPostcodeCreateDpForm(String postcode)
+    {
+        sendKeys(XPATH_POSTAL_CODE, postcode);
+    }
+
+    public void setCityCreateDpForm(String city)
+    {
+        sendKeys(XPATH_CITY, city);
+    }
+
+    public void setHubCreateDpForm(String hubId)
+    {
+        click(XPATH_HUB_ID);
+        sendKeysAndEnter(XPATH_INPUT_HUB_ID, hubId);
+    }
+
+    public void setPointAddress1CreateDpForm(String address1)
+    {
+        sendKeys(XPATH_POINT_ADDRESS_1, address1);
+    }
+
+    public void setPointAddress2CreateDpForm(String address2)
+    {
+        sendKeys(XPATH_POINT_ADDRESS_2, address2);
+    }
+
+    public void setFloorNumberCreateDpForm(String floorNumber)
+    {
+        sendKeys(XPATH_FLOOR_NUMBER, floorNumber);
+    }
+
+    public void setUnitNumberCreateDpForm(String unitNumber)
+    {
+        sendKeys(XPATH_UNIT_NUMBER, unitNumber);
+    }
+
+    public void setLatitudeCreateDpForm(Double latitude)
+    {
+        String latitudeAsString = latitude.toString();
+        sendKeys(XPATH_LATITUDE, latitudeAsString);
+    }
+
+    public void setLongitudeCreateDpForm(Double longitude)
+    {
+        String longitudeAsString = longitude.toString();
+        sendKeys(XPATH_LONGITUDE, longitudeAsString);
+    }
+
+    public void setTypeCreateDpForm(String type)
+    {
+        click(XPATH_TYPE);
+        clickf(XPATH_TYPE_OPTION, type);
+    }
+
+    public void setDirectionsCreateDpForm(String directions)
+    {
+        sendKeys(XPATH_DIRECTIONS, directions);
+    }
+
+    public void isActiveCreateDpForm()
+    {
+            click(XPATH_ACTIVE_CHECKBOX);
+    }
+
+    public void isPublicCreateDpForm()
+    {
+        click(XPATH_PUBLIC_CHECKBOX);
+    }
+
+    public void canShipperLodgeInCreateDpForm(Boolean canShipperLodgeIn)
+    {
+        if(canShipperLodgeIn)
+        {
+            click(XPATH_SEND_CHECKBOX);
+        }
+    }
+
+    public void canCustomerCollectAndSetCapacityCreateDpForm(Boolean canCustomerCollect, String maxCapacity, String bufferCapacity, Long maxParcelStay)
+    {
+        if(canCustomerCollect)
+        {
+            click(XPATH_COLLECT_CHECKBOX);
+            setCapacityAndParcelStayCreateDpForm(maxCapacity, bufferCapacity, maxParcelStay);
+        }
+    }
+
+    public void setCapacityAndParcelStayCreateDpForm(String maxCapacity, String bufferCapacity, Long maxParcelStay)
+    {
+        String maxParcelStayAsString = maxParcelStay.toString();
+        sendKeys(XPATH_MAXIMUM_CAPACITY, maxCapacity);
+        sendKeys(XPATH_BUFFER_CAPACITY, bufferCapacity);
+        sendKeys(XPATH_MAXIMUM_PARCEL_STAY, maxParcelStayAsString);
+    }
+
+    public void setOfficialTimingCreateDpForm()
+    {
+        clickf(XPATH_APPLY_ALL_DAYS, "1");
+        click(XPATH_OFFICIAL_FROM_HOURS);
+        clickf(XPATH_SELECT_TIME, "10");
+        click(XPATH_OFFICIAL_FROM_MINUTES);
+        clickf(XPATH_SELECT_TIME, "00");
+        click(XPATH_OFFICIAL_TO_HOURS);
+        clickf(XPATH_SELECT_TIME, "20");
+        click(XPATH_OFFICIAL_TO_MINUTES);
+        clickf(XPATH_SELECT_TIME, "00");
+    }
+
+    public void setOperatingTimingCreateDpForm()
+    {
+        clickf(XPATH_APPLY_ALL_DAYS, "2");
+        click(XPATH_OPERATING_FROM_HOURS);
+        clickf(XPATH_SELECT_TIME, "10");
+        click(XPATH_OPERATING_FROM_MINUTES);
+        clickf(XPATH_SELECT_TIME, "00");
+        click(XPATH_OPERATING_TO_HOURS);
+        clickf(XPATH_SELECT_TIME, "20");
+        click(XPATH_OPERATING_TO_MINUTES);
+        clickf(XPATH_SELECT_TIME, "00");
+    }
+
+    public void clickSaveSettingsCreateDpForm()
+    {
+        click(XPATH_SAVE_SETTINGS);
+    }
+
+    public void fillCreateDpForm(Dp dpParams)
+    {
+        WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
+        getWebDriver().switchTo().frame(frame);
+        waitUntilVisibilityOfElementLocated(XPATH_POINT_NAME);
+        setNameCreateDpForm(dpParams.getName());
+        setShortNameCreateDpForm(dpParams.getShortName());
+        setContactNumberCreateDpForm(dpParams.getContactNo());
+        setExternalStoreIdCreateDpForm(dpParams.getExternalStoreId());
+        setShipperAccountCreateDpForm(dpParams.getShipperId());
+        setPostcodeCreateDpForm(dpParams.getPostcode());
+        setCityCreateDpForm(dpParams.getCity());
+        setHubCreateDpForm(dpParams.getHub());
+        setPointAddress1CreateDpForm(dpParams.getAddress1());
+        setPointAddress2CreateDpForm(dpParams.getAddress2());
+        setFloorNumberCreateDpForm(dpParams.getFloorNo());
+        setUnitNumberCreateDpForm(dpParams.getUnitNo());
+        setLatitudeCreateDpForm(dpParams.getLatitude());
+        setLongitudeCreateDpForm(dpParams.getLongitude());
+        setTypeCreateDpForm(dpParams.getType());
+        setDirectionsCreateDpForm(dpParams.getDirections());
+        isActiveCreateDpForm();
+        isPublicCreateDpForm();
+        canShipperLodgeInCreateDpForm(dpParams.getCanShipperLodgeIn());
+        canCustomerCollectAndSetCapacityCreateDpForm(dpParams.getCanCustomerCollect(), dpParams.getMaxCap(), dpParams.getCapBuffer(), dpParams.getMaxParcelStayDuration());
+        setOfficialTimingCreateDpForm();
+        setOperatingTimingCreateDpForm();
+        clickSaveSettingsCreateDpForm();
+        getWebDriver().switchTo().defaultContent();
     }
 
     public void openViewDpsScreen(String dpPartnerName)
@@ -142,7 +365,25 @@ public class DpAdministrationPage extends OperatorV2SimplePage
     {
         dpTable.filterByColumn("name", dpName);
         dpTable.clickActionButton(1, "edit");
-        editDpDialog.fillForm(newDpParams);
+        fillEditDpForm(newDpParams);
+    }
+
+    public void fillEditDpForm(Dp dpParams)
+    {
+        WebElement frame = findElementByXpath(XPATH_PUDO_POINT_IFRAME);
+        getWebDriver().switchTo().frame(frame);
+        waitUntilVisibilityOfElementLocated(XPATH_POINT_NAME);
+        setContactNumberCreateDpForm(dpParams.getContactNo());
+        setPostcodeCreateDpForm(dpParams.getPostcode());
+        setPointAddress1CreateDpForm(dpParams.getAddress1());
+        setPointAddress2CreateDpForm(dpParams.getAddress2());
+        setFloorNumberCreateDpForm(dpParams.getFloorNo());
+        setUnitNumberCreateDpForm(dpParams.getUnitNo());
+        setTypeCreateDpForm(dpParams.getType());
+        setDirectionsCreateDpForm(dpParams.getDirections());
+        canShipperLodgeInCreateDpForm(dpParams.getCanShipperLodgeIn());
+        clickSaveSettingsCreateDpForm();
+        getWebDriver().switchTo().defaultContent();
     }
 
     public void verifyDpPartnerParams(DpPartner expectedDpPartnerParams)
@@ -165,7 +406,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         assertThatIfExpectedValueNotNull("DP ID", expectedDpParams.getId(), actualDpParams.getId(), equalTo(expectedDpParams.getId()));
         assertThatIfExpectedValueNotNull("DP Name", expectedDpParams.getName(), actualDpParams.getName(), equalTo(expectedDpParams.getName()));
         assertThatIfExpectedValueNotNull("DP Short Name", expectedDpParams.getShortName(), actualDpParams.getShortName(), equalTo(expectedDpParams.getShortName()));
-        assertThatIfExpectedValueNotNull("DP Hub", expectedDpParams.getHub(), actualDpParams.getHub(), equalTo(expectedDpParams.getHub()));
+        assertThatIfExpectedValueNotNull("DP Hub", expectedDpParams.getHub(), actualDpParams.getHub(), containsString(expectedDpParams.getHub()));
         assertThatIfExpectedValueNotNull("DP Address", expectedDpParams.getAddress(), actualDpParams.getAddress(), startsWith(expectedDpParams.getAddress()));
         assertThatIfExpectedValueNotNull("DP Directions", expectedDpParams.getDirections(), actualDpParams.getDirections(), equalTo(expectedDpParams.getDirections()));
         assertThatIfExpectedValueNotNull("DP Activity", expectedDpParams.getActivity(), actualDpParams.getDirections(), equalTo(expectedDpParams.getActivity()));
@@ -836,5 +1077,16 @@ public class DpAdministrationPage extends OperatorV2SimplePage
             setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "Edit"));
             setEntityClass(DpUser.class);
         }
+    }
+
+    public void verifyDpParamsWithDB(DpDetailsResponse dbParams, DpDetailsResponse apiParams)
+    {
+        assertEquals("DP ID", dbParams.getId(), apiParams.getId());
+        assertEquals("DP NAME", dbParams.getName(), apiParams.getName());
+        assertEquals("DPMS ID", dbParams.getDpmsId(), apiParams.getDpmsId());
+        assertEquals("DP COUNTRY", dbParams.getCountry(), apiParams.getCountry());
+        assertEquals("DP CITY", dbParams.getCity(), apiParams.getCity());
+        assertEquals("DP ADDRESS 1", dbParams.getAddress1(), apiParams.getAddress1());
+        assertEquals("DP ADDRESS 2", dbParams.getAddress2(), apiParams.getAddress2());
     }
 }
