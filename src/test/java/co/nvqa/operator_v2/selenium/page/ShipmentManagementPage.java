@@ -45,6 +45,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     public static final String LOCATOR_COMMENT_TEXT_AREA = "container.shipment-management.comments-optional";
     public static final String LOCATOR_MAWB_TEXT_AREA = "master-awb";
     public static final String LOCATOR_SELCT_FILTERS_PRESET = "commons.preset.load-filter-preset";
+    public static final String SHIPMENT_STATUS_DROPDOWN_XPATH = "//md-autocomplete[md-autocomplete-wrap[input[contains(@id,'input') and contains(@aria-label,'Search or Select')]]]/following-sibling::md-icon[i[text()='arrow_drop_down']]";
+    public static final String TRANSIT_SELECTION_XPATH = "//span[text()='Transit']/ancestor::li";
 
     public static final String XPATH_EDIT_SEARCH_FILTER_BUTTON = "//button[contains(@aria-label, 'Edit Filter')]";
     public static final String XPATH_FORCE_SUCCESS_CONFIRMATION_BUTTON = "//button[span[text()='Confirm']]";
@@ -139,6 +141,15 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         } else {
             sendKeys("//input[@ng-model='search' and contains(@id,'input')]", value);
         }
+        pause1s();
+    }
+
+    public void transitStatus()
+    {
+        selectValueFromNvAutocompleteByItemTypesAndDismiss("filters", "Shipment Status");
+        click(SHIPMENT_STATUS_DROPDOWN_XPATH);
+        pause1s();
+        click(TRANSIT_SELECTION_XPATH);
         pause1s();
     }
 

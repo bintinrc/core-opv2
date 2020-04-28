@@ -401,4 +401,10 @@ public class ShipmentManagementSteps extends AbstractSteps
         ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
         shipmentManagementPage.createAndUploadCsv(fileName, shipmentInfo);
     }
+
+    @When("Operator filter the shipment based on its status of Transit")
+    public void operatorFilterTheShipmentBasedOnItsStatusOfTransit()
+    {
+        shipmentManagementPage.transitStatus();
+    }
 }

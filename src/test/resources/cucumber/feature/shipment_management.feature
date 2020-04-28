@@ -211,7 +211,8 @@ Feature: Shipment Management
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
-    When Operator filter Shipment Status = Transit on Shipment Management page
+    When Operator filter the shipment based on its status of Transit
+    And Operator click "Load All Selection" on Shipment Management page
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
 
@@ -337,7 +338,6 @@ Feature: Shipment Management
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page
     When Operator go to menu Inter-Hub -> Shipment Management
-    When Operator filter Shipment Status = Transit on Shipment Management page
     When Operator filter Last Inbound Hub = {hub-name} on Shipment Management page
     When Operator click "Load All Selection" on Shipment Management page
     Then Operator verify inbounded Shipment exist on Shipment Management page
