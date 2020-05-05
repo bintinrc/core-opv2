@@ -688,15 +688,22 @@ public class AllShippersSteps extends AbstractSteps
         String pricingScriptName = mapOfData.get("pricingScriptName");
         String discount = mapOfData.get("discount");
         String comments = mapOfData.get("comments");
+        String type = mapOfData.get("type");
 
         Pricing pricing = new Pricing();
         pricing.setScriptName(pricingScriptName);
         pricing.setDiscount(discount);
         pricing.setComments(comments);
+        pricing.setType(type);
 
         shipper.setPricing(pricing);
 
-        allShippersPage.addNewPricingScript(shipper);
+        String pricingProfileId = allShippersPage.addNewPricingScript(shipper);
+
+        pricing.setTemplateId(Long.parseLong(pricingProfileId));
+
+        put(KEY_CREATED_PRICING_SCRIPT, pricing);
+        put(KEY_PRICING_PROFILE_ID, pricingProfileId);
     }
 
     @Then("Operator edits the Pending Pricing Script")
@@ -715,10 +722,10 @@ public class AllShippersSteps extends AbstractSteps
         allShippersPage.editPricingScript(shipper);
     }
 
-    @Then("Operator verifies that Pricing Script is active")
-    public void operatorVerifiesThatPricingScriptIsActive()
+    @Then("Operator verifies that Pricing Script is {string} and {string}")
+    public void operatorVerifiesThatPricingScriptIsActiveAnd(String status, String status1)
     {
-        allShippersPage.verifyPricingScriptIsActive();
+        allShippersPage.verifyPricingScriptIsActive(status, status1);
     }
 
     @When("Operator create new Shipper with basic settings and updates pricing script using data below:")
@@ -909,5 +916,13 @@ public class AllShippersSteps extends AbstractSteps
 
         allShippersPage.createNewShipperWithoutPricingScript(shipper);
         put(KEY_CREATED_SHIPPER, shipper);
+    }
+
+    @And("Operator verifies the pricing script details are correct")
+    public void OperatorVerifiesThePricingScriptDetailsAreCorrect()
+    {
+        Pricing pricingProfile = get(KEY_CREATED_PRICING_SCRIPT);
+        Pricing pricingProfileFromDb = get(KEY_PRICING_PROFILE_DETAILS);
+        allShippersPage.verifyPricingScriptDetails(pricingProfile, pricingProfileFromDb);
     }
 }

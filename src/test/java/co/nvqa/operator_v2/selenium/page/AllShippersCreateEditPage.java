@@ -15,9 +15,7 @@ import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Return;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.shipper.v2.Shopify;
-import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
-import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
@@ -50,12 +48,13 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public static final String XPATH_SAVE_CHANGES_PRICING_SCRIPT = "//form//button[@aria-label='Save Changes']";
     public static final String XPATH_DISCOUNT_VALUE = "//input[@id='discount-value']";
     public static final String ARIA_LABEL_COMMENTS = "Comments";
-    public static final String XPATH_PRICING_PROFILE_STATUS = "//table[@class='table-body']//td[contains(text(),'New Script')]/following-sibling::td[contains(@class,'status')]";
-    public static final String XPATH_ACTIVE_PRICING_PROFILE_STATUS = "//table[@class='table-body']//td[@class='status']";
+    public static final String XPATH_PRICING_PROFILE_STATUS = "//table[@class='table-body']//td[contains(@class,'status') and text()='%s']";
     public static final String LOCATOR_END_DATE = "container.shippers.pricing-billing-end-date";
     public static final String LOCATOR_START_DATE = "container.shippers.pricing-billing-start-date";
     public static final String XPATH_VALIDATION_ERROR = "//div[@class='error-box']//div[@class='content']";
     public static final String XPATH_SHIPPER_INFORMATION = "//div[text()='Shipper Information']";
+    public static final String XPATH_ADD_NEW_PROFILE = "//button[@aria-label='Add New Profile']";
+    public static final String XPATH_PRICING_PROFILE_ID = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='id']";
 
     public AllShippersCreateEditPage(WebDriver webDriver)
     {
@@ -1084,39 +1083,47 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfElementLocated("//tab-content[@aria-hidden='false']//md-content[@ng-if='ctrl.state.loading === true']//md-progress-circular");
     }
 */
-    public void addNewPricingScript(Shipper shipper)
+    public String addNewPricingScript(Shipper shipper)
     {
         String currentWindowHandle = switchToNewWindow();
 
+        waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
         Pricing pricing = shipper.getPricing();
-
         if(pricing!=null)
         {
             clickTabItem(" Pricing and Billing");
 
             if(pricing!=null && StringUtils.isNotBlank(pricing.getScriptName()))
             {
-                click("//button[@aria-label='Add New Profile']");
+                click(XPATH_ADD_NEW_PROFILE);
                 pause2s();
-                setMdDatepickerById("container.shippers.pricing-billing-start-date", TestUtils.getNextDate(1));
-                setMdDatepickerById("container.shippers.pricing-billing-end-date", TestUtils.getNextDate(10));
                 selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT, pricing.getScriptName());
-                moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
-                sendKeys(XPATH_DISCOUNT_VALUE, pricing.getDiscount());
-                sendKeysByAriaLabel(ARIA_LABEL_COMMENTS, pricing.getComments());
+                if(pricing.getDiscount()!= null)
+                {
+                    setMdDatepickerById(LOCATOR_START_DATE, TestUtils.getNextDate(1));
+                    setMdDatepickerById(LOCATOR_END_DATE, TestUtils.getNextDate(10));
+                    setMdDatepickerById(LOCATOR_START_DATE, TestUtils.getNextDate(1));
+                    moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
+                    sendKeys(XPATH_DISCOUNT_VALUE, pricing.getDiscount());
+                }
+                if(pricing.getComments()!= null)
+                {
+                    sendKeysByAriaLabel(ARIA_LABEL_COMMENTS, pricing.getComments());
+                }
                 click(XPATH_SAVE_CHANGES_PRICING_SCRIPT);
-                pause1s();
             }
         }
 
-        String status = getText(XPATH_PRICING_PROFILE_STATUS);
+        String status = getText(f(XPATH_PRICING_PROFILE_STATUS, "Pending"));
         assertEquals("Status is not Pending ", status, "Pending");
-
         clickNvIconTextButtonByName("Save Changes");
-
+        waitUntilInvisibilityOfElementLocated(XPATH_DISCOUNT_VALUE);
+        String pricingProfileId = getText(XPATH_PRICING_PROFILE_ID);
         backToShipperList();
         pause3s();
         getWebDriver().switchTo().window(currentWindowHandle);
+
+        return pricingProfileId;
     }
 
     public void editPricingScript(Shipper shipper)
@@ -1143,7 +1150,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
             }
         }
 
-        String status = getText(XPATH_PRICING_PROFILE_STATUS);
+        String status = getText(f(XPATH_PRICING_PROFILE_STATUS, "Pending"));
         assertEquals("Status is not Pending ", status, "Pending");
 
         backToShipperList();
@@ -1151,14 +1158,21 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         getWebDriver().switchTo().window(currentWindowHandle);
     }
 
-    public void verifyPricingScriptIsActive()
+    public void verifyPricingScriptIsActive(String status, String status1)
     {
         String currentWindowHandle = switchToNewWindow();
 
+        waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
         clickTabItem(" Pricing and Billing");
 
-        String status = getText(XPATH_ACTIVE_PRICING_PROFILE_STATUS);
-        assertEquals("Status is not Active ", status, "Active");
+        String statusText = getText(f(XPATH_PRICING_PROFILE_STATUS, status));
+        assertEquals("Status is not correct", status, statusText);
+
+        if(!status1.equalsIgnoreCase(""))
+        {
+            String statusText1 = getText(f(XPATH_PRICING_PROFILE_STATUS, status1));
+            assertEquals("Status is not correct", status1, statusText1);
+        }
 
         backToShipperList();
         pause3s();

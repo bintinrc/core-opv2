@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Address;
+import co.nvqa.commons.model.shipper.v2.Pricing;
 import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import org.openqa.selenium.Keys;
@@ -36,6 +37,7 @@ public class AllShippersPage extends OperatorV2SimplePage
     public static final String XPATH_HIDE_BUTTON = "//div[contains(text(),'Hide')]/following-sibling::i";
     public static final String XPATH_SEARCH_TERM = "//input[@aria-label='Search term']";
     public static final String XPATH_QUICK_SEARCH_AUTOCOMPLETE_LIST = "//ul[@class='md-autocomplete-suggestions']/li[1]";
+    public static final String XPATH_SHIPPER_INFORMATION = "//div[text()='Shipper Information']";
 
     private final AllShippersCreateEditPage allShippersCreateEditPage;
 
@@ -347,22 +349,28 @@ public class AllShippersPage extends OperatorV2SimplePage
     {
         moveToElementWithXpath(XPATH_SEARCH_TERM);
         sendKeys(XPATH_SEARCH_TERM, keyword);
-        pause1s();
+        waitUntilVisibilityOfElementLocated(XPATH_QUICK_SEARCH_AUTOCOMPLETE_LIST);
         click(XPATH_QUICK_SEARCH_AUTOCOMPLETE_LIST);
     }
 
     public void editShipper(Shipper shipper)
     {
-        quickSearchShipper(shipper.getName());
-        pause2s();
-        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
-        pause5s();
+        if(!isElementVisible(XPATH_SEARCH_TERM))
+        {
+            clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        }
+        else
+        {
+            quickSearchShipper(shipper.getName());
+            clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        }
     }
 
-    public void addNewPricingScript(Shipper shipper)
+    public String addNewPricingScript(Shipper shipper)
     {
         waitUntilPageLoaded();
-        allShippersCreateEditPage.addNewPricingScript(shipper);
+        String pricingProfileId = allShippersCreateEditPage.addNewPricingScript(shipper);
+        return pricingProfileId;
     }
 
     public void editPricingScript(Shipper shipper)
@@ -371,10 +379,19 @@ public class AllShippersPage extends OperatorV2SimplePage
         allShippersCreateEditPage.editPricingScript(shipper);
     }
 
-    public void verifyPricingScriptIsActive()
+    public void verifyPricingScriptIsActive(String status, String status1)
     {
         waitUntilPageLoaded();
-        allShippersCreateEditPage.verifyPricingScriptIsActive();
+        allShippersCreateEditPage.verifyPricingScriptIsActive(status, status1);
     }
 
+    public void verifyPricingScriptDetails(Pricing pricingProfile, Pricing pricingProfileFromDb)
+    {
+        assertTrue("Script id is not same: ", pricingProfile.getScriptName().contains(pricingProfileFromDb.getScriptId().toString()));
+        assertEquals("Pricing profile id is not same: ", pricingProfile.getTemplateId(), pricingProfileFromDb.getTemplateId());
+        assertTrue("Shipper discount Id is null:", pricingProfileFromDb.getShipperDiscountId()!=null);
+        assertEquals("Comments are not the same: ", pricingProfile.getComments(), pricingProfileFromDb.getComments());
+        assertEquals("Discount amount is not same:", pricingProfile.getDiscount(), pricingProfileFromDb.getDiscount());
+        assertEquals("Type is not the same:", pricingProfile.getType(), pricingProfileFromDb.getType());
+    }
 }
