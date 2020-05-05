@@ -1,7 +1,12 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ParcelSweeperLivePage extends OperatorV2SimplePage {
 
@@ -15,6 +20,7 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     private static final String PRIORITY_LEVEL_XPATH = "//div[contains(text(), 'Priority Level')]/following-sibling::div";
     private static final String PRIORITY_LEVEL_COLOR_XPATH ="//div[contains(@class,'priority-container')][descendant::div[contains(text(), 'Priority Level')]]";
     private static final String LOCATOR_RTS_INFO = "//div[@ng-if='ctrl.data.isRtsed']";
+    private static final String XPATH_ORDER_TAGS = "//div[contains(@class,'panel tags-info-container')]//span";
 
     public ParcelSweeperLivePage(WebDriver webDriver) {
         super(webDriver);
@@ -77,6 +83,17 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
         {
             assertFalse("RTS Label is displayed, but must not", isElementVisible(LOCATOR_RTS_INFO));
         }
+    }
+
+    public void verifiesTags(List<String> expectedOrderTags)
+    {
+        List<String> tags = new ArrayList<>();
+        List<WebElement> listOfTags = findElementsByXpath(XPATH_ORDER_TAGS);
+        for (WebElement we : listOfTags)
+        {
+            tags.add(we.getText());
+        }
+        assertEquals("Order tags is not equal to tags set on Order Tag Management page for order Id - %s", expectedOrderTags.stream().map(String::toLowerCase).sorted().collect(Collectors.toList()), tags.stream().map(String::toLowerCase).sorted().collect(Collectors.toList()));
     }
 
 }

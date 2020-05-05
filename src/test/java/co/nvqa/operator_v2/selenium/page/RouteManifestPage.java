@@ -150,6 +150,7 @@ public class RouteManifestPage extends OperatorV2SimplePage
     public void failDeliveryWaypoint(FailureReason failureReason)
     {
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        waitUntilEnabledAndClickNvIconTextButtonByName("commons.failure");
         clickButtonOnMdDialogByAriaLabel("Failure");
 
         Stack<FailureReason> stackOfFailureReason = new Stack<>();

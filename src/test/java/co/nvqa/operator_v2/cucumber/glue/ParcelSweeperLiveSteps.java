@@ -99,4 +99,10 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
         parcelSweeperLivePage.verifyRTSInfo(true);
     }
 
+    @Then("Operator verifies tags on Parcel Sweeper Live page")
+    public void operatorVerifiesTags(List<String> expectedOrderTags)
+    {
+        parcelSweeperLivePage.verifiesTags(expectedOrderTags);
+    }
+
 }
