@@ -466,7 +466,7 @@ Feature: All Shippers
       | industryName                 | {industry-name}            |
       | salesPerson                  | {sales-person}             |
     And Operator edits the created shipper
-    Then Operator verifies that Pricing Script is active
+    Then Operator verifies that Pricing Script is "Active" and ""
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
@@ -489,7 +489,7 @@ Feature: All Shippers
       | industryName                 | {industry-name}            |
       | salesPerson                  | {sales-person}             |
     And Operator edits the created shipper
-    Then Operator verifies that Pricing Script is active
+    Then Operator verifies that Pricing Script is "Active" and ""
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
@@ -510,6 +510,40 @@ Feature: All Shippers
       | isDisableDriverAppReschedule | true                       |
       | industryName                 | {industry-name}            |
       | salesPerson                  | {sales-person}             |
+
+  Scenario: Create a new Pricing Profile - with Flat Discount where Shipper has Active & Expired Pricing Profile (uid:72efc910-af1b-4145-bdd9-e486deb4284e)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                       |
+      | shipperType                  | Normal                     |
+      | ocVersion                    | v4                         |
+      | services                     | STANDARD                   |
+      | trackingType                 | Fixed                      |
+      | isAllowCod                   | true                       |
+      | isAllowCashPickup            | true                       |
+      | isPrepaid                    | true                       |
+      | isAllowStagedOrders          | true                       |
+      | isMultiParcelShipper         | true                       |
+      | isDisableDriverAppReschedule | true                       |
+      | pricingScriptName            | {pricing-script-name}      |
+      | industryName                 | {industry-name}            |
+      | salesPerson                  | {sales-person}             |
+    And Operator edits the created shipper
+    Then Operator adds new Shipper's Pricing Script
+      | pricingScriptName            | 2402 - New Script          |
+    And Operator edits the created shipper
+    Then Operator verifies that Pricing Script is "Active" and "Expired"
+    And Operator edits the created shipper
+    Then Operator adds new Shipper's Pricing Script
+      | pricingScriptName            | 2402 - New Script                 |
+      | discount                     | 20.00                             |
+      | comments                     | This is a test pricing script     |
+      | type                         | FLAT                              |
+    Then DB Operator fetches pricing script details
+    And Operator verifies the pricing script details are correct
+    When DB Operator soft delete shipper by Legacy ID
+    Then Operator verify the shipper is deleted successfully
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
