@@ -37,7 +37,7 @@ public class AllShippersPage extends OperatorV2SimplePage
     public static final String XPATH_HIDE_BUTTON = "//div[contains(text(),'Hide')]/following-sibling::i";
     public static final String XPATH_SEARCH_TERM = "//input[@aria-label='Search term']";
     public static final String XPATH_QUICK_SEARCH_AUTOCOMPLETE_LIST = "//ul[@class='md-autocomplete-suggestions']/li[1]";
-    public static final String XPATH_SHIPPER_INFORMATION = "//div[text()='Shipper Information']";
+    public static final String XPATH_PROFILE = "//button[@aria-label='Profile']";
 
     private final AllShippersCreateEditPage allShippersCreateEditPage;
 
@@ -393,5 +393,24 @@ public class AllShippersPage extends OperatorV2SimplePage
         assertEquals("Comments are not the same: ", pricingProfile.getComments(), pricingProfileFromDb.getComments());
         assertEquals("Discount amount is not same:", pricingProfile.getDiscount(), pricingProfileFromDb.getDiscount());
         assertEquals("Type is not the same:", pricingProfile.getType(), pricingProfileFromDb.getType());
+    }
+
+    public void changeCountry(String country)
+    {
+        click(XPATH_PROFILE);
+        selectValueFromMdSelect("domain.current", country);
+        pause2s();
+    }
+
+    public void verifyEditPendingProfileIsDisplayed()
+    {
+        waitUntilPageLoaded();
+        allShippersCreateEditPage.verifyEditPendingProfileIsDisplayed();
+    }
+
+    public void addNewPricingScriptAndVerifyErrorMessage(Shipper shipper, String errorMessage)
+    {
+        waitUntilPageLoaded();
+        allShippersCreateEditPage.addNewPricingScriptAndVerifyErrorMessage(shipper, errorMessage);
     }
 }

@@ -545,6 +545,126 @@ Feature: All Shippers
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
+  Scenario: Create a new Pricing Profile - with Percentage Discount where Shipper has Active & Expired Pricing Profile (uid:ad094f98-7e6f-4cf2-978e-b56b742695d7)
+    Given Operator changes the country to "id"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                       |
+      | shipperType                  | Normal                     |
+      | ocVersion                    | v4                         |
+      | services                     | STANDARD                   |
+      | trackingType                 | Fixed                      |
+      | isAllowCod                   | true                       |
+      | isAllowCashPickup            | true                       |
+      | isPrepaid                    | true                       |
+      | isAllowStagedOrders          | true                       |
+      | isMultiParcelShipper         | true                       |
+      | isDisableDriverAppReschedule | true                       |
+      | pricingScriptName            | {pricing-script-name-id}   |
+      | industryName                 | {industry-name}            |
+      | salesPerson                  | {sales-person-id}          |
+    And Operator edits the created shipper
+    Then Operator adds new Shipper's Pricing Script
+      | pricingScriptName            | 2508 - PT Cucumber Test 2  |
+    And Operator edits the created shipper
+    Then Operator verifies that Pricing Script is "Active" and "Expired"
+    And Operator edits the created shipper
+    Then Operator adds new Shipper's Pricing Script
+      | pricingScriptName            | 2508 - PT Cucumber Test 2         |
+      | discount                     | 20.00                             |
+      | comments                     | This is a test pricing script     |
+      | type                         | PERCENTAGE                        |
+    Then DB Operator fetches pricing script details
+    And Operator verifies the pricing script details are correct
+    When DB Operator soft delete shipper by Legacy ID
+    Then Operator verify the shipper is deleted successfully
+    Then Operator changes the country to "sg"
+
+  Scenario: Create a new Pricing Profile - where Shipper has Pending Pricing Profile (uid:dc2a9af8-d447-4eba-a6eb-3882d57aaeed)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                       |
+      | shipperType                  | Normal                     |
+      | ocVersion                    | v4                         |
+      | services                     | STANDARD                   |
+      | trackingType                 | Fixed                      |
+      | isAllowCod                   | true                       |
+      | isAllowCashPickup            | true                       |
+      | isPrepaid                    | true                       |
+      | isAllowStagedOrders          | true                       |
+      | isMultiParcelShipper         | true                       |
+      | isDisableDriverAppReschedule | true                       |
+      | pricingScriptName            | {pricing-script-name}      |
+      | industryName                 | {industry-name}            |
+      | salesPerson                  | {sales-person}             |
+    And Operator edits the created shipper
+    Then Operator adds new Shipper's Pricing Script
+      | pricingScriptName            | 2402 - New Script                 |
+      | discount                     | 20                                |
+      | comments                     | This is a test pricing script     |
+    And Operator edits the created shipper
+    Then Operator verifies that Pricing Script is "Pending" and ""
+    And Operator edits the created shipper
+    And Operator verifies that Edit Pending Profile is displayed
+    When DB Operator soft delete shipper by Legacy ID
+    Then Operator verify the shipper is deleted successfully
+
+  Scenario: Create a new Pricing Profile - with 0 Flat Discount (uid:c6f6e5b0-d8c6-4489-83fe-b7ae021de5f7)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                       |
+      | shipperType                  | Normal                     |
+      | ocVersion                    | v4                         |
+      | services                     | STANDARD                   |
+      | trackingType                 | Fixed                      |
+      | isAllowCod                   | true                       |
+      | isAllowCashPickup            | true                       |
+      | isPrepaid                    | true                       |
+      | isAllowStagedOrders          | true                       |
+      | isMultiParcelShipper         | true                       |
+      | isDisableDriverAppReschedule | true                       |
+      | pricingScriptName            | {pricing-script-name}      |
+      | industryName                 | {industry-name}            |
+      | salesPerson                  | {sales-person}             |
+    And Operator edits the created shipper
+    Then Operator adds pricing script with 0 discount and verifies the error message
+      | pricingScriptName            | 2402 - New Script                 |
+      | discount                     | 0                                 |
+      | errorMessage                 | 0 is not a valid discount value   |
+    When DB Operator soft delete shipper by Legacy ID
+    Then Operator verify the shipper is deleted successfully
+
+  Scenario: Create a new Pricing Profile - with 0 Percentage Discount (uid:81e2a66e-cc26-4a3a-ac56-1ea5b86f3614)
+    Given Operator changes the country to "id"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                       |
+      | shipperType                  | Normal                     |
+      | ocVersion                    | v4                         |
+      | services                     | STANDARD                   |
+      | trackingType                 | Fixed                      |
+      | isAllowCod                   | true                       |
+      | isAllowCashPickup            | true                       |
+      | isPrepaid                    | true                       |
+      | isAllowStagedOrders          | true                       |
+      | isMultiParcelShipper         | true                       |
+      | isDisableDriverAppReschedule | true                       |
+      | pricingScriptName            | {pricing-script-name-id}   |
+      | industryName                 | {industry-name}            |
+      | salesPerson                  | {sales-person-id}          |
+    And Operator edits the created shipper
+    Then Operator adds pricing script with 0 discount and verifies the error message
+      | pricingScriptName            | 2508 - PT Cucumber Test 2         |
+      | discount                     | 0                                 |
+      | errorMessage                 | 0 is not a valid discount value   |
+    When DB Operator soft delete shipper by Legacy ID
+    Then Operator verify the shipper is deleted successfully
+    Then Operator changes the country to "sg"
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

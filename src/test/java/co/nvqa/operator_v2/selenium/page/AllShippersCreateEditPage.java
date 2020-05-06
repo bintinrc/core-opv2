@@ -55,6 +55,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public static final String XPATH_SHIPPER_INFORMATION = "//div[text()='Shipper Information']";
     public static final String XPATH_ADD_NEW_PROFILE = "//button[@aria-label='Add New Profile']";
     public static final String XPATH_PRICING_PROFILE_ID = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='id']";
+    public static final String XPATH_EDIT_PENDING_PROFILE = "//button[@aria-label='Edit Pending Profile']";
+    public static final String XPATH_DISCOUNT_ERROR_MESSAGE = "//div[contains(@ng-messages,'error') and contains(@class,'ng-active')]";
 
     public AllShippersCreateEditPage(WebDriver webDriver)
     {
@@ -155,7 +157,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void updatePricingScript()
     {
-        click("//button[@aria-label='Edit Pending Profile']");
+        click(XPATH_EDIT_PENDING_PROFILE);
         pause2s();
         moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
         sendKeys(XPATH_DISCOUNT_VALUE, "20");
@@ -1172,6 +1174,48 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         {
             String statusText1 = getText(f(XPATH_PRICING_PROFILE_STATUS, status1));
             assertEquals("Status is not correct", status1, statusText1);
+        }
+
+        backToShipperList();
+        pause3s();
+        getWebDriver().switchTo().window(currentWindowHandle);
+    }
+
+    public void verifyEditPendingProfileIsDisplayed()
+    {
+        String currentWindowHandle = switchToNewWindow();
+
+        waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+        clickTabItem(" Pricing and Billing");
+
+        assertTrue("Edit Pending Profile is not displayed", isElementVisible(XPATH_EDIT_PENDING_PROFILE));
+
+        backToShipperList();
+        pause3s();
+        getWebDriver().switchTo().window(currentWindowHandle);
+    }
+
+    public void addNewPricingScriptAndVerifyErrorMessage(Shipper shipper, String errorMessage)
+    {
+        String currentWindowHandle = switchToNewWindow();
+
+        waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+        Pricing pricing = shipper.getPricing();
+        if(pricing!=null)
+        {
+            clickTabItem(" Pricing and Billing");
+
+            if(pricing!=null && StringUtils.isNotBlank(pricing.getScriptName()))
+            {
+                click(XPATH_ADD_NEW_PROFILE);
+                pause2s();
+                selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT, pricing.getScriptName());
+                moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
+                sendKeys(XPATH_DISCOUNT_VALUE, pricing.getDiscount());
+                String errorMessageText = getText(XPATH_DISCOUNT_ERROR_MESSAGE);
+                assertTrue("Error Message is displayed: ", errorMessage.equalsIgnoreCase(errorMessageText));
+                clickButtonByAriaLabel("Cancel");
+            }
         }
 
         backToShipperList();
