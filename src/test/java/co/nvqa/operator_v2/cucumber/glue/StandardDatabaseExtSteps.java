@@ -636,6 +636,16 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         }
     }
 
+    @After(value = "@DeleteMiddleMileDriver")
+    public void deleteMiddleMileDriver()
+    {
+        if (get(KEY_CREATED_MIDDLE_MILE_DRIVER_USERNAME) != null)
+        {
+            getDriverJdbc().softDeleteDriver(get(KEY_CREATED_MIDDLE_MILE_DRIVER_USERNAME));
+            getAuthJdbc().softDeleteOauthClientByClientId(get(KEY_CREATED_MIDDLE_MILE_DRIVER_USERNAME));
+        }
+    }
+
     @Given("DB Operator gets the newest existed username for Hub App")
     public void dbOperatorGetsTheNewestExistedUsernameForHubApp()
     {
