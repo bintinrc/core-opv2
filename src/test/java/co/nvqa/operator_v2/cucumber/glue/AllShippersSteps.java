@@ -919,6 +919,14 @@ public class AllShippersSteps extends AbstractSteps
         put(KEY_CREATED_SHIPPER, shipper);
     }
 
+    @And("Operator verifies the pricing script and shipper discount details are correct")
+    public void OperatorVerifiesThePricingScriptAndShipperDiscountDetailsAreCorrect()
+    {
+        Pricing pricingProfile = get(KEY_CREATED_PRICING_SCRIPT);
+        Pricing pricingProfileFromDb = get(KEY_PRICING_PROFILE_DETAILS);
+        allShippersPage.verifyPricingScriptAndShipperDiscountDetails(pricingProfile, pricingProfileFromDb);
+    }
+
     @And("Operator verifies the pricing script details are correct")
     public void OperatorVerifiesThePricingScriptDetailsAreCorrect()
     {
@@ -939,8 +947,8 @@ public class AllShippersSteps extends AbstractSteps
         allShippersPage.verifyEditPendingProfileIsDisplayed();
     }
 
-    @Then("Operator adds pricing script with 0 discount and verifies the error message")
-    public void operatorAddsPricingScriptWithDiscountAndVerifiesTheErrorMessage(Map<String, String> mapOfData)
+    @Then("Operator adds pricing script with invalid discount and verifies the error message")
+    public void operatorAddsPricingScriptWithInvalidDiscountAndVerifiesTheErrorMessage(Map<String, String> mapOfData)
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
         String pricingScriptName = mapOfData.get("pricingScriptName");
@@ -954,5 +962,24 @@ public class AllShippersSteps extends AbstractSteps
         shipper.setPricing(pricing);
 
         allShippersPage.addNewPricingScriptAndVerifyErrorMessage(shipper, errorMessage);
+    }
+
+    @Then("Operator adds pricing script with discount over 6 digits and verifies the error message")
+    public void operatorAddsPricingScriptWithDiscountOver6DigitsAndVerifiesTheErrorMessage(Map<String, String> mapOfData)
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+        String pricingScriptName = mapOfData.get("pricingScriptName");
+        String discount = mapOfData.get("discount");
+        String comments = mapOfData.get("comments");
+        String errorMessage = mapOfData.get("errorMessage");
+
+        Pricing pricing = new Pricing();
+        pricing.setScriptName(pricingScriptName);
+        pricing.setDiscount(discount);
+        pricing.setComments(comments);
+
+        shipper.setPricing(pricing);
+
+        allShippersPage.addNewPricingScriptWithDiscountOver6DigitsAndVerifyErrorMessage(shipper, errorMessage);
     }
 }

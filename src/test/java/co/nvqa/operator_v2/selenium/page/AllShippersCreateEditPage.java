@@ -57,6 +57,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public static final String XPATH_PRICING_PROFILE_ID = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='id']";
     public static final String XPATH_EDIT_PENDING_PROFILE = "//button[@aria-label='Edit Pending Profile']";
     public static final String XPATH_DISCOUNT_ERROR_MESSAGE = "//div[contains(@ng-messages,'error') and contains(@class,'ng-active')]";
+    public static final String XPATH_UPDATE_ERROR_MESSAGE = "//div[@class='error-box']//div[@class='title']";
 
     public AllShippersCreateEditPage(WebDriver webDriver)
     {
@@ -1217,6 +1218,41 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
                 clickButtonByAriaLabel("Cancel");
             }
         }
+
+        backToShipperList();
+        pause3s();
+        getWebDriver().switchTo().window(currentWindowHandle);
+    }
+
+    public void addNewPricingScriptWithDiscountOver6DigitsAndVerifyErrorMessage(Shipper shipper, String errorMessage)
+    {
+        String currentWindowHandle = switchToNewWindow();
+
+        waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+        Pricing pricing = shipper.getPricing();
+        if(pricing!=null)
+        {
+            clickTabItem(" Pricing and Billing");
+
+            if(pricing!=null && StringUtils.isNotBlank(pricing.getScriptName()))
+            {
+                click(XPATH_ADD_NEW_PROFILE);
+                pause2s();
+                selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT, pricing.getScriptName());
+                moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
+                sendKeys(XPATH_DISCOUNT_VALUE, pricing.getDiscount());
+                sendKeysByAriaLabel(ARIA_LABEL_COMMENTS, pricing.getComments());
+                click(XPATH_SAVE_CHANGES_PRICING_SCRIPT);
+                pause1s();
+            }
+        }
+        clickNvIconTextButtonByName("Save Changes");
+        waitUntilVisibilityOfToast("Some changes may not saved successfully");
+
+        String errorMessageText = getText(XPATH_UPDATE_ERROR_MESSAGE);
+        assertTrue("Error message is not displayed: ", errorMessageText.contains(errorMessage));
+
+        clickNvIconTextButtonByName("Close");
 
         backToShipperList();
         pause3s();
