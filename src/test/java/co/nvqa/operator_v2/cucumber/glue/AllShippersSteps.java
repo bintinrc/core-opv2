@@ -19,6 +19,7 @@ import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.shipper.v2.Shopify;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -924,5 +925,34 @@ public class AllShippersSteps extends AbstractSteps
         Pricing pricingProfile = get(KEY_CREATED_PRICING_SCRIPT);
         Pricing pricingProfileFromDb = get(KEY_PRICING_PROFILE_DETAILS);
         allShippersPage.verifyPricingScriptDetails(pricingProfile, pricingProfileFromDb);
+    }
+
+    @Given("Operator changes the country to {string}")
+    public void operatorChangesTheCountryTo(String country)
+    {
+        allShippersPage.changeCountry(country);
+    }
+
+    @And("Operator verifies that Edit Pending Profile is displayed")
+    public void  operatorVerifiesThatEditPendingProfileIsDisplayed()
+    {
+        allShippersPage.verifyEditPendingProfileIsDisplayed();
+    }
+
+    @Then("Operator adds pricing script with 0 discount and verifies the error message")
+    public void operatorAddsPricingScriptWithDiscountAndVerifiesTheErrorMessage(Map<String, String> mapOfData)
+    {
+        Shipper shipper = get(KEY_CREATED_SHIPPER);
+        String pricingScriptName = mapOfData.get("pricingScriptName");
+        String discount = mapOfData.get("discount");
+        String errorMessage = mapOfData.get("errorMessage");
+
+        Pricing pricing = new Pricing();
+        pricing.setScriptName(pricingScriptName);
+        pricing.setDiscount(discount);
+
+        shipper.setPricing(pricing);
+
+        allShippersPage.addNewPricingScriptAndVerifyErrorMessage(shipper, errorMessage);
     }
 }
