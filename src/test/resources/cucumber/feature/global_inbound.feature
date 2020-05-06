@@ -524,9 +524,9 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Order -> Order Tag Management
     When Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
-      | shipperName     | {shipper-v4-legacy-id}-{shipper-v4-name} |
-      | status          | Pending                                  |
-      | granular status | Pending Pickup                           |
+      | shipperName     | {shipper-v4-name} |
+      | status          | Pending           |
+      | granular status | Pending Pickup    |
     And Operator searches and selects orders created on Add Tags to Order page
     And Operator tags order with:
       | OPV2AUTO1   |
