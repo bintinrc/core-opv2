@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.MiddleMileDriver;
 import org.openqa.selenium.WebDriver;
 
@@ -241,7 +242,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
                 sendKeys(TABLE_FILTER_BY_NAME_XPATH, middleMileDriver.getName());
                 break;
 
-                //tbc
+                //tbc. will be filled with about 5 filter more
+            default :
+                NvLogger.warn("Filter is not found");
         }
 
         waitUntilVisibilityOfElementLocated(f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, MARK_ELEMENT));

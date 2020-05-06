@@ -24,99 +24,123 @@ public class MiddleMileDriver
     {
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public String getHub() {
+    public String getHub()
+    {
         return hub;
     }
 
-    public void setHub(String hub) {
+    public void setHub(String hub)
+    {
         this.hub = hub;
     }
 
-    public String getContactNumber() {
+    public String getContactNumber()
+    {
         return contactNumber;
     }
 
-    public void setContactNumber(String contactNumber) {
+    public void setContactNumber(String contactNumber)
+    {
         this.contactNumber = contactNumber;
     }
 
-    public String getLicenseNumber() {
+    public String getLicenseNumber()
+    {
         return licenseNumber;
     }
 
-    public void setLicenseNumber(String licenseNumber) {
+    public void setLicenseNumber(String licenseNumber)
+    {
         this.licenseNumber = licenseNumber;
     }
 
-    public String getLicenseType() {
+    public String getLicenseType()
+    {
         return licenseType;
     }
 
-    public void setLicenseType(String licenseType) {
+    public void setLicenseType(String licenseType)
+    {
         this.licenseType = licenseType;
     }
 
-    public String getExpiryDate() {
+    public String getExpiryDate()
+    {
         return expiryDate;
     }
 
-    public void setExpiryDate(String expiryDate) {
+    public void setExpiryDate(String expiryDate)
+    {
         this.expiryDate = expiryDate;
     }
 
-    public String getEmploymentType() {
+    public String getEmploymentType()
+    {
         return employmentType;
     }
 
-    public void setEmploymentType(String employmentType) {
+    public void setEmploymentType(String employmentType)
+    {
         this.employmentType = employmentType;
     }
 
-    public String getEmploymentStartDate() {
+    public String getEmploymentStartDate()
+    {
         return employmentStartDate;
     }
 
-    public void setEmploymentStartDate(String employmentStartDate) {
+    public void setEmploymentStartDate(String employmentStartDate)
+    {
         this.employmentStartDate = employmentStartDate;
     }
 
-    public String getEmploymentEndDate() {
+    public String getEmploymentEndDate()
+    {
         return employmentEndDate;
     }
 
-    public void setEmploymentEndDate(String employmentEndDate) {
+    public void setEmploymentEndDate(String employmentEndDate)
+    {
         this.employmentEndDate = employmentEndDate;
     }
 
-    public String getUsername() {
+    public String getUsername()
+    {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(String username)
+    {
         this.username = username;
     }
 
-    public String getPassword() {
+    public String getPassword()
+    {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String password)
+    {
         this.password = password;
     }
 
-    public String getComments() {
+    public String getComments()
+    {
         return comments;
     }
 
-    public void setComments(String comments) {
+    public void setComments(String comments)
+    {
         this.comments = comments;
     }
 }
