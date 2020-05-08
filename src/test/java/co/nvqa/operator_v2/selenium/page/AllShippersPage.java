@@ -385,14 +385,22 @@ public class AllShippersPage extends OperatorV2SimplePage
         allShippersCreateEditPage.verifyPricingScriptIsActive(status, status1);
     }
 
-    public void verifyPricingScriptDetails(Pricing pricingProfile, Pricing pricingProfileFromDb)
+    public void verifyPricingScriptAndShipperDiscountDetails(Pricing pricingProfile, Pricing pricingProfileFromDb)
     {
         assertTrue("Script id is not same: ", pricingProfile.getScriptName().contains(pricingProfileFromDb.getScriptId().toString()));
         assertEquals("Pricing profile id is not same: ", pricingProfile.getTemplateId(), pricingProfileFromDb.getTemplateId());
         assertTrue("Shipper discount Id is null:", pricingProfileFromDb.getShipperDiscountId()!=null);
         assertEquals("Comments are not the same: ", pricingProfile.getComments(), pricingProfileFromDb.getComments());
-        assertEquals("Discount amount is not same:", pricingProfile.getDiscount(), pricingProfileFromDb.getDiscount());
+        assertTrue("Discount amount is not same:", pricingProfile.getDiscount().contains(pricingProfileFromDb.getDiscount()));
         assertEquals("Type is not the same:", pricingProfile.getType(), pricingProfileFromDb.getType());
+    }
+
+    public void verifyPricingScriptDetails(Pricing pricingProfile, Pricing pricingProfileFromDb)
+    {
+        assertTrue("Script id is not same: ", pricingProfile.getScriptName().contains(pricingProfileFromDb.getScriptId().toString()));
+        assertEquals("Pricing profile id is not same: ", pricingProfile.getTemplateId(), pricingProfileFromDb.getTemplateId());
+        assertTrue("Shipper discount Id is not null:", pricingProfileFromDb.getShipperDiscountId()==0);
+        assertEquals("Comments are not the same: ", pricingProfile.getComments(), pricingProfileFromDb.getComments());
     }
 
     public void changeCountry(String country)
@@ -412,5 +420,11 @@ public class AllShippersPage extends OperatorV2SimplePage
     {
         waitUntilPageLoaded();
         allShippersCreateEditPage.addNewPricingScriptAndVerifyErrorMessage(shipper, errorMessage);
+    }
+
+    public void addNewPricingScriptWithDiscountOver6DigitsAndVerifyErrorMessage(Shipper shipper, String errorMessage)
+    {
+        waitUntilPageLoaded();
+        allShippersCreateEditPage.addNewPricingScriptWithDiscountOver6DigitsAndVerifyErrorMessage(shipper, errorMessage);
     }
 }
