@@ -842,6 +842,206 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
+  @DeleteOrArchiveRoute
+  Scenario: Parcel Sweeper Live - On Vehicle for Delivery
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    When API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When API Driver collect all his routes
+    When API Driver get pickup/delivery waypoint of the created order
+    When API Operator Van Inbound parcel
+    When API Operator start the route
+    When API Operator refresh created order data
+    Given Operator go to menu Routing -> Parcel Sweeper Live
+    When Operator sweep parcel using data below:
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    Then Operator verify Route ID on Parcel Sweeper page using data below:
+      | orderId    | ALERT                 |
+      | driverName | PARCEL STATUS ERROR   |
+      | color      | #f45050               |
+    When API Operator get all zones preferences
+    Then Operator verify Zone on Parcel Sweeper page using data below:
+      | zoneName | NIL      |
+      | color    | #f45050  |
+    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
+      | hubName | NIL       |
+      | color   | #f45050   |
+    And DB Operator verifies warehouse_sweeps record
+      | trackingId | CREATED  |
+      | hubId      | {hub-id} |
+    And DB Operator verify the last order_events record for the created order:
+      | type | 27 |
+    And Operator verifies event is present for order on Edit order page
+      | eventName | PARCEL ROUTING SCAN |
+      | hubName   | {hub-name}          |
+      | hubId     | {hub-id}            |
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
+
+  Scenario: Parcel Sweeper Live - Staging
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "is_staged":true, "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Operator refresh created order data
+    Given Operator go to menu Routing -> Parcel Sweeper Live
+    When Operator sweep parcel using data below:
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    Then Operator verify Route ID on Parcel Sweeper page using data below:
+      | orderId    | NOT FOUND |
+      | driverName | NIL       |
+      | color      | #f45050   |
+    When API Operator get all zones preferences
+    Then Operator verify Zone on Parcel Sweeper page using data below:
+      | zoneName | NIL      |
+      | color    | #f45050  |
+    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
+      | hubName | NOT FOUND |
+      | color   | #f45050   |
+    And DB Operator verifies warehouse_sweeps record
+      | trackingId | CREATED  |
+      | hubId      | {hub-id} |
+    And DB Operator verify the last order_events record for the created order:
+      | type | 27 |
+    And Operator verifies event is present for order on Edit order page
+      | eventName | PARCEL ROUTING SCAN |
+      | hubName   | {hub-name}          |
+      | hubId     | {hub-id}            |
+    And Operator verify order status is "Staging" on Edit Order page
+    And Operator verify order granular status is "Staging" on Edit Order page
+
+  @DeleteOrArchiveRoute @CloseNewWindows
+  Scenario: Parcel Sweeper Live - Arrived at Distribution Point
+    When Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Distribution Points -> DP Tagging
+    When Operator tags single order to DP with DPMS ID = "{dpms-id}"
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver deliver the created parcel successfully
+    When API Operator refresh created order data
+    Given Operator go to menu Routing -> Parcel Sweeper Live
+    When Operator sweep parcel using data below:
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    Then Operator verify Route ID on Parcel Sweeper page using data below:
+      | orderId    | NOT FOUND |
+      | driverName | NIL       |
+      | color      | #f45050   |
+    When API Operator get all zones preferences
+    Then Operator verify Zone on Parcel Sweeper page using data below:
+      | zoneName | NIL      |
+      | color    | #f45050  |
+    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
+      | hubName | NOT FOUND |
+      | color   | #f45050   |
+    And DB Operator verifies warehouse_sweeps record
+      | trackingId | CREATED  |
+      | hubId      | {hub-id} |
+    And DB Operator verify the last order_events record for the created order:
+      | type | 27 |
+    And Operator verifies event is present for order on Edit order page
+      | eventName | PARCEL ROUTING SCAN |
+      | hubName   | {hub-name}          |
+      | hubId     | {hub-id}            |
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Distribution Point" on Edit Order page
+
+  @DeleteOrArchiveRoute
+  Scenario: OPV2 Parcel Sweeper Live - Pending Pickup At Distribution Point
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                         |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}}|
+    Given API DP creates a return fully integrated order in a dp "{dp-id}" and Shipper Legacy ID = "{shipper-v4-legacy-id}"
+    When API Operator refresh created order data
+    Given Operator go to menu Routing -> Parcel Sweeper Live
+    When Operator sweep parcel using data below:
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    Then Operator verify Route ID on Parcel Sweeper page using data below:
+      | orderId    | ALERT                 |
+      | driverName | PARCEL STATUS ERROR   |
+      | color      | #f45050               |
+    When API Operator get all zones preferences
+    Then Operator verify Zone on Parcel Sweeper page using data below:
+      | zoneName | NIL      |
+      | color    | #f45050  |
+    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
+      | hubName | NIL       |
+      | color   | #f45050   |
+    And DB Operator verifies warehouse_sweeps record
+      | trackingId | CREATED  |
+      | hubId      | {hub-id} |
+    And DB Operator verify the last order_events record for the created order:
+      | type | 27 |
+    And Operator verifies event is present for order on Edit order page
+      | eventName | PARCEL ROUTING SCAN |
+      | hubName   | {hub-name}          |
+      | hubId     | {hub-id}            |
+    And Operator verify order status is "Pending" on Edit Order page
+    And Operator verify order granular status is "Pending Pickup at Distribution Point" on Edit Order page
+
+  @DisableSetAside @DeleteOrArchiveRoute
+  Scenario: Parcel Sweeper Live - Set Aside Order
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator get information about delivery routing hub of created order
+    And API Operator enable Set Aside using data below:
+      | setAsideGroup           | {set-aside-group-id} |
+      | setAsideMaxDeliveryDays | 3                    |
+      | setAsideHubs            | {KEY_ORDER_HUB_ID}   |
+    When Operator go to menu Inbounding -> Global Inbound
+    And Operator global inbounds parcel using data below:
+      | hubName    | {hub-name}             |
+      | trackingId | GET_FROM_CREATED_ORDER |
+    When API Operator refresh created order data
+    When Operator go to menu Routing -> Parcel Sweeper Live
+    When Operator provides data on Parcel Sweeper Live page:
+      | hubName    | {hub-name} |
+      | trackingId | CREATED    |
+    Then Operator verify Route ID on Parcel Sweeper page using data below:
+      | routeId    | SET ASIDE              |
+      | driverName | {set-aside-group-name} |
+      | color      | #f45050                |
+    When API Operator get all zones preferences
+    Then Operator verify Zone on Parcel Sweeper page using data below:
+      | zoneName | FROM CREATED ORDER |
+      | color    | #f45050            |
+    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
+      | hubName | {KEY_CREATED_ORDER.destinationHub} |
+      | color   | #73deec                            |
+    And DB Operator verifies warehouse_sweeps record
+      | trackingId | CREATED  |
+      | hubId      | {hub-id} |
+    And DB Operator verify the order_events record exists for the created order with type:
+      | 27    |
+    And Operator verifies event is present for order on Edit order page
+      | eventName | PARCEL ROUTING SCAN |
+      | hubName   | {hub-name}          |
+      | hubId     | {hub-id}            |
+    And Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
