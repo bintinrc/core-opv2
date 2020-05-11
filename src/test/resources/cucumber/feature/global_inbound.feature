@@ -476,9 +476,9 @@ Feature: Global Inbound
   Scenario: Inbound Fully Integrated DP Order (uid:b960288a-8f46-4503-98c4-8d87a64a5d13)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
-      | shipperClientId     | {shipper-fully-integrated-client-id}     |
-      | shipperClientSecret | {shipper-fully-integrated-client-secret} |
-      | generateFrom        | RANDOM                                   |
+      | shipperClientId     | {shipper-fully-integrated-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+      | shipperClientSecret | {shipper-fully-integrated-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest      | {"service_type":"Parcel","service_level":"standard","reference":{"merchant_order_number":"ship-123"},"to":{"name":"Latika Jamnal","phone_number":"+6588923644","email":"ninjavan.qa3@gmail.com","address":{"country":"{country-code}","address1":"30 Jalan Kilang Barat","address2":"NVQA V4 HQ","postcode":"628586"}, "collection_point": "{dp-short-name}"},"parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":null,"pickup_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"pickup_address_slot_id":1,"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"dimensions":{"weight":2},"allow_self_collection":true},"marketplace":{"seller_id":"Hazelcast-Lock-4","seller_company_name":"weee"},"international":{"portation":"Import"}} |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
@@ -498,9 +498,9 @@ Feature: Global Inbound
   Scenario: Inbound Semi Integrated DP Order (uid:c94e89fe-5244-40de-802e-4442c14f7be0)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
-      | shipperClientId     | {shipper-semi-integrated-client-id}     |
-      | shipperClientSecret | {shipper-semi-integrated-client-secret} |
-      | generateFrom        | RANDOM                                  |
+      | shipperClientId     | {shipper-semi-integrated-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+      | shipperClientSecret | {shipper-semi-integrated-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | {"service_type":"Parcel","service_level":"standard","reference":{"merchant_order_number":"ship-123"},"to":{"name":"Latika Jamnal","phone_number":"+6588923644","email":"ninjavan.qa3@gmail.com","address":{"country":"{country-code}","address2":"{dp-address-2}","address1":"{dp-address-1}","postcode":"{dp-postcode}"}},"parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":null,"pickup_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"pickup_address_slot_id":1,"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"dimensions":{"weight":2},"allow_self_collection":true},"marketplace":{"seller_id":"Hazelcast-Lock-4","seller_company_name":"weee"},"international":{"portation":"Import"}} |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
@@ -529,17 +529,17 @@ Feature: Global Inbound
       | granular status | Pending Pickup    |
     And Operator searches and selects orders created on Add Tags to Order page
     And Operator tags order with:
-      | OPV2AUTO1   |
-      | OPV2AUTO2   |
-      | OPV2AUTO3   |
+      | OPV2AUTO1 |
+      | OPV2AUTO2 |
+      | OPV2AUTO3 |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name}             |
       | trackingId | GET_FROM_CREATED_ORDER |
     Then Operator verifies tags on Global Inbound page
-      | OPV2AUTO1   |
-      | OPV2AUTO2   |
-      | OPV2AUTO3   |
+      | OPV2AUTO1 |
+      | OPV2AUTO2 |
+      | OPV2AUTO3 |
     Then API Operator verify order info after Global Inbound
     And DB Operator verify the last inbound_scans record for the created order:
       | hubId      | {hub-id}               |
@@ -632,6 +632,154 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
-  @KillBrowser @ShouldAlwaysRun
+  Scenario: Inbound parcel that is intended to be picked up on future date - Standard (uid:85a053d5-ab3e-465b-b221-61fd624ee377)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below:
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
+    And DB Operator verify the last inbound_scans record for the created order:
+      | hubId      | {hub-id}               |
+      | trackingId | GET_FROM_CREATED_ORDER |
+      | type       | 2                      |
+    And DB Operator verify order_events record for the created order:
+      | type | 26 |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of an order from All Orders page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status             | SUCCESS                        |
+      | startDate          | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate            | {gradle-next-1-day-yyyy-MM-dd} |
+      | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status    | PENDING                        |
+      | startDate | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-3-day-yyyy-MM-dd} |
+    And Operator verify order event on Edit order page using data below:
+      | name    | HUB INBOUND SCAN |
+      | hubName | {hub-name}       |
+
+  Scenario: Inbound parcel that is intended to be picked up on future date - Express (uid:6e4afd7d-87cc-4cbb-b021-d2f7e8ee807b)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Express", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below:
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
+    And DB Operator verify the last inbound_scans record for the created order:
+      | hubId      | {hub-id}               |
+      | trackingId | GET_FROM_CREATED_ORDER |
+      | type       | 2                      |
+    And DB Operator verify order_events record for the created order:
+      | type | 26 |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of an order from All Orders page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status             | SUCCESS                        |
+      | startDate          | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate            | {gradle-next-1-day-yyyy-MM-dd} |
+      | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status    | PENDING                        |
+      | startDate | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-2-day-yyyy-MM-dd} |
+    And Operator verify order event on Edit order page using data below:
+      | name    | HUB INBOUND SCAN |
+      | hubName | {hub-name}       |
+
+  Scenario: Inbound parcel that is intended to be picked up on future date - Nextday (uid:287ca61f-fdae-4515-bd60-a69e186cec9e)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Nextday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below:
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
+    And DB Operator verify the last inbound_scans record for the created order:
+      | hubId      | {hub-id}               |
+      | trackingId | GET_FROM_CREATED_ORDER |
+      | type       | 2                      |
+    And DB Operator verify order_events record for the created order:
+      | type | 26 |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of an order from All Orders page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status             | SUCCESS                        |
+      | startDate          | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate            | {gradle-next-1-day-yyyy-MM-dd} |
+      | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status    | PENDING                        |
+      | startDate | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+    And Operator verify order event on Edit order page using data below:
+      | name    | HUB INBOUND SCAN |
+      | hubName | {hub-name}       |
+
+  Scenario: Inbound parcel that is intended to be picked up on future date - Sameday
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below:
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
+    And DB Operator verify the last inbound_scans record for the created order:
+      | hubId      | {hub-id}               |
+      | trackingId | GET_FROM_CREATED_ORDER |
+      | type       | 2                      |
+    And DB Operator verify order_events record for the created order:
+      | type | 26 |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of an order from All Orders page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Pickup details on Edit order page using data below:
+      | status             | SUCCESS                        |
+      | startDate          | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate            | {gradle-next-1-day-yyyy-MM-dd} |
+      | lastServiceEndDate | {gradle-next-0-day-yyyy-MM-dd} |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status    | PENDING                        |
+      | startDate | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+    And Operator verify order event on Edit order page using data below:
+      | name    | HUB INBOUND SCAN |
+      | hubName | {hub-name}       |
+
+  @KillBrowser @ShouldAlwaysRun @Debug
   Scenario: Kill Browser
     Given no-op

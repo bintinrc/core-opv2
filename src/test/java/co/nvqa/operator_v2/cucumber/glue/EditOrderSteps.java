@@ -3,7 +3,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
@@ -15,10 +17,14 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.exparity.hamcrest.date.DateMatchers;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 
+import java.text.ParseException;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -422,6 +428,108 @@ public class EditOrderSteps extends AbstractSteps
                 .orElseThrow(() -> new AssertionError(f("There is no [%s] event on Edit Order page", expectedEvent.getName())));
 
         expectedEvent.compareWithActual(actualEvent);
+    }
+
+    @Then("^Operator verify Delivery details on Edit order page using data below:$")
+    public void verifyDeliveryDetails(Map<String, String> expectedData) throws ParseException
+    {
+        expectedData = resolveKeyValues(expectedData);
+
+        if (expectedData.containsKey("status"))
+        {
+            Assert.assertEquals("Delivery Details - Status", f("Status: %s", expectedData.get("status")), editOrderPage.deliveryDetailsBox.status.getText());
+        }
+        if (expectedData.containsKey("startDate"))
+        {
+            String actual = editOrderPage.deliveryDetailsBox.startDateTime.getText();
+            Date actualDateTime = Date.from(DateUtil.getDate(actual, DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+            Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
+            Assert.assertThat("Delivery Details - Start Date / Time",
+                    actualDateTime, DateMatchers.sameDay(expectedDateTime));
+        }
+        if (expectedData.containsKey("startDateTime"))
+        {
+            String actual = editOrderPage.deliveryDetailsBox.startDateTime.getText();
+            Date actualDateTime = Date.from(DateUtil.getDate(actual, DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+            Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(expectedData.get("startDateTime"));
+            Assert.assertThat("Delivery Details - Start Date / Time",
+                    actualDateTime, DateMatchers.sameSecondOfMinute(expectedDateTime));
+        }
+        if (expectedData.containsKey("endDate"))
+        {
+            String actual = editOrderPage.deliveryDetailsBox.endDateTime.getText();
+            Date actualDateTime = Date.from(DateUtil.getDate(actual, DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+            Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
+            Assert.assertThat("Delivery Details - End Date / Time",
+                    actualDateTime, DateMatchers.sameDay(expectedDateTime));
+        }
+        if (expectedData.containsKey("endDateTime"))
+        {
+            String actual = editOrderPage.deliveryDetailsBox.endDateTime.getText();
+            Date actualDateTime = Date.from(DateUtil.getDate(actual, DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+            Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(expectedData.get("endDateTime"));
+            Assert.assertThat("Delivery Details - End Date / Time",
+                    actualDateTime, DateMatchers.sameSecondOfMinute(expectedDateTime));
+        }
+    }
+
+    @Then("^Operator verify Pickup details on Edit order page using data below:$")
+    public void verifyPickupDetails(Map<String, String> expectedData) throws ParseException
+    {
+        expectedData = resolveKeyValues(expectedData);
+
+        if (expectedData.containsKey("status"))
+        {
+            Assert.assertEquals("Pickup Details - Status", f("Status: %s", expectedData.get("status")), editOrderPage.pickupDetailsBox.status.getText());
+        }
+        if (expectedData.containsKey("startDate"))
+        {
+            String actual = editOrderPage.pickupDetailsBox.startDateTime.getText();
+            Date actualDateTime = Date.from(DateUtil.getDate(actual, DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+            Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("startDate"));
+            Assert.assertThat("Pickup Details - Start Date / Time",
+                    actualDateTime, DateMatchers.sameDay(expectedDateTime));
+        }
+        if (expectedData.containsKey("startDateTime"))
+        {
+            String actual = editOrderPage.pickupDetailsBox.startDateTime.getText();
+            Date actualDateTime = Date.from(DateUtil.getDate(actual, DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+            Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(expectedData.get("startDateTime"));
+            Assert.assertThat("Pickup Details - Start Date / Time",
+                    actualDateTime, DateMatchers.sameSecondOfMinute(expectedDateTime));
+        }
+        if (expectedData.containsKey("endDate"))
+        {
+            String actual = editOrderPage.pickupDetailsBox.endDateTime.getText();
+            Date actualDateTime = Date.from(DateUtil.getDate(actual, DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+            Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("endDate"));
+            Assert.assertThat("Pickup Details - End Date / Time",
+                    actualDateTime, DateMatchers.sameDay(expectedDateTime));
+        }
+        if (expectedData.containsKey("endDateTime"))
+        {
+            String actual = editOrderPage.pickupDetailsBox.endDateTime.getText();
+            Date actualDateTime = Date.from(DateUtil.getDate(actual, DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+            Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(expectedData.get("endDateTime"));
+            Assert.assertThat("Delivery Details - End Date / Time",
+                    actualDateTime, DateMatchers.sameSecondOfMinute(expectedDateTime));
+        }
+        if (expectedData.containsKey("lastServiceEndDate"))
+        {
+            String actual = editOrderPage.pickupDetailsBox.lastServiceEnd.getText();
+            Date actualDateTime = Date.from(DateUtil.getDate(actual, DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+            Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD.parse(expectedData.get("lastServiceEndDate"));
+            Assert.assertThat("Pickup Details - Last Service End",
+                    actualDateTime, DateMatchers.sameDay(expectedDateTime));
+        }
+        if (expectedData.containsKey("lastServiceEndDateTime"))
+        {
+            String actual = editOrderPage.pickupDetailsBox.lastServiceEnd.getText();
+            Date actualDateTime = Date.from(DateUtil.getDate(actual, DateUtil.DATE_TIME_FORMATTER.withZone(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE))).toInstant());
+            Date expectedDateTime = DateUtil.SDF_YYYY_MM_DD_HH_MM_SS.parse(expectedData.get("lastServiceEndDateTime"));
+            Assert.assertThat("Delivery Details - Last Service End",
+                    actualDateTime, DateMatchers.sameSecondOfMinute(expectedDateTime));
+        }
     }
 
     @Then("^Operator verify (Pickup|Delivery) \"(.+)\" order event description on Edit order page$")
