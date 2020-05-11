@@ -843,7 +843,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
   @DeleteOrArchiveRoute
-  Scenario: Parcel Sweeper Live - On Vehicle for Delivery
+  Scenario: Parcel Sweeper Live - On Vehicle for Delivery (uid:5ae4645e-1195-4c53-b6f6-fdddb16c172d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -886,7 +886,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
 
-  Scenario: Parcel Sweeper Live - Staging
+  Scenario: Parcel Sweeper Live - Staging (uid:9b2f4f58-dd53-4fa8-a036-d5595d5fe65c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -920,7 +920,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Staging" on Edit Order page
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Parcel Sweeper Live - Arrived at Distribution Point
+  Scenario: Parcel Sweeper Live - Arrived at Distribution Point (uid:b5b9d7fc-67fb-473f-b030-c78a67a553c6)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -967,7 +967,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Arrived at Distribution Point" on Edit Order page
 
   @DeleteOrArchiveRoute
-  Scenario: OPV2 Parcel Sweeper Live - Pending Pickup At Distribution Point
+  Scenario: OPV2 Parcel Sweeper Live - Pending Pickup At Distribution Point (uid:0662fb02-a097-486b-9832-d371808e9290)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}}|
@@ -1001,7 +1001,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Pending Pickup at Distribution Point" on Edit Order page
 
   @DisableSetAside @DeleteOrArchiveRoute
-  Scenario: Parcel Sweeper Live - Set Aside Order
+  Scenario: Parcel Sweeper Live - Set Aside Order (uid:49d4dfa4-551a-4b5a-ac6b-0c4168507f44)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
