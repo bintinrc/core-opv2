@@ -14,6 +14,9 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
@@ -48,10 +51,15 @@ public class EditOrderPage extends OperatorV2SimplePage
     @FindBy(xpath = "//div[./label[.='Current DNR Group']]/p")
     public PageElement currentDnrGroup;
 
+    @FindBy(xpath = "//div[./label[.='Current Priority']]/h3")
+    public PageElement currentPriority;
+
     private static final String NG_REPEAT_TABLE_EVENT = "event in getTableData()";
     public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE_EVENT = "name";
     private TransactionsTable transactionsTable;
     private AddToRouteDialog addToRouteDialog;
+    @FindBy(css = "md-dialog")
+    public EditPriorityLevelDialog editPriorityLevelDialog;
     @FindBy(id = "delivery-details")
     public DeliveryDetailsBox deliveryDetailsBox;
     @FindBy(id = "pickup-details")
@@ -135,13 +143,13 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public void editPriorityLevel(int priorityLevel)
     {
-        if (!getText("//label[text()='Current Priority']/following-sibling::h3").equalsIgnoreCase(String.valueOf(priorityLevel)))
+        if (!StringUtils.equalsIgnoreCase(currentPriority.getText(), String.valueOf(priorityLevel)))
         {
             clickMenu("Order Settings", "Edit Priority Level");
-            waitUntilVisibilityOfMdDialogByTitle("Edit Priority Level");
-            sendKeysByAriaLabel("container.order.edit.delivery-priority-level", String.valueOf(priorityLevel));
-            clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
-            waitUntilInvisibilityOfMdDialogByTitle("Edit Priority Level");
+            editPriorityLevelDialog.waitUntilVisible();
+            editPriorityLevelDialog.priorityLevel.setValue(priorityLevel);
+            editPriorityLevelDialog.saveChanges.clickAndWaitUntilDone();
+            editPriorityLevelDialog.waitUntilInvisible();
         }
     }
 
@@ -2194,5 +2202,20 @@ public class EditOrderPage extends OperatorV2SimplePage
     {
         click("//div[label[@label = 'Cash on Delivery']]//button[@aria-label='No']");
         clickNvApiTextButtonByName("commons.save-changes");
+    }
+
+    public static class EditPriorityLevelDialog extends MdDialog
+    {
+        public EditPriorityLevelDialog (WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(id = "container.order.edit.delivery-priority-level-1")
+        public TextBox priorityLevel;
+
+
+        @FindBy(name = "commons.save-changes")
+        public NvApiTextButton saveChanges;
     }
 }

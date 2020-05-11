@@ -434,6 +434,7 @@ public class EditOrderSteps extends AbstractSteps
     public void verifyDeliveryDetails(Map<String, String> expectedData) throws ParseException
     {
         expectedData = resolveKeyValues(expectedData);
+        expectedData = StandardTestUtils.replaceDataTableTokens(expectedData);
 
         if (expectedData.containsKey("status"))
         {
