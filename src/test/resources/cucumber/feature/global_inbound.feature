@@ -632,6 +632,75 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
+  Scenario: Inbound Parcel with change in order SLA - Standard (uid:6c520ea5-9722-41a2-85fa-0eabfea90af9)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below:
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of an order from All Orders page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status    | PENDING                        |
+      | endDate   | {gradle-next-3-day-yyyy-MM-dd} |
+
+  Scenario: Inbound Parcel with change in order SLA - Express (uid:b713aabe-c52d-4e86-9bec-90ee238025e4)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Express", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below:
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of an order from All Orders page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status    | PENDING                        |
+      | endDate   | {gradle-next-2-day-yyyy-MM-dd} |
+
+
+  Scenario: Inbound Parcel with change in order SLA - Nextday (uid:2ffc5a4c-104f-4f0e-a766-2336789da5f3)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Nextday", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below:
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of an order from All Orders page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status    | PENDING                        |
+      | endDate   | {gradle-next-1-day-yyyy-MM-dd} |
+
+  Scenario: Inbound Parcel with change in order SLA - Sameday (uid:06080a77-61fa-4070-9eb3-225f6bfc7fc2)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Sameday", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-2-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below:
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of an order from All Orders page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    And Operator verify Delivery details on Edit order page using data below:
+      | status    | PENDING                        |
+      | endDate   | {gradle-next-2-day-yyyy-MM-dd} |
+
   Scenario: Inbound parcel that is intended to be picked up on future date - Standard (uid:85a053d5-ab3e-465b-b221-61fd624ee377)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -743,7 +812,7 @@ Feature: Global Inbound
       | name    | HUB INBOUND SCAN |
       | hubName | {hub-name}       |
 
-  Scenario: Inbound parcel that is intended to be picked up on future date - Sameday
+  Scenario: Inbound parcel that is intended to be picked up on future date - Sameday (uid:a25b3fa1-ac27-400a-8ba3-e64a3e2dac3d)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -780,6 +849,6 @@ Feature: Global Inbound
       | name    | HUB INBOUND SCAN |
       | hubName | {hub-name}       |
 
-  @KillBrowser @ShouldAlwaysRun @Debug
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

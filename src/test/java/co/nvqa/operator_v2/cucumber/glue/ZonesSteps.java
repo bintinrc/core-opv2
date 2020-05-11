@@ -45,20 +45,20 @@ public class ZonesSteps extends AbstractSteps
         zone.setDescription(f("This zone is created by Operator V2 automation test. Please don't use this zone. Created at %s.", new Date()));
 
         zonesPage.addZone(zone);
-        put("zone", zone);
+        put(KEY_CREATED_ZONE, zone);
     }
 
     @Then("^Operator verify the new Zone is created successfully$")
     public void operatorVerifyTheNewZoneIsCreatedSuccessfully()
     {
-        Zone zone = get("zone");
+        Zone zone = get(KEY_CREATED_ZONE);
         zonesPage.verifyNewZoneIsCreatedSuccessfully(zone);
     }
 
     @When("^Operator update the new Zone$")
     public void operatorUpdateTheNewZone()
     {
-        Zone zone = get("zone");
+        Zone zone = get(KEY_CREATED_ZONE);
 
         Zone zoneEdited = new Zone();
         zoneEdited.setName(zone.getName() + "-EDITED");
@@ -82,35 +82,35 @@ public class ZonesSteps extends AbstractSteps
     @When("^Operator delete the new Zone$")
     public void operatorDeleteTheNewZone()
     {
-        Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get("zone");
+        Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KEY_CREATED_ZONE);
         zonesPage.deleteZone(zone);
     }
 
     @Then("^Operator verify the new Zone is deleted successfully$")
     public void operatorVerifyTheNewZoneIsDeletedSuccessfully()
     {
-        Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get("zone");
+        Zone zone = containsKey("zoneEdited") ? get("zoneEdited") : get(KEY_CREATED_ZONE);
         zonesPage.verifyZoneIsDeletedSuccessfully(zone);
     }
 
     @Then("^Operator check all filters on Zones page work fine$")
     public void operatorCheckAllFiltersOnZonesPageWork()
     {
-        Zone zone = get("zone");
+        Zone zone = get(KEY_CREATED_ZONE);
         zonesPage.verifyAllFiltersWorkFine(zone);
     }
 
     @When("^Operator download Zone CSV file$")
     public void operatorDownloadZoneCsvFile()
     {
-        Zone zone = get("zone");
+        Zone zone = get(KEY_CREATED_ZONE);
         zonesPage.downloadCsvFile(zone);
     }
 
     @Then("^Operator verify Zone CSV file is downloaded successfully$")
     public void operatorVerifyZoneCsvFileIsDownloadSuccessfully()
     {
-        Zone zone = get("zone");
+        Zone zone = get(KEY_CREATED_ZONE);
         zonesPage.verifyCsvFileDownloadedSuccessfully(zone);
     }
 
