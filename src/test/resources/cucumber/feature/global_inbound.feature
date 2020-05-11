@@ -233,10 +233,11 @@ Feature: Global Inbound
       | Failure Reason Code ID = 6 | uid:4cb215bb-c094-419c-8708-a741b476a43e | 6                   | #9999FF   |
 
   Scenario: Inbound showing Weight Discrepancy - Weight Tolerance to not Taking Affect on Global Inbound (uid:bafa05c9-ad25-417e-9270-7b7ae23581ed)
-    Given API Shipper create V4 order using data below:
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu System Settings -> Global Settings
+    And Operator go to menu System Settings -> Global Settings
     And Operator set Weight Tolerance value to "" on Global Settings page
     And Operator save Inbound settings on Global Settings page
     And Operator go to menu Inbounding -> Global Inbound
@@ -246,30 +247,31 @@ Feature: Global Inbound
     Then API Operator verify order info after Global Inbound
 
   Scenario: Inbound showing Weight Discrepancy - Global Inbound with Higher Weight (uid:a8ee166c-7c3b-4b75-bc8d-b8cd916fef77)
-    Given API Shipper create V4 order using data below:
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu System Settings -> Global Settings
+    And Operator go to menu System Settings -> Global Settings
     And Operator set Weight Tolerance value to "2" on Global Settings page
     And Operator save Inbound settings on Global Settings page
     And Operator go to menu Inbounding -> Global Inbound
-    Then Operator global inbounds parcel using data below and check alert:
+    And Operator global inbounds parcel using data below and check alert:
       | hubName        | {hub-name}                                 |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideWeight | 7                                          |
       | weightWarning  | Weight is Higher than original by 3 kg     |
     Then API Operator verify order info after Global Inbound
 
-    @Debug
   Scenario: Inbound showing Weight Discrepancy - Global Inbound with Lower Weight (uid:0eee9227-d369-4fe8-b69e-5ed5586c2705)
-    Given API Shipper create V4 order using data below:
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu System Settings -> Global Settings
+    And Operator go to menu System Settings -> Global Settings
     And Operator set Weight Tolerance value to "2" on Global Settings page
     And Operator save Inbound settings on Global Settings page
     And Operator go to menu Inbounding -> Global Inbound
-    Then Operator global inbounds parcel using data below and check alert:
+    And Operator global inbounds parcel using data below and check alert:
       | hubName        | {hub-name}                                 |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideWeight | 1                                          |
@@ -278,28 +280,30 @@ Feature: Global Inbound
 
   @CloseNewWindows
   Scenario: Check delivery dates after Global Inbound (uid:4390f3d5-a70b-4a59-b724-39da79efbbfe)
-    Given API Shipper create V4 order using data below:
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
-    Then Operator global inbounds parcel using data below:
+    And Operator global inbounds parcel using data below:
       | hubName    | {hub-name}                                 |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    When Operator go to menu Order -> All Orders
+    And Operator go to menu Order -> All Orders
     And Operator open page of an order from All Orders page using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
-    And Operator verify Delivery details on Edit order page using data below:
+    Then Operator verify Delivery details on Edit order page using data below:
       | startDateTime | {{next-2-working-days-yyyy-MM-dd}} 09:00:00 |
       | endDateTime   | {{next-4-working-days-yyyy-MM-dd}} 22:00:00 |
 
   @CloseNewWindows
   Scenario: Inbound parcel picked up from DP - Pickup Pending (uid:a47074f8-0007-450c-b21d-febcee419fa5)
-    Given API Shipper create V4 order using data below:
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API DP lodge in an order to DP with ID = "{dp-id}" and Shipper Legacy ID = "{shipper-v4-legacy-id}"
-    When Operator go to menu Inbounding -> Global Inbound
+    And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
       | hubName    | {hub-name}                                 |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
@@ -338,14 +342,15 @@ Feature: Global Inbound
 
   @CloseNewWindows
   Scenario: Inbound parcel picked up from DP - Pickup Successed (uid:1513b098-b321-4cb8-a75f-dd9e61f99dba)
-    When API Shipper create V4 order using data below:
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API DP lodge in an order to DP with ID = "{dp-id}" and Shipper Legacy ID = "{shipper-v4-legacy-id}"
     And DB Operator gets DP Job ID by Barcode
     And API Operator do the DP Success for From Driver Flow
     And API Operator get order details
-    When Operator go to menu Inbounding -> Global Inbound
+    And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
       | hubName    | {hub-name}                                 |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
@@ -435,7 +440,8 @@ Feature: Global Inbound
 
   @DisableSetAside @CloseNewWindows
   Scenario: Inbound parcel to be set aside - set aside by destination hub - parcel to set aside (uid:379ff746-ea39-4aec-8e3f-4e63fd546c7c)
-    Given API Shipper create V4 order using data below:
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator get information about delivery routing hub of created order
@@ -443,7 +449,7 @@ Feature: Global Inbound
       | setAsideGroup           | {set-aside-group-id} |
       | setAsideMaxDeliveryDays | 3                    |
       | setAsideHubs            | {KEY_ORDER_HUB_ID}   |
-    When Operator go to menu Inbounding -> Global Inbound
+    And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
       | hubName    | {hub-name}                                 |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
@@ -472,7 +478,8 @@ Feature: Global Inbound
 
   @DisableSetAside @CloseNewWindows
   Scenario: Inbound parcel to be set aside - set aside by destination hub -  parcel not to be set aside (uid:7891cc24-d92a-4d6f-b71a-1f4a3ac0d1a8)
-    Given API Shipper create V4 order using data below:
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator get information about delivery routing hub of created order
@@ -507,7 +514,8 @@ Feature: Global Inbound
 
   @DisableSetAside @CloseNewWindows
   Scenario: Inbound parcel to be set aside - set aside by zone - parcel to set aside (uid:d95802a1-e878-4f41-8321-8457018255fe)
-    Given API Shipper create V4 order using data below:
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator get information about delivery routing hub of created order
@@ -544,7 +552,8 @@ Feature: Global Inbound
 
   @DisableSetAside @CloseNewWindows
   Scenario: Inbound parcel to be set aside - set aside by zone -  parcel not to be set aside (uid:706ad3d2-5018-440e-bfd3-1d8c67346e34)
-    Given API Shipper create V4 order using data below:
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator get information about delivery routing hub of created order
@@ -578,8 +587,8 @@ Feature: Global Inbound
       | hubName | {hub-name}       |
 
   Scenario: Inbound Fully Integrated DP Order (uid:b960288a-8f46-4503-98c4-8d87a64a5d13)
-    Given Operator go to menu Order -> All Orders
-    Given API Shipper create V4 order using data below:
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-fully-integrated-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
       | shipperClientSecret | {shipper-fully-integrated-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
       | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -588,7 +597,7 @@ Feature: Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name}                                 |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    Then API Operator verify order info after Global Inbound
+    And API Operator verify order info after Global Inbound
     And DB Operator verify the last inbound_scans record for the created order:
       | hubId      | {hub-id}                                   |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
@@ -596,18 +605,18 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order:
       | type | 26 |
     When API DP get the DP Details by DP ID = "{dp-id}"
-    And DB Operator gets all details for ninja collect confirmed status
-    Then Ninja Collect Operator verifies that all the details for Confirmed Status via "Fully Integrated" are right
+    Then DB Operator gets all details for ninja collect confirmed status
+    And Ninja Collect Operator verifies that all the details for Confirmed Status via "Fully Integrated" are right
 
   Scenario: Inbound Semi Integrated DP Order (uid:c94e89fe-5244-40de-802e-4442c14f7be0)
-    Given Operator go to menu Order -> All Orders
-    Given API Shipper create V4 order using data below:
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-semi-integrated-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
       | shipperClientSecret | {shipper-semi-integrated-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
       | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | {"service_type":"Parcel","service_level":"standard","reference":{"merchant_order_number":"ship-123"},"to":{"name":"Latika Jamnal","phone_number":"+6588923644","email":"ninjavan.qa3@gmail.com","address":{"country":"{country-code}","address2":"{dp-address-2}","address1":"{dp-address-1}","postcode":"{dp-postcode}"}},"parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":null,"pickup_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"pickup_address_slot_id":1,"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"dimensions":{"weight":2},"allow_self_collection":true},"marketplace":{"seller_id":"Hazelcast-Lock-4","seller_company_name":"weee"},"international":{"portation":"Import"}} |
     And Operator go to menu Inbounding -> Global Inbound
-    Then Operator global inbounds parcel using data below:
+    And Operator global inbounds parcel using data below:
       | hubName    | {hub-name}                                 |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then API Operator verify order info after Global Inbound
@@ -619,10 +628,10 @@ Feature: Global Inbound
       | type | 26 |
     When API DP get the DP Details by DP ID = "{dp-id}"
     And DB Operator gets all details for ninja collect confirmed status
-    Then Ninja Collect Operator verifies that all the details for Confirmed Status via "Semi Integrated" are right
+    And Ninja Collect Operator verifies that all the details for Confirmed Status via "Semi Integrated" are right
 
   Scenario: Inbound Parcel with Order Tags (uid:3f8b336c-81bf-4ba9-b5c4-6108fe6cac91)
-    Given Operator go to menu Order -> All Orders
+    When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -653,6 +662,7 @@ Feature: Global Inbound
       | type | 26 |
 
   Scenario: Inbound On Hold Order: Resolve PENDING MISSING ticket type (uid:34dfb91c-2ec0-4589-a08d-448ef95b1793)
+    When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -688,6 +698,7 @@ Feature: Global Inbound
       | type | 26 |
 
   Scenario: Inbound On Hold Order: DO NOT Resolve NON-MISSING ticket type (uid:a93fad3d-7d37-4642-b45b-5750c4684513)
+    When Operator go to menu Shipper Support -> Blocked Dates
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -720,6 +731,7 @@ Feature: Global Inbound
 
   @CloseNewWindows
   Scenario: Inbound parcel at hub with location event (uid:17d2da2d-33dc-4f1e-bd27-a5c9b26008f8)
+    When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
