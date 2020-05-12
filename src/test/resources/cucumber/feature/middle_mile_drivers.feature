@@ -1,4 +1,4 @@
-@MiddleMileDrivers @MiddleMile @CWF
+@MiddleMileDrivers @MiddleMile
 Feature: Shipment Inbound Scanning
 
   @LaunchBrowser @ShouldAlwaysRun
