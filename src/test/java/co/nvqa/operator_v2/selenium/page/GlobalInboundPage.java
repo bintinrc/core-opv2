@@ -3,9 +3,11 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
 import co.nvqa.commons.util.NvLogger;
-import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -27,11 +29,23 @@ public class GlobalInboundPage extends OperatorV2SimplePage
     @FindBy(css = "h1.rack-info")
     public PageElement rackInfo;
 
+    @FindBy(css = "div.weight-diff-info > span")
+    public PageElement weightDiffInfo;
+
     @FindBy(css = "div[ng-if='ctrl.data.setAsideGroup']")
     public PageElement setAsideGroup;
 
     @FindBy(css = "div[ng-if='ctrl.data.setAsideRackSector']")
     public PageElement setAsideRackSector;
+
+    @FindBy(css = "md-autocomplete[placeholder='Select Hub']")
+    public MdAutocomplete selectHub;
+
+    @FindBy(id = "container.global-inbound.device-id-optional")
+    public TextBox deviceIdInput;
+
+    @FindBy(name = "Continue")
+    public NvApiTextButton continueButton;
 
     public static final String XPATH_ORDER_TAGS_ON_GLOBAL_INBOUND_PAGE = "//div[contains(@class,'order-tags-container')]//span";
 
@@ -44,23 +58,13 @@ public class GlobalInboundPage extends OperatorV2SimplePage
     {
         if (isElementExistFast("//h4[text()='Select the following to begin:']"))
         {
-            retryIfRuntimeExceptionOccurred(() ->
+            pause1s();
+            retryIfRuntimeExceptionOccurred(() -> selectHub.selectValue(hubName));
+            if (StringUtils.isNotBlank(deviceId))
             {
-                selectValueFromNvAutocomplete("ctrl.hubSearchText", hubName);
-                pause500ms();
-
-                if (isElementExistFast("//nv-api-text-button[@name='Continue']/button[@disabled='disabled']"))
-                {
-                    throw new NvTestRuntimeException("Hub is not loaded yet.");
-                }
-            });
-
-            if (deviceId != null)
-            {
-                sendKeysToMdInputContainerByModel("ctrl.data.deviceId", deviceId);
+                deviceIdInput.setValue(deviceId);
             }
-
-            clickNvApiTextButtonByNameAndWaitUntilDone("Continue");
+            continueButton.clickAndWaitUntilDone();
         } else
         {
             clickNvIconButtonByNameAndWaitUntilEnabled("commons.settings");
@@ -156,12 +160,17 @@ public class GlobalInboundPage extends OperatorV2SimplePage
     {
         globalInbound(globalInboundParams);
 
+        if (StringUtils.isNotBlank(toastText))
+        {
+            assertEquals("Toast text", toastText, getToastTopText());
+            waitUntilInvisibilityOfToast(toastText);
+        }
+
         retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
         {
             if (StringUtils.isNotBlank(weightWarning))
             {
-                String message = getText("//div[contains(@class,'weight-diff-info')]/span");
-                assertEquals("Weight warning message", weightWarning, message);
+                assertEquals("Weight warning message", weightWarning, weightDiffInfo.getText());
             }
 
             if (StringUtils.isNotBlank(rackInfo))
@@ -191,13 +200,7 @@ public class GlobalInboundPage extends OperatorV2SimplePage
                 String xpath = f("//div[contains(@class, 'rack-container')]/descendant::*[normalize-space(text())='Hub: %s']", destinationHub);
                 assertNotNull("Destination Hub", waitUntilVisibilityOfElementLocated(xpath));
             }
-        }, "globalInboundAndCheckAlert");
-
-        if (StringUtils.isNotBlank(toastText))
-        {
-            assertEquals("Toast text", toastText, getToastTopText());
-            waitUntilInvisibilityOfToast(toastText);
-        }
+        }, "globalInboundAndCheckAlert", 500, 3);
     }
 
     public void verifiesPriorityLevelInfoIsCorrect(int expectedPriorityLevel, String expectedPriorityLevelColorAsHex)
