@@ -1,7 +1,7 @@
 @OperatorV2 @OperatorV2Part1 @GlobalInbound @Saas @Inbound
 Feature: Global Inbound
 
-  @LaunchBrowser @ShouldAlwaysRun @Debug @ForceNotHeadless
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 

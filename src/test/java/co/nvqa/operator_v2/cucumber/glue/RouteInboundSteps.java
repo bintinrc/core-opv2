@@ -168,30 +168,21 @@ public class RouteInboundSteps extends AbstractSteps
         routeInboundPage.validateShippersTable(expectedShippersInfo);
     }
 
-    @When("^Operator click 'View orders or reservations' button for shipper #(\\d+) in Pending Waypoints dialog$")
-    public void operatorClickViewOrdersOrReservationsButtonForShipperInPendingWaypointsDialog(int index)
+    @When("^Operator click 'View orders or reservations' button for shipper #(\\d+) in (.+) Waypoints dialog$")
+    public void operatorClickViewOrdersOrReservationsButtonForShipperInPendingWaypointsDialog(int index, String status)
     {
         routeInboundPage.openViewOrdersOrReservationsDialog(index);
     }
 
     @SuppressWarnings("unchecked")
-    @Then("^Operator verify Reservations table in Pending Waypoints dialog using data below:$")
-    public void operatorVerifyReservationsTableInPendingWaypointsDialogUsingDataBelow(List<Map<String, String>> listOfData)
+    @Then("^Operator verify Reservations table in (.+) Waypoints dialog using data below:$")
+    public void operatorVerifyReservationsTableInPendingWaypointsDialogUsingDataBelow(String status, List<Map<String, String>> listOfData)
     {
         List<WaypointReservationInfo> expectedReservationsInfo = listOfData.stream().map(data ->
         {
+            data = resolveKeyValues(data);
             WaypointReservationInfo reservationInfo = new WaypointReservationInfo();
             String value = data.get("reservationId");
-
-            if (StringUtils.equalsIgnoreCase("GET_FROM_CREATED_RESERVATION", value))
-            {
-                value = String.valueOf(get(KEY_CREATED_RESERVATION_ID));
-            } else if (StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_RESERVATION_"))
-            {
-                int index = Integer.parseInt(value.replace("GET_FROM_CREATED_RESERVATION_", "").trim()) - 1;
-                value = String.valueOf(((List<Object>) get(KEY_LIST_OF_CREATED_RESERVATION_IDS)).get(index));
-            }
-
             if (StringUtils.isNotBlank(value))
             {
                 reservationInfo.setReservationId(value);
@@ -268,30 +259,20 @@ public class RouteInboundSteps extends AbstractSteps
     }
 
     @SuppressWarnings("unchecked")
-    @Then("^Operator verify Orders table in Pending Waypoints dialog using data below:$")
-    public void operatorVerifyOrdersTableInPendingWaypointsDialogUsingDataBelow(List<Map<String, String>> listOfData)
+    @Then("^Operator verify Orders table in (.+) Waypoints dialog using data below:$")
+    public void operatorVerifyOrdersTableInPendingWaypointsDialogUsingDataBelow(String status, List<Map<String, String>> listOfData)
     {
         List<WaypointOrderInfo> expectedOrdersInfo = listOfData.stream().map(data ->
         {
+            data = resolveKeyValues(data);
             WaypointOrderInfo orderInfo = new WaypointOrderInfo();
             String value = data.get("trackingId");
-
-            if (StringUtils.equalsIgnoreCase("GET_FROM_CREATED_ORDER", value))
-            {
-                value = String.valueOf(get(KEY_CREATED_ORDER_TRACKING_ID));
-            } else if (StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_ORDER_"))
-            {
-                int index = Integer.parseInt(value.replace("GET_FROM_CREATED_ORDER_", "").trim()) - 1;
-                value = String.valueOf(((List<Object>) get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID)).get(index));
-            }
-
             if (StringUtils.isNotBlank(value))
             {
                 orderInfo.setTrackingId(value);
             }
 
             value = data.get("location");
-
             if (StringUtils.equalsIgnoreCase("GET_FROM_CREATED_ORDER", value))
             {
                 Order order = get(KEY_CREATED_ORDER);
@@ -300,6 +281,17 @@ public class RouteInboundSteps extends AbstractSteps
             {
                 int index = Integer.parseInt(value.replace("GET_FROM_CREATED_ORDER_", "").trim()) - 1;
                 orderInfo.setLocation(((List<Order>) get(KEY_LIST_OF_CREATED_ORDER)).get(index));
+            } else if (StringUtils.equalsIgnoreCase("GET_FROM_CREATED_ADDRESS", value))
+            {
+                Address location = get(KEY_CREATED_ADDRESS);
+                String address = location.getAddress1() + " " + location.getAddress2() + " " + location.getPostcode() + " " + location.getCountry();
+                orderInfo.setLocation(address);
+            } else if (StringUtils.startsWithIgnoreCase(value, "GET_FROM_CREATED_ADDRESS_"))
+            {
+                int index = Integer.parseInt(value.replace("GET_FROM_CREATED_ADDRESS_", "").trim()) - 1;
+                Address location = ((List<Address>) get(KEY_LIST_OF_CREATED_ADDRESSES)).get(index);
+                String address = location.getAddress1() + " " + location.getAddress2() + " " + location.getPostcode() + " " + location.getCountry();
+                orderInfo.setLocation(address);
             } else if (StringUtils.isNotBlank(value))
             {
                 orderInfo.setLocation(value);
@@ -382,6 +374,18 @@ public class RouteInboundSteps extends AbstractSteps
     public void operatorOpenFailedWaypointsInfoDialogOnRouteInboundPage()
     {
         routeInboundPage.openFailedWaypointsDialog();
+    }
+
+    @When("^Operator open Total Waypoints Info dialog on Route Inbound page$")
+    public void operatorOpenTotalWaypointsInfoDialogOnRouteInboundPage()
+    {
+        routeInboundPage.openTotalWaypointsDialog();
+    }
+
+    @When("^Operator open Partial Waypoints Info dialog on Route Inbound page$")
+    public void operatorOpenPartialWaypointsInfoDialogOnRouteInboundPage()
+    {
+        routeInboundPage.openPartialWaypointsDialog();
     }
 
     @When("^Operator open Money Collection dialog on Route Inbound page$")

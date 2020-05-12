@@ -6,16 +6,24 @@ import co.nvqa.operator_v2.model.WaypointOrderInfo;
 import co.nvqa.operator_v2.model.WaypointPerformance;
 import co.nvqa.operator_v2.model.WaypointReservationInfo;
 import co.nvqa.operator_v2.model.WaypointShipperInfo;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Assert;
 import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -36,8 +44,53 @@ public class RouteInboundPage extends OperatorV2SimplePage
     @FindBy(xpath = "//nv-autocomplete[@search-text='ctrl.hubSelection.searchText']")
     public NvAutocomplete selectHub;
 
+    @FindBy(id = "route-id")
+    public TextBox routeIdInput;
+
+    @FindBy(xpath = "//md-card[.//label[.='Enter the route ID']]//nv-api-text-button[@name='container.route-inbound.continue']")
+    public NvApiTextButton routeIdContinue;
+
+    @FindBy(id = "tracking-id")
+    public TextBox trackingIdInput;
+
+    @FindBy(xpath = "//md-card[.//label[.='Scan a tracking ID']]//nv-api-text-button[@name='container.route-inbound.continue']")
+    public NvApiTextButton trackingIdContinue;
+
     @FindBy(xpath = "//nv-autocomplete[@search-text='ctrl.driverSearch.searchText']")
     public NvAutocomplete selectDriver;
+
+    @FindBy(xpath = "//md-card[.//label[.='Search by driver']]//nv-api-text-button[@name='container.route-inbound.continue']")
+    public NvApiTextButton selectDriverContinue;
+
+    @FindBy(xpath = "//div[contains(@class, 'big-button')][contains(@ng-click,'WAYPOINT_PENDING')]")
+    public BigButton pendingButton;
+
+    @FindBy(xpath = "//div[contains(@class, 'big-button')][contains(@ng-click,'WAYPOINT_PARTIAL')]")
+    public BigButton partialButton;
+
+    @FindBy(xpath = "//div[contains(@class, 'big-button')][contains(@ng-click,'WAYPOINT_FAILED')]")
+    public BigButton failedButton;
+
+    @FindBy(xpath = "//div[contains(@class, 'big-button')][contains(@ng-click,'WAYPOINT_SUCCESS')]")
+    public BigButton successButton;
+
+    @FindBy(xpath = "//div[contains(@class, 'big-button')][contains(@ng-click,'WAYPOINT_TOTAL')]")
+    public BigButton totalButton;
+
+    @FindBy(xpath = "//app-route-inbound-summary//div[./label[.='Route Id']]//span")
+    public PageElement routeId;
+
+    @FindBy(xpath = "//app-route-inbound-summary//div[./label[.='Driver']]//span")
+    public PageElement driver;
+
+    @FindBy(xpath = "//app-route-inbound-summary//div[./label[.='Hub']]//span")
+    public PageElement hub;
+
+    @FindBy(xpath = "//app-route-inbound-summary//div[./label[.='Date']]//span")
+    public PageElement date;
+
+    @FindBy(css = "md-dialog")
+    public DriverAttendanceDialog driverAttendanceDialog;
 
     public RouteInboundPage(WebDriver webDriver)
     {
@@ -52,58 +105,46 @@ public class RouteInboundPage extends OperatorV2SimplePage
     public void fetchRouteByRouteId(String hubName, Long routeId)
     {
         selectHub.selectValue(hubName);
-        sendKeysById("route-id", String.valueOf(routeId));
-
-        String continueBtnXpath = "//md-card-content[./label[text()='Enter the route ID']]/nv-api-text-button[@name='container.route-inbound.continue']/button";
-        click(continueBtnXpath);
-
+        routeIdInput.setValue(routeId);
+        routeIdContinue.click();
         dismissDriverAttendanceDialog();
-
-        waitUntilInvisibilityOfElementLocated(continueBtnXpath + "//md-progress-circular");
+        routeIdContinue.waitUntilDone();
     }
 
     private void dismissDriverAttendanceDialog()
     {
-        if (isElementExistWait5Seconds("//md-dialog/md-dialog-content/h2[text()='Driver Attendance']"))
+        if (driverAttendanceDialog.waitUntilVisible(3))
         {
-            click("//md-dialog[./md-dialog-content/h2[text()='Driver Attendance']]//button[@aria-label='Yes']");
+            pause500ms();
+            driverAttendanceDialog.yes.click();
+            driverAttendanceDialog.waitUntilInvisible();
         }
     }
 
     public void fetchRouteByTrackingId(String hubName, String trackingId, Long routeId)
     {
         selectHub.selectValue(hubName);
-        sendKeysById("tracking-id", trackingId);
-
-        String continueBtnXpath = "//md-card-content[./label[text()='Scan a tracking ID']]/nv-api-text-button[@name='container.route-inbound.continue']/button";
-        click(continueBtnXpath);
-
+        trackingIdInput.setValue(trackingId);
+        trackingIdContinue.click();
         if (routeId != null)
         {
             selectRoute(routeId);
         }
-
         dismissDriverAttendanceDialog();
-
-        waitUntilInvisibilityOfElementLocated(continueBtnXpath + "//md-progress-circular");
+        trackingIdContinue.waitUntilDone();
     }
 
     public void fetchRouteByDriver(String hubName, String driverName, Long routeId)
     {
         selectHub.selectValue(hubName);
         selectDriver.selectValue(driverName);
-
-        String continueBtnXpath = "//md-card-content[.//label[text()='Search by driver']]/nv-api-text-button[@name='container.route-inbound.continue']/button";
-        click(continueBtnXpath);
-
+        selectDriverContinue.click();
         if (routeId != null)
         {
             selectRoute(routeId);
         }
-
         dismissDriverAttendanceDialog();
-
-        waitUntilInvisibilityOfElementLocated(continueBtnXpath + "//md-progress-circular");
+        selectDriverContinue.waitUntilDone();
     }
 
     public void selectRoute(Long routeId)
@@ -119,45 +160,51 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
     public void verifyRouteSummaryInfoIsCorrect(long expectedRouteId, String expectedDriverName, String expectedHubName, Date expectedRouteDate, WaypointPerformance expectedWaypointPerformance, CollectionSummary expectedCollectionSummary)
     {
-        String actualRouteId = getText("//div[./label[text()='Route Id']]/h3/span");
-        String actualDriverName = getText("//div[./label[text()='Driver']]/h3/span");
-        String actualHubName = getText("//div[./label[text()='Hub']]/h3/span");
-        String actualRouteDate = getText("//div[./label[text()='Date']]/h3/span");
+        assertEquals("Route ID", String.valueOf(expectedRouteId), routeId.getText());
+        assertEquals("Driver Name", expectedDriverName.replaceAll(" ", ""), driver.getText().replaceAll(" ", ""));
+        assertEquals("Hub Name", expectedHubName, hub.getText());
+        assertEquals("Route Date", YYYY_MM_DD_SDF.format(expectedRouteDate), date.getText());
 
-        assertEquals("Route ID", String.valueOf(expectedRouteId), actualRouteId);
-        assertEquals("Driver Name", expectedDriverName.replaceAll(" ", ""), actualDriverName.replaceAll(" ", ""));
-        assertEquals("Hub Name", expectedHubName, actualHubName);
-        assertEquals("Route Date", YYYY_MM_DD_SDF.format(expectedRouteDate), actualRouteDate);
-
-        String actualWpPending = getText("//p[./parent::div/following-sibling::div[contains(text(),'Pending')]]");
-        String actualWpPartial = getText("//p[./parent::div/following-sibling::div[contains(text(),'Partial')]]");
-        String actualWpFailed = getText("//p[./parent::div/following-sibling::div[contains(text(),'Failed')]]");
-        String actualWpCompleted = getText("//p[./parent::div/following-sibling::div[contains(text(),'Completed')]]");
-        String actualWpTotal = getText("//p[./parent::div/following-sibling::div[contains(text(),'Total')]]");
-
-        assertEquals("Waypoint Performance - Pending", String.valueOf(expectedWaypointPerformance.getPending()), actualWpPending);
-        assertEquals("Waypoint Performance - Partial", String.valueOf(expectedWaypointPerformance.getPartial()), actualWpPartial);
-        assertEquals("Waypoint Performance - Failed", String.valueOf(expectedWaypointPerformance.getFailed()), actualWpFailed);
-        assertEquals("Waypoint Performance - Completed", String.valueOf(expectedWaypointPerformance.getCompleted()), actualWpCompleted);
-        assertEquals("Waypoint Performance - Total", String.valueOf(expectedWaypointPerformance.getTotal()), actualWpTotal);
+        assertEquals("Waypoint Performance - Pending", String.valueOf(expectedWaypointPerformance.getPending()), pendingButton.text.getText());
+        assertEquals("Waypoint Performance - Partial", String.valueOf(expectedWaypointPerformance.getPartial()), partialButton.text.getText());
+        assertEquals("Waypoint Performance - Failed", String.valueOf(expectedWaypointPerformance.getFailed()), failedButton.text.getText());
+        assertEquals("Waypoint Performance - Completed", String.valueOf(expectedWaypointPerformance.getCompleted()), successButton.text.getText());
+        assertEquals("Waypoint Performance - Total", String.valueOf(expectedWaypointPerformance.getTotal()), totalButton.text.getText());
     }
 
     public void openPendingWaypointsDialog()
     {
-        click("//p[./parent::div/following-sibling::div[contains(text(),'Pending')]]");
+        pendingButton.moveAndClick();
         waitUntilVisibilityOfMdDialogByTitle("Pending");
+        pause500ms();
     }
 
     public void openCompletedWaypointsDialog()
     {
-        click("//p[./parent::div/following-sibling::div[contains(text(),'Completed')]]");
+        successButton.moveAndClick();
         waitUntilVisibilityOfMdDialogByTitle("Completed");
+        pause500ms();
     }
 
     public void openFailedWaypointsDialog()
     {
-        click("//p[./parent::div/following-sibling::div[contains(text(),'Failed')]]");
+        failedButton.moveAndClick();
         waitUntilVisibilityOfMdDialogByTitle("Failed");
+        pause500ms();
+    }
+
+    public void openTotalWaypointsDialog()
+    {
+        totalButton.moveAndClick();
+        waitUntilVisibilityOfMdDialogByTitle("Total");
+        pause500ms();
+    }
+
+    public void openPartialWaypointsDialog()
+    {
+        partialButton.moveAndClick();
+        waitUntilVisibilityOfMdDialogByTitle("Partial");
+        pause500ms();
     }
 
     public void clickContinueToInbound()
@@ -220,27 +267,59 @@ public class RouteInboundPage extends OperatorV2SimplePage
         List<WaypointReservationInfo> actualReservationsInfo = reservationsTable.readAllEntities();
         assertEquals("Reservations count", expectedReservationsInfo.size(), actualReservationsInfo.size());
 
-        for (int i = 0; i < actualReservationsInfo.size(); i++)
-        {
-            expectedReservationsInfo.get(i).compareWithActual(actualReservationsInfo.get(i));
-        }
+        expectedReservationsInfo
+                .forEach(expectedReservationInfo ->
+                {
+                    String message = f("Reservation [%d]", expectedReservationInfo.getReservationId());
+                    WaypointReservationInfo actualReservationInfo = actualReservationsInfo.stream()
+                            .filter(res -> Objects.equals(res.getReservationId(), expectedReservationInfo.getReservationId()))
+                            .findFirst()
+                            .orElseThrow(() -> new AssertionError(message + " was not found in Reservations table"));
+                    expectedReservationInfo.compareWithActual(message, actualReservationInfo);
+                });
     }
 
     public void validateOrdersTable(List<WaypointOrderInfo> expectedOrdersInfo)
     {
         List<WaypointOrderInfo> actualOrdersInfo = ordersTable.readAllEntities();
-        Map<String, WaypointOrderInfo> actualOrdersInfoMap = actualOrdersInfo.stream()
+        Map<String, List<WaypointOrderInfo>> actualOrdersInfoMap = actualOrdersInfo.stream()
                 .collect(Collectors.toMap(
                         WaypointOrderInfo::getTrackingId,
-                        orderInfo -> orderInfo
+                        orderInfo ->
+                        {
+                            List<WaypointOrderInfo> list = new ArrayList<>();
+                            list.add(orderInfo);
+                            return list;
+                        },
+                        (oldVal, newVal) ->
+                        {
+                            oldVal.addAll(newVal);
+                            return oldVal;
+                        }
                 ));
         assertEquals("Orders count", expectedOrdersInfo.size(), actualOrdersInfo.size());
 
         expectedOrdersInfo.forEach(expectedOrderInfo ->
         {
-            WaypointOrderInfo actualOrderInfo = actualOrdersInfoMap.get(expectedOrderInfo.getTrackingId());
-            assertThat("Order with Tracking ID = " + expectedOrderInfo.getTrackingId() + " was not found", actualOrderInfo, notNullValue());
-            expectedOrderInfo.compareWithActual(actualOrderInfo);
+            List<WaypointOrderInfo> actualOrderInfoList = actualOrdersInfoMap.get(expectedOrderInfo.getTrackingId());
+            String msg = f("Order [%s]", expectedOrderInfo.getTrackingId());
+            assertThat(msg + " was not found", actualOrderInfoList, notNullValue());
+            AssertionError error = null;
+            for (WaypointOrderInfo actualOrderInfo : actualOrderInfoList)
+            {
+                try
+                {
+                    expectedOrderInfo.compareWithActual(msg, actualOrderInfo);
+                    return;
+                } catch (AssertionError err)
+                {
+                    error = err;
+                }
+            }
+            if (error != null)
+            {
+                throw error;
+            }
         });
     }
 
@@ -490,6 +569,33 @@ public class RouteInboundPage extends OperatorV2SimplePage
                     .put(ROUTE_INBOUND_STATUS, "scan-status")
                     .build());
             setEntityClass(WaypointOrderInfo.class);
+        }
+    }
+
+    public static class DriverAttendanceDialog extends MdDialog
+    {
+
+        @FindBy(css = ".md-dialog-content-body")
+        public PageElement message;
+
+        @FindBy(css = "[aria-label='Yes']")
+        public Button yes;
+
+        public DriverAttendanceDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+    }
+
+    public static class BigButton extends PageElement
+    {
+
+        @FindBy(css = "div.statistic p")
+        public PageElement text;
+
+        public BigButton(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
         }
     }
 }
