@@ -26,6 +26,7 @@ import com.google.common.collect.ImmutableList;
 import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import io.cucumber.datatable.DataTable;
 import org.apache.commons.lang3.StringUtils;
@@ -947,5 +948,13 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         Long result = getCoreJdbc().getBatchId(batchId);
 
         assertEquals(f("%s Batch ID Is Not Deleted", batchId),result, null);
+    }
+
+    @When("DB Operator gets the id of the created middle mile driver")
+    public void dbOperatorGetsTheIdOfTheCreatedMiddleMileDriver()
+    {
+        String driverUsername = get(KEY_CREATED_MIDDLE_MILE_DRIVER_USERNAME);
+        Long driverId = getDriverJdbc().getDriverIdByUsername(driverUsername);
+        put(KEY_CREATED_MIDDLE_MILE_DRIVER_ID, driverId);
     }
 }
