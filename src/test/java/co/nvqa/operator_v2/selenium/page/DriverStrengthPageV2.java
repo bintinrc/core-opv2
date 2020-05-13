@@ -337,9 +337,6 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
         public static final String LOCATOR_CONTACT_TYPE = "//*[contains(@class,'md-active')]//*[@class='contact-info-contacts']/div[2]";
         public static final String LOCATOR_COMMENTS = "//*[contains(@class,'md-active')]//*[@class='contact-info-comments']/div[contains(.,'Comments')]/div[2]";
 
-        @FindBy(xpath = "//*[contains(@class,'md-active')]//*[@class='contact-info-details']/div[contains(.,'License No.')]/div[2]")
-        public PageElement driverLicenseNumber;
-
         @FindBy(xpath = "//*[contains(@class,'md-active')]")
         private ContactDetailsDialog contactDetailsDialog;
 
@@ -351,7 +348,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
         public String getLicenseNumber()
         {
             contactDetailsDialog.waitUntilVisible();
-            return driverLicenseNumber.getText();
+            return contactDetailsDialog.driverLicenseNumber.getText();
         }
 
         public String getContact()
@@ -396,6 +393,9 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
             {
                 super(webDriver, searchContext, webElement);
             }
+
+            @FindBy(xpath = "//*[contains(@class,'md-active')]//*[@class='contact-info-details']/div[contains(.,'License No.')]/div[2]")
+            public PageElement driverLicenseNumber;
         }
     }
 
