@@ -319,6 +319,7 @@ public class AllOrdersSteps extends AbstractSteps
         String mainWindowHandle = allOrdersPage.getWebDriver().getWindowHandle();
         put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
         allOrdersPage.specificSearch(AllOrdersPage.Category.TRACKING_OR_STAMP_ID, AllOrdersPage.SearchLogic.EXACTLY_MATCHES, trackingId);
+        pause500ms();
         allOrdersPage.switchToEditOrderWindow(orderId);
     }
 
