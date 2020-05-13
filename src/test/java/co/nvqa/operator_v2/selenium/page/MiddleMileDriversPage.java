@@ -35,6 +35,11 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String GET_EXPIRY_DATE_IN_VIEW_MODAL_XPATH = "//span[@id='licenseExpiryDate']//input";
     private static final String NO_COMING_BUTTON_XPATH = "//button[contains(@class,'_NotComing')]";
     private static final String YES_COMING_BUTTON_XPATH = "//button[contains(@class,'_Coming')]";
+    private static final String DROP_DOWN_ON_TABLE_XPATH = "//div[contains(@class,'dropdown-trigger')]";
+    private static final String SELECT_ALL_DROP_DOWN_SELECTION_XPATH = "//li[contains(@class,'dropdown')]//span[text()='Select All Shown']";
+    private static final String APPLY_ACTION_DROP_DOWN_XPATH = "//button[contains(@class,'GenericDropdownButton')]";
+    private static final String SET_TO_COMING_DROP_DOWN_XPATH = "//span[text()='Set To Coming']/preceding-sibling::div";
+    private static final String SET_TO_NOT_COMING_DROP_DOWN_XPATH = "//span[text()='Set Not To Coming']/preceding-sibling::div";
 
     private static final String INPUT_CREATE_DRIVER_MODAL_XPATH = "//input[@id='%s']";
     private static final String DROPDOWN_CREATE_DRIVER_MODAL_XPATH = "//div[@id='%s']";
@@ -488,6 +493,24 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
             waitUntilVisibilityOfElementLocated(YES_COMING_BUTTON_XPATH);
         } else if (YES.equalsIgnoreCase(mode)) {
             click(YES_COMING_BUTTON_XPATH);
+            waitUntilVisibilityOfElementLocated(NO_COMING_BUTTON_XPATH);
+        }
+        getWebDriver().switchTo().parentFrame();
+    }
+
+    public void clickBulkAvailabilityMode(String mode) {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+        click(DROP_DOWN_ON_TABLE_XPATH);
+        waitUntilVisibilityOfElementLocated(SELECT_ALL_DROP_DOWN_SELECTION_XPATH);
+        click(SELECT_ALL_DROP_DOWN_SELECTION_XPATH);
+        waitUntilVisibilityOfElementLocated(APPLY_ACTION_DROP_DOWN_XPATH);
+        click(APPLY_ACTION_DROP_DOWN_XPATH);
+
+        if (YES.equalsIgnoreCase(mode)) {
+            click(SET_TO_COMING_DROP_DOWN_XPATH);
+            waitUntilVisibilityOfElementLocated(YES_COMING_BUTTON_XPATH);
+        } else if (NO.equalsIgnoreCase(mode)) {
+            click(SET_TO_NOT_COMING_DROP_DOWN_XPATH);
             waitUntilVisibilityOfElementLocated(NO_COMING_BUTTON_XPATH);
         }
         getWebDriver().switchTo().parentFrame();

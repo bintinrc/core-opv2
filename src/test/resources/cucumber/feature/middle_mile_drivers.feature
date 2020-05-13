@@ -1,4 +1,4 @@
-@MiddleMileDrivers @MiddleMile
+@MiddleMileDrivers @MiddleMile @CWF
 Feature: Shipment Inbound Scanning
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -258,6 +258,41 @@ Feature: Shipment Inbound Scanning
     Then Operator verifies that the driver availability's value is the same
     Given API Driver gets all the driver
     When Operator clicks "Yes" button on the middle mile driver page
+    Given API Driver gets all the driver
+    And Operator DB gets that the driver availability value
+    Then Operator verifies that the driver availability's value is the same
+
+  @DeleteMiddleMileDriver
+  Scenario: OP bulk update driver availability - Set all to active (uid:78e379a8-4e79-48df-b865-63a60dc2b38c)
+    Given API Driver gets all the driver
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    When Operator create new Middle Mile Driver with details:
+      | name   | hub        | contactNumber | licenseNumber | employmentType | username |
+      | RANDOM | {hub-name} | 08176586525   | RANDOM        | FULL_TIME      | RANDOM   |
+    Then Operator verifies that the new Middle Mile Driver has been created
+    And Operator clicks on Load Driver Button on the Middle Mile Driver Page
+    Then Operator searches by "name" and verifies the created username
+    When Operator sets all selected middle mile driver to "Yes"
+    And Operator DB gets that the driver availability value
+    Then Operator verifies that the driver availability's value is the same
+
+  @DeleteMiddleMileDriver
+  Scenario: OP bulk update driver availability - Set all to inactive (uid:345765bf-75cd-4011-8d08-72739262eae2)
+    Given API Driver gets all the driver
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    When Operator create new Middle Mile Driver with details:
+      | name   | hub        | contactNumber | licenseNumber | employmentType | username |
+      | RANDOM | {hub-name} | 08176586525   | RANDOM        | FULL_TIME      | RANDOM   |
+    Then Operator verifies that the new Middle Mile Driver has been created
+    And Operator clicks on Load Driver Button on the Middle Mile Driver Page
+    Then Operator searches by "name" and verifies the created username
+    When Operator sets all selected middle mile driver to "Yes"
+    And Operator DB gets that the driver availability value
+    Then Operator verifies that the driver availability's value is the same
+    Given API Driver gets all the driver
+    When Operator sets all selected middle mile driver to "No"
     Given API Driver gets all the driver
     And Operator DB gets that the driver availability value
     Then Operator verifies that the driver availability's value is the same

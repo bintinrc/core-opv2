@@ -232,4 +232,9 @@ public class MiddleMileDriversSteps extends AbstractSteps {
         boolean driverAvailability = get(KEY_CREATED_MIDDLE_MILE_DRIVER_AVAILABILITY);
         middleMileDriversPage.verifiesDriverAvailability(driverAvailability);
     }
+
+    @When("Operator sets all selected middle mile driver to {string}")
+    public void operatorSetsAllSelectedMiddleMileDriverTo(String mode) {
+        middleMileDriversPage.clickBulkAvailabilityMode(mode);
+    }
 }
