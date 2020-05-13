@@ -1,10 +1,15 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.DriverInfo;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.text.ParseException;
 
@@ -328,10 +333,15 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
      */
     public static class ContactDetailsMenu extends OperatorV2SimplePage
     {
-        public static final String LOCATOR_LICENSE_NUMBER = "//*[contains(@class,'md-active')]//*[@class='contact-info-details']/div[contains(.,'License No.')]/div[2]";
         public static final String LOCATOR_CONTACT = "//*[contains(@class,'md-active')]//*[@class='contact-info-contacts']/div[1]";
         public static final String LOCATOR_CONTACT_TYPE = "//*[contains(@class,'md-active')]//*[@class='contact-info-contacts']/div[2]";
         public static final String LOCATOR_COMMENTS = "//*[contains(@class,'md-active')]//*[@class='contact-info-comments']/div[contains(.,'Comments')]/div[2]";
+
+        @FindBy(xpath = "//*[contains(@class,'md-active')]//*[@class='contact-info-details']/div[contains(.,'License No.')]/div[2]")
+        public PageElement driverLicenseNumber;
+
+        @FindBy(xpath = "//*[contains(@class,'md-active')]")
+        private ContactDetailsDialog contactDetailsDialog;
 
         public ContactDetailsMenu(WebDriver webDriver)
         {
@@ -340,8 +350,8 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
 
         public String getLicenseNumber()
         {
-            waitUntilVisibilityOfElementLocated(LOCATOR_LICENSE_NUMBER);
-            return getText(LOCATOR_LICENSE_NUMBER);
+            contactDetailsDialog.waitUntilVisible();
+            return driverLicenseNumber.getText();
         }
 
         public String getContact()
@@ -373,6 +383,19 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
             driverInfo.setContactType(getContactType());
             driverInfo.setComments(getComments());
             return driverInfo;
+        }
+
+        public static class ContactDetailsDialog extends MdDialog
+        {
+            public ContactDetailsDialog(WebDriver webDriver, WebElement webElement)
+            {
+                super(webDriver, webElement);
+            }
+
+            public ContactDetailsDialog(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+            {
+                super(webDriver, searchContext, webElement);
+            }
         }
     }
 
