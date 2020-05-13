@@ -2,9 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.MiddleMileDriver;
-import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -35,6 +33,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String EDIT_BUTTON_XPATH = "//td[contains(@class,'action')]/button[contains(@class,'edit')]";
     private static final String GET_HUB_NAME_IN_VIEW_MODAL_XPATH = "//div[@id='hubId']//div[contains(@class,'selected-value')]";
     private static final String GET_EXPIRY_DATE_IN_VIEW_MODAL_XPATH = "//span[@id='licenseExpiryDate']//input";
+    private static final String NO_COMING_BUTTON_XPATH = "//button[contains(@class,'_NotComing')]";
+    private static final String YES_COMING_BUTTON_XPATH = "//button[contains(@class,'_Coming')]";
 
     private static final String INPUT_CREATE_DRIVER_MODAL_XPATH = "//input[@id='%s']";
     private static final String DROPDOWN_CREATE_DRIVER_MODAL_XPATH = "//div[@id='%s']";
@@ -80,6 +80,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
     private static final String MARK_ELEMENT = "mark";
     private static final String SPAN_ELEMENT = "span";
+    private static final String YES = "yes";
+    private static final String NO = "no";
 
     public MiddleMileDriversPage(WebDriver webDriver) {
         super(webDriver);
@@ -476,6 +478,28 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         String actualComments = getText(COMMENTS_INPUT_CREATE_DRIVER_XPATH);
         assertEquals("Comments is not the same : ", actualComments, middleMileDriver.getComments());
 
+        getWebDriver().switchTo().parentFrame();
+    }
+
+    public void clickAvailabilityMode(String mode) {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+        if (NO.equalsIgnoreCase(mode)) {
+            click(NO_COMING_BUTTON_XPATH);
+            waitUntilVisibilityOfElementLocated(YES_COMING_BUTTON_XPATH);
+        } else if (YES.equalsIgnoreCase(mode)) {
+            click(YES_COMING_BUTTON_XPATH);
+            waitUntilVisibilityOfElementLocated(NO_COMING_BUTTON_XPATH);
+        }
+        getWebDriver().switchTo().parentFrame();
+    }
+
+    public void verifiesDriverAvailability(boolean driverAvailability) {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+        if (isElementExistFast(YES_COMING_BUTTON_XPATH)) {
+            assertTrue("Driver Availability is True : ", driverAvailability);
+        } else if (isElementExistFast(NO_COMING_BUTTON_XPATH)) {
+            assertFalse("Driver Availability is false : ", driverAvailability);
+        }
         getWebDriver().switchTo().parentFrame();
     }
 

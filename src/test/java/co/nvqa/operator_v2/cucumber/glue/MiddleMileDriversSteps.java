@@ -211,8 +211,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
         middleMileDriversPage.verifiesDataIsNotExisted(driverName);
     }
 
-    @When("Operator clicks edit button on the middle mile driver page")
-    public void operatorClicksEditButtonOnTheMiddleMileDriverPage() {
+    @When("Operator clicks view button on the middle mile driver page")
+    public void operatorClicksViewButtonOnTheMiddleMileDriverPage() {
         middleMileDriversPage.clickViewButton();
     }
 
@@ -220,5 +220,16 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     public void operatorVerifiesThatTheDetailsOfTheMiddleMileDriverIsTrue() {
         List<MiddleMileDriver> middleMileDriver = get(KEY_CREATED_MIDDLE_MILE_DRIVER_DETAILS);
         middleMileDriversPage.verifiesDataInViewModalIsTheSame(middleMileDriver.get(0));
+    }
+
+    @When("Operator clicks {string} button on the middle mile driver page")
+    public void operatorClicksButtonOnTheMiddleMileDriverPage(String mode) {
+        middleMileDriversPage.clickAvailabilityMode(mode);
+    }
+
+    @Then("Operator verifies that the driver availability's value is the same")
+    public void operatorVeririesThatTheDriverAvailabilitySValueIsTheSame() {
+        boolean driverAvailability = get(KEY_CREATED_MIDDLE_MILE_DRIVER_AVAILABILITY);
+        middleMileDriversPage.verifiesDriverAvailability(driverAvailability);
     }
 }
