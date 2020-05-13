@@ -51,7 +51,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public static final String XPATH_PRICING_PROFILE_STATUS = "//table[@class='table-body']//td[contains(@class,'status') and text()='%s']";
     public static final String LOCATOR_END_DATE = "container.shippers.pricing-billing-end-date";
     public static final String LOCATOR_START_DATE = "container.shippers.pricing-billing-start-date";
-    public static final String XPATH_VALIDATION_ERROR = "//div[@class='error-box']//div[@class='content']";
+    public static final String XPATH_VALIDATION_ERROR = "//md-dialog[contains(@class, 'nv-container-shipper-errors-dialog')] ";
     public static final String XPATH_SHIPPER_INFORMATION = "//div[text()='Shipper Information']";
     public static final String XPATH_ADD_NEW_PROFILE = "//button[@aria-label='Add New Profile']";
     public static final String XPATH_PRICING_PROFILE_ID = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='id']";
