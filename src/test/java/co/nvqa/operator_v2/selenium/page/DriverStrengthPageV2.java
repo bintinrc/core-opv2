@@ -18,6 +18,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
 {
     private static final String LOCATOR_SPINNER = "//md-progress-circular";
     public static final String LOCATOR_BUTTON_LOAD_EVERYTHING = "container.driver-strength.load-everything";
+    public static final String LOCATOR_DELETE_BUTTON = "//md-dialog//button[@aria-label='Delete']";
 
     private AddDriverDialog addDriverDialog;
     private EditDriverDialog editDriverDialog;
@@ -133,6 +134,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
         filterBy(COLUMN_USERNAME, username);
         driversTable.clickActionButton(1, ACTION_DELETE);
         waitUntilVisibilityOfMdDialogByTitle("Confirm delete");
+        waitUntilElementIsClickable(LOCATOR_DELETE_BUTTON);
         clickButtonOnMdDialogByAriaLabel("Delete");
         waitUntilInvisibilityOfMdDialogByTitle("Confirm delete");
     }
