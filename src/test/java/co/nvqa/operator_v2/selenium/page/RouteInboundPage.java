@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.CollectionSummary;
+import co.nvqa.operator_v2.model.ExpectedScans;
 import co.nvqa.operator_v2.model.MoneyCollection;
 import co.nvqa.operator_v2.model.WaypointOrderInfo;
 import co.nvqa.operator_v2.model.WaypointPerformance;
@@ -12,6 +13,7 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Assert;
 import org.junit.platform.commons.util.StringUtils;
@@ -40,6 +42,9 @@ public class RouteInboundPage extends OperatorV2SimplePage
     private OrdersTable ordersTable;
     private RouteInboundCommentsDialog routeInboundCommentsDialog;
     private MoneyCollectionDialog moneyCollectionDialog;
+
+    @FindBy(name = "Cancel")
+    public NvIconButton closeDialog;
 
     @FindBy(xpath = "//nv-autocomplete[@search-text='ctrl.hubSelection.searchText']")
     public NvAutocomplete selectHub;
@@ -76,6 +81,24 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
     @FindBy(xpath = "//div[contains(@class, 'big-button')][contains(@ng-click,'WAYPOINT_TOTAL')]")
     public BigButton totalButton;
+
+    @FindBy(xpath = "//div[./div[.=' Pending Deliveries ']]//div[@class='count-over-total']")
+    public PageElement pendingDeliveries;
+
+    @FindBy(xpath = "//div[./div[.=' Parcels Processed ']]//div[@class='count-over-total']")
+    public PageElement parcelProcessed;
+
+    @FindBy(xpath = "//div[./div[.=' Failed Deliveries (Valid) ']]//div[@class='count-over-total']")
+    public PageElement failedDeliveriesValid;
+
+    @FindBy(xpath = "//div[./div[.=' Failed Deliveries (Invalid) ']]//div[@class='count-over-total']")
+    public PageElement failedDeliveriesInvalid;
+
+    @FindBy(xpath = "//div[./div[.=' C2C / Return Pickups ']]//div[@class='count-over-total']")
+    public PageElement c2cReturnPickups;
+
+    @FindBy(xpath = "//div[./div[.=' Reservation Pickups ']]//div[@class='count-over-total']")
+    public PageElement reservationPickups;
 
     @FindBy(xpath = "//app-route-inbound-summary//div[./label[.='Route Id']]//span")
     public PageElement routeId;
@@ -172,6 +195,56 @@ public class RouteInboundPage extends OperatorV2SimplePage
         assertEquals("Waypoint Performance - Total", String.valueOf(expectedWaypointPerformance.getTotal()), totalButton.text.getText());
     }
 
+    public void verifyRouteInboundInfoIsCorrect(Long expectedRouteId, String expectedDriverName, String expectedHubName, Date expectedRouteDate, ExpectedScans expectedScans)
+    {
+        if (expectedRouteId != null)
+        {
+            assertEquals("Route ID", String.valueOf(expectedRouteId), routeId.getText());
+        }
+        if (StringUtils.isNotBlank(expectedDriverName))
+        {
+            assertEquals("Driver Name", expectedDriverName.replaceAll(" ", ""), driver.getText().replaceAll(" ", ""));
+        }
+        if (StringUtils.isNotBlank(expectedHubName))
+        {
+            assertEquals("Hub Name", expectedHubName, hub.getText());
+        }
+        if (expectedRouteDate != null)
+        {
+            assertEquals("Route Date", YYYY_MM_DD_SDF.format(expectedRouteDate), date.getText());
+        }
+        if (expectedScans.getPendingDeliveriesScans() != null)
+        {
+            String expectedValue = expectedScans.getPendingDeliveriesScans() + " / " + expectedScans.getPendingDeliveriesTotal();
+            assertEquals("Waypoint Performance - Pending Deliveries", expectedValue, pendingDeliveries.getText());
+        }
+        if (expectedScans.getParcelProcessedScans() != null)
+        {
+            String expectedValue = expectedScans.getParcelProcessedScans() + " / " + expectedScans.getParcelProcessedTotal();
+            assertEquals("Waypoint Performance - Parcel Processed", expectedValue, parcelProcessed.getText());
+        }
+        if (expectedScans.getFailedDeliveriesValidScans() != null)
+        {
+            String expectedValue = expectedScans.getFailedDeliveriesValidScans() + " / " + expectedScans.getFailedDeliveriesValidTotal();
+            assertEquals("Waypoint Performance - Failed Deliveries (Valid)", expectedValue, failedDeliveriesValid.getText());
+        }
+        if (expectedScans.getFailedDeliveriesInvalidScans() != null)
+        {
+            String expectedValue = expectedScans.getFailedDeliveriesInvalidScans() + " / " + expectedScans.getFailedDeliveriesInvalidTotal();
+            assertEquals("Waypoint Performance - Failed Deliveries (Valid)", expectedValue, failedDeliveriesInvalid.getText());
+        }
+        if (expectedScans.getC2cReturnPickupsScans() != null)
+        {
+            String expectedValue = expectedScans.getC2cReturnPickupsScans() + " / " + expectedScans.getC2cReturnPickupsTotal();
+            assertEquals("Waypoint Performance - C2C / Return Pickups", expectedValue, c2cReturnPickups.getText());
+        }
+        if (expectedScans.getReservationPickupsScans() != null)
+        {
+            String expectedValue = expectedScans.getReservationPickupsScans() + " / " + expectedScans.getReservationPickupsTotal();
+            assertEquals("Waypoint Performance - Reservation Pickups", expectedValue, reservationPickups.getText());
+        }
+    }
+
     public void openPendingWaypointsDialog()
     {
         pendingButton.moveAndClick();
@@ -205,6 +278,47 @@ public class RouteInboundPage extends OperatorV2SimplePage
         partialButton.moveAndClick();
         waitUntilVisibilityOfMdDialogByTitle("Partial");
         pause500ms();
+    }
+
+    public void openPendingDeliveriesDialog()
+    {
+        pendingDeliveries.moveAndClick();
+        waitUntilVisibilityOfMdDialogByTitle("Pending Deliveries");
+        pause500ms();
+    }
+
+    public void openFailedDeliveriesValidDialog()
+    {
+        failedDeliveriesValid.moveAndClick();
+        waitUntilVisibilityOfMdDialogByTitle("Failed Deliveries (Valid)");
+        pause500ms();
+    }
+
+    public void openFailedDeliveriesInvalidDialog()
+    {
+        failedDeliveriesInvalid.moveAndClick();
+        waitUntilVisibilityOfMdDialogByTitle("Failed Deliveries (Invalid)");
+        pause500ms();
+    }
+
+    public void openC2CReturnPickupsDialog()
+    {
+        c2cReturnPickups.moveAndClick();
+        waitUntilVisibilityOfMdDialogByTitle("C2C / Return Pickups");
+        pause500ms();
+    }
+
+    public void openReservationPickupsDialog()
+    {
+        reservationPickups.moveAndClick();
+        waitUntilVisibilityOfMdDialogByTitle("Reservation Pickups");
+        pause500ms();
+    }
+
+    public void closeDialog()
+    {
+        closeDialog.moveAndClick();
+        closeDialog.waitUntilInvisible();
     }
 
     public void clickContinueToInbound()
