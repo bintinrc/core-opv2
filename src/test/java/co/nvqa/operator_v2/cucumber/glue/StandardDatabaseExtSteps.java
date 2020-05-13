@@ -957,4 +957,11 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         Long driverId = getDriverJdbc().getDriverIdByUsername(driverUsername);
         put(KEY_CREATED_MIDDLE_MILE_DRIVER_ID, driverId);
     }
+
+    @Then("Operator DB gets that the driver availability value")
+    public void operatorDBGetsThatTheDriverAvailabilityValue() {
+        String driverUsername = get(KEY_CREATED_MIDDLE_MILE_DRIVER_USERNAME);
+        boolean driverAvailability = getDriverJdbc().getDriverAvailabilityValue(driverUsername);
+        put(KEY_CREATED_MIDDLE_MILE_DRIVER_AVAILABILITY, driverAvailability);
+    }
 }
