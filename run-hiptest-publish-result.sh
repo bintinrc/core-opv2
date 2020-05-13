@@ -1,7 +1,6 @@
 #! /bin/sh
 
 # reload RVM & hiptest-publisher
-# source ~/.rvm/scripts/rvm
 
 rvmFile=~/.rvm/scripts/rvm
 
