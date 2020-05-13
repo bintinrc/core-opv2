@@ -340,6 +340,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
 
         public String getLicenseNumber()
         {
+            waitUntilVisibilityOfElementLocated(LOCATOR_LICENSE_NUMBER);
             return getText(LOCATOR_LICENSE_NUMBER);
         }
 
