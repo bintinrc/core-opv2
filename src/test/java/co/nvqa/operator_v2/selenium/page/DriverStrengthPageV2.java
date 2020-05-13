@@ -170,6 +170,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
         public static final String LOCATOR_FIELD_PASSWORD = "Password";
         public static final String LOCATOR_FIELD_COMMENTS = "Comments";
         public static final String LOCATOR_BUTTON_SUBMIT = "Submit";
+        public static final String LOCATOR_HUB = "Hub";
 
         public AddDriverDialog(WebDriver webDriver)
         {
@@ -181,6 +182,12 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
         public AddDriverDialog waitUntilVisible()
         {
             waitUntilVisibilityOfMdDialogByTitle(dialogTittle);
+            return this;
+        }
+
+        public AddDriverDialog setHub(String value)
+        {
+            selectValueFromMdAutocomplete(LOCATOR_HUB, value);
             return this;
         }
 
@@ -285,6 +292,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
             setLastName(driverInfo.getLastName());
             setDriverLicenseNumber(driverInfo.getLicenseNumber());
             setCodLimit(driverInfo.getCodLimit());
+            setHub(driverInfo.getHub());
             setEmploymentStartDate(driverInfo.getEmploymentStartDate());
             if (driverInfo.hasVehicleInfo())
             {
