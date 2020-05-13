@@ -389,6 +389,7 @@ Feature: All Shippers
     And Operator searches for keyword "Ninja" in quick search filter
     Then Operator verifies that the results have keyword "Ninja" in "Name" column
 
+  @PricingProfile
   Scenario: Add New Shipper Pricing Profile (uid:e3bae772-87e8-4fbc-9698-c590871b4cdd)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -415,6 +416,7 @@ Feature: All Shippers
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
+  @PricingProfile
   Scenario: Edit Shipper Pricing Profile (uid:bbe028d2-f43d-4de1-a394-f53b68344aa5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -447,6 +449,7 @@ Feature: All Shippers
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
+  @PricingProfile
   Scenario: Create a new Shipper - Pricing & Billing tab (uid:d86f2bd2-94ee-406c-b80e-224f54e00e0a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -470,6 +473,7 @@ Feature: All Shippers
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
+  @PricingProfile
   Scenario: Create a new Shipper - Pricing & Billing tab - Update the Pricing Profile before Created (uid:74107efb-4c18-4468-9c0c-cf4f12f3d5fb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -493,6 +497,7 @@ Feature: All Shippers
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
+  @PricingProfile
   Scenario: Create a new Shipper - Pricing & Billing tab - No Pricing Profile (uid:1d0199fc-6fb9-4d54-a32d-65b701799c7f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -511,6 +516,7 @@ Feature: All Shippers
       | industryName                 | {industry-name}            |
       | salesPerson                  | {sales-person}             |
 
+  @PricingProfile
   Scenario: Create a new Pricing Profile - with Flat Discount where Shipper has Active & Expired Pricing Profile (uid:72efc910-af1b-4145-bdd9-e486deb4284e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -545,6 +551,7 @@ Feature: All Shippers
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
+  @PricingProfile
   Scenario: Create a new Pricing Profile - with Percentage Discount where Shipper has Active & Expired Pricing Profile (uid:ad094f98-7e6f-4cf2-978e-b56b742695d7)
     Given Operator changes the country to "id"
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -581,6 +588,7 @@ Feature: All Shippers
     Then Operator verify the shipper is deleted successfully
     Then Operator changes the country to "sg"
 
+  @PricingProfile
   Scenario: Create a new Pricing Profile - where Shipper has Pending Pricing Profile (uid:dc2a9af8-d447-4eba-a6eb-3882d57aaeed)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -611,6 +619,7 @@ Feature: All Shippers
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
+  @PricingProfile
   Scenario: Create a new Pricing Profile - with 0 Flat Discount (uid:c6f6e5b0-d8c6-4489-83fe-b7ae021de5f7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -637,6 +646,7 @@ Feature: All Shippers
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
+  @PricingProfile
   Scenario: Create a new Pricing Profile - with 0 Percentage Discount (uid:81e2a66e-cc26-4a3a-ac56-1ea5b86f3614)
     Given Operator changes the country to "id"
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -665,6 +675,7 @@ Feature: All Shippers
     Then Operator verify the shipper is deleted successfully
     Then Operator changes the country to "sg"
 
+  @PricingProfile
   Scenario: Create a new Pricing Profile - with none Flat Discount (uid:d4cf96cf-e1b2-421f-b5de-125d4af1b31f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -693,6 +704,7 @@ Feature: All Shippers
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
+  @PricingProfile
   Scenario: Create a new Pricing Profile - with none Percentage Discount (uid:d948145c-704d-4a76-b6c5-fb18f9f1a853)
     Given Operator changes the country to "id"
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -723,6 +735,7 @@ Feature: All Shippers
     Then Operator verify the shipper is deleted successfully
     Then Operator changes the country to "sg"
 
+  @PricingProfile
   Scenario: Create a new Pricing Profile - with special characters Discount (uid:4df9abce-e97a-4bf8-aef1-41a96c63ed76)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -749,6 +762,7 @@ Feature: All Shippers
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
+  @PricingProfile
   Scenario: Create a new Pricing Profile - with 3-5 integer after decimal point (uid:f3af5079-e704-4f9a-83d3-e4b79a463474)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -778,6 +792,7 @@ Feature: All Shippers
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
+  @PricingProfile
   Scenario: Create a new Pricing Profile - with shipper discount within 6 digits Flat Discount (uid:6b852274-7091-4f2f-8a3a-6fecda231d27)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -807,6 +822,7 @@ Feature: All Shippers
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
+  @PricingProfile
   Scenario: Create a new Pricing Profile - with shipper discount over 6 digits Flat Discount (uid:4e129004-7985-4226-a5eb-ebfa2465efe7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
