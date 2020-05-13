@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementSchedule;
 import co.nvqa.operator_v2.selenium.page.MovementManagementPage;
 import com.google.common.collect.ImmutableMap;
@@ -141,6 +142,7 @@ public class MovementManagementSteps extends AbstractSteps
     public void operatorFillAddMovementScheduleFormUsingDataBelow(Map<String, String> data)
     {
         data = resolveKeyValues(data);
+        data = StandardTestUtils.replaceDataTableTokens(data);
         MovementSchedule movementSchedule = new MovementSchedule();
         movementSchedule.fromMap(data);
         movementManagementPage.addMovementScheduleModal.fill(movementSchedule);

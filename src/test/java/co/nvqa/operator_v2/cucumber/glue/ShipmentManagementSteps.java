@@ -2,6 +2,9 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipments;
+import co.nvqa.commons.util.StandardTestUtils;
+import co.nvqa.operator_v2.model.MovementEvent;
+import co.nvqa.operator_v2.model.ShipmentEvent;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
 import co.nvqa.operator_v2.util.KeyConstants;
@@ -21,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Modified by Daniel Joi Partogi Hutapea.
@@ -59,7 +63,7 @@ public class ShipmentManagementSteps extends AbstractSteps
         Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         shipmentManagementPage.clickActionButton(shipmentId, actionButton);
 
-        if("Force".equals(actionButton))
+        if ("Force".equals(actionButton))
         {
             shipmentManagementPage.waitUntilForceToastDisappear(shipmentId);
         }
@@ -71,6 +75,15 @@ public class ShipmentManagementSteps extends AbstractSteps
         value = resolveValue(value);
         shipmentManagementPage.addFilter(filter, value, false);
         putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, filter, value);
+    }
+
+    @When("^Operator search shipments by given Ids on Shipment Management page:$")
+    public void fillSearchShipmentsByIds(List<String> ids)
+    {
+        List<Long> shipmentIds = ids.stream()
+                .map(id -> Long.valueOf(resolveValue(id)))
+                .collect(Collectors.toList());
+        shipmentManagementPage.searchByShipmentIds(shipmentIds);
     }
 
     @When("^Operator filter shipment based on MAWB value on Shipment Management page$")
@@ -107,8 +120,7 @@ public class ShipmentManagementSteps extends AbstractSteps
         try
         {
             shipmentManagementPage.shipmentScanExist(source, hub);
-        }
-        finally
+        } finally
         {
             shipmentManagementPage.closeScanModal();
         }
@@ -130,6 +142,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     @When("^Operator create Shipment on Shipment Management page using data below:$")
     public void operatorCreateShipmentOnShipmentManagementPageUsingDataBelow(Map<String, String> mapOfData)
     {
+        mapOfData = resolveKeyValues(mapOfData);
         List<Order> listOfOrders;
         boolean isNextOrder = false;
 
@@ -138,15 +151,13 @@ public class ShipmentManagementSteps extends AbstractSteps
             isNextOrder = get("isNextOrder");
         }
 
-        if(containsKey(KEY_LIST_OF_CREATED_ORDER))
+        if (containsKey(KEY_LIST_OF_CREATED_ORDER))
         {
             listOfOrders = get(KEY_LIST_OF_CREATED_ORDER);
-        }
-        else if(containsKey(KEY_CREATED_ORDER))
+        } else if (containsKey(KEY_CREATED_ORDER))
         {
             listOfOrders = Arrays.asList(get(KEY_CREATED_ORDER));
-        }
-        else
+        } else
         {
             listOfOrders = new ArrayList<>();
         }
@@ -157,7 +168,7 @@ public class ShipmentManagementSteps extends AbstractSteps
 
         shipmentManagementPage.createShipment(shipmentInfo, isNextOrder);
 
-        if(StringUtils.isBlank(shipmentInfo.getShipmentType()))
+        if (StringUtils.isBlank(shipmentInfo.getShipmentType()))
         {
             shipmentInfo.setShipmentType("AIR_HAUL");
         }
@@ -194,6 +205,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     @When("^Operator edit Shipment on Shipment Management page including MAWB using data below:$")
     public void operatorEditShipmentOnShipmentManagementPageIncludingMawbUsingDataBelow(Map<String, String> mapOfData)
     {
+        mapOfData = resolveKeyValues(mapOfData);
         ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
         shipmentInfo.fromMap(mapOfData);
         shipmentManagementPage.editShipment(shipmentInfo);
@@ -205,12 +217,25 @@ public class ShipmentManagementSteps extends AbstractSteps
     {
         ShipmentInfo shipmentInfo;
 
-        if (get(KEY_SHIPMENT_INFO) == null) {
+        if (get(KEY_SHIPMENT_INFO) == null)
+        {
             Shipments shipments = get(KEY_CREATED_SHIPMENT);
             shipmentInfo = new ShipmentInfo(shipments);
-        } else {
+        } else
+        {
             shipmentInfo = get(KEY_SHIPMENT_INFO);
         }
+
+        shipmentManagementPage.validateShipmentInfo(shipmentInfo.getId(), shipmentInfo);
+    }
+
+    @Then("^Operator verify parameters of shipment on Shipment Management page using data below:$")
+    public void operatorVerifyParametersShipmentOnShipmentManagementPage(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+        data = StandardTestUtils.replaceDataTableTokens(data);
+        ShipmentInfo shipmentInfo = new ShipmentInfo();
+        shipmentInfo.fromMap(data);
 
         shipmentManagementPage.validateShipmentInfo(shipmentInfo.getId(), shipmentInfo);
     }
@@ -237,10 +262,12 @@ public class ShipmentManagementSteps extends AbstractSteps
     {
         ShipmentInfo shipmentInfo;
 
-        if (get(KEY_SHIPMENT_INFO) == null) {
+        if (get(KEY_SHIPMENT_INFO) == null)
+        {
             Shipments shipments = get(KEY_CREATED_SHIPMENT);
             shipmentInfo = new ShipmentInfo(shipments);
-        } else {
+        } else
+        {
             shipmentInfo = get(KEY_SHIPMENT_INFO);
         }
         ShipmentInfo expectedShipmentInfo = new ShipmentInfo();
@@ -260,10 +287,12 @@ public class ShipmentManagementSteps extends AbstractSteps
     {
         ShipmentInfo shipmentInfo;
 
-        if (get(KEY_SHIPMENT_INFO) == null) {
+        if (get(KEY_SHIPMENT_INFO) == null)
+        {
             Shipments shipments = get(KEY_CREATED_SHIPMENT);
             shipmentInfo = new ShipmentInfo(shipments);
-        } else {
+        } else
+        {
             shipmentInfo = get(KEY_SHIPMENT_INFO);
         }
 
@@ -303,14 +332,42 @@ public class ShipmentManagementSteps extends AbstractSteps
         Order order = get(KEY_CREATED_ORDER);
         ShipmentInfo shipmentInfo;
 
-        if (get(KEY_SHIPMENT_INFO) == null) {
+        if (get(KEY_SHIPMENT_INFO) == null)
+        {
             Shipments shipments = get(KEY_CREATED_SHIPMENT);
             shipmentInfo = new ShipmentInfo(shipments);
-        } else {
+        } else
+        {
             shipmentInfo = get(KEY_SHIPMENT_INFO);
         }
 
         shipmentManagementPage.verifyOpenedShipmentDetailsPageIsTrue(shipmentInfo.getId(), order.getTrackingId());
+    }
+
+    @Then("^Operator verify shipment event on Shipment Details page using data below:$")
+    public void operatorVerifyShipmentEventOnEditOrderPage(Map<String, String> mapOfData)
+    {
+        mapOfData = resolveKeyValues(mapOfData);
+        ShipmentEvent expectedEvent = new ShipmentEvent(mapOfData);
+        List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readAllEntities();
+        ShipmentEvent actualEvent = events.stream()
+                .filter(event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(f("There is no [%s] shipment event on Shipment Details page", expectedEvent.getSource())));
+        expectedEvent.compareWithActual(actualEvent);
+    }
+
+    @Then("^Operator verify movement event on Shipment Details page using data below:$")
+    public void operatorVerifyMovementEventOnEditOrderPage(Map<String, String> mapOfData)
+    {
+        mapOfData = resolveKeyValues(mapOfData);
+        MovementEvent expectedEvent = new MovementEvent(mapOfData);
+        List<MovementEvent> events = shipmentManagementPage.movementEventsTable.readAllEntities();
+        MovementEvent actualEvent = events.stream()
+                .filter(event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(f("There is no [%s] movement event on Shipment Details page", expectedEvent.getSource())));
+        expectedEvent.compareWithActual(actualEvent);
     }
 
     @And("^Operator verify the the master AWB is opened$")
@@ -366,7 +423,8 @@ public class ShipmentManagementSteps extends AbstractSteps
     }
 
     @Given("Operator intends to create a new Shipment directly from the Shipment Toast")
-    public void operatorIntendsToCreateANewShipmentDirectlyFromTheShipmentToast() {
+    public void operatorIntendsToCreateANewShipmentDirectlyFromTheShipmentToast()
+    {
         boolean isNextOrder = true;
         put("isNextOrder", isNextOrder);
     }
