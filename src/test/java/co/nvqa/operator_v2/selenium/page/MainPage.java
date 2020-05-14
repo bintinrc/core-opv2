@@ -104,6 +104,7 @@ public class MainPage extends OperatorV2SimplePage
 
     public void clickNavigation(String parentTitle, String navTitle)
     {
+        getWebDriver().switchTo().defaultContent();
         if(isElementVisible("//i[@ng-if='!showLogo()']"))
         {
             openNavigationPanel();

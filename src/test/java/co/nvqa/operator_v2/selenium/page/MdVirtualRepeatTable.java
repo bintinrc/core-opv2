@@ -17,6 +17,7 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
     @FindBy(css = "th.column-checkbox md-menu")
     public MdMenu selectionMenu;
 
+    private String nvTableParam;
     private String mdVirtualRepeat = "data in getTableData()";
 
     public MdVirtualRepeatTable(WebDriver webDriver)
@@ -35,6 +36,11 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
         this.mdVirtualRepeat = mdVirtualRepeat;
     }
 
+    public void setNvTableParam(String nvTableParam)
+    {
+        this.nvTableParam = nvTableParam;
+    }
+
     public void selectAllShown()
     {
         selectionMenu.selectOption("Select All Shown");
@@ -43,7 +49,7 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
     @Override
     protected String getTextOnTable(int rowNumber, String columnDataClass)
     {
-        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, mdVirtualRepeat);
+        return getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, mdVirtualRepeat, nvTableParam);
     }
 
     @Override
@@ -64,18 +70,18 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
     @Override
     public int getRowsCount()
     {
-        return getRowsCountOfTableWithMdVirtualRepeat(mdVirtualRepeat);
+        return getRowsCountOfTableWithMdVirtualRepeat(mdVirtualRepeat, nvTableParam);
     }
 
     @Override
     public void selectRow(int rowNumber)
     {
-        clickf("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", mdVirtualRepeat, rowNumber);
+        clickf(".//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", mdVirtualRepeat, rowNumber);
     }
 
     @Override
     protected String getTableLocator()
     {
-        return f("//nv-table[.//tr[@md-virtual-repeat='%s']]", mdVirtualRepeat);
+        return StringUtils.isNotBlank(nvTableParam) ? f(".//nv-table[@param='%s'][.//tr[@md-virtual-repeat='%s']]", nvTableParam, mdVirtualRepeat) : f(".//nv-table[.//tr[@md-virtual-repeat='%s']]", mdVirtualRepeat);
     }
 }

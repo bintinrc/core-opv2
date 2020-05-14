@@ -4,11 +4,20 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.pdf.ShipmentAirwayBill;
 import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.operator_v2.model.MovementEvent;
+import co.nvqa.operator_v2.model.ShipmentEvent;
 import co.nvqa.operator_v2.model.ShipmentInfo;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -19,12 +28,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_CANCEL;
-import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_DETAILS;
-import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_EDIT;
-import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_FORCE;
-import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.ACTION_PRINT;
-import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.COLUMN_SHIPMENT_ID;
+import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.*;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
 
@@ -36,14 +40,7 @@ import static org.hamcrest.Matchers.contains;
 @SuppressWarnings("WeakerAccess")
 public class ShipmentManagementPage extends OperatorV2SimplePage
 {
-    public static final String LOCATOR_CREATE_SHIPMENT_BUTTON = "Create Shipment";
-    public static final String LOCATOR_FIELD_SELECT_TYPE = "select-type";
-    public static final String LOCATOR_FIELD_START_HUB = "start-hub";
-    public static final String LOCATOR_FIELD_END_HUB = "end-hub";
     public static final String LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON = "Create";
-    public static final String LOCATOR_CREATE_ANOTHER_SHIPMENT_CONFIRMATION_BUTTON = "Create Another";
-    public static final String LOCATOR_COMMENT_TEXT_AREA = "container.shipment-management.comments-optional";
-    public static final String LOCATOR_MAWB_TEXT_AREA = "master-awb";
     public static final String LOCATOR_SELCT_FILTERS_PRESET = "commons.preset.load-filter-preset";
     public static final String SHIPMENT_STATUS_DROPDOWN_XPATH = "//md-autocomplete[md-autocomplete-wrap[input[contains(@id,'input') and contains(@aria-label,'Search or Select')]]]/following-sibling::md-icon[i[text()='arrow_drop_down']]";
     public static final String TRANSIT_SELECTION_XPATH = "//span[text()='Transit']/ancestor::li";
@@ -54,7 +51,24 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     public static final String XPATH_CLOSE_SCAN_MODAL_BUTTON = "//button[@aria-label='Cancel']";
     public static final String XPATH_CLEAR_FILTER_BUTTON = "//button[@aria-label='Clear All Selections']";
     public static final String XPATH_CLEAR_FILTER_VALUE = "//button[@aria-label='Clear All']";
-    private ShipmentsTable shipmentsTable;
+    public ShipmentsTable shipmentsTable;
+    public ShipmentEventsTable shipmentEventsTable;
+    public MovementEventsTable movementEventsTable;
+
+    @FindBy(name = "Create Shipment")
+    public NvIconTextButton createShipment;
+
+    @FindBy(id = "shipment-ids")
+    public TextBox shipmentIds;
+
+    @FindBy(name = "container.shipment-management.search-by-shipment-ids")
+    public NvApiTextButton searchByShipmentIds;
+
+    @FindBy(css = "md-dialog")
+    public CreateShipmentDialog createShipmentDialog;
+
+    @FindBy(css = "md-dialog")
+    public EditShipmentDialog editShipmentDialog;
 
     private static final String FILEPATH = TestConstants.TEMP_DIR;
 
@@ -62,6 +76,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     {
         super(webDriver);
         shipmentsTable = new ShipmentsTable(webDriver);
+        shipmentEventsTable = new ShipmentEventsTable(webDriver);
+        movementEventsTable = new MovementEventsTable(webDriver);
     }
 
     public void clickEditSearchFilterButton()
@@ -75,61 +91,21 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
     }
 
-    public void clickButtonSaveChangesOnEditShipmentDialogWithMawb(Long shipmentId)
-    {
-        clickNvIconTextButtonByNameAndWaitUntilDone("Save Changes");
-        pause1s();
-
-        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@aria-describedby,'dialogContent') and not (contains(@class,'shipment-edit'))]");
-        click("//button[@aria-label='Save']");
-
-        waitUntilInvisibilityOfElementLocated(f("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s updated']", shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
-    }
-
-    public void clickButtonSaveChangesOnEditShipmentDialog(Long shipmentId)
-    {
-        clickNvIconTextButtonByNameAndWaitUntilDone("Save Changes");
-        pause1s();
-        waitUntilInvisibilityOfElementLocated(f("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s updated']", shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
-    }
-
-    public void selectStartHub(String hubName)
-    {
-        pause200ms();
-        selectValueFromMdSelectById(LOCATOR_FIELD_START_HUB, hubName);
-        pause200ms();
-    }
-
-    public void selectEndHub(String hubName)
-    {
-        pause200ms();
-        selectValueFromMdSelectById(LOCATOR_FIELD_END_HUB, hubName);
-        pause200ms();
-    }
-
-    public void fillFieldComments(String comments)
-    {
-        pause200ms();
-        sendKeysById(LOCATOR_COMMENT_TEXT_AREA, comments);
-        pause200ms();
-    }
-
-    public void fillFieldMawb(String mawb)
-    {
-        pause200ms();
-        sendKeysById(LOCATOR_MAWB_TEXT_AREA, mawb);
-        pause200ms();
-    }
-
     public void switchToOtherWindow()
     {
         waitUntilNewWindowOrTabOpened();
         Set<String> windowHandles = getWebDriver().getWindowHandles();
 
-        for(String windowHandle : windowHandles)
+        for (String windowHandle : windowHandles)
         {
             getWebDriver().switchTo().window(windowHandle);
         }
+    }
+
+    public void searchByShipmentIds(List<Long> shipmentIds)
+    {
+        this.shipmentIds.setValue(StringUtils.join(shipmentIds, "\n"));
+        searchByShipmentIds.clickAndWaitUntilDone();
     }
 
     public void addFilter(String filterLabel, String value, boolean isMawb)
@@ -138,7 +114,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         if (!isMawb)
         {
             selectValueFromNvAutocompleteByItemTypesAndDismiss(filterLabel, value);
-        } else {
+        } else
+        {
             sendKeys("//input[@ng-model='search' and contains(@id,'input')]", value);
         }
         pause1s();
@@ -153,11 +130,14 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         pause1s();
     }
 
-    public void changeDate(String date, boolean isToday) {
+    public void changeDate(String date, boolean isToday)
+    {
         String datepickerXpath = "//md-datepicker[@name='%s']//input";
-        if (isToday) {
+        if (isToday)
+        {
             sendKeys(f(datepickerXpath, "fromDateField"), date);
-        } else {
+        } else
+        {
             sendKeys(f(datepickerXpath, "toDateField"), date);
         }
     }
@@ -173,7 +153,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         String presetId = getMdSelectValueById("commons.preset.load-filter-preset");
         Pattern p = Pattern.compile("(\\d+)(-)(.+)");
         Matcher m = p.matcher(presetId);
-        if(m.matches())
+        if (m.matches())
         {
             presetId = m.group(1);
             assertThat("created preset is selected", m.group(3), equalTo(presetName));
@@ -219,23 +199,19 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
 
     public void createShipment(ShipmentInfo shipmentInfo, boolean isNextOrder)
     {
-        clickNvIconTextButtonByName(LOCATOR_CREATE_SHIPMENT_BUTTON);
-
-        selectByIndexFromMdSelectById(LOCATOR_FIELD_SELECT_TYPE, 1);
-        pause200ms();
-
-        selectStartHub(shipmentInfo.getOrigHubName());
-        pause200ms();
-        selectEndHub(shipmentInfo.getDestHubName());
-        pause200ms();
-        fillFieldComments(shipmentInfo.getComments());
+        createShipment.click();
+        createShipmentDialog.waitUntilVisible();
+        createShipmentDialog.type.selectValue("Air Haul");
+        createShipmentDialog.startHub.searchAndSelectValue(shipmentInfo.getOrigHubName());
+        createShipmentDialog.endHub.searchAndSelectValue(shipmentInfo.getDestHubName());
+        createShipmentDialog.comments.setValue(shipmentInfo.getComments());
 
         if (isNextOrder)
         {
-            clickNvApiTextButtonByNameAndWaitUntilDone(LOCATOR_CREATE_ANOTHER_SHIPMENT_CONFIRMATION_BUTTON);
+            createShipmentDialog.createAnother.click();
         } else
         {
-            clickNvApiTextButtonByNameAndWaitUntilDone(LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
+            createShipmentDialog.create.click();
         }
 
         String toastMessage = getToastTopText();
@@ -245,7 +221,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         shipmentInfo.setId(shipmentId);
     }
 
-    public Long createAnotherShipment() {
+    public Long createAnotherShipment()
+    {
         clickNvApiTextButtonByNameAndWaitUntilDone(LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON);
         String toastMessage = getToastTopText();
         assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage, allOf(containsString("Shipment"), containsString("created")));
@@ -259,16 +236,18 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     {
         clickActionButton(shipmentInfo.getId(), ACTION_EDIT);
 
-        selectStartHub(shipmentInfo.getOrigHubName());
-        selectEndHub(shipmentInfo.getDestHubName());
-        fillFieldComments(shipmentInfo.getComments());
+        editShipmentDialog.waitUntilVisible();
+        editShipmentDialog.startHub.searchAndSelectValue(shipmentInfo.getOrigHubName());
+        editShipmentDialog.endHub.searchAndSelectValue(shipmentInfo.getDestHubName());
+        editShipmentDialog.comments.setValue(shipmentInfo.getComments());
 
-        if (shipmentInfo.getMawb() == null || shipmentInfo.getMawb().isEmpty())
+        if (StringUtils.isBlank(shipmentInfo.getMawb()))
         {
-            clickButtonSaveChangesOnEditShipmentDialog(shipmentInfo.getId());
-        } else {
-            fillFieldMawb(shipmentInfo.getMawb());
-            clickButtonSaveChangesOnEditShipmentDialogWithMawb(shipmentInfo.getId());
+            editShipmentDialog.saveChanges(shipmentInfo.getId());
+        } else
+        {
+            editShipmentDialog.mawb.setValue(shipmentInfo.getMawb());
+            editShipmentDialog.saveChangesWithMawb(shipmentInfo.getId());
         }
     }
 
@@ -365,8 +344,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
                         .filter(shipment -> shipment.getId().equals(shipmentId))
                         .findFirst()
                         .orElseThrow(() -> new AssertionError(f("Shipment with ID = '%s' not exist.", shipmentId)));
-            }
-            catch(AssertionError ex)
+            } catch (AssertionError ex)
             {
                 clickEditSearchFilterButton();
                 clickButtonLoadSelection();
@@ -424,14 +402,18 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     public void createAndUploadCsv(List<Order> orders, String fileName, boolean isValid, boolean isDuplicated, int numberOfOrder, ShipmentInfo shipmentInfo) throws FileNotFoundException
     {
         StringBuilder bulkData = new StringBuilder();
-        if (isValid) {
-            for (int i = 0; i < orders.size(); i++) {
+        if (isValid)
+        {
+            for (int i = 0; i < orders.size(); i++)
+            {
                 bulkData.append(orders.get(i).getTrackingId());
-                if (i + 1 < orders.size()) {
+                if (i + 1 < orders.size())
+                {
                     bulkData.append("\n");
                 }
             }
-            if (isDuplicated) {
+            if (isDuplicated)
+            {
                 bulkData.append("\n");
                 bulkData.append(orders.get(0).getTrackingId());
             }
@@ -444,7 +426,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         if (isValid)
         {
             writer.print(bulkData);
-        } else {
+        } else
+        {
             writer.print("TS");
         }
         writer.close();
@@ -466,7 +449,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         createAndUploadCsv(null, fileName, false, false, 0, shipmentInfo);
     }
 
-    private void uploadFile(String fileName, int numberOfOrder, boolean isValid, boolean isDuplicated, ShipmentInfo shipmentInfo) {
+    private void uploadFile(String fileName, int numberOfOrder, boolean isValid, boolean isDuplicated, ShipmentInfo shipmentInfo)
+    {
         //-- click Choose File
         final String filePath = FILEPATH + fileName + ".csv";
         clickActionButton(shipmentInfo.getId(), ACTION_EDIT);
@@ -477,19 +461,23 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         int successfulOrder = Integer.parseInt(getText("//input[contains(@id,'container.shipment-management.successful')]/preceding-sibling::div"));
         int failedOrder = Integer.parseInt(getText("//input[contains(@id,'container.shipment-management.failed')]/preceding-sibling::div"));
         pause1s();
-        if (isValid) {
-            if (isDuplicated) {
-                assertEquals("Number of Order is not the same", actualNumberOfOrder, numberOfOrder+1);
+        if (isValid)
+        {
+            if (isDuplicated)
+            {
+                assertEquals("Number of Order is not the same", actualNumberOfOrder, numberOfOrder + 1);
                 assertEquals("Failed Order(s) : ", failedOrder, 1);
                 String actualFailedReason = getTextOnTableWithNgRepeat(1, "reason", "row in ctrl.uploadResult.failedUpload");
                 assertEquals("Failure reason is different : ", actualFailedReason, "DUPLICATE");
-            } else {
+            } else
+            {
                 assertEquals("Number of Order is not the same", actualNumberOfOrder, numberOfOrder);
                 assertEquals("Failed Order(s) : ", failedOrder, 0);
             }
             assertEquals("Successful Order(s) : ", successfulOrder, numberOfOrder);
 
-        } else {
+        } else
+        {
             assertEquals("Number of Order is not the same", actualNumberOfOrder, 1);
             assertEquals("Successful Order(s) : ", successfulOrder, 0);
             assertEquals("Failed Order(s) : ", failedOrder, 1);
@@ -511,6 +499,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         public static final String COLUMN_LAST_INBOUND_HUB = "currHubName";
         public static final String COLUMN_END_HUB = "destHubName";
         public static final String COLUMN_ETA_DATE_TIME = "arrivalDatetime";
+        public static final String COLUMN_SLA_DATE_TIME = "sla";
         public static final String COLUMN_COMPLETION_DATE_TIME = "completedAt";
         public static final String COLUMN_TOTAL_PARCELS = "ordersCount";
         public static final String COLUMN_COMMENTS = "comments";
@@ -534,6 +523,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
                     .put(COLUMN_LAST_INBOUND_HUB, "curr_hub_name")
                     .put(COLUMN_END_HUB, "dest_hub_name")
                     .put(COLUMN_ETA_DATE_TIME, "arrival_datetime")
+                    .put(COLUMN_SLA_DATE_TIME, "sla_datetime")
                     .put(COLUMN_COMPLETION_DATE_TIME, "completed_at")
                     .put(COLUMN_TOTAL_PARCELS, "orders_count")
                     .put(COLUMN_COMMENTS, "comments")
@@ -549,6 +539,126 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
                     ACTION_PRINT, "Print",
                     ACTION_CANCEL, "Cancel")
             );
+        }
+    }
+
+    public static class CreateShipmentDialog extends MdDialog
+    {
+        public CreateShipmentDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(css = "[id^='select-type']")
+        public MdSelect type;
+
+        @FindBy(css = "[id^='start-hub']")
+        public MdSelect startHub;
+
+        @FindBy(css = "[id^='end-hub']")
+        public MdSelect endHub;
+
+        @FindBy(id = "container.shipment-management.comments-optional")
+        public TextBox comments;
+
+        @FindBy(name = "Create")
+        public NvApiTextButton create;
+
+        @FindBy(name = "Create Another")
+        public NvApiTextButton createAnother;
+
+    }
+
+    public static class EditShipmentDialog extends MdDialog
+    {
+        public EditShipmentDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(css = "[id^='select-type']")
+        public MdSelect type;
+
+        @FindBy(css = "[id^='start-hub']")
+        public MdSelect startHub;
+
+        @FindBy(css = "[id^='end-hub']")
+        public MdSelect endHub;
+
+        @FindBy(id = "container.shipment-management.comments-optional")
+        public TextBox comments;
+
+        @FindBy(id = "master-awb")
+        public TextBox mawb;
+
+        @FindBy(id = "saveChangesButton")
+        public NvIconTextButton saveChanges;
+
+        public void saveChanges(Long shipmentId)
+        {
+            saveChanges.click();
+            pause1s();
+            waitUntilInvisibilityOfElementLocated(f("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s updated']", shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
+        }
+
+        public void saveChangesWithMawb(Long shipmentId)
+        {
+            saveChanges.click();
+            pause1s();
+
+            waitUntilVisibilityOfElementLocated("//md-dialog[contains(@aria-describedby,'dialogContent') and not (contains(@class,'shipment-edit'))]");
+            click("//button[@aria-label='Save']");
+
+            waitUntilInvisibilityOfElementLocated(f("//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()='Shipment %s updated']", shipmentId), TestConstants.VERY_LONG_WAIT_FOR_TOAST);
+        }
+
+    }
+
+    public static class ShipmentEventsTable extends MdVirtualRepeatTable<ShipmentEvent>
+    {
+        public static final String MD_VIRTUAL_REPEAT = "p in getTableData()";
+        public static final String SOURCE = "source";
+        public static final String USER_ID = "userId";
+        public static final String RESULT = "result";
+        public static final String HUB = "hub";
+        public static final String CREATED_AT = "createdAt";
+
+        public ShipmentEventsTable(WebDriver webDriver)
+        {
+            super(webDriver);
+            setMdVirtualRepeat(MD_VIRTUAL_REPEAT);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                    .put(SOURCE, "source")
+                    .put(USER_ID, "user_id")
+                    .put(RESULT, "result")
+                    .put(HUB, "hub")
+                    .put(CREATED_AT, "created_at")
+                    .build());
+            setEntityClass(ShipmentEvent.class);
+            setNvTableParam("ctrl.tableParamScans");
+        }
+    }
+
+    public static class MovementEventsTable extends MdVirtualRepeatTable<MovementEvent>
+    {
+        public static final String MD_VIRTUAL_REPEAT = "p in getTableData()";
+        public static final String SOURCE = "source";
+        public static final String STATUS = "status";
+        public static final String CREATED_AT = "createdAt";
+        public static final String COMMENTS = "comments";
+
+        public MovementEventsTable(WebDriver webDriver)
+        {
+            super(webDriver);
+            setMdVirtualRepeat(MD_VIRTUAL_REPEAT);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                    .put(SOURCE, "source")
+                    .put(STATUS, "status")
+                    .put(CREATED_AT, "created_at")
+                    .put(COMMENTS, "comments")
+                    .build());
+            setEntityClass(MovementEvent.class);
+            setNvTableParam("ctrl.tableParamEvents");
         }
     }
 }
