@@ -40,6 +40,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String APPLY_ACTION_DROP_DOWN_XPATH = "//button[contains(@class,'GenericDropdownButton')]";
     private static final String SET_TO_COMING_DROP_DOWN_XPATH = "//span[text()='Set To Coming']/preceding-sibling::div";
     private static final String SET_TO_NOT_COMING_DROP_DOWN_XPATH = "//span[text()='Set Not To Coming']/preceding-sibling::div";
+    private static final String LOAD_ICON_XPATH = "//span[contains(@class,'ant-spin-dot-spin')]";
 
     private static final String INPUT_CREATE_DRIVER_MODAL_XPATH = "//input[@id='%s']";
     private static final String DROPDOWN_CREATE_DRIVER_MODAL_XPATH = "//div[@id='%s']";
@@ -54,7 +55,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
     private static final String EMPLOYMENT_STATUS_FILTER_ID = "employmentStatus";
     private static final String LICENSE_STATUS_FILTER_ID = "licenseStatus";
 
-    private static final String LICENSE_TYPE_INPUT_CREATE_DRIVER_XPATH = "//input[@value='Class 5']";
+    private static final String LICENSE_TYPE_INPUT_CREATE_DRIVER_XPATH = "//input[@value='%s']";
     private static final String COMMENTS_INPUT_CREATE_DRIVER_XPATH = "//textarea[@id='comments']";
 
     private static final String NAME_INPUT_CREATE_DRIVER_ID = "name";
@@ -190,9 +191,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         getWebDriver().switchTo().parentFrame();
     }
 
-    public void chooseLicenseType() {
+    public void chooseLicenseType(String licenseType) {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-        click(LICENSE_TYPE_INPUT_CREATE_DRIVER_XPATH);
+        click(f(LICENSE_TYPE_INPUT_CREATE_DRIVER_XPATH, licenseType));
         getWebDriver().switchTo().parentFrame();
     }
 
@@ -522,6 +523,15 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
             assertTrue("Driver Availability is True : ", driverAvailability);
         } else if (isElementExistFast(NO_COMING_BUTTON_XPATH)) {
             assertFalse("Driver Availability is false : ", driverAvailability);
+        }
+        getWebDriver().switchTo().parentFrame();
+    }
+
+    public void refreshAndWaitUntilLoadingDone() {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+        getWebDriver().navigate().refresh();
+        if (isElementExistFast(LOAD_ICON_XPATH)) {
+            waitUntilInvisibilityOfElementLocated(LOAD_ICON_XPATH);
         }
         getWebDriver().switchTo().parentFrame();
     }

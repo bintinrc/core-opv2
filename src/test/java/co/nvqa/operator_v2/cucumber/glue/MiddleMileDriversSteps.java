@@ -3,11 +3,13 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.GetDriverResponse;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.support.RandomUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.MiddleMileDriver;
 import co.nvqa.operator_v2.selenium.page.MiddleMileDriversPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.junit.platform.commons.util.StringUtils;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,10 +28,15 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     private static final DateTimeFormatter EXPIRY_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
     private static final DateTimeFormatter COMMENT_FORMATTER = DateUtil.DATE_TIME_FORMATTER;
     private static final String AUTO = "AUTO";
-    private static final String CLASS_5 = "Class 5";
     private static final String RANDOM = "RANDOM";
     private static final String PASSWORD = "password";
     private static final String COMMENTS = String.format("Created at : %s", COMMENT_FORMATTER.format(TODAY));
+
+    private static final String CLASS_5 = "Class 5";
+    private static final String SIM_B_I_UMUM = "SIM B I Umum";
+    private static final String TYPE_C = "Type C";
+    private static final String CLASS_E = "Class E";
+    private static final String RESTRICTION_5 = "Restriction 5";
 
     private static final String FULL_TIME = "FULL_TIME";
     private static final String PART_TIME = "PART_TIME";
@@ -48,6 +55,14 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     private static final String FULL_TIME_CONTRACT = "Full-time / Contract";
     private static final String PART_TIME_FREELANCE = "Part-time / Freelance";
     private static final String VENDOR_SELECTION = "Vendor";
+    private static final String COUNTRY = "country";
+
+    private static final String SG_HUB = "OPV2-SG-HUB";
+    private static final String ID_HUB = "JKSLT-JKSLT-JKSLT-JKSLT";
+    private static final String TH_HUB = "DRIVER-APP-TH-HUB";
+    private static final String VN_HUB = "BAG - Bac Giang - NOR";
+    private static final String MY_HUB = "BUTTERWORTH";
+    private static final String PH_HUB = "CEBU-NAGA";
 
     private MiddleMileDriversPage middleMileDriversPage;
 
@@ -86,6 +101,7 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
     @When("Operator create new Middle Mile Driver with details:")
     public void operatorCreateNewMiddleMileDriverWithDetails(List<MiddleMileDriver> middleMileDrivers) {
+        String country = get(COUNTRY);
         for (MiddleMileDriver middleMileDriver : middleMileDrivers) {
             middleMileDriversPage.clickCreateDriversButton();
 
@@ -96,11 +112,41 @@ public class MiddleMileDriversSteps extends AbstractSteps {
             }
             middleMileDriversPage.fillName(middleMileDriver.getName());
 
-            middleMileDriversPage.chooseHub(middleMileDriver.getHub());
+            if (!"country_based".equalsIgnoreCase(middleMileDriver.getHub())) {
+                middleMileDriversPage.chooseHub(middleMileDriver.getHub());
+            } else {
+                switch (country.toLowerCase()) {
+                    case "singapore":
+                        middleMileDriver.setHub(SG_HUB);
+                        break;
+
+                    case "indonesia":
+                        middleMileDriver.setHub(ID_HUB);
+                        break;
+
+                    case "thailand":
+                        middleMileDriver.setHub(TH_HUB);
+                        break;
+
+                    case "vietnam":
+                        middleMileDriver.setHub(VN_HUB);
+                        break;
+
+                    case "malaysia":
+                        middleMileDriver.setHub(MY_HUB);
+                        break;
+
+                    case "philippines":
+                        middleMileDriver.setHub(PH_HUB);
+                        break;
+                }
+                middleMileDriversPage.chooseHub(middleMileDriver.getHub());
+            }
+
             middleMileDriversPage.fillcontactNumber(middleMileDriver.getContactNumber());
 
             if (RANDOM.equalsIgnoreCase(middleMileDriver.getLicenseNumber())) {
-                String licenseNumber = generateRequestedTrackingNumber();
+                String licenseNumber = RandomUtil.randomString(5);
                 System.out.println("License Number : " + licenseNumber);
                 middleMileDriver.setLicenseNumber(licenseNumber);
             }
@@ -109,8 +155,36 @@ public class MiddleMileDriversSteps extends AbstractSteps {
             middleMileDriver.setExpiryDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
             middleMileDriversPage.fillLicenseExpiryDate(CAL_FORMATTER.format(TODAY.plusMonths(2)));
 
-            middleMileDriver.setLicenseType(CLASS_5);
-            middleMileDriversPage.chooseLicenseType();
+            if (country == null) {
+                middleMileDriver.setLicenseType(CLASS_5);
+            } else {
+                switch (country.toLowerCase()) {
+                    case "singapore":
+                        middleMileDriver.setLicenseType(CLASS_5);
+                        break;
+
+                    case "indonesia":
+                        middleMileDriver.setLicenseType(SIM_B_I_UMUM);
+                        break;
+
+                    case "thailand":
+                        middleMileDriver.setLicenseType(TYPE_C);
+                        break;
+
+                    case "vietnam":
+                        middleMileDriver.setLicenseType(CLASS_E);
+                        break;
+
+                    case "malaysia":
+                        middleMileDriver.setLicenseType(CLASS_E);
+                        break;
+
+                    case "philippines":
+                        middleMileDriver.setLicenseType(RESTRICTION_5);
+                        break;
+                }
+            }
+            middleMileDriversPage.chooseLicenseType(middleMileDriver.getLicenseType());
 
             if (FULL_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
                 middleMileDriver.setEmploymentType(FULL_TIME_CONTRACT);
@@ -236,5 +310,10 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     @When("Operator sets all selected middle mile driver to {string}")
     public void operatorSetsAllSelectedMiddleMileDriverTo(String mode) {
         middleMileDriversPage.clickBulkAvailabilityMode(mode);
+    }
+
+    @When("Operator refresh Middle Mile Driver Page")
+    public void operatorRefreshMiddleMileDriverPage() {
+        middleMileDriversPage.refreshAndWaitUntilLoadingDone();
     }
 }

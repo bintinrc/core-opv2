@@ -22,6 +22,7 @@ public class LoginSteps extends AbstractSteps
     private Provider<StandardApiOperatorPortalSteps> providerOfStandardApiOperatorPortalSteps;
     private LoginPage loginPage;
     private MainPage mainPage;
+    private static final String COUNTRY = "country";
 
     public LoginSteps()
     {
@@ -81,5 +82,6 @@ public class LoginSteps extends AbstractSteps
     public void operatorChangeTheCountryTo(String countryName)
     {
         loginPage.changeCountry(countryName);
+        put(COUNTRY, countryName);
     }
 }
