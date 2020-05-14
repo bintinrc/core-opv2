@@ -1,4 +1,4 @@
-@MiddleMileDrivers @MiddleMile @CWF
+@MiddleMileDrivers @MiddleMile
 Feature: Shipment Inbound Scanning
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -296,6 +296,29 @@ Feature: Shipment Inbound Scanning
     Given API Driver gets all the driver
     And Operator DB gets that the driver availability value
     Then Operator verifies that the driver availability's value is the same
+
+  @DeleteMiddleMileDriver
+  Scenario Outline: OP Create Driver - <country>
+    Given Operator change the country to "<country>"
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    When Operator refresh Middle Mile Driver Page
+    And Operator create new Middle Mile Driver with details:
+      | name   | hub           | contactNumber | licenseNumber | employmentType | username |
+      | RANDOM | COUNTRY_BASED | 08176586525   | RANDOM        | FULL_TIME      | RANDOM   |
+    Then Operator verifies that the new Middle Mile Driver has been created
+    And Operator clicks on Load Driver Button on the Middle Mile Driver Page
+    Then Operator searches by "name" and verifies the created username
+    And Operator change the country to "Singapore"
+    Given API Driver gets all the driver
+    Examples:
+      | Note           | country     | hiptest-uid                              |
+      | SG Environment | Singapore   | uid:f255e7ab-802e-4839-b9d1-4a9d3c11e62e |
+      | ID Environment | Indonesia   | uid:befda453-1d8a-4ebd-a9f3-97105cbd1d88 |
+      | TH Environment | Thailand    | uid:3e5aa752-7b7e-4a7b-bbe2-7e8f101bd382 |
+      | VN Environment | Vietnam     | uid:dbe38f3c-4e81-4bbe-bcf4-acaa69e8ad31 |
+      | MY Environment | Malaysia    | uid:ddddcb28-d885-4101-8d86-0a8bb95d106e |
+      | PH Environment | Philippines | uid:c10376a6-b9a6-4d90-8230-7c3cb7ff6c10 |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
