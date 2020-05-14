@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.MovementSchedule;
+import co.nvqa.operator_v2.model.StationMovementSchedule;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -20,6 +21,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -40,6 +42,9 @@ public class MovementManagementPage extends OperatorV2SimplePage
     @FindBy(className = "ant-modal-wrap")
     public MovementScheduleModal movementScheduleModal;
 
+    @FindBy(css = "div.ant-modal")
+    public EditStationRelationsModal editStationRelationsModal;
+
     @FindBy(id = "originHubId")
     public AntSelect originCrossdockHub;
 
@@ -55,6 +60,9 @@ public class MovementManagementPage extends OperatorV2SimplePage
     @FindBy(xpath = "//div[contains(@class,'CrossdockMovementTableContainer')]//table")
     public NvTable<ScheduleRow> schedulesTable;
 
+    @FindBy(xpath = "//div[contains(@class,'StationMovementTableContainer')]//table")
+    public NvTable<RelationRow> relationsTable;
+
     @FindBy(xpath = "(//th//input)[1]")
     public TextBox originCrossdockHubFilter;
 
@@ -63,6 +71,28 @@ public class MovementManagementPage extends OperatorV2SimplePage
 
     @FindBy(xpath = "//div[@class='ant-popover-buttons']//button[.='Delete']")
     public Button popoverDeleteButton;
+
+    @FindBy(xpath = "//label[.='Relations']")
+    public PageElement relationsTab;
+
+    @FindBy(xpath = "//label[starts-with(.,'Pending')]")
+    public PageElement pendingTab;
+
+    @FindBy(xpath = "//th[contains(.,'Station')]//input")
+    public TextBox stationFilter;
+
+    //region Stations tab
+    @FindBy(xpath = "//label[starts-with(.,'Stations')]")
+    public PageElement stationsTab;
+
+    @FindBy(xpath = "//button[.='Add Schedule']")
+    public Button addSchedule;
+
+    @FindBy(css = "div.ant-modal")
+    public AddStationMovementScheduleModal addStationMovementScheduleModal;
+
+    //endregion
+
 
     public MovementManagementPage(WebDriver webDriver)
     {
@@ -95,17 +125,26 @@ public class MovementManagementPage extends OperatorV2SimplePage
         originCrossdockHubFilter.waitUntilClickable();
     }
 
-    public static class AddMovementScheduleModal extends AntModal
+    public static class EditStationRelationsModal extends AntModal
     {
-        public AddMovementScheduleModal(WebDriver webDriver, WebElement webElement)
+        public EditStationRelationsModal(WebDriver webDriver, WebElement webElement)
         {
             super(webDriver, webElement);
             PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
         }
 
-        public AddMovementScheduleModal(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+        @FindBy(id = "crossdockHubId")
+        public AntSelect crossdockHub;
+
+        @FindBy(xpath = "//button[.='Save']")
+        public Button save;
+    }
+
+    public static class AddMovementScheduleModal extends AntModal
+    {
+        public AddMovementScheduleModal(WebDriver webDriver, WebElement webElement)
         {
-            super(webDriver, searchContext, webElement);
+            super(webDriver, webElement);
             PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
         }
 
@@ -245,6 +284,65 @@ public class MovementManagementPage extends OperatorV2SimplePage
 
     }
 
+    public static class AddStationMovementScheduleModal extends AntModal
+    {
+        public AddStationMovementScheduleModal(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(id = "crossdock_id")
+        public AntSelect crossdockHub;
+
+        @FindBy(css = "[id*='origin_hub_id']")
+        public AntSelect originHub;
+
+        @FindBy(css = "[id*='destination_hub_id']")
+        public AntSelect destinationHub;
+
+        @FindBy(css = "[id*='movement_type']")
+        public AntSelect movementType;
+
+        @FindBy(xpath = "(.//span[@class='ant-time-picker'])[1]")
+        public AntTimePicker departureTime;
+
+        @FindBy(css = "input[id*='duration_day']")
+        public TextBox duration;
+
+        @FindBy(xpath = "(.//span[@class='ant-time-picker'])[2]")
+        public AntTimePicker endTime;
+
+        @FindBy(css = "input[id*='comment']")
+        public TextBox comment;
+
+        @FindBy(xpath = ".//button[.='Create']")
+        public Button create;
+
+        @FindBy(xpath = ".//button[.='Cancel']")
+        public Button cancel;
+
+        public void fill(StationMovementSchedule stationMovementSchedule)
+        {
+            Optional.ofNullable(stationMovementSchedule.getCrossdockHub())
+                    .ifPresent(value -> crossdockHub.selectValue(value));
+            Optional.ofNullable(stationMovementSchedule.getOriginHub())
+                    .ifPresent(value -> originHub.selectValue(value));
+            Optional.ofNullable(stationMovementSchedule.getDestinationHub())
+                    .ifPresent(value -> destinationHub.selectValue(value));
+            Optional.ofNullable(stationMovementSchedule.getMovementType())
+                    .ifPresent(value -> movementType.selectValue(value));
+            Optional.ofNullable(stationMovementSchedule.getDepartureTime())
+                    .ifPresent(value -> departureTime.setValue(value));
+            Optional.ofNullable(stationMovementSchedule.getDuration())
+                    .ifPresent(value -> duration.setValue(value));
+            Optional.ofNullable(stationMovementSchedule.getEndTime())
+                    .ifPresent(value -> endTime.setValue(value));
+            Optional.ofNullable(stationMovementSchedule.getComment())
+                    .ifPresent(value -> comment.setValue(value));
+        }
+    }
+
     public static class ScheduleRow extends NvTable.NvRow
     {
         public ScheduleRow(WebDriver webDriver, WebElement webElement)
@@ -264,6 +362,30 @@ public class MovementManagementPage extends OperatorV2SimplePage
 
         @FindBy(className = "destinationHubName")
         public PageElement destinationHubName;
+    }
+
+    public static class RelationRow extends NvTable.NvRow
+    {
+        public RelationRow(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        public RelationRow(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+        {
+            super(webDriver, searchContext, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(className = "hubName")
+        public PageElement sation;
+
+        @FindBy(className = "crossdockHubName")
+        public PageElement crossdock;
+
+        @FindBy(css = "td.actions a")
+        public PageElement editRelation;
     }
 
     public static class MovementScheduleModal extends AntModal
