@@ -9,7 +9,6 @@ import co.nvqa.operator_v2.model.MiddleMileDriver;
 import co.nvqa.operator_v2.selenium.page.MiddleMileDriversPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import org.junit.platform.commons.util.StringUtils;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -64,6 +63,13 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     private static final String MY_HUB = "BUTTERWORTH";
     private static final String PH_HUB = "CEBU-NAGA";
 
+    private static final String SINGAPORE = "singapore";
+    private static final String INDONESIA = "indonesia";
+    private static final String THAILAND = "thailand";
+    private static final String VIETNAM = "vietnam";
+    private static final String MALAYSIA = "malaysia";
+    private static final String PHILIPPINES = "philippines";
+
     private MiddleMileDriversPage middleMileDriversPage;
 
     public MiddleMileDriversSteps() {
@@ -116,29 +122,32 @@ public class MiddleMileDriversSteps extends AbstractSteps {
                 middleMileDriversPage.chooseHub(middleMileDriver.getHub());
             } else {
                 switch (country.toLowerCase()) {
-                    case "singapore":
+                    case SINGAPORE:
                         middleMileDriver.setHub(SG_HUB);
                         break;
 
-                    case "indonesia":
+                    case INDONESIA:
                         middleMileDriver.setHub(ID_HUB);
                         break;
 
-                    case "thailand":
+                    case THAILAND:
                         middleMileDriver.setHub(TH_HUB);
                         break;
 
-                    case "vietnam":
+                    case VIETNAM:
                         middleMileDriver.setHub(VN_HUB);
                         break;
 
-                    case "malaysia":
+                    case MALAYSIA:
                         middleMileDriver.setHub(MY_HUB);
                         break;
 
-                    case "philippines":
+                    case PHILIPPINES:
                         middleMileDriver.setHub(PH_HUB);
                         break;
+
+                    default :
+                        NvLogger.warn("Country is not on the list");
                 }
                 middleMileDriversPage.chooseHub(middleMileDriver.getHub());
             }
@@ -159,29 +168,32 @@ public class MiddleMileDriversSteps extends AbstractSteps {
                 middleMileDriver.setLicenseType(CLASS_5);
             } else {
                 switch (country.toLowerCase()) {
-                    case "singapore":
+                    case SINGAPORE:
                         middleMileDriver.setLicenseType(CLASS_5);
                         break;
 
-                    case "indonesia":
+                    case INDONESIA:
                         middleMileDriver.setLicenseType(SIM_B_I_UMUM);
                         break;
 
-                    case "thailand":
+                    case THAILAND:
                         middleMileDriver.setLicenseType(TYPE_C);
                         break;
 
-                    case "vietnam":
+                    case VIETNAM:
                         middleMileDriver.setLicenseType(CLASS_E);
                         break;
 
-                    case "malaysia":
+                    case MALAYSIA:
                         middleMileDriver.setLicenseType(CLASS_E);
                         break;
 
-                    case "philippines":
+                    case PHILIPPINES:
                         middleMileDriver.setLicenseType(RESTRICTION_5);
                         break;
+
+                    default :
+                        NvLogger.warn("Country is not on the list");
                 }
             }
             middleMileDriversPage.chooseLicenseType(middleMileDriver.getLicenseType());
