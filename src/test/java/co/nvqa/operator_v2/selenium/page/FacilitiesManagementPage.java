@@ -46,6 +46,9 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
     public AddHubDialog addHubDialog;
 
     @FindBy(css = "md-dialog")
+    public EditHubDialog editHubDialog;
+
+    @FindBy(css = "md-dialog")
     public ConfirmDeactivationDialog confirmDeactivationDialog;
 
     @FindBy(css = "md-dialog")
@@ -69,12 +72,10 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
     {
         loadingHubsLabel.waitUntilInvisible();
         addHub.click();
+        addHubDialog.waitUntilVisible();
         addHubDialog.hubName.setValue(hub.getName());
         addHubDialog.displayName.setValue(hub.getShortName());
-        if (StringUtils.isNotBlank(hub.getFacilityType()))
-        {
-            addHubDialog.facilityType.selectValue(hub.getFacilityType());
-        }
+        Optional.ofNullable(hub.getFacilityType()).ifPresent(value -> addHubDialog.facilityType.selectValue(value));
         addHubDialog.city.setValue(hub.getCity());
         addHubDialog.country.setValue(hub.getCountry());
         addHubDialog.latitude.setValue(String.valueOf(hub.getLatitude()));
@@ -89,14 +90,18 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
         hubsTable.filterByColumn(COLUMN_NAME, searchHubsKeyword);
         assertFalse(f("Table is empty. Hub with keywords = '%s' not found.", searchHubsKeyword), hubsTable.isEmpty());
         hubsTable.clickActionButton(1, ACTION_EDIT);
+        editHubDialog.waitUntilVisible();
 
-        Optional.ofNullable(hub.getName()).ifPresent(value -> sendKeysById("container.hub-list.hub-name", value));
-        Optional.ofNullable(hub.getShortName()).ifPresent(value -> sendKeysById("container.hub-list.display-name", value));
-        Optional.ofNullable(hub.getCity()).ifPresent(value -> sendKeysById("container.hub-list.city", value));
-        Optional.ofNullable(hub.getCountry()).ifPresent(value -> sendKeysById("container.hub-list.country", value));
-        Optional.ofNullable(hub.getLatitude()).ifPresent(value -> sendKeysById("container.hub-list.latitude", String.valueOf(value)));
-        Optional.ofNullable(hub.getLongitude()).ifPresent(value -> sendKeysById("container.hub-list.longitude", String.valueOf(value)));
-        clickNvButtonSaveByNameAndWaitUntilDone("Submit Changes");
+        pause1s();
+        Optional.ofNullable(hub.getFacilityType()).ifPresent(value -> editHubDialog.facilityType.selectValue(value));
+        Optional.ofNullable(hub.getName()).ifPresent(value -> editHubDialog.hubName.setValue(value));
+        Optional.ofNullable(hub.getShortName()).ifPresent(value -> editHubDialog.displayName.setValue(value));
+        Optional.ofNullable(hub.getCity()).ifPresent(value -> editHubDialog.city.setValue(value));
+        Optional.ofNullable(hub.getCountry()).ifPresent(value -> editHubDialog.country.setValue(value));
+        Optional.ofNullable(hub.getLatitude()).ifPresent(value -> editHubDialog.latitude.setValue(value));
+        Optional.ofNullable(hub.getLongitude()).ifPresent(value -> editHubDialog.longitude.setValue(value));
+        editHubDialog.submitChanges.clickAndWaitUntilDone();
+        editHubDialog.waitUntilInvisible();
     }
 
     public void disableHub(String searchHubsKeyword)
@@ -208,6 +213,38 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
 
         @FindBy(name = "Submit")
         public NvButtonSave submit;
+    }
+
+    public static class EditHubDialog extends MdDialog
+    {
+        public EditHubDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(css = "[id^='container.hub-list.hub-name']")
+        public TextBox hubName;
+
+        @FindBy(css = "[id^='container.hub-list.display-name']")
+        public TextBox displayName;
+
+        @FindBy(css = "[id='container.hub-list.facility-type']")
+        public MdSelect facilityType;
+
+        @FindBy(css = "[id^='container.hub-list.city']")
+        public TextBox city;
+
+        @FindBy(css = "[id^='container.hub-list.country']")
+        public TextBox country;
+
+        @FindBy(css = "[id^='container.hub-list.latitude']")
+        public TextBox latitude;
+
+        @FindBy(css = "[id^='container.hub-list.longitude']")
+        public TextBox longitude;
+
+        @FindBy(name = "Submit Changes")
+        public NvButtonSave submitChanges;
     }
 
     public static class ConfirmDeactivationDialog extends MdDialog

@@ -32,7 +32,7 @@ public class MdSelect extends PageElement
     @FindBy(xpath = "//div[contains(@class,'md-select-menu-container')][@aria-hidden='false']//md-option")
     public List<PageElement> options;
 
-    private static final String MD_OPTION_LOCATOR = "//div[contains(@class,'md-select-menu-container')][@aria-hidden='false']//md-option[div[contains(normalize-space(text()), '%s')]]";
+    private static final String MD_OPTION_LOCATOR = "//div[contains(@class,'md-select-menu-container')][@aria-hidden='false']//md-option[./div[contains(normalize-space(text()), '%s')]]";
 
     public void searchAndSelectValue(String value)
     {

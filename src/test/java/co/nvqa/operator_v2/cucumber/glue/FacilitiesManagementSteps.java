@@ -9,6 +9,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.hamcrest.Matchers;
+import org.junit.platform.commons.util.StringUtils;
 
 import java.util.Map;
 
@@ -107,6 +108,7 @@ public class FacilitiesManagementSteps extends AbstractSteps
         data = resolveKeyValues(data);
         Hub hub = get(KEY_CREATED_HUB);
 
+        String facilityType = data.get("facilityType");
         String searchHubsKeyword = data.get("searchHubsKeyword");
         String name = data.get("name");
         String displayName = data.get("displayName");
@@ -146,12 +148,28 @@ public class FacilitiesManagementSteps extends AbstractSteps
             longitude = String.valueOf(randomHub.getLongitude());
         }
 
-        hub.setName(name);
-        hub.setShortName(displayName);
+        if (StringUtils.isNotBlank(facilityType))
+        {
+            hub.setFacilityType(facilityType);
+        }
+        if (StringUtils.isNotBlank(name))
+        {
+            hub.setName(name);
+        }
+        if (StringUtils.isNotBlank(displayName))
+        {
+            hub.setShortName(displayName);
+        }
         hub.setCity(city);
         hub.setCountry(country);
-        hub.setLatitude(Double.parseDouble(latitude));
-        hub.setLongitude(Double.parseDouble(longitude));
+        if (StringUtils.isNotBlank(latitude))
+        {
+            hub.setLatitude(Double.parseDouble(latitude));
+        }
+        if (StringUtils.isNotBlank(longitude))
+        {
+            hub.setLongitude(Double.parseDouble(longitude));
+        }
 
         facilitiesManagementPage.updateHub(searchHubsKeyword, hub);
     }
