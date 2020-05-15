@@ -139,8 +139,9 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
         filterBy(COLUMN_USERNAME, username);
         driversTable.clickActionButton(1, ACTION_DELETE);
         waitUntilVisibilityOfMdDialogByTitle("Confirm delete");
+        waitUntilVisibilityOfElementLocated(LOCATOR_DELETE_BUTTON);
         waitUntilElementIsClickable(LOCATOR_DELETE_BUTTON);
-        clickButtonOnMdDialogByAriaLabel("Delete");
+        click(LOCATOR_DELETE_BUTTON);
         waitUntilInvisibilityOfMdDialogByTitle("Confirm delete");
     }
 
