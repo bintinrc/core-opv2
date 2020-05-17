@@ -48,6 +48,7 @@ public class RouteCashInboundSteps extends AbstractSteps
 
         routeCashInboundPage.addCod(routeCashInboundCod);
         put(KEY_ROUTE_CASH_INBOUND_COD, routeCashInboundCod);
+        put(KEY_COD_GOODS_AMOUNT, codGoodsAmount);
     }
 
     @Then("^Operator verify the new COD on Route Cash Inbound page is created successfully$")
