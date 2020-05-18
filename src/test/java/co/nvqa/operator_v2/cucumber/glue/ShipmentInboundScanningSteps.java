@@ -9,6 +9,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Modified by Daniel Joi Partogi Hutapea.
@@ -35,7 +36,19 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
     {
         Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         hub = resolveValue(hub);
+
         scanningPage.inboundScanning(shipmentId, label, hub);
+    }
+
+    @When("^Operator inbound scanning Shipment on Shipment Inbound Scanning page using data below:$")
+    public void inboundScanningUsingDataBelow(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+        String label = data.get("label");
+        String shipmentId = data.get("shipmentId");
+        String hub = data.get("hub");
+
+        scanningPage.inboundScanning(Long.valueOf(shipmentId), label, hub);
     }
 
     @When("Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page using MAWB")
@@ -43,6 +56,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
     {
         Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         String mawb = get(KeyConstants.KEY_MAWB);
+        hub = resolveValue(hub);
 
         if ("orderDestHubName".equalsIgnoreCase(hub))
         {

@@ -13,6 +13,7 @@ Feature: Driver Strength
       | lastName             | GENERATED                                                        |
       | licenseNumber        | GENERATED                                                        |
       | codLimit             | 100                                                              |
+      | hub                  | {hub-name}                                                       |
       | employmentStartDate  | {gradle-current-date-yyyy-MM-dd}                                 |
       | vehicleLicenseNumber | GENERATED                                                        |
       | vehicleCapacity      | 100                                                              |

@@ -30,11 +30,25 @@ public class MdDialog extends PageElement
         close.moveAndClick();
     }
 
-    public boolean isDisplayed(){
+    public boolean isDisplayed()
+    {
         return title.isDisplayedFast();
     }
 
-    public void waitUntilVisible(){
+    public void waitUntilVisible()
+    {
         title.waitUntilClickable();
+    }
+
+    public boolean waitUntilVisible(int timeout)
+    {
+        try
+        {
+            title.waitUntilClickable(timeout);
+            return true;
+        } catch (Exception ex)
+        {
+            return false;
+        }
     }
 }

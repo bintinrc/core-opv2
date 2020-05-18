@@ -16,6 +16,7 @@ import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
+import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.CreateRouteParams;
 import co.nvqa.operator_v2.model.DpPartner;
 import co.nvqa.operator_v2.model.DriverInfo;
@@ -25,6 +26,7 @@ import com.google.common.collect.ImmutableList;
 import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import io.cucumber.datatable.DataTable;
 import org.apache.commons.lang3.StringUtils;
@@ -491,8 +493,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     @Then("^DB Operator verify next Pickup transaction values are updated for the created order:$")
     public void dbOperatorVerifyPickupTransactionRecordUpdatedForTheCreatedOrderForParameters(Map<String, String> mapOfData)
     {
-        Map<String, String> mapOfTokens = createDefaultTokens();
-        mapOfData = replaceDataTableTokens(mapOfData, mapOfTokens);
+        mapOfData = resolveKeyValues(mapOfData);
+        mapOfData = StandardTestUtils.replaceDataTableTokens(mapOfData);
+
         Order order = get(KEY_CREATED_ORDER);
         String type = "PP";
         List<TransactionEntity> transactions = getCoreJdbc().findTransactionByOrderIdAndType(order.getId(), type);
@@ -945,5 +948,20 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         Long result = getCoreJdbc().getBatchId(batchId);
 
         assertEquals(f("%s Batch ID Is Not Deleted", batchId),result, null);
+    }
+
+    @When("DB Operator gets the id of the created middle mile driver")
+    public void dbOperatorGetsTheIdOfTheCreatedMiddleMileDriver()
+    {
+        String driverUsername = get(KEY_CREATED_MIDDLE_MILE_DRIVER_USERNAME);
+        Long driverId = getDriverJdbc().getDriverIdByUsername(driverUsername);
+        put(KEY_CREATED_MIDDLE_MILE_DRIVER_ID, driverId);
+    }
+
+    @Then("Operator DB gets that the driver availability value")
+    public void operatorDBGetsThatTheDriverAvailabilityValue() {
+        String driverUsername = get(KEY_CREATED_MIDDLE_MILE_DRIVER_USERNAME);
+        boolean driverAvailability = getDriverJdbc().getDriverAvailabilityValue(driverUsername);
+        put(KEY_CREATED_MIDDLE_MILE_DRIVER_AVAILABILITY, driverAvailability);
     }
 }

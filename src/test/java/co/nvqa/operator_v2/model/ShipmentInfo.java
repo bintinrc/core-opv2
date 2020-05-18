@@ -10,7 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 /**
- *
  * @author Sergey Mishanin
  */
 @SuppressWarnings("unused")
@@ -33,12 +32,13 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo>
     private int ordersCount;
     private String comments;
     private String mawb;
+    private String sla;
 
     public ShipmentInfo()
     {
     }
 
-    public ShipmentInfo (Shipments shipments)
+    public ShipmentInfo(Shipments shipments)
     {
         setShipmentType(shipments.getShipment().getShipmentType());
         setId(shipments.getShipment().getId());
@@ -67,7 +67,8 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo>
                 .withZoneSameInstant(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
 
         int nano = normalisedZdt.getNano();
-        if (nano >= 500_000L) {
+        if (nano >= 500_000L)
+        {
             normalisedZdt = normalisedZdt.plusSeconds(1L);
         }
         return normalisedZdt.format(FE_FORMATTER);
@@ -91,6 +92,11 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo>
     public void setId(Long id)
     {
         this.id = id;
+    }
+
+    public void setId(String id)
+    {
+        setId(Long.valueOf(id));
     }
 
     public String getCreatedAt()
@@ -201,5 +207,15 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo>
     public void setMawb(String mawb)
     {
         this.mawb = mawb;
+    }
+
+    public String getSla()
+    {
+        return sla;
+    }
+
+    public void setSla(String sla)
+    {
+        this.sla = sla;
     }
 }

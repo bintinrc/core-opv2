@@ -14,6 +14,9 @@ import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
@@ -48,12 +51,19 @@ public class EditOrderPage extends OperatorV2SimplePage
     @FindBy(xpath = "//div[./label[.='Current DNR Group']]/p")
     public PageElement currentDnrGroup;
 
+    @FindBy(xpath = "//div[./label[.='Current Priority']]/h3")
+    public PageElement currentPriority;
+
     private static final String NG_REPEAT_TABLE_EVENT = "event in getTableData()";
     public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE_EVENT = "name";
     private TransactionsTable transactionsTable;
     private AddToRouteDialog addToRouteDialog;
-    private DeliveryDetailsBox deliveryDetailsBox;
-    private PickupDetailsBox pickupDetailsBox;
+    @FindBy(css = "md-dialog")
+    public EditPriorityLevelDialog editPriorityLevelDialog;
+    @FindBy(id = "delivery-details")
+    public DeliveryDetailsBox deliveryDetailsBox;
+    @FindBy(id = "pickup-details")
+    public PickupDetailsBox pickupDetailsBox;
     private EventsTable eventsTable;
     private CancelOrderDialog cancelOrderDialog;
     private EditPickupDetailsDialog editPickupDetailsDialog;
@@ -69,8 +79,6 @@ public class EditOrderPage extends OperatorV2SimplePage
         super(webDriver);
         transactionsTable = new TransactionsTable(webDriver);
         addToRouteDialog = new AddToRouteDialog(webDriver);
-        deliveryDetailsBox = new DeliveryDetailsBox(webDriver);
-        pickupDetailsBox = new PickupDetailsBox(webDriver);
         eventsTable = new EventsTable(webDriver);
         cancelOrderDialog = new CancelOrderDialog(webDriver);
         deliveryRescheduleDialog = new DeliveryRescheduleDialog(webDriver);
@@ -135,13 +143,13 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public void editPriorityLevel(int priorityLevel)
     {
-        if (!getText("//label[text()='Current Priority']/following-sibling::h3").equalsIgnoreCase(String.valueOf(priorityLevel)))
+        if (!StringUtils.equalsIgnoreCase(currentPriority.getText(), String.valueOf(priorityLevel)))
         {
             clickMenu("Order Settings", "Edit Priority Level");
-            waitUntilVisibilityOfMdDialogByTitle("Edit Priority Level");
-            sendKeysByAriaLabel("container.order.edit.delivery-priority-level", String.valueOf(priorityLevel));
-            clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
-            waitUntilInvisibilityOfMdDialogByTitle("Edit Priority Level");
+            editPriorityLevelDialog.waitUntilVisible();
+            editPriorityLevelDialog.priorityLevel.setValue(priorityLevel);
+            editPriorityLevelDialog.saveChanges.clickAndWaitUntilDone();
+            editPriorityLevelDialog.waitUntilInvisible();
         }
     }
 
@@ -1255,8 +1263,17 @@ public class EditOrderPage extends OperatorV2SimplePage
     /**
      * Accessor for Delivery Details box
      */
-    public static class DeliveryDetailsBox extends OperatorV2SimplePage
+    public static class DeliveryDetailsBox extends PageElement
     {
+        @FindBy(css = "h5.nv-text-right")
+        public PageElement status;
+        @FindBy(xpath = ".//div[./label[.='Start Date / Time']]/p")
+        public PageElement startDateTime;
+        @FindBy(xpath = ".//div[./label[.='End Date / Time']]/p")
+        public PageElement endDateTime;
+        @FindBy(xpath = ".//div[./label[.='Last Service End']]/p")
+        public PageElement lastServiceEnd;
+
         private static final String BOX_LOCATOR = "//div[h5[text()='Delivery Details']]";
         private static final String DELIVERY_INSTRUCTIONS_LOCATOR = BOX_LOCATOR + "//div[label[text()='Delivery Instructions']]/p";
         private static final String ROUTE_ID_LOCATOR = BOX_LOCATOR + "//div[label[text()='Route Id']]/p";
@@ -1267,9 +1284,9 @@ public class EditOrderPage extends OperatorV2SimplePage
         private static final String END_DATE_TIME_LOCATOR = BOX_LOCATOR + "//div[label[text()='End Date / Time']]/p";
         private static final String NV_TAG_LOCATOR = "//nv-tag[@name='commons.ninja-collect']";
 
-        public DeliveryDetailsBox(WebDriver webDriver)
+        public DeliveryDetailsBox(WebDriver webDriver, WebElement webElement)
         {
-            super(webDriver);
+            super(webDriver, webElement);
         }
 
         public String getDeliveryInstructions()
@@ -1316,17 +1333,26 @@ public class EditOrderPage extends OperatorV2SimplePage
     /**
      * Accessor for Pickup Details box
      */
-    public static class PickupDetailsBox extends OperatorV2SimplePage
+    public static class PickupDetailsBox extends PageElement
     {
+        @FindBy(css = "h5.nv-text-right")
+        public PageElement status;
+        @FindBy(xpath = ".//div[./label[.='Start Date / Time']]/p")
+        public PageElement startDateTime;
+        @FindBy(xpath = ".//div[./label[.='End Date / Time']]/p")
+        public PageElement endDateTime;
+        @FindBy(xpath = ".//div[./label[.='Last Service End']]/p")
+        public PageElement lastServiceEnd;
+
         private static final String PICKUP_INSTRUCTIONS_LOCATOR = "//div[h5[text()='Pickup Details']]//div[label[text()='Pick Up Instructions']]/p";
         private static final String ROUTE_ID_LOCATOR = "//div[h5[text()='Pickup Details']]//div[label[text()='Route Id']]/p";
         private static final String ROUTE_DATE_LOCATOR = "//div[h5[text()='Pickup Details']]//div[label[text()='Route Date']]/p";
         private static final String DRIVER_LOCATOR = "//div[h5[text()='Pickup Details']]//div[label[text()='Driver']]/p";
         private static final String WAYPOINT_ID_LOCATOR = "//div[h5[text()='Pickup Details']]//div[label[text()='Waypoint ID']]/p";
 
-        public PickupDetailsBox(WebDriver webDriver)
+        public PickupDetailsBox(WebDriver webDriver, WebElement webElement)
         {
-            super(webDriver);
+            super(webDriver, webElement);
         }
 
         @SuppressWarnings("unused")
@@ -2176,5 +2202,20 @@ public class EditOrderPage extends OperatorV2SimplePage
     {
         click("//div[label[@label = 'Cash on Delivery']]//button[@aria-label='No']");
         clickNvApiTextButtonByName("commons.save-changes");
+    }
+
+    public static class EditPriorityLevelDialog extends MdDialog
+    {
+        public EditPriorityLevelDialog (WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(id = "container.order.edit.delivery-priority-level-1")
+        public TextBox priorityLevel;
+
+
+        @FindBy(name = "commons.save-changes")
+        public NvApiTextButton saveChanges;
     }
 }

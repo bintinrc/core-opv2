@@ -402,7 +402,7 @@ public class OperatorV2SimplePage extends SimplePage
         {
             if (!isBlank(nvTableParam))
             {
-                nvTableXpathExpression = f("//nv-table[@param='%s']", nvTableParam);
+                nvTableXpathExpression = f(".//nv-table[@param='%s']", nvTableParam);
             }
 
             WebElement we;
@@ -538,7 +538,17 @@ public class OperatorV2SimplePage extends SimplePage
 
     public int getRowsCountOfTableWithMdVirtualRepeat(String mdVirtualRepeat)
     {
-        String xpath = f("//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))]", mdVirtualRepeat);
+        return getRowsCountOfTableWithMdVirtualRepeat(mdVirtualRepeat, null);
+    }
+
+    public int getRowsCountOfTableWithMdVirtualRepeat(String mdVirtualRepeat, String nvTableParam)
+    {
+        String nvTableXpathExpression = "";
+        if (!isBlank(nvTableParam))
+        {
+            nvTableXpathExpression = f(".//nv-table[@param='%s']", nvTableParam);
+        }
+        String xpath = f("%s//tr[@md-virtual-repeat='%s'][not(contains(@class, 'last-row'))]", nvTableXpathExpression, mdVirtualRepeat);
 
         try
         {

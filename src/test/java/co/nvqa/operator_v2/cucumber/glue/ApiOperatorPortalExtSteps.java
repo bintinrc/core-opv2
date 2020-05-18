@@ -420,6 +420,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     {
         Order order = get(KEY_CREATED_ORDER);
         Long zoneId = order.getLastDeliveryTransaction().getRoutingZoneId();
+        assertNotNull("Zone ID", zoneId);
         Zone zone = getZoneClient().getZone(zoneId);
         put(KEY_ORDER_ZONE_ID, zoneId);
         put(KEY_ORDER_HUB_ID, zone.getHubId());

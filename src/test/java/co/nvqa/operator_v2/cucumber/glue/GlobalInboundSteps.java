@@ -118,6 +118,7 @@ public class GlobalInboundSteps extends AbstractSteps
     @When("^Operator verifies priority level info is correct using data below:$")
     public void operatorVerifiesPriorityLevelInfoIsCorrectUsingDataBelow(Map<String, String> mapOfData)
     {
+        mapOfData = resolveKeyValues(mapOfData);
         int expectedPriorityLevel = Integer.parseInt(mapOfData.get("priorityLevel"));
         String expectedPriorityLevelColorAsHex = mapOfData.get("priorityLevelColorAsHex");
         globalInboundPage.verifiesPriorityLevelInfoIsCorrect(expectedPriorityLevel, expectedPriorityLevelColorAsHex);

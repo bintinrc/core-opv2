@@ -1,10 +1,15 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.DriverInfo;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.text.ParseException;
 
@@ -18,6 +23,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
 {
     private static final String LOCATOR_SPINNER = "//md-progress-circular";
     public static final String LOCATOR_BUTTON_LOAD_EVERYTHING = "container.driver-strength.load-everything";
+    public static final String LOCATOR_DELETE_BUTTON = "//md-dialog//button[@aria-label='Delete']";
 
     private AddDriverDialog addDriverDialog;
     private EditDriverDialog editDriverDialog;
@@ -133,7 +139,9 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
         filterBy(COLUMN_USERNAME, username);
         driversTable.clickActionButton(1, ACTION_DELETE);
         waitUntilVisibilityOfMdDialogByTitle("Confirm delete");
-        clickButtonOnMdDialogByAriaLabel("Delete");
+        waitUntilVisibilityOfElementLocated(LOCATOR_DELETE_BUTTON);
+        waitUntilElementIsClickable(LOCATOR_DELETE_BUTTON);
+        click(LOCATOR_DELETE_BUTTON);
         waitUntilInvisibilityOfMdDialogByTitle("Confirm delete");
     }
 
@@ -170,6 +178,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
         public static final String LOCATOR_FIELD_PASSWORD = "Password";
         public static final String LOCATOR_FIELD_COMMENTS = "Comments";
         public static final String LOCATOR_BUTTON_SUBMIT = "Submit";
+        public static final String LOCATOR_HUB = "Hub";
 
         public AddDriverDialog(WebDriver webDriver)
         {
@@ -181,6 +190,12 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
         public AddDriverDialog waitUntilVisible()
         {
             waitUntilVisibilityOfMdDialogByTitle(dialogTittle);
+            return this;
+        }
+
+        public AddDriverDialog setHub(String value)
+        {
+            selectValueFromMdAutocomplete(LOCATOR_HUB, value);
             return this;
         }
 
@@ -285,6 +300,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
             setLastName(driverInfo.getLastName());
             setDriverLicenseNumber(driverInfo.getLicenseNumber());
             setCodLimit(driverInfo.getCodLimit());
+            setHub(driverInfo.getHub());
             setEmploymentStartDate(driverInfo.getEmploymentStartDate());
             if (driverInfo.hasVehicleInfo())
             {
@@ -318,10 +334,12 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
      */
     public static class ContactDetailsMenu extends OperatorV2SimplePage
     {
-        public static final String LOCATOR_LICENSE_NUMBER = "//*[contains(@class,'md-active')]//*[@class='contact-info-details']/div[contains(.,'License No.')]/div[2]";
         public static final String LOCATOR_CONTACT = "//*[contains(@class,'md-active')]//*[@class='contact-info-contacts']/div[1]";
         public static final String LOCATOR_CONTACT_TYPE = "//*[contains(@class,'md-active')]//*[@class='contact-info-contacts']/div[2]";
         public static final String LOCATOR_COMMENTS = "//*[contains(@class,'md-active')]//*[@class='contact-info-comments']/div[contains(.,'Comments')]/div[2]";
+
+        @FindBy(xpath = "//*[contains(@class,'md-active')]")
+        private ContactDetailsDialog contactDetailsDialog;
 
         public ContactDetailsMenu(WebDriver webDriver)
         {
@@ -330,7 +348,8 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
 
         public String getLicenseNumber()
         {
-            return getText(LOCATOR_LICENSE_NUMBER);
+            contactDetailsDialog.waitUntilVisible();
+            return contactDetailsDialog.driverLicenseNumber.getText();
         }
 
         public String getContact()
@@ -362,6 +381,22 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
             driverInfo.setContactType(getContactType());
             driverInfo.setComments(getComments());
             return driverInfo;
+        }
+
+        public static class ContactDetailsDialog extends MdDialog
+        {
+            public ContactDetailsDialog(WebDriver webDriver, WebElement webElement)
+            {
+                super(webDriver, webElement);
+            }
+
+            public ContactDetailsDialog(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+            {
+                super(webDriver, searchContext, webElement);
+            }
+
+            @FindBy(xpath = "//*[contains(@class,'md-active')]//*[@class='contact-info-details']/div[contains(.,'License No.')]/div[2]")
+            public PageElement driverLicenseNumber;
         }
     }
 

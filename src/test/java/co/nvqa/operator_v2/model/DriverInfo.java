@@ -32,6 +32,17 @@ public class DriverInfo extends DataEntity<DriverInfo>
     private String username;
     private String password;
     private String comments;
+    private String hub;
+
+    public String getHub()
+    {
+        return hub;
+    }
+
+    public void setHub(String hub)
+    {
+        this.hub = hub;
+    }
 
     public String getUuid()
     {
