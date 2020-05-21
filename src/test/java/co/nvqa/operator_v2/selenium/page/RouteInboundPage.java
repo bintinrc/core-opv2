@@ -3,6 +3,8 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.model.CollectionSummary;
 import co.nvqa.operator_v2.model.ExpectedScans;
 import co.nvqa.operator_v2.model.MoneyCollection;
+import co.nvqa.operator_v2.model.MoneyCollectionCollectedOrderEntry;
+import co.nvqa.operator_v2.model.MoneyCollectionHistoryEntry;
 import co.nvqa.operator_v2.model.WaypointOrderInfo;
 import co.nvqa.operator_v2.model.WaypointPerformance;
 import co.nvqa.operator_v2.model.WaypointReservationInfo;
@@ -14,6 +16,7 @@ import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Assert;
 import org.junit.platform.commons.util.StringUtils;
@@ -40,8 +43,13 @@ public class RouteInboundPage extends OperatorV2SimplePage
     private ShippersTable shippersTable;
     private ReservationsTable reservationsTable;
     private OrdersTable ordersTable;
-    private RouteInboundCommentsDialog routeInboundCommentsDialog;
     private MoneyCollectionDialog moneyCollectionDialog;
+
+    @FindBy(css = "md-dialog")
+    public RouteInboundCommentsDialog routeInboundCommentsDialog;
+
+    @FindBy(css = "md-dialog")
+    public MoneyCollectionHistoryDialog moneyCollectionHistoryDialog;
 
     @FindBy(name = "Cancel")
     public NvIconButton closeDialog;
@@ -82,6 +90,9 @@ public class RouteInboundPage extends OperatorV2SimplePage
     @FindBy(xpath = "//div[contains(@class, 'big-button')][contains(@ng-click,'WAYPOINT_TOTAL')]")
     public BigButton totalButton;
 
+    @FindBy(xpath = "//div[contains(@class, 'big-button')][@ng-click='ctrl.viewMoneyCollection($event)']")
+    public BigButton cashButton;
+
     @FindBy(xpath = "//div[./div[.=' Pending Deliveries ']]//div[@class='count-over-total']")
     public PageElement pendingDeliveries;
 
@@ -115,13 +126,18 @@ public class RouteInboundPage extends OperatorV2SimplePage
     @FindBy(css = "md-dialog")
     public DriverAttendanceDialog driverAttendanceDialog;
 
+    @FindBy(css = "a[ng-click='ctrl.routeInboundComments($event)']")
+    public PageElement routeInboundComments;
+
+    @FindBy(css = "div[ng-if='ctrl.hasComments()']")
+    public PageElement routeLastComment;
+
     public RouteInboundPage(WebDriver webDriver)
     {
         super(webDriver);
         shippersTable = new ShippersTable(webDriver);
         reservationsTable = new ReservationsTable(webDriver);
         ordersTable = new OrdersTable(webDriver);
-        routeInboundCommentsDialog = new RouteInboundCommentsDialog(webDriver);
         moneyCollectionDialog = new MoneyCollectionDialog(webDriver);
     }
 
@@ -464,17 +480,17 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
     public void addRoutInboundComment(String comment)
     {
-        click("//a[contains(@ng-click,'ctrl.routeInboundComments')]");
-        routeInboundCommentsDialog
-                .waitUntilVisible()
-                .enterComment(comment)
-                .clickAddButton();
+        routeInboundComments.click();
+        routeInboundCommentsDialog.waitUntilVisible();
+        routeInboundCommentsDialog.routeComment.setValue(comment);
+        routeInboundCommentsDialog.add.click();
+        routeInboundCommentsDialog.waitUntilInvisible();
         pause3s();
     }
 
     public void verifyRouteInboundComment(String expectedComment)
     {
-        String actualComment = getText("//div[@ng-if='ctrl.hasComments()']");
+        String actualComment = routeLastComment.getText();
         Pattern commentPattern = Pattern.compile("Comment by (.+):(.+)");
         Matcher matcher = commentPattern.matcher(actualComment.trim());
         if (matcher.find())
@@ -487,33 +503,16 @@ public class RouteInboundPage extends OperatorV2SimplePage
         }
     }
 
-    public static class RouteInboundCommentsDialog extends OperatorV2SimplePage
+    public static class RouteInboundCommentsDialog extends MdDialog
     {
-        static final String DIALOG_TITLE = "Route Inbound Comments";
-        static final String LOCATOR_FIELD_NEW_COMMENT = "container.route-inbound.enter-route-comment-here";
-        static final String LOCATOR_BUTTON_ADD = "Add";
+        @FindBy(css = "[id^='container.route-inbound.enter-route-comment-here']")
+        public TextBox routeComment;
+        @FindBy(name = "Add")
+        public NvIconTextButton add;
 
-        public RouteInboundCommentsDialog(WebDriver webDriver)
+        public RouteInboundCommentsDialog(WebDriver webDriver, WebElement webElement)
         {
-            super(webDriver);
-        }
-
-        public RouteInboundCommentsDialog waitUntilVisible()
-        {
-            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
-            return this;
-        }
-
-        public RouteInboundCommentsDialog enterComment(String value)
-        {
-            sendKeysById(LOCATOR_FIELD_NEW_COMMENT, value);
-            return this;
-        }
-
-        public RouteInboundCommentsDialog clickAddButton()
-        {
-            clickNvIconTextButtonByNameAndWaitUntilDone(LOCATOR_BUTTON_ADD);
-            return this;
+            super(webDriver, webElement);
         }
     }
 
@@ -711,5 +710,75 @@ public class RouteInboundPage extends OperatorV2SimplePage
         {
             super(webDriver, webElement);
         }
+    }
+
+    public static class MoneyCollectionHistoryDialog extends MdDialog
+    {
+        @FindBy(xpath = "//md-tab-item[.='History']")
+        public PageElement historyTab;
+        @FindBy(xpath = "//md-tab-item[.='Details']")
+        public PageElement detailsTab;
+        public HistoryTable historyTable;
+        public CollectedOrdersTable collectedOrdersTable;
+
+        public MoneyCollectionHistoryDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+            historyTable = new HistoryTable(webDriver);
+            collectedOrdersTable = new CollectedOrdersTable(webDriver);
+        }
+
+        public static class HistoryTable extends NgRepeatTable<MoneyCollectionHistoryEntry>
+        {
+            public static final String NG_REPEAT = "row in getTableData()";
+            public static final String PROCESSED_AMOUNT = "processedAmount";
+            public static final String PROCESSED_TYPE = "processedType";
+            public static final String INBOUNDED_BY = "inboundedBy";
+            public static final String RECEIPT_NO = "receiptNo";
+
+            public HistoryTable(WebDriver webDriver)
+            {
+                super(webDriver);
+                setNgRepeat(NG_REPEAT);
+                setColumnLocators(ImmutableMap.<String, String>builder()
+                        .put(PROCESSED_AMOUNT, "processed-amount")
+                        .put(PROCESSED_TYPE, "processed-type")
+                        .put(INBOUNDED_BY, "inbounded_by")
+                        .put(RECEIPT_NO, "receipt_no")
+                        .build());
+                setEntityClass(MoneyCollectionHistoryEntry.class);
+            }
+        }
+
+        public static class CollectedOrdersTable extends NgRepeatTable<MoneyCollectionCollectedOrderEntry>
+        {
+            public static final String NG_REPEAT = "order in getTableData()";
+            public static final String PROCESSED_COD_AMOUNT = "processedCodAmount";
+            public static final String PROCESSED_COD_COLLECTED = "processedCodCollected";
+            public static final String TRACKING_ID = "trackingId";
+            public static final String STAMP_ID = "stampId";
+            public static final String CUSTOM_TYPE = "customType";
+            public static final String LOCATION = "location";
+            public static final String CONTACT = "contact";
+            public static final String ADDRESSEE = "addressee";
+
+            public CollectedOrdersTable(WebDriver webDriver)
+            {
+                super(webDriver);
+                setNgRepeat(NG_REPEAT);
+                setColumnLocators(ImmutableMap.<String, String>builder()
+                        .put(PROCESSED_COD_AMOUNT, "processed-cod-amount")
+                        .put(PROCESSED_COD_COLLECTED, "processed-cod-collected")
+                        .put(TRACKING_ID, "tracking_id")
+                        .put(STAMP_ID, "stamp_id")
+                        .put(CUSTOM_TYPE, "custom-type")
+                        .put(LOCATION, "location")
+                        .put(CONTACT, "contact")
+                        .put(ADDRESSEE, "name")
+                        .build());
+                setEntityClass(MoneyCollectionCollectedOrderEntry.class);
+            }
+        }
+
     }
 }

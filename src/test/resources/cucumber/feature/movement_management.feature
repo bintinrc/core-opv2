@@ -451,7 +451,7 @@ Feature: Movement Management
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @ArchiveAndDeleteHubViaDb @DeleteShipment @CloseNewWindows @Debug
+  @ArchiveAndDeleteHubViaDb @DeleteShipment @CloseNewWindows
   Scenario: Crossdock Movement found and available schedule only 1 day in a week (uid:6dc554a3-b602-4181-bfa0-a2a8e6e521ad)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -652,6 +652,61 @@ Feature: Movement Management
       | source   | SLA_CALCULATION                                              |
       | status   | FAILED                                                       |
       | comments | relation for {KEY_LIST_OF_CREATED_HUBS[1].id} (SG) not found |
+
+  @ArchiveAndDeleteHubViaDb @DeleteShipment @CloseNewWindows
+  Scenario: Search Station in Pending Relations Tab (uid:3294c0fb-bfe6-4156-bfe7-44e740f2183f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | STATION   |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    When Operator go to menu Inter-Hub -> Movement Management
+    And Movement Management page is loaded
+    And Operator search for Pending relation on Movement Management page using data below:
+      | station | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+    Then Operator verify relations table on Movement Management page using data below:
+      | station      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | crossdockHub | Unfilled                           |
+    When Operator search for Pending relation on Movement Management page using data below:
+      | station | wrong-station-name |
+    Then Operator verify relations table on Movement Management page is empty
+
+  @ArchiveAndDeleteHubViaDb
+  Scenario: Update Station Relation (uid:30fd38a6-bd35-48c8-8f83-8e9839798e65)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | STATION   |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    When API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    When Operator go to menu Inter-Hub -> Movement Management
+    And Movement Management page is loaded
+    And Operator adds new relation on Movement Management page using data below:
+      | station      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | crossdockHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+    And Operator adds new Station Movement Schedule on Movement Management page using data below:
+      | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | movementType   | Air Haul                           |
+      | departureTime  | 15:15                              |
+      | duration       | 1                                  |
+      | endTime        | 16:30                              |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

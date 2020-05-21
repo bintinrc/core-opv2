@@ -160,8 +160,14 @@ public class FacilitiesManagementSteps extends AbstractSteps
         {
             hub.setShortName(displayName);
         }
-        hub.setCity(city);
-        hub.setCountry(country);
+        if (StringUtils.isNotBlank(city))
+        {
+            hub.setCity(city);
+        }
+        if (StringUtils.isNotBlank(country))
+        {
+            hub.setCountry(country);
+        }
         if (StringUtils.isNotBlank(latitude))
         {
             hub.setLatitude(Double.parseDouble(latitude));

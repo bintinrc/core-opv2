@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementSchedule;
+import co.nvqa.operator_v2.model.StationMovementSchedule;
 import co.nvqa.operator_v2.selenium.page.MovementManagementPage;
 import com.google.common.collect.ImmutableMap;
 import cucumber.api.java.After;
@@ -13,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Sergey Mishanin
@@ -76,6 +78,61 @@ public class MovementManagementSteps extends AbstractSteps
         operatorOpensAddMovementScheduleDialogOnMovementManagementPage();
         operatorFillAddMovementScheduleFormUsingDataBelow(data);
         operatorClickButtonOnAddMovementScheduleDialog("Save Schedule");
+    }
+
+    @Then("Operator adds new relation on Movement Management page using data below:")
+    public void operatorAddsNewRelationOnMovementManagementPageUsingDataBelow(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+        String station = data.get("station");
+        String crossdockHub = data.get("crossdockHub");
+        movementManagementPage.relationsTab.click();
+        movementManagementPage.pendingTab.click();
+        movementManagementPage.stationFilter.setValue(station);
+        movementManagementPage.relationsTable.rows.get(0).editRelation.click();
+        movementManagementPage.editStationRelationsModal.waitUntilVisible();
+        movementManagementPage.editStationRelationsModal.crossdockHub.selectValue(crossdockHub);
+        movementManagementPage.editStationRelationsModal.save.click();
+        movementManagementPage.editStationRelationsModal.waitUntilInvisible();
+    }
+
+    @Then("Operator search for Pending relation on Movement Management page using data below:")
+    public void operatorSearchForPendingRelationOnMovementManagementPageUsingDataBelow(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+        String station = data.get("station");
+        movementManagementPage.relationsTab.click();
+        movementManagementPage.pendingTab.click();
+        Optional.ofNullable(station).ifPresent(value -> movementManagementPage.stationFilter.setValue(value));
+    }
+
+    @Then("Operator verify relations table on Movement Management page using data below:")
+    public void operatorVerifyRelationTableOnMovementManagementPageUsingDataBelow(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+        Optional.ofNullable(data.get("station"))
+                .ifPresent(value -> assertEquals("Station", value, movementManagementPage.relationsTable.rows.get(0).sation.getText()));
+        Optional.ofNullable(data.get("crossdockHub"))
+                .ifPresent(value -> assertEquals("Crossdock Hub", value, movementManagementPage.relationsTable.rows.get(0).crossdock.getText()));
+    }
+
+    @Then("Operator verify relations table on Movement Management page is empty")
+    public void operatorVerifyRelationTableOnMovementManagementPageIsEmpty()
+    {
+        assertEquals("Numbers of row in Relations table", 0, movementManagementPage.relationsTable.rows.size());
+    }
+
+    @Then("Operator adds new Station Movement Schedule on Movement Management page using data below:")
+    public void operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+        StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(data);
+        movementManagementPage.stationsTab.click();
+        movementManagementPage.addSchedule.click();
+        movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
+        movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule);
+        movementManagementPage.addStationMovementScheduleModal.create.click();
+        movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
     }
 
     private void addMovementScheduleData(MovementSchedule movementSchedule, Map<String, String> data, String day)
