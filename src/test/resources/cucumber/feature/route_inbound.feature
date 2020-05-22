@@ -1125,6 +1125,40 @@ Feature: Route Inbound
       | routeId | {KEY_CREATED_ROUTE_ID} |
       | hubName | {hub-name}             |
 
+  @DeleteOrArchiveRoute
+  Scenario: View Cash Collection (uid:9523ff75-91b0-40df-938f-4b6023155012)
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    Given API Driver collect all his routes
+    Given API Driver get pickup/delivery waypoint of the created order
+    Given API Operator Van Inbound parcel
+    Given API Operator start the route
+    Given API Driver deliver the created parcel successfully
+    Given Operator go to menu Fleet -> Route Cash Inbound
+    When Operator create new COD on Route Cash Inbound page
+    When Operator go to menu Inbounding -> Route Inbound
+    And Operator get Route Summary Details on Route Inbound page using data below:
+      | hubName      | {hub-name}             |
+      | fetchBy      | FETCH_BY_ROUTE_ID      |
+      | fetchByValue | {KEY_CREATED_ROUTE_ID} |
+    And Operator open Money Collection history dialog on Route Inbound page
+    Then Operator verify Money Collection history record using data below:
+      | processedAmount | {KEY_ROUTE_CASH_INBOUND_COD.amountCollected} |
+      | processedType   | Cash                                         |
+      | receiptNo       | {KEY_ROUTE_CASH_INBOUND_COD.receiptNumber}   |
+    And Operator verify Money Collection Collected Order record using data below:
+      | processedCodAmount    | {KEY_COD_GOODS_AMOUNT}                     |
+      | processedCodCollected | {KEY_COD_GOODS_AMOUNT}                     |
+      | trackingId            | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | customType            | Delivery (Normal)                          |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

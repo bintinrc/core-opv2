@@ -7,6 +7,8 @@ import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ExpectedScans;
 import co.nvqa.operator_v2.model.MoneyCollection;
+import co.nvqa.operator_v2.model.MoneyCollectionCollectedOrderEntry;
+import co.nvqa.operator_v2.model.MoneyCollectionHistoryEntry;
 import co.nvqa.operator_v2.model.WaypointOrderInfo;
 import co.nvqa.operator_v2.model.WaypointPerformance;
 import co.nvqa.operator_v2.model.WaypointReservationInfo;
@@ -557,5 +559,33 @@ public class RouteInboundSteps extends AbstractSteps
     {
         MoneyCollection moneyCollection = new MoneyCollection(mapOfData);
         routeInboundPage.moneyCollectionDialog().fillForm(moneyCollection).save();
+    }
+
+    @When("^Operator open Money Collection history dialog on Route Inbound page$")
+    public void operatorOpenMoneyCollectionHistoryDialog(){
+        routeInboundPage.cashButton.click();
+        routeInboundPage.moneyCollectionHistoryDialog.waitUntilVisible();
+    }
+
+    @Then("^Operator verify Money Collection history record using data below:$")
+    public void operatorVerifyMoneyCollectionHistoryRecord(Map<String, String> mapOfData)
+    {
+        mapOfData = resolveKeyValues(mapOfData);
+        MoneyCollectionHistoryEntry expectedRecord = new MoneyCollectionHistoryEntry(mapOfData);
+        routeInboundPage.moneyCollectionHistoryDialog.historyTab.click();
+        pause1s();
+        MoneyCollectionHistoryEntry actualRecord = routeInboundPage.moneyCollectionHistoryDialog.historyTable.readEntity(1);
+        expectedRecord.compareWithActual(actualRecord);
+    }
+
+    @Then("^Operator verify Money Collection Collected Order record using data below:$")
+    public void operatorVerifyMoneyCollectionCollectedOrderRecord(Map<String, String> mapOfData)
+    {
+        mapOfData = resolveKeyValues(mapOfData);
+        MoneyCollectionCollectedOrderEntry expectedRecord = new MoneyCollectionCollectedOrderEntry(mapOfData);
+        routeInboundPage.moneyCollectionHistoryDialog.detailsTab.click();
+        pause1s();
+        MoneyCollectionCollectedOrderEntry actualRecord = routeInboundPage.moneyCollectionHistoryDialog.collectedOrdersTable.readEntity(1);
+        expectedRecord.compareWithActual(actualRecord);
     }
 }

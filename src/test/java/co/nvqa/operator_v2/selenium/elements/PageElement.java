@@ -73,6 +73,7 @@ public class PageElement extends SimplePage
     public void clearAndSendKeys(CharSequence keysToSend)
     {
         waitUntilClickable();
+        clear();
         sendKeys(webElement, keysToSend);
     }
 
