@@ -3,6 +3,8 @@ package co.nvqa.operator_v2.model;
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Order;
 
+import java.util.Map;
+
 /**
  * @author Sergey Mishanin
  */
@@ -15,6 +17,14 @@ public class WaypointOrderInfo extends DataEntity<WaypointOrderInfo>
     private String status;
     private Long cmiCount;
     private String routeInboundStatus;
+    private String shipperName;
+    private String reservationId;
+
+    public WaypointOrderInfo(){}
+
+    public WaypointOrderInfo(Map<String, String> data){
+        fromMap(data);
+    }
 
     public String getTrackingId()
     {
@@ -95,5 +105,25 @@ public class WaypointOrderInfo extends DataEntity<WaypointOrderInfo>
     public void setRouteInboundStatus(String routeInboundStatus)
     {
         this.routeInboundStatus = routeInboundStatus;
+    }
+
+    public String getShipperName()
+    {
+        return shipperName;
+    }
+
+    public void setShipperName(String shipperName)
+    {
+        this.shipperName = shipperName;
+    }
+
+    public String getReservationId()
+    {
+        return reservationId;
+    }
+
+    public void setReservationId(String reservationId)
+    {
+        this.reservationId = reservationId;
     }
 }

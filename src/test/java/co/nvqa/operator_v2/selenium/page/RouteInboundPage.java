@@ -8,10 +8,12 @@ import co.nvqa.operator_v2.model.MoneyCollectionHistoryEntry;
 import co.nvqa.operator_v2.model.WaypointOrderInfo;
 import co.nvqa.operator_v2.model.WaypointPerformance;
 import co.nvqa.operator_v2.model.WaypointReservationInfo;
+import co.nvqa.operator_v2.model.WaypointScanInfo;
 import co.nvqa.operator_v2.model.WaypointShipperInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
@@ -20,6 +22,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Assert;
 import org.junit.platform.commons.util.StringUtils;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -43,6 +46,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
     private ShippersTable shippersTable;
     private ReservationsTable reservationsTable;
     private OrdersTable ordersTable;
+    public WaypointScansTable waypointScansTable;
     private MoneyCollectionDialog moneyCollectionDialog;
 
     @FindBy(css = "md-dialog")
@@ -50,6 +54,9 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
     @FindBy(css = "md-dialog")
     public MoneyCollectionHistoryDialog moneyCollectionHistoryDialog;
+
+    @FindBy(css = "md-dialog")
+    public ReservationPickupsDialog reservationPickupsDialog;
 
     @FindBy(name = "Cancel")
     public NvIconButton closeDialog;
@@ -83,6 +90,15 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
     @FindBy(xpath = "//div[contains(@class, 'big-button')][contains(@ng-click,'WAYPOINT_FAILED')]")
     public BigButton failedButton;
+
+    @FindBy(xpath = "//div[contains(@class, 'big-button')][contains(@ng-click,'COLLECT_FAILED')]")
+    public BigButton failedParcels;
+
+    @FindBy(xpath = "//div[contains(@class, 'big-button')][contains(@ng-click,'COLLECT_C2C_AND_RETURN')]")
+    public BigButton c2cReturn;
+
+    @FindBy(xpath = "//div[contains(@class, 'big-button')][contains(@ng-click,'DETAILS_TYPE.RESERVATIONS)')]")
+    public BigButton reservationsBigButton;
 
     @FindBy(xpath = "//div[contains(@class, 'big-button')][contains(@ng-click,'WAYPOINT_SUCCESS')]")
     public BigButton successButton;
@@ -132,6 +148,18 @@ public class RouteInboundPage extends OperatorV2SimplePage
     @FindBy(css = "div[ng-if='ctrl.hasComments()']")
     public PageElement routeLastComment;
 
+    @FindBy(name = "commons.go-back")
+    public NvIconTextButton goBack;
+
+    @FindBy(name = "container.route-inbound.continue-to-inbound")
+    public NvIconTextButton continueToInbound;
+
+    @FindBy(id = "end-session")
+    public NvApiTextButton endSession;
+
+    @FindBy(css = "[aria-label='Remove route from driver app']")
+    public MdCheckbox removeRouteFromDriverApp;
+
     public RouteInboundPage(WebDriver webDriver)
     {
         super(webDriver);
@@ -139,6 +167,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
         reservationsTable = new ReservationsTable(webDriver);
         ordersTable = new OrdersTable(webDriver);
         moneyCollectionDialog = new MoneyCollectionDialog(webDriver);
+        waypointScansTable = new WaypointScansTable(webDriver);
     }
 
     public void fetchRouteByRouteId(String hubName, Long routeId)
@@ -257,6 +286,9 @@ public class RouteInboundPage extends OperatorV2SimplePage
         if (expectedScans.getReservationPickupsScans() != null)
         {
             String expectedValue = expectedScans.getReservationPickupsScans() + " / " + expectedScans.getReservationPickupsTotal();
+            if (expectedScans.getReservationPickupsExtraOrders() != null) {
+                expectedValue += "  |  +" + expectedScans.getReservationPickupsExtraOrders();
+            }
             assertEquals("Waypoint Performance - Reservation Pickups", expectedValue, reservationPickups.getText());
         }
     }
@@ -279,6 +311,27 @@ public class RouteInboundPage extends OperatorV2SimplePage
     {
         failedButton.moveAndClick();
         waitUntilVisibilityOfMdDialogByTitle("Failed");
+        pause500ms();
+    }
+
+    public void openFailedParcelsDialog()
+    {
+        failedParcels.moveAndClick();
+        waitUntilVisibilityOfMdDialogByTitle("Failed Parcels");
+        pause500ms();
+    }
+
+    public void openC2CReturnDialog()
+    {
+        c2cReturn.moveAndClick();
+        waitUntilVisibilityOfMdDialogByTitle("C2C + Return");
+        pause500ms();
+    }
+
+    public void openReservationsDialog()
+    {
+        reservationsBigButton.moveAndClick();
+        waitUntilVisibilityOfMdDialogByTitle("Reservations");
         pause500ms();
     }
 
@@ -337,19 +390,9 @@ public class RouteInboundPage extends OperatorV2SimplePage
         closeDialog.waitUntilInvisible();
     }
 
-    public void clickContinueToInbound()
-    {
-        clickNvIconTextButtonByName("container.route-inbound.continue-to-inbound");
-    }
-
-    public void clickGoBack()
-    {
-        clickNvIconTextButtonByName("commons.go-back");
-    }
-
     public void scanTrackingId(String trackingId)
     {
-        sendKeysAndEnterById("tracking-id", trackingId);
+        trackingIdInput.setValue(trackingId + Keys.ENTER);
         String xpath = "//tr[@ng-repeat=\"row in ctrl.inboundingHistory | orderBy:'createdAt':true\"]/td[normalize-space(text())='%s']";
         waitUntilVisibilityOfElementLocated(xpath, trackingId);
     }
@@ -780,5 +823,107 @@ public class RouteInboundPage extends OperatorV2SimplePage
             }
         }
 
+    }
+
+    public static class ReservationPickupsDialog extends MdDialog
+    {
+        @FindBy(xpath = ".//md-tab-item[.='Inbounded Orders']")
+        public PageElement inpoundedOrdersTab;
+        @FindBy(xpath = ".//md-tab-item[.='Non-inbounded Orders']")
+        public PageElement nonInboundedOrdersTab;
+        @FindBy(xpath = ".//md-tab-item[.='Extra Orders']")
+        public PageElement extraOrdersTab;
+        public NonInboundedOrdersTable nonInboundedOrdersTable;
+        public InboundedOrdersTable inboundedOrdersTable;
+        public ExtraOrdersTable extraOrdersTable;
+
+        public ReservationPickupsDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+            nonInboundedOrdersTable = new NonInboundedOrdersTable(webDriver);
+            inboundedOrdersTable = new InboundedOrdersTable(webDriver);
+            extraOrdersTable = new ExtraOrdersTable(webDriver);
+        }
+
+        public static class OrdersTable extends NgRepeatTable<WaypointOrderInfo>
+        {
+            public static final String NG_REPEAT = "order in getTableData()";
+            public static final String TRACKING_ID = "trackingId";
+            public static final String SHIPPER_NAME = "shipperName";
+            public static final String RESERVATION_ID = "reservationId";
+            public static final String LOCATION = "location";
+
+            public OrdersTable(WebDriver webDriver)
+            {
+                super(webDriver);
+                setNgRepeat(NG_REPEAT);
+                setColumnLocators(ImmutableMap.<String, String>builder()
+                        .put(TRACKING_ID, "tracking_id")
+                        .put(SHIPPER_NAME, "shipper_name")
+                        .put(RESERVATION_ID, "reservation-id")
+                        .put(LOCATION, "location")
+                        .build());
+                setEntityClass(WaypointOrderInfo.class);
+            }
+        }
+
+        public static class NonInboundedOrdersTable extends OrdersTable
+        {
+            public NonInboundedOrdersTable(WebDriver webDriver)
+            {
+                super(webDriver);
+                setTableLocator("//nv-table[@class='non-inbounded-orders-table']");
+            }
+        }
+
+        public static class InboundedOrdersTable extends OrdersTable
+        {
+            public InboundedOrdersTable(WebDriver webDriver)
+            {
+                super(webDriver);
+                setTableLocator("//nv-table[@class='inbounded-orders-table']");
+            }
+        }
+
+        public static class ExtraOrdersTable extends NgRepeatTable<WaypointOrderInfo>
+        {
+            public static final String NG_REPEAT = "order in getTableData()";
+            public static final String TRACKING_ID = "trackingId";
+            public static final String SHIPPER_NAME = "shipperName";
+
+            public ExtraOrdersTable(WebDriver webDriver)
+            {
+                super(webDriver);
+                setTableLocator("//nv-table[@class='extra-orders-table scroll-x-end']");
+                setNgRepeat(NG_REPEAT);
+                setColumnLocators(ImmutableMap.<String, String>builder()
+                        .put(TRACKING_ID, "tracking_id")
+                        .put(SHIPPER_NAME, "shipper_name")
+                        .build());
+                setEntityClass(WaypointOrderInfo.class);
+            }
+        }
+    }
+
+    public static class WaypointScansTable extends NgRepeatTable<WaypointScanInfo>
+    {
+        public static final String NG_REPEAT = "row in ctrl.inboundingHistory | orderBy:'createdAt':true";
+        public static final String TRACKING_ID = "trackingId";
+        public static final String STATUS = "status";
+        public static final String REASON = "reason";
+        public static final String TAGS = "tags";
+
+        public WaypointScansTable(WebDriver webDriver)
+        {
+            super(webDriver);
+            setNgRepeat(NG_REPEAT);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                    .put(TRACKING_ID, "//td[2]")
+                    .put(STATUS, "//td[3]")
+                    .put(REASON, "//td[4]")
+                    .put(TAGS, "//td[5]")
+                    .build());
+            setEntityClass(WaypointScanInfo.class);
+        }
     }
 }

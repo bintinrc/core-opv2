@@ -12,6 +12,7 @@ import co.nvqa.operator_v2.model.MoneyCollectionHistoryEntry;
 import co.nvqa.operator_v2.model.WaypointOrderInfo;
 import co.nvqa.operator_v2.model.WaypointPerformance;
 import co.nvqa.operator_v2.model.WaypointReservationInfo;
+import co.nvqa.operator_v2.model.WaypointScanInfo;
 import co.nvqa.operator_v2.model.WaypointShipperInfo;
 import co.nvqa.operator_v2.selenium.page.RouteInboundPage;
 import cucumber.api.java.en.And;
@@ -243,6 +244,11 @@ public class RouteInboundSteps extends AbstractSteps
         {
             expectedScans.setReservationPickupsScans(Integer.parseInt(value));
         }
+        value = mapOfData.get("reservationPickupsExtraOrders");
+        if (StringUtils.isNotBlank(value))
+        {
+            expectedScans.setReservationPickupsExtraOrders(Integer.parseInt(value));
+        }
         routeInboundPage.verifyRouteInboundInfoIsCorrect(routeId, driverName, hubName, routeDate, expectedScans);
     }
 
@@ -253,7 +259,7 @@ public class RouteInboundSteps extends AbstractSteps
     }
 
 
-    @Then("^Operator verify Shippers Info in (.+) Waypoints dialog using data below:$")
+    @Then("^Operator verify Shippers Info in (.+) dialog using data below:$")
     public void operatorVerifyShippersInfoInPendingWaypointsDialogUsingDataBelow(String status, List<Map<String, String>> listOfData)
     {
         List<WaypointShipperInfo> expectedShippersInfo = listOfData.stream().map(data ->
@@ -265,14 +271,14 @@ public class RouteInboundSteps extends AbstractSteps
         routeInboundPage.validateShippersTable(expectedShippersInfo);
     }
 
-    @When("^Operator click 'View orders or reservations' button for shipper #(\\d+) in (.+) Waypoints dialog$")
+    @When("^Operator click 'View orders or reservations' button for shipper #(\\d+) in (.+) dialog$")
     public void operatorClickViewOrdersOrReservationsButtonForShipperInPendingWaypointsDialog(int index, String status)
     {
         routeInboundPage.openViewOrdersOrReservationsDialog(index);
     }
 
     @SuppressWarnings("unchecked")
-    @Then("^Operator verify Reservations table in (.+) Waypoints dialog using data below:$")
+    @Then("^Operator verify Reservations table in (.+) dialog using data below:$")
     public void operatorVerifyReservationsTableInPendingWaypointsDialogUsingDataBelow(String status, List<Map<String, String>> listOfData)
     {
         List<WaypointReservationInfo> expectedReservationsInfo = listOfData.stream().map(data ->
@@ -356,7 +362,7 @@ public class RouteInboundSteps extends AbstractSteps
     }
 
     @SuppressWarnings("unchecked")
-    @Then("^Operator verify Orders table in (.+) Waypoints dialog using data below:$")
+    @Then("^Operator verify Orders table in (.+) dialog using data below:$")
     public void operatorVerifyOrdersTableInPendingWaypointsDialogUsingDataBelow(String status, List<Map<String, String>> listOfData)
     {
         List<WaypointOrderInfo> expectedOrdersInfo = listOfData.stream().map(data ->
@@ -437,7 +443,7 @@ public class RouteInboundSteps extends AbstractSteps
     @When("^Operator click 'Continue To Inbound' button on Route Inbound page$")
     public void operatorClickContinueToInboundButtonOnRouteInboundPage()
     {
-        routeInboundPage.clickContinueToInbound();
+        routeInboundPage.continueToInbound.click();
     }
 
     @When("^Operator add route inbound comment \"(.+)\"  on Route Inbound page$")
@@ -464,7 +470,8 @@ public class RouteInboundSteps extends AbstractSteps
     @When("^Operator click 'Go Back' button on Route Inbound page$")
     public void operatorClickGoBackButtonOnRouteInboundPage()
     {
-        routeInboundPage.clickGoBack();
+        routeInboundPage.goBack.click();
+        pause1s();
     }
 
     @When("^Operator open Completed Waypoints Info dialog on Route Inbound page$")
@@ -477,6 +484,24 @@ public class RouteInboundSteps extends AbstractSteps
     public void operatorOpenFailedWaypointsInfoDialogOnRouteInboundPage()
     {
         routeInboundPage.openFailedWaypointsDialog();
+    }
+
+    @When("^Operator open Failed Parcels dialog on Route Inbound page$")
+    public void operatorOpenFailedParcelsDialogOnRouteInboundPage()
+    {
+        routeInboundPage.openFailedParcelsDialog();
+    }
+
+    @When("^Operator open C2C \\+ Return dialog on Route Inbound page$")
+    public void operatorOpenC2CReturnDialogOnRouteInboundPage()
+    {
+        routeInboundPage.openC2CReturnDialog();
+    }
+
+    @When("^Operator open Reservations dialog on Route Inbound page$")
+    public void operatorOpenReservationsDialogOnRouteInboundPage()
+    {
+        routeInboundPage.openReservationsDialog();
     }
 
     @When("^Operator open Total Waypoints Info dialog on Route Inbound page$")
@@ -578,6 +603,28 @@ public class RouteInboundSteps extends AbstractSteps
         expectedRecord.compareWithActual(actualRecord);
     }
 
+    @Then("^Operator verify Non-Inbounded Orders record using data below:$")
+    public void operatorVerifyNonInboundedOrdersRecord(Map<String, String> mapOfData)
+    {
+        mapOfData = resolveKeyValues(mapOfData);
+        WaypointOrderInfo expectedRecord = new WaypointOrderInfo(mapOfData);
+        routeInboundPage.reservationPickupsDialog.nonInboundedOrdersTab.click();
+        pause1s();
+        WaypointOrderInfo actualRecord = routeInboundPage.reservationPickupsDialog.nonInboundedOrdersTable.readEntity(1);
+        expectedRecord.compareWithActual(actualRecord);
+    }
+
+    @Then("^Operator verify Extra Orders record using data below:$")
+    public void operatorVerifyExtraOrdersRecord(Map<String, String> mapOfData)
+    {
+        mapOfData = resolveKeyValues(mapOfData);
+        WaypointOrderInfo expectedRecord = new WaypointOrderInfo(mapOfData);
+        routeInboundPage.reservationPickupsDialog.extraOrdersTab.click();
+        pause1s();
+        WaypointOrderInfo actualRecord = routeInboundPage.reservationPickupsDialog.extraOrdersTable.readEntity(1);
+        expectedRecord.compareWithActual(actualRecord);
+    }
+
     @Then("^Operator verify Money Collection Collected Order record using data below:$")
     public void operatorVerifyMoneyCollectionCollectedOrderRecord(Map<String, String> mapOfData)
     {
@@ -587,5 +634,29 @@ public class RouteInboundSteps extends AbstractSteps
         pause1s();
         MoneyCollectionCollectedOrderEntry actualRecord = routeInboundPage.moneyCollectionHistoryDialog.collectedOrdersTable.readEntity(1);
         expectedRecord.compareWithActual(actualRecord);
+    }
+
+    @Then("^Operator verify Waypoint Scans record using data below:$")
+    public void operatorVerifyWaypointScansRecord(Map<String, String> mapOfData)
+    {
+        mapOfData = resolveKeyValues(mapOfData);
+        WaypointScanInfo expectedRecord = new WaypointScanInfo(mapOfData);
+        WaypointScanInfo actualRecord = routeInboundPage.waypointScansTable.readEntity(1);
+        expectedRecord.compareWithActual(actualRecord);
+    }
+
+    @Then("^Operator removes route from driver app on Route Inbound page$")
+    public void operatorRemovesRouteFromDriverAppOnRouteInboundPage()
+    {
+        routeInboundPage.removeRouteFromDriverApp.check();
+        routeInboundPage.waitUntilInvisibilityOfToast("Updated Successfully", true);
+    }
+
+    @Then("^Operator ends Route Inbound session for route \"(.+)\" on Route Inbound page$")
+    public void operatorEndsRouteInboundSessionOnRouteInboundPage(String routeId)
+    {
+        routeId = resolveValue(routeId);
+        routeInboundPage.endSession.clickAndWaitUntilDone();
+        routeInboundPage.waitUntilVisibilityOfToast("Inbound completed for route " + routeId);
     }
 }
