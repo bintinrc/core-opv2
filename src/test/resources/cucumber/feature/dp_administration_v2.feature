@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @DpAdministrationV2
+@OperatorV2 @DistributionPoints @OperatorV2Part1 @DpAdministrationV2
 Feature: DP Administration
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -52,25 +52,25 @@ Feature: DP Administration
       | restrictions | Created for test automation purposes |
     Given Operator go to menu Distribution Points -> DP Administration
     When Operator add new DP for the DP Partner on DP Administration page with the following attributes:
-      | name                   | GENERATED                                                 |
-      | shortName              | TEST-DP                                                   |
-      | contactNo              | GENERATED                                                 |
-      | externalStoreId        | TESTING-NewDP                                             |
-      | shipperId              | 129623                                                    |
-      | postcode               | 677743                                                    |
-      | city                   | SG                                                        |
-      | address1               | 1 JELEBU ROAD                                             |
-      | address2               | BUKIT PANJANG PLAZA, #01-32                               |
-      | floorNo                | 12                                                        |
-      | unitNo                 | 11                                                        |
-      | hub                    | JKB                                                       |
-      | type                   | Ninja Point                                               |
-      | directions             | Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743 |
-      | canShipperLodgeIn      | true                                                      |
-      | canCustomerCollect     | true                                                      |
-      | maxParcelStayDuration  | 2                                                         |
-      | maxCap                 | 1000000                                                   |
-      | capBuffer              | 1000000                                                   |
+      | name                  | GENERATED                                                 |
+      | shortName             | TEST-DP                                                   |
+      | contactNo             | GENERATED                                                 |
+      | externalStoreId       | TESTING-NewDP                                             |
+      | shipperId             | 129623                                                    |
+      | postcode              | 677743                                                    |
+      | city                  | SG                                                        |
+      | address1              | 1 JELEBU ROAD                                             |
+      | address2              | BUKIT PANJANG PLAZA, #01-32                               |
+      | floorNo               | 12                                                        |
+      | unitNo                | 11                                                        |
+      | hub                   | JKB                                                       |
+      | type                  | Ninja Point                                               |
+      | directions            | Home-Fix at Bukit Panjang Plaza, #01-32, Singapore 677743 |
+      | canShipperLodgeIn     | true                                                      |
+      | canCustomerCollect    | true                                                      |
+      | maxParcelStayDuration | 2                                                         |
+      | maxCap                | 1000000                                                   |
+      | capBuffer             | 1000000                                                   |
     Then Operator verify new DP params
     When DB Operator fetches dp details
     And API DP get the DP Details by DP ID

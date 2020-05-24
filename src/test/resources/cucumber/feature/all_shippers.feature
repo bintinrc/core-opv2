@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @AllShippers @Saas
+@OperatorV2 @Order @OperatorV2Part2 @AllShippers @Saas
 Feature: All Shippers
 
   @LaunchBrowser @ShouldAlwaysRun @EnableClearCache @ForceNotHeadless
@@ -394,25 +394,25 @@ Feature: All Shippers
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                       |
-      | shipperType                  | Normal                     |
-      | ocVersion                    | v4                         |
-      | services                     | STANDARD                   |
-      | trackingType                 | Fixed                      |
-      | isAllowCod                   | true                       |
-      | isAllowCashPickup            | true                       |
-      | isPrepaid                    | true                       |
-      | isAllowStagedOrders          | true                       |
-      | isMultiParcelShipper         | true                       |
-      | isDisableDriverAppReschedule | true                       |
-      | pricingScriptName            | {pricing-script-name}      |
-      | industryName                 | {industry-name}            |
-      | salesPerson                  | {sales-person}             |
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Script
-      | pricingScriptName            | 2402 - New Script                 |
-      | discount                     | 20                                |
-      | comments                     | This is a test pricing script     |
+      | pricingScriptName | 2402 - New Script             |
+      | discount          | 20                            |
+      | comments          | This is a test pricing script |
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
@@ -421,31 +421,31 @@ Feature: All Shippers
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                       |
-      | shipperType                  | Normal                     |
-      | ocVersion                    | v4                         |
-      | services                     | STANDARD                   |
-      | trackingType                 | Fixed                      |
-      | isAllowCod                   | true                       |
-      | isAllowCashPickup            | true                       |
-      | isPrepaid                    | true                       |
-      | isAllowStagedOrders          | true                       |
-      | isMultiParcelShipper         | true                       |
-      | isDisableDriverAppReschedule | true                       |
-      | pricingScriptName            | {pricing-script-name}      |
-      | industryName                 | {industry-name}            |
-      | salesPerson                  | {sales-person}             |
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Script
-      | pricingScriptName            | 2402 - New Script                 |
-      | discount                     | 20                                |
-      | comments                     | This is a test pricing script     |
+      | pricingScriptName | 2402 - New Script             |
+      | discount          | 20                            |
+      | comments          | This is a test pricing script |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     And Operator edits the created shipper
     Then Operator edits the Pending Pricing Script
-      | discount                     | 30                                |
-      | comments                     | Edited test pricing script        |
+      | discount | 30                         |
+      | comments | Edited test pricing script |
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
@@ -454,20 +454,20 @@ Feature: All Shippers
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                       |
-      | shipperType                  | Normal                     |
-      | ocVersion                    | v4                         |
-      | services                     | STANDARD                   |
-      | trackingType                 | Fixed                      |
-      | isAllowCod                   | true                       |
-      | isAllowCashPickup            | true                       |
-      | isPrepaid                    | true                       |
-      | isAllowStagedOrders          | true                       |
-      | isMultiParcelShipper         | true                       |
-      | isDisableDriverAppReschedule | true                       |
-      | pricingScriptName            | {pricing-script-name}      |
-      | industryName                 | {industry-name}            |
-      | salesPerson                  | {sales-person}             |
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator verifies that Pricing Script is "Active" and ""
     When DB Operator soft delete shipper by Legacy ID
@@ -478,20 +478,20 @@ Feature: All Shippers
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings and updates pricing script using data below:
-      | isShipperActive              | true                       |
-      | shipperType                  | Normal                     |
-      | ocVersion                    | v4                         |
-      | services                     | STANDARD                   |
-      | trackingType                 | Fixed                      |
-      | isAllowCod                   | true                       |
-      | isAllowCashPickup            | true                       |
-      | isPrepaid                    | true                       |
-      | isAllowStagedOrders          | true                       |
-      | isMultiParcelShipper         | true                       |
-      | isDisableDriverAppReschedule | true                       |
-      | pricingScriptName            | {pricing-script-name}      |
-      | industryName                 | {industry-name}            |
-      | salesPerson                  | {sales-person}             |
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator verifies that Pricing Script is "Active" and ""
     When DB Operator soft delete shipper by Legacy ID
@@ -502,50 +502,50 @@ Feature: All Shippers
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings and without Pricing profile using data below:
-      | isShipperActive              | true                       |
-      | shipperType                  | Normal                     |
-      | ocVersion                    | v4                         |
-      | services                     | STANDARD                   |
-      | trackingType                 | Fixed                      |
-      | isAllowCod                   | true                       |
-      | isAllowCashPickup            | true                       |
-      | isPrepaid                    | true                       |
-      | isAllowStagedOrders          | true                       |
-      | isMultiParcelShipper         | true                       |
-      | isDisableDriverAppReschedule | true                       |
-      | industryName                 | {industry-name}            |
-      | salesPerson                  | {sales-person}             |
+      | isShipperActive              | true            |
+      | shipperType                  | Normal          |
+      | ocVersion                    | v4              |
+      | services                     | STANDARD        |
+      | trackingType                 | Fixed           |
+      | isAllowCod                   | true            |
+      | isAllowCashPickup            | true            |
+      | isPrepaid                    | true            |
+      | isAllowStagedOrders          | true            |
+      | isMultiParcelShipper         | true            |
+      | isDisableDriverAppReschedule | true            |
+      | industryName                 | {industry-name} |
+      | salesPerson                  | {sales-person}  |
 
   @PricingProfile
   Scenario: Create a new Pricing Profile - with Flat Discount where Shipper has Active & Expired Pricing Profile (uid:72efc910-af1b-4145-bdd9-e486deb4284e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                       |
-      | shipperType                  | Normal                     |
-      | ocVersion                    | v4                         |
-      | services                     | STANDARD                   |
-      | trackingType                 | Fixed                      |
-      | isAllowCod                   | true                       |
-      | isAllowCashPickup            | true                       |
-      | isPrepaid                    | true                       |
-      | isAllowStagedOrders          | true                       |
-      | isMultiParcelShipper         | true                       |
-      | isDisableDriverAppReschedule | true                       |
-      | pricingScriptName            | {pricing-script-name}      |
-      | industryName                 | {industry-name}            |
-      | salesPerson                  | {sales-person}             |
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Script
-      | pricingScriptName            | 2402 - New Script          |
+      | pricingScriptName | 2402 - New Script |
     And Operator edits the created shipper
     Then Operator verifies that Pricing Script is "Active" and "Expired"
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Script
-      | pricingScriptName            | 2402 - New Script                 |
-      | discount                     | 20.00                             |
-      | comments                     | This is a test pricing script     |
-      | type                         | FLAT                              |
+      | pricingScriptName | 2402 - New Script             |
+      | discount          | 20.00                         |
+      | comments          | This is a test pricing script |
+      | type              | FLAT                          |
     Then DB Operator fetches pricing script and shipper discount details
     And Operator verifies the pricing script and shipper discount details are correct
     When DB Operator soft delete shipper by Legacy ID
@@ -557,31 +557,31 @@ Feature: All Shippers
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                       |
-      | shipperType                  | Normal                     |
-      | ocVersion                    | v4                         |
-      | services                     | STANDARD                   |
-      | trackingType                 | Fixed                      |
-      | isAllowCod                   | true                       |
-      | isAllowCashPickup            | true                       |
-      | isPrepaid                    | true                       |
-      | isAllowStagedOrders          | true                       |
-      | isMultiParcelShipper         | true                       |
-      | isDisableDriverAppReschedule | true                       |
-      | pricingScriptName            | {pricing-script-name-id}   |
-      | industryName                 | {industry-name}            |
-      | salesPerson                  | {sales-person-id}          |
+      | isShipperActive              | true                     |
+      | shipperType                  | Normal                   |
+      | ocVersion                    | v4                       |
+      | services                     | STANDARD                 |
+      | trackingType                 | Fixed                    |
+      | isAllowCod                   | true                     |
+      | isAllowCashPickup            | true                     |
+      | isPrepaid                    | true                     |
+      | isAllowStagedOrders          | true                     |
+      | isMultiParcelShipper         | true                     |
+      | isDisableDriverAppReschedule | true                     |
+      | pricingScriptName            | {pricing-script-name-id} |
+      | industryName                 | {industry-name}          |
+      | salesPerson                  | {sales-person-id}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Script
-      | pricingScriptName            | 2508 - PT Cucumber Test 2  |
+      | pricingScriptName | 2508 - PT Cucumber Test 2 |
     And Operator edits the created shipper
     Then Operator verifies that Pricing Script is "Active" and "Expired"
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Script
-      | pricingScriptName            | 2508 - PT Cucumber Test 2         |
-      | discount                     | 20.00                             |
-      | comments                     | This is a test pricing script     |
-      | type                         | PERCENTAGE                        |
+      | pricingScriptName | 2508 - PT Cucumber Test 2     |
+      | discount          | 20.00                         |
+      | comments          | This is a test pricing script |
+      | type              | PERCENTAGE                    |
     Then DB Operator fetches pricing script and shipper discount details
     And Operator verifies the pricing script and shipper discount details are correct
     When DB Operator soft delete shipper by Legacy ID
@@ -593,25 +593,25 @@ Feature: All Shippers
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                       |
-      | shipperType                  | Normal                     |
-      | ocVersion                    | v4                         |
-      | services                     | STANDARD                   |
-      | trackingType                 | Fixed                      |
-      | isAllowCod                   | true                       |
-      | isAllowCashPickup            | true                       |
-      | isPrepaid                    | true                       |
-      | isAllowStagedOrders          | true                       |
-      | isMultiParcelShipper         | true                       |
-      | isDisableDriverAppReschedule | true                       |
-      | pricingScriptName            | {pricing-script-name}      |
-      | industryName                 | {industry-name}            |
-      | salesPerson                  | {sales-person}             |
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Script
-      | pricingScriptName            | 2402 - New Script                 |
-      | discount                     | 20                                |
-      | comments                     | This is a test pricing script     |
+      | pricingScriptName | 2402 - New Script             |
+      | discount          | 20                            |
+      | comments          | This is a test pricing script |
     And Operator edits the created shipper
     Then Operator verifies that Pricing Script is "Pending" and ""
     And Operator edits the created shipper
@@ -624,25 +624,25 @@ Feature: All Shippers
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                       |
-      | shipperType                  | Normal                     |
-      | ocVersion                    | v4                         |
-      | services                     | STANDARD                   |
-      | trackingType                 | Fixed                      |
-      | isAllowCod                   | true                       |
-      | isAllowCashPickup            | true                       |
-      | isPrepaid                    | true                       |
-      | isAllowStagedOrders          | true                       |
-      | isMultiParcelShipper         | true                       |
-      | isDisableDriverAppReschedule | true                       |
-      | pricingScriptName            | {pricing-script-name}      |
-      | industryName                 | {industry-name}            |
-      | salesPerson                  | {sales-person}             |
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds pricing script with invalid discount and verifies the error message
-      | pricingScriptName            | 2402 - New Script                 |
-      | discount                     | 0                                 |
-      | errorMessage                 | 0 is not a valid discount value   |
+      | pricingScriptName | 2402 - New Script               |
+      | discount          | 0                               |
+      | errorMessage      | 0 is not a valid discount value |
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
@@ -652,25 +652,25 @@ Feature: All Shippers
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                       |
-      | shipperType                  | Normal                     |
-      | ocVersion                    | v4                         |
-      | services                     | STANDARD                   |
-      | trackingType                 | Fixed                      |
-      | isAllowCod                   | true                       |
-      | isAllowCashPickup            | true                       |
-      | isPrepaid                    | true                       |
-      | isAllowStagedOrders          | true                       |
-      | isMultiParcelShipper         | true                       |
-      | isDisableDriverAppReschedule | true                       |
-      | pricingScriptName            | {pricing-script-name-id}   |
-      | industryName                 | {industry-name}            |
-      | salesPerson                  | {sales-person-id}          |
+      | isShipperActive              | true                     |
+      | shipperType                  | Normal                   |
+      | ocVersion                    | v4                       |
+      | services                     | STANDARD                 |
+      | trackingType                 | Fixed                    |
+      | isAllowCod                   | true                     |
+      | isAllowCashPickup            | true                     |
+      | isPrepaid                    | true                     |
+      | isAllowStagedOrders          | true                     |
+      | isMultiParcelShipper         | true                     |
+      | isDisableDriverAppReschedule | true                     |
+      | pricingScriptName            | {pricing-script-name-id} |
+      | industryName                 | {industry-name}          |
+      | salesPerson                  | {sales-person-id}        |
     And Operator edits the created shipper
     Then Operator adds pricing script with invalid discount and verifies the error message
-      | pricingScriptName            | 2508 - PT Cucumber Test 2         |
-      | discount                     | 0                                 |
-      | errorMessage                 | 0 is not a valid discount value   |
+      | pricingScriptName | 2508 - PT Cucumber Test 2       |
+      | discount          | 0                               |
+      | errorMessage      | 0 is not a valid discount value |
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
     Then Operator changes the country to "sg"
@@ -680,25 +680,25 @@ Feature: All Shippers
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                       |
-      | shipperType                  | Normal                     |
-      | ocVersion                    | v4                         |
-      | services                     | STANDARD                   |
-      | trackingType                 | Fixed                      |
-      | isAllowCod                   | true                       |
-      | isAllowCashPickup            | true                       |
-      | isPrepaid                    | true                       |
-      | isAllowStagedOrders          | true                       |
-      | isMultiParcelShipper         | true                       |
-      | isDisableDriverAppReschedule | true                       |
-      | pricingScriptName            | {pricing-script-name}      |
-      | industryName                 | {industry-name}            |
-      | salesPerson                  | {sales-person}             |
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Script
-      | pricingScriptName            | 2402 - New Script                 |
-      | comments                     | This is a test pricing script     |
-      | type                         | FLAT                              |
+      | pricingScriptName | 2402 - New Script             |
+      | comments          | This is a test pricing script |
+      | type              | FLAT                          |
     Then DB Operator fetches pricing script details
     And Operator verifies the pricing script details are correct
     When DB Operator soft delete shipper by Legacy ID
@@ -710,25 +710,25 @@ Feature: All Shippers
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                       |
-      | shipperType                  | Normal                     |
-      | ocVersion                    | v4                         |
-      | services                     | STANDARD                   |
-      | trackingType                 | Fixed                      |
-      | isAllowCod                   | true                       |
-      | isAllowCashPickup            | true                       |
-      | isPrepaid                    | true                       |
-      | isAllowStagedOrders          | true                       |
-      | isMultiParcelShipper         | true                       |
-      | isDisableDriverAppReschedule | true                       |
-      | pricingScriptName            | {pricing-script-name-id}   |
-      | industryName                 | {industry-name}            |
-      | salesPerson                  | {sales-person-id}          |
+      | isShipperActive              | true                     |
+      | shipperType                  | Normal                   |
+      | ocVersion                    | v4                       |
+      | services                     | STANDARD                 |
+      | trackingType                 | Fixed                    |
+      | isAllowCod                   | true                     |
+      | isAllowCashPickup            | true                     |
+      | isPrepaid                    | true                     |
+      | isAllowStagedOrders          | true                     |
+      | isMultiParcelShipper         | true                     |
+      | isDisableDriverAppReschedule | true                     |
+      | pricingScriptName            | {pricing-script-name-id} |
+      | industryName                 | {industry-name}          |
+      | salesPerson                  | {sales-person-id}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Script
-      | pricingScriptName            | 2508 - PT Cucumber Test 2         |
-      | comments                     | This is a test pricing script     |
-      | type                         | PERCENTAGE                        |
+      | pricingScriptName | 2508 - PT Cucumber Test 2     |
+      | comments          | This is a test pricing script |
+      | type              | PERCENTAGE                    |
     Then DB Operator fetches pricing script details
     And Operator verifies the pricing script details are correct
     When DB Operator soft delete shipper by Legacy ID
@@ -740,25 +740,25 @@ Feature: All Shippers
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                       |
-      | shipperType                  | Normal                     |
-      | ocVersion                    | v4                         |
-      | services                     | STANDARD                   |
-      | trackingType                 | Fixed                      |
-      | isAllowCod                   | true                       |
-      | isAllowCashPickup            | true                       |
-      | isPrepaid                    | true                       |
-      | isAllowStagedOrders          | true                       |
-      | isMultiParcelShipper         | true                       |
-      | isDisableDriverAppReschedule | true                       |
-      | pricingScriptName            | {pricing-script-name}      |
-      | industryName                 | {industry-name}            |
-      | salesPerson                  | {sales-person}             |
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds pricing script with invalid discount and verifies the error message
-      | pricingScriptName            | 2402 - New Script                 |
-      | discount                     | $#^$^#@                           |
-      | errorMessage                 | Special character is not allowed  |
+      | pricingScriptName | 2402 - New Script                |
+      | discount          | $#^$^#@                          |
+      | errorMessage      | Special character is not allowed |
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
@@ -767,26 +767,26 @@ Feature: All Shippers
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                       |
-      | shipperType                  | Normal                     |
-      | ocVersion                    | v4                         |
-      | services                     | STANDARD                   |
-      | trackingType                 | Fixed                      |
-      | isAllowCod                   | true                       |
-      | isAllowCashPickup            | true                       |
-      | isPrepaid                    | true                       |
-      | isAllowStagedOrders          | true                       |
-      | isMultiParcelShipper         | true                       |
-      | isDisableDriverAppReschedule | true                       |
-      | pricingScriptName            | {pricing-script-name}      |
-      | industryName                 | {industry-name}            |
-      | salesPerson                  | {sales-person}             |
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Script
-      | pricingScriptName            | 2402 - New Script                 |
-      | discount                     | 20.54321                          |
-      | comments                     | This is a test pricing script     |
-      | type                         | FLAT                              |
+      | pricingScriptName | 2402 - New Script             |
+      | discount          | 20.54321                      |
+      | comments          | This is a test pricing script |
+      | type              | FLAT                          |
     Then DB Operator fetches pricing script and shipper discount details
     And Operator verifies the pricing script and shipper discount details are correct
     When DB Operator soft delete shipper by Legacy ID
@@ -797,26 +797,26 @@ Feature: All Shippers
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                       |
-      | shipperType                  | Normal                     |
-      | ocVersion                    | v4                         |
-      | services                     | STANDARD                   |
-      | trackingType                 | Fixed                      |
-      | isAllowCod                   | true                       |
-      | isAllowCashPickup            | true                       |
-      | isPrepaid                    | true                       |
-      | isAllowStagedOrders          | true                       |
-      | isMultiParcelShipper         | true                       |
-      | isDisableDriverAppReschedule | true                       |
-      | pricingScriptName            | {pricing-script-name}      |
-      | industryName                 | {industry-name}            |
-      | salesPerson                  | {sales-person}             |
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Script
-      | pricingScriptName            | 2402 - New Script                 |
-      | discount                     | 50000.00                          |
-      | comments                     | This is a test pricing script     |
-      | type                         | FLAT                              |
+      | pricingScriptName | 2402 - New Script             |
+      | discount          | 50000.00                      |
+      | comments          | This is a test pricing script |
+      | type              | FLAT                          |
     Then DB Operator fetches pricing script and shipper discount details
     And Operator verifies the pricing script and shipper discount details are correct
     When DB Operator soft delete shipper by Legacy ID
@@ -827,26 +827,26 @@ Feature: All Shippers
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                       |
-      | shipperType                  | Normal                     |
-      | ocVersion                    | v4                         |
-      | services                     | STANDARD                   |
-      | trackingType                 | Fixed                      |
-      | isAllowCod                   | true                       |
-      | isAllowCashPickup            | true                       |
-      | isPrepaid                    | true                       |
-      | isAllowStagedOrders          | true                       |
-      | isMultiParcelShipper         | true                       |
-      | isDisableDriverAppReschedule | true                       |
-      | pricingScriptName            | {pricing-script-name}      |
-      | industryName                 | {industry-name}            |
-      | salesPerson                  | {sales-person}             |
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds pricing script with discount over 6 digits and verifies the error message
-      | pricingScriptName            | 2402 - New Script                 |
-      | discount                     | 10000000                          |
-      | comments                     | This is an invalid discount       |
-      | errorMessage                 | Failed to update                  |
+      | pricingScriptName | 2402 - New Script           |
+      | discount          | 10000000                    |
+      | comments          | This is an invalid discount |
+      | errorMessage      | Failed to update            |
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 

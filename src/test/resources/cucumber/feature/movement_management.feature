@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @MovementManagement
+@MiddleMile @InterHub @MovementManagement
 Feature: Movement Management
 
   @LaunchBrowser @ShouldAlwaysRun

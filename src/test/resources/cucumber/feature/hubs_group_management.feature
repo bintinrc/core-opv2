@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @HubGroupsManagement
+@OperatorV2 @Hubs @OperatorV2Part1 @HubGroupsManagement
 Feature: Hubs Group Management
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -21,7 +21,7 @@ Feature: Hubs Group Management
       | hubs | {hub-name},{hub-name-2} |
     Then Operator verify created Hubs Group properties on Hubs Group Management page
     When Operator update created Hub Group on Hubs Group Management page using data below:
-      | name | GENERATED               |
+      | name | GENERATED |
     Then Operator verify created Hubs Group properties on Hubs Group Management page
 
   @DeleteHubsGroup

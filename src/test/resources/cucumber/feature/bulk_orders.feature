@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @BulkOrders
+@OperatorV2 @NewFeatures @OperatorV2Part1 @BulkOrders
 Feature: Bulk Orders
 
   @LaunchBrowser @ShouldAlwaysRun

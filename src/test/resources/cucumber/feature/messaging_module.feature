@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @MessagingModule @ShouldAlwaysRun
+@OperatorV2 @MassCommunications @OperatorV2Part2 @MessagingModule @ShouldAlwaysRun
 Feature: Messaging Module
 
   @LaunchBrowser
@@ -7,7 +7,7 @@ Feature: Messaging Module
 
   Scenario: Operator send sms valid data (uid:553ecbc6-44b4-41b4-86b3-4a864a3fede5)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "from":{ "name":"Sim Sze Kiat", "phone_number":"+6588698632" }, "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Mass Communications -> Messaging Module
     Then Operator upload SMS campaign CSV file
@@ -20,7 +20,7 @@ Feature: Messaging Module
     Given Operator go to menu Mass Communications -> Messaging Module
     Then Operator upload SMS campaign CSV file
       | tracking_id       | name         | email          | job |
-      | SOMERANDOMTRACKID | Sim Sze Kiat | qa@ninjavan.co |	Dev |
+      | SOMERANDOMTRACKID | Sim Sze Kiat | qa@ninjavan.co | Dev |
     Then Operator continue on invalid dialog
     Then Operator verify sms module page reset
 
@@ -43,7 +43,7 @@ Feature: Messaging Module
 
   Scenario: Operator using URL shortener on SMS editor (uid:9ba5f071-f569-41d4-81e5-92316cc34bd3)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "from":{ "name":"Sim Sze Kiat", "phone_number":"+6588698632" }, "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Mass Communications -> Messaging Module
     Then Operator upload SMS campaign CSV file

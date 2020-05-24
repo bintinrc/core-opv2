@@ -1,6 +1,7 @@
 @OperatorV2Deprecated @OperatorV2Part1Deprecated @OpsRoute
 Feature: Ops Route
-  This page is no longer exist.
+
+  #DEPRECATED
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2

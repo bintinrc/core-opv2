@@ -1,4 +1,4 @@
-@OperatorV2Disabled @OperatorV2Part1Disabled @DriverTypeManagement @Saas
+@OperatorV2Disabled @Fleet @OperatorV2Part1Disabled @DriverTypeManagement @Saas
 Feature: Driver Type Management
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
