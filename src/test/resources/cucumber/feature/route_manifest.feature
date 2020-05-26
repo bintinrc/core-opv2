@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @RouteManifest @Saas
+@OperatorV2 @Routing @OperatorV2Part1 @RouteManifest @Saas
 Feature: Route Manifest
 
   @LaunchBrowser @ShouldAlwaysRun @EnableClearCache

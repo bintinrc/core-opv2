@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @RouteMonitoring @Saas
+@OperatorV2 @Routing @OperatorV2Part2 @RouteMonitoring @Saas
 Feature: Route Monitoring
 
   @LaunchBrowser @ShouldAlwaysRun @EnableClearCache

@@ -1,4 +1,4 @@
-@ShipmentGlobalInbound @Shipment @MiddleMile
+@ShipmentGlobalInbound @InterHub @Shipment @MiddleMile
 Feature: Shipment Global Inbound
 
   @LaunchBrowser @ShouldAlwaysRun

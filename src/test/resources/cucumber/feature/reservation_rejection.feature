@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @ReservationRejection
+@OperatorV2 @PickUps @OperatorV2Part1 @ReservationRejection
 Feature: Reservation Preset Management
 
   @LaunchBrowser @ShouldAlwaysRun
