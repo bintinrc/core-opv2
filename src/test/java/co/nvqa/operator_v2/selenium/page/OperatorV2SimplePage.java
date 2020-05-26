@@ -522,7 +522,7 @@ public class OperatorV2SimplePage extends SimplePage
 
     public int getRowsCountOfTableWithNgRepeat(String ngRepeat)
     {
-        String xpath = f("//tr[@ng-repeat='%s'][not(contains(@class,'last-row'))]", ngRepeat);
+        String xpath = f(".//tr[@ng-repeat='%s'][not(contains(@class,'last-row'))]", ngRepeat);
 
         try
         {
@@ -610,7 +610,8 @@ public class OperatorV2SimplePage extends SimplePage
     public String getTextOnTableWithNgRepeatAndCustomCellLocator(int rowNumber, String cellLocator, String ngRepeat)
     {
         String text = null;
-        String xpath = f("//tr[@ng-repeat='%s'][%d]" + cellLocator, ngRepeat, rowNumber);
+        String xpath = ngRepeat.contains("'") ? ".//tr[@ng-repeat=\"%s\"][%d]" : ".//tr[@ng-repeat='%s'][%d]";
+        xpath = f(xpath + cellLocator, ngRepeat, rowNumber);
 
         try
         {
@@ -628,7 +629,7 @@ public class OperatorV2SimplePage extends SimplePage
     public String getTextOnTableWithNgRepeat(int rowNumber, String columnAttributeName, String attributeValue, String ngRepeat)
     {
         String text = null;
-        String xpath = f("//tr[@ng-repeat='%s'][%d]/td[starts-with(@%s, \"%s\")]", ngRepeat, rowNumber, columnAttributeName, attributeValue);
+        String xpath = f(".//tr[@ng-repeat='%s'][%d]/td[starts-with(@%s, \"%s\")]", ngRepeat, rowNumber, columnAttributeName, attributeValue);
 
         try
         {

@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @FacilitiesManagement @Saas
+@OperatorV2 @Hubs @OperatorV2Part2 @FacilitiesManagement @Saas
 Feature: Facilities Management
 
   @LaunchBrowser @ShouldAlwaysRun

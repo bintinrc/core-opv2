@@ -1,6 +1,8 @@
 @OperatorV2
 Feature: Parcel Tag
 
+  #LOOKS LIKE SOME ANAND'S PRACTICES. NEED TO BE REMOVED
+
  @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
    Scenario: Multiple order create with parcel tag
    Given API Shipper create multiple V4 orders using data below:

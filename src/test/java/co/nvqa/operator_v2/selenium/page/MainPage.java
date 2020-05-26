@@ -102,9 +102,18 @@ public class MainPage extends OperatorV2SimplePage
         }
     }
 
+    public void closeDialogIfVisible(){
+        String xpath = "//md-dialog//nv-icon-button[@name='Cancel']";
+        if (isElementVisible(xpath, 0)){
+            click(xpath);
+            waitUntilInvisibilityOfElementLocated(xpath);
+        }
+    }
+
     public void clickNavigation(String parentTitle, String navTitle)
     {
         getWebDriver().switchTo().defaultContent();
+        closeDialogIfVisible();
         if(isElementVisible("//i[@ng-if='!showLogo()']"))
         {
             openNavigationPanel();

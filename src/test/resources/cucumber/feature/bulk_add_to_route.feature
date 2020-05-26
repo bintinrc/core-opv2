@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @BulkAddToRoute @Saas
+@OperatorV2 @Routing @OperatorV2Part2 @BulkAddToRoute @Saas
 Feature: Bulk Add To Route
 
   @LaunchBrowser @ShouldAlwaysRun

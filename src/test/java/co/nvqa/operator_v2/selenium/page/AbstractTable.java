@@ -24,10 +24,16 @@ public abstract class AbstractTable<T extends DataEntity<?>> extends OperatorV2S
     protected Map<String, String> actionButtonsLocators = new HashMap<>();
     protected Map<String, Function<Integer, String>> columnReaders = new HashMap<>();
     protected Map<String, Function<String, String>> columnValueProcessors = new HashMap<>();
+    protected String tableLocator;
 
     public AbstractTable(WebDriver webDriver)
     {
         super(webDriver);
+    }
+
+    public void setTableLocator(String tableLocator)
+    {
+        this.tableLocator = tableLocator;
     }
 
     public Map<String, String> getColumnLocators()
@@ -94,7 +100,12 @@ public abstract class AbstractTable<T extends DataEntity<?>> extends OperatorV2S
             text = columnReaders.get(columnId).apply(rowNumber);
         } else
         {
-            text = getTextOnTable(rowNumber, columnLocator);
+            if (StringUtils.isNotBlank(tableLocator))
+            {
+                text = executeInContext(tableLocator, () -> getTextOnTable(rowNumber, columnLocator));
+            } else {
+                text = getTextOnTable(rowNumber, columnLocator);
+            }
         }
 
         if (columnValueProcessors.containsKey(columnId))

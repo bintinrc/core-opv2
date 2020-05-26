@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @LatLngCleanup
+@OperatorV2 @Utilities @OperatorV2Part1 @LatLngCleanup
 Feature: Lat/Lng Cleanup
 
   @LaunchBrowser @ShouldAlwaysRun

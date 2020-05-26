@@ -11,6 +11,7 @@ public class WaypointPerformance
     private int failed;
     private int completed;
     private int total;
+    private int c2cReturn;
 
     public WaypointPerformance()
     {
@@ -64,5 +65,15 @@ public class WaypointPerformance
     public void setTotal(int total)
     {
         this.total = total;
+    }
+
+    public int getC2cReturn()
+    {
+        return c2cReturn;
+    }
+
+    public void setC2cReturn(int c2cReturn)
+    {
+        this.c2cReturn = c2cReturn;
     }
 }

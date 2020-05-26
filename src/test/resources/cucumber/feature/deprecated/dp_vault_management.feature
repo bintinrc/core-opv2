@@ -1,6 +1,8 @@
 @OperatorV2Deprecated @OperatorV2Part1Deprecated @DpVaultManagement
 Feature: DP Vault Management
 
+  #DEPRECATED
+
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"

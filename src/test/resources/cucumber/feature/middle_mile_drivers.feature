@@ -1,4 +1,4 @@
-@MiddleMileDrivers @MiddleMile
+@MiddleMile @InterHub @MiddleMileDrivers
 Feature: Shipment Inbound Scanning
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -30,10 +30,10 @@ Feature: Shipment Inbound Scanning
     When Operator create new Middle Mile Driver with details:
       | name   | hub        | contactNumber | licenseNumber | employmentType | username |
       | RANDOM | {hub-name} | 08176586525   | RANDOM        | FULL_TIME      | RANDOM   |
-   Then Operator verifies that the new Middle Mile Driver has been created
-   When Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
-   And Operator clicks on Load Driver Button on the Middle Mile Driver Page
-   Then Operator searches by "name" and verifies the created username
+    Then Operator verifies that the new Middle Mile Driver has been created
+    When Operator selects the "Employment Status" with the value of "Active" on Middle Mile Driver Page
+    And Operator clicks on Load Driver Button on the Middle Mile Driver Page
+    Then Operator searches by "name" and verifies the created username
 
   @DeleteMiddleMileDriver
   Scenario: OP load driver use filter - Employment status inactive (uid:1952db73-7e36-4ad2-ad50-6383c604a7c9)

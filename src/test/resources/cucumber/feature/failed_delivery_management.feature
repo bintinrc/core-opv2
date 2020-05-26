@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part2 @FailedDeliveryManagement @Saas @Inbound
+@OperatorV2 @ShipperSupport @OperatorV2Part2 @FailedDeliveryManagement @Saas @Inbound
 Feature: Failed Delivery Management
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless

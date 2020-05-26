@@ -17,6 +17,7 @@ public class ExpectedScans
     private Integer c2cReturnPickupsScans;
     private Integer reservationPickupsTotal;
     private Integer reservationPickupsScans;
+    private Integer reservationPickupsExtraOrders;
 
     public ExpectedScans()
     {
@@ -140,5 +141,15 @@ public class ExpectedScans
     public void setReservationPickupsScans(Integer reservationPickupsScans)
     {
         this.reservationPickupsScans = reservationPickupsScans;
+    }
+
+    public Integer getReservationPickupsExtraOrders()
+    {
+        return reservationPickupsExtraOrders;
+    }
+
+    public void setReservationPickupsExtraOrders(Integer reservationPickupsExtraOrders)
+    {
+        this.reservationPickupsExtraOrders = reservationPickupsExtraOrders;
     }
 }
