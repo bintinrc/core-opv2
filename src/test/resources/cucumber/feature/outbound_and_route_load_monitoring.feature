@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @OutboundAndRouteLoadMonitoring @Saas
+@OperatorV2 @NewFeatures @OperatorV2Part1 @OutboundAndRouteLoadMonitoring @Saas
 Feature: Outbound Monitoring
   Note: Please complete this scenarios below. Some of the steps below already implemented,
   so no need to create your own implementation. Implement the Java code only for the line that says

@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @ThirdPartyOrderManagement
+@OperatorV2 @CrossBorderAnd3PL @OperatorV2Part1 @ThirdPartyOrderManagement
 Feature: Third Party Order Management
 
   @LaunchBrowser @ShouldAlwaysRun

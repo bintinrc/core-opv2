@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @StampDisassociation
+@OperatorV2 @NewFeatures @OperatorV2Part1 @StampDisassociation
 Feature: Stamp Disassociation
 
   @LaunchBrowser @ShouldAlwaysRun

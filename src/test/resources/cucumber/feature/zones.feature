@@ -1,4 +1,4 @@
-@OperatorV2Disabled @OperatorV2Part1Disabled @Zones @Saas
+@OperatorV2Disabled @Routing @OperatorV2Part1Disabled @Zones @Saas
 Feature: Zones
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless

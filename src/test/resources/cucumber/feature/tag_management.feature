@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @TagManagement @Saas
+@OperatorV2 @Routing @OperatorV2Part1 @TagManagement @Saas
 Feature: Tag Management
 
   @LaunchBrowser @ShouldAlwaysRun

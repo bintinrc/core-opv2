@@ -1,4 +1,4 @@
-@OperatorV2 @OperatorV2Part1 @ShipperBilling @Saas
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @ShipperBilling @Saas
 Feature: Shipper Billing
 
   @LaunchBrowser @ShouldAlwaysRun

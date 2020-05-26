@@ -1,4 +1,4 @@
-@PriorityLevels
+@OperatorV2 @NewFeatures @OperatorV2Part1 @PriorityLevels
 Feature: Priority Levels
 
   @LaunchBrowser @ShouldAlwaysRun
