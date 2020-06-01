@@ -18,6 +18,9 @@ import co.nvqa.commons.model.shipper.v2.Return;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.shipper.v2.Shopify;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
+import co.nvqa.operator_v2.selenium.page.ProfilePage;
+import cucumber.api.java.After;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -26,6 +29,8 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.Matchers;
+import org.junit.Assert;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,13 +41,17 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static co.nvqa.operator_v2.selenium.page.AllShippersPage.ShippersTable.ACTION_EDIT;
+
 /**
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
 public class AllShippersSteps extends AbstractSteps
 {
+    private static final String KEY_CURRENT_COUNTRY = "KEY_CURRENT_COUTRY";
     private AllShippersPage allShippersPage;
+    private ProfilePage profilePage;
 
     public AllShippersSteps()
     {
@@ -52,6 +61,27 @@ public class AllShippersSteps extends AbstractSteps
     public void init()
     {
         allShippersPage = new AllShippersPage(getWebDriver());
+        profilePage = new ProfilePage(getWebDriver());
+    }
+
+    @Before("@ResetCountry")
+    public void saveCurrentCountry()
+    {
+        profilePage.clickProfileButton();
+        put(KEY_CURRENT_COUNTRY, profilePage.getCurrentCountry());
+        profilePage.closeProfile();
+    }
+
+    @After("@ResetCountry")
+    public void restoreCurrentCountry()
+    {
+        String country = get(KEY_CURRENT_COUNTRY);
+        if (StringUtils.isNotBlank(country))
+        {
+            profilePage.clickProfileButton();
+            profilePage.changeCountry(country);
+            profilePage.closeProfile();
+        }
     }
 
     @When("Operator clear browser cache and reload All Shipper page")
@@ -71,11 +101,10 @@ public class AllShippersSteps extends AbstractSteps
 
         List<String> listOfAvailableService;
 
-        if(servicesTemp==null || servicesTemp.isEmpty())
+        if (servicesTemp == null || servicesTemp.isEmpty())
         {
             listOfAvailableService = new ArrayList<>();
-        }
-        else
+        } else
         {
             listOfAvailableService = Stream.of(servicesTemp.split(",")).map(String::trim).collect(Collectors.toList());
         }
@@ -166,19 +195,19 @@ public class AllShippersSteps extends AbstractSteps
     {
         String pickupAddressCount = mapOfData.get("pickupAddressCount");
 
-        if(StringUtils.isNotBlank(pickupAddressCount))
+        if (StringUtils.isNotBlank(pickupAddressCount))
         {
             int count = Integer.parseInt(pickupAddressCount);
             List<Address> pickupAddresses = new ArrayList<>();
 
-            for (int i=0; i<count; i++)
+            for (int i = 0; i < count; i++)
             {
                 Address address = generateRandomAddress();
                 address.setName("DA-" + generateDateUniqueString());
                 LatLong latLong = generateRandomLatLong();
                 address.setLongitude(latLong.getLongitude());
                 address.setLatitude(latLong.getLatitude());
-                fillMilkrunReservationsProperties(address, i+1, mapOfData);
+                fillMilkrunReservationsProperties(address, i + 1, mapOfData);
                 pickupAddresses.add(address);
             }
 
@@ -198,13 +227,13 @@ public class AllShippersSteps extends AbstractSteps
 
     private void fillMarketplaceProperties(Shipper shipper, Map<String, String> mapOfData)
     {
-        if(mapOfData.keySet().stream().anyMatch(key -> key.startsWith("marketplace.")))
+        if (mapOfData.keySet().stream().anyMatch(key -> key.startsWith("marketplace.")))
         {
             MarketplaceDefault md = new MarketplaceDefault();
             md.setOrderCreateVersion(mapOfData.get("marketplace.ocVersion"));
             String value = mapOfData.get("marketplace.selectedOcServices");
 
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 List<String> selectedOcServices = Arrays.asList(value.split(","));
                 md.setOrderCreateServicesAvailable(selectedOcServices);
@@ -219,7 +248,7 @@ public class AllShippersSteps extends AbstractSteps
 
             value = mapOfData.get("marketplace.premiumPickupDailyLimit");
 
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 md.setPickupPremiumPickupDailyLimit(Integer.valueOf(value));
             }
@@ -250,12 +279,12 @@ public class AllShippersSteps extends AbstractSteps
     {
         String milkrunPrefix = "address." + addressIndex + ".milkrun";
 
-        if(mapOfData.keySet().stream().anyMatch(key -> key.startsWith(milkrunPrefix)))
+        if (mapOfData.keySet().stream().anyMatch(key -> key.startsWith(milkrunPrefix)))
         {
             Map<String, String> milkrunData = extractSubmap(mapOfData, milkrunPrefix);
-            int reservationsCount = milkrunData.containsKey("reservationCount")? Integer.parseInt(milkrunData.get("reservationCount")) : 1;
+            int reservationsCount = milkrunData.containsKey("reservationCount") ? Integer.parseInt(milkrunData.get("reservationCount")) : 1;
 
-            for(int j=1; j<=reservationsCount; j++)
+            for (int j = 1; j <= reservationsCount; j++)
             {
                 Map<String, String> reservationData = extractSubmap(milkrunData, String.valueOf(j));
                 fillMilkrunReservationProperties(address, reservationData);
@@ -268,21 +297,21 @@ public class AllShippersSteps extends AbstractSteps
         MilkrunSettings ms = new MilkrunSettings();
         String value = mapOfData.get("startTime");
 
-        if(StringUtils.isNotBlank(value))
+        if (StringUtils.isNotBlank(value))
         {
             ms.setStartTime(value);
         }
 
         value = mapOfData.get("endTime");
 
-        if(StringUtils.isNotBlank(value))
+        if (StringUtils.isNotBlank(value))
         {
             ms.setEndTime(value);
         }
 
         value = mapOfData.get("days");
 
-        if(StringUtils.isNotBlank(value))
+        if (StringUtils.isNotBlank(value))
         {
             List<Integer> days = Arrays.stream(value.split(","))
                     .map(d -> Integer.parseInt(d.trim()))
@@ -292,7 +321,7 @@ public class AllShippersSteps extends AbstractSteps
 
         value = mapOfData.get("noOfReservation");
 
-        if(StringUtils.isNotBlank(value))
+        if (StringUtils.isNotBlank(value))
         {
             ms.setNoOfReservation(Integer.valueOf(value));
         }
@@ -302,11 +331,10 @@ public class AllShippersSteps extends AbstractSteps
 
         address.setMilkRun(true);
 
-        if(address.getMilkrunSettings()==null)
+        if (address.getMilkrunSettings() == null)
         {
             address.setMilkrunSettings(milkrunSettings);
-        }
-        else
+        } else
         {
             address.getMilkrunSettings().addAll(milkrunSettings);
         }
@@ -317,6 +345,178 @@ public class AllShippersSteps extends AbstractSteps
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
         allShippersPage.verifyNewShipperIsCreatedSuccessfully(shipper);
+    }
+
+    @Then("^Operator open Edit Shipper Page of shipper \"(.+)\"$")
+    public void operatorOpenEditShipperPageOfShipper(String shipperName)
+    {
+        shipperName = resolveValue(shipperName);
+        allShippersPage.searchTerm.setValue(shipperName);
+        allShippersPage.search.clickAndWaitUntilDone();
+        Assert.assertFalse(f("Shipper [%s] was not found", shipperName), allShippersPage.shippersTable.isEmpty());
+        allShippersPage.shippersTable.clickActionButton(1, ACTION_EDIT);
+        allShippersPage.allShippersCreateEditPage.switchToNewWindow();
+        allShippersPage.allShippersCreateEditPage.shipperInformation.waitUntilClickable();
+        pause2s();
+    }
+
+    @Then("^Operator open Edit Pricing Profile dialog on Edit Shipper Page$")
+    public void operatorOpenEditPricingProfileDialogOnEditShipperPage()
+    {
+        allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
+        allShippersPage.allShippersCreateEditPage.editPendingProfile.click();
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.waitUntilVisible();
+    }
+
+    @Then("^Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:$")
+    public void operatorVerifyEditPricingProfileDialogOnEditShipperPage(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+
+        String value = data.get("shipperId");
+        if (StringUtils.isNotBlank(value))
+        {
+            Assert.assertEquals("Shipper ID", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.shipperId.getText());
+        }
+        value = data.get("shipperName");
+        if (StringUtils.isNotBlank(value))
+        {
+            Assert.assertEquals("Shipper Name", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.shipperName.getText());
+        }
+        value = data.get("startDate");
+        if (StringUtils.isNotBlank(value))
+        {
+            Assert.assertEquals("Start Date", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.getValue());
+        }
+        value = data.get("endDate");
+        if (StringUtils.isNotBlank(value))
+        {
+            Assert.assertEquals("End Date", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate.getValue());
+        }
+        value = data.get("pricingScript");
+        if (StringUtils.isNotBlank(value))
+        {
+            Assert.assertThat("Pricing Script", allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingScript.getValue(), Matchers.containsString(value));
+        }
+        value = data.get("salespersonDiscountType");
+        if (StringUtils.isNotBlank(value))
+        {
+            Assert.assertEquals("Salesperson Discount Type", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingSalespersonDicountType.getText());
+        }
+        value = data.get("discountValue");
+        if (StringUtils.equalsIgnoreCase("none", value))
+        {
+            Assert.assertThat("Discount Value", allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.getValue(), Matchers.is(Matchers.emptyOrNullString()));
+        } else if (StringUtils.isNotBlank(value))
+        {
+            Assert.assertEquals("Discount Value", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.getValue());
+        }
+        value = data.get("comments");
+        if (StringUtils.isNotBlank(value))
+        {
+            Assert.assertEquals("Comments", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.getValue());
+        }
+    }
+
+    @Then("^Operator add New Pricing Profile on Edit Shipper Page using data below:$")
+    public void operatorAddNewPricingProfileOnEditShipperPage(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+        allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
+        allShippersPage.allShippersCreateEditPage.addNewProfile.click();
+        allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.waitUntilVisible();
+
+        String value = data.get("startDate");
+        if (StringUtils.isNotBlank(value))
+        {
+            allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.pricingBillingStartDate.simpleSetValue(value);
+        }
+        value = data.get("endDate");
+        if (StringUtils.isNotBlank(value))
+        {
+            allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.pricingBillingEndDate.simpleSetValue(value);
+        }
+        value = data.get("pricingScript");
+        if (StringUtils.isNotBlank(value))
+        {
+            allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.pricingScript.searchAndSelectValue(value);
+        }
+        value = data.get("discountValue");
+        if (StringUtils.isNotBlank(value))
+        {
+            allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.discountValue.setValue(value);
+        }
+        value = data.get("comments");
+        if (StringUtils.isNotBlank(value))
+        {
+            allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.comments.setValue(value);
+        }
+        allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.saveChanges.clickAndWaitUntilDone();
+        allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.waitUntilInvisible();
+    }
+
+    @Then("^Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:$")
+    public void operatorFillNewPricingProfileOnEditShipperPage(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+
+        String value = data.get("startDate");
+        if (StringUtils.isNotBlank(value))
+        {
+            allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.simpleSetValue(value);
+        }
+        value = data.get("endDate");
+        if (StringUtils.isNotBlank(value))
+        {
+            allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate.simpleSetValue(value);
+        }
+        value = data.get("pricingScript");
+        if (StringUtils.isNotBlank(value))
+        {
+            allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingScript.searchAndSelectValue(value);
+        }
+        value = data.get("discountValue");
+        if (StringUtils.equalsIgnoreCase("none", value))
+        {
+            allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.clear();
+        } else if (StringUtils.isNotBlank(value))
+        {
+            allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.setValue(value);
+        }
+        value = data.get("comments");
+        if (StringUtils.isNotBlank(value))
+        {
+            allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.setValue(value);
+        }
+    }
+
+    @Then("^Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page$")
+    public void operatorSaveChangesPricingProfileOnEditShipperPage()
+    {
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges.clickAndWaitUntilDone();
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.waitUntilInvisible();
+    }
+
+    @Then("^Operator save changes on Edit Shipper Page$")
+    public void operatorSaveChangesOnEditShipperPage()
+    {
+        allShippersPage.allShippersCreateEditPage.saveChanges.click();
+        allShippersPage.allShippersCreateEditPage.waitUntilInvisibilityOfToast("All changes saved successfully");
+        allShippersPage.allShippersCreateEditPage.backToShipperList();
+        pause3s();
+        getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
+    }
+
+    @Then("^Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:$")
+    public void operatorVerifyErrorMessagesNewPricingProfileOnEditShipperPage(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+
+        String value = data.get("discountValue");
+        if (StringUtils.isNotBlank(value))
+        {
+            Assert.assertEquals("Discount Value Error message", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValueError.getText());
+        }
     }
 
     @Then("^Operator verify the new Shipper is updated successfully$")
@@ -539,22 +739,20 @@ public class AllShippersSteps extends AbstractSteps
 
         List<Long> listOfReservationDays;
 
-        if(reservationDays==null || reservationDays.isEmpty())
+        if (reservationDays == null || reservationDays.isEmpty())
         {
             listOfReservationDays = new ArrayList<>();
-        }
-        else
+        } else
         {
             listOfReservationDays = Stream.of(reservationDays.split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
         }
 
         List<String> listOfAllowedTypes;
 
-        if(allowedTypes==null || allowedTypes.isEmpty())
+        if (allowedTypes == null || allowedTypes.isEmpty())
         {
             listOfAllowedTypes = new ArrayList<>();
-        }
-        else
+        } else
         {
             listOfAllowedTypes = Stream.of(allowedTypes.split(",")).map(String::trim).collect(Collectors.toList());
         }
@@ -600,11 +798,11 @@ public class AllShippersSteps extends AbstractSteps
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
         List<Address> addresses = shipper.getPickup().getReservationPickupAddresses();
-        if(CollectionUtils.isNotEmpty(addresses))
+        if (CollectionUtils.isNotEmpty(addresses))
         {
-            for(int i=0; i<addresses.size(); i++)
+            for (int i = 0; i < addresses.size(); i++)
             {
-                fillMilkrunReservationsProperties(addresses.get(i), i+1, mapOfData);
+                fillMilkrunReservationsProperties(addresses.get(i), i + 1, mapOfData);
             }
         }
         allShippersPage.setPickupAddressesAsMilkrun(shipper);
@@ -615,9 +813,9 @@ public class AllShippersSteps extends AbstractSteps
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
         allShippersPage.removeMilkrunReservarion(shipper, addressIndex, milkrunReservationIndex);
-        Address address = shipper.getPickup().getReservationPickupAddresses().get(addressIndex-1);
-        address.getMilkrunSettings().remove(milkrunReservationIndex-1);
-        if(CollectionUtils.isEmpty(address.getMilkrunSettings()))
+        Address address = shipper.getPickup().getReservationPickupAddresses().get(addressIndex - 1);
+        address.getMilkrunSettings().remove(milkrunReservationIndex - 1);
+        if (CollectionUtils.isEmpty(address.getMilkrunSettings()))
         {
             address.setMilkRun(false);
         }
@@ -628,7 +826,7 @@ public class AllShippersSteps extends AbstractSteps
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
         allShippersPage.removeAllMilkrunReservarions(shipper, addressIndex);
-        Address address = shipper.getPickup().getReservationPickupAddresses().get(addressIndex-1);
+        Address address = shipper.getPickup().getReservationPickupAddresses().get(addressIndex - 1);
         address.getMilkrunSettings().clear();
         address.setMilkRun(false);
     }
@@ -679,6 +877,7 @@ public class AllShippersSteps extends AbstractSteps
     public void operatorEditsTheCreatedShipper()
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
+        put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
         allShippersPage.editShipper(shipper);
     }
 
@@ -705,6 +904,7 @@ public class AllShippersSteps extends AbstractSteps
 
         put(KEY_CREATED_PRICING_SCRIPT, pricing);
         put(KEY_PRICING_PROFILE_ID, pricingProfileId);
+
     }
 
     @Then("Operator edits the Pending Pricing Script")
@@ -740,11 +940,10 @@ public class AllShippersSteps extends AbstractSteps
 
         List<String> listOfAvailableService;
 
-        if(servicesTemp==null || servicesTemp.isEmpty())
+        if (servicesTemp == null || servicesTemp.isEmpty())
         {
             listOfAvailableService = new ArrayList<>();
-        }
-        else
+        } else
         {
             listOfAvailableService = Stream.of(servicesTemp.split(",")).map(String::trim).collect(Collectors.toList());
         }
@@ -842,11 +1041,10 @@ public class AllShippersSteps extends AbstractSteps
 
         List<String> listOfAvailableService;
 
-        if(servicesTemp==null || servicesTemp.isEmpty())
+        if (servicesTemp == null || servicesTemp.isEmpty())
         {
             listOfAvailableService = new ArrayList<>();
-        }
-        else
+        } else
         {
             listOfAvailableService = Stream.of(servicesTemp.split(",")).map(String::trim).collect(Collectors.toList());
         }
@@ -938,11 +1136,13 @@ public class AllShippersSteps extends AbstractSteps
     @Given("Operator changes the country to {string}")
     public void operatorChangesTheCountryTo(String country)
     {
-        allShippersPage.changeCountry(country);
+        profilePage.clickProfileButton();
+        profilePage.changeCountry(country);
+        profilePage.closeProfile();
     }
 
     @And("Operator verifies that Edit Pending Profile is displayed")
-    public void  operatorVerifiesThatEditPendingProfileIsDisplayed()
+    public void operatorVerifiesThatEditPendingProfileIsDisplayed()
     {
         allShippersPage.verifyEditPendingProfileIsDisplayed();
     }

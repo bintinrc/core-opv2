@@ -1389,7 +1389,7 @@ Feature: Route Inbound
     And Operator close Reservations dialog on Route Inbound page
 
   @DeleteOrArchiveRoute
-  Scenario: End a Route Inbound Session : Incomplete Scans (uid:0a517a4a-8848-4db9-adfa-e91982280c4d)
+  Scenario Outline: End a Route Inbound Session : Incomplete Scans (uid:0a517a4a-8848-4db9-adfa-e91982280c4d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                |
@@ -1435,7 +1435,7 @@ Feature: Route Inbound
       | 23.57         | 23.57          |
 
   @DeleteOrArchiveRoute
-  Scenario: End a Route Inbound Session : Completed Scans (uid:99b5c97c-10da-4741-8dc3-737575ced36d)
+  Scenario Outline: End a Route Inbound Session : Completed Scans (uid:99b5c97c-10da-4741-8dc3-737575ced36d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                |

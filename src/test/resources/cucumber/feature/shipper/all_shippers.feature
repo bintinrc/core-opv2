@@ -1,4 +1,4 @@
-@OperatorV2 @Order @OperatorV2Part2 @AllShippers @Saas
+@OperatorV2 @Shipper @OperatorV2Part2 @AllShippers @Saas
 Feature: All Shippers
 
   @LaunchBrowser @ShouldAlwaysRun @EnableClearCache @ForceNotHeadless
@@ -473,7 +473,7 @@ Feature: All Shippers
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
-  @PricingProfile
+  @PricingProfile @DeleteShipper @CloseNewWindows
   Scenario: Create a new Shipper - Pricing & Billing tab - Update the Pricing Profile before Created (uid:74107efb-4c18-4468-9c0c-cf4f12f3d5fb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -494,10 +494,8 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator verifies that Pricing Script is "Active" and ""
-    When DB Operator soft delete shipper by Legacy ID
-    Then Operator verify the shipper is deleted successfully
 
-  @PricingProfile
+  @PricingProfile @DeleteShipper @CloseNewWindows
   Scenario: Create a new Shipper - Pricing & Billing tab - No Pricing Profile (uid:1d0199fc-6fb9-4d54-a32d-65b701799c7f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -516,7 +514,7 @@ Feature: All Shippers
       | industryName                 | {industry-name} |
       | salesPerson                  | {sales-person}  |
 
-  @PricingProfile
+  @PricingProfile @DeleteShipper @CloseNewWindows
   Scenario: Create a new Pricing Profile - with Flat Discount where Shipper has Active & Expired Pricing Profile (uid:72efc910-af1b-4145-bdd9-e486deb4284e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -546,14 +544,13 @@ Feature: All Shippers
       | discount          | 20.00                         |
       | comments          | This is a test pricing script |
       | type              | FLAT                          |
+    And Operator save changes on Edit Shipper Page
     Then DB Operator fetches pricing script and shipper discount details
     And Operator verifies the pricing script and shipper discount details are correct
-    When DB Operator soft delete shipper by Legacy ID
-    Then Operator verify the shipper is deleted successfully
 
-  @PricingProfile
+  @PricingProfile @DeleteShipper @CloseNewWindows @ResetCountry
   Scenario: Create a new Pricing Profile - with Percentage Discount where Shipper has Active & Expired Pricing Profile (uid:ad094f98-7e6f-4cf2-978e-b56b742695d7)
-    Given Operator changes the country to "id"
+    Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -582,13 +579,11 @@ Feature: All Shippers
       | discount          | 20.00                         |
       | comments          | This is a test pricing script |
       | type              | PERCENTAGE                    |
+    And Operator save changes on Edit Shipper Page
     Then DB Operator fetches pricing script and shipper discount details
     And Operator verifies the pricing script and shipper discount details are correct
-    When DB Operator soft delete shipper by Legacy ID
-    Then Operator verify the shipper is deleted successfully
-    Then Operator changes the country to "sg"
 
-  @PricingProfile
+  @PricingProfile @DeleteShipper @CloseNewWindows
   Scenario: Create a new Pricing Profile - where Shipper has Pending Pricing Profile (uid:dc2a9af8-d447-4eba-a6eb-3882d57aaeed)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -616,10 +611,8 @@ Feature: All Shippers
     Then Operator verifies that Pricing Script is "Pending" and ""
     And Operator edits the created shipper
     And Operator verifies that Edit Pending Profile is displayed
-    When DB Operator soft delete shipper by Legacy ID
-    Then Operator verify the shipper is deleted successfully
 
-  @PricingProfile
+  @PricingProfile @DeleteShipper @CloseNewWindows
   Scenario: Create a new Pricing Profile - with 0 Flat Discount (uid:c6f6e5b0-d8c6-4489-83fe-b7ae021de5f7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -643,12 +636,10 @@ Feature: All Shippers
       | pricingScriptName | 2402 - New Script               |
       | discount          | 0                               |
       | errorMessage      | 0 is not a valid discount value |
-    When DB Operator soft delete shipper by Legacy ID
-    Then Operator verify the shipper is deleted successfully
 
-  @PricingProfile
+  @PricingProfile @DeleteShipper @CloseNewWindows @ResetCountry
   Scenario: Create a new Pricing Profile - with 0 Percentage Discount (uid:81e2a66e-cc26-4a3a-ac56-1ea5b86f3614)
-    Given Operator changes the country to "id"
+    Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -671,11 +662,8 @@ Feature: All Shippers
       | pricingScriptName | 2508 - PT Cucumber Test 2       |
       | discount          | 0                               |
       | errorMessage      | 0 is not a valid discount value |
-    When DB Operator soft delete shipper by Legacy ID
-    Then Operator verify the shipper is deleted successfully
-    Then Operator changes the country to "sg"
 
-  @PricingProfile
+  @PricingProfile @DeleteShipper @CloseNewWindows
   Scenario: Create a new Pricing Profile - with none Flat Discount (uid:d4cf96cf-e1b2-421f-b5de-125d4af1b31f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -699,14 +687,15 @@ Feature: All Shippers
       | pricingScriptName | 2402 - New Script             |
       | comments          | This is a test pricing script |
       | type              | FLAT                          |
+    And Operator save changes on Edit Shipper Page
     Then DB Operator fetches pricing script details
     And Operator verifies the pricing script details are correct
     When DB Operator soft delete shipper by Legacy ID
     Then Operator verify the shipper is deleted successfully
 
-  @PricingProfile
+  @PricingProfile @DeleteShipper @CloseNewWindows @ResetCountry
   Scenario: Create a new Pricing Profile - with none Percentage Discount (uid:d948145c-704d-4a76-b6c5-fb18f9f1a853)
-    Given Operator changes the country to "id"
+    Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -729,13 +718,11 @@ Feature: All Shippers
       | pricingScriptName | 2508 - PT Cucumber Test 2     |
       | comments          | This is a test pricing script |
       | type              | PERCENTAGE                    |
+    And Operator save changes on Edit Shipper Page
     Then DB Operator fetches pricing script details
     And Operator verifies the pricing script details are correct
-    When DB Operator soft delete shipper by Legacy ID
-    Then Operator verify the shipper is deleted successfully
-    Then Operator changes the country to "sg"
 
-  @PricingProfile
+  @PricingProfile @DeleteShipper @CloseNewWindows
   Scenario: Create a new Pricing Profile - with special characters Discount (uid:4df9abce-e97a-4bf8-aef1-41a96c63ed76)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -759,10 +746,8 @@ Feature: All Shippers
       | pricingScriptName | 2402 - New Script                |
       | discount          | $#^$^#@                          |
       | errorMessage      | Special character is not allowed |
-    When DB Operator soft delete shipper by Legacy ID
-    Then Operator verify the shipper is deleted successfully
 
-  @PricingProfile
+  @PricingProfile @DeleteShipper @CloseNewWindows
   Scenario: Create a new Pricing Profile - with 3-5 integer after decimal point (uid:f3af5079-e704-4f9a-83d3-e4b79a463474)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -787,12 +772,11 @@ Feature: All Shippers
       | discount          | 20.54321                      |
       | comments          | This is a test pricing script |
       | type              | FLAT                          |
+    And Operator save changes on Edit Shipper Page
     Then DB Operator fetches pricing script and shipper discount details
     And Operator verifies the pricing script and shipper discount details are correct
-    When DB Operator soft delete shipper by Legacy ID
-    Then Operator verify the shipper is deleted successfully
 
-  @PricingProfile
+  @PricingProfile @DeleteShipper @CloseNewWindows
   Scenario: Create a new Pricing Profile - with shipper discount within 6 digits Flat Discount (uid:6b852274-7091-4f2f-8a3a-6fecda231d27)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -817,12 +801,11 @@ Feature: All Shippers
       | discount          | 50000.00                      |
       | comments          | This is a test pricing script |
       | type              | FLAT                          |
+    And Operator save changes on Edit Shipper Page
     Then DB Operator fetches pricing script and shipper discount details
     And Operator verifies the pricing script and shipper discount details are correct
-    When DB Operator soft delete shipper by Legacy ID
-    Then Operator verify the shipper is deleted successfully
 
-  @PricingProfile
+  @PricingProfile @DeleteShipper @CloseNewWindows
   Scenario: Create a new Pricing Profile - with shipper discount over 6 digits Flat Discount (uid:4e129004-7985-4226-a5eb-ebfa2465efe7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -847,8 +830,6 @@ Feature: All Shippers
       | discount          | 10000000                    |
       | comments          | This is an invalid discount |
       | errorMessage      | Failed to update            |
-    When DB Operator soft delete shipper by Legacy ID
-    Then Operator verify the shipper is deleted successfully
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
