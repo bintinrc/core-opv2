@@ -592,7 +592,6 @@ Feature: Route Inbound
     Then Operator verify 'Money to collect' value is "Fully Collected" on Route Inbound page
     And Operator open Money Collection dialog on Route Inbound page
     And Operator verify 'Outstanding amount' value is "Fully Collected" on Money Collection dialog
-
     Examples:
       | Title                            | hiptest-uid                              | cashCollected | creditCollected | receiptId | cashOnDelivery |
       | Inbound Cash Only                | uid:9d0eb52e-af06-4830-a8e1-29aa6dba90d1 | 23.57         |                 |           | 23.57          |
@@ -642,7 +641,6 @@ Feature: Route Inbound
     Then Operator verify 'Money to collect' value is "Fully Collected" on Route Inbound page
     And Operator open Money Collection dialog on Route Inbound page
     And Operator verify 'Outstanding amount' value is "Fully Collected" on Money Collection dialog
-
     Examples:
       | Title                            | hiptest-uid                              | cashCollected | creditCollected | receiptId | cashOnPickup |
       | Inbound Cash Only                | uid:46768d15-a726-45e1-bd72-4c0b1d9921f3 | 23.57         |                 |           | 23.57        |

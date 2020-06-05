@@ -112,7 +112,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
 
         if (totalDriver > 0) {
-            assertTrue("Total Driver Shown is the same.", getText(TOTAL_DRIVER_SHOW_XPATH).startsWith(String.valueOf(totalDriver)));
+            assertTrue("Total Driver Shown is the same.", getText(TOTAL_DRIVER_SHOW_XPATH).contains(String.valueOf(totalDriver)));
         }
 
         getWebDriver().switchTo().parentFrame();
