@@ -16,7 +16,6 @@ import org.openqa.selenium.WebElement;
 import javax.inject.Singleton;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @Singleton
@@ -57,8 +56,7 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
             WebElement webElement = operatorV2SimplePage.findElementByFast(By.xpath(leaveBtnXpath));
             webElement.click();
             operatorV2SimplePage.waitUntilInvisibilityOfToast("sidenav-main-menu");
-        }
-        catch(Throwable th)
+        } catch (Throwable th)
         {
             NvLogger.warnf("Failed to 'Reset Window'. Cause: %s", th.getMessage());
         }
@@ -73,19 +71,18 @@ public class ScenarioManager extends CommonSeleniumScenarioManager
         {
             String mainWindowHandle = getCurrentScenarioStorage().get(ScenarioStorageKeys.KEY_MAIN_WINDOW_HANDLE);
 
-            if(StringUtils.isNotBlank(mainWindowHandle))
+            if (StringUtils.isNotBlank(mainWindowHandle))
             {
                 getWebDriver().getWindowHandles().forEach(windowHandle ->
                 {
-                    if(!windowHandle.equals(mainWindowHandle))
+                    if (!windowHandle.equals(mainWindowHandle))
                     {
                         getWebDriver().switchTo().window(windowHandle).close();
                     }
                 });
                 getWebDriver().switchTo().window(mainWindowHandle).switchTo();
             }
-        }
-        catch(Throwable th)
+        } catch (Throwable th)
         {
             NvLogger.warn("Failed to 'Close new windows'.", th);
         }
