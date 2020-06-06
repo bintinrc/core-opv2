@@ -1,4 +1,4 @@
-@ShipmentManagement @InterHub @Shipment @MiddleMile @CWF
+@ShipmentManagement @InterHub @Shipment @MiddleMile
 Feature: Shipment Management
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -356,7 +356,7 @@ Feature: Shipment Management
     Then Operator select created filters preset on Shipment Management page
     And Operator verify parameters of selected filters preset on Shipment Management page
 
-  @DeleteFilersPreset @RT
+  @DeleteFilersPreset
   Scenario: Delete Shipment filters as preset (uid:e4cc014b-ce6a-47d3-bd00-a1b27fd5a60f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
