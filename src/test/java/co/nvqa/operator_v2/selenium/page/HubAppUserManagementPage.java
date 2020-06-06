@@ -270,7 +270,7 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
 
             case "employment start date" :
                 LocalDateTime today = LocalDateTime.now();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy", Locale.ENGLISH);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
 
                 click(EMPLOYMENT_START_DATE_FILTER_XPATH);
                 waitUntilVisibilityOfElementLocated(f(START_DATE_INPUT_XPATH, formatter.format(today)));
