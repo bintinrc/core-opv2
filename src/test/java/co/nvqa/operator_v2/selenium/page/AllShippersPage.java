@@ -4,8 +4,16 @@ import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.shipper.v2.Pricing;
 import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Shipper;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
+
+import static co.nvqa.operator_v2.selenium.page.AllShippersPage.ShippersTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.AllShippersPage.ShippersTable.COLUMN_NAME;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -13,6 +21,15 @@ import org.openqa.selenium.WebDriver;
 @SuppressWarnings("WeakerAccess")
 public class AllShippersPage extends OperatorV2SimplePage
 {
+    @FindBy(name = "searchTerm")
+    public TextBox searchTerm;
+    @FindBy(name = "commons.search")
+    public NvApiTextButton search;
+    @FindBy(name = "container.shippers.create-shipper")
+    public NvIconTextButton createShipper;
+
+    public ShippersTable shippersTable;
+
     private static final String MD_VIRTUAL_REPEAT = "shipper in getTableData()";
 
     public static final String COLUMN_CLASS_DATA_ID = "id";
@@ -22,7 +39,6 @@ public class AllShippersPage extends OperatorV2SimplePage
     public static final String COLUMN_CLASS_DATA_LIAISON_EMAIL = "liaison_email";
     public static final String COLUMN_CLASS_DATA_CONTACT = "contact";
     public static final String COLUMN_CLASS_DATA_SALES_PERSON = "sales_person";
-    //public static final String COLUMN_CLASS_DATA_PRICING_TEMPLATE_NAME = "_template_name";
     public static final String COLUMN_CLASS_DATA_STATUS = "_status";
 
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
@@ -39,12 +55,13 @@ public class AllShippersPage extends OperatorV2SimplePage
     public static final String XPATH_QUICK_SEARCH_AUTOCOMPLETE_LIST = "//ul[@class='md-autocomplete-suggestions']/li[1]";
     public static final String XPATH_PROFILE = "//button[@aria-label='Profile']";
 
-    private final AllShippersCreateEditPage allShippersCreateEditPage;
+    public final AllShippersCreateEditPage allShippersCreateEditPage;
 
     public AllShippersPage(WebDriver webDriver)
     {
         super(webDriver);
         allShippersCreateEditPage = new AllShippersCreateEditPage(webDriver);
+        shippersTable = new ShippersTable(webDriver);
     }
 
     public void waitUntilPageLoaded()
@@ -63,7 +80,7 @@ public class AllShippersPage extends OperatorV2SimplePage
     public void createNewShipper(Shipper shipper)
     {
         waitUntilPageLoaded();
-        clickNvIconTextButtonByName("container.shippers.create-shipper");
+        createShipper.click();
         allShippersCreateEditPage.createNewShipper(shipper);
     }
 
@@ -95,7 +112,8 @@ public class AllShippersPage extends OperatorV2SimplePage
         switchToOtherWindowAndWaitWhileLoading("/orders/management/");
     }
 
-    public void setPickupAddressesAsMilkrun(Shipper shipper){
+    public void setPickupAddressesAsMilkrun(Shipper shipper)
+    {
         searchTableByName(shipper.getName());
         assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
         Long actualLegacyId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_DATA_ID));
@@ -104,7 +122,8 @@ public class AllShippersPage extends OperatorV2SimplePage
         allShippersCreateEditPage.setPickupAddressesAsMilkrun(shipper);
     }
 
-    public void removeMilkrunReservarion(Shipper shipper, int addressIndex, int milkrunReservationIndex){
+    public void removeMilkrunReservarion(Shipper shipper, int addressIndex, int milkrunReservationIndex)
+    {
         searchTableByName(shipper.getName());
         assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
         Long actualLegacyId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_DATA_ID));
@@ -113,7 +132,8 @@ public class AllShippersPage extends OperatorV2SimplePage
         allShippersCreateEditPage.removeMilkrunReservarion(shipper, addressIndex, milkrunReservationIndex);
     }
 
-    public void removeAllMilkrunReservarions(Shipper shipper, int addressIndex){
+    public void removeAllMilkrunReservarions(Shipper shipper, int addressIndex)
+    {
         searchTableByName(shipper.getName());
         assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
         Long actualLegacyId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_DATA_ID));
@@ -296,7 +316,7 @@ public class AllShippersPage extends OperatorV2SimplePage
         sendKeys(xpathForFilter, keyword);
         pause1s();
         sendKeysWithoutClear(xpathForFilter, Keys.RETURN);
-        if(isElementVisible(XPATH_HIDE_BUTTON))
+        if (isElementVisible(XPATH_HIDE_BUTTON))
         {
             click(XPATH_HIDE_BUTTON);
         }
@@ -309,35 +329,28 @@ public class AllShippersPage extends OperatorV2SimplePage
         clickButtonByAriaLabel(ARIA_LABEL_LOAD_SELECTION);
     }
 
-
     public void verifiesResultsOfColumn(String keyword, String column)
     {
         String columnXpath = null;
-        if(column.equalsIgnoreCase("Liaison Email"))
+        if (column.equalsIgnoreCase("Liaison Email"))
         {
             columnXpath = f(XPATH_FOR_COLUMNS, "liaison_email");
-        }
-        else if(column.equalsIgnoreCase("Email"))
+        } else if (column.equalsIgnoreCase("Email"))
         {
             columnXpath = f(XPATH_FOR_COLUMNS, "email");
-        }
-        else if(column.equalsIgnoreCase("Contact"))
+        } else if (column.equalsIgnoreCase("Contact"))
         {
             columnXpath = f(XPATH_FOR_COLUMNS, "contact");
-        }
-        else if(column.equalsIgnoreCase("Status"))
+        } else if (column.equalsIgnoreCase("Status"))
         {
             columnXpath = f(XPATH_FOR_COLUMNS, "_status");
-        }
-        else if(column.equalsIgnoreCase("Industry"))
+        } else if (column.equalsIgnoreCase("Industry"))
         {
             columnXpath = f(XPATH_FOR_COLUMNS, "_industry");
-        }
-        else if(column.equalsIgnoreCase("Salesperson"))
+        } else if (column.equalsIgnoreCase("Salesperson"))
         {
             columnXpath = f(XPATH_FOR_COLUMNS, "sales_person");
-        }
-        else if(column.equalsIgnoreCase("Name"))
+        } else if (column.equalsIgnoreCase("Name"))
         {
             columnXpath = f(XPATH_FOR_COLUMNS, "name");
         }
@@ -347,30 +360,29 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void quickSearchShipper(String keyword)
     {
-        moveToElementWithXpath(XPATH_SEARCH_TERM);
-        sendKeys(XPATH_SEARCH_TERM, keyword);
-        waitUntilVisibilityOfElementLocated(XPATH_QUICK_SEARCH_AUTOCOMPLETE_LIST);
-        click(XPATH_QUICK_SEARCH_AUTOCOMPLETE_LIST);
+        searchTerm.setValue(keyword);
+        search.clickAndWaitUntilDone();
     }
 
     public void editShipper(Shipper shipper)
     {
-        if(!isElementVisible(XPATH_SEARCH_TERM))
+
+        if (!searchTerm.isDisplayedFast())
         {
-            clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
-        }
-        else
+            shippersTable.filterByColumn(COLUMN_NAME, shipper.getName());
+        } else
         {
             quickSearchShipper(shipper.getName());
-            clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
         }
+        shippersTable.clickActionButton(1, ACTION_EDIT);
+        allShippersCreateEditPage.switchToNewWindow();
+        allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
     }
 
     public String addNewPricingScript(Shipper shipper)
     {
         waitUntilPageLoaded();
-        String pricingProfileId = allShippersCreateEditPage.addNewPricingScript(shipper);
-        return pricingProfileId;
+        return allShippersCreateEditPage.addNewPricingScript(shipper);
     }
 
     public void editPricingScript(Shipper shipper)
@@ -389,7 +401,7 @@ public class AllShippersPage extends OperatorV2SimplePage
     {
         assertTrue("Script id is not same: ", pricingProfile.getScriptName().contains(pricingProfileFromDb.getScriptId().toString()));
         assertEquals("Pricing profile id is not same: ", pricingProfile.getTemplateId(), pricingProfileFromDb.getTemplateId());
-        assertTrue("Shipper discount Id is null:", pricingProfileFromDb.getShipperDiscountId()!=null);
+        assertTrue("Shipper discount Id is null:", pricingProfileFromDb.getShipperDiscountId() != null);
         assertEquals("Comments are not the same: ", pricingProfile.getComments(), pricingProfileFromDb.getComments());
         assertTrue("Discount amount is not same:", pricingProfile.getDiscount().contains(pricingProfileFromDb.getDiscount()));
         assertEquals("Type is not the same:", pricingProfile.getType(), pricingProfileFromDb.getType());
@@ -399,7 +411,7 @@ public class AllShippersPage extends OperatorV2SimplePage
     {
         assertTrue("Script id is not same: ", pricingProfile.getScriptName().contains(pricingProfileFromDb.getScriptId().toString()));
         assertEquals("Pricing profile id is not same: ", pricingProfile.getTemplateId(), pricingProfileFromDb.getTemplateId());
-        assertTrue("Shipper discount Id is not null:", pricingProfileFromDb.getShipperDiscountId()==0);
+        assertTrue("Shipper discount Id is not null:", pricingProfileFromDb.getShipperDiscountId() == 0);
         assertEquals("Comments are not the same: ", pricingProfile.getComments(), pricingProfileFromDb.getComments());
     }
 
@@ -426,5 +438,30 @@ public class AllShippersPage extends OperatorV2SimplePage
     {
         waitUntilPageLoaded();
         allShippersCreateEditPage.addNewPricingScriptWithDiscountOver6DigitsAndVerifyErrorMessage(shipper, errorMessage);
+    }
+
+    public static class ShippersTable extends MdVirtualRepeatTable<Shipper>
+    {
+        public static final String MD_VIRTUAL_REPEAT = "shipper in getTableData()";
+        public static final String COLUMN_NAME = "name";
+        public static final String ACTION_EDIT = "Edit";
+
+        public ShippersTable(WebDriver webDriver)
+        {
+            super(webDriver);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                    .put("id", "id")
+                    .put(COLUMN_NAME, "name")
+                    .put("email", "email")
+                    .put("industryName", "_industry")
+                    .put("liaisonEmail", "liaison_email")
+                    .put("contact", "contact")
+                    .put("active", "_status")
+                    .build()
+            );
+            setEntityClass(Shipper.class);
+            setMdVirtualRepeat(MD_VIRTUAL_REPEAT);
+            setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "commons.edit"));
+        }
     }
 }

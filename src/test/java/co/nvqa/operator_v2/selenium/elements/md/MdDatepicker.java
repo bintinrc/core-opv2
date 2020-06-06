@@ -39,6 +39,10 @@ public class MdDatepicker extends PageElement
     @FindBy(xpath = "//tbody[@class='md-calendar-month']")
     public List<CalendarMonth> months;
 
+    public String getValue(){
+        return input.getAttribute("value");
+    }
+
     public void setDate(Date date)
     {
         try

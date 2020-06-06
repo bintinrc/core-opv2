@@ -26,13 +26,16 @@ public class MdSelect extends PageElement
     @FindBy(css = "md-select-value")
     public PageElement selectValueElement;
 
+    @FindBy(css = "md-select-value div")
+    public PageElement currentValueElement;
+
     @FindBy(xpath = "//div[contains(@class,'md-active md-clickable')]//input[@ng-model='searchTerm']")
     public PageElement searchInput;
 
     @FindBy(xpath = "//div[contains(@class,'md-select-menu-container')][@aria-hidden='false']//md-option")
     public List<PageElement> options;
 
-    private static final String MD_OPTION_LOCATOR = "//div[contains(@class,'md-select-menu-container')][@aria-hidden='false']//md-option[./div[contains(normalize-space(text()), '%s')]]";
+    private static final String MD_OPTION_LOCATOR = "//div[contains(@class,'md-select-menu-container')][@aria-hidden='false']//md-option[.//div[contains(normalize-space(.), '%s')]]";
 
     public void searchAndSelectValue(String value)
     {
@@ -53,14 +56,14 @@ public class MdSelect extends PageElement
         selectValueElement.waitUntilClickable();
         selectValueElement.scrollIntoView();
         selectValueElement.jsClick();
-        pause1s();
+        pause500ms();
     }
 
     private void enterSearchTerm(String value)
     {
         openMenu();
         searchInput.sendKeys(value);
-        pause1s();
+        pause500ms();
     }
 
     public List<String> getOptions()
@@ -73,6 +76,6 @@ public class MdSelect extends PageElement
 
     public String getValue()
     {
-        return getValue(selectValueElement.getWebElement());
+        return currentValueElement.getText();
     }
 }

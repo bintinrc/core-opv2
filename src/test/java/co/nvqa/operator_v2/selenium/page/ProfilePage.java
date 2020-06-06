@@ -1,54 +1,64 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
 
 /**
- *
  * @author Lanang Jati
  */
 @SuppressWarnings("WeakerAccess")
-public class ProfilePage extends OperatorV2SimplePage {
+public class ProfilePage extends OperatorV2SimplePage
+{
+    @FindBy(css = "button[aria-label='Profile']")
+    public Button profileButton;
+    @FindBy(css = "md-select[ng-model='domain.current']")
+    public MdSelect countrySelect;
+    @FindBy(css = "app-sidenav")
+    public PageElement appSidenav;
 
-    private static final String PROFILE_BUTTON = "//button[@aria-label=\"Profile\"]";
-    private static final String COUNTRY_BUTTON = "//md-select[@ng-model='domain.current']/md-select-value/span/div/div/span";
-    private static final String APP_SIDENAV = "//app-sidenav";
-
-    public ProfilePage(WebDriver webDriver) {
+    public ProfilePage(WebDriver webDriver)
+    {
         super(webDriver);
     }
 
-    public void clickProfileButton() {
-        click(PROFILE_BUTTON);
+    public void clickProfileButton()
+    {
+        profileButton.moveAndClick();
     }
 
-    public void clickCountryButton() {
-        click(COUNTRY_BUTTON);
+    public void closeProfile()
+    {
+        appSidenav.moveAndClick();
     }
 
-    public void closeProfile() {
-        click(APP_SIDENAV);
+    public void pickCountry(String country)
+    {
+        countrySelect.selectValue(country);
     }
 
-    public void pickCountry(String country) {
-        click("//md-option[@ng-repeat='d in domain.all']/div/div/span[text()='" + country + "']");
+    public String getCurrentCountry()
+    {
+        return countrySelect.getValue();
     }
 
-    private String getCurrentCountry() {
-        return findElementByXpath(COUNTRY_BUTTON).getText();
-    }
-
-    public void changeCountry(String newCountry) {
+    public void changeCountry(String newCountry)
+    {
         String currentCountry = getCurrentCountry();
 
-        if (currentCountry.equalsIgnoreCase(newCountry)) {
+        if (currentCountry.equalsIgnoreCase(newCountry))
+        {
             closeProfile();
-        } else {
-            clickCountryButton();
+        } else
+        {
             pickCountry(newCountry);
         }
     }
 
-    public void currentCountryIs(String country) {
+    public void currentCountryIs(String country)
+    {
         clickProfileButton();
         String currentCountry = getCurrentCountry();
         closeProfile();
