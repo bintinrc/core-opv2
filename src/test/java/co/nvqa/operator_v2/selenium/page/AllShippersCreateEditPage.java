@@ -16,6 +16,7 @@ import co.nvqa.commons.model.shipper.v2.Return;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.shipper.v2.Shopify;
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.ContainerSwitch;
@@ -49,6 +50,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     @FindBy(xpath = "//div[text()='Shipper Information']")
     public PageElement shipperInformation;
 
+    @FindBy(name = "commons.discard-changes")
+    public NvIconTextButton discardChanges;
+
     @FindBy(css = "tabs-wrapper")
     public TabWrapper tabs;
     @FindBy(name = "container.shippers.create-shipper")
@@ -78,6 +82,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public NewPricingProfileDialog newPricingProfileDialog;
     @FindBy(css = "md-dialog")
     public EditPendingProfileDialog editPendingProfileDialog;
+    @FindBy(css = "md-dialog")
+    public DiscardChangesDialog discardChangesDialog;
 
     private static final String NG_REPEAT_TABLE_ADDRESS = "address in getTableData()";
 
@@ -109,7 +115,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void waitUntilShipperCreateEditPageIsLoaded()
     {
-        waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
+        shipperInformation.waitUntilClickable();
     }
 
     public String switchToNewWindow()
@@ -214,9 +220,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     {
         waitUntilShipperCreateEditPageIsLoaded();
         fillBasicSettingsForm(shipper);
-        clickNvIconTextButtonByName("Save Changes");
+        saveChanges.click();
         waitUntilInvisibilityOfToast("All changes saved successfully");
-        backToShipperList();
     }
 
     private void fillBasicSettingsForm(Shipper shipper)
@@ -694,22 +699,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         assertEquals("Is Multi Parcel Shipper", convertBooleanToString(orderCreate.getIsMultiParcelShipper(), "Yes", "No"), actualIsMultiParcelShipper);
         assertEquals("Disable Driver App Reschedule", convertBooleanToString(distributionPoint.getShipperLiteAllowRescheduleFirstAttempt(), "Yes", "No"), actualShipperLiteAllowRescheduleFirstAttempt);
 
-        // Pricing
-        Pricing pricing = shipper.getPricing();
-        String actualPricingScript = getMdSelectValueById(LOCATOR_FIELD_PRICING_SCRIPT);
-        assertThat("Pricing Script", actualPricingScript, endsWith(pricing.getScriptName()));
-
-        // Billing
-        String actualBillingName = getInputValueById("Billing Name");
-        String actualBillingContact = getInputValueById("Billing Contact");
-        String actualBillingAddress = getInputValueById("Billing Address");
-        String actualBillingPostcode = getInputValueById("Billing Postcode");
-
-        assertEquals("Billing Name", shipper.getBillingName(), actualBillingName);
-        assertEquals("Billing Contact", shipper.getBillingContact(), actualBillingContact);
-        assertEquals("Billing Address", shipper.getBillingAddress(), actualBillingAddress);
-        assertEquals("Billing Postcode", shipper.getBillingPostcode(), actualBillingPostcode);
-
         // Industry & Sales
         String actualIndustry = getMdSelectValue(LOCATOR_FIELD_INDUSTRY); //getNvAutocompleteValue("ctrl.view.industry.searchText");
         String actualSalesPerson = getMdSelectValueById(LOCATOR_FIELD_SALES_PERSON); //getNvAutocompleteValue("ctrl.view.salesPerson.searchText");
@@ -718,7 +707,23 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         assertEquals("Sales Person", shipper.getSalesPerson(), actualSalesPerson);
 
         verifyMoreSettingsTab(shipper);
-        backToShipperList();
+
+        // Pricing
+        tabs.selectTab("Pricing and Billing");
+//        Pricing pricing = shipper.getPricing();
+//        String actualPricingScript = getMdSelectValueById(LOCATOR_FIELD_PRICING_SCRIPT);
+//        assertThat("Pricing Script", actualPricingScript, endsWith(pricing.getScriptName()));
+
+        // Billing
+        String actualBillingName = billingName.getValue();
+        String actualBillingContact = billingContact.getValue();
+        String actualBillingAddress = billingAddress.getValue();
+        String actualBillingPostcode = billingPostcode.getValue();
+
+        assertEquals("Billing Name", shipper.getBillingName(), actualBillingName);
+        assertEquals("Billing Contact", shipper.getBillingContact(), actualBillingContact);
+        assertEquals("Billing Address", shipper.getBillingAddress(), actualBillingAddress);
+        assertEquals("Billing Postcode", shipper.getBillingPostcode(), actualBillingPostcode);
     }
 
     public void verifyMoreSettingsTab(Shipper shipper)
@@ -1079,14 +1084,13 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void backToShipperList()
     {
-        clickNvIconTextButtonByName("commons.discard-changes");
+        discardChanges.click();
         pause2s();
-        if (isElementExistFast("//md-dialog//button[@aria-label='Leave']"))
+        if (discardChangesDialog.leave.isDisplayedFast())
         {
-            clickButtonOnMdDialogByAriaLabel("Leave");
+            discardChangesDialog.leave.click();
         }
-
-        // waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading shippers...']");
+        webDriver.switchTo().window(webDriver.getWindowHandles().iterator().next());
     }
 
     public void searchTableAddressByAddress(String address)
@@ -1345,5 +1349,16 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         @FindBy(name = "Save Changes")
         public NvApiTextButton saveChanges;
+    }
+
+    public static class DiscardChangesDialog extends MdDialog
+    {
+        public DiscardChangesDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(css = "button[aria-label='Leave']")
+        public Button leave;
     }
 }

@@ -4,10 +4,12 @@ import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.shipper.v2.Pricing;
 import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Shipper;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
+import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -27,23 +29,17 @@ public class AllShippersPage extends OperatorV2SimplePage
     public NvApiTextButton search;
     @FindBy(name = "container.shippers.create-shipper")
     public NvIconTextButton createShipper;
+    @FindBy(name = "Clear All Selections")
+    public NvIconTextButton clearAllSelections;
+    @FindBy(xpath = "//md-progress-circular/following-sibling::div[text()='Loading shippers...']")
+    public PageElement loadingShippers;
 
     public ShippersTable shippersTable;
 
     private static final String MD_VIRTUAL_REPEAT = "shipper in getTableData()";
 
-    public static final String COLUMN_CLASS_DATA_ID = "id";
-    public static final String COLUMN_CLASS_DATA_NAME = "name";
-    public static final String COLUMN_CLASS_DATA_EMAIL = "email";
-    public static final String COLUMN_CLASS_DATA_INDUSTRY = "_industry";
-    public static final String COLUMN_CLASS_DATA_LIAISON_EMAIL = "liaison_email";
-    public static final String COLUMN_CLASS_DATA_CONTACT = "contact";
-    public static final String COLUMN_CLASS_DATA_SALES_PERSON = "sales_person";
-    public static final String COLUMN_CLASS_DATA_STATUS = "_status";
-
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
     public static final String ACTION_BUTTON_LOGIN = "container.shippers.shipper-dashboard-login";
-    public static final String ARIA_LABEL_CLEAR_ALL_SELECTIONS = "Clear All Selections";
     public static final String XPATH_SELECT_FILTER = "//input[@aria-label='Select Filter']";
     public static final String ARIA_LABEL_LOAD_SELECTION = "Load Selection";
     public static final String XPATH_FOR_FILTER = "//span[text()='%s']/ancestor::li";
@@ -51,8 +47,6 @@ public class AllShippersPage extends OperatorV2SimplePage
     public static final String XPATH_FOR_COLUMNS = "//table[@class='table-body']//tr[1]/td[@class='%s']";
     public static final String XPATH_ACTIVE_FILTER = "//p[text()='Active']/parent::div/following-sibling::div//span[text()='Yes']/parent::button";
     public static final String XPATH_HIDE_BUTTON = "//div[contains(text(),'Hide')]/following-sibling::i";
-    public static final String XPATH_SEARCH_TERM = "//input[@aria-label='Search term']";
-    public static final String XPATH_QUICK_SEARCH_AUTOCOMPLETE_LIST = "//ul[@class='md-autocomplete-suggestions']/li[1]";
     public static final String XPATH_PROFILE = "//button[@aria-label='Profile']";
 
     public final AllShippersCreateEditPage allShippersCreateEditPage;
@@ -67,7 +61,7 @@ public class AllShippersPage extends OperatorV2SimplePage
     public void waitUntilPageLoaded()
     {
         super.waitUntilPageLoaded();
-        waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading shippers...']");
+        loadingShippers.waitUntilInvisible();
     }
 
     public void clearBrowserCacheAndReloadPage()
@@ -87,14 +81,14 @@ public class AllShippersPage extends OperatorV2SimplePage
     public void createNewShipperWithUpdatedPricingScript(Shipper shipper)
     {
         waitUntilPageLoaded();
-        clickNvIconTextButtonByName("container.shippers.create-shipper");
+        createShipper.click();
         allShippersCreateEditPage.createNewShipperWithUpdatedPricingScript(shipper);
     }
 
     public void createNewShipperWithoutPricingScript(Shipper shipper)
     {
         waitUntilPageLoaded();
-        clickNvIconTextButtonByName("container.shippers.create-shipper");
+        createShipper.click();
         allShippersCreateEditPage.createNewShipperWithoutPricingScript(shipper);
     }
 
@@ -105,8 +99,7 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void loginToShipperDashboard(Shipper shipper)
     {
-        retryIfRuntimeExceptionOccurred(() -> searchTableByName(shipper.getName()));
-        assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
+        searchShipper(shipper.getName());
         clickActionButtonOnTable(1, ACTION_BUTTON_LOGIN);
         waitUntilNewWindowOrTabOpened();
         switchToOtherWindowAndWaitWhileLoading("/orders/management/");
@@ -114,70 +107,66 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void setPickupAddressesAsMilkrun(Shipper shipper)
     {
-        searchTableByName(shipper.getName());
-        assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
-        Long actualLegacyId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_DATA_ID));
-        shipper.setLegacyId(actualLegacyId);
-        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        searchShipper(shipper.getName());
+        Shipper actualShipper = shippersTable.readEntity(1);
+        shipper.setLegacyId(actualShipper.getLegacyId());
+        openEditShipperPage();
         allShippersCreateEditPage.setPickupAddressesAsMilkrun(shipper);
     }
 
     public void removeMilkrunReservarion(Shipper shipper, int addressIndex, int milkrunReservationIndex)
     {
-        searchTableByName(shipper.getName());
-        assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
-        Long actualLegacyId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_DATA_ID));
-        shipper.setLegacyId(actualLegacyId);
-        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        searchShipper(shipper.getName());
+        Shipper actualShipper = shippersTable.readEntity(1);
+        shipper.setLegacyId(actualShipper.getLegacyId());
+        openEditShipperPage();
         allShippersCreateEditPage.removeMilkrunReservarion(shipper, addressIndex, milkrunReservationIndex);
     }
 
     public void removeAllMilkrunReservarions(Shipper shipper, int addressIndex)
     {
-        searchTableByName(shipper.getName());
-        assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
-        Long actualLegacyId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_DATA_ID));
-        shipper.setLegacyId(actualLegacyId);
-        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        searchShipper(shipper.getName());
+        Shipper actualShipper = shippersTable.readEntity(1);
+        shipper.setLegacyId(actualShipper.getLegacyId());
+        openEditShipperPage();
         allShippersCreateEditPage.removeAllMilkrunReservations(shipper, addressIndex);
     }
 
     public void verifyShipperInfoIsCorrect(String shipperNameKeyword, Shipper shipper)
     {
-        searchTableByName(shipperNameKeyword);
-        assertFalse("Table is empty. New Shipper is not created.", isTableEmpty());
+        searchShipper(shipperNameKeyword);
+        Shipper actualShipper = shippersTable.readEntity(1);
+        shipper.setLegacyId(actualShipper.getLegacyId());
 
-        Long actualLegacyId = Long.parseLong(getTextOnTable(1, COLUMN_CLASS_DATA_ID));
-        String actualName = getTextOnTable(1, COLUMN_CLASS_DATA_NAME);
-        String actualEmail = getTextOnTable(1, COLUMN_CLASS_DATA_EMAIL);
-        String actualIndustry = getTextOnTable(1, COLUMN_CLASS_DATA_INDUSTRY);
-        String actualLiaisonEmail = getTextOnTable(1, COLUMN_CLASS_DATA_LIAISON_EMAIL);
-        String actualContact = getTextOnTable(1, COLUMN_CLASS_DATA_CONTACT);
-        String actualSalesPerson = getTextOnTable(1, COLUMN_CLASS_DATA_SALES_PERSON);
-        String actualStatus = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
+        assertEquals("Name", shipper.getName(), actualShipper.getName());
+        assertEquals("Email", shipper.getEmail(), actualShipper.getEmail());
+        assertEquals("Industry", shipper.getIndustryName(), actualShipper.getIndustryName());
+        assertEquals("Liaison Email", shipper.getLiaisonEmail(), actualShipper.getLiaisonEmail());
+        assertEquals("Contact", shipper.getContact(), actualShipper.getContact());
+        assertEquals("Sales Person", shipper.getSalesPerson().split("-")[0], actualShipper.getSalesPerson());
+        assertEquals("Expected Status = Inactive", shipper.getActive(), actualShipper.getActive());
 
-        switch (actualStatus)
-        {
-            case "container.shippers.active":
-                actualStatus = "Active";
-                break;
-            case "container.shippers.inactive":
-                actualStatus = "Inactive";
-                break;
-        }
-
-        shipper.setLegacyId(actualLegacyId);
-
-        assertEquals("Name", shipper.getName(), actualName);
-        assertEquals("Email", shipper.getEmail(), actualEmail);
-        assertEquals("Industry", shipper.getIndustryName(), actualIndustry);
-        assertEquals("Liaison Email", shipper.getLiaisonEmail(), actualLiaisonEmail);
-        assertEquals("Contact", shipper.getContact(), actualContact);
-        assertEquals("Sales Person", shipper.getSalesPerson().split("-")[0], actualSalesPerson);
-        assertEquals("Expected Status = Inactive", convertBooleanToString(shipper.getActive(), "Active", "Inactive"), actualStatus);
-
-        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        openEditShipperPage();
         allShippersCreateEditPage.verifyNewShipperIsCreatedSuccessfully(shipper);
+    }
+
+    public void openEditShipperPage()
+    {
+        shippersTable.clickActionButton(1, ACTION_EDIT);
+        allShippersCreateEditPage.switchToNewWindow();
+        allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
+    }
+
+    public void searchShipper(String shipperName)
+    {
+        if (!searchTerm.isDisplayedFast())
+        {
+            shippersTable.filterByColumn(COLUMN_NAME, shipperName);
+        } else
+        {
+            quickSearchShipper(shipperName);
+        }
+        Assert.assertFalse(f("Shipper [%s] was not found", shipperName), shippersTable.isEmpty());
     }
 
     public void updateShipper(Shipper oldShipper, Shipper updatedShipper)
@@ -277,9 +266,8 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void searchTableByNameAndGoToEditPage(Shipper shipper)
     {
-        searchTableByName(shipper.getName());
-        assertFalse("Table is empty. Cannot enable Auto-Reservation for shipper with Legacy ID = " + shipper.getLegacyId(), isTableEmpty());
-        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        searchShipper(shipper.getName());
+        openEditShipperPage();
     }
 
     public void searchTableByName(String name)
@@ -300,7 +288,7 @@ public class AllShippersPage extends OperatorV2SimplePage
     public void clearAllSelections()
     {
         pause1s();
-        clickButtonByAriaLabel(ARIA_LABEL_CLEAR_ALL_SELECTIONS);
+        clearAllSelections.click();
     }
 
     public void chooseFilter(String filter)
@@ -362,18 +350,12 @@ public class AllShippersPage extends OperatorV2SimplePage
     {
         searchTerm.setValue(keyword);
         search.clickAndWaitUntilDone();
+        loadingShippers.waitUntilInvisible();
     }
 
     public void editShipper(Shipper shipper)
     {
-
-        if (!searchTerm.isDisplayedFast())
-        {
-            shippersTable.filterByColumn(COLUMN_NAME, shipper.getName());
-        } else
-        {
-            quickSearchShipper(shipper.getName());
-        }
+        searchShipper(shipper.getName());
         shippersTable.clickActionButton(1, ACTION_EDIT);
         allShippersCreateEditPage.switchToNewWindow();
         allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
@@ -456,6 +438,7 @@ public class AllShippersPage extends OperatorV2SimplePage
                     .put("industryName", "_industry")
                     .put("liaisonEmail", "liaison_email")
                     .put("contact", "contact")
+                    .put("salesPerson", "sales_person")
                     .put("active", "_status")
                     .build()
             );
