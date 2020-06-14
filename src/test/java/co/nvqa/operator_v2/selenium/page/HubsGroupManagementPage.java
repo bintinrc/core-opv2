@@ -1,10 +1,14 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.HubsGroup;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,10 +26,14 @@ import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGrou
 public class HubsGroupManagementPage extends OperatorV2SimplePage
 {
     public static final String LOCATOR_SPINNER_LOADING_FILTERS = "//md-progress-circular/following-sibling::div[text()='Loading filters...']";
+    private static final String XPATH_OF_DELETE_BUTTON = "//md-dialog-actions//button[@aria-label='Delete']";
 
     private CreateHubsGroupDialog createHubsGroupDialog;
     private EditHubsGroupDialog editHubsGroupDialog;
     private HubsGroupTable hubsGroupTable;
+
+    @FindBy(css = "md-dialog")
+    public ConfirmDeleteDialog confirmDeleteDialog;
 
     public HubsGroupManagementPage(WebDriver webDriver)
     {
@@ -65,8 +73,21 @@ public class HubsGroupManagementPage extends OperatorV2SimplePage
     {
         hubsGroupTable.filterByColumn(COLUMN_ID, String.valueOf(hubsGroupId));
         hubsGroupTable.clickActionButton(1, ACTION_DELETE);
-        clickButtonOnMdDialogByAriaLabel("Delete");
+        confirmDeleteDialog.waitUntilVisible();
+        confirmDeleteDialog.delete.waitUntilClickable();
+        confirmDeleteDialog.delete.click();
         waitUntilInvisibilityOfToast(String.format("Hub Group %d successfully deleted", hubsGroupId));
+    }
+
+    public static class ConfirmDeleteDialog extends MdDialog
+    {
+        public ConfirmDeleteDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(xpath = XPATH_OF_DELETE_BUTTON)
+        public Button delete;
     }
 
     public void verifyHubsGroup(String hubGroupName, HubsGroup expectedHubsGroup)
