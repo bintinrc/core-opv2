@@ -1,7 +1,7 @@
 @OperatorV2 @Shipper @OperatorV2Part2 @AllShippers @Saas
 Feature: All Shippers
 
-  @LaunchBrowser @ShouldAlwaysRun @EnableClearCache @ForceNotHeadless
+  @LaunchBrowser @ShouldAlwaysRun @EnableClearCache @ForceNotHeadless @Debug
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -26,6 +26,7 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}                 |
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the new Shipper is created successfully
+    And Operator go back to Shipper List page
     When DB Operator soft delete shipper by Legacy ID
     When API Operator reload shipper's cache
     When Operator clear browser cache and reload All Shipper page
@@ -34,7 +35,7 @@ Feature: All Shippers
       | Note       | hiptest-uid                              | isShipperActive | shipperType | ocVersion | services | trackingType | isAllowCod | isAllowCashPickup | isPrepaid | isAllowStagedOrders | isMultiParcelShipper | isDisableDriverAppReschedule |
       | Shipper V4 | uid:dfbe7350-2c9d-40d3-96c4-428f5842a511 | true            | Normal      | v4        | STANDARD | Fixed        | false      | true              | true      | false               | false                | false                        |
 
-  @ResetWindow
+  @ResetWindow @Debug
   Scenario Outline: Operator create new Shipper with basic settings and then update the basic settings (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -55,9 +56,12 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}                 |
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the new Shipper is created successfully
+    And Operator go back to Shipper List page
     When Operator update Shipper's basic settings
+    And Operator go back to Shipper List page
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify Shipper's basic settings is updated successfully
+    And Operator go back to Shipper List page
     When DB Operator soft delete shipper by Legacy ID
     When API Operator reload shipper's cache
     When Operator clear browser cache and reload All Shipper page

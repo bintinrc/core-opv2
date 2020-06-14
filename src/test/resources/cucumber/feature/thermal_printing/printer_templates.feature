@@ -1,4 +1,4 @@
-@OperatorV2 @CrossBorderAnd3PL @OperatorV2Part1 @PrinterTemplates
+@OperatorV2 @ThermalPrinting @OperatorV2Part1 @PrinterTemplates
 Feature: Printer Templates
 
   @LaunchBrowser @ShouldAlwaysRun

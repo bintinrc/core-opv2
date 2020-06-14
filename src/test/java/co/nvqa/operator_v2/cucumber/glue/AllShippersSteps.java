@@ -41,8 +41,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static co.nvqa.operator_v2.selenium.page.AllShippersPage.ShippersTable.ACTION_EDIT;
-
 /**
  * @author Daniel Joi Partogi Hutapea
  */
@@ -344,6 +342,7 @@ public class AllShippersSteps extends AbstractSteps
     public void operatorVerifyTheNewShipperIsCreatedSuccessfully()
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
+        put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
         allShippersPage.verifyNewShipperIsCreatedSuccessfully(shipper);
     }
 
@@ -351,11 +350,9 @@ public class AllShippersSteps extends AbstractSteps
     public void operatorOpenEditShipperPageOfShipper(String shipperName)
     {
         shipperName = resolveValue(shipperName);
-        allShippersPage.searchTerm.setValue(shipperName);
-        allShippersPage.search.clickAndWaitUntilDone();
-        Assert.assertFalse(f("Shipper [%s] was not found", shipperName), allShippersPage.shippersTable.isEmpty());
-        allShippersPage.shippersTable.clickActionButton(1, ACTION_EDIT);
-        allShippersPage.allShippersCreateEditPage.switchToNewWindow();
+        allShippersPage.searchShipper(shipperName);
+        allShippersPage.openEditShipperPage();
+        put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
         allShippersPage.allShippersCreateEditPage.shipperInformation.waitUntilClickable();
         pause2s();
     }
@@ -507,6 +504,14 @@ public class AllShippersSteps extends AbstractSteps
         getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
     }
 
+    @Then("^Operator go back to Shipper List page")
+    public void operatorGoBackToShipperListPage()
+    {
+        allShippersPage.allShippersCreateEditPage.backToShipperList();
+        pause3s();
+        getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
+    }
+
     @Then("^Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:$")
     public void operatorVerifyErrorMessagesNewPricingProfileOnEditShipperPage(Map<String, String> data)
     {
@@ -528,6 +533,7 @@ public class AllShippersSteps extends AbstractSteps
     @When("^Operator update Shipper's basic settings$")
     public void operatorUpdateShipperBasicSettings()
     {
+        put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
         Shipper shipper = get(KEY_CREATED_SHIPPER);
         Shipper oldShipper = SerializationUtils.clone(shipper);
         String dateUniqueString = generateDateUniqueString();
@@ -574,6 +580,7 @@ public class AllShippersSteps extends AbstractSteps
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
         Shipper oldShipper = get(KEY_UPDATED_SHIPPER);
+        put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
         allShippersPage.verifyShipperIsUpdatedSuccessfully(oldShipper, shipper);
     }
 
@@ -594,6 +601,7 @@ public class AllShippersSteps extends AbstractSteps
     public void operatorVerifyShipperLabelPrinterSettingsIsUpdatedSuccessfully()
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
+        put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
         allShippersPage.verifyShipperLabelPrinterSettingsIsUpdatedSuccessfully(shipper);
     }
 
