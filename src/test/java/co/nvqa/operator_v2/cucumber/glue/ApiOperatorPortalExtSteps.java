@@ -16,7 +16,9 @@ import co.nvqa.commons.model.core.zone.Zone;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.commons.util.factory.HubFactory;
+import co.nvqa.operator_v2.model.Addressing;
 import co.nvqa.operator_v2.model.ContactType;
 import co.nvqa.operator_v2.model.Dp;
 import co.nvqa.operator_v2.model.DpPartner;
@@ -31,6 +33,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -440,5 +443,26 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     {
         BatchOrderInfo batchOrderInfo = getOrderClient().retrieveBatchOrderInfo(Long.parseLong(get(KEY_CREATED_BATCH_ORDER_ID)));
         put(KEY_CREATED_BATCH_ORDER_INFO, batchOrderInfo);
+    }
+
+    @After("@DeleteAddress")
+    public void deleteAddress()
+    {
+        Addressing addressing = get(KEY_CREATED_ADDRESSING);
+
+        if (addressing != null)
+        {
+            try
+            {
+                List<co.nvqa.commons.model.addressing.Address> addresses = getAddressingClient().searchAddresses(StandardTestConstants.COUNTRY_CODE, addressing.getBuildingNo());
+                if (CollectionUtils.isNotEmpty(addresses))
+                {
+                    getAddressingClient().deleteAddress(addresses.get(0).getId());
+                }
+            } catch (Throwable ex)
+            {
+                NvLogger.warn("Could not delete created address");
+            }
+        }
     }
 }

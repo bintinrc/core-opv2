@@ -1,4 +1,4 @@
-@OperatorV2Deprecated @RouteCleaningReport @Saas
+@OperatorV2Deprecated @RouteCleaningReport
 Feature: Route Cleaning Report
 
   # THIS FEATURE HAS BEEN DEPRECATED
