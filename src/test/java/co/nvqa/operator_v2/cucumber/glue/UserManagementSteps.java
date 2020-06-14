@@ -6,6 +6,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.SerializationUtils;
+import org.junit.Assert;
 
 /**
  *
@@ -57,18 +58,25 @@ public class UserManagementSteps extends AbstractSteps {
     @Then("^Operator verify the edited user on User Management page is existed$")
     public void verifyEditedUserOnUserManagement() {
         UserManagement userManagementEdited = get(KEY_UPDATED_USER_MANAGEMENT);
-        userManagementPage.verifyEditedUserOnUserManagement(userManagementEdited);
+        userManagementPage.verifyUserOnUserManagement(userManagementEdited);
     }
 
-    @When("^Operator filling the Grant Type Field on User Management page and load the data$")
-    public void clickGrantTypeFilter() {
-        userManagementPage.clickGrantTypeFilter();
+    @When("^Operator filling the Grant Type Field with value \"(.+)\" on User Management page and load the data$")
+    public void clickGrantTypeFilter(String value) {
+        userManagementPage.selectGrantTypeFilter(value);
+        switch (value.toLowerCase()){
+            case "google":
+                put(KEY_SELECTED_GRANT_TYPE, "GOOGLE_SSO");
+                break;
+        }
     }
 
     @Then("^Operator verify the result on the table has the same Grant Type that has been input$")
     public void verifyGrantType() {
+        String grantType = get(KEY_SELECTED_GRANT_TYPE);
+        Assert.assertNotNull("Selected Grant Type", grantType);
         UserManagement userManagement = new UserManagement();
-        userManagement.setGrantType("GOOGLE_SSO");
+        userManagement.setGrantType(grantType);
         userManagementPage.verifyGrantType(userManagement);
         put(KEY_CREATED_USER_MANAGEMENT, userManagement);
     }
