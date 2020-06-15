@@ -1,7 +1,16 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.RoleManagement;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 /**
  *
@@ -9,6 +18,12 @@ import org.openqa.selenium.WebDriver;
  */
 @SuppressWarnings("WeakerAccess")
 public class RoleManagementPage extends OperatorV2SimplePage {
+
+    @FindBy(name = "Add Role")
+    public NvIconTextButton addRole;
+
+    @FindBy(css = "md-dialog")
+    public AddRoleModal addRoleModal;
 
     private static final String NG_REPEAT = "role in $data";
 
@@ -21,9 +36,14 @@ public class RoleManagementPage extends OperatorV2SimplePage {
 
     public void createNewRole(RoleManagement roleManagement) {
         waitUntilInvisibilityOfElementLocated("//div[contains(@class, 'loading-sheet')]/md-progress-circular");
-        clickNvIconTextButtonByNameAndWaitUntilDone("Add Role");
-        fillTheForm(roleManagement);
-        clickNvApiTextButtonByNameAndWaitUntilDone("Add Role");
+        waitUntilInvisibilityOfToast();
+        addRole.waitUntilClickable();
+        addRole.click();
+        addRoleModal.waitUntilVisible();
+        addRoleModal.roleName.setValue(roleManagement.getRoleName());
+        addRoleModal.description.setValue(roleManagement.getDesc());
+        addRoleModal.scope.selectValue(roleManagement.getScope());
+        addRoleModal.addRole.clickAndWaitUntilDone();
         refreshPage();
     }
 
@@ -66,5 +86,27 @@ public class RoleManagementPage extends OperatorV2SimplePage {
 
     public String getTextOnTable(int rowNumber, String columnDataTitle) {
         return getTextOnTableWithNgRepeatUsingDataTitle(rowNumber, columnDataTitle, NG_REPEAT);
+    }
+
+    public static class AddRoleModal extends MdDialog
+    {
+        public AddRoleModal(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(css = "[id^='role-name']")
+        public TextBox roleName;
+
+        @FindBy(css = "[id^='description(optional)']")
+        public TextBox description;
+
+        @FindBy(css = "md-autocomplete[placeholder='Search Scope To Add']")
+        public MdAutocomplete scope;
+
+        @FindBy(name = "Add Role")
+        public NvApiTextButton addRole;
+
     }
 }
