@@ -1,4 +1,4 @@
-@OperatorV2Disabled @OperatorV2Part1Disabled @UnroutedPriorities
+@OperatorV2Disabled @OperatorV2Part1Disabled
 Feature: Unrouted Priorities
 
   @LaunchBrowser @ShouldAlwaysRun

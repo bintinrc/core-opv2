@@ -1,4 +1,4 @@
-@OperatorV2Deprecated @NonInboundedOrders @Saas
+@OperatorV2Deprecated @NonInboundedOrders
 Feature: Non Inbounded Orders
 
   #DEPRECATED

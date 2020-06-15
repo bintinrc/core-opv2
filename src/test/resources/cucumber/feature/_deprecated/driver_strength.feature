@@ -1,4 +1,4 @@
-@OperatorV2Deprecated @OperatorV2Part2Deprecated @DriverStrength @SaasDeprecated @ShouldAlwaysRun
+@OperatorV2Deprecated @OperatorV2Part2Deprecated
 Feature: Driver Strength
 
   #OLD VERSION OF SCENARIOS, NEED TO BE REMOVED

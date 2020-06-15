@@ -1,4 +1,4 @@
-@OperatorV2Deprecated @OperatorV2Part2Deprecated @DriverReport @Saas @ForceNotHeadless
+@OperatorV2Deprecated @OperatorV2Part2Deprecated
 Feature: Driver Report
 
   #DEPRECATED

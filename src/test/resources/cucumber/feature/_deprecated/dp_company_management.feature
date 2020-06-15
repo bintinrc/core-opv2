@@ -1,4 +1,4 @@
-@OperatorV2Deprecated @OperatorV2Part2Deprecated @DpCompanyManagement
+@OperatorV2Deprecated @OperatorV2Part2Deprecated
 Feature: DP Company Management
 
   #DEPRECATED

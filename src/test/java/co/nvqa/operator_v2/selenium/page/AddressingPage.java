@@ -2,12 +2,13 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.Addressing;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
-import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -25,11 +26,27 @@ public class AddressingPage extends OperatorV2SimplePage
     @FindBy(name = "Add Address")
     public NvIconTextButton addAddress;
 
+    @FindBy(name = "Update")
+    public NvIconTextButton editAddress;
+
+    @FindBy(name = "Delete")
+    public NvIconTextButton deleteAddress;
+
     @FindBy(tagName = "md-dialog")
     public AddAddressModal addAddressModal;
 
+    @FindBy(tagName = "md-dialog")
+    public EditAddressModal editAddressModal;
+
     @FindBy(css = "md-dialog")
     public ConfirmDeleteDialog confirmDeleteDialog;
+
+    @FindBy(id = "search")
+    public TextBox searchInput;
+
+    @FindBy(xpath = "//md-card[contains(@class, 'address-list-card')]")
+    public PageElement addressCard;
+
 
     public AddressingPage(WebDriver webDriver)
     {
@@ -50,25 +67,10 @@ public class AddressingPage extends OperatorV2SimplePage
         pause100ms();
     }
 
-    public void fillTheForm(Addressing addressing, boolean excludePostcode)
-    {
-        if (!excludePostcode)
-        {
-            sendKeysById("postcode", addressing.getPostcode());
-        }
-
-        sendKeysByIdAlt("street", addressing.getStreetName());
-        sendKeysByIdAlt("building_name", addressing.getBuildingName());
-        sendKeysByIdAlt("building_number", addressing.getBuildingNo());
-        sendKeysByIdAlt("latitude", String.valueOf(addressing.getLatitude()));
-        sendKeysByIdAlt("longitude", String.valueOf(addressing.getLongitude()));
-        selectValueFromMdSelectById("address_type", addressing.getAddressType());
-    }
-
     public void searchAddress(Addressing addressing)
     {
         refreshPage();
-        sendKeysAndEnterById("search", addressing.getBuildingNo());
+        searchInput.setValue(addressing.getBuildingNo() + Keys.ENTER);
         pause1s();
     }
 
@@ -95,7 +97,8 @@ public class AddressingPage extends OperatorV2SimplePage
 
     public void deleteAddress()
     {
-        clickNvIconTextButtonByNameAndWaitUntilDone("Delete");
+        deleteAddress.waitUntilClickable();
+        deleteAddress.click();
         confirmDeleteDialog.confirmDelete();
         waitUntilInvisibilityOfToast("Success delete address");
     }
@@ -111,16 +114,16 @@ public class AddressingPage extends OperatorV2SimplePage
     public void editAddress(Addressing addressingOld, Addressing addressingEdited)
     {
         searchAddress(addressingOld);
-        click("//md-card[contains(@class, 'address-list-card')]");
-        pause1s();
-        clickNvIconTextButtonByNameAndWaitUntilDone("Update");
-        fillTheForm(addressingEdited, true);
-        clickNvApiTextButtonByNameAndWaitUntilDone("Save Changes");
+        addressCard.click();
+        editAddress.waitUntilClickable();
+        editAddress.click();
+        editAddressModal.waitUntilVisible();
+        editAddressModal.fill(addressingEdited);
+        editAddressModal.saveChanges.clickAndWaitUntilDone();
         waitUntilInvisibilityOfToast("Success update address");
-        pause100ms();
     }
 
-    public static class AddAddressModal extends MdDialog
+    public static class AddAddressModal extends BaseAddressModel
     {
         public AddAddressModal(WebDriver webDriver, WebElement webElement)
         {
@@ -128,9 +131,39 @@ public class AddressingPage extends OperatorV2SimplePage
             PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
         }
 
-        public AddAddressModal(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+        @FindBy(name = "Add Address")
+        public NvApiTextButton addAddress;
+
+        public void fill(Addressing address)
         {
-            super(webDriver, searchContext, webElement);
+            if (isNotBlank(address.getPostcode()))
+            {
+                postcode.setValue(address.getPostcode());
+            }
+            super.fill(address);
+        }
+    }
+
+    public static class EditAddressModal extends BaseAddressModel
+    {
+        public EditAddressModal(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(name = "Save Changes")
+        public NvApiTextButton saveChanges;
+
+        @FindBy(id = "deleteButton")
+        public NvApiTextButton deleteAddress;
+    }
+
+    public static class BaseAddressModel extends MdDialog
+    {
+        public BaseAddressModel(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
             PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
         }
 
@@ -164,15 +197,8 @@ public class AddressingPage extends OperatorV2SimplePage
         @FindBy(id = "source")
         public MdSelect source;
 
-        @FindBy(name = "Add Address")
-        public NvApiTextButton addAddress;
-
         public void fill(Addressing address)
         {
-            if (isNotBlank(address.getPostcode()))
-            {
-                postcode.setValue(address.getPostcode());
-            }
             if (isNotBlank(address.getStreetName()))
             {
                 street.setValue(address.getStreetName());
