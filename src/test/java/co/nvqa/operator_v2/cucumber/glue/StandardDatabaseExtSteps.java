@@ -537,6 +537,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         Long orderId = get(KEY_CREATED_ORDER_ID);
         Order order = get(KEY_CREATED_ORDER);
         List<InboundScanEntity> inboundScans = getCoreJdbc().findInboundScansByOrderId(orderId);
+        Assert.assertThat("List of inbound scans for order " + orderId, inboundScans, Matchers.not(Matchers.empty()));
         InboundScanEntity theLastInboundScan = inboundScans.get(inboundScans.size() - 1);
 
         String value = data.get("hubId");

@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -49,6 +50,12 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     @FindBy(name = "commons.search")
     public NvApiTextButton search;
+
+    @FindBy(css = "[id^='category']")
+    public MdSelect categorySelect;
+
+    @FindBy(css = "[id^='search-logic']")
+    public MdSelect searchLogicSelect;
 
     public enum Category
     {
@@ -565,8 +572,8 @@ public class AllOrdersPage extends OperatorV2SimplePage
         String mainWindowHandle = getWebDriver().getWindowHandle();
         waitUntilPageLoaded();
 
-        selectValueFromMdSelectByIdContains("category", category.getValue());
-        selectValueFromMdSelectByIdContains("search-logic", searchLogic.getValue());
+        categorySelect.selectValue(category.getValue());
+        searchLogicSelect.selectValue(searchLogic.getValue());
         try
         {
             this.searchTerm.selectValue(searchTerm);
