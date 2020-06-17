@@ -172,9 +172,14 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
     public void fetchRouteByRouteId(String hubName, Long routeId)
     {
+        waitUntilInvisibilityOfToast(false);
         selectHub.selectValue(hubName);
         routeIdInput.setValue(routeId);
         routeIdContinue.click();
+        if (isElementVisible("//div[@class='toast-message']", 1))
+        {
+            return;
+        }
         dismissDriverAttendanceDialog();
         routeIdContinue.waitUntilDone();
     }
@@ -191,6 +196,7 @@ public class RouteInboundPage extends OperatorV2SimplePage
 
     public void fetchRouteByTrackingId(String hubName, String trackingId, Long routeId)
     {
+        waitUntilInvisibilityOfToast(false);
         selectHub.selectValue(hubName);
         trackingIdInput.setValue(trackingId);
         trackingIdContinue.click();
@@ -198,18 +204,27 @@ public class RouteInboundPage extends OperatorV2SimplePage
         {
             selectRoute(routeId);
         }
+        if (isElementVisible("//div[@class='toast-message']", 1))
+        {
+            return;
+        }
         dismissDriverAttendanceDialog();
         trackingIdContinue.waitUntilDone();
     }
 
     public void fetchRouteByDriver(String hubName, String driverName, Long routeId)
     {
+        waitUntilInvisibilityOfToast(false);
         selectHub.selectValue(hubName);
         selectDriver.selectValue(driverName);
         selectDriverContinue.click();
         if (routeId != null)
         {
             selectRoute(routeId);
+        }
+        if (isElementVisible("//div[@class='toast-message']", 1))
+        {
+            return;
         }
         dismissDriverAttendanceDialog();
         selectDriverContinue.waitUntilDone();
@@ -286,7 +301,8 @@ public class RouteInboundPage extends OperatorV2SimplePage
         if (expectedScans.getReservationPickupsScans() != null)
         {
             String expectedValue = expectedScans.getReservationPickupsScans() + " / " + expectedScans.getReservationPickupsTotal();
-            if (expectedScans.getReservationPickupsExtraOrders() != null) {
+            if (expectedScans.getReservationPickupsExtraOrders() != null)
+            {
                 expectedValue += "  |  +" + expectedScans.getReservationPickupsExtraOrders();
             }
             assertEquals("Waypoint Performance - Reservation Pickups", expectedValue, reservationPickups.getText());
