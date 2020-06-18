@@ -1,113 +1,181 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.UserManagement;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
+import com.google.common.collect.ImmutableMap;
 import org.hamcrest.Matchers;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
 /**
- *
  * @author Tristania Siagian
  */
 @SuppressWarnings("WeakerAccess")
-public class UserManagementPage extends OperatorV2SimplePage {
+public class UserManagementPage extends OperatorV2SimplePage
+{
 
-    private static final String NG_REPEAT = "user in $data";
+    @FindBy(name = "Add User")
+    public NvIconTextButton addUser;
+
+    @FindBy(name = "Load Selected Users")
+    public NvApiTextButton loadSelectedUsers;
+
+    @FindBy(css = "md-dialog")
+    public AddUserModal addUserModal;
+
+    @FindBy(css = "md-dialog")
+    public EditUserModal editUserModal;
+
+    @FindBy(id = "id")
+    public TextBox searchKeywordInput;
+
+    @FindBy(xpath = "//nv-filter-box[@main-title='Grant Types']//nv-autocomplete")
+    public NvAutocomplete grantTypeFilter;
+
+    public UsersTable usersTable;
+
     private static final String COLUMN_DATA_TITLE_GRANT_TYPE = "'container.user-management.grantType'";
-    private static final String COLUMN_DATA_TITLE_FIRST_NAME = "'commons.first-name'";
-    private static final String COLUMN_DATA_TITLE_LAST_NAME = "'commons.last-name'";
-    private static final String COLUMN_DATA_TITLE_ROLE = "'container.user-management.roles'";
 
-    private static final String ACTION_BUTTON_EDIT = "Edit";
-
-    public UserManagementPage(WebDriver webDriver) {
+    public UserManagementPage(WebDriver webDriver)
+    {
         super(webDriver);
+        usersTable = new UsersTable(webDriver);
     }
 
-    public void createUser(UserManagement userManagement) {
-        clickNvIconTextButtonByName("Add User");
-        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'user-add')]");
-        fillTheForm(userManagement, true);
-        clickNvApiTextButtonByNameAndWaitUntilDone("Add User");
+    public void createUser(UserManagement userManagement)
+    {
+        addUser.click();
+        addUserModal.waitUntilVisible();
+        addUserModal.firstName.setValue(userManagement.getFirstName());
+        addUserModal.lastName.setValue(userManagement.getLastName());
+        addUserModal.email.setValue(userManagement.getEmail());
+        addUserModal.countryAuthentication.selectValue(TestConstants.COUNTRY_CODE.toLowerCase());
+        addUserModal.role.selectValue(userManagement.getRoles());
+        addUserModal.addUser.clickAndWaitUntilDone();
+        addUserModal.waitUntilInvisible();
     }
 
-    public void verifyUserOnUserManagement(UserManagement userManagement) {
-        sendKeys("//input[@type='text'][@ng-model='ctrl.keyword']",userManagement.getEmail());
-        clickNvApiTextButtonByNameAndWaitUntilDone("Load Selected Users");
-        String actualGrantType = getTextOnTable(1,  COLUMN_DATA_TITLE_GRANT_TYPE);
-        assertEquals("Different Grant Type Returned", userManagement.getGrantType(), actualGrantType);
-        String actualFirstName = getTextOnTable(1, COLUMN_DATA_TITLE_FIRST_NAME);
-        assertEquals("Different First Name Returned", userManagement.getFirstName(), actualFirstName);
-        String actualLastName = getTextOnTable(1, COLUMN_DATA_TITLE_LAST_NAME);
-        assertEquals("Different Last Name Returned", userManagement.getLastName(), actualLastName);
-        String actualRole = getTextOnTable(1, COLUMN_DATA_TITLE_ROLE);
-        assertThat("Different Roles Returned", actualRole, Matchers.containsString(userManagement.getRoles()));
+    public void verifyUserOnUserManagement(UserManagement userManagement)
+    {
+        refreshPage();
+        searchKeywordInput.setValue(userManagement.getEmail());
+        loadSelectedUsers.clickAndWaitUntilDone();
+        UserManagement actualUserManagement = usersTable.readEntity(1);
+        assertEquals("Grant Type", userManagement.getGrantType(), actualUserManagement.getGrantType());
+        assertEquals("First Name", userManagement.getFirstName(), actualUserManagement.getFirstName());
+        assertEquals("Last Name", userManagement.getLastName(), actualUserManagement.getLastName());
+        assertThat("Roles", actualUserManagement.getRoles(), Matchers.containsString(userManagement.getRoles()));
     }
 
-    public void editUser(UserManagement userManagement, UserManagement userManagementEdited) {
-        sendKeys("//input[@type='text'][@ng-model='ctrl.keyword']",userManagement.getEmail());
-        clickNvApiTextButtonByNameAndWaitUntilDone("Load Selected Users");
-        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
-        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'user-edit')]");
-        pause300ms();
-        click("//tbody//tr[1]//button[@aria-label='Remove']");
-        fillTheForm(userManagementEdited, false);
-        clickNvApiTextButtonByNameAndWaitUntilDone("Save Changes");
+    public void editUser(UserManagement userManagement, UserManagement userManagementEdited)
+    {
+        searchKeywordInput.setValue(userManagement.getEmail());
+        loadSelectedUsers.clickAndWaitUntilDone();
+        usersTable.clickActionButton(1, "Edit");
+        editUserModal.waitUntilVisible();
+        editUserModal.remove.click();
+        editUserModal.countryAuthentication.selectValue(TestConstants.COUNTRY_CODE.toLowerCase());
+        editUserModal.role.selectValue(userManagement.getRoles());
+        editUserModal.saveUser.clickAndWaitUntilDone();
+        editUserModal.waitUntilInvisible();
     }
 
-    public void fillTheForm(UserManagement userManagement, boolean isCreate) {
-        if(isCreate) {
-            sendKeysById("first-name", userManagement.getFirstName());
-            sendKeysById("last-name", userManagement.getLastName());
-            sendKeysById("email", userManagement.getEmail());
-        }
-        pause300ms();
-        selectValueFromMdSelect("ctrl.selectedCountry", TestConstants.COUNTRY_CODE.toLowerCase());
-        pause300ms();
-        selectValueFromMdAutocomplete("Search Role To Add", userManagement.getRoles());
-        pause300ms();
-    }
-
-    public void verifyEditedUserOnUserManagement(UserManagement userManagement) {
-        sendKeys("//input[@type='text'][@ng-model='ctrl.keyword']", userManagement.getLastName());
-        pause500ms();
-        clickNvApiTextButtonByNameAndWaitUntilDone("Load Selected Users");
-        pause500ms();
-        String actualRole = getTextOnTable(1, COLUMN_DATA_TITLE_ROLE);
-        assertThat("Different Roles Returned", actualRole, Matchers.containsString(userManagement.getRoles()));
-    }
-
-    public void clickGrantTypeFilter() {
-        sendKeys("//nv-filter-box[@main-title='Grant Types']//md-autocomplete[@placeholder='Search or Select...']//input", "Google");
+    public void selectGrantTypeFilter(String grantType)
+    {
+        grantTypeFilter.selectValue(grantType);
+        grantTypeFilter.click();
         pause1s();
-        findElementByXpath("//nv-filter-box[@main-title='Grant Types']//md-autocomplete[@placeholder='Search or Select...']//input").sendKeys(Keys.RETURN);
-        pause1s();
-        click("//md-content/md-content/div/div");
-        clickNvApiTextButtonByNameAndWaitUntilDone("Load Selected Users");
+        loadSelectedUsers.clickAndWaitUntilDone();
     }
 
-    public void verifyGrantType(UserManagement userManagement) {
-        List<WebElement> grantTypeRows = findElementsByXpath(String.format("//td[@data-title=\"%s\"]", COLUMN_DATA_TITLE_GRANT_TYPE));
-        int count = 0;
-
-        for(WebElement we: grantTypeRows) {
-            if(count==10) {
-                break;
-            }
-            assertEquals("Different Grant Type Returned.", userManagement.getGrantType(), we.getText());
-            count += 1;
+    public void verifyGrantType(UserManagement userManagement)
+    {
+        List<String> actualGrantTypes = usersTable.readColumn("grantType");
+        for (int i = 1; i <= actualGrantTypes.size(); i++)
+        {
+            assertEquals("Grant Type [" + i + "]", userManagement.getGrantType(), actualGrantTypes.get(i - 1));
         }
     }
 
-    public String getTextOnTable(int rowNumber, String columnDataTitle) {
-        return getTextOnTableWithNgRepeatUsingDataTitle(rowNumber, columnDataTitle, NG_REPEAT);
+    public static class AddUserModal extends MdDialog
+    {
+        public AddUserModal(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(css = "[aria-label='First Name']")
+        public TextBox firstName;
+
+        @FindBy(css = "[aria-label='Last Name']")
+        public TextBox lastName;
+
+        @FindBy(css = "[aria-label='Email']")
+        public TextBox email;
+
+        @FindBy(css = "md-select[ng-model='ctrl.selectedCountry']")
+        public MdSelect countryAuthentication;
+
+        @FindBy(css = "md-autocomplete[placeholder='Search Role To Add']")
+        public MdAutocomplete role;
+
+        @FindBy(name = "Add User")
+        public NvApiTextButton addUser;
     }
 
-    public void clickActionButtonOnTable(int rowNumber, String actionButtonName) {
-        clickActionButtonOnTableWithNgRepeat(rowNumber, actionButtonName, NG_REPEAT);
+    public static class EditUserModal extends MdDialog
+    {
+        public EditUserModal(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+
+        @FindBy(css = "md-select[ng-model='ctrl.selectedCountry']")
+        public MdSelect countryAuthentication;
+
+        @FindBy(css = "md-autocomplete[placeholder='Search Role To Add']")
+        public MdAutocomplete role;
+
+        @FindBy(css = "button[aria-label='Remove']")
+        public Button remove;
+
+        @FindBy(name = "Save Changes")
+        public NvApiTextButton saveUser;
+    }
+
+    public static class UsersTable extends NgRepeatTable<UserManagement>
+    {
+        public static final String NG_REPEAT = "user in $data";
+
+        public UsersTable(WebDriver webDriver)
+        {
+            super(webDriver);
+            setNgRepeat(NG_REPEAT);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                    .put("email", "//td[@data-title-text='Email/Username']")
+                    .put("grantType", "//td[@data-title-text='Grant type']")
+                    .put("firstName", "//td[@data-title-text='First Name']")
+                    .put("lastName", "//td[@data-title-text='Last Name']")
+                    .put("roles", "//td[@data-title-text='Role(s)']")
+                    .build());
+            setActionButtonsLocators(ImmutableMap.of("Edit", "Edit"));
+            setEntityClass(UserManagement.class);
+        }
     }
 }
