@@ -455,27 +455,6 @@ Feature: Edit Order
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
-#  @DeleteOrArchiveRoute @CloseNewWindows
-#  Scenario: Cancel Order - Arrived at Origin Hub
-#    When Operator go to menu Shipper Support -> Blocked Dates
-#    And API Shipper create V4 order using data below:
-#      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-#      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-#    And API Operator Global Inbound parcel using data below:
-#      | globalInboundRequest | { "hubId":{origin-hub-id} } |
-#    Then API Operator cancel created order and get error:
-#      | statusCode | 500                              |
-#      | message    | Order is Arrived at Origin Hub! |
-#    When Operator go to menu Order -> All Orders
-#    And Operator find order on All Orders page using this criteria below:
-#      | category    | Tracking / Stamp ID           |
-#      | searchLogic | contains                      |
-#      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-#    And Operator switch to Edit Order's window
-#    Then Operator verify order status is "Transit" on Edit Order page
-#    And Operator verify order granular status is "Arrived at Origin Hub" on Edit Order page
-#    And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
-
   @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Cancel Order - On Vehicle for Delivery
     When Operator go to menu Shipper Support -> Blocked Dates
