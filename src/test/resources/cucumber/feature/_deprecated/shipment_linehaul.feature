@@ -1,4 +1,4 @@
-@OperatorV2Deprecated @OperatorV2Part2Deprecated @ShipmentLinehaul
+@OperatorV2Deprecated @OperatorV2Part2Deprecated
 Feature: Shipment Linehaul
 
    # THIS FEATURE HAS BEEN DEPRECATED

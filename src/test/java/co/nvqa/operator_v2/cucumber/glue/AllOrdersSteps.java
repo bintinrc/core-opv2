@@ -318,8 +318,11 @@ public class AllOrdersSteps extends AbstractSteps
         Long orderId = Long.parseLong(data.get("orderId"));
         String mainWindowHandle = allOrdersPage.getWebDriver().getWindowHandle();
         put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
-        allOrdersPage.specificSearch(AllOrdersPage.Category.TRACKING_OR_STAMP_ID, AllOrdersPage.SearchLogic.EXACTLY_MATCHES, trackingId);
-        pause500ms();
+        allOrdersPage.waitUntilPageLoaded();
+        allOrdersPage.categorySelect.selectValue(AllOrdersPage.Category.TRACKING_OR_STAMP_ID.getValue());
+        allOrdersPage.searchLogicSelect.selectValue(AllOrdersPage.SearchLogic.EXACTLY_MATCHES.getValue());
+        allOrdersPage.searchTerm.selectValue(trackingId);
+        allOrdersPage.waitUntilPageLoaded();
         allOrdersPage.switchToEditOrderWindow(orderId);
     }
 

@@ -1,4 +1,4 @@
-@OperatorV2Deprecated @OperatorV2Part2Deprecated @PricingScripts
+@OperatorV2Deprecated @OperatorV2Part2Deprecated
 Feature: Pricing Scripts
 
   @LaunchBrowser @EnableProxy @ShouldAlwaysRun

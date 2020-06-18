@@ -1,14 +1,11 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.UserManagement;
-import co.nvqa.operator_v2.selenium.elements.Button;
-import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.hamcrest.Matchers;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
@@ -26,15 +23,6 @@ public class UserManagementPage extends OperatorV2SimplePage {
     private static final String COLUMN_DATA_TITLE_ROLE = "'container.user-management.roles'";
 
     private static final String ACTION_BUTTON_EDIT = "Edit";
-    private static final String XPATH_OF_SAVE_CHANGES = "//nv-api-text-button//button[@aria-label='Save Changes']";
-    private static final String XPATH_OF_REMOVE_BUTTON = "//tbody//tr[1]//button[@aria-label='Remove']";
-    private static final String XPATH_OF_ADD_USER_BUTTON = "//nv-api-text-button//button[@aria-label='Add User']";
-
-    @FindBy(css = "md-dialog")
-    public AddUserDialog addUserDialog;
-
-    @FindBy(css = "md-dialog")
-    public EditUserDialog editUserDialog;
 
     public UserManagementPage(WebDriver webDriver) {
         super(webDriver);
@@ -42,20 +30,9 @@ public class UserManagementPage extends OperatorV2SimplePage {
 
     public void createUser(UserManagement userManagement) {
         clickNvIconTextButtonByName("Add User");
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'user-add')]");
         fillTheForm(userManagement, true);
-        addUserDialog.addUser.waitUntilClickable();
-        addUserDialog.addUser.click();
-    }
-
-    public static class AddUserDialog extends MdDialog
-    {
-        public AddUserDialog(WebDriver webDriver, WebElement webElement)
-        {
-            super(webDriver, webElement);
-        }
-
-        @FindBy(xpath = XPATH_OF_ADD_USER_BUTTON)
-        public Button addUser;
+        clickNvApiTextButtonByNameAndWaitUntilDone("Add User");
     }
 
     public void verifyUserOnUserManagement(UserManagement userManagement) {
@@ -75,25 +52,11 @@ public class UserManagementPage extends OperatorV2SimplePage {
         sendKeys("//input[@type='text'][@ng-model='ctrl.keyword']",userManagement.getEmail());
         clickNvApiTextButtonByNameAndWaitUntilDone("Load Selected Users");
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
-        editUserDialog.remove.click();
+        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'user-edit')]");
+        pause300ms();
+        click("//tbody//tr[1]//button[@aria-label='Remove']");
         fillTheForm(userManagementEdited, false);
-        editUserDialog.saveChanges.waitUntilClickable();
-        editUserDialog.saveChanges.click();
         clickNvApiTextButtonByNameAndWaitUntilDone("Save Changes");
-    }
-
-    public static class EditUserDialog extends MdDialog
-    {
-        public EditUserDialog(WebDriver webDriver, WebElement webElement)
-        {
-            super(webDriver, webElement);
-        }
-
-        @FindBy(xpath = XPATH_OF_REMOVE_BUTTON)
-        public Button remove;
-
-        @FindBy(xpath = XPATH_OF_SAVE_CHANGES)
-        public Button saveChanges;
     }
 
     public void fillTheForm(UserManagement userManagement, boolean isCreate) {

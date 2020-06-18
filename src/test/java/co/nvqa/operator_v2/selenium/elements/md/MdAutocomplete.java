@@ -40,6 +40,10 @@ public class MdAutocomplete extends PageElement
         inputElement.clearAndSendKeys(value);
     }
 
+    public void closeSuggestions(){
+        inputElement.click();
+    }
+
     public void selectItem(String value)
     {
         try

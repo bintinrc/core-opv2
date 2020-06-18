@@ -112,7 +112,11 @@ public class MainPage extends OperatorV2SimplePage
 
     public void clickNavigation(String parentTitle, String navTitle)
     {
-        getWebDriver().switchTo().defaultContent();
+        WebDriver webDriver = getWebDriver();
+        if (webDriver == null) {
+            throw new RuntimeException("WebDriver session was not started");
+        }
+        webDriver.switchTo().defaultContent();
         closeDialogIfVisible();
         if(isElementVisible("//i[@ng-if='!showLogo()']"))
         {

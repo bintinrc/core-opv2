@@ -1,4 +1,4 @@
-@OperatorV2Deprecated @OperatorV2Part2Deprecated @ParcelSweeperByHub
+@OperatorV2Deprecated @OperatorV2Part2Deprecated
 Feature: Parcel Sweeper By Hub
 
   # THIS FEATURE HAS BEEN DEPRECATED

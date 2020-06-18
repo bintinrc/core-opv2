@@ -30,7 +30,7 @@ Feature: User Management
   Scenario: Operator filtering user using Grant Types Filter on User Management Page (uid:ccc9b048-0d28-4d3f-9667-a2ca6a74d491)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Access Control -> User Management
-    When Operator filling the Grant Type Field on User Management page and load the data
+    When Operator filling the Grant Type Field with value "Google" on User Management page and load the data
     Then Operator verify the result on the table has the same Grant Type that has been input
 
   @KillBrowser @ShouldAlwaysRun

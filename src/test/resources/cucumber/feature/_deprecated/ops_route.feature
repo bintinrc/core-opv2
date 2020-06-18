@@ -1,4 +1,4 @@
-@OperatorV2Deprecated @OperatorV2Part1Deprecated @OpsRoute
+@OperatorV2Deprecated @OperatorV2Part1Deprecated
 Feature: Ops Route
 
   #DEPRECATED

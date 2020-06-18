@@ -1,7 +1,7 @@
 @OperatorV2 @Shipper @OperatorV2Part2 @AllShippers @Saas
 Feature: All Shippers
 
-  @LaunchBrowser @ShouldAlwaysRun @EnableClearCache @ForceNotHeadless @Debug
+  @LaunchBrowser @ShouldAlwaysRun @EnableClearCache
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -35,7 +35,7 @@ Feature: All Shippers
       | Note       | hiptest-uid                              | isShipperActive | shipperType | ocVersion | services | trackingType | isAllowCod | isAllowCashPickup | isPrepaid | isAllowStagedOrders | isMultiParcelShipper | isDisableDriverAppReschedule |
       | Shipper V4 | uid:dfbe7350-2c9d-40d3-96c4-428f5842a511 | true            | Normal      | v4        | STANDARD | Fixed        | false      | true              | true      | false               | false                | false                        |
 
-  @ResetWindow @Debug
+  @ResetWindow
   Scenario Outline: Operator create new Shipper with basic settings and then update the basic settings (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers

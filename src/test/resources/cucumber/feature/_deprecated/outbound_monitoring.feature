@@ -1,4 +1,4 @@
-@OperatorV2Deprecated @NewFeatures @OperatorV2Part1Deprecated @OutboundMonitoring @Saas
+@OperatorV2Deprecated @OperatorV2Part1Deprecated
 Feature: Outbound Monitoring
 
   @LaunchBrowser @ShouldAlwaysRun

@@ -1,4 +1,4 @@
-@OperatorV2Deprecated @OperatorV2Part1Deprecated @DpVaultManagement
+@OperatorV2Deprecated @OperatorV2Part1Deprecated
 Feature: DP Vault Management
 
   #DEPRECATED

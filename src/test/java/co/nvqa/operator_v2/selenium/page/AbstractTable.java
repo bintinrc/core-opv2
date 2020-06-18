@@ -6,6 +6,7 @@ import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +72,21 @@ public abstract class AbstractTable<T extends DataEntity<?>> extends OperatorV2S
         this.columnValueProcessors = columnValueProcessors;
     }
 
+    public List<String> readColumn(String columnId)
+    {
+        if (!columnLocators.containsKey(columnId))
+        {
+            throw new IllegalArgumentException("Unknown Column Id [" + columnId + "]. Available are: " + columnLocators.keySet());
+        }
+        int rowCount = getRowsCount();
+        List<String> values = new ArrayList<>();
+        for (int i = 1; i <= rowCount; i++)
+        {
+            values.add(getColumnText(i, columnId));
+        }
+        return values;
+    }
+
     protected abstract String getTextOnTable(int rowNumber, String columnDataClass);
 
     @SuppressWarnings("SameParameterValue")
@@ -103,7 +119,8 @@ public abstract class AbstractTable<T extends DataEntity<?>> extends OperatorV2S
             if (StringUtils.isNotBlank(tableLocator))
             {
                 text = executeInContext(tableLocator, () -> getTextOnTable(rowNumber, columnLocator));
-            } else {
+            } else
+            {
                 text = getTextOnTable(rowNumber, columnLocator);
             }
         }
