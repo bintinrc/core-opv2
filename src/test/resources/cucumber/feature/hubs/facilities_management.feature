@@ -15,6 +15,7 @@ Feature: Facilities Management
       | country     | GENERATED |
       | latitude    | GENERATED |
       | longitude   | GENERATED |
+    And Operator refresh page
     Then Operator verify a new Hub is created successfully on Facilities Management page
 
   @ArchiveAndDeleteHubViaDb
@@ -82,6 +83,7 @@ Feature: Facilities Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
+    And Operator refresh page
     When Operator refresh hubs cache on Facilities Management page
     Then Operator verify a new Hub is created successfully on Facilities Management page
 
@@ -128,6 +130,7 @@ Feature: Facilities Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
+    And Operator refresh page
     Then Operator verify a new Hub is created successfully on Facilities Management page
 
   @ArchiveAndDeleteHubViaDb

@@ -711,41 +711,6 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Transferred to 3PL" on Edit Order page
 
-  Scenario: Parcel Sweeper Live - Arrived at Origin Hub (uid:d990f8e0-9a2e-4208-b8fd-bee83480a2ea)
-    When Operator go to menu Shipper Support -> Blocked Dates
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{origin-hub-id} } |
-    When API Operator refresh created order data
-    Given Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator sweep parcel using data below:
-      | hubName    | {hub-name}                      |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
-    Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | orderId    | NOT ROUTED |
-      | driverName | NIL        |
-      | color      | #73deec    |
-    When API Operator get all zones preferences
-    Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | FROM CREATED ORDER |
-      | color    | #73deec            |
-    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName | GLOBAL INBOUND |
-      | color   | #73deec        |
-    And DB Operator verifies warehouse_sweeps record
-      | trackingId | CREATED  |
-      | hubId      | {hub-id} |
-    And DB Operator verify the last order_events record for the created order:
-      | type | 27 |
-    And Operator verifies event is present for order on Edit order page
-      | eventName | PARCEL ROUTING SCAN |
-      | hubName   | {hub-name}          |
-      | hubId     | {hub-id}            |
-    And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Origin Hub" on Edit Order page
-
   @DeleteOrArchiveRoute
   Scenario: Parcel Sweeper Live - Pending Reschedule (uid:a00edc09-d2fc-45a5-9424-9be72bbf92f9)
     Given API Shipper create V4 order using data below:
