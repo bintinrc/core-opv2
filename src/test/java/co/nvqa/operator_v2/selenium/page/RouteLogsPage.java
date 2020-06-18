@@ -6,20 +6,45 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.operator_v2.model.CreateRouteParams;
 import co.nvqa.operator_v2.model.DriverTypeParams;
+import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
 public class RouteLogsPage extends OperatorV2SimplePage
 {
+    @FindBy(name = "container.route-logs.duplicate-above")
+    public NvIconTextButton duplicateAbove;
+
+    @FindBy(id = "commons.model.route-date")
+    public MdDatepicker routeDate;
+
+    @FindBy(css = "[id^='commons.model.route-tags']")
+    public MdSelect routeTags;
+
+    @FindBy(css = "nv-autocomplete[possible-options='zonesSelectionOptions']")
+    public NvAutocomplete zone;
+
+    @FindBy(css = "nv-autocomplete[possible-options='hubsSelectionOptions']")
+    public NvAutocomplete hub;
+
+    @FindBy(css = "nv-autocomplete[possible-options='driversSelectionOptions']")
+    public NvAutocomplete assignedDriver;
+
+    @FindBy(css = "nv-autocomplete[possible-options='vehiclesSelectionOptions']")
+    public NvAutocomplete vehicle;
+
     private static final int ACTION_BULK_EDIT_DETAILS = 1;
     private static final int ACTION_EDIT_DRIVER_TYPES_OF_SELECTED = 2;
     private static final int ACTION_MERGE_TRANSACTIONS_OF_SELECTED = 3;
@@ -60,7 +85,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
 
     private String normalizeNinjaDriverName(String ninjaDriverName)
     {
-        switch(TestConstants.COUNTRY_CODE.toUpperCase())
+        switch (TestConstants.COUNTRY_CODE.toUpperCase())
         {
             case "MBS":
             case "FEF":
@@ -68,8 +93,10 @@ public class RouteLogsPage extends OperatorV2SimplePage
             case "TKL":
             case "HBL":
             case "MNT":
-            case "DEMO": return ninjaDriverName.replaceAll(" ", "");
-            case "MSI": return ninjaDriverName;
+            case "DEMO":
+                return ninjaDriverName.replaceAll(" ", "");
+            case "MSI":
+                return ninjaDriverName;
         }
 
         return ninjaDriverName;
@@ -77,13 +104,15 @@ public class RouteLogsPage extends OperatorV2SimplePage
 
     private void fillCreateRouteFormExceptComments(CreateRouteParams createRouteParams)
     {
-        setMdDatepickerById("commons.model.route-date", createRouteParams.getRouteDate());
-        selectMultipleValuesFromMdSelectById("commons.model.route-tags", createRouteParams.getRouteTags());
-        selectValueFromNvAutocompleteByPossibleOptions("zonesSelectionOptions", createRouteParams.getZoneName());
-        selectValueFromNvAutocompleteByPossibleOptions("hubsSelectionOptions", createRouteParams.getHubName());
-        pause2s(); // We put delay here because sometimes when typing on Driver Selection, the cursor is jumping to Hub Selection and this delay help to avoid that issue.
-        selectValueFromNvAutocompleteByPossibleOptions("driversSelectionOptions", normalizeNinjaDriverName(createRouteParams.getNinjaDriverName()));
-        selectValueFromNvAutocompleteByPossibleOptions("vehiclesSelectionOptions", createRouteParams.getVehicleName());
+        routeDate.setDate(createRouteParams.getRouteDate());
+        if (createRouteParams.getRouteTags().length > 0)
+        {
+            routeTags.searchAndSelectValues(createRouteParams.getRouteTags());
+        }
+        zone.selectValue(createRouteParams.getZoneName());
+        hub.selectValue(createRouteParams.getHubName());
+        assignedDriver.selectValue(normalizeNinjaDriverName(createRouteParams.getNinjaDriverName()));
+        vehicle.selectValue(createRouteParams.getVehicleName());
     }
 
     /**
@@ -103,11 +132,10 @@ public class RouteLogsPage extends OperatorV2SimplePage
 
         String toastBottomText = getToastBottomText();
 
-        if(toastBottomText==null)
+        if (toastBottomText == null)
         {
             throw new NvTestRuntimeException("Failed to create new Route.");
-        }
-        else
+        } else
         {
             String routeIdAsString = toastBottomText.split("Route")[1].trim();
             long routeId = Long.parseLong(routeIdAsString);
@@ -131,7 +159,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
     {
         waitUntilPageLoaded();
 
-        if(listOfCreateRouteParams==null || listOfCreateRouteParams.isEmpty())
+        if (listOfCreateRouteParams == null || listOfCreateRouteParams.isEmpty())
         {
             throw new NvTestRuntimeException("List of CreateRouteParams should not be empty.");
         }
@@ -144,29 +172,28 @@ public class RouteLogsPage extends OperatorV2SimplePage
 
         int listOfCreateRouteParamsSize = listOfCreateRouteParams.size();
 
-        for(int i=1; i<listOfCreateRouteParamsSize; i++)
+        for (int i = 1; i < listOfCreateRouteParamsSize; i++)
         {
-            clickNvIconTextButtonByName("container.route-logs.duplicate-above");
+            duplicateAbove.click();
         }
 
-        for(int i=0; i<listOfCreateRouteParamsSize; i++)
+        for (int i = 0; i < listOfCreateRouteParamsSize; i++)
         {
-            sendKeys(String.format("(//textarea[@id='comments'])[%d]", (i+1)), listOfCreateRouteParams.get(i).getComments());
+            sendKeys(String.format("(//textarea[@id='comments'])[%d]", (i + 1)), listOfCreateRouteParams.get(i).getComments());
         }
 
         clickNvButtonSaveByNameAndWaitUntilDone("Create Route(s)");
         String toastBottomText = getToastBottomText();
 
-        if(toastBottomText==null)
+        if (toastBottomText == null)
         {
             throw new NvTestRuntimeException("Failed to create new Route.");
-        }
-        else
+        } else
         {
             String[] listOfRouteIdAsString = toastBottomText.split("\\n");
             int sizeOfListOfRouteIdAsString = listOfRouteIdAsString.length;
 
-            for(int i=0; i<sizeOfListOfRouteIdAsString; i++)
+            for (int i = 0; i < sizeOfListOfRouteIdAsString; i++)
             {
                 String routeIdAsString = listOfRouteIdAsString[i].split("Route")[1].trim();
                 Long routeId = Long.parseLong(routeIdAsString);
@@ -265,7 +292,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
         String[] arrayOfRouteIdAsString = listOfCreateRouteParams.stream().map(createRouteParams -> String.valueOf(createRouteParams.getCreatedRoute().getId())).toArray(String[]::new);
         waitUntilVisibilityOfElementLocated(String.format("//h5[contains(text(), 'Optimized Routes')]/small[contains(text(), '%d of %d route(s) completed')]", sizeOfListOfCreateRouteParams, sizeOfListOfCreateRouteParams));
 
-        for(int i=1; i<=sizeOfListOfCreateRouteParams; i++)
+        for (int i = 1; i <= sizeOfListOfCreateRouteParams; i++)
         {
             String actualRouteId = getText(String.format("//tr[@ng-repeat='route in optimizedRoutes'][%d]/td[1]", i));
             String actualStatus = getText(String.format("//tr[@ng-repeat='route in optimizedRoutes'][%d]/td[2]", i));
@@ -287,15 +314,15 @@ public class RouteLogsPage extends OperatorV2SimplePage
         verifyFileDownloadedSuccessfully(latestFilenameOfDownloadedPdf);
         List<RoutePassword> listOfRoutePassword = PdfUtils.getRoutePassword(TestConstants.TEMP_DIR + latestFilenameOfDownloadedPdf);
 
-        for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
+        for (CreateRouteParams createRouteParams : listOfCreateRouteParams)
         {
             Route route = createRouteParams.getCreatedRoute();
             long expectedRouteId = route.getId();
             RoutePassword selectedRoutePassword = null;
 
-            for(RoutePassword routePassword : listOfRoutePassword)
+            for (RoutePassword routePassword : listOfRoutePassword)
             {
-                if(expectedRouteId==routePassword.getRouteId())
+                if (expectedRouteId == routePassword.getRouteId())
                 {
                     selectedRoutePassword = routePassword;
                     break;
@@ -330,7 +357,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
 
     public void verifyMultipleRoutesIsArchivedSuccessfully(List<CreateRouteParams> listOfCreateRouteParams)
     {
-        for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
+        for (CreateRouteParams createRouteParams : listOfCreateRouteParams)
         {
             retryIfRuntimeExceptionOccurred(() ->
             {
@@ -344,8 +371,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
                     assertFalse("Table is empty.", isTableEmpty);
                     String actualRouteStatus = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
                     assertEquals("Route Status", "ARCHIVED", actualRouteStatus);
-                }
-                catch(AssertionError ex)
+                } catch (AssertionError ex)
                 {
                     editFilterAndLoadSelection();
                     throw new NvTestRuntimeException("Route status is not 'ARCHIVED'.", ex);
@@ -364,7 +390,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
 
     public void verifyMultipleRoutesIsUnarchivedSuccessfully(List<CreateRouteParams> listOfCreateRouteParams)
     {
-        for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
+        for (CreateRouteParams createRouteParams : listOfCreateRouteParams)
         {
             retryIfRuntimeExceptionOccurred(() ->
             {
@@ -378,8 +404,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
                     assertFalse("Table is empty.", isTableEmpty);
                     String actualRouteStatus = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
                     assertNotEquals("Route Status", "ARCHIVED", actualRouteStatus);
-                }
-                catch(AssertionError ex)
+                } catch (AssertionError ex)
                 {
                     editFilterAndLoadSelection();
                     throw new NvTestRuntimeException("Route status is still 'ARCHIVED'.", ex);
@@ -398,7 +423,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
 
     public void verifyMultipleRoutesIsDeletedSuccessfully(List<CreateRouteParams> listOfCreateRouteParams)
     {
-        for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
+        for (CreateRouteParams createRouteParams : listOfCreateRouteParams)
         {
             retryIfRuntimeExceptionOccurred(() ->
             {
@@ -410,8 +435,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
                 try
                 {
                     assertTrue(String.format("Route with ID = %d is still exists on table.", routeId), isTableEmpty);
-                }
-                catch(AssertionError ex)
+                } catch (AssertionError ex)
                 {
                     editFilterAndLoadSelection();
                     throw new NvTestRuntimeException(ex);
@@ -493,7 +517,7 @@ public class RouteLogsPage extends OperatorV2SimplePage
         click("//button[@ng-class='ngClazz'][@aria-label='Delete']");
         pause200ms();
 
-        retryIfStaleElementReferenceExceptionOccurred(()->
+        retryIfStaleElementReferenceExceptionOccurred(() ->
         {
             clickButtonByAriaLabel("Delete");
             pause200ms();
@@ -504,17 +528,35 @@ public class RouteLogsPage extends OperatorV2SimplePage
     {
         click("//span[text()='Apply Action']");
 
-        switch(actionType)
+        switch (actionType)
         {
-            case ACTION_BULK_EDIT_DETAILS: clickButtonByAriaLabel("Bulk Edit Details"); break;
-            case ACTION_EDIT_DRIVER_TYPES_OF_SELECTED: clickButtonByAriaLabel("Edit Driver Types of Selected"); break;
-            case ACTION_MERGE_TRANSACTIONS_OF_SELECTED: clickButtonByAriaLabel("Merge Transactions of Selected"); break;
-            case ACTION_OPTIMISE_SELECTED: clickButtonByAriaLabel("Optimise Selected"); break;
-            case ACTION_PRINT_PASSWORDS_OF_SELECTED: clickButtonByAriaLabel("Print Passwords of Selected"); break;
-            case ACTION_PRINT_SELECTED: clickButtonByAriaLabel("Print Selected"); break;
-            case ACTION_ARCHIVE_SELECTED: clickButtonByAriaLabel("Archive Selected"); break;
-            case ACTION_UNARCHIVE_SELECTED: clickButtonByAriaLabel("Unarchive Selected"); break;
-            case ACTION_DELETE_SELECTED: clickButtonByAriaLabel("Delete Selected"); break;
+            case ACTION_BULK_EDIT_DETAILS:
+                clickButtonByAriaLabel("Bulk Edit Details");
+                break;
+            case ACTION_EDIT_DRIVER_TYPES_OF_SELECTED:
+                clickButtonByAriaLabel("Edit Driver Types of Selected");
+                break;
+            case ACTION_MERGE_TRANSACTIONS_OF_SELECTED:
+                clickButtonByAriaLabel("Merge Transactions of Selected");
+                break;
+            case ACTION_OPTIMISE_SELECTED:
+                clickButtonByAriaLabel("Optimise Selected");
+                break;
+            case ACTION_PRINT_PASSWORDS_OF_SELECTED:
+                clickButtonByAriaLabel("Print Passwords of Selected");
+                break;
+            case ACTION_PRINT_SELECTED:
+                clickButtonByAriaLabel("Print Selected");
+                break;
+            case ACTION_ARCHIVE_SELECTED:
+                clickButtonByAriaLabel("Archive Selected");
+                break;
+            case ACTION_UNARCHIVE_SELECTED:
+                clickButtonByAriaLabel("Unarchive Selected");
+                break;
+            case ACTION_DELETE_SELECTED:
+                clickButtonByAriaLabel("Delete Selected");
+                break;
         }
 
         pause500ms();
@@ -530,23 +572,22 @@ public class RouteLogsPage extends OperatorV2SimplePage
             boolean isReloadNeeded = false;
             String message = null;
 
-            if(isTableEmpty)
+            if (isTableEmpty)
             {
                 isReloadNeeded = true;
                 message = "Table is empty. Route not found.";
-            }
-            else
+            } else
             {
                 String actualRoutePassword = getTextOnTable(1, COLUMN_CLASS_DATA_ROUTE_PASSWORD);
 
-                if(actualRoutePassword==null || actualRoutePassword.isEmpty())
+                if (actualRoutePassword == null || actualRoutePassword.isEmpty())
                 {
                     isReloadNeeded = true;
                     message = "Route is found but the password is empty.";
                 }
             }
 
-            if(isReloadNeeded)
+            if (isReloadNeeded)
             {
                 editFilterAndLoadSelection();
                 throw new NvTestRuntimeException(message);
@@ -587,12 +628,12 @@ public class RouteLogsPage extends OperatorV2SimplePage
         setFilterAndLoadSelection(filterRouteDateFrom, filterRouteDateTo, filterHubName);
         searchTableByRouteId(routeId);
         String actualRouteStatus = getTextOnTable(1, COLUMN_CLASS_DATA_STATUS);
-        assertEquals("Track is not routed.","IN_PROGRESS", actualRouteStatus);
+        assertEquals("Track is not routed.", "IN_PROGRESS", actualRouteStatus);
     }
 
     private void checkMultipleRows(List<CreateRouteParams> listOfCreateRouteParams)
     {
-        for(CreateRouteParams createRouteParams : listOfCreateRouteParams)
+        for (CreateRouteParams createRouteParams : listOfCreateRouteParams)
         {
             Route createdRoute = createRouteParams.getCreatedRoute();
             Long createdRouteId = createdRoute.getId();

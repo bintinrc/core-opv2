@@ -1,7 +1,6 @@
 package co.nvqa.operator_v2.model;
 
 /**
- *
  * @author Sergey Mishanin
  */
 public class ThirdPartyOrderMapping
@@ -16,48 +15,64 @@ public class ThirdPartyOrderMapping
     {
     }
 
-    public int getShipperId() {
+    public int getShipperId()
+    {
         return shipperId;
     }
 
-    public void setShipperId(int shipperId) {
+    public void setShipperId(int shipperId)
+    {
         this.shipperId = shipperId;
     }
 
-    public String getTrackingId() {
+    public void setShipperId(String shipperId)
+    {
+        setShipperId(Integer.parseInt(shipperId));
+    }
+
+    public String getTrackingId()
+    {
         return trackingId;
     }
 
-    public void setTrackingId(String trackingId) {
+    public void setTrackingId(String trackingId)
+    {
         this.trackingId = trackingId;
     }
 
-    public String getThirdPlTrackingId() {
+    public String getThirdPlTrackingId()
+    {
         return thirdPlTrackingId;
     }
 
-    public void setThirdPlTrackingId(String thirdPlTrackingId) {
+    public void setThirdPlTrackingId(String thirdPlTrackingId)
+    {
         this.thirdPlTrackingId = thirdPlTrackingId;
     }
 
-    public String getStatus() {
+    public String getStatus()
+    {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(String status)
+    {
         this.status = status;
     }
 
-    public String getShipperName() {
+    public String getShipperName()
+    {
         return shipperName;
     }
 
-    public void setShipperName(String shipperName) {
+    public void setShipperName(String shipperName)
+    {
         this.shipperName = shipperName;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "ThirdPartyOrderMapping{" +
                 "shipperId='" + shipperId + '\'' +
                 ", shipperName='" + shipperName + '\'' +
@@ -67,7 +82,8 @@ public class ThirdPartyOrderMapping
                 '}';
     }
 
-    public String toCsvLine(){
+    public String toCsvLine()
+    {
         return trackingId + "," + shipperId + "," + thirdPlTrackingId;
     }
 }
