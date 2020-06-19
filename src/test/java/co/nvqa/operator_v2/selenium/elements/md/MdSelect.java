@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +33,12 @@ public class MdSelect extends PageElement
     @FindBy(xpath = "//div[contains(@class,'md-active md-clickable')]//input[@ng-model='searchTerm']")
     public PageElement searchInput;
 
+    @FindBy(xpath = ".//md-option[@selected='selected']")
+    public PageElement selectedOption;
+
+    @FindBy(xpath = "//div[contains(@class,'md-select-menu-container')][@aria-hidden='false']//md-option")
+    public PageElement option;
+
     @FindBy(xpath = "//div[contains(@class,'md-select-menu-container')][@aria-hidden='false']//md-option")
     public List<PageElement> options;
 
@@ -42,6 +49,25 @@ public class MdSelect extends PageElement
         enterSearchTerm(value);
         value = escapeValue(value);
         click(f(MD_OPTION_LOCATOR, StringUtils.normalizeSpace(value)));
+    }
+
+    public void searchAndSelectValues(Iterable<String> values)
+    {
+        openMenu();
+        values.forEach(value ->
+                {
+                    searchInput.sendKeys(value);
+                    pause500ms();
+                    value = escapeValue(value);
+                    click(f(MD_OPTION_LOCATOR, StringUtils.normalizeSpace(value)));
+                }
+        );
+        closeMenu();
+    }
+
+    public void searchAndSelectValues(String[] values)
+    {
+        searchAndSelectValues(Arrays.asList(values));
     }
 
     public void selectValue(String value)
@@ -57,6 +83,11 @@ public class MdSelect extends PageElement
         selectValueElement.scrollIntoView();
         selectValueElement.jsClick();
         pause500ms();
+    }
+
+    private void closeMenu()
+    {
+        option.sendKeys(Keys.ESCAPE);
     }
 
     private void enterSearchTerm(String value)
@@ -77,5 +108,10 @@ public class MdSelect extends PageElement
     public String getValue()
     {
         return currentValueElement.getText();
+    }
+
+    public String getSelectedValueAttribute()
+    {
+        return selectedOption.getAttribute("value");
     }
 }

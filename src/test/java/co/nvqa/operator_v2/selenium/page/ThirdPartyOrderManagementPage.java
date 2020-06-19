@@ -2,8 +2,17 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ThirdPartyOrderMapping;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,58 +21,76 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- *
  * @author Sergey Mishanin
  */
 @SuppressWarnings("WeakerAccess")
 public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
 {
+    @FindBy(css = "md-dialog")
+    public DeleteThirdPartyOrderDialog deleteThirdPartyOrderDialog;
+
+    @FindBy(css = "md-dialog")
+    public EditMappingDialog editMappingDialog;
+
+    @FindBy(css = "md-dialog")
+    public UploadSingleMappingDialog uploadSingleMappingDialog;
+
+    @FindBy(css = "md-dialog")
+    public UploadBulkMappingDialog uploadBulkMappingDialog;
+
+    @FindBy(name = "container.third-party-order.create-single-mapping")
+    public NvIconTextButton uploadSingle;
+
+    @FindBy(name = "container.third-party-order.create-multiple-mapping")
+    public NvIconTextButton uploadBulk;
+
     private static final String MD_VIRTUAL_REPEAT = "order in getTableData()";
 
     public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking-id";
     public static final String COLUMN_CLASS_DATA_THIRD_PARTY_TRACKING_ID = "third-party-order-third-party-tracking-id";
     public static final String COLUMN_CLASS_DATA_SHIPPER_NAME = "third-party-order-third-party-shipper-name";
 
-    public static final String BUTTON_UPLOAD_SINGLE_NAME = "container.third-party-order.create-single-mapping";
-    public static final String BUTTON_UPLOAD_BULK_NAME = "container.third-party-order.create-multiple-mapping";
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
     public static final String ACTION_BUTTON_DELETE = "commons.delete";
     public static final String ACTION_BUTTON_COMPLETE = "container.third-party-order.complete-order";
     public static final String CONFIRM_BUTTON_ARIA_LABEL = "Confirm";
 
-    public UploadSingleMappingPage uploadSingleMappingPage;
-    public UploadBulkMappingPage uploadBulkMappingPage;
-    public EditMappingPage editMappingPage;
     public UploadResultsPage uploadResultsPage;
 
     public ThirdPartyOrderManagementPage(WebDriver webDriver)
     {
         super(webDriver);
-        uploadSingleMappingPage = new UploadSingleMappingPage(webDriver);
-        uploadBulkMappingPage = new UploadBulkMappingPage(webDriver);
-        editMappingPage = new EditMappingPage(webDriver);
         uploadResultsPage = new UploadResultsPage(webDriver);
     }
 
     public void uploadSingleMapping(ThirdPartyOrderMapping thirdPartyOrderMapping)
     {
-        clickNvIconTextButtonByName(BUTTON_UPLOAD_SINGLE_NAME);
-        uploadSingleMappingPage.fillTheForm(thirdPartyOrderMapping);
-        uploadSingleMappingPage.submitForm();
+        uploadSingle.click();
+        uploadSingleMappingDialog.waitUntilVisible();
+        uploadSingleMappingDialog.trackingId.setValue(thirdPartyOrderMapping.getTrackingId());
+        uploadSingleMappingDialog.thirdPartyTrackingId.setValue(thirdPartyOrderMapping.getThirdPlTrackingId());
+        uploadSingleMappingDialog.idSelect.searchAndSelectValue(thirdPartyOrderMapping.getShipperName());
+        uploadSingleMappingDialog.submit.clickAndWaitUntilDone();
+        uploadSingleMappingDialog.waitUntilInvisible();
     }
 
     public void adjustAvailableThirdPartyShipperData(ThirdPartyOrderMapping thirdPartyOrderMapping)
     {
-        clickNvIconTextButtonByName(BUTTON_UPLOAD_SINGLE_NAME);
-        uploadSingleMappingPage.adjustSelectedShipperInfo(thirdPartyOrderMapping);
-        uploadSingleMappingPage.closeDialog();
+        uploadSingle.click();
+        uploadSingleMappingDialog.waitUntilVisible();
+        thirdPartyOrderMapping.setShipperName(uploadSingleMappingDialog.idSelect.getValue());
+        thirdPartyOrderMapping.setShipperId(uploadSingleMappingDialog.idSelect.getSelectedValueAttribute());
+        uploadSingleMappingDialog.close();
     }
 
     public void uploadBulkMapping(List<ThirdPartyOrderMapping> thirdPartyOrderMappings)
     {
-        clickNvIconTextButtonByName(BUTTON_UPLOAD_BULK_NAME);
-        uploadBulkMappingPage.fillTheForm(thirdPartyOrderMappings);
-        uploadBulkMappingPage.submitForm();
+        String csvContents = thirdPartyOrderMappings.stream().map(ThirdPartyOrderMapping::toCsvLine).collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
+        File csvFile = createFile(String.format("third-party-order-mappings-with-csv_%s.csv", generateDateUniqueString()), csvContents);
+        uploadBulk.click();
+        uploadBulkMappingDialog.waitUntilVisible();
+        uploadBulkMappingDialog.chooseButton.setValue(csvFile);
+        uploadBulkMappingDialog.submit.clickAndWaitUntilDone();
     }
 
     public void verifyOrderMappingCreatedSuccessfully(ThirdPartyOrderMapping expectedOrderMapping)
@@ -97,20 +124,21 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
     {
         searchTableByTrackingId(thirdPartyOrderMapping.getTrackingId());
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
-        editMappingPage.fillTheForm(thirdPartyOrderMapping);
-        editMappingPage.submitForm();
+        editMappingDialog.waitUntilVisible();
+        editMappingDialog.thirdPartyTrackingId.setValue(thirdPartyOrderMapping.getThirdPlTrackingId());
+        editMappingDialog.idSelect.searchAndSelectValue(thirdPartyOrderMapping.getShipperName());
+        editMappingDialog.submitChanges.clickAndWaitUntilDone();
+        editMappingDialog.waitUntilInvisible();
         String toastMessage = String.format("%s mapped to %s(%s)!", thirdPartyOrderMapping.getTrackingId(), thirdPartyOrderMapping.getThirdPlTrackingId(), thirdPartyOrderMapping.getShipperName());
-        waitUntilInvisibilityOfToast(toastMessage);
+        waitUntilInvisibilityOfToast(toastMessage, true);
     }
 
     public void deleteThirdPartyOrderMapping(ThirdPartyOrderMapping thirdPartyOrderMapping)
     {
         searchTableByTrackingId(thirdPartyOrderMapping.getTrackingId());
         clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
-        pause100ms();
-        clickButtonOnMdDialogByAriaLabel(CONFIRM_BUTTON_ARIA_LABEL);
-        String toastMessage = "Third Party Order Deleted";
-        waitUntilInvisibilityOfToast(toastMessage);
+        deleteThirdPartyOrderDialog.confirmDelete();
+        waitUntilInvisibilityOfToast("Third Party Order Deleted", true);
     }
 
     public void completeThirdPartyOrder(ThirdPartyOrderMapping thirdPartyOrderMapping)
@@ -143,7 +171,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
             searchTableByTrackingId(trackingId);
             boolean isTableEmpty = isTableEmpty();
 
-            if(isTableEmpty)
+            if (isTableEmpty)
             {
                 refreshPage();
                 throw new NvTestRuntimeException("Table is empty. Tracking ID not found. Refreshing Third Party Order Management page.");
@@ -161,141 +189,54 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
     }
 
-    public static class UploadSingleMappingPage extends OperatorV2SimplePage
+    public static class UploadSingleMappingDialog extends MdDialog
     {
-        private static final String DIALOG_LOCATOR = "//md-dialog//h4[text()='Upload Single Mapping']";
-        private static final String FIELD_TRACKING_ID_ID = "commons.model.tracking-id";
-        private static final String FIELD_3PL_TRACKING_ID_ID = "commons.model.third-party-tracking-id";
-        private static final String FIELD_SHIPPER_ID_ID = "commons.id";
-        private static final String BUTTON_SUBMIT_NAME = "Submit";
-        private static final String BUTTON_CLOSE_NAME = "Cancel";
+        @FindBy(css = "[id^='commons.model.tracking-id']")
+        public TextBox trackingId;
 
-        public UploadSingleMappingPage(WebDriver webDriver)
+        @FindBy(css = "[id^='commons.model.third-party-tracking-id']")
+        public TextBox thirdPartyTrackingId;
+
+        @FindBy(css = "[id^='commons.id']")
+        public MdSelect idSelect;
+
+        @FindBy(name = "Submit")
+        public NvButtonSave submit;
+
+        public UploadSingleMappingDialog(WebDriver webDriver, WebElement webElement)
         {
-            super(webDriver);
-        }
-
-        public void fillTheForm(ThirdPartyOrderMapping thirdPartyOrderMapping)
-        {
-            waitUntilVisibilityOfElementLocated(DIALOG_LOCATOR);
-            String value = thirdPartyOrderMapping.getTrackingId();
-
-            if(value!=null)
-            {
-                sendKeysById(FIELD_TRACKING_ID_ID, value);
-            }
-
-            value = thirdPartyOrderMapping.getThirdPlTrackingId();
-
-            if(value!=null)
-            {
-                sendKeysById(FIELD_3PL_TRACKING_ID_ID, value);
-            }
-
-            value = thirdPartyOrderMapping.getShipperName();
-
-            if(value!=null)
-            {
-                selectValueFromMdSelectById(FIELD_SHIPPER_ID_ID, value);
-                thirdPartyOrderMapping.setShipperId(Integer.parseInt(getMdSelectedItemValueAttributeById(FIELD_SHIPPER_ID_ID)));
-            }
-            else
-            {
-                adjustSelectedShipperInfo(thirdPartyOrderMapping);
-            }
-        }
-
-        public void adjustSelectedShipperInfo(ThirdPartyOrderMapping thirdPartyOrderMapping)
-        {
-            thirdPartyOrderMapping.setShipperName(getMdSelectValueById(FIELD_SHIPPER_ID_ID));
-            thirdPartyOrderMapping.setShipperId(Integer.parseInt(getMdSelectedItemValueAttributeById(FIELD_SHIPPER_ID_ID)));
-        }
-
-        public void submitForm()
-        {
-            clickNvButtonSaveByNameAndWaitUntilDone(BUTTON_SUBMIT_NAME);
-            waitUntilInvisibilityOfElementLocated(DIALOG_LOCATOR);
-        }
-
-        public void closeDialog()
-        {
-            clickNvIconButtonByName(BUTTON_CLOSE_NAME);
-            waitUntilInvisibilityOfElementLocated(DIALOG_LOCATOR);
+            super(webDriver, webElement);
         }
     }
 
-    @SuppressWarnings("unused")
-    public static class UploadBulkMappingPage extends OperatorV2SimplePage
+    public static class UploadBulkMappingDialog extends MdDialog
     {
-        private static final String DIALOG_LOCATOR = "//md-dialog//h4[text()='Upload Bulk Mapping CSV']";
-        private static final String BUTTON_CHOOSE_NAME = "Choose";
-        private static final String BUTTON_SUBMIT_NAME = "Submit";
-        private static final String BUTTON_CLOSE_NAME = "Cancel";
+        @FindBy(css = "[label='Choose']")
+        NvButtonFilePicker chooseButton;
 
-        public UploadBulkMappingPage(WebDriver webDriver)
+        @FindBy(name = "Submit")
+        public NvButtonSave submit;
+
+        public UploadBulkMappingDialog(WebDriver webDriver, WebElement webElement)
         {
-            super(webDriver);
-        }
-
-        public void fillTheForm(List<ThirdPartyOrderMapping> thirdPartyOrderMappings)
-        {
-            waitUntilVisibilityOfElementLocated(DIALOG_LOCATOR);
-
-            String csvContents = thirdPartyOrderMappings.stream().map(ThirdPartyOrderMapping::toCsvLine).collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
-            File csvFile = createFile(String.format("third-party-order-mappings-with-csv_%s.csv", generateDateUniqueString()), csvContents);
-
-            sendKeysByAriaLabel(BUTTON_CHOOSE_NAME, csvFile.getAbsolutePath());
-            waitUntilVisibilityOfElementLocated(String.format("//span[contains(text(), '%s')]", csvFile.getName()));
-        }
-
-        public void submitForm()
-        {
-            clickNvButtonSaveByNameAndWaitUntilDone(BUTTON_SUBMIT_NAME);
-            waitUntilInvisibilityOfElementLocated(DIALOG_LOCATOR);
-        }
-
-        public void closeDialog()
-        {
-            clickNvIconButtonByName(BUTTON_CLOSE_NAME);
-            waitUntilInvisibilityOfElementLocated(DIALOG_LOCATOR);
+            super(webDriver, webElement);
         }
     }
 
-    public static class EditMappingPage extends OperatorV2SimplePage
+    public static class EditMappingDialog extends MdDialog
     {
-        private static final String FIELD_3PL_TRACKING_ID_ID = "commons.model.third-party-tracking-id";
-        private static final String FIELD_SHIPPER_ID_ID = "commons.id";
-        private static final String BUTTON_SUBMIT_NAME = "Submit Changes";
+        @FindBy(css = "[id^='commons.model.third-party-tracking-id']")
+        public TextBox thirdPartyTrackingId;
 
-        public EditMappingPage(WebDriver webDriver)
+        @FindBy(css = "[id^='commons.id']")
+        public MdSelect idSelect;
+
+        @FindBy(name = "Submit Changes")
+        public NvButtonSave submitChanges;
+
+        public EditMappingDialog(WebDriver webDriver, WebElement webElement)
         {
-            super(webDriver);
-        }
-
-        public void fillTheForm(ThirdPartyOrderMapping thirdPartyOrderMapping)
-        {
-            String value = thirdPartyOrderMapping.getThirdPlTrackingId();
-
-            if(value!=null)
-            {
-                sendKeysById(FIELD_3PL_TRACKING_ID_ID, value);
-            }
-
-            value = thirdPartyOrderMapping.getShipperName();
-
-            if(value!=null)
-            {
-                selectValueFromMdSelectById(FIELD_SHIPPER_ID_ID, value);
-            }
-            else
-            {
-                thirdPartyOrderMapping.setShipperName(getMdSelectValueById(FIELD_SHIPPER_ID_ID));
-            }
-        }
-
-        public void submitForm()
-        {
-            clickNvButtonSaveByName(BUTTON_SUBMIT_NAME);
+            super(webDriver, webElement);
         }
     }
 
@@ -317,7 +258,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
             int recordsCount = getElementsCount(By.xpath(xpathForCounting));
             List<ThirdPartyOrderMapping> orderMappings = new ArrayList<>();
 
-            for(int rowIndex=1; rowIndex<=recordsCount; rowIndex++)
+            for (int rowIndex = 1; rowIndex <= recordsCount; rowIndex++)
             {
                 ThirdPartyOrderMapping orderMapping = new ThirdPartyOrderMapping();
                 String locator = String.format(cellLocatorTemplate, rowIndex, 1);
@@ -344,7 +285,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
             List<ThirdPartyOrderMapping> orderMappings = readMappingUploadResults();
             assertEquals("Unexpected number of created order mappings", expectedOrderMappings.size(), orderMappings.size());
 
-            for(int i=0; i<expectedOrderMappings.size(); i++)
+            for (int i = 0; i < expectedOrderMappings.size(); i++)
             {
                 ThirdPartyOrderMapping expectedOrderMapping = expectedOrderMappings.get(i);
                 ThirdPartyOrderMapping actualOrderMapping = orderMappings.get(i);
@@ -358,6 +299,25 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         public void closeDialog()
         {
             clickNvIconButtonByName(BUTTON_CLOSE_NAME);
+        }
+    }
+
+    public static class DeleteThirdPartyOrderDialog extends MdDialog
+    {
+        public DeleteThirdPartyOrderDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(css = "button[aria-label='Confirm']")
+        public Button confirm;
+
+        public void confirmDelete()
+        {
+            waitUntilVisible();
+            pause1s();
+            confirm.click();
+            waitUntilInvisible();
         }
     }
 }
