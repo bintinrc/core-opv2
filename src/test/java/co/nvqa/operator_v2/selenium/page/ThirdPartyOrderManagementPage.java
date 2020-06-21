@@ -9,6 +9,7 @@ import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import org.junit.platform.commons.util.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -69,9 +70,15 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         uploadSingleMappingDialog.waitUntilVisible();
         uploadSingleMappingDialog.trackingId.setValue(thirdPartyOrderMapping.getTrackingId());
         uploadSingleMappingDialog.thirdPartyTrackingId.setValue(thirdPartyOrderMapping.getThirdPlTrackingId());
-        uploadSingleMappingDialog.idSelect.searchAndSelectValue(thirdPartyOrderMapping.getShipperName());
+        if (StringUtils.isBlank(thirdPartyOrderMapping.getShipperName()))
+        {
+            thirdPartyOrderMapping.setShipperName(uploadSingleMappingDialog.idSelect.getValue());
+            thirdPartyOrderMapping.setShipperId(uploadSingleMappingDialog.idSelect.getSelectedValueAttribute());
+        } else
+        {
+            uploadSingleMappingDialog.idSelect.searchAndSelectValue(thirdPartyOrderMapping.getShipperName());
+        }
         uploadSingleMappingDialog.submit.clickAndWaitUntilDone();
-        uploadSingleMappingDialog.waitUntilInvisible();
     }
 
     public void adjustAvailableThirdPartyShipperData(ThirdPartyOrderMapping thirdPartyOrderMapping)

@@ -135,7 +135,7 @@ public class AllOrdersSteps extends AbstractSteps
             throw new RuntimeException("Created Order Tracking ID should not be null or empty.");
         }
 
-        allOrdersPage.findOrdersWithCsvAndWaitUntilToastDisappear(Collections.singletonList(createdTrackingId));
+        allOrdersPage.findOrdersWithCsv(Collections.singletonList(createdTrackingId));
     }
 
     @Then("^Operator verify all orders in CSV is found on All Orders page with correct info$")
@@ -262,7 +262,7 @@ public class AllOrdersSteps extends AbstractSteps
     {
         List<String> trackingIds = Collections.singletonList(get(KEY_CREATED_ORDER_TRACKING_ID));
         allOrdersPage.openFiltersForm();
-        allOrdersPage.findOrdersWithCsvAndWaitUntilToastDisappear(trackingIds);
+        allOrdersPage.findOrdersWithCsv(trackingIds);
         allOrdersPage.resumeSelected(trackingIds);
     }
 
@@ -271,7 +271,7 @@ public class AllOrdersSteps extends AbstractSteps
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         allOrdersPage.openFiltersForm();
-        allOrdersPage.findOrdersWithCsvAndWaitUntilToastDisappear(Collections.singletonList(trackingId));
+        allOrdersPage.findOrdersWithCsv(Collections.singletonList(trackingId));
         allOrdersPage.verifyOrderStatus(trackingId, expectedOrderStatus);
     }
 
