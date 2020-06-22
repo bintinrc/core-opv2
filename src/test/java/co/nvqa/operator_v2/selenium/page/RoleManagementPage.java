@@ -1,13 +1,12 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.RoleManagement;
-import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
-import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -20,8 +19,8 @@ import org.openqa.selenium.support.PageFactory;
 @SuppressWarnings("WeakerAccess")
 public class RoleManagementPage extends OperatorV2SimplePage {
 
-    @FindBy(xpath = "//button//*[name()='svg']/following::span[contains(text(),'Add New Role')]")
-    public Button addRole;
+    @FindBy(name = "Add Role")
+    public NvIconTextButton addRole;
 
     @FindBy(css = "md-dialog")
     public AddRoleModal addRoleModal;
@@ -36,11 +35,10 @@ public class RoleManagementPage extends OperatorV2SimplePage {
     }
 
     public void createNewRole(RoleManagement roleManagement) {
-//        waitUntilInvisibilityOfElementLocated("//div[contains(@class, 'loading-sheet')]/md-progress-circular");
-//        addRole.waitUntilClickable();
-//        addRole.click();
-        waitUntilElementIsClickable("//button//*[name()='svg']/following::span[contains(text(),'Add New Role')]");
-        click("//button//*[name()='svg']/following::span[contains(text(),'Add New Role')]");
+        waitUntilInvisibilityOfElementLocated("//div[contains(@class, 'loading-sheet')]/md-progress-circular");
+        waitUntilInvisibilityOfToast();
+        addRole.waitUntilClickable();
+        addRole.click();
         addRoleModal.waitUntilVisible();
         addRoleModal.roleName.setValue(roleManagement.getRoleName());
         addRoleModal.description.setValue(roleManagement.getDesc());
