@@ -5,7 +5,7 @@ package co.nvqa.operator_v2.model;
  */
 public class ThirdPartyOrderMapping
 {
-    private int shipperId = 1;
+    private int shipperId;
     private String shipperName;
     private String trackingId;
     private String thirdPlTrackingId;

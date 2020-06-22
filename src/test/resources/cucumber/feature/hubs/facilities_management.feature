@@ -38,6 +38,7 @@ Feature: Facilities Management
       | country           | GENERATED                       |
       | latitude          | GENERATED                       |
       | longitude         | GENERATED                       |
+    And Operator refresh page
     Then Operator verify Hub is updated successfully on Facilities Management page
 
   @ArchiveAndDeleteHubViaDb

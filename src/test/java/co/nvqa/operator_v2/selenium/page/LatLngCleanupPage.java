@@ -1,7 +1,13 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.WaypointDetails;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 /**
  *
@@ -55,8 +61,6 @@ public class LatLngCleanupPage extends OperatorV2SimplePage
     public static class EditWaypointDetailsDialog extends OperatorV2SimplePage
     {
         private static final String DIALOG_TITLE = "Edit Waypoint Details";
-        private static final String LOCATOR_FIELD_SEARCH_WAYPOINT_ID = "searchWaypointId";
-        private static final String LOCATOR_BUTTON_SEARCH = "commons.search";
         private static final String LOCATOR_FIELD_WAYPOINT_ID = "commons.waypoint-id";
         private static final String LOCATOR_FIELD_ADDRESS_1 = "commons.address1";
         private static final String LOCATOR_FIELD_ADDRESS_2 = "commons.address2";
@@ -69,6 +73,9 @@ public class LatLngCleanupPage extends OperatorV2SimplePage
         private static final String LOCATOR_BUTTON_CLOSE = "Cancel";
         private static final String LOCATOR_MESSAGE_WAYPOINT_NOT_FOUND = "//div[@ng-message='invalidWaypointId']";
 
+        @FindBy(css = "md-dialog")
+        private EditWaypointDialog editWaypointDialog;
+
         public EditWaypointDetailsDialog(WebDriver webDriver)
         {
             super(webDriver);
@@ -76,14 +83,34 @@ public class LatLngCleanupPage extends OperatorV2SimplePage
 
         public void waitUtilVisibility()
         {
-            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+            editWaypointDialog.waitUntilVisible();
         }
 
         public EditWaypointDetailsDialog searchWaypoint(String waypointId)
         {
-            sendKeysById(LOCATOR_FIELD_SEARCH_WAYPOINT_ID, waypointId);
-            clickNvApiTextButtonByNameAndWaitUntilDone(LOCATOR_BUTTON_SEARCH);
+            editWaypointDialog.waypointId.sendKeys(waypointId);
+            editWaypointDialog.search.waitUntilClickable();
+            editWaypointDialog.search.click();
             return this;
+        }
+
+        public static class EditWaypointDialog extends MdDialog
+        {
+            public EditWaypointDialog(WebDriver webDriver, WebElement webElement)
+            {
+                super(webDriver, webElement);
+            }
+
+            public EditWaypointDialog(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+            {
+                super(webDriver, searchContext, webElement);
+            }
+
+            @FindBy(name = "commons.search")
+            public NvApiTextButton search;
+
+            @FindBy(css = "[id^='searchWaypointId']")
+            public TextBox waypointId;
         }
 
         public EditWaypointDetailsDialog setAddress1(String address1)
