@@ -7,6 +7,7 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -29,12 +30,17 @@ public class ThirdPartyOrderManagementSteps extends AbstractSteps
     }
 
     @When("^Operator uploads new mapping$")
-    public void operatorUploadsNewMapping()
+    public void operatorUploadsNewMapping(Map<String, String> dataTableAsMap)
     {
         ThirdPartyOrderMapping thirdPartyOrderMapping = new ThirdPartyOrderMapping();
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        String shipperName = dataTableAsMap.get("3plShipperName");
+        String shipperId = dataTableAsMap.get("3plShipperId");
+
         thirdPartyOrderMapping.setTrackingId(trackingId);
         thirdPartyOrderMapping.setThirdPlTrackingId("3PL" + trackingId);
+        thirdPartyOrderMapping.setShipperName(shipperName);
+        thirdPartyOrderMapping.setShipperId(shipperId);
         thirdPartyOrderManagementPage.uploadSingleMapping(thirdPartyOrderMapping);
         put(KEY_CREATED_THIRD_PARTY_ORDER_MAPPING_PARAMS, thirdPartyOrderMapping);
     }

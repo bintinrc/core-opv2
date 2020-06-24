@@ -38,7 +38,11 @@ Feature: Facilities Management
       | country           | GENERATED                       |
       | latitude          | GENERATED                       |
       | longitude         | GENERATED                       |
+<<<<<<< HEAD
     And Operator refresh hubs cache on Facilities Management page
+=======
+    And Operator refresh page
+>>>>>>> origin/master
     Then Operator verify Hub is updated successfully on Facilities Management page
 
   @ArchiveAndDeleteHubViaDb
