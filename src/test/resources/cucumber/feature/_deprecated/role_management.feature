@@ -1,12 +1,14 @@
-@OperatorV2 @AccessControl @OperatorV2Part1 @RoleManagement @Saas
+@OperatorV2Deprecated @OperatorV2Part2Deprecated
 Feature: Role Management
+
+   # THIS FEATURE HAS BEEN DEPRECATED
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Operator adds new role in role management page (uid:2e77cf93-2ca9-4e8c-bd1c-cd84ffbd3f1c)
-    Given Operator go to menu Access Control -> Role Management
+    Given Operator go to menu Access Control -> Role Management V2
     When Operator creates new role on Role Management page
     Then Operator verifies the role on Role Management page
     When Operator deletes the role on Role Management page

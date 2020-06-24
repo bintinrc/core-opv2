@@ -71,7 +71,6 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         uploadSingleMappingDialog.thirdPartyTrackingId.setValue(thirdPartyOrderMapping.getThirdPlTrackingId());
         uploadSingleMappingDialog.idSelect.searchAndSelectValue(thirdPartyOrderMapping.getShipperName());
         uploadSingleMappingDialog.submit.clickAndWaitUntilDone();
-        uploadSingleMappingDialog.waitUntilInvisible();
     }
 
     public void adjustAvailableThirdPartyShipperData(ThirdPartyOrderMapping thirdPartyOrderMapping)
