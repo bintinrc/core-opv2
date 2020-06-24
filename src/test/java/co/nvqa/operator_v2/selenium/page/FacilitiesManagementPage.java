@@ -75,7 +75,7 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
         addHubDialog.waitUntilVisible();
         addHubDialog.hubName.setValue(hub.getName());
         addHubDialog.displayName.setValue(hub.getShortName());
-        Optional.ofNullable(hub.getFacilityType()).ifPresent(value -> addHubDialog.facilityType.selectValue(value));
+        Optional.ofNullable(hub.getFacilityType()).ifPresent(value -> addHubDialog.facilityType.selectByValue(value));
         addHubDialog.city.setValue(hub.getCity());
         addHubDialog.country.setValue(hub.getCountry());
         addHubDialog.latitude.setValue(String.valueOf(hub.getLatitude()));
@@ -93,7 +93,7 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
         editHubDialog.waitUntilVisible();
 
         pause1s();
-        Optional.ofNullable(hub.getFacilityType()).ifPresent(value -> editHubDialog.facilityType.selectValue(value));
+        Optional.ofNullable(hub.getFacilityType()).ifPresent(value -> editHubDialog.facilityType.selectByValue(value));
         Optional.ofNullable(hub.getName()).ifPresent(value -> editHubDialog.hubName.setValue(value));
         Optional.ofNullable(hub.getShortName()).ifPresent(value -> editHubDialog.displayName.setValue(value));
         Optional.ofNullable(hub.getCity()).ifPresent(value -> editHubDialog.city.setValue(value));
@@ -109,6 +109,7 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
         hubsTable.filterByColumn(COLUMN_NAME, searchHubsKeyword);
         hubsTable.clickActionButton(1, ACTION_DISABLE);
         confirmDeactivationDialog.waitUntilVisible();
+        pause1s();
         confirmDeactivationDialog.disable.click();
         confirmDeactivationDialog.waitUntilInvisible();
     }
@@ -118,6 +119,7 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
         hubsTable.filterByColumn(COLUMN_NAME, searchHubsKeyword);
         hubsTable.clickActionButton(1, ACTION_ACTIVATE);
         confirmActivationDialog.waitUntilVisible();
+        pause1s();
         confirmActivationDialog.activate.click();
         confirmActivationDialog.waitUntilInvisible();
     }
