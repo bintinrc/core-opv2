@@ -38,11 +38,7 @@ Feature: Facilities Management
       | country           | GENERATED                       |
       | latitude          | GENERATED                       |
       | longitude         | GENERATED                       |
-<<<<<<< HEAD
-    And Operator refresh hubs cache on Facilities Management page
-=======
     And Operator refresh page
->>>>>>> origin/master
     Then Operator verify Hub is updated successfully on Facilities Management page
 
   @ArchiveAndDeleteHubViaDb
@@ -55,9 +51,9 @@ Feature: Facilities Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    When Operator go to menu Hubs -> Facilities Management
     And Operator refresh page
-    And Operator search Hub on page Hubs Administration using data below:
+    And Operator go to menu Hubs -> Facilities Management
+    When Operator search Hub on page Hubs Administration using data below:
       | searchHubsKeyword | {KEY_CREATED_HUB.name} |
     Then Operator verify Hub is found on Facilities Management page and contains correct info
 
@@ -71,15 +67,16 @@ Feature: Facilities Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    When Operator go to menu Hubs -> Facilities Management
     And Operator refresh page
-    And Operator download Hub CSV file on Facilities Management page
+    And Operator go to menu Hubs -> Facilities Management
+    When Operator download Hub CSV file on Facilities Management page
     Then Operator verify Hub CSV file is downloaded successfully on Facilities Management page and contains correct info
 
   @ArchiveAndDeleteHubViaDb
   Scenario: Operator Refresh Hub Cache (uid:4f3b2cac-0f8b-4280-be3b-e30260fe582b)
-    When Operator go to menu Hubs -> Facilities Management
-    And API Operator creates new Hub using data below:
+    And Operator refresh page
+    And Operator go to menu Hubs -> Facilities Management
+    Given API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
       | facilityType | CROSSDOCK |
