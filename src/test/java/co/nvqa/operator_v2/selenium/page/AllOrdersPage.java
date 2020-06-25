@@ -4,8 +4,12 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.Keys;
@@ -51,11 +55,17 @@ public class AllOrdersPage extends OperatorV2SimplePage
     @FindBy(name = "commons.search")
     public NvApiTextButton search;
 
+    @FindBy(name = "container.order.list.find-orders-with-csv")
+    public NvIconTextButton findOrdersWithCsv;
+
     @FindBy(css = "[id^='category']")
     public MdSelect categorySelect;
 
     @FindBy(css = "[id^='search-logic']")
     public MdSelect searchLogicSelect;
+
+    @FindBy(css = "md-dialog")
+    public FindOrdersWithCsvDialog findOrdersWithCsvDialog;
 
     public enum Category
     {
@@ -168,30 +178,19 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     public void findOrdersWithCsv(List<String> listOfTrackingId)
     {
-        clickNvIconTextButtonByName("container.order.list.find-orders-with-csv");
-        waitUntilVisibilityOfElementLocated("//md-dialog//h2[contains(text(),'Find Orders with CSV')]");
-
         String csvContents = listOfTrackingId.stream().collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
         File csvFile = createFile(String.format("find-orders-with-csv_%s.csv", generateDateUniqueString()), csvContents);
 
-        sendKeysByAriaLabel("Choose", csvFile.getAbsolutePath());
-        waitUntilVisibilityOfElementLocated(String.format("//span[contains(text(), '%s')]", csvFile.getName()));
-        clickNvApiTextButtonByNameAndWaitUntilDone("commons.upload");
-        waitUntilInvisibilityOfToast(true);
-    }
-
-    public void findOrdersWithCsvAndWaitUntilToastDisappear(List<String> listOfTrackingId)
-    {
-        findOrdersWithCsv(listOfTrackingId);
-        waitUntilInvisibilityOfToast("Matches with file shown in table", false);
+        findOrdersWithCsv.click();
+        findOrdersWithCsvDialog.waitUntilVisible();
+        findOrdersWithCsvDialog.selectFile.setValue(csvFile);
+        findOrdersWithCsvDialog.upload.clickAndWaitUntilDone();
+        findOrdersWithCsvDialog.waitUntilInvisible();
+        waitUntilInvisibilityOfToast("Matches with file shown in table", true);
     }
 
     public void verifyAllOrdersInCsvIsFoundWithCorrectInfo(List<Order> listOfCreatedOrder)
     {
-        pause100ms();
-        String toastTopText = getToastTopText();
-        assertEquals("Toast message is different.", "Matches with file shown in table", toastTopText);
-        waitUntilInvisibilityOfToast("Matches with file shown in table", false);
         listOfCreatedOrder.forEach(this::verifyOrderInfoOnTableOrderIsCorrect);
     }
 
@@ -737,10 +736,23 @@ public class AllOrdersPage extends OperatorV2SimplePage
             String xpath = "//label[text()='Latest Event']/following-sibling::h3";
             String actualLatestEvent = getText(xpath);
             assertEquals("Latest Event is not the same", latestEvent.toLowerCase(), actualLatestEvent.toLowerCase());
-        }
-        finally
+        } finally
         {
             closeAllWindows(mainWindowHandle);
+        }
+    }
+
+    public static class FindOrdersWithCsvDialog extends MdDialog
+    {
+        @FindBy(css = "[label='Select File']")
+        NvButtonFilePicker selectFile;
+
+        @FindBy(name = "commons.upload")
+        public NvButtonSave upload;
+
+        public FindOrdersWithCsvDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
         }
     }
 }

@@ -1,4 +1,4 @@
-@OperatorV2Deprecated @DistributionPoints @OperatorV2Part1Deprecated
+@OperatorV2Deprecated @OperatorV2Part1Deprecated
 Feature: DP Administration
 
   #OLD VERSION OF SCENARIOS. NEED TO BE DELETED

@@ -3,37 +3,45 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RouteCashInboundCod;
-import co.nvqa.operator_v2.util.TestConstants;
+import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
-import java.text.DecimalFormat;
+import static co.nvqa.operator_v2.selenium.page.RouteCashInboundPage.RouteCashInboundTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.RouteCashInboundPage.RouteCashInboundTable.COLUMN_RECEIPT_NUMBER;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
 public class RouteCashInboundPage extends OperatorV2SimplePage
 {
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("###,###.00");
-    private static final String NG_REPEAT = "cod in $data";
     private static final String CSV_FILENAME = "cods.csv";
     private static final String XPATH_OF_TOAST_ERROR_MESSAGE = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-bottom']/strong[4]";
-    //private static final String XPATH_OF_TOAST_ERROR_CANNOT_READ_PROPERTY = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-top']/div[text()=\"Cannot read property 'filter' of null\"]";
 
-    public static final String COLUMN_CLASS_DATA_ROUTE_ID = "route-id";
-    public static final String COLUMN_CLASS_DATA_AMOUNT_COLLECTED = "amountCollected";
-    public static final String COLUMN_CLASS_DATA_RECEIPT_NO = "receiptNo";
+    @FindBy(name = "fromDateField")
+    public MdDatepicker fromDateFilter;
 
-    public static final String ACTION_BUTTON_EDIT = "Edit";
-    public static final String ACTION_BUTTON_DELETE = "Delete";
+    @FindBy(name = "toDateField")
+    public MdDatepicker toDateFilter;
+
+    @FindBy(name = "container.cod-list.cod-get")
+    public NvApiTextButton fetchCod;
+
+    @FindBy(css = "md-dialog")
+    public ConfirmDeleteDialog confirmDeleteDialog;
+
+    public RouteCashInboundTable routeCashInboundTable;
 
     public RouteCashInboundPage(WebDriver webDriver)
     {
         super(webDriver);
+        routeCashInboundTable = new RouteCashInboundTable(webDriver);
     }
 
     public void addCod(RouteCashInboundCod routeCashInboundCod)
@@ -46,10 +54,10 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
 
     public void editCod(RouteCashInboundCod routeCashInboundCodOld, RouteCashInboundCod routeCashInboundCodEdited)
     {
-        retryIfRuntimeExceptionOccurred(()->
+        retryIfRuntimeExceptionOccurred(() ->
         {
             searchAndVerifyTableIsNotEmpty(routeCashInboundCodOld);
-            clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+            routeCashInboundTable.clickActionButton(1, ACTION_EDIT);
             waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'cod-edit')]");
             fillTheFormAndSubmit(routeCashInboundCodEdited);
 
@@ -66,8 +74,7 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
                   Throw runtime exception so the code will retry again until success or max retry is reached.
                  */
                 throw new NvTestRuntimeException(toastErrorMessage);
-            }
-            catch(TimeoutException ex)
+            } catch (TimeoutException ex)
             {
                 /*
                   If TimeoutException occurred that means the toast error message is not found
@@ -104,60 +111,36 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
         verifyCodInfoIsCorrect(routeCashInboundCod);
     }
 
-    public void verifyCodInfoIsCorrect(RouteCashInboundCod routeCashInboundCod)
+    public void verifyCodInfoIsCorrect(RouteCashInboundCod expected)
     {
-        String actualRouteId = getTextOnTable(1, COLUMN_CLASS_DATA_ROUTE_ID);
-        assertEquals("Route Cash Inbound - COD - Route ID", String.valueOf(routeCashInboundCod.getRouteId()), actualRouteId);
-
-        String expectedAmountCollected = DECIMAL_FORMAT.format(routeCashInboundCod.getAmountCollected());
-
-        switch(TestConstants.COUNTRY_CODE.toUpperCase())
-        {
-            case "SG": expectedAmountCollected = "S$"+expectedAmountCollected; break;
-            case "ID":
-            case "MBS":
-            case "FEF":
-            case "MMPG":
-            case "TKL":
-            case "HBL":
-            case "MNT":
-            case "DEMO":
-            case "MSI": expectedAmountCollected = "$"+expectedAmountCollected; break;
-            default: expectedAmountCollected = "$"+expectedAmountCollected;
-        }
-
-        String actualAmountCollected = getTextOnTable(1, COLUMN_CLASS_DATA_AMOUNT_COLLECTED);
-        assertEquals("Route Cash Inbound - COD - Amount Collected", expectedAmountCollected, actualAmountCollected);
-
-        String actualReceiptNumber = getTextOnTable(1, COLUMN_CLASS_DATA_RECEIPT_NO);
-        assertEquals("Route Cash Inbound - COD - Receipt Number", routeCashInboundCod.getReceiptNumber(), actualReceiptNumber);
+        RouteCashInboundCod actual = routeCashInboundTable.readEntity(1);
+        expected.compareWithActual(actual);
     }
 
     public void deleteCod(RouteCashInboundCod routeCashInboundCod)
     {
         searchAndVerifyTableIsNotEmpty(routeCashInboundCod);
-        clickActionButtonOnTable(1, ACTION_BUTTON_DELETE);
-        pause50ms();
-        click("//md-dialog/md-dialog-actions/button[@aria-label='Delete']");
+        routeCashInboundTable.clickActionButton(1, RouteCashInboundTable.ACTION_DELETE);
+        confirmDeleteDialog.confirmDelete();
     }
 
     public void verifyCodIsDeletedSuccessfully(RouteCashInboundCod routeCashInboundCod)
     {
-        clickButtonFetchCod();
+        fetchCod.clickAndWaitUntilDone();
 
         /*
           First attempt to check after button 'Fetch COD' is clicked.
          */
-        boolean isTableEmpty = isTableEmpty();
+        boolean isTableEmpty = routeCashInboundTable.isTableEmpty();
 
-        if(!isTableEmpty)
+        if (!isTableEmpty)
         {
             /*
               If the table is not empty, then filter table by receiptNo
               and re-verify that the table is empty.
              */
-            searchTable(routeCashInboundCod.getReceiptNumber());
-            isTableEmpty = isTableEmpty();
+            routeCashInboundTable.filterByColumn(COLUMN_RECEIPT_NUMBER, routeCashInboundCod.getReceiptNumber());
+            isTableEmpty = routeCashInboundTable.isTableEmpty();
         }
 
         assertTrue("Table should be empty.", isTableEmpty);
@@ -180,23 +163,21 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
 
     public void searchAndVerifyTableIsNotEmpty(RouteCashInboundCod routeCashInboundCod)
     {
-        sendKeys("//md-datepicker[@md-placeholder='From Date']/div/input", MD_DATEPICKER_SDF.format(TestUtils.getNextDate(0)));
-        sendKeys("//md-datepicker[@md-placeholder='To Date']/div/input", MD_DATEPICKER_SDF.format(TestUtils.getNextDate(1)));
-        clickButtonFetchCod();
+        fromDateFilter.setDate(TestUtils.getNextDate(0));
+        toDateFilter.setDate(TestUtils.getNextDate(1));
+        fetchCod.clickAndWaitUntilDone();
 
         /*
           First attempt to check after button 'Fetch COD' is clicked.
          */
-        boolean isTableEmpty = isTableEmpty();
-        assertTrue("Table should not be empty.", !isTableEmpty);
+        assertFalse("Table should not be empty.", routeCashInboundTable.isTableEmpty());
 
         /*
           If the table is not empty, then filter table by receiptNo
           and re-verify that the table is not empty.
          */
-        searchTable(routeCashInboundCod.getReceiptNumber());
-        isTableEmpty = isTableEmpty();
-        assertTrue("Table should not be empty.", !isTableEmpty);
+        routeCashInboundTable.filterByColumn(COLUMN_RECEIPT_NUMBER, routeCashInboundCod.getReceiptNumber());
+        assertFalse("Table should not be empty.", routeCashInboundTable.isTableEmpty());
     }
 
     public void waitUntilToastErrorDisappear()
@@ -204,18 +185,27 @@ public class RouteCashInboundPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast("Cannot read property", false);
     }
 
-    public boolean isTableEmpty()
+    public static class RouteCashInboundTable extends MdVirtualRepeatTable<RouteCashInboundCod>
     {
-        return isElementExistFast("//div[text()='None available. Add a new COD?']") || !isElementExistFast(String.format("//tr[@ng-repeat='%s']", NG_REPEAT));
-    }
+        public static final String COLUMN_ROUTE_ID = "routeId";
+        public static final String COLUMN_TOTAL_COLLECTED = "totalCollected";
+        public static final String COLUMN_AMOUNT_COLLECTED = "amountCollected";
+        public static final String COLUMN_RECEIPT_NUMBER = "receiptNumber";
+        public static final String ACTION_EDIT = "edit";
+        public static final String ACTION_DELETE = "delete";
 
-    public String getTextOnTable(int rowNumber, String columnDataClass)
-    {
-        return getTextOnTableWithNgRepeat(rowNumber, columnDataClass, NG_REPEAT);
-    }
-
-    public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
-    {
-        clickActionButtonOnTableWithNgRepeat(rowNumber, actionButtonName, NG_REPEAT);
+        public RouteCashInboundTable(WebDriver webDriver)
+        {
+            super(webDriver);
+            setMdVirtualRepeat("cod in getTableData()");
+            setColumnLocators(ImmutableMap.of(
+                    COLUMN_ROUTE_ID, "route_id",
+                    COLUMN_TOTAL_COLLECTED, "total_collected",
+                    COLUMN_AMOUNT_COLLECTED, "amount_collected",
+                    COLUMN_RECEIPT_NUMBER, "receipt_no"
+            ));
+            setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "Edit", ACTION_DELETE, "Delete"));
+            setEntityClass(RouteCashInboundCod.class);
+        }
     }
 }

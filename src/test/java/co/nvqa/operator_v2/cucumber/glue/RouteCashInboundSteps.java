@@ -9,7 +9,6 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -38,11 +37,12 @@ public class RouteCashInboundSteps extends AbstractSteps
         Double codGoodsAmount = cod.getGoodsAmount();
         assertNotNull("COD Goods Amount should not be null.", codGoodsAmount);
 
-        Double amountCollected = codGoodsAmount-(codGoodsAmount.intValue()/2);
-        String receiptNumber = "#"+routeId+"-"+generateDateUniqueString();
+        Double amountCollected = codGoodsAmount - (codGoodsAmount.intValue() / 2);
+        String receiptNumber = "#" + routeId + "-" + generateDateUniqueString();
 
         RouteCashInboundCod routeCashInboundCod = new RouteCashInboundCod();
         routeCashInboundCod.setRouteId(routeId);
+        routeCashInboundCod.setTotalCollected(amountCollected);
         routeCashInboundCod.setAmountCollected(amountCollected);
         routeCashInboundCod.setReceiptNumber(receiptNumber);
 
@@ -70,14 +70,14 @@ public class RouteCashInboundSteps extends AbstractSteps
     {
         RouteCashInboundCod routeCashInboundCod = get(KEY_ROUTE_CASH_INBOUND_COD);
 
-        Double oldAmountCollected = routeCashInboundCod.getAmountCollected();
-        Double newAmountCollected = oldAmountCollected+(oldAmountCollected.intValue()/2);
+        Double oldTotalCollected = routeCashInboundCod.getTotalCollected();
+        Double newTotalCollected = oldTotalCollected + (oldTotalCollected.intValue() / 2);
 
         RouteCashInboundCod routeCashInboundCodEdited = new RouteCashInboundCod();
         routeCashInboundCodEdited.setRouteId(routeCashInboundCod.getRouteId());
-        routeCashInboundCodEdited.setAmountCollected(newAmountCollected);
-        routeCashInboundCodEdited.setReceiptNumber(routeCashInboundCod.getReceiptNumber()+"-EDITED");
-
+        routeCashInboundCodEdited.setTotalCollected(newTotalCollected);
+        routeCashInboundCodEdited.setAmountCollected(newTotalCollected);
+        routeCashInboundCodEdited.setReceiptNumber(routeCashInboundCod.getReceiptNumber() + "-EDITED");
 
         routeCashInboundPage.editCod(routeCashInboundCod, routeCashInboundCodEdited);
         put(KEY_ROUTE_CASH_INBOUND_COD_EDITED, routeCashInboundCodEdited);

@@ -43,6 +43,7 @@ public class MdSelect extends PageElement
     public List<PageElement> options;
 
     private static final String MD_OPTION_LOCATOR = "//div[contains(@class,'md-select-menu-container')][@aria-hidden='false']//md-option[.//div[contains(normalize-space(.), '%s')]]";
+    private static final String MD_OPTION_BY_VALUE_LOCATOR = "//div[contains(@class,'md-select-menu-container')][@aria-hidden='false']//md-option[@value='%s']";
 
     public void searchAndSelectValue(String value)
     {
@@ -75,6 +76,13 @@ public class MdSelect extends PageElement
         openMenu();
         value = escapeValue(value);
         click(f(MD_OPTION_LOCATOR, StringUtils.normalizeSpace(value)));
+    }
+
+    public void selectByValue(String value)
+    {
+        openMenu();
+        value = escapeValue(value);
+        click(f(MD_OPTION_BY_VALUE_LOCATOR, StringUtils.normalizeSpace(value)));
     }
 
     private void openMenu()

@@ -28,9 +28,9 @@ Feature: Facilities Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
+    When Operator go to menu Hubs -> Facilities Management
     And Operator refresh page
-    And Operator go to menu Hubs -> Facilities Management
-    When Operator update Hub on page Hubs Administration using data below:
+    And Operator update Hub on page Hubs Administration using data below:
       | searchHubsKeyword | {KEY_CREATED_HUB.name}          |
       | name              | {KEY_CREATED_HUB.name} [E]      |
       | displayName       | {KEY_CREATED_HUB.shortName} [E] |
@@ -85,7 +85,7 @@ Feature: Facilities Management
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And Operator refresh page
-    When Operator refresh hubs cache on Facilities Management page
+    And Operator refresh hubs cache on Facilities Management page
     Then Operator verify a new Hub is created successfully on Facilities Management page
 
   @ArchiveAndDeleteHubViaDb
@@ -99,9 +99,9 @@ Feature: Facilities Management
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator activate created hub
+    When Operator go to menu Hubs -> Facilities Management
     And Operator refresh page
-    And Operator go to menu Hubs -> Facilities Management
-    When Operator disable created hub on Facilities Management page
+    And Operator disable created hub on Facilities Management page
     Then Operator verify Hub is updated successfully on Facilities Management page
 
   @ArchiveAndDeleteHubViaDb
@@ -115,17 +115,17 @@ Feature: Facilities Management
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator disable created hub
+    When Operator go to menu Hubs -> Facilities Management
     And Operator refresh page
-    And Operator go to menu Hubs -> Facilities Management
-    When Operator activate created hub on Facilities Management page
+    And Operator activate created hub on Facilities Management page
     Then Operator verify Hub is updated successfully on Facilities Management page
 
   @ArchiveAndDeleteHubViaDb
   Scenario: Create New Station Hub (uid:e77343dc-f894-4a40-b1c4-abe0caab13c5)
-    Given Operator go to menu Hubs -> Facilities Management
-    When Operator create new Hub on page Hubs Administration using data below:
+    When Operator go to menu Hubs -> Facilities Management
+    And Operator create new Hub on page Hubs Administration using data below:
       | name         | GENERATED |
-      | facilityType | Station   |
+      | facilityType | STATION   |
       | displayName  | GENERATED |
       | city         | GENERATED |
       | country      | GENERATED |
@@ -144,11 +144,12 @@ Feature: Facilities Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
+    When Operator go to menu Hubs -> Facilities Management
     And Operator refresh page
-    And Operator go to menu Hubs -> Facilities Management
-    When Operator update Hub on page Hubs Administration using data below:
+    And Operator update Hub on page Hubs Administration using data below:
       | searchHubsKeyword | {KEY_CREATED_HUB.name} |
       | facilityType      | Station                |
+    And Operator refresh hubs cache on Facilities Management page
     Then Operator verify Hub is updated successfully on Facilities Management page
 
   @KillBrowser @ShouldAlwaysRun
