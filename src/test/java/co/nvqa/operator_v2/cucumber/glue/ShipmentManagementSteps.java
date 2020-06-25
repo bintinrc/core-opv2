@@ -465,4 +465,28 @@ public class ShipmentManagementSteps extends AbstractSteps
     {
         shipmentManagementPage.transitStatus();
     }
+
+    @When("Operator clicks on reopen shipment button under the Apply Action")
+    public void operatorClicksOnReopenShipmentButtonUnderTheApplyAction()
+    {
+        shipmentManagementPage.clickReopenShipmentButton();
+    }
+
+    @When("Operator clicks on reopen shipment button under the Apply Action for invalid status shipment")
+    public void operatorClicksOnReopenShipmentButtonUnderTheApplyActionForInvaludStatusShipment()
+    {
+        shipmentManagementPage.clickReopenShipmentButton(false);
+    }
+
+    @Then("Operator verifies that the shipment is reopened")
+    public void operatorVerifiesThatTheShipmentIsReopened()
+    {
+        shipmentManagementPage.verifiesShipmentIsReopened();
+    }
+
+    @Then("Operator verifies that the Reopen Shipment Button is disabled")
+    public void operatorVerifiesThatTheReopenShipmentButtonIsDisabled()
+    {
+        shipmentManagementPage.verifiesReopenShipmentIsDisabled();
+    }
 }
