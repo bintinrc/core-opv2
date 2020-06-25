@@ -156,6 +156,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         super.waitUntilPageLoaded();
         waitUntilInvisibilityOfElementLocated("//md-progress-circular/following-sibling::div[text()='Loading...']");
+        pause1s();
     }
 
     public void verifyItsCurrentPage()
