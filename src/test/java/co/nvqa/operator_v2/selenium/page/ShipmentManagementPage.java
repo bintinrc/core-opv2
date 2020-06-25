@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.*;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.is;
 
 /**
  * @author Lanang Jati
@@ -40,17 +41,22 @@ import static org.hamcrest.Matchers.contains;
 @SuppressWarnings("WeakerAccess")
 public class ShipmentManagementPage extends OperatorV2SimplePage
 {
-    public static final String LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON = "Create";
-    public static final String LOCATOR_SELCT_FILTERS_PRESET = "commons.preset.load-filter-preset";
-    public static final String SHIPMENT_STATUS_DROPDOWN_XPATH = "//md-autocomplete[md-autocomplete-wrap[input[contains(@id,'input') and contains(@aria-label,'Search or Select')]]]/following-sibling::md-icon[i[text()='arrow_drop_down']]";
-    public static final String TRANSIT_SELECTION_XPATH = "//span[text()='Transit']/ancestor::li";
+    private static final String LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON = "Create";
+    private static final String LOCATOR_SELCT_FILTERS_PRESET = "commons.preset.load-filter-preset";
+    private static final String SHIPMENT_STATUS_DROPDOWN_XPATH = "//md-autocomplete[md-autocomplete-wrap[input[contains(@id,'input') and contains(@aria-label,'Search or Select')]]]/following-sibling::md-icon[i[text()='arrow_drop_down']]";
+    private static final String TRANSIT_SELECTION_XPATH = "//span[text()='Transit']/ancestor::li";
 
-    public static final String XPATH_EDIT_SEARCH_FILTER_BUTTON = "//button[contains(@aria-label, 'Edit Filter')]";
-    public static final String XPATH_FORCE_SUCCESS_CONFIRMATION_BUTTON = "//button[span[text()='Confirm']]";
-    public static final String XPATH_SHIPMENT_SCAN = "//div[contains(@class,'table-shipment-scan-container')]/table/tbody/tr";
-    public static final String XPATH_CLOSE_SCAN_MODAL_BUTTON = "//button[@aria-label='Cancel']";
-    public static final String XPATH_CLEAR_FILTER_BUTTON = "//button[@aria-label='Clear All Selections']";
-    public static final String XPATH_CLEAR_FILTER_VALUE = "//button[@aria-label='Clear All']";
+    private static final String XPATH_EDIT_SEARCH_FILTER_BUTTON = "//button[contains(@aria-label, 'Edit Filter')]";
+    private static final String XPATH_FORCE_SUCCESS_CONFIRMATION_BUTTON = "//button[span[text()='Confirm']]";
+    private static final String XPATH_SHIPMENT_SCAN = "//div[contains(@class,'table-shipment-scan-container')]/table/tbody/tr";
+    private static final String XPATH_CLOSE_SCAN_MODAL_BUTTON = "//button[@aria-label='Cancel']";
+    private static final String XPATH_CLEAR_FILTER_BUTTON = "//button[@aria-label='Clear All Selections']";
+    private static final String XPATH_CLEAR_FILTER_VALUE = "//button[@aria-label='Clear All']";
+    private static final String XPATH_CHECKBOX_ON_SHIPMENT_TABLE = "//td[@class='id']/following-sibling::td[@class='column-checkbox']//md-checkbox[@ng-checked='table.isSelected(shipment)']//div[@class='md-icon']";
+    private static final String XPATH_APPLY_ACTION_BUTTON = "//button[@ng-click='$mdOpenMenu($event)' and @aria-label='Action']";
+    private static final String XPATH_REOPEN_SHIPMENT_OPTION = "//button[@ng-click='ctrl.reopenShipment($event, ctrl.tableParam.getSelection())']";
+    private static final String XPATH_REOPEN_SHIPMENT_OPTION_DISABLED = "//button[@ng-click='ctrl.reopenShipment($event, ctrl.tableParam.getSelection())' and @disabled='disabled']";
+
     public ShipmentsTable shipmentsTable;
     public ShipmentEventsTable shipmentEventsTable;
     public MovementEventsTable movementEventsTable;
@@ -397,6 +403,33 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
 
         String toastMessage = getToastTopText();
         assertThat("Toast message not contains Shipment Completion", toastMessage, allOf(containsString("Force"), containsString("Success")));
+    }
+
+    public void clickReopenShipmentButton(boolean isValid)
+    {
+        click(XPATH_CHECKBOX_ON_SHIPMENT_TABLE);
+        click(XPATH_APPLY_ACTION_BUTTON);
+        if (isValid)
+        {
+            waitUntilVisibilityOfElementLocated(XPATH_REOPEN_SHIPMENT_OPTION);
+            click(XPATH_REOPEN_SHIPMENT_OPTION);
+        }
+    }
+
+    public void clickReopenShipmentButton()
+    {
+        clickReopenShipmentButton(true);
+    }
+
+    public void verifiesShipmentIsReopened()
+    {
+        waitUntilVisibilityOfToast("Success reopen shipments");
+        waitUntilInvisibilityOfToast("Success reopen shipments");
+    }
+
+    public void verifiesReopenShipmentIsDisabled()
+    {
+        isElementExistFast(XPATH_REOPEN_SHIPMENT_OPTION_DISABLED);
     }
 
     public void createAndUploadCsv(List<Order> orders, String fileName, boolean isValid, boolean isDuplicated, int numberOfOrder, ShipmentInfo shipmentInfo) throws FileNotFoundException

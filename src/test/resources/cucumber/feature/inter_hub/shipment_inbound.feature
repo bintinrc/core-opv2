@@ -445,7 +445,6 @@ Feature: Shipment Inbound
       | hubName   | {hub-name}          |
       | hubId     | {hub-id}            |
     And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Origin Hub" on Edit Order page
 
   @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Operator Sweep Parcel in Shipment - Different Destination - Routed to NOT Today (uid:cfe3d8c9-6f01-4761-9f99-645cd2fb2c07)
@@ -493,7 +492,6 @@ Feature: Shipment Inbound
       | hubName   | {hub-name-2}          |
       | hubId     | {hub-id-2}            |
     And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Origin Hub" on Edit Order page
 
   @DeleteShipment
   Scenario: Operator Sweep Parcel in Shipment - Incomplete Process (uid:c4e5146f-618e-45eb-bf9b-22e7f7dd6a17)
@@ -628,7 +626,6 @@ Feature: Shipment Inbound
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
     Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify Current DNR Group is "{set-aside-group-name}" on Edit Order page
     And Operator verify order event on Edit order page using data below:
       | name    | HUB INBOUND SCAN |
@@ -656,7 +653,6 @@ Feature: Shipment Inbound
       | hubName   | {hub-name}          |
       | hubId     | {hub-id}            |
     And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
   @DeleteShipment
   Scenario: Operator Sweep Parcel in Shipment - Parcel with Tags (uid:c1b3f5d5-e5b5-440d-bb33-587e748429f8)
