@@ -38,6 +38,7 @@ public class FacilitiesManagementSteps extends AbstractSteps
 
         String name = data.get("name");
         String displayName = data.get("displayName");
+        String type = data.get("type");
         String city = data.get("city");
         String country = data.get("country");
         String latitude = data.get("latitude");
@@ -111,7 +112,6 @@ public class FacilitiesManagementSteps extends AbstractSteps
         String searchHubsKeyword = data.get("searchHubsKeyword");
         String name = data.get("name");
         String displayName = data.get("displayName");
-        String type = data.get("type");
         String city = data.get("city");
         String country = data.get("country");
         String latitude = data.get("latitude");
