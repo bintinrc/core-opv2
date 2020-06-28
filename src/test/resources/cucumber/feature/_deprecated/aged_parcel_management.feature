@@ -1,7 +1,7 @@
-@OperatorV2Deprecated @OperatorV2PartwDeprecated
+@OperatorV2Deprecated @OperatorV2Part2Deprecated
 Feature: Aged Parcel Management
 
-    #DEPRECATED
+  #DEPRECATED
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
   Scenario: Login to Operator Portal V2
