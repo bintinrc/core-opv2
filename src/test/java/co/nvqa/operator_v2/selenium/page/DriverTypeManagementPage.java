@@ -6,7 +6,6 @@ import co.nvqa.operator_v2.model.DriverTypeParams;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +17,7 @@ import static co.nvqa.commons.util.NvMatchers.hasItemIgnoreCase;
 import static co.nvqa.commons.util.NvMatchers.hasItemsIgnoreCase;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * Modified by Sergey Mishanin
@@ -39,9 +39,6 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
     private AddDriverTypeDialog addDriverTypeDialog;
     private EditDriverTypeDialog editDriverTypeDialog;
     private FiltersForm filtersForm;
-
-    @FindBy(css = "md-dialog")
-    public ConfirmDeleteDialog confirmDeleteDialog;
 
     public DriverTypeManagementPage(WebDriver webDriver)
     {
@@ -101,17 +98,16 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
 
         filterResults.forEach(driverTypeParams ->
         {
-            if (StringUtils.isNotBlank(filterParams.getDeliveryType()))
+            if(StringUtils.isNotBlank(filterParams.getDeliveryType()))
             {
                 assertThat(DELIVERY_TYPE,
                         driverTypeParams.getDeliveryTypes(),
                         anyOf(hasItemsIgnoreCase(filterParams.getDeliveryTypes()), hasItemIgnoreCase("All")));
             }
-            if (StringUtils.isNotBlank(filterParams.getPriorityLevel()))
+            if(StringUtils.isNotBlank(filterParams.getPriorityLevel()))
             {
-                List<String> expectedItems = filterParams.getPriorityLevels().stream().map(item ->
-                {
-                    if (!StringUtils.containsAny(item, "Only", "All", "Both"))
+                List<String> expectedItems = filterParams.getPriorityLevels().stream().map(item -> {
+                    if (!StringUtils.containsAny(item,"Only", "All", "Both"))
                     {
                         item += " Only";
                     }
@@ -119,7 +115,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
                 }).collect(Collectors.toList());
                 assertThat(PRIORITY_LEVEL, driverTypeParams.getPriorityLevels(), anyOf(hasItemsIgnoreCase(expectedItems), hasItemIgnoreCase("All")));
             }
-            if (StringUtils.isNotBlank(filterParams.getReservationSize()))
+            if(StringUtils.isNotBlank(filterParams.getReservationSize()))
             {
                 assertThat(RESERVATION_SIZE, driverTypeParams.getReservationSizes(), anyOf(hasItemsIgnoreCase(filterParams.getReservationSizes()), hasItemIgnoreCase("All")));
             }
@@ -153,37 +149,37 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
     {
         searchingCreatedDriver(expectedDriverTypeParams.getDriverTypeName());
         DriverTypeParams actualDriverTypeParams = driverTypesTable.getDriverTypeParams(1);
-        if (expectedDriverTypeParams.getDriverTypeId() != null)
+        if(expectedDriverTypeParams.getDriverTypeId()!=null)
         {
             assertThat("Driver Type ID", actualDriverTypeParams.getDriverTypeId(), equalTo(expectedDriverTypeParams.getDriverTypeId()));
         }
-        if (expectedDriverTypeParams.getDriverTypeName() != null)
+        if(expectedDriverTypeParams.getDriverTypeName()!=null)
         {
             assertThat("Driver Type Name", actualDriverTypeParams.getDriverTypeName(), equalToIgnoringCase(expectedDriverTypeParams.getDriverTypeName()));
         }
-        if (expectedDriverTypeParams.getDeliveryType() != null)
+        if(expectedDriverTypeParams.getDeliveryType()!=null)
         {
             assertThat(DELIVERY_TYPE, actualDriverTypeParams.getDeliveryType(), equalToIgnoringCase(expectedDriverTypeParams.getDeliveryType()));
         }
-        if (expectedDriverTypeParams.getPriorityLevel() != null)
+        if(expectedDriverTypeParams.getPriorityLevel()!=null)
         {
             String expectedPriorityLevel = expectedDriverTypeParams.getPriorityLevel();
-            if (!StringUtils.containsAny(expectedPriorityLevel, "Only", "All", "Both"))
+            if(!StringUtils.containsAny(expectedPriorityLevel, "Only", "All", "Both"))
             {
                 expectedPriorityLevel += " Only";
             }
 
             assertThat(PRIORITY_LEVEL, actualDriverTypeParams.getPriorityLevel(), equalToIgnoringCase(expectedPriorityLevel));
         }
-        if (expectedDriverTypeParams.getReservationSize() != null)
+        if(expectedDriverTypeParams.getReservationSize()!=null)
         {
             assertThat(RESERVATION_SIZE, actualDriverTypeParams.getReservationSize(), equalToIgnoringCase(expectedDriverTypeParams.getReservationSize()));
         }
-        if (expectedDriverTypeParams.getParcelSize() != null)
+        if(expectedDriverTypeParams.getParcelSize()!=null)
         {
             assertThat(PARCEL_SIZE, actualDriverTypeParams.getParcelSize(), equalToIgnoringCase(expectedDriverTypeParams.getParcelSize()));
         }
-        if (expectedDriverTypeParams.getTimeslot() != null)
+        if (expectedDriverTypeParams.getTimeslot()!=null)
         {
             assertThat(TIMESLOT, actualDriverTypeParams.getTimeslot(), equalToIgnoringCase(expectedDriverTypeParams.getTimeslot()));
         }
@@ -205,7 +201,10 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
     {
         searchingCreatedDriver(driverTypeParams.getDriverTypeName());
         driverTypesTable.clickDeleteButton(1);
-        confirmDeleteDialog.confirmDelete();
+        waitUntilVisibilityOfMdDialogByTitle("Confirm delete");
+        clickButtonOnMdDialogByAriaLabel("Delete");
+        waitUntilInvisibilityOfMdDialogByTitle("Confirm delete");
+        pause2s();
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)
@@ -245,7 +244,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
             waitUntilVisibilityOfElementLocated(String.format("//tr[@md-virtual-repeat='%s']", MD_VIRTUAL_REPEAT));
             int rowsCount = getRowsCount();
             List<DriverTypeParams> params = new ArrayList<>(rowsCount);
-            for (int rowIndex = 1; rowIndex <= rowsCount; rowIndex++)
+            for(int rowIndex=1; rowIndex<=rowsCount; rowIndex++)
             {
                 params.add(getDriverTypeParams(rowIndex));
             }
@@ -347,7 +346,7 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
 
         public AddDriverTypeDialog setName(String name)
         {
-            if (StringUtils.isNotBlank(name))
+            if(StringUtils.isNotBlank(name))
             {
                 sendKeysByAriaLabel(FIELD_NAME_LOCATOR, name);
             }
@@ -532,23 +531,23 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
         {
             waitUntilVisible();
             setName(driverTypeParams.getDriverTypeName());
-            if (StringUtils.isNotBlank(driverTypeParams.getDeliveryType()))
+            if(StringUtils.isNotBlank(driverTypeParams.getDeliveryType()))
             {
                 selectDeliveryType(driverTypeParams.getDeliveryTypes());
             }
-            if (StringUtils.isNotBlank(driverTypeParams.getPriorityLevel()))
+            if(StringUtils.isNotBlank(driverTypeParams.getPriorityLevel()))
             {
                 selectPriorityLevel(driverTypeParams.getPriorityLevels());
             }
-            if (StringUtils.isNotBlank(driverTypeParams.getReservationSize()))
+            if(StringUtils.isNotBlank(driverTypeParams.getReservationSize()))
             {
                 selectReservationSize(driverTypeParams.getReservationSizes());
             }
-            if (StringUtils.isNotBlank(driverTypeParams.getParcelSize()))
+            if(StringUtils.isNotBlank(driverTypeParams.getParcelSize()))
             {
                 selectParcelSize(driverTypeParams.getParcelSizes());
             }
-            if (StringUtils.isNotBlank(driverTypeParams.getTimeslot()))
+            if(StringUtils.isNotBlank(driverTypeParams.getTimeslot()))
             {
                 selectTimeslot(driverTypeParams.getTimeslots());
             }
