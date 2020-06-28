@@ -2,16 +2,25 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.addressing.JaroScore;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -20,7 +29,16 @@ import java.util.stream.Collectors;
 @SuppressWarnings("WeakerAccess")
 public class BulkAddressVerificationPage extends OperatorV2SimplePage
 {
-    private SuccessfulMatchesTable successfulMatchesTable;
+    @FindBy(name = "Upload CSV")
+    public NvIconTextButton uploadCsv;
+
+    @FindBy(name = "Update Successful Matches")
+    public NvApiTextButton updateSuccessfulMatches;
+
+    @FindBy(css = "md-dialog")
+    public UploadAddressesCsvDialog uploadAddressesCsvDialog;
+
+    public final SuccessfulMatchesTable successfulMatchesTable;
 
     public BulkAddressVerificationPage(WebDriver webDriver)
     {
@@ -37,8 +55,7 @@ public class BulkAddressVerificationPage extends OperatorV2SimplePage
         try
         {
             FileUtils.writeLines(file, csvLines);
-        }
-        catch (IOException ex)
+        } catch (IOException ex)
         {
             NvLogger.warnf("File '%s' failed to write. Cause: %s", file.getAbsolutePath(), ex.getMessage());
         }
@@ -58,18 +75,11 @@ public class BulkAddressVerificationPage extends OperatorV2SimplePage
                 jaroScore -> jaroScore
         ));
 
-        for(int rowIndex=1; rowIndex<=actualSuccessfulMatches; rowIndex++)
+        for (int rowIndex = 1; rowIndex <= actualSuccessfulMatches; rowIndex++)
         {
-            String actualWaypointID = successfulMatchesTable.getWaypointId(rowIndex);
-            JaroScore jaroScore = jsMapByWaypointId.get(Long.parseLong(actualWaypointID));
-            assertThat("[" + rowIndex + "] Unexpected Waypoint ID " + actualWaypointID, jaroScore, notNullValue());
-            assertEquals("[" + rowIndex + "] Waypoint ID", String.valueOf(jaroScore.getWaypointId()), actualWaypointID);
-            assertThat("[" + rowIndex + " Address] ", successfulMatchesTable.getAddress(rowIndex), equalToIgnoringCase(jaroScore.getAddress1()));
-            String expectedCoordinates =
-                    StringUtils.left(String.valueOf(jaroScore.getLatitude()), 6) +
-                            "," +
-                            StringUtils.left(String.valueOf(jaroScore.getLongitude()), 6);
-            assertThat("[" + rowIndex + " Coordinates] ", successfulMatchesTable.getCoordinates(rowIndex), equalToIgnoringCase(expectedCoordinates));
+            JaroScore actual = successfulMatchesTable.readEntity(rowIndex);
+            JaroScore expected = jsMapByWaypointId.get(actual.getWaypointId());
+            expected.compareWithActual(actual, "verifiedAddressId");
         }
 
         updateSuccessfulMatches();
@@ -80,57 +90,62 @@ public class BulkAddressVerificationPage extends OperatorV2SimplePage
 
     public void uploadCsv(File file)
     {
-        clickNvIconTextButtonByName("Upload CSV");
-        waitUntilVisibilityOfMdDialogByTitle("Upload Address CSV");
-        sendKeysByAriaLabel("Choose", file.getAbsolutePath());
-        clickNvButtonSaveByNameAndWaitUntilDone("Submit");
-        waitUntilInvisibilityOfMdDialogByTitle("Upload Address CSV");
+        uploadCsv.click();
+        uploadAddressesCsvDialog.waitUntilVisible();
+        uploadAddressesCsvDialog.chooseButton.setValue(file);
+        uploadAddressesCsvDialog.submit.clickAndWaitUntilDone();
+        uploadAddressesCsvDialog.waitUntilInvisible();
     }
 
     public void updateSuccessfulMatches()
     {
-        clickNvApiTextButtonByNameAndWaitUntilDone("Update Successful Matches");
+        updateSuccessfulMatches.clickAndWaitUntilDone();
     }
 
-    /**
-     * Accessor for Successful Matches table
-     */
-    public static class SuccessfulMatchesTable extends OperatorV2SimplePage
+    public static class SuccessfulMatchesTable extends NgRepeatTable<JaroScore>
     {
-        private static final String NG_REPEAT = "scs in ctrl.success track by $index";
-        private static final String COLUMN_CLASS_WP_ID = "wp-id";
-        private static final String COLUMN_CLASS_ADDRESS = "address";
-        private static final String COLUMN_CLASS_COORDINATES = "coordinate";
+        private static final Pattern LATLONG_PATTERN = Pattern.compile(".*?([\\d\\.]+).*?([\\d\\.]+).*");
+        public static final String NG_REPEAT = "scs in $data";
+        public static final String COLUMN_LATITUDE = "latitude";
+        public static final String COLUMN_LONGITUDE = "longitude";
 
         public SuccessfulMatchesTable(WebDriver webDriver)
         {
             super(webDriver);
+            setNgRepeat(NG_REPEAT);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                    .put("waypointId", "id")
+                    .put("address1", "//td[@data-title-text='Address']")
+                    .put(COLUMN_LATITUDE, "coordinate")
+                    .put(COLUMN_LONGITUDE, "coordinate")
+                    .build());
+            setColumnValueProcessors(ImmutableMap.of(
+                    COLUMN_LATITUDE, value ->
+                    {
+                        Matcher m = LATLONG_PATTERN.matcher(value);
+                        return m.matches() ? m.group(1) : null;
+                    },
+                    COLUMN_LONGITUDE, value ->
+                    {
+                        Matcher m = LATLONG_PATTERN.matcher(value);
+                        return m.matches() ? m.group(2) : null;
+                    }
+            ));
+            setEntityClass(JaroScore.class);
         }
+    }
 
-        public String getWaypointId(int rowNumber)
-        {
-            return getTextOnTable(rowNumber, COLUMN_CLASS_WP_ID);
-        }
+    public static class UploadAddressesCsvDialog extends MdDialog
+    {
+        @FindBy(css = "[label='Choose']")
+        NvButtonFilePicker chooseButton;
 
-        public String getAddress(int rowNumber)
-        {
-            return getTextOnTable(rowNumber, COLUMN_CLASS_ADDRESS);
-        }
+        @FindBy(name = "Submit")
+        public NvButtonSave submit;
 
-        public String getCoordinates(int rowNumber)
+        public UploadAddressesCsvDialog(WebDriver webDriver, WebElement webElement)
         {
-            return getTextOnTable(rowNumber, COLUMN_CLASS_COORDINATES);
-        }
-
-        private String getTextOnTable(int rowNumber, String columnDataClass)
-        {
-            String text = getTextOnTableWithNgRepeat(rowNumber, columnDataClass, NG_REPEAT);
-            return StringUtils.normalizeSpace(text);
-        }
-
-        public int getRowsCount()
-        {
-            return getRowsCountOfTableWithNgRepeat(NG_REPEAT);
+            super(webDriver, webElement);
         }
     }
 }

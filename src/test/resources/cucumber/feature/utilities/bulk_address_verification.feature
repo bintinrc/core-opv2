@@ -5,7 +5,7 @@ Feature: Bulk Address Verification
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @Debug
   Scenario: Operator should be able to verify Bulk Addresses on Bulk Address Verification page (uid:ae74df19-c939-4b91-865d-94eb19021910)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
