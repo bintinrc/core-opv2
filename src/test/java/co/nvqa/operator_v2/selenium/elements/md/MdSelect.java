@@ -1,8 +1,10 @@
 package co.nvqa.operator_v2.selenium.elements.md;
 
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -42,14 +44,22 @@ public class MdSelect extends PageElement
     @FindBy(xpath = "//div[contains(@class,'md-select-menu-container')][@aria-hidden='false']//md-option")
     public List<PageElement> options;
 
-    private static final String MD_OPTION_LOCATOR = "//div[contains(@class,'md-select-menu-container')][@aria-hidden='false']//md-option[.//div[contains(normalize-space(.), '%s')]]";
-    private static final String MD_OPTION_BY_VALUE_LOCATOR = "//div[contains(@class,'md-select-menu-container')][@aria-hidden='false']//md-option[@value='%s']";
+    private String menuId;
+
+    private static final String MD_OPTION_LOCATOR = "//div[@id='%s']//md-option[.//div[contains(normalize-space(.), '%s')]]";
+    private static final String MD_OPTION_BY_VALUE_LOCATOR = "//div[@id='%s']//md-option[@value='%s']";
 
     public void searchAndSelectValue(String value)
     {
         enterSearchTerm(value);
         value = escapeValue(value);
-        click(f(MD_OPTION_LOCATOR, StringUtils.normalizeSpace(value)));
+        try
+        {
+            click(f(MD_OPTION_LOCATOR, getMenuId(), StringUtils.normalizeSpace(value)));
+        } catch (NoSuchElementException ex)
+        {
+            throw new NvTestRuntimeException(f("Could not select option [%s] in md-select", value), ex);
+        }
     }
 
     public void searchAndSelectValues(Iterable<String> values)
@@ -82,7 +92,7 @@ public class MdSelect extends PageElement
     {
         openMenu();
         value = escapeValue(value);
-        click(f(MD_OPTION_BY_VALUE_LOCATOR, StringUtils.normalizeSpace(value)));
+        click(f(MD_OPTION_BY_VALUE_LOCATOR, getMenuId(), StringUtils.normalizeSpace(value)));
     }
 
     private void openMenu()
@@ -91,6 +101,15 @@ public class MdSelect extends PageElement
         selectValueElement.scrollIntoView();
         selectValueElement.jsClick();
         pause500ms();
+    }
+
+    private String getMenuId()
+    {
+        if (StringUtils.isBlank(menuId))
+        {
+            menuId = getAttribute("aria-owns");
+        }
+        return menuId;
     }
 
     private void closeMenu()
