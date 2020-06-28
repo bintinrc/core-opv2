@@ -1,5 +1,7 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part2 @AgedParcelManagement @Saas @Inbound
+@OperatorV2Deprecated @OperatorV2PartwDeprecated
 Feature: Aged Parcel Management
+
+    #DEPRECATED
 
   @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
   Scenario: Login to Operator Portal V2
