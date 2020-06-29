@@ -597,6 +597,8 @@ public class RouteInboundSteps extends AbstractSteps
     {
         mapOfData = resolveKeyValues(mapOfData);
         MoneyCollectionHistoryEntry expectedRecord = new MoneyCollectionHistoryEntry(mapOfData);
+        String preProcessing = expectedRecord.getProcessedAmount().replaceAll("S\\$", "");
+        expectedRecord.setProcessedAmount(preProcessing);
         routeInboundPage.moneyCollectionHistoryDialog.historyTab.click();
         pause1s();
         MoneyCollectionHistoryEntry actualRecord = routeInboundPage.moneyCollectionHistoryDialog.historyTable.readEntity(1);

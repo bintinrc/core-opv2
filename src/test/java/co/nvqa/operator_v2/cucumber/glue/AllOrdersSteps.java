@@ -321,12 +321,9 @@ public class AllOrdersSteps extends AbstractSteps
         allOrdersPage.waitUntilPageLoaded();
         allOrdersPage.categorySelect.selectValue(AllOrdersPage.Category.TRACKING_OR_STAMP_ID.getValue());
         allOrdersPage.searchLogicSelect.selectValue(AllOrdersPage.SearchLogic.EXACTLY_MATCHES.getValue());
-        retryIfRuntimeExceptionOccurred(() ->
-        {
-            allOrdersPage.searchTerm.selectValue(trackingId);
-            allOrdersPage.waitUntilPageLoaded();
-            allOrdersPage.switchToEditOrderWindow(orderId);
-        }, "open Edit Order page for order "+ trackingId, 1000, 3);
+        allOrdersPage.searchTerm.selectValue(trackingId);
+        allOrdersPage.waitUntilPageLoaded();
+        allOrdersPage.switchToEditOrderWindow(orderId);
     }
 
     @Then("Operator verifies tha searched Tracking ID is the same to the created one")

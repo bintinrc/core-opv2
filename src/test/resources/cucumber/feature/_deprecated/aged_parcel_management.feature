@@ -1,4 +1,4 @@
-@OperatorV2Deprecated @AgedParcelManagement @Saas @Inbound
+@OperatorV2Deprecated @OperatorV2Part2Deprecated
 Feature: Aged Parcel Management
 
     #DEPRECATED

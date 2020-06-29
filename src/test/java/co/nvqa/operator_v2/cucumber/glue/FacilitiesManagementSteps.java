@@ -38,12 +38,12 @@ public class FacilitiesManagementSteps extends AbstractSteps
 
         String name = data.get("name");
         String displayName = data.get("displayName");
+        String type = data.get("type");
         String city = data.get("city");
         String country = data.get("country");
         String latitude = data.get("latitude");
         String longitude = data.get("longitude");
         String facilityType = data.get("facilityType");
-        String region = data.get("region");
 
         String uniqueCode = generateDateUniqueString();
         Address address = AddressFactory.getRandomAddress();
@@ -88,7 +88,6 @@ public class FacilitiesManagementSteps extends AbstractSteps
         hub.setLatitude(Double.parseDouble(latitude));
         hub.setLongitude(Double.parseDouble(longitude));
         hub.setFacilityType(facilityType);
-        hub.setRegion(region);
 
         put(KEY_CREATED_HUB, hub);
         putInList(KEY_LIST_OF_CREATED_HUBS, hub);

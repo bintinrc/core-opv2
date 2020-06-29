@@ -1,7 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.DpTagging;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -24,6 +26,8 @@ public class DpTaggingPage extends OperatorV2SimplePage
 {
     public DpTaggingTable dpTaggingTable;
 
+    private static final String LOCATOR_DROP_OFF_DATE = "//td[contains(@class,'drop-off-date column-locked-right')]/md-input-container";
+
     @FindBy(name = "container.dp-tagging.assign-all")
     public NvApiTextButton assignAll;
 
@@ -32,6 +36,9 @@ public class DpTaggingPage extends OperatorV2SimplePage
 
     @FindBy(css = "nv-button-file-picker[label='Select File']")
     public NvButtonFilePicker selectFile;
+
+    @FindBy(xpath = LOCATOR_DROP_OFF_DATE)
+    public MdSelect selectDate;
 
     public DpTaggingPage(WebDriver webDriver)
     {
@@ -143,6 +150,22 @@ public class DpTaggingPage extends OperatorV2SimplePage
             );
             setEntityClass(DpTagging.class);
             setMdVirtualRepeat("order in getTableData()");
+        }
+    }
+
+    public void selectDateToNextDay()
+    {
+        selectDate.searchAndSelectValue(YYYY_MM_DD_SDF.format(StandardTestUtils.getNextWorkingDay(1)));
+    }
+
+    public void selectMultiDateToNextDay(int size)
+    {
+        String nextDay = YYYY_MM_DD_SDF.format(StandardTestUtils.getNextWorkingDay(1));
+
+        for(int i=1; i<=size; i++)
+        {
+            click("//tr["+i+"]"+LOCATOR_DROP_OFF_DATE);
+            clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]",nextDay,nextDay);
         }
     }
 }

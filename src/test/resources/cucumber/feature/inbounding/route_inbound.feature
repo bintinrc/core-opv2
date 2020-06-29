@@ -335,7 +335,7 @@ Feature: Route Inbound
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | GET_FROM_CREATED_ROUTE |
     Then Operator verify error message displayed on Route Inbound:
-      | status       | 400 Bad Request        |
+      | status       | 400 Unknown            |
       | errorCode    | 103009                 |
       | errorMessage | route has no waypoints |
 
@@ -347,7 +347,7 @@ Feature: Route Inbound
       | fetchBy      | FETCH_BY_ROUTE_ID |
       | fetchByValue | 123456            |
     Then Operator verify error message displayed on Route Inbound:
-      | status       | 404 Not Found    |
+      | status       | 404 Unknown      |
       | errorCode    | 103019           |
       | errorMessage | Route not found! |
 
@@ -362,7 +362,7 @@ Feature: Route Inbound
       | fetchBy      | FETCH_BY_ROUTE_ID      |
       | fetchByValue | GET_FROM_CREATED_ROUTE |
     Then Operator verify error message displayed on Route Inbound:
-      | status       | 400 Bad Request                   |
+      | status       | 400 Unknown                       |
       | errorCode    | 103088                            |
       | errorMessage | Route is not assigned to a driver |
 
@@ -467,7 +467,7 @@ Feature: Route Inbound
       | fetchBy      | FETCH_BY_TRACKING_ID          |
       | fetchByValue | KEY_CREATED_ORDER_TRACKING_ID |
     Then Operator verify error message displayed on Route Inbound:
-      | status       | 400 Bad Request            |
+      | status       | 400 Unknown                |
       | errorCode    | 103096                     |
       | errorMessage | Order is not on any route! |
 
@@ -480,7 +480,7 @@ Feature: Route Inbound
       | fetchBy      | FETCH_BY_TRACKING_ID |
       | fetchByValue | SOMEWRONGTRACKINGID  |
     Then Operator verify error message displayed on Route Inbound:
-      | status       | 404 Not Found    |
+      | status       | 404 Unknown      |
       | errorCode    | 103014           |
       | errorMessage | Order not found! |
 
