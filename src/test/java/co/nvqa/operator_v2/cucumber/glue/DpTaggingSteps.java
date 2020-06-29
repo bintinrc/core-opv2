@@ -42,6 +42,7 @@ public class DpTaggingSteps extends AbstractSteps
 
         dpTaggingPage.uploadDpTaggingCsv(listOfDpTagging);
         dpTaggingPage.verifyDpTaggingCsvIsUploadedSuccessfully(listOfDpTagging);
+        dpTaggingPage.selectDateToNextDay();
         dpTaggingPage.checkAndAssignAll(false);
 
         put("listOfDpTagging", listOfDpTagging);
@@ -92,6 +93,7 @@ public class DpTaggingSteps extends AbstractSteps
 
         dpTaggingPage.uploadDpTaggingCsv(listOfDpTagging);
         dpTaggingPage.verifyDpTaggingCsvIsUploadedSuccessfully(listOfDpTagging);
+        dpTaggingPage.selectMultiDateToNextDay(listOfTrackingId.size());
         dpTaggingPage.checkAndAssignAll(true);
 
         put("listOfDpTagging", listOfDpTagging);
