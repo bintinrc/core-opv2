@@ -65,6 +65,7 @@ public class AgedParcelManagementSteps extends AbstractSteps
     public void operatorDownloadCsvFileOfAgedParcelOnAgedParcelsList()
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        agedParcelManagementPage.waitWhilePageIsLoading();
         agedParcelManagementPage.downloadCsvFile(trackingId);
     }
 
