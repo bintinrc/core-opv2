@@ -1,11 +1,12 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part2 @AgedParcelManagement @Saas @Inbound
+@OperatorV2Deprecated @AgedParcelManagement @Saas @Inbound
 Feature: Aged Parcel Management
 
-  @LaunchBrowser @ShouldAlwaysRun @Debug @ForceNotHeadless
+    #DEPRECATED
+
+  @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @Debug
   Scenario Outline: Operator should be able to filter by Shipper/Aged Days on Aged Parcel Management page (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -22,9 +23,9 @@ Feature: Aged Parcel Management
       | shipperName      | <shipperName>      |
       | daysSinceInbound | <daysSinceInbound> |
     Examples:
-      | Note              | hiptest-uid                              | shipperName       | agedDays | daysSinceInbound |
-      | Filter by Shipper | uid:810d03ee-8015-4ee3-b61f-2c15e8405c0a | {shipper-v4-name} |          | Today            |
-#      | Filter by Aged Days | uid:4c357b48-fabf-49de-8da0-4c63f0284e67 | {shipper-v4-name} | -1       | Today            |
+      | Note                | hiptest-uid                              | shipperName       | agedDays | daysSinceInbound |
+      | Filter by Shipper   | uid:810d03ee-8015-4ee3-b61f-2c15e8405c0a | {shipper-v4-name} | -1       | Today            |
+      | Filter by Aged Days | uid:4c357b48-fabf-49de-8da0-4c63f0284e67 | {shipper-v4-name} | -1       | Today            |
 
   Scenario Outline: Operator find aged parcel on Aged Parcels list (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
