@@ -4,6 +4,7 @@ import co.nvqa.operator_v2.selenium.page.AgedParcelManagementPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.junit.platform.commons.util.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +41,7 @@ public class AgedParcelManagementSteps extends AbstractSteps
     public void operatorLoadSelectionOnPageAgedParcelManagement(Map<String, String> dataTableAsMap)
     {
         String shipperName = dataTableAsMap.getOrDefault("shipperName", getShipperOfCreatedOrder().getName());
-        Integer agedDays = dataTableAsMap.containsKey("agedDays") ? Integer.parseInt(dataTableAsMap.get("agedDays")) : null;
+        Integer agedDays = StringUtils.isNotBlank(dataTableAsMap.get("agedDays")) ? Integer.parseInt(dataTableAsMap.get("agedDays")) : null;
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         agedParcelManagementPage.loadSelection(shipperName, trackingId, agedDays);
     }

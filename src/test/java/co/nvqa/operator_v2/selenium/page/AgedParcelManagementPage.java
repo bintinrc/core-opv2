@@ -1,16 +1,28 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterTextBox;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
 public class AgedParcelManagementPage extends CommonParcelManagementPage
 {
+    @FindBy(xpath = "//nv-filter-autocomplete[@main-title='Shipper']")
+    public NvFilterAutocomplete shipperFilter;
+
+    @FindBy(xpath = "//nv-filter-text-box[@main-title='Aged Days']")
+    public NvFilterTextBox agedDaysFilter;
+
+    @FindBy(name = "commons.load-selection")
+    public NvApiTextButton loadSelection;
+
     private static final String MD_VIRTUAL_REPEAT = "agedParcel in getTableData()";
     private static final String CSV_FILENAME_PATTERN = "aged-parcel-list";
 
@@ -32,13 +44,13 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
         String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
         assertEquals("Tracking ID", trackingId, actualTrackingId);
 
-        if(StringUtils.isNotBlank(shipperName))
+        if (StringUtils.isNotBlank(shipperName))
         {
             String actualShipper = getTextOnTable(1, COLUMN_CLASS_DATA_SHIPPER);
             assertEquals("Shipper", shipperName, actualShipper);
         }
 
-        if(StringUtils.isNotBlank(daysSinceInbound))
+        if (StringUtils.isNotBlank(daysSinceInbound))
         {
             String actualDaysSinceInbound = getTextOnTable(1, COLUMN_CLASS_DAYS_SINCE_INBOUD);
             assertThat("Days since inbound", actualDaysSinceInbound, equalToIgnoringCase(daysSinceInbound));
@@ -59,37 +71,36 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
 
     public void loadSelection(String shipperName, String trackingId, Integer agedDays)
     {
-        retryIfNvTestRuntimeExceptionOccurred(()->
+        retryIfNvTestRuntimeExceptionOccurred(() ->
         {
-            if(!isElementExistFast(f("//button[contains(@aria-label,'%s')]", shipperName)))
+            if (!isElementExistFast(f("//button[contains(@aria-label,'%s')]", shipperName)))
             {
-                if(StringUtils.isNotBlank(shipperName))
+                if (StringUtils.isNotBlank(shipperName))
                 {
-                    selectValueFromNvAutocompleteByItemTypesAndDismiss("Shipper", shipperName);
-                }
-                else
+                    shipperFilter.selectFilter(shipperName);
+                } else
                 {
-                    removeNvFilterBoxByMainTitle("Shipper");
+                    shipperFilter.removeFilter();
                 }
 
-                if(agedDays!=null)
+                if (agedDays != null)
                 {
-                    sendKeysByAriaLabel("Aged Days", String.valueOf(agedDays));
-                }
-                else
+                    agedDaysFilter.setValue(String.valueOf(agedDays));
+                } else
                 {
-                    removeNvFilterBoxByMainTitle("Aged Days");
+                    agedDaysFilter.removeFilter();
                 }
             }
             clickButtonLoadSelection();
 
-            if(isElementExistFast("//*[contains(@class,'toast-error')]")){
+            if (isElementExistFast("//*[contains(@class,'toast-error')]"))
+            {
                 closeToast();
             }
 
             searchTableByTrackingId(trackingId);
 
-            if(isTableEmpty())
+            if (isTableEmpty())
             {
                 clickButtonByAriaLabel("Edit Conditions");
                 throw new NvTestRuntimeException(f("Order with tracking ID = '%s' is not listed on table.", trackingId));
@@ -99,6 +110,6 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
 
     private void clickButtonLoadSelection()
     {
-        clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
+        loadSelection.clickAndWaitUntilDone();
     }
 }
