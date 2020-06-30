@@ -1,13 +1,14 @@
 @OperatorV2 @ShipperSupport @OperatorV2Part2 @FailedPickupManagement @Saas @Inbound
 Feature: Failed Pickup Management
 
-  @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator find failed pickup C2C/Return order on Failed Pickup orders list (<hiptest-uid>)
-    Given API Shipper create V4 order using data below:
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new route using data below:
@@ -18,7 +19,6 @@ Feature: Failed Pickup Management
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Driver failed the C2C/Return order pickup
-    And Operator refresh page
     When Operator go to menu Shipper Support -> Failed Pickup Management
     Then Operator verify the failed pickup C2C/Return order is listed on Failed Pickup orders list
     Examples:
@@ -40,7 +40,6 @@ Feature: Failed Pickup Management
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Driver failed the C2C/Return order pickup
-    And Operator refresh page
     When Operator go to menu Shipper Support -> Failed Pickup Management
     And Operator download CSV file of failed pickup C2C/Return order on Failed Pickup orders list
     Then Operator verify CSV file of failed pickup C2C/Return order on Failed Pickup orders list downloaded successfully
@@ -63,7 +62,6 @@ Feature: Failed Pickup Management
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Driver failed the C2C/Return order pickup
-    And Operator refresh page
     When Operator go to menu Shipper Support -> Failed Pickup Management
     And Operator reschedule failed pickup C2C/Return order on next day
     Then Operator verify failed pickup C2C/Return order rescheduled on next day successfully
@@ -87,7 +85,6 @@ Feature: Failed Pickup Management
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Driver failed the C2C/Return order pickup
-    And Operator refresh page
     When Operator go to menu Shipper Support -> Failed Pickup Management
     And Operator reschedule failed pickup C2C/Return order on next 2 days
     Then Operator verify failed pickup C2C/Return order rescheduled on next 2 days successfully

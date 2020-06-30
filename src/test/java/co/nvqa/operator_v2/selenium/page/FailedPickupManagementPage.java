@@ -1,53 +1,66 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.driver.FailureReason;
+import co.nvqa.operator_v2.model.FailedDelivery;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
+import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static co.nvqa.operator_v2.selenium.page.FailedPickupManagementPage.FailedPickupsTable.ACTION_RESCHEDULE_NEXT_DAY;
+import static co.nvqa.operator_v2.selenium.page.FailedPickupManagementPage.FailedPickupsTable.COLUMN_TRACKING_ID;
+
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
 public class FailedPickupManagementPage extends OperatorV2SimplePage
 {
-    private static final String MD_VIRTUAL_REPEAT = "failedPickup in getTableData()";
     private static final String CSV_FILENAME_PATTERN = "failed-pickup-list";
 
-    public static final String COLUMN_CLASS_DATA_TRACKING_ID = "tracking_id";
-    public static final String COLUMN_CLASS_DATA_FAILURE_COMMENTS = "_failure-reason-comments";
+    @FindBy(css = "md-dialog")
+    public RescheduleSelectedOrdersDialog rescheduleSelectedOrdersDialog;
 
-    public static final String ACTION_BUTTON_RESCHEDULE_NEXT_DAY = "container.failed-pickup-management.reschedule-next-day";
+    @FindBy(css = "md-dialog")
+    public CancelSelectedDialog cancelSelectedDialog;
 
-    public static final int ACTION_CANCEL_SELECTED = 1;
-    public static final int ACTION_RESCHEDULE_SELECTED = 2;
-    public static final int ACTION_DOWNLOAD_CSV_FILE = 3;
+    @FindBy(css = "div.navigation md-menu")
+    public MdMenu actionsMenu;
+
+    public final FailedPickupsTable failedPickupsTable;
 
     public FailedPickupManagementPage(WebDriver webDriver)
     {
         super(webDriver);
+        failedPickupsTable = new FailedPickupsTable(webDriver);
     }
 
     public void verifyTheFailedC2cOrReturnOrderIsListed(String trackingId, FailureReason expectedFailureReason)
     {
-        searchTableByTrackingId(trackingId);
-        String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
-        assertEquals("Tracking ID", trackingId, actualTrackingId);
-        String actualFailureComments = getTextOnTable(1, COLUMN_CLASS_DATA_FAILURE_COMMENTS);
-        assertEquals("Failure Comments", expectedFailureReason.getDescription(), actualFailureComments);
+        failedPickupsTable.filterByColumn(COLUMN_TRACKING_ID, trackingId);
+        FailedDelivery actual = failedPickupsTable.readEntity(1);
+        assertEquals("Tracking ID", trackingId, actual.getTrackingId());
+        assertEquals("Failure Comments", expectedFailureReason.getFailureReasonCodeDescription(), actual.getFailureReasonCodeDescription());
     }
 
     public void downloadCsvFile(String trackingId)
     {
-        searchTableByTrackingId(trackingId);
-        checkRow(1);
-        selectAction(ACTION_DOWNLOAD_CSV_FILE);
+        failedPickupsTable.filterByColumn(COLUMN_TRACKING_ID, trackingId);
+        failedPickupsTable.selectRow(1);
+        actionsMenu.selectOption("Download CSV File");
     }
 
     public void verifyCsvFileDownloadedSuccessfully(String trackingId)
@@ -57,35 +70,33 @@ public class FailedPickupManagementPage extends OperatorV2SimplePage
 
     public void rescheduleNextDay(String trackingId)
     {
-        searchTableByTrackingId(trackingId);
-        clickActionButtonOnTable(1, ACTION_BUTTON_RESCHEDULE_NEXT_DAY);
+        failedPickupsTable.filterByColumn(COLUMN_TRACKING_ID, trackingId);
+        failedPickupsTable.clickActionButton(1, ACTION_RESCHEDULE_NEXT_DAY);
     }
 
     public void cancelSelected(List<String> listOfExpectedTrackingId)
     {
         listOfExpectedTrackingId.forEach(trackingId ->
         {
-            searchTableByTrackingId(trackingId);
-            checkRow(1);
+            failedPickupsTable.filterByColumn(COLUMN_TRACKING_ID, trackingId);
+            failedPickupsTable.selectRow(1);
         });
 
-        selectAction(ACTION_CANCEL_SELECTED);
+        actionsMenu.selectOption("Cancel Selected");
 
-        List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='order in ctrl.orders']/td[1]");
-        List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
+        cancelSelectedDialog.waitUntilVisible();
+        List<String> listOfActualTrackingIds = cancelSelectedDialog.trackingIds.stream().map(PageElement::getText).collect(Collectors.toList());
         assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
+        cancelSelectedDialog.cancellationReason.setValue(f("This order is canceled by automation to test 'Cancel Selected' feature on Failed Pickup Management. Canceled at %s.", CREATED_DATE_SDF.format(new Date())));
 
-        sendKeysById("container.order.edit.cancellation-reason", String.format("This order is canceled by automation to test 'Cancel Selected' feature on Failed Pickup Management. Canceled at %s.", CREATED_DATE_SDF.format(new Date())));
-
-        if(listOfActualTrackingIds.size()==1)
+        if (listOfActualTrackingIds.size() == 1)
         {
-            clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-order");
-        }
-        else
+            cancelSelectedDialog.cancelOrder.clickAndWaitUntilDone();
+        } else
         {
-            clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.cancel-orders");
+            cancelSelectedDialog.cancelOrders.clickAndWaitUntilDone();
         }
-
+        cancelSelectedDialog.waitUntilInvisible();
         waitUntilInvisibilityOfToast("updated");
     }
 
@@ -98,58 +109,82 @@ public class FailedPickupManagementPage extends OperatorV2SimplePage
     {
         trackingIds.forEach(trackingId ->
         {
-            searchTableByTrackingId(trackingId);
-            checkRow(1);
+            failedPickupsTable.filterByColumn(COLUMN_TRACKING_ID, trackingId);
+            failedPickupsTable.selectRow(1);
         });
 
-        selectAction(ACTION_RESCHEDULE_SELECTED);
-        setRescheduleDate(TestUtils.getNextDate(2));
-        click("//button[@aria-label='Reschedule']");
-    }
-
-    public void setRescheduleDate(Date date)
-    {
-        setMdDatepickerById("commons.model.date", date);
+        actionsMenu.selectOption("Reschedule Selected");
+        rescheduleSelectedOrdersDialog.waitUntilVisible();
+        rescheduleSelectedOrdersDialog.date.setDate(TestUtils.getNextDate(2));
+        rescheduleSelectedOrdersDialog.reschedule.click();
+        rescheduleSelectedOrdersDialog.waitUntilInvisible();
     }
 
     public void verifyOrderIsRemovedFromTableAfterReschedule(String trackingId)
     {
-        searchTableByTrackingId(trackingId);
-        boolean isTableEmpty = isTableEmpty();
-        assertTrue(f("Tracking ID '%s' is still listed on failed order list.", trackingId), isTableEmpty);
+        failedPickupsTable.filterByColumn(COLUMN_TRACKING_ID, trackingId);
+        assertTrue(f("Tracking ID '%s' is still listed on failed order list.", trackingId), failedPickupsTable.isEmpty());
     }
 
-    public void checkRow(int rowIndex)
+    public static class FailedPickupsTable extends MdVirtualRepeatTable<FailedDelivery>
     {
-        clickf("//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", MD_VIRTUAL_REPEAT, rowIndex);
-    }
+        public static final String MD_VIRTUAL_REPEAT = "failedPickup in getTableData()";
+        public static final String COLUMN_TRACKING_ID = "trackingId";
+        public static final String ACTION_RESCHEDULE_NEXT_DAY = "Reschedule Next Day";
 
-    public void selectAction(int actionType)
-    {
-        click("//span[text()='Apply Action']");
-
-        switch(actionType)
+        private FailedPickupsTable(WebDriver webDriver)
         {
-            case ACTION_CANCEL_SELECTED: clickButtonByAriaLabel("Cancel Selected"); break;
-            case ACTION_RESCHEDULE_SELECTED: clickButtonByAriaLabel("Reschedule Selected"); break;
-            case ACTION_DOWNLOAD_CSV_FILE: clickButtonByAriaLabel("Download CSV File"); break;
+            super(webDriver);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                    .put(COLUMN_TRACKING_ID, "tracking_id")
+                    .put("shipperName", "_shipper-name")
+                    .put("lastAttemptTime", "_last-attempt-time")
+                    .put("failureReasonComments", "_failure-reason-comments")
+                    .put("attemptCount", "attempt_count")
+                    .put("invalidFailureCount", "_invalid-failure-count")
+                    .put("validFailureCount", "_valid-failure-count")
+                    .put("failureReasonCodeDescription", "_failure-reason-code-descriptions")
+                    .put("daysSinceLastAttempt", "_days-since-last-attempt")
+                    .put("priorityLevel", "_priority-level")
+                    .build()
+            );
+            setActionButtonsLocators(ImmutableMap.of(ACTION_RESCHEDULE_NEXT_DAY, "container.failed-pickup-management.reschedule-next-day"));
+            setEntityClass(FailedDelivery.class);
+            setMdVirtualRepeat(MD_VIRTUAL_REPEAT);
         }
-
-        pause500ms();
     }
 
-    public void searchTableByTrackingId(String trackingId)
+    public static class RescheduleSelectedOrdersDialog extends MdDialog
     {
-        searchTableCustom1("tracking_id", trackingId);
+        @FindBy(id = "commons.model.date")
+        public MdDatepicker date;
+
+        @FindBy(name = "commons.reschedule")
+        public NvIconTextButton reschedule;
+
+        public RescheduleSelectedOrdersDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
     }
 
-    public String getTextOnTable(int rowNumber, String columnDataClass)
+    public static class CancelSelectedDialog extends MdDialog
     {
-        return getTextOnTable(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
-    }
+        @FindBy(css = "[id^='container.order.edit.cancellation-reason']")
+        public TextBox cancellationReason;
 
-    public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
-    {
-        clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
+        @FindBy(css = "tr[ng-repeat='order in ctrl.orders'] td:nth-of-type(1)")
+        public List<PageElement> trackingIds;
+
+        @FindBy(name = "container.order.edit.cancel-order")
+        public NvApiTextButton cancelOrder;
+
+        @FindBy(name = "container.order.edit.cancel-orders")
+        public NvApiTextButton cancelOrders;
+
+        public CancelSelectedDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
     }
 }
