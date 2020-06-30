@@ -96,6 +96,7 @@ public class FailedPickupManagementSteps extends AbstractSteps
     public void operatorCancelOrderOnFailedPickupManagement()
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        failedPickupManagementPage.waitWhilePageIsLoading();
         failedPickupManagementPage.cancelSelected(Collections.singletonList(trackingId));
     }
 
@@ -103,6 +104,7 @@ public class FailedPickupManagementSteps extends AbstractSteps
     public void operatorCancelMultipleOrdersOnFailedPickupManagement()
     {
         List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        failedPickupManagementPage.waitWhilePageIsLoading();
         failedPickupManagementPage.cancelSelected(trackingIds);
     }
 }

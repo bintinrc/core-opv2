@@ -1,4 +1,4 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part2 @FailedDeliveryManagement @Saas @Inbound
+@OperatorV2 @ShipperSupport @FailedDeliveryManagement @Saas @Inbound
 Feature: Failed Delivery Management
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -7,6 +7,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator find failed delivery order on Failed Delivery orders list (<hiptest-uid>)
+    When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -21,7 +22,6 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
-    And Operator refresh page
     When Operator go to menu Shipper Support -> Failed Delivery Management
     Then Operator verify the failed delivery order is listed on Failed Delivery orders list
     Examples:
@@ -32,6 +32,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator download and verify CSV file of failed delivery order on Failed Delivery orders list (<hiptest-uid>)
+    When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -46,7 +47,6 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
-    And Operator refresh page
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator download CSV file of failed delivery order on Failed Delivery orders list
     Then Operator verify CSV file of failed delivery order on Failed Delivery orders list downloaded successfully
@@ -58,6 +58,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator reschedule failed delivery order on next day (<hiptest-uid>)
+    When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -72,7 +73,6 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
-    And Operator refresh page
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator reschedule failed delivery order on next day
     Then Operator verify failed delivery order rescheduled on next day successfully
@@ -85,6 +85,7 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator reschedule failed delivery order on specific date (<hiptest-uid>)
+    When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -99,7 +100,6 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
-    And Operator refresh page
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator reschedule failed delivery order on next 2 days
     Then Operator verify failed delivery order rescheduled on next 2 days successfully
@@ -112,7 +112,8 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator RTS failed delivery order on next day (<hiptest-uid>)
-    Given API Shipper create V4 order using data below:
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
@@ -126,7 +127,6 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
-    And Operator refresh page
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator RTS failed delivery order on next day
     Then Operator verify failed delivery order RTS-ed successfully
@@ -139,7 +139,8 @@ Feature: Failed Delivery Management
 #
   @DeleteOrArchiveRoute
   Scenario Outline: Operator RTS selected failed delivery order on next day (<hiptest-uid>)
-    Given API Shipper create V4 order using data below:
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
@@ -153,7 +154,6 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
-    And Operator refresh page
     When Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator RTS selected failed delivery order on next day
     Then Operator verify failed delivery order RTS-ed successfully
@@ -166,7 +166,8 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario Outline: Return to sender one parcel and change to new address (<hiptest-uid>)
-    Given API Shipper create V4 order using data below:
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":<isPickupRequired>, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
@@ -180,8 +181,7 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
-    And Operator refresh page
-    When Operator go to menu Shipper Support -> Failed Delivery Management
+    And Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator RTS failed delivery order with following properties:
       | reason        | Other Reason                                                              |
       | internalNotes | Internal notes created by OpV2 automation on {{current-date-yyyy-MM-dd}}. |
@@ -195,7 +195,8 @@ Feature: Failed Delivery Management
 
   @DeleteOrArchiveRoute
   Scenario Outline: Return to sender one parcel - <reason>, <timeslot> (<hiptest-uid>)
-    Given API Shipper create V4 order using data below:
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
@@ -209,15 +210,14 @@ Feature: Failed Delivery Management
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver failed the delivery of the created parcel
-    And Operator refresh page
-    When Operator go to menu Shipper Support -> Failed Delivery Management
+    And Operator go to menu Shipper Support -> Failed Delivery Management
     And Operator RTS failed delivery order with following properties:
       | reason        | <reason>                                                                  |
       | internalNotes | Internal notes created by OpV2 automation on {{current-date-yyyy-MM-dd}}. |
       | deliveryDate  | {{next-1-day-yyyy-MM-dd}}                                                 |
       | timeSlot      | <timeslot>                                                                |
-    When Operator go to menu Order -> All Orders
-    When Operator open page of the created order from All Orders page
+    And Operator go to menu Order -> All Orders
+    And Operator open page of the created order from All Orders page
     Then Operator verify order status is "<status>" on Edit Order page
     And Operator verify order granular status is "<granularStatus>" on Edit Order page
     And Operator verify order delivery title is "<deliveryTitle>" on Edit Order page

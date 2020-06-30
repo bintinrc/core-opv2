@@ -70,7 +70,7 @@ public class MdSelect extends PageElement
                     searchInput.sendKeys(value);
                     pause500ms();
                     value = escapeValue(value);
-                    click(f(MD_OPTION_LOCATOR, StringUtils.normalizeSpace(value)));
+                    click(f(MD_OPTION_LOCATOR, getMenuId(), StringUtils.normalizeSpace(value)));
                 }
         );
         closeMenu();
@@ -85,7 +85,7 @@ public class MdSelect extends PageElement
     {
         openMenu();
         value = escapeValue(value);
-        click(f(MD_OPTION_LOCATOR, StringUtils.normalizeSpace(value)));
+        click(f(MD_OPTION_LOCATOR, getMenuId(), StringUtils.normalizeSpace(value)));
     }
 
     public void selectByValue(String value)

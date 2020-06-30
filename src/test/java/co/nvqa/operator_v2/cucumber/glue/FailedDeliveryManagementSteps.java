@@ -54,6 +54,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps
     public void operatorDownloadCsvFileOfFailedDeliveryOrderOnFailedDeliveryOrdersList()
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        failedDeliveryManagementPage.waitWhilePageIsLoading();
         failedDeliveryManagementPage.downloadCsvFile(trackingId);
     }
 
@@ -68,6 +69,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps
     public void operatorRescheduleFailedDeliveryOrderOnNextDay()
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        failedDeliveryManagementPage.waitWhilePageIsLoading();
         failedDeliveryManagementPage.rescheduleNextDay(trackingId);
     }
 
@@ -82,6 +84,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps
     public void operatorRescheduleFailedDeliveryOrderOnNext2Days()
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        failedDeliveryManagementPage.waitWhilePageIsLoading();
         failedDeliveryManagementPage.rescheduleNext2Days(trackingId);
     }
 
@@ -89,6 +92,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps
     public void operatorVerifyFailedDeliveryOrderRescheduleOnNext2DaysSuccessfully()
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        failedDeliveryManagementPage.waitWhilePageIsLoading();
         failedDeliveryManagementPage.verifyOrderIsRemovedFromTableAfterReschedule(trackingId);
     }
 
@@ -96,6 +100,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps
     public void operatorRtsFailedDeliveryOrderOnNextDay()
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        failedDeliveryManagementPage.waitWhilePageIsLoading();
         failedDeliveryManagementPage.rtsSingleOrderNextDay(trackingId);
     }
 
@@ -110,12 +115,13 @@ public class FailedDeliveryManagementSteps extends AbstractSteps
 
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
 
+        failedDeliveryManagementPage.waitWhilePageIsLoading();
         failedDeliveryManagementPage
                 .openEditRtsDetailsDialog(trackingId)
                 .fillForm(rtsDetails)
                 .submitForm();
 
-        if(rtsDetails.getAddress()==null)
+        if (rtsDetails.getAddress() == null)
         {
             Address randomAddress = AddressFactory.getRandomAddress();
 
@@ -148,6 +154,7 @@ public class FailedDeliveryManagementSteps extends AbstractSteps
     public void operatorRtsSelectedFailedDeliveryOrderOnNextDay()
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+        failedDeliveryManagementPage.waitWhilePageIsLoading();
         failedDeliveryManagementPage.rtsSelectedOrderNextDay(trackingId);
     }
 }

@@ -39,7 +39,7 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
 
     public void verifyAgedParcelOrderIsListed(String trackingId, String shipperName, String daysSinceInbound)
     {
-        searchTableByTrackingId(trackingId);
+        failedDeliveriesTable.filterByColumn(FailedDeliveriesTable.COLUMN_TRACKING_ID, trackingId);
 
         String actualTrackingId = getTextOnTable(1, COLUMN_CLASS_DATA_TRACKING_ID);
         assertEquals("Tracking ID", trackingId, actualTrackingId);
@@ -64,7 +64,7 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
 
     public void rescheduleNextDay(String trackingId)
     {
-        searchTableByTrackingId(trackingId);
+        failedDeliveriesTable.filterByColumn(FailedDeliveriesTable.COLUMN_TRACKING_ID, trackingId);
         clickActionButtonOnTable(1, ACTION_BUTTON_RESCHEDULE_NEXT_DAY);
         waitUntilInvisibilityOfToast("Reschedule");
     }
@@ -98,7 +98,7 @@ public class AgedParcelManagementPage extends CommonParcelManagementPage
                 closeToast();
             }
 
-            searchTableByTrackingId(trackingId);
+            failedDeliveriesTable.filterByColumn(FailedDeliveriesTable.COLUMN_TRACKING_ID, trackingId);
 
             if (isTableEmpty())
             {

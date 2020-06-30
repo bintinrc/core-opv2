@@ -20,7 +20,7 @@ public class MdMenu extends PageElement
         super(webDriver, searchContext, webElement);
     }
 
-    @FindBy(css = "button[ng-click='::$mdOpenMenu($event)'] i")
+    @FindBy(css = "button[ng-click*='$mdOpenMenu($event)'] i")
     public Button selectionButton;
 
     private static final String MD_MENU_ITEM_LOCATOR = "div.md-open-menu-container md-menu-item button[aria-label='%s']";
