@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipments;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementEvent;
 import co.nvqa.operator_v2.model.ShipmentEvent;
@@ -488,5 +489,55 @@ public class ShipmentManagementSteps extends AbstractSteps
     public void operatorVerifiesThatTheReopenShipmentButtonIsDisabled()
     {
         shipmentManagementPage.verifiesReopenShipmentIsDisabled();
+    }
+
+    @When("Operator searches multiple shipment ids in the Shipment Management Page")
+    public void operatorSearchesMultipleShipmentIdsInTheShipmentManagementPage()
+    {
+        List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
+        shipmentManagementPage.bulkSearchShipmentIds(shipmentIds);
+    }
+
+    @When("Operator searches multiple shipment ids in the Shipment Management Page with {string}")
+    public void operatorSearchesMultipleShipmentIdsInTheShipmentManagementPageWith(String condition)
+    {
+        List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
+        if ("duplicated".equalsIgnoreCase(condition))
+        {
+            shipmentManagementPage.bulkSearchShipmentIds(shipmentIds, true);
+        } else
+        {
+            shipmentManagementPage.bulkSearchShipmentIdsWithCondition(shipmentIds, condition);
+        }
+    }
+
+    @Then("Operator verifies that more than 30 warning toast shown")
+    public void operatorVerifiesThatMoreThanWarningToastShown()
+    {
+        shipmentManagementPage.moreThan30WarningToastShown();
+    }
+
+    @Then("Operator verifies that there is a search error modal shown with {string}")
+    public void operatorVerifiesThatThereIsASearchErrorModalShownWith(String mode)
+    {
+        if ("valid shipment".equalsIgnoreCase(mode)) {
+            shipmentManagementPage.verifiesSearchErrorModalIsShown(true);
+        } else if ("none".equalsIgnoreCase(mode))
+        {
+            shipmentManagementPage.verifiesSearchErrorModalIsShown(false);
+        } else
+        {
+            NvLogger.warn("Mode is not existed!");
+        }
+    }
+
+    @Then("Operator verifies the searched shipment ids result is right")
+    public void operatorVerifiesTheSearchedShipmentIdsResultIsRight()
+    {
+        List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_ID);
+        for (int i = 0; i < shipmentIds.size(); i++)
+        {
+            shipmentManagementPage.searchedShipmentVerification(shipmentIds.get(i));
+        }
     }
 }

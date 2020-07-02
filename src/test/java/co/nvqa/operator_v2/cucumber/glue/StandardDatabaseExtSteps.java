@@ -657,6 +657,13 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         put(KEY_EXISTED_HUB_APP_USERNAME, username);
     }
 
+    @Given("DB Operator gets the {int} shipment IDs")
+    public void dbOperatorGetsTheShipmentIds(int shipmentNeeded)
+    {
+        List<Long> shipmentIds = getHubJdbc().getExistedShipmentId(shipmentNeeded);
+        put(KEY_LIST_OF_CREATED_SHIPMENT_ID, shipmentIds);
+    }
+
     @SuppressWarnings("unchecked")
     @Given("^DB Operator verifies warehouse_sweeps record$")
     public void dbOperatorVerifiesWareHouseSweepsRecord(Map<String, String> mapOfData)
