@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.pdf.ShipmentAirwayBill;
+import co.nvqa.commons.support.RandomUtil;
 import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.MovementEvent;
@@ -56,6 +57,14 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     private static final String XPATH_APPLY_ACTION_BUTTON = "//button[@ng-click='$mdOpenMenu($event)' and @aria-label='Action']";
     private static final String XPATH_REOPEN_SHIPMENT_OPTION = "//button[@ng-click='ctrl.reopenShipment($event, ctrl.tableParam.getSelection())']";
     private static final String XPATH_REOPEN_SHIPMENT_OPTION_DISABLED = "//button[@ng-click='ctrl.reopenShipment($event, ctrl.tableParam.getSelection())' and @disabled='disabled']";
+    private static final String XPATH_SEARCH_BY_SHIPMENT_ID = "//textarea[@id='shipment-ids']";
+    private static final String XPATH_SEARCH_SHIPMENT_BUTTON = "//button[contains(@class,'shipment-search-btn')]";
+    private static final String XPATH_SEARCH_SHIPMENT_ID_FILTER = "//th[@class='id']//input[@ng-model='searchText']";
+    private static final String XPATH_SHIPMENT_ID_RESULT_TABLE = "//td[@nv-table-highlight='filter.id']";
+    private static final String XPATH_SHIPMENT_ID_DUPLICATED = "//span[@ng-if='ctrl.duplicateCount!==0']";
+    private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL = "//md-dialog[contains(@class,'shipment-search-error')]";
+    private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL_OK_BUTTON = "//nv-icon-text-button[@on-click='ctrl.onCancel($event)']/button";
+    private static final String XPATH_SHIPMENT_SEARCH_ERROR_MODAL_SHOW_SHIPMENT_BUTTON = "//nv-icon-text-button[@on-click='ctrl.onOk($event)']/button";
 
     public ShipmentsTable shipmentsTable;
     public ShipmentEventsTable shipmentEventsTable;
@@ -432,6 +441,113 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         isElementExistFast(XPATH_REOPEN_SHIPMENT_OPTION_DISABLED);
     }
 
+    public void bulkSearchShipmentIds(List<Long> shipmentIds, boolean isDuplicated)
+    {
+        click(XPATH_SEARCH_BY_SHIPMENT_ID);
+        for (int i = 0; i < shipmentIds.size(); i++)
+        {
+            if (i != shipmentIds.size()-1)
+            {
+                if (isDuplicated && (i % 2 == 0))
+                {
+                    sendKeysWithoutClear(XPATH_SEARCH_BY_SHIPMENT_ID, shipmentIds.get(i).toString() + "\n");
+                }
+                sendKeysWithoutClear(XPATH_SEARCH_BY_SHIPMENT_ID, shipmentIds.get(i).toString() + "\n");
+            } else
+            {
+                sendKeysWithoutClear(XPATH_SEARCH_BY_SHIPMENT_ID, shipmentIds.get(i).toString());
+            }
+        }
+        pause3s();
+        if (isDuplicated)
+        {
+            verifiesShipmentIdIsDuplicated();
+        }
+
+        click(XPATH_SEARCH_SHIPMENT_BUTTON);
+    }
+
+    public void bulkSearchShipmentIds(List<Long> shipmentIds)
+    {
+        bulkSearchShipmentIds(shipmentIds, false);
+    }
+
+    public void bulkSearchShipmentIdsWithCondition(List<Long> shipmentIds, String condition)
+    {
+        switch (condition)
+        {
+            case "invalid" :
+                sendKeysWithoutClear(XPATH_SEARCH_BY_SHIPMENT_ID, RandomUtil.randomString(5) + "\n");
+                break;
+        }
+
+        for (int i = 0; i < shipmentIds.size(); i++)
+        {
+            if (i != shipmentIds.size()-1)
+            {
+                switch (condition)
+                {
+                    case "invalid" :
+                        sendKeysWithoutClear(XPATH_SEARCH_BY_SHIPMENT_ID, shipmentIds.get(i).toString() + "\n");
+                        break;
+
+                    case "comma" :
+                        sendKeysWithoutClear(XPATH_SEARCH_BY_SHIPMENT_ID, shipmentIds.get(i).toString() + ",");
+                        break;
+
+                    case "space" :
+                        sendKeysWithoutClear(XPATH_SEARCH_BY_SHIPMENT_ID, shipmentIds.get(i).toString() + " ");
+                        break;
+
+                    case "empty line" :
+                        sendKeysWithoutClear(XPATH_SEARCH_BY_SHIPMENT_ID, shipmentIds.get(i).toString() + "\n");
+                        if (i == shipmentIds.size()/2)
+                        {
+                            sendKeysWithoutClear(XPATH_SEARCH_BY_SHIPMENT_ID,  "\n");
+                        }
+                        break;
+
+                }
+            } else
+            {
+                sendKeysWithoutClear(XPATH_SEARCH_BY_SHIPMENT_ID, shipmentIds.get(i).toString());
+            }
+        }
+        pause3s();
+        click(XPATH_SEARCH_SHIPMENT_BUTTON);
+    }
+
+    public void verifiesSearchErrorModalIsShown(boolean isValidShipmentExist)
+    {
+        isElementExist(XPATH_SHIPMENT_SEARCH_ERROR_MODAL);
+
+        if (isValidShipmentExist)
+        {
+            click(XPATH_SHIPMENT_SEARCH_ERROR_MODAL_SHOW_SHIPMENT_BUTTON);
+        } else
+        {
+            click(XPATH_SHIPMENT_SEARCH_ERROR_MODAL_OK_BUTTON);
+        }
+    }
+
+    public void searchedShipmentVerification(Long shipmentId)
+    {
+        click(XPATH_SEARCH_SHIPMENT_ID_FILTER);
+        pause1s();
+        String shipmentIdAsString = shipmentId.toString();
+        sendKeys(XPATH_SEARCH_SHIPMENT_ID_FILTER, shipmentIdAsString);
+        pause1s();
+        waitUntilVisibilityOfElementLocated(XPATH_SHIPMENT_ID_RESULT_TABLE);
+        String actualShipmentId = getText(XPATH_SHIPMENT_ID_RESULT_TABLE);
+        assertEquals("Shipment ID", shipmentIdAsString, actualShipmentId);
+    }
+
+    public void moreThan30WarningToastShown()
+    {
+        waitUntilVisibilityOfToast("We cannot process more than 30 shipments");
+        waitUntilInvisibilityOfToast("We cannot process more than 30 shipments");
+    }
+
     public void createAndUploadCsv(List<Order> orders, String fileName, boolean isValid, boolean isDuplicated, int numberOfOrder, ShipmentInfo shipmentInfo) throws FileNotFoundException
     {
         StringBuilder bulkData = new StringBuilder();
@@ -480,6 +596,11 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     public void createAndUploadCsv(String fileName, ShipmentInfo shipmentInfo) throws FileNotFoundException
     {
         createAndUploadCsv(null, fileName, false, false, 0, shipmentInfo);
+    }
+
+    private void verifiesShipmentIdIsDuplicated()
+    {
+        isElementExistFast(XPATH_SHIPMENT_ID_DUPLICATED);
     }
 
     private void uploadFile(String fileName, int numberOfOrder, boolean isValid, boolean isDuplicated, ShipmentInfo shipmentInfo)

@@ -425,6 +425,64 @@ Feature: Shipment Management
     When Operator clicks on reopen shipment button under the Apply Action for invalid status shipment
     Then Operator verifies that the Reopen Shipment Button is disabled
 
+  Scenario: Search Shipment by IDs - Search <= 30 shipments without duplicate (uid:2e2bc7cd-79cc-44b8-8462-e5397d015001)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given DB Operator gets the 10 shipment IDs
+    When Operator searches multiple shipment ids in the Shipment Management Page
+    Then Operator verifies the searched shipment ids result is right
+
+  Scenario: Search Shipment by IDs - Search <= 30 shipments with duplicate (uid:42796f04-1e4f-4b26-8e3b-a841abdeb3df)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given DB Operator gets the 10 shipment IDs
+    When Operator searches multiple shipment ids in the Shipment Management Page with "duplicated"
+    And Operator verifies the searched shipment ids result is right
+
+  Scenario: Search Shipment by IDs - Search > 30 shipments without duplicate (uid:dd575ff9-c4d5-4f34-8738-d8ea91b65a15)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given DB Operator gets the 35 shipment IDs
+    When Operator searches multiple shipment ids in the Shipment Management Page
+    Then Operator verifies that more than 30 warning toast shown
+
+  Scenario: Search Shipment by IDs - Search > 30 shipments with duplicate (uid:a341e1f8-d284-4d93-aa8f-a9bd4dc8663c)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given DB Operator gets the 35 shipment IDs
+    When Operator searches multiple shipment ids in the Shipment Management Page with "duplicated"
+    Then Operator verifies that more than 30 warning toast shown
+
+  Scenario: Search Shipment by IDs - Search <= 30 shipments with invalid shipment (uid:d1f616dc-e091-49c5-972e-e0ba3c71c58e)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given DB Operator gets the 10 shipment IDs
+    When Operator searches multiple shipment ids in the Shipment Management Page with "invalid"
+    Then Operator verifies that there is a search error modal shown with "valid shipment"
+    And Operator verifies the searched shipment ids result is right
+
+  Scenario: Search Shipment by IDs - Search <= 30 shipments separate by comma (uid:bba6e000-c0c6-4607-a6e7-851ddcf4e5ad)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given DB Operator gets the 10 shipment IDs
+    When Operator searches multiple shipment ids in the Shipment Management Page with "comma"
+    Then Operator verifies that there is a search error modal shown with "none"
+
+  Scenario: Search Shipment by IDs - Search <= 30 shipments separate by space (uid:31610bc1-675c-4ef4-8ea5-66ebc8297476)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given DB Operator gets the 10 shipment IDs
+    When Operator searches multiple shipment ids in the Shipment Management Page with "space"
+    Then Operator verifies that there is a search error modal shown with "none"
+
+  Scenario: Search Shipment by IDs - Search <= 30 shipments with empty line (uid:161e3393-6c95-46c0-a332-880be4dccf89)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    Given DB Operator gets the 10 shipment IDs
+    When Operator searches multiple shipment ids in the Shipment Management Page with "empty line"
+    Then Operator verifies that there is a search error modal shown with "valid shipment"
+    And Operator verifies the searched shipment ids result is right
+
   @DeleteFilersPreset
   Scenario: Save Shipment filters as preset (uid:1c96e7a3-8636-4ece-ad4f-722baaa6d4ea)
     Given Operator go to menu Shipper Support -> Blocked Dates
