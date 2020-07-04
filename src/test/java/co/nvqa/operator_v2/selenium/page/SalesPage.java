@@ -1,7 +1,14 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.SalesPerson;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
 import java.util.List;
@@ -12,6 +19,12 @@ import java.util.stream.Collectors;
  */
 public class SalesPage extends OperatorV2SimplePage
 {
+    @FindBy(name = "container.sales-person.create-by-csv-upload")
+    public NvIconTextButton createByCsvUpload;
+
+    @FindBy(css = "md-dialog")
+    public FindOrdersWithCsvDialog findOrdersWithCsvDialog;
+
     private static final String MD_VIRTUAL_REPEAT = "data in getTableData()";
     private static final String SAMPLE_CSV_FILENAME = "sample-data-sales-person-upload.csv";
 
@@ -27,9 +40,10 @@ public class SalesPage extends OperatorV2SimplePage
 
     public void downloadSampleCsvFile()
     {
-        clickNvIconTextButtonByName("container.sales-person.create-by-csv-upload");
-        waitUntilVisibilityOfElementLocated("//md-dialog//h2[text()='Find Orders with CSV']");
-        clickf("//a[@filename='%s']", SAMPLE_CSV_FILENAME);
+        createByCsvUpload.click();
+        findOrdersWithCsvDialog.waitUntilVisible();
+        findOrdersWithCsvDialog.downloadTemplate.click();
+        findOrdersWithCsvDialog.cancel.click();
     }
 
     public void verifySampleCsvFileDownloadedSuccessfully()
@@ -42,7 +56,7 @@ public class SalesPage extends OperatorV2SimplePage
         clickNvIconTextButtonByName("container.sales-person.create-by-csv-upload");
         waitUntilVisibilityOfElementLocated("//md-dialog//h2[text()='Find Orders with CSV']");
 
-        String csvContents = listOfSalesPerson.stream().map(it -> it.getName()+","+it.getCode()).collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
+        String csvContents = listOfSalesPerson.stream().map(it -> it.getName() + "," + it.getCode()).collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
         File csvFile = createFile(f("sample-data-sales-person-upload_%s.csv", generateDateUniqueString()), csvContents);
 
         sendKeysByAriaLabel("Choose", csvFile.getAbsolutePath());
@@ -54,7 +68,7 @@ public class SalesPage extends OperatorV2SimplePage
 
     public void verifySalesPersonCreatedSuccessfully(List<SalesPerson> listOfSalesPerson)
     {
-        for(SalesPerson salesPerson : listOfSalesPerson)
+        for (SalesPerson salesPerson : listOfSalesPerson)
         {
             searchTableByCode(salesPerson.getCode());
             boolean isTableEmpty = isTableEmpty();
@@ -68,17 +82,16 @@ public class SalesPage extends OperatorV2SimplePage
 
     public void verifiesAllFiltersWorksFine(List<SalesPerson> listOfSalesPerson)
     {
-        for(SalesPerson salesPerson : listOfSalesPerson)
+        for (SalesPerson salesPerson : listOfSalesPerson)
         {
             String[] filters = {"code", "name"};
 
-            for(String filter : filters)
+            for (String filter : filters)
             {
-                if("code".equals(filter))
+                if ("code".equals(filter))
                 {
                     searchTableByCode(salesPerson.getCode());
-                }
-                else if("name".equals(filter))
+                } else if ("name".equals(filter))
                 {
                     searchTableByName(salesPerson.getName());
                 }
@@ -90,11 +103,10 @@ public class SalesPage extends OperatorV2SimplePage
                 assertEquals("Sales Code", salesPerson.getCode(), actualCode);
                 assertEquals("Sales Name", salesPerson.getName(), actualName);
 
-                if("code".equals(filter))
+                if ("code".equals(filter))
                 {
                     clearSearchTableCustom1(COLUMN_CLASS_FILTER_SALES_CODE);
-                }
-                else if("name".equals(filter))
+                } else if ("name".equals(filter))
                 {
                     clearSearchTableCustom1(COLUMN_CLASS_FILTER_SALES_NAME);
                 }
@@ -120,5 +132,25 @@ public class SalesPage extends OperatorV2SimplePage
     public void clickActionButtonOnTable(int rowNumber, String actionButtonName)
     {
         clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
+    }
+
+    public static class FindOrdersWithCsvDialog extends MdDialog
+    {
+        public FindOrdersWithCsvDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(css = "div[translate='container.sales-person.download-template'] a")
+        public PageElement downloadTemplate;
+
+        @FindBy(css = "[label='Select File']")
+        public NvButtonFilePicker selectFile;
+
+        @FindBy(name = "commons.cancel")
+        public NvIconTextButton cancel;
+
+        @FindBy(name = "commons.upload")
+        public NvApiTextButton upload;
     }
 }
