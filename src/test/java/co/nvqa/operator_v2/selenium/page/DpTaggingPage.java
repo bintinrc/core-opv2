@@ -1,14 +1,15 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
-import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.DpTagging;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
@@ -27,6 +28,7 @@ public class DpTaggingPage extends OperatorV2SimplePage
     public DpTaggingTable dpTaggingTable;
 
     private static final String LOCATOR_DROP_OFF_DATE = "//td[contains(@class,'drop-off-date column-locked-right')]/md-input-container";
+    private static final String LOCATOR_DROP_OFF_MENU = "//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'') or contains(./div/text(),'')]";
 
     @FindBy(name = "container.dp-tagging.assign-all")
     public NvApiTextButton assignAll;
@@ -155,17 +157,30 @@ public class DpTaggingPage extends OperatorV2SimplePage
 
     public void selectDateToNextDay()
     {
-        selectDate.searchAndSelectValue(YYYY_MM_DD_SDF.format(StandardTestUtils.getNextWorkingDay(1)));
+        String nextDay = dropOffDate();
+        clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]",nextDay,nextDay);
     }
 
     public void selectMultiDateToNextDay(int size)
     {
-        String nextDay = YYYY_MM_DD_SDF.format(StandardTestUtils.getNextWorkingDay(1));
+        String nextDay = dropOffDate();
+        click(LOCATOR_DROP_OFF_DATE);
 
         for(int i=1; i<=size; i++)
         {
             click("//tr["+i+"]"+LOCATOR_DROP_OFF_DATE);
             clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,'%s') or contains(./div/text(),'%s')]",nextDay,nextDay);
         }
+    }
+
+    private String dropOffDate()
+    {
+        clickAndWaitUntilDone("//tr[1]"+LOCATOR_DROP_OFF_DATE);
+        waitUntilVisibilityOfElementLocated(LOCATOR_DROP_OFF_MENU);
+        List<String> listOfDropOffDates = findElementsBy(By.xpath(LOCATOR_DROP_OFF_MENU)).stream()
+                .map(WebElement::getText).collect(Collectors.toList());
+
+        String nextDay = listOfDropOffDates.get(listOfDropOffDates.size()-1);
+        return nextDay;
     }
 }
