@@ -3,9 +3,13 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.DriverTypeParams;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +21,6 @@ import static co.nvqa.commons.util.NvMatchers.hasItemIgnoreCase;
 import static co.nvqa.commons.util.NvMatchers.hasItemsIgnoreCase;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * Modified by Sergey Mishanin
@@ -39,6 +42,9 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
     private AddDriverTypeDialog addDriverTypeDialog;
     private EditDriverTypeDialog editDriverTypeDialog;
     private FiltersForm filtersForm;
+
+    @FindBy(css = "md-dialog")
+    private ConfirmDeleteDialog confirmDeleteDialog;
 
     public DriverTypeManagementPage(WebDriver webDriver)
     {
@@ -201,10 +207,26 @@ public class DriverTypeManagementPage extends OperatorV2SimplePage
     {
         searchingCreatedDriver(driverTypeParams.getDriverTypeName());
         driverTypesTable.clickDeleteButton(1);
-        waitUntilVisibilityOfMdDialogByTitle("Confirm delete");
-        clickButtonOnMdDialogByAriaLabel("Delete");
-        waitUntilInvisibilityOfMdDialogByTitle("Confirm delete");
+        confirmDeleteDialog.waitUntilVisible();
+        confirmDeleteDialog.delete.click();
+        confirmDeleteDialog.waitUntilInvisible();
         pause2s();
+    }
+
+    public static class ConfirmDeleteDialog extends MdDialog
+    {
+        public ConfirmDeleteDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        public ConfirmDeleteDialog(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+        {
+            super(webDriver, searchContext, webElement);
+        }
+
+        @FindBy(xpath = "//md-dialog//button[@aria-label='Delete']")
+        public Button delete;
     }
 
     public String getTextOnTable(int rowNumber, String columnDataClass)
