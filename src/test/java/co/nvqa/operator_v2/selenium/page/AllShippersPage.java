@@ -175,6 +175,12 @@ public class AllShippersPage extends OperatorV2SimplePage
         allShippersCreateEditPage.updateShipper(updatedShipper);
     }
 
+    public void updateShipperBasicSettings(Shipper oldShipper, Shipper updatedShipper)
+    {
+        searchTableByNameAndGoToEditPage(oldShipper);
+        allShippersCreateEditPage.updateShipperBasicSettings(updatedShipper);
+    }
+
     public void verifyShipperIsUpdatedSuccessfully(Shipper oldShipper, Shipper shipper)
     {
         verifyShipperInfoIsCorrect(oldShipper.getName(), shipper);

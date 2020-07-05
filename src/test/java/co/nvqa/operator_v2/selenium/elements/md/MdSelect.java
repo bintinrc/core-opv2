@@ -44,8 +44,6 @@ public class MdSelect extends PageElement
     @FindBy(xpath = "//div[contains(@class,'md-select-menu-container')][@aria-hidden='false']//md-option")
     public List<PageElement> options;
 
-    private String menuId;
-
     private static final String MD_OPTION_LOCATOR = "//div[@id='%s']//md-option[.//div[contains(normalize-space(.), '%s')]]";
     private static final String MD_OPTION_BY_VALUE_LOCATOR = "//div[@id='%s']//md-option[@value='%s']";
 
@@ -105,11 +103,8 @@ public class MdSelect extends PageElement
 
     private String getMenuId()
     {
-        if (StringUtils.isBlank(menuId))
-        {
-            menuId = getAttribute("aria-owns");
-        }
-        return menuId;
+        //Menu ID cannot be cached, because for some controls it's changing
+        return getAttribute("aria-owns");
     }
 
     private void closeMenu()
