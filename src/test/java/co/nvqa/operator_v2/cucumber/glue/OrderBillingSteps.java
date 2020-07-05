@@ -34,6 +34,12 @@ public class OrderBillingSteps extends AbstractSteps
         orderBillingPage.verifyOrderBillingZipAttachment(get(KEY_ORDER_BILLING_START_DATE), get(KEY_ORDER_BILLING_END_DATE));
     }
 
+    @Then("^operator marks gmail messages as read$")
+    public void operatorMarkGmailMessageAsRead()
+    {
+        orderBillingPage.markGmailMessageAsRead();
+    }
+
     @Then("^Operator verifies attached CSV file in received email$")
     public void operatorVerifiesAttachedCsvFileInReceivedEmail()
     {
