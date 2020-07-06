@@ -34,7 +34,6 @@ import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsT
 @SuppressWarnings("WeakerAccess")
 public class ShipperPickupsPage extends OperatorV2SimplePage
 {
-    public static final String REMOVE_BUTTON_ARIA_LABEL = "Remove";
     public static final String REFRESH_BUTTON_ARIA_LABEL = "Refresh";
     public static final String EDIT_FILTERS_BUTTON_ARIA_LABEL = "Edit Filters";
 
@@ -52,6 +51,12 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
     @FindBy(xpath = "//md-dialog[contains(@class,'shipper-pickups-finish-reservation-dialog')]")
     public FinishReservationDialog finishReservationDialog;
+
+    @FindBy(css = "md-dialog")
+    public OperationResultsDialog operationResultsDialog;
+
+    @FindBy(css = "md-dialog")
+    public RemoveRouteFromReservationsDialog removeRouteFromReservationsDialog;
 
     public ShipperPickupsPage(WebDriver webDriver)
     {
@@ -92,6 +97,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         reservationsTable.clickActionButton(1, ACTION_BUTTON_ROUTE_EDIT);
         editRouteDialog.fillTheForm(routeId, priorityLevel);
         editRouteDialog.submitForm();
+        pause1s();
     }
 
     public void verifyReservationInfo(Address address, String shipperName, String routeId, String driverName, String priorityLevel, String approxVolume, String comments)
@@ -225,8 +231,8 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
                 "1 Reservation(s) Created" :
                 "Reservation(s) created successfully";
         waitUntilInvisibilityOfToast(toastMessage, true);
-        //clickNvIconButtonByName("Cancel");
-        waitUntilInvisibilityOfMdDialog();
+        operationResultsDialog.close();
+        operationResultsDialog.waitUntilInvisible();
 
         return originalReservationsInfo;
     }
@@ -262,9 +268,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     {
         selectReservationsByAddress(addresses);
         applyActionsMenu.chooseRemoveRoute();
-        clickButtonOnMdDialogByAriaLabel(REMOVE_BUTTON_ARIA_LABEL);
-        String toastMessage = String.format("%d Reservation(s) Pulled Out from Route", addresses.size());
-        waitUntilInvisibilityOfToast(toastMessage);
+        removeRouteFromReservationsDialog.waitUntilVisible();
+        removeRouteFromReservationsDialog.remove.click();
+        waitUntilInvisibilityOfToast(f("%d Reservation(s) Pulled Out from Route", addresses.size()));
     }
 
     public void selectReservationsByAddress(List<Address> addresses)
@@ -956,6 +962,26 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
             @FindBy(css = "[aria-label='Proceed']")
             public Button proceed;
+        }
+    }
+
+    public static class OperationResultsDialog extends MdDialog
+    {
+        public OperationResultsDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+    }
+
+    public static class RemoveRouteFromReservationsDialog extends MdDialog
+    {
+        @FindBy(name = "commons.remove")
+        public NvIconTextButton remove;
+
+        public RemoveRouteFromReservationsDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
         }
     }
 }

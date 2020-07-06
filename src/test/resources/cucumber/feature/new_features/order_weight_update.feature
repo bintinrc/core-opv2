@@ -1,7 +1,7 @@
 @OperatorV2 @NewFeatures @OperatorV2Part2Disabled @OrderWeightUpdate
 Feature: Order Weight Update V2
 
-  @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
