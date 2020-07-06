@@ -69,13 +69,13 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public NvIconTextButton addNewProfile;
     @FindBy(name = "container.shippers.pricing-billing-edit-pending-profile")
     public NvIconTextButton editPendingProfile;
-    @FindBy(id = "Billing Name")
+    @FindBy(css = "form[name='ctrl.billingForm'] [id='Billing Name']")
     public TextBox billingName;
-    @FindBy(id = "Billing Contact")
+    @FindBy(css = "form[name='ctrl.billingForm'] [id='Billing Contact']")
     public TextBox billingContact;
-    @FindBy(id = "Billing Address")
+    @FindBy(css = "form[name='ctrl.billingForm'] [id='Billing Address']")
     public TextBox billingAddress;
-    @FindBy(id = "Billing Postcode")
+    @FindBy(css = "form[name='ctrl.billingForm'] [id='Billing Postcode']")
     public TextBox billingPostcode;
 
     @FindBy(css = "md-dialog")
@@ -217,6 +217,14 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     }
 
     public void updateShipper(Shipper shipper)
+    {
+        waitUntilShipperCreateEditPageIsLoaded();
+        fillBasicSettingsForm(shipper);
+        saveChanges.click();
+        waitUntilInvisibilityOfToast("All changes saved successfully");
+    }
+
+    public void updateShipperBasicSettings(Shipper shipper)
     {
         waitUntilShipperCreateEditPageIsLoaded();
         fillBasicSettingsForm(shipper);
@@ -833,15 +841,13 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void updateShipperLabelPrinterSettings(Shipper shipper)
     {
         waitUntilShipperCreateEditPageIsLoaded();
-        clickTabItem("Basic Settings");
+        tabs.selectTab("Basic Settings");
 
         LabelPrinter labelPrinter = shipper.getLabelPrinter();
         sendKeysById("Printer IP", labelPrinter.getPrinterIp());
         clickToggleButton("ctrl.data.basic.isPrinterAvailable", convertBooleanToString(labelPrinter.getShowShipperDetails(), "Yes", "No"));
-        clickNvIconTextButtonByName("Save Changes");
-
+        saveChanges.click();
         waitUntilInvisibilityOfToast("All changes saved successfully");
-        backToShipperList();
     }
 
     public void verifyShipperLabelPrinterSettingsIsUpdatedSuccessfully(Shipper shipper)
@@ -863,7 +869,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void updateShipperDistributionPointSettings(Shipper shipper)
     {
         waitUntilShipperCreateEditPageIsLoaded();
-        clickTabItem("More Settings");
+        tabs.selectTab("More Settings");
 
         DistributionPoint distributionPoint = shipper.getDistributionPoints();
 
@@ -879,10 +885,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         clickToggleButton("ctrl.data.more.isReturnsOnShipperLite", convertBooleanToString(distributionPoint.getAllowReturnsOnShipperLite(), "Yes", "No"));
         sendKeysById("Shipper Lite Logo URL", distributionPoint.getShipperLiteLogoUrl());
 
-        clickNvIconTextButtonByName("Save Changes");
-
+        saveChanges.click();
         waitUntilInvisibilityOfToast("All changes saved successfully");
-        backToShipperList();
     }
 
     public void verifyShipperDistributionPointSettingsIsUpdatedSuccessfully(Shipper shipper)
@@ -922,7 +926,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void updateShipperReturnsSettings(Shipper shipper)
     {
         waitUntilShipperCreateEditPageIsLoaded();
-        clickTabItem("More Settings");
+        tabs.selectTab("More Settings");
 
         Return returnSettings = shipper.getReturns();
 
@@ -934,10 +938,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         sendKeysById("Returns City", returnSettings.getCity());
         sendKeysById("Returns Postcode", returnSettings.getPostcode());
         sendKeysById("Last Returns Number", String.valueOf(returnSettings.getLastReturnNumber()));
-        clickNvIconTextButtonByName("Save Changes");
-
+        saveChanges.click();
         waitUntilInvisibilityOfToast("All changes saved successfully");
-        backToShipperList();
     }
 
     public void verifyShipperReturnsSettingsIsUpdatedSuccessfully(Shipper shipper)
@@ -971,16 +973,14 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void updateShipperQoo10Settings(Shipper shipper)
     {
         waitUntilShipperCreateEditPageIsLoaded();
-        clickTabItem("Integrations");
+        tabs.selectTab("Integrations");
 
         Qoo10 qoo10 = shipper.getQoo10();
 
         sendKeys("//md-input-container[@model='ctrl.data.integrations.qooUsername']/input", qoo10.getUsername());
         sendKeys("//md-input-container[@model='ctrl.data.integrations.qooPassword']/input", qoo10.getPassword());
-        clickNvIconTextButtonByName("Save Changes");
-
+        saveChanges.click();
         waitUntilInvisibilityOfToast("All changes saved successfully");
-        backToShipperList();
     }
 
     public void verifyShipperQoo10SettingsIsUpdatedSuccessfully(Shipper shipper)
@@ -1002,7 +1002,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void updateShipperShopifySettings(Shipper shipper)
     {
         waitUntilShipperCreateEditPageIsLoaded();
-        clickTabItem("Integrations");
+        tabs.selectTab("Integrations");
 
         Shopify shopify = shipper.getShopify();
 
@@ -1014,10 +1014,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         sendKeys("//md-input-container[@model='ctrl.data.integrations.shopifyPassword']/input", shopify.getPassword());
         sendKeys("//md-input-container[@model='ctrl.data.integrations.shopifyCode']/input", shopify.getShippingCodes().get(0));
         clickToggleButton("ctrl.data.integrations.shopifyCodeFilter", convertBooleanToString(shopify.getShippingCodeFilterEnabled(), "Yes", "No"));
-        clickNvIconTextButtonByName("Save Changes");
-
+        saveChanges.click();
         waitUntilInvisibilityOfToast("All changes saved successfully");
-        backToShipperList();
     }
 
     public void verifyShipperShopifySettingsIsUpdatedSuccessfully(Shipper shipper)
@@ -1051,17 +1049,15 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void updateShipperMagentoSettings(Shipper shipper)
     {
         waitUntilShipperCreateEditPageIsLoaded();
-        clickTabItem("Integrations");
+        tabs.selectTab("Integrations");
 
         Magento magento = shipper.getMagento();
 
         sendKeys("//md-input-container[@model='ctrl.data.integrations.magentoUsername']/input", magento.getUsername());
         sendKeys("//md-input-container[@model='ctrl.data.integrations.magentoPassword']/input", magento.getPassword());
         sendKeys("//md-input-container[@model='ctrl.data.integrations.magentoApiUrl']/input", magento.getSoapApiUrl());
-        clickNvIconTextButtonByName("Save Changes");
-
+        saveChanges.click();
         waitUntilInvisibilityOfToast("All changes saved successfully");
-        backToShipperList();
     }
 
     public void verifyShipperMagentoSettingsIsUpdatedSuccessfully(Shipper shipper)
@@ -1159,7 +1155,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         String status = getText(f(XPATH_PRICING_PROFILE_STATUS, "Pending"));
         assertEquals("Status is not Pending ", status, "Pending");
-        clickNvIconTextButtonByName("Save Changes");
+        saveChanges.click();
         waitUntilInvisibilityOfElementLocated(XPATH_DISCOUNT_VALUE);
         return getText(XPATH_PRICING_PROFILE_ID);
     }

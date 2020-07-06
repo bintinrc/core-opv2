@@ -515,8 +515,8 @@ public class AllShippersSteps extends AbstractSteps
     @Then("^Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:$")
     public void operatorVerifyErrorMessagesNewPricingProfileOnEditShipperPage(Map<String, String> data)
     {
+        pause1s();
         data = resolveKeyValues(data);
-
         String value = data.get("discountValue");
         if (StringUtils.isNotBlank(value))
         {
@@ -564,14 +564,14 @@ public class AllShippersSteps extends AbstractSteps
         distributionPoint.setShipperLiteAllowRescheduleFirstAttempt(!distributionPoint.getShipperLiteAllowRescheduleFirstAttempt());
 
         // Billing
-        Address billingAddress = generateRandomAddress();
+//        Address billingAddress = generateRandomAddress();
+//
+//        shipper.setBillingName("Billing #" + dateUniqueString);
+//        shipper.setBillingContact(generatePhoneNumber(dateUniqueString + "2"));
+//        shipper.setBillingAddress(billingAddress.to1LineAddress() + " #" + dateUniqueString);
+//        shipper.setBillingPostcode(billingAddress.getPostcode());
 
-        shipper.setBillingName("Billing #" + dateUniqueString);
-        shipper.setBillingContact(generatePhoneNumber(dateUniqueString + "2"));
-        shipper.setBillingAddress(billingAddress.to1LineAddress() + " #" + dateUniqueString);
-        shipper.setBillingPostcode(billingAddress.getPostcode());
-
-        allShippersPage.updateShipper(oldShipper, shipper);
+        allShippersPage.updateShipperBasicSettings(oldShipper, shipper);
         put(KEY_UPDATED_SHIPPER, oldShipper);
     }
 
