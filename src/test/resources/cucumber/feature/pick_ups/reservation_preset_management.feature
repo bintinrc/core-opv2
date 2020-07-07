@@ -1,4 +1,4 @@
-@OperatorV2 @PickUps @OperatorV2Part2 @ReservationPresetManagement
+@OperatorV2 @PickUps @OperatorV2Part2 @ReservationPresetManagement @Debug
 Feature: Reservation Preset Management
 
   @LaunchBrowser @ShouldAlwaysRun

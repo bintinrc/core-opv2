@@ -27,6 +27,7 @@ public class MdDialog extends PageElement
 
     public void close()
     {
+        close.waitUntilClickable();
         close.moveAndClick();
     }
 

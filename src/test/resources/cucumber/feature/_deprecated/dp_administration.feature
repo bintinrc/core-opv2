@@ -3,7 +3,7 @@ Feature: DP Administration
 
   #OLD VERSION OF SCENARIOS. NEED TO BE DELETED
 
-  @LaunchBrowser @ForceNotHeadless
+  @LaunchBrowser
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 

@@ -1,4 +1,4 @@
-@MiddleMileNonHeadless @InterHub @ForceNotHeadless
+@MiddleMileNonHeadless @InterHub
 Feature: Shipment Management
 
   @LaunchBrowser @ShouldAlwaysRun

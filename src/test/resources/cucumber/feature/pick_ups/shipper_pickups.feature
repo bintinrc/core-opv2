@@ -1,7 +1,7 @@
 @OperatorV2 @PickUps @OperatorV2Part2 @ShipperPickups @Saas
 Feature: Shipper Pickups
 
-  @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
