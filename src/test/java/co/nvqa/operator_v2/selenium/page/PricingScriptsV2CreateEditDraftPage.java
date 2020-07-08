@@ -5,8 +5,11 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -17,6 +20,18 @@ import java.util.List;
 @SuppressWarnings("WeakerAccess")
 public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
 {
+    @FindBy(name = "commons.actions")
+    public NvIconButton actionsButton;
+
+    @FindBy(xpath = "//p[text()='No errors found. You may proceed to verify or save the draft.']")
+    public PageElement noErrorsMessage;
+
+    @FindBy(xpath = "//div[@ng-repeat='action in ctrl.manageScriptActions'][normalize-space()='Delete']")
+    public PageElement deleteAction;
+
+    @FindBy(css = "md-dialog")
+    public ConfirmDeleteDialog confirmDeleteDialog;
+
     private final DecimalFormat RUN_CHECK_RESULT_DF = new DecimalFormat("###.###");
 
     protected static final int ACTION_SAVE = 1;
@@ -61,9 +76,13 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
 
     private void activateParameters(List<String> activeParameters)
     {
-        for (String activeParameter : activeParameters)
+        String xpath = "//span[text()='Inactive Parameters']/following-sibling::div//md-input-container";
+        if (isElementExistFast(xpath))
         {
-            activateInactiveParameter(activeParameter);
+            for (String activeParameter : activeParameters)
+            {
+                activateInactiveParameter(activeParameter);
+            }
         }
     }
 
@@ -75,13 +94,14 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
     public void deleteScript(Script script)
     {
         waitUntilPageLoaded(buildScriptUrl(script));
-        waitUntilVisibilityOfElementLocated("//p[text()='No errors found. You may proceed to verify or save the draft.']");
+        noErrorsMessage.waitUntilClickable();
         selectAction(ACTION_DELETE);
-        clickButtonOnMdDialogByAriaLabel("Delete");
-        clickToast(script.getName() + " has been successfully deleted.");
+        confirmDeleteDialog.confirmDelete();
+        waitUntilInvisibilityOfToast(script.getName() + " has been successfully deleted.", true);
     }
 
-    private String buildScriptUrl(Script script){
+    private String buildScriptUrl(Script script)
+    {
         return String.format("pricing-scripts-v2/%d?type=normal", script.getId());
     }
 
@@ -161,7 +181,7 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
 
     public void selectAction(int actionType)
     {
-        clickNvIconButtonByName("commons.actions");
+        actionsButton.click();
 
         switch (actionType)
         {
@@ -172,7 +192,7 @@ public class PricingScriptsV2CreateEditDraftPage extends OperatorV2SimplePage
                 click("//div[@ng-repeat='action in ctrl.manageScriptActions'][normalize-space()='Save and Exit']");
                 break;
             case ACTION_DELETE:
-                click("//div[@ng-repeat='action in ctrl.manageScriptActions'][normalize-space()='Delete']");
+                deleteAction.click();
                 break;
         }
 

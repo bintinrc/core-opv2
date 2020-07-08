@@ -23,6 +23,7 @@ Feature: Order Billing
     Given API Operator Van Inbound parcel
     Given API Operator start the route
     Given API Driver deliver the created parcel successfully
+    Given operator marks gmail messages as read
     Given Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
@@ -48,6 +49,7 @@ Feature: Order Billing
     Given API Operator Van Inbound parcel
     Given API Operator start the route
     Given API Driver deliver the created parcel successfully
+    Given Operator marks gmail messages as read
     Given Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |

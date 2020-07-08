@@ -105,6 +105,14 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
             fromCal.set(Calendar.MINUTE, 0);
             fromCal.set(Calendar.SECOND, 0);
             fromDate = fromCal.getTime();
+        } else if ("TOMORROW".equalsIgnoreCase(value))
+        {
+            Calendar fromCal = Calendar.getInstance();
+            fromCal.setTime(getNextDate(1));
+            fromCal.set(Calendar.HOUR_OF_DAY, 16);
+            fromCal.set(Calendar.MINUTE, 0);
+            fromCal.set(Calendar.SECOND, 0);
+            fromDate = fromCal.getTime();
         } else if (StringUtils.isNotBlank(value))
         {
             fromDate = Date.from(DateUtil.getDate(value).toInstant());
@@ -117,6 +125,14 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         {
             Calendar toCal = Calendar.getInstance();
             toCal.setTime(new Date());
+            toCal.set(Calendar.HOUR_OF_DAY, 15);
+            toCal.set(Calendar.MINUTE, 59);
+            toCal.set(Calendar.SECOND, 59);
+            toDate = toCal.getTime();
+        } else if ("TOMORROW".equalsIgnoreCase(value))
+        {
+            Calendar toCal = Calendar.getInstance();
+            toCal.setTime(getNextDate(1));
             toCal.set(Calendar.HOUR_OF_DAY, 15);
             toCal.set(Calendar.MINUTE, 59);
             toCal.set(Calendar.SECOND, 59);

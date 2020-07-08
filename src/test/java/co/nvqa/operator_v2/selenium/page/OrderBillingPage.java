@@ -83,6 +83,12 @@ public class OrderBillingPage extends OperatorV2SimplePage
         verifyListOfFilesInZip(attachmentUrl, startDate, endDate);
     }
 
+    public void markGmailMessageAsRead()
+    {
+        GmailClient gmailClient = new GmailClient();
+        gmailClient.markUnreadMessagesAsRead();
+    }
+
     public void verifyOrderBillingCsvAttachment(Order order)
     {
         String attachmentUrl = getOrderBillingAttachmentFromEmail();

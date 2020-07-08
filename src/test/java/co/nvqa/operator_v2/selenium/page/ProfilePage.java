@@ -26,7 +26,7 @@ public class ProfilePage extends OperatorV2SimplePage
 
     public void clickProfileButton()
     {
-        profileButton.moveAndClick();
+        profileButton.click();
     }
 
     public void closeProfile()

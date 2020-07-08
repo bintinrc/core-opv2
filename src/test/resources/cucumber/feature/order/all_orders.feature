@@ -1,7 +1,7 @@
 @OperatorV2 @Order @OperatorV2Part2 @AllOrders @Saas
 Feature: All Orders
 
-  @LaunchBrowser @ShouldAlwaysRun @ForceNotHeadless
+  @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 

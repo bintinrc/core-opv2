@@ -91,7 +91,9 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the new Shipper is created successfully
+    And Operator go back to Shipper List page
     When Operator update Shipper's Label Printer settings
+    And Operator go back to Shipper List page
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify Shipper's Label Printer settings is updated successfully
     When DB Operator soft delete shipper by Legacy ID
@@ -120,7 +122,9 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the new Shipper is created successfully
+    And Operator go back to Shipper List page
     When Operator update Shipper's Returns settings
+    And Operator go back to Shipper List page
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify Shipper's Returns settings is updated successfully
     When DB Operator soft delete shipper by Legacy ID
@@ -149,7 +153,9 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the new Shipper is created successfully
+    And Operator go back to Shipper List page
     When Operator update Shipper's Distribution Point settings
+    And Operator go back to Shipper List page
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify Shipper's Distribution Point settings is updated successfully
     When DB Operator soft delete shipper by Legacy ID
@@ -178,7 +184,9 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the new Shipper is created successfully
+    And Operator go back to Shipper List page
     When Operator update Shipper's Qoo10 settings
+    And Operator go back to Shipper List page
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify Shipper's Qoo10 settings is updated successfully
     When DB Operator soft delete shipper by Legacy ID
@@ -207,7 +215,9 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the new Shipper is created successfully
+    And Operator go back to Shipper List page
     When Operator update Shipper's Shopify settings
+    And Operator go back to Shipper List page
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify Shipper's Shopify settings is updated successfully
     When DB Operator soft delete shipper by Legacy ID
@@ -236,7 +246,9 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify the new Shipper is created successfully
+    And Operator go back to Shipper List page
     When Operator update Shipper's Magento settings
+    And Operator go back to Shipper List page
     When Operator clear browser cache and reload All Shipper page
     Then Operator verify Shipper's Magento settings is updated successfully
     When DB Operator soft delete shipper by Legacy ID

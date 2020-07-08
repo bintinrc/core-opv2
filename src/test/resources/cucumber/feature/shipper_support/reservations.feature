@@ -5,6 +5,7 @@ Feature: Reservations
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @DeleteReservationsAndAddresses
   Scenario: Operator create new Reservation (uid:b2a5084c-16f9-42ce-9203-131574e5f3d2)
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -17,6 +18,7 @@ Feature: Reservations
     Then Operator verify the new Reservation is created successfully
       | expectedTimeslotTextOnCalendar | 9:00 AM - 12:00 PM |
 
+  @DeleteReservationsAndAddresses
   Scenario: Operator create and edit Reservation (uid:a7b7630f-5723-45c4-9575-1b9ed572be17)
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -34,6 +36,7 @@ Feature: Reservations
     Then Operator verify the new Reservation is updated successfully
       | expectedTimeslotTextOnCalendar | 12:00 PM - 3:00 PM |
 
+  @DeleteReservationsAndAddresses
   Scenario: Operator create and delete Reservation (uid:4d256cf6-cada-491d-855f-900e7f01c8d6)
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -49,6 +52,7 @@ Feature: Reservations
     When Operator delete the new Reservation
     Then Operator verify the new Reservation is deleted successfully
 
+  @DeleteReservationsAndAddresses
   Scenario: Operator create, edit, and delete Reservation (uid:7d8deed7-7ccd-4d29-8645-16aa43a90931)
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
