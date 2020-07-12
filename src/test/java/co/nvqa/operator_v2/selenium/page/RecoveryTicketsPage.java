@@ -2,6 +2,8 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.RecoveryTicket;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
@@ -12,6 +14,7 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static co.nvqa.operator_v2.selenium.page.RecoveryTicketsPage.TicketsTable.ACTION_EDIT;
@@ -30,8 +33,6 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     private static final String TICKET_TYPE_MISSING = "MISSING";
     private static final String TICKET_TYPE_PARCEL_EXCEPTION = "PARCEL EXCEPTION";
     private static final String TICKET_TYPE_SHIPPER_ISSUE = "SHIPPER ISSUE";
-    private static final String XPATH_FOR_FILTERS = "//p[text()='%s']/parent::div/following-sibling::div//input";
-    private static final String XPATH_FOR_FILTER_OPTION = "//span[text()='%s']";
     private static final String XPATH_REMOVE_TRACKINGID_FILTER = "//p[text()='Tracking IDs']/../following-sibling::div//button[@aria-label='Clear All']";
 
     public TicketsTable ticketsTable;
@@ -60,21 +61,6 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     @FindBy(xpath = "//nv-autocomplete[@placeholder='filter.select-filter']")
     public NvAutocomplete addFilter;
 
-    @FindBy(css = "[id^='order-outcome']")
-    public MdSelect orderOutcome;
-
-    @FindBy(css = "[id^='investigating-dept']")
-    public MdSelect investigatingDept;
-
-    @FindBy(css = "[id^='investigating-hub']")
-    public MdSelect investigatingHub;
-
-    @FindBy(css = "[id^='commons.rts-reason']")
-    public MdSelect rtsReason;
-
-    @FindBy(css = "[id^='container.recovery-tickets.ticket-status']")
-    public MdSelect ticketStatus;
-
     @FindBy(name = "commons.load-selection")
     public NvApiTextButton loadSelection;
 
@@ -83,6 +69,12 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     @FindBy(name = "Create New Ticket")
     public NvIconTextButton createNewTicket;
+
+    @FindBy(css = "md-dialog")
+    public CreateTicketDialog createTicketDialog;
+
+    @FindBy(css = "md-dialog")
+    public EditTicketDialog editTicketDialog;
 
     public RecoveryTicketsPage(WebDriver webDriver)
     {
@@ -97,101 +89,91 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         String ticketType = recoveryTicket.getTicketType();
 
         createNewTicket.click();
-        sendKeysById("trackingId", trackingId + " "); // Add 1 <SPACE> character at the end of tracking ID to make the textbox get trigged and request tracking ID validation to backend.
-        selectEntrySource(recoveryTicket.getEntrySource());
-        selectInvestigatingDepartment(recoveryTicket.getInvestigatingDepartment());
-        selectInvestigatingHub(recoveryTicket.getInvestigatingHub());
-        selectTicketType(ticketType);
+        createTicketDialog.waitUntilVisible();
+        createTicketDialog.trackingId.setValue(trackingId + " "); // Add 1 <SPACE> character at the end of tracking ID to make the textbox get trigged and request tracking ID validation to backend.
+        createTicketDialog.entrySource.selectValue(recoveryTicket.getEntrySource());
+        createTicketDialog.investigatingDept.selectValue(recoveryTicket.getInvestigatingDepartment());
+        createTicketDialog.investigatingHub.searchAndSelectValue(recoveryTicket.getInvestigatingHub());
+        createTicketDialog.investigatingHub.selectValue(ticketType);
 
         switch (ticketType)
         {
             case TICKET_TYPE_DAMAGED:
             {
-                //selectTicketSubType(recoveryTicket.getTicketSubType());
-
                 //Damaged Details
-                selectParcelLocation(recoveryTicket.getParcelLocation());
-                selectLiability(recoveryTicket.getLiability());
-                setDamageDescription(recoveryTicket.getDamageDescription());
-                selectOrderOutcome(recoveryTicket.getOrderOutcomeDamaged());
-
-                setCustZendeskId(recoveryTicket.getCustZendeskId());
-                setShipperZendeskId(recoveryTicket.getShipperZendeskId());
-                setTicketNotes(recoveryTicket.getTicketNotes());
+                createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcomeDamaged());
+                createTicketDialog.parcelLocation.selectValue(recoveryTicket.getParcelLocation());
+                createTicketDialog.liability.selectValue(recoveryTicket.getLiability());
+                createTicketDialog.damageDescription.setValue(recoveryTicket.getDamageDescription());
                 break;
             }
             case TICKET_TYPE_MISSING:
             {
-                selectOrderOutcome(recoveryTicket.getOrderOutcomeMissing());
-                setParcelDescription(recoveryTicket.getParcelDescription());
-                setCustZendeskId(recoveryTicket.getCustZendeskId());
-                setShipperZendeskId(recoveryTicket.getShipperZendeskId());
-                setTicketNotes(recoveryTicket.getTicketNotes());
+                createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcomeMissing());
+                createTicketDialog.parcelDescription.setValue(recoveryTicket.getParcelDescription());
+                createTicketDialog.parcelDescription.setValue(recoveryTicket.getParcelDescription());
                 break;
             }
             case TICKET_TYPE_PARCEL_EXCEPTION:
             {
-                selectTicketSubType(recoveryTicket.getTicketSubType());
-                selectOrderOutcome(recoveryTicket.getOrderOutcomeInaccurateAddress());
+                createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
+                createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcomeInaccurateAddress());
                 if (StringUtils.isNotBlank(recoveryTicket.getRtsReason()))
                 {
-                    selectRtsReason(recoveryTicket.getRtsReason());
+                    createTicketDialog.rtsReason.searchAndSelectValue(recoveryTicket.getRtsReason());
                 }
-                setExceptionReason(recoveryTicket.getExceptionReason());
-                setCustZendeskId(recoveryTicket.getCustZendeskId());
-                setShipperZendeskId(recoveryTicket.getShipperZendeskId());
-                setTicketNotes(recoveryTicket.getTicketNotes());
+                createTicketDialog.exceptionReason.setValue(recoveryTicket.getExceptionReason());
                 break;
             }
             case TICKET_TYPE_SHIPPER_ISSUE:
             {
-                selectTicketSubType(recoveryTicket.getTicketSubType());
-                selectOrderOutcome(recoveryTicket.getOrderOutcomeDuplicateParcel());
+                createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
+                createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcomeInaccurateAddress());
                 if (StringUtils.isNotBlank(recoveryTicket.getRtsReason()))
                 {
-                    selectRtsReason(recoveryTicket.getRtsReason());
+                    createTicketDialog.rtsReason.searchAndSelectValue(recoveryTicket.getRtsReason());
                 }
-                setIssueDescription(recoveryTicket.getIssueDescription());
-                setCustZendeskId(recoveryTicket.getCustZendeskId());
-                setShipperZendeskId(recoveryTicket.getShipperZendeskId());
-                setTicketNotes(recoveryTicket.getTicketNotes());
+                createTicketDialog.issueDescription.setValue(recoveryTicket.getIssueDescription());
             }
         }
 
+        createTicketDialog.customerZendeskId.setValue(recoveryTicket.getCustZendeskId());
+        createTicketDialog.shipperZendeskId.setValue(recoveryTicket.getShipperZendeskId());
+        createTicketDialog.ticketNotes.setValue(recoveryTicket.getTicketNotes());
+
         retryIfRuntimeExceptionOccurred(() ->
         {
-            if (isElementExistWait1Second("//button[@aria-label='Create Ticket'][@disabled='disabled']"))
+            if (createTicketDialog.createTicket.isDisabled())
             {
-                sendKeys("//input[@aria-label='Tracking ID']", trackingId);
+                createTicketDialog.trackingId.setValue(trackingId + " ");
                 pause100ms();
                 throw new NvTestRuntimeException("Button \"Create Ticket\" still disabled. Trying to key in Tracking ID again.");
             }
         });
 
-        clickCreateTicketOnCreateNewTicketDialog();
+        createTicketDialog.createTicket.clickAndWaitUntilDone();
         waitUntilInvisibilityOfToast("Ticket created");
     }
 
-
     public void editTicketSettings(RecoveryTicket recoveryTicket)
     {
-        waitUntilPageLoaded();
+        editTicketDialog.waitUntilVisible();
         pause2s();
-        selectTicketStatus(recoveryTicket.getTicketStatus());
-        selectOrderOutcome(recoveryTicket.getOrderOutcome());
-        selectAssignTo(recoveryTicket.getAssignTo());
-        setEnterNewInstruction(recoveryTicket.getEnterNewInstruction());
-        clickButtonByAriaLabel("Update Ticket");
+        editTicketDialog.ticketStatus.selectValue(recoveryTicket.getTicketStatus());
+        editTicketDialog.orderOutcome.selectValue(recoveryTicket.getOrderOutcome());
+        editTicketDialog.assignTo.selectValue(recoveryTicket.getAssignTo());
+        editTicketDialog.newInstructions.setValue(recoveryTicket.getEnterNewInstruction());
+        editTicketDialog.updateTicket.clickAndWaitUntilDone();
     }
 
     public void editAdditionalSettings(RecoveryTicket recoveryTicket)
     {
-        waitUntilPageLoaded();
+        editTicketDialog.waitUntilVisible();
         pause2s();
-        setCustomerZendeskId(recoveryTicket.getCustZendeskId());
-        setShipZendeskId(recoveryTicket.getCustZendeskId());
-        setTicketComments(recoveryTicket.getTicketComments());
-        clickButtonByAriaLabel("Update Ticket");
+        editTicketDialog.customerZendeskId.setValue(recoveryTicket.getCustZendeskId());
+        editTicketDialog.shipperZendeskId.setValue(recoveryTicket.getCustZendeskId());
+        editTicketDialog.ticketComments.setValue(recoveryTicket.getTicketComments());
+        editTicketDialog.updateTicket.clickAndWaitUntilDone();
     }
 
     public boolean verifyTicketIsExist(String trackingId)
@@ -210,11 +192,9 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void enterTrackingId(String trackingId)
     {
-        waitUntilVisibilityOfElementLocated("//nv-api-text-button[@name='commons.load-selection']");
-        selectValueFromMdAutocomplete("Select Filter", "Tracking IDs");
-        sendKeysAndEnterByAriaLabel("Type in here..", trackingId);
-        clickNvApiTextButtonByNameAndWaitUntilDone("commons.load-selection");
+        trackingIdFilter.setValue(trackingId);
         pause1s();
+        loadSelection.clickAndWaitUntilDone();
     }
 
     public void chooseTicketStatusFilter(String status)
@@ -226,7 +206,6 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void chooseEntrySourceFilter(String entrySource)
     {
-
         clearAllSelections.click();
         pause2s();
         addFilter.selectValue("Entry Source");
@@ -283,9 +262,9 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
 
     public void assignToTicket(String assignTo)
     {
-        waitUntilPageLoaded();
-        selectAssignTo(assignTo);
-        clickButtonByAriaLabel("Update Ticket");
+        editTicketDialog.waitUntilVisible();
+        editTicketDialog.assignTo.selectValue(assignTo);
+        editTicketDialog.updateTicket.clickAndWaitUntilDone();
         waitUntilInvisibilityOfToast();
     }
 
@@ -316,127 +295,6 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         assertEquals(expectedStatus.toLowerCase(), status.toLowerCase());
     }
 
-    public void selectEntrySource(String entrySource)
-    {
-        selectValueFromMdSelectById("entry-source", entrySource);
-    }
-
-    public void selectTicketStatus(String ticketStatusValue)
-    {
-        ticketStatus.selectValue(ticketStatusValue);
-    }
-
-    public void selectOrderOutcome(String orderOutcomeValue)
-    {
-        orderOutcome.selectValue(orderOutcomeValue);
-    }
-
-    public void selectAssignTo(String assignTo)
-    {
-        selectValueFromMdSelectByIdContains("assign-to", assignTo);
-    }
-
-    public void setEnterNewInstruction(String enterNewInstruction)
-    {
-        sendKeysByAriaLabel("Enter New Instruction", enterNewInstruction);
-    }
-
-    public void setTicketComments(String ticketComments)
-    {
-        sendKeysByAriaLabel("Ticket Comments", ticketComments);
-    }
-
-    public void selectInvestigatingDepartment(String investigatingDepartment)
-    {
-        investigatingDept.selectValue(investigatingDepartment);
-    }
-
-    public void selectInvestigatingHub(String investigatingHubValue)
-    {
-        investigatingHub.searchAndSelectValue(investigatingHubValue);
-    }
-
-    public void selectRtsReason(String rtsReasonValue)
-    {
-        rtsReason.selectValue(rtsReasonValue);
-    }
-
-    public void selectTicketType(String ticketType)
-    {
-        selectValueFromMdSelectById("ticket-type", ticketType);
-    }
-
-    public void selectTicketSubType(String ticketSubType)
-    {
-        selectValueFromMdSelectById("ticket-sub-type", ticketSubType);
-    }
-
-    public void selectParcelLocation(String parcelLocation)
-    {
-        selectValueFromMdSelectById("parcelLocation", parcelLocation);
-    }
-
-    public void selectLiability(String liability)
-    {
-        selectValueFromMdSelectById("liability", liability);
-    }
-
-    public void setDamageDescription(String damageDescription)
-    {
-        sendKeysById("damageDescription", damageDescription);
-    }
-
-    public void setExceptionReason(String exceptionReason)
-    {
-        sendKeysById("exceptionReason", exceptionReason);
-    }
-
-    public void setIssueDescription(String issueDescription)
-    {
-        sendKeysById("issueDescription", issueDescription);
-    }
-
-    public void setParcelDescription(String parcelDescription)
-    {
-        sendKeysById("parcelDescription", parcelDescription);
-    }
-
-    public void setTicketNotes(String ticketNotes)
-    {
-        sendKeysById("ticket-notes", ticketNotes);
-    }
-
-    public void setCustZendeskId(String custZendeskId)
-    {
-        sendKeysById("customer-zendesk-id", custZendeskId);
-    }
-
-    public void setCustomerZendeskId(String customerZendeskId)
-    {
-        sendKeysByAriaLabel("Customer Zendesk ID", customerZendeskId);
-    }
-
-    public void setShipZendeskId(String shipperZendeskId)
-    {
-        sendKeysByAriaLabel("Shipper Zendesk ID", shipperZendeskId);
-    }
-
-    public void setShipperZendeskId(String shipperZendeskId)
-    {
-        sendKeysById("shipper-zendesk-id", shipperZendeskId);
-    }
-
-    public void setComments(String comments)
-    {
-        sendKeys("//textarea[@aria-label='Comments']", comments);
-    }
-
-    public void clickCreateTicketOnCreateNewTicketDialog()
-    {
-        clickNvApiTextButtonByNameAndWaitUntilDone("Create Ticket");
-        pause1s();
-    }
-
     public void searchTableByTrackingId(String trackingId)
     {
         // Remove default filters.
@@ -465,8 +323,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     public String displayNoResults()
     {
         pause2s();
-        String actualResult = getText("//table[contains(@class,'noStripe')]//h5");
-        return actualResult;
+        return getText("//table[contains(@class,'noStripe')]//h5");
     }
 
     /**
@@ -487,6 +344,100 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
             setEntityClass(RecoveryTicket.class);
             setActionButtonsLocators(ImmutableMap.of(ACTION_EDIT, "Edit"));
             setMdVirtualRepeat("ticket in getTableData()");
+        }
+    }
+
+    public static class CreateTicketDialog extends MdDialog
+    {
+        @FindBy(id = "trackingId")
+        public TextBox trackingId;
+
+        @FindBy(css = "[id^='entry-source']")
+        public MdSelect entrySource;
+
+        @FindBy(css = "[id^='investigating-dept']")
+        public MdSelect investigatingDept;
+
+        @FindBy(css = "[id^='investigating-hub']")
+        public MdSelect investigatingHub;
+
+        @FindBy(css = "[id^='ticket-type']")
+        public MdSelect ticketType;
+
+        @FindBy(css = "[id^='ticket-sub-type']")
+        public MdSelect ticketSubtype;
+
+        @FindBy(css = "[id^='order-outcome']")
+        public MdSelect orderOutcome;
+
+        @FindBy(css = "[id^='commons.rts-reason']")
+        public MdSelect rtsReason;
+
+        @FindBy(id = "parcelLocation")
+        public MdSelect parcelLocation;
+
+        @FindBy(id = "liability")
+        public MdSelect liability;
+
+        @FindBy(id = "damageDescription")
+        public TextBox damageDescription;
+
+        @FindBy(id = "parcelDescription")
+        public TextBox parcelDescription;
+
+        @FindBy(id = "exceptionReason")
+        public TextBox exceptionReason;
+
+        @FindBy(id = "issueDescription")
+        public TextBox issueDescription;
+
+        @FindBy(css = "[id^='customer-zendesk-id']")
+        public TextBox customerZendeskId;
+
+        @FindBy(css = "[id^='shipper-zendesk-id']")
+        public TextBox shipperZendeskId;
+
+        @FindBy(id = "ticket-notes")
+        public TextBox ticketNotes;
+
+        @FindBy(name = "Create Ticket")
+        public NvApiTextButton createTicket;
+
+        public CreateTicketDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+    }
+
+    public static class EditTicketDialog extends MdDialog
+    {
+        @FindBy(css = "[id^='container.recovery-tickets.ticket-status']")
+        public MdSelect ticketStatus;
+
+        @FindBy(css = "[id^='container.recovery-tickets.assign-to']")
+        public MdSelect assignTo;
+
+        @FindBy(css = "[id^='order-outcome']")
+        public MdSelect orderOutcome;
+
+        @FindBy(css = "[id^='container.recovery-tickets.enter-new-instruction']")
+        public TextBox newInstructions;
+
+        @FindBy(css = "[id^='container.recovery-tickets.customer-zendesk-id']")
+        public TextBox customerZendeskId;
+
+        @FindBy(css = "[id^='container.recovery-tickets.shipper-zendesk-id']")
+        public TextBox shipperZendeskId;
+
+        @FindBy(css = "[id^='container.recovery-tickets.ticket-comments']")
+        public TextBox ticketComments;
+
+        @FindBy(name = "Update Tickets")
+        public NvApiTextButton updateTicket;
+
+        public EditTicketDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
         }
     }
 }

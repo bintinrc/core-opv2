@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.elements.nv;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -44,5 +45,10 @@ public class NvApiTextButton extends PageElement
     {
         click();
         waitUntilDone();
+    }
+
+    public boolean isDisabled()
+    {
+        return StringUtils.equalsIgnoreCase(getAttribute("disabled"), "disabled");
     }
 }

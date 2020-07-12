@@ -1,7 +1,12 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.RecoveryTicketsScanning;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
 
 /**
  *
@@ -9,6 +14,27 @@ import org.openqa.selenium.WebDriver;
  */
 @SuppressWarnings("WeakerAccess")
 public class RecoveryTicketsScanningPage extends OperatorV2SimplePage {
+    @FindBy(id ="ticketType")
+    public MdSelect ticketType;
+
+    @FindBy(id ="entrySource")
+    public MdSelect entrySource;
+
+    @FindBy(id ="investigatingGroup")
+    public MdSelect investigatingGroup;
+
+    @FindBy(id ="investigatingHub")
+    public MdSelect investigatingHub;
+
+    @FindBy(id ="trackingId-input")
+    public TextBox trackingId;
+
+    @FindBy(id ="comments")
+    public TextBox comments;
+
+    @FindBy(css ="[aria-label='Prompt invalid tracking id']]")
+    public MdCheckbox promptInvalidTrackingId;
+
     public static final String NG_REPEAT = "ticket in ctrl.tickets track by $index";
 
     public static final String TICKET_TYPE_DAMAGED = "DAMAGED";
@@ -77,18 +103,18 @@ public class RecoveryTicketsScanningPage extends OperatorV2SimplePage {
         String comment = recoveryTicketsScanning.getComment();
         String ticketSubtype = recoveryTicketsScanning.getTicketSubtype();
 
-        selectFromCombobox("Ticket Type", ticketType);
+        this.ticketType.selectValue(ticketType);
         pause2s();
-        selectFromCombobox("Investigating Dept.", investigatingGroup);
-        selectFromCombobox("Investigating Hub", investigatingHub);
-        selectFromCombobox("Entry Source", entrySource);
+        this.investigatingGroup.searchAndSelectValue(investigatingGroup);
+        this.investigatingHub.searchAndSelectValue(investigatingHub);
+        this.entrySource.selectValue(entrySource);
 
         if(hasSubtype) {
             selectFromCombobox("Ticket Subtype", ticketSubtype);
         }
 
-        sendKeysByName("comments", comment);
-        sendKeysAndEnterById("trackingId-input", trackingId);
+        this.comments.setValue(comment);
+        this.trackingId.setValue(trackingId + Keys.ENTER);
     }
 
     public void selectFromCombobox(String ariaLabel, String selectedValue) {

@@ -225,10 +225,10 @@ public class RecoveryTicketsSteps extends AbstractSteps
     @Then("Operator changes the ticket status to {string}")
     public void changeTicketStatus(String status)
     {
-        recoveryTicketsPage.selectTicketStatus(status);
+        recoveryTicketsPage.editTicketDialog.ticketStatus.selectValue(status);
         pause2s();
-        recoveryTicketsPage.clickButtonByAriaLabel("Update Ticket");
-        recoveryTicketsPage.waitUntilInvisibilityOfMdDialogByTitle("Edit Ticket");
+        recoveryTicketsPage.editTicketDialog.updateTicket.clickAndWaitUntilDone();
+        recoveryTicketsPage.editTicketDialog.waitUntilInvisible();
     }
 
     @Then("Operator chooses the ticket status as {string}")
@@ -272,9 +272,9 @@ public class RecoveryTicketsSteps extends AbstractSteps
     }
 
     @Then("Operator changes the ticket status to Resloved")
-    public void changeTicketStatusToResloved()
+    public void changeTicketStatusToResolved()
     {
-        recoveryTicketsPage.selectTicketStatus("RESOLVED");
+        recoveryTicketsPage.editTicketDialog.ticketStatus.selectValue("RESOLVED");
         pause2s();
         recoveryTicketsPage.clickButtonByAriaLabel("Keep");
         pause2s();
@@ -303,8 +303,8 @@ public class RecoveryTicketsSteps extends AbstractSteps
     public void noResultsShouldDisplayed()
     {
         String expectedResult = "No Results Found";
-        String actualresult = recoveryTicketsPage.displayNoResults();
-        assertEquals(expectedResult.toLowerCase().trim(), actualresult.trim().toLowerCase());
+        String actualResult = recoveryTicketsPage.displayNoResults();
+        assertEquals(expectedResult.toLowerCase().trim(), actualResult.trim().toLowerCase());
     }
 
     @Then("Operator chooses Investigating Hub filter as {string}")

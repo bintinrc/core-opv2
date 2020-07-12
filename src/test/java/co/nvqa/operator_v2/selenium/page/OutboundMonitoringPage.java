@@ -8,7 +8,6 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import com.google.common.collect.ImmutableMap;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -151,11 +150,6 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage implements Scen
         public PutCommentsModal(WebDriver webDriver, WebElement webElement)
         {
             super(webDriver, webElement);
-        }
-
-        public PutCommentsModal(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-        {
-            super(webDriver, searchContext, webElement);
         }
 
         @FindBy(css = "[id ^= 'comments']")
