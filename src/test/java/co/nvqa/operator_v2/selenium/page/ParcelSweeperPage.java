@@ -74,7 +74,13 @@ public class ParcelSweeperPage extends OperatorV2SimplePage
             String zoneFullName = getText(LOCATOR_ZONE_INFO_CONTAINER + "//h5");
             if (!("NIL".equalsIgnoreCase(zoneName)))
             {
-                assertThat("Unexpected Zone Name", zoneShortName + " " + zoneFullName, equalToIgnoringCase(zoneName));
+                if((zoneFullName != null && !zoneFullName.isEmpty()))
+                {
+                    assertThat("Unexpected Zone Name", zoneShortName + " " + zoneFullName, equalToIgnoringCase(zoneName));
+                } else
+                {
+                    assertThat("Unexpected Zone Name", zoneShortName, equalToIgnoringCase(zoneName));
+                }
             } else
             {
                 assertThat("Unexpected Zone Name", "NIL", equalToIgnoringCase(zoneName));
