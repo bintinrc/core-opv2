@@ -1,7 +1,7 @@
 @OperatorV2 @PickUps @OperatorV2Part2 @ShipperPickups @Saas
 Feature: Shipper Pickups
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @Debug @ForceNotHeadless
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -64,7 +64,7 @@ Feature: Shipper Pickups
       | driverName   | {ninja-driver-name}          |
     And DB Operator verify new record is created in route_waypoints table with the correct details
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @Debug
   Scenario: Operator assign Reservation to Route on Shipper Pickups page (uid:992f1485-ef00-45cc-88d8-df36a3e4e77d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
