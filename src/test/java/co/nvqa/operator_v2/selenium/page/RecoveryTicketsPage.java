@@ -94,7 +94,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         createTicketDialog.entrySource.selectValue(recoveryTicket.getEntrySource());
         createTicketDialog.investigatingDept.selectValue(recoveryTicket.getInvestigatingDepartment());
         createTicketDialog.investigatingHub.searchAndSelectValue(recoveryTicket.getInvestigatingHub());
-        createTicketDialog.investigatingHub.selectValue(ticketType);
+        createTicketDialog.ticketType.selectValue(ticketType);
 
         switch (ticketType)
         {
@@ -120,7 +120,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
                 createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcomeInaccurateAddress());
                 if (StringUtils.isNotBlank(recoveryTicket.getRtsReason()))
                 {
-                    createTicketDialog.rtsReason.searchAndSelectValue(recoveryTicket.getRtsReason());
+                    createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
                 }
                 createTicketDialog.exceptionReason.setValue(recoveryTicket.getExceptionReason());
                 break;
@@ -128,10 +128,10 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
             case TICKET_TYPE_SHIPPER_ISSUE:
             {
                 createTicketDialog.ticketSubtype.selectValue(recoveryTicket.getTicketSubType());
-                createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcomeInaccurateAddress());
+                createTicketDialog.orderOutcome.searchAndSelectValue(recoveryTicket.getOrderOutcomeDuplicateParcel());
                 if (StringUtils.isNotBlank(recoveryTicket.getRtsReason()))
                 {
-                    createTicketDialog.rtsReason.searchAndSelectValue(recoveryTicket.getRtsReason());
+                    createTicketDialog.rtsReason.selectValue(recoveryTicket.getRtsReason());
                 }
                 createTicketDialog.issueDescription.setValue(recoveryTicket.getIssueDescription());
             }
@@ -170,8 +170,10 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
     {
         editTicketDialog.waitUntilVisible();
         pause2s();
+        editTicketDialog.customerZendeskId.scrollIntoView();
         editTicketDialog.customerZendeskId.setValue(recoveryTicket.getCustZendeskId());
         editTicketDialog.shipperZendeskId.setValue(recoveryTicket.getCustZendeskId());
+        editTicketDialog.ticketComments.scrollIntoView();
         editTicketDialog.ticketComments.setValue(recoveryTicket.getTicketComments());
         editTicketDialog.updateTicket.clickAndWaitUntilDone();
     }
@@ -432,7 +434,7 @@ public class RecoveryTicketsPage extends OperatorV2SimplePage
         @FindBy(css = "[id^='container.recovery-tickets.ticket-comments']")
         public TextBox ticketComments;
 
-        @FindBy(name = "Update Tickets")
+        @FindBy(name = "Update Ticket")
         public NvApiTextButton updateTicket;
 
         public EditTicketDialog(WebDriver webDriver, WebElement webElement)
