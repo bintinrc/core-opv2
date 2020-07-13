@@ -51,7 +51,6 @@ Feature: Order Billing
     Given API Operator start the route
     Given API Driver deliver the created parcel successfully
     When API Operator whitelist email "{order-billing-email}"
-    Given Operator marks gmail messages as read
     Given Operator go to menu Shipper Support -> Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |

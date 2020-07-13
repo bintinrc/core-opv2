@@ -28,7 +28,6 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
 
     public void selectHubToBegin(String hubName){
         pause2s();
-        waitUntilElementIsClickable("//md-select[@aria-label='Hub']");
         selectValueFromMdSelectWithSearch("model", hubName);
         clickButtonByAriaLabelAndWaitUntilDone("Continue");
     }
