@@ -19,7 +19,7 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     private static final String SCAN_ERROR_CLASS_XPATH = "[contains(@ng-class,'scan-error')]";
     private static final String PRIORITY_LEVEL_XPATH = "//div[contains(text(), 'Priority Level')]/following-sibling::div";
     private static final String PRIORITY_LEVEL_COLOR_XPATH ="//div[contains(@class,'priority-container')][descendant::div[contains(text(), 'Priority Level')]]";
-    private static final String LOCATOR_RTS_INFO = "//div[@ng-if='ctrl.data.isRtsed']";
+    private static final String LOCATOR_RTS_INFO = "//div[contains(@class,'rts-info-container')]/div/h5";
     private static final String XPATH_ORDER_TAGS = "//div[contains(@class,'panel tags-info-container')]//span";
 
     public ParcelSweeperLivePage(WebDriver webDriver) {
@@ -28,6 +28,7 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
 
     public void selectHubToBegin(String hubName){
         pause2s();
+        waitUntilElementIsClickable("//md-select[@aria-label='Hub']");
         selectValueFromMdSelectWithSearch("model", hubName);
         clickButtonByAriaLabelAndWaitUntilDone("Continue");
     }

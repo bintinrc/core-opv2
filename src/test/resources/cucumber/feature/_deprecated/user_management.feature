@@ -1,5 +1,7 @@
-@OperatorV2 @AccessControl @OperatorV2Part1 @UserManagement @Saas
+@OperatorV2Deprecated @OperatorV2Part1Deprecated
 Feature: User Management
+
+   # THIS FEATURE HAS BEEN DEPRECATED
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
