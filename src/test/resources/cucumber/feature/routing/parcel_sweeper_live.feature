@@ -5,6 +5,7 @@ Feature: Parcel Sweeper Live
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @CloseNewWindows
   Scenario: Parcel Sweeper Live - Order Not Found - Invalid Tracking ID (uid:5699c5ca-a546-42c4-b29d-0b25ad512360)
     Given Operator go to menu Order -> All Orders
     Given Operator go to menu Routing -> Parcel Sweeper Live
@@ -22,6 +23,7 @@ Feature: Parcel Sweeper Live
       | hubName | -       |
       | color   | #d86965 |
 
+  @CloseNewWindows
   Scenario: Parcel Sweeper Live - Order Not Found - Pending Pickup (uid:d59c536f-3671-46b8-883c-6785a524a38a)
     Given Operator go to menu Order -> All Orders
     Given Operator go to menu Routing -> Parcel Sweeper Live
@@ -53,7 +55,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup" on Edit Order page
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Parcel Sweeper Live - Van En-Route to Pickup (uid:be9ed0d6-276b-4368-bf9a-47dc0a8bec27)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
@@ -91,6 +93,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Van en-route to pickup" on Edit Order page
 
+  @CloseNewWindows
   Scenario: Parcel Sweeper Live - Baseline Scenarios - ddnt unrouted (uid:db35114c-2d0b-4a7e-9243-a60a1722cdd0)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
@@ -125,7 +128,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Parcel Sweeper Live - Baseline Scenarios - ddnt routed, route's hub = physical hub, route's date = today (uid:fde3c3b5-a9ae-410f-8621-efd9037aaf33)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -169,7 +172,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Parcel Sweeper Live - Baseline Scenarios - ddnt routed, route's hub different from physical hub, route's date = today (uid:343e6c75-97d8-4381-a684-0b12afb3a30b)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -208,7 +211,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Parcel Sweeper Live - Baseline Scenarios - ddnt routed, route's hub = physical hub, route's date is NOT today (uid:7a3348b5-7f3d-4d1c-aa4d-6a1b93b5021a)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -247,7 +250,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Parcel Sweeper Live - Baseline Scenarios - ddnt routed, route's hub different from physical hub, route's date is NOT today (uid:824507a8-a2a5-4543-be47-4d702afe3aea)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -286,7 +289,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario Outline: Parcel Sweeper Live - With Priority Level - <scenarioName> (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -342,7 +345,7 @@ Feature: Parcel Sweeper Live
       | Late Priority (2 - 90) | uid:e166f436-b6c0-4cb2-b1f4-340220898063 | 50            | #e29d4a                 |
       | Urgent Priority (91++) | uid:8acf6dff-fca2-42ff-bc60-2b63b04f3d32 | 100           | #c65d44                 |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Parcel Sweeper Live - RTS Order (uid:6603db76-fc8c-45ec-a4ab-52a47a9c13c8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -380,7 +383,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Parcel Sweeper Live - On Hold Order - NON-MISSING TICKET (uid:b0baaa1e-e23d-43e3-8e0b-64f9e881b6f8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -429,7 +432,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "On Hold" on Edit Order page
     And Operator verify order granular status is "On Hold" on Edit Order page
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Parcel Sweeper Live - On Hold Order - MISSING TICKET (uid:195348a0-3620-4ad9-aa6c-103783aef17e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -479,7 +482,7 @@ Feature: Parcel Sweeper Live
     And DB Operator verify ticket status
       | status | 3 |
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Parcel Sweeper Live - Pickup Fail (uid:41b05d2e-ea25-48fc-81bd-b326321aca69)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -519,7 +522,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Pickup fail" on Edit Order page
     And Operator verify order granular status is "Pickup Fail" on Edit Order page
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Parcel Sweeper Live - En-route to Sorting Hub (uid:5b520d7a-51d3-427a-89b7-43ec63e707f8)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -564,6 +567,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
 
+  @CloseNewWindows
   Scenario: Parcel Sweeper Live - Arrived at Sorting Hub (uid:bcdec68a-2619-48e3-8043-43f7bfe266b7)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
@@ -598,6 +602,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
+  @CloseNewWindows
   Scenario: Parcel Sweeper Live - Cancelled (uid:29a43c56-13dc-4498-b557-66e943825a4b)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
@@ -631,6 +636,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Cancelled" on Edit Order page
     And Operator verify order granular status is "Cancelled" on Edit Order page
 
+  @CloseNewWindows
   Scenario: Parcel Sweeper Live - Completed (uid:a0ec03e7-4074-4ae0-85c7-ca908e74e9ac)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
@@ -664,6 +670,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
 
+  @CloseNewWindows
   Scenario: Parcel Sweeper Live - Returned to Sender (uid:99b866b3-d280-46e7-98e7-1387377773de)
     Given Operator go to menu Order -> All Orders
     And API Shipper create V4 order using data below:
@@ -702,6 +709,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Returned to sender" on Edit Order page
 
+  @CloseNewWindows
   Scenario: Parcel Sweeper Live - Transferred to 3PL (uid:0eae2694-7221-42b1-97c5-bd04bfac1859)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -738,7 +746,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Transferred to 3PL" on Edit Order page
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Parcel Sweeper Live - Pending Reschedule (uid:a00edc09-d2fc-45a5-9424-9be72bbf92f9)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -784,6 +792,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Delivery Fail" on Edit Order page
     And Operator verify order granular status is "Pending Reschedule" on Edit Order page
 
+  @CloseNewWindows
   Scenario: Parcel Sweeper Live - Show Order Tag (uid:8b0cb0c0-3146-48e7-b3db-96302c1d54f8)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
@@ -832,7 +841,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Parcel Sweeper Live - On Vehicle for Delivery (uid:5ae4645e-1195-4c53-b6f6-fdddb16c172d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -875,6 +884,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
 
+  @CloseNewWindows
   Scenario: Parcel Sweeper Live - Staging (uid:9b2f4f58-dd53-4fa8-a036-d5595d5fe65c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -954,7 +964,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Distribution Point" on Edit Order page
 
-  @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: OPV2 Parcel Sweeper Live - Pending Pickup At Distribution Point (uid:0662fb02-a097-486b-9832-d371808e9290)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                         |
@@ -987,7 +997,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup at Distribution Point" on Edit Order page
 
-  @DisableSetAside @DeleteOrArchiveRoute
+  @DisableSetAside @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Parcel Sweeper Live - Set Aside Order (uid:49d4dfa4-551a-4b5a-ac6b-0c4168507f44)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
