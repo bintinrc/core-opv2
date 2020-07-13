@@ -7,7 +7,7 @@ Feature: Recovery Tickets Scanning
 
   Scenario Outline: Operator creates new <Note> ticket (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Recovery -> Recovery Tickets Scanning
     When Operator fills all the field on Recovery Tickets Scanning Page and clicks on enter with data bellow:
@@ -18,9 +18,9 @@ Feature: Recovery Tickets Scanning
     When Operator clicks on Load Selection Button on Recovery Tickets Page and enters the Tracking ID
     Then Operator verifies the created ticket on Recovery Tickets Page is made
     Examples:
-      | Note             | hiptest-uid                              | ticketType       | investigatingGroup | investigatingHub | entrySource        | comment      | ticketSubtype      | trackingId      |
-      | DAMAGED          | uid:7193f95d-5c4a-48a8-90e1-3de847648b5e | DAMAGED          | Fleet (First Mile) | {hub-name}       | CUSTOMER COMPLAINT | TEST PURPOSE | IMPROPER PACKAGING | {{tracking_id}} |
-      | MISSING          | uid:ae3b88fa-a9eb-4ea2-96b9-e0880d9e3c29 | MISSING          | Fleet (First Mile) | {hub-name}       | CUSTOMER COMPLAINT | TEST PURPOSE |                    | {{tracking_id}} |
+      | Note    | hiptest-uid                              | ticketType | investigatingGroup | investigatingHub | entrySource        | comment      | ticketSubtype      | trackingId      |
+      | DAMAGED | uid:7193f95d-5c4a-48a8-90e1-3de847648b5e | DAMAGED    | Fleet (First Mile) | {hub-name}       | CUSTOMER COMPLAINT | TEST PURPOSE | IMPROPER PACKAGING | {{tracking_id}} |
+      | MISSING | uid:ae3b88fa-a9eb-4ea2-96b9-e0880d9e3c29 | MISSING    | Fleet (First Mile) | {hub-name}       | CUSTOMER COMPLAINT | TEST PURPOSE |                    | {{tracking_id}} |
 #      | SELF COLLECTION  | uid:f70f75ff-7c8d-40d1-b292-39c8576ac234 | SELF COLLECTION  | Fleet (First Mile) | {hub-name}       | CUSTOMER COMPLAINT | TEST PURPOSE |                    | {{tracking_id}} |
 #      | PARCEL EXCEPTION | uid:887e49fa-9806-4c92-bd14-856849e42f39 | PARCEL EXCEPTION | Fleet (First Mile) | {hub-name}       | CUSTOMER COMPLAINT | TEST PURPOSE | INACCURATE ADDRESS | {{tracking_id}} |
 #      | SHIPPER ISSUE    | uid:5e1ac33b-2ec2-49e1-8054-f44f50faeab1 | SHIPPER ISSUE    | Fleet (First Mile) | {hub-name}       | CUSTOMER COMPLAINT | TEST PURPOSE | DUPLICATE PARCEL   | {{tracking_id}} |

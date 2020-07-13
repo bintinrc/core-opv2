@@ -21,11 +21,16 @@ public class NvFilterBox extends PageElement
     @FindBy(name = "commons.clear-all")
     public PageElement clearAll;
 
-    public void clearAll(){
-        clearAll.moveAndClick();
+    public void clearAll()
+    {
+        if (clearAll.isDisplayedFast())
+        {
+            clearAll.moveAndClick();
+        }
     }
 
-    public void selectFilter(String value){
+    public void selectFilter(String value)
+    {
         searchOrSelect.selectValue(value);
     }
 

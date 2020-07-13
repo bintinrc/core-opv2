@@ -1,5 +1,5 @@
 @OperatorV2 @PickUps @OperatorV2Part1 @ReservationRejection
-Feature: Reservation Preset Management
+Feature: Reservation Rejection
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
@@ -45,7 +45,7 @@ Feature: Reservation Preset Management
   @DeleteOrArchiveRoute
   Scenario: Operator should be able to Re-assign a Rejected Reservation on Reservation Rejection page (uid:b1698d74-da98-4320-837b-d00e3bd340e5)
     Given API Operator create new route using data below:
-    | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -62,6 +62,6 @@ Feature: Reservation Preset Management
     And Operator reassigns RSVN to new route
     And Operator verifies RSVN reassigned successfully
 
-@KillBrowser @ShouldAlwaysRun
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

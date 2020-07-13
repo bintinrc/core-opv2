@@ -4,10 +4,9 @@ import co.nvqa.operator_v2.model.ReservationGroup;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
 
-import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.ACTION_DELETE;
-import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.ACTION_EDIT;
-import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.COLUMN_NAME;
+import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.*;
 
 /**
  * @author Sergey Mishanin
@@ -15,6 +14,9 @@ import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGrou
 @SuppressWarnings("WeakerAccess")
 public class ReservationPresetManagementPage extends OperatorV2SimplePage
 {
+    @FindBy(css = "md-dialog")
+    public ConfirmDeleteDialog confirmDeleteDialog;
+
     public static final String LOCATOR_SPINNER_LOADING_FILTERS = "//md-progress-circular/following-sibling::div[text()='Loading filters...']";
 
     private AddNewGroupDialog addNewGroupDialog;
@@ -59,7 +61,7 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage
     {
         reservationPresetTable.filterByColumn(COLUMN_NAME, groupName);
         reservationPresetTable.clickActionButton(1, ACTION_DELETE);
-        clickButtonOnMdDialogByAriaLabel("Delete");
+        confirmDeleteDialog.confirmDelete();
         waitUntilInvisibilityOfToast("Group Deleted");
     }
 
@@ -103,7 +105,7 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage
 
         public AddNewGroupDialog setName(String value)
         {
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 sendKeysById("commons.name", value);
             }
@@ -112,7 +114,7 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage
 
         public AddNewGroupDialog setDriver(String value)
         {
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 selectValueFromNvAutocompleteByPossibleOptions("ctrl.driversSelectionOptions", value);
             }
@@ -121,7 +123,7 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage
 
         public AddNewGroupDialog setHub(String value)
         {
-            if(StringUtils.isNotBlank(value))
+            if (StringUtils.isNotBlank(value))
             {
                 selectValueFromNvAutocompleteByPossibleOptions("ctrl.hubsSelectionOptions", value);
             }

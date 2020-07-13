@@ -57,7 +57,7 @@ public class RecoveryTicketsScanningSteps extends AbstractSteps {
     @And("^Operator clicks on Load Selection Button on Recovery Tickets Page and enters the Tracking ID$")
     public void enterTrackingId() {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        recoveryTicketsPage.clickButtonByAriaLabel("Clear All Selections");
+        recoveryTicketsPage.clearAllSelections.click();
         recoveryTicketsPage.enterTrackingId(trackingId);
     }
 

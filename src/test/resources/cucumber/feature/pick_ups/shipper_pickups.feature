@@ -174,7 +174,7 @@ Feature: Shipper Pickups
     Given API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -208,7 +208,7 @@ Feature: Shipper Pickups
     Given API Operator create multiple V2 reservations based on number of created addresses using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
@@ -292,8 +292,8 @@ Feature: Shipper Pickups
       | routeId     | GET_FROM_CREATED_ROUTE |
       | driverName  | {ninja-driver-name}    |
     Examples:
-      | Note     | hiptest-uid                              | hubId    | hubName            | zoneId    | zoneName            |
-      | Params 1 | uid:619b39f4-1a64-4abe-8b8f-916e7509d129 | {hub-id} | {hub-name} | {zone-id} |                     |
+      | Note     | hiptest-uid                              | hubId    | hubName    | zoneId    | zoneName |
+      | Params 1 | uid:619b39f4-1a64-4abe-8b8f-916e7509d129 | {hub-id} | {hub-name} | {zone-id} |          |
 #     In the step "API Operator create new route using data below" zone of a created route doesn't match to requested zone,
 #     So, it's not possible to find created pickup by zone name
 #      | Params 2 | uid:579e00c4-0612-4c55-91b3-26d29a8fec8a | {hub-id} |            | 569       | DRIVER-APP-MSI-ZONE |
@@ -471,10 +471,10 @@ Feature: Shipper Pickups
       | reservationDateStart | {gradle-current-date-yyyy-MM-dd} |
       | reservationDateEnd   | {gradle-next-1-day-yyyy-MM-dd}   |
       | shipperName          | {shipper-v4-name}                |
-      | waypointStatus       | FAIL                          |
+      | waypointStatus       | FAIL                             |
     Then Operator verify the new reservation is listed on table in Shipper Pickups page using data below:
-      | shipperName  | {shipper-v4-name}            |
-      | approxVolume | Less than 10 Parcels         |
+      | shipperName  | {shipper-v4-name}    |
+      | approxVolume | Less than 10 Parcels |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
