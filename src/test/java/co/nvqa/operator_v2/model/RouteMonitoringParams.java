@@ -18,10 +18,14 @@ public class RouteMonitoringParams extends DataEntity<RouteMonitoringParams>
     private Integer cmiCount;
     private Integer earlyCount;
     private Integer lateCount;
+    private Integer totalParcels;
 
-    public RouteMonitoringParams(){}
+    public RouteMonitoringParams()
+    {
+    }
 
-    public RouteMonitoringParams(Map<String, String> data){
+    public RouteMonitoringParams(Map<String, String> data)
+    {
         fromMap(data);
     }
 
@@ -164,5 +168,20 @@ public class RouteMonitoringParams extends DataEntity<RouteMonitoringParams>
     public void fromCsvLine(String csvLine)
     {
         throw new UnsupportedOperationException();
+    }
+
+    public Integer getTotalParcels()
+    {
+        return totalParcels;
+    }
+
+    public void setTotalParcels(Integer totalParcelCount)
+    {
+        this.totalParcels = totalParcelCount;
+    }
+
+    public void setTotalParcels(String totalParcelCount)
+    {
+        setTotalParcels(Integer.valueOf(totalParcelCount));
     }
 }
