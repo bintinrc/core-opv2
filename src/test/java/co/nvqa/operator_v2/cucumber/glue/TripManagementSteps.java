@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.operator_v2.model.TripManagementFilteringType;
 import co.nvqa.operator_v2.selenium.page.TripManagementPage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -82,9 +83,10 @@ public class TripManagementSteps extends AbstractSteps {
         MovementTripType tabNameAsEnum = MovementTripType.fromString(tabName);
         if (tripManagementCount != null && tripManagementCount != 0) {
             tripManagementPage.verifiesSumOfTripManagement(tabNameAsEnum, tripManagementCount);
-        } else {
-            tripManagementPage.verifiesNoResult();
+            return;
         }
+
+        tripManagementPage.verifiesNoResult();
     }
 
     @Then("Operator verifies that the archived trip management is shown correctly")
@@ -93,10 +95,11 @@ public class TripManagementSteps extends AbstractSteps {
         if (tripManagementDetailsData.getCount() != null && tripManagementDetailsData.getCount() != 0) {
             int index = tripManagementDetailsData.getData().size() - 1;
             Long tripManagementId = tripManagementDetailsData.getData().get(index).getId();
-            tripManagementPage.searchAndVerifiesTripManagementIsExisted(tripManagementId);
-        } else {
-            tripManagementPage.verifiesNoResult();
+            tripManagementPage.searchAndVerifiesTripManagementIsExistedById(tripManagementId);
+            return;
         }
+
+        tripManagementPage.verifiesNoResult();
     }
 
     @When("Operator selects the date to tomorrow in {string} Tab")
@@ -118,5 +121,31 @@ public class TripManagementSteps extends AbstractSteps {
     @When("Operator clicks on {string} tab")
     public void operatorClicksOnTab(String tabName) {
         tripManagementPage.clickTabBasedOnName(tabName);
+    }
+
+    @And("Operator searches for the Trip Management based on its {string}")
+    public void operatorSearchesForTheTripManagementBasedOnIts(String filteringName) {
+        TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
+        TripManagementFilteringType tripManagementFilteringType = TripManagementFilteringType.fromString(filteringName);
+        if ("driver".equalsIgnoreCase(tripManagementFilteringType.getVal())) {
+            String driverUsername = get(KEY_TRIP_MANAGEMENT_DRIVER_NAME);
+            tripManagementPage.tableFiltering(tripManagementFilteringType, tripManagementDetailsData, driverUsername);
+            return;
+        }
+
+        tripManagementPage.tableFiltering(tripManagementFilteringType, tripManagementDetailsData);
+    }
+
+    @Then("Operator verifies that the trip management shown with {string} as its filter is right")
+    public void operatorVerifiesThatTheTripManagementShownWithAsItsFilterIsRight(String filteringName) {
+        TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
+        TripManagementFilteringType tripManagementFilteringType = TripManagementFilteringType.fromString(filteringName);
+        if ("driver".equalsIgnoreCase(tripManagementFilteringType.getVal())) {
+            String driverUsername = get(KEY_TRIP_MANAGEMENT_DRIVER_NAME);
+            tripManagementPage.verifyResult(tripManagementFilteringType, tripManagementDetailsData, driverUsername);
+            return;
+        }
+
+        tripManagementPage.verifyResult(tripManagementFilteringType, tripManagementDetailsData);
     }
 }

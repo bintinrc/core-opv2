@@ -1,10 +1,15 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
+import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.operator_v2.model.TripManagementFilteringType;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,15 +34,28 @@ public class TripManagementPage extends OperatorV2SimplePage {
     private static final String CALENDAR_SELECTED_XPATH = "//td[@title='%s']";
     private static final String NEXT_MONTH_BUTTON_XPATH = "//a[contains(@class,'next-month')]";
     private static final String PREV_MONTH_BUTTON_XPATH = "//a[contains(@class,'prev-month')]";
-    private static final String TAB_XPATH = "//span[span[text()='%s']]";
+    private static final String TAB_XPATH = "//span[span[starts-with(text(),'%s')]]";
+    private static final String TABLE_HEADER_FILTER_INPUT_XPATH = "//th[contains(@class,'%s')]";
     private static final String IN_TABLE_FILTER_INPUT_XPATH = "//th[contains(@class,'%s')]//span[contains(@class,'input-prefix')]/following-sibling::input";
-    private static final String FIRST_ROW_RESULT_XPATH = "//td[contains(@class,'%s')]//mark";
-    private static final String IN_TABLE_FILTER_RESULT_XPATH = "//td[contains(@class,'%s')]//mark[text()='%s']";
+    private static final String BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH = "//th[contains(@class,'%s')]/div/button";
+    private static final String CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH = "//span[text()='%s']/preceding-sibling::label//input";
+    private static final String FIRST_ROW_INPUT_FILTERED_RESULT_XPATH = "//tr[1]/td[contains(@class,'%s')]/span/mark";
+    private static final String FIRST_ROW_OPTION_FILTERED_RESULT_XPATH = "//tr[1]/td[contains(@class,'%s')]";
+    private static final String FIRST_ROW_TIME_FILTERED_RESULT_XPATH = "//tr[1]/td[contains(@class,'%s')]/span";
+    private static final String FIRST_ROW_OF_TABLE_RESULT_XPATH = "//div[contains(@class,'table')]//tbody/tr[1]";
+    private static final String OK_BUTTON_OPTION_TABLE_XPATH = "//button[contains(@class,'btn-primary')]";
 
     private static final String ID_CLASS = "id";
     private static final String ORIGIN_HUB_CLASS = "originHub";
     private static final String DESTINATION_HUB_CLASS = "destinationHub";
+    private static final String MOVEMENT_TYPE_CLASS = "movementType";
+    private static final String EXPECTED_DEPARTURE_TIME_CLASS = "expectedDepartureTime";
+    private static final String ACTUAL_DEPARTURE_TIME_CLASS = "actualDepartureTime";
+    private static final String EXPECTED_ARRIVAL_TIME_CLASS = "expectedArrivalTime";
+    private static final String ACTUAL_ARRIVAL_TIME_CLASS = "actualArrivalTime";
     private static final String DRIVER_CLASS = "driver";
+    private static final String STATUS_CLASS = "status";
+    private static final String LAST_STATUS_CLASS = "lastStatus";
 
     public TripManagementPage(WebDriver webDriver) {
         super(webDriver);
@@ -91,13 +109,13 @@ public class TripManagementPage extends OperatorV2SimplePage {
         getWebDriver().switchTo().parentFrame();
     }
 
-    public void searchAndVerifiesTripManagementIsExisted(Long tripManagementId) {
+    public void searchAndVerifiesTripManagementIsExistedById(Long tripManagementId) {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
         waitUntilVisibilityOfElementLocated(f(IN_TABLE_FILTER_INPUT_XPATH, ID_CLASS));
         sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, ID_CLASS), tripManagementId.toString());
-        waitUntilVisibilityOfElementLocated(f(FIRST_ROW_RESULT_XPATH, ID_CLASS));
+        waitUntilVisibilityOfElementLocated(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, ID_CLASS));
 
-        String actualTripManagementId = getText(f(IN_TABLE_FILTER_RESULT_XPATH, ID_CLASS, tripManagementId.toString()));
+        String actualTripManagementId = getText(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, ID_CLASS));
         assertEquals("Trip Management ID", tripManagementId.toString(), actualTripManagementId);
 
         getWebDriver().switchTo().parentFrame();
@@ -156,6 +174,309 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
 
     public void verifiesNoResult() {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
         isElementExistFast(NO_RESULT_XPATH);
+        getWebDriver().switchTo().parentFrame();
+    }
+
+    public void tableFiltering(TripManagementFilteringType tripManagementFilteringType,
+                               TripManagementDetailsData tripManagementDetailsData, String driverUsername) {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
+        // Get the newest record
+        int index = tripManagementDetailsData.getData().size() - 1;
+
+        if (tripManagementDetailsData.getCount() == null || tripManagementDetailsData.getCount() == 0) {
+            verifiesNoResult();
+            getWebDriver().switchTo().parentFrame();
+            return;
+        }
+
+        String filterValue;
+
+        switch (tripManagementFilteringType) {
+            case DESTINATION_HUB:
+                filterValue = tripManagementDetailsData.getData().get(index).getDestinationHubName();
+                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, DESTINATION_HUB_CLASS));
+                sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, DESTINATION_HUB_CLASS), filterValue);
+                break;
+
+            case ORIGIN_HUB:
+                filterValue = tripManagementDetailsData.getData().get(index).getOriginHubName();
+                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, ORIGIN_HUB_CLASS));
+                sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, ORIGIN_HUB_CLASS), filterValue);
+                break;
+
+            case TRIP_ID:
+                filterValue = tripManagementDetailsData.getData().get(index).getId().toString();
+                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, ID_CLASS));
+                sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, ID_CLASS), filterValue);
+                break;
+
+            case MOVEMENT_TYPE:
+                filterValue = movementTypeConverter(tripManagementDetailsData.getData().get(index).getMovementType());
+                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, MOVEMENT_TYPE_CLASS));
+                click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, MOVEMENT_TYPE_CLASS));
+                waitUntilVisibilityOfElementLocated(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, filterValue));
+                click(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, filterValue));
+                click(OK_BUTTON_OPTION_TABLE_XPATH);
+                pause3s();
+                break;
+
+            case EXPECTED_DEPARTURE_TIME:
+                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
+                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, EXPECTED_DEPARTURE_TIME_CLASS));
+                click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, EXPECTED_DEPARTURE_TIME_CLASS));
+                selectDateTime(tripManagementDetailsData.getData().get(index).getExpectedDepartureTime());
+                break;
+
+            case ACTUAL_DEPARTURE_TIME:
+                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
+                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, ACTUAL_DEPARTURE_TIME_CLASS));
+                click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, ACTUAL_DEPARTURE_TIME_CLASS));
+                selectDateTime(tripManagementDetailsData.getData().get(index).getActualStartTime());
+                break;
+
+            case EXPECTED_ARRIVAL_TIME:
+                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
+                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, EXPECTED_ARRIVAL_TIME_CLASS));
+                click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, EXPECTED_ARRIVAL_TIME_CLASS));
+                selectDateTime(tripManagementDetailsData.getData().get(index).getExpectedArrivalTime());
+                break;
+
+            case ACTUAL_ARRIVAL_TIME:
+                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
+                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, ACTUAL_ARRIVAL_TIME_CLASS));
+                click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, ACTUAL_ARRIVAL_TIME_CLASS));
+                selectDateTime(tripManagementDetailsData.getData().get(index).getActualEndTime());
+                break;
+
+            case DRIVER:
+                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
+                filterValue = driverConverted(driverUsername);
+                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, DRIVER_CLASS));
+                sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, DRIVER_CLASS), filterValue);
+                break;
+
+            case STATUS:
+                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
+                filterValue = statusConverted(tripManagementDetailsData.getData().get(index).getStatus());
+                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, STATUS_CLASS));
+                click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, STATUS_CLASS));
+                waitUntilVisibilityOfElementLocated(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, filterValue));
+                click(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, filterValue));
+                click(OK_BUTTON_OPTION_TABLE_XPATH);
+                pause3s();
+                break;
+
+            case LAST_STATUS:
+                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
+                filterValue = statusConverted(tripManagementDetailsData.getData().get(index).getStatus());
+                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, LAST_STATUS_CLASS));
+                click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, LAST_STATUS_CLASS));
+                waitUntilVisibilityOfElementLocated(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, filterValue));
+                click(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, filterValue));
+                click(OK_BUTTON_OPTION_TABLE_XPATH);
+                pause3s();
+                break;
+
+            default:
+                NvLogger.warn("Filtering type is not found");
+        }
+        getWebDriver().switchTo().parentFrame();
+    }
+
+    public void tableFiltering(TripManagementFilteringType tripManagementFilteringType, TripManagementDetailsData tripManagementDetailsData) {
+        tableFiltering(tripManagementFilteringType, tripManagementDetailsData, null);
+    }
+
+    public void verifyResult(TripManagementFilteringType tripManagementFilteringType,
+                             TripManagementDetailsData tripManagementDetailsData, String driverUsername) {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        if (!(isElementExistFast(FIRST_ROW_OF_TABLE_RESULT_XPATH))) {
+            verifiesNoResult();
+            return;
+        }
+
+        if (tripManagementDetailsData.getCount() == null || tripManagementDetailsData.getCount() == 0) {
+            verifiesNoResult();
+            return;
+        }
+
+        // Get Newest Record
+        int index = tripManagementDetailsData.getData().size() - 1;
+
+        String actualValue;
+        String expectedValue;
+
+        switch (tripManagementFilteringType) {
+            case DESTINATION_HUB:
+                expectedValue = tripManagementDetailsData.getData().get(index).getDestinationHubName();
+                actualValue = getText(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DESTINATION_HUB_CLASS));
+                assertEquals("Destination Hub", expectedValue, actualValue);
+                break;
+
+            case ORIGIN_HUB:
+                expectedValue = tripManagementDetailsData.getData().get(index).getOriginHubName();
+                actualValue = getText(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, ORIGIN_HUB_CLASS));
+                assertEquals("Origin Hub", expectedValue, actualValue);
+                break;
+
+            case TRIP_ID:
+                expectedValue = tripManagementDetailsData.getData().get(index).getId().toString();
+                actualValue = getText(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, ID_CLASS));
+                assertEquals("Trip ID", expectedValue, actualValue);
+                break;
+
+            case MOVEMENT_TYPE:
+                expectedValue = movementTypeConverter(tripManagementDetailsData.getData().get(index).getMovementType());
+                actualValue = getText(f(FIRST_ROW_OPTION_FILTERED_RESULT_XPATH, MOVEMENT_TYPE_CLASS));
+                assertEquals("Movement Type", expectedValue, actualValue);
+                break;
+
+            case EXPECTED_DEPARTURE_TIME:
+                expectedValue = expectedValueDateTime(tripManagementDetailsData.getData().get(index).getExpectedDepartureTime());
+                actualValue = getText(f(FIRST_ROW_TIME_FILTERED_RESULT_XPATH, EXPECTED_DEPARTURE_TIME_CLASS));
+                assertTrue("Expected Departure Time", actualValue.contains(expectedValue));
+                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
+                break;
+
+            case ACTUAL_DEPARTURE_TIME:
+                expectedValue = expectedValueDateTime(tripManagementDetailsData.getData().get(index).getActualStartTime());
+                actualValue = getText(f(FIRST_ROW_TIME_FILTERED_RESULT_XPATH, ACTUAL_DEPARTURE_TIME_CLASS));
+                assertTrue("Actual Departure Time", actualValue.contains(expectedValue));
+                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
+                break;
+
+            case EXPECTED_ARRIVAL_TIME:
+                expectedValue = expectedValueDateTime(tripManagementDetailsData.getData().get(index).getExpectedArrivalTime());
+                actualValue = getText(f(FIRST_ROW_TIME_FILTERED_RESULT_XPATH, EXPECTED_ARRIVAL_TIME_CLASS));
+                assertTrue("Expected Arrival Time", actualValue.contains(expectedValue));
+                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
+                break;
+
+            case ACTUAL_ARRIVAL_TIME:
+                expectedValue = expectedValueDateTime(tripManagementDetailsData.getData().get(index).getActualEndTime());
+                actualValue = getText(f(FIRST_ROW_TIME_FILTERED_RESULT_XPATH, ACTUAL_ARRIVAL_TIME_CLASS));
+                assertTrue("Actual Departure Time", actualValue.contains(expectedValue));
+                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
+                break;
+
+            case DRIVER:
+                expectedValue = driverConverted(driverUsername);
+                actualValue = getText(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DRIVER_CLASS));
+                assertEquals("Driver", expectedValue, actualValue);
+                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
+                break;
+
+            case STATUS:
+                expectedValue = statusConverted(tripManagementDetailsData.getData().get(index).getStatus());
+                actualValue = getText(f(FIRST_ROW_OPTION_FILTERED_RESULT_XPATH, STATUS_CLASS));
+                assertEquals("Status", expectedValue, actualValue);
+                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
+                break;
+
+            case LAST_STATUS:
+                expectedValue = statusConverted(tripManagementDetailsData.getData().get(index).getStatus());
+                actualValue = getText(f(FIRST_ROW_OPTION_FILTERED_RESULT_XPATH, LAST_STATUS_CLASS));
+                assertEquals("Last Status", expectedValue, actualValue);
+                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
+                break;
+
+            default:
+                NvLogger.warn("Filtering type is not found");
+        }
+
+        getWebDriver().switchTo().parentFrame();
+    }
+
+    public void verifyResult(TripManagementFilteringType tripManagementFilteringType, TripManagementDetailsData tripManagementDetailsData) {
+        verifyResult(tripManagementFilteringType, tripManagementDetailsData, null);
+    }
+
+    private String movementTypeConverter(String movementType) {
+        String movementTypeConverted;
+        if ("LAND_HAUL".equalsIgnoreCase(movementType)) {
+            movementTypeConverted = "Land Haul";
+        } else if ("AIR_HAUL".equalsIgnoreCase(movementType)) {
+            movementTypeConverted = "Air Haul";
+        } else {
+            movementTypeConverted = null;
+            NvLogger.warn("Movement Type is not found!");
+        }
+
+        return movementTypeConverted;
+    }
+
+    private String driverConverted(String driverUsername) {
+        String driver;
+        if (driverUsername == null || driverUsername.isEmpty()) {
+            driver = "Not assigned";
+        } else {
+            driver = driverUsername;
+        }
+
+        return driver;
+    }
+
+    private String statusConverted(String status) {
+        String statusConverted = null;
+        switch (status) {
+            case "PENDING" :
+                statusConverted = "Pending";
+                break;
+
+            case "IN_TRANSIT" :
+                statusConverted = "In Transit";
+                break;
+
+            case "COMPLETED" :
+                statusConverted = "Completed";
+                break;
+
+            case "CANCELLED" :
+                statusConverted = "Cancelled";
+                break;
+
+            default :
+                NvLogger.warn("Status is not found!");
+        }
+
+        return statusConverted;
+    }
+
+    private void selectDateTime(ZonedDateTime dateTime) {
+        DateTimeFormatter DD_MMMM_FORMAT = DateTimeFormatter.ofPattern("dd MMMM");
+        String date = null;
+        String time = null;
+
+        if (dateTime != null) {
+            date = dateTime.format(DD_MMMM_FORMAT);
+            time = "18:00 - 00:00";
+        }
+
+        if (dateTime == null && isElementExist(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, "-"))) {
+            click(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, "-"));
+        } else if (!(isElementExistFast(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, date)))) {
+            click(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, time));
+        } else {
+            click(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, date));
+        }
+
+        pause1s();
+        click(OK_BUTTON_OPTION_TABLE_XPATH);
+        pause3s();
+    }
+
+    private String expectedValueDateTime(ZonedDateTime dateTime) {
+        DateTimeFormatter DD_MMMM_FORMAT = DateTimeFormatter.ofPattern("dd MMMM");
+        String expectedValue;
+
+        if (dateTime != null) {
+            expectedValue = dateTime.format(DD_MMMM_FORMAT);
+        } else {
+            expectedValue = "-";
+        }
+        return expectedValue;
     }
 }
