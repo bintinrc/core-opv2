@@ -1,4 +1,4 @@
-@TripManagement @InterHub @ForceNotHeadless
+@TripManagement @InterHub @MiddleMile
 Feature: Trip Management
 
   @LaunchBrowser @ShouldAlwaysRun

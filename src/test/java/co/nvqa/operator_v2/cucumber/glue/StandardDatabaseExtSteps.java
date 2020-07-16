@@ -6,6 +6,7 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.Waypoint;
+import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.commons.model.entity.DriverEntity;
 import co.nvqa.commons.model.entity.InboundScanEntity;
@@ -964,6 +965,21 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         String driverUsername = get(KEY_CREATED_MIDDLE_MILE_DRIVER_USERNAME);
         Long driverId = getDriverJdbc().getDriverIdByUsername(driverUsername);
         put(KEY_CREATED_MIDDLE_MILE_DRIVER_ID, driverId);
+    }
+
+    @When("DB Operator gets the driver name by driver id for Trip Management")
+    public void dbOperatorGetsTheDriverNameByDriverId()
+    {
+        TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
+        int index = tripManagementDetailsData.getData().size() - 1;
+        String driverUsername = null;
+
+        if (tripManagementDetailsData.getData().get(index).getDrivers().size() != 0) {
+            driverUsername = getDriverJdbc().getDriverUsernameById(
+                    tripManagementDetailsData.getData().get(index).getDrivers().get(0).getDriverId());
+        }
+
+        put(KEY_TRIP_MANAGEMENT_DRIVER_NAME, driverUsername);
     }
 
     @Then("Operator DB gets that the driver availability value")
