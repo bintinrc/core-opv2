@@ -524,17 +524,6 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
         return retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> standardApiOperatorPortalSteps.getOrderClient().searchOrderByTrackingId(trackingNumber), f("%s - [Tracking ID = %s]", getCurrentMethodName(), trackingNumber));
     }
 
-    private void storeOrderToScenarioStorage(Order order) {
-        put(KEY_CREATED_ORDER, order);
-        put(KEY_CREATED_ORDER_ID, order.getId());
-        put(KEY_CREATED_ORDER_TRACKING_ID, order.getTrackingId());
-        put(KEY_CREATED_ORDER_TYPE, order.getType());
-        putInList(KEY_LIST_OF_CREATED_ORDER, order);
-        putInList(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID, order.getTrackingId());
-        putInList(KEY_LIST_OF_CREATED_ORDER_ID, order.getId());
-        put(KEY_SHIPPER_OF_CREATED_ORDER, order.getShipper());
-    }
-
     private synchronized OrderCreateClientV4 getOrderCreateClientV4() {
         if (orderCreateClientV4 == null) {
             orderCreateClientV4 = new OrderCreateClientV4(apiBaseUrl, getShipperAccessToken("V4"));
