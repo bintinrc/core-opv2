@@ -40,7 +40,9 @@ public class TripManagementSteps extends AbstractSteps {
 
     @And("Operator verifies that the Trip Management Page is opened")
     public void operatorVerifiesThatTheTripManagementPageIsOpened() {
+        pause2s();
         tripManagementPage.verifiesTripManagementIsLoaded();
+        pause2s();
     }
 
     @When("Operator clicks on Load Trip Button")

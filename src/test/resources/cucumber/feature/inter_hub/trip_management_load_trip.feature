@@ -144,9 +144,9 @@ Feature: Trip Management
     When Operator clicks on "Archive" tab
     And Operator clicks on Load Trip Button
     And API Operator gets the count of the Trip Management with data:
-      | movementTripType | none |
-      | days             | 0    |
-      | hubId            | null |
+      | movementTripType | archive |
+      | days             | 0       |
+      | hubId            | 0       |
     Then Operator verifies that the archived trip management is shown correctly
 
   Scenario: OP Load Trip Use Filter - Archived Tab - Filter by Departure Date (uid:4316f393-f493-4d3b-8d00-2cc48bf747d9)
@@ -159,7 +159,7 @@ Feature: Trip Management
     And API Operator gets the count of the Trip Management with data:
       | movementTripType | archive_departure_date |
       | days             | 3                      |
-      | hubId            | null                   |
+      | hubId            | 0                      |
     Then Operator verifies that the archived trip management is shown correctly
 
   Scenario: OP Load Trip Use Filter - Archived Tab - Filter by Arrival Date (uid:21ec224c-e09c-4641-8574-5835ca096c71)
@@ -172,7 +172,7 @@ Feature: Trip Management
     And API Operator gets the count of the Trip Management with data:
       | movementTripType | archive_arrival_date |
       | days             | 3                    |
-      | hubId            | null                 |
+      | hubId            | 0                    |
     Then Operator verifies that the archived trip management is shown correctly
 
   Scenario: OP Load Trip Use Filter - Archived Tab - Filter by Origin Hub (uid:cebcb18a-5725-46d2-8a7f-53e921764505)

@@ -1,4 +1,4 @@
-@TripManagement @InterHub @MiddleMile
+@TripManagement @InterHub @MiddleMile @CWF
 Feature: Trip Management
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -239,6 +239,228 @@ Feature: Trip Management
     And Operator clicks on Load Trip Button
     And API Operator gets the count of the "departure" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     And Operator clicks on "Assigned" tab
+    And Operator searches for the Trip Management based on its "status"
+    Then Operator verifies that the trip management shown with "status" as its filter is right
+
+  # Arrival Tab
+
+  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Origin Hub (uid:1f0c330c-8c22-4f12-9213-fabfd414eb7f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Arrival" tab
+    When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
+    And Operator searches for the Trip Management based on its "origin_hub"
+    Then Operator verifies that the trip management shown with "origin_hub" as its filter is right
+
+  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Trip ID (uid:12e1714f-6725-46ea-98d1-414600139571)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Arrival" tab
+    When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
+    And Operator searches for the Trip Management based on its "trip_id"
+    Then Operator verifies that the trip management shown with "trip_id" as its filter is right
+
+  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Movement Type (uid:69c87465-c2f1-4373-8e6d-caf834a2c82c)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Arrival" tab
+    When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
+    And Operator searches for the Trip Management based on its "movement_type"
+    Then Operator verifies that the trip management shown with "movement_type" as its filter is right
+
+  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Expected Departure Time (uid:f3e0bd64-f6a8-4b96-ba3b-472eb4d33fe2)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Arrival" tab
+    When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
+    And Operator searches for the Trip Management based on its "expected_departure_time"
+    Then Operator verifies that the trip management shown with "expected_departure_time" as its filter is right
+
+  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Actual Departure Time (uid:707ae922-20db-4bf4-a4bb-fac6ec7b45d7)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Arrival" tab
+    When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
+    And Operator searches for the Trip Management based on its "actual_departure_time"
+    Then Operator verifies that the trip management shown with "actual_departure_time" as its filter is right
+
+  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Expected Arrival Time (uid:137e9800-1f61-4845-962a-a2917c671e2f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Arrival" tab
+    When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
+    And Operator searches for the Trip Management based on its "expected_arrival_time"
+    Then Operator verifies that the trip management shown with "expected_arrival_time" as its filter is right
+
+  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Driver (uid:e1d92ab4-c5c0-459b-947e-933fd4f39fd3)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Arrival" tab
+    When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
+    And Operator searches for the Trip Management based on its "driver"
+    Then Operator verifies that the trip management shown with "driver" as its filter is right
+
+  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Status (uid:0f0c0dde-7bc5-4b0b-8a5f-418fd7e5119f)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Arrival" tab
+    When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
+    And Operator searches for the Trip Management based on its "status"
+    Then Operator verifies that the trip management shown with "status" as its filter is right
+
+  # Archived Tab
+
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Origin Hub (uid:a2a9183e-f08f-414a-8422-f29b27744cdc)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Archive" tab
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the Trip Management with data:
+      | movementTripType | archive |
+      | days             | 0       |
+      | hubId            | 0       |
+    And Operator searches for the Trip Management based on its "origin_hub"
+    Then Operator verifies that the trip management shown with "origin_hub" as its filter is right
+
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Destination Hub (uid:3c2922fe-2c2b-4e7e-bc9b-41f1dc97ae4e)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Archive" tab
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the Trip Management with data:
+      | movementTripType | archive |
+      | days             | 0       |
+      | hubId            | 0       |
+    And Operator searches for the Trip Management based on its "destination_hub"
+    Then Operator verifies that the trip management shown with "destination_hub" as its filter is right
+
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Trip ID (uid:5f26570e-f90b-4959-9126-ea77b5eb7040)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Archive" tab
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the Trip Management with data:
+      | movementTripType | archive |
+      | days             | 0       |
+      | hubId            | 0       |
+    And Operator searches for the Trip Management based on its "trip_id"
+    Then Operator verifies that the trip management shown with "trip_id" as its filter is right
+
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Movement Type (uid:88133a1a-b0e7-4524-8f62-9f51c4ecc2d0)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Archive" tab
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the Trip Management with data:
+      | movementTripType | archive |
+      | days             | 0       |
+      | hubId            | 0       |
+    And Operator searches for the Trip Management based on its "movement_type"
+    Then Operator verifies that the trip management shown with "movement_type" as its filter is right
+
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Expected Departure Time (uid:67c1b89e-fca3-47eb-8ef5-8d4872be5ef8)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Archive" tab
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the Trip Management with data:
+      | movementTripType | archive |
+      | days             | 0       |
+      | hubId            | 0       |
+    And Operator searches for the Trip Management based on its "expected_departure_time"
+    Then Operator verifies that the trip management shown with "expected_departure_time" as its filter is right
+
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Actual Departure Time (uid:a4770681-3e30-420f-a3b5-a6fa86062236)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Archive" tab
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the Trip Management with data:
+      | movementTripType | archive |
+      | days             | 0       |
+      | hubId            | 0       |
+    And Operator searches for the Trip Management based on its "actual_departure_time"
+    Then Operator verifies that the trip management shown with "actual_departure_time" as its filter is right
+
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Expected Arrival Time (uid:6f739d2e-982a-44b2-adb3-276923f3de95)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Archive" tab
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the Trip Management with data:
+      | movementTripType | archive |
+      | days             | 0       |
+      | hubId            | 0       |
+    And Operator searches for the Trip Management based on its "expected_arrival_time"
+    Then Operator verifies that the trip management shown with "expected_arrival_time" as its filter is right
+
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Actual Arrival Time (uid:8db57f5f-6931-4eaa-bb89-05437d912bf5)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Archive" tab
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the Trip Management with data:
+      | movementTripType | archive |
+      | days             | 0       |
+      | hubId            | 0       |
+    And Operator searches for the Trip Management based on its "actual_arrival_time"
+    Then Operator verifies that the trip management shown with "actual_arrival_time" as its filter is right
+
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Driver (uid:beeadbb9-4b6a-47dd-9db7-24e34a6eac6b)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Archive" tab
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the Trip Management with data:
+      | movementTripType | archive |
+      | days             | 0       |
+      | hubId            | 0       |
+    And Operator searches for the Trip Management based on its "driver"
+    Then Operator verifies that the trip management shown with "driver" as its filter is right
+
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Status (uid:8d88468c-b9ed-440d-b205-60ca8814cfab)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator goes to Trip Management Page
+    And Operator verifies that the Trip Management Page is opened
+    When Operator clicks on "Archive" tab
+    And Operator clicks on Load Trip Button
+    And API Operator gets the count of the Trip Management with data:
+      | movementTripType | archive |
+      | days             | 0       |
+      | hubId            | 0       |
     And Operator searches for the Trip Management based on its "status"
     Then Operator verifies that the trip management shown with "status" as its filter is right
 
