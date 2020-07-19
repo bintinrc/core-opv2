@@ -10,7 +10,6 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -34,30 +33,39 @@ public class OrderTagManagementSteps extends AbstractSteps
     }
 
     @When("^Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:$")
-    public void operatorSelectsFilterAndclicksLoadSelectionOnAddTagsToOrderPageUsingDataBelow(Map<String, String> mapOfData)
+    public void operatorSelectsFilterAndclicksLoadSelectionOnAddTagsToOrderPageUsingDataBelow(Map<String, String> data)
     {
-        if(Objects.nonNull(mapOfData.get("shipperName")))
+        data = resolveKeyValues(data);
+        if (data.containsKey("shipperName"))
         {
-            orderTagManagementPage.selectShipperValue(mapOfData.get("shipperName"));
+            orderTagManagementPage.shipperFilter.clearAll();
+            orderTagManagementPage.shipperFilter.selectFilter(data.get("shipperName"));
         }
 
-        if(Objects.nonNull(mapOfData.get("status")))
+        if (data.containsKey("status"))
         {
-            orderTagManagementPage.selectUniqueStatusValue(mapOfData.get("status"));
+            orderTagManagementPage.statusFilter.clearAll();
+            orderTagManagementPage.statusFilter.selectFilter(data.get("status"));
         }
 
-        if(Objects.nonNull(mapOfData.get("granularStatus")))
+        if (data.containsKey("granularStatus"))
         {
-            orderTagManagementPage.selectUniqueGranularStatusValue(mapOfData.get("granularStatus"));
+            orderTagManagementPage.granularStatusFilter.clearAll();
+            orderTagManagementPage.granularStatusFilter.selectFilter(data.get("granularStatus"));
         }
 
-        orderTagManagementPage.clickLoadSelectionButton();
+        orderTagManagementPage.loadSelection.click();
     }
 
     @And("^Operator searches and selects orders created on Add Tags to Order page$")
-    public void operatorSearchesAndSelectsordersCreatedOnAddTagsToOrderPage()
+    public void operatorSearchesAndSelectsOrdersCreatedOnAddTagsToOrderPage()
     {
-        orderTagManagementPage.selectOrdersInTable();
+        List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        trackingIds.forEach(trackingId ->
+        {
+            orderTagManagementPage.ordersTable.filterByColumn("trackingId", trackingId);
+            orderTagManagementPage.ordersTable.selectRow(1);
+        });
     }
 
     @And("^Operator tags order with:$")

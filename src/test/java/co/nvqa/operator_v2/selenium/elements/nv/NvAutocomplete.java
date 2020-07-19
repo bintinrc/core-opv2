@@ -4,9 +4,7 @@ import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -34,31 +32,27 @@ public class NvAutocomplete extends PageElement
 
     public void selectValue(String value)
     {
-        inputElement.clearAndSendKeys(value);
-        pause1s();
-        progressBar.waitUntilInvisible();
-
-        /*
-          Check if the value is not found on NV Autocomplete.
-         */
-        String noMatchingErrorText = f("\"%s\" were found.", value);
-
         retryIfRuntimeExceptionOccurred(() ->
         {
-            try
+            inputElement.clearAndSendKeys(value);
+            pause1s();
+            progressBar.waitUntilInvisible();
+
+            String noMatchingErrorText = f("\"%s\" were found.", value);
+            String notFoundXpath = f("//span[contains(text(), '%s')]", noMatchingErrorText);
+            if (isElementVisible(notFoundXpath, WAIT_1_SECOND))
             {
-                WebElement noMatchingErrorWe = findElementByXpath(f("//span[contains(text(), '%s')]", noMatchingErrorText), WAIT_1_SECOND);
-                String actualNoMatchingErrorText = getText(noMatchingErrorWe);
+                String actualNoMatchingErrorText = getText(notFoundXpath);
                 throw new NvTestRuntimeException(f("Value not found on NV Autocomplete. Error message: %s", actualNoMatchingErrorText));
-            } catch (NoSuchElementException | TimeoutException ignore)
-            {
             }
         }, "Check if the value is not found on NV Autocomplete", 500, 5);
 
-        inputElement.sendKeys(Keys.RETURN);
-        pause200ms();
         String suggestionsId = inputElement.getAttribute("aria-owns");
-        if (isElementVisible(f("//ul[@id='%s']", suggestionsId), 0))
+        String menuXpath = f("//ul[@id='%s']", suggestionsId);
+        String itemXpath = menuXpath + f("//li//span[contains(.,'%s')]", value);
+        click(itemXpath);
+        pause200ms();
+        if (isElementVisible(menuXpath, 0))
         {
             inputElement.sendKeys(Keys.ESCAPE);
         }
