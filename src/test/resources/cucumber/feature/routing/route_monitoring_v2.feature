@@ -11,9 +11,10 @@ Feature: Route Monitoring
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Routing -> Route Monitoring V2
     Then Route Monitoring V2 page is loaded
-    When Operator filter Route Monitoring V2 using data below and then load selection:
-      | hubs  | {hub-name}  |
-      | zones | {zone-name} |
+    When Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId      | {KEY_CREATED_ROUTE_ID} |
       | totalParcels | 1                      |
@@ -32,9 +33,10 @@ Feature: Route Monitoring
       | addParcelToRouteRequest | { "type":"PP" } |
     When Operator go to menu Routing -> Route Monitoring V2
     Then Route Monitoring V2 page is loaded
-    When Operator filter Route Monitoring V2 using data below and then load selection:
-      | hubs  | {hub-name}  |
-      | zones | {zone-name} |
+    When Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId      | {KEY_CREATED_ROUTE_ID} |
       | totalParcels | 3                      |
@@ -51,9 +53,10 @@ Feature: Route Monitoring
     And API Operator add reservation pick-up to the route
     When Operator go to menu Routing -> Route Monitoring V2
     Then Route Monitoring V2 page is loaded
-    When Operator filter Route Monitoring V2 using data below and then load selection:
-      | hubs  | {hub-name}  |
-      | zones | {zone-name} |
+    When Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
     Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
       | routeId      | {KEY_CREATED_ROUTE_ID} |
       | totalParcels | 0                      |

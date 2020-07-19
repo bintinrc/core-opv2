@@ -17,6 +17,12 @@ public class RouteMonitoringV2Page extends OperatorV2SimplePage
     @FindBy(css = ".ant-spin")
     public PageElement spinner;
 
+    @FindBy(css = ".anticon-loading")
+    public PageElement smallSpinner;
+
+    @FindBy(css = "div.ant-collapse-header i.ant-collapse-arrow")
+    public Button openFilters;
+
     @FindBy(tagName = "iframe")
     private PageElement pageFrame;
 

@@ -8,6 +8,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Assert;
 
+import java.util.Date;
 import java.util.Map;
 
 import static co.nvqa.operator_v2.selenium.page.RouteMonitoringV2Page.RouteMonitoringTable.COLUMN_ROUTE_ID;
@@ -40,6 +41,11 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps
     @When("^Operator filter Route Monitoring V2 using data below and then load selection:$")
     public void operatorFilterRouteMonitoringV2UsingDataBelowAndThenLoadSelection(Map<String, String> data)
     {
+        if (routeMonitoringV2Page.openFilters.isDisplayedFast())
+        {
+            routeMonitoringV2Page.openFilters.click();
+        }
+
         data = resolveKeyValues(data);
         RouteMonitoringFilters filters = new RouteMonitoringFilters(data);
         if (ArrayUtils.isNotEmpty(filters.getHubs()))
@@ -59,7 +65,40 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps
             }
         }
         routeMonitoringV2Page.loadSelection.click();
-        routeMonitoringV2Page.spinner.waitUntilInvisible();
+        pause1s();
+        routeMonitoringV2Page.smallSpinner.waitUntilInvisible();
+    }
+
+    @When("^Operator search order on Route Monitoring V2 using data below:$")
+    public void operatorSearchOrderOnRouteMonitoringV2Page(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+        operatorFilterRouteMonitoringV2UsingDataBelowAndThenLoadSelection(data);
+
+        int timeout = Integer.parseInt(data.getOrDefault("timeout", "180")) * 1000;
+
+        RouteMonitoringParams expected = new RouteMonitoringParams(data);
+        Long routeId = expected.getRouteId();
+        Assert.assertNotNull("Route ID was not defined", routeId);
+        routeMonitoringV2Page.routeMonitoringTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        routeMonitoringV2Page.smallSpinner.waitUntilInvisible();
+
+        long start = new Date().getTime();
+        while (routeMonitoringV2Page.routeMonitoringTable.isEmpty() && (new Date().getTime() - start <= timeout))
+        {
+            routeMonitoringV2Page.openFilters.click();
+            routeMonitoringV2Page.loadSelection.click();
+            pause1s();
+            routeMonitoringV2Page.smallSpinner.waitUntilInvisible();
+            routeMonitoringV2Page.routeMonitoringTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+            pause1s();
+            routeMonitoringV2Page.smallSpinner.waitUntilInvisible();
+        }
+
+        if (routeMonitoringV2Page.routeMonitoringTable.isEmpty())
+        {
+            Assert.fail(f("Order [%d] was not found on Route Monitoring V2 page in [%d] seconds", routeId, timeout / 1000));
+        }
     }
 
     @When("^Operator verify parameters of a route on Route Monitoring V2 page using data below:$")
