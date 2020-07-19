@@ -1,12 +1,14 @@
 package co.nvqa.operator_v2.model;
 
+import co.nvqa.commons.model.DataEntity;
+
 import java.util.Date;
+import java.util.Map;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
-public class RouteMonitoringFilters
+public class RouteMonitoringFilters extends DataEntity<RouteMonitoringFilters>
 {
     private Date routeDate;
     private String[] routeTags;
@@ -15,6 +17,11 @@ public class RouteMonitoringFilters
 
     public RouteMonitoringFilters()
     {
+    }
+
+    public RouteMonitoringFilters(Map<String, ?> data)
+    {
+        fromMap(data);
     }
 
     public Date getRouteDate()
@@ -47,6 +54,11 @@ public class RouteMonitoringFilters
         this.hubs = hubs;
     }
 
+    public void setHubs(String hubs)
+    {
+        setHubs(hubs.split(";"));
+    }
+
     public String[] getZones()
     {
         return zones;
@@ -55,5 +67,10 @@ public class RouteMonitoringFilters
     public void setZones(String[] zones)
     {
         this.zones = zones;
+    }
+
+    public void setZones(String zones)
+    {
+        setZones(zones.split(";"));
     }
 }
