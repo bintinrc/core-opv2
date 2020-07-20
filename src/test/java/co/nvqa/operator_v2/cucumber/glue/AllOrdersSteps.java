@@ -295,7 +295,7 @@ public class AllOrdersSteps extends AbstractSteps
     {
         List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
         List<String> expectedFailureReasons = new ArrayList<>(trackingIds.size());
-        Collections.fill(expectedFailureReasons, "No route to pull from");
+        Collections.fill(expectedFailureReasons, "No route found to unroute");
         allOrdersPage.verifySelectionErrorDialog(trackingIds, AllOrdersAction.PULL_FROM_ROUTE, expectedFailureReasons);
     }
 

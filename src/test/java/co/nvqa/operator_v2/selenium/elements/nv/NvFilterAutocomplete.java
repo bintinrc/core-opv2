@@ -24,15 +24,21 @@ public class NvFilterAutocomplete extends PageElement
     @FindBy(name = "commons.remove-filter")
     public NvIconButton removeFilter;
 
-    public void clearAll(){
-        clearAll.moveAndClick();
+    public void clearAll()
+    {
+        if (clearAll.isDisplayedFast())
+        {
+            clearAll.moveAndClick();
+        }
     }
 
-    public void selectFilter(String value){
+    public void selectFilter(String value)
+    {
         searchOrSelect.selectValue(value);
     }
 
-    public void removeFilter(){
+    public void removeFilter()
+    {
         removeFilter.click();
     }
 

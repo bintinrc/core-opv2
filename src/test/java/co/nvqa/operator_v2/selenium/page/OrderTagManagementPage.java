@@ -1,109 +1,127 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.core.Order;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
+import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author Niko Susanto
  */
-@SuppressWarnings("WeakerAccess")
 public class OrderTagManagementPage extends OperatorV2SimplePage
 {
-    private static final String TABLE_DATA = "data in getTableData()";
-    private static final String TABLE_DATA_ORDER_ID_COLUMN_CLASS = "order-id";
+    @FindBy(xpath = "//nv-filter-autocomplete[@main-title='Shipper']")
+    public NvFilterAutocomplete shipperFilter;
 
-    private static final String FILTER_STATUS_MAIN_TITLE = "Status";
-    private static final String FILTER_GRANULAR_STATUS_MAIN_TITLE = "Granular Status";
-    private static final String FILTER_SHIPPER_ITEM_TYPES = "Shipper";
-    private static final String FILTER_MASTER_SHIPPER_ITEM_TYPES = "Master Shipper";
+    @FindBy(xpath = "//nv-filter-box[@item-types='Status']")
+    public NvFilterBox statusFilter;
+
+    @FindBy(xpath = "//nv-filter-box[@item-types='Granular Status']")
+    public NvFilterBox granularStatusFilter;
+
+    @FindBy(name = "Load Selection")
+    public NvIconTextButton loadSelection;
+
+    @FindBy(css = "md-dialog")
+    public AddTagsDialog addTagsDialog;
+
+    @FindBy(css = "md-dialog")
+    public RemoveTagsDialog removeTagsDialog;
+
+    @FindBy(css = "div.actions-container md-menu")
+    public MdMenu actionsMenu;
+
+    public OrdersTable ordersTable;
 
     public OrderTagManagementPage(WebDriver webDriver)
     {
         super(webDriver);
+        ordersTable = new OrdersTable(webDriver);
     }
 
-
-    public void selectShipperValue(String value)
+    public void addTag(List<String> orderTags)
     {
-        selectValueFromNvAutocompleteByItemTypes(FILTER_SHIPPER_ITEM_TYPES, value);
-    }
-
-    public void selectUniqueStatusValue(String value)
-    {
-        List<String> valuesSelected = getSelectedValuesFromNvFilterBox(FILTER_STATUS_MAIN_TITLE);
-         if((Objects.nonNull(valuesSelected) && !valuesSelected.contains(value)) || valuesSelected.isEmpty())
-         {
-             selectValueFromNvAutocompleteByItemTypesAndDismiss(FILTER_STATUS_MAIN_TITLE, value);
-         }
-
-         valuesSelected = getSelectedValuesFromNvFilterBox(FILTER_STATUS_MAIN_TITLE);
-
-         if(Objects.nonNull(valuesSelected) && !valuesSelected.isEmpty())
-         {
-             valuesSelected.stream()
-                     .filter(valueSelected -> !valueSelected.equals(value))
-                     .forEach(valueSelected -> removeSelectedValueFromNvFilterBoxByAriaLabel(FILTER_STATUS_MAIN_TITLE, valueSelected));
-         }
-    }
-
-    public void selectUniqueGranularStatusValue(String value)
-    {
-        List<String> valuesSelected = getSelectedValuesFromNvFilterBox(FILTER_GRANULAR_STATUS_MAIN_TITLE);
-
-        if((Objects.nonNull(valuesSelected) && !valuesSelected.contains(value)) || valuesSelected.isEmpty())
+        actionsMenu.selectOption("Add Tags");
+        addTagsDialog.waitUntilVisible();
+        for (String tag : orderTags)
         {
-            selectValueFromNvAutocompleteByItemTypesAndDismiss(FILTER_GRANULAR_STATUS_MAIN_TITLE, value);
+            addTagsDialog.selectTag.selectValue(tag);
         }
+        addTagsDialog.save.click();
+        addTagsDialog.waitUntilInvisible();
+    }
 
-        valuesSelected = getSelectedValuesFromNvFilterBox(FILTER_GRANULAR_STATUS_MAIN_TITLE);
-
-        if(Objects.nonNull(valuesSelected) && !valuesSelected.isEmpty())
+    public void removeTag(List<String> orderTags)
+    {
+        actionsMenu.selectOption("Remove Tags");
+        removeTagsDialog.removeTag.waitUntilClickable();
+        while (removeTagsDialog.removeTag.isDisplayedFast())
         {
-            valuesSelected.stream()
-                    .filter(valueSelected -> !valueSelected.equals(value))
-                    .forEach(valueSelected -> removeSelectedValueFromNvFilterBoxByAriaLabel(FILTER_GRANULAR_STATUS_MAIN_TITLE, valueSelected));
+            removeTagsDialog.removeTag.click();
         }
-    }
-
-    public void clickLoadSelectionButton()
-    {
-        clickNvIconTextButtonByNameAndWaitUntilDone("Load Selection");
-    }
-
-    public void selectOrdersInTable()
-    {
-        checkRowWithMdVirtualRepeat(1, TABLE_DATA);
-    }
-
-    public void addTag(List orderTag)
-    {
-        clickButtonByAriaLabel("Action");
-        clickButtonByAriaLabel("Add Tags");
-        for (int i = 0; i < orderTag.size(); i++)
+        for (String tag : orderTags)
         {
-            sendKeysAndEnter("//md-autocomplete//input[@aria-autocomplete='list']", String.valueOf(orderTag.get(i)));
+            removeTagsDialog.selectTag.selectValue(tag);
         }
-
-        click("//md-icon/i[contains(text(),'arrow_drop_down')]");
-        clickButtonByAriaLabel("Save");
-        pause5s();
+        removeTagsDialog.remove.click();
+        removeTagsDialog.waitUntilInvisible();
     }
 
-    public void removeTag(List orderTag)
+    public static class OrdersTable extends MdVirtualRepeatTable<Order>
     {
-        clickButtonByAriaLabel("Action");
-        clickButtonByAriaLabel("Remove Tags");
-
-        for (int i = 0; i < orderTag.size(); i++)
+        public OrdersTable(WebDriver webDriver)
         {
-            sendKeysAndEnter("//md-autocomplete//input[@aria-autocomplete='list']", String.valueOf(orderTag.get(i)));
+            super(webDriver);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                    .put("id", "order-id")
+                    .put("trackingId", "tracking-id")
+                    .put("granularStatus", "granular-status")
+                    .build()
+            );
+            setMdVirtualRepeat("data in getTableData()");
+            setEntityClass(Order.class);
         }
+    }
 
-        click("//md-icon/i[contains(text(),'arrow_drop_down')]");
-        clickButtonByAriaLabel("Remove");
-        pause5s();
+    public static class AddTagsDialog extends MdDialog
+    {
+        @FindBy(xpath = ".//nv-autocomplete[@selected-item='ctrl.selectedTag']")
+        public NvAutocomplete selectTag;
+
+        @FindBy(name = "commons.save")
+        public NvIconTextButton save;
+
+        public AddTagsDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+    }
+
+    public static class RemoveTagsDialog extends MdDialog
+    {
+        @FindBy(xpath = ".//nv-autocomplete[@selected-item='ctrl.selectedTag']")
+        public NvAutocomplete selectTag;
+
+        @FindBy(name = "commons.remove")
+        public NvIconTextButton remove;
+
+        @FindBy(css = "button[aria-label='remove']")
+        public Button removeTag;
+
+        public RemoveTagsDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
     }
 
 }

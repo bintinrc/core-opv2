@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.elements;
 
 import co.nvqa.common_selenium.page.SimplePage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -42,7 +43,12 @@ public class PageElement extends SimplePage
 
     public void click()
     {
-        webElement.click();
+        try
+        {
+            webElement.click();
+        } catch (ElementClickInterceptedException ex) {
+            jsClick();
+        }
     }
 
     public void jsClick()
