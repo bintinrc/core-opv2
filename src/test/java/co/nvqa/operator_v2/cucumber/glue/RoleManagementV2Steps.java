@@ -13,11 +13,13 @@ import java.util.Date;
 public class RoleManagementV2Steps extends AbstractSteps {
     private RoleManagementV2Page roleManagementV2Page;
 
-    public RoleManagementV2Steps() {
+    public RoleManagementV2Steps()
+    {
     }
 
     @Override
-    public void init() {
+    public void init()
+    {
         roleManagementV2Page = new RoleManagementV2Page(getWebDriver());
     }
 
