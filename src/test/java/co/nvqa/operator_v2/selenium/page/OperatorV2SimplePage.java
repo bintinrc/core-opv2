@@ -1272,20 +1272,25 @@ public class OperatorV2SimplePage extends SimplePage
     {
         waitUntilNewWindowOrTabOpened();
         String currentWindowHandle = getWebDriver().getWindowHandle();
-        Set<String> windowHandles = getWebDriver().getWindowHandles();
         boolean windowFound = false;
+        int attempts = 0;
 
-        for (String windowHandle : windowHandles)
+        do
         {
-            getWebDriver().switchTo().window(windowHandle);
-            String currentWindowUrl = getCurrentUrl();
-
-            if (currentWindowUrl.endsWith(expectedUrlEndWith))
+            Set<String> windowHandles = getWebDriver().getWindowHandles();
+            for (String windowHandle : windowHandles)
             {
-                windowFound = true;
-                break;
+                getWebDriver().switchTo().window(windowHandle);
+                String currentWindowUrl = getCurrentUrl();
+
+                if (currentWindowUrl.endsWith(expectedUrlEndWith))
+                {
+                    windowFound = true;
+                    break;
+                }
             }
-        }
+            attempts++;
+        } while (!windowFound && attempts <= 5);
 
         if (!windowFound)
         {

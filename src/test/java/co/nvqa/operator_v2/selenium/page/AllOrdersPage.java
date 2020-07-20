@@ -1,8 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.operator_v2.model.ChangeDeliveryTiming;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
@@ -66,6 +67,15 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     @FindBy(css = "md-dialog")
     public FindOrdersWithCsvDialog findOrdersWithCsvDialog;
+
+    @FindBy(css = "md-dialog")
+    public ManuallyCompleteOrderDialog manuallyCompleteOrderDialog;
+
+    @FindBy(css = "md-dialog")
+    public PullSelectedFromRouteDialog pullSelectedFromRouteDialog;
+
+    @FindBy(css = "md-dialog")
+    public ResumeSelectedDialog resumeSelectedDialog;
 
     public enum Category
     {
@@ -166,9 +176,10 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     public void downloadSampleCsvFile()
     {
-        clickNvIconTextButtonByName("container.order.list.find-orders-with-csv");
-        waitUntilVisibilityOfElementLocated("//md-dialog//h2[text()='Find Orders with CSV']");
-        click("//a[@filename='find-orders-with-csv.csv']");
+        findOrdersWithCsv.click();
+        findOrdersWithCsvDialog.waitUntilVisible();
+        findOrdersWithCsvDialog.downloadSample.click();
+        findOrdersWithCsvDialog.cancel.click();
     }
 
     public void verifySampleCsvFileDownloadedSuccessfully()
@@ -185,8 +196,6 @@ public class AllOrdersPage extends OperatorV2SimplePage
         findOrdersWithCsvDialog.waitUntilVisible();
         findOrdersWithCsvDialog.selectFile.setValue(csvFile);
         findOrdersWithCsvDialog.upload.clickAndWaitUntilDone();
-        findOrdersWithCsvDialog.waitUntilInvisible();
-        waitUntilInvisibilityOfToast("Matches with file shown in table", true);
     }
 
     public void verifyAllOrdersInCsvIsFoundWithCorrectInfo(List<Order> listOfCreatedOrder)
@@ -196,6 +205,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     public void verifyInvalidTrackingIdsIsFailedToFind(List<String> listOfInvalidTrackingId)
     {
+        pause1s();
         List<WebElement> listOfWe = findElementsByXpath("//div[@ng-repeat='error in ctrl.payload.errors track by $index']");
         List<String> listOfActualInvalidTrackingId = listOfWe.stream().map(we -> we.getText().split("\\.")[1].trim()).collect(Collectors.toList());
         assertThat("Expected Tracking ID not found.", listOfActualInvalidTrackingId, hasItems(listOfInvalidTrackingId.toArray(new String[]{})));
@@ -263,8 +273,9 @@ public class AllOrdersPage extends OperatorV2SimplePage
         filterTableOrderByTrackingId(trackingId);
         selectAllShown("ctrl.ordersTableParam");
         applyActionsMenu.chooseItem(MANUALLY_COMPLETE_SELECTED);
-        waitUntilVisibilityOfElementLocated("//md-dialog//div[contains(text(), \"Proceed to set the order status to 'Completed'?\")]");
-        clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.complete-order");
+        manuallyCompleteOrderDialog.waitUntilVisible();
+        manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
+        manuallyCompleteOrderDialog.waitUntilInvisible();
         waitUntilInvisibilityOfToast("Complete Order");
     }
 
@@ -354,34 +365,36 @@ public class AllOrdersPage extends OperatorV2SimplePage
         selectAllShown("ctrl.ordersTableParam");
         applyActionsMenu.chooseItem(RESUME_SELECTED);
 
-        List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='order in ctrl.orders']/td[1]");
-        List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
+        resumeSelectedDialog.waitUntilVisible();
+        List<String> listOfActualTrackingIds = resumeSelectedDialog.trackingIds.stream().map(PageElement::getText).collect(Collectors.toList());
         assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
 
         if (listOfActualTrackingIds.size() == 1)
         {
-            clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.resume-order");
+            resumeSelectedDialog.resumeOrder.clickAndWaitUntilDone();
         } else
         {
-            clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.resume-orders");
+            resumeSelectedDialog.resumeOrders.clickAndWaitUntilDone();
         }
-
+        resumeSelectedDialog.waitUntilInvisible();
         waitUntilInvisibilityOfToast("updated");
     }
 
     public void pullOutFromRoute(List<String> listOfExpectedTrackingId)
     {
         applyActionToOrdersByTrackingId(listOfExpectedTrackingId, PULL_FROM_ROUTE);
-        //selectTypeFromPullSelectedFromRouteDialog(listOfExpectedTrackingId, "Delivery");
-        clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.pull-orders-from-routes");
+        pullSelectedFromRouteDialog.waitUntilVisible();
+        pullSelectedFromRouteDialog.pullOrdersFromRoutes.clickAndWaitUntilDone();
+        pullSelectedFromRouteDialog.waitUntilInvisible();
         waitUntilInvisibilityOfToast("updated");
     }
 
     public void pullOutFromRouteWithExpectedSelectionError(List<String> listOfExpectedTrackingId)
     {
         applyActionToOrdersByTrackingId(listOfExpectedTrackingId, PULL_FROM_ROUTE);
+        pullSelectedFromRouteDialog.waitUntilVisible();
         selectTypeFromPullSelectedFromRouteDialog(listOfExpectedTrackingId, "Delivery");
-        clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.pull-orders-from-routes");
+        pullSelectedFromRouteDialog.pullOrdersFromRoutes.clickAndWaitUntilDone();
     }
 
     public void selectTypeFromPullSelectedFromRouteDialog(List<String> listOfExpectedTrackingId, String type)
@@ -389,7 +402,6 @@ public class AllOrdersPage extends OperatorV2SimplePage
         List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='processedTransactionData in ctrl.processedTransactionsData']/td[@ng-if='ctrl.settings.showTrackingId']");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
         assertThat("Expected Tracking ID not found.", listOfActualTrackingIds, hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
-        //listOfExpectedTrackingId.forEach(trackingId -> selectValueFromMdSelectByMdSelectXpath(f("//tr[@ng-repeat='processedTransactionData in ctrl.processedTransactionsData']/td[text()='%s']/following-sibling::td//md-checkbox", trackingId), type));
     }
 
     public void applyActionToOrdersByTrackingId(@SuppressWarnings("unused") List<String> listOfExpectedTrackingId, AllOrdersAction action)
@@ -403,30 +415,38 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         WebElement failedToUpdateWe = findElementByXpath("//div[contains(text(), 'Failed to update')]");
         assertNotNull("Failed to update n item(s) dialog not found.", failedToUpdateWe);
+        pause3s();
 
         //To-Do: Enable this codes below when they fix the UI.
-        /*
-        waitUntilVisibilityOfMdDialogByTitle("Selection Error");
+//        Pattern p = Pattern.compile("([^\\s]+)\\s?.*Message:(.+)].*");
+//        List<String> errors = pullSelectedFromRouteDialog.errors.stream().map(PageElement::getText).collect(Collectors.toList());
+//        assertEquals("Unexpected number of Orders", listOfExpectedTrackingId.size(), errors.size());
+//        assertThat("Expected Tracking ID not found", errors, hasItems(errors.stream().map(error ->
+//        {
+//            Matcher m = p.matcher(error);
+//            if (m.find())
+//            {
+//                return m.group(1);
+//            } else
+//            {
+//                return null;
+//            }
+//        }).toArray(String[]::new)));
+//
+//        assertThat("Expected Error Message not found", errors, hasItems(errors.stream().map(error ->
+//        {
+//            Matcher m = p.matcher(error);
+//            if (m.find())
+//            {
+//                return m.group(2);
+//            } else
+//            {
+//                return null;
+//            }
+//        }).toArray(String[]::new)));
 
-        String actualAction = getText("//div[label[text()='Process']]/p");
-        assertThat("Unexpected Process", actualAction, equalToIgnoringCase(action.getName()));
-
-        List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='row in ctrl.ordersValidationErrorData.errors']/td[1]");
-        List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
-        assertEquals("Unexpected number of Orders", listOfExpectedTrackingId.size(), listOfActualTrackingIds.size());
-        assertThat("Expected Tracking ID not found", listOfActualTrackingIds, hasItems(listOfExpectedTrackingId.toArray(new String[]{})));
-
-        listOfWe = findElementsByXpath("//tr[@ng-repeat='row in ctrl.ordersValidationErrorData.errors']/td[2]");
-        List<String> listOfFailureReason = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
-        assertThat("Unexpected Failure Reason", listOfFailureReason, hasItems(expectedReasons.toArray(new String[]{})));
-
-        clickNvIconTextButtonByNameAndWaitUntilDone("commons.continue");
-
-        String toastTopText = getToastTopText();
-        String toastBottomText = getToastBottomText();
-        assertEquals("Toast top text", "Unable to apply actions", toastTopText);
-        assertEquals("Toast bottom text", "No valid selection", toastBottomText);
-        */
+        pullSelectedFromRouteDialog.close.click();
+        pullSelectedFromRouteDialog.waitUntilInvisible();
     }
 
     public void addToRoute(List<String> listOfExpectedTrackingId, long routeId)
@@ -456,61 +476,6 @@ public class AllOrdersPage extends OperatorV2SimplePage
     public void verifyWaybillContentsIsCorrect(Order order)
     {
         editOrderPage.verifyAirwayBillContentsIsCorrect(order);
-    }
-
-    public void verifyDeliveryTimingIsUpdatedSuccessfully(ChangeDeliveryTiming changeDeliveryTiming)
-    {
-        String mainWindowHandle = getWebDriver().getWindowHandle();
-
-        try
-        {
-            searchTrackingId(changeDeliveryTiming.getTrackingId());
-            switchToNewOpenedWindow(mainWindowHandle);
-            editOrderPage.waitUntilInvisibilityOfLoadingOrder();
-
-            String actualStartDate = getText("//div[@id='delivery-details']//div[label/text()='Start Date / Time']/p");
-            String actualEndDate = getText("//div[@id='delivery-details']//div[label/text()='End Date / Time']/p");
-
-            String expectedStartDate = changeDeliveryTiming.getStartDate();
-            String expectedEndDate = changeDeliveryTiming.getEndDate();
-            String expectedStartTime = "";
-            String expectedEndTime = "";
-            Integer timewindow = changeDeliveryTiming.getTimewindow();
-
-            if (timewindow == null)
-            {
-                actualStartDate = actualStartDate.substring(0, 10);
-                actualEndDate = actualEndDate.substring(0, 10);
-            } else
-            {
-                expectedStartTime = TestUtils.getStartTime(timewindow);
-                expectedEndTime = TestUtils.getEndTime(timewindow);
-            }
-
-            String expectedStartDateWithTime = concatDateWithTime(expectedStartDate, expectedStartTime);
-            String expectedEndDateWithTime = concatDateWithTime(expectedEndDate, expectedEndTime);
-
-            boolean isDateEmpty = isBlank(changeDeliveryTiming.getStartDate()) || isBlank(changeDeliveryTiming.getEndDate());
-
-            if (!isDateEmpty)
-            {
-                assertEquals("Start Date does not match.", expectedStartDateWithTime, actualStartDate);
-                assertEquals("End Date does not match.", expectedEndDateWithTime, actualEndDate);
-            } else
-            {
-                /*
-                  If date is empty, check only the start/end time.
-                 */
-                String actualStartTime = actualStartDate.substring(11, 19);
-                String actualEndTime = actualEndDate.substring(11, 19);
-
-                assertEquals("Start Date does not match.", expectedStartDateWithTime, actualStartTime);
-                assertEquals("End Date does not match.", expectedEndDateWithTime, actualEndTime);
-            }
-        } finally
-        {
-            closeAllWindows(mainWindowHandle);
-        }
     }
 
     private String concatDateWithTime(String date, String time)
@@ -745,12 +710,63 @@ public class AllOrdersPage extends OperatorV2SimplePage
     public static class FindOrdersWithCsvDialog extends MdDialog
     {
         @FindBy(css = "[label='Select File']")
-        NvButtonFilePicker selectFile;
+        public NvButtonFilePicker selectFile;
+
+        @FindBy(xpath = ".//a[text()='here']")
+        public Button downloadSample;
 
         @FindBy(name = "commons.upload")
         public NvButtonSave upload;
 
+        @FindBy(name = "commons.cancel")
+        public NvIconTextButton cancel;
+
         public FindOrdersWithCsvDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+    }
+
+    public static class ManuallyCompleteOrderDialog extends MdDialog
+    {
+        @FindBy(name = "container.order.edit.complete-order")
+        public NvApiTextButton completeOrder;
+
+        public ManuallyCompleteOrderDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+    }
+
+    public static class PullSelectedFromRouteDialog extends MdDialog
+    {
+        @FindBy(name = "container.order.edit.pull-orders-from-routes")
+        public NvApiTextButton pullOrdersFromRoutes;
+
+        @FindBy(xpath = "//nv-icon-text-button[@name='Close']")
+        public NvIconTextButton close;
+
+        @FindBy(xpath = "//div[@ng-repeat='error in ctrl.payload.errors track by $index']")
+        public List<PageElement> errors;
+
+        public PullSelectedFromRouteDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+    }
+
+    public static class ResumeSelectedDialog extends MdDialog
+    {
+        @FindBy(xpath = ".//tr[@ng-repeat='order in ctrl.orders']/td")
+        public List<PageElement> trackingIds;
+
+        @FindBy(name = "container.order.edit.resume-order")
+        public NvApiTextButton resumeOrder;
+
+        @FindBy(name = "container.order.edit.resume-orders")
+        public NvApiTextButton resumeOrders;
+
+        public ResumeSelectedDialog(WebDriver webDriver, WebElement webElement)
         {
             super(webDriver, webElement);
         }

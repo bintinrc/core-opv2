@@ -16,6 +16,7 @@ import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -23,6 +24,7 @@ import com.google.common.collect.ImmutableMap;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -58,12 +60,19 @@ public class EditOrderPage extends OperatorV2SimplePage
     public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE_EVENT = "name";
     private TransactionsTable transactionsTable;
     private AddToRouteDialog addToRouteDialog;
+
     @FindBy(css = "md-dialog")
     public EditPriorityLevelDialog editPriorityLevelDialog;
+
+    @FindBy(css = "md-dialog")
+    public AddToRoute2Dialog addToRoute2Dialog;
+
     @FindBy(id = "delivery-details")
     public DeliveryDetailsBox deliveryDetailsBox;
+
     @FindBy(id = "pickup-details")
     public PickupDetailsBox pickupDetailsBox;
+
     private EventsTable eventsTable;
     private CancelOrderDialog cancelOrderDialog;
     private EditPickupDetailsDialog editPickupDetailsDialog;
@@ -223,20 +232,25 @@ public class EditOrderPage extends OperatorV2SimplePage
     public void addToRoute(long routeId, String type)
     {
         clickMenu("Pickup", "Add To Route");
-        addToRouteDialog
-                .waitUntilVisibility()
-                .enterRouteId(routeId)
-                .selectType(type)
-                .submit();
+        addToRoute2Dialog.waitUntilVisible();
+        addToRoute2Dialog.route.setValue(routeId);
+        addToRoute2Dialog.type.selectValue(type);
+        addToRoute2Dialog.addToRoute.clickAndWaitUntilDone();
+        addToRoute2Dialog.waitUntilInvisible();
     }
 
     public void addToRouteFromRouteTag(String routeTag)
     {
         clickMenu("Delivery", "Add To Route");
-        addToRouteDialog
-                .waitUntilVisibility()
-                .selectRouteTags(routeTag)
-                .submit();
+        addToRoute2Dialog.waitUntilVisible();
+        addToRoute2Dialog.routeTags.selectValue(routeTag);
+        addToRoute2Dialog.suggestRoute.clickAndWaitUntilDone();
+        if (toastErrors.size() > 0)
+        {
+            Assert.fail(f("Error on attempt to suggest routes: %s", toastErrors.get(0).toastBottom.getText()));
+        }
+        addToRoute2Dialog.addToRoute.clickAndWaitUntilDone();
+        addToRoute2Dialog.waitUntilInvisible();
         waitUntilInvisibilityOfToast(true);
     }
 
@@ -2206,7 +2220,7 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public static class EditPriorityLevelDialog extends MdDialog
     {
-        public EditPriorityLevelDialog (WebDriver webDriver, WebElement webElement)
+        public EditPriorityLevelDialog(WebDriver webDriver, WebElement webElement)
         {
             super(webDriver, webElement);
         }
@@ -2217,5 +2231,28 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         @FindBy(name = "commons.save-changes")
         public NvApiTextButton saveChanges;
+    }
+
+    public static class AddToRoute2Dialog extends MdDialog
+    {
+        public AddToRoute2Dialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(css = "[id^='container.order.edit.route']")
+        public TextBox route;
+
+        @FindBy(css = "[id^='commons.type']")
+        public MdSelect type;
+
+        @FindBy(css = "[id^='container.order.edit.route-tags']")
+        public MdSelect routeTags;
+
+        @FindBy(name = "container.order.edit.suggest-route")
+        public NvApiTextButton suggestRoute;
+
+        @FindBy(name = "container.order.edit.add-to-route")
+        public NvApiTextButton addToRoute;
     }
 }
