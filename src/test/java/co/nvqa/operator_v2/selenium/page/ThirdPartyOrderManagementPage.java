@@ -87,7 +87,7 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
         uploadSingleMappingDialog.waitUntilVisible();
         thirdPartyOrderMapping.setShipperName(uploadSingleMappingDialog.idSelect.getValue());
         thirdPartyOrderMapping.setShipperId(uploadSingleMappingDialog.idSelect.getSelectedValueAttribute());
-        uploadSingleMappingDialog.close();
+        refreshPage();
     }
 
     public void uploadBulkMapping(List<ThirdPartyOrderMapping> thirdPartyOrderMappings)
@@ -103,14 +103,14 @@ public class ThirdPartyOrderManagementPage extends OperatorV2SimplePage
     public void verifyOrderMappingCreatedSuccessfully(ThirdPartyOrderMapping expectedOrderMapping)
     {
         uploadResultsPage.verifyUploadResultsData(expectedOrderMapping);
-        uploadResultsPage.closeDialog();
+        refreshPage();
         verifyOrderMappingRecord(expectedOrderMapping);
     }
 
     public void verifyMultipleOrderMappingCreatedSuccessfully(List<ThirdPartyOrderMapping> expectedOrderMappings)
     {
         uploadResultsPage.verifyUploadResultsData(expectedOrderMappings);
-        uploadResultsPage.closeDialog();
+        refreshPage();
         verifyOrderMappingRecords(expectedOrderMappings);
     }
 
