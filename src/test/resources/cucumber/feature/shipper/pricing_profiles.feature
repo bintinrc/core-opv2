@@ -1,4 +1,4 @@
-@OperatorV2 @Shipper @OperatorV2Part2 @AllShippers @Saas
+@OperatorV2 @Shipper @OperatorV2Part2 @AllShippers @Saas @PricingProfiles
 Feature: Pricing Profiles
 
   @LaunchBrowser @ShouldAlwaysRun @EnableClearCache
