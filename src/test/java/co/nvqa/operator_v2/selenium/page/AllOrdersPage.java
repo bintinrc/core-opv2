@@ -6,12 +6,12 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
 import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
-import co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -26,7 +26,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction.*;
+import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction.CANCEL_SELECTED;
+import static co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction.PULL_FROM_ROUTE;
 
 /**
  * @author Tristania Siagian
@@ -76,6 +77,9 @@ public class AllOrdersPage extends OperatorV2SimplePage
 
     @FindBy(css = "md-dialog")
     public ResumeSelectedDialog resumeSelectedDialog;
+
+    @FindBy(css = "div.navigation md-menu")
+    public MdMenu actionsMenu;
 
     public enum Category
     {
@@ -148,7 +152,6 @@ public class AllOrdersPage extends OperatorV2SimplePage
     }
 
     private final EditOrderPage editOrderPage;
-    public ApplyActionsMenu applyActionsMenu;
 
     public AllOrdersPage(WebDriver webDriver)
     {
@@ -159,7 +162,6 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         super(webDriver);
         this.editOrderPage = editOrderPage;
-        this.applyActionsMenu = new ApplyActionsMenu(webDriver);
     }
 
     public void waitUntilPageLoaded()
@@ -272,7 +274,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         filterTableOrderByTrackingId(trackingId);
         selectAllShown("ctrl.ordersTableParam");
-        applyActionsMenu.chooseItem(MANUALLY_COMPLETE_SELECTED);
+        actionsMenu.selectOption("Manually Complete Selected");
         manuallyCompleteOrderDialog.waitUntilVisible();
         manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
         manuallyCompleteOrderDialog.waitUntilInvisible();
@@ -300,7 +302,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         filterTableOrderByTrackingId(trackingId);
         selectAllShown("ctrl.ordersTableParam");
-        applyActionsMenu.chooseItem(SET_RTS_TO_SELECTED);
+        actionsMenu.selectOption("Set RTS to Selected");
         setMdDatepickerById("commons.model.delivery-date", TestUtils.getNextDate(1));
         selectValueFromMdSelectById("commons.timeslot", "3PM - 6PM");
         clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.set-order-to-rts");
@@ -311,7 +313,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         clearFilterTableOrderByTrackingId();
         selectAllShown("ctrl.ordersTableParam");
-        applyActionsMenu.chooseItem(SET_RTS_TO_SELECTED);
+        actionsMenu.selectOption("Set RTS to Selected");
 
         List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='order in ctrl.orders']/td[1]");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
@@ -335,7 +337,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         clearFilterTableOrderByTrackingId();
         selectAllShown("ctrl.ordersTableParam");
-        applyActionsMenu.chooseItem(CANCEL_SELECTED);
+        actionsMenu.selectOption(CANCEL_SELECTED.getName());
 
         List<WebElement> listOfWe = findElementsByXpath("//tr[@ng-repeat='order in ctrl.orders']/td[1]");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
@@ -363,7 +365,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         clearFilterTableOrderByTrackingId();
         selectAllShown("ctrl.ordersTableParam");
-        applyActionsMenu.chooseItem(RESUME_SELECTED);
+        actionsMenu.selectOption("Resume Selected");
 
         resumeSelectedDialog.waitUntilVisible();
         List<String> listOfActualTrackingIds = resumeSelectedDialog.trackingIds.stream().map(PageElement::getText).collect(Collectors.toList());
@@ -408,7 +410,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         clearFilterTableOrderByTrackingId();
         selectAllShown("ctrl.ordersTableParam");
-        applyActionsMenu.chooseItem(action);
+        actionsMenu.selectOption(action.getName());
     }
 
     public void verifySelectionErrorDialog(List<String> listOfExpectedTrackingId, AllOrdersAction action, List<String> expectedReasons)
@@ -453,7 +455,7 @@ public class AllOrdersPage extends OperatorV2SimplePage
     {
         clearFilterTableOrderByTrackingId();
         selectAllShown("ctrl.ordersTableParam");
-        applyActionsMenu.chooseItem(ADD_TO_ROUTE);
+        actionsMenu.selectOption(AllOrdersAction.ADD_TO_ROUTE.getName());
 
         List<WebElement> listOfWe = findElementsByXpath("//div[@md-virtual-repeat='order in ctrl.formData.orders']/div[@class='table-tracking-id']");
         List<String> listOfActualTrackingIds = listOfWe.stream().map(WebElement::getText).collect(Collectors.toList());
@@ -648,43 +650,25 @@ public class AllOrdersPage extends OperatorV2SimplePage
         clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT_TABLE_ORDER);
     }
 
-    /**
-     * Accessor for Apply Action menu
-     */
-    public static class ApplyActionsMenu extends OperatorV2SimplePage
+    public enum AllOrdersAction
     {
-        public enum AllOrdersAction
+        SET_RTS_TO_SELECTED("Set RTS to Selected"),
+        CANCEL_SELECTED("Cancel Selected"),
+        RESUME_SELECTED("Resume Selected"),
+        MANUALLY_COMPLETE_SELECTED("Manually Complete Selected"),
+        PULL_FROM_ROUTE("Pull from Route"),
+        ADD_TO_ROUTE("Add To Route");
+
+        private String name;
+
+        public String getName()
         {
-            SET_RTS_TO_SELECTED("Set RTS to Selected"),
-            CANCEL_SELECTED("Cancel Selected"),
-            RESUME_SELECTED("Resume Selected"),
-            MANUALLY_COMPLETE_SELECTED("Manually Complete Selected"),
-            PULL_FROM_ROUTE("Pull from Route"),
-            ADD_TO_ROUTE("Add To Route");
-
-            private String name;
-
-            public String getName()
-            {
-                return name;
-            }
-
-            AllOrdersAction(String name)
-            {
-                this.name = name;
-            }
+            return name;
         }
 
-        private static final String PARENT_MENU_NAME = "Apply Action";
-
-        public ApplyActionsMenu(WebDriver webDriver)
+        AllOrdersAction(String name)
         {
-            super(webDriver);
-        }
-
-        public void chooseItem(AllOrdersAction action)
-        {
-            clickMdMenuItem(PARENT_MENU_NAME, action.getName());
+            this.name = name;
         }
     }
 

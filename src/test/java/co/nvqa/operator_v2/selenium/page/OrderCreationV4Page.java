@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- *
  * @author Sergey Mishanin
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
@@ -39,9 +38,9 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
 
     static
     {
-        MAP_OF_ADDITIONAL_CONFIGURATIONS_XPATH.put("Pickup Required","//md-checkbox[@ng-model=\"ctrl.state.isPickupRequired\"]");
-        MAP_OF_ADDITIONAL_CONFIGURATIONS_XPATH.put("Cash Enabled","//md-checkbox[@ng-model=\"ctrl.state.isCashEnabled\"]");
-        MAP_OF_ADDITIONAL_CONFIGURATIONS_XPATH.put("Stamp Shipper","//md-checkbox[@ng-model=\"ctrl.state.isStampShipper\"]");
+        MAP_OF_ADDITIONAL_CONFIGURATIONS_XPATH.put("Pickup Required", "//md-checkbox[@ng-model=\"ctrl.state.isPickupRequired\"]");
+        MAP_OF_ADDITIONAL_CONFIGURATIONS_XPATH.put("Cash Enabled", "//md-checkbox[@ng-model=\"ctrl.state.isCashEnabled\"]");
+        MAP_OF_ADDITIONAL_CONFIGURATIONS_XPATH.put("Stamp Shipper", "//md-checkbox[@ng-model=\"ctrl.state.isStampShipper\"]");
     }
 
     private OrdersTable ordersTable;
@@ -89,7 +88,7 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
         assertThat("Delivery Timeslot", ordersTable.getDeliveryTimeslot(rowNumber), equalTo(buildTimeslot(order.getParcelJob().getDeliveryTimeslot())));
     }
 
-    public void downloadSampleFile(Map<String,String> dataTableAsMap) throws ParseException
+    public void downloadSampleFile(Map<String, String> dataTableAsMap) throws ParseException
     {
         String shipperName = dataTableAsMap.get("shipperName");
         String orderType = dataTableAsMap.get("orderType");
@@ -118,7 +117,7 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
 
         // Step 1
         retryIfNvTestRuntimeExceptionOccurred(
-                ()->selectValueFromNvAutocomplete("ctrl.shipperText", shipperName),
+                () -> selectValueFromNvAutocomplete("ctrl.shipperText", shipperName),
                 "Select shipper from NvAutoComplete");
 
         clickf("//md-radio-button//span[contains(text(),'%s')]", orderType);
@@ -137,7 +136,7 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
         click("//div[@class=\"layout-column\"]//nv-icon-text-button[@name=\"commons.next\"]");
 
         // step 4
-        if(additionalConfigurationsAsList.contains("Pickup Required"))
+        if (additionalConfigurationsAsList.contains("Pickup Required"))
         {
             waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'ocv4-preset-sample')]");
             setMdDatepicker("ctrl.currentStep.date", YYYY_MM_DD_SDF.parse(pickupDate));
@@ -150,21 +149,19 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
         // step 5
         waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'ocv4-preset-sample')]");
 
-        if("Marketplace".equals(orderType))
+        if ("Marketplace".equals(orderType))
         {
             click("//div[@class=\"layout-column\"]//nv-icon-text-button[@name=\"commons.next\"]");
-            sendKeysById("Seller ID","OPV2");
-            sendKeysById("commons.company-name","Ninja Van");
+            sendKeysById("Seller ID", "OPV2");
+            sendKeysById("commons.company-name", "Ninja Van");
         }
 
         // step 6
-        if(additionalConfigurationsAsList.contains("Cash Enabled"))
+        if (additionalConfigurationsAsList.contains("Cash Enabled"))
         {
             click("//div[@class=\"layout-column\"]//nv-icon-text-button[@name=\"commons.next\"]");
             waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class,'ocv4-preset-sample')]");
-            sendKeys("//input[@name='commons.cash-amount']",cashAmount);
-            click("//md-radio-button//span[contains(text(),'"+cashCollectionTransaction+"')]");
-            click("//md-radio-button//span[contains(text(),'"+cashCollectionType+"')]");
+            sendKeys("//input[@name='commons.cash-amount']", cashAmount);
         }
 
         click("//div[@class='layout-column']//nv-icon-text-button[@name='commons.done']");
@@ -180,7 +177,7 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
         verifyFileDownloadedSuccessfully(getLatestDownloadedFilename(CSV_FILENAME_PATTERN));
     }
 
-    public void verifyDownloadedFile(Map<String,String> dataTableAsMap) throws IOException
+    public void verifyDownloadedFile(Map<String, String> dataTableAsMap) throws IOException
     {
         Map<String, String> fileValues = new HashMap<>();
         fileValues.put("service_type", dataTableAsMap.get("orderType"));
@@ -195,7 +192,7 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
         fileValues.put("parcel_job.pickup_approximate_volume", dataTableAsMap.get("reservationVolume"));
 
         FileInputStream downloadedFile = new FileInputStream(StandardTestConstants.TEMP_DIR + getLatestDownloadedFilename(CSV_FILENAME_PATTERN));
-        XSSFWorkbook myWorkBook = new XSSFWorkbook (downloadedFile);
+        XSSFWorkbook myWorkBook = new XSSFWorkbook(downloadedFile);
         XSSFSheet mySheet = myWorkBook.getSheetAt(0);
 
         String cellHeader;
@@ -203,13 +200,13 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
         int rowNumber = 0;
         int cols = mySheet.getRow(rowNumber).getPhysicalNumberOfCells();
 
-        for(int c=0; c<cols; c++)
+        for (int c = 0; c < cols; c++)
         {
             cellHeader = mySheet.getRow(0).getCell(c).getStringCellValue();
-            if(fileValues.containsKey(cellHeader))
+            if (fileValues.containsKey(cellHeader))
             {
                 cellValue = mySheet.getRow(1).getCell(c).getStringCellValue();
-                assertEquals(fileValues.get(cellHeader).toLowerCase(),cellValue.toLowerCase());
+                assertEquals(fileValues.get(cellHeader).toLowerCase(), cellValue.toLowerCase());
             }
         }
     }
@@ -218,7 +215,7 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
     {
         String fromAddress;
 
-        switch(TestConstants.COUNTRY_CODE.toUpperCase())
+        switch (TestConstants.COUNTRY_CODE.toUpperCase())
         {
             case "MBS":
             case "FEF":
@@ -278,7 +275,7 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
 
         int i = 0;
 
-        for(Map.Entry<String, Object> entry : data.entrySet())
+        for (Map.Entry<String, Object> entry : data.entrySet())
         {
             String header = entry.getKey();
             Object value = entry.getValue();
@@ -286,12 +283,11 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
             i++;
         }
 
-        try(FileOutputStream fileOut = new FileOutputStream(excelFileName))
+        try (FileOutputStream fileOut = new FileOutputStream(excelFileName))
         {
             wb.write(fileOut);
             fileOut.flush();
-        }
-        catch(IOException ex)
+        } catch (IOException ex)
         {
             throw new NvTestRuntimeException(ex);
         }
@@ -391,6 +387,6 @@ public class OrderCreationV4Page extends OperatorV2SimplePage
     public String getBatchId()
     {
         String batchId = getText(XPATH_BATCH_ID);
-        return  batchId;
+        return batchId;
     }
 }

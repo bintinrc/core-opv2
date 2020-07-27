@@ -6,11 +6,12 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ListOrderCreationV2Template;
 import co.nvqa.operator_v2.model.OrderCreationV2Template;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.hamcrest.Matchers;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,13 +21,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static javax.swing.UIManager.put;
-
 /**
  * @author Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class OrderWeightUpdatePage extends OperatorV2SimplePage {
+    @FindBy(name = "container.order-weight-update.upload-selected")
+    public NvIconTextButton upload;
+
     private static final String NG_REPEAT = "row in $data";
     private static final String CSV_FILENAME_PATTERN = "sample_csv";
 
@@ -311,24 +313,12 @@ public class OrderWeightUpdatePage extends OperatorV2SimplePage {
 
     public void uploadOrderUpdateCsv(String OrderTrackingNo, Map<String, String> map) {
         File createOrderUpdateCsv = buildCreateOrderUpdateCsv(OrderTrackingNo, map);
-
         uploadOrderWeightCsv(createOrderUpdateCsv);
     }
 
     public void uploadMultiOrderUpdateCsv(List<String> trackId, List listWeight) {
         File createOrderUpdateCsv = buildMultiCreateOrderUpdateCsv(trackId, listWeight);
-
         uploadOrderWeightCsv(createOrderUpdateCsv);
-        pause(1000);
-        clickToSelectMultiOrderWeightUpdate("/html/body/div[1]/md-content/div/div/md-content/md-content/div[2]/div/div/nv-table/div/div[1]/table/thead/tr/th[7]/md-menu/button");
-        clickToSelectMultiOrderWeightUpdate("//*[@class='md-open-menu-container md-whiteframe-z2 md-active md-clickable']/md-menu-content/md-menu-item[1]/button");
-        pause(5 * 1000);
-        clickToSelectMultiOrderWeightUpdate("//nv-icon-text-button[@name='container.order-weight-update.upload-selected']");
-
-    }
-
-    public void clickToSelectMultiOrderWeightUpdate(String button){
-        click(button);
     }
 
     public void uploadOrderWeightCsv(File createOrderUpdateCsv) {
@@ -338,15 +328,8 @@ public class OrderWeightUpdatePage extends OperatorV2SimplePage {
         clickNvButtonUploadByNameAndWaitUntilDone("commons.upload");
     }
 
-    public void uploadOrderWeightUpload() {
-        clickToSelectMultiOrderWeightUpdate("/html/body/div[1]/md-content/div/div/md-content/md-content/div[2]/div/div/nv-table/div/div[1]/table/thead/tr/th[7]/md-menu/button");
-        clickToSelectMultiOrderWeightUpdate("//*[@class='md-open-menu-container md-whiteframe-z2 md-active md-clickable']/md-menu-content/md-menu-item[1]/button");
-        clickNvIconTextButtonByName("container.order-weight-update.upload-selected");
-    }
-
     public void uploadCsvForMultipleOrders(ListOrderCreationV2Template orderCreationV2Template) {
         File createOrderCsv = buildCreateOrderCsvForMultipleOrders(orderCreationV2Template);
-
         uploadCsv(createOrderCsv);
     }
 

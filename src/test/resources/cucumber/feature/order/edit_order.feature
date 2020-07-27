@@ -9,7 +9,7 @@ Feature: Edit Order
   Scenario: Operator Edit Order Details on Edit Order page (uid:310145cf-c2c5-4451-9501-637b368d274c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Order -> All Orders
     When Operator find order on All Orders page using this criteria below:
@@ -25,7 +25,7 @@ Feature: Edit Order
   Scenario: Operator should be able to Edit Instructions of an order on Edit Order page (uid:083eeb16-7b61-4851-8896-70370bc848b6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Order -> All Orders
     When Operator find order on All Orders page using this criteria below:
@@ -41,13 +41,13 @@ Feature: Edit Order
     And DB Operator verify order_events record for the created order:
       | type | 14 |
     And Operator verify order event on Edit order page using data below:
-      | name    | UPDATE INSTRUCTION |
+      | name | UPDATE INSTRUCTION |
 
   @CloseNewWindows
   Scenario: Operator should be able to Manually Complete Order on Edit Order page (uid:eb872b68-ff7d-4b6d-b5da-98676774bb93)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Order -> All Orders
     When Operator find order on All Orders page using this criteria below:
@@ -63,7 +63,7 @@ Feature: Edit Order
   Scenario: Operator should be able to edit the Priority Level (uid:6163a252-e695-4e75-93e2-9c976e03727b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Order -> All Orders
     When Operator find order on All Orders page using this criteria below:
@@ -79,7 +79,7 @@ Feature: Edit Order
   Scenario: Operator should be able to print the airway bill (uid:f0095133-9d98-47bf-9d34-564917fa5bb4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Order -> All Orders
     When Operator find order on All Orders page using this criteria below:
@@ -94,7 +94,7 @@ Feature: Edit Order
   Scenario Outline: Operator should be able to add C2C/Return  order to Route for Pickup on Edit Order page (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
       | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -111,35 +111,6 @@ Feature: Edit Order
       | Note              | hiptest-uid                              | orderType | routeType |
       | Return - Delivery | uid:c4f25b56-21c6-4f4a-9521-540a8678fc85 | Return    | Delivery  |
       | Return - Pickup   | uid:27ec7fb6-c2ac-4764-b483-5c656c72568d | Return    | Pickup    |
-
-#  Scenario: Operator Edit Cash Collection Details on Edit Order page
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given API Shipper create V4 order using data below:
-#      | generateFromAndTo | RANDOM |
-#      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-#    When Operator go to menu Order -> All Orders
-#    When Operator find order on All Orders page using this criteria below:
-#      | category    | Tracking / Stamp ID           |
-#      | searchLogic | contains                      |
-#      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-#    When Operator switch to Edit Order's window
-#    When Operator click Order Settings -> Edit Cash Collection Details on Edit Order page
-#    When Operator Edit Cash Collection Details on Edit Order page
-#    When Operator Edit Cash Collection Details on Edit Order page successfully
-
-  @CloseNewWindows
-  Scenario: Operator should be able to update Stamp ID from Edit Order page ()
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Order -> All Orders
-    When Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    When Operator switch to Edit Order's window
-    When Operator change Stamp ID of the created order to "GENERATED" on Edit order page
 
   @CloseNewWindows
   Scenario: Operator should be able to update order status from Pending/Pending to Transit/Arrived at Sorting Hub on Edit Order page ()
@@ -249,7 +220,7 @@ Feature: Edit Order
       | status   | CANCELLED                                                                          |
       | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     And Operator verify Pickup transaction on Edit order page using data below:
-      | status  | CANCELLED |
+      | status | CANCELLED |
     And Operator verify Delivery transaction on Edit order page using data below:
       | status | CANCELLED |
     And Operator verify order event on Edit order page using data below:
@@ -286,6 +257,7 @@ Feature: Edit Order
     And Operator verify order granular status is "Cancelled" on Edit Order page
     And Operator verify order summary on Edit order page using data below:
       | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+    When API Operator get order details
     And API Operator verify Pickup transaction of the created order using data below:
       | status   | CANCELLED                                                                          |
       | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
@@ -435,7 +407,7 @@ Feature: Edit Order
     Then Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Cancel Order - Arrived at Sorting  Hub
+  Scenario: Cancel Order - Arrived at Sorting Hub
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -532,7 +504,7 @@ Feature: Edit Order
     And API Operator start the route
     And API Driver deliver the created parcel successfully
     Then API Operator cancel created order and get error:
-      | statusCode | 500                          |
+      | statusCode | 500                                     |
       | message    | Order is Arrived at Distribution Point! |
     When Operator go to menu Order -> All Orders
     And Operator find order on All Orders page using this criteria below:
@@ -602,8 +574,8 @@ Feature: Edit Order
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Cross Border & 3PL -> Third Party Order Management
     When Operator uploads new mapping
-      |3plShipperName  | {3pl-shipper-name}    |
-      |3plShipperId    | {3pl-shipper-id}      |
+      | 3plShipperName | {3pl-shipper-name} |
+      | 3plShipperId   | {3pl-shipper-id}   |
     Then API Operator cancel created order and get error:
       | statusCode | 500                          |
       | message    | Order is Transferred to 3PL! |
@@ -636,7 +608,7 @@ Feature: Edit Order
       | shipperZendeskId        | 1                  |
       | ticketNotes             | GENERATED          |
     Then API Operator cancel created order and get error:
-      | statusCode | 500                          |
+      | statusCode | 500               |
       | message    | Order is On Hold! |
     When Operator go to menu Order -> All Orders
     And Operator find order on All Orders page using this criteria below:
@@ -651,7 +623,7 @@ Feature: Edit Order
   @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Operator Edit Pickup Details on Edit Order page (uid:bdf1d848-7fdc-4df8-8794-2e2d6f560692)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Order -> All Orders
     Then Operator find order on All Orders page using this criteria below:
@@ -661,17 +633,17 @@ Feature: Edit Order
     When Operator switch to Edit Order's window
     And Operator click Pickup -> Edit Pickup Details on Edit Order page
     And Operator update Pickup Details on Edit Order Page
-      | senderName        | test sender name         |
-      | senderContact     | +9727894434              |
-      | senderEmail       | test@mail.com            |
-      | internalNotes     | test internalNotes       |
-      | pickupDate        | {{next-1-day-yyyy-MM-dd}}|
-      | pickupTimeslot    | 9AM - 12PM               |
-      | country           | Singapore                |
-      | city              | Singapore                |
-      | address1          | 116 Keng Lee Rd          |
-      | address2          | 15                       |
-      | postalCode        | 308402                   |
+      | senderName     | test sender name          |
+      | senderContact  | +9727894434               |
+      | senderEmail    | test@mail.com             |
+      | internalNotes  | test internalNotes        |
+      | pickupDate     | {{next-1-day-yyyy-MM-dd}} |
+      | pickupTimeslot | 9AM - 12PM                |
+      | country        | Singapore                 |
+      | city           | Singapore                 |
+      | address1       | 116 Keng Lee Rd           |
+      | address2       | 15                        |
+      | postalCode     | 308402                    |
     Then Operator verify Pickup "UPDATE ADDRESS" order event description on Edit order page
     And Operator verify Pickup "UPDATE CONTACT INFORMATION" order event description on Edit order page
     And Operator verify Pickup "UPDATE SLA" order event description on Edit order page
@@ -680,10 +652,10 @@ Feature: Edit Order
     And Operator verifies Pickup Transaction is updated on Edit Order Page
     And DB Operator verifies pickup info is updated in order record
     And DB Operator verify the order_events record exists for the created order with type:
-      | 7    |
-      | 17   |
-      | 11   |
-      | 12   |
+      | 7  |
+      | 17 |
+      | 11 |
+      | 12 |
     And DB Operator verify Pickup '17' order_events record for the created order
     And DB Operator verify Pickup transaction record is updated for the created order
     And DB Operator verify Pickup waypoint record is updated
@@ -701,17 +673,17 @@ Feature: Edit Order
     When Operator switch to Edit Order's window
     And Operator click Delivery -> Edit Delivery Details on Edit Order page
     And Operator update Delivery Details on Edit Order Page
-      | recipientName        | test sender name         |
-      | recipientContact     | +9727894434              |
-      | recipientEmail       | test@mail.com            |
-      | internalNotes        | test internalNotes       |
-      | deliveryDate         | {{next-1-day-yyyy-MM-dd}}|
-      | deliveryTimeslot     | 9AM - 12PM               |
-      | country              | Singapore                |
-      | city                 | Singapore                |
-      | address1             | 116 Keng Lee Rd          |
-      | address2             | 15                       |
-      | postalCode           | 308402                   |
+      | recipientName    | test sender name          |
+      | recipientContact | +9727894434               |
+      | recipientEmail   | test@mail.com             |
+      | internalNotes    | test internalNotes        |
+      | deliveryDate     | {{next-1-day-yyyy-MM-dd}} |
+      | deliveryTimeslot | 9AM - 12PM                |
+      | country          | Singapore                 |
+      | city             | Singapore                 |
+      | address1         | 116 Keng Lee Rd           |
+      | address2         | 15                        |
+      | postalCode       | 308402                    |
     Then Operator verify Delivery "UPDATE ADDRESS" order event description on Edit order page
     And Operator verify Delivery "UPDATE CONTACT INFORMATION" order event description on Edit order page
     And Operator verify Delivery "UPDATE SLA" order event description on Edit order page
@@ -720,10 +692,10 @@ Feature: Edit Order
     And Operator verifies Delivery Transaction is updated on Edit Order Page
     And DB Operator verifies delivery info is updated in order record
     And DB Operator verify the order_events record exists for the created order with type:
-      | 7    |
-      | 17   |
-      | 11   |
-      | 12   |
+      | 7  |
+      | 17 |
+      | 11 |
+      | 12 |
     And DB Operator verify Delivery '17' order_events record for the created order
     And DB Operator verify Delivery transaction record is updated for the created order
     And DB Operator verify Delivery waypoint record is updated
@@ -753,16 +725,16 @@ Feature: Edit Order
       | toState    |                        |
       | toDistrict |                        |
     Then DB Operator verify next Delivery transaction values are updated for the created order:
-      | distribution_point_id | 12356 |
-      | address1              | GET_FROM_CREATED_ORDER      |
-      | address2              | GET_FROM_CREATED_ORDER      |
-      | postcode              | GET_FROM_CREATED_ORDER      |
-      | city                  | GET_FROM_CREATED_ORDER      |
-      | country               | GET_FROM_CREATED_ORDER      |
+      | distribution_point_id | 12356                  |
+      | address1              | GET_FROM_CREATED_ORDER |
+      | address2              | GET_FROM_CREATED_ORDER |
+      | postcode              | GET_FROM_CREATED_ORDER |
+      | city                  | GET_FROM_CREATED_ORDER |
+      | country               | GET_FROM_CREATED_ORDER |
     And Operator verifies Delivery Details are updated on Edit Order Page
     And DB Operator verify Delivery waypoint record is updated
     And DB Operator verify the order_events record exists for the created order with type:
-      | 18    |
+      | 18 |
 
   @CloseNewWindows
   Scenario: Operator Untag/Remove order from DP (uid:b8827dd0-a733-4724-a0d2-b9e777d4c1a3)
@@ -781,23 +753,23 @@ Feature: Edit Order
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
 #  initially city is ""
     Then DB Operator verify next Delivery transaction values are updated for the created order:
-      | distribution_point_id | null |
-      | address1              | GET_FROM_CREATED_ORDER      |
-      | address2              | GET_FROM_CREATED_ORDER      |
-      | postcode              | GET_FROM_CREATED_ORDER      |
-      | city                  | GET_FROM_CREATED_ORDER      |
-      | country               | GET_FROM_CREATED_ORDER      |
+      | distribution_point_id | null                   |
+      | address1              | GET_FROM_CREATED_ORDER |
+      | address2              | GET_FROM_CREATED_ORDER |
+      | postcode              | GET_FROM_CREATED_ORDER |
+      | city                  | GET_FROM_CREATED_ORDER |
+      | country               | GET_FROM_CREATED_ORDER |
     And DB Operator verifies delivery info is updated in order record
     And Operator verifies Delivery Details are updated on Edit Order Page
     And DB Operator verify Delivery waypoint record is updated
     And DB Operator verify the order_events record exists for the created order with type:
-      | 35    |
+      | 35 |
 
   @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Operator reschedule fail pickup (uid:ae4caac7-69d1-4cb0-adff-b3fb10ed23e9)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
-      | v4OrderRequest | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
@@ -814,22 +786,22 @@ Feature: Edit Order
     When Operator open page of the created order from All Orders page
     And Operator click Order Settings -> Reschedule Order on Edit Order page
     When Operator reschedule Pickup on Edit Order Page
-    | senderName        | test sender name         |
-    | senderContact     | +9727894434              |
-    | senderEmail       | test@mail.com            |
-    | internalNotes     | test internalNotes       |
-    | pickupDate        | {{next-1-day-yyyy-MM-dd}}|
-    | pickupTimeslot    | 9AM - 12PM               |
-    | country           | Singapore                |
-    | city              | Singapore                |
-    | address1          | 116 Keng Lee Rd          |
-    | address2          | 15                       |
-    | postalCode        | 308402                   |
-  And DB Operator verifies pickup info is updated in order record
-  And DB Operator verify Pickup waypoint record for Pending transaction
-  And DB Operator verifies orders record using data below:
-  | status         | Pending        |
-  | granularStatus | Pending Pickup |
+      | senderName     | test sender name          |
+      | senderContact  | +9727894434               |
+      | senderEmail    | test@mail.com             |
+      | internalNotes  | test internalNotes        |
+      | pickupDate     | {{next-1-day-yyyy-MM-dd}} |
+      | pickupTimeslot | 9AM - 12PM                |
+      | country        | Singapore                 |
+      | city           | Singapore                 |
+      | address1       | 116 Keng Lee Rd           |
+      | address2       | 15                        |
+      | postalCode     | 308402                    |
+    And DB Operator verifies pickup info is updated in order record
+    And DB Operator verify Pickup waypoint record for Pending transaction
+    And DB Operator verifies orders record using data below:
+      | status         | Pending        |
+      | granularStatus | Pending Pickup |
 
   @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Operator reschedule fail delivery (uid:72abb7c8-affc-4d26-9fba-22512acf7359)
@@ -855,17 +827,17 @@ Feature: Edit Order
     When Operator open page of the created order from All Orders page
     And Operator click Order Settings -> Reschedule Order on Edit Order page
     When Operator reschedule Delivery on Edit Order Page
-      | recipientName        | test recipient name      |
-      | recipientContact     | +9727894434              |
-      | recipientEmail       | test@mail.com            |
-      | internalNotes        | test internalNotes       |
-      | deliveryDate         | {{next-1-day-yyyy-MM-dd}}|
-      | deliveryTimeslot     | 9AM - 12PM               |
-      | country              | Singapore                |
-      | city                 | Singapore                |
-      | address1             | 116 Keng Lee Rd          |
-      | address2             | 15                       |
-      | postalCode           | 308402                   |
+      | recipientName    | test recipient name       |
+      | recipientContact | +9727894434               |
+      | recipientEmail   | test@mail.com             |
+      | internalNotes    | test internalNotes        |
+      | deliveryDate     | {{next-1-day-yyyy-MM-dd}} |
+      | deliveryTimeslot | 9AM - 12PM                |
+      | country          | Singapore                 |
+      | city             | Singapore                 |
+      | address1         | 116 Keng Lee Rd           |
+      | address2         | 15                        |
+      | postalCode       | 308402                    |
     And DB Operator verifies delivery info is updated in order record
     And DB Operator verify Delivery waypoint record for Pending transaction
     And DB Operator verifies orders record using data below:
@@ -876,7 +848,7 @@ Feature: Edit Order
   Scenario: Operator delete order (uid:9a593a7f-bbfa-43c0-88f9-568d34afc158)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Order -> All Orders
     When Operator open page of the created order from All Orders page
@@ -888,7 +860,7 @@ Feature: Edit Order
   @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Operator pull out parcel from a route (OPV2) - PICKUP (uid:ed1e8f6c-0483-463f-866a-fb1eec3cd2f6)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -901,9 +873,9 @@ Feature: Edit Order
     And Operator click Pickup -> Pull from Route on Edit Order page
     And Operator pull out parcel from the route for Delivery on Edit Order page
     Then Operator verify Pickup transaction on Edit order page using data below:
-      | routeId |           |
+      | routeId |  |
     And Operator verify order event on Edit order page using data below:
-      | name    | PULL OUT OF ROUTE |
+      | name | PULL OUT OF ROUTE |
     And DB Operator verify order_events record for the created order:
       | type | 33 |
     Then DB Operator verify next Pickup transaction values are updated for the created order:
@@ -914,7 +886,7 @@ Feature: Edit Order
   @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Operator pull out parcel from a route (OPV2) - DELIVERY (uid:b4262bec-47f3-4e1b-a714-575e388656ef)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -927,9 +899,9 @@ Feature: Edit Order
     When Operator click Delivery -> Pull from Route on Edit Order page
     And Operator pull out parcel from the route for Delivery on Edit Order page
     Then Operator verify Delivery transaction on Edit order page using data below:
-      | routeId |   |
+      | routeId |  |
     Then Operator verify order event on Edit order page using data below:
-      | name    | PULL OUT OF ROUTE |
+      | name | PULL OUT OF ROUTE |
     And DB Operator verify order_events record for the created order:
       | type | 33 |
     Then DB Operator verify next Delivery transaction values are updated for the created order:
@@ -1003,14 +975,14 @@ Feature: Edit Order
       | stampId | - |
     When Operator go to menu Order -> All Orders
     Then Operator can't find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_STAMP_ID                  |
+      | category    | Tracking / Stamp ID |
+      | searchLogic | contains            |
+      | searchTerm  | KEY_STAMP_ID        |
 
   @CloseNewWindows
   Scenario: Edit Cash Collection Details - Edit Cash on Pickup PP (uid:7563a418-d677-4bf8-b03e-e2c99750002f)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{"cash_on_delivery":23.57, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Order -> All Orders
     Then Operator find order on All Orders page using this criteria below:
@@ -1024,12 +996,12 @@ Feature: Edit Order
     Then Operator verify COP value is updated to "100"
     And Operator verify "UPDATE CASH" order event description on Edit order page
     And DB Operator verify the order_events record exists for the created order with type:
-      | 15    |
+      | 15 |
 
   @CloseNewWindows
   Scenario: Edit Cash Collection Details - Edit Cash on Delivery DD (uid:d698b8cb-1ba6-4547-9f95-620b7d7ae7b2)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"cash_on_delivery":23.57, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Order -> All Orders
     Then Operator find order on All Orders page using this criteria below:
@@ -1043,12 +1015,12 @@ Feature: Edit Order
     Then Operator verify COD value is updated to "100"
     And Operator verify "UPDATE CASH" order event description on Edit order page
     And DB Operator verify the order_events record exists for the created order with type:
-      | 15    |
+      | 15 |
 
   @CloseNewWindows
   Scenario: Edit Cash Collection Details - Add Cash on Pickup PP (uid:ccf868b7-5317-478d-b6da-e519c757db62)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{"is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Order -> All Orders
     Then Operator find order on All Orders page using this criteria below:
@@ -1062,12 +1034,12 @@ Feature: Edit Order
     And Operator refresh page
     Then Operator verify COP value is updated to "100"
     And DB Operator verify the order_events record exists for the created order with type:
-      | 15    |
+      | 15 |
 
   @CloseNewWindows
   Scenario: Edit Cash Collection Details - Add Cash on Delivery DD (uid:55f9301a-df97-4f61-9b4b-6454e069765c)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Order -> All Orders
     Then Operator find order on All Orders page using this criteria below:
@@ -1081,12 +1053,12 @@ Feature: Edit Order
     And Operator refresh page
     Then Operator verify COD value is updated to "100"
     And DB Operator verify the order_events record exists for the created order with type:
-      | 15    |
+      | 15 |
 
   @CloseNewWindows
   Scenario: Edit Cash Collection Details - Remove Cash on Pickup PP (uid:5592dc3e-23ae-4b83-9a10-beb52431d116)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{"cash_on_delivery":23.57, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Order -> All Orders
     Then Operator find order on All Orders page using this criteria below:
@@ -1099,12 +1071,12 @@ Feature: Edit Order
     And Operator refresh page
     And Operator verify "UPDATE CASH" order event description on Edit order page
     And DB Operator verify the order_events record exists for the created order with type:
-      | 15    |
+      | 15 |
 
   @CloseNewWindows
   Scenario: Edit Cash Collection Details - Remove Cash on Delivery DD (uid:2fb62b3f-b2fc-499a-a5dd-89069a556c1a)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"cash_on_delivery":23.57, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Order -> All Orders
     Then Operator find order on All Orders page using this criteria below:
@@ -1117,7 +1089,7 @@ Feature: Edit Order
     And Operator refresh page
     And Operator verify "UPDATE CASH" order event description on Edit order page
     And DB Operator verify the order_events record exists for the created order with type:
-      | 15    |
+      | 15 |
 
   @CloseNewWindows
   Scenario: Operator Edit Priority Level (uid:2d80a8b7-a7e3-4bf5-9284-5853f85d77b4)
@@ -1136,7 +1108,7 @@ Feature: Edit Order
     And DB Operator verify order_events record for the created order:
       | type | 17 |
     And Operator verify order event on Edit order page using data below:
-      | name    | UPDATE SLA |
+      | name | UPDATE SLA |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
