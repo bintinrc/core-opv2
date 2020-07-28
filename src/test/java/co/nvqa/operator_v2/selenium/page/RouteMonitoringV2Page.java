@@ -58,6 +58,15 @@ public class RouteMonitoringV2Page extends OperatorV2SimplePage
             setColumnLocators(ImmutableMap.<String, String>builder()
                     .put(COLUMN_ROUTE_ID, "routeId")
                     .put("totalParcels", "totalParcels")
+                    .put("completionPercentage", "completionRate")
+                    .put("totalWaypoint", "totalWaypoints")
+                    .put("pendingCount", "numPending")
+                    .put("numLateAndPending", "numLateAndPending")
+                    .put("successCount", "numSuccess")
+                    .put("numInvalidFailed", "numInvalidFailed")
+                    .put("numValidFailed", "numValidFailed")
+                    .put("earlyCount", "numEarlyWp")
+                    .put("lateCount", "numLateWp")
                     .build()
             );
             setEntityClass(RouteMonitoringParams.class);
