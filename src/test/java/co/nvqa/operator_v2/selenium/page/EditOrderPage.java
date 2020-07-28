@@ -13,11 +13,15 @@ import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvTag;
 import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import com.google.common.collect.ImmutableMap;
@@ -50,22 +54,69 @@ import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_
 @SuppressWarnings("WeakerAccess")
 public class EditOrderPage extends OperatorV2SimplePage
 {
+    @FindBy(id = "header")
+    public PageElement header;
+
+    @FindBy(xpath = "//div[label[.='Tracking ID']]/h3")
+    public PageElement trackingId;
+
+    @FindBy(xpath = "//div[label[.='Status']]/h3")
+    public PageElement status;
+
+    @FindBy(xpath = "//div[label[.='Granular']]/h3")
+    public PageElement granular;
+
+    @FindBy(xpath = "//div[label[.='Shipper ID']]/p")
+    public PageElement shipperId;
+
+    @FindBy(xpath = "//div[label[.='Order Type']]/p")
+    public PageElement orderType;
+
     @FindBy(xpath = "//div[./label[.='Current DNR Group']]/p")
     public PageElement currentDnrGroup;
 
     @FindBy(xpath = "//div[./label[.='Current Priority']]/h3")
     public PageElement currentPriority;
 
+    @FindBy(css = "nv-tag[name^='COP']")
+    public NvTag copValue;
+
+    @FindBy(css = "nv-tag[name^='COD']")
+    public NvTag codValue;
+
     private static final String NG_REPEAT_TABLE_EVENT = "event in getTableData()";
     public static final String COLUMN_CLASS_DATA_NAME_ON_TABLE_EVENT = "name";
     private TransactionsTable transactionsTable;
-    private AddToRouteDialog addToRouteDialog;
 
     @FindBy(css = "md-dialog")
     public EditPriorityLevelDialog editPriorityLevelDialog;
 
     @FindBy(css = "md-dialog")
-    public AddToRoute2Dialog addToRoute2Dialog;
+    public AddToRouteDialog addToRouteDialog;
+
+    @FindBy(css = "md-dialog")
+    public EditOrderDetailsDialog editOrderDetailsDialog;
+
+    @FindBy(css = "md-dialog")
+    public EditInstructionsDialog editInstructionsDialog;
+
+    @FindBy(css = "md-dialog")
+    public ManuallyCompleteOrderDialog manuallyCompleteOrderDialog;
+
+    @FindBy(css = "md-dialog")
+    public EditOrderStampDialog editOrderStampDialog;
+
+    @FindBy(css = "md-dialog")
+    public UpdateStatusDialog updateStatusDialog;
+
+    @FindBy(css = "md-dialog")
+    private CancelOrderDialog cancelOrderDialog;
+
+    @FindBy(css = "md-dialog")
+    private EditPickupDetailsDialog editPickupDetailsDialog;
+
+    @FindBy(css = "md-dialog")
+    private EditCashCollectionDetailsDialog editCashCollectionDetailsDialog;
 
     @FindBy(id = "delivery-details")
     public DeliveryDetailsBox deliveryDetailsBox;
@@ -74,8 +125,6 @@ public class EditOrderPage extends OperatorV2SimplePage
     public PickupDetailsBox pickupDetailsBox;
 
     private EventsTable eventsTable;
-    private CancelOrderDialog cancelOrderDialog;
-    private EditPickupDetailsDialog editPickupDetailsDialog;
     private EditDeliveryDetailsDialog editDeliveryDetailsDialog;
     private DpDropOffSettingDialog dpDropOffSettingDialog;
     private DeleteOrderDialog deleteOrderDialog;
@@ -87,11 +136,8 @@ public class EditOrderPage extends OperatorV2SimplePage
     {
         super(webDriver);
         transactionsTable = new TransactionsTable(webDriver);
-        addToRouteDialog = new AddToRouteDialog(webDriver);
         eventsTable = new EventsTable(webDriver);
-        cancelOrderDialog = new CancelOrderDialog(webDriver);
         deliveryRescheduleDialog = new DeliveryRescheduleDialog(webDriver);
-        editPickupDetailsDialog = new EditPickupDetailsDialog(webDriver);
         editDeliveryDetailsDialog = new EditDeliveryDetailsDialog(webDriver);
         dpDropOffSettingDialog = new DpDropOffSettingDialog(webDriver);
         deleteOrderDialog = new DeleteOrderDialog(webDriver);
@@ -128,25 +174,25 @@ public class EditOrderPage extends OperatorV2SimplePage
         String parcelSize = getParcelSizeShortStringByLongString(order.getParcelSize());
         Dimension dimension = order.getDimensions();
 
-        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'order-edit-details')]//nv-api-text-button[@name='commons.save-changes']");
-        selectValueFromMdSelectById("parcel-size", parcelSize);
-        sendKeysByIdAlt("weight", String.valueOf(dimension.getWeight()));
-        clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
-        waitUntilInvisibilityOfToast("Current order updated successfully");
+        editOrderDetailsDialog.waitUntilVisible();
+        editOrderDetailsDialog.parcelSize.selectValue(parcelSize);
+        editOrderDetailsDialog.weight.setValue(dimension.getWeight());
+        editOrderDetailsDialog.saveChanges.clickAndWaitUntilDone();
+        waitUntilInvisibilityOfToast("Current order updated successfully", true);
     }
 
     public void editOrderInstructions(String pickupInstruction, String deliveryInstruction)
     {
-        waitUntilVisibilityOfMdDialogByTitle("Edit Instructions");
+        editInstructionsDialog.waitUntilVisible();
         if (pickupInstruction != null)
         {
-            sendKeysByAriaLabel("Pickup Instruction", pickupInstruction);
+            editInstructionsDialog.pickupInstruction.setValue(pickupInstruction);
         }
         if (deliveryInstruction != null)
         {
-            sendKeysByAriaLabel("Delivery Instruction", deliveryInstruction);
+            editInstructionsDialog.deliveryInstruction.setValue(deliveryInstruction);
         }
-        clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
+        editInstructionsDialog.saveChanges.clickAndWaitUntilDone();
         waitUntilInvisibilityOfToast("Instructions Updated", true);
     }
 
@@ -165,9 +211,9 @@ public class EditOrderPage extends OperatorV2SimplePage
     public void editOrderStamp(String stampId)
     {
         clickMenu("Order Settings", "Edit Order Stamp");
-        waitUntilVisibilityOfMdDialogByTitle("Edit Order Stamp");
-        sendKeysById("commons.stamp-id", stampId);
-        clickNvApiTextButtonByNameAndWaitUntilDone("commons.save");
+        editOrderStampDialog.waitUntilVisible();
+        editOrderStampDialog.stampId.setValue(stampId);
+        editOrderStampDialog.save.clickAndWaitUntilDone();
         waitUntilInvisibilityOfToast(String.format("Stamp ID updated successfully: %s", stampId), true);
         waitUntilInvisibilityOfMdDialogByTitle("Edit Order Stamp");
     }
@@ -175,22 +221,20 @@ public class EditOrderPage extends OperatorV2SimplePage
     public void editOrderStampToExisting(String existingStampId, String trackingId)
     {
         clickMenu("Order Settings", "Edit Order Stamp");
-        waitUntilVisibilityOfMdDialogByTitle("Edit Order Stamp");
-        sendKeysById("commons.stamp-id", existingStampId);
-        clickNvApiTextButtonByNameAndWaitUntilDone("commons.save");
+        editOrderStampDialog.waitUntilVisible();
+        editOrderStampDialog.stampId.setValue(existingStampId);
+        editOrderStampDialog.save.clickAndWaitUntilDone();
         waitUntilInvisibilityOfToast(String.format("Stamp %s exists in order %s", existingStampId, trackingId), true);
-        waitUntilVisibilityOfMdDialogByTitle("Edit Order Stamp");
-        clickButtonByAriaLabelAndWaitUntilDone("Cancel");
-        waitUntilInvisibilityOfMdDialogByTitle("Edit Order Stamp");
+        editOrderStampDialog.sendKeys(Keys.ESCAPE);
+        editOrderStampDialog.waitUntilInvisible();
     }
 
     public void removeOrderStamp()
     {
         clickMenu("Order Settings", "Edit Order Stamp");
-        waitUntilVisibilityOfMdDialogByTitle("Edit Order Stamp");
-        clickButtonByAriaLabelAndWaitUntilDone("Remove");
+        editOrderStampDialog.waitUntilVisible();
+        editOrderStampDialog.remove.clickAndWaitUntilDone();
         waitUntilInvisibilityOfToast("Stamp ID removed successfully", true);
-        waitUntilInvisibilityOfMdDialogByTitle("Edit Order Stamp");
     }
 
     public void manuallyCompleteOrder()
@@ -205,52 +249,52 @@ public class EditOrderPage extends OperatorV2SimplePage
     public void updateOrderStatus(Order order)
     {
         clickMenu("Order Settings", "Update Status");
-        waitUntilVisibilityOfMdDialogByTitle("Update Status");
+        updateStatusDialog.waitUntilVisible();
+
         if (StringUtils.isNotBlank(order.getStatus()))
         {
-            selectValueFromMdSelectById("commons.status", order.getStatus());
+            updateStatusDialog.status.selectValue(order.getStatus());
         }
         if (StringUtils.isNotBlank(order.getGranularStatus()))
         {
-            selectValueFromMdSelectById("commons.model.granular-status", order.getGranularStatus());
+            updateStatusDialog.granularStatus.selectValue(order.getGranularStatus());
         }
         Transaction transaction = order.getLastPickupTransaction();
         if (transaction != null && StringUtils.isNotBlank(transaction.getStatus()))
         {
-            selectValueFromMdSelectById("container.order.edit.last-pickup-transaction-status", WordUtils.capitalizeFully(transaction.getStatus()));
+            updateStatusDialog.lastPickupTransactionStatus.selectValue(WordUtils.capitalizeFully(transaction.getStatus()));
         }
         transaction = order.getLastDeliveryTransaction();
         if (transaction != null && StringUtils.isNotBlank(transaction.getStatus()))
         {
-            selectValueFromMdSelectById("container.order.edit.last-delivery-transaction-status", WordUtils.capitalizeFully(transaction.getStatus()));
+            updateStatusDialog.lastDeliveryTransactionStatus.selectValue(WordUtils.capitalizeFully(transaction.getStatus()));
         }
-        clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
+        updateStatusDialog.saveChanges.clickAndWaitUntilDone();
         waitUntilInvisibilityOfToast("Status Updated", true);
-        waitUntilInvisibilityOfMdDialogByTitle("Update Status");
     }
 
     public void addToRoute(long routeId, String type)
     {
         clickMenu("Pickup", "Add To Route");
-        addToRoute2Dialog.waitUntilVisible();
-        addToRoute2Dialog.route.setValue(routeId);
-        addToRoute2Dialog.type.selectValue(type);
-        addToRoute2Dialog.addToRoute.clickAndWaitUntilDone();
-        addToRoute2Dialog.waitUntilInvisible();
+        addToRouteDialog.waitUntilVisible();
+        addToRouteDialog.route.setValue(routeId);
+        addToRouteDialog.type.selectValue(type);
+        addToRouteDialog.addToRoute.clickAndWaitUntilDone();
+        addToRouteDialog.waitUntilInvisible();
     }
 
     public void addToRouteFromRouteTag(String routeTag)
     {
         clickMenu("Delivery", "Add To Route");
-        addToRoute2Dialog.waitUntilVisible();
-        addToRoute2Dialog.routeTags.selectValue(routeTag);
-        addToRoute2Dialog.suggestRoute.clickAndWaitUntilDone();
+        addToRouteDialog.waitUntilVisible();
+        addToRouteDialog.routeTags.selectValue(routeTag);
+        addToRouteDialog.suggestRoute.clickAndWaitUntilDone();
         if (toastErrors.size() > 0)
         {
             Assert.fail(f("Error on attempt to suggest routes: %s", toastErrors.get(0).toastBottom.getText()));
         }
-        addToRoute2Dialog.addToRoute.clickAndWaitUntilDone();
-        addToRoute2Dialog.waitUntilInvisible();
+        addToRouteDialog.addToRoute.clickAndWaitUntilDone();
+        addToRouteDialog.waitUntilInvisible();
         waitUntilInvisibilityOfToast(true);
     }
 
@@ -261,7 +305,7 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public void verifyOrderHeaderColor(String color)
     {
-        assertEquals("Order Header Color", color, getCssValue("//div[@class='header-holder']/div", "background-color"));
+        assertEquals("Order Header Color", color, header.getCssValue("background-color"));
     }
 
     public void verifyDeliveryEndDateTime(String expectedDate)
@@ -313,9 +357,9 @@ public class EditOrderPage extends OperatorV2SimplePage
     public void cancelOrder(String cancellationReason)
     {
         clickMenu("Order Settings", "Cancel Order");
-        cancelOrderDialog.waitUntilVisibility()
-                .enterCancellationReason(cancellationReason)
-                .submit();
+        cancelOrderDialog.waitUntilVisible();
+        cancelOrderDialog.cancellationReason.setValue(cancellationReason);
+        cancelOrderDialog.cancelOrder.clickAndWaitUntilDone();
         waitUntilInvisibilityOfToast("1 order(s) cancelled");
     }
 
@@ -360,20 +404,20 @@ public class EditOrderPage extends OperatorV2SimplePage
     {
         if (expectedPickupInstructions != null)
         {
-            String actualPickupInstructions = getText("//div[label[text()='Pick Up Instructions']]/p");
+            String actualPickupInstructions = pickupDetailsBox.pickupInstructions.getText();
             assertThat("Pick Up Instructions", expectedPickupInstructions, equalToIgnoringCase(actualPickupInstructions));
         }
-
         if (expectedDeliveryInstructions != null)
         {
-            assertEquals("Delivery Instructions", expectedDeliveryInstructions, deliveryDetailsBox.getDeliveryInstructions());
+            String actualDeliveryInstructions = deliveryDetailsBox.deliveryInstructions.getText();
+            assertThat("Delivery Instructions", expectedDeliveryInstructions, equalToIgnoringCase(actualDeliveryInstructions));
         }
     }
 
     public void confirmCompleteOrder()
     {
-        waitUntilVisibilityOfMdDialogByTitle("Manually Complete Order");
-        clickNvApiTextButtonByNameAndWaitUntilDone("container.order.edit.complete-order");
+        manuallyCompleteOrderDialog.waitUntilVisible();
+        manuallyCompleteOrderDialog.completeOrder.clickAndWaitUntilDone();
         waitUntilInvisibilityOfToast("The order has been completed", true);
     }
 
@@ -416,31 +460,31 @@ public class EditOrderPage extends OperatorV2SimplePage
     {
         String expectedTrackingId = order.getTrackingId();
 
-        assertEquals("Tracking ID", expectedTrackingId, getTrackingId());
-        assertThat("Status", getStatus(), equalToIgnoringCase(order.getStatus()));
-        assertThat("Granular Status", getGranularStatus(), equalToIgnoringCase(order.getGranularStatus().replaceFirst("_", " ")));
-        assertThat("Shipper ID", getShipperId(), containsString(String.valueOf(order.getShipper().getId())));
-        assertEquals("Order Type", order.getType(), getOrderType());
+        assertEquals("Tracking ID", expectedTrackingId, trackingId.getText());
+        assertThat("Status", status.getText(), equalToIgnoringCase(order.getStatus()));
+        assertThat("Granular Status", granular.getText(), equalToIgnoringCase(order.getGranularStatus().replaceFirst("_", " ")));
+        assertThat("Shipper ID", shipperId.getText(), containsString(String.valueOf(order.getShipper().getId())));
+        assertEquals("Order Type", order.getType(), orderType.getText());
         assertEquals("Size", order.getParcelSize(), getSize());
         assertEquals("Weight", order.getWeight(), getWeight(), 0.0);
 
         Transaction pickupTransaction = order.getTransactions().get(0);
-        assertEquals("Pickup Status", pickupTransaction.getStatus(), getPickupStatus());
+        assertEquals("Pickup Status", pickupTransaction.getStatus(), pickupDetailsBox.getStatus());
 
         Transaction deliveryTransaction = order.getTransactions().get(1);
-        assertEquals("Delivery Status", deliveryTransaction.getStatus(), getDeliveryStatus());
+        assertEquals("Delivery Status", deliveryTransaction.getStatus(), deliveryDetailsBox.getStatus());
 
         verifyPickupAndDeliveryInfo(order);
     }
 
     public void verifyOrderStatus(String expectedStatus)
     {
-        assertThat("Status", getStatus(), equalToIgnoringCase(expectedStatus));
+        assertThat("Status", status.getText(), equalToIgnoringCase(expectedStatus));
     }
 
     public void verifyOrderGranularStatus(String expectedGranularStatus)
     {
-        assertThat("Granular Status", getGranularStatus(), equalToIgnoringCase(expectedGranularStatus));
+        assertThat("Granular Status", granular.getText(), equalToIgnoringCase(expectedGranularStatus));
     }
 
     public void verifyOrderDeliveryTitle(String expectedDeliveryTitle)
@@ -450,28 +494,28 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public void verifyOrderDeliveryStatus(String expectedDeliveryStatus)
     {
-        assertThat("Delivery Status", getDeliveryStatus(), equalToIgnoringCase(expectedDeliveryStatus));
+        assertThat("Delivery Status", deliveryDetailsBox.getStatus(), equalToIgnoringCase(expectedDeliveryStatus));
     }
 
     public void verifyOrderIsForceSuccessedSuccessfully(Order order)
     {
         String expectedTrackingId = order.getTrackingId();
 
-        assertEquals("Tracking ID", expectedTrackingId, getTrackingId());
-        assertThat("Status", getStatus(), equalToIgnoringCase("Completed"));
-        assertThat("Granular Status", getGranularStatus(), equalToIgnoringCase("Completed"));
+        assertEquals("Tracking ID", expectedTrackingId, trackingId.getText());
+        assertThat("Status", status.getText(), equalToIgnoringCase("Completed"));
+        assertThat("Granular Status", granular.getText(), equalToIgnoringCase("Completed"));
 
         Long shipperId = order.getShipper().getId();
 
         if (shipperId != null)
         {
-            assertThat("Shipper ID", getShipperId(), containsString(String.valueOf(shipperId)));
+            assertThat("Shipper ID", this.shipperId.getText(), containsString(String.valueOf(shipperId)));
         }
 
-        assertEquals("Order Type", order.getType(), getOrderType());
+        assertEquals("Order Type", order.getType(), orderType.getText());
         //Assert.assertThat("Latest Event", getLatestEvent(), Matchers.containsString("Order Force Successed")); //Disabled because somehow the latest event name is always 'PRICING_CHANGE' and the value on Latest Event is '-'.
-        assertEquals("Pickup Status", "SUCCESS", getPickupStatus());
-        assertEquals("Delivery Status", "SUCCESS", getDeliveryStatus());
+        assertEquals("Pickup Status", "SUCCESS", pickupDetailsBox.getStatus());
+        assertEquals("Delivery Status", "SUCCESS", deliveryDetailsBox.getStatus());
 
         verifyPickupAndDeliveryInfo(order);
     }
@@ -487,20 +531,20 @@ public class EditOrderPage extends OperatorV2SimplePage
     public void verifyPickupInfo(Order order)
     {
         // Pickup
-        assertEquals("From Name", order.getFromName(), getFromName());
-        assertEquals("From Email", order.getFromEmail(), getFromEmail());
-        assertEquals("From Contact", order.getFromContact(), getFromContact());
-        String fromAddress = getFromAddress();
+        assertEquals("From Name", order.getFromName(), pickupDetailsBox.from.getText());
+        assertEquals("From Email", order.getFromEmail(), pickupDetailsBox.fromEmail.getText());
+        assertEquals("From Contact", order.getFromContact(), pickupDetailsBox.fromContact.getText());
+        String fromAddress = pickupDetailsBox.fromAddress.getText();
         assertThat("From Address", fromAddress, containsString(order.getFromAddress1()));
         assertThat("From Address", fromAddress, containsString(order.getFromAddress2()));
     }
 
     public void verifyDeliveryInfo(Order order)
     {
-        assertEquals("To Name", order.getToName(), getToName());
-        assertEquals("To Email", order.getToEmail(), getToEmail());
-        assertEquals("To Contact", order.getToContact(), getToContact());
-        String toAddress = getToAddress();
+        assertEquals("To Name", order.getToName(), deliveryDetailsBox.to.getText());
+        assertEquals("To Email", order.getToEmail(), deliveryDetailsBox.toEmail.getText());
+        assertEquals("To Contact", order.getToContact(), deliveryDetailsBox.toContact.getText());
+        String toAddress = deliveryDetailsBox.toAddress.getText();
         assertThat("To Address", toAddress, containsString(order.getToAddress1()));
         assertThat("To Address", toAddress, containsString(order.getToAddress2()));
     }
@@ -513,23 +557,23 @@ public class EditOrderPage extends OperatorV2SimplePage
         }
 
         String expectedTrackingId = order.getTrackingId();
-        assertEquals("Tracking ID", expectedTrackingId, getTrackingId());
+        assertEquals("Tracking ID", expectedTrackingId, trackingId.getText());
 
         if (StringUtils.isNotBlank(expectedStatus))
         {
-            assertThat(String.format("Status - [Tracking ID = %s]", expectedTrackingId), getStatus(), equalToIgnoringCase(expectedStatus));
+            assertThat(String.format("Status - [Tracking ID = %s]", expectedTrackingId), status.getText(), equalToIgnoringCase(expectedStatus));
         }
 
         if (CollectionUtils.isNotEmpty(expectedGranularStatus))
         {
-            assertThat(String.format("Granular Status - [Tracking ID = %s]", expectedTrackingId), getGranularStatus(), isIn(expectedGranularStatus));
+            assertThat(String.format("Granular Status - [Tracking ID = %s]", expectedTrackingId), granular.getText(), isIn(expectedGranularStatus));
         }
 
-        assertEquals("Pickup Status", "SUCCESS", getPickupStatus());
+        assertEquals("Pickup Status", "SUCCESS", pickupDetailsBox.getStatus());
 
         if (StringUtils.isNotBlank(expectedDeliveryStatus))
         {
-            assertThat("Delivery Status", getDeliveryStatus(), equalToIgnoringCase(expectedDeliveryStatus));
+            assertThat("Delivery Status", deliveryDetailsBox.getStatus(), equalToIgnoringCase(expectedDeliveryStatus));
         }
 
         // There is an issue where after Global Inbound the new Size is not applied. KH need to fix this.
@@ -613,26 +657,6 @@ public class EditOrderPage extends OperatorV2SimplePage
         return getText("//*[@id='delivery-details']/div/div[1]/h5");
     }
 
-    public String getShipperId()
-    {
-        return getText("//label[text()='Shipper ID']/following-sibling::p");
-    }
-
-    public String getTrackingId()
-    {
-        return getText("//label[text()='Tracking ID']/following-sibling::h3");
-    }
-
-    public String getStatus()
-    {
-        return getText("//label[text()='Status']/following-sibling::h3");
-    }
-
-    public String getGranularStatus()
-    {
-        return getText("//label[text()='Granular']/following-sibling::h3");
-    }
-
     public String getTag()
     {
         return getText("//nv-tag[@ng-repeat='tag in ctrl.orderTags']/*");
@@ -653,11 +677,6 @@ public class EditOrderPage extends OperatorV2SimplePage
     public String getLatestEvent()
     {
         return getText("//label[text()='Latest Event']/following-sibling::h3");
-    }
-
-    public String getOrderType()
-    {
-        return getText("//label[text()='Order Type']/following-sibling::p");
     }
 
     public String getSize()
@@ -729,56 +748,6 @@ public class EditOrderPage extends OperatorV2SimplePage
         return total;
     }
 
-    public String getPickupStatus()
-    {
-        return getText("//div[h5[text()='Pickup']]/following-sibling::div/h5[contains(text(), Status)]").split(":")[1].trim();
-    }
-
-    public String getFromName()
-    {
-        return getText("//div[@id='pickup-details']/div[2]/div/div/div/div/div/h5");
-    }
-
-    public String getFromEmail()
-    {
-        return getText("//div[@id='pickup-details']/div[2]/div/div/div[2]/div/span");
-    }
-
-    public String getFromContact()
-    {
-        return getText("//div[@id='pickup-details']/div[2]/div/div/div[2]/div[2]/span");
-    }
-
-    public String getFromAddress()
-    {
-        return getText("//div[@id='pickup-details']/div[2]/div/div/div[2]/div[3]/span");
-    }
-
-    public String getDeliveryStatus()
-    {
-        return getText("//*[@id='delivery-details']/div/div[2]/h5").split(":")[1].trim();
-    }
-
-    public String getToName()
-    {
-        return getText("//div[@id='delivery-details']/div[2]/div/div/div/div/div/h5");
-    }
-
-    public String getToEmail()
-    {
-        return getText("//div[@id='delivery-details']/div[2]/div/div/div[2]/div/span");
-    }
-
-    public String getToContact()
-    {
-        return getText("//div[@id='delivery-details']/div[2]/div/div/div[2]/div[2]/span");
-    }
-
-    public String getToAddress()
-    {
-        return getText("//div[@id='delivery-details']/div[2]/div/div/div[2]/div[3]/span");
-    }
-
     public String getStampId()
     {
         return getText("//div[@class='data-block']/label[text()='Stamp ID']/following-sibling::p");
@@ -815,21 +784,20 @@ public class EditOrderPage extends OperatorV2SimplePage
         String address2 = mapOfData.get("address2");
         String postalCode = mapOfData.get("postalCode");
 
-        editPickupDetailsDialog
-                .updateSenderName(senderName)
-                .updateSenderContact(senderContact)
-                .updateSenderEmail(senderEmail)
-                .updateInternalNotes(internalNotes)
-                .updatePickupDate(pickupDate)
-                .updatePickupTimeslot(pickupTimeslot)
-                .clickChangeAddress()
-                .updateCountry(country)
-                .updateCity(city)
-                .updateAddress1(address1)
-                .updateAddress2(address2)
-                .updatePostalCode(postalCode)
-                .clickSaveChanges();
-        editPickupDetailsDialog.confirmPickupDetailsUpdated();
+        editPickupDetailsDialog.senderName.setValue(senderName);
+        editPickupDetailsDialog.senderContact.setValue(senderContact);
+        editPickupDetailsDialog.senderEmail.setValue(senderEmail);
+        editPickupDetailsDialog.internalNotes.setValue(internalNotes);
+        editPickupDetailsDialog.pickupDate.simpleSetValue(pickupDate);
+        editPickupDetailsDialog.pickupTimeslot.selectValue(pickupTimeslot);
+        editPickupDetailsDialog.changeAddress.click();
+        editPickupDetailsDialog.country.setValue(country);
+        editPickupDetailsDialog.city.setValue(city);
+        editPickupDetailsDialog.address1.setValue(address1);
+        editPickupDetailsDialog.address2.setValue(address2);
+        editPickupDetailsDialog.postcode.setValue(postalCode);
+        editPickupDetailsDialog.saveChanges.clickAndWaitUntilDone();
+        waitUntilInvisibilityOfToast("Pickup Details Updated", false);
     }
 
     public void updateDeliveryDetails(Map<String, String> mapOfData)
@@ -1195,83 +1163,18 @@ public class EditOrderPage extends OperatorV2SimplePage
     /**
      * Accessor for Cancel dialog
      */
-    public static class CancelOrderDialog extends OperatorV2SimplePage
+    public static class CancelOrderDialog extends MdDialog
     {
-        private static final String DIALOG_TITLE = "Cancel Order";
-        private static final String FIELD_CANCELLATION_REASON_LOCATOR = "container.order.edit.cancellation-reason";
-        private static final String BUTTON_CANCEL_ORDER_LOCATOR = "container.order.edit.cancel-order";
-
-        public CancelOrderDialog(WebDriver webDriver)
+        public CancelOrderDialog(WebDriver webDriver, WebElement webElement)
         {
-            super(webDriver);
+            super(webDriver, webElement);
         }
 
-        public CancelOrderDialog waitUntilVisibility()
-        {
-            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
-            return this;
-        }
+        @FindBy(css = "[id^='container.order.edit.cancellation-reason']")
+        public TextBox cancellationReason;
 
-        public CancelOrderDialog enterCancellationReason(String cancellationReason)
-        {
-            sendKeysByName(FIELD_CANCELLATION_REASON_LOCATOR, cancellationReason);
-            return this;
-        }
-
-        public void submit()
-        {
-            clickNvApiTextButtonByNameAndWaitUntilDone(BUTTON_CANCEL_ORDER_LOCATOR);
-            waitUntilInvisibilityOfMdDialogByTitle(DIALOG_TITLE);
-        }
-    }
-
-    /**
-     * Accessor for Add To Route dialog
-     */
-    public static class AddToRouteDialog extends OperatorV2SimplePage
-    {
-        private static final String DIALOG_TITLE = "Add To Route";
-        private static final String FIELD_ROUTE_LOCATOR = "ctrl.formData.orders[0].routeId";
-        private static final String FIELD_TYPE_LOCATOR = "model";
-        private static final String BUTTON_ADD_TO_ROUTE_LOCATOR = "container.order.edit.add-to-route";
-        private static final String ROUTE_TAGS_OPTION_ID = "container.order.edit.route-tags";
-
-        public AddToRouteDialog(WebDriver webDriver)
-        {
-            super(webDriver);
-        }
-
-        public AddToRouteDialog waitUntilVisibility()
-        {
-            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
-            return this;
-        }
-
-        public AddToRouteDialog enterRouteId(long routeId)
-        {
-            sendKeysToMdInputContainerByModel(FIELD_ROUTE_LOCATOR, String.valueOf(routeId));
-            return this;
-        }
-
-        public AddToRouteDialog selectType(String type)
-        {
-            selectValueFromMdSelect(FIELD_TYPE_LOCATOR, type);
-            return this;
-        }
-
-        public AddToRouteDialog selectRouteTags(String routeTag)
-        {
-            selectValueFromMdSelectById(ROUTE_TAGS_OPTION_ID, routeTag);
-            click("//input[contains(@id,'container.order.edit.route')]");
-            click("//nv-api-text-button[@name='container.order.edit.suggest-route']/button[contains(@id,'button-api-text')]");
-            return this;
-        }
-
-        public void submit()
-        {
-            clickNvApiTextButtonByNameAndWaitUntilDone(BUTTON_ADD_TO_ROUTE_LOCATOR);
-            waitUntilInvisibilityOfMdDialogByTitle(DIALOG_TITLE);
-        }
+        @FindBy(name = "container.order.edit.cancel-order")
+        public NvApiTextButton cancelOrder;
     }
 
     /**
@@ -1281,15 +1184,24 @@ public class EditOrderPage extends OperatorV2SimplePage
     {
         @FindBy(css = "h5.nv-text-right")
         public PageElement status;
-        @FindBy(xpath = ".//div[./label[.='Start Date / Time']]/p")
+        @FindBy(xpath = "./div[2]/div/div/div[1]/div/div/h5")
+        public PageElement to;
+        @FindBy(xpath = "./div[2]/div/div/div[2]/div[1]/span")
+        public PageElement toEmail;
+        @FindBy(xpath = "./div[2]/div/div/div[2]/div[2]/span")
+        public PageElement toContact;
+        @FindBy(xpath = "./div[2]/div/div/div[2]/div[3]/span")
+        public PageElement toAddress;
+        @FindBy(xpath = ".//div[label[.='Start Date / Time']]/p")
         public PageElement startDateTime;
-        @FindBy(xpath = ".//div[./label[.='End Date / Time']]/p")
+        @FindBy(xpath = ".//div[label[.='End Date / Time']]/p")
         public PageElement endDateTime;
-        @FindBy(xpath = ".//div[./label[.='Last Service End']]/p")
+        @FindBy(xpath = ".//div[label[.='Last Service End']]/p")
         public PageElement lastServiceEnd;
+        @FindBy(xpath = ".//div[label[.='Delivery Instructions']]/p")
+        public PageElement deliveryInstructions;
 
         private static final String BOX_LOCATOR = "//div[h5[text()='Delivery Details']]";
-        private static final String DELIVERY_INSTRUCTIONS_LOCATOR = BOX_LOCATOR + "//div[label[text()='Delivery Instructions']]/p";
         private static final String ROUTE_ID_LOCATOR = BOX_LOCATOR + "//div[label[text()='Route Id']]/p";
         private static final String ROUTE_DATE_LOCATOR = BOX_LOCATOR + "//div[label[text()='Route Date']]/p";
         private static final String DRIVER_LOCATOR = BOX_LOCATOR + "//div[label[text()='Driver']]/p";
@@ -1303,9 +1215,9 @@ public class EditOrderPage extends OperatorV2SimplePage
             super(webDriver, webElement);
         }
 
-        public String getDeliveryInstructions()
+        public String getStatus()
         {
-            return getText(DELIVERY_INSTRUCTIONS_LOCATOR);
+            return status.getText().split(":")[1].trim();
         }
 
         public String getRouteId()
@@ -1351,14 +1263,23 @@ public class EditOrderPage extends OperatorV2SimplePage
     {
         @FindBy(css = "h5.nv-text-right")
         public PageElement status;
-        @FindBy(xpath = ".//div[./label[.='Start Date / Time']]/p")
+        @FindBy(xpath = "./div[2]/div/div/div[1]/div/div/h5")
+        public PageElement from;
+        @FindBy(xpath = "./div[2]/div/div/div[2]/div[1]/span")
+        public PageElement fromEmail;
+        @FindBy(xpath = "./div[2]/div/div/div[2]/div[2]/span")
+        public PageElement fromContact;
+        @FindBy(xpath = "./div[2]/div/div/div[2]/div[3]/span")
+        public PageElement fromAddress;
+        @FindBy(xpath = ".//div[label[.='Start Date / Time']]/p")
         public PageElement startDateTime;
-        @FindBy(xpath = ".//div[./label[.='End Date / Time']]/p")
+        @FindBy(xpath = ".//div[label[.='End Date / Time']]/p")
         public PageElement endDateTime;
-        @FindBy(xpath = ".//div[./label[.='Last Service End']]/p")
+        @FindBy(xpath = ".//div[label[.='Last Service End']]/p")
         public PageElement lastServiceEnd;
+        @FindBy(xpath = ".//div[label[.='Pick Up Instructions']]/p")
+        public PageElement pickupInstructions;
 
-        private static final String PICKUP_INSTRUCTIONS_LOCATOR = "//div[h5[text()='Pickup Details']]//div[label[text()='Pick Up Instructions']]/p";
         private static final String ROUTE_ID_LOCATOR = "//div[h5[text()='Pickup Details']]//div[label[text()='Route Id']]/p";
         private static final String ROUTE_DATE_LOCATOR = "//div[h5[text()='Pickup Details']]//div[label[text()='Route Date']]/p";
         private static final String DRIVER_LOCATOR = "//div[h5[text()='Pickup Details']]//div[label[text()='Driver']]/p";
@@ -1369,10 +1290,9 @@ public class EditOrderPage extends OperatorV2SimplePage
             super(webDriver, webElement);
         }
 
-        @SuppressWarnings("unused")
-        public String getPickupInstructions()
+        public String getStatus()
         {
-            return getText(PICKUP_INSTRUCTIONS_LOCATOR);
+            return status.getText().split(":")[1].trim();
         }
 
         public String getRouteId()
@@ -1403,162 +1323,50 @@ public class EditOrderPage extends OperatorV2SimplePage
     /**
      * Accessor for Edit Pickup Details dialog
      */
-    public static class EditPickupDetailsDialog extends OperatorV2SimplePage
+    public static class EditPickupDetailsDialog extends MdDialog
     {
-        private static final String DIALOG_TITLE = "Edit Pickup Details";
-        private static final String SENDER_NAME_ARIA_LABEL = "Sender Name";
-        private static final String SENDER_CONTACT_ARIA_LABEL = "Sender Contact";
-        private static final String SENDER_EMAIL_ARIA_LABEL = "Sender Email";
-        private static final String INTERNAL_NOTES_ARIA_LABEL = "Internal Notes";
-        private static final String PICKUP_DATE_ID = "commons.model.pickup-date";
-        private static final String PICKUP_TIMESLOT_ARIA_LABEL = "Pickup Timeslot";
-        private static final String COUNTRY_ARIA_LABEL = "Country";
-        private static final String COUNTRY_XPATH = "//input[@aria-label='Country' and @aria-hidden='false']";
-        private static final String CITY_ARIA_LABEL = "City";
-        private static final String ADDRESS_1_ARIA_LABEL = "Address 1";
-        private static final String ADDRESS_2_ARIA_LABEL = "Address 2";
-        private static final String POSTAL_CODE_ARIA_LABEL = "Postal Code";
-        private static final String CHANGE_ADDRESS_BUTTON_ARIA_LABEL = "Change Address";
-        private static final String SAVE_CHANGES_BUTTON_ARIA_LABEL = "Save changes";
-        private static final String UPDATE_PICKUP_DETAILS_SUCCESSFUL_TOAST_MESSAGE = "Pickup Details Updated";
+        @FindBy(css = "[id^='commons.sender-name']")
+        public TextBox senderName;
 
-        public EditPickupDetailsDialog(WebDriver webDriver)
-        {
-            super(webDriver);
-        }
+        @FindBy(css = "[id^='commons.sender-contact']")
+        public TextBox senderContact;
 
-        public EditPickupDetailsDialog waitUntilVisibility()
-        {
-            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
-            return this;
-        }
+        @FindBy(css = "[id^='commons.sender-email']")
+        public TextBox senderEmail;
 
-        public EditPickupDetailsDialog waitUntilAddressCanBeChanged()
-        {
-            waitUntilVisibilityOfElementLocated(COUNTRY_XPATH);
-            return this;
-        }
+        @FindBy(id = "container.order.edit.internal-notes")
+        public TextBox internalNotes;
 
-        public EditPickupDetailsDialog updateSenderName(String text)
-        {
-            if (Objects.nonNull(text))
-            {
-                sendKeysByAriaLabel(SENDER_NAME_ARIA_LABEL, text);
-            }
-            return this;
-        }
+        @FindBy(id = "commons.model.pickup-date")
+        public MdDatepicker pickupDate;
 
-        public EditPickupDetailsDialog updateSenderContact(String text)
-        {
-            if (Objects.nonNull(text))
-            {
-                sendKeysByAriaLabel(SENDER_CONTACT_ARIA_LABEL, text);
-            }
-            return this;
-        }
+        @FindBy(css = "[id^='container.order.edit.pickup-timeslot']")
+        public MdSelect pickupTimeslot;
 
-        public EditPickupDetailsDialog updateSenderEmail(String text)
-        {
-            if (Objects.nonNull(text))
-            {
-                sendKeysByAriaLabel(SENDER_EMAIL_ARIA_LABEL, text);
-            }
-            return this;
-        }
+        @FindBy(name = "container.order.edit.change-address")
+        public NvIconTextButton changeAddress;
 
-        public EditPickupDetailsDialog updateInternalNotes(String text)
-        {
-            if (Objects.nonNull(text))
-            {
-                sendKeysByAriaLabel(INTERNAL_NOTES_ARIA_LABEL, text);
-            }
-            return this;
-        }
+        @FindBy(css = "[id^='commons.country']")
+        public TextBox country;
 
-        public EditPickupDetailsDialog updatePickupDate(String textDate)
-        {
-            if (Objects.nonNull(textDate))
-            {
-                try
-                {
-                    setMdDatepickerById(PICKUP_DATE_ID, YYYY_MM_DD_SDF.parse(textDate));
-                } catch (ParseException e)
-                {
-                    throw new NvTestRuntimeException("Failed to parse date.", e);
-                }
-            }
-            return this;
-        }
+        @FindBy(css = "[id^='commons.city']")
+        public TextBox city;
 
-        public EditPickupDetailsDialog updatePickupTimeslot(String value)
-        {
-            if (Objects.nonNull(value))
-            {
-                selectValueFromMdSelectByAriaLabel(PICKUP_TIMESLOT_ARIA_LABEL, value);
-            }
-            return this;
-        }
+        @FindBy(css = "[id^='commons.address1']")
+        public TextBox address1;
 
-        public EditPickupDetailsDialog clickChangeAddress()
-        {
-            clickButtonByAriaLabel(CHANGE_ADDRESS_BUTTON_ARIA_LABEL);
-            waitUntilAddressCanBeChanged();
-            return this;
-        }
+        @FindBy(css = "[id^='commons.address2']")
+        public TextBox address2;
 
-        public EditPickupDetailsDialog updateCountry(String value)
-        {
-            if (Objects.nonNull(value))
-            {
-                sendKeysByAriaLabel(COUNTRY_ARIA_LABEL, value);
-            }
-            return this;
-        }
+        @FindBy(css = "[id^='commons.postcode']")
+        public TextBox postcode;
 
-        public EditPickupDetailsDialog updateCity(String value)
-        {
-            if (Objects.nonNull(value))
-            {
-                sendKeysByAriaLabel(CITY_ARIA_LABEL, value);
-            }
-            return this;
-        }
+        @FindBy(name = "commons.save-changes")
+        public NvApiTextButton saveChanges;
 
-        public EditPickupDetailsDialog updateAddress1(String value)
+        public EditPickupDetailsDialog(WebDriver webDriver, WebElement webElement)
         {
-            if (Objects.nonNull(value))
-            {
-                sendKeysByAriaLabel(ADDRESS_1_ARIA_LABEL, value);
-            }
-            return this;
-        }
-
-        public EditPickupDetailsDialog updateAddress2(String value)
-        {
-            if (Objects.nonNull(value))
-            {
-                sendKeysByAriaLabel(ADDRESS_2_ARIA_LABEL, value);
-            }
-            return this;
-        }
-
-        public EditPickupDetailsDialog updatePostalCode(String value)
-        {
-            if (Objects.nonNull(value))
-            {
-                sendKeysByAriaLabel(POSTAL_CODE_ARIA_LABEL, value);
-            }
-            return this;
-        }
-
-        public void clickSaveChanges()
-        {
-            clickButtonByAriaLabelAndWaitUntilDone(SAVE_CHANGES_BUTTON_ARIA_LABEL);
-        }
-
-        public void confirmPickupDetailsUpdated()
-        {
-            waitUntilVisibilityOfToast(UPDATE_PICKUP_DETAILS_SUCCESSFUL_TOAST_MESSAGE);
+            super(webDriver, webElement);
         }
     }
 
@@ -2174,48 +1982,58 @@ public class EditOrderPage extends OperatorV2SimplePage
 
     public void changeCopValue(Integer copValue)
     {
-        click("//input[@id='Amount']");
-        webDriver.findElement(By.id("Amount")).sendKeys(String.valueOf(copValue));
-        clickNvApiTextButtonByName("commons.save-changes");
+        editCashCollectionDetailsDialog.waitUntilVisible();
+        pause1s();
+        editCashCollectionDetailsDialog.amount.click();
+        editCashCollectionDetailsDialog.amount.sendKeys(copValue);
+        editCashCollectionDetailsDialog.saveChanges.clickAndWaitUntilDone();
+        editOrderStampDialog.waitUntilInvisible();
     }
 
     public void changeCodValue(Integer codValue)
     {
-        click("//input[@id='Amount']");
-        webDriver.findElement(By.id("Amount")).sendKeys(String.valueOf(codValue));
-        clickNvApiTextButtonByName("commons.save-changes");
+        editCashCollectionDetailsDialog.waitUntilVisible();
+        pause1s();
+        editCashCollectionDetailsDialog.amount.click();
+        editCashCollectionDetailsDialog.amount.sendKeys(codValue);
+        editCashCollectionDetailsDialog.saveChanges.clickAndWaitUntilDone();
+        editOrderStampDialog.waitUntilInvisible();
     }
 
     public void verifyCopUpdated(Integer copValue)
     {
-        assertEquals("COP Value", "COP SGD" + (copValue / 100), getText("//nv-tag/span[contains(text(),'COP SGD')]"));
+        assertEquals("COP Value", "COP SGD" + (copValue / 100), this.copValue.getText());
     }
 
     public void verifyCodUpdated(Integer codValue)
     {
-        assertEquals("COD Value", "COD SGD" + (codValue / 100), getText("//nv-tag/span[contains(text(),'COD SGD')]"));
+        assertEquals("COD Value", "COD SGD" + (codValue / 100), this.codValue.getText());
     }
 
     public void changeCopToggleToYes()
     {
-        click("//div[label[@label = 'Cash on Pickup']]//button[@aria-label='Yes']");
+        editCashCollectionDetailsDialog.waitUntilVisible();
+        editCashCollectionDetailsDialog.copYes.click();
     }
 
     public void changeCopToggleToNo()
     {
-        click("//div[label[@label = 'Cash on Pickup']]//button[@aria-label='No']");
-        clickNvApiTextButtonByName("commons.save-changes");
+        editCashCollectionDetailsDialog.waitUntilVisible();
+        editCashCollectionDetailsDialog.copNo.click();
+        editCashCollectionDetailsDialog.saveChanges.clickAndWaitUntilDone();
     }
 
     public void changeCodToggleToYes()
     {
-        click("//div[label[@label = 'Cash on Delivery']]//button[@aria-label='Yes']");
+        editCashCollectionDetailsDialog.waitUntilVisible();
+        editCashCollectionDetailsDialog.codYes.click();
     }
 
     public void changeCodToggleToNo()
     {
-        click("//div[label[@label = 'Cash on Delivery']]//button[@aria-label='No']");
-        clickNvApiTextButtonByName("commons.save-changes");
+        editCashCollectionDetailsDialog.waitUntilVisible();
+        editCashCollectionDetailsDialog.codNo.click();
+        editCashCollectionDetailsDialog.saveChanges.clickAndWaitUntilDone();
     }
 
     public static class EditPriorityLevelDialog extends MdDialog
@@ -2233,9 +2051,9 @@ public class EditOrderPage extends OperatorV2SimplePage
         public NvApiTextButton saveChanges;
     }
 
-    public static class AddToRoute2Dialog extends MdDialog
+    public static class AddToRouteDialog extends MdDialog
     {
-        public AddToRoute2Dialog(WebDriver webDriver, WebElement webElement)
+        public AddToRouteDialog(WebDriver webDriver, WebElement webElement)
         {
             super(webDriver, webElement);
         }
@@ -2254,5 +2072,122 @@ public class EditOrderPage extends OperatorV2SimplePage
 
         @FindBy(name = "container.order.edit.add-to-route")
         public NvApiTextButton addToRoute;
+    }
+
+    public static class EditOrderDetailsDialog extends MdDialog
+    {
+        public EditOrderDetailsDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(css = "[id^='delivery-types']")
+        public MdSelect deliveryTypes;
+
+        @FindBy(css = "md-select[id^='parcel-size']")
+        public MdSelect parcelSize;
+
+        @FindBy(id = "weight")
+        public TextBox weight;
+
+        @FindBy(name = "commons.save-changes")
+        public NvApiTextButton saveChanges;
+    }
+
+    public static class EditInstructionsDialog extends MdDialog
+    {
+        public EditInstructionsDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(id = "container.order.edit.pickup-instruction")
+        public TextBox pickupInstruction;
+
+        @FindBy(id = "container.order.edit.delivery-instruction")
+        public TextBox deliveryInstruction;
+
+        @FindBy(id = "container.order.edit.order-instruction")
+        public TextBox orderInstruction;
+
+        @FindBy(name = "commons.save-changes")
+        public NvApiTextButton saveChanges;
+    }
+
+    public static class ManuallyCompleteOrderDialog extends MdDialog
+    {
+        public ManuallyCompleteOrderDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(name = "container.order.edit.complete-order")
+        public NvApiTextButton completeOrder;
+    }
+
+    public static class EditOrderStampDialog extends MdDialog
+    {
+        public EditOrderStampDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(id = "commons.stamp-id")
+        public TextBox stampId;
+
+        @FindBy(name = "commons.save")
+        public NvApiTextButton save;
+
+        @FindBy(name = "commons.remove")
+        public NvApiTextButton remove;
+    }
+
+    public static class UpdateStatusDialog extends MdDialog
+    {
+        public UpdateStatusDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(css = "[id^='commons.status']")
+        public MdSelect status;
+
+        @FindBy(css = "[id^='commons.model.granular-status']")
+        public MdSelect granularStatus;
+
+        @FindBy(css = "[id^='container.order.edit.last-pickup-transaction-status']")
+        public MdSelect lastPickupTransactionStatus;
+
+        @FindBy(css = "[id^='container.order.edit.last-delivery-transaction-status']")
+        public MdSelect lastDeliveryTransactionStatus;
+
+        @FindBy(name = "commons.save-changes")
+        public NvApiTextButton saveChanges;
+    }
+
+    public static class EditCashCollectionDetailsDialog extends MdDialog
+    {
+        public EditCashCollectionDetailsDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(id = "Amount")
+        public TextBox amount;
+
+        @FindBy(xpath = "//div[label[@label = 'Cash on Pickup']]//button[@aria-label='Yes']")
+        public Button copYes;
+
+        @FindBy(xpath = "//div[label[@label = 'Cash on Pickup']]//button[@aria-label='No']")
+        public Button copNo;
+
+        @FindBy(xpath = "//div[label[@label = 'Cash on Delivery']]//button[@aria-label='Yes']")
+        public Button codYes;
+
+        @FindBy(xpath = "//div[label[@label = 'Cash on Delivery']]//button[@aria-label='No']")
+        public Button codNo;
+
+        @FindBy(name = "commons.save-changes")
+        public NvApiTextButton saveChanges;
     }
 }
