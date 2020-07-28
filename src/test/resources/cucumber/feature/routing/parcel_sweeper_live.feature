@@ -1,7 +1,7 @@
 @OperatorV2 @Routing @OperatorV2Part2 @ParcelSweeperLive
 Feature: Parcel Sweeper Live
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @WIP
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -63,8 +63,8 @@ Feature: Parcel Sweeper Live
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator new add parcel to the route using data below:
+      | addParcelToRouteRequest | PICKUP |
     And API Operator start the route
     Then API Operator verify order info after Return PP transaction added to route
     When Operator go to menu Routing -> Parcel Sweeper Live
@@ -137,8 +137,8 @@ Feature: Parcel Sweeper Live
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator new add parcel to the route using data below:
+      | addParcelToRouteRequest | DELIVERY |
     When API Operator refresh created order data
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
@@ -181,8 +181,8 @@ Feature: Parcel Sweeper Live
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator new add parcel to the route using data below:
+      | addParcelToRouteRequest | DELIVERY |
     When API Operator refresh created order data
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
@@ -211,7 +211,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @CloseNewWindows
+  @CloseNewWindows @WIP
   Scenario: Parcel Sweeper Live - Baseline Scenarios - ddnt routed, route's hub = physical hub, route's date is NOT today (uid:7a3348b5-7f3d-4d1c-aa4d-6a1b93b5021a)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -220,8 +220,8 @@ Feature: Parcel Sweeper Live
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{next-1-day-yyyy-MM-dd}} 16:00:00", "dateTime": "{{next-1-day-yyyy-MM-dd}}T16:00:00+00:00"} |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator new add parcel to the route using data below:
+      | addParcelToRouteRequest | DELIVERY |
     When API Operator refresh created order data
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
@@ -259,8 +259,8 @@ Feature: Parcel Sweeper Live
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id}, "date":"{{next-1-day-yyyy-MM-dd}} 16:00:00", "dateTime": "{{next-1-day-yyyy-MM-dd}}T16:00:00+00:00"} |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator new add parcel to the route using data below:
+      | addParcelToRouteRequest | DELIVERY |
     When API Operator refresh created order data
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
@@ -298,8 +298,8 @@ Feature: Parcel Sweeper Live
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator new add parcel to the route using data below:
+      | addParcelToRouteRequest | DELIVERY |
     When API Operator refresh created order data
     When Operator go to menu Order -> All Orders
     And Operator open page of the created order from All Orders page
@@ -490,8 +490,8 @@ Feature: Parcel Sweeper Live
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Operator new add parcel to the route using data below:
+      | addParcelToRouteRequest | DELIVERY |
     And API Operator start the route
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
@@ -532,8 +532,8 @@ Feature: Parcel Sweeper Live
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator new add parcel to the route using data below:
+      | addParcelToRouteRequest | DELIVERY |
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
@@ -755,8 +755,8 @@ Feature: Parcel Sweeper Live
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator new add parcel to the route using data below:
+      | addParcelToRouteRequest | DELIVERY |
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When Operator set filter using data below and click 'Load Selection'
@@ -851,8 +851,8 @@ Feature: Parcel Sweeper Live
       | globalInboundRequest | { "hubId":{hub-id} } |
     When API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator new add parcel to the route using data below:
+      | addParcelToRouteRequest | DELIVERY |
     When API Driver collect all his routes
     When API Driver get pickup/delivery waypoint of the created order
     When API Operator Van Inbound parcel
@@ -930,8 +930,8 @@ Feature: Parcel Sweeper Live
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator pulled out parcel "DELIVERY" from route
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator new add parcel to the route using data below:
+      | addParcelToRouteRequest | DELIVERY |
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
@@ -1039,6 +1039,6 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @KillBrowser @ShouldAlwaysRun
+  @KillBrowser @ShouldAlwaysRun @WIP
   Scenario: Kill Browser
     Given no-op
