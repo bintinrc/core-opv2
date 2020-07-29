@@ -16,12 +16,17 @@ import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +49,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
 {
     private static final String LOCATOR_CREATE_SHIPMENT_CONFIRMATION_BUTTON = "Create";
     private static final String LOCATOR_SELCT_FILTERS_PRESET = "commons.preset.load-filter-preset";
-    private static final String SHIPMENT_STATUS_DROPDOWN_XPATH = "//md-autocomplete[md-autocomplete-wrap[input[contains(@id,'input') and contains(@aria-label,'Search or Select')]]]/following-sibling::md-icon[i[text()='arrow_drop_down']]";
+    private static final String SHIPMENT_STATUS_INPUT_XPATH = "//input[contains(@id,'input') and contains(@aria-label,'Search or Select')]";
     private static final String TRANSIT_SELECTION_XPATH = "//span[text()='Transit']/ancestor::li";
 
     private static final String XPATH_EDIT_SEARCH_FILTER_BUTTON = "//button[contains(@aria-label, 'Edit Filter')]";
@@ -139,9 +144,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     public void transitStatus()
     {
         selectValueFromNvAutocompleteByItemTypesAndDismiss("filters", "Shipment Status");
-        click(SHIPMENT_STATUS_DROPDOWN_XPATH);
-        pause1s();
+        click(SHIPMENT_STATUS_INPUT_XPATH);
         click(TRANSIT_SELECTION_XPATH);
+        sendKeys(SHIPMENT_STATUS_INPUT_XPATH, Keys.ESCAPE);
         pause1s();
     }
 
@@ -520,6 +525,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     public void verifiesSearchErrorModalIsShown(boolean isValidShipmentExist)
     {
         isElementExist(XPATH_SHIPMENT_SEARCH_ERROR_MODAL);
+        pause2s();
 
         if (isValidShipmentExist)
         {
