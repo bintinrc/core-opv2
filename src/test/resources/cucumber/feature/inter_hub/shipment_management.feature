@@ -213,7 +213,6 @@ Feature: Shipment Management
     When Operator go to menu Inter-Hub -> Shipment Management
     When Operator filter the shipment based on its status of Transit
     And Operator click "Load All Selection" on Shipment Management page
-    And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
 
   @DeleteShipment
