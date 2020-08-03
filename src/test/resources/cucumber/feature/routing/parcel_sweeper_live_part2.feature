@@ -115,7 +115,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Transferred to 3PL" on Edit Order page
 
-  @CloseNewWindows
+  @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Parcel Sweeper Live - Pending Reschedule (uid:a00edc09-d2fc-45a5-9424-9be72bbf92f9)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -210,7 +210,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
-  @CloseNewWindows
+  @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Parcel Sweeper Live - On Vehicle for Delivery (uid:5ae4645e-1195-4c53-b6f6-fdddb16c172d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -286,7 +286,7 @@ Feature: Parcel Sweeper Live
     And Operator verify order status is "Staging" on Edit Order page
     And Operator verify order granular status is "Staging" on Edit Order page
 
-  @CloseNewWindows
+  @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Parcel Sweeper Live - Arrived at Distribution Point (uid:b5b9d7fc-67fb-473f-b030-c78a67a553c6)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
