@@ -14,13 +14,14 @@ import org.openqa.selenium.support.PageFactory;
 import java.util.ArrayList;
 
 /**
- *
  * @author Niko Susanto
  */
 @SuppressWarnings("WeakerAccess")
-public class RoleManagementV2Page extends OperatorV2SimplePage {
+public class RoleManagementV2Page extends OperatorV2SimplePage
+{
 
-    public RoleManagementV2Page(WebDriver webDriver) {
+    public RoleManagementV2Page(WebDriver webDriver)
+    {
         super(webDriver);
     }
 
@@ -41,10 +42,10 @@ public class RoleManagementV2Page extends OperatorV2SimplePage {
     @FindBy(xpath = "//div[@class='ant-col ant-col-24']//span[.='Id']")
     public TextBox sort;
 
-    @FindBy (xpath = "//tbody[1]/tr[1]//button")
+    @FindBy(xpath = "//tbody[1]/tr[1]//button")
     public Button delete;
 
-    @FindBy (xpath = "//button[.= 'Yes']")
+    @FindBy(xpath = "//button[.= 'Yes']")
     public Button confirm;
 
     @FindBy(css = "div.ant-modal")
@@ -53,7 +54,7 @@ public class RoleManagementV2Page extends OperatorV2SimplePage {
     @FindBy(css = "div.ant-modal")
     public UpdateDescriptionModal updateDescriptionModal;
 
-    @FindBy (xpath = "//button[.='Assign Scopes']")
+    @FindBy(xpath = "//button[.='Assign Scopes']")
     public Button assignScope;
 
     @FindBy(css = "div.ant-modal")
@@ -104,7 +105,8 @@ public class RoleManagementV2Page extends OperatorV2SimplePage {
         refreshPage();
     }
 
-    public void verifyRoleIsDeleted(RoleManagement roleManagement) {
+    public void verifyRoleIsDeleted(RoleManagement roleManagement)
+    {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
         add.waitUntilClickable();
         sort.click();
@@ -113,12 +115,13 @@ public class RoleManagementV2Page extends OperatorV2SimplePage {
         assertNotEquals("Role Description is the same", roleManagement.getDesc(), getText(COLUMN_DATA_TITLE_DESC));
     }
 
-    public void editRole(RoleManagement roleManagementEdited) {
+    public void editRole(RoleManagement roleManagementEdited)
+    {
         click(COLUMN_DATA_TITLE_NAME);
         waitUntilPageLoaded();
 
-        ArrayList tabs = new ArrayList(webDriver.getWindowHandles());
-        webDriver.switchTo().window((String) tabs.get(1));
+        ArrayList<String> tabs = new ArrayList<>(webDriver.getWindowHandles());
+        webDriver.switchTo().window(tabs.get(1));
         refreshPage();
 
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
@@ -201,10 +204,10 @@ public class RoleManagementV2Page extends OperatorV2SimplePage {
 
     public void verifyEditedRoleDetails(RoleManagement roleManagement)
     {
-        String actualName = getText(UPDATED_NAME_XPATH).replace("NAME\n","");
-        String actualDescription = getText(UPDATED_DESCRIPTION_XPATH).replace("DESCRIPTION\n","");
-        assertEquals("Different Role Name Returned", roleManagement.getRoleName(), actualName.replace("\nEdit",""));
-        assertEquals("Different Description Returned", roleManagement.getDesc(), actualDescription.replace("\nEdit",""));
-        assertEquals("New Scope Not Found", roleManagement.getScope(), getText(f("//tbody[1]//span/span[.='%s']",roleManagement.getScope())));
+        String actualName = getText(UPDATED_NAME_XPATH).replace("NAME\n", "");
+        String actualDescription = getText(UPDATED_DESCRIPTION_XPATH).replace("DESCRIPTION\n", "");
+        assertEquals("Different Role Name Returned", roleManagement.getRoleName(), actualName.replace("\nEdit", ""));
+        assertEquals("Different Description Returned", roleManagement.getDesc(), actualDescription.replace("\nEdit", ""));
+        assertEquals("New Scope Not Found", roleManagement.getScope(), getText(f("//tbody[1]//span/span[.='%s']", roleManagement.getScope())));
     }
 }

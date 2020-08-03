@@ -4,9 +4,7 @@ import co.nvqa.commons.client.auth.AuthClient;
 import co.nvqa.commons.client.dp.Dp3plClient;
 import co.nvqa.commons.client.order_create.OrderCreateClientV2;
 import co.nvqa.commons.client.order_create.OrderCreateClientV4;
-import co.nvqa.commons.cucumber.StandardScenarioManager;
 import co.nvqa.commons.cucumber.StandardScenarioStorageKeys;
-import co.nvqa.commons.cucumber.glue.AbstractApiOperatorPortalSteps;
 import co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
 import co.nvqa.commons.database.CoreJdbc;
 import co.nvqa.commons.model.auth.AuthResponse;
@@ -14,8 +12,11 @@ import co.nvqa.commons.model.auth.ClientCredentialsAuth;
 import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.Dimension;
 import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.order_create.v4.*;
+import co.nvqa.commons.model.order_create.v4.International;
 import co.nvqa.commons.model.order_create.v4.OrderRequestV4;
+import co.nvqa.commons.model.order_create.v4.Reference;
+import co.nvqa.commons.model.order_create.v4.Timeslot;
+import co.nvqa.commons.model.order_create.v4.UserDetail;
 import co.nvqa.commons.model.order_create.v4.job.ParcelJob;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.util.StandardTestConstants;
@@ -31,13 +32,20 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import io.cucumber.datatable.DataTable;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.TimeZone;
 
 /**
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class OrderWeightUpdateSteps extends AbstractSteps    {
+public class OrderWeightUpdateSteps extends AbstractSteps
+{
     private String apiBaseUrl;
 
     private String shipperV2ClientId;
@@ -69,11 +77,14 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
     @Inject
     private StandardApiOperatorPortalSteps standardApiOperatorPortalSteps;
     public static final String KEY_ORDER_WEIGHT = "KEY_ORDER_WEIGHT";
-    public OrderWeightUpdateSteps() {
+
+    public OrderWeightUpdateSteps()
+    {
     }
 
     @Override
-    public void init() {
+    public void init()
+    {
         orderWeightUpdatePage = new OrderWeightUpdatePage(getWebDriver());
         this.apiBaseUrl = StandardTestConstants.API_BASE_URL;
 
@@ -91,35 +102,42 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
 
 
     @When("^Operator download Sample CSV file on Order Weight Update V2 page$")
-    public void operatorDownloadSampleCsvFileOnOrderWeightUpdatePageV2() {
+    public void operatorDownloadSampleCsvFileOnOrderWeightUpdatePageV2()
+    {
         orderWeightUpdatePage.downloadSampleCsvFile();
     }
 
     @Then("^Operator verify Sample CSV file on Order Weight Update V2 page downloaded successfully$")
-    public void operatorVerifySampleCsvFileOnOrderWeightUpdatePageV2DownloadedSuccessfully() {
+    public void operatorVerifySampleCsvFileOnOrderWeightUpdatePageV2DownloadedSuccessfully()
+    {
         orderWeightUpdatePage.verifyCsvFileDownloadedSuccessfully();
     }
 
     @When("^Operator uploading invalid CSV file on Order Weight Update V2 page$")
-    public void operatorUploadingInvalidCsvFileOnOrderWeightUpdatePageV2() {
+    public void operatorUploadingInvalidCsvFileOnOrderWeightUpdatePageV2()
+    {
         orderWeightUpdatePage.uploadInvalidCsv();
     }
 
     @When("^Operator create order V2 by uploading CSV on Order Weight Update V2 page using data below:$")
-    public void operatorCreateOrderV2ByUploadingCsvOnOrderWeightUpdatePageV2UsingDataBelow(DataTable dataTable) {
+    public void operatorCreateOrderV2ByUploadingCsvOnOrderWeightUpdatePageV2UsingDataBelow(DataTable dataTable)
+    {
         operatorCreateOrderByUploadingCsvOnOrderWeightUpdatePageV2UsingDataBelow(dataTable);
     }
 
     @When("^Operator create order V3 by uploading CSV on Order Weight Update V2 page using data below:$")
-    public void operatorCreateOrderV3ByUploadingCsvOnOrderWeightUpdatePageV2UsingDataBelow(DataTable dataTable) {
+    public void operatorCreateOrderV3ByUploadingCsvOnOrderWeightUpdatePageV2UsingDataBelow(DataTable dataTable)
+    {
         operatorCreateOrderByUploadingCsvOnOrderWeightUpdatePageV2UsingDataBelow(dataTable);
     }
 
     //TODO: should move to page
-    private void operatorCreateOrderByUploadingCsvOnOrderWeightUpdatePageV2UsingDataBelow(DataTable dataTable) {
+    private void operatorCreateOrderByUploadingCsvOnOrderWeightUpdatePageV2UsingDataBelow(DataTable dataTable)
+    {
         Long shipperV2OrV3Id = null;
 
-        if (containsKey(KEY_CREATED_SHIPPER)) {
+        if (containsKey(KEY_CREATED_SHIPPER))
+        {
             shipperV2OrV3Id = this.<Shipper>get(KEY_CREATED_SHIPPER).getLegacyId();
         }
 
@@ -143,17 +161,20 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
         String toEmail = null;
         String toName = null;
 
-        if ("Normal".equals(orderType)) {
+        if ("Normal".equals(orderType))
+        {
             fromEmail = f("shipper.normal.%s@ninjavan.co", trackingRefNo);
             fromName = f("S-N-%s Shipper", trackingRefNo);
             toEmail = f("customer.normal.%s@ninjavan.co", trackingRefNo);
             toName = f("C-N-%s Customer", trackingRefNo);
-        } else if ("C2C".equals(orderType)) {
+        } else if ("C2C".equals(orderType))
+        {
             fromEmail = f("shipper.c2c.%s@ninjavan.co", trackingRefNo);
             fromName = f("S-C-%s Shipper", trackingRefNo);
             toEmail = f("customer.c2c.%s@ninjavan.co", trackingRefNo);
             toName = f("C-C-%s Customer", trackingRefNo);
-        } else if ("Return".equals(orderType)) {
+        } else if ("Return".equals(orderType))
+        {
             fromEmail = f("customer.return.%s@ninjavan.co", trackingRefNo);
             fromName = f("C-R-%s Customer", trackingRefNo);
             toEmail = f("shipper.return.%s@ninjavan.co", trackingRefNo);
@@ -203,136 +224,139 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
     }
 
     @Then("^Operator verify order V2 is created successfully on Order Weight Update V2 page$")
-    public void operatorVerifyOrderV2IsCreatedSuccessfullyOnOrderWeightUpdatePageV2() {
+    public void operatorVerifyOrderV2IsCreatedSuccessfullyOnOrderWeightUpdatePageV2()
+    {
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
         orderWeightUpdatePage.verifyOrderV2IsCreatedSuccessfully(orderCreationV2Template);
         pause(5 * 1000);
     }
 
     @Then("^Operator verify order V3 is created successfully on Order Weight Update V2 page$")
-    public void operatorVerifyOrderV3IsCreatedSuccessfullyOnOrderWeightUpdatePageV2() {
+    public void operatorVerifyOrderV3IsCreatedSuccessfullyOnOrderWeightUpdatePageV2()
+    {
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
 
         orderWeightUpdatePage.verifyOrderV3IsCreatedSuccessfully(orderCreationV2Template);
     }
 
     @When("^Operator Pop Open Order Weight update CSV on Order Weight Update V2 page$")
-    public void downloadOrderWeightUpdateSampleCsvFile() {
+    public void downloadOrderWeightUpdateSampleCsvFile()
+    {
         orderWeightUpdatePage.downloadOrderWeightUpdateSampleCsvFile();
         //pause(15*1000);
 
     }
 
     @When("^Operator Download Sample Csv Order Weight update CSV on Order Weight Update V2 page$")
-    public void downloadSampleCsvOrderWeightUpdateSampleCsvFile() {
+    public void downloadSampleCsvOrderWeightUpdateSampleCsvFile()
+    {
         orderWeightUpdatePage.downloadOrderUpdateCsvFile();
         pause(10 * 1000);
 
     }
 
     @When("^Operator Order Weight update CSV Upload on Order Weight Update V2 page$")
-    public void OrderWeightUpdateUploadCsvFile(Map<String, String> map) {
-        //System.out.println(" Weight    : " + Integer.parseInt(map.get("weight")));
+    public void OrderWeightUpdateUploadCsvFile(Map<String, String> map)
+    {
         put(KEY_ORDER_WEIGHT, map.get("new-weight-in-double-format"));
-        System.out.println("Order Id====>" + get(KEY_CREATED_ORDER_ID));
-        System.out.println("Tracking Id====>" + get(KEY_CREATED_ORDER_TRACKING_ID));
-        System.out.println("map Id====>" + map.get("new-weight-in-double-format"));
-        Long OrderId = get(KEY_CREATED_ORDER_ID);
         String OrderTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         orderWeightUpdatePage.uploadOrderUpdateCsv(OrderTrackingId, map);
-        pause(5 * 1000);
-
+        pause5s();
     }
 
     @Then("^Operator Order Weight update on Order Weight Update V2 page$")
-    public void OrderWeightUpdate() {
-        pause(2000);
-        orderWeightUpdatePage.uploadOrderWeightUpload();
-
-
+    public void OrderWeightUpdate()
+    {
+        pause2s();
+        orderWeightUpdatePage.upload.click();
+        orderWeightUpdatePage.waitUntilInvisibilityOfToast("Order weight update success", true);
     }
 
     @Then("^Operator Verify Order Weight update Successfully on Order Weight Update V2 page$")
-    public void VerifyOrderWeightUpdate() {
+    public void VerifyOrderWeightUpdate()
+    {
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
-        //orderWeightUpdatePage.VerifyOrderWeightUpload("SOCV2"+orderCreationV2Template.getOrderNo());
         orderWeightUpdatePage.VerifyOrderWeightUpload("SOCV2JVRNUEW8");
-        pause(5 * 1000);
-
-
+        pause5s();
     }
 
     @Then("^Operator Edit Order on Order Weight Update V2 page$")
-    public void EditOrderClick() {
-       // String OrderId  = ""+String.valueOf(get(KEY_CREATED_ORDER_ID));
+    public void EditOrderClick()
+    {
         orderWeightUpdatePage.clickOrderEditButton("" + get(KEY_CREATED_ORDER_ID));
         pause(10 * 1000);
     }
 
     @Then("^Operator Verify Order Weight on Order Weight Update V2 page$")
-    public void VerifyOrderWeightClick() {
+    public void VerifyOrderWeightClick()
+    {
         OrderCreationV2Template orderCreationV2Template = get("orderCreationV2Template");
 
         Long orderId = get(KEY_CREATED_ORDER_ID);
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         String methodInfo = f("%s - [Tracking ID = %s]", getCurrentMethodName(), trackingId);
 
-        retryIfAssertionErrorOrRuntimeExceptionOccurred(()->
-                {
-                    //Order orderDetails = getOrderClient().getOrder(orderId);
-                    //assertEquals("Order Weight Matched", orderDetails.getWeight(),f("%s kg",get(KEY_ORDER_WEIGHT)));
+        retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
+        {
+            //Order orderDetails = getOrderClient().getOrder(orderId);
+            //assertEquals("Order Weight Matched", orderDetails.getWeight(),f("%s kg",get(KEY_ORDER_WEIGHT)));
 
-                }, methodInfo);
+        }, methodInfo);
         pause(2 * 1000);
     }
 
     @Then("^Operator Search Button For Orders on Order Weight Update V2 page$")
-    public void ClickOrderSearch() {
+    public void ClickOrderSearch()
+    {
         orderWeightUpdatePage.clickOrderSearchButton();
         pause(5 * 1000);
 
     }
 
     @Given("^API create multiple V4 orders using data below:$")
-    public void shipperCreateMultipleV4Orders(Map<String, String> dataTableAsMap) {
+    public void shipperCreateMultipleV4Orders(Map<String, String> dataTableAsMap)
+    {
         int numberOfOrder = Integer.parseInt(dataTableAsMap.getOrDefault("numberOfOrder", "1"));
         System.out.println("Muliti order" + numberOfOrder);
-        for (int i = 0; i < numberOfOrder; i++) {
+        for (int i = 0; i < numberOfOrder; i++)
+        {
             apiCreateV4MultiOrder(dataTableAsMap);
         }
         put("numberOfOrder", numberOfOrder);
     }
 
     @When("^Operator create order V2 by uploading CSV on Order Weight Update V2 page for multiple orders using data below:$")
-    public void operatorCreateOrderV2ByUploadingCsvOnOrderWeightUpdatePageV2ForMultipleOrderUsingDataBelow(DataTable dataTable) {
+    public void operatorCreateOrderV2ByUploadingCsvOnOrderWeightUpdatePageV2ForMultipleOrderUsingDataBelow(DataTable dataTable)
+    {
         operatorCreateOrderByUploadingCsvOnOrderWeightUpdatePageV2ForMultipleOrdersUsingDataBelow(dataTable);
     }
 
     @When("^Operator Multiple Order Weight update CSV Upload on Order Weight Update V2 page$")
-    public void multiOrderWeightUpdateUploadCsvFile(List listWeight) {
-
+    public void multiOrderWeightUpdateUploadCsvFile(List listWeight)
+    {
         List<String> listOfCreatedTrackingId = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
 
-        if (listOfCreatedTrackingId == null || listOfCreatedTrackingId.isEmpty()) {
+        if (listOfCreatedTrackingId == null || listOfCreatedTrackingId.isEmpty())
+        {
             throw new RuntimeException("List of created Tracking ID should not be null or empty.");
         }
-        //orderWeightUpdatePage.uploadMultiOrderUpdateCsv(listOfCreatedTrackingId,listWeight);
         put("orderMultiweight", listWeight);
         Long OrderId = get(KEY_CREATED_ORDER_ID);
         String OrderTrackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         orderWeightUpdatePage.uploadMultiOrderUpdateCsv(listOfCreatedTrackingId, listWeight);
-        pause(5 * 1000);
-
+        pause5s();
     }
 
     @Then("^Operator verify all orders Weights Updated  on All Orders page with correct info$")
-    public void operatorVerifyAllOrdersInCsvIsFoundOnAllOrdersPageWithCorrectInfo() {
+    public void operatorVerifyAllOrdersInCsvIsFoundOnAllOrdersPageWithCorrectInfo()
+    {
         List<Order> listOfCreatedOrder = containsKey(KEY_LIST_OF_ORDER_DETAILS) ? get(KEY_LIST_OF_ORDER_DETAILS) : get(KEY_LIST_OF_CREATED_ORDER);
         List weight = get("orderMultiweight");
         orderWeightUpdatePage.verifyAllOrdersInCsvIsFoundWithCorrectInfo(listOfCreatedOrder, weight);
     }
 
-    private void apiCreateV4MultiOrder(Map<String, String> dataTableAsMap) {
+    private void apiCreateV4MultiOrder(Map<String, String> dataTableAsMap)
+    {
         OrderRequestV4 requestOrder = buildOrderRequestV4(dataTableAsMap);
         OrderRequestV4 createdOrder = getOrderCreateClientV4().createOrder(requestOrder, "4.1");
         String trackingNumber = createdOrder.getTrackingNumber();
@@ -341,12 +365,14 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
         storeOrderToScenarioStorage(order);
     }
 
-    private void operatorCreateOrderByUploadingCsvOnOrderWeightUpdatePageV2ForMultipleOrdersUsingDataBelow(DataTable dataTable) {
+    private void operatorCreateOrderByUploadingCsvOnOrderWeightUpdatePageV2ForMultipleOrdersUsingDataBelow(DataTable dataTable)
+    {
 
 
         Long shipperV2OrV3Id = null;
 
-        if (containsKey(KEY_CREATED_SHIPPER)) {
+        if (containsKey(KEY_CREATED_SHIPPER))
+        {
             shipperV2OrV3Id = this.<Shipper>get(KEY_CREATED_SHIPPER).getLegacyId();
         }
 
@@ -358,7 +384,8 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
         ListOrderCreationV2Template listOrderCreationV2Template = new ListOrderCreationV2Template();
         List<OrderCreationV2Template> list = new ArrayList<>();
 
-        for (int i = 1; i <= mapOfData.size(); i++) {
+        for (int i = 1; i <= mapOfData.size(); i++)
+        {
 
             String orderCreationV2TemplateAsJsonString = mapOfData.get("orderCreationV2Template" + i);
             System.out.println("OrderCreation  : " + orderCreationV2TemplateAsJsonString);
@@ -384,17 +411,20 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
             String toEmail = null;
             String toName = null;
 
-            if ("Normal".equals(orderType)) {
+            if ("Normal".equals(orderType))
+            {
                 fromEmail = f("shipper.normal.%s@ninjavan.co", trackingRefNo);
                 fromName = f("S-N-%s Shipper", trackingRefNo);
                 toEmail = f("customer.normal.%s@ninjavan.co", trackingRefNo);
                 toName = f("C-N-%s Customer", trackingRefNo);
-            } else if ("C2C".equals(orderType)) {
+            } else if ("C2C".equals(orderType))
+            {
                 fromEmail = f("shipper.c2c.%s@ninjavan.co", trackingRefNo);
                 fromName = f("S-C-%s Shipper", trackingRefNo);
                 toEmail = f("customer.c2c.%s@ninjavan.co", trackingRefNo);
                 toName = f("C-C-%s Customer", trackingRefNo);
-            } else if ("Return".equals(orderType)) {
+            } else if ("Return".equals(orderType))
+            {
                 fromEmail = f("customer.return.%s@ninjavan.co", trackingRefNo);
                 fromName = f("C-R-%s Customer", trackingRefNo);
                 toEmail = f("shipper.return.%s@ninjavan.co", trackingRefNo);
@@ -443,19 +473,17 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
 
         listOrderCreationV2Template.setOrderCreationV2TemplatesList(list);
 
-//
-        System.out.println("Getting orderNo :   " + list.get(1).getOrderNo());
         orderWeightUpdatePage.uploadCsvForMultipleOrders(listOrderCreationV2Template);
-
-
     }
 
 
     @Then("^Operator verify order V2 is created successfully for multiple orders on Order Weight Update V2 page$")
-    public void operatorVerifyOrderV2IsCreatedSuccessfullyOnOrderWeightUpdatePageV2ForMultipleUsers() {
+    public void operatorVerifyOrderV2IsCreatedSuccessfullyOnOrderWeightUpdatePageV2ForMultipleUsers()
+    {
         List<OrderCreationV2Template> list = new ArrayList<>();
 
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= 3; i++)
+        {
             list.add(get("orderCreationV2Template" + i));
         }
         System.out.println("Size Of the List  : " + list.size());
@@ -469,9 +497,11 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
 
 
     @When("^Operator Order Weight update CSV Upload on Order Weight Update V2 page for multiple orders$")
-    public void OrderWeightUpdateUploadCsvFileForMultipleOrders(Map<String, String> map) {
+    public void OrderWeightUpdateUploadCsvFileForMultipleOrders(Map<String, String> map)
+    {
         List<OrderCreationV2Template> list = new ArrayList<>();
-        for (int i = 1; i <= map.size(); i++) {
+        for (int i = 1; i <= map.size(); i++)
+        {
             list.add(get("orderCreationV2Template" + i));
         }
         ListOrderCreationV2Template listOrderCreationV2Template = new ListOrderCreationV2Template();
@@ -480,20 +510,25 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
         pause(5 * 1000);
 
     }
-    private synchronized String getShipperAccessToken(String shipperVersion) {
+
+    private synchronized String getShipperAccessToken(String shipperVersion)
+    {
         shipperVersion = shipperVersion.toUpperCase();
         String shipperAccessToken = null;
         String shipperClientId = null;
         String shipperClientSecret = null;
 
-        switch (shipperVersion) {
-            case "V2": {
+        switch (shipperVersion)
+        {
+            case "V2":
+            {
                 shipperAccessToken = get(StandardScenarioStorageKeys.KEY_SHIPPER_V2_ACCESS_TOKEN);
                 shipperClientId = shipperV2ClientId;
                 shipperClientSecret = shipperV2ClientSecret;
                 break;
             }
-            case "V4": {
+            case "V4":
+            {
                 shipperAccessToken = get(StandardScenarioStorageKeys.KEY_SHIPPER_V4_ACCESS_TOKEN);
                 shipperClientId = shipperV4ClientId;
                 shipperClientSecret = shipperV4ClientSecret;
@@ -501,13 +536,15 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
             }
         }
 
-        if (shipperAccessToken == null) {
+        if (shipperAccessToken == null)
+        {
             ClientCredentialsAuth clientCredentialsAuth = new ClientCredentialsAuth(shipperClientId, shipperClientSecret);
             AuthClient authClient = new AuthClient(apiBaseUrl);
             AuthResponse authResponse = authClient.authenticate(clientCredentialsAuth);
             shipperAccessToken = authResponse.getAccessToken();
 
-            switch (shipperVersion) {
+            switch (shipperVersion)
+            {
                 case "V2":
                     put(KEY_SHIPPER_V2_ACCESS_TOKEN, shipperAccessToken);
                     break;
@@ -520,27 +557,34 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
         return shipperAccessToken;
     }
 
-    private Order retrieveOrderFromCore(String trackingNumber) {
+    private Order retrieveOrderFromCore(String trackingNumber)
+    {
         return retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> standardApiOperatorPortalSteps.getOrderClient().searchOrderByTrackingId(trackingNumber), f("%s - [Tracking ID = %s]", getCurrentMethodName(), trackingNumber));
     }
 
-    private synchronized OrderCreateClientV4 getOrderCreateClientV4() {
-        if (orderCreateClientV4 == null) {
+    private synchronized OrderCreateClientV4 getOrderCreateClientV4()
+    {
+        if (orderCreateClientV4 == null)
+        {
             orderCreateClientV4 = new OrderCreateClientV4(apiBaseUrl, getShipperAccessToken("V4"));
         }
         return orderCreateClientV4;
     }
 
-    public OrderRequestV4 buildOrderRequestV4(Map<String, String> dataTableAsMap) {
+    public OrderRequestV4 buildOrderRequestV4(Map<String, String> dataTableAsMap)
+    {
         return buildOrderRequestV4(dataTableAsMap, false);
     }
 
-    public OrderRequestV4 buildOrderRequestV4(Map<String, String> dataTableAsMap, boolean isGrabParcel) {
+    public OrderRequestV4 buildOrderRequestV4(Map<String, String> dataTableAsMap, boolean isGrabParcel)
+    {
         String scenarioName;
 
-        if (getScenarioManager() == null) {
+        if (getScenarioManager() == null)
+        {
             scenarioName = dataTableAsMap.getOrDefault("scenarioName", "N/A");
-        } else {
+        } else
+        {
             scenarioName = getScenarioManager().getCurrentScenario().getName();
         }
 
@@ -560,13 +604,15 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
         Address fromAddress = generateAddress(generateFrom);
         Address toAddress = generateAddress(generateTo);
 
-        if (!isGrabParcel) {
+        if (!isGrabParcel)
+        {
             orderRequestV4.setRequestedTrackingNumber(Optional.ofNullable(orderRequestV4.getRequestedTrackingNumber()).orElse(requestedTrackingNumber));
         }
 
         Reference reference = orderRequestV4.getReference();
 
-        if (reference == null) {
+        if (reference == null)
+        {
             reference = new Reference();
             orderRequestV4.setReference(reference);
         }
@@ -575,14 +621,16 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
 
         UserDetail from = orderRequestV4.getFrom();
 
-        if (from == null) {
+        if (from == null)
+        {
             from = new UserDetail();
             orderRequestV4.setFrom(from);
         }
 
         UserDetail to = orderRequestV4.getTo();
 
-        if (to == null) {
+        if (to == null)
+        {
             to = new UserDetail();
             orderRequestV4.setTo(to);
         }
@@ -593,40 +641,49 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
         String toEmail = null;
         String serviceType = orderRequestV4.getServiceType();
 
-        switch (serviceType) {
-            case "Normal": {
+        switch (serviceType)
+        {
+            case "Normal":
+            {
                 orderRequestV4.setServiceType("Parcel");
             }
-            case "Marketplace": {
+            case "Marketplace":
+            {
                 fromName = f("S-P-%s Marketplace Shipper", requestedTrackingNumber);
                 fromEmail = f("marketplace.shipper.parcel.%s@ninjavan.co", requestedTrackingNumber.toLowerCase());
                 toName = f("C-P-%s Marketplace Customer", requestedTrackingNumber);
                 toEmail = f("marketplace.customer.parcel.%s@ninjavan.co", requestedTrackingNumber.toLowerCase());
                 break;
             }
-            case "Parcel": {
+            case "Parcel":
+            {
                 fromName = f("S-P-%s Shipper", requestedTrackingNumber);
                 fromEmail = f("shipper.parcel.%s@ninjavan.co", requestedTrackingNumber.toLowerCase());
                 toName = f("C-P-%s Customer", requestedTrackingNumber);
                 toEmail = f("customer.parcel.%s@ninjavan.co", requestedTrackingNumber.toLowerCase());
                 break;
             }
-            case "Return": {
+            case "Return":
+            {
                 fromName = f("C-R-%s Customer", requestedTrackingNumber);
                 fromEmail = f("customer.return.%s@ninjavan.co", requestedTrackingNumber.toLowerCase());
                 toName = f("S-R-%s Shipper", requestedTrackingNumber);
                 toEmail = f("shipper.return.%s@ninjavan.co", requestedTrackingNumber.toLowerCase());
                 break;
             }
-            case "International": {
+            case "International":
+            {
                 International international = orderRequestV4.getInternational();
 
-                if (international != null) {
+                if (international != null)
+                {
                     String portation = international.getPortation();
 
-                    if (portation.equals("Export")) {
+                    if (portation.equals("Export"))
+                    {
                         toAddress = getRandomAddressIntl();
-                    } else if (portation.equals("Import")) {
+                    } else if (portation.equals("Import"))
+                    {
                         fromAddress = getRandomAddressIntl();
                     }
                 }
@@ -642,10 +699,12 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
         from.setName(Optional.ofNullable(from.getName()).orElse(fromName));
         from.setEmail(Optional.ofNullable(from.getEmail()).orElse(fromEmail));
 
-        if (fromAddress != null) {
+        if (fromAddress != null)
+        {
             from.setAddress(convertValueToMapSnakeCase(fromAddress, String.class, String.class));
 
-            if (from.getPhoneNumber() == null) {
+            if (from.getPhoneNumber() == null)
+            {
                 from.setPhoneNumber(fromAddress.getContact());
             }
         }
@@ -653,22 +712,26 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
         to.setName(Optional.ofNullable(to.getName()).orElse(toName));
         to.setEmail(Optional.ofNullable(to.getEmail()).orElse(toEmail));
 
-        if (toAddress != null) {
+        if (toAddress != null)
+        {
             to.setAddress(convertValueToMapSnakeCase(toAddress, String.class, String.class));
 
-            if (to.getPhoneNumber() == null) {
+            if (to.getPhoneNumber() == null)
+            {
                 to.setPhoneNumber(toAddress.getContact());
             }
         }
 
         ParcelJob parcelJob = orderRequestV4.getParcelJob();
 
-        if (parcelJob == null) {
+        if (parcelJob == null)
+        {
             parcelJob = new ParcelJob();
             orderRequestV4.setParcelJob(parcelJob);
         }
 
-        if (parcelJob.getIsPickupRequired()) {
+        if (parcelJob.getIsPickupRequired())
+        {
             parcelJob.setPickupAddress(from);
         }
 
@@ -676,33 +739,40 @@ public class OrderWeightUpdateSteps extends AbstractSteps    {
 
         Timeslot pickupTimeslot = parcelJob.getPickupTimeslot();
 
-        if (pickupTimeslot != null) {
+        if (pickupTimeslot != null)
+        {
             pickupTimeslot.setTimezone(Optional.ofNullable(pickupTimeslot.getTimezone()).orElse(TimeZone.getDefault().getID()));
         }
 
         String formattedCreatedDate = CREATED_DATE_SDF.format(new Date());
 
-        if (parcelJob.getPickupInstruction() == null) {
+        if (parcelJob.getPickupInstruction() == null)
+        {
             parcelJob.setPickupInstruction(f("[PICKUP] This V4 order is created for testing purpose only. Ignore this order. Created at %s by scenario \"%s\".", formattedCreatedDate, scenarioName));
         }
 
         Timeslot deliveryTimeslot = parcelJob.getDeliveryTimeslot();
 
-        if (deliveryTimeslot != null) {
-            if (serviceType.equals("International")) {
+        if (deliveryTimeslot != null)
+        {
+            if (serviceType.equals("International"))
+            {
                 deliveryTimeslot.setTimezone(StandardTestUtils.getTimeZoneByCountryCode(toAddress.getCountry()));
-            } else {
+            } else
+            {
                 deliveryTimeslot.setTimezone(Optional.ofNullable(deliveryTimeslot.getTimezone()).orElse(TimeZone.getDefault().getID()));
             }
         }
 
-        if (parcelJob.getDeliveryInstruction() == null) {
+        if (parcelJob.getDeliveryInstruction() == null)
+        {
             parcelJob.setDeliveryInstruction(f("[DELIVERY] This V4 order is created for testing purpose only. Ignore this order. Created at %s by scenario \"%s\".", formattedCreatedDate, scenarioName));
         }
 
         Dimension dimension = parcelJob.getDimensions();
 
-        if (dimension == null) {
+        if (dimension == null)
+        {
             dimension = new Dimension();
             dimension.setLength((double) randomInt(1, 5));
             dimension.setWidth((double) randomInt(1, 5));

@@ -3,7 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
-import co.nvqa.operator_v2.selenium.page.AllOrdersPage.ApplyActionsMenu.AllOrdersAction;
+import co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction;
 import com.google.common.collect.ImmutableMap;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;

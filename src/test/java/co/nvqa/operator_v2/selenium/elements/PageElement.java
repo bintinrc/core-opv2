@@ -61,6 +61,11 @@ public class PageElement extends SimplePage
         return getAttribute(webElement, attributeName);
     }
 
+    public String getCssValue(String propertyName)
+    {
+        return webElement.getCssValue(propertyName);
+    }
+
     public String getText()
     {
         return getText(webElement);
@@ -74,6 +79,11 @@ public class PageElement extends SimplePage
     public void sendKeys(CharSequence keysToSend)
     {
         sendKeysWithoutClear(webElement, keysToSend);
+    }
+
+    public void sendKeys(Object value)
+    {
+        sendKeys(String.valueOf(value));
     }
 
     public void clearAndSendKeys(CharSequence keysToSend)

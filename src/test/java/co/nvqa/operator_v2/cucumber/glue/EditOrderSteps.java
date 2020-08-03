@@ -481,7 +481,7 @@ public class EditOrderSteps extends AbstractSteps
 
         if (expectedData.containsKey("status"))
         {
-            Assert.assertEquals("Pickup Details - Status", f("Status: %s", expectedData.get("status")), editOrderPage.pickupDetailsBox.status.getText());
+            Assert.assertEquals("Pickup Details - Status", expectedData.get("status"), editOrderPage.pickupDetailsBox.getStatus());
         }
         if (expectedData.containsKey("startDate"))
         {
