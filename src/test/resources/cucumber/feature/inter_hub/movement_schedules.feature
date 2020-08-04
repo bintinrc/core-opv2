@@ -15,7 +15,7 @@ Feature: Movement Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     When Movement Management page is loaded
     And Operator opens Add Movement Schedule modal on Movement Management page
     Then Operator can select "{KEY_LIST_OF_CREATED_HUBS[1].name}" crossdock hub when create crossdock movement schedule
@@ -39,7 +39,7 @@ Feature: Movement Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -73,7 +73,7 @@ Feature: Movement Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -110,7 +110,7 @@ Feature: Movement Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -148,7 +148,7 @@ Feature: Movement Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -184,7 +184,7 @@ Feature: Movement Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator opens Add Movement Schedule modal on Movement Management page
     And Operator fill Add Movement Schedule form using data below:
@@ -210,7 +210,7 @@ Feature: Movement Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator opens Add Movement Schedule modal on Movement Management page
     And Operator adds new Movement Schedule on Movement Management page using data below:
@@ -245,7 +245,7 @@ Feature: Movement Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -269,7 +269,7 @@ Feature: Movement Management
   @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
   Scenario: Search Crossdock Movement Schedule - wrong crossdock name (uid:f8760200-aebb-4745-a9ba-d87c5c87406f)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator load schedules on Movement Management page
     And Operator filters schedules list on Movement Management page using data below:
@@ -299,7 +299,7 @@ Feature: Movement Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -338,7 +338,7 @@ Feature: Movement Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -375,7 +375,7 @@ Feature: Movement Management
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -423,7 +423,7 @@ Feature: Movement Management
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -471,7 +471,7 @@ Feature: Movement Management
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -568,7 +568,7 @@ Feature: Movement Management
     When Operator edit Shipment on Shipment Management page including MAWB using data below:
       | comments | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd} |
       | mawb     | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                          |
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -618,7 +618,7 @@ Feature: Movement Management
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -632,7 +632,7 @@ Feature: Movement Management
     When Operator update Hub on page Hubs Administration using data below:
       | searchHubsKeyword | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | facilityType      | Station                            |
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And API Operator does the "van-inbound" scan for the shipment
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
@@ -664,7 +664,7 @@ Feature: Movement Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator search for Pending relation on Movement Management page using data below:
       | station | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -694,7 +694,7 @@ Feature: Movement Management
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
-    When Operator go to menu Inter-Hub -> Movement Management
+    When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new relation on Movement Management page using data below:
       | station      | {KEY_LIST_OF_CREATED_HUBS[1].name} |

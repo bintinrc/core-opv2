@@ -269,6 +269,8 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
             editShipmentDialog.mawb.setValue(shipmentInfo.getMawb());
             editShipmentDialog.saveChangesWithMawb(shipmentInfo.getId());
         }
+        waitUntilVisibilityOfToast(f("Shipment %d updated", shipmentInfo.getId()));
+        waitUntilInvisibilityOfToast(f("Shipment %d updated", shipmentInfo.getId()));
     }
 
     public void editCancelledShipment()

@@ -41,6 +41,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
 
     public void inboundScanning(Long shipmentId, String label, String hub)
     {
+        pause2s();
         selectHub(hub);
         click(grabXpathButton(label));
         clickStartInbound();
@@ -51,6 +52,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
 
     public void inboundScanningUsingMawb(Long shipmentId, String mawb, String label, String hub)
     {
+        pause2s();
         selectHub(hub);
         click(grabXpathButton(label));
         clickStartInbound();
@@ -61,6 +63,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
 
     public void inboundScanningNegativeScenario(Long shipmentId, String label, String hub, String condition)
     {
+        pause2s();
         selectHub(hub);
         click(grabXpathButton(label));
         clickStartInbound();
@@ -72,6 +75,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
 
     public void inboundScanningUsingMawbWithAlerts(Long shipmentId, String mawb, String label, String hub, String condition)
     {
+        pause2s();
         selectHub(hub);
         click(grabXpathButton(label));
         clickStartInbound();

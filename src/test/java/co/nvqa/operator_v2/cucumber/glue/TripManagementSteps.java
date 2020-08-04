@@ -22,20 +22,12 @@ import java.time.format.DateTimeFormatter;
 public class TripManagementSteps extends AbstractSteps {
     private TripManagementPage tripManagementPage;
 
-    private static final String TRIP_MANAGEMENT_URL = "https://operatorv2-qa.ninjavan.co/#/sg/trip-management";
-
     public TripManagementSteps() {
     }
 
     @Override
     public void init() {
         tripManagementPage = new TripManagementPage(getWebDriver());
-    }
-
-    @Given("Operator goes to Trip Management Page")
-    public void operatorGoesToTripManagementPage() {
-        navigateTo(TRIP_MANAGEMENT_URL);
-        pause1s();
     }
 
     @And("Operator verifies that the Trip Management Page is opened")
