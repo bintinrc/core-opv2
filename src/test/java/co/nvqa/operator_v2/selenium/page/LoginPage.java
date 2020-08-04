@@ -184,5 +184,7 @@ public class LoginPage extends OperatorV2SimplePage
         waitUntilVisibilityOfElementLocated("//md-select[@ng-model='domain.current']/md-select-value[contains(@id,'select_value_label')]");
         click("//md-select[@ng-model='domain.current']/md-select-value[contains(@id,'select_value_label')]");
         click(f("//md-option[contains(@ng-repeat,'domain.all')]//span[text()='%s']", countryName));
+        getWebDriver().navigate().refresh();
+        pause3s();
     }
 }

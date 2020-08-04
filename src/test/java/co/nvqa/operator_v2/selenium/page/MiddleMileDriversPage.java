@@ -375,7 +375,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
             case EMPLOYMENT_STATUS :
                 ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='70%'");
-                pause1s();
+                pause3s();
                 sendKeys(TABLE_FILTER_BY_NAME_XPATH, middleMileDriver.getName());
                 waitUntilVisibilityOfElementLocated(f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, MARK_ELEMENT));
 
@@ -396,7 +396,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
             case LICENSE_TYPE :
                 ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='70%'");
-                pause1s();
+                pause3s();
                 sendKeys(TABLE_FILTER_BY_NAME_XPATH, middleMileDriver.getName());
                 waitUntilVisibilityOfElementLocated(f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, MARK_ELEMENT));
 
@@ -417,7 +417,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage {
 
             case LICENSE_STATUS :
                 ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='70%'");
-                pause1s();
+                pause3s();
                 sendKeys(TABLE_FILTER_BY_NAME_XPATH, middleMileDriver.getName());
                 waitUntilVisibilityOfElementLocated(f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, MARK_ELEMENT));
 

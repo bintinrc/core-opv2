@@ -822,6 +822,7 @@ Feature: Shipment Inbound Scanning
     Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator change the country to "Indonesia"
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
     When Operator change the country to "Singapore"
@@ -832,6 +833,7 @@ Feature: Shipment Inbound Scanning
     Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator change the country to "Indonesia"
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
     When Operator change the country to "Singapore"
@@ -853,6 +855,7 @@ Feature: Shipment Inbound Scanning
     When Operator scan the created order to shipment in hub {hub-name}
     And Operator close the shipment which has been created
     When Operator change the country to "Indonesia"
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
     When Operator change the country to "Singapore"
@@ -863,6 +866,7 @@ Feature: Shipment Inbound Scanning
     Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator change the country to "Indonesia"
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
     When Operator change the country to "Singapore"
@@ -877,6 +881,7 @@ Feature: Shipment Inbound Scanning
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Completed |
     When Operator change the country to "Indonesia"
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
     When Operator change the country to "Singapore"
@@ -891,6 +896,7 @@ Feature: Shipment Inbound Scanning
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Cancelled |
     When Operator change the country to "Indonesia"
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name-temp} on Shipment Inbound Scanning page with different country van alert
     When Operator change the country to "Singapore"
@@ -901,6 +907,7 @@ Feature: Shipment Inbound Scanning
     Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator change the country to "Indonesia"
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
     When Operator change the country to "Singapore"
@@ -911,6 +918,7 @@ Feature: Shipment Inbound Scanning
     Given Operator go to menu Inter-Hub -> Shipment Management
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {hub-id-2}
     When Operator change the country to "Indonesia"
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
     When Operator change the country to "Singapore"
@@ -932,6 +940,7 @@ Feature: Shipment Inbound Scanning
     When Operator scan the created order to shipment in hub {hub-name}
     And Operator close the shipment which has been created
     When Operator change the country to "Indonesia"
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
     When Operator change the country to "Singapore"
@@ -944,6 +953,7 @@ Feature: Shipment Inbound Scanning
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {hub-name} on Shipment Inbound Scanning page
     When Operator change the country to "Indonesia"
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
     When Operator change the country to "Singapore"
@@ -958,6 +968,7 @@ Feature: Shipment Inbound Scanning
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Completed |
     When Operator change the country to "Indonesia"
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
     When Operator change the country to "Singapore"
@@ -972,6 +983,7 @@ Feature: Shipment Inbound Scanning
     Then Operator verify the following parameters of the created shipment on Shipment Management page:
       | status | Cancelled |
     When Operator change the country to "Indonesia"
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name-temp} on Shipment Inbound Scanning page with different country hub alert
     When Operator change the country to "Singapore"
