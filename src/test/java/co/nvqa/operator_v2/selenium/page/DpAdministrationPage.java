@@ -60,7 +60,9 @@ public class DpAdministrationPage extends OperatorV2SimplePage
     private static final String XPATH_MAXIMUM_CAPACITY = "//input[@id='actualMaxCapacity']";
     private static final String XPATH_BUFFER_CAPACITY = "//input[@id='computedMaxCapacity']";
     private static final String XPATH_MAXIMUM_PARCEL_STAY = "//input[@id='maxParcelStayDuration']";
-    private static final String XPATH_APPLY_ALL_DAYS = "(//span[text()='Apply to All Days']/ancestor::label//input)[%s]";
+    private static final String XPATH_APPLY_ALL_DAYS = "(//span[text()='Apply first day slots to all days'])[%s]";
+    private static final String XPATH_APPLY_ALL_DAYS_OPENING_HOURS = "//input[@id='all-days-reservation-slots']";
+    private static final String XPATH_APPLY_ALL_DAYS_RESERVATION = "//input[@id='all-days-official-operating-hours']";
     private static final String XPATH_OFFICIAL_FROM_HOURS = "//div[@id='reservationSlots.allWeek.startHour']";
     private static final String XPATH_OFFICIAL_FROM_MINUTES = "//div[@id='reservationSlots.allWeek.startMinute']";
     private static final String XPATH_OFFICIAL_TO_HOURS = "//div[@id='reservationSlots.allWeek.endHour']";
@@ -275,7 +277,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
     public void setOfficialTimingCreateDpForm()
     {
-        clickf(XPATH_APPLY_ALL_DAYS, "1");
+        click(XPATH_APPLY_ALL_DAYS_OPENING_HOURS);
         click(XPATH_OFFICIAL_FROM_HOURS);
         clickf(XPATH_SELECT_TIME, "10");
         click(XPATH_OFFICIAL_FROM_MINUTES);
@@ -288,7 +290,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
 
     public void setOperatingTimingCreateDpForm()
     {
-        clickf(XPATH_APPLY_ALL_DAYS, "2");
+        click(XPATH_APPLY_ALL_DAYS_RESERVATION);
         click(XPATH_OPERATING_FROM_HOURS);
         clickf(XPATH_SELECT_TIME, "10");
         click(XPATH_OPERATING_FROM_MINUTES);
@@ -329,8 +331,6 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         isPublicCreateDpForm();
         canShipperLodgeInCreateDpForm(dpParams.getCanShipperLodgeIn());
         canCustomerCollectAndSetCapacityCreateDpForm(dpParams.getCanCustomerCollect(), dpParams.getMaxCap(), dpParams.getCapBuffer(), dpParams.getMaxParcelStayDuration());
-        setOfficialTimingCreateDpForm();
-        setOperatingTimingCreateDpForm();
         clickSaveSettingsCreateDpForm();
         getWebDriver().switchTo().defaultContent();
     }
