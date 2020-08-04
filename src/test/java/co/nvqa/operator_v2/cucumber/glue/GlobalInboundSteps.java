@@ -12,6 +12,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
+import org.openqa.selenium.support.Color;
 
 import java.util.List;
 import java.util.Map;
@@ -142,7 +143,7 @@ public class GlobalInboundSteps extends AbstractSteps
         {
             String expected = data.get("destinationHub");
             String actual = globalInboundPage.destinationHub.getText();
-            actual = StringUtils.normalizeSpace(StringUtils.remove(actual, "Hub:"));
+            actual = StringUtils.normalizeSpace(StringUtils.remove(actual, "Assigned Hub:"));
             Assert.assertThat("Destination Hub", actual, Matchers.equalToIgnoringCase(expected));
         }
 
@@ -168,6 +169,13 @@ public class GlobalInboundSteps extends AbstractSteps
             String actual = globalInboundPage.setAsideRackSector.getText();
             actual = StringUtils.normalizeSpace(StringUtils.remove(actual, "Rack Sector:"));
             Assert.assertThat("Set Aside Rack Sector", actual, Matchers.equalToIgnoringCase(expected));
+        }
+
+        if (data.containsKey("color"))
+        {
+            String expected = data.get("color");
+            Color actualColor = Color.fromString(globalInboundPage.getCssValue(globalInboundPage.XPATH_CONTAINER, "background-color"));
+            assertEquals("Expected another color for Route ID background", expected, actualColor.asHex());
         }
     }
 
