@@ -23,13 +23,13 @@ import java.util.stream.Collectors;
  */
 public class GlobalInboundPage extends OperatorV2SimplePage
 {
-    @FindBy(css = "h3.hub-info")
+    @FindBy(xpath = "//div/*[self::h2]")
     public PageElement destinationHub;
 
-    @FindBy(css = "h1.rack-info")
+    @FindBy(xpath = "//div/*[self::h1]")
     public PageElement rackInfo;
 
-    @FindBy(css = "div.weight-diff-info > span")
+    @FindBy(css = "div.toast-bottom")
     public PageElement weightDiffInfo;
 
     @FindBy(css = "div[ng-if='ctrl.data.setAsideGroup']")
@@ -48,6 +48,8 @@ public class GlobalInboundPage extends OperatorV2SimplePage
     public NvApiTextButton continueButton;
 
     public static final String XPATH_ORDER_TAGS_ON_GLOBAL_INBOUND_PAGE = "//div[contains(@class,'order-tags-container')]//span";
+    public static String XPATH_CONTAINER = "//div[contains(@class, 'rack-container')]";
+
 
     public GlobalInboundPage(WebDriver webDriver)
     {
