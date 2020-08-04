@@ -1,6 +1,6 @@
 [submodule "commons"]
 	path = commons
-	url = https://git.ninjavan.co/scm/qa/commons.git
+	url = ssh://git@git.ninjavan.co:7999/qa/commons.git
 [submodule "common-selenium"]
 	path = common-selenium
-	url = https://git.ninjavan.co/scm/qa/common-selenium.git
+	url = ssh://git@git.ninjavan.co:7999/qa/common-selenium.git
