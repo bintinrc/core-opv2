@@ -9,7 +9,6 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.Map;
 
 /**
- *
  * @author Sergey Mishanin
  */
 @SuppressWarnings("WeakerAccess")

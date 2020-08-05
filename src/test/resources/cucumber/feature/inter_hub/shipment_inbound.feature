@@ -33,7 +33,7 @@ Feature: Shipment Inbound
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
       | driverName | {ninja-driver-name}    |
-      | color      | #73deec                |
+      | color      | #55a1e8                |
     And DB Operator verify the order_events record exists for the created order with type:
       | 32    |
       | 27    |
@@ -67,7 +67,7 @@ Feature: Shipment Inbound
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
       | driverName | {ninja-driver-name}    |
-      | color      | #73deec                |
+      | color      | #55a1e8                |
     And DB Operator verify the order_events record exists for the created order with type:
       | 32    |
       | 27    |
@@ -95,13 +95,13 @@ Feature: Shipment Inbound
       | hubName    | {KEY_CREATED_ORDER.destinationHub} |
       | trackingId | CREATED                            |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | NOT ROUTED |
-      | driverName | NIL        |
-      | color      | #73deec    |
+      | routeId    | -       |
+      | driverName |         |
+      | color      | #55a1e8 |
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color    | #73deec            |
+      | color    | #55a1e8            |
 
   @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Shipment Inbound - Invalid Tracking ID (uid:f0b77dd5-f9c8-49e1-9e0d-77e79f167542)
@@ -130,15 +130,15 @@ Feature: Shipment Inbound
       | hubName    | {KEY_CREATED_ORDER.destinationHub} |
       | trackingId | invalid                            |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | NOT FOUND |
-      | driverName | NIL       |
-      | color      | #f45050   |
+      | routeId    | sync_problem RECOVERY |
+      | driverName | INVALID               |
+      | color      | #e86161               |
     Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | NIL     |
-      | color    | #f45050 |
+      | zoneName | -       |
+      | color    | #e86161 |
     Then Operator verify Destination Hub on Parcel Sweeper page using data below:
-      | hubName | NOT FOUND |
-      | color   | #f45050   |
+      | hubName | -       |
+      | color   | #e86161 |
 
   @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Shipment Inbound - Routed Tracking ID (uid:21eba800-e004-4b4e-802a-286e5ad99535)
@@ -169,11 +169,11 @@ Feature: Shipment Inbound
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
       | driverName | {ninja-driver-name}    |
-      | color      | #73deec                |
+      | color      | #55a1e8                |
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color    | #73deec            |
+      | color    | #55a1e8            |
 
   @DeleteShipment
   Scenario: Shipment Inbound - Different Hub (No Route) (uid:520f05c8-563b-4575-910e-af74e937ef10)
@@ -198,9 +198,9 @@ Feature: Shipment Inbound
       | hubName    | {hub-name-2} |
       | trackingId | CREATED      |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | NOT ROUTED |
-      | driverName | NIL        |
-      | color      | #73deec    |
+      | routeId    | -       |
+      | driverName |         |
+      | color      | #55a1e8 |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED    |
       | hubId      | {hub-id-2} |
@@ -258,13 +258,12 @@ Feature: Shipment Inbound
       | trackingId | CREATED      |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
-      | driverName | -                      |
-      | color      | #f45050                |
+      | driverName | NOT ROUTED TODAY       |
+      | color      | #e86161                |
     When API Operator get all zones preferences
-    And Operator verify Parcel route different date label on Parcel Sweeper By Hub page
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color    | #f45050            |
+      | color    | #e86161            |
     And DB Operator verify the order_events record exists for the created order with type:
       | 27    |
 
@@ -291,13 +290,13 @@ Feature: Shipment Inbound
       | hubName    | {KEY_CREATED_ORDER.destinationHub} |
       | trackingId | CREATED                            |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | NOT ROUTED |
-      | driverName | NIL        |
-      | color      | #73deec    |
+      | routeId    | -       |
+      | driverName |         |
+      | color      | #55a1e8 |
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color    | #73deec            |
+      | color    | #55a1e8            |
 
   @DeleteShipment
   Scenario: Operator Sweep Parcel in Shipment - Different Destination - Not Routed (uid:201f763d-d927-4676-b7a5-56a177698884)
@@ -322,9 +321,9 @@ Feature: Shipment Inbound
       | hubName    | {hub-name-2} |
       | trackingId | CREATED      |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | NOT ROUTED |
-      | driverName | NIL        |
-      | color      | #73deec    |
+      | routeId    | -       |
+      | driverName |         |
+      | color      | #55a1e8 |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED    |
       | hubId      | {hub-id-2} |
@@ -358,11 +357,11 @@ Feature: Shipment Inbound
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
       | driverName | {ninja-driver-name}    |
-      | color      | #73deec                |
+      | color      | #55a1e8                |
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color    | #73deec            |
+      | color    | #55a1e8            |
 
   @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Operator Sweep Parcel in Shipment - Different Destination - Routed to Today (uid:79495eee-3095-491e-be98-0dec4124d6a0)
@@ -393,11 +392,11 @@ Feature: Shipment Inbound
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
       | driverName | {ninja-driver-name}    |
-      | color      | #73deec                |
+      | color      | #55a1e8                |
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color    | #73deec            |
+      | color    | #55a1e8            |
 
   @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Operator Sweep Parcel in Shipment - Same Destination - Routed to NOT Today (uid:cd5e3a48-cd68-4d87-a992-c437ebf53386)
@@ -428,13 +427,12 @@ Feature: Shipment Inbound
       | trackingId | CREATED    |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
-      | driverName | -                      |
-      | color      | #f45050                |
+      | driverName | NOT ROUTED TODAY       |
+      | color      | #e86161                |
     When API Operator get all zones preferences
-    And Operator verify Parcel route different date label on Parcel Sweeper By Hub page
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color    | #f45050            |
+      | color    | #e86161            |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
@@ -475,13 +473,12 @@ Feature: Shipment Inbound
       | trackingId | CREATED      |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
-      | driverName | -                      |
-      | color      | #f45050                |
+      | driverName | NOT ROUTED TODAY       |
+      | color      | #e86161                |
     When API Operator get all zones preferences
-    And Operator verify Parcel route different date label on Parcel Sweeper By Hub page
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color    | #f45050            |
+      | color    | #e86161            |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id-2} |
@@ -516,9 +513,9 @@ Feature: Shipment Inbound
       | hubName    | {hub-name-2} |
       | trackingId | CREATED      |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | NOT ROUTED |
-      | driverName | NIL        |
-      | color      | #73deec    |
+      | routeId    | -       |
+      | driverName |         |
+      | color      | #55a1e8 |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED    |
       | hubId      | {hub-id-2} |
@@ -556,14 +553,14 @@ Feature: Shipment Inbound
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
       | driverName | {ninja-driver-name}    |
-      | color      | #73deec                |
+      | color      | #55a1e8                |
     Then Operator verifies priority level dialog box shows correct priority level info using data below:
       | priorityLevel           | <priorityLevel>             |
       | priorityLevelColorAsHex | <priorityLevelColorAsHex>   |
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color    | #73deec            |
+      | color    | #55a1e8            |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
@@ -587,72 +584,74 @@ Feature: Shipment Inbound
       | Priority 2 - 90 | uid:7b214f67-e3d7-41b3-879a-db9359b88ac4 | 50            | #ffa500                 |
       | Priority >90    | uid:e2ff802e-3332-4386-90e8-41d69c3c03c4 | 100           | #ff0000                 |
 
-  @DeleteShipment @DisableSetAside
-  Scenario: Operator Sweep Parcel in Shipment - Set Aside (uid:73fa79da-dbfd-49e5-86be-8bb2c3e229ad)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    Given DB Operator gets Hub ID by Hub Name of created parcel
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given API Operator put created parcel to shipment
-    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
-    And API Operator get information about delivery routing hub of created order
-    And API Operator enable Set Aside using data below:
-      | setAsideGroup           | {set-aside-group-id} |
-      | setAsideMaxDeliveryDays | 3                    |
-      | setAsideHubs            | {KEY_ORDER_HUB_ID}   |
-    When Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}             |
-      | trackingId | GET_FROM_CREATED_ORDER |
-    Then Operator verify info on Global Inbound page using data below:
-      | destinationHub     | {KEY_CREATED_ORDER.destinationHub} |
-      | rackInfo           | SET ASIDE                          |
-      | setAsideGroup      | {set-aside-group-name}             |
-      | setAsideRackSector | {KEY_CREATED_ORDER.rackSector}     |
-    And DB Operator verify the last inbound_scans record for the created order:
-      | hubId   | {hub-id}                                   |
-      | orderId | {KEY_CREATED_ORDER_ID}                     |
-      | scan    | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | type    | 2                                          |
-    And DB Operator verify order_events record for the created order:
-      | type | 26 |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify Current DNR Group is "{set-aside-group-name}" on Edit Order page
-    And Operator verify order event on Edit order page using data below:
-      | name    | HUB INBOUND SCAN |
-      | hubName | {hub-name}       |
-    When Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator provides data on Parcel Sweeper Live page:
-      | hubName    | {hub-name} |
-      | trackingId | CREATED    |
-    Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | SET ASIDE       |
-      | driverName | set_aside_group |
-      | color      | #f45050         |
-    When API Operator get all zones preferences
-    And Operator verify Parcel route different date label on Parcel Sweeper By Hub page
-    Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | FROM CREATED ORDER |
-      | color    | #f45050            |
-    And DB Operator verifies warehouse_sweeps record
-      | trackingId | CREATED  |
-      | hubId      | {hub-id} |
-    And DB Operator verify the order_events record exists for the created order with type:
-      | 27    |
-    And Operator verifies event is present for order on Edit order page
-      | eventName | PARCEL ROUTING SCAN |
-      | hubName   | {hub-name}          |
-      | hubId     | {hub-id}            |
-    And Operator verify order status is "Transit" on Edit Order page
+#  All scenarios related to Set Aside is not valid anymore
+#  Ticket : https://jira.ninjavan.co/browse/SORT-318
+#  @DeleteShipment @DisableSetAside
+#  Scenario: Operator Sweep Parcel in Shipment - Set Aside (uid:73fa79da-dbfd-49e5-86be-8bb2c3e229ad)
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given API Shipper create V4 order using data below:
+#      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+#      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+#    Given API Operator Global Inbound parcel using data below:
+#      | globalInboundRequest | { "hubId":{hub-id} } |
+#    Given DB Operator gets Hub ID by Hub Name of created parcel
+#    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+#    Given API Operator put created parcel to shipment
+#    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+#    And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
+#    And API Operator get information about delivery routing hub of created order
+#    And API Operator enable Set Aside using data below:
+#      | setAsideGroup           | {set-aside-group-id} |
+#      | setAsideMaxDeliveryDays | 3                    |
+#      | setAsideHubs            | {KEY_ORDER_HUB_ID}   |
+#    When Operator go to menu Inbounding -> Global Inbound
+#    And Operator global inbounds parcel using data below:
+#      | hubName    | {hub-name}             |
+#      | trackingId | GET_FROM_CREATED_ORDER |
+#    Then Operator verify info on Global Inbound page using data below:
+#      | destinationHub     | {KEY_CREATED_ORDER.destinationHub} |
+#      | rackInfo           | SET ASIDE                          |
+#      | setAsideGroup      | {set-aside-group-name}             |
+#      | setAsideRackSector | {KEY_CREATED_ORDER.rackSector}     |
+#    And DB Operator verify the last inbound_scans record for the created order:
+#      | hubId   | {hub-id}                                   |
+#      | orderId | {KEY_CREATED_ORDER_ID}                     |
+#      | scan    | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+#      | type    | 2                                          |
+#    And DB Operator verify order_events record for the created order:
+#      | type | 26 |
+#    When Operator go to menu Order -> All Orders
+#    And Operator open page of an order from All Orders page using data below:
+#      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+#      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+#    Then Operator verify order status is "Transit" on Edit Order page
+#    And Operator verify Current DNR Group is "{set-aside-group-name}" on Edit Order page
+#    And Operator verify order event on Edit order page using data below:
+#      | name    | HUB INBOUND SCAN |
+#      | hubName | {hub-name}       |
+#    When Operator go to menu Routing -> Parcel Sweeper Live
+#    When Operator provides data on Parcel Sweeper Live page:
+#      | hubName    | {hub-name} |
+#      | trackingId | CREATED    |
+#    Then Operator verify Route ID on Parcel Sweeper page using data below:
+#      | routeId    | SET ASIDE       |
+#      | driverName | set_aside_group |
+#      | color      | #e86161         |
+#    When API Operator get all zones preferences
+#    And Operator verify Parcel route different date label on Parcel Sweeper By Hub page
+#    Then Operator verify Zone on Parcel Sweeper page using data below:
+#      | zoneName | FROM CREATED ORDER |
+#      | color    | #e86161            |
+#    And DB Operator verifies warehouse_sweeps record
+#      | trackingId | CREATED  |
+#      | hubId      | {hub-id} |
+#    And DB Operator verify the order_events record exists for the created order with type:
+#      | 27    |
+#    And Operator verifies event is present for order on Edit order page
+#      | eventName | PARCEL ROUTING SCAN |
+#      | hubName   | {hub-name}          |
+#      | hubId     | {hub-id}            |
+#    And Operator verify order status is "Transit" on Edit Order page
 
   @DeleteShipment
   Scenario: Operator Sweep Parcel in Shipment - Parcel with Tags (uid:c1b3f5d5-e5b5-440d-bb33-587e748429f8)
@@ -688,12 +687,12 @@ Feature: Shipment Inbound
       | hubName    | {KEY_CREATED_ORDER.destinationHub} |
       | trackingId | CREATED                            |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | NOT ROUTED |
-      | driverName | NIL        |
-      | color      | #73deec    |
+      | routeId    | -       |
+      | driverName |         |
+      | color      | #55a1e8 |
     And DB Operator verifies warehouse_sweeps record
-      | trackingId | CREATED                            |
-      | hubId      | {KEY_CREATED_ORDER.destinationHub} |
+      | trackingId | CREATED               |
+      | hubId      | {KEY_DESTINATION_HUB} |
 
   @DeleteShipment
   Scenario: Operator Sweep Parcel in Shipment - RTS (uid:16feea05-7a9b-4e92-91c0-afa8f4ee78e3)
@@ -730,12 +729,12 @@ Feature: Shipment Inbound
       | hubName    | {KEY_CREATED_ORDER.destinationHub} |
       | trackingId | CREATED                            |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | NOT ROUTED |
-      | driverName | NIL        |
-      | color      | #73deec    |
+      | routeId    | -       |
+      | driverName |         |
+      | color      | #55a1e8 |
     And DB Operator verifies warehouse_sweeps record
-      | trackingId | CREATED                            |
-      | hubId      | {KEY_CREATED_ORDER.destinationHub} |
+      | trackingId | CREATED               |
+      | hubId      | {KEY_DESTINATION_HUB} |
 
   @DeleteShipment
   Scenario: Operator Sweep Parcel in Shipment - On Hold Missing Ticket (uid:9e1ae748-064a-4aa2-a312-b1aa65f1810d)
@@ -778,11 +777,11 @@ Feature: Shipment Inbound
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | {KEY_CREATED_ROUTE_ID} |
       | driverName | {ninja-driver-name}    |
-      | color      | #73deec                |
+      | color      | #55a1e8                |
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color    | #73deec            |
+      | color    | #55a1e8            |
 
   @DeleteShipment
   Scenario: Operator Sweep Parcel in Shipment - On Hold Non Missing Ticket (Shipper issue, Damaged, Parcel Exception) (uid:68d540f4-88af-4be7-82b1-8af9a95ebe0b)
@@ -832,12 +831,12 @@ Feature: Shipment Inbound
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | ON HOLD  |
       | driverName | RECOVERY |
-      | color      | #f45050  |
+      | color      | #e86161  |
     When API Operator get all zones preferences
     And Operator verify Parcel route different date label on Parcel Sweeper By Hub page
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color    | #f45050            |
+      | color    | #e86161            |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED                            |
       | hubId      | {KEY_CREATED_ORDER.destinationHub} |

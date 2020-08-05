@@ -388,6 +388,24 @@ Feature: Shipment Scanning
     And Operator removes all the parcel from the shipment
     Then Operator verifies that the parcel shown is zero
 
+  @DeleteShipment
+  Scenario: Operator Close Pending Shipment
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And DB Operator gets Hub ID by Hub Name of created parcel
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Then Operator scan the created order to shipment in hub {hub-name}
+    And Operator close the shipment which has been created
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    And Operator click "Load All Selection" on Shipment Management page
+    And Operator open the shipment detail for the created shipment on Shipment Management Page
+    Then Operator verify the Shipment Details Page opened is for the created shipment
+
   @KillBrowser
   Scenario: Kill Browser
     Given no-op

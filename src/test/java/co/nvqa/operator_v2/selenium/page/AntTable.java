@@ -3,6 +3,8 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.DataEntity;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -56,7 +58,19 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T>
     public AbstractTable<T> filterByColumn(String columnId, String value)
     {
         String xpath = f("//th[contains(@class,'%s')]//input", columnId);
-        sendKeys(xpath, value);
+        String currentValue = getValue(xpath);
+        if (StringUtils.isNotEmpty(currentValue) && !currentValue.equals(value))
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < currentValue.length(); i++)
+            {
+                sb.append(Keys.BACK_SPACE);
+            }
+            sb.append(value);
+            sendKeys(xpath, sb.toString());
+        } else if (StringUtils.isEmpty(currentValue)){
+            sendKeys(xpath, value);
+        }
         return this;
     }
 

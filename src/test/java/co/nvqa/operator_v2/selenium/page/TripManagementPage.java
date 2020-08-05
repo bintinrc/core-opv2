@@ -225,6 +225,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
             case EXPECTED_DEPARTURE_TIME:
                 ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
+                pause3s();
                 waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, EXPECTED_DEPARTURE_TIME_CLASS));
                 click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, EXPECTED_DEPARTURE_TIME_CLASS));
                 selectDateTime(tripManagementDetailsData.getData().get(index).getExpectedDepartureTime());
@@ -232,6 +233,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
             case ACTUAL_DEPARTURE_TIME:
                 ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
+                pause3s();
                 waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, ACTUAL_DEPARTURE_TIME_CLASS));
                 click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, ACTUAL_DEPARTURE_TIME_CLASS));
                 selectDateTime(tripManagementDetailsData.getData().get(index).getActualStartTime());
@@ -239,6 +241,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
             case EXPECTED_ARRIVAL_TIME:
                 ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
+                pause3s();
                 waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, EXPECTED_ARRIVAL_TIME_CLASS));
                 click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, EXPECTED_ARRIVAL_TIME_CLASS));
                 selectDateTime(tripManagementDetailsData.getData().get(index).getExpectedArrivalTime());
@@ -246,6 +249,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
             case ACTUAL_ARRIVAL_TIME:
                 ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
+                pause3s();
                 waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, ACTUAL_ARRIVAL_TIME_CLASS));
                 click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, ACTUAL_ARRIVAL_TIME_CLASS));
                 selectDateTime(tripManagementDetailsData.getData().get(index).getActualEndTime());
@@ -253,6 +257,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
             case DRIVER:
                 ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
+                pause3s();
                 filterValue = driverConverted(driverUsername);
                 waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, DRIVER_CLASS));
                 sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, DRIVER_CLASS), filterValue);
@@ -260,6 +265,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
             case STATUS:
                 ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
+                pause3s();
                 filterValue = statusConverted(tripManagementDetailsData.getData().get(index).getStatus());
                 waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, STATUS_CLASS));
                 click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, STATUS_CLASS));
@@ -271,6 +277,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
             case LAST_STATUS:
                 ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
+                pause3s();
                 filterValue = statusConverted(tripManagementDetailsData.getData().get(index).getStatus());
                 waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, LAST_STATUS_CLASS));
                 click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, LAST_STATUS_CLASS));

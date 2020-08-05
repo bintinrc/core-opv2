@@ -216,7 +216,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     @Then("^Operator verify parameters of the created shipment on Shipment Management page$")
     public void operatorVerifyParametersOfTheCreatedShipmentOnShipmentManagementPage()
     {
-        pause2s();
+        pause5s();
         ShipmentInfo shipmentInfo;
 
         if (get(KEY_SHIPMENT_INFO) == null)

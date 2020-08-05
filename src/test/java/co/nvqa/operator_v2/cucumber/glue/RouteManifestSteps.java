@@ -13,6 +13,8 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.util.Map;
 
+import static co.nvqa.commons.util.factory.FailureReasonFactory.*;
+
 /**
  * @author Daniel Joi Partogi Hutapea
  */
@@ -69,8 +71,8 @@ public class RouteManifestSteps extends AbstractSteps
     @When("^Operator fail (delivery|pickup|reservation) waypoint from Route Manifest page$")
     public void operatorFailDeliveryWaypointFromRouteManifestPage(String waypointType)
     {
-        String mode = "Pickup".equalsIgnoreCase(waypointType)? "Pickup" : "Delivery";
-        FailureReason failureReason = FailureReasonFactory.findAdvance("Normal", mode, "*", "FIRST");
+        String mode = FAILURE_REASON_PICKUP.equalsIgnoreCase(waypointType) ? FAILURE_REASON_PICKUP : FAILURE_REASON_DELIVERY;
+        FailureReason failureReason = FailureReasonFactory.findAdvance(FAILURE_REASON_TYPE_NORMAL, mode, FAILURE_REASON_CODE_ID_ALL, FAILURE_REASON_INDEX_MODE_FIRST);
         routeManifestPage.failDeliveryWaypoint(failureReason);
         put(KEY_SELECTED_FAILURE_REASON, failureReason);
     }
