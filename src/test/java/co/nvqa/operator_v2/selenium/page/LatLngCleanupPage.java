@@ -1,35 +1,36 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.WaypointDetails;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
-import org.openqa.selenium.SearchContext;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
- *
  * @author Sergey Mishanin
  */
-@SuppressWarnings("WeakerAccess")
 public class LatLngCleanupPage extends OperatorV2SimplePage
 {
-    public static final String LOCATOR_BUTTON_EDIT_WAYPOINT_DETAILS = "container.lat-lng-cleanup.edit-waypoint-details";
+    @FindBy(name = "container.lat-lng-cleanup.edit-waypoint-details")
+    public NvIconTextButton editWaypointDetails;
 
-    private EditWaypointDetailsDialog editWaypointDetailsDialog;
+    @FindBy(css = "md-dialog")
+    public EditWaypointDetailsDialog editWaypointDetailsDialog;
 
     public LatLngCleanupPage(WebDriver webDriver)
     {
         super(webDriver);
-        editWaypointDetailsDialog = new EditWaypointDetailsDialog(webDriver);
     }
 
     public EditWaypointDetailsDialog openEditWaypointDetailsDialog()
     {
-        clickNvIconTextButtonByName(LOCATOR_BUTTON_EDIT_WAYPOINT_DETAILS);
-        editWaypointDetailsDialog.waitUtilVisibility();
+        editWaypointDetails.click();
+        editWaypointDetailsDialog.waitUntilVisible();
         return editWaypointDetailsDialog;
     }
 
@@ -37,7 +38,7 @@ public class LatLngCleanupPage extends OperatorV2SimplePage
     {
         openEditWaypointDetailsDialog()
                 .searchWaypoint(String.valueOf(waypointId))
-                .validateWaypoitWasFound()
+                .validateWaypointWasFound()
                 .fillForm(newWaypointDetails)
                 .submitForm()
                 .close();
@@ -47,7 +48,7 @@ public class LatLngCleanupPage extends OperatorV2SimplePage
     {
         WaypointDetails actualWaypointDetails = openEditWaypointDetailsDialog()
                 .searchWaypoint(String.valueOf(waypointId))
-                .validateWaypoitWasFound()
+                .validateWaypointWasFound()
                 .getWaypointDetails();
 
         expectedWaypointDetails.compareWithActual(actualWaypointDetails);
@@ -58,214 +59,130 @@ public class LatLngCleanupPage extends OperatorV2SimplePage
      * Accessor for Edit Waypoint Details dialog
      */
     @SuppressWarnings("UnusedReturnValue")
-    public static class EditWaypointDetailsDialog extends OperatorV2SimplePage
+    public static class EditWaypointDetailsDialog extends MdDialog
     {
-        private static final String DIALOG_TITLE = "Edit Waypoint Details";
-        private static final String LOCATOR_FIELD_WAYPOINT_ID = "commons.waypoint-id";
-        private static final String LOCATOR_FIELD_ADDRESS_1 = "commons.address1";
-        private static final String LOCATOR_FIELD_ADDRESS_2 = "commons.address2";
-        private static final String LOCATOR_FIELD_CITY = "commons.city";
-        private static final String LOCATOR_FIELD_COUNTRY = "commons.country";
-        private static final String LOCATOR_FIELD_POSTAL_CODE = "commons.postcode";
-        private static final String LOCATOR_FIELD_LATITUDE = "commons.latitude";
-        private static final String LOCATOR_FIELD_LONGITUDE = "commons.longitude";
-        private static final String BUTTON_SUBMIT_ARIA_LABEL = "Save changes";
-        private static final String LOCATOR_BUTTON_CLOSE = "Cancel";
-        private static final String LOCATOR_MESSAGE_WAYPOINT_NOT_FOUND = "//div[@ng-message='invalidWaypointId']";
 
-        @FindBy(css = "md-dialog")
-        private EditWaypointDialog editWaypointDialog;
+        @FindBy(name = "commons.search")
+        public NvApiTextButton search;
 
-        public EditWaypointDetailsDialog(WebDriver webDriver)
+        @FindBy(xpath = ".//div[@ng-message='invalidWaypointId']")
+        public PageElement invalidWaypointIdMessage;
+
+        @FindBy(css = "[id^='searchWaypointId']")
+        public TextBox searchWaypointId;
+
+
+        @FindBy(css = "[id^='commons.waypoint-id']")
+        public PageElement waypointId;
+
+        @FindBy(css = "[id^='commons.address1']")
+        public TextBox address1;
+
+        @FindBy(css = "[id^='commons.address2']")
+        public TextBox address2;
+
+        @FindBy(css = "[id^='commons.city']")
+        public TextBox city;
+
+        @FindBy(css = "[id^='commons.country']")
+        public TextBox country;
+
+        @FindBy(css = "[id^='commons.postcode']")
+        public TextBox postcode;
+
+        @FindBy(css = "[id^='commons.latitude']")
+        public TextBox latitude;
+
+        @FindBy(css = "[id^='commons.longitude']")
+        public TextBox longitude;
+
+        @FindBy(name = "commons.save-changes")
+        public NvApiTextButton saveChanges;
+
+        public EditWaypointDetailsDialog(WebDriver webDriver, WebElement webElement)
         {
-            super(webDriver);
-        }
-
-        public void waitUtilVisibility()
-        {
-            editWaypointDialog.waitUntilVisible();
+            super(webDriver, webElement);
         }
 
         public EditWaypointDetailsDialog searchWaypoint(String waypointId)
         {
-            editWaypointDialog.waypointId.sendKeys(waypointId);
-            editWaypointDialog.search.waitUntilClickable();
-            editWaypointDialog.search.click();
+            this.searchWaypointId.sendKeys(waypointId);
+            search.click();
             return this;
         }
 
-        public static class EditWaypointDialog extends MdDialog
-        {
-            public EditWaypointDialog(WebDriver webDriver, WebElement webElement)
-            {
-                super(webDriver, webElement);
-            }
-
-            public EditWaypointDialog(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-            {
-                super(webDriver, searchContext, webElement);
-            }
-
-            @FindBy(name = "commons.search")
-            public NvApiTextButton search;
-
-            @FindBy(css = "[id^='searchWaypointId']")
-            public TextBox waypointId;
-        }
-
-        public EditWaypointDetailsDialog setAddress1(String address1)
-        {
-            sendKeysById(LOCATOR_FIELD_ADDRESS_1, address1);
-            return this;
-        }
-
-        public EditWaypointDetailsDialog setAddress2(String address2)
-        {
-            sendKeysById(LOCATOR_FIELD_ADDRESS_2, address2);
-            return this;
-        }
-
-        public EditWaypointDetailsDialog setCity(String city)
-        {
-            sendKeysById(LOCATOR_FIELD_CITY, city);
-            return this;
-        }
-
-        public EditWaypointDetailsDialog setCountry(String country)
-        {
-            sendKeysById(LOCATOR_FIELD_COUNTRY, country);
-            return this;
-        }
-
-        public EditWaypointDetailsDialog setPostalCode(String postalCode)
-        {
-            sendKeysById(LOCATOR_FIELD_POSTAL_CODE, postalCode);
-            return this;
-        }
-
-        public EditWaypointDetailsDialog setLatitude(String latitude)
-        {
-            sendKeysById(LOCATOR_FIELD_LATITUDE, latitude);
-            return this;
-        }
-
-        public EditWaypointDetailsDialog setLongitude(String longitude)
-        {
-            sendKeysById(LOCATOR_FIELD_LONGITUDE, longitude);
-            return this;
-        }
 
         public EditWaypointDetailsDialog fillForm(WaypointDetails waypointDetails)
         {
-            if(waypointDetails.getAddress1()!=null)
+            if (waypointDetails.getAddress1() != null)
             {
-                setAddress1(waypointDetails.getAddress1());
+                address1.setValue(waypointDetails.getAddress1());
             }
 
-            if(waypointDetails.getAddress2()!=null)
+            if (waypointDetails.getAddress2() != null)
             {
-                setAddress2(waypointDetails.getAddress2());
+                address2.setValue(waypointDetails.getAddress2());
             }
 
-            if(waypointDetails.getCity()!=null)
+            if (waypointDetails.getCity() != null)
             {
-                setCity(waypointDetails.getCity());
+                city.setValue(waypointDetails.getCity());
             }
 
-            if(waypointDetails.getCountry()!=null)
+            if (waypointDetails.getCountry() != null)
             {
-                setCountry(waypointDetails.getCountry());
+                country.setValue(waypointDetails.getCountry());
             }
 
-            if(waypointDetails.getPostalCode()!=null)
+            if (waypointDetails.getPostalCode() != null)
             {
-                setPostalCode(waypointDetails.getPostalCode());
+                postcode.setValue(waypointDetails.getPostalCode());
             }
 
-            if(waypointDetails.getLatitude()!=null)
+            if (waypointDetails.getLatitude() != null)
             {
-                setLatitude(String.valueOf(waypointDetails.getLatitude()));
+                latitude.setValue(waypointDetails.getLatitude());
             }
 
-            if(waypointDetails.getLongitude()!=null)
+            if (waypointDetails.getLongitude() != null)
             {
-                setLongitude(String.valueOf(waypointDetails.getLongitude()));
+                longitude.setValue(waypointDetails.getLongitude());
             }
 
             return this;
-        }
-
-        public String getWaypointId()
-        {
-            return getInputValueById(LOCATOR_FIELD_WAYPOINT_ID, XpathTextMode.STARTS_WITH);
-        }
-
-        public String getAddress1()
-        {
-            return getInputValueById(LOCATOR_FIELD_ADDRESS_1, XpathTextMode.STARTS_WITH);
-        }
-
-        public String getAddress2()
-        {
-            return getInputValueById(LOCATOR_FIELD_ADDRESS_2, XpathTextMode.STARTS_WITH);
-        }
-
-        public String getCity()
-        {
-            return getInputValueById(LOCATOR_FIELD_CITY, XpathTextMode.STARTS_WITH);
-        }
-
-        public String getCountry()
-        {
-            return getInputValueById(LOCATOR_FIELD_COUNTRY, XpathTextMode.STARTS_WITH);
-        }
-
-        public String getPostalCode()
-        {
-            return getInputValueById(LOCATOR_FIELD_POSTAL_CODE, XpathTextMode.STARTS_WITH);
-        }
-
-        public String getLatitude()
-        {
-            return getInputValueById(LOCATOR_FIELD_LATITUDE, XpathTextMode.STARTS_WITH);
-        }
-
-        public String getLongitude()
-        {
-            return getInputValueById(LOCATOR_FIELD_LONGITUDE, XpathTextMode.STARTS_WITH);
         }
 
         public WaypointDetails getWaypointDetails()
         {
             WaypointDetails waypointDetails = new WaypointDetails();
-            waypointDetails.setId(getWaypointId());
-            waypointDetails.setAddress1(getAddress1());
-            waypointDetails.setAddress2(getAddress2());
-            waypointDetails.setCity(getCity());
-            waypointDetails.setCountry(getCountry());
-            waypointDetails.setPostalCode(getPostalCode());
-            waypointDetails.setLatitude(getLatitude());
-            waypointDetails.setLongitude(getLongitude());
+            waypointDetails.setId(waypointId.getValue());
+            waypointDetails.setAddress1(address1.getValue());
+            waypointDetails.setAddress2(address2.getValue());
+            waypointDetails.setCity(city.getValue());
+            waypointDetails.setCountry(country.getValue());
+            waypointDetails.setPostalCode(postcode.getValue());
+            waypointDetails.setLatitude(latitude.getValue());
+            waypointDetails.setLongitude(longitude.getValue());
 
             return waypointDetails;
         }
 
-        public EditWaypointDetailsDialog validateWaypoitWasFound()
+        public EditWaypointDetailsDialog validateWaypointWasFound()
         {
-            assertFalse("Waypoint Id cannot be found", isElementVisible(LOCATOR_MESSAGE_WAYPOINT_NOT_FOUND));
+            assertFalse("Waypoint Id cannot be found", invalidWaypointIdMessage.isDisplayedFast());
             return this;
         }
 
         public EditWaypointDetailsDialog submitForm()
         {
-            clickButtonByAriaLabelAndWaitUntilDone(BUTTON_SUBMIT_ARIA_LABEL);
+            saveChanges.clickAndWaitUntilDone();
             return this;
         }
 
         public void close()
         {
-            clickNvIconButtonByName(LOCATOR_BUTTON_CLOSE);
-            waitUntilInvisibilityOfMdDialogByTitle(DIALOG_TITLE);
+            sendKeys(Keys.ESCAPE);
+            waitUntilInvisible();
         }
     }
 }

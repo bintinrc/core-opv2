@@ -61,6 +61,10 @@ public class PageElement extends SimplePage
         return getAttribute(webElement, attributeName);
     }
 
+    public String getValue(){
+        return getAttribute("value");
+    }
+
     public String getCssValue(String propertyName)
     {
         return webElement.getCssValue(propertyName);

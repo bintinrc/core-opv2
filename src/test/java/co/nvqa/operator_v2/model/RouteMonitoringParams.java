@@ -10,15 +10,18 @@ import java.util.Map;
 public class RouteMonitoringParams extends DataEntity<RouteMonitoringParams>
 {
     private Long routeId;
+    private Integer totalParcels;
+    private Double completionPercentage;
     private Integer totalWaypoint;
-    private Integer completionPercentage;
     private Integer pendingCount;
+    private Integer numLateAndPending;
     private Integer successCount;
-    private Integer failedCount;
-    private Integer cmiCount;
+    private Integer numInvalidFailed;
+    private Integer numValidFailed;
     private Integer earlyCount;
     private Integer lateCount;
-    private Integer totalParcels;
+    private Integer failedCount;
+    private Integer cmiCount;
 
     public RouteMonitoringParams()
     {
@@ -59,19 +62,19 @@ public class RouteMonitoringParams extends DataEntity<RouteMonitoringParams>
         setTotalWaypoint(Integer.parseInt(totalWaypoint));
     }
 
-    public Integer getCompletionPercentage()
+    public Double getCompletionPercentage()
     {
         return completionPercentage;
     }
 
-    public void setCompletionPercentage(Integer completionPercentage)
+    public void setCompletionPercentage(Double completionPercentage)
     {
         this.completionPercentage = completionPercentage;
     }
 
     public void setCompletionPercentage(String completionPercentage)
     {
-        setCompletionPercentage(Integer.parseInt(completionPercentage));
+        setCompletionPercentage(Double.valueOf(completionPercentage));
     }
 
     public Integer getPendingCount()
@@ -183,5 +186,50 @@ public class RouteMonitoringParams extends DataEntity<RouteMonitoringParams>
     public void setTotalParcels(String totalParcelCount)
     {
         setTotalParcels(Integer.valueOf(totalParcelCount));
+    }
+
+    public Integer getNumLateAndPending()
+    {
+        return numLateAndPending;
+    }
+
+    public void setNumLateAndPending(Integer numLateAndPending)
+    {
+        this.numLateAndPending = numLateAndPending;
+    }
+
+    public void setNumLateAndPending(String numLateAndPending)
+    {
+        setNumLateAndPending(Integer.valueOf(numLateAndPending));
+    }
+
+    public Integer getNumInvalidFailed()
+    {
+        return numInvalidFailed;
+    }
+
+    public void setNumInvalidFailed(Integer numInvalidFailed)
+    {
+        this.numInvalidFailed = numInvalidFailed;
+    }
+
+    public void setNumInvalidFailed(String numInvalidFailed)
+    {
+        setNumInvalidFailed(Integer.valueOf(numInvalidFailed));
+    }
+
+    public Integer getNumValidFailed()
+    {
+        return numValidFailed;
+    }
+
+    public void setNumValidFailed(Integer numValidFailed)
+    {
+        this.numValidFailed = numValidFailed;
+    }
+
+    public void setNumValidFailed(String numValidFailed)
+    {
+        setNumValidFailed(Integer.valueOf(numValidFailed));
     }
 }
