@@ -5,7 +5,7 @@ Feature: Shipment Scanning
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Scan order to shipment (uid:b776b582-a395-4a02-962a-9785f6945750)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -17,7 +17,7 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Scan multiple orders to shipment (uid:d3759781-3a4f-4ae5-8f44-229b72ac9bff)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
@@ -31,7 +31,7 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     When Operator scan multiple created order to shipment in hub {hub-name}
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Operator Add Parcel to Shipment (uid:d2e2e056-3176-409d-802c-d74ddf1909ad)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -44,7 +44,7 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Operator Add Parcel to Shipment - by Order Status : Pending Pickup (uid:1f2770be-d02a-4bab-a802-86ae02a8398b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -70,7 +70,7 @@ Feature: Shipment Scanning
 #    Then Operator scan the created order to shipment in hub {hub-name}
 #    And Operator verifies that the row of the added order is red highlighted
 
-  @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Operator Add Parcel to Shipment - by Order Status : Pickup Fail (uid:5fe26a89-6c0d-442a-b323-53b4f94308fc)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Shipper create V4 order using data below:
@@ -90,7 +90,7 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
-  @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Operator Add Parcel to Shipment - by Order Status : En-route to Sorting hub (uid:d00cbfff-144a-4784-b58d-6171321a2fe7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Shipper create V4 order using data below:
@@ -110,7 +110,7 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
-  @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Operator Add Parcel to Shipment - by Order Status : Van en-route to Pickup (uid:5a1ee95b-692e-4088-a55c-e8be75d2f416)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Shipper create V4 order using data below:
@@ -126,7 +126,7 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
-  @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Operator Add Parcel to Shipment - by Order Status : On Vehicle for Delivery (uid:12092f23-dad6-4058-9cca-44eceed7a711)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -147,7 +147,7 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Operator Add Parcel to Shipment - by Order Status : Cancelled (uid:2df692d5-50e5-4378-bd24-a267afd9c300)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -159,7 +159,7 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Operator Add Parcel to Shipment - by Order Status : Staging (uid:ac63ea94-942a-4ee1-ba43-da71038c4b80)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -170,7 +170,7 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
-  @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Operator Add Parcel to Shipment - by Order Status : Completed (uid:0489409a-6da9-4afb-aa7b-f7043622041a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -182,7 +182,7 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Operator Add Parcel to Shipment - by Order Status : Arrived at Sorting Hub (uid:a3b1c2a6-eef9-400e-92ab-d62b2ea78503)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -195,7 +195,7 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Operator Add Parcel to Shipment - by Order Status : Arrived at Origin Hub (uid:6aca4a88-160e-458b-97f1-c0041ef9ee6a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -234,7 +234,7 @@ Feature: Shipment Scanning
 #    Given Operator go to menu Inter-Hub -> Shipment Scanning
 #    Then Operator scan the created order to shipment in hub {hub-name}
 
-  @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Operator Add Parcel to Shipment - by Order Status : Pending Reschedule (uid:c8ddcfe9-78e4-4d59-a7bf-bb20d7f4765a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -258,7 +258,7 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Operator Add Parcel to Shipment - by Order Status : Return to Sender (uid:43e5cbd6-3456-49a8-9c3c-f1a3be8ab361)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -283,7 +283,7 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Operator Add Parcel to Shipment - by Order Status : On-Hold (uid:0b6f1305-6071-46e9-8084-4eda5787416f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -309,7 +309,7 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Operator Add Parcel With Tag to Shipment (uid:ea3e60cf-56ce-40d3-9bb0-9b0968faf920)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -338,7 +338,7 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Operator Add Parcel to Shipment with Alert (uid:c1bf85e7-69b2-4d04-9907-49c49571afaa)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -372,7 +372,7 @@ Feature: Shipment Scanning
 #    And Operator removes the parcel from the shipment
 #    Then Operator verifies that the parcels shown are decreased
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Operator Remove All Parcel from Shipment (uid:d48f32b0-72c9-4482-874a-73ba6936b273)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
@@ -388,7 +388,7 @@ Feature: Shipment Scanning
     And Operator removes all the parcel from the shipment
     Then Operator verifies that the parcel shown is zero
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Operator Close Pending Shipment
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
