@@ -383,6 +383,7 @@ public class EditOrderSteps extends AbstractSteps
     @Then("^Operator verifies event is present for order on Edit order page$")
     public void operatorVerifiesEventIsPresentOnEditOrderPage(Map<String, String> mapOfData)
     {
+        mapOfData = resolveKeyValues(mapOfData);
         String event = mapOfData.get("eventName");
         String hubName = mapOfData.get("hubName");
         String hubId = mapOfData.get("hubId");

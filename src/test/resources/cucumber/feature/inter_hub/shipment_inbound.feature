@@ -5,7 +5,7 @@ Feature: Shipment Inbound
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Shipment Inbound - Normal (Valid Tracking ID, Same Shipment) (uid:22256332-8766-4e7d-b14b-407e04141a5f)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -38,7 +38,7 @@ Feature: Shipment Inbound
       | 32    |
       | 27    |
 
-  @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Shipment Inbound - Normal (Prefix Using) (uid:e2373267-5be0-4ee4-9651-93592740d156)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -72,7 +72,7 @@ Feature: Shipment Inbound
       | 32    |
       | 27    |
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Shipment Inbound - Same Hub (No Route) (uid:a66c21aa-b06a-49a5-9a80-c3cb4abeb528)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -103,7 +103,7 @@ Feature: Shipment Inbound
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
 
-  @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Shipment Inbound - Invalid Tracking ID (uid:f0b77dd5-f9c8-49e1-9e0d-77e79f167542)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -140,7 +140,7 @@ Feature: Shipment Inbound
       | hubName | -       |
       | color   | #e86161 |
 
-  @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Shipment Inbound - Routed Tracking ID (uid:21eba800-e004-4b4e-802a-286e5ad99535)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -175,7 +175,7 @@ Feature: Shipment Inbound
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Shipment Inbound - Different Hub (No Route) (uid:520f05c8-563b-4575-910e-af74e937ef10)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -230,7 +230,7 @@ Feature: Shipment Inbound
 #      | shipmentId   | {KEY_CREATED_SHIPMENT_ID}          |
 #      | errorMessage | Shipment is not completed          |
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Shipment Inbound - Routed to a Route that is not in Current Date (uid:b7062d1d-75b9-40d5-af5c-4c0765a9fa1f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -267,7 +267,7 @@ Feature: Shipment Inbound
     And DB Operator verify the order_events record exists for the created order with type:
       | 27    |
 
-  @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Operator Sweep Parcel in Shipment - Same Destination - Not Routed (uid:d4f2dd69-e61b-4945-9e5c-900ace78bf4a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -298,7 +298,7 @@ Feature: Shipment Inbound
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Operator Sweep Parcel in Shipment - Different Destination - Not Routed (uid:201f763d-d927-4676-b7a5-56a177698884)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -328,7 +328,7 @@ Feature: Shipment Inbound
       | trackingId | CREATED    |
       | hubId      | {hub-id-2} |
 
-  @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Operator Sweep Parcel in Shipment - Same Destination - Routed to Today (uid:dcde6c29-1ea1-4219-bded-3cbf6aee10d3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -363,7 +363,7 @@ Feature: Shipment Inbound
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
 
-  @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Operator Sweep Parcel in Shipment - Different Destination - Routed to Today (uid:79495eee-3095-491e-be98-0dec4124d6a0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -398,7 +398,7 @@ Feature: Shipment Inbound
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
 
-  @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Operator Sweep Parcel in Shipment - Same Destination - Routed to NOT Today (uid:cd5e3a48-cd68-4d87-a992-c437ebf53386)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -444,7 +444,7 @@ Feature: Shipment Inbound
       | hubId     | {hub-id}            |
     And Operator verify order status is "Transit" on Edit Order page
 
-  @DeleteShipment @DeleteOrArchiveRoute
+  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
   Scenario: Operator Sweep Parcel in Shipment - Different Destination - Routed to NOT Today (uid:cfe3d8c9-6f01-4761-9f99-645cd2fb2c07)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -490,7 +490,7 @@ Feature: Shipment Inbound
       | hubId     | {hub-id-2}            |
     And Operator verify order status is "Transit" on Edit Order page
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Operator Sweep Parcel in Shipment - Incomplete Process (uid:c4e5146f-618e-45eb-bf9b-22e7f7dd6a17)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -520,40 +520,40 @@ Feature: Shipment Inbound
       | trackingId | CREATED    |
       | hubId      | {hub-id-2} |
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario Outline: Operator Sweep Parcel in Shipment - Priority Level - <scenarioName>
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo | RANDOM |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    Given DB Operator gets Hub ID by Hub Name of created parcel
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+      | globalInboundRequest | { "hubId":{hub-id-2} } |
+    And DB Operator gets Hub ID by Hub Name of created parcel
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
-    Given Operator go to menu Inbounding -> Global Inbound
-    When Operator global inbounds parcel using data below:
-      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
-      | trackingId | GET_FROM_CREATED_ORDER             |
-    Then API Operator verify order info after Global Inbound
-    And API Operator create new route using data below:
-      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
-      | addParcelToRouteRequest | { "type":"DD" } |
-    When API Operator refresh created order data
     When Operator go to menu Order -> All Orders
     And Operator open page of the created order from All Orders page
     When Operator change Priority Level to "<priorityLevel>" on Edit Order page
+    And Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below:
+      | hubName    | {KEY_CREATED_ORDER.destinationHub}         |
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    Then Operator verifies priority level info is correct using data below:
+      | priorityLevel           | <priorityLevel>           |
+      | priorityLevelColorAsHex | <priorityLevelColorAsHex> |
+    Then API Operator verify order info after Global Inbound
+    And DB Operator verify order_events record for the created order:
+      | type | 26 |
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
-      | hubName    | {hub-name} |
-      | trackingId | CREATED    |
+      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
+      | trackingId | CREATED                            |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | {KEY_CREATED_ROUTE_ID} |
-      | driverName | {ninja-driver-name}    |
-      | color      | #55a1e8                |
+      | routeId    | -       |
+      | driverName |         |
+      | color      | #55a1e8 |
     Then Operator verifies priority level dialog box shows correct priority level info using data below:
       | priorityLevel           | <priorityLevel>             |
       | priorityLevelColorAsHex | <priorityLevelColorAsHex>   |
@@ -562,27 +562,19 @@ Feature: Shipment Inbound
       | zoneName | FROM CREATED ORDER |
       | color    | #55a1e8            |
     And DB Operator verifies warehouse_sweeps record
-      | trackingId | CREATED  |
-      | hubId      | {hub-id} |
-    And DB Operator verify the order_events record exists for the created order with type:
-      | 31    |
-      | 27    |
+      | trackingId | CREATED               |
+      | hubId      | {KEY_DESTINATION_HUB} |
     And Operator verifies event is present for order on Edit order page
-      | eventName | PARCEL ROUTING SCAN |
-      | hubName   | {hub-name}          |
-      | hubId     | {hub-id}            |
-    And Operator verifies event is present for order on Edit order page
-      | eventName | OUTBOUND SCAN	    |
-      | hubName   | {hub-name}          |
-      | hubId     | {hub-id}            |
+      | eventName | PARCEL ROUTING SCAN                |
+      | hubName   | {KEY_CREATED_ORDER.destinationHub} |
+      | hubId     | {KEY_DESTINATION_HUB}              |
     And Operator verify order status is "Transit" on Edit Order page
 
     Examples:
       | scenarioName    | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
-      | Priority 0      | uid:7681b53a-87e0-4f88-ae2e-01b8d4a6bb7b | 0             | #e8e8e8                 |
-      | Priority 1      | uid:86b7953d-a6d6-4cc7-912a-c720ab746f3d | 1             | #ffff00                 |
-      | Priority 2 - 90 | uid:7b214f67-e3d7-41b3-879a-db9359b88ac4 | 50            | #ffa500                 |
-      | Priority >90    | uid:e2ff802e-3332-4386-90e8-41d69c3c03c4 | 100           | #ff0000                 |
+      | Priority 1      | uid:86b7953d-a6d6-4cc7-912a-c720ab746f3d | 1             | #f8cf5c                 |
+      | Priority 2 - 90 | uid:7b214f67-e3d7-41b3-879a-db9359b88ac4 | 50            | #e29d4a                 |
+      | Priority >90    | uid:e2ff802e-3332-4386-90e8-41d69c3c03c4 | 100           | #c65d44                 |
 
 #  All scenarios related to Set Aside is not valid anymore
 #  Ticket : https://jira.ninjavan.co/browse/SORT-318
@@ -812,34 +804,32 @@ Feature: Shipment Inbound
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
     Given Operator go to menu Inbounding -> Global Inbound
-    Then Operator global inbound and verify the ticket's type of "damaged" shown in the Global Inbound Page with data:
+    Then Operator global inbounds parcel using data below:
       | hubName    | {KEY_CREATED_ORDER.destinationHub} |
       | trackingId | GET_FROM_CREATED_ORDER             |
-    When Operator go to menu Order -> All Orders
-    And Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    And Operator switch to Edit Order's window
-    Then Operator verify order status is "On Hold" on Edit Order page
-    And Operator verify order granular status is "On Hold" on Edit Order page
-    And DB Operator verify the last order_events record for the created order:
-      | type | 26 |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | RECOVERY DAMAGED |
+      | rackInfo       | ON HOLD          |
+      | color          | #f45050          |
+    And DB Operator verify the last inbound_scans record for the created order:
+      | hubId      | {hub-id}               |
+      | trackingId | GET_FROM_CREATED_ORDER |
+      | type       | 2                      |
+    When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {KEY_CREATED_ORDER.destinationHub} |
       | trackingId | CREATED                            |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | ON HOLD  |
-      | driverName | RECOVERY |
-      | color      | #e86161  |
+      | routeId    | sync_problem RECOVERY |
+      | driverName | ON HOLD               |
+      | color      | #e86161               |
     When API Operator get all zones preferences
-    And Operator verify Parcel route different date label on Parcel Sweeper By Hub page
     Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | FROM CREATED ORDER |
-      | color    | #e86161            |
+      | zoneName | -       |
+      | color    | #e86161 |
     And DB Operator verifies warehouse_sweeps record
-      | trackingId | CREATED                            |
-      | hubId      | {KEY_CREATED_ORDER.destinationHub} |
+      | trackingId | CREATED               |
+      | hubId      | {KEY_DESTINATION_HUB} |
     And DB Operator verify the order_events record exists for the created order with type:
       | 27    |
 
