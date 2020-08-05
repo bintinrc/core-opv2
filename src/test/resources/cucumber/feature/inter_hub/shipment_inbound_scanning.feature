@@ -1021,7 +1021,7 @@ Feature: Shipment Inbound Scanning
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Hub in hub {hub-name} on Shipment Inbound Scanning page
 
-  @DeleteShipment
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Validation INTO HUB Inbound when Status of Shipment in CLOSED (uid:b79f468e-0b95-40d2-9fab-1e236d285933)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
