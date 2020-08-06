@@ -177,6 +177,8 @@ public class GlobalInboundSteps extends AbstractSteps
             Color actualColor = Color.fromString(globalInboundPage.getCssValue(globalInboundPage.XPATH_CONTAINER, "background-color"));
             assertEquals("Expected another color for Route ID background", expected, actualColor.asHex());
         }
+
+        pause3s();
     }
 
     @Then("Ninja Collect Operator verifies that all the details for Confirmed Status via {string} are right")
