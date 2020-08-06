@@ -1,4 +1,4 @@
-@OperatorV2 @Routing @OperatorV2Part2 @ParcelSweeperLive @ParcelSweeperLivePart2
+@Sort @Routing @ParcelSweeperLive @ParcelSweeperLivePart2
 Feature: Parcel Sweeper Live
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -20,13 +20,13 @@ Feature: Parcel Sweeper Live
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | sync_problem RECOVERY   |
       | driverName | COMPLETED               |
-      | color      | #d86965                 |
+      | color      | #e86161                 |
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | -       |
-      | color    | #d86965 |
+      | color    | #e86161 |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName | -       |
-      | color   | #d86965 |
+      | color   | #e86161 |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
@@ -59,13 +59,13 @@ Feature: Parcel Sweeper Live
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | sync_problem RECOVERY   |
       | driverName | RETURNED TO SENDER      |
-      | color      | #d86965                 |
+      | color      | #e86161                 |
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | -       |
-      | color    | #d86965 |
+      | color    | #e86161 |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName | -       |
-      | color   | #d86965 |
+      | color   | #e86161 |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
@@ -96,13 +96,13 @@ Feature: Parcel Sweeper Live
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | sync_problem RECOVERY   |
       | driverName | TRANSFERRED TO 3PL      |
-      | color      | #d86965                 |
+      | color      | #e86161                 |
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | -       |
-      | color    | #d86965 |
+      | color    | #e86161 |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName | -       |
-      | color   | #d86965 |
+      | color   | #e86161 |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
@@ -141,11 +141,11 @@ Feature: Parcel Sweeper Live
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | orderId    | -          |
-      | color      | #67a0e2    |
+      | color      | #55a1e8    |
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color    | #67a0e2            |
+      | color    | #55a1e8            |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName | GLOBAL INBOUND |
       | color   | #e8e8e8        |
@@ -186,14 +186,14 @@ Feature: Parcel Sweeper Live
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | orderId    | -        |
-      | color      | #67a0e2  |
+      | color      | #55a1e8  |
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
-      | color    | #67a0e2            |
+      | color    | #55a1e8            |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName | GLOBAL INBOUND |
-      | color   | #67a0e2        |
+      | color   | #55a1e8        |
     And Operator verifies tags on Parcel Sweeper Live page
       | OPV2AUTO1   |
       | OPV2AUTO2   |
@@ -234,13 +234,13 @@ Feature: Parcel Sweeper Live
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | sync_problem RECOVERY   |
       | driverName | ON VEHICLE FOR DELIVERY |
-      | color      | #d86965                 |
+      | color      | #e86161                 |
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | -       |
-      | color    | #d86965 |
+      | color    | #e86161 |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName | -       |
-      | color   | #d86965 |
+      | color   | #e86161 |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
@@ -267,13 +267,13 @@ Feature: Parcel Sweeper Live
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | error_outline ERROR     |
       | driverName | NOT INBOUNDED           |
-      | color      | #f4a73c                 |
+      | color      | #ffa400                 |
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | -       |
-      | color    | #f4a73c |
+      | color    | #ffa400 |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName | -       |
-      | color   | #f4a73c |
+      | color   | #ffa400 |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
@@ -314,13 +314,13 @@ Feature: Parcel Sweeper Live
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | error_outline ERROR     |
       | driverName | NOT INBOUNDED           |
-      | color      | #f4a73c                 |
+      | color      | #ffa400                 |
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | -       |
-      | color    | #f4a73c |
+      | color    | #ffa400 |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName | -       |
-      | color   | #f4a73c |
+      | color   | #ffa400 |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
@@ -347,13 +347,13 @@ Feature: Parcel Sweeper Live
     Then Operator verify Route ID on Parcel Sweeper page using data below:
       | routeId    | error_outline ERROR     |
       | driverName | NOT INBOUNDED           |
-      | color      | #f4a73c                 |
+      | color      | #ffa400                 |
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | -       |
-      | color    | #f4a73c |
+      | color    | #ffa400 |
     And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
       | hubName | -       |
-      | color   | #f4a73c |
+      | color   | #ffa400 |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
@@ -365,48 +365,6 @@ Feature: Parcel Sweeper Live
       | hubId     | {hub-id}            |
     And Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup at Distribution Point" on Edit Order page
-
-  @DisableSetAside @CloseNewWindows
-  Scenario: Parcel Sweeper Live - Set Aside Order (uid:49d4dfa4-551a-4b5a-ac6b-0c4168507f44)
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator get information about delivery routing hub of created order
-    And API Operator enable Set Aside using data below:
-      | setAsideGroup           | {set-aside-group-id} |
-      | setAsideMaxDeliveryDays | 3                    |
-      | setAsideHubs            | {KEY_ORDER_HUB_ID}   |
-    When Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}             |
-      | trackingId | GET_FROM_CREATED_ORDER |
-    When API Operator refresh created order data
-    When Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator provides data on Parcel Sweeper Live page:
-      | hubName    | {hub-name} |
-      | trackingId | CREATED    |
-    Then Operator verify Route ID on Parcel Sweeper page using data below:
-      | routeId    | SET ASIDE              |
-      | driverName | {set-aside-group-name} |
-      | color      | #d86965                |
-    When API Operator get all zones preferences
-    Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | FROM CREATED ORDER |
-      | color    | #d86965            |
-    And Operator verify Destination Hub on Parcel Sweeper By Hub page using data below:
-      | hubName | {KEY_CREATED_ORDER.destinationHub} |
-      | color   | #d86965                            |
-    And DB Operator verifies warehouse_sweeps record
-      | trackingId | CREATED  |
-      | hubId      | {hub-id} |
-    And DB Operator verify the order_events record exists for the created order with type:
-      | 27    |
-    And Operator verifies event is present for order on Edit order page
-      | eventName | PARCEL ROUTING SCAN |
-      | hubName   | {hub-name}          |
-      | hubId     | {hub-id}            |
-    And Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
