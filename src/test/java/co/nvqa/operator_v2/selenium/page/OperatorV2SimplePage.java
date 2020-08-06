@@ -1331,4 +1331,19 @@ public class OperatorV2SimplePage extends SimplePage
         String text = getAttribute(xpathExpression, "innerText").trim();
         return text;
     }
+
+    private void moveAndDoubleClick(WebElement webElement)
+    {
+        Actions action = new Actions(getWebDriver());
+        action.moveToElement(webElement);
+        pause100ms();
+        action.doubleClick();
+        action.perform();
+        pause100ms();
+    }
+
+    public void doubleClick(String xpathExpression) {
+        WebElement we = findElementByXpath(xpathExpression);
+        moveAndDoubleClick(we);
+    }
 }
