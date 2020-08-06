@@ -46,12 +46,14 @@ public class B2bManagementSteps extends AbstractSteps
     public void operatorFillNameSearchFieldWithOnBBManagementPage(String searchValue)
     {
         b2bManagementPage.getMasterShipper().searchByName(searchValue);
+        pause1s();
     }
 
     @When("Operator fill email search field with {string} on b2b management page")
     public void operatorFillEmailSearchFieldWithOnBBManagementPage(String searchValue)
     {
         b2bManagementPage.getMasterShipper().searchByEmail(searchValue);
+        pause1s();
     }
 
     @Then("QA verify master shippers with name contains {string} is displayed on b2b management page")
@@ -59,6 +61,7 @@ public class B2bManagementSteps extends AbstractSteps
     {
         List<Shipper> actualMasterShipper = b2bManagementPage.getMasterShipper().readAllEntities();
         boolean isExist = actualMasterShipper.stream().allMatch(s-> s.getName().contains(shipperName));
+        getWebDriver().switchTo().parentFrame();
         assertTrue(f("Check shippers name contain %s", shipperName), isExist);
     }
 
@@ -67,6 +70,7 @@ public class B2bManagementSteps extends AbstractSteps
     {
         List<Shipper> actualMasterShipper = b2bManagementPage.getMasterShipper().readAllEntities();
         boolean isExist = actualMasterShipper.stream().allMatch(s-> s.getEmail().contains(shipperEmail));
+        getWebDriver().switchTo().parentFrame();
         assertTrue(f("Check shippers email contain %s", shipperEmail), isExist);
     }
 

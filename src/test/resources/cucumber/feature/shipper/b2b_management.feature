@@ -1,4 +1,4 @@
-@MileZero @B2B @target
+@MileZero @B2B
 Feature: B2B Management
 
   @LaunchBrowser @ShouldAlwaysRun

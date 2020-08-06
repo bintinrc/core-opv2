@@ -23,6 +23,8 @@ public class B2bManagementPage extends OperatorV2SimplePage
     {
         super.waitUntilPageLoaded();
         assertTrue(getWebDriver().getCurrentUrl().endsWith(LAST_URL_PATH));
+        assertTrue(isElementExist(IFRAME_XPATH));
+        getWebDriver().switchTo().parentFrame();
     }
 
     public B2bShipperTable getMasterShipper() {
@@ -46,6 +48,15 @@ public class B2bManagementPage extends OperatorV2SimplePage
                     .build()
             );
             setEntityClass(Shipper.class);
+        }
+
+        @Override
+        public int getRowsCount()
+        {
+            getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+            int rowCount = getElementsCount("//tbody/tr");
+            getWebDriver().switchTo().parentFrame();
+            return rowCount;
         }
 
         @Override

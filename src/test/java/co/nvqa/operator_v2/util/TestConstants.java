@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.util;
 
 import co.nvqa.common_selenium.util.CommonSeleniumTestConstants;
+import co.nvqa.commons.util.NvSystemProperties;
 
 /**
  *
@@ -39,8 +40,9 @@ public final class TestConstants extends CommonSeleniumTestConstants
 
     static
     {
-        OPERATOR_PORTAL_BASE_URL = getString("operator-portal-base-url");
-        OPERATOR_PORTAL_LOGIN_URL = getString("operator-portal-login-url");
+        String apiBase = NvSystemProperties.getString(NV_API_BASE, getString("operator-portal-base-url"));
+        OPERATOR_PORTAL_BASE_URL = apiBase.replace("api", "operatorv2") + "/#";
+        OPERATOR_PORTAL_LOGIN_URL = OPERATOR_PORTAL_BASE_URL + "/login";
         OPERATOR_PORTAL_UID = getString("operator-portal-uid");
         OPERATOR_PORTAL_PWD = getString("operator-portal-pwd");
 
@@ -48,8 +50,6 @@ public final class TestConstants extends CommonSeleniumTestConstants
         OPERATOR_PORTAL_USER_COOKIE = getString("operator-portal-user-cookie");
         OPERATOR_PORTAL_COOKIE_DOMAIN = getString("operator-portal-cookie-domain");
         CSV_UPLOAD_FILE_NAME = getString("csv-upload-file-name");
-
-        API_BASE_URL = getString("api-base-url");
 
         SHIPPER_V2_ID = getLong("shipper-v2-id");
         SHIPPER_V2_LEGACY_ID = getLong("shipper-v2-legacy-id");
