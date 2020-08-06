@@ -76,6 +76,7 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
         addHubDialog.hubName.setValue(hub.getName());
         addHubDialog.displayName.setValue(hub.getShortName());
         Optional.ofNullable(hub.getFacilityType()).ifPresent(value -> addHubDialog.facilityType.selectByValue(value));
+        Optional.ofNullable(hub.getRegion()).ifPresent(value -> addHubDialog.region.selectByValue(value));
         addHubDialog.city.setValue(hub.getCity());
         addHubDialog.country.setValue(hub.getCountry());
         addHubDialog.latitude.setValue(String.valueOf(hub.getLatitude()));
@@ -142,6 +143,7 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
     {
         private static final Pattern LATLONG_PATTERN = Pattern.compile(".*?([\\d\\.]+).*?([\\d\\.]+).*");
         public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_SHORT_NAME = "shortName";
         public static final String COLUMN_LATITUDE = "latitude";
         public static final String COLUMN_LONGITUDE = "longitude";
         public static final String COLUMN_ACTIVE = "active";
@@ -156,7 +158,7 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
             setColumnLocators(ImmutableMap.<String, String>builder()
                     .put("id", "id")
                     .put(COLUMN_NAME, "name")
-                    .put("shortName", "short-name")
+                    .put(COLUMN_SHORT_NAME, "short_name")
                     .put("city", "city")
                     .put("region", "region")
                     .put("area", "area")
@@ -200,6 +202,9 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
 
         @FindBy(css = "[id='container.hub-list.facility-type']")
         public MdSelect facilityType;
+
+        @FindBy(css = "[id='container.hub-list.region']")
+        public MdSelect region;
 
         @FindBy(css = "[id^='container.hub-list.city']")
         public TextBox city;
