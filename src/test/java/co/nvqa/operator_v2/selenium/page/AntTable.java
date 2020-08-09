@@ -26,7 +26,7 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T>
     @Override
     protected String getTextOnTable(int rowNumber, String columnDataClass)
     {
-        String xpath = f(".//tr[%d]/td[contains(@class,'%s')]", rowNumber, columnDataClass);
+        String xpath = f(".//tbody/tr[%d]/td[contains(@class,'%s')]", rowNumber, columnDataClass);
         return getText(xpath);
     }
 
@@ -39,7 +39,7 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T>
     @Override
     public int getRowsCount()
     {
-        return getElementsCount(".//tr");
+        return getElementsCount(".//tbody/tr");
     }
 
     @Override

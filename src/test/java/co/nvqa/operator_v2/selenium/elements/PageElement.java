@@ -4,6 +4,7 @@ import co.nvqa.common_selenium.page.SimplePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -99,6 +100,11 @@ public class PageElement extends SimplePage
 
     public WebElement getWebElement()
     {
+        try {
+            webElement.getTagName();
+        } catch (StaleElementReferenceException ex){
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
         return webElement;
     }
 

@@ -7,6 +7,7 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 
 import java.util.Date;
 import java.util.Map;
@@ -79,7 +80,7 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps
 
         RouteMonitoringParams expected = new RouteMonitoringParams(data);
         Long routeId = expected.getRouteId();
-        Assert.assertNotNull("Route ID was not defined", routeId);
+        Assertions.assertNotNull(routeId, "Route ID was not defined");
         routeMonitoringV2Page.routeMonitoringTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
         routeMonitoringV2Page.smallSpinner.waitUntilInvisible();
 
