@@ -6,6 +6,7 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
@@ -36,6 +37,9 @@ public class OperatorV2SimplePage extends SimplePage
 
     @FindBy(css = "div.toast-error")
     public List<ToastError> toastErrors;
+
+    @FindBy(css = "div.md-half-circle")
+    public PageElement halfCircleSpinner;
 
     public OperatorV2SimplePage(WebDriver webDriver)
     {
@@ -1254,6 +1258,10 @@ public class OperatorV2SimplePage extends SimplePage
         }, TestConstants.SELENIUM_WEB_DRIVER_WAIT_TIMEOUT_IN_MILLISECONDS);
 
         waitUntilPageLoaded();
+        if (halfCircleSpinner.isDisplayedFast())
+        {
+            halfCircleSpinner.waitUntilInvisible();
+        }
     }
 
     public void waitUntilNewWindowOrTabOpened()
