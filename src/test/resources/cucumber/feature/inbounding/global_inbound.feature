@@ -6,30 +6,7 @@ Feature: Global Inbound
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows
-  Scenario: Operator global inbounds the created order with valid tracking ID (uid:50b27d44-6f86-44e7-b9b8-f9f0cd8178c2)
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Inbounding -> Global Inbound
-    When Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
-      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
-    Then API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-    And Operator verify Delivery details on Edit order page using data below:
-      | status | PENDING |
-
-  @CloseNewWindows
-  Scenario: Operator global inbounds the created order and override the size (uid:68e2827e-93e7-4407-9726-503b3e9966b9)
+  Scenario: Inbound parcel with changes in size - Small parcel inbounded with different size (uid:5b0733cb-2457-414b-a3ac-c0bad9b97d98)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -54,7 +31,7 @@ Feature: Global Inbound
       | status | PENDING |
 
   @CloseNewWindows
-  Scenario: Operator global inbounds the created order and override the weight (uid:7a93ddec-359a-4e66-b50a-0044a92b8d70)
+  Scenario: Inbound parcel with changes in weight - Inbound in SG (uid:60912e81-74bf-4d06-a823-909a40c6b9ce)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -79,7 +56,7 @@ Feature: Global Inbound
       | status | PENDING |
 
   @CloseNewWindows
-  Scenario: Operator global inbounds the created order, override the weight and recalculate the price (uid:f1ae23d0-1c04-4312-99fc-1c24733e9cc1)
+  Scenario: Global inbounds override the weight and recalculate the price (uid:cc9a0545-0a24-4b7c-ae6d-9ef9aafbdcd6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -107,7 +84,7 @@ Feature: Global Inbound
       | status | PENDING |
 
   @CloseNewWindows
-  Scenario: Operator global inbounds the created order and override dimension (uid:f40ec594-d63f-44c8-9298-54cd3553b081)
+  Scenario: Global inbounds override dimension (uid:8238be24-a3aa-438b-8403-1f8765373477)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -134,7 +111,7 @@ Feature: Global Inbound
       | status | PENDING |
 
   @CloseNewWindows
-  Scenario: Operator global inbounds the created order and override size, weight and dimension (uid:234173e8-0d85-4f22-a729-437f8799fc72)
+  Scenario: Global inbounds override size, weight and dimension (uid:a43d0021-86c6-45e7-a375-7c2249ec9183)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -163,7 +140,7 @@ Feature: Global Inbound
       | status | PENDING |
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Operator should not be able to Global Inbound routed pending delivery (uid:f56aada4-dbed-4688-b4eb-a3126d0b4981)
+  Scenario: Operator should not be able to Global Inbound routed pending delivery (uid:42638dfc-d876-44a5-b5c0-bf9ba42ba342)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -194,7 +171,7 @@ Feature: Global Inbound
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
 
-  Scenario: Operator should not be able to Global Inbound parcel with invalid order's status - Completed (uid:cd293abb-cceb-44f2-a58c-ee89c1a8ba67)
+  Scenario: Operator should not be able to Global Inbound parcel with invalid order's status - Completed Order (uid:9316f5f0-1423-47eb-890d-3916654f545b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -210,7 +187,7 @@ Feature: Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
-  Scenario: Operator should not be able to Global Inbound parcel with invalid order's status - Completed (uid:2b1af9c8-e582-434a-aee6-76fb06aadf95)
+  Scenario: Operator should not be able to Global Inbound parcel with invalid order's status - Cancelled Order (uid:de8f3cf0-9aee-4c53-aa7f-9b25f8bf3249)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -227,7 +204,7 @@ Feature: Global Inbound
       | type | 26 |
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario Outline: Operator should be a ble to Global Inbound failed delivery order on Global Inbound page - <Note> (<hiptest-uid>)
+  Scenario Outline: Inbound failed delivery - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -271,13 +248,13 @@ Feature: Global Inbound
       | status | FAIL |
     Examples:
       | Note                       | hiptest-uid                              | failureReasonCodeId | rackColor |
-      | Failure Reason Code ID = 1 | uid:53f3925a-a618-41f2-8adc-4b853d8e412d | 1                   | #90EE90   |
-      | Failure Reason Code ID = 2 | uid:d1236bef-2762-4927-9f97-b07d81b7a8a4 | 2                   | #FFFFED   |
-      | Failure Reason Code ID = 3 | uid:b10f6e85-5a72-44d4-b2ee-38bfc7ddb85a | 3                   | #D8BFD8   |
-      | Failure Reason Code ID = 5 | uid:13495ba0-9a2d-47a2-8b0c-0718c1120487 | 13                  | #90EE90   |
-      | Failure Reason Code ID = 6 | uid:4cb215bb-c094-419c-8708-a741b476a43e | 6                   | #9999FF   |
+      | failure_reason_code_id = 1 | uid:cf4d5066-8706-43d4-8eaa-6ff0f6664648 | 1                   | #90EE90   |
+      | failure_reason_code_id = 2 | uid:e1e5fc32-05bb-46a3-81e8-b5d6e9235e7f | 2                   | #FFFFED   |
+      | failure_reason_code_id = 3 | uid:e0789546-619e-47ef-bcff-8b362da04d80 | 3                   | #D8BFD8   |
+      | failure_reason_code_id = 5 | uid:93e4b151-b514-4f4d-8580-bc92f1120319 | 13                  | #90EE90   |
+      | failure_reason_code_id = 6 | uid:6f91726d-ba39-462b-ac0e-e7533d00bd5e | 6                   | #9999FF   |
 
-  Scenario: Inbound showing Weight Discrepancy - Weight Tolerance to not Taking Affect on Global Inbound (uid:bafa05c9-ad25-417e-9270-7b7ae23581ed)
+  Scenario: Inbound showing weight discrepancy alert - weight tolerance is not set, lower weight (uid:272f52ce-9443-4510-a7fd-10ff40c28c4c)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -295,7 +272,7 @@ Feature: Global Inbound
       | color          | #ffa400                            |
     Then API Operator verify order info after Global Inbound
 
-  Scenario: Inbound showing Weight Discrepancy - Global Inbound with Higher Weight (uid:a8ee166c-7c3b-4b75-bc8d-b8cd916fef77)
+  Scenario: Inbound showing Weight Discrepancy Alert - weight tolerance is set, higher weigh (uid:6fd8c798-b6b4-4920-bbc8-891bd6355eae)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -315,7 +292,7 @@ Feature: Global Inbound
       | color          | #ffa400                            |
     Then API Operator verify order info after Global Inbound
 
-  Scenario: Inbound showing Weight Discrepancy - Global Inbound with Lower Weight (uid:0eee9227-d369-4fe8-b69e-5ed5586c2705)
+  Scenario: Inbound showing Weight Discrepancy Alert - weight tolerance is set, lower weight (uid:ccae0c7e-cee9-45e4-adfe-024b8334e6a6)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -337,29 +314,7 @@ Feature: Global Inbound
     Then API Operator verify order info after Global Inbound
 
   @CloseNewWindows
-  Scenario: Check delivery dates after Global Inbound (uid:4390f3d5-a70b-4a59-b724-39da79efbbfe)
-    When Operator go to menu Shipper Support -> Blocked Dates
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Inbounding -> Global Inbound
-    And Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
-      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
-    And Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
-    Then Operator verify Delivery details on Edit order page using data below:
-      | startDateTime | {{next-2-working-days-yyyy-MM-dd}} 09:00:00 |
-      | endDateTime   | {{next-4-working-days-yyyy-MM-dd}} 22:00:00 |
-
-  @CloseNewWindows
-  Scenario: Inbound parcel picked up from DP - Pickup Pending (uid:a47074f8-0007-450c-b21d-febcee419fa5)
+  Scenario: Inbound parcel picked up from DP - Pickup Pending (uid:9ed6ad00-9a3c-4bc8-b4ab-3f67d6238d58)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -407,7 +362,7 @@ Feature: Global Inbound
       | hubName | {hub-name}       |
 
   @CloseNewWindows
-  Scenario: Inbound parcel picked up from DP - Pickup Successed (uid:1513b098-b321-4cb8-a75f-dd9e61f99dba)
+  Scenario: Inbound parcel picked up from DP - Pickup Successed (uid:7c40f1b0-f27e-4699-b9ca-839b7923eddb)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -458,7 +413,7 @@ Feature: Global Inbound
       | hubName | {hub-name}       |
 
   @CloseNewWindows
-  Scenario Outline: Operator global inbounds the created order with Priority Level <Note> (<hiptest-uid>)
+  Scenario Outline: Inbound with Priority Level - <Note> (<hiptest-uid>)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
@@ -501,9 +456,9 @@ Feature: Global Inbound
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     Examples:
       | Note   | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
-      | 1      | uid:9004241a-7037-40c6-8f83-b8f67f717847 | 1             | #f8cf5c                 |
-      | 2 - 90 | uid:6e523c1e-1aa8-4eed-9032-42642067b4d1 | 50            | #e29d4a                 |
-      | > 90   | uid:ffdb3be9-171d-4edc-af85-20e479704862 | 100           | #c65d44                 |
+      | 1      | uid:b686236c-d123-4def-9d76-4ca59380f820 | 1             | #f8cf5c                 |
+      | 2 - 90 | uid:d21927f7-ff4b-4dca-965d-ac3630f24217 | 50            | #e29d4a                 |
+      | > 90   | uid:125b3e40-9e7e-41bc-b61a-3b138ba54149 | 100           | #c65d44                 |
 
 #  API to create International parcel still have an issue.
 #  Scenario: Operator should be able to Inbound an International Order and verify the alert info is correct
@@ -511,7 +466,7 @@ Feature: Global Inbound
 #      | generateFromAndTo | RANDOM |
 #      | v4OrderRequest    | { "international":{ "portation":"Export" }, "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"15:00", "end_time":"18:00"}}} |
 
-  Scenario: Inbound Fully Integrated DP Order (uid:b960288a-8f46-4503-98c4-8d87a64a5d13)
+  Scenario: Inbound Fully Integrated DP Order (uid:8a855ffd-2b50-4aea-a358-53cff150ad98)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-fully-integrated-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -537,7 +492,7 @@ Feature: Global Inbound
     Then DB Operator gets all details for ninja collect confirmed status
     And Ninja Collect Operator verifies that all the details for Confirmed Status via "Fully Integrated" are right
 
-  Scenario: Inbound Semi Integrated DP Order (uid:c94e89fe-5244-40de-802e-4442c14f7be0)
+  Scenario: Inbound Semi Integrated DP Order (uid:d846ee76-cf66-4b14-8e91-88f3f8f3999f)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-semi-integrated-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -563,7 +518,7 @@ Feature: Global Inbound
     And DB Operator gets all details for ninja collect confirmed status
     And Ninja Collect Operator verifies that all the details for Confirmed Status via "Semi Integrated" are right
 
-  Scenario: Inbound Parcel with Order Tags (uid:3f8b336c-81bf-4ba9-b5c4-6108fe6cac91)
+  Scenario: Inbound Parcel with Order Tags (uid:3f95f6e9-4e6a-4599-b438-7b1b74330c33)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -598,7 +553,7 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
-  Scenario: Inbound On Hold Order: Resolve PENDING MISSING ticket type (uid:34dfb91c-2ec0-4589-a08d-448ef95b1793)
+  Scenario: Inbound On Hold Order - Resolve PENDING MISSING ticket type (uid:e1211ee8-24c0-42f2-bb00-4940d65950da)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -648,7 +603,7 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
-  Scenario: Inbound On Hold Order: DO NOT Resolve NON-MISSING ticket type (uid:a93fad3d-7d37-4642-b45b-5750c4684513)
+  Scenario: Inbound On Hold Order - DO NOT Resolve NON-MISSING ticket type (uid:e1211ee8-24c0-42f2-bb00-4940d65950da)
     When Operator go to menu Shipper Support -> Blocked Dates
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -700,37 +655,7 @@ Feature: Global Inbound
       | type | 26 |
 
   @CloseNewWindows
-  Scenario: Inbound parcel at hub with location event (uid:17d2da2d-33dc-4f1e-bd27-a5c9b26008f8)
-    When Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Inbounding -> Global Inbound
-    When Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                                 |
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
-      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
-      | color          | #ffa400                            |
-    Then API Operator verify order info after Global Inbound
-    And DB Operator verify the last inbound_scans record for the created order:
-      | hubId      | {hub-id}                                   |
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | type       | 2                                          |
-    And DB Operator verify order_events record for the created order:
-      | type | 26 |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
-    Then Operator verify order status is "Transit" on Edit Order page
-    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
-    And Operator verify Delivery details on Edit order page using data below:
-      | status | PENDING |
-
-  @CloseNewWindows
-  Scenario: Inbound Parcel with change in order SLA - Standard (uid:6c520ea5-9722-41a2-85fa-0eabfea90af9)
+  Scenario: Inbound Parcel with change in order SLA - Standard (uid:c43a34d0-b8ba-4e6f-9304-51320543b9ee)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                            |
@@ -752,7 +677,7 @@ Feature: Global Inbound
       | endDate | {gradle-next-3-day-yyyy-MM-dd} |
 
   @CloseNewWindows
-  Scenario: Inbound Parcel with change in order SLA - Express (uid:b713aabe-c52d-4e86-9bec-90ee238025e4)
+  Scenario: Inbound Parcel with change in order SLA - Express (uid:45b363f0-1fb9-4155-8a7a-c9bd3d46da73)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -774,7 +699,7 @@ Feature: Global Inbound
       | endDate | {gradle-next-2-day-yyyy-MM-dd} |
 
   @CloseNewWindows
-  Scenario: Inbound Parcel with change in order SLA - Nextday (uid:2ffc5a4c-104f-4f0e-a766-2336789da5f3)
+  Scenario: Inbound Parcel with change in order SLA - Nextday (uid:69d8cd89-bfd3-4e1a-ad04-ece038974e99)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -796,7 +721,7 @@ Feature: Global Inbound
       | endDate | {gradle-next-1-day-yyyy-MM-dd} |
 
   @CloseNewWindows
-  Scenario: Inbound Parcel with change in order SLA - Sameday (uid:06080a77-61fa-4070-9eb3-225f6bfc7fc2)
+  Scenario: Inbound Parcel with change in order SLA - Sameday (uid:79a946bb-aa72-4e5e-a063-9656f8826a7b)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                 |
@@ -818,7 +743,7 @@ Feature: Global Inbound
       | endDate | {gradle-next-2-day-yyyy-MM-dd} |
 
   @CloseNewWindows
-  Scenario: Inbound parcel that is intended to be picked up on future date - Standard (uid:85a053d5-ab3e-465b-b221-61fd624ee377)
+  Scenario: Inbound parcel that is intended to be picked up on future date - Standard (uid:d929ec0a-629b-4ab3-beae-47ef1fafc329)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                            |
@@ -860,7 +785,7 @@ Feature: Global Inbound
       | hubName | {hub-name}       |
 
   @CloseNewWindows
-  Scenario: Inbound parcel that is intended to be picked up on future date - Express (uid:6e4afd7d-87cc-4cbb-b021-d2f7e8ee807b)
+  Scenario: Inbound parcel that is intended to be picked up on future date - Express (uid:56abc408-a381-4c0d-b431-ed75a0f289d7)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -898,7 +823,7 @@ Feature: Global Inbound
       | hubName | {hub-name}       |
 
   @CloseNewWindows
-  Scenario: Inbound parcel that is intended to be picked up on future date - Nextday (uid:287ca61f-fdae-4515-bd60-a69e186cec9e)
+  Scenario: Inbound parcel that is intended to be picked up on future date - Nextday (uid:49cbc076-7249-431d-abbb-43771b2ec41a)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -936,7 +861,7 @@ Feature: Global Inbound
       | hubName | {hub-name}       |
 
   @CloseNewWindows
-  Scenario: Inbound parcel that is intended to be picked up on future date - Sameday (uid:a25b3fa1-ac27-400a-8ba3-e64a3e2dac3d)
+  Scenario: Inbound parcel that is intended to be picked up on future date - Sameday (uid:964cd5ae-50f2-4ea0-87b4-e36fcfe1b49a)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -974,7 +899,7 @@ Feature: Global Inbound
       | hubName | {hub-name}       |
 
   @CloseNewWindows
-  Scenario: Operator should not be able to global inbound parcel with invalid order's status - Returned to Sender
+  Scenario: Operator should not be able to global inbound parcel with invalid order's status - Returned to Sender (uid:5664ec96-151c-417e-b6aa-2d45a5ca5443)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -994,7 +919,7 @@ Feature: Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
-  Scenario: Operator should not be able to global inbound parcel with invalid order's status - Transferred to Third Party
+  Scenario: Operator should not be able to global inbound parcel with invalid order's status - Transferred to Third Party (uid:bea1c2f2-caea-418a-a471-dfbddcb749a3)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -1014,7 +939,7 @@ Feature: Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
-  Scenario: Inbound showing max weight limit alert - inbound weight is higher than max weight limit
+  Scenario: Inbound showing max weight limit alert - inbound weight is higher than max weight limit (uid:d56315b8-24df-49ad-8d1f-f02e0cfeb658)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -1036,7 +961,7 @@ Feature: Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
-  Scenario: Inbound showing max weight limit alert - inbound weight is equal to max weight limit
+  Scenario: Inbound showing max weight limit alert - inbound weight is equal to max weight limit (uid:fbcb6c61-f744-4bb7-9697-561d32714f9a)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -1059,7 +984,7 @@ Feature: Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
-  Scenario: Inbound showing max weight limit alert - inbound weight is lower than max weight limit
+  Scenario: Inbound showing max weight limit alert - inbound weight is lower than max weight limit (uid:533e3e4d-5dd0-4582-a204-2e163620654c)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
