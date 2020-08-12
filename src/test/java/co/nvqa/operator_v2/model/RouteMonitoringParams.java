@@ -13,6 +13,7 @@ public class RouteMonitoringParams extends DataEntity<RouteMonitoringParams>
     private Integer totalParcels;
     private Double completionPercentage;
     private Integer totalWaypoint;
+    private Integer pendingPriorityParcels;
     private Integer pendingCount;
     private Integer numLateAndPending;
     private Integer successCount;
@@ -231,5 +232,20 @@ public class RouteMonitoringParams extends DataEntity<RouteMonitoringParams>
     public void setNumValidFailed(String numValidFailed)
     {
         setNumValidFailed(Integer.valueOf(numValidFailed));
+    }
+
+    public Integer getPendingPriorityParcels()
+    {
+        return pendingPriorityParcels;
+    }
+
+    public void setPendingPriorityParcels(Integer pendingPriorityParcels)
+    {
+        this.pendingPriorityParcels = pendingPriorityParcels;
+    }
+
+    public void setPendingPriorityParcels(String pendingPriorityParcels)
+    {
+        setPendingPriorityParcels(Integer.parseInt(pendingPriorityParcels));
     }
 }

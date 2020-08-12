@@ -104,6 +104,8 @@ public abstract class AbstractTable<T extends DataEntity<?>> extends OperatorV2S
         values.forEach(value -> selectEntity(columnId, value));
     }
 
+    public abstract void clickColumn(int rowNumber, String columnId);
+
     public String getColumnText(int rowNumber, String columnId)
     {
         Preconditions.checkArgument(StringUtils.isNotBlank(columnId), "'columnId' cannot be null or blank string.");

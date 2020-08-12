@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.operator_v2.model.PendingPriorityOrder;
 import co.nvqa.operator_v2.model.RouteMonitoringFilters;
 import co.nvqa.operator_v2.model.RouteMonitoringParams;
 import co.nvqa.operator_v2.selenium.page.RouteMonitoringV2Page;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.Assertions;
 import java.util.Date;
 import java.util.Map;
 
+import static co.nvqa.operator_v2.selenium.page.RouteMonitoringV2Page.PendingPriorityModal.PendingPriorityTable.COLUMN_TRACKING_ID;
+import static co.nvqa.operator_v2.selenium.page.RouteMonitoringV2Page.RouteMonitoringTable.COLUMN_PENDING_PRIORITY_PARCELS;
 import static co.nvqa.operator_v2.selenium.page.RouteMonitoringV2Page.RouteMonitoringTable.COLUMN_ROUTE_ID;
 
 /**
@@ -114,5 +117,85 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps
         Assert.assertFalse(f("Route [%d] was not found", routeId), routeMonitoringV2Page.routeMonitoringTable.isEmpty());
         RouteMonitoringParams actual = routeMonitoringV2Page.routeMonitoringTable.readEntity(1);
         expected.compareWithActual(actual);
+    }
+
+    @When("^Operator open Pending Priority modal of a route \"(.+)\" on Route Monitoring V2 page$")
+    public void openPendingPriorityModal(String routeId)
+    {
+        routeMonitoringV2Page.routeMonitoringTable.filterByColumn(COLUMN_ROUTE_ID, resolveValue(routeId));
+        pause1s();
+        routeMonitoringV2Page.routeMonitoringTable.clickColumn(1, COLUMN_PENDING_PRIORITY_PARCELS);
+        routeMonitoringV2Page.pendingPriorityModal.waitUntilVisible();
+        routeMonitoringV2Page.spinner.waitUntilInvisible();
+    }
+
+    @When("^Operator check there are (\\d+) Pending Priority Pickups in Pending Priority modal on Route Monitoring V2 page$")
+    public void checkPendingPriorityPickupsNumber(Integer expectedCount)
+    {
+        Assertions.assertEquals(f("Pending Priority Pickups (%d)", expectedCount), routeMonitoringV2Page.pendingPriorityModal.pendingPriorityPickupsTitle.getText().trim(), "Pending Priority Pickups Title");
+        Assertions.assertEquals(expectedCount, routeMonitoringV2Page.pendingPriorityModal.pendingPriorityPickupsTable.getRowsCount(), "Pending Priority Pickups Table rows count");
+    }
+
+    @When("^Operator check there are (\\d+) Pending Priority Deliveries in Pending Priority modal on Route Monitoring V2 page$")
+    public void checkPendingPriorityDeliveriesNumber(Integer expectedCount)
+    {
+        Assertions.assertEquals(f("Pending Priority Deliveries (%d)", expectedCount), routeMonitoringV2Page.pendingPriorityModal.pendingPriorityDeliveriesTitle.getText().trim(), "Pending Priority Deliveries Title");
+        Assertions.assertEquals(expectedCount, routeMonitoringV2Page.pendingPriorityModal.pendingPriorityDeliveriesTable.getRowsCount(), "Pending Priority Deliveries Table rows count");
+    }
+
+    @When("^Operator verify Pending Priority Pickup record in Pending Priority modal on Route Monitoring V2 page using data below:$")
+    public void verifyPendingPriorityPickupRecord(Map<String, String> data)
+    {
+        PendingPriorityOrder expected = new PendingPriorityOrder(resolveKeyValues(data));
+        routeMonitoringV2Page.pendingPriorityModal.pendingPriorityPickupsTable.filterByColumn(COLUMN_TRACKING_ID, expected.getTrackingId());
+        Assertions.assertEquals(1, routeMonitoringV2Page.pendingPriorityModal.pendingPriorityPickupsTable.getRowsCount(), "Pending Priority Pickups Table rows count");
+        PendingPriorityOrder actual = routeMonitoringV2Page.pendingPriorityModal.pendingPriorityPickupsTable.readEntity(1);
+        expected.compareWithActual(actual);
+    }
+
+    @When("^Operator verify Pending Priority Delivery record in Pending Priority modal on Route Monitoring V2 page using data below:$")
+    public void verifyPendingPriorityDeliveryRecord(Map<String, String> data)
+    {
+        PendingPriorityOrder expected = new PendingPriorityOrder(resolveKeyValues(data));
+        routeMonitoringV2Page.pendingPriorityModal.pendingPriorityDeliveriesTable.filterByColumn(COLUMN_TRACKING_ID, expected.getTrackingId());
+        Assertions.assertEquals(1, routeMonitoringV2Page.pendingPriorityModal.pendingPriorityDeliveriesTable.getRowsCount(), "Pending Priority Deliveries Table rows count");
+        PendingPriorityOrder actual = routeMonitoringV2Page.pendingPriorityModal.pendingPriorityDeliveriesTable.readEntity(1);
+        expected.compareWithActual(actual);
+    }
+
+    @When("^Operator click on tracking id of a Pending Priority Pickup record in Pending Priority modal on Route Monitoring V2 page using data below:$")
+    public void clickPendingPriorityPickupTrackingId(Map<String, String> dataMap)
+    {
+        Map<String, String> data = resolveKeyValues(dataMap);
+        String mainWindowHandle = routeMonitoringV2Page.getWebDriver().getWindowHandle();
+        put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
+        routeMonitoringV2Page.pendingPriorityModal.pendingPriorityPickupsTable.filterByColumn(COLUMN_TRACKING_ID, data.get("trackingId"));
+        routeMonitoringV2Page.pendingPriorityModal.pendingPriorityPickupsTable.clickColumn(1, COLUMN_TRACKING_ID);
+        pause3s();
+        routeMonitoringV2Page.switchToOtherWindow(data.get("orderId"));
+    }
+
+    @When("^Operator click on tracking id of a Pending Priority Delivery record in Pending Priority modal on Route Monitoring V2 page using data below:$")
+    public void clickPendingPriorityDeliveryTrackingId(Map<String, String> dataMap)
+    {
+        Map<String, String> data = resolveKeyValues(dataMap);
+        String mainWindowHandle = routeMonitoringV2Page.getWebDriver().getWindowHandle();
+        put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
+        routeMonitoringV2Page.pendingPriorityModal.pendingPriorityDeliveriesTable.filterByColumn(COLUMN_TRACKING_ID, data.get("trackingId"));
+        routeMonitoringV2Page.pendingPriorityModal.pendingPriorityDeliveriesTable.clickColumn(1, COLUMN_TRACKING_ID);
+        pause3s();
+        routeMonitoringV2Page.switchToOtherWindow(data.get("orderId"));
+    }
+
+    @When("^Operator close current window and switch to Route Monitoring V2 page$")
+    public void operatorCloseCurrentWindow()
+    {
+        if (routeMonitoringV2Page.getWebDriver().getWindowHandles().size() > 1)
+        {
+            routeMonitoringV2Page.getWebDriver().close();
+            String mainWindowHandle = get(KEY_MAIN_WINDOW_HANDLE);
+            routeMonitoringV2Page.getWebDriver().switchTo().window(mainWindowHandle);
+            routeMonitoringV2Page.switchTo();
+        }
     }
 }

@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 
 /**
- *
  * @author Sergey Mishanin
  */
 public class NgRepeatTable<T extends DataEntity<?>> extends AbstractTable<T>
@@ -36,11 +35,10 @@ public class NgRepeatTable<T extends DataEntity<?>> extends AbstractTable<T>
     @Override
     protected String getTextOnTable(int rowNumber, String columnDataClass)
     {
-        if(StringUtils.startsWithAny(columnDataClass, "/", "./"))
+        if (StringUtils.startsWithAny(columnDataClass, "/", "./"))
         {
             return getTextOnTableWithNgRepeatAndCustomCellLocator(rowNumber, columnDataClass, ngRepeat);
-        }
-        else
+        } else
         {
             return getTextOnTableWithNgRepeat(rowNumber, columnDataClass, ngRepeat);
         }
@@ -68,5 +66,11 @@ public class NgRepeatTable<T extends DataEntity<?>> extends AbstractTable<T>
     protected String getTableLocator()
     {
         return f("//nv-table[.//tr[@ng-repeat='%s']]", ngRepeat);
+    }
+
+    @Override
+    public void clickColumn(int rowNumber, String columnId)
+    {
+        throw new UnsupportedOperationException();
     }
 }
