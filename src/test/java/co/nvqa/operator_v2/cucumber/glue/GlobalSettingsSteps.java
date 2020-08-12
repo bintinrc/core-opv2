@@ -33,4 +33,16 @@ public class GlobalSettingsSteps extends AbstractSteps
     {
         globalSettingsPage.clickInboudSettingsUpdateButton();
     }
+
+    @And("^Operator set Weight Limit value to \"([^\"]*)\" on Global Settings page$")
+    public void operatorSetWeightLimitValueToOnGlobalSettingsPage(String weightLimit)
+    {
+        globalSettingsPage.setWeightLimit(weightLimit);
+    }
+
+    @And("^Operator save wight limit settings on Global Settings page$")
+    public void operatorSaveWeightLimitOnGlobalSettingsPage()
+    {
+        globalSettingsPage.clickWeightLimitUpdateButton();
+    }
 }
