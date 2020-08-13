@@ -1,51 +1,18 @@
 package co.nvqa.operator_v2.model;
 
 import co.nvqa.commons.model.DataEntity;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MovementSchedule extends DataEntity<MovementSchedule>
 {
-    private String originHub;
-    private String destinationHub;
-    private boolean applyToAllDays;
     private List<Schedule> schedules;
-
-    public String getOriginHub()
-    {
-        return originHub;
-    }
-
-    public void setOriginHub(String originHub)
-    {
-        this.originHub = originHub;
-    }
-
-    public String getDestinationHub()
-    {
-        return destinationHub;
-    }
-
-    public void setDestinationHub(String destinationHub)
-    {
-        this.destinationHub = destinationHub;
-    }
-
-    public boolean isApplyToAllDays()
-    {
-        return applyToAllDays;
-    }
-
-    public void setApplyToAllDays(boolean applyToAllDays)
-    {
-        this.applyToAllDays = applyToAllDays;
-    }
-
-    public void setApplyToAllDays(String applyToAllDays)
-    {
-        setApplyToAllDays(Boolean.parseBoolean(applyToAllDays));
-    }
 
     public List<Schedule> getSchedules()
     {
@@ -57,7 +24,18 @@ public class MovementSchedule extends DataEntity<MovementSchedule>
         this.schedules = schedules;
     }
 
-    public void addSchedule(Schedule schedule)
+    public Schedule getSchedule(int index)
+    {
+        if (CollectionUtils.isEmpty(schedules) || schedules.size() <= index)
+        {
+            return null;
+        } else
+        {
+            return schedules.get(index);
+        }
+    }
+
+    public void addSchedules(Schedule schedule)
     {
         if (schedules == null)
         {
@@ -66,103 +44,115 @@ public class MovementSchedule extends DataEntity<MovementSchedule>
         schedules.add(schedule);
     }
 
-    public Schedule getSchedule(int index)
+    public Schedule getSchedules(int index)
     {
-        if (schedules == null || index >= schedules.size())
-        {
-            return null;
-        } else
-        {
-            return getSchedules().get(index);
-        }
+        return getSchedule(index);
     }
 
     public static class Schedule extends DataEntity<Schedule>
     {
-        private String day;
+        private String originHub;
+        private String destinationHub;
+        private String movementType;
+        private Set<String> daysOfWeek;
+        private String departureTime;
+        private Integer durationDays;
+        private String durationTime;
+        private String comment;
 
-        private List<Movement> movements;
-
-        public String getDay()
+        public String getOriginHub()
         {
-            return day;
+            return originHub;
         }
 
-        public void setDay(String day)
+        public void setOriginHub(String originHub)
         {
-            this.day = day;
+            this.originHub = originHub;
         }
 
-        public List<Movement> getMovements()
+        public String getDestinationHub()
         {
-            return movements;
+            return destinationHub;
         }
 
-        public void setMovements(List<Movement> movements)
+        public void setDestinationHub(String destinationHub)
         {
-            this.movements = movements;
+            this.destinationHub = destinationHub;
         }
 
-        public void addMovement(Movement movement)
+        public Set<String> getDaysOfWeek()
         {
-            if (movements == null)
-            {
-                movements = new ArrayList<>();
-            }
-            movements.add(movement);
+            return daysOfWeek;
         }
 
-        public Movement getMovement(int index)
+        public void setDaysOfWeek(Set<String> daysOfWeek)
         {
-            if (movements == null || index >= movements.size())
-            {
-                return null;
-            } else
-            {
-                return getMovements().get(index);
-            }
+            this.daysOfWeek = daysOfWeek;
         }
 
-        public static class Movement extends DataEntity<Movement>
+        public void setDaysOfWeek(String daysOfWeek)
         {
-            private String startTime;
-            private Integer duration;
-            private String endTime;
-
-            public String getStartTime()
+            if (StringUtils.equalsAnyIgnoreCase(daysOfWeek, "all"))
             {
-                return startTime;
+                daysOfWeek = "monday,tuesday,wednesday,thursday,friday,saturday,sunday";
             }
+            String[] days = daysOfWeek.split(",");
+            setDaysOfWeek(Arrays.stream(days).map(day -> day.trim().toLowerCase()).collect(Collectors.toSet()));
+        }
 
-            public void setStartTime(String startTime)
-            {
-                this.startTime = startTime;
-            }
+        public String getComment()
+        {
+            return comment;
+        }
 
-            public Integer getDuration()
-            {
-                return duration;
-            }
+        public void setComment(String comment)
+        {
+            this.comment = comment;
+        }
 
-            public void setDuration(Integer duration)
-            {
-                this.duration = duration;
-            }
+        public String getMovementType()
+        {
+            return movementType;
+        }
 
-            public void setDuration(String duration)
-            {
-                setDuration(Integer.valueOf(duration));
-            }
+        public void setMovementType(String movementType)
+        {
+            this.movementType = movementType;
+        }
 
-            public String getEndTime()
-            {
-                return endTime;
-            }
+        public String getDepartureTime()
+        {
+            return departureTime;
+        }
 
-            public void setEndTime(String endTime)
-            {
-                this.endTime = endTime;
-            }
+        public void setDepartureTime(String departureTime)
+        {
+            this.departureTime = departureTime;
+        }
+
+        public Integer getDurationDays()
+        {
+            return durationDays;
+        }
+
+        public void setDurationDays(Integer durationDays)
+        {
+            this.durationDays = durationDays;
+        }
+
+        public void setDurationDays(String durationDays)
+        {
+            setDurationDays(Integer.parseInt(durationDays));
+        }
+
+        public String getDurationTime()
+        {
+            return durationTime;
+        }
+
+        public void setDurationTime(String durationTime)
+        {
+            this.durationTime = durationTime;
         }
     }
 }

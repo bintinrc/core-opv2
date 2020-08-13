@@ -84,4 +84,10 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
     {
         return StringUtils.isNotBlank(nvTableParam) ? f(".//nv-table[@param='%s'][.//tr[@md-virtual-repeat='%s']]", nvTableParam, mdVirtualRepeat) : f(".//nv-table[.//tr[@md-virtual-repeat='%s']]", mdVirtualRepeat);
     }
+
+    @Override
+    public void clickColumn(int rowNumber, String columnId)
+    {
+        throw new UnsupportedOperationException();
+    }
 }

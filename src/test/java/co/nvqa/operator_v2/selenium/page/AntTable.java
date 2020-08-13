@@ -26,7 +26,7 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T>
     @Override
     protected String getTextOnTable(int rowNumber, String columnDataClass)
     {
-        String xpath = f(".//tr[%d]/td[contains(@class,'%s')]", rowNumber, columnDataClass);
+        String xpath = f(".//tbody/tr[%d]/td[contains(@class,'%s')]", rowNumber, columnDataClass);
         return getText(xpath);
     }
 
@@ -39,7 +39,13 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T>
     @Override
     public int getRowsCount()
     {
-        return getElementsCount(".//tr");
+        if (StringUtils.isNotBlank(tableLocator))
+        {
+            return executeInContext(tableLocator, () -> getElementsCount(".//tbody/tr"));
+        } else
+        {
+            return getElementsCount(".//tbody/tr");
+        }
     }
 
     @Override
@@ -58,6 +64,10 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T>
     public AbstractTable<T> filterByColumn(String columnId, String value)
     {
         String xpath = f("//th[contains(@class,'%s')]//input", columnId);
+        if (StringUtils.isNotBlank(tableLocator))
+        {
+            xpath = tableLocator + xpath;
+        }
         String currentValue = getValue(xpath);
         if (StringUtils.isNotEmpty(currentValue) && !currentValue.equals(value))
         {
@@ -68,7 +78,8 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T>
             }
             sb.append(value);
             sendKeys(xpath, sb.toString());
-        } else if (StringUtils.isEmpty(currentValue)){
+        } else if (StringUtils.isEmpty(currentValue))
+        {
             sendKeys(xpath, value);
         }
         return this;
@@ -83,5 +94,16 @@ public class AntTable<T extends DataEntity<?>> extends AbstractTable<T>
     public boolean isEmpty()
     {
         return noResultsFound.isDisplayedFast();
+    }
+
+    @Override
+    public void clickColumn(int rowNumber, String columnId)
+    {
+        String xpath = f("//tbody/tr[%d]/td[contains(@class,'%s')]", rowNumber, getColumnLocators().get(columnId));
+        if (StringUtils.isNotBlank(tableLocator))
+        {
+            xpath = tableLocator + xpath;
+        }
+        click(xpath);
     }
 }

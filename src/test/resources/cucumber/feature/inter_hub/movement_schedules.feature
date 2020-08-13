@@ -5,7 +5,7 @@ Feature: Movement Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
+  @SoftDeleteHubViaDb
   Scenario: Create New Crossdock Hub (uid:dd1e6f6d-5b0c-4c0c-af60-cb17748a2156)
     When API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -20,7 +20,7 @@ Feature: Movement Management
     And Operator opens Add Movement Schedule modal on Movement Management page
     Then Operator can select "{KEY_LIST_OF_CREATED_HUBS[1].name}" crossdock hub when create crossdock movement schedule
 
-  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
+  @SoftDeleteHubViaDb
   Scenario: Create New Crossdock Movement Schedule - apply all days - 1 movement scedule/day (uid:abdae2c8-c872-442b-a053-ed71a916c154)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -42,19 +42,20 @@ Feature: Movement Management
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
-      | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destinationHub                    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | applyToAllDays                    | true                               |
-      | schedule[1].day                   | Monday-Sunday                      |
-      | schedule[1].movement[1].startTime | 15:15                              |
-      | schedule[1].movement[1].duration  | 1                                  |
-      | schedule[1].movement[1].endTime   | 16 h 30 m                          |
+      | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
+      | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
+      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].departureTime  | 15:15                                                         |
+      | schedules[1].durationDays   | 1                                                             |
+      | schedules[1].durationTime   | 16:30                                                         |
+      | schedules[1].daysOfWeek     | all                                                           |
+      | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
     And Operator load schedules on Movement Management page using data below:
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
+  @SoftDeleteHubViaDb
   Scenario: Create New Crossdock Movement Schedule - apply all days - more then 1 movement scedule/day (uid:ddb34cbf-c420-45b6-a581-82dbec11121a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -76,22 +77,28 @@ Feature: Movement Management
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
-      | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destinationHub                    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | applyToAllDays                    | true                               |
-      | schedule[1].day                   | Monday-Sunday                      |
-      | schedule[1].movement[1].startTime | 15:15                              |
-      | schedule[1].movement[1].duration  | 1                                  |
-      | schedule[1].movement[1].endTime   | 16 h 30 m                          |
-      | schedule[1].movement[2].startTime | 17:15                              |
-      | schedule[1].movement[2].duration  | 2                                  |
-      | schedule[1].movement[2].endTime   | 18 h 30 m                          |
+      | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
+      | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
+      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].departureTime  | 15:15                                                         |
+      | schedules[1].durationDays   | 1                                                             |
+      | schedules[1].durationTime   | 16:30                                                         |
+      | schedules[1].daysOfWeek     | all                                                           |
+      | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
+      | schedules[2].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
+      | schedules[2].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
+      | schedules[2].movementType   | Air Haul                                                      |
+      | schedules[2].departureTime  | 17:15                                                         |
+      | schedules[2].durationDays   | 2                                                             |
+      | schedules[2].durationTime   | 18:30                                                         |
+      | schedules[2].daysOfWeek     | all                                                           |
+      | schedules[2].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
     And Operator load schedules on Movement Management page using data below:
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
+  @SoftDeleteHubViaDb
   Scenario: Create New Crossdock Movement Schedule - not all days - 1 movement scedule/day (uid:4405488d-0f69-4f90-adae-2dceb66d2cc4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -113,23 +120,20 @@ Feature: Movement Management
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
-      | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destinationHub                    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | applyToAllDays                    | false                              |
-      | schedule[1].day                   | Monday                             |
-      | schedule[1].movement[1].startTime | 15:15                              |
-      | schedule[1].movement[1].duration  | 1                                  |
-      | schedule[1].movement[1].endTime   | 16 h 30 m                          |
-      | schedule[2].day                   | Tuesday                            |
-      | schedule[2].movement[1].startTime | 17:15                              |
-      | schedule[2].movement[1].duration  | 2                                  |
-      | schedule[2].movement[1].endTime   | 18 h 30 m                          |
+      | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
+      | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
+      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].departureTime  | 15:15                                                         |
+      | schedules[1].durationDays   | 1                                                             |
+      | schedules[1].durationTime   | 16:30                                                         |
+      | schedules[1].daysOfWeek     | monday,wednesday,friday                                       |
+      | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
     And Operator load schedules on Movement Management page using data below:
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
+  @SoftDeleteHubViaDb
   Scenario: Create New Crossdock Movement Schedule - not all days - more then 1 movement scedule/day (uid:24a32b1e-9791-4e42-9231-b5b6a9302fe9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -151,29 +155,28 @@ Feature: Movement Management
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
-      | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destinationHub                    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | applyToAllDays                    | false                              |
-      | schedule[1].day                   | Monday                             |
-      | schedule[1].movement[1].startTime | 15:15                              |
-      | schedule[1].movement[1].duration  | 1                                  |
-      | schedule[1].movement[1].endTime   | 16 h 30 m                          |
-      | schedule[1].movement[2].startTime | 17:15                              |
-      | schedule[1].movement[2].duration  | 2                                  |
-      | schedule[1].movement[2].endTime   | 18 h 30 m                          |
-      | schedule[2].day                   | Tuesday                            |
-      | schedule[2].movement[1].startTime | 15:15                              |
-      | schedule[2].movement[1].duration  | 1                                  |
-      | schedule[2].movement[1].endTime   | 16 h 30 m                          |
-      | schedule[2].movement[2].startTime | 17:15                              |
-      | schedule[2].movement[2].duration  | 2                                  |
-      | schedule[2].movement[2].endTime   | 18 h 30 m                          |
+      | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
+      | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
+      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].departureTime  | 15:15                                                         |
+      | schedules[1].durationDays   | 1                                                             |
+      | schedules[1].durationTime   | 16:30                                                         |
+      | schedules[1].daysOfWeek     | monday,wednesday,friday                                       |
+      | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
+      | schedules[2].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
+      | schedules[2].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
+      | schedules[2].movementType   | Air Haul                                                      |
+      | schedules[2].departureTime  | 17:15                                                         |
+      | schedules[2].durationDays   | 2                                                             |
+      | schedules[2].durationTime   | 18:30                                                         |
+      | schedules[2].daysOfWeek     | tuesday,thursday,saturday                                     |
+      | schedules[2].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
     And Operator load schedules on Movement Management page using data below:
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
+  @SoftDeleteHubViaDb
   Scenario: Create New Crossdock Movement Schedule - Origin Crossdock Hub same with Destination Crossdock Hub (uid:29f3608a-6d09-4787-87df-4e776f89b608)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -188,10 +191,10 @@ Feature: Movement Management
     And Movement Management page is loaded
     And Operator opens Add Movement Schedule modal on Movement Management page
     And Operator fill Add Movement Schedule form using data below:
-      | originHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | schedules[1].originHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator can not select "{KEY_LIST_OF_CREATED_HUBS[1].name}" destination crossdock hub on Add Movement Schedule dialog
 
-  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
+  @SoftDeleteHubViaDb
   Scenario: Cancel Create New Crossdock Movement Schedule (uid:3816b3bb-b453-4d99-94c2-6432b0744e8e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -213,20 +216,21 @@ Feature: Movement Management
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator opens Add Movement Schedule modal on Movement Management page
-    And Operator adds new Movement Schedule on Movement Management page using data below:
-      | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destinationHub                    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | applyToAllDays                    | true                               |
-      | schedule[1].day                   | Monday-Sunday                      |
-      | schedule[1].movement[1].startTime | 15:15                              |
-      | schedule[1].movement[1].duration  | 1                                  |
-      | schedule[1].movement[1].endTime   | 16 h 30 m                          |
+    And Operator fill Add Movement Schedule form using data below:
+      | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
+      | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
+      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].departureTime  | 15:15                                                         |
+      | schedules[1].durationDays   | 1                                                             |
+      | schedules[1].durationTime   | 16:30                                                         |
+      | schedules[1].daysOfWeek     | all                                                           |
+      | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
     And Operator click "Cancel" button on Add Movement Schedule dialog
     Then Operator verifies Add Movement Schedule dialog is closed on Movement Management page
     And Operator opens Add Movement Schedule modal on Movement Management page
     Then Operator verify Add Movement Schedule form is empty
 
-  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
+  @SoftDeleteHubViaDb
   Scenario: Search Crossdock Movement Schedule - correct crossdock name (uid:a921ee4c-0bdb-4bc0-94b9-be09a8cfd9be)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -248,13 +252,14 @@ Feature: Movement Management
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
     And Operator adds new Movement Schedule on Movement Management page using data below:
-      | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destinationHub                    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | applyToAllDays                    | true                               |
-      | schedule[1].day                   | Monday-Sunday                      |
-      | schedule[1].movement[1].startTime | 15:15                              |
-      | schedule[1].movement[1].duration  | 1                                  |
-      | schedule[1].movement[1].endTime   | 16 h 30 m                          |
+      | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
+      | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
+      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].departureTime  | 15:15                                                         |
+      | schedules[1].durationDays   | 1                                                             |
+      | schedules[1].durationTime   | 16:30                                                         |
+      | schedules[1].daysOfWeek     | all                                                           |
+      | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
     And Operator load schedules on Movement Management page
     And Operator filters schedules list on Movement Management page using data below:
       | originHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -266,7 +271,7 @@ Feature: Movement Management
     Then Operator verify schedules list on Movement Management page using data below:
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
 
-  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
+  @SoftDeleteHubViaDb
   Scenario: Search Crossdock Movement Schedule - wrong crossdock name (uid:f8760200-aebb-4745-a9ba-d87c5c87406f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inter-Hub -> Movement Schedules
@@ -280,46 +285,48 @@ Feature: Movement Management
       | destinationHub | WRONG_HUB_NAME |
     Then Operator verify schedules list is empty on Movement Management page
 
-  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
-  Scenario: Delete Crossdock Movement Schedule (uid:537f891d-0131-4a6d-bfb8-dd175a50abb6)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    When API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | CROSSDOCK |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    When API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | CROSSDOCK |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    When Operator go to menu Inter-Hub -> Movement Schedules
-    And Movement Management page is loaded
-    And Operator adds new Movement Schedule on Movement Management page using data below:
-      | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destinationHub                    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-      | applyToAllDays                    | true                               |
-      | schedule[1].day                   | Monday-Sunday                      |
-      | schedule[1].movement[1].startTime | 15:15                              |
-      | schedule[1].movement[1].duration  | 1                                  |
-      | schedule[1].movement[1].endTime   | 16 h 30 m                          |
-    And Operator load schedules on Movement Management page using data below:
-      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-    Then Operator verifies a new schedule is created on Movement Management page
-    When Operator deletes created movement schedule on Movement Management page
-    And Operator load schedules on Movement Management page using data below:
-      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-    Then Operator verify schedules list is empty on Movement Management page
+#  Functionality has been deleted
+#
+#  @SoftDeleteHubViaDb
+#  Scenario: Delete Crossdock Movement Schedule (uid:537f891d-0131-4a6d-bfb8-dd175a50abb6)
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    When API Operator creates new Hub using data below:
+#      | name         | GENERATED |
+#      | displayName  | GENERATED |
+#      | facilityType | CROSSDOCK |
+#      | city         | GENERATED |
+#      | country      | GENERATED |
+#      | latitude     | GENERATED |
+#      | longitude    | GENERATED |
+#    When API Operator creates new Hub using data below:
+#      | name         | GENERATED |
+#      | displayName  | GENERATED |
+#      | facilityType | CROSSDOCK |
+#      | city         | GENERATED |
+#      | country      | GENERATED |
+#      | latitude     | GENERATED |
+#      | longitude    | GENERATED |
+#    When Operator go to menu Inter-Hub -> Movement Schedules
+#    And Movement Management page is loaded
+#    And Operator adds new Movement Schedule on Movement Management page using data below:
+#      | originHub                         | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+#      | destinationHub                    | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+#      | applyToAllDays                    | true                               |
+#      | schedule[1].day                   | Monday-Sunday                      |
+#      | schedule[1].movement[1].startTime | 15:15                              |
+#      | schedule[1].movement[1].duration  | 1                                  |
+#      | schedule[1].movement[1].endTime   | 16 h 30 m                          |
+#    And Operator load schedules on Movement Management page using data below:
+#      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+#      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+#    Then Operator verifies a new schedule is created on Movement Management page
+#    When Operator deletes created movement schedule on Movement Management page
+#    And Operator load schedules on Movement Management page using data below:
+#      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+#      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+#    Then Operator verify schedules list is empty on Movement Management page
 
-  @ArchiveAndDeleteHubViaDb @SwitchToDefaultContent
+  @SoftDeleteHubViaDb
   Scenario: View Crossdock Movement Schedule (uid:00979c7f-39a0-4f12-9c16-2ee31d1341ac)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -355,7 +362,7 @@ Feature: Movement Management
     When Operator open view modal of a created movement schedule on Movement Management page
     And Operator verifies created movement schedule data on Movement Schedule modal on Movement Management page
 
-  @ArchiveAndDeleteHubViaDb  @DeleteShipment @CloseNewWindows
+  @SoftDeleteHubViaDb  @DeleteShipment @CloseNewWindows
   Scenario: Crossdock Movement found and there is available schedule (uid:61f65ed7-0b58-4343-b892-92ad0519f203)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -403,7 +410,7 @@ Feature: Movement Management
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @ArchiveAndDeleteHubViaDb @DeleteShipment @CloseNewWindows
+  @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
   Scenario: Crossdock Movement found and the schedule available on tomorrow (uid:c60cd46c-a341-4d66-b770-599125274204)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -451,7 +458,7 @@ Feature: Movement Management
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @ArchiveAndDeleteHubViaDb @DeleteShipment @CloseNewWindows
+  @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
   Scenario: Crossdock Movement found and available schedule only 1 day in a week (uid:6dc554a3-b602-4181-bfa0-a2a8e6e521ad)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -500,7 +507,7 @@ Feature: Movement Management
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @ArchiveAndDeleteHubViaDb @DeleteShipment @CloseNewWindows
+  @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
   Scenario: Crossdock Movement found but has no schedule (uid:567c04fb-64fa-4d68-a760-1566bfa6679b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -540,7 +547,7 @@ Feature: Movement Management
       | status   | FAILED                                                                                                                   |
       | comments | found no movement from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (SG) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (SG) |
 
-  @ArchiveAndDeleteHubViaDb @DeleteShipment @CloseNewWindows
+  @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
   Scenario: Crossdock Movement found and do Van Inbound Shipment using MAWB (uid:01813aa8-0f39-4dc9-ad52-a4950bba22cc)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -598,7 +605,7 @@ Feature: Movement Management
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @ArchiveAndDeleteHubViaDb @DeleteShipment @CloseNewWindows
+  @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
   Scenario: Facility Type of Origin/Destination Crossdock Hub is changed to 'Station' (uid:c64ee237-d954-4bec-838c-2e224f8b1717)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -653,7 +660,7 @@ Feature: Movement Management
       | status   | FAILED                                                       |
       | comments | relation for {KEY_LIST_OF_CREATED_HUBS[1].id} (SG) not found |
 
-  @ArchiveAndDeleteHubViaDb @DeleteShipment @CloseNewWindows
+  @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
   Scenario: Search Station in Pending Relations Tab (uid:3294c0fb-bfe6-4156-bfe7-44e740f2183f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -675,7 +682,7 @@ Feature: Movement Management
       | station | wrong-station-name |
     Then Operator verify relations table on Movement Management page is empty
 
-  @ArchiveAndDeleteHubViaDb
+  @SoftDeleteHubViaDb
   Scenario: Update Station Relation (uid:30fd38a6-bd35-48c8-8f83-8e9839798e65)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:

@@ -265,6 +265,115 @@ Feature: Route Monitoring
       | earlyCount           | 1                      |
       | lateCount            | 0                      |
 
+  @DeleteOrArchiveRoute @Close@CloseNewWindows
+  Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Then API Shipper tags multiple parcels as per the below tag
+      | OrderTag | 5570 |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add multiple parcels to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    When Operator go to menu Routing -> Route Monitoring V2
+    Then Route Monitoring V2 page is loaded
+    When Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
+      | routeId                | {KEY_CREATED_ROUTE_ID} |
+      | totalParcels           | 2                      |
+      | totalWaypoint          | 2                      |
+      | pendingPriorityParcels | 2                      |
+    When Operator open Pending Priority modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
+    Then Operator check there are 2 Pending Priority Pickups in Pending Priority modal on Route Monitoring V2 page
+    And Operator verify Pending Priority Pickup record in Pending Priority modal on Route Monitoring V2 page using data below:
+      | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | customerName | {KEY_LIST_OF_CREATED_ORDER[1].fromName}    |
+      | tags         | PRIOR                                      |
+    When Operator click on tracking id of a Pending Priority Pickup record in Pending Priority modal on Route Monitoring V2 page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    Then Operator close current window and switch to Route Monitoring V2 page
+    When Operator click on tracking id of a Pending Priority Pickup record in Pending Priority modal on Route Monitoring V2 page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels  on NON-PRIOR Waypoints
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    When Operator go to menu Routing -> Route Monitoring V2
+    Then Route Monitoring V2 page is loaded
+    When Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
+      | routeId                | {KEY_CREATED_ROUTE_ID} |
+      | totalParcels           | 1                      |
+      | pendingPriorityParcels | 0                      |
+    When Operator open Pending Priority modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
+    Then Operator check there are 0 Pending Priority Pickups in Pending Priority modal on Route Monitoring V2 page
+    And Operator check there are 0 Pending Priority Deliveries in Pending Priority modal on Route Monitoring V2 page
+
+  @DeleteOrArchiveRoute @CloseNewWindows
+  Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels  on NON-PRIOR Waypoints
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"PP" } |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Shipper tags multiple parcels as per the below tag
+      | OrderTag | 5570 |
+    When Operator go to menu Routing -> Route Monitoring V2
+    Then Route Monitoring V2 page is loaded
+    When Operator search order on Route Monitoring V2 using data below:
+      | hubs    | {hub-name}             |
+      | zones   | {zone-name}            |
+      | routeId | {KEY_CREATED_ROUTE_ID} |
+    Then Operator verify parameters of a route on Route Monitoring V2 page using data below:
+      | routeId                | {KEY_CREATED_ROUTE_ID} |
+      | totalParcels           | 2                      |
+      | totalWaypoint          | 2                      |
+      | pendingPriorityParcels | 2                      |
+    When Operator open Pending Priority modal of a route "{KEY_CREATED_ROUTE_ID}" on Route Monitoring V2 page
+    Then Operator check there are 1 Pending Priority Pickups in Pending Priority modal on Route Monitoring V2 page
+    Then Operator check there are 1 Pending Priority Deliveries in Pending Priority modal on Route Monitoring V2 page
+    And Operator verify Pending Priority Pickup record in Pending Priority modal on Route Monitoring V2 page using data below:
+      | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | customerName | {KEY_LIST_OF_CREATED_ORDER[1].fromName}    |
+      | tags         | PRIOR                                      |
+    And Operator verify Pending Priority Delivery record in Pending Priority modal on Route Monitoring V2 page using data below:
+      | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | customerName | {KEY_LIST_OF_CREATED_ORDER[2].toName}      |
+      | tags         | PRIOR                                      |
+    When Operator click on tracking id of a Pending Priority Pickup record in Pending Priority modal on Route Monitoring V2 page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    Then Operator close current window and switch to Route Monitoring V2 page
+    When Operator click on tracking id of a Pending Priority Delivery record in Pending Priority modal on Route Monitoring V2 page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

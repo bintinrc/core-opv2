@@ -3,15 +3,16 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.operator_v2.model.MovementSchedule;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.ant.AntCheckbox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTextWithLabel;
 import co.nvqa.operator_v2.selenium.elements.ant.AntTimePicker;
 import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.SearchContext;
@@ -20,19 +21,17 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Optional;
-
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Sergey Mishanin
  */
 public class MovementManagementPage extends OperatorV2SimplePage
 {
-    @FindBy(xpath = "//button[.='New Crossdock Movement Schedule']")
-    public Button newCrossdockMovementSchedule;
-
     @FindBy(tagName = "iframe")
     private PageElement pageFrame;
 
@@ -56,9 +55,6 @@ public class MovementManagementPage extends OperatorV2SimplePage
 
     @FindBy(xpath = "//button[.='Edit Filters']")
     public Button editFilters;
-
-    @FindBy(xpath = "//div[contains(@class,'CrossdockMovementTableContainer')]//table")
-    public NvTable<ScheduleRow> schedulesTable;
 
     @FindBy(xpath = "//div[contains(@class,'StationMovementTableContainer')]//table")
     public NvTable<RelationRow> relationsTable;
@@ -93,10 +89,12 @@ public class MovementManagementPage extends OperatorV2SimplePage
 
     //endregion
 
+    public SchedulesTable schedulesTable;
 
     public MovementManagementPage(WebDriver webDriver)
     {
         super(webDriver);
+        schedulesTable = new SchedulesTable(webDriver);
     }
 
     public void switchTo()
@@ -148,140 +146,131 @@ public class MovementManagementPage extends OperatorV2SimplePage
             PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
         }
 
-        @FindBy(id = "originHubId")
-        public AntSelect originCrossdockHub;
+        @FindBy(xpath = ".//button[.='Add Another Schedule']")
+        public Button addAnotherSchedule;
 
-        @FindBy(id = "destinationHubId")
-        public AntSelect destinationCrossdockHub;
-
-        @FindBy(xpath = "//label[.='Apply to all days']/span[@class='ant-checkbox']")
-        public AntCheckbox applyToAllDays;
-
-        @FindBy(xpath = ".//button[.='Save Schedule']")
-        public Button saveSchedule;
+        @FindBy(xpath = ".//button[.='Create']")
+        public Button create;
 
         @FindBy(xpath = ".//button[.='Cancel']")
         public Button cancel;
 
-        public void fill(MovementSchedule movementSchedule)
+        public void fill(MovementSchedule schedule)
         {
-            if (isNotBlank(movementSchedule.getOriginHub()))
+            for (int i = 1; i <= schedule.getSchedules().size(); i++)
             {
-                originCrossdockHub.selectValue(movementSchedule.getOriginHub());
-            }
-
-            if (isNotBlank(movementSchedule.getDestinationHub()))
-            {
-                destinationCrossdockHub.selectValue(movementSchedule.getDestinationHub());
-            }
-
-            applyToAllDays.setValue(movementSchedule.isApplyToAllDays());
-
-            if (CollectionUtils.isNotEmpty(movementSchedule.getSchedules()))
-            {
-                movementSchedule.getSchedules().forEach(schedule ->
+                ScheduleForm scheduleForm = getScheduleForm(i);
+                scheduleForm.fill(schedule.getSchedules().get(i - 1));
+                if (i < schedule.getSchedules().size())
                 {
-                    ScheduleForm form = getScheduleFormForDay(schedule.getDay());
-                    form.fill(schedule);
-                });
+                    addAnotherSchedule.click();
+                }
             }
         }
 
-        public ScheduleForm getScheduleFormForDay(String day)
+        public ScheduleForm getScheduleForm(int index)
         {
-            WebElement webElement = findElementByXpath(f("//div[contains(@class,'DailyMovementContainer')][.//span[.='%s']]", day));
+            WebElement webElement = findElementByXpath(f(".//div[contains(@class,'ant-divider')][%d]", index));
             return new ScheduleForm(getWebDriver(), getWebElement(), webElement);
         }
 
         public static class ScheduleForm extends PageElement
         {
-            public ScheduleForm(WebDriver webDriver, WebElement webElement)
-            {
-                super(webDriver, webElement);
-                PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-            }
-
             public ScheduleForm(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
             {
                 super(webDriver, searchContext, webElement);
                 PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
             }
 
-            @FindBy(xpath = ".//button[.='Add a Movement']")
-            public Button addAMovement;
+            @FindBy(xpath = "./following-sibling::div//*[contains(@id,'origin_hub_id')]")
+            public AntSelect originHub;
 
-            @FindBy(xpath = ".//button[.='Add Another Movement']")
-            public Button addAnotherMovement;
+            @FindBy(xpath = "./following-sibling::div//*[contains(@id,'destination_hub_id')]")
+            public AntSelect destinationHub;
 
-            @FindBy(xpath = "(.//span[@class='ant-time-picker'])[1]")
-            public AntTimePicker startTime;
+            @FindBy(xpath = "./following-sibling::div//*[contains(@id,'movement_type')]")
+            public AntSelect movementType;
 
-            @FindBy(css = "input[id*='dayDuration']")
-            public TextBox duration;
+            @FindBy(xpath = "(./following-sibling::div//span[@class='ant-time-picker'])[1]")
+            public AntTimePicker departureTime;
 
-            @FindBy(xpath = "(.//span[@class='ant-time-picker'])[2]")
-            public AntTimePicker endTime;
+            @FindBy(xpath = "./following-sibling::div//input[contains(@id,'duration_day')]")
+            public TextBox durationDays;
 
-            @FindBy(css = "div[class*='ScheduleMovementContainer']")
-            public List<MovementForm> movementForms;
+            @FindBy(xpath = "(./following-sibling::div//span[@class='ant-time-picker'])[2]")
+            public AntTimePicker durationTime;
+
+            @FindBy(xpath = "./following-sibling::div//input[@type='checkbox'][@value='1']")
+            public CheckBox monday;
+
+            @FindBy(xpath = "./following-sibling::div//input[@type='checkbox'][@value='2']")
+            public CheckBox tuesday;
+
+            @FindBy(xpath = "./following-sibling::div//input[@type='checkbox'][@value='3']")
+            public CheckBox wednesday;
+
+            @FindBy(xpath = "./following-sibling::div//input[@type='checkbox'][@value='4']")
+            public CheckBox thursday;
+
+            @FindBy(xpath = "./following-sibling::div//input[@type='checkbox'][@value='5']")
+            public CheckBox friday;
+
+            @FindBy(xpath = "./following-sibling::div//input[@type='checkbox'][@value='6']")
+            public CheckBox saturday;
+
+            @FindBy(xpath = "./following-sibling::div//input[@type='checkbox'][@value='7']")
+            public CheckBox sunday;
+
+            @FindBy(xpath = "./following-sibling::div//textarea[contains(@id,'comment')]")
+            public TextBox comment;
 
             public void fill(MovementSchedule.Schedule schedule)
             {
-                for (int i = 0; i < schedule.getMovements().size(); i++)
+                if (StringUtils.isNotBlank(schedule.getOriginHub()))
                 {
-                    if (i == 0)
-                    {
-                        addAMovement.click();
-                    } else
-                    {
-                        addAnotherMovement.click();
-                    }
-                    MovementSchedule.Schedule.Movement movement = schedule.getMovement(i);
-                    movementForms.get(i).fill(movement);
+                    originHub.selectValue(schedule.getOriginHub());
+                }
+                if (StringUtils.isNotBlank(schedule.getDestinationHub()))
+                {
+                    destinationHub.selectValue(schedule.getDestinationHub());
+                }
+                if (StringUtils.isNotBlank(schedule.getMovementType()))
+                {
+                    movementType.selectValue(schedule.getMovementType());
+                }
+                if (StringUtils.isNotBlank(schedule.getDepartureTime()))
+                {
+                    departureTime.setValue(schedule.getDepartureTime());
+                }
+                if (schedule.getDurationDays() != null)
+                {
+                    durationDays.setValue(schedule.getDurationDays());
+                }
+                if (StringUtils.isNotBlank(schedule.getDurationTime()))
+                {
+                    durationTime.setValue(schedule.getDurationTime());
+                }
+                if (CollectionUtils.isNotEmpty(schedule.getDaysOfWeek()))
+                {
+                    setDaysOfWeek(schedule.getDaysOfWeek());
+                }
+                if (StringUtils.isNotBlank(schedule.getComment()))
+                {
+                    comment.setValue(schedule.getComment());
                 }
             }
 
-            public static class MovementForm extends PageElement
+            public void setDaysOfWeek(Set<String> daysOfWeek)
             {
-                public MovementForm(WebDriver webDriver, WebElement webElement)
-                {
-                    super(webDriver, webElement);
-                    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-                }
-
-                public MovementForm(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-                {
-                    super(webDriver, searchContext, webElement);
-                    PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-                }
-
-                @FindBy(xpath = "(.//span[@class='ant-time-picker'])[1]")
-                public AntTimePicker startTime;
-
-                @FindBy(css = "input[id*='dayDuration']")
-                public TextBox duration;
-
-                @FindBy(xpath = "(.//span[@class='ant-time-picker'])[2]")
-                public AntTimePicker endTime;
-
-                public void fill(MovementSchedule.Schedule.Movement movement)
-                {
-                    if (isNotBlank(movement.getStartTime()))
-                    {
-                        startTime.setValue(movement.getStartTime());
-                    }
-                    if (movement.getDuration() != null)
-                    {
-                        duration.setValue(String.valueOf(movement.getDuration()));
-                    }
-                    if (isNotBlank(movement.getEndTime()))
-                    {
-                        endTime.setValue(movement.getEndTime());
-                    }
-                }
+                monday.setValue(daysOfWeek.contains("monday"));
+                tuesday.setValue(daysOfWeek.contains("tuesday"));
+                wednesday.setValue(daysOfWeek.contains("wednesday"));
+                thursday.setValue(daysOfWeek.contains("thursday"));
+                friday.setValue(daysOfWeek.contains("friday"));
+                saturday.setValue(daysOfWeek.contains("saturday"));
+                sunday.setValue(daysOfWeek.contains("sunday"));
             }
         }
-
     }
 
     public static class AddStationMovementScheduleModal extends AntModal
@@ -410,6 +399,88 @@ public class MovementManagementPage extends OperatorV2SimplePage
 
         @FindBy(xpath = ".//button[.='Edit Schedule']")
         public Button editSchedule;
+    }
+
+    public static class SchedulesTable extends AntTable<MovementSchedule.Schedule>
+    {
+        private static final Pattern DURATION_PATTERN = Pattern.compile("(\\d{2})d\\s(\\d{2})h\\s(\\d{2})m");
+        private static final String DAY_OF_WEEK_LOCATOR = ".//tbody/tr[%d]/td[contains(@class,'daysofweek')]//input[@value='%d']";
+        public static final String COLUMN_ORIGIN_HUB = "originHub";
+        public static final String COLUMN_DESTINATION_HUB = "destinationHub";
+        public static final String COLUMN_DURATION = "durationDays";
+        public static final String COLUMN_DURATION_TIME = "durationTime";
+        public static final String COLUMN_DAYS_OF_WEEK = "daysOfWeek";
+
+        public SchedulesTable(WebDriver webDriver)
+        {
+            super(webDriver);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                    .put(COLUMN_ORIGIN_HUB, "originHubName")
+                    .put(COLUMN_DESTINATION_HUB, "destinationHubName")
+                    .put("movementType", "movementType")
+                    .put("departureTime", "startTime")
+                    .put(COLUMN_DURATION, "duration")
+                    .put(COLUMN_DURATION_TIME, "duration")
+                    .put(COLUMN_DAYS_OF_WEEK, "daysofweek")
+                    .put("comment", "comment")
+                    .build()
+            );
+            setColumnValueProcessors(ImmutableMap.of(
+                    COLUMN_DURATION, value ->
+                    {
+                        Matcher m = DURATION_PATTERN.matcher(value);
+                        return m.matches() ? m.group(1) : null;
+                    },
+                    COLUMN_DURATION_TIME, value ->
+                    {
+                        Matcher m = DURATION_PATTERN.matcher(value);
+                        return m.matches() ? m.group(2) + ":" + m.group(3) : null;
+                    }
+            ));
+            setColumnReaders(ImmutableMap.of(COLUMN_DAYS_OF_WEEK, this::getDaysOfWeek));
+            setEntityClass(MovementSchedule.Schedule.class);
+        }
+
+        public String getDaysOfWeek(int rowNumber)
+        {
+            WebElement checkbox = findElementByXpath(f(DAY_OF_WEEK_LOCATOR, rowNumber, 1));
+            Set<String> days = new LinkedHashSet<>();
+            if (checkbox.isSelected())
+            {
+                days.add("monday");
+            }
+            checkbox = findElementByXpath(f(DAY_OF_WEEK_LOCATOR, rowNumber, 2));
+            if (checkbox.isSelected())
+            {
+                days.add("tuesday");
+            }
+            checkbox = findElementByXpath(f(DAY_OF_WEEK_LOCATOR, rowNumber, 3));
+            if (checkbox.isSelected())
+            {
+                days.add("wednesday");
+            }
+            checkbox = findElementByXpath(f(DAY_OF_WEEK_LOCATOR, rowNumber, 4));
+            if (checkbox.isSelected())
+            {
+                days.add("thursday");
+            }
+            checkbox = findElementByXpath(f(DAY_OF_WEEK_LOCATOR, rowNumber, 5));
+            if (checkbox.isSelected())
+            {
+                days.add("friday");
+            }
+            checkbox = findElementByXpath(f(DAY_OF_WEEK_LOCATOR, rowNumber, 6));
+            if (checkbox.isSelected())
+            {
+                days.add("saturday");
+            }
+            checkbox = findElementByXpath(f(DAY_OF_WEEK_LOCATOR, rowNumber, 7));
+            if (checkbox.isSelected())
+            {
+                days.add("sunday");
+            }
+            return String.join(",", days);
+        }
     }
 
 }
