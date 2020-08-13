@@ -11,7 +11,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.NoSuchElementException;
 
 import java.util.Map;
@@ -48,7 +47,7 @@ public class MovementManagementSteps extends AbstractSteps
             movementManagementPage.addMovementScheduleModal.getScheduleForm(1).originHub.selectValue(hubName);
         } catch (Throwable ex)
         {
-            Assertions.fail(f("Cannot select [%s] value in Origin Crossdock Hub field on the New Crossdock Movement Schedule dialog", hubName));
+            fail(f("Cannot select [%s] value in Origin Crossdock Hub field on the New Crossdock Movement Schedule dialog", hubName));
         }
     }
 
@@ -59,7 +58,7 @@ public class MovementManagementSteps extends AbstractSteps
         try
         {
             movementManagementPage.addMovementScheduleModal.getScheduleForm(1).destinationHub.selectValue(hubName);
-            Assertions.fail(f("Operator can select [%s] value in Destination Crossdock Hub field on the New Crossdock Movement Schedule dialog, but must not", hubName));
+            fail(f("Operator can select [%s] value in Destination Crossdock Hub field on the New Crossdock Movement Schedule dialog, but must not", hubName));
         } catch (NoSuchElementException ex)
         {
             // Step passed. Do nothing
@@ -71,6 +70,7 @@ public class MovementManagementSteps extends AbstractSteps
     {
         movementManagementPage.switchTo();
         movementManagementPage.addSchedule.waitUntilClickable(60);
+        // TODO Will keep it for a while until refactoring is finished
 //        getWebDriver().navigate().refresh();
 //        movementManagementPage.switchTo();
 //        movementManagementPage.addSchedule.waitUntilClickable(60);
@@ -164,7 +164,7 @@ public class MovementManagementSteps extends AbstractSteps
     public void operatorVerifiesANewScheduleIsCreatedOnMovementManagementPage()
     {
         MovementSchedule movementSchedule = get(KEY_CREATED_MOVEMENT_SCHEDULE);
-        Assertions.assertEquals(movementSchedule.getSchedules().size(), movementManagementPage.schedulesTable.getRowsCount(), "Number of displayed schedules");
+        assertEquals("Number of displayed schedules", movementSchedule.getSchedules().size(), movementManagementPage.schedulesTable.getRowsCount());
         for (int i = 0; i < movementSchedule.getSchedules().size(); i++)
         {
             MovementSchedule.Schedule actual = movementManagementPage.schedulesTable.readEntity(i + 1);
@@ -210,22 +210,22 @@ public class MovementManagementSteps extends AbstractSteps
     @Then("Operator verify Add Movement Schedule form is empty")
     public void operatorVerifyAddMovementScheduleFormIsEmpty()
     {
-        Assertions.assertNull(movementManagementPage.addMovementScheduleModal.getScheduleForm(1).originHub.getValue(), "Origin Crossdock Hub value");
-        Assertions.assertNull(movementManagementPage.addMovementScheduleModal.getScheduleForm(1).destinationHub.getValue(), "Destination Crossdock Hub value");
-        Assertions.assertNull(movementManagementPage.addMovementScheduleModal.getScheduleForm(1).movementType.getValue(), "Movement Type value");
-        Assertions.assertEquals("", movementManagementPage.addMovementScheduleModal.getScheduleForm(1).comment.getValue(), "Comment value");
+        assertNull("Origin Crossdock Hub value", movementManagementPage.addMovementScheduleModal.getScheduleForm(1).originHub.getValue());
+        assertNull("Destination Crossdock Hub value", movementManagementPage.addMovementScheduleModal.getScheduleForm(1).destinationHub.getValue());
+        assertNull("Movement Type value", movementManagementPage.addMovementScheduleModal.getScheduleForm(1).movementType.getValue());
+        assertEquals("Comment value", "", movementManagementPage.addMovementScheduleModal.getScheduleForm(1).comment.getValue());
     }
 
     @Then("Operator verifies Add Movement Schedule dialog is closed on Movement Management page")
     public void operatorVerifiesAddMovementScheduleDialogIsClosedOnMovementManagementPage()
     {
-        Assertions.assertFalse(movementManagementPage.addMovementScheduleModal.isDisplayed(), "Add Movement Schedule dialog is opened");
+        assertFalse("Add Movement Schedule dialog is opened", movementManagementPage.addMovementScheduleModal.isDisplayed());
     }
 
     @Then("Operator verify schedules list is empty on Movement Management page")
     public void operatorVerifySchedulesListIsEmptyOnMovementManagementPage()
     {
-        Assertions.assertTrue(movementManagementPage.schedulesTable.isEmpty(), "Schedules list is not empty");
+        assertTrue("Schedules list is not empty", movementManagementPage.schedulesTable.isEmpty());
     }
 
     @And("Operator filters schedules list on Movement Management page using data below:")
@@ -257,12 +257,12 @@ public class MovementManagementSteps extends AbstractSteps
             if (StringUtils.isNotBlank(originHub))
             {
                 String actualOriginHub = movementManagementPage.schedulesTable.getColumnText(i + 1, COLUMN_ORIGIN_HUB);
-                Assertions.assertTrue(StringUtils.containsIgnoreCase(originHub, actualOriginHub), f("Row [%d] - Origin Hub name - doesn't contains [%s]", i + 1, originHub));
+                assertTrue(f("Row [%d] - Origin Hub name - doesn't contains [%s]", i + 1, originHub), StringUtils.containsIgnoreCase(originHub, actualOriginHub));
             }
             if (StringUtils.isNotBlank(destinationHub))
             {
                 String actualDestinationHub = movementManagementPage.schedulesTable.getColumnText(i + 1, MovementManagementPage.SchedulesTable.COLUMN_DESTINATION_HUB);
-                Assertions.assertTrue(StringUtils.containsIgnoreCase(destinationHub, actualDestinationHub), f("Row [%d] - Destination Hub name - doesn't contains [%s]", i + 1, destinationHub));
+                assertTrue(f("Row [%d] - Destination Hub name - doesn't contains [%s]", i + 1, destinationHub), StringUtils.containsIgnoreCase(destinationHub, actualDestinationHub));
             }
         }
     }
@@ -279,6 +279,7 @@ public class MovementManagementSteps extends AbstractSteps
         MovementSchedule movementSchedule = get(KEY_CREATED_MOVEMENT_SCHEDULE);
         Map<String, String> filters = ImmutableMap.of("originHub", movementSchedule.getSchedule(0).getOriginHub(), "destinationHub", movementSchedule.getSchedule(0).getDestinationHub());
         operatorFiltersSchedulesListOnMovementManagementPageUsingDataBelow(filters);
+        //TODO Rework this according new scenarios
 //        movementManagementPage.schedulesTable.rows.get(0).clickAction("Delete Schedule");
         pause1s();
         movementManagementPage.popoverDeleteButton.click();
@@ -291,6 +292,7 @@ public class MovementManagementSteps extends AbstractSteps
         MovementSchedule movementSchedule = get(KEY_CREATED_MOVEMENT_SCHEDULE);
         Map<String, String> filters = ImmutableMap.of("originHub", movementSchedule.getSchedule(0).getOriginHub(), "destinationHub", movementSchedule.getSchedule(0).getDestinationHub());
         operatorFiltersSchedulesListOnMovementManagementPageUsingDataBelow(filters);
+        //TODO Rework this according new scenarios
 //        movementManagementPage.schedulesTable.rows.get(0).clickAction("View Schedule");
         movementManagementPage.movementScheduleModal.waitUntilVisible();
         pause1s();
@@ -301,11 +303,11 @@ public class MovementManagementSteps extends AbstractSteps
     {
         MovementSchedule movementSchedule = get(KEY_CREATED_MOVEMENT_SCHEDULE);
         String actualOriginHub = movementManagementPage.movementScheduleModal.originCrossdockHub.getText();
-        Assertions.assertEquals(movementSchedule.getSchedule(0).getOriginHub(), actualOriginHub, "Origin Crossdock Hub");
+        assertEquals("Origin Crossdock Hub", movementSchedule.getSchedule(0).getOriginHub(), actualOriginHub);
 
         String actualDestinationHub = movementManagementPage.movementScheduleModal.destinationCrossdockHub.getText();
-        Assertions.assertEquals(movementSchedule.getSchedule(0).getDestinationHub(), actualDestinationHub, "Destination Crossdock Hub");
+        assertEquals("Destination Crossdock Hub", movementSchedule.getSchedule(0).getDestinationHub(), actualDestinationHub);
 
-        Assertions.assertTrue(movementManagementPage.movementScheduleModal.editSchedule.isEnabled(), "Edit Schedule button is disabled");
+        assertTrue("Edit Schedule button is disabled", movementManagementPage.movementScheduleModal.editSchedule.isEnabled());
     }
 }
