@@ -137,7 +137,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast("All changes saved successfully");
         backToShipperList();
         pause3s();
-        getWebDriver().switchTo().window(currentWindowHandle).close();
+        getWebDriver().switchTo().window(currentWindowHandle);
     }
 
     public void createNewShipperWithUpdatedPricingScript(Shipper shipper)

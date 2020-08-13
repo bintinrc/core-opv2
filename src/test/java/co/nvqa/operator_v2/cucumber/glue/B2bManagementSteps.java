@@ -9,7 +9,10 @@ import cucumber.api.java.en.When;
 
 import java.util.List;
 
-import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.*;
+import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.ID_COLUMN_SUB_SHIPPER_LOCATOR_KEY;
+import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.MASTER_SHIPPER_VIEW_SUB_SHIPPER_ACTION_BUTTON_INDEX;
+import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.NAME_COLUMN_LOCATOR_KEY;
+import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.SUB_SHIPPER_EDIT_ACTION_BUTTON_INDEX;
 
 /**
  * @author Lanang Jati
