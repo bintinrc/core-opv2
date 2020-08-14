@@ -37,7 +37,6 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -116,23 +115,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void waitUntilShipperCreateEditPageIsLoaded()
     {
         shipperInformation.waitUntilClickable();
-    }
-
-    public String switchToNewWindow()
-    {
-        waitUntilNewWindowOrTabOpened();
-        String currentWindowHandle = getWebDriver().getWindowHandle();
-        Set<String> windowHandles = getWebDriver().getWindowHandles();
-
-        for (String windowHandle : windowHandles)
-        {
-            if (!windowHandle.equalsIgnoreCase(currentWindowHandle))
-            {
-                getWebDriver().switchTo().window(windowHandle);
-            }
-        }
-
-        return currentWindowHandle;
     }
 
     public void createNewShipper(Shipper shipper)

@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.shipper.v2.Shipper;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.B2bManagementPage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
@@ -8,8 +9,10 @@ import cucumber.api.java.en.When;
 
 import java.util.List;
 
+import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.ID_COLUMN_SUB_SHIPPER_LOCATOR_KEY;
 import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.MASTER_SHIPPER_VIEW_SUB_SHIPPER_ACTION_BUTTON_INDEX;
 import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.NAME_COLUMN_LOCATOR_KEY;
+import static co.nvqa.operator_v2.selenium.page.B2bManagementPage.SUB_SHIPPER_EDIT_ACTION_BUTTON_INDEX;
 
 /**
  * @author Lanang Jati
@@ -125,4 +128,105 @@ public class B2bManagementSteps extends AbstractSteps
     }
 
 
+    @When("Operator click add sub-shipper button on b2b management page")
+    public void operatorClickAddSubShipperButtonOnBBManagementPage()
+    {
+        b2bManagementPage.clickAddSubShipperButton();
+    }
+
+    @And("Operator fill seller id field with {string} on b2b management page")
+    public void operatorFillSellerIdFieldWithOnBBManagementPage(String sellerId)
+    {
+        String id = sellerId;
+        if ("random".equalsIgnoreCase(sellerId)) {
+            id = String.valueOf(System.currentTimeMillis()).substring(5, 11);
+        }
+        b2bManagementPage.fillSellerId(id);
+        putInList(KEY_SUB_SHIPPER_SELLER_IDS, id);
+    }
+
+    @And("Operator fill name field with {string} on b2b management page")
+    public void operatorFillNameFieldWithOnBBManagementPage(String name)
+    {
+        String fixedName = name;
+        if ("random".equalsIgnoreCase(name)) {
+            String random = String.valueOf(System.currentTimeMillis()).substring(5, 11);
+            fixedName = f("sub shipper %s", random);
+        }
+        b2bManagementPage.fillName(fixedName);
+    }
+
+    @And("Operator fill email field with {string} on b2b management page")
+    public void operatorFillEmailFieldWithOnBBManagementPage(String email)
+    {
+        String fixedEmail = email;
+        if ("random".equalsIgnoreCase(email)) {
+            String random = String.valueOf(System.currentTimeMillis()).substring(5, 11);
+            fixedEmail = f("sub.shipper+%s@ninja.tes", random);
+        }
+        b2bManagementPage.fillEmail(fixedEmail);
+    }
+
+    @And("Operator click create sub-shipper account button on b2b management page")
+    public void operatorClickCreateSubShipperAccountButtonOnBBManagementPage()
+    {
+        b2bManagementPage.clickCreateSubShipperButton();
+    }
+
+    @Then("QA verify sub shipper is created on b2b management page")
+    public void qaVerifySubShipperWithSellerIdIsDisplayedOnBBManagementPage()
+    {
+        List<String> expectedSellerIds = get(KEY_SUB_SHIPPER_SELLER_IDS);
+
+        expectedSellerIds.forEach(expectedSellerId ->
+        {
+            boolean isSubShipperExist;
+            boolean isNextPageDisabled;
+            List<Shipper> actualSubShipper;
+            NvLogger.infof("Check seller id %s", expectedSellerId);
+
+            goToFirstPage();
+            do
+            {
+                actualSubShipper = b2bManagementPage.getSubShipperTable().readAllEntities();
+                isSubShipperExist = actualSubShipper.stream().anyMatch(subShipper -> subShipper.getExternalRef().equals(expectedSellerId));
+                isNextPageDisabled = b2bManagementPage.isNextPageButtonDisable();
+                if (!isNextPageDisabled)
+                {
+                    b2bManagementPage.clickNextPageButton();
+                }
+            }
+            while (!isSubShipperExist && !isNextPageDisabled);
+
+            assertTrue(isSubShipperExist);
+
+        });
+    }
+
+    private void goToFirstPage()
+    {
+        while (!b2bManagementPage.isPrevPageButtonDisable())
+        {
+            b2bManagementPage.clickPrevPageButton();
+        }
+    }
+
+    @When("Operator click edit action button for sub shipper with seller id contains {string} on b2b management page")
+    public void operatorClickEditActionButtonForSubShipperOnBBManagementPage(String sellerId)
+    {
+        b2bManagementPage.getSubShipperTable().clickActionButton(ID_COLUMN_SUB_SHIPPER_LOCATOR_KEY, sellerId, SUB_SHIPPER_EDIT_ACTION_BUTTON_INDEX);
+    }
+
+    @Then("QA verify shipper details page with id {string} is displayed")
+    public void qaVerifyShipperDetailsPageWithIdIsDisplayed(String shipperId)
+    {
+        b2bManagementPage.shipperDetailsDisplayed(shipperId);
+    }
+
+    @Then("QA verify error message {string} is displayed on b2b management page")
+    public void qaVerifyErrorMessageIsDisplayedOnBBManagementPage(String errorMsg)
+    {
+        String actualErrorMsg = b2bManagementPage.getErrorMessage();
+        assertEquals(f("Check error message : %s", errorMsg), errorMsg, actualErrorMsg);
+    }
 }

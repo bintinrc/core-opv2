@@ -70,6 +70,105 @@ Feature: B2B Management
       | masterShipperName                  | masterShipperId                  | searchValue                      | hiptest-uid                              |
       | {operator-b2b-master-shipper-name} | {operator-b2b-master-shipper-id} | {operator-b2b-sub-shipper-email} | uid:2cc0b647-a92a-4135-bdfb-c6d16625b97f |
 
+  Scenario Outline: Create sub shipper on b2b management page (uid:136facd1-b3eb-44b3-aa3e-1d17361d35e2)
+    Given Operator refresh page
+    Given QA verify b2b management page is displayed
+    When Operator fill name search field with "<masterShipperName>" on master shipper table on b2b management page
+    Then QA verify master shippers with name contains "<masterShipperName>" is displayed on b2b management page
+    When Operator click view sub-shippers button for shipper "<masterShipperName>" on b2b management page
+    And Operator click add sub-shipper button on b2b management page
+    And Operator fill seller id field with "random" on b2b management page
+    And Operator fill name field with "random" on b2b management page
+    And Operator fill email field with "random" on b2b management page
+    And Operator click create sub-shipper account button on b2b management page
+    Then QA verify sub shipper is created on b2b management page
+
+    Examples:
+      | masterShipperName                  | hiptest-uid                              |
+      | {operator-b2b-master-shipper-name} | uid:b610d8ad-58f5-430a-ae8b-564e5958ee90 |
+
+  @CloseNewWindows
+  Scenario Outline: Edit sub shippers on b2b management (uid:194b7d19-189f-419a-abcc-eefc58d77aac)
+    Given Operator refresh page
+    Given QA verify b2b management page is displayed
+    When Operator fill name search field with "<masterShipperName>" on master shipper table on b2b management page
+    Then QA verify master shippers with name contains "<masterShipperName>" is displayed on b2b management page
+    When Operator click view sub-shippers button for shipper "<masterShipperName>" on b2b management page
+    And Operator fill name search field with "<searchValue>" on sub shipper table on b2b management page
+    Then QA verify sub shippers with name contains "<searchValue>" is displayed on b2b management page
+
+    When Operator click edit action button for sub shipper with seller id contains "<searchValue>" on b2b management page
+    Then QA verify shipper details page with id "{operator-b2b-sub-shipper-id}" is displayed
+
+    Examples:
+      | masterShipperName                  | searchValue                          | hiptest-uid                              |
+      | {operator-b2b-master-shipper-name} | {operator-b2b-sub-shipper-seller-id} | uid:2300d1be-3d97-49ad-afb1-ca8adf4a15ba |
+
+  Scenario Outline: Create sub shipper with empty seller id field on b2b management page (uid:efc01b1f-7ad8-4059-a650-b60f94b5065d)
+    Given Operator refresh page
+    Given QA verify b2b management page is displayed
+    When Operator fill name search field with "<masterShipperName>" on master shipper table on b2b management page
+    Then QA verify master shippers with name contains "<masterShipperName>" is displayed on b2b management page
+    When Operator click view sub-shippers button for shipper "<masterShipperName>" on b2b management page
+    And Operator click add sub-shipper button on b2b management page
+    And Operator fill name field with "random" on b2b management page
+    And Operator fill email field with "random" on b2b management page
+    And Operator click create sub-shipper account button on b2b management page
+    Then QA verify error message "Seller ID must be filled." is displayed on b2b management page
+
+    Examples:
+      | masterShipperName                  | hiptest-uid                              |
+      | {operator-b2b-master-shipper-name} | uid:f59905a3-f150-431d-aece-e7faa49aae16 |
+
+  Scenario Outline: Create sub shipper with empty name field on b2b management page (uid:b19876f6-38e8-4c78-86b8-9033f17706ec)
+    Given Operator refresh page
+    Given QA verify b2b management page is displayed
+    When Operator fill name search field with "<masterShipperName>" on master shipper table on b2b management page
+    Then QA verify master shippers with name contains "<masterShipperName>" is displayed on b2b management page
+    When Operator click view sub-shippers button for shipper "<masterShipperName>" on b2b management page
+    And Operator click add sub-shipper button on b2b management page
+    And Operator fill seller id field with "random" on b2b management page
+    And Operator fill email field with "random" on b2b management page
+    And Operator click create sub-shipper account button on b2b management page
+    Then QA verify error message "Name must be filled." is displayed on b2b management page
+
+    Examples:
+      | masterShipperName                  | hiptest-uid                              |
+      | {operator-b2b-master-shipper-name} | uid:41016957-fdb7-453c-b868-2eb8523c04a5 |
+
+  Scenario Outline: Create sub shipper with empty email field on b2b management page (uid:4be10e78-3f50-4077-b8b5-718a8cab0c5d)
+    Given Operator refresh page
+    Given QA verify b2b management page is displayed
+    When Operator fill name search field with "<masterShipperName>" on master shipper table on b2b management page
+    Then QA verify master shippers with name contains "<masterShipperName>" is displayed on b2b management page
+    When Operator click view sub-shippers button for shipper "<masterShipperName>" on b2b management page
+    And Operator click add sub-shipper button on b2b management page
+    And Operator fill seller id field with "random" on b2b management page
+    And Operator fill name field with "random" on b2b management page
+    And Operator click create sub-shipper account button on b2b management page
+    Then QA verify error message "Email must be filled." is displayed on b2b management page
+
+    Examples:
+      | masterShipperName                  | hiptest-uid                              |
+      | {operator-b2b-master-shipper-name} | uid:b5703a3d-5d57-486f-8663-dbb0b5ef0640 |
+
+  Scenario Outline: Create sub shipper with invalid email format on b2b management page (uid:e4076be6-1fdc-4a68-80dc-27d33956f595)
+    Given Operator refresh page
+    Given QA verify b2b management page is displayed
+    When Operator fill name search field with "<masterShipperName>" on master shipper table on b2b management page
+    Then QA verify master shippers with name contains "<masterShipperName>" is displayed on b2b management page
+    When Operator click view sub-shippers button for shipper "<masterShipperName>" on b2b management page
+    And Operator click add sub-shipper button on b2b management page
+    And Operator fill seller id field with "random" on b2b management page
+    And Operator fill name field with "random" on b2b management page
+    And Operator fill email field with "wrong.format" on b2b management page
+    And Operator click create sub-shipper account button on b2b management page
+    Then QA verify error message "Email not formatted as _@_._" is displayed on b2b management page
+
+    Examples:
+      | masterShipperName                   | hiptest-uid                              |
+      | {operator-b2b-master-shipper-name}  | uid:c344e290-7672-47d6-917a-de46b70aa7e2 |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

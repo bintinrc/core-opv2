@@ -1354,4 +1354,21 @@ public class OperatorV2SimplePage extends SimplePage
         WebElement we = findElementByXpath(xpathExpression);
         moveAndDoubleClick(we);
     }
+
+    public String switchToNewWindow()
+    {
+        waitUntilNewWindowOrTabOpened();
+        String currentWindowHandle = getWebDriver().getWindowHandle();
+        Set<String> windowHandles = getWebDriver().getWindowHandles();
+
+        for (String windowHandle : windowHandles)
+        {
+            if (!windowHandle.equalsIgnoreCase(currentWindowHandle))
+            {
+                getWebDriver().switchTo().window(windowHandle);
+            }
+        }
+
+        return currentWindowHandle;
+    }
 }

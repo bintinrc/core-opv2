@@ -36,4 +36,5 @@ public interface ScenarioStorageKeys extends StandardScenarioStorageKeys
     String KEY_CREATED_MOVEMENT_SCHEDULE = "KEY_CREATED_MOVEMENT_SCHEDULE";
 
     String KEY_CREATED_ZONE = "KEY_CREATED_ZONE";
+    String KEY_SUB_SHIPPER_SELLER_IDS = "KEY_SUB_SHIPPER_SELLER_IDS";
 }
