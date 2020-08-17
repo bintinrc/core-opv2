@@ -9,6 +9,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.Arrays;
+
 public class PageElement extends SimplePage
 {
     protected WebElement webElement;
@@ -47,7 +49,8 @@ public class PageElement extends SimplePage
         try
         {
             webElement.click();
-        } catch (ElementClickInterceptedException ex) {
+        } catch (ElementClickInterceptedException ex)
+        {
             jsClick();
         }
     }
@@ -62,7 +65,8 @@ public class PageElement extends SimplePage
         return getAttribute(webElement, attributeName);
     }
 
-    public String getValue(){
+    public String getValue()
+    {
         return getAttribute("value");
     }
 
@@ -100,9 +104,11 @@ public class PageElement extends SimplePage
 
     public WebElement getWebElement()
     {
-        try {
+        try
+        {
             webElement.getTagName();
-        } catch (StaleElementReferenceException ex){
+        } catch (StaleElementReferenceException ex)
+        {
             PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
         }
         return webElement;
@@ -166,5 +172,10 @@ public class PageElement extends SimplePage
     protected String escapeValue(String value)
     {
         return value.replace("'", "\\'");
+    }
+
+    public boolean hasClass(String className)
+    {
+        return Arrays.asList(getAttribute("class").split(" ")).contains(className);
     }
 }
