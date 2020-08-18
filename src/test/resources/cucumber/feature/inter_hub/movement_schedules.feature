@@ -723,7 +723,7 @@ Feature: Movement Management
       | endTime        | 16:30                              |
 
   @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
-  Scenario: Station to its Crossdock - Station Movement Found and there is available schedule
+  Scenario: Station to its Crossdock - Station Movement Found and there is available schedule (uid:6fcd7f9e-1876-4445-b840-d6baeece5575)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -790,7 +790,7 @@ Feature: Movement Management
       | status | SUCCESS         |
 
   @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
-  Scenario: Station to its Crossdock - Station Movement Found but there is no available schedule
+  Scenario: Station to its Crossdock - Station Movement Found but there is no available schedule (uid:be4d5366-99e4-432d-879f-7647efbf7d6b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -837,7 +837,7 @@ Feature: Movement Management
       | comments | found no movement from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (SG) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (SG) |
 
   @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
-  Scenario: Station to its Crossdock - Station Movement not found
+  Scenario: Station to its Crossdock - Station Movement not found (uid:034368e1-26d9-43fc-9aec-6a8f6cb8f3eb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -879,7 +879,7 @@ Feature: Movement Management
       | comments | relation for {KEY_LIST_OF_CREATED_HUBS[1].id} (SG) not found |
 
   @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
-  Scenario: Crossdock to its Station - Station Movement Found and there is available schedule
+  Scenario: Crossdock to its Station - Station Movement Found and there is available schedule (uid:4be9aa9e-813f-4c02-8d92-5af401b4a6f4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -946,7 +946,7 @@ Feature: Movement Management
       | status | SUCCESS         |
 
   @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
-  Scenario: Crossdock to its Station - Station Movement Found but there is no available schedule
+  Scenario: Crossdock to its Station - Station Movement Found but there is no available schedule (uid:459a5ba5-3ffd-4fe4-ae77-250e77e4c1b0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -993,7 +993,7 @@ Feature: Movement Management
       | comments | found no movement from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (SG) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (SG) |
 
   @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
-  Scenario: Crossdock to its Station - Station Movement not found
+  Scenario: Crossdock to its Station - Station Movement not found (uid:9aa9d622-d1e1-41d0-9ab0-c7b960051f91)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -1035,7 +1035,7 @@ Feature: Movement Management
       | comments | relation for {KEY_LIST_OF_CREATED_HUBS[2].id} (SG) not found |
 
   @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
-  Scenario: Station to another Crossdock - Station Movement Found and there is available schedule
+  Scenario:   Scenario: Station to another Crossdock - Station Movement Found and there is available schedule (uid:6aaa8018-2bc7-4445-a5b7-665b28d1163c)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
       | name         | GENERATED |
