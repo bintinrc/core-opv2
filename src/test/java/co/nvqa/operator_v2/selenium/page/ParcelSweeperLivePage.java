@@ -21,6 +21,12 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     private static final String PRIORITY_LEVEL_COLOR_XPATH ="//div[contains(@class,'priority-container')][descendant::div[contains(text(), 'Priority Level')]]";
     private static final String LOCATOR_RTS_INFO = "//div[contains(@class,'rts-info-container')]/div/h5";
     private static final String XPATH_ORDER_TAGS = "//div[contains(@class,'panel tags-info-container')]//span";
+    private static final String HUB_DROPDOWN_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and not(@disabled)]/ancestor::md-autocomplete";
+    private static final String HUB_INPUT_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and not(@disabled)]";
+    private static final String CHOSEN_VALUE_SELECTION_XPATH = "//li[@ng-click='$mdAutocompleteCtrl.select($index)']//span[text()='%s']";
+    private static final String SORT_TASK_DROPDOWN_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and contains(@class,'invalid')]/ancestor::md-autocomplete";
+    private static final String SORT_TASK_INPUT_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and contains(@class,'invalid')]";
+    private static final String MASTER_VIEW_SORT_TASK_OPTION = "Master View";
 
     public ParcelSweeperLivePage(WebDriver webDriver) {
         super(webDriver);
@@ -28,8 +34,25 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
 
     public void selectHubToBegin(String hubName){
         pause2s();
-        selectValueFromMdSelectWithSearch("model", hubName);
-        clickButtonByAriaLabelAndWaitUntilDone("Continue");
+
+        // Select Hub
+        click(HUB_DROPDOWN_XPATH);
+        waitUntilVisibilityOfElementLocated(HUB_INPUT_XPATH);
+        sendKeys(HUB_INPUT_XPATH, hubName);
+        waitUntilVisibilityOfElementLocated(f(CHOSEN_VALUE_SELECTION_XPATH, hubName));
+        click(f(CHOSEN_VALUE_SELECTION_XPATH, hubName));
+
+        //Select Sort Task
+        click(SORT_TASK_DROPDOWN_XPATH);
+        if (isElementExistFast(SORT_TASK_INPUT_XPATH))
+        {
+            waitUntilVisibilityOfElementLocated(SORT_TASK_INPUT_XPATH);
+            sendKeys(SORT_TASK_INPUT_XPATH, MASTER_VIEW_SORT_TASK_OPTION);
+            waitUntilVisibilityOfElementLocated(f(CHOSEN_VALUE_SELECTION_XPATH, MASTER_VIEW_SORT_TASK_OPTION));
+            click(f(CHOSEN_VALUE_SELECTION_XPATH, MASTER_VIEW_SORT_TASK_OPTION));
+        }
+
+        clickButtonByAriaLabelAndWaitUntilDone("Proceed");
     }
 
     public void scanTrackingId(String trackingId)

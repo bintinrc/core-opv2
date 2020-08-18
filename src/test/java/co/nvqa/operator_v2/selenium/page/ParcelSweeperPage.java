@@ -51,12 +51,12 @@ public class ParcelSweeperPage extends OperatorV2SimplePage
     {
         if (routeId != null)
         {
-            assertEquals("Unexpected Route ID", routeId, getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h4"));
+            assertEquals("Unexpected Route ID", routeId, getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h3"));
         }
 
         if (StringUtils.isNotBlank(driverName))
         {
-            assertThat("Unexpected Route ID", getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h5"), equalToIgnoringCase(driverName));
+            assertThat("Unexpected Driver Name", getText(LOCATOR_ROUTE_INFO_CONTAINER + "//h4"), equalToIgnoringCase(driverName));
         }
 
         if (StringUtils.isNotBlank(color))
@@ -76,7 +76,7 @@ public class ParcelSweeperPage extends OperatorV2SimplePage
             {
                 if((zoneFullName != null && !zoneFullName.isEmpty()))
                 {
-                    assertThat("Unexpected Zone Name", zoneShortName + " " + zoneFullName, equalToIgnoringCase(zoneName));
+                    assertThat("Unexpected Zone Name", zoneFullName, equalToIgnoringCase(zoneName));
                 } else
                 {
                     assertThat("Unexpected Zone Name", zoneShortName, equalToIgnoringCase(zoneName));
