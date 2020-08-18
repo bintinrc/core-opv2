@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementSchedule;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.MovementManagementPage;
 import com.google.common.collect.ImmutableMap;
 import cucumber.api.java.After;
@@ -70,10 +71,6 @@ public class MovementManagementSteps extends AbstractSteps
     {
         movementManagementPage.switchTo();
         movementManagementPage.addSchedule.waitUntilClickable(60);
-        // TODO Will keep it for a while until refactoring is finished
-//        getWebDriver().navigate().refresh();
-//        movementManagementPage.switchTo();
-//        movementManagementPage.addSchedule.waitUntilClickable(60);
     }
 
     @Then("Operator adds new Movement Schedule on Movement Management page using data below:")
@@ -91,12 +88,15 @@ public class MovementManagementSteps extends AbstractSteps
         data = resolveKeyValues(data);
         String station = data.get("station");
         String crossdockHub = data.get("crossdockHub");
-        movementManagementPage.relationsTab.click();
-        movementManagementPage.pendingTab.click();
+        operatorSelectTabOnMovementManagementPage("Relations");
+        operatorSelectTabOnMovementManagementPage("Pending");
         movementManagementPage.stationFilter.setValue(station);
-        movementManagementPage.relationsTable.rows.get(0).editRelation.click();
+        movementManagementPage.relationsTable.rows.get(0).editRelations.click();
         movementManagementPage.editStationRelationsModal.waitUntilVisible();
-        movementManagementPage.editStationRelationsModal.crossdockHub.selectValue(crossdockHub);
+        retryIfRuntimeExceptionOccurred(() ->
+                        movementManagementPage.editStationRelationsModal.crossdockHub.selectValue(crossdockHub),
+                2
+        );
         movementManagementPage.editStationRelationsModal.save.click();
         movementManagementPage.editStationRelationsModal.waitUntilInvisible();
     }
@@ -144,9 +144,10 @@ public class MovementManagementSteps extends AbstractSteps
     public void operatorLoadSchedulesOnMovementManagementPageUsingDataBelow(Map<String, String> data)
     {
         data = resolveKeyValues(data);
+        String crossdockHub = data.get("crossdockHub");
         String originHub = data.get("originHub");
         String destinationHub = data.get("destinationHub");
-        movementManagementPage.loadSchedules(originHub, destinationHub);
+        movementManagementPage.loadSchedules(crossdockHub, originHub, destinationHub);
     }
 
     @And("Operator load schedules on Movement Management page")
@@ -286,6 +287,7 @@ public class MovementManagementSteps extends AbstractSteps
         movementManagementPage.waitUntilInvisibilityOfNotification("Movement schedules deleted", true);
     }
 
+    @Deprecated
     @When("Operator open view modal of a created movement schedule on Movement Management page")
     public void operatorOpenViewDialogOfACreatedMovementScheduleOnMovementManagementPage()
     {
@@ -309,5 +311,85 @@ public class MovementManagementSteps extends AbstractSteps
         assertEquals("Destination Crossdock Hub", movementSchedule.getSchedule(0).getDestinationHub(), actualDestinationHub);
 
         assertTrue("Edit Schedule button is disabled", movementManagementPage.movementScheduleModal.editSchedule.isEnabled());
+    }
+
+    @When("Operator select \"(.+)\" tab on Movement Management page")
+    public void operatorSelectTabOnMovementManagementPage(String tabName)
+    {
+        switch (StringUtils.normalizeSpace(tabName.toLowerCase()))
+        {
+            case "crossdock hubs":
+                movementManagementPage.crossdockHubsTab.click();
+                break;
+            case "stations":
+                movementManagementPage.stationsTab.click();
+                break;
+            case "relations":
+                movementManagementPage.relationsTab.click();
+                pause1s();
+                movementManagementPage.waitUntil(() -> !StringUtils.contains(movementManagementPage.allTab.getText(), "(0)"), 10000);
+                break;
+            case "pending":
+                movementManagementPage.pendingTab.click();
+                break;
+            case "completed":
+                movementManagementPage.completedTab.click();
+                break;
+            case "all":
+                movementManagementPage.allTab.click();
+                break;
+            default:
+                fail("Unknown tab name [%s]", tabName);
+        }
+    }
+
+    @When("Operator verify 'All' 'Pending' and 'Completed' tabs are displayed on 'Relations' tab")
+    public void operatorVerifyTabsAreDisplayedOnRelationsTab()
+    {
+        assertTrue("All tab is displayed", movementManagementPage.allTab.isDisplayedFast());
+        assertTrue("Pending tab is displayed", movementManagementPage.pendingTab.isDisplayedFast());
+        assertTrue("Completed tab is displayed", movementManagementPage.completedTab.isDisplayedFast());
+    }
+
+    @When("Operator verify \"(.+)\" tab is selected on 'Relations' tab")
+    public void operatorVerifyTabIsSelectedOnRelationsTab(String tabName)
+    {
+        PageElement tabElement = null;
+        switch (StringUtils.normalizeSpace(tabName.toLowerCase()))
+        {
+            case "all":
+                tabElement = movementManagementPage.allTab;
+                break;
+            case "pending":
+                tabElement = movementManagementPage.pendingTab;
+                break;
+            case "completed":
+                tabElement = movementManagementPage.completedTab;
+                break;
+            default:
+                fail("Unknown tab name [%s]", tabName);
+        }
+        assertTrue(f("%s tab is selected", tabName), tabElement.hasClass("ant-radio-button-wrapper-checked"));
+    }
+
+    @When("Operator verify all Crossdock Hub in Pending tab have \"(.+)\" value")
+    public void operatorVerifyCrossdockHubInPendingTabOnRelationsTab(String expectedValue)
+    {
+        assertTrue(f("All Crossdock Hub in Pending tab have '%s' value", expectedValue),
+                movementManagementPage.relationsTable.rows.stream().map(row -> row.crossdock.getText()).allMatch(expectedValue::equals));
+    }
+
+    @When("Operator verify all Crossdock Hub of all listed Stations already defined")
+    public void operatorVerifyCrossdockHubAlreadyDefinedOnRelationsTab()
+    {
+        assertTrue("all Crossdock Hub of all listed Stations already defined",
+                movementManagementPage.relationsTable.rows.stream().map(row -> row.crossdock.getText()).noneMatch("Unfilled"::equals));
+    }
+
+    @When("Operator verify there is 'Edit Relation' link in Relations table on 'Relations' tab")
+    public void operatorVerifyEditRelationLinkOnRelationsTab()
+    {
+        assertTrue("there is hyperlink for 'Edit Relations' on the right side",
+                movementManagementPage.relationsTable.rows.stream().map(row -> row.editRelations.getText()).allMatch("Edit Relations"::equals));
     }
 }

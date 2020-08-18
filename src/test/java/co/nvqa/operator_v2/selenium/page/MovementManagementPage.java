@@ -47,8 +47,17 @@ public class MovementManagementPage extends OperatorV2SimplePage
     @FindBy(id = "originHubId")
     public AntSelect originCrossdockHub;
 
+    @FindBy(id = "orig_station_hub")
+    public AntSelect originStationHub;
+
+    @FindBy(id = "crossdock_hub")
+    public AntSelect crossdockHub;
+
     @FindBy(id = "destinationHubId")
     public AntSelect destinationCrossdockHub;
+
+    @FindBy(id = "dest_station_hub")
+    public AntSelect destinationStationHub;
 
     @FindBy(xpath = "//button[.='Load Schedules']")
     public Button loadSchedules;
@@ -68,8 +77,17 @@ public class MovementManagementPage extends OperatorV2SimplePage
     @FindBy(xpath = "//div[@class='ant-popover-buttons']//button[.='Delete']")
     public Button popoverDeleteButton;
 
+    @FindBy(xpath = "//label[.='Crossdock Hubs']")
+    public PageElement crossdockHubsTab;
+
     @FindBy(xpath = "//label[.='Relations']")
     public PageElement relationsTab;
+
+    @FindBy(xpath = "//label[starts-with(.,'All')]")
+    public PageElement allTab;
+
+    @FindBy(xpath = "//label[starts-with(.,'Completed')]")
+    public PageElement completedTab;
 
     @FindBy(xpath = "//label[starts-with(.,'Pending')]")
     public PageElement pendingTab;
@@ -102,21 +120,38 @@ public class MovementManagementPage extends OperatorV2SimplePage
         getWebDriver().switchTo().frame(pageFrame.getWebElement());
     }
 
-    public void loadSchedules(String originHub, String destinationHub)
+    public void loadSchedules(String crossdockHub, String originHub, String destinationHub)
     {
         if (editFilters.isDisplayedFast())
         {
             editFilters.click();
         }
 
-        if (StringUtils.isNotBlank(originHub))
+        if (StringUtils.isNotBlank(crossdockHub))
         {
-            originCrossdockHub.selectValue(originHub);
-        }
+            this.crossdockHub.selectValue(crossdockHub);
+            pause2s();
 
-        if (StringUtils.isNotBlank(destinationHub))
+            if (StringUtils.isNotBlank(originHub))
+            {
+                originStationHub.selectValue(originHub);
+            }
+
+            if (StringUtils.isNotBlank(destinationHub))
+            {
+                destinationStationHub.selectValue(destinationHub);
+            }
+        } else
         {
-            destinationCrossdockHub.selectValue(destinationHub);
+            if (StringUtils.isNotBlank(originHub))
+            {
+                originCrossdockHub.selectValue(originHub);
+            }
+
+            if (StringUtils.isNotBlank(destinationHub))
+            {
+                destinationCrossdockHub.selectValue(destinationHub);
+            }
         }
 
         loadSchedules.click();
@@ -374,7 +409,7 @@ public class MovementManagementPage extends OperatorV2SimplePage
         public PageElement crossdock;
 
         @FindBy(css = "td.actions a")
-        public PageElement editRelation;
+        public PageElement editRelations;
     }
 
     public static class MovementScheduleModal extends AntModal
