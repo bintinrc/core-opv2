@@ -134,7 +134,7 @@ Feature: Shipment Inbound
       | driverName | INVALID               |
       | color      | #e86161               |
     Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | -       |
+      | zoneName |         |
       | color    | #e86161 |
     Then Operator verify Destination Hub on Parcel Sweeper page using data below:
       | hubName | -       |
@@ -810,7 +810,7 @@ Feature: Shipment Inbound
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | RECOVERY DAMAGED |
       | rackInfo       | ON HOLD          |
-      | color          | #f45050          |
+      | color          | #e86161          |
     And DB Operator verify the last inbound_scans record for the created order:
       | hubId      | {hub-id}               |
       | trackingId | GET_FROM_CREATED_ORDER |
@@ -825,7 +825,7 @@ Feature: Shipment Inbound
       | color      | #e86161               |
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
-      | zoneName | -       |
+      | zoneName |         |
       | color    | #e86161 |
     And DB Operator verifies warehouse_sweeps record
       | trackingId | CREATED               |
