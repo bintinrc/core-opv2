@@ -15,24 +15,24 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
 {
     private static final String ADD_HUB_USER_BUTTON_XPATH = "//button[@id='btnAddUser']";
     private static final String FILTER_XPATH = "//div[@id='%s']";
-    private static final String EMPLOYMENT_START_DATE_FILTER_XPATH = "//span[@id='employment_start_date']";
+    private static final String EMPLOYMENT_START_DATE_FILTER_XPATH = "//span[@id='employmentStartDate']";
     private static final String START_DATE_INPUT_XPATH = "//div[contains(@class,'calendar-range-left')]//td[@title='%s']";
     private static final String ACTIVE_EMPLOYMENT_FILTER_XPATH = "//li[text()='ACTIVE']";
     private static final String INACTIVE_EMPLOYMENT_FILTER_XPATH = "//li[text()='INACTIVE']";
     private static final String UNSELECTABLE_FILTER = "//div[@id='%s']//span[@unselectable='on']";
 
     private static final String ADD_EDIT_HUB_USER_DIALOG_XPATH = "//div[contains(@id,'rcDialogTitle')]";
-    private static final String EMPLOYMENT_TYPE_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='employment_type']";
+    private static final String EMPLOYMENT_TYPE_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='employmentType']";
     private static final String FULL_TIME_EMPLOYMENT_TYPE_XPATH = "//li[text()='FULL_TIME']";
     private static final String PART_TIME_EMPLOYMENT_TYPE_XPATH = "//li[text()='PART_TIME']";
     private static final String HUB_SELECTION_XPATH = "//li[text()='%s']";
-    private static final String EMPLOYMENT_START_DATE_XPATH = "//div[contains(@class,'ant-card-bordered')]//span[@id='employment_start_date']";
+    private static final String EMPLOYMENT_START_DATE_XPATH = "//div[contains(@class,'ant-card-bordered')]//span[@id='employmentStartDate']";
     private static final String RECENT_MONTH_XPATH = "//a[contains(@class,'month-select')]";
-    private static final String HUB_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='hub_id']";
+    private static final String HUB_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='hubId']";
     private static final String CREATE_UPDATE_BUTTON_ADD_HUB_DIALOG_XPATH = "//button[@id='btnUpsertUser']";
     private static final String CLOSE_BUTTON_MODAL_XPATH = "//button[@aria-label='Close']";
     private static final String EDIT_LINK_TEXT_XPATH = "//a[contains(@class, 'edit-user')]";
-    private static final String STATUS_COMBOBOX_XPATH = "//form[contains(@class,'StyledForm')]//div[@id='is_active']";
+    private static final String STATUS_COMBOBOX_XPATH = "//form[contains(@class,'StyledForm')]//div[@id='isActive']";
 
     private static final String CLEAR_FILTERS_BUTTON_XPATH = "//button[span[text()='Clear Filters']]";
     private static final String IFRAME_XPATH = "//iframe[contains(@src,'hub-user-management')]";
@@ -41,28 +41,28 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     private static final String TABLE_RESULT_XPATH = "//td[contains(@class,'%s')]/span/%s";
     private static final String TOAST_HUB_APP_USER_CREATED_XPATH = "//div[contains(@class,'notification-notice-content')]//div[contains(text(),'Hub User has been created')]";
     private static final String TOAST_HUB_APP_USER_UPDATED_XPATH = "//div[contains(@class,'notification-notice-content')]//div[contains(text(),'Hub User has been updated')]";
-    private static final String ERROR_TOAST_DUPLICATION_USERNAME_XPATH = "//div[contains(@class,'toast-error')]//strong[text()='username %s already exists']";
-    private static final String ERROR_TOAST_DUPLICATION_CLOSE_XPATH = "//i[text()='close']";
+    private static final String ERROR_TOAST_DUPLICATION_USERNAME_XPATH = "//div[contains(@class,'notification-notice-message') and (contains(text(),'username %s already exists'))]";
+    private static final String ERROR_TOAST_DUPLICATION_CLOSE_XPATH = "//a[contains(@class,'notification-notice-close')]";
     private static final String ERROR_MESSAGE_EMPTY_FIELD_XPATH = "//div[@class='ant-form-explain']/span[text()='%s']";
     private static final String TEST_CALENDAR = "//td[@title='%s']/div";
 
-    private static final String FIRST_NAME_ID = "first_name";
-    private static final String LAST_NAME_ID = "last_name";
-    private static final String CONTACT_DETAIL_ID = "contact_details";
+    private static final String FIRST_NAME_ID = "firstName";
+    private static final String LAST_NAME_ID = "lastName";
+    private static final String CONTACT_DETAIL_ID = "contactDetails";
     private static final String USERNAME_ID = "username";
     private static final String PASSWORD_ID = "password";
     private static final String WAREHOUSE_TEAM_FORMATION_ID = "team";
     private static final String POSITION_ID = "position";
     private static final String COMMENT_ID = "comment";
-    private static final String STATUS_ID = "is_active";
+    private static final String STATUS_ID = "isActive";
 
     private static final String USERNAME_CLASS = "username";
-    private static final String HUB_CLASS = "hub_id";
+    private static final String HUB_CLASS = "hubId";
     private static final String POSITION_CLASS = "position";
-    private static final String EMPLOYMENT_TYPE_CLASS = "employment_type";
-    private static final String FIRST_NAME_CLASS = "first_name";
-    private static final String LAST_NAME_CLASS = "last_name";
-    private static final String EMPLOYMENT_START_DATE_CLASS = "employment_start_date";
+    private static final String EMPLOYMENT_TYPE_CLASS = "employmentType";
+    private static final String FIRST_NAME_CLASS = "firstName";
+    private static final String LAST_NAME_CLASS = "lastName";
+    private static final String EMPLOYMENT_START_DATE_CLASS = "employmentStartDate";
 
     public HubAppUserManagementPage(WebDriver webDriver)
     {
@@ -323,8 +323,10 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
 
     public void verifiesDuplicationErrorToastShown(String existedUsername)
     {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
         waitUntilVisibilityOfElementLocated(ERROR_TOAST_DUPLICATION_USERNAME_XPATH, existedUsername);
         click(ERROR_TOAST_DUPLICATION_CLOSE_XPATH);
+        getWebDriver().switchTo().parentFrame();
     }
 
     public void emptyErrorMessage(String errorMessage)

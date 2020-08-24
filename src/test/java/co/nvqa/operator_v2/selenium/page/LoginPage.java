@@ -180,8 +180,21 @@ public class LoginPage extends OperatorV2SimplePage
 
     public void changeCountry(String countryName)
     {
+        // Checking for error toast
+        if (isElementExistFast("//div[contains(@class,'toast-error')]"))
+        {
+           click("//button[contains(@class,'nvYellow')]");
+           pause2s();
+        }
+
         click("//button[contains(@ng-click,'$mdOpenMenu($event)') and @aria-label='Profile']");
-        waitUntilVisibilityOfElementLocated("//md-select[@ng-model='domain.current']/md-select-value[contains(@id,'select_value_label')]");
+
+        // Check if Country option is opened
+        while (!isElementExistFast("//md-select[@ng-model='domain.current']/md-select-value[contains(@id,'select_value_label')]"))
+        {
+            click("//button[contains(@ng-click,'$mdOpenMenu($event)') and @aria-label='Profile']");
+        }
+
         click("//md-select[@ng-model='domain.current']/md-select-value[contains(@id,'select_value_label')]");
         click(f("//md-option[contains(@ng-repeat,'domain.all')]//span[text()='%s']", countryName));
         getWebDriver().navigate().refresh();
