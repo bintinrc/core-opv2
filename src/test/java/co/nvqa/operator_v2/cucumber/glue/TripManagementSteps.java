@@ -4,10 +4,11 @@ import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
+import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.TripManagementFilteringType;
 import co.nvqa.operator_v2.selenium.page.TripManagementPage;
 import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
@@ -141,5 +142,21 @@ public class TripManagementSteps extends AbstractSteps {
         }
 
         tripManagementPage.verifyResult(tripManagementFilteringType, tripManagementDetailsData);
+    }
+
+    @When("Operator clicks on {string} icon on the action column")
+    public void operatorClicksOnIconOnTheActionColumn(String actionName) {
+        String windowHandle = getWebDriver().getWindowHandle();
+        MovementTripActionName movementTripActionName = MovementTripActionName.fromString(actionName);
+        String tripId = tripManagementPage.getTripIdAndClickOnActionIcon(movementTripActionName);
+        put(KEY_TRIP_ID, tripId);
+        put(KEY_MAIN_WINDOW_HANDLE, windowHandle);
+    }
+
+    @Then("Operator verifies that the new tab with trip details is opened")
+    public void operatorVerifiesThatTheNewTabWithTripDetailsIsOpened() {
+        String tripId = get(KEY_TRIP_ID);
+        String windowHandle = get(KEY_MAIN_WINDOW_HANDLE);
+        tripManagementPage.verifiesTripDetailIsOpened(tripId, windowHandle);
     }
 }
