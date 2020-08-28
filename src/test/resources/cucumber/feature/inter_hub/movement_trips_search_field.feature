@@ -7,9 +7,8 @@ Feature: Trip Management
 
   # Departure Tab - All Tab
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - All Tab - Search Destination Hub (uid:4a19b3bc-90b5-4998-88b5-9ecdfb49e949)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+  Scenario: OP Search Trip on Search Field - Departure Tab - All Tab - Search Destination Hub (uid:5737e644-93bf-4d7b-bf90-11dde3056e4a)
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -18,9 +17,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "destination_hub"
     Then Operator verifies that the trip management shown with "destination_hub" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - All Tab - Search Trip ID (uid:912f1784-b806-48a3-89ca-b6eddbcf46cd)
+  Scenario: OP Search Trip on Search Field - Departure Tab - All Tab - Search Trip ID (uid:1d695657-840f-4215-816d-9de15e7e4696)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -29,9 +28,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "trip_id"
     Then Operator verifies that the trip management shown with "trip_id" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - All Tab - Search Movement Type (uid:7d05b6a3-6705-4474-a7d6-5dbfcfb27df8)
+  Scenario: OP Search Trip on Search Field - Departure Tab - All Tab - Search Movement Type (uid:fbc48ce0-8617-4a73-b0e2-8816bdef14c2)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -40,9 +39,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "movement_type"
     Then Operator verifies that the trip management shown with "movement_type" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - All Tab - Search Expected Departure Time (uid:4bbede02-cb82-42a6-8fb2-f7952b6381d2)
+  Scenario: OP Search Trip on Search Field - Departure Tab - All Tab - Search Expected Departure Time (uid:a379c940-9154-426d-a668-d65ca10d0fca)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -51,9 +50,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "expected_departure_time"
     Then Operator verifies that the trip management shown with "expected_departure_time" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - All Tab - Search Arrival Time (uid:b9f42449-6966-45ed-8e12-e1642a27acd2)
+  Scenario: OP Search Trip on Search Field - Departure Tab - All Tab - Search Arrival Time (uid:c2c8f740-3611-4635-a207-d21e0a7d36c9)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -62,9 +61,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "expected_arrival_time"
     Then Operator verifies that the trip management shown with "expected_arrival_time" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - All Tab - Search Driver (uid:890a7036-c4ee-4618-9334-41f7eb36bda1)
+  Scenario: OP Search Trip on Search Field - Departure Tab - All Tab - Search Driver (uid:ee873a8a-a4fe-46ba-bc56-18e673abee46)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -73,9 +72,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "driver"
     Then Operator verifies that the trip management shown with "driver" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - All Tab - Search Status (uid:f6271825-af18-496e-a069-62a65101f6b1)
+  Scenario: OP Search Trip on Search Field - Departure Tab - All Tab - Search Status (uid:56195990-aaf0-4dfc-864c-82b6da482aac)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -86,9 +85,9 @@ Feature: Trip Management
 
   # Departure Tab - Unassigned Tab
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - Unassigned Tab - Search Destination Hub (uid:aaed2dde-8c72-46e8-bc16-d21f279e68cb)
+  Scenario: OP Search Trip on Search Field - Departure Tab - Unassigned Tab - Search Destination Hub (uid:3a1e7959-4f86-42db-8ba5-1bdf33865a86)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -97,9 +96,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "destination_hub"
     Then Operator verifies that the trip management shown with "destination_hub" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - Unassigned Tab - Search Trip ID (uid:bdc99d60-24dc-4bee-a2d7-6fbe66edbb10)
+  Scenario: OP Search Trip on Search Field - Departure Tab - Unassigned Tab - Search Trip ID (uid:4d86df97-7ef1-4c9a-ae18-7eddbcaaeafe)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -108,9 +107,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "trip_id"
     Then Operator verifies that the trip management shown with "trip_id" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - Unassigned Tab - Search Movement Type (uid:efefd7dd-4955-41f0-bf89-d24b9cca5aed)
+  Scenario: OP Search Trip on Search Field - Departure Tab - Unassigned Tab - Search Movement Type (uid:84f1290a-ab89-4d24-a84e-fed6d8894868)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -119,9 +118,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "movement_type"
     Then Operator verifies that the trip management shown with "movement_type" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - Unassigned Tab - Search Expected Departure Time (uid:42b610e9-a2ad-41cb-8433-20eec3472a04)
+  Scenario: OP Search Trip on Search Field - Departure Tab - Unassigned Tab - Search Expected Departure Time (uid:5d2748d3-9647-4722-904f-097d33012a3a)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -130,9 +129,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "expected_departure_time"
     Then Operator verifies that the trip management shown with "expected_departure_time" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - Unassigned Tab - Search Arrival Time (uid:485b0c27-b837-494f-8a82-f71d8e5ca02d)
+  Scenario: OP Search Trip on Search Field - Departure Tab - Unassigned Tab - Search Arrival Time (uid:e15d00ae-32c5-4e31-a370-42bdc0ace672)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -141,9 +140,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "expected_arrival_time"
     Then Operator verifies that the trip management shown with "expected_arrival_time" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - Unassigned Tab - Search Driver (uid:f7aaa48b-9ea9-4ed2-b00c-5fd9df8ae7ff)
+  Scenario: OP Search Trip on Search Field - Departure Tab - Unassigned Tab - Search Driver (uid:d6d35e11-be1f-4cdf-82d9-f3b9477e4093)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -152,9 +151,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "driver"
     Then Operator verifies that the trip management shown with "driver" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - Unassigned Tab - Search Status (uid:ddd6bfd7-1843-4f1a-b68c-5942582f263e)
+  Scenario: OP Search Trip on Search Field - Departure Tab - Unassigned Tab - Search Status (uid:7d8e1b29-164a-4994-8119-a3d71fb9ef41)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -165,9 +164,9 @@ Feature: Trip Management
 
   # Departure Tab - Assigned Tab
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - Assigned Tab - Search Destination Hub (uid:fa67ece1-0fb6-44f2-b2da-f65d381265d5)
+  Scenario: OP Search Trip on Search Field - Departure Tab - Assigned Tab - Search Destination Hub (uid:16123ee1-325d-4c88-959e-4d0200284ac6)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -176,9 +175,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "destination_hub"
     Then Operator verifies that the trip management shown with "destination_hub" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - Assigned Tab - Search Trip ID (uid:42f7a201-f949-4d4c-bbd8-eba36866a400)
+  Scenario: OP Search Trip on Search Field - Departure Tab - Assigned Tab - Search Trip ID (uid:1213b7a3-e898-4d23-ac5a-874bf6d094ee)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -187,9 +186,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "trip_id"
     Then Operator verifies that the trip management shown with "trip_id" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - Assigned Tab - Search Movement Type (uid:46a2af02-1407-44d2-a29f-b4e92ee9cf88)
+  Scenario: OP Search Trip on Search Field - Departure Tab - Assigned Tab - Search Movement Type (uid:e1cbce83-f057-4c8f-9b5f-c7f58fec21e1)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -198,9 +197,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "movement_type"
     Then Operator verifies that the trip management shown with "movement_type" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - Assigned Tab - Search Expected Departure Time (uid:5d1c5373-a5f7-4441-b634-ae945539cf22)
+  Scenario: OP Search Trip on Search Field - Departure Tab - Assigned Tab - Search Expected Departure Time (uid:a403748d-4656-40e7-a826-2882fa76663f)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -209,9 +208,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "expected_departure_time"
     Then Operator verifies that the trip management shown with "expected_departure_time" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - Assigned Tab - Search Arrival Time (uid:fc710de4-74f4-49ba-9110-2d8867f2ebbe)
+  Scenario: OP Search Trip on Search Field - Departure Tab - Assigned Tab - Search Arrival Time (uid:86d46d08-f937-4c9b-a98e-ae5ca423bac6)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -220,9 +219,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "expected_arrival_time"
     Then Operator verifies that the trip management shown with "expected_arrival_time" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - Assigned Tab - Search Driver (uid:892162a1-20f7-4122-9dc2-3c5f2ddf83d2)
+  Scenario: OP Search Trip on Search Field - Departure Tab - Assigned Tab - Search Driver (uid:9cf00b01-0d91-46cb-b994-428957439a03)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -231,9 +230,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "driver"
     Then Operator verifies that the trip management shown with "driver" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Departure Tab - Assigned Tab - Search Status (uid:82c6ebd4-4a9a-41f7-bcad-c65407a5e743)
+  Scenario: OP Search Trip on Search Field - Departure Tab - Assigned Tab - Search Status (uid:4467d634-3a90-4981-b610-2ae44669ab47)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
@@ -244,9 +243,9 @@ Feature: Trip Management
 
   # Arrival Tab
 
-  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Origin Hub (uid:1f0c330c-8c22-4f12-9213-fabfd414eb7f)
+  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Origin Hub (uid:9ec65ffc-1219-4cf3-877c-c39f5c14954f)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Arrival" tab
     When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
@@ -255,9 +254,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "origin_hub"
     Then Operator verifies that the trip management shown with "origin_hub" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Trip ID (uid:12e1714f-6725-46ea-98d1-414600139571)
+  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Trip ID (uid:cbafa53a-3ce4-4e92-993c-21d3ead034b3)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Arrival" tab
     When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
@@ -266,9 +265,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "trip_id"
     Then Operator verifies that the trip management shown with "trip_id" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Movement Type (uid:69c87465-c2f1-4373-8e6d-caf834a2c82c)
+  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Movement Type (uid:f7683073-37be-40f9-994e-e2feac804839)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Arrival" tab
     When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
@@ -277,9 +276,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "movement_type"
     Then Operator verifies that the trip management shown with "movement_type" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Expected Departure Time (uid:f3e0bd64-f6a8-4b96-ba3b-472eb4d33fe2)
+  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Expected Departure Time (uid:c6b58cec-b1d8-46b8-b417-0396e7104101)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Arrival" tab
     When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
@@ -288,9 +287,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "expected_departure_time"
     Then Operator verifies that the trip management shown with "expected_departure_time" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Actual Departure Time (uid:707ae922-20db-4bf4-a4bb-fac6ec7b45d7)
+  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Actual Departure Time (uid:812c3ddf-021f-4611-af81-6703bc69a6b5)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Arrival" tab
     When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
@@ -299,9 +298,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "actual_departure_time"
     Then Operator verifies that the trip management shown with "actual_departure_time" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Expected Arrival Time (uid:137e9800-1f61-4845-962a-a2917c671e2f)
+  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Expected Arrival Time (uid:c519dd8f-6df1-4d9a-bb75-a60432661ada)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Arrival" tab
     When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
@@ -310,9 +309,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "expected_arrival_time"
     Then Operator verifies that the trip management shown with "expected_arrival_time" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Driver (uid:e1d92ab4-c5c0-459b-947e-933fd4f39fd3)
+  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Driver (uid:092ae7a3-2960-4987-862c-b11d68101f50)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Arrival" tab
     When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
@@ -321,9 +320,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "driver"
     Then Operator verifies that the trip management shown with "driver" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Status (uid:0f0c0dde-7bc5-4b0b-8a5f-418fd7e5119f)
+  Scenario: OP Search Trip on Search Field - Arrival Tab - Search Status (uid:05e8153e-627b-4f44-b08f-b5e937e02456)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Arrival" tab
     When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
@@ -334,9 +333,9 @@ Feature: Trip Management
 
   # Archived Tab
 
-  Scenario: OP Search Trip on Search Field - Archived Tab - Search Origin Hub (uid:a2a9183e-f08f-414a-8422-f29b27744cdc)
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Origin Hub (uid:24c88049-0727-4dab-b807-daaae9d046f3)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Archive" tab
     And Operator clicks on Load Trip Button
@@ -347,9 +346,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "origin_hub"
     Then Operator verifies that the trip management shown with "origin_hub" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Archived Tab - Search Destination Hub (uid:3c2922fe-2c2b-4e7e-bc9b-41f1dc97ae4e)
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Destination Hub (uid:d1d2520d-d125-49eb-8d91-8658a3d3d7f4)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Archive" tab
     And Operator clicks on Load Trip Button
@@ -360,9 +359,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "destination_hub"
     Then Operator verifies that the trip management shown with "destination_hub" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Archived Tab - Search Trip ID (uid:5f26570e-f90b-4959-9126-ea77b5eb7040)
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Trip ID (uid:b7d86f4b-64d9-4116-a4f3-559f9dd43db0)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Archive" tab
     And Operator clicks on Load Trip Button
@@ -373,9 +372,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "trip_id"
     Then Operator verifies that the trip management shown with "trip_id" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Archived Tab - Search Movement Type (uid:88133a1a-b0e7-4524-8f62-9f51c4ecc2d0)
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Movement Type (uid:be7903ac-d86a-4360-8601-bab8dd664249)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Archive" tab
     And Operator clicks on Load Trip Button
@@ -386,9 +385,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "movement_type"
     Then Operator verifies that the trip management shown with "movement_type" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Archived Tab - Search Expected Departure Time (uid:67c1b89e-fca3-47eb-8ef5-8d4872be5ef8)
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Expected Departure Time (uid:89a80586-afc6-4b61-8cfe-cd5a200dc96b)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Archive" tab
     And Operator clicks on Load Trip Button
@@ -399,9 +398,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "expected_departure_time"
     Then Operator verifies that the trip management shown with "expected_departure_time" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Archived Tab - Search Actual Departure Time (uid:a4770681-3e30-420f-a3b5-a6fa86062236)
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Actual Departure Time (uid:57d0cde4-0e74-4a70-8007-beef8d039c97)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Archive" tab
     And Operator clicks on Load Trip Button
@@ -412,9 +411,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "actual_departure_time"
     Then Operator verifies that the trip management shown with "actual_departure_time" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Archived Tab - Search Expected Arrival Time (uid:6f739d2e-982a-44b2-adb3-276923f3de95)
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Expected Arrival Time (uid:6f72ed1f-a455-4e70-9794-93f89cab83f1)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Archive" tab
     And Operator clicks on Load Trip Button
@@ -425,9 +424,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "expected_arrival_time"
     Then Operator verifies that the trip management shown with "expected_arrival_time" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Archived Tab - Search Actual Arrival Time (uid:8db57f5f-6931-4eaa-bb89-05437d912bf5)
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Actual Arrival Time (uid:5a6a10af-afb1-4e58-b1b5-c7819ff81028)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Archive" tab
     And Operator clicks on Load Trip Button
@@ -438,9 +437,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "actual_arrival_time"
     Then Operator verifies that the trip management shown with "actual_arrival_time" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Archived Tab - Search Driver (uid:beeadbb9-4b6a-47dd-9db7-24e34a6eac6b)
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Driver (uid:76c84730-e1ca-43f0-80de-adc4fbe64887)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Archive" tab
     And Operator clicks on Load Trip Button
@@ -451,9 +450,9 @@ Feature: Trip Management
     And Operator searches for the Trip Management based on its "driver"
     Then Operator verifies that the trip management shown with "driver" as its filter is right
 
-  Scenario: OP Search Trip on Search Field - Archived Tab - Search Status (uid:8d88468c-b9ed-440d-b205-60ca8814cfab)
+  Scenario: OP Search Trip on Search Field - Archived Tab - Search Status (uid:1d773d8f-8e84-45a6-aa86-40a2a36d717d)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Archive" tab
     And Operator clicks on Load Trip Button
