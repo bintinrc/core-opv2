@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.shipper_support.PricedOrder;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.GmailClient;
 import co.nvqa.commons.util.NvLogger;
@@ -9,19 +9,14 @@ import co.nvqa.operator_v2.util.TestConstants;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.WebDriver;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.math.BigDecimal;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -40,6 +35,15 @@ public class OrderBillingPage extends OperatorV2SimplePage
     private static final String FILTER_SHIPPER_SELECTED_SHIPPERS_NVAUTOCOMPLETE_ITEMTYPES = "Shipper";
     private static final String FILTER_SHIPPER_SELECTED_SHIPPERS_BUTTON_ARIA_LABEL = "Selected Shippers";
     private static final String FILTER_GENERATE_FILE_CHECKBOX_PATTERN = "//md-input-container[@label = '%s']/md-checkbox";
+
+    public static final String SHIPPER_BILLING_REPORT = "Shipper Billing Report";
+    public static final String SCRIPT_BILLING_REPORT = "Script Billing Report";
+    public static final String AGGREGATED_BILLING_REPORT = "Aggregated Billing Report";
+
+    private final List<List<String>> csvRowsInAggregatedReport = new ArrayList<>();
+    private String csvRowForOrderInShipperReport;
+    private String headerLineInShipperReport;
+
 
     public OrderBillingPage(WebDriver webDriver)
     {
@@ -77,10 +81,27 @@ public class OrderBillingPage extends OperatorV2SimplePage
         clickButtonByAriaLabelAndWaitUntilDone("Generate Success Billings");
     }
 
-    public void verifyOrderBillingZipAttachment(String startDate, String endDate)
+    public int getNoOfFilesInZipAttachment(String attachmentUrl, String startDate, String endDate)
     {
-        String attachmentUrl = getOrderBillingAttachmentFromEmail();
-        verifyListOfFilesInZip(attachmentUrl, startDate, endDate);
+        try (ZipInputStream zipIs = new ZipInputStream(new URL(attachmentUrl).openStream()))
+        {
+            int filesNumber = 0;
+            ZipEntry zEntry;
+
+            while ((zEntry = zipIs.getNextEntry()) != null)
+            {
+                String fileName = zEntry.getName();
+                String assertMessage = f("One of the files in Success Billings zip is wrong. Expected to have: startDate = %s, endDate = %s, extension = %s. But was %s", startDate, endDate, REPORT_ATTACHMENT_FILE_EXTENSION, fileName);
+                assertTrue(assertMessage, fileName.contains(startDate) && fileName.contains(endDate) && fileName.endsWith(REPORT_ATTACHMENT_FILE_EXTENSION));
+                filesNumber++;
+            }
+            NvLogger.infof("Total number of files in Success Billings - %s", filesNumber);
+            return filesNumber;
+        } catch (IOException ex)
+        {
+            NvLogger.errorf("Could not read file from %s. Cause: %s", attachmentUrl, ex);
+            throw new NvTestRuntimeException(ex.getMessage());
+        }
     }
 
     public void markGmailMessageAsRead()
@@ -89,15 +110,10 @@ public class OrderBillingPage extends OperatorV2SimplePage
         gmailClient.markUnreadMessagesAsRead();
     }
 
-    public void verifyOrderBillingCsvAttachment(Order order)
-    {
-        String attachmentUrl = getOrderBillingAttachmentFromEmail();
-        verifyCsvFileInZip(attachmentUrl, order);
-    }
 
-    private String getOrderBillingAttachmentFromEmail()
+    public String getOrderBillingAttachmentFromEmail()
     {
-        pause7s();
+        pause10s();
 
         GmailClient gmailClient = new GmailClient();
         AtomicBoolean isFound = new AtomicBoolean();
@@ -106,7 +122,8 @@ public class OrderBillingPage extends OperatorV2SimplePage
         gmailClient.readUnseenMessage(message ->
         {
             String subject = message.getSubject();
-            if (subject.equals(REPORT_EMAIL_SUBJECT) && !isFound.get()) {
+            if (subject.equals(REPORT_EMAIL_SUBJECT) && !isFound.get())
+            {
                 String body = gmailClient.getSimpleContentBody(message);
 
                 Pattern pattern = Pattern.compile(REPORT_ATTACHMENT_NAME_PATTERN);
@@ -114,12 +131,11 @@ public class OrderBillingPage extends OperatorV2SimplePage
 
                 String attachmentUrl;
 
-                if(matcher.find())
+                if (matcher.find())
                 {
                     attachmentUrl = matcher.group();
                     NvLogger.infof("Success Billings file received in mail - %s", attachmentUrl);
                     attachmentUrlList.add(attachmentUrl);
-
                     isFound.set(Boolean.TRUE);
                 }
             }
@@ -128,50 +144,25 @@ public class OrderBillingPage extends OperatorV2SimplePage
         assertTrue(f("No email with '%s' subject in the mailbox", REPORT_EMAIL_SUBJECT), isFound.get());
 
         return attachmentUrlList.stream()
-                                      .filter(urlItem -> urlItem.endsWith(".zip"))
-                                      .findFirst()
-                                      .orElseThrow(() -> new IllegalArgumentException("No Zip file in attachment"));
+                .filter(urlItem -> urlItem.endsWith(".zip"))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No Zip file in attachment"));
     }
 
-    private void verifyListOfFilesInZip(String url, String startDate, String endDate)
+    public void readOrderBillingCsvAttachment(String attachmentUrl, PricedOrder pricedOrder, String reportName)
     {
-        try(ZipInputStream zipIs = new ZipInputStream(new URL(url).openStream()))
-        {
-            int filesNumber = 0;
-            ZipEntry zEntry;
-
-            while((zEntry=zipIs.getNextEntry())!=null)
-            {
-                String fileName = zEntry.getName();
-                String assertMessage = f("One of the files in Success Billings zip is wrong. Expected to have: startDate = %s, endDate = %s, extension = %s. But was %s", startDate, endDate, REPORT_ATTACHMENT_FILE_EXTENSION, fileName);
-                assertTrue(assertMessage, fileName.contains(startDate) && fileName.contains(endDate) && fileName.endsWith(REPORT_ATTACHMENT_FILE_EXTENSION));
-                filesNumber++;
-            }
-            NvLogger.infof("Total number of files in Success Billings - %s", filesNumber);
-        }
-        catch(IOException ex)
-        {
-            NvLogger.errorf("Could not read file from %s. Cause: %s", url, ex);
-            throw new NvTestRuntimeException(ex.getMessage());
-        }
-    }
-
-    private void verifyCsvFileInZip(String url, Order order)
-    {
-        boolean isOrderFound = false;
+        boolean isBodyFound = false;
         String zipName = "order_billing.zip";
         String pathToZip = TestConstants.TEMP_DIR + "order_billing_" + DateUtil.getTimestamp() + "/";
-
         try
         {
-            FileUtils.copyURLToFile(new URL(url), new File(pathToZip + zipName));
-        }
-        catch(IOException ex)
+            FileUtils.copyURLToFile(new URL(attachmentUrl), new File(pathToZip + zipName));
+        } catch (IOException ex)
         {
-            throw new NvTestRuntimeException("Could not get file from " + url, ex);
+            throw new NvTestRuntimeException("Could not get file from " + attachmentUrl, ex);
         }
 
-        try(ZipFile zipFile = new ZipFile(pathToZip + zipName))
+        try (ZipFile zipFile = new ZipFile(pathToZip + zipName))
         {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
@@ -180,42 +171,117 @@ public class OrderBillingPage extends OperatorV2SimplePage
                 ZipEntry entry = entries.nextElement();
                 InputStream is = zipFile.getInputStream(entry);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-
-                while(reader.ready())
+                boolean isFirstLine = true;
+                while (reader.ready())
                 {
                     String line = reader.readLine();
-                    isOrderFound = isLineFoundAndValidatedInCsv(line, order);
-                    if(isOrderFound)
+                    if (isFirstLine)
                     {
-                        break;
+                        if (line.startsWith("\"Shipper ID"))
+                        {
+                            saveHeaderInCSv(line);
+                        } else
+                        {
+                            fail(f("Header line is not found in CSV received in email (%s)", attachmentUrl));
+                        }
+                        isFirstLine = false;
+                    } else
+                    {
+                        isBodyFound = true;
+                        saveBodyInCsv(pricedOrder, reportName, line);
                     }
                 }
             }
-        }
-        catch(IOException ex)
+        } catch (IOException ex)
         {
-            throw new NvTestRuntimeException("Could not read from file " + url, ex);
+            throw new NvTestRuntimeException("Could not read from file " + attachmentUrl, ex);
         }
-        assertTrue(f("Order with %s trackingId is not found in CSV received in email (%s)", order.getTrackingId(), url), isOrderFound);
+        assertTrue(f("Body is not found in CSV received in email (%s)", attachmentUrl), isBodyFound);
     }
 
-    private boolean isLineFoundAndValidatedInCsv(String line, Order order)
+    private void saveBodyInCsv(PricedOrder pricedOrder, String reportName, String line)
     {
-        String trackingId = order.getTrackingId();
-        if(!line.startsWith("\"Shipper ID") && line.contains(trackingId))
+        if (Arrays.asList(SHIPPER_BILLING_REPORT, SCRIPT_BILLING_REPORT).contains(reportName) && line.contains(pricedOrder.getTrackingId()))
         {
-            String shipperOrderRefNo = order.getShipperOrderRefNo();
-            String toName = order.getToName();
-            String toAddress = order.getToAddress1() + " " + order.getToCountry() + " " + order.getToPostcode();
-            String toPostcode = order.getToPostcode();
-            assertThat("Success Billings Csv file does not contains expected information", line, containsString(f("\"%s\",", toName)));
-            assertThat("Success Billings Csv file does not contains expected information", line, containsString(f("\"%s\",", shipperOrderRefNo)));
-            assertThat("Success Billings Csv file does not contains expected information", line, containsString(f("\"%s\",\"%s\",", toAddress, toPostcode)));
-            return true;
+            csvRowForOrderInShipperReport = line;
         }
-        else
+        if (reportName.equals(AGGREGATED_BILLING_REPORT))
         {
-            return false;
+            csvRowsInAggregatedReport.add(Arrays.asList(line.replaceAll("\"", "").split(",")));
         }
+    }
+
+    private void saveHeaderInCSv(String headerLine)
+    {
+        headerLineInShipperReport = headerLine;
+    }
+
+    public PricedOrder pricedOrderCsv(String line)
+    {
+        List<String> columnArray = Arrays.stream(line.replaceAll("\"", "").split(","))
+                .map((value) -> value.equals("") ? null : value)
+                .collect(Collectors.toList());
+
+        PricedOrder pricedOrderInCsv = new PricedOrder();
+        pricedOrderInCsv.setShipperId(integerValue(columnArray.get(0)));
+        pricedOrderInCsv.setShipperName(columnArray.get(1));
+        pricedOrderInCsv.setBillingName(columnArray.get(2));
+        pricedOrderInCsv.setTrackingId(columnArray.get(3));
+        pricedOrderInCsv.setShipperOrderRef(columnArray.get(4));
+        pricedOrderInCsv.setGranularStatus(columnArray.get(5));
+        pricedOrderInCsv.setCustomerName(columnArray.get(6));
+        pricedOrderInCsv.setDeliveryTypeName(columnArray.get(7));
+        pricedOrderInCsv.setDeliveryTypeId(integerValue(columnArray.get(8)));
+        pricedOrderInCsv.setParcelSizeId(columnArray.get(9));
+        pricedOrderInCsv.setParcelWeight(Double.valueOf(columnArray.get(10)));
+        pricedOrderInCsv.setCreatedTime(columnArray.get(11));
+        pricedOrderInCsv.setDeliveryDate(columnArray.get(12));
+        pricedOrderInCsv.setFromCity(columnArray.get(13));
+        pricedOrderInCsv.setFromBillingZone(columnArray.get(14));
+        pricedOrderInCsv.setOriginHub(columnArray.get(15));
+        pricedOrderInCsv.setL1Name(columnArray.get(16));
+        pricedOrderInCsv.setL2Name(columnArray.get(17));
+        pricedOrderInCsv.setL3Name(columnArray.get(18));
+        pricedOrderInCsv.setToAddress(columnArray.get(19));
+        pricedOrderInCsv.setToPostcode(columnArray.get(20));
+        pricedOrderInCsv.setToBillingZone(columnArray.get(21));
+        pricedOrderInCsv.setDestinationHub(columnArray.get(22));
+        pricedOrderInCsv.setDeliveryFee(bigDecimalValue(columnArray.get(23)));
+        pricedOrderInCsv.setCodCollected(bigDecimalValue(columnArray.get(24)));
+        pricedOrderInCsv.setCodFee(bigDecimalValue(columnArray.get(25)));
+        pricedOrderInCsv.setInsuredValue(bigDecimalValue(columnArray.get(26)));
+        pricedOrderInCsv.setInsuredFee(bigDecimalValue(columnArray.get(27)));
+        pricedOrderInCsv.setHandlingFee(bigDecimalValue(columnArray.get(28)));
+        pricedOrderInCsv.setGst(bigDecimalValue(columnArray.get(29)));
+        pricedOrderInCsv.setTotal(bigDecimalValue(columnArray.get(30)));
+        pricedOrderInCsv.setScriptId(integerValue(columnArray.get(31)));
+        pricedOrderInCsv.setScriptVersion(columnArray.get(32));
+        pricedOrderInCsv.setLastCalculatedDate(columnArray.get(33));
+        return pricedOrderInCsv;
+    }
+
+    public List<List<String>> getAggregatedOrdersFromCsv()
+    {
+        return csvRowsInAggregatedReport;
+    }
+
+    public String getOrderFromCsv()
+    {
+        return csvRowForOrderInShipperReport;
+    }
+
+    public String getHeaderLine()
+    {
+        return headerLineInShipperReport;
+    }
+
+    private BigDecimal bigDecimalValue(String value)
+    {
+        return (value != null && !value.equals("")) ? new BigDecimal(value) : null;
+    }
+
+    private Integer integerValue(String value)
+    {
+        return (value != null && !value.equals("")) ? Integer.valueOf(value) : null;
     }
 }
