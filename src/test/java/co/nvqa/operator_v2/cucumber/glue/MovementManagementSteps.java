@@ -82,6 +82,23 @@ public class MovementManagementSteps extends AbstractSteps
         pause3s();
     }
 
+    @Then("Operator edits Crossdock Movement Schedule on Movement Management page using data below:")
+    public void operatorEditsCrossdockMovementScheduleOnMovementManagementPageUsingDataBelow(Map<String, String> mapOfData)
+    {
+        MovementSchedule movementSchedule = get(KEY_CREATED_MOVEMENT_SCHEDULE);
+        Map<String, String> data = resolveKeyValues(mapOfData);
+        data = StandardTestUtils.replaceDataTableTokens(data);
+        movementSchedule.fromMap(data);
+
+        movementManagementPage.modify.click();
+        movementManagementPage.schedulesTable.filterByColumn(COLUMN_ORIGIN_HUB, movementSchedule.getSchedule(0).getOriginHub());
+        movementManagementPage.schedulesTable.filterByColumn(COLUMN_DESTINATION_HUB, movementSchedule.getSchedule(0).getDestinationHub());
+        movementManagementPage.schedulesTable.editSchedule(movementSchedule.getSchedule(0));
+        movementManagementPage.save.click();
+        movementManagementPage.updateSchedulesConfirmationModal.update.click();
+        pause3s();
+    }
+
     @Then("Operator adds new relation on Movement Management page using data below:")
     public void operatorAddsNewRelationOnMovementManagementPageUsingDataBelow(Map<String, String> data)
     {
@@ -162,6 +179,7 @@ public class MovementManagementSteps extends AbstractSteps
     }
 
     @Then("Operator verifies a new schedule is created on Movement Management page")
+    @And("Operator verifies Crossdock Movement Schedule parameters on Movement Management page")
     public void operatorVerifiesANewScheduleIsCreatedOnMovementManagementPage()
     {
         MovementSchedule movementSchedule = get(KEY_CREATED_MOVEMENT_SCHEDULE);

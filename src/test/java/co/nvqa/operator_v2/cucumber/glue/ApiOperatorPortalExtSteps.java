@@ -319,6 +319,12 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         putInList(KEY_LIST_OF_CREATED_HUBS, hub);
     }
 
+    @Given("^API Operator reloads hubs cache$")
+    public void apiOperatorReloadsHubsCache()
+    {
+        getHubClient().reload();
+    }
+
     @Given("^API Operator disable created hub$")
     public void apiOperatorDisableCreatedHub()
     {
