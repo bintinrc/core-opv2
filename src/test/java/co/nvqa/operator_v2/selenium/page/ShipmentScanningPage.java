@@ -30,15 +30,19 @@ public class ShipmentScanningPage extends OperatorV2SimplePage
 
     public void selectHub(String hubName)
     {
-        clickf(".//md-select[starts-with(@id, '%s')]", "commons.hub");
+        sendKeys("//nv-autocomplete[@item-types='hub']//input", hubName);
         pause1s();
-        clickf("//md-option[div[text()=' %s ']]", hubName);
+        clickf("//li//span[text()='%s']", hubName);
         pause50ms();
     }
 
     public void selectShipmentId(Long shipmentId)
     {
-        selectValueFromMdSelectById("container.shipment-management.shipment-id", String.valueOf(shipmentId));
+        sendKeys("//nv-autocomplete[@item-types='shipment']//input", shipmentId.toString());
+        pause2s();
+        waitUntilVisibilityOfElementLocated(f("//li//span[starts-with(text(),'%s')]", shipmentId.toString()));
+        clickf("//li//span[starts-with(text(),'%s')]", shipmentId.toString());
+        pause50ms();
     }
 
     public void clickSelectShipment()

@@ -5,40 +5,40 @@ Feature: Trip Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: OP Load Trip Use Filter - Departure Tab - No filter (uid:e8bf8cfa-7b50-415a-a92f-8869228cc61c)
-    Given Operator go to menu Shipper Support -> Movement Trips
+  Scenario: OP Load Trip Use Filter - Departure Tab - No filter (uid:9b2117b6-6e7d-4f18-85af-8418e4643cbc)
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on Load Trip Button
     Then Operator verifies that there will be an error shown for unselected Origin Hub
 
-  Scenario: OP Load Trip Use Filter - Departure Tab - Filter by Origin Hub (uid:1bd3482f-2700-49b9-bf33-3fafe69071ca)
+  Scenario: OP Load Trip Use Filter - Departure Tab - Filter by Origin Hub (uid:196c24d0-ef86-4155-be1e-1b1893230f09)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     And Operator clicks on Load Trip Button
     And API Operator gets the count of the "departure" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     Then Operator verifies that the trip management shown in "departure" tab is correct
 
-  Scenario: OP Load Trip Use Filter - Departure Tab - Filter by Movement Type (uid:ee941c02-5f85-4975-a341-d51f426dc90f)
+  Scenario: OP Load Trip Use Filter - Departure Tab - Filter by Movement Type (uid:af28fa18-2531-4b2f-b032-8116ec506810)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "movement type" with value "Land Haul"
     And Operator clicks on Load Trip Button
     Then Operator verifies that there will be an error shown for unselected Origin Hub
 
-  Scenario: OP Load Trip Use Filter - Departure Tab - Filter by Departure Date (uid:fa61fb73-e85d-4701-8d72-a29be08170a6)
+  Scenario: OP Load Trip Use Filter - Departure Tab - Filter by Departure Date (uid:a1e3ad45-d6e2-4ac7-902e-a2b0dd99af68)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the date to tomorrow in "departure" Tab
     And Operator clicks on Load Trip Button
     Then Operator verifies that there will be an error shown for unselected Origin Hub
 
-  Scenario: OP Load Trip Use Filter - Departure Tab - Filter by Origin Hub and Movement Type (uid:19ad4d0b-fc7b-4234-ad30-d805ec88fa8c)
+  Scenario: OP Load Trip Use Filter - Departure Tab - Filter by Origin Hub and Movement Type (uid:539095f7-01d6-4997-b147-55bf52897f27)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     When Operator selects the "movement type" with value "Land Haul"
@@ -46,9 +46,9 @@ Feature: Trip Management
     And API Operator gets the count of the "departure" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     Then Operator verifies that the trip management shown in "departure" tab is correct
 
-  Scenario: OP Load Trip Use Filter - Departure Tab - Filter by Origin Hub and Departure Date (uid:1a3b3e8f-7705-433b-993a-b4ccd043bb24)
+  Scenario: OP Load Trip Use Filter - Departure Tab - Filter by Origin Hub and Departure Date (uid:07d07c97-19e8-4a7c-b4d5-ba3f33f43ac2)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     When Operator selects the date to tomorrow in "departure" Tab
@@ -56,9 +56,9 @@ Feature: Trip Management
     And API Operator gets the count of the "departure" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     Then Operator verifies that the trip management shown in "departure" tab is correct
 
-  Scenario: OP Load Trip Use Filter - Departure Tab - Filter by Origin Hub, Movement Type, Departure Date (uid:2721809b-03e0-406b-82c8-32a932559804)
+  Scenario: OP Load Trip Use Filter - Departure Tab - Filter by Origin Hub, Movement Type, Departure Date (uid:f215de60-efdd-46e6-80fb-0a9fb6132b93)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
     When Operator selects the "movement type" with value "Land Haul"
@@ -67,17 +67,17 @@ Feature: Trip Management
     And API Operator gets the count of the "departure" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     Then Operator verifies that the trip management shown in "departure" tab is correct
 
-  Scenario: OP Load Trip Use Filter - Arrival Tab - No filter (uid:21378eea-3e11-4cd7-a2ba-d9d7d55f1de6)
+  Scenario: OP Load Trip Use Filter - Arrival Tab - No filter (uid:a55505ea-f602-46ac-a100-8c3fb13807d6)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Arrival" tab
     When Operator clicks on Load Trip Button
     Then Operator verifies that there will be an error shown for unselected Origin Hub
 
-  Scenario: OP Load Trip Use Filter - Arrival Tab - Filter by Destination Hub (uid:a72b9fdf-acb1-4c00-b180-195446df4b47)
+  Scenario: OP Load Trip Use Filter - Arrival Tab - Filter by Destination Hub (uid:871871f1-adec-4f77-a624-fa363563fc80)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Arrival" tab
     When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
@@ -85,27 +85,27 @@ Feature: Trip Management
     And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     Then Operator verifies that the trip management shown in "arrival" tab is correct
 
-  Scenario: OP Load Trip Use Filter - Arrival Tab - Filter by Movement Type (uid:9f746015-b17d-44b2-93c8-a6047ffa2dc0)
+  Scenario: OP Load Trip Use Filter - Arrival Tab - Filter by Movement Type (uid:fd9cd117-58b3-49a1-9ed7-12c826fa174e)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Arrival" tab
     When Operator selects the "movement type" with value "Land Haul"
     And Operator clicks on Load Trip Button
     Then Operator verifies that there will be an error shown for unselected Origin Hub
 
-  Scenario: OP Load Trip Use Filter - Arrival Tab - Filter by Arrival Date (uid:dcc75baa-d499-49fd-bded-9e8ce9b628bf)
+  Scenario: OP Load Trip Use Filter - Arrival Tab - Filter by Arrival Date (uid:d9d8c18b-d3f5-47f3-ad14-ba6a5a7f04a6)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Arrival" tab
     When Operator selects the date to tomorrow in "arrival" Tab
     And Operator clicks on Load Trip Button
     Then Operator verifies that there will be an error shown for unselected Origin Hub
 
-  Scenario: OP Load Trip Use Filter - Arrival Tab - Filter by Destination Hub and Movement Type (uid:2da67b5f-f8eb-44aa-81ef-9851bff417fe)
+  Scenario: OP Load Trip Use Filter - Arrival Tab - Filter by Destination Hub and Movement Type (uid:a0b93012-bcc9-4c9e-b3df-3d8baa1bfbe0)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Arrival" tab
     When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
@@ -114,9 +114,9 @@ Feature: Trip Management
     And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     Then Operator verifies that the trip management shown in "arrival" tab is correct
 
-  Scenario: OP Load Trip Use Filter - Arrival Tab - Filter by Destination Hub and Arrival Date (uid:14e8b043-0ded-4926-a2c4-4e0d11e02ad3)
+  Scenario: OP Load Trip Use Filter - Arrival Tab - Filter by Destination Hub and Arrival Date (uid:49d374f3-d309-4d1d-b988-c0f6c5514fb6)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Arrival" tab
     When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
@@ -125,9 +125,9 @@ Feature: Trip Management
     And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     Then Operator verifies that the trip management shown in "arrival" tab is correct
 
-  Scenario: OP Load Trip Use Filter - Arrival Tab - Filter by Destination Hub, Movement Type, Arrival Date (uid:d0d3674c-6f9f-4f6f-a461-dde20a7811c4)
+  Scenario: OP Load Trip Use Filter - Arrival Tab - Filter by Destination Hub, Movement Type, Arrival Date (uid:7bf46e74-836d-4a9c-bebc-b18333c402ad)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Arrival" tab
     When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
@@ -137,9 +137,9 @@ Feature: Trip Management
     And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     Then Operator verifies that the trip management shown in "arrival" tab is correct
 
-  Scenario: OP Load Trip Use Filter - Archived Tab - Load Without Filter (uid:0c2d0439-4eb6-482f-855b-c06d52c87d63)
+  Scenario: OP Load Trip Use Filter - Archived Tab - Load Without Filter (uid:63a089f2-1abc-4d1d-accd-6478898ddd42)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Archive" tab
     And Operator clicks on Load Trip Button
@@ -149,9 +149,9 @@ Feature: Trip Management
       | hubId            | 0       |
     Then Operator verifies that the archived trip management is shown correctly
 
-  Scenario: OP Load Trip Use Filter - Archived Tab - Filter by Departure Date (uid:4316f393-f493-4d3b-8d00-2cc48bf747d9)
+  Scenario: OP Load Trip Use Filter - Archived Tab - Filter by Departure Date (uid:a67900c7-23df-466a-b4f2-3395ddd6b3c7)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Archive" tab
     When Operator selects the date to 3 days early in "archive_departure_date" filter
@@ -162,9 +162,9 @@ Feature: Trip Management
       | hubId            | 0                      |
     Then Operator verifies that the archived trip management is shown correctly
 
-  Scenario: OP Load Trip Use Filter - Archived Tab - Filter by Arrival Date (uid:21ec224c-e09c-4641-8574-5835ca096c71)
+  Scenario: OP Load Trip Use Filter - Archived Tab - Filter by Arrival Date (uid:35674652-2322-4761-8130-3535c2bb6a69)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Archive" tab
     When Operator selects the date to 3 days early in "archive_arrival_date" filter
@@ -175,9 +175,9 @@ Feature: Trip Management
       | hubId            | 0                    |
     Then Operator verifies that the archived trip management is shown correctly
 
-  Scenario: OP Load Trip Use Filter - Archived Tab - Filter by Origin Hub (uid:cebcb18a-5725-46d2-8a7f-53e921764505)
+  Scenario: OP Load Trip Use Filter - Archived Tab - Filter by Origin Hub (uid:77f201f3-3b12-4645-a846-5af6fe96f745)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Archive" tab
     When Operator selects the "origin hub" with value "{hub-relation-origin-hub-name}"
@@ -188,9 +188,9 @@ Feature: Trip Management
       | hubId            | {hub-relation-origin-hub-id} |
     Then Operator verifies that the archived trip management is shown correctly
 
-  Scenario: OP Load Trip Use Filter - Archived Tab - Filter by Destination Hub (uid:08d6da41-1782-4e65-91de-127cf92a6a94)
+  Scenario: OP Load Trip Use Filter - Archived Tab - Filter by Destination Hub (uid:c3f0b2df-a748-4d9c-be24-26f88f03b467)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Archive" tab
     When Operator selects the "destination hub" with value "{hub-relation-origin-hub-name}"
@@ -201,9 +201,9 @@ Feature: Trip Management
       | hubId            | {hub-relation-origin-hub-id} |
     Then Operator verifies that the archived trip management is shown correctly
 
-  Scenario: OP Load Trip Use Filter - Archived Tab - Filter by All (uid:e156b25b-3287-463c-8383-79041eabbcb7)
+  Scenario: OP Load Trip Use Filter - Archived Tab - Filter by All (uid:d1366c11-5a4c-447e-a555-3eb69fc4a097)
     Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Shipper Support -> Movement Trips
+    Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
     When Operator clicks on "Archive" tab
     When Operator selects the date to 3 days early in "archive_departure_date" filter

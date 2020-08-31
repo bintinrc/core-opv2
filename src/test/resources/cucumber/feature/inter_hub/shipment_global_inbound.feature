@@ -682,9 +682,9 @@ Feature: Shipment Global Inbound
       | hubName    | {KEY_CREATED_ORDER.destinationHub} |
       | trackingId | GET_FROM_CREATED_ORDER             |
     Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | RECOVERY DAMAGED |
-      | rackInfo       | ON HOLD          |
-      | color          | #f45050          |
+      | destinationHub | ON HOLD - DAMAGED     |
+      | rackInfo       | sync_problem RECOVERY |
+      | color          | #e86161               |
     And DB Operator verify the last inbound_scans record for the created order:
       | hubId      | {hub-id}               |
       | trackingId | GET_FROM_CREATED_ORDER |

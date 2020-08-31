@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.TripManagementFilteringType;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class TripManagementPage extends OperatorV2SimplePage {
 
-    private static final String IFRAME_TRIP_MANAGEMENT_XPATH = "//iframe[contains(@src,'trip-management')]";
+    private static final String IFRAME_TRIP_MANAGEMENT_XPATH = "//iframe[contains(@src,'movement-trips')]";
     private static final String TRIP_MANAGEMENT_CONTAINER_XPATH = "//div[contains(@class,'TripContainer')]";
     private static final String LOAD_BUTTON_XPATH = "//button[contains(@class,'ant-btn-primary')]";
     private static final String FIELD_REQUIRED_ERROR_MESSAGE_XPATH = "//button[contains(@class,'ant-btn-primary')]";
@@ -44,6 +45,11 @@ public class TripManagementPage extends OperatorV2SimplePage {
     private static final String FIRST_ROW_TIME_FILTERED_RESULT_XPATH = "//tr[1]/td[contains(@class,'%s')]/span";
     private static final String FIRST_ROW_OF_TABLE_RESULT_XPATH = "//div[contains(@class,'table')]//tbody/tr[1]";
     private static final String OK_BUTTON_OPTION_TABLE_XPATH = "//button[contains(@class,'btn-primary')]";
+    private static final String TRIP_ID_FIRST_ROW_XPATH = "//tr[1]//td[contains(@class,'id')]/span/span";
+    private static final String ACTION_COLUMN_XPATH = "//tr[1]//td[contains(@class,'action')]";
+    private static final String ACTION_ICON_XPATH = "//tr[1]//td[contains(@class,'action')]/div/i[%d]";
+    private static final String VIEW_ICON_ARRIVAL_ARCHIVE_XPATH = "//tr[1]//td[contains(@class,'action')]/div/a[1]";
+    private static final String TRIP_ID_IN_TRIP_DETAILS_XPATH = "//div[contains(@class,'row')]/h4";
 
     private static final String ID_CLASS = "id";
     private static final String ORIGIN_HUB_CLASS = "originHub";
@@ -399,6 +405,51 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
     public void verifyResult(TripManagementFilteringType tripManagementFilteringType, TripManagementDetailsData tripManagementDetailsData) {
         verifyResult(tripManagementFilteringType, tripManagementDetailsData, null);
+    }
+
+    public String getTripIdAndClickOnActionIcon(MovementTripActionName actionName) {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        String tripId = null;
+        if (isElementExistFast(ACTION_COLUMN_XPATH)) {
+            tripId = getText(TRIP_ID_FIRST_ROW_XPATH);
+
+            switch (actionName) {
+                case VIEW:
+                    if (isElementExistFast(f(ACTION_ICON_XPATH,1))) {
+                        click(f(ACTION_ICON_XPATH, 1));
+                    } else {
+                        click(VIEW_ICON_ARRIVAL_ARCHIVE_XPATH);
+                    }
+                    break;
+
+                case ASSIGN_DRIVER:
+                    click(f(ACTION_ICON_XPATH, 2));
+                    break;
+
+                case CANCEL:
+                    click(f(ACTION_ICON_XPATH, 3));
+                    break;
+
+                default:
+                    NvLogger.warn("Movement Trip Action Name is not found!");
+            }
+        }
+        getWebDriver().switchTo().parentFrame();
+        return tripId;
+    }
+
+    public void verifiesTripDetailIsOpened(String tripId, String windowHandle) {
+        switchToNewWindow();
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
+        waitUntilVisibilityOfElementLocated(TRIP_ID_IN_TRIP_DETAILS_XPATH);
+        String actualTripId = getText(TRIP_ID_IN_TRIP_DETAILS_XPATH);
+        assertTrue("Trip ID", actualTripId.contains(tripId));
+
+        getWebDriver().close();
+        getWebDriver().switchTo().window(windowHandle);
+
+        getWebDriver().switchTo().parentFrame();
     }
 
     private String movementTypeConverter(String movementType) {
