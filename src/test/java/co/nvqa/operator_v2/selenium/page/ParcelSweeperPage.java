@@ -70,7 +70,7 @@ public class ParcelSweeperPage extends OperatorV2SimplePage
     {
         if (StringUtils.isNotBlank(zoneName))
         {
-            String zoneShortName = getText(LOCATOR_ZONE_INFO_CONTAINER + "//h4");
+            String zoneShortName = getText(LOCATOR_ZONE_INFO_CONTAINER + "//h3[@class=\"zone-title\"]");
             String zoneFullName = getText(LOCATOR_ZONE_INFO_CONTAINER + "//h5");
             if (!("NIL".equalsIgnoreCase(zoneName)))
             {
