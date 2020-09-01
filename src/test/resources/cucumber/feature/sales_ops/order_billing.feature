@@ -11,7 +11,7 @@ Feature: Order Billing
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario: Generate "SHIPPER" Success Billing Report - All Shippers
+  Scenario: Generate "SHIPPER" Success Billing Report - All Shippers (uid:714b412f-6a26-4198-b7f0-0e55edf054e0)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -39,7 +39,7 @@ Feature: Order Billing
     Then Operator verifies zip is attached with multiple CSV files in received email
 
   @DeleteOrArchiveRoute
-  Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper
+  Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper (uid:3fe5e7fb-4dbb-4078-93f2-c2e1ce1bb2db)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -73,7 +73,7 @@ Feature: Order Billing
     Then Operator verifies the priced order details in the body
 
   @DeleteOrArchiveRoute
-  Scenario: Generate "PARENT" Success Billing Report - All Shippers
+  Scenario: Generate "PARENT" Success Billing Report - All Shippers (uid:f5eb3206-3762-470c-817e-8dd6fcbc0c33)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -103,7 +103,7 @@ Feature: Order Billing
 
   @ignore #changes of the functionality is still on going
   @DeleteOrArchiveRoute
-  Scenario: Generate "PARENT" Success Billing Report - Selected Shipper
+  Scenario: Generate "PARENT" Success Billing Report - Selected Shipper - Normal Shipper (uid:d476c359-09dd-4bc2-a962-37160049b578)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -133,7 +133,7 @@ Feature: Order Billing
     Then Operator verifies zip is not attached with any CSV files in received email
 
   @DeleteOrArchiveRoute
-  Scenario: Generate "ALL" Success Billing Report - All Shippers
+  Scenario: Generate "ALL" Success Billing Report - All Shippers (uid:59af6bea-ac85-446d-97ba-4d386577f447)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -142,7 +142,7 @@ Feature: Order Billing
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator set tags of the new created route to [{route-tag-id}]
+ Given API Operator set tags of the new created route to [{route-tag-id}]
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     Given API Driver collect all his routes
@@ -166,7 +166,7 @@ Feature: Order Billing
     Then Operator verifies the priced order details in the body
 
   @DeleteOrArchiveRoute
-  Scenario: Generate "ALL" Success Billing Report - - Selected Shipper
+  Scenario: Generate "ALL" Success Billing Report - Selected Shipper (uid:6f415334-b2d5-48b0-b39d-57e89bd9d1eb)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -200,7 +200,7 @@ Feature: Order Billing
     Then Operator verifies the priced order details in the body
 
   @DeleteOrArchiveRoute
-  Scenario: Generate "AGGREGATED" Success Billing Report - All Shippers
+  Scenario: Generate "AGGREGATED" Success Billing Report - All Shippers (uid:68cbd874-d3a8-4cd0-a1e5-efe6e46fb29e)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -234,7 +234,7 @@ Feature: Order Billing
     # blocked : need the sql query for above step
 
   @DeleteOrArchiveRoute
-  Scenario: Generate "AGGREGATED" Success Billing Report - Selected Shipper
+  Scenario: Generate "AGGREGATED" Success Billing Report - Selected Shipper (uid:e45b4c91-9a83-46ef-8384-9cf841cea016)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -268,7 +268,7 @@ Feature: Order Billing
     Then Operator verifies the orders grouped by shipper and parcel size and weight
 
   @DeleteOrArchiveRoute
-  Scenario: Generate "SCRIPT" Success Billing Report - All Shippers
+  Scenario: Generate "SCRIPT" Success Billing Report - All Shippers (uid:a6967dec-0d31-46f8-98c0-efe91682bd35)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -297,7 +297,7 @@ Feature: Order Billing
     Then Operator verifies zip is attached with multiple CSV files in received email
 
   @DeleteOrArchiveRoute
-  Scenario: Generate "SCRIPT" Success Billing Report - Selected Shipper
+  Scenario: Generate "SCRIPT" Success Billing Report - Selected Shipper (uid:1fc9c536-15b8-4157-b14c-88c595805819)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
