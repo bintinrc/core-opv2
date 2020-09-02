@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.shipper_support.AggregatedOrder;
 import co.nvqa.commons.model.shipper_support.PricedOrder;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.OrderBillingPage;
@@ -82,22 +83,26 @@ public class OrderBillingSteps extends AbstractSteps
     @Then("^Operator verifies zip is attached with multiple CSV files in received email$")
     public void operatorVerifiesAttachedZipFileInReceivedEmail()
     {
-        int noOfFiles = orderBillingPage.getNoOfFilesInZipAttachment(get(KEY_ORDER_BILLING_SSB_URL), get(KEY_ORDER_BILLING_START_DATE), get(KEY_ORDER_BILLING_END_DATE));
-        assertTrue("Multiple CSV files are not available in the ZIP", noOfFiles > 1);
+        assertTrue("Multiple CSV files are not available in the ZIP", getNoOfFilesInZipAttachment() > 1);
     }
 
-    @Then("^Operator verifies zip is attached with one CSV file in received email")
+    private int getNoOfFilesInZipAttachment()
+    {
+        int noOfFilesInZipAttachment = orderBillingPage.getNoOfFilesInZipAttachment(get(KEY_ORDER_BILLING_SSB_URL), get(KEY_ORDER_BILLING_START_DATE), get(KEY_ORDER_BILLING_END_DATE));
+        put(KEY_ORDER_BILLING_CSV_FILE_COUNT, noOfFilesInZipAttachment);
+        return noOfFilesInZipAttachment;
+    }
+
+    @Then("Operator verifies zip is attached with one CSV file in received email")
     public void operatorVerifiesZipAttachedWithOneCSVFilesInReceivedEmail()
     {
-        int noOfFiles = orderBillingPage.getNoOfFilesInZipAttachment(get(KEY_ORDER_BILLING_SSB_URL), get(KEY_ORDER_BILLING_START_DATE), get(KEY_ORDER_BILLING_END_DATE));
-        assertTrue("More than one CSV file attached in the ZIP", noOfFiles == 1);
+        assertTrue("More than one CSV file attached in the ZIP", getNoOfFilesInZipAttachment() == 1);
     }
 
     @Then("Operator verifies zip is not attached with any CSV files in received email")
     public void operatorVerifiesZipIsNotAttachedWithAnyCSVFilesInReceivedEmail()
     {
-        int noOfFiles = orderBillingPage.getNoOfFilesInZipAttachment(get(KEY_ORDER_BILLING_SSB_URL), get(KEY_ORDER_BILLING_START_DATE), get(KEY_ORDER_BILLING_END_DATE));
-        assertTrue("One or more CSV files attached in the ZIP", noOfFiles == 0);
+        assertTrue("One or more CSV files attached in the ZIP", getNoOfFilesInZipAttachment() == 0);
     }
 
     @Then("^operator marks gmail messages as read$")
@@ -169,17 +174,30 @@ public class OrderBillingSteps extends AbstractSteps
         assertThat("Success Billings Csv file does not contains expected information for column LastCalculatedDate", pricedOrderDb.getLastCalculatedDate(), containsString(f("%s", pricedOrderCsv.getLastCalculatedDate())));
     }
 
-
     @Then("Operator verifies the orders grouped by shipper and parcel size and weight")
     public void operatorVerifiesTheOrdersGroupedByShipperAndParcelSizeAndWeight()
     {
-        List<List<String>> expectedResultsInDB = get(KEY_ORDER_BILLING_DB_AGGREGATED_DATA_BY_SHIPPER);
-        List<List<String>> actualSsbOrderRows = get(KEY_ORDER_BILLING_SSB_AGGREGATED_DATA);
+        List<AggregatedOrder> expectedResultsInDB = Objects.isNull(get(KEY_ORDER_BILLING_SHIPPER_NAME)) ? get(KEY_ORDER_BILLING_DB_AGGREGATED_DATA_ALL_SHIPPERS) : get(KEY_ORDER_BILLING_DB_AGGREGATED_DATA_BY_SHIPPER);
+        List<AggregatedOrder> actualSsbOrderRows = get(KEY_ORDER_BILLING_SSB_AGGREGATED_DATA);
 
         for (int i = 0; i < expectedResultsInDB.size(); i++)
         {
-            assertEquals("Actual data in CSV does not match with the expected data : row %s ", expectedResultsInDB.get(i), actualSsbOrderRows.get(i));
+            assertEquals("Actual data in CSV does not match with the expected data for column ShipperId, row " + i, expectedResultsInDB.get(i).getShipperId(), actualSsbOrderRows.get(i).getShipperId());
+            assertEquals("Actual data in CSV does not match with the expected data for column ShipperName, row " + i, expectedResultsInDB.get(i).getShipperName(), actualSsbOrderRows.get(i).getShipperName());
+            assertEquals("Actual data in CSV does not match with the expected data for column ShipperBillingName, row " + i, expectedResultsInDB.get(i).getShipperBillingName(), actualSsbOrderRows.get(i).getShipperBillingName());
+            assertEquals("Actual data in CSV does not match with the expected data for column DeliveryTypeName, row " + i, expectedResultsInDB.get(i).getDeliveryTypeName(), actualSsbOrderRows.get(i).getDeliveryTypeName());
+            assertEquals("Actual data in CSV does not match with the expected data for column DeliveryTypeId, row " + i, expectedResultsInDB.get(i).getDeliveryTypeId(), actualSsbOrderRows.get(i).getDeliveryTypeId());
+            assertEquals("Actual data in CSV does not match with the expected data for column ParcelSize, row " + i, expectedResultsInDB.get(i).getParcelSize(), actualSsbOrderRows.get(i).getParcelSize());
+            assertEquals("Actual data in CSV does not match with the expected data for column ParcelWeight, row " + i, expectedResultsInDB.get(i).getParcelWeight(), actualSsbOrderRows.get(i).getParcelWeight());
+            assertEquals("Actual data in CSV does not match with the expected data for column Count, row " + i, expectedResultsInDB.get(i).getCount(), actualSsbOrderRows.get(i).getCount());
+            assertEquals("Actual data in CSV does not match with the expected data for column Cost, row " + i, expectedResultsInDB.get(i).getCost(), actualSsbOrderRows.get(i).getCost());
         }
+    }
+
+    @Then("Operator verifies the count of files in zip")
+    public void operatorVerifiesTheCountOfFilesInZip()
+    {
+        assertEquals("Actual file count in Zip does not match with the expected file count in DB" , get(KEY_ORDER_BILLING_DB_FILE_COUNT), get(KEY_ORDER_BILLING_CSV_FILE_COUNT));
     }
 
 }
