@@ -988,4 +988,6 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         boolean driverAvailability = getDriverJdbc().getDriverAvailabilityValue(driverUsername);
         put(KEY_CREATED_MIDDLE_MILE_DRIVER_AVAILABILITY, driverAvailability);
     }
+
+
 }

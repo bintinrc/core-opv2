@@ -171,6 +171,49 @@ Feature: Global Inbound
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
 
+  @CloseNewWindows
+  Scenario: Operator should not be able to global inbound parcel with invalid order's status - Returned to Sender (uid:5664ec96-151c-417e-b6aa-2d45a5ca5443)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator RTS created order:
+      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+    When API Operator force succeed created order
+    And Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below:
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | RTS                          |
+      | rackInfo       | sync_problem RECOVERY        |
+      | color          | #e86161                      |
+    And DB Operator verify the last order_events record for the created order:
+      | type | 26 |
+
+  Scenario: Operator should not be able to global inbound parcel with invalid order's status - Transferred to Third Party (uid:bea1c2f2-caea-418a-a471-dfbddcb749a3)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Cross Border & 3PL -> Third Party Order Management
+    When Operator uploads new mapping
+      |3plShipperName  | {3pl-shipper-name}    |
+      |3plShipperId    | {3pl-shipper-id}      |
+    When API Operator refresh created order data
+    And Operator go to menu Inbounding -> Global Inbound
+    Then Operator global inbounds parcel using data below:
+      | hubName    | {hub-name}                      |
+      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | TRANSFERRED TO 3PL           |
+      | rackInfo       | sync_problem RECOVERY        |
+      | color          | #e86161                      |
+    And DB Operator verify the last order_events record for the created order:
+      | type | 26 |
+
   Scenario: Operator should not be able to Global Inbound parcel with invalid order's status - Completed Order (uid:9316f5f0-1423-47eb-890d-3916654f545b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -182,8 +225,9 @@ Feature: Global Inbound
       | hubName           | {hub-name}                                 |
       | trackingId        | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
-      | rackInfo       | COMPLETED                          |
-      | color          | #e86161                            |
+      | destinationHub | COMPLETED                    |
+      | rackInfo       | sync_problem RECOVERY        |
+      | color          | #e86161                      |
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
@@ -198,10 +242,48 @@ Feature: Global Inbound
       | hubName           | {hub-name}                                 |
       | trackingId        | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
-      | rackInfo       | CANCELLED                          |
-      | color          | #e86161                            |
+      | destinationHub | CANCELLED                    |
+      | rackInfo       | sync_problem RECOVERY        |
+      | color          | #e86161                      |
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
+
+  @DeleteOrArchiveRoute
+  Scenario: Inbound On Vehicle for Delivery Order (uid:4d0c8a28-ca6a-4bf0-9505-ce656f1a6179)
+      Given Operator go to menu Shipper Support -> Blocked Dates
+      Given API Shipper create V4 order using data below:
+        | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+        | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      When API Operator Global Inbound parcel using data below:
+        | globalInboundRequest | { "hubId":{hub-id} } |
+      When API Operator create new route using data below:
+        | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+      And API Operator add parcel to the route using data below:
+        | addParcelToRouteRequest | { "type":"DD" } |
+      When API Driver collect all his routes
+      When API Driver get pickup/delivery waypoint of the created order
+      When API Operator Van Inbound parcel
+      When API Operator start the route
+    When Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName           | {hub-name}                                 |
+      | trackingId        | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    Then Operator verify info on Global Inbound page using data below:
+      | rackInfo       | ROUTED        |
+      | color          | #e86161       |
+    And DB Operator verify the last order_events record for the created order:
+      | type | 26 |
+
+  Scenario: Inbound invalid tracking ID (uid:af756fa4-6695-40e2-8632-6de0055c0083)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName           | {hub-name}   |
+      | trackingId        | INVALID      |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | INVALID                      |
+      | rackInfo       | sync_problem RECOVERY        |
+      | color          | #e86161                      |
 
   @DeleteOrArchiveRoute @CloseNewWindows
   Scenario Outline: Inbound failed delivery - <Note> (<hiptest-uid>)
@@ -459,12 +541,6 @@ Feature: Global Inbound
       | 1      | uid:b686236c-d123-4def-9d76-4ca59380f820 | 1             | #f8cf5c                 |
       | 2 - 90 | uid:d21927f7-ff4b-4dca-965d-ac3630f24217 | 50            | #e29d4a                 |
       | > 90   | uid:125b3e40-9e7e-41bc-b61a-3b138ba54149 | 100           | #c65d44                 |
-
-#  API to create International parcel still have an issue.
-#  Scenario: Operator should be able to Inbound an International Order and verify the alert info is correct
-#    Given API Shipper create V4 order using data below:
-#      | generateFromAndTo | RANDOM |
-#      | v4OrderRequest    | { "international":{ "portation":"Export" }, "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"15:00", "end_time":"18:00"}}} |
 
   Scenario: Inbound Fully Integrated DP Order (uid:8a855ffd-2b50-4aea-a358-53cff150ad98)
     When Operator go to menu Shipper Support -> Blocked Dates
@@ -898,47 +974,6 @@ Feature: Global Inbound
       | name    | HUB INBOUND SCAN |
       | hubName | {hub-name}       |
 
-  @CloseNewWindows
-  Scenario: Operator should not be able to global inbound parcel with invalid order's status - Returned to Sender (uid:5664ec96-151c-417e-b6aa-2d45a5ca5443)
-    When Operator go to menu Shipper Support -> Blocked Dates
-    And API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator RTS created order:
-      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-    When API Operator force succeed created order
-    And Operator go to menu Inbounding -> Global Inbound
-    Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                      |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
-    Then Operator verify info on Global Inbound page using data below:
-      | rackInfo       | RTS                          |
-      | color          | #e86161                      |
-    And DB Operator verify the last order_events record for the created order:
-      | type | 26 |
-
-  Scenario: Operator should not be able to global inbound parcel with invalid order's status - Transferred to Third Party (uid:bea1c2f2-caea-418a-a471-dfbddcb749a3)
-    When Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given Operator go to menu Cross Border & 3PL -> Third Party Order Management
-    When Operator uploads new mapping
-      |3plShipperName  | {3pl-shipper-name}    |
-      |3plShipperId    | {3pl-shipper-id}      |
-    When API Operator refresh created order data
-    And Operator go to menu Inbounding -> Global Inbound
-    Then Operator global inbounds parcel using data below:
-      | hubName    | {hub-name}                      |
-      | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
-    Then Operator verify info on Global Inbound page using data below:
-      | rackInfo       | TRANSFERRED TO 3PL           |
-      | color          | #e86161                      |
-    And DB Operator verify the last order_events record for the created order:
-      | type | 26 |
-
   Scenario: Inbound showing max weight limit alert - inbound weight is higher than max weight limit (uid:d56315b8-24df-49ad-8d1f-f02e0cfeb658)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -999,6 +1034,40 @@ Feature: Global Inbound
       | hubName        | {hub-name}                                 |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideWeight | 24                                         |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
+      | color          | #ffa400                            |
+    And DB Operator verify the last order_events record for the created order:
+      | type | 26 |
+
+  Scenario: Inbound an International order - portation export (uid:a0364582-4f4a-4f8c-90e6-ded25c878348)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | { "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}, "international":{"portation":"export"}} |
+      | addressType         | global                                                                                                                                                                                                                                                                |
+      And Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName        | {hub-name}         |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | INTERNATIONAL                      |
+      | rackInfo       | {KEY_CREATED_ORDER.destinationHub} |
+      | color          | #ffa400                            |
+    And DB Operator verify the last order_events record for the created order:
+      | type | 26 |
+
+  Scenario: Inbound an International order - portation import (uid:581b7d82-f823-4d56-b6a4-bfffc2b65d8f)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                |
+      | v4OrderRequest      | { "service_type":"International", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}, "international":{"portation":"import"}} |
+      | addressType         | global                                                                                                                                                                                                                                                                |
+    And Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName        | {hub-name}         |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
