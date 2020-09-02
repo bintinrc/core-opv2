@@ -78,7 +78,7 @@ public class MovementManagementSteps extends AbstractSteps
     {
         operatorOpensAddMovementScheduleDialogOnMovementManagementPage();
         operatorFillAddMovementScheduleFormUsingDataBelow(data);
-        operatorClickButtonOnAddMovementScheduleDialog("Save Schedule");
+        operatorClickButtonOnAddMovementScheduleDialog("Create");
         pause3s();
     }
 
@@ -203,7 +203,7 @@ public class MovementManagementSteps extends AbstractSteps
     {
         switch (StringUtils.normalizeSpace(buttonName.toLowerCase()))
         {
-            case "save schedule":
+            case "create":
                 movementManagementPage.addMovementScheduleModal.create.click();
                 break;
             case "cancel":
@@ -212,7 +212,6 @@ public class MovementManagementSteps extends AbstractSteps
             default:
                 throw new IllegalArgumentException(f("Unknown button name [%s] on 'Add Movement Schedule' dialog", buttonName));
         }
-        movementManagementPage.addMovementScheduleModal.waitUntilInvisible();
     }
 
     @And("Operator fill Add Movement Schedule form using data below:")
@@ -223,7 +222,15 @@ public class MovementManagementSteps extends AbstractSteps
         MovementSchedule movementSchedule = new MovementSchedule();
         movementSchedule.fromMap(data);
         movementManagementPage.addMovementScheduleModal.fill(movementSchedule);
-        put(KEY_CREATED_MOVEMENT_SCHEDULE, movementSchedule);
+
+        MovementSchedule existed = get(KEY_CREATED_MOVEMENT_SCHEDULE);
+        if (existed == null)
+        {
+            put(KEY_CREATED_MOVEMENT_SCHEDULE, movementSchedule);
+        } else
+        {
+            existed.getSchedules().addAll(movementSchedule.getSchedules());
+        }
     }
 
     @Then("Operator verify Add Movement Schedule form is empty")
@@ -409,5 +416,12 @@ public class MovementManagementSteps extends AbstractSteps
     {
         assertTrue("there is hyperlink for 'Edit Relations' on the right side",
                 movementManagementPage.relationsTable.rows.stream().map(row -> row.editRelations.getText()).allMatch("Edit Relations"::equals));
+    }
+
+    @When("Operator verify {string} error Message is displayed in Add Crossdock Movement Schedule dialog")
+    public void operatorVerifyErrorMessageInAddCrossdockMovementScheduleDialog(String expectedMessage)
+    {
+        assertTrue("Error message is not displayed", movementManagementPage.addMovementScheduleModal.errorMessage.isDisplayedFast());
+        assertEquals("Error message text", expectedMessage, movementManagementPage.addMovementScheduleModal.errorMessage.getText());
     }
 }

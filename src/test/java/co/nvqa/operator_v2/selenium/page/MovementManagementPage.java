@@ -197,6 +197,9 @@ public class MovementManagementPage extends OperatorV2SimplePage
         @FindBy(xpath = ".//button[.='Create']")
         public Button create;
 
+        @FindBy(css = "div.has-error")
+        public PageElement errorMessage;
+
         @FindBy(xpath = ".//button[.='Cancel']")
         public Button cancel;
 
