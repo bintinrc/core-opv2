@@ -1,5 +1,5 @@
 @MiddleMile @Hub @InterHub @MovementManagement
-Feature: Movement Management
+Feature: Movement Schedules
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
