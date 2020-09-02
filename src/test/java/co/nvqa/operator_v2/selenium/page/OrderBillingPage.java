@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.shipper_support.AggregatedOrder;
 import co.nvqa.commons.model.shipper_support.PricedOrder;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.GmailClient;
@@ -40,7 +41,7 @@ public class OrderBillingPage extends OperatorV2SimplePage
     public static final String SCRIPT_BILLING_REPORT = "Script Billing Report";
     public static final String AGGREGATED_BILLING_REPORT = "Aggregated Billing Report";
 
-    private final List<List<String>> csvRowsInAggregatedReport = new ArrayList<>();
+    private final List<AggregatedOrder> csvRowsInAggregatedReport = new ArrayList<>();
     private String csvRowForOrderInShipperReport;
     private String headerLineInShipperReport;
 
@@ -207,7 +208,18 @@ public class OrderBillingPage extends OperatorV2SimplePage
         }
         if (reportName.equals(AGGREGATED_BILLING_REPORT))
         {
-            csvRowsInAggregatedReport.add(Arrays.asList(line.replaceAll("\"", "").split(",")));
+            List<String> orderDetailList = Arrays.asList(line.replaceAll("\"", "").split(","));
+            AggregatedOrder aggregatedOrder = new AggregatedOrder();
+            aggregatedOrder.setShipperId(orderDetailList.get(0));
+            aggregatedOrder.setShipperName(orderDetailList.get(1));
+            aggregatedOrder.setShipperBillingName(orderDetailList.get(2));
+            aggregatedOrder.setDeliveryTypeName(orderDetailList.get(3));
+            aggregatedOrder.setDeliveryTypeId(orderDetailList.get(4));
+            aggregatedOrder.setParcelSize(orderDetailList.get(5));
+            aggregatedOrder.setParcelWeight(orderDetailList.get(6));
+            aggregatedOrder.setCount(orderDetailList.get(7));
+            aggregatedOrder.setCost(orderDetailList.get(8));
+            csvRowsInAggregatedReport.add(aggregatedOrder);
         }
     }
 
@@ -260,7 +272,7 @@ public class OrderBillingPage extends OperatorV2SimplePage
         return pricedOrderInCsv;
     }
 
-    public List<List<String>> getAggregatedOrdersFromCsv()
+    public List<AggregatedOrder> getAggregatedOrdersFromCsv()
     {
         return csvRowsInAggregatedReport;
     }
