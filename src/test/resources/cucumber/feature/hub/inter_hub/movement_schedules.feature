@@ -252,7 +252,8 @@ Feature: Movement Schedules
     Then Operator verify Add Movement Schedule form is empty
 
   @SoftDeleteHubViaDb
-  Scenario: View Crossdock Movement Schedule (uid:56b4708c-607e-40fd-8e20-5b0fa7caf652)    Given Operator go to menu Shipper Support -> Blocked Dates
+  Scenario: View Crossdock Movement Schedule (uid:56b4708c-607e-40fd-8e20-5b0fa7caf652)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -785,7 +786,8 @@ Feature: Movement Schedules
       | status | SUCCESS         |
 
   @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
-  Scenario: Station to its Crossdock - Station Movement Found but there is no available schedule (uid:be4d5366-99e4-432d-879f-7647efbf7d6b)    Given Operator go to menu Shipper Support -> Blocked Dates
+  Scenario: Station to its Crossdock - Station Movement Found but there is no available schedule (uid:be4d5366-99e4-432d-879f-7647efbf7d6b)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
