@@ -79,8 +79,9 @@ Feature: Shipment Global Inbound
       | hubName           | {hub-name}                                 |
       | trackingId        | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
-      | rackInfo       | <message>                          |
-      | color          | #f45050                            |
+      | destinationHub | <message>             |
+      | rackInfo       | sync_problem RECOVERY |
+      | color          | #e86161               |
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
     Examples:
