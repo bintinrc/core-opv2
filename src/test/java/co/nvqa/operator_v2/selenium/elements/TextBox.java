@@ -34,6 +34,11 @@ public class TextBox extends PageElement
         executeScript(f("arguments[0].value='%s'", value), webElement);
     }
 
+    public void jsSetValue(Object value)
+    {
+        jsSetValue(String.valueOf(value));
+    }
+
     public String getValue()
     {
         return getValue(webElement);

@@ -15,6 +15,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -40,6 +41,9 @@ public class MovementManagementPage extends OperatorV2SimplePage
 
     @FindBy(className = "ant-modal-wrap")
     public MovementScheduleModal movementScheduleModal;
+
+    @FindBy(className = "ant-modal")
+    public UpdateSchedulesConfirmationModal updateSchedulesConfirmationModal;
 
     @FindBy(css = "div.ant-modal")
     public EditStationRelationsModal editStationRelationsModal;
@@ -101,6 +105,12 @@ public class MovementManagementPage extends OperatorV2SimplePage
 
     @FindBy(xpath = "//button[.='Add Schedule']")
     public Button addSchedule;
+
+    @FindBy(xpath = "//button[.='Modify']")
+    public Button modify;
+
+    @FindBy(xpath = "//button[.='Save']")
+    public Button save;
 
     @FindBy(css = "div.ant-modal")
     public AddStationMovementScheduleModal addStationMovementScheduleModal;
@@ -186,6 +196,9 @@ public class MovementManagementPage extends OperatorV2SimplePage
 
         @FindBy(xpath = ".//button[.='Create']")
         public Button create;
+
+        @FindBy(css = "div.has-error")
+        public PageElement errorMessage;
 
         @FindBy(xpath = ".//button[.='Cancel']")
         public Button cancel;
@@ -367,27 +380,6 @@ public class MovementManagementPage extends OperatorV2SimplePage
         }
     }
 
-    public static class ScheduleRow extends NvTable.NvRow
-    {
-        public ScheduleRow(WebDriver webDriver, WebElement webElement)
-        {
-            super(webDriver, webElement);
-            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-        }
-
-        public ScheduleRow(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-        {
-            super(webDriver, searchContext, webElement);
-            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-        }
-
-        @FindBy(className = "originHubName")
-        public PageElement originHubName;
-
-        @FindBy(className = "destinationHubName")
-        public PageElement destinationHubName;
-    }
-
     public static class RelationRow extends NvTable.NvRow
     {
         public RelationRow(WebDriver webDriver, WebElement webElement)
@@ -438,6 +430,39 @@ public class MovementManagementPage extends OperatorV2SimplePage
 
     public static class SchedulesTable extends AntTable<MovementSchedule.Schedule>
     {
+        @FindBy(xpath = "//td[@class='startTime']//span[@class='ant-time-picker']")
+        public AntTimePicker departureTime;
+
+        @FindBy(xpath = "//td[@class='duration']//input[@class='ant-input-number-input']")
+        public TextBox durationDays;
+
+        @FindBy(xpath = "//td[@class='duration']//span[@class='ant-time-picker']")
+        public AntTimePicker durationTime;
+
+        @FindBy(xpath = "//td[@class='daysofweek']//input[@type='checkbox'][@value='1']")
+        public CheckBox monday;
+
+        @FindBy(xpath = "//td[@class='daysofweek']//input[@type='checkbox'][@value='2']")
+        public CheckBox tuesday;
+
+        @FindBy(xpath = "//td[@class='daysofweek']//input[@type='checkbox'][@value='3']")
+        public CheckBox wednesday;
+
+        @FindBy(xpath = "//td[@class='daysofweek']//input[@type='checkbox'][@value='4']")
+        public CheckBox thursday;
+
+        @FindBy(xpath = "//td[@class='daysofweek']//input[@type='checkbox'][@value='5']")
+        public CheckBox friday;
+
+        @FindBy(xpath = "//td[@class='daysofweek']//input[@type='checkbox'][@value='6']")
+        public CheckBox saturday;
+
+        @FindBy(xpath = "//td[@class='daysofweek']//input[@type='checkbox'][@value='7']")
+        public CheckBox sunday;
+
+        @FindBy(xpath = "//td[@class='comment']//textarea")
+        public TextBox comment;
+
         private static final Pattern DURATION_PATTERN = Pattern.compile("(\\d{2})d\\s(\\d{2})h\\s(\\d{2})m");
         private static final String DAY_OF_WEEK_LOCATOR = ".//tbody/tr[%d]/td[contains(@class,'daysofweek')]//input[@value='%d']";
         public static final String COLUMN_ORIGIN_HUB = "originHub";
@@ -516,6 +541,52 @@ public class MovementManagementPage extends OperatorV2SimplePage
             }
             return String.join(",", days);
         }
+
+        public void editSchedule(MovementSchedule.Schedule schedule)
+        {
+            if (StringUtils.isNotBlank(schedule.getDepartureTime()))
+            {
+                departureTime.setValue(schedule.getDepartureTime());
+            }
+            if (schedule.getDurationDays() != null)
+            {
+                durationDays.sendKeys(Keys.BACK_SPACE + String.valueOf(schedule.getDurationDays()));
+            }
+            if (StringUtils.isNotBlank(schedule.getDurationTime()))
+            {
+                durationTime.setValue(schedule.getDurationTime());
+            }
+            if (CollectionUtils.isNotEmpty(schedule.getDaysOfWeek()))
+            {
+                setDaysOfWeek(schedule.getDaysOfWeek());
+            }
+            if (StringUtils.isNotBlank(schedule.getComment()))
+            {
+                comment.setValue(schedule.getComment());
+            }
+        }
+
+        public void setDaysOfWeek(Set<String> daysOfWeek)
+        {
+            monday.setValue(daysOfWeek.contains("monday"));
+            tuesday.setValue(daysOfWeek.contains("tuesday"));
+            wednesday.setValue(daysOfWeek.contains("wednesday"));
+            thursday.setValue(daysOfWeek.contains("thursday"));
+            friday.setValue(daysOfWeek.contains("friday"));
+            saturday.setValue(daysOfWeek.contains("saturday"));
+            sunday.setValue(daysOfWeek.contains("sunday"));
+        }
     }
 
+    public static class UpdateSchedulesConfirmationModal extends AntModal
+    {
+        public UpdateSchedulesConfirmationModal(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(xpath = "//button[.='Update']")
+        public Button update;
+    }
 }
