@@ -1,7 +1,7 @@
 @MiddleMile @InterHub @MiddleMileDrivers
 Feature: Shipment Inbound Scanning
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @Debug @ForceNotHeadless
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
@@ -262,14 +262,16 @@ Feature: Shipment Inbound Scanning
     And Operator DB gets that the driver availability value
     Then Operator verifies that the driver availability's value is the same
 
-  @DeleteMiddleMileDriver
+  @DeleteMiddleMileDriver @Debug
   Scenario: OP bulk update driver availability - Set all to active (uid:78e379a8-4e79-48df-b865-63a60dc2b38c)
     Given API Driver gets all the driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
+    And API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-4-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-4-day-yyyy-MM-dd}"}} |
     When Operator create new Middle Mile Driver with details:
-      | name   | hub        | contactNumber | licenseNumber | employmentType | username |
-      | RANDOM | {hub-name} | 08176586525   | RANDOM        | FULL_TIME      | RANDOM   |
+#      | name   | hub        | contactNumber | licenseNumber | employmentType | username |
+#      | RANDOM | {hub-name} | 08176586525   | RANDOM        | FULL_TIME      | RANDOM   |
     Then Operator verifies that the new Middle Mile Driver has been created
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "name" and verifies the created username
