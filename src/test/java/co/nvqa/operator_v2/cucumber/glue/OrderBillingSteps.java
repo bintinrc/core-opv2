@@ -9,10 +9,8 @@ import cucumber.api.java.en.Then;
 import cucumber.runtime.java.guice.ScenarioScoped;
 
 import java.text.ParseException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+
 
 /**
  * @author Kateryna Skakunova
@@ -21,6 +19,7 @@ import java.util.Objects;
 public class OrderBillingSteps extends AbstractSteps
 {
     private OrderBillingPage orderBillingPage;
+    private String shipperIds = null;
 
     public OrderBillingSteps()
     {
@@ -59,6 +58,11 @@ public class OrderBillingSteps extends AbstractSteps
             orderBillingPage.setSpecificShipper(shipper);
             put(KEY_ORDER_BILLING_SHIPPER_NAME, shipper);
 
+        }
+        if (Objects.nonNull(mapOfData.get("uploadCsv")))
+        {
+            shipperIds = mapOfData.get("uploadCsv");
+            orderBillingPage.uploadCsvShippers(shipperIds);
         }
         if (Objects.nonNull(mapOfData.get("generateFile")))
         {
@@ -197,7 +201,24 @@ public class OrderBillingSteps extends AbstractSteps
     @Then("Operator verifies the count of files in zip")
     public void operatorVerifiesTheCountOfFilesInZip()
     {
-        assertEquals("Actual file count in Zip does not match with the expected file count in DB" , get(KEY_ORDER_BILLING_DB_FILE_COUNT), get(KEY_ORDER_BILLING_CSV_FILE_COUNT));
+        assertEquals("Actual file count in Zip does not match with the expected file count in DB", get(KEY_ORDER_BILLING_DB_FILE_COUNT), get(KEY_ORDER_BILLING_CSV_FILE_COUNT));
     }
 
+    @Then("Operator verifies the report only contains orders from the shipper IDs in the uploaded file")
+    public void operatorVerifiesTheReportOnlyContainsOrdersFromTheShipperIDsInTheUploadedFile()
+    {
+
+        Set<String> expectedShipperIds = new HashSet<>(Arrays.asList(shipperIds.split(",")));
+        Set<String> actualShipperIds = orderBillingPage.getShipperIdsInCsv();
+        assertEquals(expectedShipperIds,actualShipperIds);
+
+    }
+
+    @Then("Operator verifies the report only contains valid shipper IDs like below:")
+    public void operatorVerifiesTheReportOnlyContainsValidShipperIDsLikeBelow(List<String> validShipperIds)
+    {
+        Set<String> expectedShipperIds = new HashSet<>(validShipperIds);
+        Set<String> actualShipperIds = orderBillingPage.getShipperIdsInCsv();
+        assertEquals(expectedShipperIds,actualShipperIds);
+    }
 }
