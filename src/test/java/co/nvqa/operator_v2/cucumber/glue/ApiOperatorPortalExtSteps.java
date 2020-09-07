@@ -213,10 +213,13 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
 
         CreateDriverV2Request driverCreateRequest = fromJsonCamelCase(driverCreateRequestJson, CreateDriverV2Request.class);
         driverCreateRequest = getDriverClient().createDriver(driverCreateRequest);
+        put(KEY_CREATED_DRIVER, driverCreateRequest.getDriver());
+        putInList(KEY_LIST_OF_CREATED_DRIVERS, driverCreateRequest.getDriver());
+
         DriverInfo driverInfo = new DriverInfo();
         driverInfo.fromDriver(driverCreateRequest.getDriver());
-
-        put(KEY_CREATED_DRIVER, driverInfo);
+        put(KEY_CREATED_DRIVER_INFO, driverInfo);
+        put(KEY_CREATED_DRIVER_USERNAME, driverInfo.getUsername());
         put(KEY_CREATED_DRIVER_ID, driverInfo.getId());
         put(KEY_CREATED_DRIVER_UUID, driverInfo.getUuid());
     }

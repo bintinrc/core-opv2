@@ -1,11 +1,11 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.GetDriverResponse;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.support.RandomUtil;
 import co.nvqa.commons.util.NvLogger;
-import co.nvqa.operator_v2.model.MiddleMileDriver;
 import co.nvqa.operator_v2.selenium.page.MiddleMileDriversPage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -14,13 +14,14 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
- *
  * @author Tristania Siagian
  */
 
-public class MiddleMileDriversSteps extends AbstractSteps {
+public class MiddleMileDriversSteps extends AbstractSteps
+{
 
     private static final ZonedDateTime TODAY = DateUtil.getDate();
     private static final DateTimeFormatter CAL_FORMATTER = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
@@ -72,7 +73,8 @@ public class MiddleMileDriversSteps extends AbstractSteps {
 
     private MiddleMileDriversPage middleMileDriversPage;
 
-    public MiddleMileDriversSteps() {
+    public MiddleMileDriversSteps()
+    {
     }
 
     @Override
@@ -82,16 +84,19 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     }
 
     @When("Operator clicks on Load Driver Button on the Middle Mile Driver Page")
-    public void operatorClicksOnLoadDriverButtonOnTheMiddleMileDriverPage() {
+    public void operatorClicksOnLoadDriverButtonOnTheMiddleMileDriverPage()
+    {
         middleMileDriversPage.clickLoadDriversButton();
     }
 
     @Then("Operator verifies that the data shown has the same value")
-    public void operatorVerifiesThatTheDataShownHasTheSameValue() {
+    public void operatorVerifiesThatTheDataShownHasTheSameValue()
+    {
         GetDriverResponse driver = get(KEY_ALL_DRIVERS_DATA);
         int totalDriver = 0;
 
-        if (driver != null) {
+        if (driver != null)
+        {
             totalDriver = driver.getData().getCount();
         }
 
@@ -99,29 +104,39 @@ public class MiddleMileDriversSteps extends AbstractSteps {
     }
 
     @When("Operator selects the hub on the Middle Mile Drivers Page")
-    public void operatorSelectsTheHubOnTheMiddleMileDriversPage() {
+    public void operatorSelectsTheHubOnTheMiddleMileDriversPage()
+    {
         Hub hub = get(KEY_HUB_INFO);
         String hubName = hub.getName();
         middleMileDriversPage.selectHubFilter(hubName);
     }
 
     @When("Operator create new Middle Mile Driver with details:")
-    public void operatorCreateNewMiddleMileDriverWithDetails(List<MiddleMileDriver> middleMileDrivers) {
+    public void operatorCreateNewMiddleMileDriverWithDetails(List<Map<String, String>> middleMileDrivers)
+    {
         String country = get(COUNTRY);
-        for (MiddleMileDriver middleMileDriver : middleMileDrivers) {
+        for (Map<String, String> data : middleMileDrivers)
+        {
+            Driver middleMileDriver = new Driver();
             middleMileDriversPage.clickCreateDriversButton();
+            middleMileDriver.setFirstName(data.get("name"));
 
-            if (RANDOM.equalsIgnoreCase(middleMileDriver.getName())) {
+            if (RANDOM.equalsIgnoreCase(middleMileDriver.getFirstName()))
+            {
                 String name = AUTO + generateRequestedTrackingNumber();
                 System.out.println("Name and Username : " + name);
-                middleMileDriver.setName(name);
+                middleMileDriver.setFirstName(name);
             }
-            middleMileDriversPage.fillName(middleMileDriver.getName());
+            middleMileDriversPage.fillName(middleMileDriver.getFirstName());
 
-            if (!"country_based".equalsIgnoreCase(middleMileDriver.getHub())) {
+            middleMileDriver.setHub(data.get("hub"));
+            if (!"country_based".equalsIgnoreCase(middleMileDriver.getHub()))
+            {
                 middleMileDriversPage.chooseHub(middleMileDriver.getHub());
-            } else {
-                switch (country.toLowerCase()) {
+            } else
+            {
+                switch (country.toLowerCase())
+                {
                     case SINGAPORE:
                         middleMileDriver.setHub(SG_HUB);
                         break;
@@ -146,28 +161,34 @@ public class MiddleMileDriversSteps extends AbstractSteps {
                         middleMileDriver.setHub(PH_HUB);
                         break;
 
-                    default :
+                    default:
                         NvLogger.warn("Country is not on the list");
                 }
                 middleMileDriversPage.chooseHub(middleMileDriver.getHub());
             }
 
-            middleMileDriversPage.fillcontactNumber(middleMileDriver.getContactNumber());
+            middleMileDriver.setMobilePhone(data.get("contactNumber"));
+            middleMileDriversPage.fillcontactNumber(middleMileDriver.getMobilePhone());
 
-            if (RANDOM.equalsIgnoreCase(middleMileDriver.getLicenseNumber())) {
+            middleMileDriver.setLicenseNumber(data.get("licenseNumber"));
+            if (RANDOM.equalsIgnoreCase(middleMileDriver.getLicenseNumber()))
+            {
                 String licenseNumber = RandomUtil.randomString(5);
                 System.out.println("License Number : " + licenseNumber);
                 middleMileDriver.setLicenseNumber(licenseNumber);
             }
             middleMileDriversPage.fillLicenseNumber(middleMileDriver.getLicenseNumber());
 
-            middleMileDriver.setExpiryDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
+            middleMileDriver.setLicenseExpiryDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
             middleMileDriversPage.fillLicenseExpiryDate(CAL_FORMATTER.format(TODAY.plusMonths(2)));
 
-            if (country == null) {
+            if (country == null)
+            {
                 middleMileDriver.setLicenseType(CLASS_5);
-            } else {
-                switch (country.toLowerCase()) {
+            } else
+            {
+                switch (country.toLowerCase())
+                {
                     case SINGAPORE:
                         middleMileDriver.setLicenseType(CLASS_5);
                         break;
@@ -192,17 +213,21 @@ public class MiddleMileDriversSteps extends AbstractSteps {
                         middleMileDriver.setLicenseType(RESTRICTION_5);
                         break;
 
-                    default :
+                    default:
                         NvLogger.warn("Country is not on the list");
                 }
             }
             middleMileDriversPage.chooseLicenseType(middleMileDriver.getLicenseType());
 
-            if (FULL_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
+            middleMileDriver.setEmploymentType(data.get("employmentType"));
+            if (FULL_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType()))
+            {
                 middleMileDriver.setEmploymentType(FULL_TIME_CONTRACT);
-            } else if (PART_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
+            } else if (PART_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType()))
+            {
                 middleMileDriver.setEmploymentType(PART_TIME_FREELANCE);
-            } else if (VENDOR.equalsIgnoreCase(middleMileDriver.getEmploymentType())) {
+            } else if (VENDOR.equalsIgnoreCase(middleMileDriver.getEmploymentType()))
+            {
                 middleMileDriver.setEmploymentType(VENDOR_SELECTION);
             }
             middleMileDriversPage.chooseEmploymentType(middleMileDriver.getEmploymentType());
@@ -210,8 +235,10 @@ public class MiddleMileDriversSteps extends AbstractSteps {
             middleMileDriversPage.fillEmploymentStartDate(CAL_FORMATTER.format(TODAY));
             middleMileDriversPage.fillEmploymentEndDate(CAL_FORMATTER.format(TODAY.plusMonths(2)));
 
-            if (RANDOM.equalsIgnoreCase(middleMileDriver.getUsername())) {
-                middleMileDriver.setUsername(middleMileDriver.getName());
+            middleMileDriver.setUsername(data.get("username"));
+            if (RANDOM.equalsIgnoreCase(middleMileDriver.getUsername()))
+            {
+                middleMileDriver.setUsername(middleMileDriver.getFirstName());
             }
             middleMileDriversPage.fillUsername(middleMileDriver.getUsername());
 
@@ -221,40 +248,38 @@ public class MiddleMileDriversSteps extends AbstractSteps {
             middleMileDriversPage.fillComments(middleMileDriver.getComments());
 
             middleMileDriversPage.clickSaveButton();
-        }
 
-        if (middleMileDrivers.size() > 1) {
-            for (MiddleMileDriver middleMileDriver : middleMileDrivers) {
-                put(KEY_LIST_OF_CREATED_MIDDLE_MILE_DRIVER_DETAILS, middleMileDriver);
-                put(KEY_LIST_OF_CREATED_MIDDLE_MILE_DRIVER_USERNAME, middleMileDriver.getUsername());
-            }
-        } else {
-            put(KEY_CREATED_MIDDLE_MILE_DRIVER_DETAILS, middleMileDrivers);
-            put(KEY_CREATED_MIDDLE_MILE_DRIVER_USERNAME, middleMileDrivers.get(0).getUsername());
+            put(KEY_CREATED_DRIVER, middleMileDriver);
+            putInList(KEY_LIST_OF_CREATED_DRIVERS, middleMileDriver);
+            put(KEY_CREATED_DRIVER_USERNAME, middleMileDriver.getUsername());
         }
     }
 
     @Then("Operator verifies that the new Middle Mile Driver has been created")
-    public void operatorVerifiesThatTheNewMiddleMileDriverHasBeenCreated() {
-        String username = get(KEY_CREATED_MIDDLE_MILE_DRIVER_USERNAME);
+    public void operatorVerifiesThatTheNewMiddleMileDriverHasBeenCreated()
+    {
+        String username = get(KEY_CREATED_DRIVER_USERNAME);
         middleMileDriversPage.driverHasBeenCreatedToast(username);
     }
 
     @When("Operator selects the {string} with the value of {string} on Middle Mile Driver Page")
-    public void operatorSelectsTheWithTheValueOfOnMiddleMileDriverPage(String filterName, String value) {
+    public void operatorSelectsTheWithTheValueOfOnMiddleMileDriverPage(String filterName, String value)
+    {
         middleMileDriversPage.selectFilter(filterName, value);
     }
 
     @Then("Operator searches by {string} and verifies the created username")
-    public void operatorSearchesAndVerifiesTheCreatedUsername(String filterBy) {
-        List<MiddleMileDriver> middleMileDriver = get(KEY_CREATED_MIDDLE_MILE_DRIVER_DETAILS);
-        switch (filterBy.toLowerCase()) {
+    public void operatorSearchesAndVerifiesTheCreatedUsername(String filterBy)
+    {
+        List<Driver> middleMileDriver = get(KEY_LIST_OF_CREATED_DRIVERS);
+        switch (filterBy.toLowerCase())
+        {
             case NAME_FILTER:
                 middleMileDriversPage.tableFilter(middleMileDriver.get(0), NAME_FILTER);
                 break;
 
             case ID_FILTER:
-                Long driverId = get(KEY_CREATED_MIDDLE_MILE_DRIVER_ID);
+                Long driverId = get(KEY_CREATED_DRIVER_ID);
                 middleMileDriversPage.tableFilterById(middleMileDriver.get(0), driverId);
                 break;
 
@@ -286,46 +311,53 @@ public class MiddleMileDriversSteps extends AbstractSteps {
                 middleMileDriversPage.tableFilter(middleMileDriver.get(0), COMMENTS_FILTER);
                 break;
 
-            default :
+            default:
                 NvLogger.warn("Filter is not found");
         }
     }
 
     @Then("Operator searches and verifies the created username is not exist")
-    public void operatorSearchesAndVerifiesTheCreatedUsernameIsNotExist() {
-        String driverName = get(KEY_CREATED_MIDDLE_MILE_DRIVER_USERNAME);
+    public void operatorSearchesAndVerifiesTheCreatedUsernameIsNotExist()
+    {
+        String driverName = get(KEY_CREATED_DRIVER_USERNAME);
         middleMileDriversPage.verifiesDataIsNotExisted(driverName);
     }
 
     @When("Operator clicks view button on the middle mile driver page")
-    public void operatorClicksViewButtonOnTheMiddleMileDriverPage() {
+    public void operatorClicksViewButtonOnTheMiddleMileDriverPage()
+    {
         middleMileDriversPage.clickViewButton();
     }
 
     @Then("Operator verifies that the details of the middle mile driver is true")
-    public void operatorVerifiesThatTheDetailsOfTheMiddleMileDriverIsTrue() {
-        List<MiddleMileDriver> middleMileDriver = get(KEY_CREATED_MIDDLE_MILE_DRIVER_DETAILS);
+    public void operatorVerifiesThatTheDetailsOfTheMiddleMileDriverIsTrue()
+    {
+        List<Driver> middleMileDriver = get(KEY_LIST_OF_CREATED_DRIVERS);
         middleMileDriversPage.verifiesDataInViewModalIsTheSame(middleMileDriver.get(0));
     }
 
     @When("Operator clicks {string} button on the middle mile driver page")
-    public void operatorClicksButtonOnTheMiddleMileDriverPage(String mode) {
+    public void operatorClicksButtonOnTheMiddleMileDriverPage(String mode)
+    {
         middleMileDriversPage.clickAvailabilityMode(mode);
     }
 
     @Then("Operator verifies that the driver availability's value is the same")
-    public void operatorVeririesThatTheDriverAvailabilitySValueIsTheSame() {
+    public void operatorVeririesThatTheDriverAvailabilitySValueIsTheSame()
+    {
         boolean driverAvailability = get(KEY_CREATED_MIDDLE_MILE_DRIVER_AVAILABILITY);
         middleMileDriversPage.verifiesDriverAvailability(driverAvailability);
     }
 
     @When("Operator sets all selected middle mile driver to {string}")
-    public void operatorSetsAllSelectedMiddleMileDriverTo(String mode) {
+    public void operatorSetsAllSelectedMiddleMileDriverTo(String mode)
+    {
         middleMileDriversPage.clickBulkAvailabilityMode(mode);
     }
 
     @When("Operator refresh Middle Mile Driver Page")
-    public void operatorRefreshMiddleMileDriverPage() {
+    public void operatorRefreshMiddleMileDriverPage()
+    {
         middleMileDriversPage.refreshAndWaitUntilLoadingDone();
     }
 }

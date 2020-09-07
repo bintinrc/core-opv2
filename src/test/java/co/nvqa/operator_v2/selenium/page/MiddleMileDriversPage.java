@@ -1,7 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.util.NvLogger;
-import co.nvqa.operator_v2.model.MiddleMileDriver;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -24,7 +24,6 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
     private static final String DRIVERS_NOT_FOUND_TOAST_XPATH = "//div[contains(@class,'notification-notice-closable')]";
     private static final String DRIVERS_LIST_CONTAINER_XPATH = "//div[contains(@class,'MiddleMileDriverListContainer')]";
     private static final String TOTAL_DRIVER_SHOW_XPATH = "//div[contains(@class,'TableWrapper')]/div[contains(@class,'TableStats')]/span[2]";
-    private static final String FILTER_DROPDOWN_XPATH = "//div[@id='%s']";
     private static final String SELECT_FILTER_VALUE_XPATH = "//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[text()='%s']";
     private static final String CREATE_DRIVER_BUTTON_XPATH = "//button[contains(@class,'CreateDriverButton')]";
     private static final String MODAL_XPATH = "//div[contains(@id,'rcDialogTitle')]";
@@ -48,10 +47,6 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
     private static final String CALENDAR_CREATE_DRIVER_MODAL_XPATH = "//span[@id='%s']";
     private static final String TABLE_ASSERTION_XPATH = "//tr[1]//td[contains(@class,'%s')]/span/%s";
     private static final String TABLE_ASSERTION_SELECTION_XPATH = "//td[contains(@class,'%s')]";
-
-    private static final String HUB_FILTER_ID = "hubIds";
-    private static final String EMPLOYMENT_STATUS_FILTER_ID = "employmentStatus";
-    private static final String LICENSE_STATUS_FILTER_ID = "licenseStatus";
 
     private static final String LICENSE_TYPE_INPUT_CREATE_DRIVER_XPATH = "//input[@value='%s']";
     private static final String COMMENTS_INPUT_CREATE_DRIVER_XPATH = "//textarea[@id='comments']";
@@ -88,6 +83,18 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
 
     @FindBy(xpath = "//span[contains(@class,'ant-spin-dot-spin')]")
     public PageElement antDotSpinner;
+
+    @FindBy(id = "hubIds")
+    public AntSelect hubSearchFilter;
+
+    @FindBy(id = "employmentStatus")
+    public AntSelect employmentStatusSearchFilter;
+
+    @FindBy(id = "licenseStatus")
+    public AntSelect licenseStatusSearchFilter;
+
+    @FindBy(xpath = "//button[.='Load Drivers']")
+    public Button loadDrivers;
 
     @FindBy(xpath = "//th[div[.='Name']]//input")
     public TextBox nameFilter;
@@ -126,20 +133,22 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
 
     public void clickLoadDriversButton()
     {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-
-        waitUntilVisibilityOfElementLocated(LOAD_DRIVERS_BUTTON_XPATH);
-        click(LOAD_DRIVERS_BUTTON_XPATH);
-
-        if (isElementExist(DRIVERS_NOT_FOUND_TOAST_XPATH))
+        try
         {
-            waitUntilInvisibilityOfElementLocated(DRIVERS_NOT_FOUND_TOAST_XPATH);
-        } else
+            getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+            loadDrivers.click();
+
+            if (isElementExist(DRIVERS_NOT_FOUND_TOAST_XPATH))
+            {
+                waitUntilInvisibilityOfElementLocated(DRIVERS_NOT_FOUND_TOAST_XPATH);
+            } else
+            {
+                waitUntilVisibilityOfElementLocated(DRIVERS_LIST_CONTAINER_XPATH);
+            }
+        } finally
         {
-            waitUntilVisibilityOfElementLocated(DRIVERS_LIST_CONTAINER_XPATH);
+            getWebDriver().switchTo().parentFrame();
         }
-
-        getWebDriver().switchTo().parentFrame();
     }
 
     public void verifiesTotalDriverIsTheSame(int totalDriver)
@@ -156,32 +165,40 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
 
     public void selectHubFilter(String hubName)
     {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+        try
+        {
+            getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
 
-        waitUntilVisibilityOfElementLocated(LOAD_DRIVERS_BUTTON_XPATH);
-        click(f(FILTER_DROPDOWN_XPATH, HUB_FILTER_ID));
-        waitUntilVisibilityOfElementLocated(f(SELECT_FILTER_VALUE_XPATH, hubName));
-        click(f(SELECT_FILTER_VALUE_XPATH, hubName));
-
-        getWebDriver().switchTo().parentFrame();
+            loadDrivers.waitUntilClickable();
+            hubSearchFilter.selectValue(hubName);
+        } finally
+        {
+            getWebDriver().switchTo().parentFrame();
+        }
     }
 
     public void selectFilter(String filterName, String value)
     {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+        try
+        {
+            getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
 
-        if ("Employment Status".equalsIgnoreCase(filterName))
+            switch (filterName.toLowerCase())
+            {
+                case "hub":
+                    hubSearchFilter.selectValue(value);
+                    break;
+                case "employment status":
+                    employmentStatusSearchFilter.selectValue(value);
+                    break;
+                case "license status":
+                    licenseStatusSearchFilter.selectValue(value);
+                    break;
+            }
+        } finally
         {
-            click(f(FILTER_DROPDOWN_XPATH, EMPLOYMENT_STATUS_FILTER_ID));
-        } else if ("License Status".equalsIgnoreCase(filterName))
-        {
-            click(f(FILTER_DROPDOWN_XPATH, LICENSE_STATUS_FILTER_ID));
+            getWebDriver().switchTo().parentFrame();
         }
-
-        waitUntilVisibilityOfElementLocated(f(SELECT_FILTER_VALUE_XPATH, value));
-        click(f(SELECT_FILTER_VALUE_XPATH, value));
-
-        getWebDriver().switchTo().parentFrame();
     }
 
     public void clickCreateDriversButton()
@@ -312,77 +329,89 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
         getWebDriver().switchTo().parentFrame();
     }
 
-    public void tableFilter(MiddleMileDriver middleMileDriver, String filterBy)
+    public void tableFilter(Driver middleMileDriver, String filterBy)
     {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-        String actualName = null;
-        String actualUsername = null;
-        String actualHub = null;
-        String actualEmploymentType = null;
-        String actualLicenseType = null;
-        String actualComments = null;
-
-        switch (filterBy.toLowerCase())
+        try
         {
-            case NAME_TABLE_FILTER_ID:
-                nameFilter.setValue(middleMileDriver.getName());
-                waitUntilVisibilityOfElementLocated(f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, MARK_ELEMENT));
-                actualName = getText(f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, MARK_ELEMENT));
-                actualUsername = getText(f(TABLE_ASSERTION_XPATH, USERNAME_TABLE_FILTER_ID, SPAN_ELEMENT));
-                actualHub = getText(f(TABLE_ASSERTION_XPATH, HUB_TABLE_FILTER_ID, SPAN_ELEMENT));
-                actualEmploymentType = getText(f(TABLE_ASSERTION_SELECTION_XPATH, EMPLOYMENT_TYPE_TABLE_FILTER_ID));
-                actualLicenseType = getText(f(TABLE_ASSERTION_SELECTION_XPATH, LICENSE_TYPE_TABLE_FILTER_ID));
-                actualComments = getText(f(TABLE_ASSERTION_XPATH, COMMENTS_TABLE_FILTER_ID, SPAN_ELEMENT));
-                break;
+            getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+            String actualName = null;
+            String actualUsername = null;
+            String actualHub = null;
+            String actualEmploymentType = null;
+            String actualLicenseType = null;
+            String actualComments = null;
 
-            case USERNAME_TABLE_FILTER_ID:
-                usernameFilter.setValue(middleMileDriver.getUsername());
-                waitUntilVisibilityOfElementLocated(f(TABLE_ASSERTION_XPATH, USERNAME_TABLE_FILTER_ID, MARK_ELEMENT));
-                actualName = getText(f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, SPAN_ELEMENT));
-                actualUsername = getText(f(TABLE_ASSERTION_XPATH, USERNAME_TABLE_FILTER_ID, MARK_ELEMENT));
-                actualHub = getText(f(TABLE_ASSERTION_XPATH, HUB_TABLE_FILTER_ID, SPAN_ELEMENT));
-                actualEmploymentType = getText(f(TABLE_ASSERTION_SELECTION_XPATH, EMPLOYMENT_TYPE_TABLE_FILTER_ID));
-                actualLicenseType = getText(f(TABLE_ASSERTION_SELECTION_XPATH, LICENSE_TYPE_TABLE_FILTER_ID));
-                actualComments = getText(f(TABLE_ASSERTION_XPATH, COMMENTS_TABLE_FILTER_ID, SPAN_ELEMENT));
-                break;
+            switch (filterBy.toLowerCase())
+            {
+                case NAME_TABLE_FILTER_ID:
+                    nameFilter.setValue(middleMileDriver.getFirstName());
+                    waitUntilVisibilityOfElementLocated(f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, MARK_ELEMENT));
+                    actualName = getText(f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, MARK_ELEMENT));
+                    actualUsername = getText(f(TABLE_ASSERTION_XPATH, USERNAME_TABLE_FILTER_ID, SPAN_ELEMENT));
+                    actualHub = getText(f(TABLE_ASSERTION_XPATH, HUB_TABLE_FILTER_ID, SPAN_ELEMENT));
+                    actualEmploymentType = getText(f(TABLE_ASSERTION_SELECTION_XPATH, EMPLOYMENT_TYPE_TABLE_FILTER_ID));
+                    actualLicenseType = getText(f(TABLE_ASSERTION_SELECTION_XPATH, LICENSE_TYPE_TABLE_FILTER_ID));
+                    actualComments = getText(f(TABLE_ASSERTION_XPATH, COMMENTS_TABLE_FILTER_ID, SPAN_ELEMENT));
+                    break;
 
-            case HUB_TABLE_FILTER_ID:
-                nameFilter.setValue(middleMileDriver.getName());
-                hubFilter.setValue(middleMileDriver.getHub());
-                waitUntilVisibilityOfElementLocated(f(TABLE_ASSERTION_XPATH, HUB_TABLE_FILTER_ID, MARK_ELEMENT));
-                actualName = getText(f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, MARK_ELEMENT));
-                actualUsername = getText(f(TABLE_ASSERTION_XPATH, USERNAME_TABLE_FILTER_ID, SPAN_ELEMENT));
-                actualHub = getText(f(TABLE_ASSERTION_XPATH, HUB_TABLE_FILTER_ID, MARK_ELEMENT));
-                actualEmploymentType = getText(f(TABLE_ASSERTION_SELECTION_XPATH, EMPLOYMENT_TYPE_TABLE_FILTER_ID));
-                actualLicenseType = getText(f(TABLE_ASSERTION_SELECTION_XPATH, LICENSE_TYPE_TABLE_FILTER_ID));
-                actualComments = getText(f(TABLE_ASSERTION_XPATH, COMMENTS_TABLE_FILTER_ID, SPAN_ELEMENT));
-                break;
+                case USERNAME_TABLE_FILTER_ID:
+                    usernameFilter.setValue(middleMileDriver.getUsername());
+                    waitUntilVisibilityOfElementLocated(f(TABLE_ASSERTION_XPATH, USERNAME_TABLE_FILTER_ID, MARK_ELEMENT));
+                    actualName = getText(f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, SPAN_ELEMENT));
+                    actualUsername = getText(f(TABLE_ASSERTION_XPATH, USERNAME_TABLE_FILTER_ID, MARK_ELEMENT));
+                    actualHub = getText(f(TABLE_ASSERTION_XPATH, HUB_TABLE_FILTER_ID, SPAN_ELEMENT));
+                    actualEmploymentType = getText(f(TABLE_ASSERTION_SELECTION_XPATH, EMPLOYMENT_TYPE_TABLE_FILTER_ID));
+                    actualLicenseType = getText(f(TABLE_ASSERTION_SELECTION_XPATH, LICENSE_TYPE_TABLE_FILTER_ID));
+                    actualComments = getText(f(TABLE_ASSERTION_XPATH, COMMENTS_TABLE_FILTER_ID, SPAN_ELEMENT));
+                    break;
 
-            case COMMENTS_TABLE_FILTER_ID:
-                commentsFilter.setValue(middleMileDriver.getComments());
-                waitUntilVisibilityOfElementLocated(f(TABLE_ASSERTION_XPATH, COMMENTS_TABLE_FILTER_ID, MARK_ELEMENT));
-                actualName = getText(f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, SPAN_ELEMENT));
-                actualUsername = getText(f(TABLE_ASSERTION_XPATH, USERNAME_TABLE_FILTER_ID, SPAN_ELEMENT));
-                actualHub = getText(f(TABLE_ASSERTION_XPATH, HUB_TABLE_FILTER_ID, SPAN_ELEMENT));
-                actualEmploymentType = getText(f(TABLE_ASSERTION_SELECTION_XPATH, EMPLOYMENT_TYPE_TABLE_FILTER_ID));
-                actualLicenseType = getText(f(TABLE_ASSERTION_SELECTION_XPATH, LICENSE_TYPE_TABLE_FILTER_ID));
-                actualComments = getText(f(TABLE_ASSERTION_XPATH, COMMENTS_TABLE_FILTER_ID, MARK_ELEMENT));
-                break;
+                case HUB_TABLE_FILTER_ID:
+                    nameFilter.setValue(middleMileDriver.getFirstName());
+                    hubFilter.setValue(middleMileDriver.getHub());
+                    waitUntilVisibilityOfElementLocated(f(TABLE_ASSERTION_XPATH, HUB_TABLE_FILTER_ID, MARK_ELEMENT));
+                    actualName = getText(f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, MARK_ELEMENT));
+                    actualUsername = getText(f(TABLE_ASSERTION_XPATH, USERNAME_TABLE_FILTER_ID, SPAN_ELEMENT));
+                    actualHub = getText(f(TABLE_ASSERTION_XPATH, HUB_TABLE_FILTER_ID, MARK_ELEMENT));
+                    actualEmploymentType = getText(f(TABLE_ASSERTION_SELECTION_XPATH, EMPLOYMENT_TYPE_TABLE_FILTER_ID));
+                    actualLicenseType = getText(f(TABLE_ASSERTION_SELECTION_XPATH, LICENSE_TYPE_TABLE_FILTER_ID));
+                    actualComments = getText(f(TABLE_ASSERTION_XPATH, COMMENTS_TABLE_FILTER_ID, SPAN_ELEMENT));
+                    break;
 
-            default:
-                NvLogger.warn("Filter is not found");
+                case COMMENTS_TABLE_FILTER_ID:
+                    try
+                    {
+                        ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='70%'");
+                        commentsFilter.setValue(middleMileDriver.getComments());
+                        waitUntilVisibilityOfElementLocated(f(TABLE_ASSERTION_XPATH, COMMENTS_TABLE_FILTER_ID, MARK_ELEMENT));
+                        actualName = getText(f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, SPAN_ELEMENT));
+                        actualUsername = getText(f(TABLE_ASSERTION_XPATH, USERNAME_TABLE_FILTER_ID, SPAN_ELEMENT));
+                        actualHub = getText(f(TABLE_ASSERTION_XPATH, HUB_TABLE_FILTER_ID, SPAN_ELEMENT));
+                        actualEmploymentType = getText(f(TABLE_ASSERTION_SELECTION_XPATH, EMPLOYMENT_TYPE_TABLE_FILTER_ID));
+                        actualLicenseType = getText(f(TABLE_ASSERTION_SELECTION_XPATH, LICENSE_TYPE_TABLE_FILTER_ID));
+                        actualComments = getText(f(TABLE_ASSERTION_XPATH, COMMENTS_TABLE_FILTER_ID, MARK_ELEMENT));
+                    } finally
+                    {
+                        ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
+                    }
+                    break;
+
+                default:
+                    NvLogger.warn("Filter is not found");
+            }
+
+            assertEquals("Name is not the same : ", middleMileDriver.getFirstName(), actualName);
+            assertEquals("Username is not the same : ", middleMileDriver.getUsername(), actualUsername);
+            assertEquals("Hub is not the same : ", middleMileDriver.getHub(), actualHub);
+            assertEquals("Employment Type is not the same : ", middleMileDriver.getEmploymentType(), actualEmploymentType);
+            assertEquals("License Type is not the same : ", middleMileDriver.getLicenseType(), actualLicenseType);
+            assertEquals("Comment is not the same : ", middleMileDriver.getComments(), actualComments);
+        } finally
+        {
+            getWebDriver().switchTo().parentFrame();
         }
-
-        assertEquals("Name is not the same : ", middleMileDriver.getName(), actualName);
-        assertEquals("Username is not the same : ", middleMileDriver.getUsername(), actualUsername);
-        assertEquals("Hub is not the same : ", middleMileDriver.getHub(), actualHub);
-        assertEquals("Employment Type is not the same : ", middleMileDriver.getEmploymentType(), actualEmploymentType);
-        assertEquals("License Type is not the same : ", middleMileDriver.getLicenseType(), actualLicenseType);
-        assertEquals("Comment is not the same : ", middleMileDriver.getComments(), actualComments);
-        getWebDriver().switchTo().parentFrame();
     }
 
-    public void tableFilterById(MiddleMileDriver middleMileDriver, Long driverId)
+    public void tableFilterById(Driver middleMileDriver, Long driverId)
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
         idFilter.setValue(driverId);
@@ -396,7 +425,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
         String actualLicenseType = getText(f(TABLE_ASSERTION_SELECTION_XPATH, LICENSE_TYPE_TABLE_FILTER_ID));
         String actualComments = getText(f(TABLE_ASSERTION_XPATH, COMMENTS_TABLE_FILTER_ID, SPAN_ELEMENT));
 
-        assertEquals("Name is not the same : ", middleMileDriver.getName(), actualName);
+        assertEquals("Name is not the same : ", middleMileDriver.getFirstName(), actualName);
         assertEquals("ID is not the same : ", driverId.toString(), actualId);
         assertEquals("Username is not the same : ", middleMileDriver.getUsername(), actualUsername);
         assertEquals("Hub is not the same : ", middleMileDriver.getHub(), actualHub);
@@ -406,7 +435,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
         getWebDriver().switchTo().parentFrame();
     }
 
-    public void tableFilterCombobox(MiddleMileDriver middleMileDriver, String filterBy)
+    public void tableFilterCombobox(Driver middleMileDriver, String filterBy)
     {
         try
         {
@@ -420,7 +449,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
             getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
             ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='70%'");
             pause3s();
-            nameFilter.setValue(middleMileDriver.getName());
+            nameFilter.setValue(middleMileDriver.getFirstName());
             waitUntilVisibilityOfElementLocated(f(TABLE_ASSERTION_XPATH, NAME_TABLE_FILTER_ID, MARK_ELEMENT));
 
             switch (filterBy.toLowerCase())
@@ -478,7 +507,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
                     break;
             }
 
-            assertEquals("Name is not the same : ", middleMileDriver.getName(), actualName);
+            assertEquals("Name is not the same : ", middleMileDriver.getFirstName(), actualName);
             assertEquals("Username is not the same : ", middleMileDriver.getUsername(), actualUsername);
             assertEquals("Hub is not the same : ", middleMileDriver.getHub(), actualHub);
             assertEquals("Employment Type is not the same : ", middleMileDriver.getEmploymentType(), actualEmploymentType);
@@ -493,10 +522,15 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
 
     public void verifiesDataIsNotExisted(String driverName)
     {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-        nameFilter.setValue(driverName);
-        waitUntilVisibilityOfElementLocated(NO_RESULT_TABLE_XPATH);
-        getWebDriver().switchTo().parentFrame();
+        try
+        {
+            getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+            nameFilter.setValue(driverName);
+            waitUntilVisibilityOfElementLocated(NO_RESULT_TABLE_XPATH);
+        } finally
+        {
+            getWebDriver().switchTo().parentFrame();
+        }
     }
 
     public void clickViewButton()
@@ -513,17 +547,17 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
         }
     }
 
-    public void verifiesDataInViewModalIsTheSame(MiddleMileDriver middleMileDriver)
+    public void verifiesDataInViewModalIsTheSame(Driver middleMileDriver)
     {
         try
         {
             getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
 
-            assertEquals("Name is not the same : ", middleMileDriver.getName(), viewDriverDialog.name.getValue());
+            assertEquals("Name is not the same : ", middleMileDriver.getFirstName(), viewDriverDialog.name.getValue());
             assertEquals("Hub is not the same : ", middleMileDriver.getHub(), viewDriverDialog.hub.getValue());
-            assertEquals("Contact number is not the same : ", middleMileDriver.getContactNumber(), viewDriverDialog.contactNumber.getValue());
+            assertEquals("Contact number is not the same : ", middleMileDriver.getMobilePhone(), viewDriverDialog.contactNumber.getValue());
             assertEquals("License Number is not the same : ", middleMileDriver.getLicenseNumber(), viewDriverDialog.licenseNumber.getValue());
-            assertEquals("Expiry Date is not the same : ", middleMileDriver.getExpiryDate(), viewDriverDialog.licenseExpiryDate.getValue());
+            assertEquals("Expiry Date is not the same : ", middleMileDriver.getLicenseExpiryDate(), viewDriverDialog.licenseExpiryDate.getValue());
             assertEquals("Username is not the same : ", middleMileDriver.getUsername(), viewDriverDialog.username.getValue());
             assertEquals("Comments is not the same : ", middleMileDriver.getComments(), viewDriverDialog.comments.getValue());
         } finally
