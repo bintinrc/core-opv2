@@ -613,7 +613,7 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     @Given("^DB Operator get data of created driver$")
     public void dbOperatorGetDataOfCreatedDriver()
     {
-        DriverInfo driverInfo = get(KEY_CREATED_DRIVER);
+        DriverInfo driverInfo = get(KEY_CREATED_DRIVER_INFO);
         DriverEntity driverEntity = getDriverJdbc().getDriverData(driverInfo.getUsername());
         driverInfo.setId(driverEntity.getId());
         driverInfo.setUuid(driverEntity.getUuid());
@@ -638,16 +638,6 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         {
             getHubJdbc().deleteHubAppUser(get(KEY_CREATED_HUB_APP_USERNAME));
             getAuthJdbc().softDeleteOauthClientByClientId(get(KEY_CREATED_HUB_APP_USERNAME));
-        }
-    }
-
-    @After(value = "@DeleteMiddleMileDriver")
-    public void deleteMiddleMileDriver()
-    {
-        if (get(KEY_CREATED_MIDDLE_MILE_DRIVER_USERNAME) != null)
-        {
-            getDriverJdbc().softDeleteDriver(get(KEY_CREATED_MIDDLE_MILE_DRIVER_USERNAME));
-            getAuthJdbc().softDeleteOauthClientByClientId(get(KEY_CREATED_MIDDLE_MILE_DRIVER_USERNAME));
         }
     }
 
@@ -956,15 +946,15 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         Long batchId = get(KEY_CREATED_BATCH_ID);
         Long result = getCoreJdbc().getBatchId(batchId);
 
-        assertEquals(f("%s Batch ID Is Not Deleted", batchId),result, null);
+        assertEquals(f("%s Batch ID Is Not Deleted", batchId), result, null);
     }
 
     @When("DB Operator gets the id of the created middle mile driver")
     public void dbOperatorGetsTheIdOfTheCreatedMiddleMileDriver()
     {
-        String driverUsername = get(KEY_CREATED_MIDDLE_MILE_DRIVER_USERNAME);
+        String driverUsername = get(KEY_CREATED_DRIVER_USERNAME);
         Long driverId = getDriverJdbc().getDriverIdByUsername(driverUsername);
-        put(KEY_CREATED_MIDDLE_MILE_DRIVER_ID, driverId);
+        put(KEY_CREATED_DRIVER_ID, driverId);
     }
 
     @When("DB Operator gets the driver name by driver id for Trip Management")
@@ -974,7 +964,8 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         int index = tripManagementDetailsData.getData().size() - 1;
         String driverUsername = null;
 
-        if (tripManagementDetailsData.getData().get(index).getDrivers().size() != 0) {
+        if (tripManagementDetailsData.getData().get(index).getDrivers().size() != 0)
+        {
             driverUsername = getDriverJdbc().getDriverUsernameById(
                     tripManagementDetailsData.getData().get(index).getDrivers().get(0).getDriverId());
         }
@@ -983,8 +974,9 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     }
 
     @Then("Operator DB gets that the driver availability value")
-    public void operatorDBGetsThatTheDriverAvailabilityValue() {
-        String driverUsername = get(KEY_CREATED_MIDDLE_MILE_DRIVER_USERNAME);
+    public void operatorDBGetsThatTheDriverAvailabilityValue()
+    {
+        String driverUsername = get(KEY_CREATED_DRIVER_USERNAME);
         boolean driverAvailability = getDriverJdbc().getDriverAvailabilityValue(driverUsername);
         put(KEY_CREATED_MIDDLE_MILE_DRIVER_AVAILABILITY, driverAvailability);
     }

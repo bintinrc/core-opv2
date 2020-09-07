@@ -107,6 +107,7 @@ public class MovementManagementSteps extends AbstractSteps
         String crossdockHub = data.get("crossdockHub");
         operatorSelectTabOnMovementManagementPage("Relations");
         operatorSelectTabOnMovementManagementPage("Pending");
+        movementManagementPage.stationFilter.forceClear();
         movementManagementPage.stationFilter.setValue(station);
         movementManagementPage.relationsTable.rows.get(0).editRelations.click();
         movementManagementPage.editStationRelationsModal.waitUntilVisible();

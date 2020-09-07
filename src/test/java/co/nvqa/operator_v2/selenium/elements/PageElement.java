@@ -48,6 +48,7 @@ public class PageElement extends SimplePage
     {
         try
         {
+            scrollIntoView();
             webElement.click();
         } catch (ElementClickInterceptedException ex)
         {
