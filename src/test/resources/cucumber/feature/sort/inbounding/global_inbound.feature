@@ -557,6 +557,7 @@ Feature: Global Inbound
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
+    And Operator verifies DP tag is displayed
     And API Operator verify order info after Global Inbound
     And DB Operator verify the last inbound_scans record for the created order:
       | hubId      | {hub-id}                                   |
@@ -1074,6 +1075,60 @@ Feature: Global Inbound
       | color          | #ffa400                            |
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
+
+  @CloseNewWindows @DeleteOrArchiveRoute
+  Scenario: Inbound Arrived at Distribution Point Order (uid:6213841e-2cb4-434b-bd6b-020aea8833ba)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given Operator go to menu Distribution Points -> DP Tagging
+    When Operator tags single order to DP with DPMS ID = "{dpms-id}"
+    And API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator pulled out parcel "DELIVERY" from route
+    And API Operator new add parcel to the route using data below:
+      | addParcelToRouteRequest | DELIVERY |
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    And API Operator Van Inbound parcel
+    And API Operator start the route
+    And API Driver deliver the created parcel successfully
+    When API Operator refresh created order data
+    And Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName        | {hub-name}                                 |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
+      | color          | #ffa400                            |
+    And Operator verifies DP tag is displayed
+    And DB Operator verify the last order_events record for the created order:
+      | type | 26 |
+
+  @CloseNewWindows
+  Scenario: Inbound With Device ID (uid:a4df911d-8bf7-43ae-aef0-e791b6e9a664)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName        | {hub-name}                                 |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | deviceId       | 12345                                      |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
+      | color          | #ffa400                            |
+    When Operator go to menu Order -> All Orders
+    And Operator open page of an order from All Orders page using data below:
+      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    Then Operator verify "HUB INBOUND SCAN" order event description on Edit order page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

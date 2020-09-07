@@ -16,6 +16,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -46,6 +47,9 @@ public class GlobalInboundPage extends OperatorV2SimplePage
 
     @FindBy(name = "Continue")
     public NvApiTextButton continueButton;
+
+    @FindBy(xpath = "//nv-tag")
+    public PageElement dpTag;
 
     public static final String XPATH_ORDER_TAGS_ON_GLOBAL_INBOUND_PAGE = "//div[contains(@class,'order-tags-container')]//span";
     public static String XPATH_CONTAINER = "//div[contains(@class, 'rack-container')]";
@@ -147,11 +151,40 @@ public class GlobalInboundPage extends OperatorV2SimplePage
     public void globalInbound(GlobalInboundParams globalInboundParams)
     {
         selectHubAndDeviceId(globalInboundParams.getHubName(), globalInboundParams.getDeviceId());
-        overrideSize(globalInboundParams.getOverrideSize());
-        overrideWeight(globalInboundParams.getOverrideWeight());
-        overrideDimHeight(globalInboundParams.getOverrideDimHeight());
-        overrideDimWidth(globalInboundParams.getOverrideDimWidth());
-        overrideDimLength(globalInboundParams.getOverrideDimLength());
+
+        String size = globalInboundParams.getOverrideSize();
+        Double weigh = globalInboundParams.getOverrideWeight();
+        Double height = globalInboundParams.getOverrideDimHeight();
+        Double width = globalInboundParams.getOverrideDimWidth();
+        Double length = globalInboundParams.getOverrideDimLength();
+
+        if (Optional.ofNullable(size).isPresent())
+        {
+            overrideSize(size);
+        }
+
+        if (Optional.ofNullable(weigh).isPresent())
+        {
+            overrideWeight(weigh);
+        }
+
+
+        if (Optional.ofNullable(height).isPresent())
+        {
+            overrideDimHeight(height);
+        }
+
+
+        if (Optional.ofNullable(width).isPresent())
+        {
+            overrideDimWidth(width);
+        }
+
+
+        if (Optional.ofNullable(length).isPresent())
+        {
+            overrideDimLength(length);
+        }
 
         sendKeysAndEnterByAriaLabel("Scan a new parcel / Enter a tracking ID", globalInboundParams.getTrackingId());
         pause500ms();
@@ -253,5 +286,11 @@ public class GlobalInboundPage extends OperatorV2SimplePage
         String xpathRackSector = "//div[contains(@class,'rack-sector')]/h1";
         String rackSector = getText(xpathRackSector);
         assertEquals("Recovery Ticket Type rack sector is displayed", ("RECOVERY " + recoveryTicketType).toLowerCase(), rackSector.toLowerCase());
+    }
+
+    public void verifiesDpTag()
+    {
+        String actualTag = dpTag.getText();
+        assertEquals("DP tag", "DP PARCEL", actualTag);
     }
 }

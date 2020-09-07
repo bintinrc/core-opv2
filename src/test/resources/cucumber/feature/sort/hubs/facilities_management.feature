@@ -1,4 +1,4 @@
-@OperatorV2 @Hubs @OperatorV2Part2 @FacilitiesManagement @Saas
+@Sort @Hubs @FacilitiesManagement @Saas
 Feature: Facilities Management
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -6,7 +6,7 @@ Feature: Facilities Management
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @SoftDeleteHubViaDb
-  Scenario: Operator should be able to create a new Hub on page Hubs Administration (uid:c753d5ed-1026-408e-9c71-0e5b8f4e7aa3)
+  Scenario: Create Hub (uid:c40d8354-a4cb-463c-a220-39f56e91eb71)
     Given Operator go to menu Hubs -> Facilities Management
     When Operator create new Hub on page Hubs Administration using data below:
       | name         | GENERATED |
@@ -21,7 +21,7 @@ Feature: Facilities Management
     Then Operator verify a new Hub is created successfully on Facilities Management page
 
   @SoftDeleteHubViaDb
-  Scenario: Operator should be able to update Hub on page Hubs Administration (uid:aca32744-d848-4506-a5f0-b2736dc19987)
+  Scenario: Update Hub (uid:16ec1eac-f4f4-495a-8b71-4f8a9d846e54)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -46,7 +46,7 @@ Feature: Facilities Management
     Then Operator verify Hub is updated successfully on Facilities Management page
 
   @SoftDeleteHubViaDb
-  Scenario: Operator should be able to search Hub on page Hubs Administration (uid:94222294-3788-453b-90c4-86f9bd751641)
+  Scenario: Search Hub (uid:449beef4-34f3-42ad-8c08-026938ae42db)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -64,7 +64,7 @@ Feature: Facilities Management
     Then Operator verify Hub is found on Facilities Management page and contains correct info
 
   @SoftDeleteHubViaDb
-  Scenario: Operator should be able to download Hub CSV file and verify the contents is correct on page Hubs Administration (uid:2a3dd749-c251-45a7-893b-84b8611f5665)
+  Scenario: Download CSV hubs (uid:382e0a13-8725-42ae-995c-e6f524961fa7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -82,7 +82,7 @@ Feature: Facilities Management
     Then Operator verify Hub CSV file is downloaded successfully on Facilities Management page and contains correct info
 
   @SoftDeleteHubViaDb
-  Scenario: Operator Refresh Hub Cache (uid:4f3b2cac-0f8b-4280-be3b-e30260fe582b)
+  Scenario: Refresh Hub Cache (uid:eed1ef3e-e148-45a8-a677-c97e6e228ecd)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Hubs -> Facilities Management
     And API Operator creates new Hub using data below:
@@ -99,7 +99,7 @@ Feature: Facilities Management
     Then Operator verify a new Hub is created successfully on Facilities Management page
 
   @SoftDeleteHubViaDb
-  Scenario: Operator Disable active hub (uid:da54b8e3-cc63-4c74-95ad-15f7cab1c2b8)
+  Scenario: Disable active hub (uid:667d6ff4-6483-490e-a4ea-0513741d00ad)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -117,7 +117,7 @@ Feature: Facilities Management
     Then Operator verify Hub is updated successfully on Facilities Management page
 
   @SoftDeleteHubViaDb
-  Scenario: Operator Activate disabled hub (uid:a157bbd1-e008-4abd-8b92-051d010465cb)
+  Scenario: Activate disabled hub (uid:60f0c3fc-649b-4018-9952-23bd208b4374)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -136,7 +136,7 @@ Feature: Facilities Management
     Then Operator verify Hub is updated successfully on Facilities Management page
 
   @SoftDeleteHubViaDb
-  Scenario: Create New Station Hub (uid:e77343dc-f894-4a40-b1c4-abe0caab13c5)
+  Scenario: Create New Station Hub (uid:8f0ca3bd-c928-4bc9-b759-5fcdfeb9ea98)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Hubs -> Facilities Management
     And Operator create new Hub on page Hubs Administration using data below:
@@ -152,7 +152,7 @@ Feature: Facilities Management
     Then Operator verify a new Hub is created successfully on Facilities Management page
 
   @SoftDeleteHubViaDb
-  Scenario: Update Hub Type to Station (uid:f8a6ddf8-0386-4cb6-9d10-9c2bc21f6bd0)
+  Scenario: Update Hub Type to Station (uid:4aae1605-d328-4259-9fda-e0b742e9910d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator creates new Hub using data below:
       | name         | GENERATED |
