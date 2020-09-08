@@ -118,11 +118,14 @@ public class HubAppUserManagementSteps extends AbstractSteps
     @And("Operator Load all the Hub App User")
     public void operatorLoadAllTheHubAppUser()
     {
+        navigateRefresh();
+        pause2s();
         hubAppUserManagementPage.clickAllHubAppUser();
     }
 
     @Then("Operator verifies that the newly created Hub App User will be shown")
     public void operatorVerifiesThatTheNewlyCreatedHubAppUserWillBeShown() {
+        pause2s();
         if (get(KEY_LIST_OF_CREATED_HUB_APP_DETAILS) == null) {
             List<HubAppUser> hubAppUser = get(KEY_CREATED_HUB_APP_DETAILS);
             hubAppUserManagementPage.checkTheHubAppUserIsCreated(hubAppUser.get(0));
