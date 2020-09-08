@@ -1,4 +1,4 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @OrderBilling @SalesOps @LaunchBrowser
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @SalesOps @UploadCsv @LaunchBrowser
 Feature: Order Billing
   "SHIPPER": Orders consolidated by shipper (1 file per shipper)
   "ALL": All orders (1 very big file, takes long time to generate)
@@ -27,24 +27,13 @@ Feature: Order Billing
     Given operator marks gmail messages as read
     Given Operator go to menu Shipper Support -> Order Billing
 
-  @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Generate "SHIPPER" Success Billing Report - All Shippers (uid:714b412f-6a26-4198-b7f0-0e55edf054e0)
-    When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
-      | generateFile | Orders consolidated by shipper (1 file per shipper) |
-      | emailAddress | {order-billing-email}                               |
-    Then Operator opens Gmail and checks received email
-    Then Operator gets the count of files when orders consolidated by shipper from the database
-    Then Operator verifies zip is attached with multiple CSV files in received email
-    Then Operator verifies the count of files in zip
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper (uid:3fe5e7fb-4dbb-4078-93f2-c2e1ce1bb2db)
+  Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "SHIPPER" Report (uid:8fe85666-3011-48da-aa10-74fef665831a)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
-      | shipper      | {shipper-v4-name}                                   |
+      | uploadCsv    | {shipper-v4-legacy-id}                              |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
     Then Operator gets price order details from the database
@@ -54,12 +43,47 @@ Feature: Order Billing
     Then Operator verifies the header using data below:
       | "Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
     Then Operator verifies the priced order details in the body
+    Then Operator verifies the report only contains orders from the shipper IDs in the uploaded file
+
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Generate "ALL" Success Billing Report - All Shippers (uid:59af6bea-ac85-446d-97ba-4d386577f447)
+  Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "SHIPPER" Report (uid:aa520fe0-a6ee-463e-86c2-d98b61d403f6)
+    When Operator generates success billings using data below:
+      | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
+      | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
+      | shipper      | {shipper-v4-name}                                   |
+      | uploadCsv    | 1122334455                                          |
+      | generateFile | Orders consolidated by shipper (1 file per shipper) |
+      | emailAddress | {order-billing-email}                               |
+    Then Operator gets price order details from the database
+    Then Operator opens Gmail and checks received email
+    Then Operator verifies zip is not attached with any CSV files in received email
+
+  @DeleteOrArchiveRoute @KillBrowser
+  Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "SHIPPER" Report (uid:421533d4-906c-463a-abf3-e06e5dcae8c7)
+    When Operator generates success billings using data below:
+      | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
+      | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
+      | uploadCsv    | {shipper-v4-legacy-id},1122334455                   |
+      | generateFile | Orders consolidated by shipper (1 file per shipper) |
+      | emailAddress | {order-billing-email}                               |
+    Then Operator gets price order details from the database
+    Then Operator opens Gmail and checks received email
+    Then Operator verifies zip is attached with one CSV file in received email
+    Then Operator reads the CSV attachment for "Shipper Billing Report"
+    Then Operator verifies the header using data below:
+      | "Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
+    Then Operator verifies the priced order details in the body
+    Then Operator verifies the report only contains valid shipper IDs like below:
+      | {shipper-v4-legacy-id} |
+
+
+  @DeleteOrArchiveRoute @KillBrowser
+  Scenario: Search Shipper by Upload CSV - Valid Shipper ID - Generate "ALL" Report (uid:e7c3219c-707a-4671-9147-229c7a2d9122)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
+      | uploadCsv    | {shipper-v4-legacy-id}                                    |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
     Then Operator gets price order details from the database
@@ -68,74 +92,37 @@ Feature: Order Billing
     Then Operator verifies the header using data below:
       | "Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
     Then Operator verifies the priced order details in the body
+    Then Operator verifies the report only contains orders from the shipper IDs in the uploaded file
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Generate "ALL" Success Billing Report - Selected Shipper (uid:6f415334-b2d5-48b0-b39d-57e89bd9d1eb)
+  Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "ALL" Report (uid:78642fba-c5a6-4123-9926-5e5cf75b5f7c)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
-      | shipper      | {shipper-v4-name}                                         |
+      | uploadCsv    | 1122334455                                                |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
     Then Operator gets price order details from the database
     Then Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Shipper Billing Report"
-    Then Operator verifies the header using data below:
-      | "Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
-    Then Operator verifies the priced order details in the body
+    Then Operator verifies zip is not attached with any CSV files in received email
+    Then Operator verifies zip is not attached with any CSV files in received email
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Generate "AGGREGATED" Success Billing Report - All Shippers (uid:68cbd874-d3a8-4cd0-a1e5-efe6e46fb29e)
+  Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "ALL" Report (uid:adfd1a31-0172-496f-9ba5-4c3cee6924fe)
     When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                                                           |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                                                           |
-      | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
-      | emailAddress | {order-billing-email}                                                                      |
-    Then Operator gets the orders grouped by shipper and parcel size and weight from the database for all shippers
-    Then Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Aggregated Billing Report"
-    Then Operator verifies the header using data below:
-      | "Shipper ID" | "Shipper Name" | "Billing Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size" | "Parcel Weight" | "Count" | "Cost" |
-    Then Operator verifies the orders grouped by shipper and parcel size and weight
-
-  @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Generate "AGGREGATED" Success Billing Report - Selected Shipper (uid:e45b4c91-9a83-46ef-8384-9cf841cea016)
-    When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                                                           |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                                                           |
-      | shipper      | {shipper-v4-name}                                                                          |
-      | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
-      | emailAddress | {order-billing-email}                                                                      |
-    Then Operator opens Gmail and checks received email
-    Then Operator reads the CSV attachment for "Aggregated Billing Report"
-    Then Operator gets the orders and parcel size and weight from the database for specified shipper
-    Then Operator verifies the header using data below:
-      | "Shipper ID" | "Shipper Name" | "Billing Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size" | "Parcel Weight" | "Count" | "Cost" |
-    Then Operator verifies the orders grouped by shipper and parcel size and weight
-
-  @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Generate "SCRIPT" Success Billing Report - All Shippers (uid:a6967dec-0d31-46f8-98c0-efe91682bd35)
-    When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                                                      |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                                                      |
-      | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
-      | emailAddress | {order-billing-email}                                                                 |
-    Then Operator opens Gmail and checks received email
-    Then Operator gets the count of files when orders consolidated by script from the database
-    Then Operator verifies zip is attached with multiple CSV files in received email
-    Then Operator verifies the count of files in zip
-
-  @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Generate "SCRIPT" Success Billing Report - Selected Shipper (uid:1fc9c536-15b8-4157-b14c-88c595805819)
-    When Operator generates success billings using data below:
-      | startDate    | {gradle-current-date-yyyy-MM-dd}                                                      |
-      | endDate      | {gradle-current-date-yyyy-MM-dd}                                                      |
-      | uploadCsv    | {shipper-v4-legacy-id}                                                                |
-      | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
-      | emailAddress | {order-billing-email}                                                                 |
-    Then Operator opens Gmail and checks received email
+      | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
+      | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
+      | uploadCsv    | {shipper-v4-legacy-id},1122334455                         |
+      | generateFile | All orders (1 very big file, takes long time to generate) |
+      | emailAddress | {order-billing-email}                                     |
     Then Operator gets price order details from the database
+    Then Operator opens Gmail and checks received email
+    Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
     Then Operator verifies the header using data below:
       | "Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
     Then Operator verifies the priced order details in the body
+    Then Operator verifies the report only contains valid shipper IDs like below:
+      | {shipper-v4-legacy-id} |
+
+

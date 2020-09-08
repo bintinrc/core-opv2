@@ -36,6 +36,13 @@ public class OrderBillingPage extends OperatorV2SimplePage
     private static final String FILTER_SHIPPER_SELECTED_SHIPPERS_NVAUTOCOMPLETE_ITEMTYPES = "Shipper";
     private static final String FILTER_SHIPPER_SELECTED_SHIPPERS_BUTTON_ARIA_LABEL = "Selected Shippers";
     private static final String FILTER_GENERATE_FILE_CHECKBOX_PATTERN = "//md-input-container[@label = '%s']/md-checkbox";
+    private static final String FILTER_UPLOAD_CSV_ARIA_LABEL = "Upload CSV";
+    private static final String FILTER_UPLOAD_CSV_NAME = "commons.upload-csv";
+    private static final String FILTER_UPLOAD_CSV_DIALOG_SHIPPER_ID_XPATH = "//md-dialog//h4[text()='Upload Shipper ID CSV']";
+    private static final String FILTER_UPLOAD_CSV_DIALOG_DROP_FILES_XPATH = "//md-dialog-content//h4[text()=\"Drop files or click 'Choose' to select files\"]";
+    private static final String FILTER_UPLOAD_CSV_DIALOG_CHOSSE_BUTTON_ARIA_LABEL = "Choose";
+    private static final String FILTER_UPLOAD_CSV_DIALOG_SAVE_BUTTON_ARIA_LABEL = "Save Button";
+    private static final String FILTER_UPLOAD_CSV_DIALOG_FILE_NAME = "//md-dialog//h4//span[contains(text(), '%s')]";
 
     public static final String SHIPPER_BILLING_REPORT = "Shipper Billing Report";
     public static final String SCRIPT_BILLING_REPORT = "Script Billing Report";
@@ -44,6 +51,7 @@ public class OrderBillingPage extends OperatorV2SimplePage
     private final List<AggregatedOrder> csvRowsInAggregatedReport = new ArrayList<>();
     private String csvRowForOrderInShipperReport;
     private String headerLineInShipperReport;
+    private final Set<String> shipperIds = new HashSet<>();
 
 
     public OrderBillingPage(WebDriver webDriver)
@@ -67,6 +75,24 @@ public class OrderBillingPage extends OperatorV2SimplePage
         selectValueFromNvAutocompleteByItemTypes(FILTER_SHIPPER_SELECTED_SHIPPERS_NVAUTOCOMPLETE_ITEMTYPES, shipper);
     }
 
+    public void uploadCsvShippers(String shipperIds)
+    {
+
+        int countOfShipperIds = shipperIds.split(",").length;
+        File csvFile = createFile("shipper-id-upload.csv", shipperIds);
+
+        clickButtonByAriaLabel(FILTER_UPLOAD_CSV_ARIA_LABEL);
+        clickNvIconTextButtonByName(FILTER_UPLOAD_CSV_NAME);
+
+        waitUntilVisibilityOfElementLocated(FILTER_UPLOAD_CSV_DIALOG_SHIPPER_ID_XPATH);
+        waitUntilVisibilityOfElementLocated(FILTER_UPLOAD_CSV_DIALOG_DROP_FILES_XPATH);
+        sendKeysByAriaLabel(FILTER_UPLOAD_CSV_DIALOG_CHOSSE_BUTTON_ARIA_LABEL, csvFile.getAbsolutePath());
+        waitUntilVisibilityOfElementLocated(f(FILTER_UPLOAD_CSV_DIALOG_FILE_NAME, csvFile.getName()));
+        clickButtonByAriaLabel(FILTER_UPLOAD_CSV_DIALOG_SAVE_BUTTON_ARIA_LABEL);
+
+        waitUntilInvisibilityOfToast(f("Upload success. Extracted %s Shipper IDs.",countOfShipperIds));
+    }
+
     public void tickGenerateTheseFilesOption(String option)
     {
         click(f(FILTER_GENERATE_FILE_CHECKBOX_PATTERN, option));
@@ -76,6 +102,7 @@ public class OrderBillingPage extends OperatorV2SimplePage
     {
         sendKeysAndEnterByAriaLabel("Email", emailAddress);
     }
+
 
     public void clickGenerateSuccessBillingsButton()
     {
@@ -202,9 +229,13 @@ public class OrderBillingPage extends OperatorV2SimplePage
 
     private void saveBodyInCsv(PricedOrder pricedOrder, String reportName, String line)
     {
-        if (Arrays.asList(SHIPPER_BILLING_REPORT, SCRIPT_BILLING_REPORT).contains(reportName) && line.contains(pricedOrder.getTrackingId()))
+        if (Arrays.asList(SHIPPER_BILLING_REPORT, SCRIPT_BILLING_REPORT).contains(reportName))
         {
-            csvRowForOrderInShipperReport = line;
+            shipperIds.add(line.replaceAll("\"", "").split(",")[0]);
+            if(line.contains(pricedOrder.getTrackingId())){
+                csvRowForOrderInShipperReport = line;
+            }
+
         }
         if (reportName.equals(AGGREGATED_BILLING_REPORT))
         {
@@ -230,7 +261,7 @@ public class OrderBillingPage extends OperatorV2SimplePage
 
     public PricedOrder pricedOrderCsv(String line)
     {
-        List<String> columnArray = Arrays.stream(line.replaceAll("\"", "").split(","))
+        List<String> columnArray = Arrays.stream(line.replaceAll("^\"|\"$","").split("\",\""))
                 .map((value) -> value.equals("") ? null : value)
                 .collect(Collectors.toList());
 
@@ -275,6 +306,11 @@ public class OrderBillingPage extends OperatorV2SimplePage
     public List<AggregatedOrder> getAggregatedOrdersFromCsv()
     {
         return csvRowsInAggregatedReport;
+    }
+
+    public Set<String> getShipperIdsInCsv()
+    {
+        return shipperIds;
     }
 
     public String getOrderFromCsv()
