@@ -240,6 +240,8 @@ public class OrderBillingPage extends OperatorV2SimplePage
         if (reportName.equals(AGGREGATED_BILLING_REPORT))
         {
             List<String> orderDetailList = Arrays.asList(line.replaceAll("\"", "").split(","));
+            shipperIds.add(orderDetailList.get(0));
+
             AggregatedOrder aggregatedOrder = new AggregatedOrder();
             aggregatedOrder.setShipperId(orderDetailList.get(0));
             aggregatedOrder.setShipperName(orderDetailList.get(1));
