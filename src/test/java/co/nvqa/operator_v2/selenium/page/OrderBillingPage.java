@@ -90,7 +90,7 @@ public class OrderBillingPage extends OperatorV2SimplePage
         waitUntilVisibilityOfElementLocated(f(FILTER_UPLOAD_CSV_DIALOG_FILE_NAME, csvFile.getName()));
         clickButtonByAriaLabel(FILTER_UPLOAD_CSV_DIALOG_SAVE_BUTTON_ARIA_LABEL);
 
-        waitUntilInvisibilityOfToast(f("Upload success. Extracted %s Shipper IDs.",countOfShipperIds));
+        waitUntilInvisibilityOfToast(f("Upload success. Extracted %s Shipper IDs.", countOfShipperIds));
     }
 
     public void tickGenerateTheseFilesOption(String option)
@@ -232,14 +232,19 @@ public class OrderBillingPage extends OperatorV2SimplePage
         if (Arrays.asList(SHIPPER_BILLING_REPORT, SCRIPT_BILLING_REPORT).contains(reportName))
         {
             shipperIds.add(line.replaceAll("\"", "").split(",")[0]);
-            if(line.contains(pricedOrder.getTrackingId())){
+
+            if (Objects.nonNull(pricedOrder) && line.contains(pricedOrder.getTrackingId()))
+            {
                 csvRowForOrderInShipperReport = line;
             }
+
 
         }
         if (reportName.equals(AGGREGATED_BILLING_REPORT))
         {
             List<String> orderDetailList = Arrays.asList(line.replaceAll("\"", "").split(","));
+            shipperIds.add(orderDetailList.get(0));
+
             AggregatedOrder aggregatedOrder = new AggregatedOrder();
             aggregatedOrder.setShipperId(orderDetailList.get(0));
             aggregatedOrder.setShipperName(orderDetailList.get(1));
@@ -261,7 +266,7 @@ public class OrderBillingPage extends OperatorV2SimplePage
 
     public PricedOrder pricedOrderCsv(String line)
     {
-        List<String> columnArray = Arrays.stream(line.replaceAll("^\"|\"$","").split("\",\""))
+        List<String> columnArray = Arrays.stream(line.replaceAll("^\"|\"$", "").split("\",\""))
                 .map((value) -> value.equals("") ? null : value)
                 .collect(Collectors.toList());
 
