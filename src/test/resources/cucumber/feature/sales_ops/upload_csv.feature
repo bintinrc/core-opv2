@@ -1,4 +1,4 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @UploadCsv @LaunchBrowser
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @SalesOps @OrderBilling @UploadCsv @LaunchBrowser
 Feature: Order Billing
   "SHIPPER": Orders consolidated by shipper (1 file per shipper)
   "ALL": All orders (1 very big file, takes long time to generate)
@@ -13,27 +13,28 @@ Feature: Order Billing
     Given operator marks gmail messages as read
 
 
-    @nadeera
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "SHIPPER" Report (uid:4176de9f-42ef-498b-911a-42379b1866b6)
-  Given API Shipper create V4 order using data below:
-    | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-    | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-  Given API Operator Global Inbound parcel using data below:
-    | globalInboundRequest | { "hubId":{hub-id} } |
-  Given API Operator create new route using data below:
-    | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-  Given API Operator add parcel to the route using data below:
-    | addParcelToRouteRequest | { "type":"DD" } |
-  Given API Driver collect all his routes
-  Given API Driver get pickup/delivery waypoint of the created order
-  Given API Operator Van Inbound parcel
-  Given API Operator start the route
-  Given API Driver deliver the created parcel successfully
+    Given API Shipper create V4 order using data below:
+      | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                                     |
+      | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                                       |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "hubId":{hub-id} } |
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    Given API Driver collect all his routes
+    Given API Driver get pickup/delivery waypoint of the created order
+    Given API Operator Van Inbound parcel
+    Given API Operator start the route
+    Given API Driver deliver the created parcel successfully
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
-      | uploadCsv    | {shipper-sop-v4-legacy-id}                              |
+      | uploadCsv    | {shipper-sop-v4-legacy-id}                          |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
     Then Operator gets price order details from the database
@@ -62,7 +63,7 @@ Feature: Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
-      | uploadCsv    | {shipper-sop-v4-legacy-id},1122334455                   |
+      | uploadCsv    | {shipper-sop-v4-legacy-id},1122334455               |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
     Then Operator gets price order details from the database
@@ -78,6 +79,8 @@ Feature: Order Billing
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Valid Shipper ID - Generate "ALL" Report (uid:94211053-c20d-499b-9742-54baa208182a)
     Given API Shipper create V4 order using data below:
+      | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                                     |
+      | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
@@ -94,7 +97,7 @@ Feature: Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
-      | uploadCsv    | {shipper-sop-v4-legacy-id}                                    |
+      | uploadCsv    | {shipper-sop-v4-legacy-id}                                |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
     Then Operator gets price order details from the database
@@ -105,7 +108,6 @@ Feature: Order Billing
     Then Operator verifies the priced order details in the body
     Then Operator verifies the report only contains orders from the shipper IDs in the uploaded file
 
-#  @nadeera
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "ALL" Report (uid:87374ccf-6795-4d22-9028-391e7a46a1fc)
     When Operator generates success billings using data below:
@@ -124,7 +126,7 @@ Feature: Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
-      | uploadCsv    | {shipper-sop-v4-legacy-id},1122334455                         |
+      | uploadCsv    | {shipper-sop-v4-legacy-id},1122334455                     |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
     Then Operator gets price order details from the database
@@ -139,6 +141,8 @@ Feature: Order Billing
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "AGGREGATED" Report (uid:6e4e54e5-fb92-4ecc-a61a-1301799d969c)
     Given API Shipper create V4 order using data below:
+      | shipperClientId     | {shipper-sop-v4-client-id}                                                                                                                                                                                                                                                                                                                     |
+      | shipperClientSecret | {shipper-sop-v4-client-secret}                                                                                                                                                                                                                                                                                                                       |
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
@@ -155,7 +159,7 @@ Feature: Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                      |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                                                      |
-      | uploadCsv    | {shipper-sop-v4-legacy-id}                                                                |
+      | uploadCsv    | {shipper-sop-v4-legacy-id}                                                            |
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
     Then Operator gets price order details from the database
@@ -185,7 +189,7 @@ Feature: Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                      |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                                                      |
-      | uploadCsv    | {shipper-sop-v4-legacy-id},1122334455                                                     |
+      | uploadCsv    | {shipper-sop-v4-legacy-id},1122334455                                                 |
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
     Then Operator gets price order details from the database
@@ -203,7 +207,7 @@ Feature: Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                           |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                                                           |
-      | uploadCsv    | {shipper-sop-v4-legacy-id}                                                                     |
+      | uploadCsv    | {shipper-sop-v4-legacy-id}                                                                 |
       | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                                                      |
     Then Operator opens Gmail and checks received email
@@ -230,7 +234,7 @@ Feature: Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                           |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                                                           |
-      | uploadCsv    | {shipper-sop-v4-legacy-id},1122334455                                                          |
+      | uploadCsv    | {shipper-sop-v4-legacy-id},1122334455                                                      |
       | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                                                      |
     Then Operator opens Gmail and checks received email

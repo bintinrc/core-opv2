@@ -237,8 +237,6 @@ public class OrderBillingPage extends OperatorV2SimplePage
             {
                 csvRowForOrderInShipperReport = line;
             }
-
-
         }
         if (reportName.equals(AGGREGATED_BILLING_REPORT))
         {

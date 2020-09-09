@@ -27,6 +27,7 @@ Feature: Order Billing
     Given operator marks gmail messages as read
     Given Operator go to menu Shipper Support -> Order Billing
 
+    @nadeerad
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SHIPPER" Success Billing Report - All Shippers (uid:714b412f-6a26-4198-b7f0-0e55edf054e0)
     When Operator generates success billings using data below:
