@@ -204,4 +204,10 @@ public class GlobalInboundSteps extends AbstractSteps
         globalInboundPage.unSuccessfulGlobalInbound(recoveryTicketType, globalInboundParams);
         put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
     }
+
+    @When("^Operator verifies DP tag is displayed$")
+    public void OperatorVerifiesDpTagIsDisplayed()
+    {
+        globalInboundPage.verifiesDpTag();
+    }
 }

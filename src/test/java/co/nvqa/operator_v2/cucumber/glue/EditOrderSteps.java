@@ -580,6 +580,10 @@ public class EditOrderSteps extends AbstractSteps
             {
                 editOrderPage.eventsTable().verifyDeliveryAddressEventDescription(order, eventDescription);
             }
+            if (StringUtils.equalsIgnoreCase(expectedEventName, "HUB INBOUND SCAN"))
+            {
+                editOrderPage.eventsTable().verifyHubInboundWithDeviceIdEventDescription(order, eventDescription);
+            }
         }
     }
 

@@ -1129,6 +1129,15 @@ public class EditOrderPage extends OperatorV2SimplePage
                         eventDescription.matches(cashPattern));
             }
         }
+
+        public void verifyHubInboundWithDeviceIdEventDescription(Order order, String eventDescription)
+        {
+            String deviceIdPattern = null;
+
+            deviceIdPattern = f("*Device Id: 12345*");
+            assertTrue(f("'%s' pattern is not present in the '%s' event description", deviceIdPattern, eventDescription),
+                    eventDescription.matches(deviceIdPattern));
+        }
     }
 
     public void tagOrderToDP(String dpId)
