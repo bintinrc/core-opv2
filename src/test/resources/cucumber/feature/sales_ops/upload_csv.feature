@@ -29,7 +29,7 @@ Feature: Order Billing
 
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "SHIPPER" Report (uid:8fe85666-3011-48da-aa10-74fef665831a)
+  Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "SHIPPER" Report (uid:4176de9f-42ef-498b-911a-42379b1866b6)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
@@ -47,7 +47,7 @@ Feature: Order Billing
 
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "SHIPPER" Report (uid:aa520fe0-a6ee-463e-86c2-d98b61d403f6)
+  Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "SHIPPER" Report (uid:edfd517b-1112-4821-b393-4b4cf0a69afb)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
@@ -60,7 +60,7 @@ Feature: Order Billing
     Then Operator verifies zip is not attached with any CSV files in received email
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "SHIPPER" Report (uid:421533d4-906c-463a-abf3-e06e5dcae8c7)
+  Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "SHIPPER" Report (uid:d3e4c175-1eec-415d-a1fe-74ea2a94bc4e)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
@@ -79,7 +79,7 @@ Feature: Order Billing
 
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV - Valid Shipper ID - Generate "ALL" Report (uid:e7c3219c-707a-4671-9147-229c7a2d9122)
+  Scenario: Search Shipper by Upload CSV - Valid Shipper ID - Generate "ALL" Report (uid:94211053-c20d-499b-9742-54baa208182a)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
@@ -95,7 +95,7 @@ Feature: Order Billing
     Then Operator verifies the report only contains orders from the shipper IDs in the uploaded file
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "ALL" Report (uid:78642fba-c5a6-4123-9926-5e5cf75b5f7c)
+  Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "ALL" Report (uid:87374ccf-6795-4d22-9028-391e7a46a1fc)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
@@ -108,7 +108,7 @@ Feature: Order Billing
     Then Operator verifies zip is not attached with any CSV files in received email
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "ALL" Report (uid:adfd1a31-0172-496f-9ba5-4c3cee6924fe)
+  Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "ALL" Report (uid:a3c83778-4a7d-4b14-b8a3-9a9ba1e03001)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
@@ -126,7 +126,7 @@ Feature: Order Billing
       | {shipper-v4-legacy-id} |
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "SCRIPT" Report
+  Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "AGGREGATED" Report (uid:6e4e54e5-fb92-4ecc-a61a-1301799d969c)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                      |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                                                      |
@@ -143,7 +143,7 @@ Feature: Order Billing
     Then Operator verifies the report only contains orders from the shipper IDs in the uploaded file
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "SCRIPT" Report
+  Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "AGGREGATED" Report (uid:e9d47d53-e032-4666-b18f-638a99474cf5)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                      |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                                                      |
@@ -156,7 +156,7 @@ Feature: Order Billing
     Then Operator verifies zip is not attached with any CSV files in received email
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "SCRIPT" Report
+  Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "AGGREGATED" Report (uid:62ae496e-0fab-4708-bf9f-da781eb068b0)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                      |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                                                      |
@@ -175,7 +175,7 @@ Feature: Order Billing
 
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "AGGREGATED" Report
+  Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "SCRIPT" Report (uid:2d148d59-72e0-4516-b9ac-165f4fe1e2fc)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                           |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                                                           |
@@ -191,7 +191,7 @@ Feature: Order Billing
 
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "AGGREGATED" Report
+  Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "SCRIPT" Report (uid:73e3dce4-6ae4-4790-a8d5-79dc008bbd78)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                           |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                                                           |
@@ -204,7 +204,7 @@ Feature: Order Billing
 
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "AGGREGATED" Report
+  Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "SCRIPT" Report (uid:c023accf-e4c0-4c46-9dfb-227a144fbf6e)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                           |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                                                           |
