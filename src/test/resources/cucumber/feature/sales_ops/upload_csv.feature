@@ -1,4 +1,4 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @SalesOps @OrderBilling @UploadCsv @LaunchBrowser
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @SalesOps @UploadCsv @LaunchBrowser
 Feature: Order Billing
   "SHIPPER": Orders consolidated by shipper (1 file per shipper)
   "ALL": All orders (1 very big file, takes long time to generate)
@@ -11,7 +11,6 @@ Feature: Order Billing
     Given Operator go to menu Shipper Support -> Order Billing
     When API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
-
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "SHIPPER" Report (uid:4176de9f-42ef-498b-911a-42379b1866b6)
