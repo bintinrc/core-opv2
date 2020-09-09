@@ -12,8 +12,6 @@ Feature: Order Billing
     When API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
-
-@nadeera
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "SHIPPER" Report (uid:4176de9f-42ef-498b-911a-42379b1866b6)
   Given API Shipper create V4 order using data below:
@@ -45,7 +43,6 @@ Feature: Order Billing
     Then Operator verifies the priced order details in the body
     Then Operator verifies the report only contains orders from the shipper IDs in the uploaded file
 
-@nadeera
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "SHIPPER" Report (uid:edfd517b-1112-4821-b393-4b4cf0a69afb)
     When Operator generates success billings using data below:
