@@ -170,7 +170,6 @@ Feature: Order Billing
     Then Operator verifies the priced order details in the body
     Then Operator verifies the report only contains orders from the shipper IDs in the uploaded file
 
-#  @nadeera
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "AGGREGATED" Report (uid:e9d47d53-e032-4666-b18f-638a99474cf5)
     When Operator generates success billings using data below:

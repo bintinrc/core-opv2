@@ -27,7 +27,6 @@ Feature: Order Billing
     Given operator marks gmail messages as read
     Given Operator go to menu Shipper Support -> Order Billing
 
-    @nadeerad
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SHIPPER" Success Billing Report - All Shippers (uid:714b412f-6a26-4198-b7f0-0e55edf054e0)
     When Operator generates success billings using data below:
@@ -85,7 +84,6 @@ Feature: Order Billing
       | "Shipper ID" | "Shipper Name" | "Billing Name" | "Tracking ID" | "Shipper Order Ref" | "Order Granular Status" | "Customer Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size ID" | "Parcel Weight" | "Create Time" | "Delivery Date" | "From City" | "From Billing Zone" | "Origin Hub" | "L1 Name" | "L2 Name" | "L3 Name" | "To Address" | "To Postcode" | "To Billing Zone" | "Destination Hub" | "Delivery Fee" | "COD Collected" | "COD Fee" | "Insured Value" | "Insurance Fee" | "Handling Fee" | "GST" | "Total" | "Script ID" | "Script Version" | "Last Calculated Date" |
     Then Operator verifies the priced order details in the body
 
-  @nadeerad
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "AGGREGATED" Success Billing Report - All Shippers (uid:68cbd874-d3a8-4cd0-a1e5-efe6e46fb29e)
     When Operator generates success billings using data below:
@@ -100,7 +98,6 @@ Feature: Order Billing
       | "Shipper ID" | "Shipper Name" | "Billing Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size" | "Parcel Weight" | "Count" | "Cost" |
     Then Operator verifies the orders grouped by shipper and parcel size and weight
 
-    @nadeerad
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "AGGREGATED" Success Billing Report - Selected Shipper (uid:e45b4c91-9a83-46ef-8384-9cf841cea016)
     When Operator generates success billings using data below:
@@ -116,7 +113,6 @@ Feature: Order Billing
       | "Shipper ID" | "Shipper Name" | "Billing Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size" | "Parcel Weight" | "Count" | "Cost" |
     Then Operator verifies the orders grouped by shipper and parcel size and weight
 
-  @nadeerad
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SCRIPT" Success Billing Report - All Shippers (uid:a6967dec-0d31-46f8-98c0-efe91682bd35)
     When Operator generates success billings using data below:
