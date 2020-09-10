@@ -198,7 +198,8 @@ public class OrderBillingSteps extends AbstractSteps
             assertEquals("Actual data in CSV does not match with the expected data for column DeliveryTypeName, row " + i, expectedResultsInDB.get(i).getDeliveryTypeName(), actualSsbOrderRows.get(i).getDeliveryTypeName());
             assertEquals("Actual data in CSV does not match with the expected data for column DeliveryTypeId, row " + i, expectedResultsInDB.get(i).getDeliveryTypeId(), actualSsbOrderRows.get(i).getDeliveryTypeId());
             assertEquals("Actual data in CSV does not match with the expected data for column ParcelSize, row " + i, expectedResultsInDB.get(i).getParcelSize(), actualSsbOrderRows.get(i).getParcelSize());
-            assertEquals("Actual data in CSV does not match with the expected data for column ParcelWeight, row " + i, expectedResultsInDB.get(i).getParcelWeight(), actualSsbOrderRows.get(i).getParcelWeight());
+            assertEquals("Actual data in CSV does not match with the expected data for column ParcelWeight, row " + i, actualSsbOrderRows.get(i).getParcelWeight(), expectedResultsInDB.get(i).getParcelWeight(), actualSsbOrderRows.get(i).getParcelWeight());
+//            assertThat("Actual data in CSV does not match with the expected data for column ParcelWeight, row " + i, expectedResultsInDB.get(i).getParcelWeight(), actualSsbOrderRows.get(i).getParcelWeight());
             assertEquals("Actual data in CSV does not match with the expected data for column Count, row " + i, expectedResultsInDB.get(i).getCount(), actualSsbOrderRows.get(i).getCount());
             assertEquals("Actual data in CSV does not match with the expected data for column Cost, row " + i, expectedResultsInDB.get(i).getCost(), actualSsbOrderRows.get(i).getCost());
         }

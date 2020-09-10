@@ -250,7 +250,7 @@ public class OrderBillingPage extends OperatorV2SimplePage
             aggregatedOrder.setDeliveryTypeName(orderDetailList.get(3));
             aggregatedOrder.setDeliveryTypeId(orderDetailList.get(4));
             aggregatedOrder.setParcelSize(orderDetailList.get(5));
-            aggregatedOrder.setParcelWeight(orderDetailList.get(6));
+            aggregatedOrder.setParcelWeight(Double.valueOf(orderDetailList.get(6)));
             aggregatedOrder.setCount(orderDetailList.get(7));
             aggregatedOrder.setCost(orderDetailList.get(8));
             csvRowsInAggregatedReport.add(aggregatedOrder);
