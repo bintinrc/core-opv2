@@ -485,7 +485,7 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         switch (condition)
         {
             case "invalid" :
-                sendKeysWithoutClear(XPATH_SEARCH_BY_SHIPMENT_ID, RandomUtil.randomString(5) + "\n");
+                sendKeysWithoutClear(XPATH_SEARCH_BY_SHIPMENT_ID, generatePhoneNumber() + "\n");
                 break;
         }
 
