@@ -1,4 +1,4 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @SalesOps @UploadCsv @LaunchBrowser
+@OperatorV2 @ShipperSupport @OperatorV2Part1 @LaunchBrowser @SalesOps @OrderBilling @UploadCsv
 Feature: Order Billing
   "SHIPPER": Orders consolidated by shipper (1 file per shipper)
   "ALL": All orders (1 very big file, takes long time to generate)
@@ -119,7 +119,6 @@ Feature: Order Billing
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is not attached with any CSV files in received email
 
-
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "ALL" Report (uid:a3c83778-4a7d-4b14-b8a3-9a9ba1e03001)
     When Operator generates success billings using data below:
@@ -199,7 +198,6 @@ Feature: Order Billing
     Then Operator verifies the report only contains valid shipper IDs like below:
       | {shipper-sop-v4-legacy-id} |
 
-
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "SCRIPT" Report (uid:2d148d59-72e0-4516-b9ac-165f4fe1e2fc)
     When Operator generates success billings using data below:
@@ -214,7 +212,6 @@ Feature: Order Billing
       | "Shipper ID" | "Shipper Name" | "Billing Name" | "Delivery Type Name" | "Delivery Type ID" | "Parcel Size" | "Parcel Weight" | "Count" | "Cost" |
     Then Operator verifies the report only contains orders from the shipper IDs in the uploaded file
 
-
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "SCRIPT" Report (uid:73e3dce4-6ae4-4790-a8d5-79dc008bbd78)
     When Operator generates success billings using data below:
@@ -225,7 +222,6 @@ Feature: Order Billing
       | emailAddress | {order-billing-email}                                                                      |
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is not attached with any CSV files in received email
-
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "SCRIPT" Report (uid:c023accf-e4c0-4c46-9dfb-227a144fbf6e)
