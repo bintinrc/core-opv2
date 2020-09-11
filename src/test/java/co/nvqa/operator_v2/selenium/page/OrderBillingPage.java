@@ -90,8 +90,8 @@ public class OrderBillingPage extends OperatorV2SimplePage
         waitUntilVisibilityOfElementLocated(f(FILTER_UPLOAD_CSV_DIALOG_FILE_NAME, csvFile.getName()));
         clickButtonByAriaLabel(FILTER_UPLOAD_CSV_DIALOG_SAVE_BUTTON_ARIA_LABEL);
 
-        waitUntilInvisibilityOfToast(f("Upload success. Extracted %s Shipper IDs.", countOfShipperIds));
-    }
+        assertEquals(f("Upload success. Extracted %s Shipper IDs.", countOfShipperIds),getToastTopText());
+  }
 
     public void uploadPDFShippersAndVerifyErrorMsg()
     {
@@ -111,7 +111,7 @@ public class OrderBillingPage extends OperatorV2SimplePage
 
     public void tickGenerateTheseFilesOption(String option)
     {
-        click(f(FILTER_GENERATE_FILE_CHECKBOX_PATTERN, option));
+        simpleClick(f(FILTER_GENERATE_FILE_CHECKBOX_PATTERN, option));
     }
 
     public void setEmailAddress(String emailAddress)
