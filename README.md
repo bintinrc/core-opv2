@@ -61,7 +61,7 @@ from intellij gradle runner:
 -Penvironment=qa-sg -Ptags=@ocv4 
 -PdbHost="10.80.0.33" -PdbPort=6333 
 -PdbUser=qa_automation 
--PdbPass=spMYtbidBKPaAV6BVxG0O9IfBzdMUtwA 
+-PdbPass=Jz43S0xG852hcxmG3BAbrs7YWml6x5c4 
 -PdbEnvironment=qa 
 -PapiBaseUrl="https://api-qa.ninjavan.co" 
 -PsystemId=sg
