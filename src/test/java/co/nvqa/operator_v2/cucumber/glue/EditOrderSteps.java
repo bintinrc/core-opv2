@@ -1031,4 +1031,11 @@ public class EditOrderSteps extends AbstractSteps
     {
         editOrderPage.changeCopToggleToNo();
     }
+
+    @When("Operator switch to edit order page using direct URL")
+    public void switchPage()
+    {
+        Order order = get(KEY_CREATED_ORDER);
+        navigateTo(f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, order.getId()));
+    }
 }

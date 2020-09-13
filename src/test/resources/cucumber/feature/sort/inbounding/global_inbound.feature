@@ -21,10 +21,7 @@ Feature: Global Inbound
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
     Then API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify Delivery details on Edit order page using data below:
@@ -46,10 +43,7 @@ Feature: Global Inbound
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
     Then API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify Delivery details on Edit order page using data below:
@@ -74,10 +68,7 @@ Feature: Global Inbound
     When API Operator save current order cost
     When API Operator recalculate order price
     When API Operator verify the order price is updated
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify Delivery details on Edit order page using data below:
@@ -101,10 +92,7 @@ Feature: Global Inbound
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
     Then API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify Delivery details on Edit order page using data below:
@@ -130,10 +118,7 @@ Feature: Global Inbound
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
     Then API Operator verify order info after Global Inbound
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify Delivery details on Edit order page using data below:
@@ -162,10 +147,7 @@ Feature: Global Inbound
     And API Operator verify order info after Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify Delivery details on Edit order page using data below:
@@ -193,6 +175,7 @@ Feature: Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
+  @CloseNewWindows
   Scenario: Operator should not be able to global inbound parcel with invalid order's status - Transferred to Third Party (uid:bea1c2f2-caea-418a-a471-dfbddcb749a3)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -214,6 +197,7 @@ Feature: Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
+  @CloseNewWindows
   Scenario: Operator should not be able to Global Inbound parcel with invalid order's status - Completed Order (uid:9316f5f0-1423-47eb-890d-3916654f545b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -231,6 +215,7 @@ Feature: Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
+  @CloseNewWindows
   Scenario: Operator should not be able to Global Inbound parcel with invalid order's status - Cancelled Order (uid:de8f3cf0-9aee-4c53-aa7f-9b25f8bf3249)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -248,7 +233,7 @@ Feature: Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
-  @DeleteOrArchiveRoute
+  @CloseNewWindows @DeleteOrArchiveRoute
   Scenario: Inbound On Vehicle for Delivery Order (uid:4d0c8a28-ca6a-4bf0-9505-ce656f1a6179)
       Given Operator go to menu Shipper Support -> Blocked Dates
       Given API Shipper create V4 order using data below:
@@ -274,6 +259,7 @@ Feature: Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
+  @CloseNewWindows
   Scenario: Inbound invalid tracking ID (uid:af756fa4-6695-40e2-8632-6de0055c0083)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When Operator go to menu Inbounding -> Global Inbound
@@ -320,10 +306,7 @@ Feature: Global Inbound
       | type  | 2        |
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Delivery fail" on Edit Order page
     And Operator verify order granular status is "Pending Reschedule" on Edit Order page
     And Operator verify Delivery details on Edit order page using data below:
@@ -336,6 +319,7 @@ Feature: Global Inbound
       | failure_reason_code_id = 5 | uid:93e4b151-b514-4f4d-8580-bc92f1120319 | 13                  | #90EE90   |
       | failure_reason_code_id = 6 | uid:6f91726d-ba39-462b-ac0e-e7533d00bd5e | 6                   | #9999FF   |
 
+  @CloseNewWindows
   Scenario: Inbound showing weight discrepancy alert - weight tolerance is not set, lower weight (uid:272f52ce-9443-4510-a7fd-10ff40c28c4c)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -354,6 +338,7 @@ Feature: Global Inbound
       | color          | #ffa400                            |
     Then API Operator verify order info after Global Inbound
 
+  @CloseNewWindows
   Scenario: Inbound showing Weight Discrepancy Alert - weight tolerance is set, higher weigh (uid:6fd8c798-b6b4-4920-bbc8-891bd6355eae)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -374,6 +359,7 @@ Feature: Global Inbound
       | color          | #ffa400                            |
     Then API Operator verify order info after Global Inbound
 
+  @CloseNewWindows
   Scenario: Inbound showing Weight Discrepancy Alert - weight tolerance is set, lower weight (uid:ccae0c7e-cee9-45e4-adfe-024b8334e6a6)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -433,10 +419,7 @@ Feature: Global Inbound
       | releasedTo  | DRIVER                                     |
       | collectedAt | {gradle-current-date-yyyy-MM-dd}           |
       | releasedAt  | {gradle-current-date-yyyy-MM-dd}           |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -484,10 +467,7 @@ Feature: Global Inbound
       | releasedTo  | DRIVER                                     |
       | collectedAt | {gradle-current-date-yyyy-MM-dd}           |
       | releasedAt  | {gradle-current-date-yyyy-MM-dd}           |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify order event on Edit order page using data below:
@@ -530,10 +510,7 @@ Feature: Global Inbound
       | priorityLevel | <priorityLevel> |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     Examples:
@@ -542,6 +519,7 @@ Feature: Global Inbound
       | 2 - 90 | uid:d21927f7-ff4b-4dca-965d-ac3630f24217 | 50            | #e29d4a                 |
       | > 90   | uid:125b3e40-9e7e-41bc-b61a-3b138ba54149 | 100           | #c65d44                 |
 
+  @CloseNewWindows
   Scenario: Inbound Fully Integrated DP Order (uid:8a855ffd-2b50-4aea-a358-53cff150ad98)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -569,6 +547,7 @@ Feature: Global Inbound
     Then DB Operator gets all details for ninja collect confirmed status
     And Ninja Collect Operator verifies that all the details for Confirmed Status via "Fully Integrated" are right
 
+  @CloseNewWindows
   Scenario: Inbound Semi Integrated DP Order (uid:d846ee76-cf66-4b14-8e91-88f3f8f3999f)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -595,6 +574,7 @@ Feature: Global Inbound
     And DB Operator gets all details for ninja collect confirmed status
     And Ninja Collect Operator verifies that all the details for Confirmed Status via "Semi Integrated" are right
 
+  @CloseNewWindows
   Scenario: Inbound Parcel with Order Tags (uid:3f95f6e9-4e6a-4599-b438-7b1b74330c33)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -630,6 +610,7 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
+  @CloseNewWindows
   Scenario: Inbound On Hold Order - Resolve PENDING MISSING ticket type (uid:e1211ee8-24c0-42f2-bb00-4940d65950da)
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
@@ -680,6 +661,7 @@ Feature: Global Inbound
     And DB Operator verify order_events record for the created order:
       | type | 26 |
 
+  @CloseNewWindows
   Scenario: Inbound On Hold Order - DO NOT Resolve NON-MISSING ticket type (uid:e1211ee8-24c0-42f2-bb00-4940d65950da)
     When Operator go to menu Shipper Support -> Blocked Dates
     When API Shipper create V4 order using data below:
@@ -720,8 +702,8 @@ Feature: Global Inbound
       | hubName    | {hub-name}                                 |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | RECOVERY SHIPPER ISSUE             |
-      | rackInfo       | ON HOLD                            |
+      | destinationHub | ON HOLD - SHIPPER ISSUE            |
+      | rackInfo       | sync_problem RECOVERY              |
       | color          | #e86161                            |
     Then API Operator verify order Recovery ticket info after Global Inbound
     And DB Operator verify the last inbound_scans record for the created order:
@@ -745,10 +727,7 @@ Feature: Global Inbound
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
       | status  | PENDING                        |
       | endDate | {gradle-next-3-day-yyyy-MM-dd} |
@@ -767,10 +746,7 @@ Feature: Global Inbound
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
       | status  | PENDING                        |
       | endDate | {gradle-next-2-day-yyyy-MM-dd} |
@@ -789,10 +765,7 @@ Feature: Global Inbound
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
       | status  | PENDING                        |
       | endDate | {gradle-next-1-day-yyyy-MM-dd} |
@@ -811,10 +784,7 @@ Feature: Global Inbound
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     And Operator verify Delivery details on Edit order page using data below:
       | status  | PENDING                        |
       | endDate | {gradle-next-2-day-yyyy-MM-dd} |
@@ -842,10 +812,7 @@ Feature: Global Inbound
       | type       | 2                      |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify Pickup details on Edit order page using data below:
@@ -880,10 +847,7 @@ Feature: Global Inbound
       | type       | 2                      |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify Pickup details on Edit order page using data below:
@@ -918,10 +882,7 @@ Feature: Global Inbound
       | type       | 2                      |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify Pickup details on Edit order page using data below:
@@ -956,10 +917,7 @@ Feature: Global Inbound
       | type       | 2                      |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify Pickup details on Edit order page using data below:
@@ -975,6 +933,7 @@ Feature: Global Inbound
       | name    | HUB INBOUND SCAN |
       | hubName | {hub-name}       |
 
+  @CloseNewWindows
   Scenario: Inbound showing max weight limit alert - inbound weight is higher than max weight limit (uid:d56315b8-24df-49ad-8d1f-f02e0cfeb658)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -997,6 +956,7 @@ Feature: Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
+  @CloseNewWindows
   Scenario: Inbound showing max weight limit alert - inbound weight is equal to max weight limit (uid:fbcb6c61-f744-4bb7-9697-561d32714f9a)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1020,6 +980,7 @@ Feature: Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
+  @CloseNewWindows
   Scenario: Inbound showing max weight limit alert - inbound weight is lower than max weight limit (uid:533e3e4d-5dd0-4582-a204-2e163620654c)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1042,6 +1003,7 @@ Feature: Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
+  @CloseNewWindows
   Scenario: Inbound an International order - portation export (uid:a0364582-4f4a-4f8c-90e6-ded25c878348)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1059,6 +1021,7 @@ Feature: Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
 
+  @CloseNewWindows
   Scenario: Inbound an International order - portation import (uid:581b7d82-f823-4d56-b6a4-bfffc2b65d8f)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
@@ -1124,11 +1087,64 @@ Feature: Global Inbound
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of an order from All Orders page using data below:
-      | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[1]}          |
+    When Operator switch to edit order page using direct URL
     Then Operator verify "HUB INBOUND SCAN" order event description on Edit order page
+
+  @CloseNewWindows
+  Scenario: Order Tagging with Global Inbound - Total tags is less/equal 4 (uid:0e043740-9f44-45ae-94a3-94f6987c45ad)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator add the order tags
+      | OPV2AUTO1 |
+      | OPV2AUTO2 |
+      | OPV2AUTO3 |
+    When Operator global inbounds parcel using data below:
+      | hubName        | {hub-name}                                 |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
+      | color          | #ffa400                            |
+    Then Operator verify the tags shown on Edit Order page
+      | OPV2AUTO1 |
+      | OPV2AUTO2 |
+      | OPV2AUTO3 |
+    And DB Operator verify order_events record for the created order:
+      | type | 48 |
+    And DB Operator verify the last order_events record for the created order:
+      | type | 26 |
+
+  @CloseNewWindows
+  Scenario: Order Tagging with Global Inbound - Total tags is more than 4 (uid:aecc250f-25a7-49ec-8d19-8634ff2a1d79)
+    When Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Shipper tags multiple parcels as per the below tag
+      | OrderTag | 5570 |
+    And Operator go to menu Inbounding -> Global Inbound
+    And Operator add the order tags
+      | OPV2AUTO1  |
+      | OPV2AUTO2  |
+      | SORTAUTO01 |
+      | SORTAUTO02 |
+    When Operator global inbounds parcel using data below:
+      | hubName        | {hub-name}                                 |
+      | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
+      | color          | #ffa400                            |
+    And Operator verify failed tagging error toast is shown
+    Then Operator verify the tags shown on Edit Order page
+      | PRIOR |
+    And DB Operator verify order_events record for the created order:
+      | type | 48 |
+    And DB Operator verify the last order_events record for the created order:
+      | type | 26 |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
