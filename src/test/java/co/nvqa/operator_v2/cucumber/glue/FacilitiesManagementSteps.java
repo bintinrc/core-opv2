@@ -2,7 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
-import co.nvqa.commons.model.core.hub.Hub;
+import co.nvqa.commons.model.sort.hub.Hub;
 import co.nvqa.commons.util.factory.HubFactory;
 import co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage;
 import cucumber.api.java.en.Then;
@@ -11,6 +11,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import org.hamcrest.Matchers;
 import org.junit.platform.commons.util.StringUtils;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -99,8 +100,12 @@ public class FacilitiesManagementSteps extends AbstractSteps
     @Then("^Operator verify a new Hub is created successfully on Facilities Management page$")
     public void operatorVerifyANewHubIsCreatedSuccessfullyOnPageHubsAdministration()
     {
-        Hub hub = get(KEY_CREATED_HUB);
-        facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
+//        Hub hub = get(KEY_CREATED_HUB);
+//        facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
+        List<Hub> listOfCreatedHubs = get(KEY_LIST_OF_CREATED_HUBS);
+        for (Hub hub: listOfCreatedHubs) {
+            facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
+        }
     }
 
     @When("^Operator update Hub on page Hubs Administration using data below:$")

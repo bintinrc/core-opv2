@@ -8,11 +8,12 @@ import co.nvqa.commons.model.core.BulkOrderInfo;
 import co.nvqa.commons.model.core.CreateDriverV2Request;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.ThirdPartyShippers;
-import co.nvqa.commons.model.core.hub.Hub;
+
 import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.core.setaside.SetAsideRequest;
 import co.nvqa.commons.model.core.zone.Zone;
+import co.nvqa.commons.model.sort.hub.Hub;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvLogger;
