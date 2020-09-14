@@ -1,9 +1,9 @@
 @ShipmentInboundScanning @InterHub @Shipment @MiddleMile @VanInbound @WithoutTrip @refo
 Feature: Shipment Inbound Scanning
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
-    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
+#  @LaunchBrowser @ShouldAlwaysRun
+#  Scenario: Login to Operator Portal V2
+#    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @SoftDeleteHubViaDb
   Scenario: Start Van Inbound After Select Driver and Trip (uid:26f6c205-bc90-4ce8-991f-77a95f38f4fe)
@@ -24,35 +24,35 @@ Feature: Shipment Inbound Scanning
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    Then Operator verify a new Hub is created successfully on Facilities Management page
+    Then API Operator verify new Hubs are created successfully
 
-    #    Given Operator success "create a trip"
-    #    Given Operator success "assign trip to driver"
-    #    Given Operator success "create a shipment"
-    #    Given Make sure "trip origin hub" is "same with shipment origin hub"
-    #    Given Operator open "Shipment Inbound Scanning" page
-    #    Then Make sure it will direct to "Shipment Inbound Scanning" page
-    #    When Operator search "trip's origin hub" as Inbound Hub
-    #    And Operator select Inbound Type "Into Van"
-    #    Then Make sure "Start Inbound" button is "enable"
-    #    When Operator search Driver's "name/username"
-    #    Then Make sure it show toast with message "Please select a trip before start inbound"
-    #    And Make sure "Start Inbound" button is "disable"
-    #    When Operator search "movement trip"
-    #    Then Make sure "Start Inbound" button is "enable"
-    #    When Operator click "Start Inbound" button
-    #    Then Make sure it will direct to "another Shipment Inbound Scanning" page
-    #    And Make sure "selected Inbound Hub" is shown
-    #    And Make sure "selected Inbound Type" is shown
-    #    And Make sure "selected Driver" is shown
-    #    And Make sure "selected Movement Trip" is shown
-    #    And Make sure "Movement Type" is shown
-    #    And Make sure "Origin/Destination hub" is shown
-    #    And Make sure "Departure Time" is shown
-    #    And Make sure "Existing Van Inbounded Shipments" is shown
-    #    And operator click
-    #    And Operator click "Start Van Inbound" button
-    #    And Make sure "" appear in ""
+#    Given Operator success "create a trip"
+#    Given Operator success "assign trip to driver"
+#    Given Operator success "create a shipment"
+#    Given Make sure "trip origin hub" is "same with shipment origin hub"
+#    Given Operator open "Shipment Inbound Scanning" page
+#    Then Make sure it will direct to "Shipment Inbound Scanning" page
+#    When Operator search "trip's origin hub" as Inbound Hub
+#    And Operator select Inbound Type "Into Van"
+#    Then Make sure "Start Inbound" button is "enable"
+#    When Operator search Driver's "name/username"
+#    Then Make sure it show toast with message "Please select a trip before start inbound"
+#    And Make sure "Start Inbound" button is "disable"
+#    When Operator search "movement trip"
+#    Then Make sure "Start Inbound" button is "enable"
+#    When Operator click "Start Inbound" button
+#    Then Make sure it will direct to "another Shipment Inbound Scanning" page
+#    And Make sure "selected Inbound Hub" is shown
+#    And Make sure "selected Inbound Type" is shown
+#    And Make sure "selected Driver" is shown
+#    And Make sure "selected Movement Trip" is shown
+#    And Make sure "Movement Type" is shown
+#    And Make sure "Origin/Destination hub" is shown
+#    And Make sure "Departure Time" is shown
+#    And Make sure "Existing Van Inbounded Shipments" is shown
+#    And operator click
+#    And Operator click "Start Van Inbound" button
+#    And Make sure "" appear in ""
 
 #  @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
 #  Scenario: Shipment Inbound - Normal (Valid Tracking ID, Same Shipment) (uid:22256332-8766-4e7d-b14b-407e04141a5f)
@@ -89,6 +89,6 @@ Feature: Shipment Inbound Scanning
 
 
 
-  @KillBrowser @ShouldAlwaysRun
-  Scenario: Kill Browser
-    Given no-op
+#  @KillBrowser @ShouldAlwaysRun
+#  Scenario: Kill Browser
+#    Given no-op

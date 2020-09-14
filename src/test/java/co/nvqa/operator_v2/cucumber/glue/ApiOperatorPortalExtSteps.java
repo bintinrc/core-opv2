@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.client.sort.HubClient;
 import co.nvqa.commons.cucumber.glue.AbstractApiOperatorPortalSteps;
 import co.nvqa.commons.cucumber.glue.AddressFactory;
 import co.nvqa.commons.model.core.Address;
@@ -323,10 +324,21 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         putInList(KEY_LIST_OF_CREATED_HUBS, hub);
     }
 
+
     @Given("^API Operator reloads hubs cache$")
     public void apiOperatorReloadsHubsCache()
     {
         getHubClient().reload();
+    }
+
+    @When("^API Operator verify new Hubs are created successfully")
+    public void apiOperatorVerifyNewHubsCreatedSuccessfully()
+    {
+        List<Hub> hubs = get(KEY_LIST_OF_CREATED_HUBS);
+        HubClient hubClient = getHubClient();
+        for (Hub hub: hubs) {
+            hubClient.getHubById(hub.getId());
+        }
     }
 
     @Given("^API Operator disable created hub$")
