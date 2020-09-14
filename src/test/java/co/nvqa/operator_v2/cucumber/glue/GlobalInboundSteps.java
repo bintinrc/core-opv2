@@ -6,6 +6,7 @@ import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollec
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.GlobalInboundPage;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
@@ -209,5 +210,17 @@ public class GlobalInboundSteps extends AbstractSteps
     public void OperatorVerifiesDpTagIsDisplayed()
     {
         globalInboundPage.verifiesDpTag();
+    }
+
+    @And("^Operator add the order tags$")
+    public void operatorTagsOrderWith(List<String> orderTag)
+    {
+        globalInboundPage.addTag(orderTag);
+    }
+
+    @Then("^Operator verify failed tagging error toast is shown$")
+    public void operatorVerifyFailedTaggingToast()
+    {
+        globalInboundPage.verifyFailedTaggingToast("Tagging Failed: Order exceed 4 tags limit");
     }
 }
