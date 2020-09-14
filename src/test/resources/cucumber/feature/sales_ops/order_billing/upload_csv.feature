@@ -239,7 +239,7 @@ Feature: Order Billing
       | {shipper-sop-v4-legacy-id} |
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "PARENT" Report
+  Scenario: Search Shipper by Upload CSV -  Valid Shipper ID - Generate "PARENT" Report (uid:305d96a8-7450-4290-9eaf-43dd7828f948)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-mktpl-v4-client-id}                                                                                                                                                                                                                                                                                                 |
       | shipperClientSecret | {shipper-sop-mktpl-v4-client-secret}                                                                                                                                                                                                                                                                                             |
@@ -269,7 +269,7 @@ Feature: Order Billing
     Then Operator verifies the report only contains orders from the shipper IDs in the uploaded file
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "PARENT" Report
+  Scenario: Search Shipper by Upload CSV - Invalid Shipper ID - Generate "PARENT" Report (uid:7574aab4-be81-4219-bbf6-c52b4104d0c1)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                  |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                                  |
@@ -280,7 +280,7 @@ Feature: Order Billing
     Then Operator verifies zip is not attached with any CSV files in received email
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "PARENT" Report
+  Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "PARENT" Report (uid:59c22e15-29eb-427e-bb65-57f956b3df58)
     Given API Shipper create V4 order using data below:
       | shipperClientId     | {shipper-sop-mktpl-v4-client-id}                                                                                                                                                                                                                                                                                                 |
       | shipperClientSecret | {shipper-sop-mktpl-v4-client-secret}                                                                                                                                                                                                                                                                                             |
@@ -311,14 +311,14 @@ Feature: Order Billing
       | {shipper-sop-mktpl-v4-legacy-id} |
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV -  Invalid File Type
+  Scenario: Search Shipper by Upload CSV -  Invalid File Type (uid:2c0617ed-a93e-4146-8a57-8743c472b050)
     When Operator generates success billings using data below:
       | startDate | {gradle-current-date-yyyy-MM-dd} |
       | endDate   | {gradle-current-date-yyyy-MM-dd} |
     Then Operator tries to upload a PDF and verifies that any other file except csv is not allowed
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV with two columns
+  Scenario: Search Shipper by Upload CSV with two columns (uid:f404e9e5-70f8-4407-bfa7-3057d410a97f)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
@@ -332,7 +332,7 @@ Feature: Order Billing
     Then Operator verifies the report only contains orders from the shipper IDs in the uploaded file
 
   @DeleteOrArchiveRoute @KillBrowser
-  Scenario: Search Shipper by Upload CSV - Shipper ID from Different Operating Country
+  Scenario: Search Shipper by Upload CSV - Shipper ID from Different Operating Country (uid:d7760ca6-1f92-4f61-b9f3-a96240a5d57b)
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                    |

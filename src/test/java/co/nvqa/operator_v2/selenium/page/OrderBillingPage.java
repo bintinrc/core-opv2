@@ -105,7 +105,7 @@ public class OrderBillingPage extends OperatorV2SimplePage
         waitUntilVisibilityOfElementLocated(FILTER_UPLOAD_CSV_DIALOG_DROP_FILES_XPATH);
 
         sendKeysByAriaLabel(FILTER_UPLOAD_CSV_DIALOG_CHOSSE_BUTTON_ARIA_LABEL, pdfFile.getAbsolutePath());
-        String expectedToastText = "\"".concat(pdfFileName).concat("\" is not allowed.");
+        String expectedToastText = "\"" + pdfFileName +  "\" is not allowed.";
         assertEquals(expectedToastText,getToastTopText());
     }
 
