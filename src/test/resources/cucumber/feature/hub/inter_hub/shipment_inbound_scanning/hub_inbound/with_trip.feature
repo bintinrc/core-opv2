@@ -3,5 +3,5 @@
 
 Feature: A description
 
-  Scenario: A scenario
+  Scenario: A scenario 2
     Given something..
