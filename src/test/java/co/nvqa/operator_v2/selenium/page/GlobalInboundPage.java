@@ -4,10 +4,12 @@ import co.nvqa.commons.model.dp.DpDetailsResponse;
 import co.nvqa.commons.model.dp.dp_database_checking.DatabaseCheckingNinjaCollectConfirmed;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -50,6 +52,12 @@ public class GlobalInboundPage extends OperatorV2SimplePage
 
     @FindBy(xpath = "//nv-tag")
     public PageElement dpTag;
+
+    @FindBy(xpath = "//button[@aria-label='Use order tagging']")
+    public Button useOrderTagging;
+
+    @FindBy(xpath = ".//nv-autocomplete[@selected-options='ctrl.data.selectedTagOptions']")
+    public NvAutocomplete selectTag;
 
     public static final String XPATH_ORDER_TAGS_ON_GLOBAL_INBOUND_PAGE = "//div[contains(@class,'order-tags-container')]//span";
     public static String XPATH_CONTAINER = "//div[contains(@class, 'rack-container')]";
@@ -292,5 +300,19 @@ public class GlobalInboundPage extends OperatorV2SimplePage
     {
         String actualTag = dpTag.getText();
         assertEquals("DP tag", "DP PARCEL", actualTag);
+    }
+
+    public void addTag(List<String> orderTags)
+    {
+        useOrderTagging.click();
+        for (String tag : orderTags)
+        {
+            selectTag.selectValue(tag);
+        }
+    }
+
+    public void verifyFailedTaggingToast(String message)
+    {
+        waitUntilVisibilityOfToast(message);
     }
 }
