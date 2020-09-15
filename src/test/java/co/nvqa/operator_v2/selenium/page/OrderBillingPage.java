@@ -90,12 +90,28 @@ public class OrderBillingPage extends OperatorV2SimplePage
         waitUntilVisibilityOfElementLocated(f(FILTER_UPLOAD_CSV_DIALOG_FILE_NAME, csvFile.getName()));
         clickButtonByAriaLabel(FILTER_UPLOAD_CSV_DIALOG_SAVE_BUTTON_ARIA_LABEL);
 
-        waitUntilInvisibilityOfToast(f("Upload success. Extracted %s Shipper IDs.", countOfShipperIds));
+        assertEquals(f("Upload success. Extracted %s Shipper IDs.", countOfShipperIds),getToastTopText());
+  }
+
+    public void uploadPDFShippersAndVerifyErrorMsg()
+    {
+        String pdfFileName = "shipper-id-upload.pdf";
+        File pdfFile = createFile(pdfFileName, "TEST");
+
+        clickButtonByAriaLabel(FILTER_UPLOAD_CSV_ARIA_LABEL);
+        clickNvIconTextButtonByName(FILTER_UPLOAD_CSV_NAME);
+
+        waitUntilVisibilityOfElementLocated(FILTER_UPLOAD_CSV_DIALOG_SHIPPER_ID_XPATH);
+        waitUntilVisibilityOfElementLocated(FILTER_UPLOAD_CSV_DIALOG_DROP_FILES_XPATH);
+
+        sendKeysByAriaLabel(FILTER_UPLOAD_CSV_DIALOG_CHOSSE_BUTTON_ARIA_LABEL, pdfFile.getAbsolutePath());
+        String expectedToastText = "\"" + pdfFileName +  "\" is not allowed.";
+        assertEquals(expectedToastText,getToastTopText());
     }
 
     public void tickGenerateTheseFilesOption(String option)
     {
-        click(f(FILTER_GENERATE_FILE_CHECKBOX_PATTERN, option));
+        simpleClick(f(FILTER_GENERATE_FILE_CHECKBOX_PATTERN, option));
     }
 
     public void setEmailAddress(String emailAddress)
@@ -335,4 +351,5 @@ public class OrderBillingPage extends OperatorV2SimplePage
     {
         return (value != null && !value.equals("")) ? Integer.valueOf(value) : null;
     }
+
 }

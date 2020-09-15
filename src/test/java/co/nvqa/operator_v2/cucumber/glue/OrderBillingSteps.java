@@ -228,4 +228,10 @@ public class OrderBillingSteps extends AbstractSteps
         Set<String> actualShipperIds = orderBillingPage.getShipperIdsInCsv();
         assertEquals(expectedShipperIds, actualShipperIds);
     }
+
+    @Then("Operator tries to upload a PDF and verifies that any other file except csv is not allowed")
+    public void operatorTriesToUploadAPDFAndVerifiesThatAnyOtherFileExceptCsvIsNotAllowed()
+    {
+        orderBillingPage.uploadPDFShippersAndVerifyErrorMsg();
+    }
 }
