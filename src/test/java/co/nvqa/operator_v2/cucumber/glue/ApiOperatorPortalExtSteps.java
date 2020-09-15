@@ -1,14 +1,10 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.client.driver.DriverClient;
 import co.nvqa.commons.client.sort.HubClient;
 import co.nvqa.commons.cucumber.glue.AbstractApiOperatorPortalSteps;
 import co.nvqa.commons.cucumber.glue.AddressFactory;
-import co.nvqa.commons.model.core.Address;
-import co.nvqa.commons.model.core.BatchOrderInfo;
-import co.nvqa.commons.model.core.BulkOrderInfo;
-import co.nvqa.commons.model.core.CreateDriverV2Request;
-import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.ThirdPartyShippers;
+import co.nvqa.commons.model.core.*;
 
 import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.route.Route;
@@ -331,8 +327,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         getHubClient().reload();
     }
 
-    @When("^API Operator verify new Hubs are created successfully")
-    public void apiOperatorVerifyNewHubsCreatedSuccessfully()
+    @When("^API Operator verify new Hubs are created")
+    public void apiOperatorVerifyNewHubsCreated()
     {
         List<Hub> hubs = get(KEY_LIST_OF_CREATED_HUBS);
         HubClient hubClient = getHubClient();
