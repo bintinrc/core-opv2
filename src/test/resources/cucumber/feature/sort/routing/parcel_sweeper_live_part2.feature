@@ -14,7 +14,7 @@ Feature: Parcel Sweeper Live
     When API Operator force succeed created order
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator sweep parcel using data below:
+    When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
@@ -52,7 +52,7 @@ Feature: Parcel Sweeper Live
     When API Operator force succeed created order
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator sweep parcel using data below:
+    When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify RTS label on Parcel Sweeper Live page
@@ -90,7 +90,7 @@ Feature: Parcel Sweeper Live
       |3plShipperId    | {3pl-shipper-id}      |
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator sweep parcel using data below:
+    When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
@@ -136,7 +136,7 @@ Feature: Parcel Sweeper Live
     When Operator fail delivery waypoint from Route Manifest page
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator sweep parcel using data below:
+    When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
@@ -181,7 +181,7 @@ Feature: Parcel Sweeper Live
       | globalInboundRequest | { "hubId":{hub-id} } |
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator sweep parcel using data below:
+    When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
@@ -228,7 +228,7 @@ Feature: Parcel Sweeper Live
     When API Operator start the route
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator sweep parcel using data below:
+    When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
@@ -261,7 +261,7 @@ Feature: Parcel Sweeper Live
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "is_staged":true, "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator sweep parcel using data below:
+    When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
@@ -308,7 +308,7 @@ Feature: Parcel Sweeper Live
     And API Driver deliver the created parcel successfully
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator sweep parcel using data below:
+    When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
@@ -341,7 +341,7 @@ Feature: Parcel Sweeper Live
     Given API DP creates a return fully integrated order in a dp "{dp-id}" and Shipper Legacy ID = "{shipper-v4-legacy-id}"
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator sweep parcel using data below:
+    When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:

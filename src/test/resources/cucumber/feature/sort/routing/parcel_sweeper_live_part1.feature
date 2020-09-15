@@ -103,7 +103,7 @@ Feature: Parcel Sweeper Live
       | globalInboundRequest | { "hubId":{hub-id} } |
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator sweep parcel using data below:
+    When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
@@ -301,8 +301,7 @@ Feature: Parcel Sweeper Live
     And API Operator new add parcel to the route using data below:
       | addParcelToRouteRequest | DELIVERY |
     When API Operator refresh created order data
-    When Operator go to menu Order -> All Orders
-    And Operator open page of the created order from All Orders page
+    When Operator switch to edit order page using direct URL
     When Operator change Priority Level to "<priorityLevel>" on Edit Order page
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
@@ -577,7 +576,7 @@ Feature: Parcel Sweeper Live
       | globalInboundRequest | { "hubId":{hub-id} } |
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator sweep parcel using data below:
+    When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
@@ -611,7 +610,7 @@ Feature: Parcel Sweeper Live
     When API Operator cancel created order
     When API Operator refresh created order data
     Given Operator go to menu Routing -> Parcel Sweeper Live
-    When Operator sweep parcel using data below:
+    When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name}                      |
       | trackingId | {KEY_CREATED_ORDER_TRACKING_ID} |
     Then Operator verify Route ID on Parcel Sweeper page using data below:
