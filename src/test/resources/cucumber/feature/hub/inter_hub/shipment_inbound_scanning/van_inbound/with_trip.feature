@@ -5,7 +5,7 @@ Feature: Shipment Inbound Scanning
 #  Scenario: Login to Operator Portal V2
 #    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteShipment @DeleteDriver @ForceSuccessOrder @SoftDeleteHubViaDb
+  @DeleteShipment @ForceSuccessOrder
   Scenario: Start Van Inbound After Select Driver and Trip (uid:26f6c205-bc90-4ce8-991f-77a95f38f4fe)
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -34,7 +34,8 @@ Feature: Shipment Inbound Scanning
       | globalInboundRequest | { "hubId":{KEY_LIST_OF_CREATED_HUBS[1].id} } |
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator put created parcel to shipment
-    Given API Operator create new
+    Given API Operator create new movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator assign driver to movement trip schedule
 
 #    Given Operator success "create a trip"
 #    Given Operator success "assign trip to driver"
