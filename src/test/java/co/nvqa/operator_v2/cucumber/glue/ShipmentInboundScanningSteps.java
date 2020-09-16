@@ -1,11 +1,13 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.ShipmentInboundScanningPage;
 import co.nvqa.operator_v2.util.KeyConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.openqa.selenium.NoSuchElementException;
 
 import java.util.Date;
 import java.util.List;
@@ -100,4 +102,29 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
         scanningPage.clickChangeDateButton();
         scanningPage.checkEndDateSessionScanChange(mustCheckId, next2DaysDate);
     }
+
+    @When("^Operator inbound scanning Into Van Shipment Inbound Scanning page with data below:$")
+    public void inboundScanningIntoVanWithDataBelow(Map<String, String> data)
+    {
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try
+            {
+                final Map<String, String> finalData = resolveKeyValues(data);
+                String inboundHub = finalData.get("inboundHub");
+                String inboundType = finalData.get("inboundType");
+                String driver = finalData.get("driver");
+                String movementTripSchedule = finalData.get("movementTripSchedule").split("-")[2];
+
+                scanningPage.inboundScanningWithTrip(inboundHub, inboundType, driver, movementTripSchedule);
+            } catch (Throwable ex)
+            {
+                NvLogger.info("Element in Shipment inbound scanning not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause3s();
+                throw ex;
+            }
+        }, 10);
+    }
+
 }

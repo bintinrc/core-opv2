@@ -1,18 +1,16 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.client.driver.DriverClient;
+import co.nvqa.commons.client.core.HubClient;
 import co.nvqa.commons.cucumber.glue.AbstractApiOperatorPortalSteps;
 import co.nvqa.commons.cucumber.glue.AddressFactory;
-import co.nvqa.commons.model.core.Address;
-import co.nvqa.commons.model.core.BatchOrderInfo;
-import co.nvqa.commons.model.core.BulkOrderInfo;
-import co.nvqa.commons.model.core.CreateDriverV2Request;
-import co.nvqa.commons.model.core.Order;
-import co.nvqa.commons.model.core.ThirdPartyShippers;
-import co.nvqa.commons.model.core.hub.Hub;
+import co.nvqa.commons.model.core.*;
+
 import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.core.setaside.SetAsideRequest;
 import co.nvqa.commons.model.core.zone.Zone;
+import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvLogger;
@@ -322,10 +320,21 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         putInList(KEY_LIST_OF_CREATED_HUBS, hub);
     }
 
+
     @Given("^API Operator reloads hubs cache$")
     public void apiOperatorReloadsHubsCache()
     {
         getHubClient().reload();
+    }
+
+    @When("^API Operator verify new Hubs are created")
+    public void apiOperatorVerifyNewHubsCreated()
+    {
+        List<Hub> hubs = get(KEY_LIST_OF_CREATED_HUBS);
+        HubClient hubClient = getHubClient();
+        for (Hub hub: hubs) {
+            hubClient.getHubById(hub.getId());
+        }
     }
 
     @Given("^API Operator disable created hub$")
