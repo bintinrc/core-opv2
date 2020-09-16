@@ -23,7 +23,7 @@ Feature: Hub App User Management
     Then Operator verifies that there will be a duplication error toast shown
 
   @KillBrowser @LaunchBrowser
-  Scenario Outline: Cannot Create Hub User with Invalid Request - <scenarioName>
+  Scenario Outline: Cannot Create Hub User with Invalid Request - <scenarioName> (<hiptest-uid>)
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Access Control -> Hub App User Management
@@ -53,7 +53,7 @@ Feature: Hub App User Management
     Then Operator verifies that the newly created Hub App User will be shown
 
   @DeleteHubAppUser @KillBrowser @LaunchBrowser
-  Scenario Outline: Search Hub User by Filter - <scenarioName>
+  Scenario Outline: Search Hub User by Filter - <scenarioName> (<hiptest-uid>)
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Access Control -> Hub App User Management
@@ -74,15 +74,6 @@ Feature: Hub App User Management
       | Search Hub App User by Employment Start Date Filter | employment start date | uid:79b7d18d-ad24-4c40-b38c-9027625b7400 |
       | Search Hub App User by Status Filter                | status                | uid:4b9e9ce5-941f-4ce0-8c45-951394c14e6d |
       | Search Hub App User by Multiple Filter              | multiple              | uid:91997ca6-351d-4dc8-84a2-ce1565fc4709 |
-
-  @KillBrowser @LaunchBrowser
-  Scenario: Clearing the selected filters (uid:7b4025d2-a1f3-4b56-94d6-16b4744efc22)
-    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Access Control -> Hub App User Management
-    When Operator fills the filter without creating Hub App User
-    And Operator clicks on the clear filter button on the Hub App User Management Page
-    Then Operator verifies that the filter is blank
 
   @DeleteHubAppUser @KillBrowser @LaunchBrowser
   Scenario Outline: Update Personal Detail - <scenarioName> (<hiptest-uid>)
