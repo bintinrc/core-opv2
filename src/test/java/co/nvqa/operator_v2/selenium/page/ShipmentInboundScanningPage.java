@@ -25,9 +25,16 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
     public static final String XPATH_SCANNING_SESSION_NO_CHANGE = XPATH_SCANNING_SESSION;
     public static final String XPATH_SCANNING_SESSION_CHANGE = XPATH_SCANNING_SESSION + "[contains(@class,'changed')]";
     public static final String XPATH_CHANGE_DATE_BUTTON = "//button[@aria-label='Change Date']";
+    public static final String XPATH_ACTIVE_INPUT_SELECTION = "//div[contains(@class,'md-select-menu-container nv-input-select-container md-active md-clickable')]//md-option[1]";
 
     @FindBy(xpath = "//md-select[contains(@id,'inbound-hub')]")
     public MdSelect inboundHub;
+
+    @FindBy(xpath = "//md-select[contains(@id,'driver-2')]")
+    public MdSelect driver;
+
+    @FindBy(xpath = "//md-select[contains(@id,'movement-trip-3')]")
+    public MdSelect movementTrip;
 
     public ShipmentInboundScanningPage(WebDriver webDriver)
     {
@@ -168,5 +175,33 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
                 assertTrue("Error Message is not the same : ", errorMessage.contains(f("shipment %d is [Closed]", shipmentId)));
                 break;
         }
+    }
+
+    public void selectDriver(String driverName)
+    {
+        driver.searchAndSelectValue(driverName);
+    }
+
+    public void selectMovementTrip(String movementTripSchedule)
+    {
+        movementTrip.searchAndSelectValue(movementTripSchedule);
+    }
+
+    public void inboundScanningWithTrip(String hub, String label, String driver, String movementTripSchedule)
+    {
+        pause2s();
+        selectHub(hub);
+
+        pause2s();
+        click(grabXpathButton(label));
+
+        pause2s();
+        selectDriver(driver);
+
+        pause2s();
+        selectMovementTrip(movementTripSchedule);
+
+        pause2s();
+        clickStartInbound();
     }
 }
