@@ -460,20 +460,6 @@ Feature: Shipment Management
     Then Operator verifies that there is a search error modal shown with "valid shipment"
     And Operator verifies the searched shipment ids result is right
 
-#  Scenario: Search Shipment by IDs - Search <= 30 shipments separate by comma (uid:bba6e000-c0c6-4607-a6e7-851ddcf4e5ad)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given Operator go to menu Inter-Hub -> Shipment Management
-#    Given DB Operator gets the 10 shipment IDs
-#    When Operator searches multiple shipment ids in the Shipment Management Page with "comma"
-#    Then Operator verifies that there is a search error modal shown with "none"
-
-#  Scenario: Search Shipment by IDs - Search <= 30 shipments separate by space (uid:31610bc1-675c-4ef4-8ea5-66ebc8297476)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given Operator go to menu Inter-Hub -> Shipment Management
-#    Given DB Operator gets the 10 shipment IDs
-#    When Operator searches multiple shipment ids in the Shipment Management Page with "space"
-#    Then Operator verifies that there is a search error modal shown with "none"
-
   Scenario: Search Shipment by IDs - Search <= 30 shipments with empty line (uid:161e3393-6c95-46c0-a332-880be4dccf89)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management

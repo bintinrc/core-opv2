@@ -189,26 +189,19 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
 
     public void inboundScanningWithTrip(String hub, String label, String driver, String movementTripSchedule)
     {
-        System.out.println("debug1");
         pause2s();
         selectHub(hub);
 
-        System.out.println("debug2");
         pause2s();
         click(grabXpathButton(label));
 
-        System.out.println("debug3");
         pause2s();
         selectDriver(driver);
 
-        System.out.println("debug4");
         pause2s();
         selectMovementTrip(movementTripSchedule);
 
-        System.out.println("debug5");
         pause2s();
         clickStartInbound();
-
-        System.out.println("SUCCESS");
     }
 }

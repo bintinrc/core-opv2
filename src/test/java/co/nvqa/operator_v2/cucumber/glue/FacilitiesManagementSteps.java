@@ -100,12 +100,8 @@ public class FacilitiesManagementSteps extends AbstractSteps
     @Then("^Operator verify a new Hub is created successfully on Facilities Management page$")
     public void operatorVerifyANewHubIsCreatedSuccessfullyOnPageHubsAdministration()
     {
-//        Hub hub = get(KEY_CREATED_HUB);
-//        facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
-        List<Hub> listOfCreatedHubs = get(KEY_LIST_OF_CREATED_HUBS);
-        for (Hub hub: listOfCreatedHubs) {
-            facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
-        }
+        Hub hub = get(KEY_CREATED_HUB);
+        facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
     }
 
     @When("^Operator update Hub on page Hubs Administration using data below:$")

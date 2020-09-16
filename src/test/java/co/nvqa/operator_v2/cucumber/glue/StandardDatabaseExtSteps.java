@@ -624,11 +624,14 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     public void deleteShipment()
     {
         ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
-        Long createdShipmentId = get(KEY_CREATED_SHIPMENT_ID);
         if (shipmentInfo != null)
         {
             getHubJdbc().deleteShipment(shipmentInfo.getId());
-        } else if (createdShipmentId != null)
+            return;
+        }
+
+        Long createdShipmentId = get(KEY_CREATED_SHIPMENT_ID);
+        if (createdShipmentId != null)
         {
             getHubJdbc().deleteShipment(createdShipmentId);
         }
