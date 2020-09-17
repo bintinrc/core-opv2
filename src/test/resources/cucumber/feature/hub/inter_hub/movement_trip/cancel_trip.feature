@@ -1,7 +1,10 @@
-# new feature
-# Tags: optional
+@MovementTrip @InterHub @Hub @MiddleMile
+Feature: Cancel Trip
 
-Feature: A description
+  @LaunchBrowser @ShouldAlwaysRun
+  Scenario: Login to Operator Portal V2
+    Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: A scenario
-    Given something..
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op
