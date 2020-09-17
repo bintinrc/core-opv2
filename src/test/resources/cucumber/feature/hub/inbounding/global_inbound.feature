@@ -289,7 +289,6 @@ Feature: Shipment Global Inbound
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     Examples:
       | Title  | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
-#      | 0      | uid:c6215ea5-b3d3-43b8-b976-2c56a77dae8b | 0             | #E8E8E8                 |
       | 1      | uid:1a303888-7fb7-4a7a-ac7e-9bf1c65453a6 | 1             | #f8cf5c                 |
       | 2 - 90 | uid:f11eae19-dfc8-4369-aac2-ad3d7f451306 | 50            | #e29d4a                 |
       | > 90   | uid:4bd56e07-bc29-45aa-b0b3-4d81309cb215 | 100           | #c65d44                 |
