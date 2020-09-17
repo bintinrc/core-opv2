@@ -6,7 +6,7 @@ Feature: Shipment Global Inbound
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Inbound Parcel In Shipment with Original Size <Note> (<hiptest-uid>)
+  Scenario Outline: Inbound Parcel In Shipment with Original Size - <Note> - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -109,11 +109,11 @@ Feature: Shipment Global Inbound
       | type | 26 |
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Operator Inbound Parcel in Shipment - Size, Weight, and Dimension - Return Order - Update Size (uid:f193dde1-90eb-4a13-bdd3-a1d0b493f0c5)
+  Scenario Outline: Inbound Parcel In Shipment and Update The Size - <Note> - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id-2} } |
     And DB Operator gets Hub ID by Hub Name of created parcel
@@ -137,13 +137,17 @@ Feature: Shipment Global Inbound
     Then Operator verify order info after Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
+    Examples:
+      | Note         | orderType | hiptest-uid                              |
+      | Normal Order | Normal    | uid:f416f1c0-8f79-40e9-96f9-feb2837050b2 |
+      | Return Order | Return    | uid:370a68cf-f55c-4339-a3f8-5789dbd6ae20 |
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Operator Inbound Parcel in Shipment - Size, Weight, and Dimension - Return Order - Update Weight (uid:78e2c37d-4bbc-4ba1-b81a-2a8bd4d0b1dd)
+  Scenario Outline: Inbound Parcel In Shipment and Update The Weight - <Note> - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id-2} } |
     And DB Operator gets Hub ID by Hub Name of created parcel
@@ -172,13 +176,17 @@ Feature: Shipment Global Inbound
     Then Operator verify order info after Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 1 |
+    Examples:
+      | Note         | orderType | hiptest-uid                              |
+      | Normal Order | Normal    | uid:01a4056f-12b2-4b78-b3b7-925bff98492a |
+      | Return Order | Return    | uid:34adf70a-1655-4a0b-8499-249961441fc2 |
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Operator Inbound Parcel in Shipment - Size, Weight, and Dimension - Return Order - Update Dimension (uid:73eb512e-c31b-4142-9270-dc225bad61ff)
+  Scenario Outline: Inbound Parcel In Shipment and Update The Dimension - <Note> - (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id-2} } |
     And DB Operator gets Hub ID by Hub Name of created parcel
@@ -204,12 +212,17 @@ Feature: Shipment Global Inbound
     Then Operator verify order info after Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
+    Examples:
+      | Note         | orderType | hiptest-uid                              |
+      | Normal Order | Normal    | uid:fa576d6e-81ae-4f1b-bfcf-cb0a4e71ee94 |
+      | Return Order | Return    | uid:585cd071-b9eb-4853-aa80-b10be12a23e4 |
+
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Operator Inbound Parcel in Shipment - Size, Weight, and Dimension - Return Order - Update Size, Weight and Dimension (uid:bbb9a65e-167b-4f0b-ab51-f72c71b4f78b)
+  Scenario Outline: Inbound Parcel In Shipment and Update The Size, Weight, and Dimension - <Note> - (<hiptest-uid>)
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                               |
+      | v4OrderRequest    | { "service_type":"<orderType>", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id-2} } |
     And DB Operator gets Hub ID by Hub Name of created parcel
@@ -237,6 +250,10 @@ Feature: Shipment Global Inbound
     Then Operator verify order info after Global Inbound
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
+    Examples:
+      | Note         | orderType | hiptest-uid                              |
+      | Normal Order | Normal    | uid:ac89ed10-09ba-4da4-9c4d-e9bef9869db2 |
+      | Return Order | Return    | uid:357afca0-0c8b-4ad8-a3e4-d57a1653c1f5 |
 
   @DeleteShipment @ForceSuccessOrder
   Scenario Outline: Inbound Parcel In Shipment with Priority Level - <scenarioName> (<hiptest-uid>)
@@ -272,7 +289,7 @@ Feature: Shipment Global Inbound
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     Examples:
       | Title  | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
-#      | 0      | uid:c6215ea5-b3d3-43b8-b976-2c56a77dae8b | 0             | #808080                 |
+#      | 0      | uid:c6215ea5-b3d3-43b8-b976-2c56a77dae8b | 0             | #E8E8E8                 |
       | 1      | uid:1a303888-7fb7-4a7a-ac7e-9bf1c65453a6 | 1             | #f8cf5c                 |
       | 2 - 90 | uid:f11eae19-dfc8-4369-aac2-ad3d7f451306 | 50            | #e29d4a                 |
       | > 90   | uid:4bd56e07-bc29-45aa-b0b3-4d81309cb215 | 100           | #c65d44                 |
