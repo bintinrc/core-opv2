@@ -339,7 +339,6 @@ Feature: Parcel Sweeper Live
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     Examples:
       | scenarioName           | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
-      | No Priority (0)        | uid:cec1cdb3-279c-4f30-9c6a-4eef22c041fa | 0             | #e8e8e8                 |
       | No Priority (1)        | uid:2cf3bc90-c0e0-402f-8638-5c47379bddab | 1             | #f8cf5c                 |
       | Late Priority (2 - 90) | uid:5c2ba0db-4564-472d-b665-e6a394b0ecee | 50            | #e29d4a                 |
       | Urgent Priority (91++) | uid:f357f17a-ac88-416f-80c3-e50484c41f4b | 100           | #c65d44                 |
