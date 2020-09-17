@@ -24,7 +24,6 @@ Feature: Failed Pickup Management
     Examples:
       | Note   | hiptest-uid                              | orderType |
       | Return | uid:fa0d5e83-ac12-4629-a416-c76577f683b3 | Return    |
-#      | C2C    | uid:8e27fdff-334b-4fc3-b0b6-a2826ba284c0 | C2C       |
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator download and verify CSV file of failed pickup C2C/Return order on Failed Pickup orders list (<hiptest-uid>)
@@ -46,7 +45,6 @@ Feature: Failed Pickup Management
     Examples:
       | Note   | hiptest-uid                              | orderType |
       | Return | uid:047a8650-493c-4da3-a80e-f3efa0b08cd5 | Return    |
-#      | C2C    | uid:821b30e9-26a2-4e52-a6fd-d5f426599751 | C2C       |
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator reschedule failed pickup C2C/Return order on next day (<hiptest-uid>)
@@ -69,7 +67,6 @@ Feature: Failed Pickup Management
     Examples:
       | Note   | hiptest-uid                              | orderType |
       | Return | uid:5d699f49-f393-402b-92f9-8b676ebce0fb | Return    |
-#      | C2C    | uid:815e700a-68f7-4b89-a9a0-ffbd8c5cbcdb | C2C       |
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator reschedule failed pickup C2C/Return order on specific date (<hiptest-uid>)
@@ -92,7 +89,6 @@ Feature: Failed Pickup Management
     Examples:
       | Note   | hiptest-uid                              | orderType |
       | Return | uid:97126afe-c6ab-4aff-9dca-fc19ba021727 | Return    |
-#      | C2C    | uid:bec16db3-4ee0-4334-8a2f-d090a4f681cd | C2C       |
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator should be able to cancel failed pickup of C2C/Return order (<hiptest-uid>)
@@ -114,7 +110,6 @@ Feature: Failed Pickup Management
     Examples:
       | Note   | hiptest-uid                              | orderType |
       | Return | uid:7b390a2f-975f-483b-97e4-3b9c6e2572f7 | Return    |
-#      | C2C    | uid:c30a6b0b-e5d9-49e3-bd1f-aebb7f6c7270 | C2C       |
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator should be able to cancel multiple failed pickup of C2C/Return orders (<hiptest-uid>)
@@ -137,7 +132,6 @@ Feature: Failed Pickup Management
     Examples:
       | Note   | hiptest-uid                              | orderType |
       | Return | uid:72f6a742-59f2-4761-bdda-91699975de5b | Return    |
-#      | C2C    | uid:2e8212f8-8a02-4a42-b760-6685bff08eeb | C2C    |
 
   @DeleteOrArchiveRoute
   Scenario Outline: Operator reschedule multiple failed pickup of C2C/Return orders on specific date (<hiptest-uid>)
@@ -161,7 +155,6 @@ Feature: Failed Pickup Management
     Examples:
       | Note   | hiptest-uid                              | orderType |
       | Return | uid:721b3db0-da4c-482a-a9cb-cb8b6087147a | Return    |
-#      | C2C    | uid:2a6248d7-a754-494d-9750-b8e4beb94a52 | C2C       |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
