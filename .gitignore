@@ -14,7 +14,6 @@ hs_err_pid*
 .allure
 out
 /gradle
-*.properties
 
 .idea
 *.iml
