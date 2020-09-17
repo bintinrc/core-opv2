@@ -93,6 +93,13 @@ public class TripManagementPage extends OperatorV2SimplePage {
         getWebDriver().switchTo().parentFrame();
     }
 
+    public void selectValueFromFilterDropDownQuick(String filterName, String filterValue) {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        click(f(FILTER_OPTION_XPATH, filterName));
+        click(f(TEXT_OPTION_XPATH, filterValue));
+        getWebDriver().switchTo().parentFrame();
+    }
+
     public void verifiesSumOfTripManagement(MovementTripType tabName, Long tripManagementCount) {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
         List<WebElement> tripManagementList = new ArrayList<>();

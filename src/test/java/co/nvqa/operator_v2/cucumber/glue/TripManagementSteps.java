@@ -14,6 +14,8 @@ import cucumber.api.java.en.When;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -69,6 +71,42 @@ public class TripManagementSteps extends AbstractSteps {
         }
 
         tripManagementPage.selectValueFromFilterDropDown(filterName, filterValue);
+    }
+
+    @When("Operator searches and selects the {string} with value {string}")
+    public void operatorSearchesAndSelectsWithValue(final String filterName, final String filterValue) {
+        final Map<String, String> filterMap = new HashMap<>();
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try
+            {
+                filterMap.put("filterValue", resolveValue(filterValue));
+                switch (filterName.toLowerCase()) {
+                    case "origin hub" :
+                        filterMap.put("filterName", "originHub");
+                        break;
+
+                    case "destination hub" :
+                        filterMap.put("filterName", "destinationHub");
+                        break;
+
+                    case "movement type" :
+                        filterMap.put("filterName", "movementType");
+                        put(KEY_MOVEMENT_TYPE_INCLUDED, true);
+                        break;
+                    default :
+                        NvLogger.warn("Filter Type is not found!");
+                }
+                tripManagementPage.selectValueFromFilterDropDownQuick(filterMap.get("filterName"), filterMap.get("filterValue"));
+            } catch (Throwable ex)
+            {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                throw ex;
+            }
+        }, 10);
     }
 
     @Then("Operator verifies that the trip management shown in {string} tab is correct")
