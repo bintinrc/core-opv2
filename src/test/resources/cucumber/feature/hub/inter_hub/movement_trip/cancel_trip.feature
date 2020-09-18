@@ -7,19 +7,6 @@ Feature: Cancel Trip
 
   @SoftDeleteHubViaDb
   Scenario: Cancel Trip - Trip Status Pending (uid:318c9c20-adae-40f0-8094-e82d986008e6)
-#    When API Operator creates new Hub using data below:
-#      | name         | GENERATED |
-#      | displayName  | GENERATED |
-#      | facilityType | CROSSDOCK |
-#      | city         | GENERATED |
-#      | country      | GENERATED |
-#      | latitude     | GENERATED |
-#      | longitude    | GENERATED |
-#    And API Operator reloads hubs cache
-#    When Operator go to menu Inter-Hub -> Movement Schedules
-#    When Movement Management page is loaded
-#    And Operator opens Add Movement Schedule modal on Movement Management page
-#    Then Operator can select "{KEY_LIST_OF_CREATED_HUBS[1].name}" crossdock hub when create crossdock movement schedule
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened
@@ -47,12 +34,9 @@ Feature: Cancel Trip
     And Operator clicks on Load Trip Button
     And Operator verifies a trip to destination hub "{KEY_LIST_OF_CREATED_HUBS[2].name}" exist
     And Operator searches for the Trip Management based on its "status"
-#    When Operator clicks on "cancel" icon on the action column
+    When Operator clicks on "cancel" icon on the action column
     And Operator clicks "Cancel Trip" button on cancel trip dialog
-    # click cancel
-    # show dialog
-    # click yes
-    # verify status cancelled
+    # verify status cancelled from UI
     # [verify ui] wait toast
     # [verify ui] trip has status: Cancelled in Departure tab Opv2
     # [verify db] has event cancelled in hub_qa_gl/movement_trip_event

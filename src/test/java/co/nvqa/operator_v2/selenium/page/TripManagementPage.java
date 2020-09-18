@@ -570,7 +570,6 @@ public class TripManagementPage extends OperatorV2SimplePage {
         cancelTripModal.waitUntilVisible();
         switch (buttonValue){
             case "Cancel Trip":
-                System.out.println("debug");
                 cancelTripModal.cancelTrip.click();
                 break;
             case "No":

@@ -174,8 +174,6 @@ public class TripManagementSteps extends AbstractSteps {
     @Then("Operator verifies that the trip management shown with {string} as its filter is right")
     public void operatorVerifiesThatTheTripManagementShownWithAsItsFilterIsRight(String filteringName) {
         TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
-        System.out.println("test");
-        System.out.println(tripManagementDetailsData.getCount());
         TripManagementFilteringType tripManagementFilteringType = TripManagementFilteringType.fromString(filteringName);
         if ("driver".equalsIgnoreCase(tripManagementFilteringType.getVal())) {
             String driverUsername = get(KEY_TRIP_MANAGEMENT_DRIVER_NAME);
@@ -204,8 +202,6 @@ public class TripManagementSteps extends AbstractSteps {
 
     @And("Operator clicks {string} button on cancel trip dialog")
     public void operatorClicksButtonOnCancelTripDialog(String buttonValue) {
-        MovementTripActionName movementTripActionName = MovementTripActionName.fromString("cancel");
-        tripManagementPage.getTripIdAndClickOnActionIcon(movementTripActionName);
         tripManagementPage.clickButtonOnCancelDialog(buttonValue);
     }
 }
