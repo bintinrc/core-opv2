@@ -5,9 +5,16 @@ import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.TripManagementFilteringType;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CheckBox;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -63,6 +70,12 @@ public class TripManagementPage extends OperatorV2SimplePage {
     private static final String STATUS_CLASS = "status";
     private static final String LAST_STATUS_CLASS = "lastStatus";
 
+    @FindBy(className = "ant-modal-wrap")
+    public CancelTripModal cancelTripModal;
+
+    @FindBy(xpath = "//th[div[.='Status']]")
+    public StatusFilter tripStatusFilter;
+
     public TripManagementPage(WebDriver webDriver) {
         super(webDriver);
     }
@@ -93,7 +106,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         getWebDriver().switchTo().parentFrame();
     }
 
-    public void selectValueFromFilterDropDownQuick(String filterName, String filterValue) {
+    public void selectValueFromFilterDropDownDirectly(String filterName, String filterValue) {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
         click(f(FILTER_OPTION_XPATH, filterName));
         click(f(TEXT_OPTION_XPATH, filterValue));
@@ -130,6 +143,18 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
         String actualTripManagementId = getText(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, ID_CLASS));
         assertEquals("Trip Management ID", tripManagementId.toString(), actualTripManagementId);
+
+        getWebDriver().switchTo().parentFrame();
+    }
+
+    public void searchAndVerifiesTripManagementIsExistedByDestinationHubName(String destinationHubName) {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        waitUntilVisibilityOfElementLocated(f(IN_TABLE_FILTER_INPUT_XPATH, DESTINATION_HUB_CLASS));
+        sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, DESTINATION_HUB_CLASS), destinationHubName);
+        waitUntilVisibilityOfElementLocated(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DESTINATION_HUB_CLASS));
+
+        String actualDestinationHubName = getText(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DESTINATION_HUB_CLASS));
+        assertEquals("Destination Hub Name", destinationHubName, actualDestinationHubName);
 
         getWebDriver().switchTo().parentFrame();
     }
@@ -277,15 +302,10 @@ public class TripManagementPage extends OperatorV2SimplePage {
                 break;
 
             case STATUS:
-                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
-                pause3s();
-                filterValue = statusConverted(tripManagementDetailsData.getData().get(index).getStatus());
-                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, STATUS_CLASS));
-                click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, STATUS_CLASS));
-                waitUntilVisibilityOfElementLocated(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, filterValue));
-                click(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, filterValue));
-                click(OK_BUTTON_OPTION_TABLE_XPATH);
-                pause3s();
+                filterValue = tripManagementDetailsData.getData().get(index).getStatus();
+                tripStatusFilter.openButton.click();
+                tripStatusFilter.selectType(filterValue);
+                tripStatusFilter.ok.click();
                 break;
 
             case LAST_STATUS:
@@ -543,5 +563,92 @@ public class TripManagementPage extends OperatorV2SimplePage {
             expectedValue = "-";
         }
         return expectedValue;
+    }
+
+    public void clickButtonOnCancelDialog(String buttonValue) {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        cancelTripModal.waitUntilVisible();
+        switch (buttonValue){
+            case "Cancel Trip":
+                System.out.println("debug");
+                cancelTripModal.cancelTrip.click();
+                break;
+            case "No":
+                cancelTripModal.no.click();
+                break;
+            default:
+                NvLogger.warn("Button value is not found!");
+        }
+        cancelTripModal.waitUntilInvisible();
+    }
+
+    public static class TableFilterPopup extends PageElement
+    {
+        public TableFilterPopup(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(xpath = ".//button")
+        public Button openButton;
+
+        @FindBy(xpath = ".//button[.='OK']")
+        public Button ok;
+
+        @FindBy(xpath = ".//button[.='Reset']")
+        public Button reset;
+    }
+
+    public static class StatusFilter extends TableFilterPopup
+    {
+        public StatusFilter(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(xpath = ".//li[.='Pending']//input")
+        public CheckBox pending;
+
+        @FindBy(xpath = ".//li[.='In Transit']//input")
+        public CheckBox inTransit;
+
+        @FindBy(xpath = ".//li[.='Completed']//input")
+        public CheckBox completed;
+
+        @FindBy(xpath = ".//li[.='Cancelled']//input")
+        public CheckBox cancelled;
+
+        public void selectType(String type)
+        {
+            switch (type.toLowerCase())
+            {
+                case "pending":
+                    pending.check();
+                    break;
+                case "in transit":
+                    inTransit.check();
+                    break;
+                case "completed":
+                    completed.check();
+                    break;
+                case "cancelled":
+                    cancelled.check();
+                    break;
+            }
+        }
+    }
+    public static class CancelTripModal extends AntModal
+    {
+        public CancelTripModal(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(xpath = "//button[.='Cancel Trip']")
+        public Button cancelTrip;
+
+        @FindBy(xpath = "//button[.='No']")
+        public Button no;
     }
 }
