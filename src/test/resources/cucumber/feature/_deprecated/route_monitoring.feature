@@ -1,5 +1,7 @@
-@OperatorV2 @Routing @OperatorV2Part2 @RouteMonitoring @Saas
+@@OperatorV2Deprecated @RouteMonitoring
 Feature: Route Monitoring
+
+  #DEPRECATED
 
   @LaunchBrowser @ShouldAlwaysRun @EnableClearCache
   Scenario: Login to Operator Portal V2

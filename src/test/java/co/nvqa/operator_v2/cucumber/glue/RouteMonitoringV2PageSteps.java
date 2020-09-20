@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.selenium.page.RouteMonitoringV2Page;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 
@@ -14,8 +15,7 @@ import java.util.Date;
 import java.util.Map;
 
 import static co.nvqa.operator_v2.selenium.page.RouteMonitoringV2Page.PendingPriorityModal.PendingPriorityTable.COLUMN_TRACKING_ID;
-import static co.nvqa.operator_v2.selenium.page.RouteMonitoringV2Page.RouteMonitoringTable.COLUMN_PENDING_PRIORITY_PARCELS;
-import static co.nvqa.operator_v2.selenium.page.RouteMonitoringV2Page.RouteMonitoringTable.COLUMN_ROUTE_ID;
+import static co.nvqa.operator_v2.selenium.page.RouteMonitoringV2Page.RouteMonitoringTable.*;
 
 /**
  * @author Sergey Mishanin
@@ -129,6 +129,16 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps
         routeMonitoringV2Page.spinner.waitUntilInvisible();
     }
 
+    @When("^Operator open Invalid Failed WP modal of a route \"(.+)\" on Route Monitoring V2 page$")
+    public void openInvalidFailedWpModal(String routeId)
+    {
+        routeMonitoringV2Page.routeMonitoringTable.filterByColumn(COLUMN_ROUTE_ID, resolveValue(routeId));
+        pause1s();
+        routeMonitoringV2Page.routeMonitoringTable.clickColumn(1, COLUMN_INVALID_FAILED_WP);
+        routeMonitoringV2Page.invalidFailedWpModal.waitUntilVisible();
+        routeMonitoringV2Page.spinner.waitUntilInvisible();
+    }
+
     @When("^Operator check there are (\\d+) Pending Priority Pickups in Pending Priority modal on Route Monitoring V2 page$")
     public void checkPendingPriorityPickupsNumber(Integer expectedCount)
     {
@@ -136,11 +146,32 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps
         Assertions.assertEquals(expectedCount, routeMonitoringV2Page.pendingPriorityModal.pendingPriorityPickupsTable.getRowsCount(), "Pending Priority Pickups Table rows count");
     }
 
+    @When("^Operator check there are (\\d+) Invalid Failed Pickups in Invalid Failed WP modal on Route Monitoring V2 page$")
+    public void checkInvalidFailedPickupsNumber(Integer expectedCount)
+    {
+        Assertions.assertEquals(f("Invalid Failed Pickups (%d)", expectedCount), routeMonitoringV2Page.invalidFailedWpModal.invalidFailedPickupsTitle.getText().trim(), "Invalid Failed Pickups Title");
+        Assertions.assertEquals(expectedCount, routeMonitoringV2Page.invalidFailedWpModal.invalidFailedPickupsTable.getRowsCount(), "Invalid Failed Pickups Table rows count");
+    }
+
+    @When("^Operator check there are (\\d+) Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page$")
+    public void checkInvalidFailedReservationsNumber(Integer expectedCount)
+    {
+        Assertions.assertEquals(f("Invalid Failed Reservations (%d)", expectedCount), routeMonitoringV2Page.invalidFailedWpModal.invalidFailedReservationsTitle.getText().trim(), "Invalid Failed Reservations Title");
+        Assertions.assertEquals(expectedCount, routeMonitoringV2Page.invalidFailedWpModal.invalidFailedReservationsTable.getRowsCount(), "Invalid Failed Reservations Table rows count");
+    }
+
     @When("^Operator check there are (\\d+) Pending Priority Deliveries in Pending Priority modal on Route Monitoring V2 page$")
     public void checkPendingPriorityDeliveriesNumber(Integer expectedCount)
     {
         Assertions.assertEquals(f("Pending Priority Deliveries (%d)", expectedCount), routeMonitoringV2Page.pendingPriorityModal.pendingPriorityDeliveriesTitle.getText().trim(), "Pending Priority Deliveries Title");
         Assertions.assertEquals(expectedCount, routeMonitoringV2Page.pendingPriorityModal.pendingPriorityDeliveriesTable.getRowsCount(), "Pending Priority Deliveries Table rows count");
+    }
+
+    @When("^Operator check there are (\\d+) Invalid Failed Deliveries in Invalid Failed WP modal on Route Monitoring V2 page$")
+    public void checkInvalidFailedDeliveriesNumber(Integer expectedCount)
+    {
+        Assertions.assertEquals(f("Invalid Failed Deliveries (%d)", expectedCount), routeMonitoringV2Page.invalidFailedWpModal.invalidFailedDeliveriesTitle.getText().trim(), "Invalid Failed Deliveries Title");
+        Assertions.assertEquals(expectedCount, routeMonitoringV2Page.invalidFailedWpModal.invalidFailedDeliveriesTable.getRowsCount(), "Invalid Failed Deliveries Table rows count");
     }
 
     @When("^Operator verify Pending Priority Pickup record in Pending Priority modal on Route Monitoring V2 page using data below:$")
@@ -153,6 +184,21 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps
         expected.compareWithActual(actual);
     }
 
+    @When("^Operator verify Invalid Failed Pickup record in Invalid Failed WP modal on Route Monitoring V2 page using data below:$")
+    public void verifyInvalidFailedPickupRecord(Map<String, String> data)
+    {
+        PendingPriorityOrder expected = new PendingPriorityOrder(resolveKeyValues(data));
+        routeMonitoringV2Page.invalidFailedWpModal.invalidFailedPickupsTable.filterByColumn(COLUMN_TRACKING_ID, expected.getTrackingId());
+        Assertions.assertEquals(1, routeMonitoringV2Page.invalidFailedWpModal.invalidFailedPickupsTable.getRowsCount(), "Invalid Failed Pickups Table rows count");
+        PendingPriorityOrder actual = routeMonitoringV2Page.invalidFailedWpModal.invalidFailedPickupsTable.readEntity(1);
+        if (StringUtils.equals(data.get("tags"), "-"))
+        {
+            expected.clearTags();
+            assertNull("List of tags", actual.getTags());
+        }
+        expected.compareWithActual(actual);
+    }
+
     @When("^Operator verify Pending Priority Delivery record in Pending Priority modal on Route Monitoring V2 page using data below:$")
     public void verifyPendingPriorityDeliveryRecord(Map<String, String> data)
     {
@@ -160,6 +206,21 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps
         routeMonitoringV2Page.pendingPriorityModal.pendingPriorityDeliveriesTable.filterByColumn(COLUMN_TRACKING_ID, expected.getTrackingId());
         Assertions.assertEquals(1, routeMonitoringV2Page.pendingPriorityModal.pendingPriorityDeliveriesTable.getRowsCount(), "Pending Priority Deliveries Table rows count");
         PendingPriorityOrder actual = routeMonitoringV2Page.pendingPriorityModal.pendingPriorityDeliveriesTable.readEntity(1);
+        expected.compareWithActual(actual);
+    }
+
+    @When("^Operator verify Invalid Failed Delivery record in Invalid Failed WP modal on Route Monitoring V2 page using data below:$")
+    public void verifyInvalidFailedDeliveryRecord(Map<String, String> data)
+    {
+        PendingPriorityOrder expected = new PendingPriorityOrder(resolveKeyValues(data));
+        routeMonitoringV2Page.invalidFailedWpModal.invalidFailedDeliveriesTable.filterByColumn(COLUMN_TRACKING_ID, expected.getTrackingId());
+        Assertions.assertEquals(1, routeMonitoringV2Page.invalidFailedWpModal.invalidFailedDeliveriesTable.getRowsCount(), "Invalid Failed Deliveries Table rows count");
+        PendingPriorityOrder actual = routeMonitoringV2Page.invalidFailedWpModal.invalidFailedDeliveriesTable.readEntity(1);
+        if (StringUtils.equals(data.get("tags"), "-"))
+        {
+            expected.clearTags();
+            assertNull("List of tags", actual.getTags());
+        }
         expected.compareWithActual(actual);
     }
 
@@ -175,6 +236,18 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps
         routeMonitoringV2Page.switchToOtherWindow(data.get("orderId"));
     }
 
+    @When("^Operator click on tracking id of a Invalid Failed Pickup record in Invalid Failed WP modal on Route Monitoring V2 page using data below:$")
+    public void clickInvalidFailedPickupTrackingId(Map<String, String> dataMap)
+    {
+        Map<String, String> data = resolveKeyValues(dataMap);
+        String mainWindowHandle = routeMonitoringV2Page.getWebDriver().getWindowHandle();
+        put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
+        routeMonitoringV2Page.invalidFailedWpModal.invalidFailedPickupsTable.filterByColumn(COLUMN_TRACKING_ID, data.get("trackingId"));
+        routeMonitoringV2Page.invalidFailedWpModal.invalidFailedPickupsTable.clickColumn(1, COLUMN_TRACKING_ID);
+        pause3s();
+        routeMonitoringV2Page.switchToOtherWindow(data.get("orderId"));
+    }
+
     @When("^Operator click on tracking id of a Pending Priority Delivery record in Pending Priority modal on Route Monitoring V2 page using data below:$")
     public void clickPendingPriorityDeliveryTrackingId(Map<String, String> dataMap)
     {
@@ -183,6 +256,18 @@ public class RouteMonitoringV2PageSteps extends AbstractSteps
         put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
         routeMonitoringV2Page.pendingPriorityModal.pendingPriorityDeliveriesTable.filterByColumn(COLUMN_TRACKING_ID, data.get("trackingId"));
         routeMonitoringV2Page.pendingPriorityModal.pendingPriorityDeliveriesTable.clickColumn(1, COLUMN_TRACKING_ID);
+        pause3s();
+        routeMonitoringV2Page.switchToOtherWindow(data.get("orderId"));
+    }
+
+    @When("^Operator click on tracking id of a Invalid Failed Delivery record in Invalid Failed WP modal on Route Monitoring V2 page using data below:$")
+    public void clickInvalidFailedDeliveryTrackingId(Map<String, String> dataMap)
+    {
+        Map<String, String> data = resolveKeyValues(dataMap);
+        String mainWindowHandle = routeMonitoringV2Page.getWebDriver().getWindowHandle();
+        put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
+        routeMonitoringV2Page.invalidFailedWpModal.invalidFailedDeliveriesTable.filterByColumn(COLUMN_TRACKING_ID, data.get("trackingId"));
+        routeMonitoringV2Page.invalidFailedWpModal.invalidFailedDeliveriesTable.clickColumn(1, COLUMN_TRACKING_ID);
         pause3s();
         routeMonitoringV2Page.switchToOtherWindow(data.get("orderId"));
     }
