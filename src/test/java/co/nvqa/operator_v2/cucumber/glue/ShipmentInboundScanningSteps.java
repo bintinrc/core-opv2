@@ -121,7 +121,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
             {
                 NvLogger.info("Element in Shipment inbound scanning not found, retrying after 2 seconds...");
                 navigateRefresh();
-                pause3s();
+                pause2s();
                 throw ex;
             }
         }, 10);

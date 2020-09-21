@@ -8,12 +8,7 @@ import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.Waypoint;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.model.driver.FailureReason;
-import co.nvqa.commons.model.entity.DriverEntity;
-import co.nvqa.commons.model.entity.InboundScanEntity;
-import co.nvqa.commons.model.entity.OrderEventEntity;
-import co.nvqa.commons.model.entity.RouteDriverTypeEntity;
-import co.nvqa.commons.model.entity.TransactionEntity;
-import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
+import co.nvqa.commons.model.entity.*;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
@@ -52,6 +47,7 @@ import java.util.stream.Collectors;
 
 import static co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps.TRANSACTION_TYPE_PICKUP;
 import static co.nvqa.commons.support.DateUtil.TIME_FORMATTER_1;
+import static co.nvqa.operator_v2.cucumber.ScenarioStorageKeys.KEY_TRIP_ID;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -985,6 +981,20 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         String driverUsername = get(KEY_CREATED_DRIVER_USERNAME);
         boolean driverAvailability = getDriverJdbc().getDriverAvailabilityValue(driverUsername);
         put(KEY_CREATED_MIDDLE_MILE_DRIVER_AVAILABILITY, driverAvailability);
+    }
+
+
+    @Then("DB Operator verifies movement trip has event with status cancelled")
+    public void dbOperatorVerifiesMovementTripHasEventWithStatusCancelled()
+    {
+        String tripId = get(KEY_TRIP_ID);
+        MovementTripEventEntity movementTripEventEntity =getHubJdbc().getNewestMovementTripEvent(Long.valueOf(tripId));
+        String movementTripEntityEvent = movementTripEventEntity.getEvent().toLowerCase();
+        String movementTripEntityStatus = movementTripEventEntity.getStatus().toLowerCase();
+        String movementTripEntityUserId = movementTripEventEntity.getUserId().toLowerCase();
+        assertEquals("cancelled", movementTripEntityEvent);
+        assertEquals( "cancelled", movementTripEntityStatus);
+        assertEquals( "automation@ninjavan.co", movementTripEntityUserId);
     }
 
 
