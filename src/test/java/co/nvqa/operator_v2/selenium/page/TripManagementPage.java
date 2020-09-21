@@ -51,7 +51,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     private static final String FIRST_ROW_OPTION_FILTERED_RESULT_XPATH = "//tr[1]/td[contains(@class,'%s')]";
     private static final String FIRST_ROW_TIME_FILTERED_RESULT_XPATH = "//tr[1]/td[contains(@class,'%s')]/span";
     private static final String FIRST_ROW_OF_TABLE_RESULT_XPATH = "//div[contains(@class,'table')]//tbody/tr[1]";
-    private static final String FIRST_ROW_TRACK_STATUS = "//tr[1]//td[contains(@class,'track')]/div/span";
+    private static final String FIRST_ROW_STATUS = "//tr[1]//td[contains(@class,'status')]";
     private static final String OK_BUTTON_OPTION_TABLE_XPATH = "//button[contains(@class,'btn-primary')]";
     private static final String TRIP_ID_FIRST_ROW_XPATH = "//tr[1]//td[contains(@class,'id')]/span/span";
     private static final String ACTION_COLUMN_XPATH = "//tr[1]//td[contains(@class,'action')]";
@@ -516,16 +516,16 @@ public class TripManagementPage extends OperatorV2SimplePage {
         getWebDriver().switchTo().parentFrame();
     }
 
-    public void verifyTrackValue(String expectedTripId, String expectedTrackValue)
+    public void verifyStatusValue(String expectedTripId, String expectedStatusValue)
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
         waitUntilVisibilityOfElementLocated(TRIP_ID_FIRST_ROW_XPATH);
         String actualTripId = getText(TRIP_ID_FIRST_ROW_XPATH);
         assertEquals(expectedTripId, actualTripId);
 
-        waitUntilVisibilityOfElementLocated(FIRST_ROW_TRACK_STATUS);
-        String actualTrackValue = getText(FIRST_ROW_TRACK_STATUS).toLowerCase();
-        assertEquals(expectedTrackValue, actualTrackValue);
+        waitUntilVisibilityOfElementLocated(FIRST_ROW_STATUS);
+        String actualTrackValue = getText(FIRST_ROW_STATUS).toLowerCase();
+        assertEquals(expectedStatusValue, actualTrackValue);
 
         getWebDriver().switchTo().parentFrame();
     }

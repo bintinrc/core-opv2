@@ -215,10 +215,10 @@ public class TripManagementSteps extends AbstractSteps {
         tripManagementPage.tableFilterByStatus(statusValue);
     }
 
-    @Then("Operator verifies movement trip shown has track value {string}")
-    public void operatorVerifiesMovementTripShownHasTrackValue(String trackValue) {
+    @Then("Operator verifies movement trip shown has status value {string}")
+    public void operatorVerifiesMovementTripShownHasStatusValue(String statusValue) {
         String tripId = get(KEY_TRIP_ID);
-        tripManagementPage.verifyTrackValue(tripId, trackValue.toLowerCase());
+        tripManagementPage.verifyStatusValue(tripId, statusValue.toLowerCase());
     }
 
 }
