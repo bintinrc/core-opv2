@@ -221,4 +221,9 @@ public class TripManagementSteps extends AbstractSteps {
         tripManagementPage.verifyStatusValue(tripId, statusValue.toLowerCase());
     }
 
+    @Then("Operator verifies {string} button disabled")
+    public void operatorVerifiesButtonDisabled(String buttonValue) {
+        assertFalse(tripManagementPage.isElementEnabled(buttonValue));
+    }
+
 }

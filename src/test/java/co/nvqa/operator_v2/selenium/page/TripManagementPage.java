@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author Tristania Siagian
  */
 
@@ -131,10 +130,10 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
             default:
                 NvLogger.warn("No Tab Name Found!");
-            }
+        }
 
-            Long actualTripManagementSum = (long) tripManagementList.size();
-            assertEquals("Sum of Trip Management", actualTripManagementSum, tripManagementCount);
+        Long actualTripManagementSum = (long) tripManagementList.size();
+        assertEquals("Sum of Trip Management", actualTripManagementSum, tripManagementCount);
         getWebDriver().switchTo().parentFrame();
     }
 
@@ -166,15 +165,15 @@ public class TripManagementPage extends OperatorV2SimplePage {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
 
         switch (movementTripType) {
-            case DEPARTURE :
+            case DEPARTURE:
                 click(DEPARTURE_CALENDAR_XPATH);
                 break;
 
-            case ARRIVAL :
+            case ARRIVAL:
                 click(ARRIVAL_CALENDAR_XPATH);
                 break;
 
-            default :
+            default:
                 NvLogger.warn("Tab is not found!");
         }
 
@@ -189,15 +188,15 @@ public class TripManagementPage extends OperatorV2SimplePage {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
 
         switch (movementTripType) {
-            case ARCHIVE_DEPARTURE_DATE :
+            case ARCHIVE_DEPARTURE_DATE:
                 click(DEPARTURE_CALENDAR_XPATH);
                 break;
 
-            case ARCHIVE_ARRIVAL_DATE :
+            case ARCHIVE_ARRIVAL_DATE:
                 click(ARRIVAL_CALENDAR_XPATH);
                 break;
 
-            default :
+            default:
                 NvLogger.warn("Tab is not found!");
         }
 
@@ -329,8 +328,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         getWebDriver().switchTo().parentFrame();
     }
 
-    public void tableFilterByStatus(String filterValue)
-    {
+    public void tableFilterByStatus(String filterValue) {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
         tripStatusFilter.openButton.click();
         tripStatusFilter.selectType(filterValue);
@@ -454,7 +452,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
             switch (actionName) {
                 case VIEW:
-                    if (isElementExistFast(f(ACTION_ICON_XPATH,1))) {
+                    if (isElementExistFast(f(ACTION_ICON_XPATH, 1))) {
                         click(f(ACTION_ICON_XPATH, 1));
                     } else {
                         click(VIEW_ICON_ARRIVAL_ARCHIVE_XPATH);
@@ -494,7 +492,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     public void clickButtonOnCancelDialog(String buttonValue) {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
         cancelTripModal.waitUntilVisible();
-        switch (buttonValue){
+        switch (buttonValue) {
             case "Cancel Trip":
                 cancelTripModal.cancelTrip.click();
                 break;
@@ -508,16 +506,14 @@ public class TripManagementPage extends OperatorV2SimplePage {
         getWebDriver().switchTo().parentFrame();
     }
 
-    public void verifiesSuccessCancelTripToastShown()
-    {
+    public void verifiesSuccessCancelTripToastShown() {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
         waitUntilVisibilityOfElementLocated(SUCCESS_CANCEL_TRIP_TOAST);
         click(SUCCESS_CANCEL_TRIP_TOAST);
         getWebDriver().switchTo().parentFrame();
     }
 
-    public void verifyStatusValue(String expectedTripId, String expectedStatusValue)
-    {
+    public void verifyStatusValue(String expectedTripId, String expectedStatusValue) {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
         waitUntilVisibilityOfElementLocated(TRIP_ID_FIRST_ROW_XPATH);
         String actualTripId = getText(TRIP_ID_FIRST_ROW_XPATH);
@@ -528,6 +524,35 @@ public class TripManagementPage extends OperatorV2SimplePage {
         assertEquals(expectedStatusValue, actualTrackValue);
 
         getWebDriver().switchTo().parentFrame();
+    }
+
+    public Boolean isActionButtonEnabled(MovementTripActionName actionName) {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        boolean result = false;
+        if (isElementExistFast(ACTION_COLUMN_XPATH)) {
+            switch (actionName) {
+                case VIEW:
+                    if (isElementExistFast(f(ACTION_ICON_XPATH, 1))) {
+                        result = isElementEnabled(f(ACTION_ICON_XPATH, 1));
+                    } else {
+                        result = isElementEnabled(VIEW_ICON_ARRIVAL_ARCHIVE_XPATH);
+                    }
+                    break;
+
+                case ASSIGN_DRIVER:
+                    result = isElementEnabled(f(ACTION_ICON_XPATH, 2));
+                    break;
+
+                case CANCEL:
+                    result = isElementEnabled(f(ACTION_ICON_XPATH, 3));
+                    break;
+
+                default:
+                    NvLogger.warn("Movement Trip Action Name is not found!");
+            }
+        }
+        getWebDriver().switchTo().parentFrame();
+        return result;
     }
 
 
@@ -559,23 +584,23 @@ public class TripManagementPage extends OperatorV2SimplePage {
     private String statusConverted(String status) {
         String statusConverted = null;
         switch (status) {
-            case "PENDING" :
+            case "PENDING":
                 statusConverted = "Pending";
                 break;
 
-            case "IN_TRANSIT" :
+            case "IN_TRANSIT":
                 statusConverted = "In Transit";
                 break;
 
-            case "COMPLETED" :
+            case "COMPLETED":
                 statusConverted = "Completed";
                 break;
 
-            case "CANCELLED" :
+            case "CANCELLED":
                 statusConverted = "Cancelled";
                 break;
 
-            default :
+            default:
                 NvLogger.warn("Status is not found!");
         }
 
@@ -617,11 +642,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
         return expectedValue;
     }
 
-
-    public static class TableFilterPopup extends PageElement
-    {
-        public TableFilterPopup(WebDriver webDriver, WebElement webElement)
-        {
+    public static class TableFilterPopup extends PageElement {
+        public TableFilterPopup(WebDriver webDriver, WebElement webElement) {
             super(webDriver, webElement);
         }
 
@@ -635,10 +657,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
         public Button reset;
     }
 
-    public static class StatusFilter extends TableFilterPopup
-    {
-        public StatusFilter(WebDriver webDriver, WebElement webElement)
-        {
+    public static class StatusFilter extends TableFilterPopup {
+        public StatusFilter(WebDriver webDriver, WebElement webElement) {
             super(webDriver, webElement);
         }
 
@@ -654,10 +674,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
         @FindBy(xpath = ".//li[.='Cancelled']//input")
         public CheckBox cancelled;
 
-        public void selectType(String type)
-        {
-            switch (type.toLowerCase())
-            {
+        public void selectType(String type) {
+            switch (type.toLowerCase()) {
                 case "pending":
                     pending.check();
                     break;
@@ -673,10 +691,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
             }
         }
     }
-    public static class CancelTripModal extends AntModal
-    {
-        public CancelTripModal(WebDriver webDriver, WebElement webElement)
-        {
+
+    public static class CancelTripModal extends AntModal {
+        public CancelTripModal(WebDriver webDriver, WebElement webElement) {
             super(webDriver, webElement);
             PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
         }
