@@ -55,6 +55,11 @@ public class PendingPriorityOrder extends DataEntity<PendingPriorityOrder>
         this.tags = tags;
     }
 
+    public void clearTags()
+    {
+        this.tags = null;
+    }
+
     public void setTags(String tags)
     {
         setTags(Arrays.asList(tags.split(",")));
