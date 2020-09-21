@@ -51,6 +51,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     private static final String FIRST_ROW_OPTION_FILTERED_RESULT_XPATH = "//tr[1]/td[contains(@class,'%s')]";
     private static final String FIRST_ROW_TIME_FILTERED_RESULT_XPATH = "//tr[1]/td[contains(@class,'%s')]/span";
     private static final String FIRST_ROW_OF_TABLE_RESULT_XPATH = "//div[contains(@class,'table')]//tbody/tr[1]";
+    private static final String FIRST_ROW_TRACK_STATUS = "//tr[1]//td[contains(@class,'track')]/div/span";
     private static final String OK_BUTTON_OPTION_TABLE_XPATH = "//button[contains(@class,'btn-primary')]";
     private static final String TRIP_ID_FIRST_ROW_XPATH = "//tr[1]//td[contains(@class,'id')]/span/span";
     private static final String ACTION_COLUMN_XPATH = "//tr[1]//td[contains(@class,'action')]";
@@ -69,6 +70,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
     private static final String DRIVER_CLASS = "driver";
     private static final String STATUS_CLASS = "status";
     private static final String LAST_STATUS_CLASS = "lastStatus";
+
+    private static final String SUCCESS_CANCEL_TRIP_TOAST = "//div[contains(@class,'notification-notice-message') and (contains(text(),'Movement trip cancelled'))]";
 
     @FindBy(className = "ant-modal-wrap")
     public CancelTripModal cancelTripModal;
@@ -326,6 +329,15 @@ public class TripManagementPage extends OperatorV2SimplePage {
         getWebDriver().switchTo().parentFrame();
     }
 
+    public void tableFilterByStatus(String filterValue)
+    {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        tripStatusFilter.openButton.click();
+        tripStatusFilter.selectType(filterValue);
+        tripStatusFilter.ok.click();
+        getWebDriver().switchTo().parentFrame();
+    }
+
     public void tableFiltering(TripManagementFilteringType tripManagementFilteringType, TripManagementDetailsData tripManagementDetailsData) {
         tableFiltering(tripManagementFilteringType, tripManagementDetailsData, null);
     }
@@ -479,6 +491,46 @@ public class TripManagementPage extends OperatorV2SimplePage {
         getWebDriver().switchTo().parentFrame();
     }
 
+    public void clickButtonOnCancelDialog(String buttonValue) {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        cancelTripModal.waitUntilVisible();
+        switch (buttonValue){
+            case "Cancel Trip":
+                cancelTripModal.cancelTrip.click();
+                break;
+            case "No":
+                cancelTripModal.no.click();
+                break;
+            default:
+                NvLogger.warn("Button value is not found!");
+        }
+        cancelTripModal.waitUntilInvisible();
+        getWebDriver().switchTo().parentFrame();
+    }
+
+    public void verifiesSuccessCancelTripToastShown()
+    {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        waitUntilVisibilityOfElementLocated(SUCCESS_CANCEL_TRIP_TOAST);
+        click(SUCCESS_CANCEL_TRIP_TOAST);
+        getWebDriver().switchTo().parentFrame();
+    }
+
+    public void verifyTrackValue(String expectedTripId, String expectedTrackValue)
+    {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        waitUntilVisibilityOfElementLocated(TRIP_ID_FIRST_ROW_XPATH);
+        String actualTripId = getText(TRIP_ID_FIRST_ROW_XPATH);
+        assertEquals(expectedTripId, actualTripId);
+
+        waitUntilVisibilityOfElementLocated(FIRST_ROW_TRACK_STATUS);
+        String actualTrackValue = getText(FIRST_ROW_TRACK_STATUS).toLowerCase();
+        assertEquals(expectedTrackValue, actualTrackValue);
+
+        getWebDriver().switchTo().parentFrame();
+    }
+
+
     private String movementTypeConverter(String movementType) {
         String movementTypeConverted;
         if ("LAND_HAUL".equalsIgnoreCase(movementType)) {
@@ -565,21 +617,6 @@ public class TripManagementPage extends OperatorV2SimplePage {
         return expectedValue;
     }
 
-    public void clickButtonOnCancelDialog(String buttonValue) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
-        cancelTripModal.waitUntilVisible();
-        switch (buttonValue){
-            case "Cancel Trip":
-                cancelTripModal.cancelTrip.click();
-                break;
-            case "No":
-                cancelTripModal.no.click();
-                break;
-            default:
-                NvLogger.warn("Button value is not found!");
-        }
-        cancelTripModal.waitUntilInvisible();
-    }
 
     public static class TableFilterPopup extends PageElement
     {

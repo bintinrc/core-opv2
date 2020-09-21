@@ -33,15 +33,13 @@ Feature: Cancel Trip
     When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
     And Operator clicks on Load Trip Button
     And Operator verifies a trip to destination hub "{KEY_LIST_OF_CREATED_HUBS[2].name}" exist
-    And Operator searches for the Trip Management based on its "status"
+    And Operator searches for Movement Trip based on status "pending"
     When Operator clicks on "cancel" icon on the action column
     And Operator clicks "Cancel Trip" button on cancel trip dialog
-    # verify status cancelled from UI
-    # [verify ui] wait toast
-    # [verify ui] trip has status: Cancelled in Departure tab Opv2
-    # [verify db] has event cancelled in hub_qa_gl/movement_trip_event
-    # [verify db] event has status cancelled in hub_qa_gl/movement_trip_event
-    # [verify db] event has user id: email of user in hub_qa_gl/movement_trip_event
+    And Operator verifies that there will be a movement trip cancelled toast shown
+    And Operator searches for Movement Trip based on status "cancelled"
+    Then Operator verifies movement trip shown has track value "cancelled"
+    And DB Operator verifies movement trip has event with status cancelled
 
 #    Given Operator open Trip Management page on Opv2
 #    When Operator search and load trip in Departure tab
@@ -71,7 +69,35 @@ Feature: Cancel Trip
 
 #  @coverage-auto @coverage-operator-auto
 #  Scenario: Call Off Cancel Trip - Trip Status Pending (uid:770109ba-1146-459c-8be6-26eba77c303d)
-#    Given dummy_noop
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given Operator go to menu Inter-Hub -> Movement Trips
+#    And Operator verifies that the Trip Management Page is opened
+#    Given API Operator creates new Hub using data below:
+#      | name         | GENERATED |
+#      | displayName  | GENERATED |
+#      | facilityType | CROSSDOCK |
+#      | city         | GENERATED |
+#      | country      | GENERATED |
+#      | latitude     | GENERATED |
+#      | longitude    | GENERATED |
+#    And API Operator creates new Hub using data below:
+#      | name         | GENERATED |
+#      | displayName  | GENERATED |
+#      | facilityType | CROSSDOCK |
+#      | city         | GENERATED |
+#      | country      | GENERATED |
+#      | latitude     | GENERATED |
+#      | longitude    | GENERATED |
+#    And API Operator verify new Hubs are created
+#    And API Operator reloads hubs cache
+#    Given API Operator create new movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+#    And API Operator gets the count of the "departure" Trip Management based on the hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}"
+#    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
+#    And Operator clicks on Load Trip Button
+#    And Operator verifies a trip to destination hub "{KEY_LIST_OF_CREATED_HUBS[2].name}" exist
+#    And Operator searches for the Trip Management based on its "status"
+#    When Operator clicks on "cancel" icon on the action column
+#    And Operator clicks "No" button on cancel trip dialog
 #
 #  @coverage-auto @coverage-operator-auto
 #  Scenario: Call Off Cancel Trip - Trip Status Transit (uid:9003a32c-c483-4a4c-981a-b331abf7b684)

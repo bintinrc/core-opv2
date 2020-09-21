@@ -204,4 +204,21 @@ public class TripManagementSteps extends AbstractSteps {
     public void operatorClicksButtonOnCancelTripDialog(String buttonValue) {
         tripManagementPage.clickButtonOnCancelDialog(buttonValue);
     }
+
+    @And("Operator verifies that there will be a movement trip cancelled toast shown")
+    public void operatorVerifiesMovementTripCancelledToastShown() {
+        tripManagementPage.verifiesSuccessCancelTripToastShown();
+    }
+
+    @And("Operator searches for Movement Trip based on status {string}")
+    public void operatorSearchesForMovementTripBasedOnStatus(String statusValue) {
+        tripManagementPage.tableFilterByStatus(statusValue);
+    }
+
+    @Then("Operator verifies movement trip shown has track value {string}")
+    public void operatorVerifiesMovementTripShownHasTrackValue(String trackValue) {
+        String tripId = get(KEY_TRIP_ID);
+        tripManagementPage.verifyTrackValue(tripId, trackValue.toLowerCase());
+    }
+
 }
