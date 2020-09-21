@@ -298,7 +298,7 @@ Feature: Crossdock Hubs
       | destinationHub | WRONG_HUB_NAME |
     Then Operator verify schedules list is empty on Movement Management page
 
-  @SoftDeleteHubViaDb
+  @SoftDeleteHubViaDb # todo: migration deprecate, check https://studio.cucumber.io/projects/210778/test-plan/folders/1576332/scenarios/5228387
   Scenario: Edit Crossdock Movement Schedule (uid:1ee7d8dd-f6f1-4662-981e-b8744cbf0f18)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
