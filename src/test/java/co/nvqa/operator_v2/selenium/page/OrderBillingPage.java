@@ -34,7 +34,11 @@ public class OrderBillingPage extends OperatorV2SimplePage
     private static final String FILTER_START_DATE_MDDATEPICKERNGMODEL = "ctrl.data.startDate";
     private static final String FILTER_END_DATE_MDDATEPICKERNGMODEL = "ctrl.data.endDate";
     private static final String FILTER_SHIPPER_SELECTED_SHIPPERS_NVAUTOCOMPLETE_ITEMTYPES = "Shipper";
+    private static final String FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_NVAUTOCOMPLETE_ITEMTYPES = "Parent Shipper";
+    private static final String FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_ERROR_MSG = "//md-virtual-repeat-container//li[1]";
+    private static final String FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_SEARCH_BOX = ".//nv-autocomplete[@item-types='Parent Shipper']//input";
     private static final String FILTER_SHIPPER_SELECTED_SHIPPERS_BUTTON_ARIA_LABEL = "Selected Shippers";
+    private static final String FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_BUTTON_ARIA_LABEL = "Select by Parent Shipper";
     private static final String FILTER_GENERATE_FILE_CHECKBOX_PATTERN = "//md-input-container[@label = '%s']/md-checkbox";
     private static final String FILTER_UPLOAD_CSV_ARIA_LABEL = "Upload CSV";
     private static final String FILTER_UPLOAD_CSV_NAME = "commons.upload-csv";
@@ -73,6 +77,22 @@ public class OrderBillingPage extends OperatorV2SimplePage
     {
         clickButtonByAriaLabelAndWaitUntilDone(FILTER_SHIPPER_SELECTED_SHIPPERS_BUTTON_ARIA_LABEL);
         selectValueFromNvAutocompleteByItemTypes(FILTER_SHIPPER_SELECTED_SHIPPERS_NVAUTOCOMPLETE_ITEMTYPES, shipper);
+    }
+
+    public void setParentShipper(String parentShipper)
+    {
+        clickButtonByAriaLabelAndWaitUntilDone(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_BUTTON_ARIA_LABEL);
+        selectValueFromNvAutocompleteByItemTypesAndDismiss(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_NVAUTOCOMPLETE_ITEMTYPES, parentShipper);
+  }
+
+    public void setInvalidParentShipper(String shipper)
+    {
+        clickButtonByAriaLabelAndWaitUntilDone(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_BUTTON_ARIA_LABEL);
+        sendKeys(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_SEARCH_BOX, shipper);
+    }
+
+    public String getNoParentErrorMsg(){
+        return getText(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_ERROR_MSG);
     }
 
     public void uploadCsvShippers(String shipperIds)
