@@ -6,7 +6,7 @@ Feature: DP Administration
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDpPartner
-  Scenario: Operator should be able to create a new DP Partners on DP Administration page (uid:4e077488-54e0-4754-bd1b-10fd1a0ec624)
+  Scenario: DP Administration - Create DP Partner (uid:b12cc97d-4764-4870-ac54-781e7c7970e5)
     Given Operator go to menu Distribution Points -> DP Administration
     Given Operator add new DP Partner on DP Administration page with the following attributes:
       | name         | GENERATED                            |
@@ -17,7 +17,7 @@ Feature: DP Administration
     Then Operator verify new DP Partner params
 
   @DeleteDpPartner
-  Scenario: Operator should be able to update a new DP Partners on DP Administration page (uid:be020dff-3609-4a38-9afc-abf9bb31c639)
+  Scenario: DP Administration - Update DP Partner (uid:cb1ca5de-be07-4a3b-903e-955bf19dd2b1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -34,7 +34,7 @@ Feature: DP Administration
     Then Operator verify new DP Partner params
 
   @DeleteDpPartner
-  Scenario: Operator should be able to download and verify DP Partners CSV file on DP Administration page (uid:e3cbf6dc-db95-49c6-971c-3cee7dd69fd8)
+  Scenario: DP Administration - Download CSV DP Partners (uid:ccd24e58-8ae7-4410-8d20-831b6da979b1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Distribution Points -> DP Administration
     When Operator get first 10 DP Partners params on DP Administration page
@@ -42,7 +42,7 @@ Feature: DP Administration
     Then Downloaded CSV file contains correct DP Partners data
 
   @DeleteDpAndPartner
-  Scenario: Operator should be able to create a new DP on DP Administration page (uid:6b1aa2c0-704a-40ee-9810-d2d6a1cf87f7)
+  Scenario: DP Administration - Create Distribution Point (DP) - Choose Ninja Point Type (uid:6f003723-fe55-4cdb-808c-92230ecba8eb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -77,7 +77,7 @@ Feature: DP Administration
     Then Operator verifies dp Params with database
 
   @DeleteDpAndPartner
-  Scenario: Operator should be able to update a new DP on DP Administration page (uid:f3e7e39e-9b92-4ba4-a32f-6cb943b4a3e0)
+  Scenario: DP Administration - Update Distribution Point - Ninja Point (uid:9f588a33-c2f9-45b2-a3ee-939bc5fe8e60)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -105,7 +105,7 @@ Feature: DP Administration
     Then Operator verifies dp Params with database
 
   @DeleteDpAndPartner
-  Scenario: Operator should be able to download and verify DPs CSV file on DP Administration page (uid:2adb0efd-f26f-43a1-a250-008f74fe634b)
+  Scenario: DP Administration - Download CSV DPs (uid:f4161483-42f6-4fc3-8f69-88e232e4642a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -122,7 +122,7 @@ Feature: DP Administration
     Then Downloaded CSV file contains correct DP data
 
   @DeleteDpAndPartner
-  Scenario: Operator should be able to create a new DP User on DP Administration page (uid:4b30c29c-2bab-49fb-8ec9-2b803c931608)
+  Scenario: DP Administration - Create DP User (uid:0146137a-6964-4985-a417-7bbd6035e5b7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -144,7 +144,7 @@ Feature: DP Administration
     Then Operator verify new DP User params
 
   @DeleteDpAndPartner
-  Scenario: Operator should be able to update a DP User on DP Administration page (uid:d3b89b0d-ff97-494c-bcd3-b2a6a6b9de00)
+  Scenario: DP Administration - Update DP user (uid:cfa0f458-4373-4927-b411-a653e5b9dc10)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
@@ -171,7 +171,7 @@ Feature: DP Administration
     Then Operator verify new DP User params
 
   @DeleteDpAndPartner
-  Scenario: Operator should be able to download and verify DP Users CSV file on DP Administration page (uid:235c47f3-3af8-4a13-9eff-a1d724698b4b)
+  Scenario: DP Administration - Download CSV DP Users (uid:11060b54-7a1d-4122-9ceb-7f693c1bf154)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new DP Partner with the following attributes:
       | name         | GENERATED                            |
