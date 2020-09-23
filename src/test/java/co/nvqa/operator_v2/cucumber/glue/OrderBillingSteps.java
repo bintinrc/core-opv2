@@ -65,6 +65,12 @@ public class OrderBillingSteps extends AbstractSteps
             shipperIds = mapOfData.get("uploadCsv");
             orderBillingPage.uploadCsvShippers(shipperIds);
         }
+        if (Objects.nonNull(mapOfData.get("parentShipper")))
+        {
+            String parentShipper = mapOfData.get("parentShipper");
+            orderBillingPage.setParentShipper(parentShipper);
+            put(KEY_ORDER_BILLING_SHIPPER_NAME, parentShipper);
+        }
         if (Objects.nonNull(mapOfData.get("generateFile")))
         {
             orderBillingPage.tickGenerateTheseFilesOption(mapOfData.get("generateFile"));
@@ -75,6 +81,7 @@ public class OrderBillingSteps extends AbstractSteps
         }
 
         orderBillingPage.clickGenerateSuccessBillingsButton();
+
     }
 
 
@@ -233,5 +240,17 @@ public class OrderBillingSteps extends AbstractSteps
     public void operatorTriesToUploadAPDFAndVerifiesThatAnyOtherFileExceptCsvIsNotAllowed()
     {
         orderBillingPage.uploadPDFShippersAndVerifyErrorMsg();
+    }
+
+    @Then("Operator chooses Select by Parent Shippers option and search for normal shipper ID like below:")
+    public void operatorChoosesSelectByParentShippersOptionAndSearchForNormalShipperIDLikeBelow(String shipperId)
+    {
+        orderBillingPage.setInvalidParentShipper(shipperId);
+    }
+
+    @Then("Operator verifies that the name of normal shipper suggestion is not displayed")
+    public void operatorVerifiesThatTheNameOfNormalShipperSuggestionIsNotDisplayed()
+    {
+       assertThat("The displayed error msg does not match with the expected error msg",orderBillingPage.getNoParentErrorMsg(), containsString("No Parent Shipper matching"));
     }
 }
