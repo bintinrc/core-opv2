@@ -1,4 +1,4 @@
-@OperatorV2 @Utilities @OperatorV2Part2 @BulkAddressVerification @Saas
+@OperatorV2 @Core @Utilities @BulkAddressVerification
 Feature: Bulk Address Verification
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -6,7 +6,7 @@ Feature: Bulk Address Verification
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario: Operator should be able to verify Bulk Addresses on Bulk Address Verification page (uid:ae74df19-c939-4b91-865d-94eb19021910)
+  Scenario: Operator Bulk Verify Addresses by Upload CSV Successfully (uid:9aefdd19-47df-42e9-ad40-15fd942c0015)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
