@@ -4,7 +4,6 @@ import co.nvqa.commons.model.core.hub.trip_management.MovementTripType;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
-import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.TripManagementFilteringType;
 import co.nvqa.operator_v2.selenium.page.TripManagementPage;
@@ -14,9 +13,10 @@ import cucumber.api.java.en.When;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- *
  * @author Tristania Siagian
  */
 
@@ -51,28 +51,68 @@ public class TripManagementSteps extends AbstractSteps {
     @When("Operator selects the {string} with value {string}")
     public void operatorSelectsTheWithValue(String filterName, String filterValue) {
         switch (filterName.toLowerCase()) {
-            case "origin hub" :
+            case "origin hub":
                 filterName = "originHub";
                 break;
 
-            case "destination hub" :
+            case "destination hub":
                 filterName = "destinationHub";
                 break;
 
-            case "movement type" :
+            case "movement type":
                 filterName = "movementType";
                 put(KEY_MOVEMENT_TYPE_INCLUDED, true);
                 break;
 
-            default :
+            default:
                 NvLogger.warn("Filter Type is not found!");
         }
 
         tripManagementPage.selectValueFromFilterDropDown(filterName, filterValue);
     }
 
+    @When("Operator searches and selects the {string} with value {string}")
+    public void operatorSearchesAndSelectsWithValue(final String filterName, final String filterValue) {
+        final Map<String, String> filterMap = new HashMap<>();
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try {
+                filterMap.put("filterValue", resolveValue(filterValue));
+                switch (filterName.toLowerCase()) {
+                    case "origin hub":
+                        filterMap.put("filterName", "originHub");
+                        break;
+
+                    case "destination hub":
+                        filterMap.put("filterName", "destinationHub");
+                        break;
+
+                    case "movement type":
+                        filterMap.put("filterName", "movementType");
+                        put(KEY_MOVEMENT_TYPE_INCLUDED, true);
+                        break;
+                    default:
+                        NvLogger.warn("Filter Type is not found!");
+                }
+                tripManagementPage.selectValueFromFilterDropDownDirectly(filterMap.get("filterName"), filterMap.get("filterValue"));
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                throw ex;
+            }
+        }, 10);
+    }
+
+    @And("Operator verifies a trip to destination hub {string} exist")
+    public void operatorVerifiesATripToDestinationHubExist(String destinationHubName) {
+        destinationHubName = resolveValue(destinationHubName);
+        tripManagementPage.searchAndVerifiesTripManagementIsExistedByDestinationHubName(destinationHubName);
+    }
+
     @Then("Operator verifies that the trip management shown in {string} tab is correct")
-    public void operatorVerifiesThetTheTripManagementShownIsCorrect(String tabName) {
+    public void operatorVerifiesThatTheTripManagementShownIsCorrect(String tabName) {
         TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
         Long tripManagementCount = tripManagementDetailsData.getCount();
         MovementTripType tabNameAsEnum = MovementTripType.fromString(tabName);
@@ -159,4 +199,31 @@ public class TripManagementSteps extends AbstractSteps {
         String windowHandle = get(KEY_MAIN_WINDOW_HANDLE);
         tripManagementPage.verifiesTripDetailIsOpened(tripId, windowHandle);
     }
+
+    @And("Operator clicks {string} button on cancel trip dialog")
+    public void operatorClicksButtonOnCancelTripDialog(String buttonValue) {
+        tripManagementPage.clickButtonOnCancelDialog(buttonValue);
+    }
+
+    @And("Operator verifies that there will be a movement trip cancelled toast shown")
+    public void operatorVerifiesMovementTripCancelledToastShown() {
+        tripManagementPage.verifiesSuccessCancelTripToastShown();
+    }
+
+    @And("Operator searches for Movement Trip based on status {string}")
+    public void operatorSearchesForMovementTripBasedOnStatus(String statusValue) {
+        tripManagementPage.tableFilterByStatus(statusValue);
+    }
+
+    @Then("Operator verifies movement trip shown has status value {string}")
+    public void operatorVerifiesMovementTripShownHasStatusValue(String statusValue) {
+        String tripId = get(KEY_TRIP_ID);
+        tripManagementPage.verifyStatusValue(tripId, statusValue.toLowerCase());
+    }
+
+    @Then("Operator verifies {string} button disabled")
+    public void operatorVerifiesButtonDisabled(String buttonValue) {
+        assertFalse(tripManagementPage.isElementEnabled(buttonValue));
+    }
+
 }

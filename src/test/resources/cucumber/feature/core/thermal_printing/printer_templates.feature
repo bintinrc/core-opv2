@@ -1,4 +1,4 @@
-@OperatorV2 @ThermalPrinting @OperatorV2Part1 @PrinterTemplates
+@OperatorV2 @Core @ThermalPrinting @PrinterTemplates
 Feature: Printer Templates
 
   @LaunchBrowser @ShouldAlwaysRun

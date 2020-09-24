@@ -6,24 +6,12 @@ Feature: Shipment Scanning
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Scan order to shipment (uid:b776b582-a395-4a02-962a-9785f6945750)
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
-    Then Operator scan the created order to shipment in hub {hub-name}
-
-  @DeleteShipment @ForceSuccessOrder
-  Scenario: Scan multiple orders to shipment (uid:d3759781-3a4f-4ae5-8f44-229b72ac9bff)
+  Scenario: Add Multiple Parcels to Shipment (uid:2b1021d1-828f-437c-a095-baebbae1d8c7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 3      |
-      | generateFromAndTo | RANDOM |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}}|
+      | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given DB Operator gets Hub ID by Hub Name of created parcel
@@ -32,7 +20,7 @@ Feature: Shipment Scanning
     When Operator scan multiple created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Operator Add Parcel to Shipment (uid:d2e2e056-3176-409d-802c-d74ddf1909ad)
+  Scenario: Add Parcel to Shipment with Alert (uid:21ff371d-e507-453a-9d4a-f37c18037aa7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -45,7 +33,7 @@ Feature: Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Operator Add Parcel to Shipment - by Order Status : Pending Pickup (uid:1f2770be-d02a-4bab-a802-86ae02a8398b)
+  Scenario: Add Pending Pickup Parcel to Shipment (uid:8588eec2-d295-4ea2-9760-7aca19564882)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -55,23 +43,23 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
-#  @DeleteShipment
-#  Scenario: Operator Add Parcel to Shipment - by Order Status : Pending Pickup at Distribution Point (uid:dadb5031-6a5d-40f7-96d2-08f3cf9b8eae)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given API Shipper create V4 order using data below:
-#      | generateFromAndTo | RANDOM |
-#      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}}|
-#    Given API Operator Global Inbound parcel using data below:
-#      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
-#    Given API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
-#    And DB Operator gets Hub ID by Hub Name of created parcel
-#    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-#    Given Operator go to menu Inter-Hub -> Shipment Scanning
-#    Then Operator scan the created order to shipment in hub {hub-name}
-#    And Operator verifies that the row of the added order is red highlighted
+  @DeleteShipment
+  Scenario: Add Pending Pickup at Distribution Point Parcel to Shipment (uid:d2181800-29d5-4f12-a344-7198446b0599)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}}|
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+    Given API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
+    And DB Operator gets Hub ID by Hub Name of created parcel
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Then Operator scan the created order to shipment in hub {hub-name}
+    And Operator verifies that the row of the added order is red highlighted
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
-  Scenario: Operator Add Parcel to Shipment - by Order Status : Pickup Fail (uid:5fe26a89-6c0d-442a-b323-53b4f94308fc)
+  Scenario: Add Pickup Fail Parcel to Shipment (uid:aa02f11e-ee9f-4d6d-9051-5f403771c2ed)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -91,7 +79,7 @@ Feature: Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
-  Scenario: Operator Add Parcel to Shipment - by Order Status : En-route to Sorting hub (uid:d00cbfff-144a-4784-b58d-6171321a2fe7)
+  Scenario: Add En-route to Sorting Hub Parcel to Shipment (uid:1f5b734c-70cb-4ea5-9d4f-4db9593bc497)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -111,7 +99,7 @@ Feature: Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
-  Scenario: Operator Add Parcel to Shipment - by Order Status : Van en-route to Pickup (uid:5a1ee95b-692e-4088-a55c-e8be75d2f416)
+  Scenario: Add Van En-route to Pickup Parcel to Shipment (uid:d8d50542-1770-4ab1-8c93-abd6cc245460)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -127,7 +115,7 @@ Feature: Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
-  Scenario: Operator Add Parcel to Shipment - by Order Status : On Vehicle for Delivery (uid:12092f23-dad6-4058-9cca-44eceed7a711)
+  Scenario: Add On Vehicle for Delivery Parcel to Shipment (uid:cc66a7bd-cfb3-4d83-b680-e6c86b6b90bc)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -148,7 +136,7 @@ Feature: Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Operator Add Parcel to Shipment - by Order Status : Cancelled (uid:2df692d5-50e5-4378-bd24-a267afd9c300)
+  Scenario: Add Cancelled Parcel to Shipment (uid:48c12c8f-4a28-47af-927a-b2e895d4f737)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -160,10 +148,10 @@ Feature: Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Operator Add Parcel to Shipment - by Order Status : Staging (uid:ac63ea94-942a-4ee1-ba43-da71038c4b80)
+  Scenario: Add Staging Parcel to Shipment (uid:9ee96560-bccb-41de-8ab7-42b1aa800682)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "is_staged":true, "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
@@ -171,7 +159,7 @@ Feature: Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
-  Scenario: Operator Add Parcel to Shipment - by Order Status : Completed (uid:0489409a-6da9-4afb-aa7b-f7043622041a)
+  Scenario: Add Completed Parcel to Shipment (uid:b703c8fe-a10f-4b92-b4c7-1afb577164e5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -183,7 +171,7 @@ Feature: Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Operator Add Parcel to Shipment - by Order Status : Arrived at Sorting Hub (uid:a3b1c2a6-eef9-400e-92ab-d62b2ea78503)
+  Scenario: Add Arrived at Sorting Hub to Shipment (uid:4a1176a8-bb81-4713-8d4d-78f0eb7c625a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -195,47 +183,34 @@ Feature: Shipment Scanning
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
-  @DeleteShipment @ForceSuccessOrder
-  Scenario: Operator Add Parcel to Shipment - by Order Status : Arrived at Origin Hub (uid:6aca4a88-160e-458b-97f1-c0041ef9ee6a)
+  @DeleteShipment @DeleteOrArchiveRoute
+  Scenario: Add Arrived at Distribution Point Parcel to Shipment (uid:af227045-0411-4130-a054-124ac1b6edb8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When DB Operator gets Hub ID by Hub Name of created parcel
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{KEY_DESTINATION_HUB} } |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+    Given API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
+    Given API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add parcel to the route using data below:
+      | addParcelToRouteRequest | { "type":"DD" } |
+    And API Operator Van Inbound parcel
+    Given API Operator start the route
+    And API Driver collect all his routes
+    And API Driver get pickup/delivery waypoint of the created order
+    Given API Operator get order details
+    Given DB Operator get DP job id
+    And API Operator do the DP Success for From Driver Flow
+    Given API Driver deliver dp parcel successfully
+    And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
-#  @DeleteShipment @DeleteOrArchiveRoute
-#  Scenario: Operator Add Parcel to Shipment - by Order Status : Arrived at Distribution Point (uid:ca33807e-8f82-472f-adcf-2c9b99d1759f)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given API Shipper create V4 order using data below:
-#      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-#      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-#    Given API Operator Global Inbound parcel using data below:
-#      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
-#    Given API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
-#    Given API Operator create new route using data below:
-#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-#    Given API Operator add parcel to the route using data below:
-#      | addParcelToRouteRequest | { "type":"DD" } |
-#    And API Operator Van Inbound parcel
-#    Given API Operator start the route
-#    And API Driver collect all his routes
-#    And API Driver get pickup/delivery waypoint of the created order
-#    Given API Operator get order details
-#    Given DB Operator get DP job id
-#    And API Operator do the DP Success for From Driver Flow
-#    Given API Driver deliver dp parcel successfully
-#    And DB Operator gets Hub ID by Hub Name of created parcel
-#    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-#    Given Operator go to menu Inter-Hub -> Shipment Scanning
-#    Then Operator scan the created order to shipment in hub {hub-name}
-
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
-  Scenario: Operator Add Parcel to Shipment - by Order Status : Pending Reschedule (uid:c8ddcfe9-78e4-4d59-a7bf-bb20d7f4765a)
+  Scenario: Add Pending Reschedule Parcel to Shipment (uid:63b05de8-14e2-4ea0-8b66-7d4ec1a4746b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -259,7 +234,7 @@ Feature: Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Operator Add Parcel to Shipment - by Order Status : Return to Sender (uid:43e5cbd6-3456-49a8-9c3c-f1a3be8ab361)
+  Scenario: Add Returned to Sender Parcel to Shipment (uid:c9a90e68-17e2-42b8-b527-a45010410e88)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -284,7 +259,7 @@ Feature: Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Operator Add Parcel to Shipment - by Order Status : On-Hold (uid:0b6f1305-6071-46e9-8084-4eda5787416f)
+  Scenario: Add On Hold Parcel to Shipment (uid:0dd82e6d-3bf3-4343-9295-3b739733be11)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -310,10 +285,10 @@ Feature: Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Operator Add Parcel With Tag to Shipment (uid:ea3e60cf-56ce-40d3-9bb0-9b0968faf920)
+  Scenario: Add Parcel with Tag to Shipment (uid:3d303265-3fae-445e-a59b-982a9d1f281d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu Order -> Order Tag Management
     When Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
@@ -322,13 +297,13 @@ Feature: Shipment Scanning
       | granular status | Pending Pickup                           |
     And Operator searches and selects orders created on Add Tags to Order page
     And Operator tags order with:
-      | OPV2AUTO1   |
-      | OPV2AUTO2   |
-      | OPV2AUTO3   |
+      | OPV2AUTO1 |
+      | OPV2AUTO2 |
+      | OPV2AUTO3 |
     Then Operator verify the tags shown on Edit Order page
-      | OPV2AUTO1   |
-      | OPV2AUTO2   |
-      | OPV2AUTO3   |
+      | OPV2AUTO1 |
+      | OPV2AUTO2 |
+      | OPV2AUTO3 |
     And DB Operator verify order_events record for the created order:
       | type | 48 |
     Given API Operator Global Inbound parcel using data below:
@@ -339,7 +314,7 @@ Feature: Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Operator Add Parcel to Shipment with Alert (uid:c1bf85e7-69b2-4d04-9907-49c49571afaa)
+  Scenario: Add Parcel to Shipment with Alert (uid:21ff371d-e507-453a-9d4a-f37c18037aa7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -356,29 +331,13 @@ Feature: Shipment Scanning
     Then Operator scan the created order to shipment in hub {hub-name}
     And Operator verifies that the row of the added order is red highlighted
 
-#  @DeleteShipment
-#  Scenario: Operator Remove Parcel from Shipment (uid:ce3ceec2-cd67-4463-a2bf-c6f377c9f11f)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given API Shipper create multiple V4 orders using data below:
-#      | numberOfOrder     | 3      |
-#      | generateFromAndTo | RANDOM |
-#      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}}|
-#    Given API Operator Global Inbound parcel using data below:
-#      | globalInboundRequest | { "hubId":{hub-id} } |
-#    Given DB Operator gets Hub ID by Hub Name of created parcel
-#    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-#    Given Operator go to menu Inter-Hub -> Shipment Scanning
-#    When Operator scan multiple created order to shipment in hub {hub-name}
-#    And Operator removes the parcel from the shipment
-#    Then Operator verifies that the parcels shown are decreased
-
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Operator Remove All Parcel from Shipment (uid:d48f32b0-72c9-4482-874a-73ba6936b273)
+  Scenario: Remove Parcel In Shipment from Action Toggle (uid:ffad1735-0cb1-43ac-a6f2-2fe32cfcfadf)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 3      |
-      | generateFromAndTo | RANDOM |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}}|
+      | numberOfOrder     | 3                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given DB Operator gets Hub ID by Hub Name of created parcel

@@ -32,7 +32,7 @@ public class AntSelect extends PageElement
     public void selectValue(String value)
     {
         enterSearchTerm(value);
-        clickf("//div[contains(@class,'ant-select-dropdown')][not(contains(@class,'ant-select-dropdown-hidden'))]//li[contains(@class,'ant-select-dropdown-menu-item')][contains(normalize-space(text()), '%s')]", StringUtils.normalizeSpace(value));
+        clickf("//div[@class='ant-select-dropdown-menu']//div[@class='BaseTable__row-cell-text'][contains(normalize-space(text()), '%s')]", StringUtils.normalizeSpace(value));
     }
 
     private void openMenu()
