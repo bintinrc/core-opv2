@@ -6,16 +6,15 @@ Feature: Global Inbound
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @CloseNewWindows
-  Scenario: Inbound parcel with changes in size - Small parcel inbounded with different size (uid:5b0733cb-2457-414b-a3ac-c0bad9b97d98)
+  Scenario Outline: Inbound parcel at hub on Operator v2 - <orderType> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | v4OrderRequest    | { "service_type":"<service>", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     When Operator go to menu Inbounding -> Global Inbound
     When Operator global inbounds parcel using data below:
       | hubName      | {hub-name}                                 |
       | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | overrideSize | L                                          |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
@@ -26,6 +25,45 @@ Feature: Global Inbound
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify Delivery details on Edit order page using data below:
       | status | PENDING |
+    And Operator verify order event on Edit order page using data below:
+      | name    | HUB INBOUND SCAN |
+    Examples:
+      | orderType       | service       | hiptest-uid                              |
+      | Normal order    | Parcel        | uid:1b29cfe9-33b6-498d-80d0-ac89b4868f81 |
+      | Return order    | Return        | uid:2785626f-4012-4a4a-a722-00661a8b4261 |
+
+  @CloseNewWindows
+  Scenario Outline: Inbound parcel with changes in size - <size> (<hiptest-uid>)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                    |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"XXL", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu Inbounding -> Global Inbound
+    When Operator global inbounds parcel using data below:
+      | hubName      | {hub-name}                                 |
+      | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | overrideSize | <size>                                     |
+    Then Operator verify info on Global Inbound page using data below:
+      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
+      | color          | #ffa400                            |
+    Then API Operator verify order info after Global Inbound
+    When Operator switch to edit order page using direct URL
+    Then Operator verify order status is "Transit" on Edit Order page
+    And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
+    And Operator verify Delivery details on Edit order page using data below:
+      | status | PENDING |
+    And API Operator get order details
+    And Operator make sure size changed to "<size>"
+    And Operator verify order event on Edit order page using data below:
+      | name    | HUB INBOUND SCAN |
+      | hubName | {hub-name}       |
+    Examples:
+      | size | hiptest-uid                              |
+      | S    | uid:ac575eea-cd24-4daa-a5d2-23e3dbc57b5b |
+      | M    | uid:17d8ecb4-414c-4830-a0ee-a3dc9af9e376 |
+      | L    | uid:be495115-41c4-4432-8fdc-6c16638eae98 |
+      | XL   | uid:9bf35d1f-1f78-4a59-a9c6-c5d99acd2f64 |
 
   @CloseNewWindows
   Scenario: Inbound parcel with changes in weight - Inbound in SG (uid:60912e81-74bf-4d06-a823-909a40c6b9ce)
@@ -1114,7 +1152,7 @@ Feature: Global Inbound
       | OPV2AUTO3 |
     And DB Operator verify order_events record for the created order:
       | type | 48 |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order:
       | type | 26 |
 
   @CloseNewWindows
@@ -1143,7 +1181,7 @@ Feature: Global Inbound
       | PRIOR |
     And DB Operator verify order_events record for the created order:
       | type | 48 |
-    And DB Operator verify the last order_events record for the created order:
+    And DB Operator verify order_events record for the created order:
       | type | 26 |
 
   @KillBrowser @ShouldAlwaysRun

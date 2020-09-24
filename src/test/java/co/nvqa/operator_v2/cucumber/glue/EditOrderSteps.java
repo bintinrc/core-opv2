@@ -1038,4 +1038,32 @@ public class EditOrderSteps extends AbstractSteps
         Order order = get(KEY_CREATED_ORDER);
         navigateTo(f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, order.getId()));
     }
+
+    @When("Operator make sure size changed to {string}")
+    public void sizeUpdated(String size)
+    {
+        Order order = get(KEY_CREATED_ORDER);
+        String parcelSize = "";
+
+        switch(size) {
+            case "S":
+                parcelSize = "SMALL";
+                break;
+            case "M":
+                parcelSize = "MEDIUM";
+                break;
+            case "L":
+                parcelSize = "LARGE";
+                break;
+            case "XL":
+                parcelSize = "EXTRALARGE";
+                break;
+            default:
+                parcelSize = order.getParcelSize();
+        }
+
+        Order orderAfterInbound = get(KEY_ORDER_DETAILS);
+
+        assertEquals(("Size changed"), parcelSize, orderAfterInbound.getParcelSize());
+    }
 }
