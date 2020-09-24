@@ -1,11 +1,11 @@
-@OperatorV2 @Utilities @OperatorV2Part1 @QrCodePrinting @Saas
+@OperatorV2 @Core @Utilities @QrCodePrinting
 Feature: QR Code Printing
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator create QR Code from random text and verify the created QR Code is correct (uid:32784ac6-04a4-4a28-9da7-aecda3f830e7)
+  Scenario: Operator Create QR Code from Random Text and Verify the Created QR Code is Correct (uid:dac16149-15f8-4af1-9dce-cff848e1cf15)
     Given Operator go to menu Utilities -> QRCode Printing
     When Operator create QR Code from random text on QRCode Printing page
     Then Operator verify the created QR Code is correct
