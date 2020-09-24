@@ -95,7 +95,7 @@ Feature: Route Monitoring
       | lateCount            | 0                      |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Route Monitoring Data And Checks Total Pending Waypoint - Pickup (uid:1e195c8b-3569-4ed4-bb71-72ab94701c69)
+  Scenario: Operator Filter Route Monitoring Data And Checks Total Pending Waypoint - Pickup (uid:d58b2f01-96b1-490c-8359-e207a77fa3a9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -124,7 +124,7 @@ Feature: Route Monitoring
       | lateCount            | 0                      |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Route Monitoring Data And Checks Total Pending Waypoint - Delivery (uid:7338b163-ed9a-4094-b83f-5fea211202a9)
+  Scenario: Operator Filter Route Monitoring Data And Checks Total Pending Waypoint - Delivery (uid:8ff7b641-6085-4a03-bd23-2fa7caddc4a3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -307,7 +307,7 @@ Feature: Route Monitoring
       | Invalid Failed | 9                   | 0                    | 1                | 0              | uid:a320bc69-a868-46ba-a9b4-0e073ed84d24 |
 
   @DeleteOrArchiveRoute @Close@CloseNewWindows
-  Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Pickup (uid:2c79b0f5-11a6-42e8-b761-461303c7267d)
+  Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Pickup (uid:f84418a9-839e-4d8c-b179-98e5b58b643d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                               |
@@ -345,7 +345,7 @@ Feature: Route Monitoring
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
   @DeleteOrArchiveRoute @Close@CloseNewWindows
-  Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Delivery (uid:49495b5c-9762-492b-9e04-810c209104a2)
+  Scenario: Operator Filter Route Monitoring Data And Checks Pending Priority Parcels - Delivery (uid:b1a7810d-d762-4546-8dec-87e4a8926acf)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -683,7 +683,7 @@ Feature: Route Monitoring
       | orderId    | {KEY_LIST_OF_CREATED_ORDER_ID[2]}          |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Pickups on NON-Failed Waypoints (uid:f152f03a-5b87-4171-b06f-c11f83834f1e)
+  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed on NON-Failed Waypoints (uid:f152f03a-5b87-4171-b06f-c11f83834f1e)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -712,7 +712,7 @@ Feature: Route Monitoring
     And Operator check there are 0 Invalid Failed Reservations in Invalid Failed WP modal on Route Monitoring V2 page
 
   @DeleteOrArchiveRoute @Close@CloseNewWindows
-  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Waypoints - Pickup, Delivery & Reservation Under the Same Route
+  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Waypoints - Pickup, Delivery & Reservation Under the Same Route (uid:a9415bb3-33d2-41aa-b4c6-06975f5f360e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -775,7 +775,7 @@ Feature: Route Monitoring
       | tags         | -                                          |
 
   @DeleteOrArchiveRoute @Close@CloseNewWindows
-  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Reservation
+  Scenario: Operator Filter Route Monitoring Data And Checks Invalid Failed Reservation (uid:184d89a0-ea55-4d0f-bd94-c6f249eb1b3f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
