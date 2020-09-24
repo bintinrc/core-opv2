@@ -1,4 +1,4 @@
-@ShipmentInboundScanning @InterHub @Shipment @MiddleMile @VanInbound @WithTrip
+@ShipmentInboundScanning @InterHub @Shipment @MiddleMile @VanInbound @WithTrip @Refo
 Feature: Shipment Inbound Scanning
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -39,11 +39,18 @@ Feature: Shipment Inbound Scanning
     Given API Operator create new movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
     When Operator inbound scanning Into Van Shipment Inbound Scanning page with data below:
-      | inboundHub  | {KEY_LIST_OF_CREATED_HUBS[1].name}  |
-      | inboundType | Into Van |
-      | driver      | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName}  |
-      | movementTripSchedule  | {gradle-current-date-yyyy-MM-dd} |
+      | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                          |
+      | inboundType          | Into Van                                                                                    |
+      | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
+      | movementTripSchedule | {KEY_MOVEMENT_TRIP_DETAIL_SHIPMENT_SCANNING}                                                |
     And Operator scan the created shipment
+    Then Operator verify the trip Details is correct on shipment inbound scanning page using data below:
+      | inboundHub       | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                          |
+      | inboundType      | Into Van                                                                                    |
+      | driver           | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
+      | movementTrip     | {KEY_MOVEMENT_TRIP_DETAIL_SHIPMENT_SCANNING}                                                |
+      | stringShipmentId | {KEY_CREATED_SHIPMENT_ID}                                                                   |
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

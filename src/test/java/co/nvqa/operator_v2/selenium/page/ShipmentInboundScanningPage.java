@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.openqa.selenium.WebDriver;
@@ -26,6 +27,8 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
     public static final String XPATH_SCANNING_SESSION_CHANGE = XPATH_SCANNING_SESSION + "[contains(@class,'changed')]";
     public static final String XPATH_CHANGE_DATE_BUTTON = "//button[@aria-label='Change Date']";
     public static final String XPATH_ACTIVE_INPUT_SELECTION = "//div[contains(@class,'md-select-menu-container nv-input-select-container md-active md-clickable')]//md-option[1]";
+    public static final String XPATH_INBOUND_HUB_TEXT = "//div[span[.='Inbound Hub']]//p";
+    public static final String XPATH_SHIPMENT_ID = "//td[@class='shipment_id']";
 
     @FindBy(xpath = "//md-select[contains(@id,'inbound-hub')]")
     public MdSelect inboundHub;
@@ -35,6 +38,19 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
 
     @FindBy(xpath = "//md-select[contains(@id,'movement-trip-3')]")
     public MdSelect movementTrip;
+
+    @FindBy(xpath = XPATH_INBOUND_HUB_TEXT)
+    public TextBox inboundHubText;
+
+    @FindBy(xpath = "//div[span[.='Inbound Type']]//p")
+    public TextBox inboundTypeText;
+
+    @FindBy(xpath = "//div[span[.='Driver']]//p")
+    public TextBox driverText;
+
+    @FindBy(xpath = "//div[span[.='Movement Trip']]//p")
+    public TextBox movementTripText;
+
 
     public ShipmentInboundScanningPage(WebDriver webDriver)
     {
@@ -187,7 +203,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
         movementTrip.searchAndSelectValue(movementTripSchedule);
     }
 
-    public void inboundScanningWithTrip(String hub, String label, String driver, String movementTripSchedule)
+    public void inboundScanningWithTripReturnMovementTrip(String hub, String label, String driver, String movementTripSchedule)
     {
         pause2s();
         selectHub(hub);
@@ -203,5 +219,35 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
 
         pause2s();
         clickStartInbound();
+    }
+
+    public void verifyTripData(String expectedInboundHub, String  expectedInboundType,
+                               String  expectedDriver, String expectedMovementTrip)
+    {
+        waitUntilVisibilityOfElementLocated(XPATH_INBOUND_HUB_TEXT);
+        String actualInboundHub = inboundHubText.getText();
+        String actualInboundType = inboundTypeText.getText();
+        String actualDriver = driverText.getText();
+        String actualMovementTrip = movementTripText.getText();
+        String actualDestinationHub = actualMovementTrip.split(",")[0].split(" ")[1];
+        String actualTime = actualMovementTrip.split(",")[2].trim();
+        String expectedDestinationHub = expectedMovementTrip.split(",")[0].split(" ")[1];
+        String expectedTime = expectedMovementTrip.split(",")[2].split(" ")[1];
+
+
+        assertEquals(expectedInboundHub, actualInboundHub);
+        assertEquals(expectedInboundType, actualInboundType);
+        assertEquals(expectedDriver, actualDriver);
+        assertEquals(expectedMovementTrip, actualMovementTrip);
+        assertEquals(expectedDestinationHub, actualDestinationHub);
+        assertEquals(expectedTime, actualTime);
+
+    }
+
+    public void verifyShipmentInTrip(String expectedShipmentId)
+    {
+        waitUntilVisibilityOfElementLocated(XPATH_SHIPMENT_ID);
+        String actualShipmentId = findElementByXpath(XPATH_SHIPMENT_ID).getText();
+        assertEquals(expectedShipmentId, actualShipmentId);
     }
 }

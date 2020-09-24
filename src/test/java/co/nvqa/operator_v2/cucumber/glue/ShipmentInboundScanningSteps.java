@@ -5,9 +5,9 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.ShipmentInboundScanningPage;
 import co.nvqa.operator_v2.util.KeyConstants;
 import co.nvqa.operator_v2.util.TestUtils;
+import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import org.openqa.selenium.NoSuchElementException;
 
 import java.util.Date;
 import java.util.List;
@@ -110,21 +110,36 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
         {
             try
             {
+                navigateRefresh();
+                pause2s();
                 final Map<String, String> finalData = resolveKeyValues(data);
                 String inboundHub = finalData.get("inboundHub");
                 String inboundType = finalData.get("inboundType");
                 String driver = finalData.get("driver");
-                String movementTripSchedule = finalData.get("movementTripSchedule").split("-")[2];
+                String movementTripSchedule = finalData.get("movementTripSchedule");
 
-                scanningPage.inboundScanningWithTrip(inboundHub, inboundType, driver, movementTripSchedule);
+                scanningPage.inboundScanningWithTripReturnMovementTrip(inboundHub, inboundType, driver, movementTripSchedule);
             } catch (Throwable ex)
             {
-                NvLogger.info("Element in Shipment inbound scanning not found, retrying after 2 seconds...");
-                navigateRefresh();
-                pause2s();
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
                 throw ex;
             }
         }, 10);
+    }
+
+    @Then("^Operator verify the trip Details is correct on shipment inbound scanning page using data below:$")
+    public void operatorVerifyTheTripDetailsIsCorrectOnShipmentInboundScanningPageUsingDataBelow(Map<String, String> data)
+    {
+        final Map<String, String> finalData = resolveKeyValues(data);
+        String inboundHub = finalData.get("inboundHub");
+        String inboundType = finalData.get("inboundType");
+        String driver = finalData.get("driver");
+        String movementTrip = finalData.get("movementTrip");
+        String stringShipmentId = finalData.get("stringShipmentId");
+//        System.out.println(inboundHub + inboundType + driver + movementTrip);
+        scanningPage.verifyTripData(inboundHub, inboundType, driver, movementTrip);
+        scanningPage.verifyShipmentInTrip(stringShipmentId);
     }
 
 }
