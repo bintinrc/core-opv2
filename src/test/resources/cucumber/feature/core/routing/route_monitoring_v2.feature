@@ -1,4 +1,4 @@
-@OperatorV2 @Routing @RouteMonitoringV2 @Core
+@OperatorV2 @Core @Routing @RouteMonitoringV2
 Feature: Route Monitoring
 
   @LaunchBrowser @ShouldAlwaysRun
