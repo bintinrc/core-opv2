@@ -100,6 +100,7 @@ public class OrderBillingPage extends OperatorV2SimplePage
 
         int countOfShipperIds = shipperIds.split(",").length;
         File csvFile = createFile("shipper-id-upload.csv", shipperIds);
+        NvLogger.info("Path of the created file : "+ csvFile.getAbsolutePath());
 
         clickButtonByAriaLabel(FILTER_UPLOAD_CSV_ARIA_LABEL);
         clickNvIconTextButtonByName(FILTER_UPLOAD_CSV_NAME);
@@ -370,6 +371,13 @@ public class OrderBillingPage extends OperatorV2SimplePage
     private Integer integerValue(String value)
     {
         return (value != null && !value.equals("")) ? Integer.valueOf(value) : null;
+    }
+
+    public void verifyNoErrorsAvailable(){
+        if (toastErrors.size() > 0)
+        {
+        fail(f("Error on attempt to generate email: %s", toastErrors.get(0).toastBottom.getText()));
+        }
     }
 
 }

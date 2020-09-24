@@ -81,7 +81,7 @@ public class OrderBillingSteps extends AbstractSteps
         }
 
         orderBillingPage.clickGenerateSuccessBillingsButton();
-
+        orderBillingPage.verifyNoErrorsAvailable();
     }
 
 
