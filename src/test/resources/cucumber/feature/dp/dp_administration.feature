@@ -1,4 +1,4 @@
-@OperatorV2 @DistributionPoints @OperatorV2Part1 @DpAdministrationV2
+@OperatorV2 @DistributionPoints @OperatorV2Part1 @DpAdministrationV2 @DP
 Feature: DP Administration
 
   @LaunchBrowser @ShouldAlwaysRun
