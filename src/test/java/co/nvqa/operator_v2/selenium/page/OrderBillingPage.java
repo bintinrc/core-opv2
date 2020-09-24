@@ -83,7 +83,7 @@ public class OrderBillingPage extends OperatorV2SimplePage
     {
         clickButtonByAriaLabelAndWaitUntilDone(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_BUTTON_ARIA_LABEL);
         selectValueFromNvAutocompleteByItemTypesAndDismiss(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_NVAUTOCOMPLETE_ITEMTYPES, parentShipper);
-  }
+    }
 
     public void setInvalidParentShipper(String shipper)
     {
@@ -91,7 +91,8 @@ public class OrderBillingPage extends OperatorV2SimplePage
         sendKeys(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_SEARCH_BOX, shipper);
     }
 
-    public String getNoParentErrorMsg(){
+    public String getNoParentErrorMsg()
+    {
         return getText(FILTER_SHIPPER_SELECT_BY_PARENT_SHIPPER_ERROR_MSG);
     }
 
@@ -100,7 +101,7 @@ public class OrderBillingPage extends OperatorV2SimplePage
 
         int countOfShipperIds = shipperIds.split(",").length;
         File csvFile = createFile("shipper-id-upload.csv", shipperIds);
-        NvLogger.info("Path of the created file : "+ csvFile.getAbsolutePath());
+        NvLogger.info("Path of the created file : " + csvFile.getAbsolutePath());
 
         clickButtonByAriaLabel(FILTER_UPLOAD_CSV_ARIA_LABEL);
         clickNvIconTextButtonByName(FILTER_UPLOAD_CSV_NAME);
@@ -111,8 +112,8 @@ public class OrderBillingPage extends OperatorV2SimplePage
         waitUntilVisibilityOfElementLocated(f(FILTER_UPLOAD_CSV_DIALOG_FILE_NAME, csvFile.getName()));
         clickButtonByAriaLabel(FILTER_UPLOAD_CSV_DIALOG_SAVE_BUTTON_ARIA_LABEL);
 
-        assertEquals(f("Upload success. Extracted %s Shipper IDs.", countOfShipperIds),getToastTopText());
-  }
+        assertEquals(f("Upload success. Extracted %s Shipper IDs.", countOfShipperIds), getToastTopText());
+    }
 
     public void uploadPDFShippersAndVerifyErrorMsg()
     {
@@ -126,8 +127,8 @@ public class OrderBillingPage extends OperatorV2SimplePage
         waitUntilVisibilityOfElementLocated(FILTER_UPLOAD_CSV_DIALOG_DROP_FILES_XPATH);
 
         sendKeysByAriaLabel(FILTER_UPLOAD_CSV_DIALOG_CHOSSE_BUTTON_ARIA_LABEL, pdfFile.getAbsolutePath());
-        String expectedToastText = "\"" + pdfFileName +  "\" is not allowed.";
-        assertEquals(expectedToastText,getToastTopText());
+        String expectedToastText = "\"" + pdfFileName + "\" is not allowed.";
+        assertEquals(expectedToastText, getToastTopText());
     }
 
     public void tickGenerateTheseFilesOption(String option)
@@ -373,10 +374,11 @@ public class OrderBillingPage extends OperatorV2SimplePage
         return (value != null && !value.equals("")) ? Integer.valueOf(value) : null;
     }
 
-    public void verifyNoErrorsAvailable(){
+    public void verifyNoErrorsAvailable()
+    {
         if (toastErrors.size() > 0)
         {
-        fail(f("Error on attempt to generate email: %s", toastErrors.get(0).toastBottom.getText()));
+            fail(f("Error on attempt to generate email: %s", toastErrors.get(0).toastBottom.getText()));
         }
     }
 
