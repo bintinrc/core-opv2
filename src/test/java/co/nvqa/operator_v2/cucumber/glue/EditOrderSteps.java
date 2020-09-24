@@ -1064,6 +1064,6 @@ public class EditOrderSteps extends AbstractSteps
 
         Order orderAfterInbound = get(KEY_ORDER_DETAILS);
 
-        assertEquals(f("Size changed"), parcelSize, orderAfterInbound.getParcelSize());
+        assertEquals(("Size changed"), parcelSize, orderAfterInbound.getParcelSize());
     }
 }
