@@ -18,6 +18,7 @@ public class ZonesPage extends OperatorV2SimplePage
     private static final String CSV_FILENAME = "zones.csv";
     private static final String XPATH_OF_TOAST_ERROR_MESSAGE = "//div[@id='toast-container']//div[@class='toast-message']/div[@class='toast-right']/div[@class='toast-bottom']/strong[4]";
 
+    public static final String COLUMN_CLASS_DATA_ID = "id";
     public static final String COLUMN_CLASS_DATA_SHORT_NAME = "short_name";
     public static final String COLUMN_CLASS_DATA_NAME = "name";
     public static final String COLUMN_CLASS_DATA_HUB_NAME = "hub-name";
@@ -222,6 +223,7 @@ public class ZonesPage extends OperatorV2SimplePage
         retryIfRuntimeExceptionOccurred(()->
         {
             clickRefreshCache();
+            refreshPage();
             searchTableByName(name);
 
             if(isTableEmpty())

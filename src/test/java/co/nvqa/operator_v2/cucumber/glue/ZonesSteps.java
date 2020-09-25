@@ -53,6 +53,8 @@ public class ZonesSteps extends AbstractSteps
     {
         Zone zone = get(KEY_CREATED_ZONE);
         zonesPage.verifyNewZoneIsCreatedSuccessfully(zone);
+        long createdZoneId = Long.parseLong(zonesPage.getTextOnTable(1, zonesPage.COLUMN_CLASS_DATA_ID));
+        put(KEY_CREATED_ZONE_ID, createdZoneId);
     }
 
     @When("^Operator update the new Zone$")
