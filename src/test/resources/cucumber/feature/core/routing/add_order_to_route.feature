@@ -1,11 +1,11 @@
-@OperatorV2 @Routing @OperatorV2Part2
+@OperatorV2 @Core @Routing @AddOrderToRoute
 Feature: Add Order To Route
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Add order to a route - Valid Tracking ID, Prefix Using (uid:8d3eb4d1-b0a7-4ab4-98aa-26722de59027)
+  Scenario: Add Order to a Route - Valid Tracking ID, With Prefix (uid:44589e4d-860b-45ac-a50e-add9f5aedf4a)
     Given Operator go to menu Routing -> Add Order to Route
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
@@ -20,7 +20,7 @@ Feature: Add Order To Route
     Then DB operator gets details for transactions table for route
     And Operator verifies transaction tables for route
 
-  Scenario: Add order to a route - Invalid Tracking ID, Prefix Using (uid:39fa3ecb-d1f0-4eb8-ae2c-eabf23d83a75)
+  Scenario: Add Order to a Route - Invalid Tracking ID, With Prefix (uid:ce2a5e6b-f06d-4c6d-9f9c-656ac605b3bb)
     Given Operator go to menu Order -> All Orders
     Given Operator go to menu Routing -> Add Order to Route
     Given API Operator create new route using data below:
@@ -31,7 +31,7 @@ Feature: Add Order To Route
     Then Operator verifies the last scanned with prefix tracking id
     And Operator verifies error messages
 
-  Scenario: Add order to a route - Valid Tracking ID, No Prefix (uid:a46d6a08-707a-4418-ab45-693e4e917216)
+  Scenario: Add Order to a Route - Valid Tracking ID, No Prefix (uid:777598b1-78a7-4e36-bdc3-7345f32ab40a)
     Given Operator go to menu Order -> All Orders
     Given Operator go to menu Routing -> Add Order to Route
     Given API Shipper create V4 order using data below:
@@ -48,7 +48,7 @@ Feature: Add Order To Route
     Then DB operator gets details for transactions table for route
     And Operator verifies transaction tables for route
 
-  Scenario: Add order to a route - Invalid Tracking ID, No Prefix (uid:a4e6e785-488d-43e0-a89a-60578fcad94b)
+  Scenario: Add Order to a Route - Invalid Tracking ID, No Prefix (uid:e09d356e-d21f-462a-b26f-a2631203662e)
     Given Operator go to menu Order -> All Orders
     Given Operator go to menu Routing -> Add Order to Route
     Given API Operator create new route using data below:

@@ -1,11 +1,11 @@
-@OperatorV2 @Routing @OperatorV2Part2 @CreateRouteGroups
+@OperatorV2 @Core @Routing @CreateRouteGroups
 Feature: Create Route Groups
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Add transaction to Route Group (uid:b6848852-12e6-4cba-bf7c-8444538596c1)
+  Scenario: Operator Add Transaction to Route Group (uid:d23d9e3d-bc53-4a52-9388-325d803f9616)
     #Notes: Shipper create sameday parcel with OC V2
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
@@ -26,7 +26,7 @@ Feature: Create Route Groups
     Then Operator V2 clean up 'Route Groups'
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter RTS Transaction (uid:52a86349-8c4c-4ae7-ab22-eea3af31ebff)
+  Scenario: Operator Filter RTS Transaction on Route Group (uid:f712664e-dbb9-4fbe-b041-d4d6c305ff48)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -62,7 +62,7 @@ Feature: Create Route Groups
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 15:00:00 |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Filter Routed Transaction (uid:ab4c851f-876e-4cdc-8315-90ab4fa0cdc8)
+  Scenario: Operator Filter Routed Transaction on Route Group (uid:9dbd0ea4-c2f5-43cc-aaa4-86b96edf944a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
