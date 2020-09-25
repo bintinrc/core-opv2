@@ -56,6 +56,7 @@ public class DpAdministrationPage extends OperatorV2SimplePage
     private static final String XPATH_ACTIVE_CHECKBOX = "//input[@id='isActive']";
     private static final String XPATH_PUBLIC_CHECKBOX = "//input[@id='isPublic']";
     private static final String XPATH_SEND_CHECKBOX = "//input[@id='isSend']";
+    private static final String XPATH_RETAIL_POINT_NETWORK = "//input[@value='RETAIL_POINT_NETWORK']";
     private static final String XPATH_COLLECT_CHECKBOX = "//input[@id='isCollect']";
     private static final String XPATH_MAXIMUM_CAPACITY = "//input[@id='actualMaxCapacity']";
     private static final String XPATH_BUFFER_CAPACITY = "//input[@id='computedMaxCapacity']";
@@ -327,12 +328,17 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         setLongitudeCreateDpForm(dpParams.getLongitude());
         setTypeCreateDpForm(dpParams.getType());
         setDirectionsCreateDpForm(dpParams.getDirections());
+        setRetailPointNetwork();
         isActiveCreateDpForm();
         isPublicCreateDpForm();
-        canShipperLodgeInCreateDpForm(dpParams.getCanShipperLodgeIn());
-        canCustomerCollectAndSetCapacityCreateDpForm(dpParams.getCanCustomerCollect(), dpParams.getMaxCap(), dpParams.getCapBuffer(), dpParams.getMaxParcelStayDuration());
+        setCapacityAndParcelStayCreateDpForm(dpParams.getMaxCap(), dpParams.getCapBuffer(), dpParams.getMaxParcelStayDuration());
         clickSaveSettingsCreateDpForm();
         getWebDriver().switchTo().defaultContent();
+    }
+
+    public void setRetailPointNetwork()
+    {
+        click(XPATH_RETAIL_POINT_NETWORK);
     }
 
     public void openViewDpsScreen(String dpPartnerName)
