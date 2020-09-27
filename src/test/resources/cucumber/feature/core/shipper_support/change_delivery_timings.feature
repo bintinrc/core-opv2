@@ -1,17 +1,17 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @ChangeDeliveryTimings @Saas
+@OperatorV2 @Core @ShipperSupport @ChangeDeliveryTimings @Saas
 Feature: Change Delivery Timings
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator download and verify CSV file of Change Delivery Timings' sample (uid:9e4e2241-3488-43ea-abd4-a22480d313dd)
+  Scenario: Operator Download and Verify CSV file of Change Delivery Timings' Sample (uid:d62b8c4f-43a0-44c9-a880-48e9cbecd14c)
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator click on Download Button for Sample CSV File of Change Delivery Timings' sample
     Then Operator verify CSV file of Change Delivery Timings' sample
 
   @CloseNewWindows
-  Scenario: Operator uploads the CSV file on Change Delivery Timings page (uid:4449fbd6-9fac-4d92-bbe6-41ebc2d38303)
+  Scenario: Operator Uploads the CSV File on Change Delivery Timings Page (uid:c45d09b1-9082-4e8d-86f6-1fee6987ea15)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -31,7 +31,7 @@ Feature: Change Delivery Timings
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
 
   @CloseNewWindows
-  Scenario: Operator uploads the CSV file on Change Delivery Timings page with null timewindow id (uid:07e9af4f-3762-468f-8538-8418c6f2627a)
+  Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with NULL Timewindow Id (uid:8f87e215-1680-44d6-86c0-2b517ca85ad3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -50,7 +50,7 @@ Feature: Change Delivery Timings
       | startDateTime | {gradle-current-date-yyyy-MM-dd} 09:00:00 |
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
 
-  Scenario: Operator uploads the CSV file on Change Delivery Timings page with invalid Tracking ID (uid:79b23384-11ae-4d03-9d5b-16f35c2e4096)
+  Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Invalid Tracking ID (uid:82ca200a-d5d3-45da-adf6-b9a63d9545ea)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper Support -> Change Delivery Timings
     When Operator uploads the CSV file on Change Delivery Timings page using data below:
@@ -61,7 +61,7 @@ Feature: Change Delivery Timings
     Then Operator verify the tracking ID is invalid on Change Delivery Timings page
 
   @DeleteOrArchiveRoute @CloseNewWindows
-  Scenario: Operator uploads the CSV file on Change Delivery Timings page with invalid order state (uid:fbbabed4-94df-4f0b-95b4-f668836ba0fe)
+  Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Invalid Order State (uid:66c7644b-64e7-4c60-963c-1ef5a837cd8e)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -91,7 +91,7 @@ Feature: Change Delivery Timings
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
 
   @CloseNewWindows
-  Scenario: Operator uploads the CSV file on Change Delivery Timings page with one of the date is empty (uid:58bd63ca-d461-47a6-a377-11dac88bbb8f)
+  Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with One of the Date is Empty (uid:16505a85-abcd-4121-a5e5-598e1d9cd2d9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -111,7 +111,7 @@ Feature: Change Delivery Timings
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
 
   @CloseNewWindows
-  Scenario: Operator uploads the CSV file on Change Delivery Timings page with start date is later than end date (uid:5b96c619-4a16-4490-8a29-c3274315eb64)
+  Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Start Date is Later than End Date (uid:7b563c16-28f8-48a7-ac6e-5967d0042c3f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -131,7 +131,7 @@ Feature: Change Delivery Timings
       | endDateTime   | {gradle-next-1-day-yyyy-MM-dd} 22:00:00   |
 
   @CloseNewWindows
-  Scenario: Operator uploads the CSV file on Change Delivery Timings page with both date empty (uid:7966f797-eb34-4ffc-ad44-499159cec435)
+  Scenario: Operator Uploads the CSV File on Change Delivery Timings Page with Both Date Empty (uid:bf8bfde6-f452-4bf8-ab4d-c5bb299ce9c4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
