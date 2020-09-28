@@ -1,8 +1,15 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.FindBy;
 
 import static org.hamcrest.Matchers.allOf;
 
@@ -20,6 +27,14 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     public static final String XPATH_BARCODE_SCAN = "//input[@id='scan_barcode_input']";
     //public static final String XPATH_ORDER_IN_SHIPMENT = "//td[contains(@class, 'tracking-id')]";
     public static final String XPATH_RACK_SECTOR = "//div[contains(@class,'rack-sector-card')]/div/h2[@ng-show='ctrl.rackInfo']";
+    public static final String XPATH_TRIP_DEPART_PROCEED_BUTTON = "//nv[]";
+    public static final String XPATH_SCAN_SHIPMENT_CONTAINER = "//div[contains(@class,'scan-barcode-container')]";
+
+    @FindBy(xpath = "//div[.='End Inbound']")
+    public Button endInboundButton;
+
+    @FindBy(css = "md-dialog")
+    public TripDepartureDialog tripDepartureDialog;
 
     public ShipmentScanningPage(WebDriver webDriver) {
         super(webDriver);
@@ -109,7 +124,34 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         isElementExist("//div[contains(@class,'error-border')]");
     }
 
-    public void verifiesShipmentNotFoundToastIsShown() {
+    public void verifiesToastWithMessageIsShown(String expectedToastMessage) {
+        String actualToastMessage = getToastTopText();
+        assertEquals(expectedToastMessage, actualToastMessage);
+        pause5s();
+    }
 
+    public void verifiesScanShipmentColor(String expectedContainerColorAsHex) {
+        String actualContainerColorAsHex = getBackgroundColor(XPATH_SCAN_SHIPMENT_CONTAINER).asHex();
+        assertEquals(expectedContainerColorAsHex, actualContainerColorAsHex);
+    }
+
+    public void endShipmentInbound() {
+        endInboundButton.click();
+        tripDepartureDialog.waitUntilVisible();
+        tripDepartureDialog.proceed.click();
+
+    }
+
+    public static class TripDepartureDialog extends MdDialog {
+
+        @FindBy(name = "commons.proceed")
+        public NvIconTextButton proceed;
+
+        @FindBy(name = "commons.cancel")
+        public NvIconTextButton cancel;
+
+        public TripDepartureDialog(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+        }
     }
 }

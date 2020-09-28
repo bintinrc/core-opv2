@@ -12,34 +12,29 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import java.util.List;
 
 /**
- *
  * @author Lanang Jati
- *
+ * <p>
  * Modified by Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
-public class ShipmentScanningSteps extends AbstractSteps
-{
+public class ShipmentScanningSteps extends AbstractSteps {
     private ShipmentScanningPage shipmentScanningPage;
 
-    public ShipmentScanningSteps()
-    {
+    public ShipmentScanningSteps() {
     }
 
     @Override
-    public void init()
-    {
+    public void init() {
         shipmentScanningPage = new ShipmentScanningPage(getWebDriver());
     }
 
     @When("^Operator scan the created order to shipment in hub ([^\"]*)$")
-    public void operatorScanTheCreatedOrderToShipmentInHub(String hub)
-    {
+    public void operatorScanTheCreatedOrderToShipmentInHub(String hub) {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
                 ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
-                ((Shipments)get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
+                ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
 
 
         shipmentScanningPage.selectHub(hub);
@@ -51,19 +46,17 @@ public class ShipmentScanningSteps extends AbstractSteps
     }
 
     @And("Operator close the shipment which has been created")
-    public void operatorCloseTheShipmentWhichHasBeenCreated()
-    {
+    public void operatorCloseTheShipmentWhichHasBeenCreated() {
         shipmentScanningPage.closeShipment();
     }
 
     @When("^Operator scan multiple created order to shipment in hub ([^\"]*)$")
-    public void aPIShipperTagsMultipleParcelsAsPerTheBelowTag(String hub)
-    {
+    public void aPIShipperTagsMultipleParcelsAsPerTheBelowTag(String hub) {
         List<String> trackingIds = (get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID));
         Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
         String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
                 ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
-                ((Shipments)get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
+                ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
 
 
         shipmentScanningPage.selectHub(hub);
@@ -77,47 +70,52 @@ public class ShipmentScanningSteps extends AbstractSteps
     }
 
     @And("Operator removes the parcel from the shipment")
-    public void operatorRemovesTheParcelFromTheShipment()
-    {
+    public void operatorRemovesTheParcelFromTheShipment() {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         shipmentScanningPage.removeOrderFromShipment(trackingId);
     }
 
     @Then("Operator verifies that the parcels shown are decreased")
-    public void operatorVerifiesThatTheParcelsShownAreDecreased()
-    {
+    public void operatorVerifiesThatTheParcelsShownAreDecreased() {
         List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
-        int actualSumOfOrder = orders.size()-1;
+        int actualSumOfOrder = orders.size() - 1;
         shipmentScanningPage.verifiesTheSumOfOrderIsDecreased(actualSumOfOrder);
     }
 
     @And("Operator removes all the parcel from the shipment")
-    public void operatorRemovesAllTheParcelFromTheShipment()
-    {
+    public void operatorRemovesAllTheParcelFromTheShipment() {
         shipmentScanningPage.removeAllOrdersFromShipment();
     }
 
     @Then("Operator verifies that the parcel shown is zero")
-    public void operatorVerifiesThatTheParcelShownIsZero()
-    {
+    public void operatorVerifiesThatTheParcelShownIsZero() {
         shipmentScanningPage.verifiesTheSumOfOrderIsZero();
     }
 
     @And("Operator verifies that the row of the added order is red highlighted")
-    public void operatorVerifiesThatTheRowOfTheAddedOrderIsRedHighlighted()
-    {
+    public void operatorVerifiesThatTheRowOfTheAddedOrderIsRedHighlighted() {
         shipmentScanningPage.verifiesOrderIsRedHighlighted();
     }
 
     @And("Operator scan shipment with id {string}")
-    public void operatorScanTheCreatedShipment(String shipmentIdAsString)
-    {
+    public void operatorScanTheCreatedShipment(String shipmentIdAsString) {
         shipmentScanningPage.scanBarcode(shipmentIdAsString);
     }
 
-    @Then("Operator verifies shipment not found toast is shown")
-    public void operatorVerifiesShipmentNotFoundToastIsShown()
-    {
-        shipmentScanningPage.verifiesShipmentNotFoundToastIsShown();
+    @Then("Operator verifies toast with message {string} is shown on Shipment Inbound Scanning page")
+    public void operatorVerifiesShipmentNotFoundToastIsShown(String toastMessage) {
+        toastMessage = resolveValue(toastMessage);
+        shipmentScanningPage.verifiesToastWithMessageIsShown(toastMessage);
     }
+
+    @And("Operator verifies Scan Shipment Container color is {string}")
+    public void operatorVerifiesScanShipmentContainerColorIs(String containerColorAsHex) {
+        shipmentScanningPage.verifiesScanShipmentColor(containerColorAsHex);
+    }
+
+    @When("Operator ends shipment inbound")
+    public void operatorEndsShipmentInbound() {
+        shipmentScanningPage.endShipmentInbound();
+    }
+
 }
