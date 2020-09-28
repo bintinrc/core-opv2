@@ -6,14 +6,14 @@ Feature: Vehicle Type Management
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteVehicleTypes
-  Scenario: Operator create new vehicle type (uid:2926a8ff-45f5-4df2-b04d-efc5bab48796)
+  Scenario: Create New Vehicle Type (uid:f1d38bb4-2784-4a9d-a80c-2f21b498115a)
     Given Operator go to menu Fleet -> Vehicle Type Management
     When Operator create new Vehicle Type
     And API Operator gets data of created Vehicle Type
     Then Operator verify vehicle type
 
   @DeleteVehicleTypes
-  Scenario: Operator search vehicle type (uid:71753ae9-ac12-4d17-917c-6c5bad435d66)
+  Scenario: Seach Vehicle Type (uid:c91965a9-5955-4841-9949-096611ce65a9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Vehicle Type Management
     When Operator create new Vehicle Type
@@ -21,7 +21,7 @@ Feature: Vehicle Type Management
     Then Operator verify vehicle type
 
   @DeleteVehicleTypes
-  Scenario: Operator edit vehicle type (uid:6687b26f-84ad-4e0f-bc46-a84a54b0c156)
+  Scenario: Update Vehicle Type (uid:1764c756-7439-4546-9990-d1ad7a3b1318)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Vehicle Type Management
     When Operator create new Vehicle Type
@@ -30,7 +30,7 @@ Feature: Vehicle Type Management
     Then Operator verify the edited vehicle type name is existed
 
   @DeleteVehicleTypes
-  Scenario: Operator delete vehicle type (uid:ca337865-701b-4573-b5bc-643cc68724fb)
+  Scenario: Delete Vehicle Type (uid:61c59793-5b5c-4f43-ac10-ac294b0c8977)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Vehicle Type Management
     When Operator create new Vehicle Type
@@ -39,7 +39,7 @@ Feature: Vehicle Type Management
     Then Operator verify vehicle type name is deleted
 
   @DeleteVehicleTypes
-  Scenario: Operator download and verify CSV file of vehicle type on Vehicle Type Management page (uid:c8156f4a-07c7-4cb2-821e-3ba3a9ea962b)
+  Scenario: Download CSV File of Vehicle Type (uid:4bbcbebc-4848-4105-bf78-321ada1ddbe1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Vehicle Type Management
     When Operator create new Vehicle Type
