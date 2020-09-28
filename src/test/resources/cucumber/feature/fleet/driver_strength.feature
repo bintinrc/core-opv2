@@ -6,7 +6,7 @@ Feature: Driver Strength
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriver
-  Scenario: Operator should be able to add a new Driver (uid:70921910-cb0a-4283-93ad-34431fd86b98)
+  Scenario: Create New Driver Account (uid:7b2078bd-589f-4c9a-a06e-156098e34cf2)
     Given Operator go to menu Fleet -> Driver Strength
     When Operator create new Driver on Driver Strength page using data below:
       | firstName            | GENERATED                                                        |
@@ -30,7 +30,7 @@ Feature: Driver Strength
     Then Operator verify driver strength params of created driver on Driver Strength page
 
   @DeleteDriver
-  Scenario: Operator should be able to edit new Driver (uid:3f54984e-aaa1-494c-a27b-68af2d809071)
+  Scenario: Update Driver Account (uid:6ddb814e-8b32-4097-9a5f-0900d0d8a3ca)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Fleet -> Driver Strength
     And API Operator create new Driver using data below:
@@ -52,7 +52,7 @@ Feature: Driver Strength
     Then Operator verify driver strength params of created driver on Driver Strength page
 
   @DeleteDriver
-  Scenario: Operator should be able to add a new Driver and verify the 'Contact Details' is correct (uid:b7a6c2b2-66c0-4e7d-890c-b0099cef4b5a)
+  Scenario: Create New Driver Account and Verify Contact Detail is Correct (uid:fadb6a2a-6f2a-4c6f-94a9-e9f41c8795cc)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Fleet -> Driver Strength
     When API Operator create new Driver using data below:
@@ -60,7 +60,7 @@ Feature: Driver Strength
     Then Operator verify contact details of created driver on Driver Strength page
 
   @DeleteDriver
-  Scenario: Operator should be able to delete a Driver (uid:9e1d4874-d927-438a-abdf-8cde0308f35b)
+  Scenario: Delete Driver Account (uid:4cdc0535-7095-463e-87da-ea108e500644)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Fleet -> Driver Strength
     And API Operator create new Driver using data below:
@@ -69,7 +69,7 @@ Feature: Driver Strength
     Then Operator verify new driver is deleted successfully on Driver Strength page
 
   @DeleteDriver
-  Scenario: Operator should be able to change the 'Coming' value (uid:bd210076-fd96-4d1a-8277-ec119286680c)
+  Scenario: Operator Should Be Able to Change The 'Coming' Value (uid:32abe41c-49be-4d54-8f11-3891bcd81afb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Fleet -> Driver Strength
     And API Operator create new Driver using data below:
@@ -78,7 +78,7 @@ Feature: Driver Strength
     Then Operator verify Coming value for created driver has been changed on Driver Strength page
 
   @DeleteDriver
-  Scenario: Operator should be able to filter Driver by 'Zones' (uid:830216ec-bc25-4921-8950-40e6bd8818af)
+  Scenario: Filter Driver Account by Zones (uid:fa20ebea-5a9c-43bb-88ad-a93aa94ef18f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Fleet -> Driver Strength
     And API Operator create new Driver using data below:
@@ -87,7 +87,7 @@ Feature: Driver Strength
     Then Operator verify driver strength is filtered by "{zone-name}" zone
 
   @DeleteDriver
-  Scenario: Operator should be able to filter Driver by 'Driver Types' (uid:204f21ef-8b0c-4b74-a6e0-c191199d3f5a)
+  Scenario: Filter Driver Account by Driver Types (uid:74653b45-cba6-464b-a874-e9ddbc9759bb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Fleet -> Driver Strength
     And API Operator create new Driver using data below:
