@@ -7,14 +7,12 @@ import org.openqa.selenium.WebElement;
 import static org.hamcrest.Matchers.allOf;
 
 /**
- *
  * @author Lanang Jati
- *
+ * <p>
  * Modified by Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
-public class ShipmentScanningPage extends OperatorV2SimplePage
-{
+public class ShipmentScanningPage extends OperatorV2SimplePage {
     public static final String XPATH_HUB_DROPDOWN = "//md-select[@name='hub']";
     public static final String XPATH_SHIPMENT_DROPDOWN = "//md-select[@name='shipment']";
     //public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
@@ -23,21 +21,18 @@ public class ShipmentScanningPage extends OperatorV2SimplePage
     //public static final String XPATH_ORDER_IN_SHIPMENT = "//td[contains(@class, 'tracking-id')]";
     public static final String XPATH_RACK_SECTOR = "//div[contains(@class,'rack-sector-card')]/div/h2[@ng-show='ctrl.rackInfo']";
 
-    public ShipmentScanningPage(WebDriver webDriver)
-    {
+    public ShipmentScanningPage(WebDriver webDriver) {
         super(webDriver);
     }
 
-    public void selectHub(String hubName)
-    {
+    public void selectHub(String hubName) {
         sendKeys("//nv-autocomplete[@item-types='hub']//input", hubName);
         pause1s();
         clickf("//li//span[text()='%s']", hubName);
         pause50ms();
     }
 
-    public void selectShipmentId(Long shipmentId)
-    {
+    public void selectShipmentId(Long shipmentId) {
         sendKeys("//nv-autocomplete[@item-types='shipment']//input", shipmentId.toString());
         pause2s();
         waitUntilVisibilityOfElementLocated(f("//li//span[starts-with(text(),'%s')]", shipmentId.toString()));
@@ -45,33 +40,28 @@ public class ShipmentScanningPage extends OperatorV2SimplePage
         pause50ms();
     }
 
-    public void clickSelectShipment()
-    {
+    public void clickSelectShipment() {
         clickNvApiTextButtonByNameAndWaitUntilDone("container.shipment-scanning.select-shipment");
     }
 
-    public void selectShipmentType(String shipmentType)
-    {
+    public void selectShipmentType(String shipmentType) {
         selectValueFromMdSelectById("container.shipment-scanning.shipment-type", shipmentType);
     }
 
-    public void scanBarcode(String trackingId)
-    {
+    public void scanBarcode(String trackingId) {
         sendKeysAndEnter(XPATH_BARCODE_SCAN, trackingId);
     }
 
-    public void checkOrderInShipment(String trackingId)
-    {
+    public void checkOrderInShipment(String trackingId) {
 //        String rack = getText(XPATH_RACK_SECTOR);
 //        assertTrue("order is " + rack, !rack.equalsIgnoreCase("INVALID") && !rack.equalsIgnoreCase("DUPLICATE"));
 
         WebElement orderWe = getWebDriver().findElement(By.xpath(String.format("//td[contains(@class, 'tracking-id')][contains(text(), '%s')]", trackingId)));
-        boolean orderExist = orderWe!=null;
+        boolean orderExist = orderWe != null;
         assertTrue("order " + trackingId + " doesn't exist in shipment", orderExist);
     }
 
-    public void closeShipment()
-    {
+    public void closeShipment() {
         pause300ms();
         click("//nv-icon-text-button[contains(@name,'close-shipment')]/button[contains(@class,'close-shipment')]");
         waitUntilVisibilityOfElementLocated("//md-dialog[md-dialog-content[contains(@id,'dialogContent')]]");
@@ -82,8 +72,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast();
     }
 
-    public void removeOrderFromShipment(String firstTrackingId)
-    {
+    public void removeOrderFromShipment(String firstTrackingId) {
         pause1s();
         sendKeys("//nv-search-input-filter[@search-text='filter.trackingId']//input", firstTrackingId);
         pause1s();
@@ -95,15 +84,13 @@ public class ShipmentScanningPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast();
     }
 
-    public void verifiesTheSumOfOrderIsDecreased(int expectedSumOfOrder)
-    {
-        String actualSumOfOrder = getText("//nv-icon-text-button[@label='container.shipment-scanning.remove-all']/preceding-sibling::h5").substring(0,1);
+    public void verifiesTheSumOfOrderIsDecreased(int expectedSumOfOrder) {
+        String actualSumOfOrder = getText("//nv-icon-text-button[@label='container.shipment-scanning.remove-all']/preceding-sibling::h5").substring(0, 1);
         int actualSumOfOrderAsInt = Integer.parseInt(actualSumOfOrder);
         assertEquals("Sum Of Order is not the same : ", expectedSumOfOrder, actualSumOfOrderAsInt);
     }
 
-    public void removeAllOrdersFromShipment()
-    {
+    public void removeAllOrdersFromShipment() {
         pause1s();
         click("//nv-icon-text-button[@label='container.shipment-scanning.remove-all']");
         waitUntilVisibilityOfElementLocated("//md-dialog-content[contains(@id,'dialogContent')]");
@@ -111,16 +98,18 @@ public class ShipmentScanningPage extends OperatorV2SimplePage
         pause1s();
     }
 
-    public void verifiesTheSumOfOrderIsZero()
-    {
-        String actualSumOfOrder = getText("//nv-icon-text-button[@label='container.shipment-scanning.remove-all']/preceding-sibling::h5").substring(0,1);
+    public void verifiesTheSumOfOrderIsZero() {
+        String actualSumOfOrder = getText("//nv-icon-text-button[@label='container.shipment-scanning.remove-all']/preceding-sibling::h5").substring(0, 1);
         int actualSumOfOrderAsInt = Integer.parseInt(actualSumOfOrder);
         assertEquals("Sum Of Order is not the same : ", 0, actualSumOfOrderAsInt);
     }
 
-    public void verifiesOrderIsRedHighlighted()
-    {
+    public void verifiesOrderIsRedHighlighted() {
         isElementExist("//tr[contains(@class,'highlight')]");
         isElementExist("//div[contains(@class,'error-border')]");
+    }
+
+    public void verifiesShipmentNotFoundToastIsShown() {
+
     }
 }

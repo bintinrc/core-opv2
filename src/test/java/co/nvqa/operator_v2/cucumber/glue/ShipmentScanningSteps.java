@@ -109,10 +109,15 @@ public class ShipmentScanningSteps extends AbstractSteps
         shipmentScanningPage.verifiesOrderIsRedHighlighted();
     }
 
-    @And("Operator scan the created shipment")
-    public void operatorScanTheCreatedShipment()
+    @And("Operator scan shipment with id {string}")
+    public void operatorScanTheCreatedShipment(String shipmentIdAsString)
     {
-        Long shipmentId =  get(KEY_CREATED_SHIPMENT_ID);
-        shipmentScanningPage.scanBarcode(String.valueOf(shipmentId));
+        shipmentScanningPage.scanBarcode(shipmentIdAsString);
+    }
+
+    @Then("Operator verifies shipment not found toast is shown")
+    public void operatorVerifiesShipmentNotFoundToastIsShown()
+    {
+        shipmentScanningPage.verifiesShipmentNotFoundToastIsShown();
     }
 }
