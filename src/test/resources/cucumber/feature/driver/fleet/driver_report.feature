@@ -1,8 +1,6 @@
 @OperatorV2Deprecated @OperatorV2Part2Deprecated
 Feature: Driver Report
 
-  #DEPRECATED
-
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
