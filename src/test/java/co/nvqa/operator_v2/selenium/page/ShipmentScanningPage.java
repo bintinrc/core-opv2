@@ -42,8 +42,14 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     @FindBy(css = "md-dialog")
     public ConfirmRemoveDialog confirmRemoveDialog;
 
+    @FindBy(css = "md-dialog")
+    public ErrorShipment errorShipment;
+
     @FindBy(name = "commons.remove")
     public NvIconButton removeButton;
+
+    @FindBy(name = "commons.cancel")
+    public NvIconButton cancelButton;
 
     public ShipmentScanningPage(WebDriver webDriver) {
         super(webDriver);
@@ -144,16 +150,44 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         assertEquals(expectedContainerColorAsHex, actualContainerColorAsHex);
     }
 
-    public void endShipmentInbound() {
+    public void clickEndShipmentInbound() {
         endInboundButton.click();
         tripDepartureDialog.waitUntilVisible();
+    }
+
+    public void clickProceedInEndInboundDialog() {
+        tripDepartureDialog.proceed.waitUntilClickable();
         tripDepartureDialog.proceed.click();
+        tripDepartureDialog.waitUntilInvisible();
     }
 
     public void clickRemoveButton() {
         removeButton.click();
-        confirmRemoveDialog.waitUntilClickable();
+        confirmRemoveDialog.waitUntilVisible();
         confirmRemoveDialog.remove.click();
+    }
+
+    public void verifyErrorShipmentWithMessage(String shipmentId, String resultMessage) {
+        errorShipment.waitUntilVisible();
+        String dialogTitleText = errorShipment.dialogTitle.getText();
+        assertEquals("Error Shipment", dialogTitleText);
+
+        String actualShipmentId = errorShipment.shipmentIdTextBox.getText();
+        String actualResultMessage = errorShipment.resultTextBox.getText();
+
+        assertEquals(shipmentId, actualShipmentId);
+        assertEquals(resultMessage, actualResultMessage);
+    }
+
+    public void clickCancelInMdDialog() {
+        cancelButton.waitUntilClickable();
+        cancelButton.click();
+    }
+
+    public void clickProceedButtonInErrorShipmentDialog() {
+        errorShipment.proceed.waitUntilClickable();
+        errorShipment.proceed.click();
+        errorShipment.waitUntilInvisible();
     }
 
     public void verifyShipmentNotExist() {
@@ -185,6 +219,27 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         public Button remove;
 
         public ConfirmRemoveDialog(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+        }
+    }
+
+    public static class ErrorShipment extends MdDialog {
+        @FindBy(xpath = "//div[@class='md-toolbar-tools']//h4")
+        public TextBox dialogTitle;
+
+        @FindBy(name = "commons.cancel")
+        public Button cancel;
+
+        @FindBy(name = "commons.proceed")
+        public Button proceed;
+
+        @FindBy(xpath = "//md-dialog-content//td[@class='shipment_id']")
+        public TextBox shipmentIdTextBox;
+
+        @FindBy(xpath = "//md-dialog-content//td[@class='result']")
+        public TextBox resultTextBox;
+
+        public ErrorShipment(WebDriver webDriver, WebElement webElement) {
             super(webDriver, webElement);
         }
     }

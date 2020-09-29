@@ -8,6 +8,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import net.bytebuddy.implementation.bytecode.Throw;
 
 import java.util.List;
 
@@ -114,9 +115,14 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.verifyScanShipmentColor(containerColorAsHex);
     }
 
-    @When("Operator ends shipment inbound")
+    @When("Operator clicks end inbound button")
     public void operatorEndsShipmentInbound() {
-        shipmentScanningPage.endShipmentInbound();
+        shipmentScanningPage.clickEndShipmentInbound();
+    }
+
+    @And("Operator clicks proceed in end inbound dialog")
+    public void operatorClicksProceedInEndInboundDialog() {
+        shipmentScanningPage.clickProceedInEndInboundDialog();
     }
 
     @When("Operator click remove button in scanned shipment table")
@@ -133,5 +139,25 @@ public class ShipmentScanningSteps extends AbstractSteps {
     public void operatorEnterShipmentWithIdInRemoveShipment(String shipmentIdAsString) {
         String shipmentId = resolveValue(shipmentIdAsString);
         shipmentScanningPage.removeShipmentWithId(shipmentId);
+    }
+
+    @When("Operator verifies shipment with id {string} appears in error shipment dialog with result {string}")
+    public void operatorVerifiesShipmentWithIdAppearsInErrorShipmentDialogWithResult(String shipmentIdAsString, String resultString) {
+        retryIfAssertionErrorOccurred(() -> {
+            try {
+                String shipmentId = resolveValue(shipmentIdAsString);
+                shipmentScanningPage.verifyErrorShipmentWithMessage(shipmentId, resultString);
+            } catch (Throwable ex) {
+                shipmentScanningPage.clickCancelInMdDialog();
+                pause1s();
+                shipmentScanningPage.clickEndShipmentInbound();
+                throw ex;
+            }
+        }, "trying to find error shipment dialog");
+    }
+
+    @When("Operator click proceed in error shipment dialog")
+    public void operatorClickProceedInErrorShipmentDialog() {
+        shipmentScanningPage.clickProceedButtonInErrorShipmentDialog();
     }
 }

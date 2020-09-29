@@ -165,7 +165,7 @@ public class ShipmentManagementSteps extends AbstractSteps
 
         ShipmentInfo shipmentInfo = new ShipmentInfo();
         shipmentInfo.fromMap(mapOfData);
-        shipmentInfo.setOrdersCount(listOfOrders.size());
+        shipmentInfo.setOrdersCount((long) listOfOrders.size());
 
         shipmentManagementPage.createShipment(shipmentInfo, isNextOrder);
 
@@ -273,7 +273,8 @@ public class ShipmentManagementSteps extends AbstractSteps
             shipmentInfo = get(KEY_SHIPMENT_INFO);
         }
         ShipmentInfo expectedShipmentInfo = new ShipmentInfo();
-        expectedShipmentInfo.fromMap(mapOfData);
+        Map<String, String> resolvedKeyValues = resolveKeyValues(mapOfData);
+        expectedShipmentInfo.fromMap(resolvedKeyValues);
         shipmentManagementPage.validateShipmentInfo(shipmentInfo.getId(), expectedShipmentInfo);
     }
 
