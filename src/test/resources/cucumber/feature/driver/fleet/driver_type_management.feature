@@ -5,14 +5,14 @@ Feature: Driver Type Management
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator should be able to download CSV file on Driver Type Management page (uid:24c3e041-cf3a-4182-93a1-4b35320ab144)
+  Scenario: Download CSV File of Driver Type (uid:76f6ba04-4f9c-46f7-b450-8b73f67a7b7b)
     Given Operator go to menu Fleet -> Driver Type Management
     When Operator get all Driver Type params on Driver Type Management page
     When Operator click on Download CSV File button on Driver Type Management page
     Then Downloaded CSV file contains correct Driver Types data
 
   @DeleteDriverType
-  Scenario: Operator should be able to create a new Driver Type on Driver Type Management page (uid:1aff8024-0653-4a8d-8e3b-a662913bd5ee)
+  Scenario: Create New Driver Type (uid:eaa1b45c-725f-4ec3-9383-99fa808f887a)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Driver Type Management
     Given Operator create new Driver Type with the following attributes:
@@ -26,7 +26,7 @@ Feature: Driver Type Management
     Then Operator verify new Driver Type params
 
   @DeleteDriverType
-  Scenario: Operator should be able to update a Driver Type on Driver Type Management page (uid:9638882f-eed5-4303-a422-2ee998e4cab9)
+  Scenario: Update Driver Type (uid:d47cf8da-5c64-4771-ad90-0ceed2f4bac0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Driver Type Management
     Given Operator create new Driver Type with the following attributes:
@@ -47,7 +47,7 @@ Feature: Driver Type Management
     Then Operator verify new Driver Type params
 
   @DeleteDriverType
-  Scenario: Operator should be able to delete a Driver Type on Driver Type Management page (uid:2288beb7-e076-41ea-a5bb-51d07956beb0)
+  Scenario: Delete Driver Type That Is Not Being Used by Driver (uid:693eafa6-09c6-4a38-9a84-043c5afed854)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Driver Type Management
     Given Operator create new Driver Type with the following attributes:
@@ -69,27 +69,27 @@ Feature: Driver Type Management
     Then Operator verify filter results on Driver Type Management page
     Examples:
       | Note                                  | hiptest-uid                              | param           | value                |
-      | deliveryType: Normal Delivery         | uid:ddc38972-2cd5-4ead-9f1b-e871c1060fee | deliveryType    | Normal Delivery      |
-      | deliveryType: C2C + Return Pick Up    | uid:eb311074-6ee1-4e3b-b243-b17afb2b9c30 | deliveryType    | C2C + Return Pick Up |
-      | deliveryType: Reservation Pick Up     | uid:f22d171c-4f0c-43e9-989a-b8586a68fe39 | deliveryType    | Reservation Pick Up  |
-      | priorityLevel: Priority               | uid:f622fc14-bfd5-4e34-bce1-5d25c0df6ab5 | priorityLevel   | Priority             |
-      | priorityLevel: Non-Priority           | uid:6b2d25f1-b065-4931-902c-02ba3471a98b | priorityLevel   | Non-Priority         |
-      | reservationSize: Less Than 3 Parcels  | uid:a95b5461-c876-42eb-9162-72b6a5093826 | reservationSize | Less Than 3 Parcels  |
-      | reservationSize: Less Than 10 Parcels | uid:9d7fc7d8-2fdd-4fb7-bf13-e9a8c51bfdb2 | reservationSize | Less Than 10 Parcels |
-      | reservationSize: Trolley Required     | uid:1418577e-f5dc-4990-889b-4b68cb3ebce2 | reservationSize | Trolley Required     |
-      | reservationSize: Half Van Load        | uid:c915829c-7957-42da-ae1c-8b82dce313e5 | reservationSize | Half Van Load        |
-      | reservationSize: Full Van Load        | uid:b4db25d5-d4d8-4eb8-94dd-781f5f48e49c | reservationSize | Full Van Load        |
-      | reservationSize: Larger Than Van Load | uid:94e2bbf9-4a80-45e2-9f98-c4245c0a94b8 | reservationSize | Larger Than Van Load |
-      | parcelSize: Small                     | uid:edba8c29-1ae6-4c4f-a0cc-0d57080ab402 | parcelSize      | Small                |
-      | parcelSize: Medium                    | uid:17259475-2e26-4456-a2c5-4edb4b8cb1cf | parcelSize      | Medium               |
-      | parcelSize: Large                     | uid:d44dad43-2e46-4554-8862-b346428e0413 | parcelSize      | Large                |
-      | parcelSize: Extra Large               | uid:782cd9d5-08bb-4a3b-85a8-c7b643f8e487 | parcelSize      | Extra Large          |
-      | timeslot: 9AM To 6PM                  | uid:cd65b713-c0dd-49ea-b2b0-3ab9295380a8 | timeslot        | 9AM To 6PM           |
-      | timeslot: 9AM To 10PM                 | uid:64e40eaa-a676-4049-bc1c-c1e7ea206f59 | timeslot        | 9AM To 10PM          |
-      | timeslot: 9AM To 12PM                 | uid:ac66a89d-d30a-440b-bced-b9ff388a00d5 | timeslot        | 9AM To 12PM          |
-      | timeslot: 12PM To 3PM                 | uid:4aa95dfa-37d1-4206-b867-fe6d512d2d78 | timeslot        | 12PM To 3PM          |
-      | timeslot: 3PM To 6PM                  | uid:0c3a580d-ce1d-4592-b836-145780ac9828 | timeslot        | 3PM To 6PM           |
-      | timeslot: 6PM To 10PM                 | uid:6b7caf52-9b9d-4464-8eb0-a9f12f543805 | timeslot        | 6PM To 10PM          |
+      | deliveryType: Normal Delivery         | uid:f9b37dac-8d1f-41f7-be76-8d25444dda91 | deliveryType    | Normal Delivery      |
+      | deliveryType: C2C + Return Pick Up    | uid:ec607fad-a709-4662-b3c1-428fc245a774 | deliveryType    | C2C + Return Pick Up |
+      | deliveryType: Reservation Pick Up     | uid:c49805f4-f82f-4738-83a5-2f5d3b483e17 | deliveryType    | Reservation Pick Up  |
+      | priorityLevel: Priority               | uid:f91f40e6-354f-49ff-a3b0-e552a17d6b6c | priorityLevel   | Priority             |
+      | priorityLevel: Non-Priority           | uid:f39ec62a-d5c1-45a3-80ac-d4c9c7dcca5c | priorityLevel   | Non-Priority         |
+      | reservationSize: Less Than 3 Parcels  | uid:e7ee4097-6b56-408f-acfb-ace79cba492a | reservationSize | Less Than 3 Parcels  |
+      | reservationSize: Less Than 10 Parcels | uid:a68160bf-d8d6-4ea6-af89-b76aab131124 | reservationSize | Less Than 10 Parcels |
+      | reservationSize: Trolley Required     | uid:1dda72e6-9ca0-4c57-87c7-8d493512a3dc | reservationSize | Trolley Required     |
+      | reservationSize: Half Van Load        | uid:910dcf45-5361-43eb-9e09-9e57e8b5aca2 | reservationSize | Half Van Load        |
+      | reservationSize: Full Van Load        | uid:1c8f4fcd-be2b-4da1-9a8e-3b671b301cb1 | reservationSize | Full Van Load        |
+      | reservationSize: Larger Than Van Load | uid:eb53b254-a2df-4513-a877-1b80267161dc | reservationSize | Larger Than Van Load |
+      | parcelSize: Small                     | uid:590e63b3-7b7c-4abd-b66a-4c9ff7ec0b86 | parcelSize      | Small                |
+      | parcelSize: Medium                    | uid:6bb0673d-8c66-4efa-98f0-cac222adb250 | parcelSize      | Medium               |
+      | parcelSize: Large                     | uid:089b4ea6-3cfb-43e4-8fbd-13d853cfacf5 | parcelSize      | Large                |
+      | parcelSize: Extra Large               | uid:c060d91d-2551-4ac8-9512-0f70794b1d59 | parcelSize      | Extra Large          |
+      | timeslot: 9AM To 6PM                  | uid:2c827a3b-4ef4-4a28-8ac7-31302269eb17 | timeslot        | 9AM To 6PM           |
+      | timeslot: 9AM To 10PM                 | uid:791bc6fd-e689-4bbd-807c-31936acf7f55 | timeslot        | 9AM To 10PM          |
+      | timeslot: 9AM To 12PM                 | uid:7bf849c2-86be-48db-93ec-ef8bfba824e5 | timeslot        | 9AM To 12PM          |
+      | timeslot: 12PM To 3PM                 | uid:2b0d5790-9d3f-492f-955f-cee9b22f9879 | timeslot        | 12PM To 3PM          |
+      | timeslot: 3PM To 6PM                  | uid:08e3f316-04a9-4aae-b55f-94eb86aa719f | timeslot        | 3PM To 6PM           |
+      | timeslot: 6PM To 10PM                 | uid:5ceba73a-806b-4115-824f-01345fec3ed9 | timeslot        | 6PM To 10PM          |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

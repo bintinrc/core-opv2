@@ -6,14 +6,14 @@ Feature: Contact Type Management
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteContactTypes
-  Scenario: Operator should be able to create a new Contact Type on page Contact Type Management (uid:0eef79ec-1d12-4408-8971-5b122ed8c644)
+  Scenario: Create New Contact Type (uid:567ed49b-0506-407f-a2ee-d5b357c9a12f)
     Given Operator go to menu Fleet -> Contact Type Management
     When Operator create new Contact Type on page Contact Type Management using data below:
       | name | GENERATED |
     Then Operator verify a new Contact Type is created successfully on page Contact Type Management
 
   @DeleteContactTypes
-  Scenario: Operator should be able to update Contact Type on page Contact Type Management (uid:69e23778-83fb-49ad-9537-e0d2c49c4dcb)
+  Scenario: Update Contact Type (uid:e9659eed-89b4-4677-902d-f9ca439df862)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Contact Type Management
     When Operator create new Contact Type on page Contact Type Management using data below:
@@ -25,7 +25,7 @@ Feature: Contact Type Management
     Then Operator verify Contact Type is updated successfully on page Contact Type Management
 
   @DeleteContactTypes
-  Scenario: Operator should be able to delete Contact Type on page Contact Type Management (uid:ca1f6e89-e5f7-4518-850e-06ad38afd602)
+  Scenario: Delete Contact Type (uid:b608fbb0-b420-4c60-a398-01503d79b2cb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Contact Type Management
     When Operator create new Contact Type on page Contact Type Management using data below:
@@ -36,7 +36,7 @@ Feature: Contact Type Management
     Then Operator verify Contact Type is deleted successfully on page Contact Type Management
 
   @DeleteContactTypes
-  Scenario: Operator should be able to search Contact Type on page Contact Type Management (uid:a09c1ac5-c72b-4ef8-9977-a436cc82d414)
+  Scenario: Search Contact Type (uid:e6e64225-fb24-49dd-b826-5f49b14da148)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Contact Type Management
     When Operator create new Contact Type on page Contact Type Management using data below:
@@ -47,7 +47,7 @@ Feature: Contact Type Management
     Then Operator verify Contact Type is found on page Contact Type Management and contains correct info
 
   @DeleteContactTypes
-  Scenario: Operator should be able to download Contact Type CSV file and verify the contents is correct on page Contact Type Management (uid:dba3191a-9cb1-4723-9eb8-d9bb58498b14)
+  Scenario: Download CSV File of Contact Type (uid:b968a978-534c-4714-b325-16b5437920ad)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Fleet -> Contact Type Management
     When Operator create new Contact Type on page Contact Type Management using data below:
