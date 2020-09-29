@@ -7,6 +7,7 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.TripManagementFilteringType;
 import co.nvqa.operator_v2.selenium.page.TripManagementPage;
+import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -38,9 +39,20 @@ public class TripManagementSteps extends AbstractSteps {
         pause2s();
     }
 
+    @And("Operator verifies movement Trip page is loaded")
+    public void operatorMovementTripPageIsLoaded() {
+        tripManagementPage.switchTo();
+        tripManagementPage.loadButton.waitUntilClickable(30);
+    }
+
     @When("Operator clicks on Load Trip Button")
     public void operatorClicksOnLoadTripButton() {
         tripManagementPage.clickLoadButton();
+    }
+
+    @Then("Operator verifies trip has departed")
+    public void operatorVerifiesTripHasDeparted() {
+        tripManagementPage.verifyTripHasDeparted();
     }
 
     @Then("Operator verifies that there will be an error shown for unselected Origin Hub")
@@ -50,6 +62,7 @@ public class TripManagementSteps extends AbstractSteps {
 
     @When("Operator selects the {string} with value {string}")
     public void operatorSelectsTheWithValue(String filterName, String filterValue) {
+        filterValue = resolveValue(filterValue);
         switch (filterName.toLowerCase()) {
             case "origin hub":
                 filterName = "originHub";
@@ -100,6 +113,7 @@ public class TripManagementSteps extends AbstractSteps {
                 NvLogger.info("Searched element is not found, retrying after 2 seconds...");
                 navigateRefresh();
                 pause2s();
+                tripManagementPage.switchTo();
                 throw ex;
             }
         }, 10);
@@ -217,13 +231,22 @@ public class TripManagementSteps extends AbstractSteps {
 
     @Then("Operator verifies movement trip shown has status value {string}")
     public void operatorVerifiesMovementTripShownHasStatusValue(String statusValue) {
-        String tripId = get(KEY_TRIP_ID);
+        String tripId = get(KEY_CURRENT_MOVEMENT_TRIP_ID);
         tripManagementPage.verifyStatusValue(tripId, statusValue.toLowerCase());
     }
 
     @Then("Operator verifies {string} button disabled")
     public void operatorVerifiesButtonDisabled(String buttonValue) {
         assertFalse(tripManagementPage.isElementEnabled(buttonValue));
+    }
+
+    @Then("Operator verifies event {string} with status {string} is present for trip on Trip events page")
+    public void operatorVerifiesEventIsPresentForTripOnTripEventsPage(String tripEvent, String tripStatus) {
+        String stringTripId = get(KEY_CURRENT_MOVEMENT_TRIP_ID);
+        Long longTripId = Long.valueOf(stringTripId);
+        navigateTo(f("%s/%s/movement-trips/%d/events", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, longTripId));
+        tripManagementPage.switchTo();
+        tripManagementPage.verifyEventExist(tripEvent, tripStatus);
     }
 
 }

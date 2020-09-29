@@ -11,6 +11,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import net.bytebuddy.implementation.bytecode.Throw;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Lanang Jati
@@ -105,9 +106,15 @@ public class ShipmentScanningSteps extends AbstractSteps {
     }
 
     @Then("Operator verifies toast with message {string} is shown on Shipment Inbound Scanning page")
-    public void operatorVerifiesShipmentNotFoundToastIsShown(String toastMessage) {
+    public void operatorVerifiesToastWithMessageIsShown(String toastMessage) {
         toastMessage = resolveValue(toastMessage);
         shipmentScanningPage.verifyToastWithMessageIsShown(toastMessage);
+    }
+
+    @Then("Operator verifies toast with message containing {string} is shown on Shipment Inbound Scanning page")
+    public void operatorVerifiesToastContainingMessageIsShown(String toastMessage) {
+        toastMessage = resolveValue(toastMessage);
+        shipmentScanningPage.verifyToastContainingMessageIsShown(toastMessage);
     }
 
     @And("Operator verifies Scan Shipment Container color is {string}")
@@ -120,6 +127,19 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.clickEndShipmentInbound();
     }
 
+    @Then("^Operator verify the trip Details is correct on shipment inbound scanning page using data below:$")
+    public void operatorVerifyTheTripDetailsIsCorrectOnShipmentInboundScanningPageUsingDataBelow(Map<String, String> data)
+    {
+        final Map<String, String> finalData = resolveKeyValues(data);
+        String inboundHub = finalData.get("inboundHub");
+        String inboundType = finalData.get("inboundType");
+        String driver = finalData.get("driver");
+        String movementTrip = finalData.get("movementTrip");
+        String stringShipmentId = finalData.get("stringShipmentId");
+        shipmentScanningPage.verifyTripData(inboundHub, inboundType, driver, movementTrip);
+        shipmentScanningPage.verifyShipmentInTrip(stringShipmentId);
+    }
+
     @And("Operator clicks proceed in end inbound dialog")
     public void operatorClicksProceedInEndInboundDialog() {
         shipmentScanningPage.clickProceedInEndInboundDialog();
@@ -130,9 +150,9 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.clickRemoveButton();
     }
 
-    @And("Operator verifies shipment not in shipment scanned into Trip")
-    public void operatorVerifiesShipmentNotInShipmentScannedIntoTrip() {
-        shipmentScanningPage.verifyShipmentNotExist();
+    @And("Operator verifies shipment counter is {string}")
+    public void operatorVerifiesShipmentNotInShipmentScannedIntoTrip(String shipmentCounter) {
+        shipmentScanningPage.verifyShipmentCount(shipmentCounter);
     }
 
     @And("Operator enter shipment with id {string} in remove shipment")
@@ -160,4 +180,11 @@ public class ShipmentScanningSteps extends AbstractSteps {
     public void operatorClickProceedInErrorShipmentDialog() {
         shipmentScanningPage.clickProceedButtonInErrorShipmentDialog();
     }
+
+    @Then("Operator verify small message {string} appears in Shipment Inbound Box")
+    public void operatorVerifySmallMessageAppearsInShipmentInboundBox(String smallMessage) {
+        smallMessage = resolveValue(smallMessage);
+        shipmentScanningPage.verifySmallMessageAppearsInScanShipmentBox(smallMessage);
+    }
+
 }

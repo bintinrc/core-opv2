@@ -29,6 +29,22 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     public static final String XPATH_RACK_SECTOR = "//div[contains(@class,'rack-sector-card')]/div/h2[@ng-show='ctrl.rackInfo']";
     public static final String XPATH_TRIP_DEPART_PROCEED_BUTTON = "//nv[]";
     public static final String XPATH_SCAN_SHIPMENT_CONTAINER = "//div[contains(@class,'scan-barcode-container')]";
+    public static final String XPATH_ACTIVE_INPUT_SELECTION = "//div[contains(@class,'md-select-menu-container nv-input-select-container md-active md-clickable')]//md-option[1]";
+    public static final String XPATH_INBOUND_HUB_TEXT = "//div[span[.='Inbound Hub']]//p";
+    public static final String XPATH_SHIPMENT_ID = "//td[@class='shipment_id']";
+    public static final String XPATH_SMALL_SUCCESS_MESSAGE = "//div[contains(@class,'scan-barcode-container')]//small";
+
+    @FindBy(xpath = "//div[span[.='Driver']]//p")
+    public TextBox driverText;
+
+    @FindBy(xpath = "//div[span[.='Movement Trip']]//p")
+    public TextBox movementTripText;
+
+    @FindBy(xpath = XPATH_INBOUND_HUB_TEXT)
+    public TextBox inboundHubText;
+
+    @FindBy(xpath = "//div[span[.='Inbound Type']]//p")
+    public TextBox inboundTypeText;
 
     @FindBy(xpath = "//div[.='End Inbound']")
     public Button endInboundButton;
@@ -145,6 +161,11 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         pause5s();
     }
 
+    public void verifyToastContainingMessageIsShown(String expectedToastMessageContain) {
+        String actualToastMessage = getToastTopText();
+        assertThat(f("Toast message contains %s", expectedToastMessageContain), actualToastMessage, containsString(expectedToastMessageContain));
+    }
+
     public void verifyScanShipmentColor(String expectedContainerColorAsHex) {
         String actualContainerColorAsHex = getBackgroundColor(XPATH_SCAN_SHIPMENT_CONTAINER).asHex();
         assertEquals(expectedContainerColorAsHex, actualContainerColorAsHex);
@@ -156,6 +177,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     }
 
     public void clickProceedInEndInboundDialog() {
+        String dialogTitleText = tripDepartureDialog.dialogTitle.getText();
+        assertEquals("Trip Departure", dialogTitleText);
+
+        String dialogMessageText = tripDepartureDialog.dialogMessage.getText();
+        assertEquals("Are you sure you want to start departure?", dialogMessageText);
+
         tripDepartureDialog.proceed.waitUntilClickable();
         tripDepartureDialog.proceed.click();
         tripDepartureDialog.waitUntilInvisible();
@@ -190,16 +217,55 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         errorShipment.waitUntilInvisible();
     }
 
-    public void verifyShipmentNotExist() {
+    public void verifyTripData(String expectedInboundHub, String expectedInboundType,
+                               String expectedDriver, String expectedMovementTrip) {
+        waitUntilVisibilityOfElementLocated(XPATH_INBOUND_HUB_TEXT);
+        String actualInboundHub = inboundHubText.getText();
+        String actualInboundType = inboundTypeText.getText();
+        String actualDriver = driverText.getText();
+        String actualMovementTrip = movementTripText.getText();
+        String actualDestinationHub = actualMovementTrip.split(",")[0].split(" ")[1];
+        String actualTime = actualMovementTrip.split(",")[2].trim();
+        String expectedDestinationHub = expectedMovementTrip.split(",")[0].split(" ")[1];
+        String expectedTime = expectedMovementTrip.split(",")[2].split(" ")[1];
+
+        assertEquals(expectedInboundHub, actualInboundHub);
+        assertEquals(expectedInboundType, actualInboundType);
+        assertEquals(expectedDriver, actualDriver);
+        assertEquals(expectedMovementTrip, actualMovementTrip);
+        assertEquals(expectedDestinationHub, actualDestinationHub);
+        assertEquals(expectedTime, actualTime);
+    }
+
+    public void verifyShipmentInTrip(String expectedShipmentId) {
+        waitUntilVisibilityOfElementLocated(XPATH_SHIPMENT_ID);
+        String actualShipmentId = findElementByXpath(XPATH_SHIPMENT_ID).getText();
+        assertEquals(expectedShipmentId, actualShipmentId);
+    }
+
+    public void verifyShipmentCount(String numberOfShipment) {
         String textNumberOfScannedParcel = numberOfScannedParcel.getText();
-        assertEquals("0 Shipment Scanned to Hub", textNumberOfScannedParcel);
+        assertEquals(f("%s Shipment Scanned to Hub", numberOfShipment), textNumberOfScannedParcel);
     }
 
     public void removeShipmentWithId(String shipmentId) {
         sendKeysAndEnter(XPATH_REMOVE_SHIPMENT_SCAN, shipmentId);
     }
 
+    public void verifySmallMessageAppearsInScanShipmentBox(String expectedSuccessMessage) {
+        retryIfAssertionErrorOccurred(() -> {
+            String actualSuccessMessage = findElementByXpath(XPATH_SMALL_SUCCESS_MESSAGE).getText();
+            assertEquals(expectedSuccessMessage, actualSuccessMessage);
+        }, "retry if small text not found");
+    }
+
     public static class TripDepartureDialog extends MdDialog {
+        @FindBy(xpath = "//div[@class='md-toolbar-tools']//h4")
+        public TextBox dialogTitle;
+
+        @FindBy(xpath = "//md-dialog-content//p")
+        public TextBox dialogMessage;
+
         @FindBy(name = "commons.proceed")
         public NvIconTextButton proceed;
 

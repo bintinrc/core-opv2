@@ -988,13 +988,33 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
     public void dbOperatorVerifiesMovementTripHasEventWithStatusCancelled()
     {
         String tripId = get(KEY_TRIP_ID);
-        MovementTripEventEntity movementTripEventEntity =getHubJdbc().getNewestMovementTripEvent(Long.valueOf(tripId));
+        MovementTripEventEntity movementTripEventEntity = getHubJdbc().getNewestMovementTripEvent(Long.valueOf(tripId));
         String movementTripEntityEvent = movementTripEventEntity.getEvent().toLowerCase();
         String movementTripEntityStatus = movementTripEventEntity.getStatus().toLowerCase();
         String movementTripEntityUserId = movementTripEventEntity.getUserId().toLowerCase();
         assertEquals("cancelled", movementTripEntityEvent);
         assertEquals( "cancelled", movementTripEntityStatus);
         assertEquals( "automation@ninjavan.co", movementTripEntityUserId);
+    }
+
+    @Then("DB Operator verify path for shipment {string} appear in shipment_paths table")
+    public void dbOperatorVerifyPathForShipmentAppearInShipmentPathsTable(String shipmentIdAsString)
+    {
+        shipmentIdAsString = resolveValue(shipmentIdAsString);
+        Long shipmentId = Long.valueOf(shipmentIdAsString);
+        ShipmentPathEntity shipmentPathEntity = getHubJdbc().getShipmentPathByShipmentId(shipmentId);
+        assertNotNull(shipmentPathEntity.getSeqNo());
+        assertNotNull(shipmentPathEntity.getTripId());
+    }
+
+    @Then("DB Operator verify inbound type {string} for shipment {string} appear in trip_shipment_scans table")
+    public void dbOperatorVerifyInboundTypeForShipmentAppearInTripShipmentScansTable(String inboundType, String shipmentIdAsString)
+    {
+        shipmentIdAsString = resolveValue(shipmentIdAsString);
+        Long shipmentId = Long.valueOf(shipmentIdAsString);
+        String actualInboundType = getHubJdbc().getInboundScanTypeByShipmentId(shipmentId);
+        assertEquals(inboundType.toLowerCase(), actualInboundType.toLowerCase());
+
     }
 
 

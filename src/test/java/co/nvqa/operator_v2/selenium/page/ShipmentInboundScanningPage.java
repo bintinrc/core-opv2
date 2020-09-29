@@ -45,12 +45,6 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
     @FindBy(xpath = "//div[span[.='Inbound Type']]//p")
     public TextBox inboundTypeText;
 
-    @FindBy(xpath = "//div[span[.='Driver']]//p")
-    public TextBox driverText;
-
-    @FindBy(xpath = "//div[span[.='Movement Trip']]//p")
-    public TextBox movementTripText;
-
 
     public ShipmentInboundScanningPage(WebDriver webDriver)
     {
@@ -221,33 +215,5 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
         clickStartInbound();
     }
 
-    public void verifyTripData(String expectedInboundHub, String  expectedInboundType,
-                               String  expectedDriver, String expectedMovementTrip)
-    {
-        waitUntilVisibilityOfElementLocated(XPATH_INBOUND_HUB_TEXT);
-        String actualInboundHub = inboundHubText.getText();
-        String actualInboundType = inboundTypeText.getText();
-        String actualDriver = driverText.getText();
-        String actualMovementTrip = movementTripText.getText();
-        String actualDestinationHub = actualMovementTrip.split(",")[0].split(" ")[1];
-        String actualTime = actualMovementTrip.split(",")[2].trim();
-        String expectedDestinationHub = expectedMovementTrip.split(",")[0].split(" ")[1];
-        String expectedTime = expectedMovementTrip.split(",")[2].split(" ")[1];
 
-
-        assertEquals(expectedInboundHub, actualInboundHub);
-        assertEquals(expectedInboundType, actualInboundType);
-        assertEquals(expectedDriver, actualDriver);
-        assertEquals(expectedMovementTrip, actualMovementTrip);
-        assertEquals(expectedDestinationHub, actualDestinationHub);
-        assertEquals(expectedTime, actualTime);
-
-    }
-
-    public void verifyShipmentInTrip(String expectedShipmentId)
-    {
-        waitUntilVisibilityOfElementLocated(XPATH_SHIPMENT_ID);
-        String actualShipmentId = findElementByXpath(XPATH_SHIPMENT_ID).getText();
-        assertEquals(expectedShipmentId, actualShipmentId);
-    }
 }
