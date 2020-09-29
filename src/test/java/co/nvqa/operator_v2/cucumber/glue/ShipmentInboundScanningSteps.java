@@ -137,7 +137,6 @@ public class ShipmentInboundScanningSteps extends AbstractSteps
         String driver = finalData.get("driver");
         String movementTrip = finalData.get("movementTrip");
         String stringShipmentId = finalData.get("stringShipmentId");
-//        System.out.println(inboundHub + inboundType + driver + movementTrip);
         scanningPage.verifyTripData(inboundHub, inboundType, driver, movementTrip);
         scanningPage.verifyShipmentInTrip(stringShipmentId);
     }

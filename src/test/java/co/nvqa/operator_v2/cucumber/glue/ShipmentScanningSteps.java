@@ -79,7 +79,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
     public void operatorVerifiesThatTheParcelsShownAreDecreased() {
         List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
         int actualSumOfOrder = orders.size() - 1;
-        shipmentScanningPage.verifiesTheSumOfOrderIsDecreased(actualSumOfOrder);
+        shipmentScanningPage.verifyTheSumOfOrderIsDecreased(actualSumOfOrder);
     }
 
     @And("Operator removes all the parcel from the shipment")
@@ -89,28 +89,29 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
     @Then("Operator verifies that the parcel shown is zero")
     public void operatorVerifiesThatTheParcelShownIsZero() {
-        shipmentScanningPage.verifiesTheSumOfOrderIsZero();
+        shipmentScanningPage.verifyTheSumOfOrderIsZero();
     }
 
     @And("Operator verifies that the row of the added order is red highlighted")
     public void operatorVerifiesThatTheRowOfTheAddedOrderIsRedHighlighted() {
-        shipmentScanningPage.verifiesOrderIsRedHighlighted();
+        shipmentScanningPage.verifyOrderIsRedHighlighted();
     }
 
     @And("Operator scan shipment with id {string}")
     public void operatorScanTheCreatedShipment(String shipmentIdAsString) {
-        shipmentScanningPage.scanBarcode(shipmentIdAsString);
+        String shipmentId = resolveValue(shipmentIdAsString);
+        shipmentScanningPage.scanBarcode(shipmentId);
     }
 
     @Then("Operator verifies toast with message {string} is shown on Shipment Inbound Scanning page")
     public void operatorVerifiesShipmentNotFoundToastIsShown(String toastMessage) {
         toastMessage = resolveValue(toastMessage);
-        shipmentScanningPage.verifiesToastWithMessageIsShown(toastMessage);
+        shipmentScanningPage.verifyToastWithMessageIsShown(toastMessage);
     }
 
     @And("Operator verifies Scan Shipment Container color is {string}")
     public void operatorVerifiesScanShipmentContainerColorIs(String containerColorAsHex) {
-        shipmentScanningPage.verifiesScanShipmentColor(containerColorAsHex);
+        shipmentScanningPage.verifyScanShipmentColor(containerColorAsHex);
     }
 
     @When("Operator ends shipment inbound")
@@ -118,4 +119,19 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.endShipmentInbound();
     }
 
+    @When("Operator click remove button in scanned shipment table")
+    public void operatorClickRemoveButtonInScannedShipmentTable() {
+        shipmentScanningPage.clickRemoveButton();
+    }
+
+    @And("Operator verifies shipment not in shipment scanned into Trip")
+    public void operatorVerifiesShipmentNotInShipmentScannedIntoTrip() {
+        shipmentScanningPage.verifyShipmentNotExist();
+    }
+
+    @And("Operator enter shipment with id {string} in remove shipment")
+    public void operatorEnterShipmentWithIdInRemoveShipment(String shipmentIdAsString) {
+        String shipmentId = resolveValue(shipmentIdAsString);
+        shipmentScanningPage.removeShipmentWithId(shipmentId);
+    }
 }

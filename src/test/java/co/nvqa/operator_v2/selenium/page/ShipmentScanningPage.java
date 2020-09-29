@@ -1,10 +1,9 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonFilePicker;
-import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
-import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -25,6 +24,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     //public static final String XPATH_HUB_ACTIVE_DROPDOWN = "//div[contains(@class, 'md-active')]/md-select-menu/md-content/md-option";
     public static final String XPATH_SELECT_SHIPMENT_BUTTON = "//button[@aria-label='Select Shipment']";
     public static final String XPATH_BARCODE_SCAN = "//input[@id='scan_barcode_input']";
+    public static final String XPATH_REMOVE_SHIPMENT_SCAN = "//input[@id='scan_barcode_input_remove']";
     //public static final String XPATH_ORDER_IN_SHIPMENT = "//td[contains(@class, 'tracking-id')]";
     public static final String XPATH_RACK_SECTOR = "//div[contains(@class,'rack-sector-card')]/div/h2[@ng-show='ctrl.rackInfo']";
     public static final String XPATH_TRIP_DEPART_PROCEED_BUTTON = "//nv[]";
@@ -33,8 +33,17 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//div[.='End Inbound']")
     public Button endInboundButton;
 
+    @FindBy(xpath = "//h5[@class='shipment-parcel-numbers']")
+    public TextBox numberOfScannedParcel;
+
     @FindBy(css = "md-dialog")
     public TripDepartureDialog tripDepartureDialog;
+
+    @FindBy(css = "md-dialog")
+    public ConfirmRemoveDialog confirmRemoveDialog;
+
+    @FindBy(name = "commons.remove")
+    public NvIconButton removeButton;
 
     public ShipmentScanningPage(WebDriver webDriver) {
         super(webDriver);
@@ -99,7 +108,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         waitUntilInvisibilityOfToast();
     }
 
-    public void verifiesTheSumOfOrderIsDecreased(int expectedSumOfOrder) {
+    public void verifyTheSumOfOrderIsDecreased(int expectedSumOfOrder) {
         String actualSumOfOrder = getText("//nv-icon-text-button[@label='container.shipment-scanning.remove-all']/preceding-sibling::h5").substring(0, 1);
         int actualSumOfOrderAsInt = Integer.parseInt(actualSumOfOrder);
         assertEquals("Sum Of Order is not the same : ", expectedSumOfOrder, actualSumOfOrderAsInt);
@@ -113,24 +122,24 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         pause1s();
     }
 
-    public void verifiesTheSumOfOrderIsZero() {
+    public void verifyTheSumOfOrderIsZero() {
         String actualSumOfOrder = getText("//nv-icon-text-button[@label='container.shipment-scanning.remove-all']/preceding-sibling::h5").substring(0, 1);
         int actualSumOfOrderAsInt = Integer.parseInt(actualSumOfOrder);
         assertEquals("Sum Of Order is not the same : ", 0, actualSumOfOrderAsInt);
     }
 
-    public void verifiesOrderIsRedHighlighted() {
+    public void verifyOrderIsRedHighlighted() {
         isElementExist("//tr[contains(@class,'highlight')]");
         isElementExist("//div[contains(@class,'error-border')]");
     }
 
-    public void verifiesToastWithMessageIsShown(String expectedToastMessage) {
+    public void verifyToastWithMessageIsShown(String expectedToastMessage) {
         String actualToastMessage = getToastTopText();
         assertEquals(expectedToastMessage, actualToastMessage);
         pause5s();
     }
 
-    public void verifiesScanShipmentColor(String expectedContainerColorAsHex) {
+    public void verifyScanShipmentColor(String expectedContainerColorAsHex) {
         String actualContainerColorAsHex = getBackgroundColor(XPATH_SCAN_SHIPMENT_CONTAINER).asHex();
         assertEquals(expectedContainerColorAsHex, actualContainerColorAsHex);
     }
@@ -139,11 +148,24 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         endInboundButton.click();
         tripDepartureDialog.waitUntilVisible();
         tripDepartureDialog.proceed.click();
+    }
 
+    public void clickRemoveButton() {
+        removeButton.click();
+        confirmRemoveDialog.waitUntilClickable();
+        confirmRemoveDialog.remove.click();
+    }
+
+    public void verifyShipmentNotExist() {
+        String textNumberOfScannedParcel = numberOfScannedParcel.getText();
+        assertEquals("0 Shipment Scanned to Hub", textNumberOfScannedParcel);
+    }
+
+    public void removeShipmentWithId(String shipmentId) {
+        sendKeysAndEnter(XPATH_REMOVE_SHIPMENT_SCAN, shipmentId);
     }
 
     public static class TripDepartureDialog extends MdDialog {
-
         @FindBy(name = "commons.proceed")
         public NvIconTextButton proceed;
 
@@ -151,6 +173,18 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         public NvIconTextButton cancel;
 
         public TripDepartureDialog(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+        }
+    }
+
+    public static class ConfirmRemoveDialog extends MdDialog {
+        @FindBy(xpath = "//button//span[.='Cancel']")
+        public Button cancel;
+
+        @FindBy(xpath = "//button//span[.='Remove']")
+        public Button remove;
+
+        public ConfirmRemoveDialog(WebDriver webDriver, WebElement webElement) {
             super(webDriver, webElement);
         }
     }
