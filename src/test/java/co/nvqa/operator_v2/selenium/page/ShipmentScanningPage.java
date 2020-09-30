@@ -5,10 +5,14 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
+
+import java.util.Map;
+import java.util.Set;
 
 import static org.hamcrest.Matchers.allOf;
 
@@ -56,6 +60,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     public TripDepartureDialog tripDepartureDialog;
 
     @FindBy(css = "md-dialog")
+    public ShipmentToGoWithTripDialog shipmentToGoWithTripDialog;
+
+    @FindBy(css = "md-dialog")
     public ConfirmRemoveDialog confirmRemoveDialog;
 
     @FindBy(css = "md-dialog")
@@ -66,6 +73,15 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     @FindBy(name = "commons.cancel")
     public NvIconButton cancelButton;
+
+    @FindBy(xpath = "//div//p[@class='nv-p']//a")
+    public TextBox shipmentToGo;
+
+    @FindBy(xpath = "//div[contains(@class,'nv-h4')]")
+    public TextBox pageTitle;
+
+    @FindBy(xpath = "//div//h3")
+    public TextBox shipmentDetailPageShipmentId;
 
     public ShipmentScanningPage(WebDriver webDriver) {
         super(webDriver);
@@ -217,6 +233,59 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         errorShipment.waitUntilInvisible();
     }
 
+    public void verifyShipmentToGoWithTripData(Map<String, String> finalData) {
+        String shipmentCount = finalData.get("shipmentCount");
+        String dialogTitle = f("shipments to go with trip (%s)", shipmentCount);
+        String shipmentId = finalData.get("shipmentId");
+        String originHub = finalData.get("originHub");
+        String dropOffHub = finalData.get("dropOffHub");
+        String destinationHub = finalData.get("destinationHub");
+        String comments = finalData.get("comments");
+
+        shipmentToGoWithTripDialog.waitUntilVisible();
+        String actualDialogTitle = shipmentToGoWithTripDialog.dialogTitle.getText().toLowerCase();
+        String actualShipmentId = shipmentToGoWithTripDialog.shipmentId.getText();
+        String actualOriginHub = shipmentToGoWithTripDialog.originHubName.getText();
+        String actualDropOffHub = shipmentToGoWithTripDialog.dropOffHubName.getText();
+        String actualDestinationHub = shipmentToGoWithTripDialog.destinationHubName.getText();
+        String actualComments = shipmentToGoWithTripDialog.comments.getText();
+
+        assertEquals(dialogTitle, actualDialogTitle);
+        assertEquals(shipmentId, actualShipmentId);
+        assertEquals(originHub, actualOriginHub);
+        assertEquals(dropOffHub, actualDropOffHub);
+        assertEquals(destinationHub, actualDestinationHub);
+        assertEquals(comments, actualComments);
+    }
+
+    public void switchToOtherWindow() {
+        waitUntilNewWindowOrTabOpened();
+        Set<String> windowHandles = getWebDriver().getWindowHandles();
+
+        for (String windowHandle : windowHandles) {
+            getWebDriver().switchTo().window(windowHandle);
+        }
+    }
+
+    public void clickShipmentToGoWithId(String shipmentIdAsString) {
+        shipmentToGoWithTripDialog.waitUntilVisible();
+        String actualShipmentId = shipmentToGoWithTripDialog.shipmentId.getText();
+        assertEquals(shipmentIdAsString, actualShipmentId);
+        shipmentToGoWithTripDialog.shipmentId.click();
+        switchToOtherWindow();
+
+    }
+
+    public void verifyShipmentDetailPageIsOpenedForShipmentWithId(String shipmentIdAsString) {
+        pageTitle.waitUntilVisible();
+        String expectedPageTitle = "Shipment Details";
+        assertEquals(expectedPageTitle, pageTitle.getText());
+
+        shipmentDetailPageShipmentId.waitUntilVisible();
+        String expectedShipmentIdString = f("Shipment ID : %s", shipmentIdAsString);
+        assertEquals(expectedShipmentIdString, shipmentDetailPageShipmentId.getText());
+    }
+
     public void verifyTripData(String expectedInboundHub, String expectedInboundType,
                                String expectedDriver, String expectedMovementTrip) {
         waitUntilVisibilityOfElementLocated(XPATH_INBOUND_HUB_TEXT);
@@ -259,6 +328,13 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         }, "retry if small text not found");
     }
 
+    public void verifyShipmentToGoWithTrip(Long expectedTotalShipment) {
+        shipmentToGo.waitUntilVisible();
+        String shipmentToGoText = shipmentToGo.getText().trim();
+        Long actualShipmentToGoCount = Long.valueOf(shipmentToGoText.split(" ")[0]);
+        assertEquals(expectedTotalShipment, actualShipmentToGoCount);
+    }
+
     public static class TripDepartureDialog extends MdDialog {
         @FindBy(xpath = "//div[@class='md-toolbar-tools']//h4")
         public TextBox dialogTitle;
@@ -287,6 +363,31 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         public ConfirmRemoveDialog(WebDriver webDriver, WebElement webElement) {
             super(webDriver, webElement);
         }
+    }
+
+    public static class ShipmentToGoWithTripDialog extends MdDialog {
+        @FindBy(xpath = "//div[@class='md-toolbar-tools']//h4")
+        public TextBox dialogTitle;
+
+        @FindBy(xpath = "//td[@class='id']//a")
+        public TextBox shipmentId;
+
+        @FindBy(css = "[nv-table-highlight='filter.orig_hub_name']")
+        public TextBox originHubName;
+
+        @FindBy(css = "[nv-table-highlight='filter.dropoff_hub_name']")
+        public TextBox dropOffHubName;
+
+        @FindBy(css = "[nv-table-highlight='filter.dest_hub_name']")
+        public TextBox destinationHubName;
+
+        @FindBy(css = "[nv-table-highlight='filter.comments']")
+        public TextBox comments;
+
+        public ShipmentToGoWithTripDialog(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+        }
+
     }
 
     public static class ErrorShipment extends MdDialog {

@@ -128,8 +128,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
     }
 
     @Then("^Operator verify the trip Details is correct on shipment inbound scanning page using data below:$")
-    public void operatorVerifyTheTripDetailsIsCorrectOnShipmentInboundScanningPageUsingDataBelow(Map<String, String> data)
-    {
+    public void operatorVerifyTheTripDetailsIsCorrectOnShipmentInboundScanningPageUsingDataBelow(Map<String, String> data) {
         final Map<String, String> finalData = resolveKeyValues(data);
         String inboundHub = finalData.get("inboundHub");
         String inboundType = finalData.get("inboundType");
@@ -187,4 +186,35 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.verifySmallMessageAppearsInScanShipmentBox(smallMessage);
     }
 
+    @Then("Operator verifies shipment to go with trip is shown with total {string}")
+    public void operatorVerifiesShipmentToGoWithTripIsShownWithTotal(String totalAsString) {
+        Long totalShipmentToGo = Long.valueOf(totalAsString);
+        shipmentScanningPage.verifyShipmentToGoWithTrip(totalShipmentToGo);
+    }
+
+    @When("Operator clicks shipment to go with trip")
+    public void operatorClicksShipmentToGoWithTrip() {
+        shipmentScanningPage.shipmentToGo.waitUntilClickable();
+        shipmentScanningPage.shipmentToGo.click();
+    }
+
+    @Then("Operator verifies shipment to go with trip with data below:")
+    public void operatorVerifiesShipmentToGoWithTripData(Map<String, String> data) {
+        final Map<String, String> finalData = resolveKeyValues(data);
+        shipmentScanningPage.verifyShipmentToGoWithTripData(finalData);
+
+    }
+
+    @When("Operator clicks shipment with id {string}")
+    public void operatorClicksShipmentWithId(String shipmentIdAsString) {
+        shipmentIdAsString = resolveValue(shipmentIdAsString);
+        shipmentScanningPage.clickShipmentToGoWithId(shipmentIdAsString);
+    }
+
+    @Then("Operator verifies it will direct to shipment details page for shipment {string}")
+    public void operatorVerifiesItWillDirectToShipmentDetailsPage(String shipmentIdAsString) {
+
+        shipmentIdAsString = resolveValue(shipmentIdAsString);
+        shipmentScanningPage.verifyShipmentDetailPageIsOpenedForShipmentWithId(shipmentIdAsString);
+    }
 }
