@@ -1,4 +1,4 @@
-@OperatorV2 @SystemSettings @OperatorV2Part1 @PrinterSettings @Saas
+@OperatorV2 @Core @SystemSettings @PrinterSettings @Saas
 Feature: Printer Settings
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -6,7 +6,7 @@ Feature: Printer Settings
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeletePrinter
-  Scenario: Add Printer Settings (uid:f139cffa-0c34-45c2-8d36-15c43e47063f)
+  Scenario: Operator Add Printer Setting (uid:63ecfb9e-7bc1-4553-b277-ab08a7742f1d)
     Given Operator go to menu System Settings -> Printer Settings
     When Operator click Add Printer button
     Then Operator verify Add Printer form is displayed
@@ -18,7 +18,7 @@ Feature: Printer Settings
     Then Operator verify Printer Settings is added successfully
 
   @DeletePrinter
-  Scenario: Delete Printer Settings (uid:4228809e-130b-40d6-93ea-258a8182700a)
+  Scenario: Operator Delete Printer Setting (uid:6f2634f3-d864-45b6-8e6a-5e0eed33c383)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator adds new printer using data below:
       | name      | Printer {gradle-current-date-yyyyMMddHHmmsss} |
@@ -30,7 +30,7 @@ Feature: Printer Settings
     Then Operator verify Printer Settings is deleted successfully
 
   @DeletePrinter
-  Scenario Outline: Edit Printer Setting (<hiptest-uid>)
+  Scenario Outline: Operator Edit Printer Setting (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator adds new printer using data below:
       | name      | <printerSettingsName> |
@@ -42,9 +42,9 @@ Feature: Printer Settings
     Then Operator verify Printer Settings is edited successfully
     Examples:
       | Note            | hiptest-uid                              | printerSettingsName                                             | configName | configValue                                                        |
-      | Edit Name       | uid:57ce879c-d076-495f-b3f4-1d1ea0d0af8c | Printer - Edit Name {gradle-current-date-yyyyMMddHHmmsss}       | name       | Printer - Edit Name {gradle-current-date-yyyyMMddHHmmsss} [EDITED] |
-      | Edit IP Address | uid:9cf3df1f-2182-4d55-a5ae-3691d972ded4 | Printer - Edit IP Address {gradle-current-date-yyyyMMddHHmmsss} | ipAddress  | 192.168.0.1:9000                                                   |
-      | Edit Version    | uid:70800e26-83ef-4342-a996-679f099d2a93 | Printer - Edit Version {gradle-current-date-yyyyMMddHHmmsss}    | version    | 2                                                                  |
+      | Edit Name       | uid:b86927a3-04a0-495f-a6f8-7fad876f8279 | Printer - Edit Name {gradle-current-date-yyyyMMddHHmmsss}       | name       | Printer - Edit Name {gradle-current-date-yyyyMMddHHmmsss} [EDITED] |
+      | Edit IP Address | uid:be805b7b-f524-4bef-8356-b07cc3d9f30f | Printer - Edit IP Address {gradle-current-date-yyyyMMddHHmmsss} | ipAddress  | 192.168.0.1:9000                                                   |
+      | Edit Version    | uid:2d8c86e8-2843-432e-9f82-6b25eb02b16a | Printer - Edit Version {gradle-current-date-yyyyMMddHHmmsss}    | version    | 2                                                                  |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
