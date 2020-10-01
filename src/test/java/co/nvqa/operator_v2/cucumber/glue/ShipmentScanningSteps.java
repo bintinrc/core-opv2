@@ -121,6 +121,11 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.verifyScanShipmentColor(containerColorAsHex);
     }
 
+    @Then("Operator verifies Scanned Shipment color is {string}")
+    public void operatorVerifiesScannedShipmentColorIs(String boxColor) {
+        shipmentScanningPage.verifyScannedShipmentColor(boxColor);
+    }
+
     @When("Operator clicks end inbound button")
     public void operatorEndsShipmentInbound() {
         shipmentScanningPage.clickEndShipmentInbound();
@@ -164,7 +169,8 @@ public class ShipmentScanningSteps extends AbstractSteps {
         retryIfAssertionErrorOccurred(() -> {
             try {
                 String shipmentId = resolveValue(shipmentIdAsString);
-                shipmentScanningPage.verifyErrorShipmentWithMessage(shipmentId, resultString);
+                String resultStringValue = resolveValue(resultString);
+                shipmentScanningPage.verifyErrorShipmentWithMessage(shipmentId, resultStringValue);
             } catch (Throwable ex) {
                 shipmentScanningPage.clickCancelInMdDialog();
                 pause1s();

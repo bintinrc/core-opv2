@@ -33,6 +33,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     public static final String XPATH_RACK_SECTOR = "//div[contains(@class,'rack-sector-card')]/div/h2[@ng-show='ctrl.rackInfo']";
     public static final String XPATH_TRIP_DEPART_PROCEED_BUTTON = "//nv[]";
     public static final String XPATH_SCAN_SHIPMENT_CONTAINER = "//div[contains(@class,'scan-barcode-container')]";
+    public static final String XPATH_SCANNED_SHIPMENT = "//td[contains(@class,'shipment_id')]";
     public static final String XPATH_ACTIVE_INPUT_SELECTION = "//div[contains(@class,'md-select-menu-container nv-input-select-container md-active md-clickable')]//md-option[1]";
     public static final String XPATH_INBOUND_HUB_TEXT = "//div[span[.='Inbound Hub']]//p";
     public static final String XPATH_SHIPMENT_ID = "//td[@class='shipment_id']";
@@ -185,6 +186,11 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     public void verifyScanShipmentColor(String expectedContainerColorAsHex) {
         String actualContainerColorAsHex = getBackgroundColor(XPATH_SCAN_SHIPMENT_CONTAINER).asHex();
         assertEquals(expectedContainerColorAsHex, actualContainerColorAsHex);
+    }
+
+    public void verifyScannedShipmentColor(String expectedShipmentColorAsHex) {
+        String actualColorAsHex = getBackgroundColor(XPATH_SCANNED_SHIPMENT).asHex();
+        assertEquals(expectedShipmentColorAsHex, actualColorAsHex);
     }
 
     public void clickEndShipmentInbound() {

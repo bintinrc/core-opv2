@@ -302,6 +302,14 @@ public class ShipmentManagementSteps extends AbstractSteps
         shipmentManagementPage.openShipmentDetailsPage(shipmentInfo.getId());
     }
 
+    @And("Operator open the shipment detail for the shipment {string} on Shipment Management Page")
+    public void operatorOpenShipmentDetailOnShipmentManagementPage(String shipmentIdAsString)
+    {
+        Long shipmentId = Long.valueOf(resolveValue(shipmentIdAsString));
+        shipmentManagementPage.openShipmentDetailsPage(shipmentId);
+    }
+
+
     @And("^Operator force success the created shipment on Shipment Management page$")
     public void operatorForceSuccessTheCreatedShipmentOnShipmentManagementPage()
     {
