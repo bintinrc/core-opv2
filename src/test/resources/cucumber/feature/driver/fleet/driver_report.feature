@@ -1,4 +1,4 @@
-@OperatorV2Deprecated @OperatorV2Part2Deprecated
+@OperatorV2 @Driver @Fleet @DriverReport
 Feature: Driver Report
 
   @LaunchBrowser @ShouldAlwaysRun

@@ -1,4 +1,4 @@
-@OperatorV2 @Addressing @OperatorV2Part1
+@OperatorV2 @Core @Addressing
 Feature: Addressing
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -6,7 +6,7 @@ Feature: Addressing
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteAddress
-  Scenario: Operator adds new address on Addressing Page (uid:baee8a52-1dc5-4064-92b4-aeddfbd7a445)
+  Scenario: Operator Adds New Address on Addressing Page (uid:a15fc921-f0d4-4f69-a13e-64cbac92df84)
     Given Operator go to menu Addressing -> Addressing
     When Operator clicks on Add Address Button on Addressing Page
     And Operator creates new address on Addressing Page
@@ -14,7 +14,7 @@ Feature: Addressing
     Then Operator verifies the address exists on Addressing Page
 
   @DeleteAddress
-  Scenario: Operator searches address on Addressing Page (uid:3301502a-65ce-4e64-9a90-d8a06acaa554)
+  Scenario: Operator Searches Address on Addressing Page (uid:40b89573-88d3-4e72-89a3-6fba0c42730b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Addressing -> Addressing
     When Operator clicks on Add Address Button on Addressing Page
@@ -23,7 +23,7 @@ Feature: Addressing
     Then Operator verifies the address exists on Addressing Page
 
   @DeleteAddress
-  Scenario: Operator deletes address on Addressing Page (uid:5d78f636-fa3d-4ab3-b084-476d5f686a49)
+  Scenario: Operator Deletes Address on Addressing Page (uid:4ea12392-c48c-43a0-8ffc-cc56d41cd8c0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Addressing -> Addressing
     When Operator clicks on Add Address Button on Addressing Page
@@ -34,7 +34,7 @@ Feature: Addressing
     Then Operator verifies the address does not exist anymore on Addressing Page
 
   @DeleteAddress
-  Scenario: Operator edits address on Addressing Page (uid:e6861e4e-7257-4038-bedd-0e2c0a02dd39)
+  Scenario: Operator Edits Address on Addressing Page (uid:2b28baed-74ae-48e4-a508-56a2aa4dfc6b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Addressing -> Addressing
     When Operator clicks on Add Address Button on Addressing Page
