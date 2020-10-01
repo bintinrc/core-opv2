@@ -5,7 +5,7 @@ Feature: Shipper Pickups
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator find Normal Reservation on Shipper Pickups page (uid:877efac2-803a-4c50-a1d4-5e9792ff5490)
+  Scenario: Operator Filters Reservation by Reservation Type - Normal Reservation (uid:f622a44e-809f-442b-9461-574b180ebd44)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -23,7 +23,7 @@ Feature: Shipper Pickups
       | comments     | GET_FROM_CREATED_RESERVATION |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator add Reservation to Route using API and verify the Reservation info is correct (uid:b8b62011-882f-451b-9331-6cec2077aab2)
+  Scenario: Operator add Reservation to Route using API and verify the Reservation info is correct Operator Verify Route Details of A Routed Reservation on Shipper Pickup Page (uid:15a1bd52-d4c5-4c31-a88e-3c4ca4619807)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -47,7 +47,7 @@ Feature: Shipper Pickups
     And DB Operator verify new record is created in route_waypoints table with the correct details
 
   @DeleteOrArchiveRoute
-  Scenario: Operator assign Reservation to Route on Shipper Pickups page (uid:992f1485-ef00-45cc-88d8-df36a3e4e77d)
+  Scenario: Operator Assign a Pending Reservation to a Driver Route (uid:f8c61882-5430-4d7a-aaa9-3e4c97f52b13)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -73,7 +73,7 @@ Feature: Shipper Pickups
     And DB Operator verify new record is created in route_waypoints table with the correct details
 
   @DeleteOrArchiveRoute
-  Scenario: Operator assign Reservation to Route with priority level on Shipper Pickups page (uid:4e1e8b2b-ddad-48c4-98ea-b1f5a5ef448c)
+  Scenario: Operator Assign Reservation to a Driver Route with Priority Level (uid:5830302f-c452-49c4-bc59-28bb130e20ae)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -98,7 +98,7 @@ Feature: Shipper Pickups
       | priorityLevel | 3                            |
     And DB Operator verify new record is created in route_waypoints table with the correct details
 
-  Scenario: Operator create and verify the reservations details is correct on Shipper Pickups page (uid:acc59c88-9da5-4990-9a48-26c23ba7e464)
+  Scenario: Operator Find Created Reservation by Shipper Name (uid:4d2d2a71-33e0-4f6c-846e-9cca10ef4c2b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -115,7 +115,7 @@ Feature: Shipper Pickups
       | shipperId     | {shipper-v4-legacy-id}       |
       | reservationId | GET_FROM_CREATED_RESERVATION |
 
-  Scenario: Operator should be able to create/duplicate single reservation on Shipper Pickups page (uid:37a2c9b1-7f8f-41e8-a0a9-52f57b69bcdc)
+  Scenario: Operator Creates New Reservation by Duplicating Existing Reservation Details - Single Reservation (uid:2138a61e-e56b-4efb-9ced-7dfd92ea07f3)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -130,7 +130,7 @@ Feature: Shipper Pickups
     And Operator duplicates created reservation
     Then Operator verify the duplicated reservation is created successfully
 
-  Scenario: Operator should be able to create/duplicate multiple reservations on Shipper Pickups page (uid:e974f8e8-498c-4602-a63e-2560902ff343)
+  Scenario: Operator Creates New Reservation by Duplicating Existing Reservation Details - Multiple Reservations (uid:aea00c1d-f550-4286-ba1a-5ed0f7369d2b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create multiple shipper addresses V2 using data below:
       | numberOfAddresses | 2               |
@@ -147,7 +147,7 @@ Feature: Shipper Pickups
     Then Operator verify the duplicated reservations are created successfully
 
   @DeleteOrArchiveRoute
-  Scenario: Operator should be able to use the Route Suggestion and add single reservation to the route on Shipper Pickups page (uid:87eaa63d-5f66-4bc7-b425-ebf33ab47392)
+  Scenario: Operator Add Reservation to Driver Route Using Bulk Action Suggest Route - Single Reservation (uid:9d6f1456-f96a-4ac8-a38b-bb0ddbe8740b)
     # For a route to be able to be suggested to a RSVN, it should have at least 1 waypoint.
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
@@ -180,7 +180,7 @@ Feature: Shipper Pickups
       | driverName  | GET_FROM_SUGGESTED_ROUTE |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator should be able to use the Route Suggestion and add multiple reservations to the route on Shipper Pickups page (uid:b5ffe64a-0143-4d66-aa5d-82d9be1f9ff4)
+  Scenario: Operator Add Reservation to Driver Route Using Bulk Action Suggest Route - Multiple Reservations (uid:e1d9c28e-57d9-48c5-b43d-752165695637)
     # For a route to be able to be suggested to a RSVN, it should have at least 1 waypoint.
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create multiple shipper addresses V2 using data below:
@@ -214,7 +214,7 @@ Feature: Shipper Pickups
       | driverName  | GET_FROM_SUGGESTED_ROUTE |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator should be able to remove the route from single reservation on Shipper Pickups page (uid:b96dab27-cb75-4696-a6fd-fed6c40b5caa)
+  Scenario: Operator Bulk Removes Driver Route of Routed Reservation - Single Reservation (uid:cce1d21c-a238-4a46-b622-dcc8820f8ce1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -233,7 +233,7 @@ Feature: Shipper Pickups
     Then Operator verify the route was removed from the created reservation
 
   @DeleteOrArchiveRoute
-  Scenario: Operator should be able to remove the route from multiple reservations on Shipper Pickups page (uid:8bd44522-4d95-4fb9-8dba-5819de6171b9)
+  Scenario: Operator Bulk Removes Driver Route of Routed Reservation - Multiple Reservations (uid:b4d16fb8-edb0-4dca-b31d-416e58232e45)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create multiple shipper addresses V2 using data below:
       | numberOfAddresses | 2               |
@@ -253,7 +253,7 @@ Feature: Shipper Pickups
     Then Operator verify the route was removed from the created reservations
 
   @DeleteOrArchiveRoute
-  Scenario Outline: Operator should be able to filter the Shipper Pickups by parameters (<hiptest-uid>)
+  Scenario Outline: Operator Filters Reservation by - <Note> (<hiptest-uid>)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -274,13 +274,11 @@ Feature: Shipper Pickups
       | routeId     | GET_FROM_CREATED_ROUTE |
       | driverName  | {ninja-driver-name}    |
     Examples:
-      | Note     | hiptest-uid                              | hubId    | hubName    | zoneId    | zoneName |
-      | Params 1 | uid:619b39f4-1a64-4abe-8b8f-916e7509d129 | {hub-id} | {hub-name} | {zone-id} |          |
-#     In the step "API Operator create new route using data below" zone of a created route doesn't match to requested zone,
-#     So, it's not possible to find created pickup by zone name
-#      | Params 2 | uid:579e00c4-0612-4c55-91b3-26d29a8fec8a | {hub-id} |            | 569       | DRIVER-APP-MSI-ZONE |
+      | Note      | hiptest-uid                              | hubId    | hubName    | zoneId    | zoneName |
+      | Hub Name  | uid:f524560a-9fce-4255-b811-b8d61afa3b79 | {hub-id} | {hub-name} | {zone-id} |          |
+      | Zone Name | uid:7f1be87e-f830-4288-87d5-5cafd8602619 | {hub-id} |            | 569       | DRIVER-APP-MSI-ZONE |
 
-  Scenario: Operator should be able to download CSV file on Shipper Pickups page (uid:1214e548-8996-403a-a58c-043ed5c642d9)
+  Scenario: Operator Downloads Selected Reservations Details as CSV File (uid:77200c54-10f5-42e2-9575-60d1e365ae61)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -295,7 +293,7 @@ Feature: Shipper Pickups
     And Operator download CSV file for created reservation
     Then Operator verify the reservation info is correct in downloaded CSV file
 
-  Scenario: Operator should be able to edit the Priority Level of single reservation on Shipper Pickups page (uid:a9630dc0-ce00-4caf-aced-c6dedc59b76b)
+  Scenario: Operator Edits Priority Level on Bulk Action - Single Reservation (uid:4c10632f-b48e-4e09-a67f-f4763f6942d6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -313,7 +311,7 @@ Feature: Shipper Pickups
     And DB Operator verify reservation priority level
       | priorityLevel | 2 |
 
-  Scenario: Operator should be able to edit the Priority Level of multiple reservation on Shipper Pickups page (uid:1ef31434-423d-417c-955e-051d5b203a65)
+  Scenario: Operator Edits Priority Level on Bulk Action - Multiple Reservations (uid:8b24231a-34a4-493a-8a97-45b100e6888f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create multiple shipper addresses V2 using data below:
       | numberOfAddresses | 2               |
@@ -330,7 +328,7 @@ Feature: Shipper Pickups
     Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
       | priorityLevel | 2 |
 
-  Scenario: Operator should be able to edit the Priority Level of multiple reservation on Shipper Pickups page using "Set To All" option (uid:f68f5816-325a-425f-9dc8-656cfe75038d)
+  Scenario: Operator Edits Priority Level on Bulk Action - Multiple Reservations, Set to All Priority Level (uid:e994a33e-d5e8-4176-91b2-c7636f4ae1f6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create multiple shipper addresses V2 using data below:
       | numberOfAddresses | 2               |
@@ -347,7 +345,7 @@ Feature: Shipper Pickups
     Then Operator verify the new reservations are listed on table in Shipper Pickups page using data below:
       | priorityLevel | 2 |
 
-  Scenario: Operator filters using Waypoint Status filter - PENDING (uid:ece39130-5b50-4025-afc2-9cf08aea30c0)
+  Scenario: Operator Filters Reservation by Waypoint Status - PENDING (uid:f9641b05-1512-48f9-961d-b627e044c5a5)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -366,7 +364,7 @@ Feature: Shipper Pickups
       | comments     | GET_FROM_CREATED_RESERVATION |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator filters using Waypoint Status filter - ROUTED (uid:4c0f6b60-7c52-4d93-98ac-30c642318fbf)
+  Scenario: Operator Filters Reservation by Waypoint Status - ROUTED (uid:fec438e6-fc0a-4c0f-acd5-e49f27f6a285)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -388,7 +386,7 @@ Feature: Shipper Pickups
       | comments     | GET_FROM_CREATED_RESERVATION |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator filters using Waypoint Status filter - SUCCESS (uid:90724128-68ff-4b66-a30a-8f9808aa0f37)
+  Scenario: Operator Filters Reservation by Waypoint Status - SUCCESS (uid:a400c076-ada2-4e14-aabe-e9f888608373)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
@@ -424,7 +422,7 @@ Feature: Shipper Pickups
       | comments     | GET_FROM_CREATED_RESERVATION |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator filters using Waypoint Status filter - FAIL (uid:3de9fd64-efa9-4dad-bb91-e78cf1a7a65d)
+  Scenario: Operator Filters Reservation by Waypoint Status - FAIL (uid:8e4d27a1-4d7b-4def-bd7b-2f758cb2deb4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
