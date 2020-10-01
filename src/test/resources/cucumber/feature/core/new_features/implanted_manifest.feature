@@ -1,11 +1,11 @@
-@OperatorV2 @NewFeatures @OperatorV2Part1 @ImplantedManifest
+@OperatorV2 @Core @NewFeatures @ImplantedManifest
 Feature: Implanted Manifest
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator Should be able to download CSV file and verifies the file contains all scanned orders with correct info (uid:b217b429-96b6-4407-b486-bae6eab1147c)
+  Scenario: Operator Scan All Orders and Download & Verifies CSV File Info on Implanted Manifest Page (uid:cd7f3ec4-3887-4f61-b057-d40ae8a56d5b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -16,7 +16,7 @@ Feature: Implanted Manifest
     And Operator clicks "Download CSV File" on Implanted Manifest
     Then Operator verifies the file is downloaded successfully and contains all scanned orders with correct info
 
-  Scenario: Operator Should be able to scan all created orders (uid:8458b84d-321a-4811-9b8e-12565c1fbf99)
+  Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page (uid:fb17a389-4f54-45b7-b5f1-c12a830d6aa8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                  |
@@ -26,7 +26,7 @@ Feature: Implanted Manifest
     When Operator creates Manifest for Hub {hub-name} and scan barcodes
     Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
 
-  Scenario: Operator Should be able to scan all created orders and then remove all scanned orders by using "Remove order by scan" (uid:6fa1c9f5-bb0b-49b1-8e48-f605688d8ce8)
+  Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page and Remove Scanned Order by Scanning (uid:ca1314b5-661a-4dc7-b144-8b897e4d54b0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -37,7 +37,7 @@ Feature: Implanted Manifest
     And Operator do "Remove order by Scan" for all created orders on Implanted Manifest page
     Then Operator verifies all scanned orders is removed from the Manifest table
 
-  Scenario: Operator Should be able to scan all created orders and then remove all scanned orders by using "Remove All" button (uid:004ebaaa-751f-43aa-96bb-9badf85f15f1)
+  Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page and Remove All Scanned Orders by Remove All Button (uid:5284e3dc-43ab-4336-b395-6ee7c46be8ed)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
@@ -48,7 +48,7 @@ Feature: Implanted Manifest
     And Operator clicks "Remove All" button on Implanted Manifest page
     Then Operator verifies all scanned orders is removed from the Manifest table
 
-  Scenario: Operator Should be able to scan all created orders and then remove all scanned orders by using "Actions X" button on Manifest table (uid:2f38603b-7227-490f-86cc-3c4743d65062)
+  Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page and Remove All Scanned Orders by X Button (uid:b18d3f25-98d9-4d76-bb5b-3c92c8e9bada)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |

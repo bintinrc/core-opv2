@@ -1,4 +1,4 @@
-@OperatorV2 @PickUps @OperatorV2Part2 @ReservationPresetManagement
+@OperatorV2 @Core @PickUps @ReservationPresetManagement
 Feature: Reservation Preset Management
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -6,7 +6,7 @@ Feature: Reservation Preset Management
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteReservationGroup
-  Scenario: Operator add new Reservation Group on page Reservation Preset Management (uid:2f701775-293e-47cd-86e7-70b2c0957686)
+  Scenario: Operator Create New Group to Assign Driver on Reservation Preset Management Page (uid:5e413315-ed96-4c3a-92b6-9b58b2d34a25)
     Given Operator go to menu Pick Ups -> Reservation Preset Management
     When Operator create new Reservation Group on Reservation Preset Management page using data below:
       | name   | GENERATED           |
@@ -16,7 +16,7 @@ Feature: Reservation Preset Management
     And API Operator get created Reservation Group params
 
   @DeleteReservationGroup
-  Scenario: Operator edit new Reservation Group on page Reservation Preset Management (uid:a1894bcc-03e3-4e9a-b163-ebeb38a39805)
+  Scenario: Operator Edit Reservation Group on Reservation Preset Management Page (uid:c4721621-2712-410e-b8c7-561e2999361e)
     Given Operator go to menu Pick Ups -> Reservation Preset Management
     When Operator create new Reservation Group on Reservation Preset Management page using data below:
       | name   | GENERATED           |
@@ -30,7 +30,7 @@ Feature: Reservation Preset Management
     Then Operator verify created Reservation Group properties on Reservation Preset Management page
 
   @DeleteReservationGroup
-  Scenario: Operator delete new Reservation Group on page Reservation Preset Management (uid:dba33834-9036-4c5b-a12a-5b530b1a7638)
+  Scenario: Operator Delete Reservation Group on Reservation Preset Management Page (uid:3c303ac8-8409-4337-b854-786a22b50f62)
     Given Operator go to menu Pick Ups -> Reservation Preset Management
     When Operator create new Reservation Group on Reservation Preset Management page using data below:
       | name   | GENERATED           |

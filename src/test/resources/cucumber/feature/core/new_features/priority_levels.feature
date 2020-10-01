@@ -1,17 +1,17 @@
-@OperatorV2 @NewFeatures @OperatorV2Part1 @PriorityLevels
+@OperatorV2 @Core @NewFeatures @PriorityLevels
 Feature: Priority Levels
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator should be able to download all Sample CSV file on Priority Levels page (uid:0f2fd3e3-cd21-4500-854d-4464fd4a1597)
+  Scenario: Operator should be Able to Download All Sample CSV File on Priority Levels Page (uid:69f77818-72e2-4f8c-9eb1-de0230fee4fb)
     Given Operator go to menu Order -> All Orders
     And Operator go to menu New Features -> Priority Levels
     Then Operator verifies "Orders Sample CSV" is downloaded successfully and correct
     Then Operator verifies "Reservations Sample CSV" is downloaded successfully and correct
 
-  Scenario: Operator should be able to Update via CSV (Orders) on Priority Levels page (uid:72d27657-7d71-47bf-b3a5-4cac9a1d3b33)
+  Scenario: Operator Update Orders Priority Level by CSV upload (uid:1528790a-a26b-4b30-a61f-13bd89798fb7)
     Given Operator go to menu Order -> All Orders
     Given API Shipper create multiple V4 orders using data below:
       | numberOfOrder     | 2      |
