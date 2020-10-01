@@ -427,8 +427,224 @@ Feature: Shipment Inbound Scanning
 #      | currHubName | {KEY_LIST_OF_CREATED_HUBS[3].name} |
 #      | status      | Pending                            |
 
+#  @DeleteShipment @DeleteDriver @SoftDeleteHubViaDb
+#  Scenario: View Transit Shipment To Go With Trip for Van Inbound (uid:fe6d3ffe-552a-4020-9e64-d766abb387a6)
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+#    Given API Operator creates new Hub using data below:
+#      | name         | GENERATED |
+#      | displayName  | GENERATED |
+#      | facilityType | CROSSDOCK |
+#      | city         | GENERATED |
+#      | country      | GENERATED |
+#      | latitude     | GENERATED |
+#      | longitude    | GENERATED |
+#    And API Operator creates new Hub using data below:
+#      | name         | GENERATED |
+#      | displayName  | GENERATED |
+#      | facilityType | CROSSDOCK |
+#      | city         | GENERATED |
+#      | country      | GENERATED |
+#      | latitude     | GENERATED |
+#      | longitude    | GENERATED |
+#    And API Operator creates new Hub using data below:
+#      | name         | GENERATED |
+#      | displayName  | GENERATED |
+#      | facilityType | STATION   |
+#      | city         | GENERATED |
+#      | country      | GENERATED |
+#      | latitude     | GENERATED |
+#      | longitude    | GENERATED |
+#    And API Operator verify new Hubs are created
+#    And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[2].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[3].id}"
+#    And API Operator reloads hubs cache
+#    Given API Operator create new Driver using data below:
+#      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+#    And API Operator create new Driver using data below:
+#      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+#    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
+#    Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+#    And API Operator create new "STATIONS" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[2].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
+#    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
+#    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[2].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id}"
+#    Given API Operator shipment inbound scan with trip with data below:
+#      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}                               |
+#      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+#      | hubSystemId    | sg                                                      |
+#      | actionType     | ADD                                                     |
+#      | scanType       | SHIPMENT_VAN_INBOUND                                    |
+#      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+#      | driverId       | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                     |
+#    When Operator inbound scanning Into Van Shipment Inbound Scanning page with data below:
+#      | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                                                              |
+#      | inboundType          | Into Van                                                                                                                        |
+#      | driver               | {KEY_LIST_OF_CREATED_DRIVERS[2].firstName}{KEY_LIST_OF_CREATED_DRIVERS[2].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[2].username}) |
+#      | movementTripSchedule | To {KEY_LIST_OF_CREATED_HUBS[3].name}, Departure                                                                                |
+#    Then Operator verifies shipment to go with trip is shown with total "1"
+#    When Operator clicks shipment to go with trip
+#    Then Operator verifies shipment to go with trip with data below:
+#      | shipmentCount  | 1                                  |
+#      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}          |
+#      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+#      | dropOffHub     | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+#      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+#      | comments       | Shipment added to trip             |
+#    When Operator clicks shipment with id "{KEY_CREATED_SHIPMENT_ID}"
+#    Then Operator verifies it will direct to shipment details page for shipment "{KEY_CREATED_SHIPMENT_ID}"
+
+#  @DeleteShipment @DeleteDriver @SoftDeleteHubViaDb
+#  Scenario: View At Transit Hub Shipment To Go With Trip for Van Inbound (uid:fa98b89c-b2a6-4896-a711-75e1e12bc309)
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+#    Given API Operator creates new Hub using data below:
+#      | name         | GENERATED |
+#      | displayName  | GENERATED |
+#      | facilityType | CROSSDOCK |
+#      | city         | GENERATED |
+#      | country      | GENERATED |
+#      | latitude     | GENERATED |
+#      | longitude    | GENERATED |
+#    And API Operator creates new Hub using data below:
+#      | name         | GENERATED |
+#      | displayName  | GENERATED |
+#      | facilityType | CROSSDOCK |
+#      | city         | GENERATED |
+#      | country      | GENERATED |
+#      | latitude     | GENERATED |
+#      | longitude    | GENERATED |
+#    And API Operator creates new Hub using data below:
+#      | name         | GENERATED |
+#      | displayName  | GENERATED |
+#      | facilityType | STATION   |
+#      | city         | GENERATED |
+#      | country      | GENERATED |
+#      | latitude     | GENERATED |
+#      | longitude    | GENERATED |
+#    And API Operator verify new Hubs are created
+#    And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[2].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[3].id}"
+#    And API Operator reloads hubs cache
+#    Given API Operator create new Driver using data below:
+#      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+#    And API Operator create new Driver using data below:
+#      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+#    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
+#    Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+#    And API Operator create new "STATIONS" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[2].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
+#    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
+#    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[2].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id}"
+#    Given API Operator shipment inbound scan with trip with data below:
+#      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}                               |
+#      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+#      | actionType     | ADD                                                     |
+#      | scanType       | SHIPMENT_VAN_INBOUND                                    |
+#      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+#      | driverId       | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                     |
+#    Given API Operator shipment inbound scan with trip with data below:
+#      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}                               |
+#      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+#      | actionType     | ADD                                                     |
+#      | scanType       | SHIPMENT_HUB_INBOUND                                    |
+#      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+#      | driverId       | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                     |
+#    When Operator inbound scanning Into Van Shipment Inbound Scanning page with data below:
+#      | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                                                              |
+#      | inboundType          | Into Van                                                                                                                        |
+#      | driver               | {KEY_LIST_OF_CREATED_DRIVERS[2].firstName}{KEY_LIST_OF_CREATED_DRIVERS[2].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[2].username}) |
+#      | movementTripSchedule | {KEY_LIST_OF_CREATED_HUBS[3].name}                                                                                              |
+#    Then Operator verifies shipment to go with trip is shown with total "1"
+#    When Operator clicks shipment to go with trip
+#    Then Operator verifies shipment to go with trip with data below:
+#      | shipmentCount  | 1                                  |
+#      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}          |
+#      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+#      | dropOffHub     | -                                  |
+#      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+#      | comments       | -                                  |
+#    When Operator clicks shipment with id "{KEY_CREATED_SHIPMENT_ID}"
+#    Then Operator verifies it will direct to shipment details page for shipment "{KEY_CREATED_SHIPMENT_ID}"
+
+#  @DeleteShipment @DeleteDriver @SoftDeleteHubViaDb
+#  Scenario: View Many Shipments To Go With Trip for Van Inbound (uid:bccb666c-c8b3-406a-87cd-c00886ad77ae)
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+#    Given API Operator creates new Hub using data below:
+#      | name         | GENERATED |
+#      | displayName  | GENERATED |
+#      | facilityType | CROSSDOCK |
+#      | city         | GENERATED |
+#      | country      | GENERATED |
+#      | latitude     | GENERATED |
+#      | longitude    | GENERATED |
+#    And API Operator creates new Hub using data below:
+#      | name         | GENERATED |
+#      | displayName  | GENERATED |
+#      | facilityType | CROSSDOCK |
+#      | city         | GENERATED |
+#      | country      | GENERATED |
+#      | latitude     | GENERATED |
+#      | longitude    | GENERATED |
+#    And API Operator creates new Hub using data below:
+#      | name         | GENERATED |
+#      | displayName  | GENERATED |
+#      | facilityType | STATION   |
+#      | city         | GENERATED |
+#      | country      | GENERATED |
+#      | latitude     | GENERATED |
+#      | longitude    | GENERATED |
+#    And API Operator verify new Hubs are created
+#    And API Operator assign CrossDock "{KEY_LIST_OF_CREATED_HUBS[2].id}" for Station "{KEY_LIST_OF_CREATED_HUBS[3].id}"
+#    And API Operator reloads hubs cache
+#    Given API Operator create new Driver using data below:
+#      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+#    And API Operator create new Driver using data below:
+#      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+#    Given API Operator create multiple 10 new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
+#    Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+#    And API Operator create new "STATIONS" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[2].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
+#    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
+#    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[2].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id}"
+#    Given API Operator shipment inbound scan all created shipments with data below:
+#      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+#      | actionType     | ADD                                                     |
+#      | scanType       | SHIPMENT_VAN_INBOUND                                    |
+#      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+#    And API Operator shipment end inbound with trip with data below:
+#      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+#      | actionType     | ADD                                                     |
+#      | scanType       | SHIPMENT_VAN_INBOUND                                    |
+#      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+#      | driverId       | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                     |
+#    And API Operator shipment inbound scan with trip with data below:
+#      | shipmentId     | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[10]}                   |
+#      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+#      | actionType     | ADD                                                     |
+#      | scanType       | SHIPMENT_HUB_INBOUND                                    |
+#      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+#    And API Operator shipment end inbound with trip with data below:
+#      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+#      | actionType     | ADD                                                     |
+#      | scanType       | SHIPMENT_HUB_INBOUND                                    |
+#      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+#      | driverId       | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                     |
+#    When Operator inbound scanning Into Van Shipment Inbound Scanning page with data below:
+#      | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[2].id} - {KEY_LIST_OF_CREATED_HUBS[2].name}                                                           |
+#      | inboundType          | Into Van                                                                                                                        |
+#      | driver               | {KEY_LIST_OF_CREATED_DRIVERS[2].firstName}{KEY_LIST_OF_CREATED_DRIVERS[2].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[2].username}) |
+#      | movementTripSchedule | {KEY_LIST_OF_CREATED_HUBS[3].name}                                                                                              |
+#    Then Operator verifies shipment to go with trip is shown with total "10"
+#    When Operator clicks shipment to go with trip
+#    Then Operator verifies created shipments data in shipment to go with trip with data below:
+#      | shipmentCount  | 10                                 |
+#      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+#      | dropOffHub     | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+#      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+#      | comments       | Shipment added to trip             |
+#    Then Operator verifies it able to scroll into row with shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}"
+#    When Operator clicks shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}"
+#    Then Operator verifies it will direct to shipment details page for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}"
+
   @DeleteShipment @DeleteDriver @SoftDeleteHubViaDb
-  Scenario: View Transit Shipment To Go With Trip for Van Inbound (uid:fe6d3ffe-552a-4020-9e64-d766abb387a6)
+  Scenario: View Many Shipments To Go With Trip for Van Inbound (uid:bccb666c-c8b3-406a-87cd-c00886ad77ae)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     Given API Operator creates new Hub using data below:
@@ -462,35 +678,50 @@ Feature: Shipment Inbound Scanning
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     And API Operator create new Driver using data below:
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
+    Given API Operator create multiple 10 new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator create new "STATIONS" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[2].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[2].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[2].id}"
-    Given API Operator shipment inbound scan with trip with data below:
-      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}                               |
+    Given API Operator shipment inbound scan all created shipments with data below:
       | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
-      | hubSystemId    | sg                                                      |
+      | actionType     | ADD                                                     |
+      | scanType       | SHIPMENT_VAN_INBOUND                                    |
+      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+    And API Operator shipment end inbound with trip with data below:
+      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
       | actionType     | ADD                                                     |
       | scanType       | SHIPMENT_VAN_INBOUND                                    |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
       | driverId       | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                     |
+    And API Operator shipment inbound scan with trip with data below:
+      | shipmentId     | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[10]}                   |
+      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+      | actionType     | ADD                                                     |
+      | scanType       | SHIPMENT_HUB_INBOUND                                    |
+      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+    And API Operator shipment end inbound with trip with data below:
+      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+      | actionType     | ADD                                                     |
+      | scanType       | SHIPMENT_HUB_INBOUND                                    |
+      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+      | driverId       | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                     |
     When Operator inbound scanning Into Van Shipment Inbound Scanning page with data below:
-      | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                                                              |
+      | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[2].id} - {KEY_LIST_OF_CREATED_HUBS[2].name}                                                           |
       | inboundType          | Into Van                                                                                                                        |
       | driver               | {KEY_LIST_OF_CREATED_DRIVERS[2].firstName}{KEY_LIST_OF_CREATED_DRIVERS[2].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[2].username}) |
-      | movementTripSchedule | To {KEY_LIST_OF_CREATED_HUBS[3].name}, Departure                                                                                |
-    Then Operator verifies shipment to go with trip is shown with total "1"
+      | movementTripSchedule | {KEY_LIST_OF_CREATED_HUBS[3].name}                                                                                              |
+    Then Operator verifies shipment to go with trip is shown with total "10"
     When Operator clicks shipment to go with trip
-    Then Operator verifies shipment to go with trip with data below:
-      | shipmentCount  | 1                                  |
-      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}          |
+    Then Operator verifies created shipments data in shipment to go with trip with data below:
+      | shipmentCount  | 10                                 |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | dropOffHub     | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | comments       | Shipment added to trip             |
-    When Operator clicks shipment with id "{KEY_CREATED_SHIPMENT_ID}"
-    Then Operator verifies it will direct to shipment details page for shipment "{KEY_CREATED_SHIPMENT_ID}"
+    Then Operator verifies it able to scroll into row with shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}"
+    When Operator clicks shipment with id "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}"
+    Then Operator verifies it will direct to shipment details page for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[1]}"
 
 
   @KillBrowser @ShouldAlwaysRun

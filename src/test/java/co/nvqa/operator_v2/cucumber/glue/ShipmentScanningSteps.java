@@ -8,7 +8,6 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
-import net.bytebuddy.implementation.bytecode.Throw;
 
 import java.util.List;
 import java.util.Map;
@@ -202,7 +201,14 @@ public class ShipmentScanningSteps extends AbstractSteps {
     public void operatorVerifiesShipmentToGoWithTripData(Map<String, String> data) {
         final Map<String, String> finalData = resolveKeyValues(data);
         shipmentScanningPage.verifyShipmentToGoWithTripData(finalData);
+    }
 
+    @Then("Operator verifies created shipments data in shipment to go with trip with data below:")
+    public void operatorVerifiesCreatedShipmentsDataInShipmentToGoWithTripData(Map<String, String> data) {
+        final Map<String, String> finalData = resolveKeyValues(data);
+        List<Long> shipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_IDS);
+        finalData.put("shipmentIds", shipmentIds.toString().replace("[", "").replace("]", ""));
+        shipmentScanningPage.verifyCreatedShipmentsShipmentToGoWithTripDataLastIndexTransitHub(finalData);
     }
 
     @When("Operator clicks shipment with id {string}")
@@ -213,8 +219,14 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
     @Then("Operator verifies it will direct to shipment details page for shipment {string}")
     public void operatorVerifiesItWillDirectToShipmentDetailsPage(String shipmentIdAsString) {
-
         shipmentIdAsString = resolveValue(shipmentIdAsString);
         shipmentScanningPage.verifyShipmentDetailPageIsOpenedForShipmentWithId(shipmentIdAsString);
+    }
+
+    @Then("Operator verifies it able to scroll into row with shipment {string}")
+    public void operatorVerifiesItAbleToScrollIntoRowWithShipment(String shipmentIdAsString) {
+        shipmentIdAsString = resolveValue(shipmentIdAsString);
+        shipmentScanningPage.verifyShipmentToGoTableToScrollInto(shipmentIdAsString);
+
     }
 }
