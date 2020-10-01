@@ -1,4 +1,4 @@
-@OperatorV2 @Fleet @OperatorV2Part1 @ContactTypeManagement @Saas
+@OperatorV2 @Driver @Fleet @ContactTypeManagement
 Feature: Contact Type Management
 
   @LaunchBrowser @ShouldAlwaysRun
