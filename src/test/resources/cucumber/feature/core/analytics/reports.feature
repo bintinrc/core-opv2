@@ -5,7 +5,7 @@ Feature: Order Creation V4
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Generate/send Driver CODs for A Day Report (uid:3e252f0a-e0f3-4e17-8f52-17e5a8bfc237)
+  Scenario: Operator Generate/Send Driver CODs for A Day Report (uid:c050d2f7-8386-4000-acbb-0e7c45d1621b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM |
