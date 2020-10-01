@@ -1,4 +1,4 @@
-@OperatorV2 @MassCommunications @OperatorV2Part2 @MessagingModule @ShouldAlwaysRun
+@OperatorV2 @Core @MassCommunications @MessagingModule
 Feature: Messaging Module
 
   @LaunchBrowser
