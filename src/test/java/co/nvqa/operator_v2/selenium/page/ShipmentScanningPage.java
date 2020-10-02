@@ -103,6 +103,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     @FindBy(css = "md-dialog")
     public CloseShipmentDialog closeShipmentDialog;
 
+    @FindBy(xpath = "//div[contains(@class,'tracking-id-remove')]//small")
+    public TextBox smallRemoveMessage;
+
 
     public ShipmentScanningPage(WebDriver webDriver) {
         super(webDriver);
@@ -404,6 +407,13 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         retryIfAssertionErrorOccurred(() -> {
             String actualSuccessMessage = findElementByXpath(XPATH_SMALL_SUCCESS_MESSAGE).getText();
             assertEquals(expectedSuccessMessage, actualSuccessMessage);
+        }, "retry if small text not found");
+    }
+
+    public void verifySmallMessageAppearsInRemoveShipmentBox(String expectedRemoveMessage) {
+        retryIfAssertionErrorOccurred(() -> {
+            String actualSuccessMessage = smallRemoveMessage.getText();
+            assertEquals(expectedRemoveMessage, actualSuccessMessage);
         }, "retry if small text not found");
     }
 

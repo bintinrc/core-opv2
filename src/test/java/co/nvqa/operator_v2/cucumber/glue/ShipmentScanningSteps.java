@@ -163,7 +163,7 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.clickProceedInEndInboundDialog();
     }
 
-    @When("Operator click remove button in scanned shipment table")
+    @When("Operator remove scanned shipment from remove button in scanned shipment table")
     public void operatorClickRemoveButtonInScannedShipmentTable() {
         shipmentScanningPage.clickRemoveButton();
     }
@@ -204,6 +204,12 @@ public class ShipmentScanningSteps extends AbstractSteps {
     public void operatorVerifySmallMessageAppearsInShipmentInboundBox(String smallMessage) {
         smallMessage = resolveValue(smallMessage);
         shipmentScanningPage.verifySmallMessageAppearsInScanShipmentBox(smallMessage);
+    }
+
+    @Then("Operator verify small message {string} appears in Remove Shipment Container")
+    public void operatorVerifySmallMessageAppearsInRemoveShipmentContainer(String smallMessage) {
+        smallMessage = resolveValue(smallMessage);
+        shipmentScanningPage.verifySmallMessageAppearsInRemoveShipmentBox(smallMessage);
     }
 
     @Then("Operator verifies shipment to go with trip is shown with total {string}")
