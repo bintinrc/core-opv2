@@ -2,12 +2,12 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.pdf.ShipmentAirwayBill;
-import co.nvqa.commons.support.RandomUtil;
 import co.nvqa.commons.util.PdfUtils;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.MovementEvent;
 import co.nvqa.operator_v2.model.ShipmentEvent;
 import co.nvqa.operator_v2.model.ShipmentInfo;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
@@ -17,16 +17,12 @@ import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +85,12 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
 
     @FindBy(css = "md-dialog")
     public EditShipmentDialog editShipmentDialog;
+
+    @FindBy(css = "md-dialog")
+    public ForceCompleteDialog forceCompleteDialog;
+
+    @FindBy(css = "md-dialog")
+    public CancelShipmentDialog cancelShipmentDialog;
 
     private static final String FILEPATH = TestConstants.TEMP_DIR;
 
@@ -301,16 +303,21 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     {
         shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
         shipmentsTable.clickActionButton(1, ACTION_FORCE);
-        click(XPATH_FORCE_SUCCESS_CONFIRMATION_BUTTON);
+        forceCompleteDialog.waitUntilVisible();
+        forceCompleteDialog.confirm.click();
+//        click(XPATH_FORCE_SUCCESS_CONFIRMATION_BUTTON);
         waitUntilVisibilityOfToast(f("Success changed status to Force Success for Shipment ID %d", shipmentId));
+        pause5s();
     }
 
     public void cancelShipment(Long shipmentId)
     {
         shipmentsTable.filterByColumn(COLUMN_SHIPMENT_ID, String.valueOf(shipmentId));
         shipmentsTable.clickActionButton(1, ACTION_CANCEL);
-        clickButtonByAriaLabel("Cancel Shipment");
+        cancelShipmentDialog.waitUntilVisible();
+        cancelShipmentDialog.cancelShipment.click();
         waitUntilVisibilityOfToast(f("Success changed status to Cancelled for Shipment ID %d", shipmentId));
+        pause5s();
     }
 
     public void openAwb(Long shipmentId)
@@ -822,6 +829,34 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
                     .build());
             setEntityClass(MovementEvent.class);
             setNvTableParam("ctrl.tableParamEvents");
+        }
+    }
+
+    public static class CancelShipmentDialog extends MdDialog
+    {
+
+        @FindBy(xpath = "//Button//span[.='Cancel Shipment']")
+        public Button cancelShipment;
+
+        @FindBy(xpath = "//Button//span[.='Cancel']")
+        public Button cancel;
+
+        public CancelShipmentDialog(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+        }
+    }
+
+    public static class ForceCompleteDialog extends MdDialog
+    {
+
+        @FindBy(xpath = "//Button//span[.='Confirm']")
+        public Button confirm;
+
+        @FindBy(xpath = "//Button//span[.='Cancel']")
+        public Button cancel;
+
+        public ForceCompleteDialog(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
         }
     }
 }

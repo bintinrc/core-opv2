@@ -4,6 +4,7 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
@@ -84,6 +85,25 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//div//h3")
     public TextBox shipmentDetailPageShipmentId;
 
+    @FindBy(xpath = "//div[@class='hub-selection']//nv-autocomplete")
+    public NvAutocomplete selectHub;
+
+    @FindBy(xpath = "//md-input-container//md-select")
+    public MdSelect selectShipmentType;
+
+    @FindBy(xpath = "//div[@class='shipment-selection']//nv-autocomplete")
+    public NvAutocomplete selectShipmentFilter;
+
+    @FindBy(name = "container.shipment-scanning.select-shipment")
+    public NvApiTextButton selectShipmentButton;
+
+    @FindBy(name = "container.shipment-scanning.close-shipment")
+    public NvIconTextButton closeShipmentButton;
+
+    @FindBy(css = "md-dialog")
+    public CloseShipmentDialog closeShipmentDialog;
+
+
     public ShipmentScanningPage(WebDriver webDriver) {
         super(webDriver);
     }
@@ -133,6 +153,34 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         String toastMessage = getToastTopText();
         assertThat("Toast message not contains Shipment <SHIPMENT_ID> created", toastMessage, allOf(containsString("Shipment"), containsString("closed")));
         waitUntilInvisibilityOfToast();
+    }
+
+    public void closeShipmentWithData(String hubName, String shipmentType, String shipmentId) {
+        waitUntilVisibilityOfElementLocated("//div[@class='hub-selection']//nv-autocomplete");
+        System.out.println("DEBUG success");
+        selectHub.waitUntilVisible();
+        selectHub.selectValue(hubName);
+        System.out.println("DEBUG clicked");
+
+        selectShipmentType.waitUntilVisible();
+        selectShipmentType.click();
+//        selectShipmentType.sendKeysAndEnter(shipmentType);
+        selectShipmentType.selectValue("Air Haul");
+
+        selectShipmentFilter.waitUntilVisible();
+        selectShipmentFilter.selectValue(shipmentId);
+
+        selectShipmentButton.waitUntilClickable();
+        selectShipmentButton.click();
+
+        closeShipmentButton.waitUntilVisible();
+        closeShipmentButton.waitUntilClickable();
+        closeShipmentButton.click();
+
+        closeShipmentDialog.waitUntilVisible();
+        closeShipmentDialog.closeShipmentButton.waitUntilClickable();
+        closeShipmentDialog.closeShipmentButton.click();
+
     }
 
     public void removeOrderFromShipment(String firstTrackingId) {
@@ -251,7 +299,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         shipmentToGoWithTripDialog.waitUntilVisible();
         String actualDialogTitle = shipmentToGoWithTripDialog.dialogTitle.getText().toLowerCase();
         int index = 0;
-        for (PageElement shipmentIdElement: shipmentToGoWithTripDialog.shipmentId) {
+        for (PageElement shipmentIdElement : shipmentToGoWithTripDialog.shipmentId) {
             String currentShipmentId = shipmentIdElement.getText().trim();
             if (currentShipmentId.equals(shipmentId)) {
                 break;
@@ -274,9 +322,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     public void verifyCreatedShipmentsShipmentToGoWithTripDataLastIndexTransitHub(Map<String, String> finalData) {
         String[] shipmentIds = finalData.get("shipmentIds").split(", ");
-        for (int count=0; count<shipmentIds.length; count++) {
+        for (int count = 0; count < shipmentIds.length; count++) {
             finalData.put("shipmentId", shipmentIds[count]);
-            if (count==(shipmentIds.length - 1)) {
+            if (count == (shipmentIds.length - 1)) {
                 finalData.put("dropOffHub", "-");
                 finalData.put("comments", "-");
             }
@@ -296,7 +344,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     public void clickShipmentToGoWithId(String shipmentIdAsString) {
         shipmentToGoWithTripDialog.waitUntilVisible();
-        for (PageElement shipmentIdElement: shipmentToGoWithTripDialog.shipmentId) {
+        for (PageElement shipmentIdElement : shipmentToGoWithTripDialog.shipmentId) {
             String currentShipmentId = shipmentIdElement.getText();
             if (currentShipmentId.equals(shipmentIdAsString)) {
                 assertEquals(shipmentIdAsString, currentShipmentId);
@@ -368,13 +416,25 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     public void verifyShipmentToGoTableToScrollInto(String shipmentId) {
         shipmentToGoWithTripDialog.waitUntilVisible();
-        for (PageElement shipmentIdElement: shipmentToGoWithTripDialog.shipmentId) {
+        for (PageElement shipmentIdElement : shipmentToGoWithTripDialog.shipmentId) {
             String currentShipmentId = shipmentIdElement.getText();
             if (currentShipmentId.equals(shipmentId)) {
                 assertEquals(shipmentId, currentShipmentId);
                 shipmentIdElement.scrollIntoView();
                 return;
             }
+        }
+    }
+
+    public static class CloseShipmentDialog extends MdDialog {
+        @FindBy(xpath = "//button[.='Cancel']")
+        public Button cancelButton;
+
+        @FindBy(xpath = "//button[.='Close Shipment']")
+        public Button closeShipmentButton;
+
+        public CloseShipmentDialog(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
         }
     }
 

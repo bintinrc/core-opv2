@@ -51,6 +51,15 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.closeShipment();
     }
 
+    @And("Operator close shipment with data below:")
+    public void operatorCloseShipmentWithDataBelow(Map<String, String> mapOfData) {
+        mapOfData = resolveKeyValues(mapOfData);
+        String hubName = mapOfData.get("origHubName");
+        String shipmentType = mapOfData.get("shipmentType");
+        String shipmentId = mapOfData.get("shipmentId");
+        shipmentScanningPage.closeShipmentWithData(hubName, shipmentType, shipmentId);
+    }
+
     @When("^Operator scan multiple created order to shipment in hub ([^\"]*)$")
     public void aPIShipperTagsMultipleParcelsAsPerTheBelowTag(String hub) {
         List<String> trackingIds = (get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID));
@@ -124,6 +133,12 @@ public class ShipmentScanningSteps extends AbstractSteps {
     @Then("Operator verifies Scanned Shipment color is {string}")
     public void operatorVerifiesScannedShipmentColorIs(String boxColor) {
         shipmentScanningPage.verifyScannedShipmentColor(boxColor);
+    }
+
+    @Then("Operator verifies shipment {string} scanned")
+    public void operatorVerifiesShipmentScanned(String shipmentIdAsString) {
+        shipmentIdAsString = resolveValue(shipmentIdAsString);
+        shipmentScanningPage.verifyShipmentInTrip(shipmentIdAsString);
     }
 
     @When("Operator clicks end inbound button")
