@@ -35,6 +35,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     public static final String XPATH_TRIP_DEPART_PROCEED_BUTTON = "//nv[]";
     public static final String XPATH_SCAN_SHIPMENT_CONTAINER = "//div[contains(@class,'scan-barcode-container')]";
     public static final String XPATH_SCANNED_SHIPMENT = "//td[contains(@class,'shipment_id')]";
+    public static final String XPATH_SCANNED_SHIPMENT_BY_ID = "//td[contains(@class,'shipment_id')][.='%s']";
     public static final String XPATH_ACTIVE_INPUT_SELECTION = "//div[contains(@class,'md-select-menu-container nv-input-select-container md-active md-clickable')]//md-option[1]";
     public static final String XPATH_INBOUND_HUB_TEXT = "//div[span[.='Inbound Hub']]//p";
     public static final String XPATH_SHIPMENT_ID = "//td[@class='shipment_id']";
@@ -229,6 +230,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         pause5s();
     }
 
+    public void verifyBottomToastWithMessageIsShown(String expectedToastMessage) {
+        String actualToastMessage = getToastBottomText();
+        assertEquals(expectedToastMessage, actualToastMessage);
+        pause5s();
+    }
+
     public void verifyToastContainingMessageIsShown(String expectedToastMessageContain) {
         String actualToastMessage = getToastTopText();
         assertThat(f("Toast message contains %s", expectedToastMessageContain), actualToastMessage, containsString(expectedToastMessageContain));
@@ -241,6 +248,15 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     public void verifyScannedShipmentColor(String expectedShipmentColorAsHex) {
         String actualColorAsHex = getBackgroundColor(XPATH_SCANNED_SHIPMENT).asHex();
+        assertEquals(expectedShipmentColorAsHex, actualColorAsHex);
+    }
+
+    public void verifyScannedShipmentColorById(String expectedShipmentColorAsHex, String expectedShipmentId) {
+        waitUntilVisibilityOfElementLocated(f(XPATH_SCANNED_SHIPMENT_BY_ID, expectedShipmentId));
+        String actualShipmentId = findElementByXpath(f(XPATH_SCANNED_SHIPMENT_BY_ID, expectedShipmentId)).getText();
+        String actualColorAsHex = getBackgroundColor(f(XPATH_SCANNED_SHIPMENT_BY_ID, expectedShipmentId)).asHex();
+
+        assertEquals(expectedShipmentId, actualShipmentId);
         assertEquals(expectedShipmentColorAsHex, actualColorAsHex);
     }
 

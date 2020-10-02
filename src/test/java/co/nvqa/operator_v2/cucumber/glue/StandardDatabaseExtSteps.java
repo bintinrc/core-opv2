@@ -633,6 +633,26 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         }
     }
 
+    @After(value = "@DeleteShipments")
+    public void deleteShipments()
+    {
+        ShipmentInfo shipmentInfo = get(KEY_SHIPMENT_INFO);
+        if (shipmentInfo != null)
+        {
+            getHubJdbc().deleteShipment(shipmentInfo.getId());
+            return;
+        }
+
+        List<Long> createdShipmentIds = get(KEY_LIST_OF_CREATED_SHIPMENT_IDS);
+        if (createdShipmentIds.size() != 0)
+        {
+            for (Long createdShipmentId: createdShipmentIds)
+            {
+                getHubJdbc().deleteShipment(createdShipmentId);
+            }
+        }
+    }
+
     @After(value = "@DeleteHubAppUser")
     public void deleteHubAppUser()
     {
