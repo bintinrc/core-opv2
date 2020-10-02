@@ -1,4 +1,4 @@
-@OperatorV2 @Shipper @OperatorV2Part1 @Sales
+@OperatorV2 @Core @Shippers @Sales
 Feature: Sales
 
   @LaunchBrowser @ShouldAlwaysRun
