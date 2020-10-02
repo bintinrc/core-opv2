@@ -23,7 +23,7 @@ Feature: Shipper Pickups
       | comments     | GET_FROM_CREATED_RESERVATION |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator add Reservation to Route using API and verify the Reservation info is correct Operator Verify Route Details of A Routed Reservation on Shipper Pickup Page (uid:15a1bd52-d4c5-4c31-a88e-3c4ca4619807)
+  Scenario: Operator Verify Route Details of A Routed Reservation on Shipper Pickup Page (uid:15a1bd52-d4c5-4c31-a88e-3c4ca4619807)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
