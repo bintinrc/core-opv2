@@ -1,4 +1,4 @@
-@OperatorV2 @ShipperSupport @OperatorV2Part1 @Reservations @Saas
+@OperatorV2 @Engineering @ShipperSupport @Reservations
 Feature: Reservations
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -6,7 +6,7 @@ Feature: Reservations
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteReservationsAndAddresses
-  Scenario: Operator create new Reservation (uid:b2a5084c-16f9-42ce-9203-131574e5f3d2)
+  Scenario: Create Reservation - Create one Reservation in one address (uid:015f6c41-d6ae-4548-8e3a-e40a244f8edf)
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -19,7 +19,7 @@ Feature: Reservations
       | expectedTimeslotTextOnCalendar | 9:00 AM - 12:00 PM |
 
   @DeleteReservationsAndAddresses
-  Scenario: Operator create and edit Reservation (uid:a7b7630f-5723-45c4-9575-1b9ed572be17)
+  Scenario: Update Reservation Scheduled for Today (uid:bdbb75f3-da34-4169-9496-b66265867a84)
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -37,7 +37,7 @@ Feature: Reservations
       | expectedTimeslotTextOnCalendar | 12:00 PM - 3:00 PM |
 
   @DeleteReservationsAndAddresses
-  Scenario: Operator create and delete Reservation (uid:4d256cf6-cada-491d-855f-900e7f01c8d6)
+  Scenario: Delete Reservation for Today (uid:eeccf9f1-73e1-4e23-a020-272f775e8986)
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -49,31 +49,11 @@ Feature: Reservations
       | approxVolume | Less than 3 Parcels |
     Then Operator verify the new Reservation is created successfully
       | expectedTimeslotTextOnCalendar | 9:00 AM - 12:00 PM |
-    When Operator delete the new Reservation
-    Then Operator verify the new Reservation is deleted successfully
-
-  @DeleteReservationsAndAddresses
-  Scenario: Operator create, edit, and delete Reservation (uid:7d8deed7-7ccd-4d29-8645-16aa43a90931)
-    Given API Operator create new shipper address V2 using data below:
-      | shipperId       | {shipper-v4-id} |
-      | generateAddress | RANDOM          |
-    And Operator go to menu Shipper Support -> Blocked Dates
-    When Operator go to menu Shipper Support -> Reservations
-    And Operator create new Reservation using data below:
-      | shipperName  | {shipper-v4-name}   |
-      | timeslot     | 9AM-12PM            |
-      | approxVolume | Less than 3 Parcels |
-    Then Operator verify the new Reservation is created successfully
-      | expectedTimeslotTextOnCalendar | 9:00 AM - 12:00 PM |
-    When Operator update the new Reservation using data below:
-      | timeslot | 12PM-3PM |
-    Then Operator verify the new Reservation is updated successfully
-      | expectedTimeslotTextOnCalendar | 12:00 PM - 3:00 PM |
     When Operator delete the new Reservation
     Then Operator verify the new Reservation is deleted successfully
 
   @DeleteOrArchiveRoute
-  Scenario: Operator fails a normal reservation (uid:a7c0111d-924b-4626-86bf-16c7fa05b917)
+  Scenario: Fail Reservation (uid:f68dda3c-4869-400d-9168-7266177ac1be)
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
@@ -105,7 +85,7 @@ Feature: Reservations
       | status | Fail |
 
   @DeleteOrArchiveRoute
-  Scenario: Operator finishes a normal reservation with success (uid:e6644334-79ee-413a-9d07-e5a7fbac14d3)
+  Scenario: Success Reservation (uid:3a5f9759-9805-4055-acae-6116dc451b22)
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
