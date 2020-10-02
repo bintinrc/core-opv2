@@ -53,7 +53,7 @@ Feature: Update Delivery Address with CSV
       | trackingId                      | status                                                                                                                                                                                           |
       | {KEY_CREATED_ORDER_TRACKING_ID} | Require to fill in to.name, to.email, to.phone_number, to.address.address1, to.address.address2, to.address.postcode, to.address.city, to.address.country, to.address.state, to.address.district |
 
-  Scenario: Bulk update order delivery address with CSV - With technical issues (uid:786c8edb-376b-461d-913d-421d29ccbce6)
+  Scenario: Bulk Update Order Delivery Address with CSV - With Technical Issues (uid:37c5b5a7-d8ff-4401-a596-746daed36f23)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |

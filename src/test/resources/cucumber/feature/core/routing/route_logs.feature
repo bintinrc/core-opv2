@@ -151,7 +151,7 @@ Feature: Route Logs
     Then Operator verify multiple routes is archived successfully
 
   @DeleteOrArchiveRoute
-  Scenario: Operator Unarchive Multiple Routes from Route Logs Page (uid:ca9a74b2-4a72-4939-a4d2-f49c44a192cc)
+  Scenario: Operator Unarchive Multiple Archived Routes from Route Logs Page (uid:ca9a74b2-4a72-4939-a4d2-f49c44a192cc)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Routing -> Route Logs
     When Operator create multiple routes using data below:
