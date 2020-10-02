@@ -1205,65 +1205,85 @@ Feature: Shipment Inbound Scanning
 #      | result | Closed                 |
 #      | userId | automation@ninjavan.co |
 
+  @DeleteShipment @DeleteDriver @SoftDeleteHubViaDb
   Scenario: Invalid to Scan Transit Shipment From Another Country to Van Inbound (uid:48377ad2-c189-473c-b7f5-ac4d2a8d4183)
     Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given API Operator creates new Hub using data below:
-#      | name         | GENERATED |
-#      | displayName  | GENERATED |
-#      | facilityType | CROSSDOCK |
-#      | city         | GENERATED |
-#      | country      | GENERATED |
-#      | latitude     | GENERATED |
-#      | longitude    | GENERATED |
-#    And API Operator creates new Hub using data below:
-#      | name         | GENERATED |
-#      | displayName  | GENERATED |
-#      | facilityType | CROSSDOCK |
-#      | city         | GENERATED |
-#      | country      | GENERATED |
-#      | latitude     | GENERATED |
-#      | longitude    | GENERATED |
-#    And API Operator verify new Hubs are created
-#    And API Operator reloads hubs cache
-#    Given API Operator create new Driver using data below:
-#      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
-#    And API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
-#    Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
-#    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
-#    Given API Operator shipment inbound scan with trip with data below:
-#      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}                               |
-#      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
-#      | actionType     | ADD                                                     |
-#      | scanType       | SHIPMENT_VAN_INBOUND                                    |
-#      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
-#    And API Operator shipment end inbound with trip with data below:
-#      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
-#      | actionType     | ADD                                                     |
-#      | scanType       | SHIPMENT_VAN_INBOUND                                    |
-#      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
-#      | driverId       | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                     |
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator verify new Hubs are created
+    And API Operator reloads hubs cache
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    And API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
+    Given API Operator shipment inbound scan with trip with data below:
+      | shipmentId     | {KEY_CREATED_SHIPMENT_ID}                               |
+      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+      | actionType     | ADD                                                     |
+      | scanType       | SHIPMENT_VAN_INBOUND                                    |
+      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+    And API Operator shipment end inbound with trip with data below:
+      | movementTripId | {KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id} |
+      | actionType     | ADD                                                     |
+      | scanType       | SHIPMENT_VAN_INBOUND                                    |
+      | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
+      | driverId       | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                     |
     When Operator change the country to "Indonesia"
-    # create trip
+    Given Operator go to menu Hubs -> Facilities Management
+    When Operator create new Hub on page Hubs Administration using data below:
+      | name         | GENERATED       |
+      | displayName  | GENERATED       |
+      | facilityType | CROSSDOCK       |
+      | region       | Greater Jakarta |
+      | city         | GENERATED       |
+      | country      | ID              |
+      | latitude     | GENERATED       |
+      | longitude    | GENERATED       |
+    And Operator refresh page
+    And Operator refresh hubs cache on Facilities Management page
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
+    And Operator load schedules on Movement Management page with retry using data below:
+      | originHub      | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | destinationHub | {hub-name-temp}                    |
     And Operator adds new Movement Schedule on Movement Management page using data below:
-      | schedules[1].originHub      | {hub-name-temp}                                               |
-      | schedules[1].destinationHub | {hub-name-temp-2}                                             |
+      | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[3].name}                            |
+      | schedules[1].destinationHub | {hub-name-temp}                                               |
       | schedules[1].movementType   | Air Haul                                                      |
       | schedules[1].departureTime  | 15:15                                                         |
       | schedules[1].durationDays   | 1                                                             |
       | schedules[1].durationTime   | 16:30                                                         |
       | schedules[1].daysOfWeek     | all                                                           |
       | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
-    #assign driver
+    And Operator refresh page
+    When Movement Management page is loaded
+    And Operator load schedules on Movement Management page with retry using data below:
+      | originHub      | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | destinationHub | {hub-name-temp}                    |
+    And Operator assign driver "{id-driver-name} ({id-driver-username})" to created movement schedule
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Into Van Shipment Inbound Scanning page with data below:
-      | inboundHub           | {hub-name-temp}                                                                                                                 |
-      | inboundType          | Into Van                                                                                                                        |
-      | driver               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
-      | movementTripSchedule | {hub-name-temp-2}                                                                                                               |
+      | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[3].name}      |
+      | inboundType          | Into Van                                |
+      | driver               | {id-driver-name} ({id-driver-username}) |
+      | movementTripSchedule | {hub-name-temp}                         |
     And Operator scan shipment with id "{KEY_CREATED_SHIPMENT_ID}"
-    Then Operator verifies toast with message "Mismatched hub system ID: shipment origin hub system ID id and scan hub system ID sg are not the same." is shown on Shipment Inbound Scanning page
+    Then Operator verifies toast with message "Mismatched hub system ID: shipment origin hub system ID sg and scan hub system ID id are not the same." is shown on Shipment Inbound Scanning page
     And Operator verifies Scan Shipment Container color is "#ffe7ec"
     When Operator go to menu Inter-Hub -> Shipment Management
     When Operator change the country to "Singapore"

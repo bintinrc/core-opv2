@@ -7,11 +7,7 @@ import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
-import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
-import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
-import co.nvqa.operator_v2.selenium.elements.ant.AntTextWithLabel;
-import co.nvqa.operator_v2.selenium.elements.ant.AntTimePicker;
-import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
+import co.nvqa.operator_v2.selenium.elements.ant.*;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -115,6 +111,12 @@ public class MovementManagementPage extends OperatorV2SimplePage
     @FindBy(css = "div.ant-modal")
     public AddStationMovementScheduleModal addStationMovementScheduleModal;
 
+    @FindBy(xpath = "//td//i")
+    public PageElement assignDriverButton;
+
+    @FindBy(className = "ant-modal-wrap")
+    public AssignDriverModal assignDriverModal;
+
     //endregion
 
     public SchedulesTable schedulesTable;
@@ -166,6 +168,38 @@ public class MovementManagementPage extends OperatorV2SimplePage
 
         loadSchedules.click();
         originCrossdockHubFilter.waitUntilClickable();
+    }
+
+    public void assignDriver(String driverUsername)
+    {
+        assignDriverButton.click();
+        System.out.println("DEBUG 1");
+        assignDriverModal.waitUntilVisible();
+        System.out.println("DEBUG 2");
+        assignDriverModal.driverSelect.enterSearchTerm(driverUsername);
+        assignDriverModal.driverSelect.sendReturnButton();
+        System.out.println("DEBUG 3");
+        assignDriverModal.save.click();
+        System.out.println("DEBUG 4");
+        assignDriverModal.waitUntilInvisible();
+        System.out.println("DEBUG 5");
+    }
+
+    public static class AssignDriverModal extends AntModal
+    {
+        public AssignDriverModal(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(xpath = ".//div[contains(@class,'ant-select')]")
+        public AntSelect driverSelect;
+
+        @FindBy(xpath = "//button[.='Save Driver']")
+        public Button save;
+
+        @FindBy(xpath = "//button[.='Cancel']")
+        public Button cancel;
     }
 
     public static class EditStationRelationsModal extends AntModal

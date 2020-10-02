@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.selenium.elements.ant;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -32,7 +33,7 @@ public class AntSelect extends PageElement
     public void selectValue(String value)
     {
         enterSearchTerm(value);
-        clickf("//div[@class='ant-select-dropdown-menu']//div[@class='BaseTable__row-cell-text'][contains(normalize-space(text()), '%s')]", StringUtils.normalizeSpace(value));
+        clickf("//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[text()='%s']", value);
     }
 
     private void openMenu()
@@ -42,11 +43,16 @@ public class AntSelect extends PageElement
         pause1s();
     }
 
-    private void enterSearchTerm(String value)
+    public void enterSearchTerm(String value)
     {
         openMenu();
         searchInput.sendKeys(value);
         pause1s();
+    }
+
+    public void sendReturnButton()
+    {
+        searchInput.sendKeys(Keys.RETURN);
     }
 
     public String getValue()

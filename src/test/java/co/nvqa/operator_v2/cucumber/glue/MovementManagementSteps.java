@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementSchedule;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
@@ -80,6 +81,13 @@ public class MovementManagementSteps extends AbstractSteps
         operatorFillAddMovementScheduleFormUsingDataBelow(data);
         operatorClickButtonOnAddMovementScheduleDialog("Create");
         pause3s();
+    }
+
+    @And("Operator assign driver {string} to created movement schedule")
+    public void operatorAssignDriverToCreatedMovementScheduleWithData(String driverUsername)
+    {
+        driverUsername = resolveValue(driverUsername);
+        movementManagementPage.assignDriver(driverUsername);
     }
 
     @Then("Operator edits Crossdock Movement Schedule on Movement Management page using data below:")
@@ -166,6 +174,27 @@ public class MovementManagementSteps extends AbstractSteps
         String originHub = data.get("originHub");
         String destinationHub = data.get("destinationHub");
         movementManagementPage.loadSchedules(crossdockHub, originHub, destinationHub);
+    }
+
+    @And("Operator load schedules on Movement Management page with retry using data below:")
+    public void operatorLoadSchedulesOnMovementManagementPageWithRetryUsingDataBelow(Map<String, String> inputData)
+    {
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try {
+                final Map<String, String> data = resolveKeyValues(inputData);
+                String crossdockHub = data.get("crossdockHub");
+                String originHub = data.get("originHub");
+                String destinationHub = data.get("destinationHub");
+                movementManagementPage.loadSchedules(crossdockHub, originHub, destinationHub);
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                throw ex;
+            }
+        }, 10);
     }
 
     @And("Operator load schedules on Movement Management page")
