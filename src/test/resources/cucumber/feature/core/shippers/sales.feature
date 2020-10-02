@@ -5,13 +5,13 @@ Feature: Sales
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  Scenario: Operator download sample CSV file for "Sales Person Creation" on Sales page (uid:b3757347-5768-4ac8-8bda-b55d9a849d2d)
+  Scenario: Operator Download Sample CSV File for Sales Person Creation on Sales Page (uid:3af61552-4ca9-4246-ba7a-1be3dc528dbc)
     Given Operator go to menu Shipper -> Sales
     When Operator download sample CSV file for "Sales Person Creation" on Sales page
     Then Operator verify sample CSV file for "Sales Person Creation" on Sales page is downloaded successfully
 
   @DeleteSalesPerson
-  Scenario: Operator successfully creates multiple Sales Persons by uploading CSV contains multiple Sales Person on Sales page (uid:cb2f9698-2a87-485d-bf37-5f9e62e30f76)
+  Scenario: Operator Successfully Creates Multiple Sales Persons by Uploading CSV Contains Multiple Sales Person on Sales Page (uid:bcbfc882-3e1e-4423-b9d8-3c8ad973c204)
     Given Operator go to menu Shipper -> Sales
     When Operator upload CSV contains multiple Sales Persons on Sales page using data below:
       | numberOfSalesPerson | 2 |
@@ -19,7 +19,7 @@ Feature: Sales
     Then Operator verifies all Sales Persons created successfully
 
   @DeleteSalesPerson
-  Scenario: Operator verifies all filters on Sales page works fine (uid:b4b7bc22-0374-4426-a24d-b4aa3890a78d)
+  Scenario: Operator Verifies All filters on Sales Page Works Fine (uid:550e3406-2ed8-4c41-9ffb-f73e4307384c)
     Given Operator go to menu Shipper -> Sales
     When Operator upload CSV contains multiple Sales Persons on Sales page using data below:
       | numberOfSalesPerson | 1 |

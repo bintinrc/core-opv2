@@ -1,4 +1,4 @@
-@OperatorV2Deprecated @OperatorV2Part1Deprecated
+@OperatorV2 @Core @NewFeatures @OutboundMonitoring
 Feature: Outbound Monitoring
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -6,7 +6,7 @@ Feature: Outbound Monitoring
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteOrArchiveRoute
-  Scenario: Operator's searching the outbound data on Outbound Monitoring page (uid:19cba029-d587-4911-9269-b9b4beb4b529)
+  Scenario: Operator Search Outbound Data on Outbound Monitoring Page (uid:e70dd3bc-b9ad-4447-b717-5afb2b52ed30)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -20,13 +20,13 @@ Feature: Outbound Monitoring
     Given API Driver get pickup/delivery waypoint of the created order
     Given API Operator Van Inbound parcel
     Given API Operator start the route
-    Given Operator go to menu New Features -> Outbound/Route Load Monitoring
+    Given Operator go to menu New Features -> Outbound Load Monitoring
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
     When Operator search on Route ID Header Table on Outbound Monitoring Page
     Then Operator verify the route ID is exist on Outbound Monitoring Page
 
   @DeleteOrArchiveRoute
-  Scenario: Operator verifies the In Progress Outbound Status on Outbound Monitoring Page (uid:7974395f-d4c7-4a18-bec7-a203136377df)
+  Scenario: Operator Verifies the In Progress Outbound Status on Outbound Monitoring Page (uid:4414c191-4865-4d4f-8722-8678795d3636)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -41,13 +41,13 @@ Feature: Outbound Monitoring
     Given API Driver get pickup/delivery waypoint of the created order
     Given API Operator Van Inbound parcel
     Given API Operator start the route
-    Given Operator go to menu New Features -> Outbound/Route Load Monitoring
+    Given Operator go to menu New Features -> Outbound Load Monitoring
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
     When Operator search on Route ID Header Table on Outbound Monitoring Page
     Then Operator verify the In Progress Outbound Status on Outbound Monitoring Page
 
   @DeleteOrArchiveRoute
-  Scenario: Operator verifies the Complete Outbound Status on Outbound Monitoring Page (uid:85004aba-947b-43eb-9b31-ab69015dae02)
+  Scenario: Operator Verifies the Complete Outbound Status on Outbound Monitoring Page (uid:e00fae9b-9e58-40da-bb16-e66ca91960e7)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -65,13 +65,13 @@ Feature: Outbound Monitoring
       | outboundRequest | { "hubId":{hub-id} } |
     Given API Operator start the route
     Given API Driver deliver the created parcel successfully
-    Given Operator go to menu New Features -> Outbound/Route Load Monitoring
+    Given Operator go to menu New Features -> Outbound Load Monitoring
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
     When Operator search on Route ID Header Table on Outbound Monitoring Page
     Then Operator verify the Complete Outbound Status on Outbound Monitoring Page
 
   @DeleteOrArchiveRoute
-  Scenario: Operator clicks on Flag Icon to mark route ID on Outbound Monitoring Page (uid:ae918b82-457e-47fe-a269-7c7cb6733b54)
+  Scenario: Operator Clicks on Flag Icon to Mark Route ID on Outbound Monitoring Page (uid:9a062aaa-cc20-4937-a4d4-e996200bd283)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -86,14 +86,14 @@ Feature: Outbound Monitoring
     Given API Driver get pickup/delivery waypoint of the created order
     Given API Operator Van Inbound parcel
     Given API Operator start the route
-    Given Operator go to menu New Features -> Outbound/Route Load Monitoring
+    Given Operator go to menu New Features -> Outbound Load Monitoring
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
     When Operator search on Route ID Header Table on Outbound Monitoring Page
     When Operator click on flag icon on chosen route ID on Outbound Monitoring Page
     Then Operator verifies the Outbound status on the chosen route ID is changed
 
   @DeleteOrArchiveRoute
-  Scenario: Operator adding comment on the Outbound Monitoring Page (uid:ee8738f0-95b2-4419-8865-0e2f3b5be7bd)
+  Scenario: Operator Adding Comment on the Outbound Monitoring Page (uid:5fab15ab-78eb-4349-8656-e96e0942f560)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -108,14 +108,14 @@ Feature: Outbound Monitoring
     Given API Driver get pickup/delivery waypoint of the created order
     Given API Operator Van Inbound parcel
     Given API Operator start the route
-    Given Operator go to menu New Features -> Outbound/Route Load Monitoring
+    Given Operator go to menu New Features -> Outbound Load Monitoring
     When Operator click on 'Load Selection' Button on Outbound Monitoring Page
     When Operator search on Route ID Header Table on Outbound Monitoring Page
     When Operator click on comment icon on chosen route ID on Outbound Monitoring Page
     Then Operator verifies the comment table on the chosen route ID is changed
 
   @CloseNewWindows @DeleteOrArchiveRoute
-  Scenario: Operator should be able to Pull out order from route on Outbound Monitoring page (uid:a0b72c03-6596-454c-a697-00a02ed7984a)
+  Scenario: Operator Pull Out Order from a Route on Outbound Monitoring Page (uid:ff2d5814-a7fa-4386-aa98-5fe41c2a2032)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -126,7 +126,7 @@ Feature: Outbound Monitoring
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    Given Operator go to menu New Features -> Outbound/Route Load Monitoring
+    Given Operator go to menu New Features -> Outbound Load Monitoring
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | fromDate | {{previous-1-day-yyyy-MM-dd}} |
       | toDate   | {{current-date-yyyy-MM-dd}}   |
@@ -134,29 +134,6 @@ Feature: Outbound Monitoring
       | hubName  | {hub-name}                    |
     When Operator pull out order from route on Outbound Monitoring page
     Then API Operator verify order is pulled out from route
-
-#TO DO : after the page is migrated to OpV2
-#  @DeleteOrArchiveRoute
-#  Scenario: Operator pull out order on Outbound Monitoring Page
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given API Shipper create V4 order using data below:
-#      | generateFromAndTo | RANDOM |
-#      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-#    Given API Operator Global Inbound parcel using data below:
-#      | globalInboundRequest | { "hubId":{hub-id} } |
-#    Given API Operator create new route using data below:
-#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-#    Given API Operator add parcel to the route using data below:
-#      | addParcelToRouteRequest | { "type":"DD" } |
-#    Given Operator go to menu New Features -> Outbound Monitoring
-#    When Operator click on 'Load Selection' Button on Outbound Monitoring Page
-#    When Operator search on Route ID Header Table on Outbound Monitoring Page
-#    When Operator click on edit icon on chosen route ID on Outbound Monitoring Page
-#    When Operator pull out a tracking ID of the route ID on Outbound Monitoring Page
-#    Given Operator go to menu New Features -> Outbound Monitoring
-#    When Operator click on 'Load Selection' Button on Outbound Monitoring Page
-#    When Operator search on Route ID Header Table on Outbound Monitoring Page
-#    Then Operator verifies the Total Parcel in Route is changed on Outbound Monitoring Page
 
 #  @DeleteOrArchiveRoute
 #  Scenario: Operator fail pull out order on Outbound Monitoring Page due to van inbounded order
