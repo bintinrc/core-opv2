@@ -1686,6 +1686,6 @@ Feature: Shipment Inbound Scanning
     Then Operator verify small message "Scan failed. MAWB: {KEY_SHIPMENT_AWB}" appears in Shipment Inbound Box
     And Operator verifies shipment counter is "1"
 
-  @KillBrowser @ShouldAlwaysRunScan
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
