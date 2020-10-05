@@ -1,11 +1,13 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.*;
+import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -13,6 +15,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import static org.hamcrest.Matchers.allOf;
@@ -385,23 +388,24 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     }
 
     public void verifyTripData(String expectedInboundHub, String expectedInboundType,
-                               String expectedDriver, String expectedMovementTrip) {
+                               String expectedDriver, String expectedDestinationHub) {
         waitUntilVisibilityOfElementLocated(XPATH_INBOUND_HUB_TEXT);
         String actualInboundHub = inboundHubText.getText();
         String actualInboundType = inboundTypeText.getText();
         String actualDriver = driverText.getText();
         String actualMovementTrip = movementTripText.getText();
-        String actualDestinationHub = actualMovementTrip.split(",")[0].split(" ")[1];
-        String actualTime = actualMovementTrip.split(",")[2].trim();
-        String expectedDestinationHub = expectedMovementTrip.split(",")[0].split(" ")[1];
-        String expectedTime = expectedMovementTrip.split(",")[2].split(" ")[1];
+        String actualDestinationHub = actualMovementTrip.split(",")[0].replace("To ", "");
+        String departureDate = DateUtil.displayDate(DateUtil.getDate());
+        String month = TestUtils.integerToMonth(Integer.parseInt(departureDate.split("-")[1]) - 1);
+        String date = departureDate.split("-")[2];
+        String expectedDepartureTime = date + " " + month;
+        String actualDepartureTime = actualMovementTrip.split(",")[1].replace(" Departure ", "");
 
         assertEquals(expectedInboundHub, actualInboundHub);
         assertEquals(expectedInboundType, actualInboundType);
         assertEquals(expectedDriver, actualDriver);
-        assertEquals(expectedMovementTrip, actualMovementTrip);
         assertEquals(expectedDestinationHub, actualDestinationHub);
-        assertEquals(expectedTime, actualTime);
+        assertEquals(expectedDepartureTime, actualDepartureTime);
     }
 
     public void verifyShipmentInTrip(String expectedShipmentId) {

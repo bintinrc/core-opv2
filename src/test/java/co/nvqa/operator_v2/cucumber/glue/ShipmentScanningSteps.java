@@ -164,10 +164,8 @@ public class ShipmentScanningSteps extends AbstractSteps {
         String inboundHub = finalData.get("inboundHub");
         String inboundType = finalData.get("inboundType");
         String driver = finalData.get("driver");
-        String movementTrip = finalData.get("movementTrip");
-        String stringShipmentId = finalData.get("stringShipmentId");
-        shipmentScanningPage.verifyTripData(inboundHub, inboundType, driver, movementTrip);
-        shipmentScanningPage.verifyShipmentInTrip(stringShipmentId);
+        String destinationHub = finalData.get("destinationHub");
+        shipmentScanningPage.verifyTripData(inboundHub, inboundType, driver, destinationHub);
     }
 
     @And("Operator clicks proceed in end inbound dialog")
