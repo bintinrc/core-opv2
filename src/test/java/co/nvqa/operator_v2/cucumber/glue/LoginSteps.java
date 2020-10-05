@@ -1,8 +1,10 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.StandardApiOperatorPortalSteps;
+import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import co.nvqa.operator_v2.selenium.page.LoginPage;
 import co.nvqa.operator_v2.selenium.page.MainPage;
+import co.nvqa.operator_v2.selenium.page.ProfilePage;
 import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -22,6 +24,7 @@ public class LoginSteps extends AbstractSteps
     private Provider<StandardApiOperatorPortalSteps> providerOfStandardApiOperatorPortalSteps;
     private LoginPage loginPage;
     private MainPage mainPage;
+    private ProfilePage profilePage;
     private static final String COUNTRY = "country";
 
     public LoginSteps()
@@ -33,6 +36,7 @@ public class LoginSteps extends AbstractSteps
     {
         loginPage = new LoginPage(getWebDriver());
         mainPage = new MainPage(getWebDriver());
+        profilePage = new ProfilePage(getWebDriver());
     }
 
     @Given("^Operator login with username = \"([^\"]*)\" and password = \"([^\"]*)\"$")
@@ -81,7 +85,8 @@ public class LoginSteps extends AbstractSteps
     @When("Operator change the country to {string}")
     public void operatorChangeTheCountryTo(String countryName)
     {
-        loginPage.changeCountry(countryName);
+        profilePage.clickProfileButton();
+        profilePage.changeCountry(countryName);
         put(COUNTRY, countryName);
     }
 }

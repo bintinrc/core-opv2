@@ -10,7 +10,9 @@ import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -71,6 +73,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     private static final String LAST_STATUS_CLASS = "lastStatus";
 
     private static final String SUCCESS_CANCEL_TRIP_TOAST = "//div[contains(@class,'notification-notice-message') and (contains(text(),'Movement trip cancelled'))]";
+    private static final String FIRST_ROW_TRACK = "//tr[1]//td[contains(@class,'track')]";
 
     @FindBy(className = "ant-modal-wrap")
     public CancelTripModal cancelTripModal;
@@ -78,8 +81,21 @@ public class TripManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//th[div[.='Status']]")
     public StatusFilter tripStatusFilter;
 
+    @FindBy(xpath= "//div[contains(@class,'nv-table')]//table")
+    public NvTable<TripEventsRow> tripEventsRowNvTable;
+
+    @FindBy(tagName = "iframe")
+    private PageElement pageFrame;
+
+    @FindBy(xpath = LOAD_BUTTON_XPATH)
+    public Button loadButton;
+
     public TripManagementPage(WebDriver webDriver) {
         super(webDriver);
+    }
+
+    public void switchTo() {
+        getWebDriver().switchTo().frame(pageFrame.getWebElement());
     }
 
     public void verifiesTripManagementIsLoaded() {
@@ -89,9 +105,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
 
     public void clickLoadButton() {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
-        click(LOAD_BUTTON_XPATH);
-        getWebDriver().switchTo().parentFrame();
+        loadButton.click();
+        loadButton.waitUntilInvisible();
     }
 
     public void verifiesFieldReqiredErrorMessageShown() {
@@ -109,10 +124,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
 
     public void selectValueFromFilterDropDownDirectly(String filterName, String filterValue) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
         click(f(FILTER_OPTION_XPATH, filterName));
         click(f(TEXT_OPTION_XPATH, filterValue));
-        getWebDriver().switchTo().parentFrame();
     }
 
     public void verifiesSumOfTripManagement(MovementTripType tabName, Long tripManagementCount) {
@@ -514,16 +527,38 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
 
     public void verifyStatusValue(String expectedTripId, String expectedStatusValue) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
         waitUntilVisibilityOfElementLocated(TRIP_ID_FIRST_ROW_XPATH);
         String actualTripId = getText(TRIP_ID_FIRST_ROW_XPATH);
         assertEquals(expectedTripId, actualTripId);
 
         waitUntilVisibilityOfElementLocated(FIRST_ROW_STATUS);
-        String actualTrackValue = getText(FIRST_ROW_STATUS).toLowerCase();
-        assertEquals(expectedStatusValue, actualTrackValue);
+        String actualStatusValue = getText(FIRST_ROW_STATUS).toLowerCase();
+        assertEquals(expectedStatusValue, actualStatusValue);
+    }
 
-        getWebDriver().switchTo().parentFrame();
+    public void verifyTripHasDeparted() {
+        waitUntilVisibilityOfElementLocated(TRIP_ID_FIRST_ROW_XPATH);
+        String actualTrackValue = getText(FIRST_ROW_TRACK).toLowerCase();
+        assertEquals("departed", actualTrackValue.toLowerCase());
+    }
+
+    public void verifyEventExist(String event, String status) {
+        waitUntilVisibilityOfElementLocated("//table");
+        List<TripEventsRow> tripEvents = tripEventsRowNvTable.rows;
+        int departedRow = -1;
+        int counter = 0;
+        for (TripEventsRow singleTripEvent: tripEvents) {
+            String actualEvent = singleTripEvent.event.getText().toLowerCase();
+            if (actualEvent.equals(event.toLowerCase())) {
+                departedRow = counter;
+            }
+            counter += 1;
+        }
+        if (departedRow == -1) {
+            assertEquals(status, "");
+        }
+        String actualStatus = tripEvents.get(departedRow).status.getText().toLowerCase();
+        assertEquals(status, actualStatus);
     }
 
     public Boolean isActionButtonEnabled(MovementTripActionName actionName) {
@@ -703,5 +738,32 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
         @FindBy(xpath = "//button[.='No']")
         public Button no;
+    }
+
+    public static class TripEventsRow extends NvTable.NvRow {
+        public TripEventsRow(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        public TripEventsRow(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
+            super(webDriver, searchContext, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(className = "event")
+        public PageElement event;
+
+        @FindBy(className = "userId")
+        public PageElement userId;
+
+        @FindBy(className = "status")
+        public PageElement status;
+
+        @FindBy(className = "hubName")
+        public PageElement hubName;
+
+        @FindBy(className = "createdAt")
+        public PageElement createdAt;
     }
 }

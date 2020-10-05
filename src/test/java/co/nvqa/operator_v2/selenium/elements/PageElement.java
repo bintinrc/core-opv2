@@ -160,6 +160,11 @@ public class PageElement extends SimplePage
         waitUntilInvisibilityOfElementLocated(webElement);
     }
 
+    public void waitUntilVisible()
+    {
+        waitUntilVisibilityOfElementLocated(webElement);
+    }
+
     public boolean isEnabled()
     {
         return webElement.isEnabled();

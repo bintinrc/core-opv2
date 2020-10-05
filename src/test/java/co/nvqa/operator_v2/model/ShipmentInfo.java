@@ -29,7 +29,7 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo>
     private String destHubName;
     private String arrivalDatetime;
     private String completedAt;
-    private int ordersCount;
+    private Long ordersCount;
     private String comments;
     private String mawb;
     private String sla;
@@ -50,7 +50,7 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo>
         setDestHubName(shipments.getShipment().getDestHubName());
         setArrivalDatetime(normalisedDate(shipments.getShipment().getArrivalDatetime()));
         setCompletedAt(normalisedDate(shipments.getShipment().getCompletedAt()));
-        setOrdersCount(Math.toIntExact(shipments.getShipment().getOrdersCount()));
+        setOrdersCount((shipments.getShipment().getOrdersCount()));
         setComments(shipments.getShipment().getComments());
         setMawb(shipments.getShipment().getMawb());
     }
@@ -179,12 +179,12 @@ public class ShipmentInfo extends DataEntity<ShipmentInfo>
         this.completedAt = completedAt;
     }
 
-    public int getOrdersCount()
+    public Long getOrdersCount()
     {
         return ordersCount;
     }
 
-    public void setOrdersCount(int ordersCount)
+    public void setOrdersCount(Long ordersCount)
     {
         this.ordersCount = ordersCount;
     }

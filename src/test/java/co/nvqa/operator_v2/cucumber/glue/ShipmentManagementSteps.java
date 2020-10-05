@@ -9,6 +9,7 @@ import co.nvqa.operator_v2.model.ShipmentEvent;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
 import co.nvqa.operator_v2.util.KeyConstants;
+import co.nvqa.operator_v2.util.TestConstants;
 import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -165,7 +166,7 @@ public class ShipmentManagementSteps extends AbstractSteps
 
         ShipmentInfo shipmentInfo = new ShipmentInfo();
         shipmentInfo.fromMap(mapOfData);
-        shipmentInfo.setOrdersCount(listOfOrders.size());
+        shipmentInfo.setOrdersCount((long) listOfOrders.size());
 
         shipmentManagementPage.createShipment(shipmentInfo, isNextOrder);
 
@@ -273,7 +274,8 @@ public class ShipmentManagementSteps extends AbstractSteps
             shipmentInfo = get(KEY_SHIPMENT_INFO);
         }
         ShipmentInfo expectedShipmentInfo = new ShipmentInfo();
-        expectedShipmentInfo.fromMap(mapOfData);
+        Map<String, String> resolvedKeyValues = resolveKeyValues(mapOfData);
+        expectedShipmentInfo.fromMap(resolvedKeyValues);
         shipmentManagementPage.validateShipmentInfo(shipmentInfo.getId(), expectedShipmentInfo);
     }
 
@@ -300,6 +302,14 @@ public class ShipmentManagementSteps extends AbstractSteps
 
         shipmentManagementPage.openShipmentDetailsPage(shipmentInfo.getId());
     }
+
+    @And("Operator open the shipment detail for the shipment {string} on Shipment Management Page")
+    public void operatorOpenShipmentDetailOnShipmentManagementPage(String shipmentIdAsString)
+    {
+        Long shipmentId = Long.valueOf(resolveValue(shipmentIdAsString));
+        shipmentManagementPage.openShipmentDetailsPage(shipmentId);
+    }
+
 
     @And("^Operator force success the created shipment on Shipment Management page$")
     public void operatorForceSuccessTheCreatedShipmentOnShipmentManagementPage()
@@ -357,6 +367,26 @@ public class ShipmentManagementSteps extends AbstractSteps
                 .findFirst()
                 .orElseThrow(() -> new AssertionError(f("There is no [%s] shipment event on Shipment Details page", expectedEvent.getSource())));
         expectedEvent.compareWithActual(actualEvent);
+    }
+
+    @Then("Operator verifies event is present for shipment on Shipment Detail page")
+    public void operatorVerifiesEventIsPresentForShipmentOnShipmentDetailPage(Map<String, String> mapOfData)
+    {
+        final Map <String, String> finalMapOfData = resolveKeyValues(mapOfData);
+        List<Shipments> lists = get(KEY_LIST_OF_CREATED_SHIPMENT);
+
+        lists.forEach(shipment ->
+        {
+            ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
+            navigateTo(f("%s/%s/shipment-details/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, shipment.getShipment().getId()));
+            shipmentManagementPage.waitUntilPageLoaded();
+            List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readAllEntities();
+            ShipmentEvent actualEvent = events.stream()
+                    .filter(event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
+                    .findFirst()
+                    .orElseThrow(() -> new AssertionError(f("There is no [%s] shipment event on Shipment Details page", expectedEvent.getSource())));
+            expectedEvent.compareWithActual(actualEvent);
+        });
     }
 
     @Then("^Operator verify movement event on Shipment Details page using data below:$")
