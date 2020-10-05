@@ -173,16 +173,11 @@ public class MovementManagementPage extends OperatorV2SimplePage
     public void assignDriver(String driverUsername)
     {
         assignDriverButton.click();
-        System.out.println("DEBUG 1");
         assignDriverModal.waitUntilVisible();
-        System.out.println("DEBUG 2");
         assignDriverModal.driverSelect.enterSearchTerm(driverUsername);
         assignDriverModal.driverSelect.sendReturnButton();
-        System.out.println("DEBUG 3");
         assignDriverModal.save.click();
-        System.out.println("DEBUG 4");
         assignDriverModal.waitUntilInvisible();
-        System.out.println("DEBUG 5");
     }
 
     public static class AssignDriverModal extends AntModal

@@ -164,14 +164,11 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     public void closeShipmentWithData(String hubName, String shipmentType, String shipmentId) {
         waitUntilVisibilityOfElementLocated("//div[@class='hub-selection']//nv-autocomplete");
-        System.out.println("DEBUG success");
         selectHub.waitUntilVisible();
         selectHub.selectValue(hubName);
-        System.out.println("DEBUG clicked");
 
         selectShipmentType.waitUntilVisible();
         selectShipmentType.click();
-//        selectShipmentType.sendKeysAndEnter(shipmentType);
         selectShipmentType.selectValue("Air Haul");
 
         selectShipmentFilter.waitUntilVisible();
