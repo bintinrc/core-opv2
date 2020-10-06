@@ -251,6 +251,6 @@ public class OrderBillingSteps extends AbstractSteps
     @Then("Operator verifies that the name of normal shipper suggestion is not displayed")
     public void operatorVerifiesThatTheNameOfNormalShipperSuggestionIsNotDisplayed()
     {
-       assertThat("The displayed error msg does not match with the expected error msg",orderBillingPage.getNoParentErrorMsg(), containsString("No Parent Shipper matching"));
+        assertThat("The displayed error msg does not match with the expected error msg", orderBillingPage.getNoParentErrorMsg(), containsString("No Parent Shipper matching"));
     }
 }

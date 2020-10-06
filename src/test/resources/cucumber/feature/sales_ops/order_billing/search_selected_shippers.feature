@@ -11,6 +11,7 @@ Feature: Order Billing
     Given API Operator whitelist email "{order-billing-email}"
     Given operator marks gmail messages as read
 
+
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Generate "SHIPPER" Success Billing Report - Selected Shipper (uid:3fe5e7fb-4dbb-4078-93f2-c2e1ce1bb2db)
     Given API Shipper create V4 order using data below:
@@ -31,7 +32,7 @@ Feature: Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                    |
-      | shipper      | {shipper-v4-name}                                   |
+      | shipper      | {shipper-v4-legacy-id}                              |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
     Then Operator gets price order details from the database
@@ -62,7 +63,7 @@ Feature: Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                          |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                          |
-      | shipper      | {shipper-v4-name}                                         |
+      | shipper      | {shipper-v4-legacy-id}                                    |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
     Then Operator gets price order details from the database
@@ -78,7 +79,7 @@ Feature: Order Billing
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                                                           |
       | endDate      | {gradle-current-date-yyyy-MM-dd}                                                           |
-      | shipper      | {shipper-v4-name}                                                                          |
+      | shipper      | {shipper-v4-legacy-id}                                                                     |
       | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                                                      |
     Then Operator opens Gmail and checks received email
