@@ -31,11 +31,26 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     }
 
     @When("^Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page$")
-    public void inboundScanning(String label, String hub) {
-        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
-        hub = resolveValue(hub);
+    public void inboundScanning(String label, final String hub) {
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try {
+                navigateRefresh();
+                pause2s();
+                Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+                final String finalHub = resolveValue(hub);
 
-        scanningPage.inboundScanning(shipmentId, label, hub);
+                scanningPage.inboundScanning(shipmentId, label, finalHub);
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
+                throw ex;
+            }
+        }, 10);
+//        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+//        hub = resolveValue(hub);
+//
+//        scanningPage.inboundScanning(shipmentId, label, hub);
     }
 
     @When("^Operator inbound scanning Shipment on Shipment Inbound Scanning page using data below:$")
