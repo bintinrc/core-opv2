@@ -359,6 +359,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     @Then("^Operator verify shipment event on Shipment Details page using data below:$")
     public void operatorVerifyShipmentEventOnEditOrderPage(Map<String, String> mapOfData)
     {
+        pause3s();
         mapOfData = resolveKeyValues(mapOfData);
         ShipmentEvent expectedEvent = new ShipmentEvent(mapOfData);
         List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readAllEntities();

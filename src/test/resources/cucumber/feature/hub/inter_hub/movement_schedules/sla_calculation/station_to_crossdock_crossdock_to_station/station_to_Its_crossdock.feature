@@ -63,7 +63,7 @@ Feature: Station to it's Crossdock
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}  |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}  |
       | status      | Transit                             |
-      | sla         | {{next-2-days-yyyy-MM-dd}} 07:45:00 |
+      | sla         | {{next-3-days-yyyy-MM-dd}} 07:45:00 |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_VAN_INBOUND               |
