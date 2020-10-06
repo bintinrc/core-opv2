@@ -1,5 +1,5 @@
 @TripManagement @InterHub @MiddleMile
-Feature: Trip Management
+Feature: Trip Management - View Trips
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
@@ -27,7 +27,7 @@ Feature: Trip Management
     When Operator clicks on "view" icon on the action column
     Then Operator verifies that the new tab with trip details is opened
 
-  Scenario: View Archive Trip (uid:f88425c2-6cb1-44d5-a9ff-d87abf1cf31b)
+  Scenario: View Archived Trip (uid:f88425c2-6cb1-44d5-a9ff-d87abf1cf31b)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies that the Trip Management Page is opened

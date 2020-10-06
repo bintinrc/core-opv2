@@ -7,6 +7,7 @@ import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementEvent;
 import co.nvqa.operator_v2.model.ShipmentEvent;
 import co.nvqa.operator_v2.model.ShipmentInfo;
+import co.nvqa.operator_v2.model.StationMovementSchedule;
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
 import co.nvqa.operator_v2.util.KeyConstants;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -144,56 +145,67 @@ public class ShipmentManagementSteps extends AbstractSteps
     @When("^Operator create Shipment on Shipment Management page using data below:$")
     public void operatorCreateShipmentOnShipmentManagementPageUsingDataBelow(Map<String, String> mapOfData)
     {
-        mapOfData = resolveKeyValues(mapOfData);
-        List<Order> listOfOrders;
-        boolean isNextOrder = false;
-
-        if (get("isNextOrder") != null)
+        retryIfRuntimeExceptionOccurred(() ->
         {
-            isNextOrder = get("isNextOrder");
-        }
+            try {
+                final Map<String, String> finalData = resolveKeyValues(mapOfData);
+                List<Order> listOfOrders;
+                boolean isNextOrder = false;
 
-        if (containsKey(KEY_LIST_OF_CREATED_ORDER))
-        {
-            listOfOrders = get(KEY_LIST_OF_CREATED_ORDER);
-        } else if (containsKey(KEY_CREATED_ORDER))
-        {
-            listOfOrders = Arrays.asList(get(KEY_CREATED_ORDER));
-        } else
-        {
-            listOfOrders = new ArrayList<>();
-        }
+                if (get("isNextOrder") != null)
+                {
+                    isNextOrder = get("isNextOrder");
+                }
 
-        ShipmentInfo shipmentInfo = new ShipmentInfo();
-        shipmentInfo.fromMap(mapOfData);
-        shipmentInfo.setOrdersCount((long) listOfOrders.size());
+                if (containsKey(KEY_LIST_OF_CREATED_ORDER))
+                {
+                    listOfOrders = get(KEY_LIST_OF_CREATED_ORDER);
+                } else if (containsKey(KEY_CREATED_ORDER))
+                {
+                    listOfOrders = Arrays.asList(get(KEY_CREATED_ORDER));
+                } else
+                {
+                    listOfOrders = new ArrayList<>();
+                }
 
-        shipmentManagementPage.createShipment(shipmentInfo, isNextOrder);
+                ShipmentInfo shipmentInfo = new ShipmentInfo();
+                shipmentInfo.fromMap(finalData);
+                shipmentInfo.setOrdersCount((long) listOfOrders.size());
 
-        if (StringUtils.isBlank(shipmentInfo.getShipmentType()))
-        {
-            shipmentInfo.setShipmentType("AIR_HAUL");
-        }
+                shipmentManagementPage.createShipment(shipmentInfo, isNextOrder);
+
+                if (StringUtils.isBlank(shipmentInfo.getShipmentType()))
+                {
+                    shipmentInfo.setShipmentType("AIR_HAUL");
+                }
 
 //        final String mawb = ("AUTO".equalsIgnoreCase(shipmentInfo.getMawb()) && !StringUtils.isBlank(shipmentInfo.getMawb())) ? "AUTO-" + randomLong(0000000, 9999999) : null;
 //        put("tanias'mawb", mawb);
 //        shipmentInfo.setMawb(mawb);
 
-        put(KEY_SHIPMENT_INFO, shipmentInfo);
-        put(KEY_CREATED_SHIPMENT, shipmentInfo);
-        put(KEY_CREATED_SHIPMENT_ID, shipmentInfo.getId());
+                put(KEY_SHIPMENT_INFO, shipmentInfo);
+                put(KEY_CREATED_SHIPMENT, shipmentInfo);
+                put(KEY_CREATED_SHIPMENT_ID, shipmentInfo.getId());
 
-        if (isNextOrder)
-        {
-            Long secondShipmentId = shipmentManagementPage.createAnotherShipment();
-            shipmentInfo.setId(secondShipmentId);
-            Long shipmentIdBefore = get(KEY_CREATED_SHIPMENT_ID);
-            List<Long> listOfShipmentId = new ArrayList<>();
-            listOfShipmentId.add(shipmentIdBefore);
-            listOfShipmentId.add(secondShipmentId);
+                if (isNextOrder)
+                {
+                    Long secondShipmentId = shipmentManagementPage.createAnotherShipment();
+                    shipmentInfo.setId(secondShipmentId);
+                    Long shipmentIdBefore = get(KEY_CREATED_SHIPMENT_ID);
+                    List<Long> listOfShipmentId = new ArrayList<>();
+                    listOfShipmentId.add(shipmentIdBefore);
+                    listOfShipmentId.add(secondShipmentId);
 
-            put(KEY_LIST_OF_CREATED_SHIPMENT_ID, listOfShipmentId);
-        }
+                    put(KEY_LIST_OF_CREATED_SHIPMENT_ID, listOfShipmentId);
+                }
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                throw ex;
+            }
+        }, 10);
     }
 
     @When("^Operator edit Shipment on Shipment Management page using data below:$")
