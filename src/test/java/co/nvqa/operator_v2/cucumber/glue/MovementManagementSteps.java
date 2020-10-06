@@ -42,15 +42,31 @@ public class MovementManagementSteps extends AbstractSteps
     @Then("Operator can select {string} crossdock hub when create crossdock movement schedule")
     public void operatorCanSelectCrossdockHubWhenCreateCrossdockMovementSchedule(String hubName)
     {
-        hubName = resolveValue(hubName);
-
-        try
+        retryIfRuntimeExceptionOccurred(() ->
         {
-            movementManagementPage.addMovementScheduleModal.getScheduleForm(1).originHub.selectValue(hubName);
-        } catch (Throwable ex)
-        {
-            fail(f("Cannot select [%s] value in Origin Crossdock Hub field on the New Crossdock Movement Schedule dialog", hubName));
-        }
+            try {
+                final String finalHubName = resolveValue(hubName);
+                movementManagementPage.addMovementScheduleModal.getScheduleForm(1).originHub.selectValue(finalHubName);
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info(f("Cannot select [%s] value in Origin Crossdock Hub field on the New Crossdock Movement Schedule dialog", hubName));
+                navigateRefresh();
+                pause2s();
+                movementManagementPage.switchTo();
+                movementManagementPage.addSchedule.waitUntilClickable(60);
+                movementManagementPage.addSchedule.click();
+                movementManagementPage.addMovementScheduleModal.waitUntilVisible();
+                throw ex;
+            }
+        }, 10);
+//        hubName = resolveValue(hubName);
+//        try
+//        {
+//            movementManagementPage.addMovementScheduleModal.getScheduleForm(1).originHub.selectValue(hubName);
+//        } catch (Throwable ex)
+//        {
+//            fail(f("Cannot select [%s] value in Origin Crossdock Hub field on the New Crossdock Movement Schedule dialog", hubName));
+//        }
     }
 
     @Then("Operator can not select {string} destination crossdock hub on Add Movement Schedule dialog")
@@ -77,10 +93,23 @@ public class MovementManagementSteps extends AbstractSteps
     @Then("Operator adds new Movement Schedule on Movement Management page using data below:")
     public void operatorAddsNewMovementScheduleOnMovementManagementPageUsingDataBelow(Map<String, String> data)
     {
-        operatorOpensAddMovementScheduleDialogOnMovementManagementPage();
-        operatorFillAddMovementScheduleFormUsingDataBelow(data);
-        operatorClickButtonOnAddMovementScheduleDialog("Create");
-        pause3s();
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try {
+                operatorOpensAddMovementScheduleDialogOnMovementManagementPage();
+                operatorFillAddMovementScheduleFormUsingDataBelow(data);
+                operatorClickButtonOnAddMovementScheduleDialog("Create");
+                pause6s();
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                movementManagementPage.switchTo();
+                movementManagementPage.addSchedule.waitUntilClickable(60);
+                throw ex;
+            }
+        }, 10);
     }
 
     @And("Operator assign driver {string} to created movement schedule")
@@ -238,6 +267,7 @@ public class MovementManagementSteps extends AbstractSteps
                 break;
             case "cancel":
                 movementManagementPage.addMovementScheduleModal.cancel.click();
+                movementManagementPage.addMovementScheduleModal.waitUntilInvisible();
                 break;
             default:
                 throw new IllegalArgumentException(f("Unknown button name [%s] on 'Add Movement Schedule' dialog", buttonName));
@@ -247,20 +277,49 @@ public class MovementManagementSteps extends AbstractSteps
     @And("Operator fill Add Movement Schedule form using data below:")
     public void operatorFillAddMovementScheduleFormUsingDataBelow(Map<String, String> data)
     {
-        data = resolveKeyValues(data);
-        data = StandardTestUtils.replaceDataTableTokens(data);
-        MovementSchedule movementSchedule = new MovementSchedule();
-        movementSchedule.fromMap(data);
-        movementManagementPage.addMovementScheduleModal.fill(movementSchedule);
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try {
+                final Map<String, String> finalData = StandardTestUtils.replaceDataTableTokens(resolveKeyValues(data));
+                MovementSchedule movementSchedule = new MovementSchedule();
+                movementSchedule.fromMap(finalData);
+                movementManagementPage.addMovementScheduleModal.fill(movementSchedule);
 
-        MovementSchedule existed = get(KEY_CREATED_MOVEMENT_SCHEDULE);
-        if (existed == null)
-        {
-            put(KEY_CREATED_MOVEMENT_SCHEDULE, movementSchedule);
-        } else
-        {
-            existed.getSchedules().addAll(movementSchedule.getSchedules());
-        }
+                MovementSchedule existed = get(KEY_CREATED_MOVEMENT_SCHEDULE);
+                if (existed == null)
+                {
+                    put(KEY_CREATED_MOVEMENT_SCHEDULE, movementSchedule);
+                } else
+                {
+                    existed.getSchedules().addAll(movementSchedule.getSchedules());
+                }
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                movementManagementPage.switchTo();
+                movementManagementPage.addSchedule.waitUntilClickable(60);
+                movementManagementPage.addSchedule.click();
+                movementManagementPage.addMovementScheduleModal.waitUntilVisible();
+                throw ex;
+            }
+        }, 10);
+
+//        data = resolveKeyValues(data);
+//        data = StandardTestUtils.replaceDataTableTokens(data);
+//        MovementSchedule movementSchedule = new MovementSchedule();
+//        movementSchedule.fromMap(data);
+//        movementManagementPage.addMovementScheduleModal.fill(movementSchedule);
+//
+//        MovementSchedule existed = get(KEY_CREATED_MOVEMENT_SCHEDULE);
+//        if (existed == null)
+//        {
+//            put(KEY_CREATED_MOVEMENT_SCHEDULE, movementSchedule);
+//        } else
+//        {
+//            existed.getSchedules().addAll(movementSchedule.getSchedules());
+//        }
     }
 
     @Then("Operator verify Add Movement Schedule form is empty")
