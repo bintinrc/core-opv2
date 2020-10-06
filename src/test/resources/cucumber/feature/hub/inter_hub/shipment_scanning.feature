@@ -16,7 +16,7 @@ Feature: Shipment Scanning
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given DB Operator gets Hub ID by Hub Name of created parcel
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan multiple created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
@@ -29,7 +29,7 @@ Feature: Shipment Scanning
       | globalInboundRequest | { "hubId":{hub-id} } |
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
@@ -40,7 +40,7 @@ Feature: Shipment Scanning
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment
@@ -54,7 +54,7 @@ Feature: Shipment Scanning
     Given API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
     And Operator verifies that the row of the added order is red highlighted
 
@@ -75,7 +75,7 @@ Feature: Shipment Scanning
     Then API Operator verify order info after pickup "PICKUP_FAILED"
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
@@ -95,7 +95,7 @@ Feature: Shipment Scanning
     Then API Operator verify order info after pickup "PICKUP_SUCCESS"
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
@@ -111,7 +111,7 @@ Feature: Shipment Scanning
     And API Operator start the route
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
@@ -132,7 +132,7 @@ Feature: Shipment Scanning
     When API Operator start the route
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
@@ -144,7 +144,7 @@ Feature: Shipment Scanning
     When API Operator force created order status to Cancelled
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
@@ -155,7 +155,7 @@ Feature: Shipment Scanning
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "is_staged":true, "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
@@ -167,7 +167,7 @@ Feature: Shipment Scanning
     When API Operator force created order status to Completed
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
@@ -180,7 +180,7 @@ Feature: Shipment Scanning
       | globalInboundRequest | { "hubId":{hub-id} } |
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @DeleteOrArchiveRoute
@@ -206,7 +206,7 @@ Feature: Shipment Scanning
     Given API Driver deliver dp parcel successfully
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @DeleteOrArchiveRoute @ForceSuccessOrder
@@ -230,7 +230,7 @@ Feature: Shipment Scanning
     Then API Operator verify order info after delivery "DELIVERY_FAILED"
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
@@ -255,7 +255,7 @@ Feature: Shipment Scanning
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
@@ -281,7 +281,7 @@ Feature: Shipment Scanning
     Then Operator verify ticket is created successfully on page Recovery Tickets
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
@@ -310,7 +310,7 @@ Feature: Shipment Scanning
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given DB Operator gets Hub ID by Hub Name of created parcel
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
@@ -327,7 +327,7 @@ Feature: Shipment Scanning
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created multiple shipment on Shipment Management page
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
     And Operator verifies that the row of the added order is red highlighted
 
@@ -342,7 +342,7 @@ Feature: Shipment Scanning
       | globalInboundRequest | { "hubId":{hub-id} } |
     Given DB Operator gets Hub ID by Hub Name of created parcel
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan multiple created order to shipment in hub {hub-name}
     And Operator removes all the parcel from the shipment
     Then Operator verifies that the parcel shown is zero
@@ -357,7 +357,7 @@ Feature: Shipment Scanning
       | globalInboundRequest | { "hubId":{hub-id} } |
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
     And Operator close the shipment which has been created
     Given Operator go to menu Inter-Hub -> Shipment Management
