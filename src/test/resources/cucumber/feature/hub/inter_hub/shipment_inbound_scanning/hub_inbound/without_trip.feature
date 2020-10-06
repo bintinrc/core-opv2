@@ -1,5 +1,5 @@
 @ShipmentInboundScanning @InterHub @Shipment @MiddleMile @HubInbound @WithoutTrip
-Feature: Shipment Inbound Scanning
+Feature: Shipment Hub Inbound Without Trip Scanning
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
