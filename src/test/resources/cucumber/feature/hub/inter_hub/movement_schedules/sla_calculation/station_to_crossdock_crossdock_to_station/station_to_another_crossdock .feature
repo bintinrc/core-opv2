@@ -57,7 +57,7 @@ Feature: Station to another Crossdock
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name}                            |
       | schedules[1].movementType   | Air Haul                                                      |
       | schedules[1].departureTime  | 15:15                                                         |
-      | schedules[1].durationDays   | 1                                                             |
+      | schedules[1].durationDays   | 0                                                             |
       | schedules[1].durationTime   | 16:30                                                         |
       | schedules[1].daysOfWeek     | all                                                           |
       | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
@@ -78,7 +78,7 @@ Feature: Station to another Crossdock
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_VAN_INBOUND               |
       | result | Transit                            |
-      | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | hub    | {KEY_LIST_OF_CREATED_HUBS[3].name} |
     Then Operator verify movement event on Shipment Details page using data below:
       | source | SLA_CALCULATION |
       | status | SUCCESS         |

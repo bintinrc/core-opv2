@@ -44,7 +44,7 @@ Feature: Crossdock to other station belong to another crossdock
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
       | schedules[1].movementType   | Air Haul                                                      |
       | schedules[1].departureTime  | 15:15                                                         |
-      | schedules[1].durationDays   | 1                                                             |
+      | schedules[1].durationDays   | 0                                                             |
       | schedules[1].durationTime   | 16:30                                                         |
       | schedules[1].daysOfWeek     | all                                                           |
       | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |

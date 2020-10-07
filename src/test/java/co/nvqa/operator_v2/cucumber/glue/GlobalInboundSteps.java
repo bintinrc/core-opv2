@@ -86,10 +86,21 @@ public class GlobalInboundSteps extends AbstractSteps
     @When("^Operator global inbounds parcel using data below:$")
     public void operatorGlobalInboundsParcelUsingThisDataBelow(Map<String, String> mapOfData)
     {
-        mapOfData = resolveKeyValues(mapOfData);
-        GlobalInboundParams globalInboundParams = buildGlobalInboundParams(mapOfData);
-        globalInboundPage.successfulGlobalInbound(globalInboundParams);
-        put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try {
+                navigateRefresh();
+                pause2s();
+                final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
+                GlobalInboundParams globalInboundParams = buildGlobalInboundParams(finalMapOfData);
+                globalInboundPage.successfulGlobalInbound(globalInboundParams);
+                put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
+                throw ex;
+            }
+        }, 10);
     }
 
     @When("^Operator global inbounds parcel using data below and check alert:$")

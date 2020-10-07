@@ -42,15 +42,23 @@ public class MovementManagementSteps extends AbstractSteps
     @Then("Operator can select {string} crossdock hub when create crossdock movement schedule")
     public void operatorCanSelectCrossdockHubWhenCreateCrossdockMovementSchedule(String hubName)
     {
-        hubName = resolveValue(hubName);
-
-        try
+        retryIfRuntimeExceptionOccurred(() ->
         {
-            movementManagementPage.addMovementScheduleModal.getScheduleForm(1).originHub.selectValue(hubName);
-        } catch (Throwable ex)
-        {
-            fail(f("Cannot select [%s] value in Origin Crossdock Hub field on the New Crossdock Movement Schedule dialog", hubName));
-        }
+            try {
+                final String finalHubName = resolveValue(hubName);
+                movementManagementPage.addMovementScheduleModal.getScheduleForm(1).originHub.selectValue(finalHubName);
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info(f("Cannot select [%s] value in Origin Crossdock Hub field on the New Crossdock Movement Schedule dialog", hubName));
+                navigateRefresh();
+                pause2s();
+                movementManagementPage.switchTo();
+                movementManagementPage.addSchedule.waitUntilClickable(60);
+                movementManagementPage.addSchedule.click();
+                movementManagementPage.addMovementScheduleModal.waitUntilVisible();
+                throw ex;
+            }
+        }, 10);
     }
 
     @Then("Operator can not select {string} destination crossdock hub on Add Movement Schedule dialog")
@@ -77,10 +85,23 @@ public class MovementManagementSteps extends AbstractSteps
     @Then("Operator adds new Movement Schedule on Movement Management page using data below:")
     public void operatorAddsNewMovementScheduleOnMovementManagementPageUsingDataBelow(Map<String, String> data)
     {
-        operatorOpensAddMovementScheduleDialogOnMovementManagementPage();
-        operatorFillAddMovementScheduleFormUsingDataBelow(data);
-        operatorClickButtonOnAddMovementScheduleDialog("Create");
-        pause3s();
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try {
+                operatorOpensAddMovementScheduleDialogOnMovementManagementPage();
+                operatorFillAddMovementScheduleFormUsingDataBelow(data);
+                operatorClickButtonOnAddMovementScheduleDialog("Create");
+                pause6s();
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                movementManagementPage.switchTo();
+                movementManagementPage.addSchedule.waitUntilClickable(60);
+                throw ex;
+            }
+        }, 10);
     }
 
     @And("Operator assign driver {string} to created movement schedule")
@@ -110,21 +131,34 @@ public class MovementManagementSteps extends AbstractSteps
     @Then("Operator adds new relation on Movement Management page using data below:")
     public void operatorAddsNewRelationOnMovementManagementPageUsingDataBelow(Map<String, String> data)
     {
-        data = resolveKeyValues(data);
-        String station = data.get("station");
-        String crossdockHub = data.get("crossdockHub");
-        operatorSelectTabOnMovementManagementPage("Relations");
-        operatorSelectTabOnMovementManagementPage("Pending");
-        movementManagementPage.stationFilter.forceClear();
-        movementManagementPage.stationFilter.setValue(station);
-        movementManagementPage.relationsTable.rows.get(0).editRelations.click();
-        movementManagementPage.editStationRelationsModal.waitUntilVisible();
         retryIfRuntimeExceptionOccurred(() ->
-                        movementManagementPage.editStationRelationsModal.crossdockHub.selectValue(crossdockHub),
-                2
-        );
-        movementManagementPage.editStationRelationsModal.save.click();
-        movementManagementPage.editStationRelationsModal.waitUntilInvisible();
+        {
+            try {
+                final Map<String, String> finalData = resolveKeyValues(data);
+                String station = finalData.get("station");
+                String crossdockHub = finalData.get("crossdockHub");
+                operatorSelectTabOnMovementManagementPage("Relations");
+                operatorSelectTabOnMovementManagementPage("Pending");
+                movementManagementPage.stationFilter.forceClear();
+                movementManagementPage.stationFilter.setValue(station);
+                movementManagementPage.relationsTable.rows.get(0).editRelations.click();
+                movementManagementPage.editStationRelationsModal.waitUntilVisible();
+                retryIfRuntimeExceptionOccurred(() ->
+                                movementManagementPage.editStationRelationsModal.crossdockHub.selectValue(crossdockHub),
+                        2
+                );
+                movementManagementPage.editStationRelationsModal.save.click();
+                movementManagementPage.editStationRelationsModal.waitUntilInvisible();
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                movementManagementPage.switchTo();
+                movementManagementPage.stationsTab.waitUntilClickable(60);
+                throw ex;
+            }
+        }, 10);
     }
 
     @Then("Operator search for Pending relation on Movement Management page using data below:")
@@ -156,14 +190,27 @@ public class MovementManagementSteps extends AbstractSteps
     @Then("Operator adds new Station Movement Schedule on Movement Management page using data below:")
     public void operatorAddsNewStationMovementScheduleOnMovementManagementPageUsingDataBelow(Map<String, String> data)
     {
-        data = resolveKeyValues(data);
-        StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(data);
-        movementManagementPage.stationsTab.click();
-        movementManagementPage.addSchedule.click();
-        movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
-        movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule);
-        movementManagementPage.addStationMovementScheduleModal.create.click();
-        movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try {
+                final Map<String, String> finalData = resolveKeyValues(data);
+                StationMovementSchedule stationMovementSchedule = new StationMovementSchedule(finalData);
+                movementManagementPage.stationsTab.click();
+                movementManagementPage.addSchedule.click();
+                movementManagementPage.addStationMovementScheduleModal.waitUntilVisible();
+                movementManagementPage.addStationMovementScheduleModal.fill(stationMovementSchedule);
+                movementManagementPage.addStationMovementScheduleModal.create.click();
+                movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                movementManagementPage.switchTo();
+                movementManagementPage.stationsTab.waitUntilClickable(60);
+                throw ex;
+            }
+        }, 10);
     }
 
     @And("Operator load schedules on Movement Management page using data below:")
@@ -192,6 +239,7 @@ public class MovementManagementSteps extends AbstractSteps
                 NvLogger.info("Searched element is not found, retrying after 2 seconds...");
                 navigateRefresh();
                 pause2s();
+                movementManagementPageIsLoaded();
                 throw ex;
             }
         }, 10);
@@ -238,6 +286,7 @@ public class MovementManagementSteps extends AbstractSteps
                 break;
             case "cancel":
                 movementManagementPage.addMovementScheduleModal.cancel.click();
+                movementManagementPage.addMovementScheduleModal.waitUntilInvisible();
                 break;
             default:
                 throw new IllegalArgumentException(f("Unknown button name [%s] on 'Add Movement Schedule' dialog", buttonName));
@@ -247,20 +296,34 @@ public class MovementManagementSteps extends AbstractSteps
     @And("Operator fill Add Movement Schedule form using data below:")
     public void operatorFillAddMovementScheduleFormUsingDataBelow(Map<String, String> data)
     {
-        data = resolveKeyValues(data);
-        data = StandardTestUtils.replaceDataTableTokens(data);
-        MovementSchedule movementSchedule = new MovementSchedule();
-        movementSchedule.fromMap(data);
-        movementManagementPage.addMovementScheduleModal.fill(movementSchedule);
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try {
+                final Map<String, String> finalData = StandardTestUtils.replaceDataTableTokens(resolveKeyValues(data));
+                MovementSchedule movementSchedule = new MovementSchedule();
+                movementSchedule.fromMap(finalData);
+                movementManagementPage.addMovementScheduleModal.fill(movementSchedule);
 
-        MovementSchedule existed = get(KEY_CREATED_MOVEMENT_SCHEDULE);
-        if (existed == null)
-        {
-            put(KEY_CREATED_MOVEMENT_SCHEDULE, movementSchedule);
-        } else
-        {
-            existed.getSchedules().addAll(movementSchedule.getSchedules());
-        }
+                MovementSchedule existed = get(KEY_CREATED_MOVEMENT_SCHEDULE);
+                if (existed == null)
+                {
+                    put(KEY_CREATED_MOVEMENT_SCHEDULE, movementSchedule);
+                } else
+                {
+                    existed.getSchedules().addAll(movementSchedule.getSchedules());
+                }
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                movementManagementPage.switchTo();
+                movementManagementPage.addSchedule.waitUntilClickable(60);
+                movementManagementPage.addSchedule.click();
+                movementManagementPage.addMovementScheduleModal.waitUntilVisible();
+                throw ex;
+            }
+        }, 10);
     }
 
     @Then("Operator verify Add Movement Schedule form is empty")

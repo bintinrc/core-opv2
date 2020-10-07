@@ -1,5 +1,5 @@
 @MovementTrip @InterHub @Hub @MiddleMile @CancelTrip @TripManagement
-Feature: Cancel Trip
+Feature: Trip Management - Cancel Trip
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
@@ -9,7 +9,7 @@ Feature: Cancel Trip
   Scenario: Cancel Trip - Trip Status Pending (uid:318c9c20-adae-40f0-8094-e82d986008e6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Trips
-    And Operator verifies that the Trip Management Page is opened
+    And Operator verifies movement Trip page is loaded
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |

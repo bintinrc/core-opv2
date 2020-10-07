@@ -7,6 +7,7 @@ Feature: Station to Station Under Same Crossdock
 
   @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
   Scenario: Station to Station Under Same Crossdock - Station Movement Found and there is available schedule (uid:3958c45b-c383-42a0-a703-cd1b2049981d)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -47,7 +48,7 @@ Feature: Station to Station Under Same Crossdock
     And Operator adds new Station Movement Schedule on Movement Management page using data below:
       | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | movementType   | Air Haul                           |
       | departureTime  | 15:15                              |
       | duration       | 1                                  |
@@ -62,7 +63,7 @@ Feature: Station to Station Under Same Crossdock
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}  |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}  |
       | status      | Transit                             |
-      | sla         | {{next-2-days-yyyy-MM-dd}} 07:45:00 |
+      | sla         | {{next-3-days-yyyy-MM-dd}} 07:45:00 |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_VAN_INBOUND               |

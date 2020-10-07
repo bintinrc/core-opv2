@@ -99,9 +99,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
 
     public void verifiesTripManagementIsLoaded() {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        
         isElementExist(TRIP_MANAGEMENT_CONTAINER_XPATH);
-        getWebDriver().switchTo().parentFrame();
+        
     }
 
     public void clickLoadButton() {
@@ -110,17 +110,17 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
 
     public void verifiesFieldReqiredErrorMessageShown() {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        
         isElementExist(FIELD_REQUIRED_ERROR_MESSAGE_XPATH);
-        getWebDriver().switchTo().parentFrame();
+        
     }
 
     public void selectValueFromFilterDropDown(String filterName, String filterValue) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        
         click(f(FILTER_OPTION_XPATH, filterName));
         waitUntilVisibilityOfElementLocated(f(TEXT_OPTION_XPATH, filterValue));
         click(f(TEXT_OPTION_XPATH, filterValue));
-        getWebDriver().switchTo().parentFrame();
+        
     }
 
     public void selectValueFromFilterDropDownDirectly(String filterName, String filterValue) {
@@ -129,7 +129,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
 
     public void verifiesSumOfTripManagement(MovementTripType tabName, Long tripManagementCount) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        
         List<WebElement> tripManagementList = new ArrayList<>();
 
         switch (tabName) {
@@ -147,11 +147,11 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
         Long actualTripManagementSum = (long) tripManagementList.size();
         assertEquals("Sum of Trip Management", actualTripManagementSum, tripManagementCount);
-        getWebDriver().switchTo().parentFrame();
+        
     }
 
     public void searchAndVerifiesTripManagementIsExistedById(Long tripManagementId) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        
         waitUntilVisibilityOfElementLocated(f(IN_TABLE_FILTER_INPUT_XPATH, ID_CLASS));
         sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, ID_CLASS), tripManagementId.toString());
         waitUntilVisibilityOfElementLocated(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, ID_CLASS));
@@ -159,23 +159,20 @@ public class TripManagementPage extends OperatorV2SimplePage {
         String actualTripManagementId = getText(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, ID_CLASS));
         assertEquals("Trip Management ID", tripManagementId.toString(), actualTripManagementId);
 
-        getWebDriver().switchTo().parentFrame();
+        
     }
 
     public void searchAndVerifiesTripManagementIsExistedByDestinationHubName(String destinationHubName) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
         waitUntilVisibilityOfElementLocated(f(IN_TABLE_FILTER_INPUT_XPATH, DESTINATION_HUB_CLASS));
         sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, DESTINATION_HUB_CLASS), destinationHubName);
         waitUntilVisibilityOfElementLocated(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DESTINATION_HUB_CLASS));
 
         String actualDestinationHubName = getText(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DESTINATION_HUB_CLASS));
         assertEquals("Destination Hub Name", destinationHubName, actualDestinationHubName);
-
-        getWebDriver().switchTo().parentFrame();
     }
 
     public void selectsDate(MovementTripType movementTripType, String tomorrowDate) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        
 
         switch (movementTripType) {
             case DEPARTURE:
@@ -194,11 +191,11 @@ public class TripManagementPage extends OperatorV2SimplePage {
             click(NEXT_MONTH_BUTTON_XPATH);
         }
         click(f(CALENDAR_SELECTED_XPATH, tomorrowDate));
-        getWebDriver().switchTo().parentFrame();
+        
     }
 
     public void selectsDateArchiveTab(MovementTripType movementTripType, String date) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        
 
         switch (movementTripType) {
             case ARCHIVE_DEPARTURE_DATE:
@@ -217,31 +214,31 @@ public class TripManagementPage extends OperatorV2SimplePage {
             click(PREV_MONTH_BUTTON_XPATH);
         }
         click(f(CALENDAR_SELECTED_XPATH, date));
-        getWebDriver().switchTo().parentFrame();
+        
     }
 
     public void clickTabBasedOnName(String tabName) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        
         click(f(TAB_XPATH, tabName));
-        getWebDriver().switchTo().parentFrame();
+        
     }
 
     public void verifiesNoResult() {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        
         isElementExistFast(NO_RESULT_XPATH);
-        getWebDriver().switchTo().parentFrame();
+        
     }
 
     public void tableFiltering(TripManagementFilteringType tripManagementFilteringType,
                                TripManagementDetailsData tripManagementDetailsData, String driverUsername) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        
 
         // Get the newest record
         int index = tripManagementDetailsData.getData().size() - 1;
 
         if (tripManagementDetailsData.getCount() == null || tripManagementDetailsData.getCount() == 0) {
             verifiesNoResult();
-            getWebDriver().switchTo().parentFrame();
+            
             return;
         }
 
@@ -338,15 +335,15 @@ public class TripManagementPage extends OperatorV2SimplePage {
             default:
                 NvLogger.warn("Filtering type is not found");
         }
-        getWebDriver().switchTo().parentFrame();
+        
     }
 
     public void tableFilterByStatus(String filterValue) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        
         tripStatusFilter.openButton.click();
         tripStatusFilter.selectType(filterValue);
         tripStatusFilter.ok.click();
-        getWebDriver().switchTo().parentFrame();
+        
     }
 
     public void tableFiltering(TripManagementFilteringType tripManagementFilteringType, TripManagementDetailsData tripManagementDetailsData) {
@@ -355,7 +352,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
     public void verifyResult(TripManagementFilteringType tripManagementFilteringType,
                              TripManagementDetailsData tripManagementDetailsData, String driverUsername) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        
         if (!(isElementExistFast(FIRST_ROW_OF_TABLE_RESULT_XPATH))) {
             verifiesNoResult();
             return;
@@ -450,7 +447,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
                 NvLogger.warn("Filtering type is not found");
         }
 
-        getWebDriver().switchTo().parentFrame();
+        
     }
 
     public void verifyResult(TripManagementFilteringType tripManagementFilteringType, TripManagementDetailsData tripManagementDetailsData) {
@@ -458,7 +455,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
 
     public String getTripIdAndClickOnActionIcon(MovementTripActionName actionName) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        
         String tripId = null;
         if (isElementExistFast(ACTION_COLUMN_XPATH)) {
             tripId = getText(TRIP_ID_FIRST_ROW_XPATH);
@@ -484,13 +481,13 @@ public class TripManagementPage extends OperatorV2SimplePage {
                     NvLogger.warn("Movement Trip Action Name is not found!");
             }
         }
-        getWebDriver().switchTo().parentFrame();
+        
         return tripId;
     }
 
     public void verifiesTripDetailIsOpened(String tripId, String windowHandle) {
         switchToNewWindow();
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        
 
         waitUntilVisibilityOfElementLocated(TRIP_ID_IN_TRIP_DETAILS_XPATH);
         String actualTripId = getText(TRIP_ID_IN_TRIP_DETAILS_XPATH);
@@ -499,11 +496,11 @@ public class TripManagementPage extends OperatorV2SimplePage {
         getWebDriver().close();
         getWebDriver().switchTo().window(windowHandle);
 
-        getWebDriver().switchTo().parentFrame();
+        
     }
 
     public void clickButtonOnCancelDialog(String buttonValue) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        
         cancelTripModal.waitUntilVisible();
         switch (buttonValue) {
             case "Cancel Trip":
@@ -516,14 +513,14 @@ public class TripManagementPage extends OperatorV2SimplePage {
                 NvLogger.warn("Button value is not found!");
         }
         cancelTripModal.waitUntilInvisible();
-        getWebDriver().switchTo().parentFrame();
+        
     }
 
     public void verifiesSuccessCancelTripToastShown() {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        
         waitUntilVisibilityOfElementLocated(SUCCESS_CANCEL_TRIP_TOAST);
         click(SUCCESS_CANCEL_TRIP_TOAST);
-        getWebDriver().switchTo().parentFrame();
+        
     }
 
     public void verifyStatusValue(String expectedTripId, String expectedStatusValue) {
@@ -562,7 +559,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
 
     public Boolean isActionButtonEnabled(MovementTripActionName actionName) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+        
         boolean result = false;
         if (isElementExistFast(ACTION_COLUMN_XPATH)) {
             switch (actionName) {
@@ -586,7 +583,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
                     NvLogger.warn("Movement Trip Action Name is not found!");
             }
         }
-        getWebDriver().switchTo().parentFrame();
+        
         return result;
     }
 

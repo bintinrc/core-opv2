@@ -434,7 +434,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         assertThat("Different Result Returned", actualLatestEvent, isOneOf("Van Inbound Scan", "DRIVER INBOUND SCAN"));
     }
 
-    public void verifyEvent(Order order, String hubName, String hubId, String eventNameExpected)
+    public void verifyEvent(Order order, String hubName, String hubId, String eventNameExpected, String stringContained)
     {
         ZonedDateTime eventDateExpected = DateUtil.getDate(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE));
 
@@ -450,7 +450,7 @@ public class EditOrderPage extends OperatorV2SimplePage
         OrderEvent eventRow = eventsTable.readEntity(rowWithExpectedEvent);
         assertEquals("Different Result Returned for hub name", hubName, eventRow.getHubName());
 //        assertThat("Different Result Returned for event description", eventRow.getDescription(), containsString(f("Parcel inbound at Origin Hub - %s", hubName)));
-        assertThat("Different Result Returned for event description", eventRow.getDescription(), containsString(f("Inbounded at Hub %s", hubId)));
+        assertThat("Different Result Returned for event description", eventRow.getDescription(), containsString(f("%s at Hub %s", stringContained, hubId)));
         assertThat("Different Result Returned for event time",
                 eventRow.getEventTime(),
                 containsString(DateUtil.displayDate(eventDateExpected)));
