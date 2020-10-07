@@ -1,4 +1,4 @@
-@TripManagement @InterHub @MiddleMile @Refo
+@TripManagement @InterHub @MiddleMile
 Feature: Trip Management - Load Trips
 
   @LaunchBrowser @ShouldAlwaysRun
