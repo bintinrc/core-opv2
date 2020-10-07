@@ -487,8 +487,8 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
     public void verifiesTripDetailIsOpened(String tripId, String windowHandle) {
         switchToNewWindow();
-        
 
+        this.switchTo();
         waitUntilVisibilityOfElementLocated(TRIP_ID_IN_TRIP_DETAILS_XPATH);
         String actualTripId = getText(TRIP_ID_IN_TRIP_DETAILS_XPATH);
         assertTrue("Trip ID", actualTripId.contains(tripId));
