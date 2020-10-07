@@ -301,10 +301,6 @@ public class TripManagementPage extends OperatorV2SimplePage {
                 actualDepartTimeFilter.selectDate(actualDepartureTime);
                 actualDepartTimeFilter.selectTime(actualDepartureTime);
                 actualDepartTimeFilter.ok.click();
-
-//                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, ACTUAL_DEPARTURE_TIME_CLASS));
-//                click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, ACTUAL_DEPARTURE_TIME_CLASS));
-//                selectDateTime(tripManagementDetailsData.getData().get(index).getActualStartTime());
                 break;
 
             case EXPECTED_ARRIVAL_TIME:
@@ -321,10 +317,6 @@ public class TripManagementPage extends OperatorV2SimplePage {
                 actualArrivalTimeFilter.selectDate(actualArrivalTime);
                 actualArrivalTimeFilter.selectTime(actualArrivalTime);
                 actualArrivalTimeFilter.ok.click();
-
-//                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, ACTUAL_ARRIVAL_TIME_CLASS));
-//                click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, ACTUAL_ARRIVAL_TIME_CLASS));
-//                selectDateTime(tripManagementDetailsData.getData().get(index).getActualEndTime());
                 break;
 
             case DRIVER:
@@ -345,14 +337,6 @@ public class TripManagementPage extends OperatorV2SimplePage {
                 lastStatusFilter.openButton.click();
                 lastStatusFilter.selectType(filterValue);
                 lastStatusFilter.ok.click();
-//                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
-//                pause3s();
-//                filterValue = statusConverted(tripManagementDetailsData.getData().get(index).getStatus());
-//                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, LAST_STATUS_CLASS));
-//                click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, LAST_STATUS_CLASS));
-//                waitUntilVisibilityOfElementLocated(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, filterValue));
-//                click(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, filterValue));
-//                click(OK_BUTTON_OPTION_TABLE_XPATH);
                 pause3s();
                 break;
 

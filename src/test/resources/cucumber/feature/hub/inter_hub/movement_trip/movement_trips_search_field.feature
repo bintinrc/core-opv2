@@ -83,7 +83,7 @@ Feature: Trip Management - Search Trips
     And Operator searches for the Trip Management based on its "status"
     Then Operator verifies that the trip management shown with "status" as its filter is right
 
-   Departure Tab - Unassigned Tab
+#   Departure Tab - Unassigned Tab
 
   Scenario: Search Trip on Search Field - Departure Tab - Unassigned Tab - Search Destination Hub (uid:3a1e7959-4f86-42db-8ba5-1bdf33865a86)
     Given Operator go to menu Shipper Support -> Blocked Dates
