@@ -83,10 +83,21 @@ public class ShipmentManagementSteps extends AbstractSteps
     @When("^Operator search shipments by given Ids on Shipment Management page:$")
     public void fillSearchShipmentsByIds(List<String> ids)
     {
-        List<Long> shipmentIds = ids.stream()
-                .map(id -> Long.valueOf(resolveValue(id)))
-                .collect(Collectors.toList());
-        shipmentManagementPage.searchByShipmentIds(shipmentIds);
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try {
+                List<Long> shipmentIds = ids.stream()
+                        .map(id -> Long.valueOf(resolveValue(id)))
+                        .collect(Collectors.toList());
+                shipmentManagementPage.searchByShipmentIds(shipmentIds);
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                throw ex;
+            }
+        }, 10);
     }
 
     @When("^Operator filter shipment based on MAWB value on Shipment Management page$")

@@ -239,6 +239,7 @@ public class MovementManagementSteps extends AbstractSteps
                 NvLogger.info("Searched element is not found, retrying after 2 seconds...");
                 navigateRefresh();
                 pause2s();
+                movementManagementPageIsLoaded();
                 throw ex;
             }
         }, 10);

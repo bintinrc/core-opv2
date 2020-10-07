@@ -387,12 +387,18 @@ public class EditOrderSteps extends AbstractSteps
         String event = map.get("eventName");
         String hubName = map.get("hubName");
         String hubId = map.get("hubId");
+        String inboundType = map.get("inboundType");
         List<Order> lists = get(KEY_LIST_OF_CREATED_ORDER);
 
         lists.forEach(order ->
         {
             navigateTo(f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, order.getId()));
-            editOrderPage.verifyEvent(order, hubName, hubId, event);
+            if (inboundType != null)
+            {
+                editOrderPage.verifyEvent(order, hubName, hubId, event, inboundType);
+                return;
+            }
+            editOrderPage.verifyEvent(order, hubName, hubId, event, "Scanned");
         });
     }
 
