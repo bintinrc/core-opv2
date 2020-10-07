@@ -1,4 +1,4 @@
-@TripManagement @InterHub @MiddleMile
+@TripManagement @InterHub @MiddleMile @Refo
 Feature: Trip Management - Load Trips
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -6,6 +6,7 @@ Feature: Trip Management - Load Trips
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Load Trip Use Filter - Departure Tab - No filter (uid:9b2117b6-6e7d-4f18-85af-8418e4643cbc)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
     When Operator clicks on Load Trip Button

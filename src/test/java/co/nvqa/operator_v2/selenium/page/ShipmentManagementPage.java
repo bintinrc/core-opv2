@@ -348,7 +348,6 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         String actualTextShipmentDetails = getText("//md-content[contains(@class,'nv-shipment-details')]//h3");
         assertEquals("Shipment ID is not the same: ", expectedTextShipmentDetails, actualTextShipmentDetails);
         isElementExist(f("//td[contains(text(),'%s')]", trackingId));
-        getWebDriver().close();
     }
 
     public void verifyMasterAwbIsOpened()

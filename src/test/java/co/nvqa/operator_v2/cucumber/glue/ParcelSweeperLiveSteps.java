@@ -2,7 +2,10 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Transaction;
+import co.nvqa.commons.model.core.hub.Shipments;
 import co.nvqa.commons.model.core.zone.Zone;
+import co.nvqa.commons.util.NvLogger;
+import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.ParcelSweeperLivePage;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -56,15 +59,26 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
 
     @Then("^Operator provides data on Parcel Sweeper Live page:$")
     public void operatorProvidesDataOnParcelSweeperLivePage(Map<String, String> mapOfData) {
-        mapOfData = resolveKeyValues(mapOfData);
-        parcelSweeperLivePage.selectHubToBegin(mapOfData.get("hubName"));
-
-        String trackingId = mapOfData.get("trackingId");
-        if (StringUtils.equalsIgnoreCase(trackingId, "CREATED"))
+        retryIfRuntimeExceptionOccurred(() ->
         {
-            trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        }
-        parcelSweeperLivePage.scanTrackingId(trackingId);
+            try {
+                final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
+                parcelSweeperLivePage.selectHubToBegin(finalMapOfData.get("hubName"));
+
+                String trackingId = finalMapOfData.get("trackingId");
+                if (StringUtils.equalsIgnoreCase(trackingId, "CREATED"))
+                {
+                    trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+                }
+                parcelSweeperLivePage.scanTrackingId(trackingId);
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                throw ex;
+            }
+        }, 10);
     }
 
     private String getExpectedZoneName(String zoneNameFromDataTable){

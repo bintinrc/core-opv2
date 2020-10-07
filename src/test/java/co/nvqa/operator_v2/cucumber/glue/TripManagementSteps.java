@@ -47,7 +47,7 @@ public class TripManagementSteps extends AbstractSteps {
 
     @When("Operator clicks on Load Trip Button")
     public void operatorClicksOnLoadTripButton() {
-        tripManagementPage.clickLoadButton();
+        tripManagementPage.loadButton.click();
     }
 
     @Then("Operator verifies trip has departed")
