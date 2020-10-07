@@ -31,7 +31,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
     }
 
     @When("^Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page$")
-    public void inboundScanning(String label, final String hub) {
+    public void inboundScanning(String label, String hub) {
         retryIfRuntimeExceptionOccurred(() ->
         {
             try {
@@ -47,10 +47,6 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
                 throw ex;
             }
         }, 10);
-//        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
-//        hub = resolveValue(hub);
-//
-//        scanningPage.inboundScanning(shipmentId, label, hub);
     }
 
     @When("^Operator inbound scanning Shipment on Shipment Inbound Scanning page using data below:$")

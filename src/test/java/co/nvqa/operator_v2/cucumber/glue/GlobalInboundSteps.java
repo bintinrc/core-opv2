@@ -101,11 +101,6 @@ public class GlobalInboundSteps extends AbstractSteps
                 throw ex;
             }
         }, 10);
-
-//        mapOfData = resolveKeyValues(mapOfData);
-//        GlobalInboundParams globalInboundParams = buildGlobalInboundParams(mapOfData);
-//        globalInboundPage.successfulGlobalInbound(globalInboundParams);
-//        put(KEY_GLOBAL_INBOUND_PARAMS, globalInboundParams);
     }
 
     @When("^Operator global inbounds parcel using data below and check alert:$")

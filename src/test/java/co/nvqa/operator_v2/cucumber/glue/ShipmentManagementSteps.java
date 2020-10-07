@@ -190,10 +190,6 @@ public class ShipmentManagementSteps extends AbstractSteps
                     shipmentInfo.setShipmentType("AIR_HAUL");
                 }
 
-//        final String mawb = ("AUTO".equalsIgnoreCase(shipmentInfo.getMawb()) && !StringUtils.isBlank(shipmentInfo.getMawb())) ? "AUTO-" + randomLong(0000000, 9999999) : null;
-//        put("tanias'mawb", mawb);
-//        shipmentInfo.setMawb(mawb);
-
                 put(KEY_SHIPMENT_INFO, shipmentInfo);
                 put(KEY_CREATED_SHIPMENT, shipmentInfo);
                 put(KEY_CREATED_SHIPMENT_ID, shipmentInfo.getId());
