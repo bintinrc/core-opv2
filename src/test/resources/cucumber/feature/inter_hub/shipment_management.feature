@@ -1,4 +1,4 @@
-@ShipmentManagement @InterHub @Shipment @MiddleMile @Refo
+@ShipmentManagement @InterHub @Shipment @MiddleMile
 Feature: Shipment Management
 
   @LaunchBrowser @ShouldAlwaysRun

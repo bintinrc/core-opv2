@@ -318,7 +318,8 @@ public class ShipmentManagementSteps extends AbstractSteps
         {
             shipmentInfo = get(KEY_SHIPMENT_INFO);
         }
-
+        String mainWindowHandle = shipmentManagementPage.getWebDriver().getWindowHandle();
+        put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
         shipmentManagementPage.openShipmentDetailsPage(shipmentInfo.getId());
     }
 
@@ -371,8 +372,8 @@ public class ShipmentManagementSteps extends AbstractSteps
         {
             shipmentInfo = get(KEY_SHIPMENT_INFO);
         }
-
         shipmentManagementPage.verifyOpenedShipmentDetailsPageIsTrue(shipmentInfo.getId(), order.getTrackingId());
+        getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
     }
 
     @Then("^Operator verify shipment event on Shipment Details page using data below:$")
