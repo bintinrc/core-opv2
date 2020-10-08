@@ -74,21 +74,32 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
     @When("^Operator scan multiple created order to shipment in hub ([^\"]*)$")
     public void aPIShipperTagsMultipleParcelsAsPerTheBelowTag(String hub) {
-        List<String> trackingIds = (get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID));
-        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
-        String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
-                ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
-                ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try {
+                List<String> trackingIds = (get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID));
+                Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+                String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
+                        ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
+                        ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
 
 
-        shipmentScanningPage.selectHub(hub);
-        shipmentScanningPage.selectShipmentType(shipmentType);
-        shipmentScanningPage.selectShipmentId(shipmentId);
-        shipmentScanningPage.clickSelectShipment();
+                shipmentScanningPage.selectHub(hub);
+                shipmentScanningPage.selectShipmentType(shipmentType);
+                shipmentScanningPage.selectShipmentId(shipmentId);
+                shipmentScanningPage.clickSelectShipment();
 
-        for (int i = 0; i < trackingIds.size(); i++) {
-            shipmentScanningPage.scanBarcode(trackingIds.get(i));
-        }
+                for (String trackingId : trackingIds) {
+                    shipmentScanningPage.scanBarcode(trackingId);
+                }
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                throw ex;
+            }
+        }, 10);
     }
 
     @And("Operator removes the parcel from the shipment")

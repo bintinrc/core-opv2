@@ -43,8 +43,8 @@ Feature: Crossdock to other station belong to another crossdock
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
       | schedules[1].movementType   | Air Haul                                                      |
-      | schedules[1].departureTime  | 15:15                                                         |
-      | schedules[1].durationDays   | 0                                                             |
+      | schedules[1].departureTime  | 20:15                                                         |
+      | schedules[1].durationDays   | 1                                                             |
       | schedules[1].durationTime   | 16:30                                                         |
       | schedules[1].daysOfWeek     | all                                                           |
       | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
@@ -56,7 +56,7 @@ Feature: Crossdock to other station belong to another crossdock
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | movementType   | Air Haul                           |
-      | departureTime  | 15:15                              |
+      | departureTime  | 20:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
     When Operator select "Stations" tab on Movement Management page
@@ -78,7 +78,7 @@ Feature: Crossdock to other station belong to another crossdock
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}  |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[3].name}  |
       | status      | Transit                             |
-      | sla         | {{next-4-days-yyyy-MM-dd}} 07:45:00 |
+      | sla         | {{next-4-days-yyyy-MM-dd}} 12:45:00 |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_VAN_INBOUND               |

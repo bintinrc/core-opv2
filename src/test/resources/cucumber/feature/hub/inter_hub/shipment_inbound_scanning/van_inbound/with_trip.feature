@@ -1691,6 +1691,10 @@ Feature: Shipment Van Inbound With Trip Scanning
     Then DB Operator verify path for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" appear in shipment_paths table
     Then DB Operator verify inbound type "SHIPMENT_VAN_INBOUND" for shipment "{KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]}" appear in trip_shipment_scans table
 
+  @DeleteShipment @DeleteDriver @SoftDeleteHubViaDb @ForceSuccessOrder
+  Scenario: Check whether Driver&Trip  Values are cleared after changing Hub Inbound (uid:c37d486b-36b9-498f-9cf0-8923bb00699c)
+    Given no-op
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

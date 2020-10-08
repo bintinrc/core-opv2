@@ -45,7 +45,7 @@ Feature: Trip Management - Cancel Trip
   Scenario: Cancel Trip - Trip Status Transit (uid:c4b7c24e-e9c1-42a6-8bcd-299f0bde7d68)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Trips
-    And Operator verifies that the Trip Management Page is opened
+    And Operator verifies movement Trip page is loaded
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -85,7 +85,7 @@ Feature: Trip Management - Cancel Trip
   Scenario: Call Off Cancel Trip - Trip Status Pending (uid:770109ba-1146-459c-8be6-26eba77c303d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Trips
-    And Operator verifies that the Trip Management Page is opened
+    And Operator verifies movement Trip page is loaded
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -118,7 +118,7 @@ Feature: Trip Management - Cancel Trip
   Scenario: Call Off Cancel Trip - Trip Status Transit (uid:9003a32c-c483-4a4c-981a-b331abf7b684)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Trips
-    And Operator verifies that the Trip Management Page is opened
+    And Operator verifies movement Trip page is loaded
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -155,7 +155,7 @@ Feature: Trip Management - Cancel Trip
   Scenario: Cannot Cancel Invalid Trip - Trip status Cancelled (uid:dba2be77-0bd7-439d-9c6e-58c5bd07ddd1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Trips
-    And Operator verifies that the Trip Management Page is opened
+    And Operator verifies movement Trip page is loaded
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
@@ -190,7 +190,7 @@ Feature: Trip Management - Cancel Trip
   Scenario: Cannot Cancel Invalid Trip - Trip status Completed (uid:6b520ff1-b954-4877-a9c3-985ac92b4fc4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Trips
-    And Operator verifies that the Trip Management Page is opened
+    And Operator verifies movement Trip page is loaded
     Given API Operator creates new Hub using data below:
       | name         | GENERATED |
       | displayName  | GENERATED |
