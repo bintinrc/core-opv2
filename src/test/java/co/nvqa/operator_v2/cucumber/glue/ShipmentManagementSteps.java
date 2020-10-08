@@ -318,8 +318,7 @@ public class ShipmentManagementSteps extends AbstractSteps
         {
             shipmentInfo = get(KEY_SHIPMENT_INFO);
         }
-        String mainWindowHandle = shipmentManagementPage.getWebDriver().getWindowHandle();
-        put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
+        put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
         shipmentManagementPage.openShipmentDetailsPage(shipmentInfo.getId());
     }
 
