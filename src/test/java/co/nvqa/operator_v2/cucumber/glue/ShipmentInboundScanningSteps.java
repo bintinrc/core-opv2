@@ -110,7 +110,7 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
 
     }
 
-    @When("Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:")
+    @When("Operator fill Shipment Inbound Scanning page with data below:")
     public void fillInboundScanningIntoVanValuesDataBelow(Map<String, String> data) {
         retryIfRuntimeExceptionOccurred(() ->
         {

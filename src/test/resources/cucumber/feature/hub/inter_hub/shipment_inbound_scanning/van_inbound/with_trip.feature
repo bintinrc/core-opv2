@@ -32,7 +32,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                          |
       | inboundType          | Into Van                                                                                    |
       | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
@@ -72,7 +72,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                          |
       | inboundType          | Into Van                                                                                    |
       | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
@@ -112,7 +112,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                          |
       | inboundType          | Into Van                                                                                    |
       | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
@@ -149,7 +149,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                          |
       | inboundType          | Into Van                                                                                    |
       | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
@@ -186,7 +186,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
     Given Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                       |
       | inboundType          | Into Van                                                                                    |
       | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
@@ -252,7 +252,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator put created parcel to shipment
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                          |
       | inboundType          | Into Van                                                                                    |
       | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
@@ -316,7 +316,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator put created parcel to shipment
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                          |
       | inboundType          | Into Van                                                                                    |
       | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
@@ -404,7 +404,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator put created parcel to shipment
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                                                           |
       | inboundType          | Into Van                                                                                                                        |
       | driver               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
@@ -477,7 +477,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | scanType       | SHIPMENT_VAN_INBOUND                                    |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
       | driverId       | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                     |
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[2].id} - {KEY_LIST_OF_CREATED_HUBS[2].name}                                                           |
       | inboundType          | Into Van                                                                                                                        |
       | driver               | {KEY_LIST_OF_CREATED_DRIVERS[2].firstName}{KEY_LIST_OF_CREATED_DRIVERS[2].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[2].username}) |
@@ -559,7 +559,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | scanType       | SHIPMENT_HUB_INBOUND                                    |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
       | driverId       | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                     |
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[2].id} - {KEY_LIST_OF_CREATED_HUBS[2].name}                                                           |
       | inboundType          | Into Van                                                                                                                        |
       | driver               | {KEY_LIST_OF_CREATED_DRIVERS[2].firstName}{KEY_LIST_OF_CREATED_DRIVERS[2].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[2].username}) |
@@ -640,7 +640,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | scanType       | SHIPMENT_HUB_INBOUND                                    |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
       | driverId       | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                     |
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[2].id} - {KEY_LIST_OF_CREATED_HUBS[2].name}                                                           |
       | inboundType          | Into Van                                                                                                                        |
       | driver               | {KEY_LIST_OF_CREATED_DRIVERS[2].firstName}{KEY_LIST_OF_CREATED_DRIVERS[2].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[2].username}) |
@@ -741,7 +741,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | scanType       | SHIPMENT_HUB_INBOUND                                    |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
       | driverId       | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                     |
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[3].id} - {KEY_LIST_OF_CREATED_HUBS[3].name}                                                           |
       | inboundType          | Into Van                                                                                                                        |
       | driver               | {KEY_LIST_OF_CREATED_DRIVERS[3].firstName}{KEY_LIST_OF_CREATED_DRIVERS[3].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[3].username}) |
@@ -849,7 +849,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | scanType       | SHIPMENT_HUB_INBOUND                                    |
       | tripId         | {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}              |
       | driverId       | {KEY_LIST_OF_CREATED_DRIVERS[1].id}                     |
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[2].id} - {KEY_LIST_OF_CREATED_HUBS[2].name}                                                           |
       | inboundType          | Into Van                                                                                                                        |
       | driver               | {KEY_LIST_OF_CREATED_DRIVERS[2].firstName}{KEY_LIST_OF_CREATED_DRIVERS[2].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[2].username}) |
@@ -912,7 +912,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator change the status of the shipment into "Completed"
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                                                           |
       | inboundType          | Into Van                                                                                                                        |
       | driver               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
@@ -964,7 +964,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator change the status of the shipment into "Cancelled"
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                                                           |
       | inboundType          | Into Van                                                                                                                        |
       | driver               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
@@ -1021,7 +1021,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator change the country to "Singapore"
-    And Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    And Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                                                           |
       | inboundType          | Into Van                                                                                                                        |
       | driver               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
@@ -1082,7 +1082,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator cancel the created shipment on Shipment Management page
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator change the country to "Singapore"
-    And Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    And Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                                                           |
       | inboundType          | Into Van                                                                                                                        |
       | driver               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
@@ -1142,7 +1142,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator force success the created shipment on Shipment Management page
     When Operator change the country to "Singapore"
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    And Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    And Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                                                           |
       | inboundType          | Into Van                                                                                                                        |
       | driver               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
@@ -1205,7 +1205,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | shipmentId   | {KEY_CREATED_SHIPMENT_ID} |
     When Operator change the country to "Singapore"
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    And Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    And Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                                                           |
       | inboundType          | Into Van                                                                                                                        |
       | driver               | {KEY_LIST_OF_CREATED_DRIVERS[1].firstName}{KEY_LIST_OF_CREATED_DRIVERS[1].lastName} ({KEY_LIST_OF_CREATED_DRIVERS[1].username}) |
@@ -1302,7 +1302,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | destinationHub | {hub-name-temp}                    |
     And Operator assign driver "{id-driver-name} ({id-driver-username})" to created movement schedule
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
-    And Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    And Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[3].name}      |
       | inboundType          | Into Van                                |
       | driver               | {id-driver-name} ({id-driver-username}) |
@@ -1354,7 +1354,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                       |
       | inboundType          | Into Van                                                                                    |
       | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
@@ -1393,7 +1393,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                       |
       | inboundType          | Into Van                                                                                    |
       | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
@@ -1432,7 +1432,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                       |
       | inboundType          | Into Van                                                                                    |
       | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
@@ -1489,7 +1489,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                       |
       | inboundType          | Into Van                                                                                    |
       | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
@@ -1573,7 +1573,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                       |
       | inboundType          | Into Van                                                                                    |
       | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
@@ -1614,7 +1614,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                       |
       | inboundType          | Into Van                                                                                    |
       | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
@@ -1667,7 +1667,7 @@ Feature: Shipment Van Inbound With Trip Scanning
       | {KEY_LIST_OF_CREATED_SHIPMENT_IDS[2]} |
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].id} - {KEY_LIST_OF_CREATED_HUBS[1].name}                       |
       | inboundType          | Into Van                                                                                    |
       | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
@@ -1751,18 +1751,18 @@ Feature: Shipment Van Inbound With Trip Scanning
     And API Operator put created parcel to shipment
     Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     And API Operator assign driver to movement trip schedule
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                          |
       | inboundType          | Into Van                                                                                    |
     Then Operator verify start inbound button is "enabled"
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
     Then Operator verify small message "Please select a trip before start inbound" "appears" in Start Inbound Box
     And Operator verify start inbound button is "disabled"
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | movementTripSchedule | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                          |
     Then Operator verify start inbound button is "enabled"
-    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+    When Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | inboundType | Into Hub                           |
     Then Operator verify driver and movement trip is cleared
