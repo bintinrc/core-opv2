@@ -253,4 +253,10 @@ public class OrderBillingSteps extends AbstractSteps
     {
         assertThat("The displayed error msg does not match with the expected error msg", orderBillingPage.getNoParentErrorMsg(), containsString("No Parent Shipper matching"));
     }
+
+    @Then("Operator opens Gmail and verifies the email body contains message {string}")
+    public void operatorOpensGmailAndVerifiesTheEmailBodyContainsMessage(String expectedErrorMessage)
+    {
+        assertThat("Actual error message does not contain expected error message",orderBillingPage.getOrderBillingBodyFromEmail(), containsString(expectedErrorMessage));
+    }
 }

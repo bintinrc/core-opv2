@@ -54,8 +54,7 @@ Feature: Order Billing
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
     Then Operator gets price order details from the database
-    Then Operator opens Gmail and checks received email
-    Then Operator verifies zip is not attached with any CSV files in received email
+    Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "SHIPPER" Report (uid:d3e4c175-1eec-415d-a1fe-74ea2a94bc4e)
@@ -131,8 +130,8 @@ Feature: Order Billing
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
     Then Operator gets price order details from the database
-    Then Operator opens Gmail and checks received email
-    Then Operator verifies zip is not attached with any CSV files in received email
+    Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
+
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "ALL" Report (uid:a3c83778-4a7d-4b14-b8a3-9a9ba1e03001)
@@ -193,8 +192,8 @@ Feature: Order Billing
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
     Then Operator gets price order details from the database
-    Then Operator opens Gmail and checks received email
-    Then Operator verifies zip is not attached with any CSV files in received email
+    Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
+
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "AGGREGATED" Report (uid:62ae496e-0fab-4708-bf9f-da781eb068b0)
@@ -235,8 +234,8 @@ Feature: Order Billing
       | uploadCsv    | 1122334455                                                                                 |
       | generateFile | All orders grouped by shipper and parcel size/weight (1 file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                                                      |
-    Then Operator opens Gmail and checks received email
-    Then Operator verifies zip is not attached with any CSV files in received email
+    Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
+
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "SCRIPT" Report (uid:c023accf-e4c0-4c46-9dfb-227a144fbf6e)
@@ -291,8 +290,8 @@ Feature: Order Billing
       | uploadCsv    | 1122334455                                                        |
       | generateFile | Orders consolidated by parent shipper (1 file per parent shipper) |
       | emailAddress | {order-billing-email}                                             |
-    Then Operator opens Gmail and checks received email
-    Then Operator verifies zip is not attached with any CSV files in received email
+    Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
+
 
   @DeleteOrArchiveRoute @KillBrowser
   Scenario: Search Shipper by Upload CSV - Valid & Invalid Shipper ID at the Same Time - Generate "PARENT" Report (uid:59c22e15-29eb-427e-bb65-57f956b3df58)
@@ -384,5 +383,5 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-id-v4-legacy-id}                           |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
-    Then Operator opens Gmail and checks received email
-    Then Operator verifies zip is not attached with any CSV files in received email
+    Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
+

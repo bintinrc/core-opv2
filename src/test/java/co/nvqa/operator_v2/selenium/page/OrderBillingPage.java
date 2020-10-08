@@ -215,6 +215,28 @@ public class OrderBillingPage extends OperatorV2SimplePage
                 .orElseThrow(() -> new IllegalArgumentException("No Zip file in attachment"));
     }
 
+    public String getOrderBillingBodyFromEmail()
+    {
+        pause10s();
+
+        GmailClient gmailClient = new GmailClient();
+        AtomicBoolean isFound = new AtomicBoolean();
+
+        List<String> bodyMsgList = new ArrayList<>();
+        gmailClient.readUnseenMessage(message ->
+        {
+            if (message.getSubject().equals(REPORT_EMAIL_SUBJECT) && !isFound.get())
+            {
+                String emailBody = gmailClient.getSimpleContentBody(message);
+                bodyMsgList.add(emailBody);
+                isFound.set(Boolean.TRUE);
+            }
+        });
+        return bodyMsgList.stream()
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No body message in email"));
+    }
+
     public void readOrderBillingCsvAttachment(String attachmentUrl, PricedOrder pricedOrder, String reportName)
     {
         boolean isBodyFound = false;
