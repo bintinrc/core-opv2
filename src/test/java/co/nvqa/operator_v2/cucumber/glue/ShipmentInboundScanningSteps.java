@@ -115,21 +115,47 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
         retryIfRuntimeExceptionOccurred(() ->
         {
             try {
-                navigateRefresh();
-                pause2s();
                 final Map<String, String> finalData = resolveKeyValues(data);
                 String inboundHub = finalData.get("inboundHub");
                 String inboundType = finalData.get("inboundType");
                 String driver = finalData.get("driver");
                 String movementTripSchedule = finalData.get("movementTripSchedule");
-
                 scanningPage.inboundScanningWithTripReturnMovementTrip(inboundHub, inboundType, driver, movementTripSchedule);
             } catch (Throwable ex) {
                 NvLogger.error(ex.getMessage());
                 NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
+                navigateRefresh();
+                pause2s();
                 throw ex;
             }
         }, 10);
+    }
 
+    @Then("Operator verify start inbound button is {string}")
+    public void verifyStartInboundButtonIs(String status) {
+        if (status.equals("enabled")) {
+            assertTrue( scanningPage.startInboundButton.isEnabled());
+            return;
+        }
+        if (status.equals("disabled")) {
+            assertFalse(scanningPage.startInboundButton.isEnabled());
+        }
+    }
+
+    @Then("Operator verify small message {string} {string} in Start Inbound Box")
+    public void verifySmallMessage(String message, String status) {
+        if (status.equals("appears")) {
+            assertEquals(message, scanningPage.tripUnselectedWarning.getText());
+            return;
+        }
+        if (status.equals("not appears")) {
+            assertFalse(scanningPage.tripUnselectedWarning.isDisplayedFast());
+        }
+    }
+
+    @Then("Operator verify driver and movement trip is cleared")
+    public void verifyDriverAndMovementTripIsCleared() {
+        assertEquals("Driver", scanningPage.driver.getText());
+        assertEquals("Movement Trip", scanningPage.movementTrip.getText());
     }
 }

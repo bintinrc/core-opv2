@@ -1,4 +1,4 @@
-@ShipmentInboundScanning @InterHub @Shipment @MiddleMile @VanInbound @WithTrip @Refo
+@ShipmentInboundScanning @InterHub @Shipment @MiddleMile @VanInbound @WithTrip
 Feature: Shipment Van Inbound With Trip Scanning
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -1754,9 +1754,20 @@ Feature: Shipment Van Inbound With Trip Scanning
     When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[1].name}                                                          |
       | inboundType          | Into Van                                                                                    |
+    Then Operator verify start inbound button is "enabled"
+    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
       | driver               | {KEY_CREATED_DRIVER.firstName}{KEY_CREATED_DRIVER.lastName} ({KEY_CREATED_DRIVER.username}) |
+    Then Operator verify small message "Please select a trip before start inbound" "appears" in Start Inbound Box
+    And Operator verify start inbound button is "disabled"
+    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
       | movementTripSchedule | {KEY_LIST_OF_CREATED_HUBS[2].name}                                                          |
-    And Operator click start inbound
+    Then Operator verify start inbound button is "enabled"
+    When Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:
+      | inboundHub  | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | inboundType | Into Hub                           |
+    Then Operator verify driver and movement trip is cleared
+    And Operator verify small message "Please select a trip before start inbound" "not appears" in Start Inbound Box
+    And Operator verify start inbound button is "enabled"
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
