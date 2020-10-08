@@ -155,7 +155,7 @@ public class MovementManagementSteps extends AbstractSteps
                 navigateRefresh();
                 pause2s();
                 movementManagementPage.switchTo();
-                movementManagementPage.stationsTab.waitUntilClickable(60);
+                movementManagementPage.relationsTab.waitUntilClickable(60);
                 throw ex;
             }
         }, 10);
@@ -164,11 +164,24 @@ public class MovementManagementSteps extends AbstractSteps
     @Then("Operator search for Pending relation on Movement Management page using data below:")
     public void operatorSearchForPendingRelationOnMovementManagementPageUsingDataBelow(Map<String, String> data)
     {
-        data = resolveKeyValues(data);
-        String station = data.get("station");
-        movementManagementPage.relationsTab.click();
-        movementManagementPage.pendingTab.click();
-        Optional.ofNullable(station).ifPresent(value -> movementManagementPage.stationFilter.setValue(value));
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try {
+                final Map<String, String> finalData = resolveKeyValues(data);
+                String station = finalData.get("station");
+                operatorSelectTabOnMovementManagementPage("Relations");
+                operatorSelectTabOnMovementManagementPage("Pending");
+                Optional.ofNullable(station).ifPresent(value -> movementManagementPage.stationFilter.setValue(value));
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                movementManagementPage.switchTo();
+                movementManagementPage.relationsTab.waitUntilClickable(60);
+                throw ex;
+            }
+        }, 10);
     }
 
     @Then("Operator verify relations table on Movement Management page using data below:")

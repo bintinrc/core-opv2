@@ -117,9 +117,9 @@ Feature: Crossdock to it's Station
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify movement event on Shipment Details page using data below:
-      | source   | SLA_CALCULATION                                                                                                          |
-      | status   | FAILED                                                                                                                   |
-      | comments | found no movement from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (SG) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (SG) |
+      | source   | SLA_CALCULATION                                                                                                      |
+      | status   | FAILED                                                                                                               |
+      | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (SG) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (SG) |
 
   @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
   Scenario: Crossdock to its Station - Station Movement not found (uid:9aa9d622-d1e1-41d0-9ab0-c7b960051f91)
@@ -160,9 +160,9 @@ Feature: Crossdock to it's Station
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify movement event on Shipment Details page using data below:
-      | source   | SLA_CALCULATION                                              |
-      | status   | FAILED                                                       |
-      | comments | relation for {KEY_LIST_OF_CREATED_HUBS[2].id} (SG) not found |
+      | source   | SLA_CALCULATION                                                                                                      |
+      | status   | FAILED                                                                                                               |
+      | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (SG) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (SG) |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

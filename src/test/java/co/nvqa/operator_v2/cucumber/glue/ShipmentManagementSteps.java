@@ -379,15 +379,17 @@ public class ShipmentManagementSteps extends AbstractSteps
     @Then("^Operator verify shipment event on Shipment Details page using data below:$")
     public void operatorVerifyShipmentEventOnEditOrderPage(Map<String, String> mapOfData)
     {
-        pause3s();
-        mapOfData = resolveKeyValues(mapOfData);
-        ShipmentEvent expectedEvent = new ShipmentEvent(mapOfData);
-        List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readAllEntities();
-        ShipmentEvent actualEvent = events.stream()
-                .filter(event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
-                .findFirst()
-                .orElseThrow(() -> new AssertionError(f("There is no [%s] shipment event on Shipment Details page", expectedEvent.getSource())));
-        expectedEvent.compareWithActual(actualEvent);
+        retryIfAssertionErrorOccurred(() ->
+        {
+            final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
+            ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
+            List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readAllEntities();
+            ShipmentEvent actualEvent = events.stream()
+                    .filter(event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
+                    .findFirst()
+                    .orElseThrow(() -> new AssertionError(f("There is no [%s] shipment event on Shipment Details page", expectedEvent.getSource())));
+            expectedEvent.compareWithActual(actualEvent);
+        }, "retry shipment details", 5000, 10);
     }
 
     @Then("Operator verifies event is present for shipment on Shipment Detail page")
