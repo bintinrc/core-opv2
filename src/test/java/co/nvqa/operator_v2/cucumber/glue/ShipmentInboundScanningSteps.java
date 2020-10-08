@@ -103,8 +103,15 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
         scanningPage.checkEndDateSessionScanChange(mustCheckId, next2DaysDate);
     }
 
-    @When("^Operator inbound scanning Into Van Shipment Inbound Scanning page with data below:$")
-    public void inboundScanningIntoVanWithDataBelow(Map<String, String> data) {
+    @When("Operator click start inbound")
+    public void clickStartInbound() {
+        scanningPage.startInboundButton.waitUntilClickable();
+        scanningPage.clickStartInbound();
+
+    }
+
+    @When("Operator fill inbound scanning Into Van values Shipment Inbound Scanning page with data below:")
+    public void fillInboundScanningIntoVanValuesDataBelow(Map<String, String> data) {
         retryIfRuntimeExceptionOccurred(() ->
         {
             try {
@@ -123,5 +130,6 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
                 throw ex;
             }
         }, 10);
+
     }
 }

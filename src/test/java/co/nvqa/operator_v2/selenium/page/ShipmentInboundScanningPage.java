@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -44,6 +45,9 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
 
     @FindBy(xpath = "//div[span[.='Inbound Type']]//p")
     public TextBox inboundTypeText;
+
+    @FindBy(css = "[aria-label='container.inbound-scanning.start-inbound'")
+    public Button startInboundButton;
 
 
     public ShipmentInboundScanningPage(WebDriver webDriver)
@@ -102,7 +106,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
     }
 
     public void clickStartInbound(){
-        clickNvIconTextButtonByNameAndWaitUntilDone("container.inbound-scanning.start-inbound");
+        startInboundButton.click();
     }
 
     public String grabXpathButton(String label)
@@ -212,7 +216,6 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage
         selectMovementTrip(movementTripSchedule);
 
         pause2s();
-        clickStartInbound();
     }
 
 
