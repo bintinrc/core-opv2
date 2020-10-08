@@ -59,7 +59,7 @@ Feature: Station to Station Under Different Crossdock
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[3].name}                            |
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[4].name}                            |
       | schedules[1].movementType   | Air Haul                                                      |
-      | schedules[1].departureTime  | 15:15                                                         |
+      | schedules[1].departureTime  | 20:15                                                         |
       | schedules[1].durationDays   | 1                                                             |
       | schedules[1].durationTime   | 16:30                                                         |
       | schedules[1].daysOfWeek     | all                                                           |
@@ -76,7 +76,7 @@ Feature: Station to Station Under Different Crossdock
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}  |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}  |
       | status      | Transit                             |
-      | sla         | {{next-2-days-yyyy-MM-dd}} 07:45:00 |
+      | sla         | {{next-2-days-yyyy-MM-dd}} 12:45:00 |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_VAN_INBOUND               |

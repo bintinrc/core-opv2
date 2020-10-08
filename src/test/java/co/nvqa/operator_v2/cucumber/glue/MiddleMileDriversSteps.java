@@ -114,145 +114,157 @@ public class MiddleMileDriversSteps extends AbstractSteps
     @When("Operator create new Middle Mile Driver with details:")
     public void operatorCreateNewMiddleMileDriverWithDetails(List<Map<String, String>> middleMileDrivers)
     {
-        String country = get(COUNTRY);
-        for (Map<String, String> data : middleMileDrivers)
+        retryIfRuntimeExceptionOccurred(() ->
         {
-            Driver middleMileDriver = new Driver();
-            middleMileDriversPage.clickCreateDriversButton();
-            middleMileDriver.setFirstName(data.get("name"));
-
-            if (RANDOM.equalsIgnoreCase(middleMileDriver.getFirstName()))
-            {
-                String name = AUTO + generateRequestedTrackingNumber();
-                System.out.println("Name and Username : " + name);
-                middleMileDriver.setFirstName(name);
-            }
-            middleMileDriversPage.fillName(middleMileDriver.getFirstName());
-
-            middleMileDriver.setHub(data.get("hub"));
-            if (!"country_based".equalsIgnoreCase(middleMileDriver.getHub()))
-            {
-                middleMileDriversPage.chooseHub(middleMileDriver.getHub());
-            } else
-            {
-                switch (country.toLowerCase())
+            try {
+                navigateRefresh();
+                pause2s();
+                String country = get(COUNTRY);
+                for (Map<String, String> data : middleMileDrivers)
                 {
-                    case SINGAPORE:
-                        middleMileDriver.setHub(SG_HUB);
-                        break;
+                    Driver middleMileDriver = new Driver();
+                    middleMileDriversPage.clickCreateDriversButton();
+                    middleMileDriver.setFirstName(data.get("name"));
 
-                    case INDONESIA:
-                        middleMileDriver.setHub(ID_HUB);
-                        break;
+                    if (RANDOM.equalsIgnoreCase(middleMileDriver.getFirstName()))
+                    {
+                        String name = AUTO + generateRequestedTrackingNumber();
+                        System.out.println("Name and Username : " + name);
+                        middleMileDriver.setFirstName(name);
+                    }
+                    middleMileDriversPage.fillName(middleMileDriver.getFirstName());
 
-                    case THAILAND:
-                        middleMileDriver.setHub(TH_HUB);
-                        break;
+                    middleMileDriver.setHub(data.get("hub"));
+                    if (!"country_based".equalsIgnoreCase(middleMileDriver.getHub()))
+                    {
+                        middleMileDriversPage.chooseHub(middleMileDriver.getHub());
+                    } else
+                    {
+                        switch (country.toLowerCase())
+                        {
+                            case SINGAPORE:
+                                middleMileDriver.setHub(SG_HUB);
+                                break;
 
-                    case VIETNAM:
-                        middleMileDriver.setHub(VN_HUB);
-                        break;
+                            case INDONESIA:
+                                middleMileDriver.setHub(ID_HUB);
+                                break;
 
-                    case MALAYSIA:
-                        middleMileDriver.setHub(MY_HUB);
-                        break;
+                            case THAILAND:
+                                middleMileDriver.setHub(TH_HUB);
+                                break;
 
-                    case PHILIPPINES:
-                        middleMileDriver.setHub(PH_HUB);
-                        break;
+                            case VIETNAM:
+                                middleMileDriver.setHub(VN_HUB);
+                                break;
 
-                    default:
-                        NvLogger.warn("Country is not on the list");
-                }
-                middleMileDriversPage.chooseHub(middleMileDriver.getHub());
-            }
+                            case MALAYSIA:
+                                middleMileDriver.setHub(MY_HUB);
+                                break;
 
-            middleMileDriver.setMobilePhone(data.get("contactNumber"));
-            middleMileDriversPage.fillcontactNumber(middleMileDriver.getMobilePhone());
+                            case PHILIPPINES:
+                                middleMileDriver.setHub(PH_HUB);
+                                break;
 
-            middleMileDriver.setLicenseNumber(data.get("licenseNumber"));
-            if (RANDOM.equalsIgnoreCase(middleMileDriver.getLicenseNumber()))
-            {
-                String licenseNumber = RandomUtil.randomString(5);
-                System.out.println("License Number : " + licenseNumber);
-                middleMileDriver.setLicenseNumber(licenseNumber);
-            }
-            middleMileDriversPage.fillLicenseNumber(middleMileDriver.getLicenseNumber());
+                            default:
+                                NvLogger.warn("Country is not on the list");
+                        }
+                        middleMileDriversPage.chooseHub(middleMileDriver.getHub());
+                    }
 
-            middleMileDriver.setLicenseExpiryDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
-            middleMileDriversPage.fillLicenseExpiryDate(CAL_FORMATTER.format(TODAY.plusMonths(2)));
+                    middleMileDriver.setMobilePhone(data.get("contactNumber"));
+                    middleMileDriversPage.fillcontactNumber(middleMileDriver.getMobilePhone());
 
-            if (country == null)
-            {
-                middleMileDriver.setLicenseType(CLASS_5);
-            } else
-            {
-                switch (country.toLowerCase())
-                {
-                    case SINGAPORE:
+                    middleMileDriver.setLicenseNumber(data.get("licenseNumber"));
+                    if (RANDOM.equalsIgnoreCase(middleMileDriver.getLicenseNumber()))
+                    {
+                        String licenseNumber = RandomUtil.randomString(5);
+                        System.out.println("License Number : " + licenseNumber);
+                        middleMileDriver.setLicenseNumber(licenseNumber);
+                    }
+                    middleMileDriversPage.fillLicenseNumber(middleMileDriver.getLicenseNumber());
+
+                    middleMileDriver.setLicenseExpiryDate(EXPIRY_DATE_FORMATTER.format(TODAY.plusMonths(2)));
+                    middleMileDriversPage.fillLicenseExpiryDate(CAL_FORMATTER.format(TODAY.plusMonths(2)));
+
+                    if (country == null)
+                    {
                         middleMileDriver.setLicenseType(CLASS_5);
-                        break;
+                    } else
+                    {
+                        switch (country.toLowerCase())
+                        {
+                            case SINGAPORE:
+                                middleMileDriver.setLicenseType(CLASS_5);
+                                break;
 
-                    case INDONESIA:
-                        middleMileDriver.setLicenseType(SIM_B_I_UMUM);
-                        break;
+                            case INDONESIA:
+                                middleMileDriver.setLicenseType(SIM_B_I_UMUM);
+                                break;
 
-                    case THAILAND:
-                        middleMileDriver.setLicenseType(TYPE_C);
-                        break;
+                            case THAILAND:
+                                middleMileDriver.setLicenseType(TYPE_C);
+                                break;
 
-                    case VIETNAM:
-                        middleMileDriver.setLicenseType(CLASS_E);
-                        break;
+                            case VIETNAM:
+                                middleMileDriver.setLicenseType(CLASS_E);
+                                break;
 
-                    case MALAYSIA:
-                        middleMileDriver.setLicenseType(CLASS_E);
-                        break;
+                            case MALAYSIA:
+                                middleMileDriver.setLicenseType(CLASS_E);
+                                break;
 
-                    case PHILIPPINES:
-                        middleMileDriver.setLicenseType(RESTRICTION_5);
-                        break;
+                            case PHILIPPINES:
+                                middleMileDriver.setLicenseType(RESTRICTION_5);
+                                break;
 
-                    default:
-                        NvLogger.warn("Country is not on the list");
+                            default:
+                                NvLogger.warn("Country is not on the list");
+                        }
+                    }
+                    middleMileDriversPage.chooseLicenseType(middleMileDriver.getLicenseType());
+
+                    middleMileDriver.setEmploymentType(data.get("employmentType"));
+                    if (FULL_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType()))
+                    {
+                        middleMileDriver.setEmploymentType(FULL_TIME_CONTRACT);
+                    } else if (PART_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType()))
+                    {
+                        middleMileDriver.setEmploymentType(PART_TIME_FREELANCE);
+                    } else if (VENDOR.equalsIgnoreCase(middleMileDriver.getEmploymentType()))
+                    {
+                        middleMileDriver.setEmploymentType(VENDOR_SELECTION);
+                    }
+                    middleMileDriversPage.chooseEmploymentType(middleMileDriver.getEmploymentType());
+
+                    middleMileDriversPage.fillEmploymentStartDate(CAL_FORMATTER.format(TODAY));
+                    middleMileDriversPage.fillEmploymentEndDate(CAL_FORMATTER.format(TODAY.plusMonths(2)));
+
+                    middleMileDriver.setUsername(data.get("username"));
+                    if (RANDOM.equalsIgnoreCase(middleMileDriver.getUsername()))
+                    {
+                        middleMileDriver.setUsername(middleMileDriver.getFirstName());
+                    }
+                    middleMileDriversPage.fillUsername(middleMileDriver.getUsername());
+
+                    middleMileDriversPage.fillPassword(PASSWORD);
+
+                    middleMileDriver.setComments(COMMENTS);
+                    middleMileDriversPage.fillComments(middleMileDriver.getComments());
+
+                    middleMileDriversPage.clickSaveButton();
+
+                    put(KEY_CREATED_DRIVER, middleMileDriver);
+                    putInList(KEY_LIST_OF_CREATED_DRIVERS, middleMileDriver);
+                    put(KEY_CREATED_DRIVER_USERNAME, middleMileDriver.getUsername());
                 }
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
+                throw ex;
             }
-            middleMileDriversPage.chooseLicenseType(middleMileDriver.getLicenseType());
+        }, 10);
 
-            middleMileDriver.setEmploymentType(data.get("employmentType"));
-            if (FULL_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType()))
-            {
-                middleMileDriver.setEmploymentType(FULL_TIME_CONTRACT);
-            } else if (PART_TIME.equalsIgnoreCase(middleMileDriver.getEmploymentType()))
-            {
-                middleMileDriver.setEmploymentType(PART_TIME_FREELANCE);
-            } else if (VENDOR.equalsIgnoreCase(middleMileDriver.getEmploymentType()))
-            {
-                middleMileDriver.setEmploymentType(VENDOR_SELECTION);
-            }
-            middleMileDriversPage.chooseEmploymentType(middleMileDriver.getEmploymentType());
-
-            middleMileDriversPage.fillEmploymentStartDate(CAL_FORMATTER.format(TODAY));
-            middleMileDriversPage.fillEmploymentEndDate(CAL_FORMATTER.format(TODAY.plusMonths(2)));
-
-            middleMileDriver.setUsername(data.get("username"));
-            if (RANDOM.equalsIgnoreCase(middleMileDriver.getUsername()))
-            {
-                middleMileDriver.setUsername(middleMileDriver.getFirstName());
-            }
-            middleMileDriversPage.fillUsername(middleMileDriver.getUsername());
-
-            middleMileDriversPage.fillPassword(PASSWORD);
-
-            middleMileDriver.setComments(COMMENTS);
-            middleMileDriversPage.fillComments(middleMileDriver.getComments());
-
-            middleMileDriversPage.clickSaveButton();
-
-            put(KEY_CREATED_DRIVER, middleMileDriver);
-            putInList(KEY_LIST_OF_CREATED_DRIVERS, middleMileDriver);
-            put(KEY_CREATED_DRIVER_USERNAME, middleMileDriver.getUsername());
-        }
     }
 
     @Then("Operator verifies that the new Middle Mile Driver has been created")

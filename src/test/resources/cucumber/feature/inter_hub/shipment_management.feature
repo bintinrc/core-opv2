@@ -179,7 +179,7 @@ Feature: Shipment Management
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan the created order to shipment in hub {hub-name}
     And Operator close the shipment which has been created
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -201,7 +201,7 @@ Feature: Shipment Management
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan the created order to shipment in hub {hub-name}
     And Operator close the shipment which has been created
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -301,7 +301,7 @@ Feature: Shipment Management
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan the created order to shipment in hub {hub-name}
     And Operator close the shipment which has been created
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -324,7 +324,7 @@ Feature: Shipment Management
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan the created order to shipment in hub {hub-name}
     And Operator close the shipment which has been created
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -355,7 +355,7 @@ Feature: Shipment Management
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan the created order to shipment in hub {hub-name}
     And Operator close the shipment which has been created
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -391,7 +391,7 @@ Feature: Shipment Management
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan the created order to shipment in hub {hub-name}
     And Operator close the shipment which has been created
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -549,24 +549,6 @@ Feature: Shipment Management
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator click "Load All Selection" on Shipment Management page
     Then Operator verify parameters of the created shipment on Shipment Management page
-
-  @DeleteShipment
-  Scenario: Open Shipment Details (uid:d4072972-d4f1-446f-aaed-62a5c43ab03d)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id-2} } |
-    Given Operator go to menu Inter-Hub -> Shipment Management
-    When Operator create Shipment on Shipment Management page using data below:
-      | origHubName | {hub-name}                                                          |
-      | destHubName | {hub-name-2}                                                        |
-      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    Given API Operator put created parcel to shipment
-    When Operator click "Load All Selection" on Shipment Management page
-    And Operator open the shipment detail for the created shipment on Shipment Management Page
-    Then Operator verify the Shipment Details Page opened is for the created shipment
 
   @DeleteShipment
   Scenario: Print Master AWB (uid:6edf77ea-9bd7-49f5-a9e5-d520fd5d1a73)

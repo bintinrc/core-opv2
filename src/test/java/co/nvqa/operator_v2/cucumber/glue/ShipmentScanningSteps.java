@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.hub.Shipments;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.ShipmentScanningPage;
 import cucumber.api.java.en.And;
@@ -31,19 +32,30 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
     @When("^Operator scan the created order to shipment in hub ([^\"]*)$")
     public void operatorScanTheCreatedOrderToShipmentInHub(String hub) {
-        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
-        String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
-                ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
-                ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try {
+                String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
+                Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+                String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
+                        ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
+                        ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
 
-
-        shipmentScanningPage.selectHub(hub);
-        shipmentScanningPage.selectShipmentType(shipmentType);
-        shipmentScanningPage.selectShipmentId(shipmentId);
-        shipmentScanningPage.clickSelectShipment();
-        shipmentScanningPage.scanBarcode(trackingId);
-        shipmentScanningPage.checkOrderInShipment(trackingId);
+                shipmentScanningPage.selectHub(hub);
+                shipmentScanningPage.selectShipmentType(shipmentType);
+                shipmentScanningPage.selectShipmentFilter.waitUntilVisible();
+                shipmentScanningPage.selectShipmentFilter.selectValue(String.valueOf(shipmentId));
+                shipmentScanningPage.clickSelectShipment();
+                shipmentScanningPage.scanBarcode(trackingId);
+                shipmentScanningPage.checkOrderInShipment(trackingId);
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                throw ex;
+            }
+        }, 10);
     }
 
     @And("Operator close the shipment which has been created")
@@ -62,21 +74,32 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
     @When("^Operator scan multiple created order to shipment in hub ([^\"]*)$")
     public void aPIShipperTagsMultipleParcelsAsPerTheBelowTag(String hub) {
-        List<String> trackingIds = (get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID));
-        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
-        String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
-                ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
-                ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try {
+                List<String> trackingIds = (get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID));
+                Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+                String shipmentType = containsKey(KEY_SHIPMENT_INFO) ?
+                        ((ShipmentInfo) get(KEY_SHIPMENT_INFO)).getShipmentType() :
+                        ((Shipments) get(KEY_CREATED_SHIPMENT)).getShipment().getShipmentType();
 
 
-        shipmentScanningPage.selectHub(hub);
-        shipmentScanningPage.selectShipmentType(shipmentType);
-        shipmentScanningPage.selectShipmentId(shipmentId);
-        shipmentScanningPage.clickSelectShipment();
+                shipmentScanningPage.selectHub(hub);
+                shipmentScanningPage.selectShipmentType(shipmentType);
+                shipmentScanningPage.selectShipmentId(shipmentId);
+                shipmentScanningPage.clickSelectShipment();
 
-        for (int i = 0; i < trackingIds.size(); i++) {
-            shipmentScanningPage.scanBarcode(trackingIds.get(i));
-        }
+                for (String trackingId : trackingIds) {
+                    shipmentScanningPage.scanBarcode(trackingId);
+                }
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                throw ex;
+            }
+        }, 10);
     }
 
     @And("Operator removes the parcel from the shipment")

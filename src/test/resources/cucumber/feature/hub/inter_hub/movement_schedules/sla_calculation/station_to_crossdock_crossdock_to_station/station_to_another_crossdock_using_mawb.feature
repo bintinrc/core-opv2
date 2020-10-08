@@ -50,7 +50,7 @@ Feature: Station to another Crossdock using MAWB
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
       | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name}                            |
       | schedules[1].movementType   | Air Haul                                                      |
-      | schedules[1].departureTime  | 15:15                                                         |
+      | schedules[1].departureTime  | 20:15                                                         |
       | schedules[1].durationDays   | 1                                                             |
       | schedules[1].durationTime   | 16:30                                                         |
       | schedules[1].daysOfWeek     | all                                                           |
@@ -63,7 +63,7 @@ Feature: Station to another Crossdock using MAWB
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | movementType   | Air Haul                           |
-      | departureTime  | 15:15                              |
+      | departureTime  | 20:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -76,7 +76,7 @@ Feature: Station to another Crossdock using MAWB
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}  |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[3].name}  |
       | status      | Transit                             |
-      | sla         | {{next-4-days-yyyy-MM-dd}} 07:45:00 |
+      | sla         | {{next-4-days-yyyy-MM-dd}} 12:45:00 |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_VAN_INBOUND               |
@@ -156,9 +156,9 @@ Feature: Station to another Crossdock using MAWB
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify movement event on Shipment Details page using data below:
-      | source   | SLA_CALCULATION                                                                                                          |
-      | status   | FAILED                                                                                                                   |
-      | comments | found no movement from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (SG) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (SG) |
+      | source   | SLA_CALCULATION                                                                                                      |
+      | status   | FAILED                                                                                                               |
+      | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (sg) |
 
   @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
   Scenario: Station to another Crossdock using MAWB - Station Movement not found (uid:78d93bdc-8539-47b1-a050-68f748c2d9a8)
@@ -227,9 +227,9 @@ Feature: Station to another Crossdock using MAWB
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify movement event on Shipment Details page using data below:
-      | source   | SLA_CALCULATION                                              |
-      | status   | FAILED                                                       |
-      | comments | relation for {KEY_LIST_OF_CREATED_HUBS[1].id} (SG) not found |
+      | source   | SLA_CALCULATION                                                                                                      |
+      | status   | FAILED                                                                                                               |
+      | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (sg) |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

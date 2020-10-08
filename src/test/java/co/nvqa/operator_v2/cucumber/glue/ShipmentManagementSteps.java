@@ -7,6 +7,7 @@ import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementEvent;
 import co.nvqa.operator_v2.model.ShipmentEvent;
 import co.nvqa.operator_v2.model.ShipmentInfo;
+import co.nvqa.operator_v2.model.StationMovementSchedule;
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
 import co.nvqa.operator_v2.util.KeyConstants;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -82,10 +83,21 @@ public class ShipmentManagementSteps extends AbstractSteps
     @When("^Operator search shipments by given Ids on Shipment Management page:$")
     public void fillSearchShipmentsByIds(List<String> ids)
     {
-        List<Long> shipmentIds = ids.stream()
-                .map(id -> Long.valueOf(resolveValue(id)))
-                .collect(Collectors.toList());
-        shipmentManagementPage.searchByShipmentIds(shipmentIds);
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try {
+                List<Long> shipmentIds = ids.stream()
+                        .map(id -> Long.valueOf(resolveValue(id)))
+                        .collect(Collectors.toList());
+                shipmentManagementPage.searchByShipmentIds(shipmentIds);
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                throw ex;
+            }
+        }, 10);
     }
 
     @When("^Operator filter shipment based on MAWB value on Shipment Management page$")
@@ -144,56 +156,63 @@ public class ShipmentManagementSteps extends AbstractSteps
     @When("^Operator create Shipment on Shipment Management page using data below:$")
     public void operatorCreateShipmentOnShipmentManagementPageUsingDataBelow(Map<String, String> mapOfData)
     {
-        mapOfData = resolveKeyValues(mapOfData);
-        List<Order> listOfOrders;
-        boolean isNextOrder = false;
-
-        if (get("isNextOrder") != null)
+        retryIfRuntimeExceptionOccurred(() ->
         {
-            isNextOrder = get("isNextOrder");
-        }
+            try {
+                final Map<String, String> finalData = resolveKeyValues(mapOfData);
+                List<Order> listOfOrders;
+                boolean isNextOrder = false;
 
-        if (containsKey(KEY_LIST_OF_CREATED_ORDER))
-        {
-            listOfOrders = get(KEY_LIST_OF_CREATED_ORDER);
-        } else if (containsKey(KEY_CREATED_ORDER))
-        {
-            listOfOrders = Arrays.asList(get(KEY_CREATED_ORDER));
-        } else
-        {
-            listOfOrders = new ArrayList<>();
-        }
+                if (get("isNextOrder") != null)
+                {
+                    isNextOrder = get("isNextOrder");
+                }
 
-        ShipmentInfo shipmentInfo = new ShipmentInfo();
-        shipmentInfo.fromMap(mapOfData);
-        shipmentInfo.setOrdersCount((long) listOfOrders.size());
+                if (containsKey(KEY_LIST_OF_CREATED_ORDER))
+                {
+                    listOfOrders = get(KEY_LIST_OF_CREATED_ORDER);
+                } else if (containsKey(KEY_CREATED_ORDER))
+                {
+                    listOfOrders = Arrays.asList(get(KEY_CREATED_ORDER));
+                } else
+                {
+                    listOfOrders = new ArrayList<>();
+                }
 
-        shipmentManagementPage.createShipment(shipmentInfo, isNextOrder);
+                ShipmentInfo shipmentInfo = new ShipmentInfo();
+                shipmentInfo.fromMap(finalData);
+                shipmentInfo.setOrdersCount((long) listOfOrders.size());
 
-        if (StringUtils.isBlank(shipmentInfo.getShipmentType()))
-        {
-            shipmentInfo.setShipmentType("AIR_HAUL");
-        }
+                shipmentManagementPage.createShipment(shipmentInfo, isNextOrder);
 
-//        final String mawb = ("AUTO".equalsIgnoreCase(shipmentInfo.getMawb()) && !StringUtils.isBlank(shipmentInfo.getMawb())) ? "AUTO-" + randomLong(0000000, 9999999) : null;
-//        put("tanias'mawb", mawb);
-//        shipmentInfo.setMawb(mawb);
+                if (StringUtils.isBlank(shipmentInfo.getShipmentType()))
+                {
+                    shipmentInfo.setShipmentType("AIR_HAUL");
+                }
 
-        put(KEY_SHIPMENT_INFO, shipmentInfo);
-        put(KEY_CREATED_SHIPMENT, shipmentInfo);
-        put(KEY_CREATED_SHIPMENT_ID, shipmentInfo.getId());
+                put(KEY_SHIPMENT_INFO, shipmentInfo);
+                put(KEY_CREATED_SHIPMENT, shipmentInfo);
+                put(KEY_CREATED_SHIPMENT_ID, shipmentInfo.getId());
 
-        if (isNextOrder)
-        {
-            Long secondShipmentId = shipmentManagementPage.createAnotherShipment();
-            shipmentInfo.setId(secondShipmentId);
-            Long shipmentIdBefore = get(KEY_CREATED_SHIPMENT_ID);
-            List<Long> listOfShipmentId = new ArrayList<>();
-            listOfShipmentId.add(shipmentIdBefore);
-            listOfShipmentId.add(secondShipmentId);
+                if (isNextOrder)
+                {
+                    Long secondShipmentId = shipmentManagementPage.createAnotherShipment();
+                    shipmentInfo.setId(secondShipmentId);
+                    Long shipmentIdBefore = get(KEY_CREATED_SHIPMENT_ID);
+                    List<Long> listOfShipmentId = new ArrayList<>();
+                    listOfShipmentId.add(shipmentIdBefore);
+                    listOfShipmentId.add(secondShipmentId);
 
-            put(KEY_LIST_OF_CREATED_SHIPMENT_ID, listOfShipmentId);
-        }
+                    put(KEY_LIST_OF_CREATED_SHIPMENT_ID, listOfShipmentId);
+                }
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                throw ex;
+            }
+        }, 10);
     }
 
     @When("^Operator edit Shipment on Shipment Management page using data below:$")
@@ -299,7 +318,7 @@ public class ShipmentManagementSteps extends AbstractSteps
         {
             shipmentInfo = get(KEY_SHIPMENT_INFO);
         }
-
+        put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
         shipmentManagementPage.openShipmentDetailsPage(shipmentInfo.getId());
     }
 
@@ -352,21 +371,24 @@ public class ShipmentManagementSteps extends AbstractSteps
         {
             shipmentInfo = get(KEY_SHIPMENT_INFO);
         }
-
         shipmentManagementPage.verifyOpenedShipmentDetailsPageIsTrue(shipmentInfo.getId(), order.getTrackingId());
+        getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
     }
 
     @Then("^Operator verify shipment event on Shipment Details page using data below:$")
     public void operatorVerifyShipmentEventOnEditOrderPage(Map<String, String> mapOfData)
     {
-        mapOfData = resolveKeyValues(mapOfData);
-        ShipmentEvent expectedEvent = new ShipmentEvent(mapOfData);
-        List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readAllEntities();
-        ShipmentEvent actualEvent = events.stream()
-                .filter(event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
-                .findFirst()
-                .orElseThrow(() -> new AssertionError(f("There is no [%s] shipment event on Shipment Details page", expectedEvent.getSource())));
-        expectedEvent.compareWithActual(actualEvent);
+        retryIfAssertionErrorOccurred(() ->
+        {
+            final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
+            ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
+            List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readAllEntities();
+            ShipmentEvent actualEvent = events.stream()
+                    .filter(event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
+                    .findFirst()
+                    .orElseThrow(() -> new AssertionError(f("There is no [%s] shipment event on Shipment Details page", expectedEvent.getSource())));
+            expectedEvent.compareWithActual(actualEvent);
+        }, "retry shipment details", 5000, 10);
     }
 
     @Then("Operator verifies event is present for shipment on Shipment Detail page")

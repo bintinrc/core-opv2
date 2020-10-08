@@ -5,10 +5,7 @@ import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.TripManagementFilteringType;
-import co.nvqa.operator_v2.selenium.elements.Button;
-import co.nvqa.operator_v2.selenium.elements.CheckBox;
-import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
-import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.*;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
 import org.openqa.selenium.JavascriptExecutor;
@@ -81,11 +78,29 @@ public class TripManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//th[div[.='Status']]")
     public StatusFilter tripStatusFilter;
 
-    @FindBy(xpath= "//div[contains(@class,'nv-table')]//table")
+    @FindBy(xpath = "//th[div[.='Last Status']]")
+    public StatusFilter lastStatusFilter;
+
+    @FindBy(xpath = "//div[contains(@class,'nv-table')]//table")
     public NvTable<TripEventsRow> tripEventsRowNvTable;
 
     @FindBy(tagName = "iframe")
     private PageElement pageFrame;
+
+    @FindBy(xpath = "//th[div[.='Movement Type']]")
+    public MovementTypeFilter movementTypeFilter;
+
+    @FindBy(xpath = "//th[div[.='Expected Departure Time']]")
+    public TripTimeFilter expectedDepartTimeFilter;
+
+    @FindBy(xpath = "//th[div[.='Actual Departure Time']]")
+    public TripTimeFilter actualDepartTimeFilter;
+
+    @FindBy(xpath = "//th[div[.='Expected Arrival Time']]")
+    public TripTimeFilter expectedArrivalTimeFilter;
+
+    @FindBy(xpath = "//th[div[.='Actual Arrival Time']]")
+    public TripTimeFilter actualArrivalTimeFilter;
 
     @FindBy(xpath = LOAD_BUTTON_XPATH)
     public Button loadButton;
@@ -99,9 +114,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
 
     public void verifiesTripManagementIsLoaded() {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
         isElementExist(TRIP_MANAGEMENT_CONTAINER_XPATH);
-        getWebDriver().switchTo().parentFrame();
+
     }
 
     public void clickLoadButton() {
@@ -110,17 +125,17 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
 
     public void verifiesFieldReqiredErrorMessageShown() {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
         isElementExist(FIELD_REQUIRED_ERROR_MESSAGE_XPATH);
-        getWebDriver().switchTo().parentFrame();
+
     }
 
     public void selectValueFromFilterDropDown(String filterName, String filterValue) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
         click(f(FILTER_OPTION_XPATH, filterName));
         waitUntilVisibilityOfElementLocated(f(TEXT_OPTION_XPATH, filterValue));
         click(f(TEXT_OPTION_XPATH, filterValue));
-        getWebDriver().switchTo().parentFrame();
+
     }
 
     public void selectValueFromFilterDropDownDirectly(String filterName, String filterValue) {
@@ -129,7 +144,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
 
     public void verifiesSumOfTripManagement(MovementTripType tabName, Long tripManagementCount) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
         List<WebElement> tripManagementList = new ArrayList<>();
 
         switch (tabName) {
@@ -147,11 +162,11 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
         Long actualTripManagementSum = (long) tripManagementList.size();
         assertEquals("Sum of Trip Management", actualTripManagementSum, tripManagementCount);
-        getWebDriver().switchTo().parentFrame();
+
     }
 
     public void searchAndVerifiesTripManagementIsExistedById(Long tripManagementId) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
         waitUntilVisibilityOfElementLocated(f(IN_TABLE_FILTER_INPUT_XPATH, ID_CLASS));
         sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, ID_CLASS), tripManagementId.toString());
         waitUntilVisibilityOfElementLocated(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, ID_CLASS));
@@ -159,23 +174,20 @@ public class TripManagementPage extends OperatorV2SimplePage {
         String actualTripManagementId = getText(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, ID_CLASS));
         assertEquals("Trip Management ID", tripManagementId.toString(), actualTripManagementId);
 
-        getWebDriver().switchTo().parentFrame();
+
     }
 
     public void searchAndVerifiesTripManagementIsExistedByDestinationHubName(String destinationHubName) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
         waitUntilVisibilityOfElementLocated(f(IN_TABLE_FILTER_INPUT_XPATH, DESTINATION_HUB_CLASS));
         sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, DESTINATION_HUB_CLASS), destinationHubName);
         waitUntilVisibilityOfElementLocated(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DESTINATION_HUB_CLASS));
 
         String actualDestinationHubName = getText(f(FIRST_ROW_INPUT_FILTERED_RESULT_XPATH, DESTINATION_HUB_CLASS));
         assertEquals("Destination Hub Name", destinationHubName, actualDestinationHubName);
-
-        getWebDriver().switchTo().parentFrame();
     }
 
     public void selectsDate(MovementTripType movementTripType, String tomorrowDate) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
 
         switch (movementTripType) {
             case DEPARTURE:
@@ -194,11 +206,11 @@ public class TripManagementPage extends OperatorV2SimplePage {
             click(NEXT_MONTH_BUTTON_XPATH);
         }
         click(f(CALENDAR_SELECTED_XPATH, tomorrowDate));
-        getWebDriver().switchTo().parentFrame();
+
     }
 
     public void selectsDateArchiveTab(MovementTripType movementTripType, String date) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
 
         switch (movementTripType) {
             case ARCHIVE_DEPARTURE_DATE:
@@ -217,31 +229,31 @@ public class TripManagementPage extends OperatorV2SimplePage {
             click(PREV_MONTH_BUTTON_XPATH);
         }
         click(f(CALENDAR_SELECTED_XPATH, date));
-        getWebDriver().switchTo().parentFrame();
+
     }
 
     public void clickTabBasedOnName(String tabName) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
         click(f(TAB_XPATH, tabName));
-        getWebDriver().switchTo().parentFrame();
+
     }
 
     public void verifiesNoResult() {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
         isElementExistFast(NO_RESULT_XPATH);
-        getWebDriver().switchTo().parentFrame();
+
     }
 
     public void tableFiltering(TripManagementFilteringType tripManagementFilteringType,
                                TripManagementDetailsData tripManagementDetailsData, String driverUsername) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
 
         // Get the newest record
         int index = tripManagementDetailsData.getData().size() - 1;
 
         if (tripManagementDetailsData.getCount() == null || tripManagementDetailsData.getCount() == 0) {
             verifiesNoResult();
-            getWebDriver().switchTo().parentFrame();
+
             return;
         }
 
@@ -268,49 +280,46 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
             case MOVEMENT_TYPE:
                 filterValue = movementTypeConverter(tripManagementDetailsData.getData().get(index).getMovementType());
-                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, MOVEMENT_TYPE_CLASS));
-                click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, MOVEMENT_TYPE_CLASS));
-                waitUntilVisibilityOfElementLocated(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, filterValue));
-                click(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, filterValue));
-                click(OK_BUTTON_OPTION_TABLE_XPATH);
+                movementTypeFilter.openButton.click();
+                movementTypeFilter.selectType(filterValue.toLowerCase());
+                movementTypeFilter.ok.click();
                 pause3s();
                 break;
 
             case EXPECTED_DEPARTURE_TIME:
-                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
-                pause3s();
-                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, EXPECTED_DEPARTURE_TIME_CLASS));
-                click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, EXPECTED_DEPARTURE_TIME_CLASS));
-                selectDateTime(tripManagementDetailsData.getData().get(index).getExpectedDepartureTime());
+                ZonedDateTime expectedDepartTime = tripManagementDetailsData.getData().get(index).getExpectedDepartureTime();
+                expectedDepartTimeFilter.openButton.click();
+                expectedDepartTimeFilter.ok.waitUntilClickable();
+                expectedDepartTimeFilter.selectDate(expectedDepartTime);
+                expectedDepartTimeFilter.selectTime(expectedDepartTime);
+                expectedDepartTimeFilter.ok.click();
                 break;
 
             case ACTUAL_DEPARTURE_TIME:
-                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
-                pause3s();
-                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, ACTUAL_DEPARTURE_TIME_CLASS));
-                click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, ACTUAL_DEPARTURE_TIME_CLASS));
-                selectDateTime(tripManagementDetailsData.getData().get(index).getActualStartTime());
+                ZonedDateTime actualDepartureTime = tripManagementDetailsData.getData().get(index).getExpectedArrivalTime();
+                actualDepartTimeFilter.openButton.click();
+                actualDepartTimeFilter.selectDate(actualDepartureTime);
+                actualDepartTimeFilter.selectTime(actualDepartureTime);
+                actualDepartTimeFilter.ok.click();
                 break;
 
             case EXPECTED_ARRIVAL_TIME:
-                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
-                pause3s();
-                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, EXPECTED_ARRIVAL_TIME_CLASS));
-                click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, EXPECTED_ARRIVAL_TIME_CLASS));
-                selectDateTime(tripManagementDetailsData.getData().get(index).getExpectedArrivalTime());
+                ZonedDateTime expectedArrivalTime = tripManagementDetailsData.getData().get(index).getExpectedArrivalTime();
+                expectedArrivalTimeFilter.openButton.click();
+                expectedArrivalTimeFilter.selectDate(expectedArrivalTime);
+                expectedArrivalTimeFilter.selectTime(expectedArrivalTime);
+                expectedArrivalTimeFilter.ok.click();
                 break;
 
             case ACTUAL_ARRIVAL_TIME:
-                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
-                pause3s();
-                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, ACTUAL_ARRIVAL_TIME_CLASS));
-                click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, ACTUAL_ARRIVAL_TIME_CLASS));
-                selectDateTime(tripManagementDetailsData.getData().get(index).getActualEndTime());
+                ZonedDateTime actualArrivalTime = tripManagementDetailsData.getData().get(index).getExpectedArrivalTime();
+                actualArrivalTimeFilter.openButton.click();
+                actualArrivalTimeFilter.selectDate(actualArrivalTime);
+                actualArrivalTimeFilter.selectTime(actualArrivalTime);
+                actualArrivalTimeFilter.ok.click();
                 break;
 
             case DRIVER:
-                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
-                pause3s();
                 filterValue = driverConverted(driverUsername);
                 waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, DRIVER_CLASS));
                 sendKeys(f(IN_TABLE_FILTER_INPUT_XPATH, DRIVER_CLASS), filterValue);
@@ -324,29 +333,25 @@ public class TripManagementPage extends OperatorV2SimplePage {
                 break;
 
             case LAST_STATUS:
-                ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='50%'");
-                pause3s();
-                filterValue = statusConverted(tripManagementDetailsData.getData().get(index).getStatus());
-                waitUntilVisibilityOfElementLocated(f(TABLE_HEADER_FILTER_INPUT_XPATH, LAST_STATUS_CLASS));
-                click(f(BUTTON_TABLE_HEADER_FILTER_INPUT_XPATH, LAST_STATUS_CLASS));
-                waitUntilVisibilityOfElementLocated(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, filterValue));
-                click(f(CHECKBOX_OPTION_HEADER_FILTER_INPUT_XPATH, filterValue));
-                click(OK_BUTTON_OPTION_TABLE_XPATH);
+                filterValue = tripManagementDetailsData.getData().get(index).getStatus();
+                lastStatusFilter.openButton.click();
+                lastStatusFilter.selectType(filterValue);
+                lastStatusFilter.ok.click();
                 pause3s();
                 break;
 
             default:
                 NvLogger.warn("Filtering type is not found");
         }
-        getWebDriver().switchTo().parentFrame();
+
     }
 
     public void tableFilterByStatus(String filterValue) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
         tripStatusFilter.openButton.click();
         tripStatusFilter.selectType(filterValue);
         tripStatusFilter.ok.click();
-        getWebDriver().switchTo().parentFrame();
+
     }
 
     public void tableFiltering(TripManagementFilteringType tripManagementFilteringType, TripManagementDetailsData tripManagementDetailsData) {
@@ -355,7 +360,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
     public void verifyResult(TripManagementFilteringType tripManagementFilteringType,
                              TripManagementDetailsData tripManagementDetailsData, String driverUsername) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
         if (!(isElementExistFast(FIRST_ROW_OF_TABLE_RESULT_XPATH))) {
             verifiesNoResult();
             return;
@@ -450,7 +455,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
                 NvLogger.warn("Filtering type is not found");
         }
 
-        getWebDriver().switchTo().parentFrame();
+
     }
 
     public void verifyResult(TripManagementFilteringType tripManagementFilteringType, TripManagementDetailsData tripManagementDetailsData) {
@@ -458,7 +463,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
 
     public String getTripIdAndClickOnActionIcon(MovementTripActionName actionName) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
         String tripId = null;
         if (isElementExistFast(ACTION_COLUMN_XPATH)) {
             tripId = getText(TRIP_ID_FIRST_ROW_XPATH);
@@ -484,14 +489,14 @@ public class TripManagementPage extends OperatorV2SimplePage {
                     NvLogger.warn("Movement Trip Action Name is not found!");
             }
         }
-        getWebDriver().switchTo().parentFrame();
+
         return tripId;
     }
 
     public void verifiesTripDetailIsOpened(String tripId, String windowHandle) {
         switchToNewWindow();
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
 
+        this.switchTo();
         waitUntilVisibilityOfElementLocated(TRIP_ID_IN_TRIP_DETAILS_XPATH);
         String actualTripId = getText(TRIP_ID_IN_TRIP_DETAILS_XPATH);
         assertTrue("Trip ID", actualTripId.contains(tripId));
@@ -499,11 +504,11 @@ public class TripManagementPage extends OperatorV2SimplePage {
         getWebDriver().close();
         getWebDriver().switchTo().window(windowHandle);
 
-        getWebDriver().switchTo().parentFrame();
+
     }
 
     public void clickButtonOnCancelDialog(String buttonValue) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
         cancelTripModal.waitUntilVisible();
         switch (buttonValue) {
             case "Cancel Trip":
@@ -516,14 +521,14 @@ public class TripManagementPage extends OperatorV2SimplePage {
                 NvLogger.warn("Button value is not found!");
         }
         cancelTripModal.waitUntilInvisible();
-        getWebDriver().switchTo().parentFrame();
+
     }
 
     public void verifiesSuccessCancelTripToastShown() {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
         waitUntilVisibilityOfElementLocated(SUCCESS_CANCEL_TRIP_TOAST);
         click(SUCCESS_CANCEL_TRIP_TOAST);
-        getWebDriver().switchTo().parentFrame();
+
     }
 
     public void verifyStatusValue(String expectedTripId, String expectedStatusValue) {
@@ -547,7 +552,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         List<TripEventsRow> tripEvents = tripEventsRowNvTable.rows;
         int departedRow = -1;
         int counter = 0;
-        for (TripEventsRow singleTripEvent: tripEvents) {
+        for (TripEventsRow singleTripEvent : tripEvents) {
             String actualEvent = singleTripEvent.event.getText().toLowerCase();
             if (actualEvent.equals(event.toLowerCase())) {
                 departedRow = counter;
@@ -562,7 +567,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     }
 
     public Boolean isActionButtonEnabled(MovementTripActionName actionName) {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_TRIP_MANAGEMENT_XPATH));
+
         boolean result = false;
         if (isElementExistFast(ACTION_COLUMN_XPATH)) {
             switch (actionName) {
@@ -586,8 +591,12 @@ public class TripManagementPage extends OperatorV2SimplePage {
                     NvLogger.warn("Movement Trip Action Name is not found!");
             }
         }
-        getWebDriver().switchTo().parentFrame();
+
         return result;
+    }
+
+    private static boolean isBetween(int x, int lower, int upper) {
+        return lower <= x && x <= upper;
     }
 
 
@@ -690,6 +699,120 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
         @FindBy(xpath = ".//button[.='Reset']")
         public Button reset;
+    }
+
+    public static class TripTimeFilter extends TableFilterPopup {
+
+        public TripTimeFilter(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(xpath = "(.//div[p[.='Date']]//ul//li)[1]")
+        public TextBox firstDateText;
+
+        @FindBy(xpath = "(.//div[p[.='Date']]//ul//li//input)[1]")
+        public CheckBox firstDate;
+
+        @FindBy(xpath = "(.//div[p[.='Date']]//ul//li)[2]")
+        public TextBox secondDateText;
+
+        @FindBy(xpath = "(.//div[p[.='Date']]//ul//li//input)[2]")
+        public CheckBox secondDate;
+
+        @FindBy(xpath = "(.//div[p[.='Date']]//ul//li)[3]")
+        public TextBox thirdDateText;
+
+        @FindBy(xpath = "(.//div[p[.='Date']]//ul//li//input)[3]")
+        public CheckBox thirdDate;
+
+        @FindBy(xpath = "(.//div[p[.='Date']]//ul//li)[4]")
+        public TextBox fourthDateText;
+
+        @FindBy(xpath = "(.//div[p[.='Date']]//ul//li//input)[4]")
+        public CheckBox fourthDate;
+
+        @FindBy(xpath = ".//li[.='-']//input")
+        public CheckBox none;
+
+        @FindBy(xpath = ".//li[.='00:00 - 06:00']//input")
+        public CheckBox earlyMorning;
+
+        @FindBy(xpath = ".//li[.='06:00 - 12:00']//input")
+        public CheckBox morning;
+
+        @FindBy(xpath = ".//li[.='12:00 - 18:00']//input")
+        public CheckBox afterNoon;
+
+        @FindBy(xpath = ".//li[.='18:00 - 00:00']//input")
+        public CheckBox night;
+
+        public void selectDate(ZonedDateTime dateTime) {
+            DateTimeFormatter DD_MMMM_FORMAT = DateTimeFormatter.ofPattern("dd MMMM");
+            String stringDate = dateTime.format(DD_MMMM_FORMAT);
+            firstDateText.waitUntilVisible();
+            if (firstDateText.getText().contains(stringDate)) {
+                firstDate.check();
+                return;
+            }
+            if (secondDateText.getText().contains(stringDate)) {
+                secondDate.check();
+                return;
+            }
+            if (thirdDateText.getText().contains(stringDate)) {
+                thirdDate.check();
+                return;
+            }
+            if (fourthDateText.getText().contains(stringDate)) {
+                fourthDate.check();
+            }
+        }
+
+        public void selectTime(ZonedDateTime dateTime) {
+            if (dateTime != null) {
+                int hour = dateTime.getHour();
+                if (isBetween(hour, 0, 6)) {
+                    earlyMorning.check();
+                    return;
+                }
+                if (isBetween(hour, 6, 12)) {
+                    morning.check();
+                    return;
+                }
+                if (isBetween(hour, 12, 18)) {
+                    afterNoon.check();
+                    return;
+                }
+                if (isBetween(hour, 18, 23)) {
+                    night.check();
+                    return;
+                }
+            }
+            none.check();
+        }
+    }
+
+    public static class MovementTypeFilter extends TableFilterPopup {
+
+        public MovementTypeFilter(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(xpath = ".//li[.='Air Haul']//input")
+        public CheckBox airHaul;
+
+        @FindBy(xpath = ".//li[.='Land Haul']//input")
+        public CheckBox landHaul;
+
+        public void selectType(String type) {
+            switch (type.toLowerCase()) {
+                case "air haul":
+                    airHaul.check();
+                    break;
+                case "land haul":
+                    landHaul.check();
+                    break;
+            }
+        }
     }
 
     public static class StatusFilter extends TableFilterPopup {

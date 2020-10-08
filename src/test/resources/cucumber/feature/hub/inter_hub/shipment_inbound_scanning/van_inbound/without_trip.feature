@@ -1,5 +1,5 @@
 @ShipmentInboundScanning @InterHub @Shipment @MiddleMile @VanInbound @WithoutTrip
-Feature: Shipment Inbound Scanning
+Feature: Shipment Van Inbound Without Trip Scanning
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
@@ -157,7 +157,7 @@ Feature: Shipment Inbound Scanning
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan the created order to shipment in hub {hub-name}
     And Operator close the shipment which has been created
     When Operator change the country to "Indonesia"
@@ -243,7 +243,7 @@ Feature: Shipment Inbound Scanning
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan the created order to shipment in hub {hub-name}
     And Operator close the shipment which has been created
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -271,7 +271,7 @@ Feature: Shipment Inbound Scanning
       | origHubName | {hub-name}                                                          |
       | destHubName | {hub-name-2}                                                        |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan the created order to shipment in hub {hub-name}
     And Operator close the shipment which has been created
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -354,7 +354,7 @@ Feature: Shipment Inbound Scanning
       | origHubName | {hub-name}                                                           |
       | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
       | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan the created order to shipment in hub {hub-name}
     And Operator close the shipment which has been created
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -387,7 +387,7 @@ Feature: Shipment Inbound Scanning
       | origHubName | {hub-name}                                                           |
       | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
       | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
-    Given Operator go to menu Inter-Hub -> Shipment Scanning
+    Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan the created order to shipment in hub {hub-name}
     And Operator close the shipment which has been created
     Given Operator go to menu Shipper Support -> Blocked Dates

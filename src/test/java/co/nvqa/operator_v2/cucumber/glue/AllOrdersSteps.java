@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage;
 import co.nvqa.operator_v2.selenium.page.AllOrdersPage.AllOrdersAction;
@@ -234,10 +235,21 @@ public class AllOrdersSteps extends AbstractSteps
     @Then("^Operator verify order info after Global Inbound$")
     public void operatorVerifyOrderInfoAfterGlobalInbound()
     {
-        operatorVerifyFollowingOrderInfoParametersAfterGlobalInbound(ImmutableMap.of(
-                "orderStatus", "TRANSIT",
-                "granularStatus", "Arrived at Sorting Hub; Arrived at Origin Hub",
-                "deliveryStatus", "PENDING"));
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try {
+                operatorVerifyFollowingOrderInfoParametersAfterGlobalInbound(ImmutableMap.of(
+                        "orderStatus", "TRANSIT",
+                        "granularStatus", "Arrived at Sorting Hub; Arrived at Origin Hub",
+                        "deliveryStatus", "PENDING"));
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                throw ex;
+            }
+        }, 10);
     }
 
     @Then("^Operator verify following order info parameters after Global Inbound$")

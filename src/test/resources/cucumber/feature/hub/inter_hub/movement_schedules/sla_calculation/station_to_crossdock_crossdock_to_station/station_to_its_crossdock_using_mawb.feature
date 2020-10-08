@@ -45,7 +45,7 @@ Feature: Station to its Crossdock using MAWB
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | movementType   | Air Haul                           |
-      | departureTime  | 15:15                              |
+      | departureTime  | 20:15                              |
       | duration       | 1                                  |
       | endTime        | 16:30                              |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
@@ -58,7 +58,7 @@ Feature: Station to its Crossdock using MAWB
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}  |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}  |
       | status      | Transit                             |
-      | sla         | {{next-2-days-yyyy-MM-dd}} 07:45:00 |
+      | sla         | {{next-2-days-yyyy-MM-dd}} 12:45:00 |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_VAN_INBOUND               |
@@ -120,9 +120,9 @@ Feature: Station to its Crossdock using MAWB
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify movement event on Shipment Details page using data below:
-      | source   | SLA_CALCULATION                                                                                                          |
-      | status   | FAILED                                                                                                                   |
-      | comments | found no movement from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (SG) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (SG) |
+      | source   | SLA_CALCULATION                                                                                                      |
+      | status   | FAILED                                                                                                               |
+      | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (sg) |
 
   @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
   Scenario: Station to its Crossdock using MAWB - Station Movement not found (uid:0f908fa5-4d52-4b0a-8e9d-d30d13889c26)
@@ -171,9 +171,9 @@ Feature: Station to its Crossdock using MAWB
       | result | Transit                            |
       | hub    | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator verify movement event on Shipment Details page using data below:
-      | source   | SLA_CALCULATION                                              |
-      | status   | FAILED                                                       |
-      | comments | relation for {KEY_LIST_OF_CREATED_HUBS[1].id} (SG) not found |
+      | source   | SLA_CALCULATION                                                                                                      |
+      | status   | FAILED                                                                                                               |
+      | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (sg) |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

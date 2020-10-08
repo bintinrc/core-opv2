@@ -1,6 +1,9 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.core.hub.HubRelationData;
+import co.nvqa.commons.model.core.hub.Shipments;
+import co.nvqa.commons.util.NvLogger;
+import co.nvqa.operator_v2.model.ShipmentInfo;
 import co.nvqa.operator_v2.selenium.page.MovementVisualizationPage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
@@ -28,6 +31,24 @@ public class MovementVisualizationSteps extends AbstractSteps {
     @When("Operator selects the Hub Type of {string} on Movement Visualization Page")
     public void operatorSelectsTheHubTypeOfOnMovementVisualizationPage(String hubType) {
         movementVisualizationPage.selectHubType(hubType);
+    }
+
+    @When("Operator selects the Hub by name {string} for Hub Type {string}")
+    public void operatorSelectsTheHubTypeOfOnMovementVisualizationPageForHubType(String hubName, String hubType) {
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            try {
+                movementVisualizationPage.selectHubType(hubType);
+                movementVisualizationPage.selectHub(hubName);
+
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
+                navigateRefresh();
+                pause2s();
+                throw ex;
+            }
+        }, 10);
     }
 
     @When("Operator selects the Hub by name {string}")
