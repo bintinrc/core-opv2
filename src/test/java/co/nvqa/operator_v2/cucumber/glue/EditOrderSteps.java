@@ -24,11 +24,7 @@ import org.junit.jupiter.api.Assertions;
 
 import java.text.ParseException;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
 
@@ -387,15 +383,15 @@ public class EditOrderSteps extends AbstractSteps
         String event = map.get("eventName");
         String hubName = map.get("hubName");
         String hubId = map.get("hubId");
-        String inboundType = map.get("inboundType");
+        String descriptionString = map.get("descriptionString");
         List<Order> lists = get(KEY_LIST_OF_CREATED_ORDER);
 
         lists.forEach(order ->
         {
             navigateTo(f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, order.getId()));
-            if (inboundType != null)
+            if (descriptionString != null)
             {
-                editOrderPage.verifyEvent(order, hubName, hubId, event, inboundType);
+                editOrderPage.verifyEvent(order, hubName, hubId, event, descriptionString);
                 return;
             }
             editOrderPage.verifyEvent(order, hubName, hubId, event, "Scanned");

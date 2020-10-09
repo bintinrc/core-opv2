@@ -399,15 +399,18 @@ public class ShipmentManagementSteps extends AbstractSteps
 
         lists.forEach(shipment ->
         {
-            ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
-            navigateTo(f("%s/%s/shipment-details/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, shipment.getShipment().getId()));
-            shipmentManagementPage.waitUntilPageLoaded();
-            List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readAllEntities();
-            ShipmentEvent actualEvent = events.stream()
-                    .filter(event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
-                    .findFirst()
-                    .orElseThrow(() -> new AssertionError(f("There is no [%s] shipment event on Shipment Details page", expectedEvent.getSource())));
-            expectedEvent.compareWithActual(actualEvent);
+            retryIfAssertionErrorOccurred(() ->
+            {
+                ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
+                navigateTo(f("%s/%s/shipment-details/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, shipment.getShipment().getId()));
+                shipmentManagementPage.waitUntilPageLoaded();
+                List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readAllEntities();
+                ShipmentEvent actualEvent = events.stream()
+                        .filter(event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
+                        .findFirst()
+                        .orElseThrow(() -> new AssertionError(f("There is no [%s] shipment event on Shipment Details page", expectedEvent.getSource())));
+                expectedEvent.compareWithActual(actualEvent);
+            }, "retry shipment details event", 5000, 10);
         });
     }
 

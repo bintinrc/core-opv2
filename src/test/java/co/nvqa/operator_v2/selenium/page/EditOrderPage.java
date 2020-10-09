@@ -450,10 +450,15 @@ public class EditOrderPage extends OperatorV2SimplePage
         OrderEvent eventRow = eventsTable.readEntity(rowWithExpectedEvent);
         assertEquals("Different Result Returned for hub name", hubName, eventRow.getHubName());
 //        assertThat("Different Result Returned for event description", eventRow.getDescription(), containsString(f("Parcel inbound at Origin Hub - %s", hubName)));
-        assertThat("Different Result Returned for event description", eventRow.getDescription(), containsString(f("%s at Hub %s", stringContained, hubId)));
         assertThat("Different Result Returned for event time",
                 eventRow.getEventTime(),
                 containsString(DateUtil.displayDate(eventDateExpected)));
+        if (stringContained.contains("Shipment"))
+        {
+            assertThat("Different Result Returned for event description", eventRow.getDescription(), containsString(stringContained));
+            return;
+        }
+        assertThat("Different Result Returned for event description", eventRow.getDescription(), containsString(f("%s at Hub %s", stringContained, hubId)));
     }
 
     public void verifyOrderInfoIsCorrect(Order order)

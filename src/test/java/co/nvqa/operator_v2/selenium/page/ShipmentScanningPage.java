@@ -66,6 +66,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     public TripDepartureDialog tripDepartureDialog;
 
     @FindBy(css = "md-dialog")
+    public LeavePageDialog leavePageDialog;
+
+    @FindBy(css = "md-dialog")
     public ShipmentToGoWithTripDialog shipmentToGoWithTripDialog;
 
     @FindBy(css = "md-dialog")
@@ -243,12 +246,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     public void verifyScanShipmentColor(String expectedContainerColorAsHex) {
         String actualContainerColorAsHex = getBackgroundColor(XPATH_SCAN_SHIPMENT_CONTAINER).asHex();
-        assertEquals(expectedContainerColorAsHex, actualContainerColorAsHex);
+        assertThat("Scan container color is the same", actualContainerColorAsHex, equalTo(expectedContainerColorAsHex));
     }
 
     public void verifyScannedShipmentColor(String expectedShipmentColorAsHex) {
         String actualColorAsHex = getBackgroundColor(XPATH_SCANNED_SHIPMENT).asHex();
-        assertEquals(expectedShipmentColorAsHex, actualColorAsHex);
+        assertThat("Scanned shipment color is the same", expectedShipmentColorAsHex, equalTo(actualColorAsHex));
     }
 
     public void verifyScannedShipmentColorById(String expectedShipmentColorAsHex, String expectedShipmentId) {
@@ -267,14 +270,20 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     public void clickProceedInEndInboundDialog() {
         String dialogTitleText = tripDepartureDialog.dialogTitle.getText();
-        assertEquals("Trip Departure", dialogTitleText);
+        assertThat("Dialog title is the same", dialogTitleText, equalTo("Confirm End Inbound"));
 
         String dialogMessageText = tripDepartureDialog.dialogMessage.getText();
-        assertEquals("Are you sure you want to start departure?", dialogMessageText);
+        assertThat("Dialog message text is the same", dialogMessageText, equalTo("Are you sure you want to end inbound?"));
 
         tripDepartureDialog.proceed.waitUntilClickable();
         tripDepartureDialog.proceed.click();
-        tripDepartureDialog.waitUntilInvisible();
+        pause2s();
+    }
+
+    public void clickLeavePageDialog() {
+        leavePageDialog.leave.waitUntilClickable();
+        leavePageDialog.leave.click();
+        leavePageDialog.waitUntilInvisible();
     }
 
     public void clickRemoveButton() {
@@ -413,7 +422,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     public void verifyShipmentCount(String numberOfShipment) {
         String textNumberOfScannedParcel = numberOfScannedParcel.getText();
-        assertEquals(f("%s Shipment Scanned to Hub", numberOfShipment), textNumberOfScannedParcel);
+        assertThat("Number of shipment scanned to Hub message is the same",
+                textNumberOfScannedParcel,
+                equalTo(f("%s Shipment Scanned to Hub", numberOfShipment)));
     }
 
     public void removeShipmentWithId(String shipmentId) {
@@ -423,7 +434,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     public void verifySmallMessageAppearsInScanShipmentBox(String expectedSuccessMessage) {
         retryIfAssertionErrorOccurred(() -> {
             String actualSuccessMessage = findElementByXpath(XPATH_SMALL_SUCCESS_MESSAGE).getText();
-            assertThat("Small message is equal", expectedSuccessMessage, equalTo(actualSuccessMessage));
+            assertThat("Small message is equal", actualSuccessMessage, equalTo(expectedSuccessMessage));
         }, "retry if small text not found");
     }
 
@@ -479,6 +490,18 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         public NvIconTextButton cancel;
 
         public TripDepartureDialog(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+        }
+    }
+
+    public static class LeavePageDialog extends MdDialog {
+        @FindBy(css = "[aria-label='Leave']")
+        public Button leave;
+
+        @FindBy(css = "[aria-label='Stay']")
+        public Button stay;
+
+        public LeavePageDialog(WebDriver webDriver, WebElement webElement) {
             super(webDriver, webElement);
         }
     }
