@@ -158,4 +158,9 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
         assertEquals("Driver", scanningPage.driver.getText());
         assertEquals("Movement Trip", scanningPage.movementTrip.getText());
     }
+
+    @When("Operator click proceed in trip completion dialog")
+    public void clickProceedInTripCompletionDialog() {
+        scanningPage.completeTrip();
+    }
 }

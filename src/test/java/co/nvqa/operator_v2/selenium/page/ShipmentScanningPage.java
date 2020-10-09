@@ -226,7 +226,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     public void verifyToastWithMessageIsShown(String expectedToastMessage) {
         String actualToastMessage = getToastTopText();
-        assertEquals(expectedToastMessage, actualToastMessage);
+        assertThat("Shipment inbound toast message is the same", expectedToastMessage, equalTo(actualToastMessage));
         pause5s();
     }
 
@@ -423,7 +423,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     public void verifySmallMessageAppearsInScanShipmentBox(String expectedSuccessMessage) {
         retryIfAssertionErrorOccurred(() -> {
             String actualSuccessMessage = findElementByXpath(XPATH_SMALL_SUCCESS_MESSAGE).getText();
-            assertEquals(expectedSuccessMessage, actualSuccessMessage);
+            assertThat("Small message is equal", expectedSuccessMessage, equalTo(actualSuccessMessage));
         }, "retry if small text not found");
     }
 

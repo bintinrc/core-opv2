@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.util.TestConstants;
 import org.openqa.selenium.WebDriver;
@@ -49,6 +50,9 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
 
     @FindBy(xpath = "//div[contains(@class,'trip-unselected-warning')]")
     public TextBox tripUnselectedWarning;
+
+    @FindBy(css = "md-dialog")
+    public TripCompletion tripCompletionDialog;
 
     public ShipmentInboundScanningPage(WebDriver webDriver) {
         super(webDriver);
@@ -140,6 +144,13 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
         }
     }
 
+    public void completeTrip() {
+        tripCompletionDialog.waitUntilVisible();
+        tripCompletionDialog.proceed.waitUntilClickable();
+        tripCompletionDialog.proceed.click();
+        tripCompletionDialog.waitUntilInvisible();
+    }
+
     public void inputEndDate(Date date) {
         setMdDatepicker("ctrl.date", date);
     }
@@ -184,29 +195,40 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
 
     public void inboundScanningWithTripReturnMovementTrip(String hub, String label, String driver, String movementTripSchedule) {
         if (hub != null) {
-
             pause2s();
             selectHub(hub);
         }
 
         if (label != null) {
-
             pause2s();
             click(grabXpathButton(label));
         }
 
         if (driver != null) {
-
             pause2s();
             selectDriver(driver);
         }
         if (movementTripSchedule != null) {
             pause2s();
             selectMovementTrip(movementTripSchedule);
-
         }
 
         pause2s();
+    }
+
+    public static class TripCompletion extends MdDialog {
+        @FindBy(className = "md-title")
+        public TextBox dialogTitle;
+
+        @FindBy(xpath = ".//button[.='Cancel']")
+        public Button cancel;
+
+        @FindBy(xpath = ".//button[.='Proceed']")
+        public Button proceed;
+
+        public TripCompletion(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+        }
     }
 
 
