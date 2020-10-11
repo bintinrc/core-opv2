@@ -16,6 +16,7 @@ import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
@@ -116,6 +117,9 @@ public class EditOrderPage extends OperatorV2SimplePage
     private EditPickupDetailsDialog editPickupDetailsDialog;
 
     @FindBy(css = "md-dialog")
+    private PullFromRouteDialog pullFromRouteDialog;
+
+    @FindBy(css = "md-dialog")
     private EditCashCollectionDetailsDialog editCashCollectionDetailsDialog;
 
     @FindBy(id = "delivery-details")
@@ -130,7 +134,6 @@ public class EditOrderPage extends OperatorV2SimplePage
     private DeleteOrderDialog deleteOrderDialog;
     private PickupRescheduleDialog pickupRescheduleDialog;
     private DeliveryRescheduleDialog deliveryRescheduleDialog;
-    private PullFromRouteDialog pullFromRouteDialog;
 
     public EditOrderPage(WebDriver webDriver)
     {
@@ -142,7 +145,6 @@ public class EditOrderPage extends OperatorV2SimplePage
         dpDropOffSettingDialog = new DpDropOffSettingDialog(webDriver);
         deleteOrderDialog = new DeleteOrderDialog(webDriver);
         pickupRescheduleDialog = new PickupRescheduleDialog(webDriver);
-        pullFromRouteDialog = new PullFromRouteDialog(webDriver);
     }
 
     public EventsTable eventsTable()
@@ -897,10 +899,10 @@ public class EditOrderPage extends OperatorV2SimplePage
     {
         String trackingId = order.getTrackingId();
 
-        pullFromRouteDialog.waitUntilVisibility();
-        pullFromRouteDialog.isToPullCheckboxChecked();
-        pullFromRouteDialog.clickPullFromRouteButton();
-        pullFromRouteDialog.confirmPulledFromRouteMessageDisplayed(trackingId, routeId);
+        pullFromRouteDialog.waitUntilVisible();
+        pullFromRouteDialog.toPull.check();
+        pullFromRouteDialog.pullFromRoute.clickAndWaitUntilDone();
+        waitUntilInvisibilityOfToast(f("%s has been pulled from route %d successfully", trackingId, routeId), true);
     }
 
     /**
@@ -1955,38 +1957,18 @@ public class EditOrderPage extends OperatorV2SimplePage
     /**
      * Accessor for Pull from Route Dialog
      */
-    public static class PullFromRouteDialog extends OperatorV2SimplePage
+    public static class PullFromRouteDialog extends MdDialog
     {
-        private static final String DIALOG_TITLE = "Pull from Route";
-        private static final String TO_PULL_CHECKBOX_LOCATOR = "//md-input-container[contains(@class,'to-pull-checkbox')]/md-checkbox[@aria-checked='true']";
-        private static final String PULL_FROM_ROUTE_NV_API_TEXT_BUTTON_NAME = "container.order.edit.pull-from-route";
-        private static final String PULL_FROM_ROUTE_SUCCESSFUL_TOAST_MESSAGE_PATTERN = "%s has been pulled from route %d successfully";
-
-        public PullFromRouteDialog(WebDriver webDriver)
+        public PullFromRouteDialog(WebDriver webDriver, WebElement webElement)
         {
-            super(webDriver);
+            super(webDriver, webElement);
         }
 
-        public PullFromRouteDialog waitUntilVisibility()
-        {
-            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
-            return this;
-        }
+        @FindBy(css = ".to-pull-checkbox > md-checkbox")
+        public MdCheckbox toPull;
 
-        public boolean isToPullCheckboxChecked()
-        {
-            return isElementExist(TO_PULL_CHECKBOX_LOCATOR);
-        }
-
-        public void clickPullFromRouteButton()
-        {
-            clickNvApiTextButtonByNameAndWaitUntilDone(PULL_FROM_ROUTE_NV_API_TEXT_BUTTON_NAME);
-        }
-
-        public void confirmPulledFromRouteMessageDisplayed(String trackingId, Long routeId)
-        {
-            waitUntilInvisibilityOfToast(f(PULL_FROM_ROUTE_SUCCESSFUL_TOAST_MESSAGE_PATTERN, trackingId, routeId), true);
-        }
+        @FindBy(name = "container.order.edit.pull-from-route")
+        public NvApiTextButton pullFromRoute;
     }
 
     public void changeCopValue(Integer copValue)

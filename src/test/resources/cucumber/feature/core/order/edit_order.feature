@@ -32,7 +32,6 @@ Feature: Edit Order
     Then Operator verify Pickup "UPDATE ADDRESS" order event description on Edit order page
     And Operator verify Pickup "UPDATE CONTACT INFORMATION" order event description on Edit order page
     And Operator verify Pickup "UPDATE SLA" order event description on Edit order page
-    And Operator verify Pickup "VERIFY ADDRESS" order event description on Edit order page
     And Operator verifies Pickup Details are updated on Edit Order Page
     And Operator verifies Pickup Transaction is updated on Edit Order Page
     And DB Operator verifies pickup info is updated in order record
@@ -72,7 +71,6 @@ Feature: Edit Order
     Then Operator verify Delivery "UPDATE ADDRESS" order event description on Edit order page
     And Operator verify Delivery "UPDATE CONTACT INFORMATION" order event description on Edit order page
     And Operator verify Delivery "UPDATE SLA" order event description on Edit order page
-    And Operator verify Delivery "VERIFY ADDRESS" order event description on Edit order page
     And Operator verifies Delivery Details are updated on Edit Order Page
     And Operator verifies Delivery Transaction is updated on Edit Order Page
     And DB Operator verifies delivery info is updated in order record
@@ -138,7 +136,7 @@ Feature: Edit Order
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order Page
 #  initially city is ""
     Then DB Operator verify next Delivery transaction values are updated for the created order:
-      | distribution_point_id | null                   |
+      | distribution_point_id | 0                      |
       | address1              | GET_FROM_CREATED_ORDER |
       | address2              | GET_FROM_CREATED_ORDER |
       | postcode              | GET_FROM_CREATED_ORDER |
@@ -225,6 +223,7 @@ Feature: Edit Order
 
   @CloseNewWindows
   Scenario: Edit Cash Collection Details - Add Cash on Pickup PP (uid:f38119f4-8baf-48bc-ad02-8d0d98a8cd03)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{"is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -244,6 +243,7 @@ Feature: Edit Order
 
   @CloseNewWindows
   Scenario: Edit Cash Collection Details - Add Cash on Delivery DD (uid:a1290675-50c1-4c63-b371-3af1f2b61e22)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                         |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -263,6 +263,7 @@ Feature: Edit Order
 
   @CloseNewWindows
   Scenario: Edit Cash Collection Details - Edit Cash on Pickup PP (uid:24a93b3a-11be-4488-820e-fb055ecef040)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{"cash_on_delivery":23.57, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -282,6 +283,7 @@ Feature: Edit Order
 
   @CloseNewWindows
   Scenario: Edit Cash Collection Details - Edit Cash on Delivery DD (uid:c747a488-2545-4cba-8982-f148bffd3c57)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"cash_on_delivery":23.57, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -301,6 +303,7 @@ Feature: Edit Order
 
   @CloseNewWindows
   Scenario: Edit Cash Collection Details - Remove Cash on Pickup PP (uid:998f5cfa-c712-4dcd-b3a0-e06bf8f4fd13)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{"cash_on_delivery":23.57, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -319,6 +322,7 @@ Feature: Edit Order
 
   @CloseNewWindows
   Scenario: Edit Cash Collection Details - Remove Cash on Delivery DD (uid:6da65f1f-b866-424f-8cf3-2e4a982c9191)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{"cash_on_delivery":23.57, "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -385,7 +389,7 @@ Feature: Edit Order
     And DB Operator verify order_events record for the created order:
       | type | 33 |
     Then DB Operator verify next Pickup transaction values are updated for the created order:
-      | routeId | null |
+      | routeId | 0 |
     And DB Operator verify Pickup waypoint of the created order using data below:
       | status | PENDING |
 
@@ -411,7 +415,7 @@ Feature: Edit Order
     And DB Operator verify order_events record for the created order:
       | type | 33 |
     Then DB Operator verify next Delivery transaction values are updated for the created order:
-      | routeId | null |
+      | routeId | 0 |
     And DB Operator verify Delivery waypoint of the created order using data below:
       | status | PENDING |
     And DB Operator verifies waypoint for Delivery transaction is deleted from route_waypoint table
@@ -805,8 +809,8 @@ Feature: Edit Order
     And Operator verify order summary on Edit order page using data below:
       | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     And API Operator verify Pickup transaction of the created order using data below:
-      | status   | CANCELLED                                                                          |
-      | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
+      | status   | FAIL                                      |
+      | comments | {KEY_SELECTED_FAILURE_REASON.description} |
     And API Operator verify Delivery transaction of the created order using data below:
       | status   | CANCELLED                                                                          |
       | comments | Cancellation reason : Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
@@ -984,14 +988,13 @@ Feature: Edit Order
     When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given Operator go to menu Distribution Points -> DP Tagging
-    When Operator tags single order to DP with DPMS ID = "{dpms-id}"
-    And API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
-    And API Operator create new route using data below:
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    Given API Operator Global Inbound parcel using data below:
+      | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
+    Given API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
+    Given API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    And API Operator add parcel to the route using data below:
+    Given API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order

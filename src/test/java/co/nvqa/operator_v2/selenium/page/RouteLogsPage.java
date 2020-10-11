@@ -668,5 +668,6 @@ public class RouteLogsPage extends OperatorV2SimplePage
         searchTableByRouteId(routeId);
         clickf("//a[@ui-sref='container.route-manifest({routeId: route.id})'][.='%s']", strRouteId);
         switchToOtherWindowAndWaitWhileLoading("route-manifest/" + strRouteId);
+        waitUntilPageLoaded();
     }
 }
