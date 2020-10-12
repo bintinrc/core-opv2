@@ -34,6 +34,41 @@ Feature: Sort Task
     Then Operator verify success delete mid tier toast is shown
     And Operator verify middle tier is deleted
 
+  @CloseNewWindows
+  Scenario: Removing a sort task (uid:5691e165-f0c7-4ecd-a255-294b7d095f17)
+    Given Operator go to menu Sort -> Sort Tasks
+    When Operator select the hub in the Hub dropdown menu
+      | hubName  | {hub-name}   |
+    And Operator open the sidebar menu
+    And Operator open create new middle tier
+      | name     | GENERATED    |
+    Then Operator verify success create new mid tier toast is shown
+      And Operator select a sort task
+    Then Operator verify success modified toast is shown
+    When Operator refresh page
+    When Operator select the hub in the Hub dropdown menu
+      | hubName  | {hub-name}   |
+    And Operator verify added outputs appears on tree list
+
+  @CloseNewWindows
+  Scenario: Add a sort task (uid:dace248c-a773-46f2-888f-c23385354e34)
+    Given Operator go to menu Sort -> Sort Tasks
+    When Operator select the hub in the Hub dropdown menu
+      | hubName  | {hub-name}   |
+    And Operator open the sidebar menu
+    And Operator open create new middle tier
+      | name     | GENERATED    |
+    Then Operator verify success create new mid tier toast is shown
+    And Operator select a sort task
+    Then Operator verify success modified toast is shown
+    And Operator open the sidebar menu
+    And Operator select a sort task
+    Then Operator verify success modified toast is shown
+    When Operator refresh page
+    When Operator select the hub in the Hub dropdown menu
+      | hubName  | {hub-name}   |
+    Then Operator verify removed outputs removed on tree list
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

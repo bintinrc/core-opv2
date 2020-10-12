@@ -14,6 +14,7 @@ import org.openqa.selenium.support.FindBy;
 public class SortTasksPage extends OperatorV2SimplePage
 {
     private static final String IFRAME_XPATH = "//iframe[contains(@src,'sort-tasks')]";
+    private static final String OUTPUT_XPATH = "//div[@class='ant-col content-holder'][text()='%s']";
 
     @FindBy(xpath = "(//div[@id='hubId'])[1]")
     public AntSelect selectHub;
@@ -54,6 +55,12 @@ public class SortTasksPage extends OperatorV2SimplePage
     @FindBy(xpath = "//div[contains(@class,'NoResult')]/span")
     public PageElement noResult;
 
+    @FindBy(xpath = "//input[@class='ant-checkbox-input']")
+    public PageElement select;
+
+    @FindBy(xpath = "//button/span[text()='Submit']")
+    public Button submit;
+
     public SortTasksPage(WebDriver webDriver)
     {
         super(webDriver);
@@ -71,24 +78,16 @@ public class SortTasksPage extends OperatorV2SimplePage
         selectHub.searchInput.sendKeys(Keys.RETURN);
         load.waitUntilClickable();
         load.click();
-
-        getWebDriver().switchTo().parentFrame();
     }
 
     public void openSidebar()
     {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-
         pause1s();
         sideBar.click();
-
-        getWebDriver().switchTo().parentFrame();
     }
 
     public void createMiddleTier(String name)
     {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-
         createNewMidTier.click();
         midTierName.sendKeys(name);
         create.waitUntilClickable();
@@ -101,14 +100,10 @@ public class SortTasksPage extends OperatorV2SimplePage
         assertThat("Sort Name", actualSortName.getText(), equalToIgnoringCase(sortName));
         assertThat("Hub Name", actualHubName.getText(), equalToIgnoringCase(hubName));
         assertThat("Sort Name", actualSortType.getText(), equalToIgnoringCase(sortType));
-
-        getWebDriver().switchTo().parentFrame();
     }
 
     public void deleteMidTier()
     {
-        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-
         delete.click();
         confirm.waitUntilClickable();
         confirm.click();
@@ -117,7 +112,24 @@ public class SortTasksPage extends OperatorV2SimplePage
     public void verifyMidTierIsDeleted()
     {
         assertThat("Result", noResult.getText(), equalToIgnoringCase("No Results Found"));
+    }
 
-        getWebDriver().switchTo().parentFrame();
+    public void selectSortTask(String sortName)
+    {
+        find.sendKeys(sortName);
+        select.click();
+        submit.waitUntilClickable();
+        submit.click();
+    }
+
+    public void verifyOutput(String sortName)
+    {
+        isElementExistFast(f(OUTPUT_XPATH, sortName));
+    }
+
+    public void verifyOutputDeleted(String sortName)
+    {
+        String value = getText(f(OUTPUT_XPATH, sortName)) ;
+        assertNull("Outputs is removed", value);
     }
 }
