@@ -21,6 +21,7 @@ Feature: Sort Task
   @CloseNewWindows
   Scenario: Delete Middle Tier (uid:740f8475-5447-4af5-89d9-7adae3170d83)
     Given Operator go to menu Sort -> Sort Tasks
+    When Operator refresh page
     When Operator select the hub in the Hub dropdown menu
       | hubName  | {hub-name}   |
     And Operator open the sidebar menu
@@ -37,6 +38,7 @@ Feature: Sort Task
   @CloseNewWindows
   Scenario: Removing a sort task (uid:5691e165-f0c7-4ecd-a255-294b7d095f17)
     Given Operator go to menu Sort -> Sort Tasks
+    When Operator refresh page
     When Operator select the hub in the Hub dropdown menu
       | hubName  | {hub-name}   |
     And Operator open the sidebar menu
@@ -53,6 +55,7 @@ Feature: Sort Task
   @CloseNewWindows
   Scenario: Add a sort task (uid:dace248c-a773-46f2-888f-c23385354e34)
     Given Operator go to menu Sort -> Sort Tasks
+    When Operator refresh page
     When Operator select the hub in the Hub dropdown menu
       | hubName  | {hub-name}   |
     And Operator open the sidebar menu
