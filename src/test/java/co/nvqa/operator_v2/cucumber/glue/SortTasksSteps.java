@@ -86,4 +86,31 @@ public class SortTasksSteps extends AbstractSteps
     {
         sortTasksPage.verifyMidTierIsDeleted();
     }
+
+    @Then("^Operator select a sort task$")
+    public void operatorSelectASortTask()
+    {
+        String sortName = get(KEY_CREATED_MIDDLE_TIER);
+        sortTasksPage.selectSortTask(sortName);
+    }
+
+    @Then("^Operator verify success modified toast is shown$")
+    public void operatorVerifySuccessModifiedToastIsShown()
+    {
+        sortTasksPage.waitUntilInvisibilityOfNotification("modified", true);
+    }
+
+    @Then("^Operator verify added outputs appears on tree list$")
+    public void operatorVerifyAddedOutputsSAppearsOnTreeList()
+    {
+        String sortName = get(KEY_CREATED_MIDDLE_TIER);
+        sortTasksPage.verifyOutput(sortName);
+    }
+
+    @Then("^Operator verify removed outputs removed on tree list$")
+    public void operatorVerifyRemovedOutputsRemovedOnTreeList()
+    {
+        String sortName = get(KEY_CREATED_MIDDLE_TIER);
+        sortTasksPage.verifyOutputDeleted(sortName);
+    }
 }
