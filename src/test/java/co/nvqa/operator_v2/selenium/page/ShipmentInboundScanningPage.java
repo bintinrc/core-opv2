@@ -45,7 +45,7 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//div[span[.='Inbound Type']]//p")
     public TextBox inboundTypeText;
 
-    @FindBy(css = "[aria-label='container.inbound-scanning.start-inbound'")
+    @FindBy(xpath = "//button[contains(@class,'start-inbound-btn')]")
     public Button startInboundButton;
 
     @FindBy(xpath = "//div[contains(@class,'trip-unselected-warning')]")

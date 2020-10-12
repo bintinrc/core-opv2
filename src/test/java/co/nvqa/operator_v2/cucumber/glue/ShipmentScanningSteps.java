@@ -191,8 +191,12 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.verifyTripData(inboundHub, inboundType, driver, destinationHub);
     }
 
-    @And("Operator clicks proceed in end inbound dialog")
-    public void operatorClicksProceedInEndInboundDialog() {
+    @And("Operator clicks proceed in end inbound dialog {string}")
+    public void operatorClicksProceedInEndInboundDialog(String inboundType) {
+        if (inboundType.equals("Van Inbound")) {
+            shipmentScanningPage.clickProceedInTripDepartureDialog();
+            return;
+        }
         shipmentScanningPage.clickProceedInEndInboundDialog();
     }
 

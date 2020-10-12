@@ -229,7 +229,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     public void verifyToastWithMessageIsShown(String expectedToastMessage) {
         String actualToastMessage = getToastTopText();
-        assertThat("Shipment inbound toast message is the same", expectedToastMessage, equalTo(actualToastMessage));
+        assertThat("Shipment inbound toast message is the same", actualToastMessage, equalTo(expectedToastMessage));
         pause5s();
     }
 
@@ -274,6 +274,18 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
         String dialogMessageText = tripDepartureDialog.dialogMessage.getText();
         assertThat("Dialog message text is the same", dialogMessageText, equalTo("Are you sure you want to end inbound?"));
+
+        tripDepartureDialog.proceed.waitUntilClickable();
+        tripDepartureDialog.proceed.click();
+        pause2s();
+    }
+
+    public void clickProceedInTripDepartureDialog() {
+        String dialogTitleText = tripDepartureDialog.dialogTitle.getText();
+        assertThat("Dialog title is the same", dialogTitleText, equalTo("Trip Departure"));
+
+        String dialogMessageText = tripDepartureDialog.dialogMessage.getText();
+        assertThat("Dialog message text is the same", dialogMessageText, equalTo("Are you sure you want to start departure?"));
 
         tripDepartureDialog.proceed.waitUntilClickable();
         tripDepartureDialog.proceed.click();

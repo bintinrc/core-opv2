@@ -453,12 +453,12 @@ public class EditOrderPage extends OperatorV2SimplePage
         assertThat("Different Result Returned for event time",
                 eventRow.getEventTime(),
                 containsString(DateUtil.displayDate(eventDateExpected)));
-        if (stringContained.contains("Shipment"))
+        if (stringContained.contains("Scanned"))
         {
-            assertThat("Different Result Returned for event description", eventRow.getDescription(), containsString(stringContained));
+            assertThat("Different Result Returned for event description", eventRow.getDescription(), containsString(f("%s at Hub %s", stringContained, hubId)));
             return;
         }
-        assertThat("Different Result Returned for event description", eventRow.getDescription(), containsString(f("%s at Hub %s", stringContained, hubId)));
+        assertThat("Different Result Returned for event description", eventRow.getDescription(), containsString(stringContained));
     }
 
     public void verifyOrderInfoIsCorrect(Order order)
