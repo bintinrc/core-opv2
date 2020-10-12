@@ -157,6 +157,11 @@ public class EditOrderPage extends OperatorV2SimplePage
         return transactionsTable;
     }
 
+    public void openPage(long orderId){
+        getWebDriver().get(f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, StandardTestConstants.COUNTRY_CODE, orderId));
+        waitUntilInvisibilityOfLoadingOrder();
+    }
+
     public void clickMenu(String parentMenuName, String childMenuName)
     {
         clickf("//md-menu-bar/md-menu/button[contains(text(), '%s')]", parentMenuName);
