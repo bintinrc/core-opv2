@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
@@ -293,9 +294,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     }
 
     public void clickLeavePageDialog() {
-        leavePageDialog.leave.waitUntilClickable();
-        leavePageDialog.leave.click();
-        leavePageDialog.waitUntilInvisible();
+        WebElement leavePageButton = getWebDriver().findElement(By.cssSelector("[aria-label='Leave']"));
+        leavePageButton.click();
     }
 
     public void clickRemoveButton() {
@@ -324,7 +324,6 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     public void clickProceedButtonInErrorShipmentDialog() {
         errorShipment.proceed.waitUntilClickable();
         errorShipment.proceed.click();
-        errorShipment.waitUntilInvisible();
     }
 
     public void verifyShipmentWithTripData(Map<String, String> finalData) {
@@ -448,16 +447,27 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     public void verifySmallMessageAppearsInScanShipmentBox(String expectedSuccessMessage) {
         retryIfAssertionErrorOccurred(() -> {
-            String actualSuccessMessage = findElementByXpath(XPATH_SMALL_SUCCESS_MESSAGE).getText();
-            assertThat("Small message is equal", actualSuccessMessage, equalTo(expectedSuccessMessage));
-        }, "retry if small text not found");
+            try {
+                String actualSuccessMessage = findElementByXpath(XPATH_SMALL_SUCCESS_MESSAGE).getText();
+                assertThat("Small message is equal", actualSuccessMessage, equalTo(expectedSuccessMessage));
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                throw ex;
+            }
+        }, getCurrentMethodName());
     }
 
     public void verifySmallMessageAppearsInRemoveShipmentBox(String expectedRemoveMessage) {
         retryIfAssertionErrorOccurred(() -> {
-            String actualSuccessMessage = smallRemoveMessage.getText();
-            assertEquals(expectedRemoveMessage, actualSuccessMessage);
-        }, "retry if small text not found");
+            try {
+                String actualSuccessMessage = smallRemoveMessage.getText();
+                assertThat("Small message is equal", actualSuccessMessage, equalTo(expectedRemoveMessage));
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                throw ex;
+            }
+        }, getCurrentMethodName());
+
     }
 
     public void verifyShipmentToGoWithTrip(Long expectedTotalShipment) {
