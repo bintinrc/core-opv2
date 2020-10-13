@@ -412,18 +412,18 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         String actualInboundType = inboundTypeText.getText();
         String actualDriver = driverText.getText();
         String actualMovementTrip = movementTripText.getText();
-        String actualDestinationHub = actualMovementTrip.split(",")[0].replace("To ", "");
+        String actualDestinationHub = actualMovementTrip.split(",")[0];
         String departureDate = DateUtil.displayDate(DateUtil.getDate());
         String month = TestUtils.integerToMonth(Integer.parseInt(departureDate.split("-")[1]) - 1);
         String date = departureDate.split("-")[2];
         String expectedDepartureTime = date + " " + month;
         String actualDepartureTime = actualMovementTrip.split(",")[1].replace(" Departure ", "");
 
-        assertEquals(expectedInboundHub, actualInboundHub);
-        assertEquals(expectedInboundType, actualInboundType);
-        assertEquals(expectedDriver, actualDriver);
-        assertEquals(expectedDestinationHub, actualDestinationHub);
-        assertEquals(expectedDepartureTime, actualDepartureTime);
+        assertThat("Inbound Hub is the same", actualInboundHub, equalTo(expectedInboundHub));
+        assertThat("Inbound Type is the same", actualInboundType, equalTo(expectedInboundType));
+        assertThat("Driver is the same", actualDriver, equalTo(expectedDriver));
+        assertThat("Destination or Origin hub is the same", actualDestinationHub, containsString(expectedDestinationHub));
+        assertThat("Departure time is the same", actualDepartureTime, equalTo(expectedDepartureTime));
     }
 
     public void verifyShipmentInTrip(String expectedShipmentId) {
