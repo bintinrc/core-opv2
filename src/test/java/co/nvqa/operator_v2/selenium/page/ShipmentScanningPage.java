@@ -9,13 +9,10 @@ import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.*;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 
-import java.time.ZonedDateTime;
 import java.util.*;
 
 import static org.hamcrest.Matchers.allOf;
@@ -69,7 +66,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     public LeavePageDialog leavePageDialog;
 
     @FindBy(css = "md-dialog")
-    public ShipmentToGoWithTripDialog shipmentToGoWithTripDialog;
+    public ShipmentWithTrip shipmentWithTripDialog;
 
     @FindBy(css = "md-dialog")
     public ConfirmRemoveDialog confirmRemoveDialog;
@@ -85,6 +82,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     @FindBy(xpath = "//div//p[@class='nv-p']//a")
     public TextBox shipmentToGo;
+
+    @FindBy(xpath = "//div//p[@class='nv-p']//a")
+    public TextBox shipmentToUnload;
 
     @FindBy(xpath = "//div[contains(@class,'nv-h4')]")
     public TextBox pageTitle;
@@ -327,37 +327,40 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         errorShipment.waitUntilInvisible();
     }
 
-    public void verifyShipmentToGoWithTripData(Map<String, String> finalData) {
+    public void verifyShipmentWithTripData(Map<String, String> finalData) {
         String shipmentCount = finalData.get("shipmentCount");
         String dialogTitle = f("shipments to go with trip (%s)", shipmentCount);
+        if (finalData.get("inboundType") != null && finalData.get("inboundType").equals("Into Hub")) {
+            dialogTitle = f("shipments to unload (%s)", shipmentCount);
+        }
         String shipmentId = finalData.get("shipmentId");
         String originHub = finalData.get("originHub");
         String dropOffHub = finalData.get("dropOffHub");
         String destinationHub = finalData.get("destinationHub");
         String comments = finalData.get("comments");
 
-        shipmentToGoWithTripDialog.waitUntilVisible();
-        String actualDialogTitle = shipmentToGoWithTripDialog.dialogTitle.getText().toLowerCase();
+        shipmentWithTripDialog.waitUntilVisible();
+        String actualDialogTitle = shipmentWithTripDialog.dialogTitle.getText().toLowerCase();
         int index = 0;
-        for (PageElement shipmentIdElement : shipmentToGoWithTripDialog.shipmentId) {
+        for (PageElement shipmentIdElement : shipmentWithTripDialog.shipmentId) {
             String currentShipmentId = shipmentIdElement.getText().trim();
             if (currentShipmentId.equals(shipmentId)) {
                 break;
             }
             index++;
         }
-        String actualShipmentId = shipmentToGoWithTripDialog.shipmentId.get(index).getText();
-        String actualOriginHub = shipmentToGoWithTripDialog.originHubName.get(index).getText();
-        String actualDropOffHub = shipmentToGoWithTripDialog.dropOffHubName.get(index).getText();
-        String actualDestinationHub = shipmentToGoWithTripDialog.destinationHubName.get(index).getText();
-        String actualComments = shipmentToGoWithTripDialog.comments.get(index).getText();
+        String actualShipmentId = shipmentWithTripDialog.shipmentId.get(index).getText();
+        String actualOriginHub = shipmentWithTripDialog.originHubName.get(index).getText();
+        String actualDropOffHub = shipmentWithTripDialog.dropOffHubName.get(index).getText();
+        String actualDestinationHub = shipmentWithTripDialog.destinationHubName.get(index).getText();
+        String actualComments = shipmentWithTripDialog.comments.get(index).getText();
 
-        assertEquals(dialogTitle, actualDialogTitle);
-        assertEquals(shipmentId, actualShipmentId);
-        assertEquals(originHub, actualOriginHub);
-        assertEquals(dropOffHub, actualDropOffHub);
-        assertEquals(destinationHub, actualDestinationHub);
-        assertEquals(comments, actualComments);
+        assertThat("Dialog title is equal", actualDialogTitle, equalTo(dialogTitle));
+        assertThat("Shipment id is equal", actualShipmentId, equalTo(shipmentId));
+        assertThat("Origin hub is equal", actualOriginHub, equalTo(originHub));
+        assertThat("Drop off hub is equal", actualDropOffHub, equalTo(dropOffHub));
+        assertThat("Destination hub is equal", actualDestinationHub, equalTo(destinationHub));
+        assertThat("Comments is equal", actualComments, equalTo(comments));
     }
 
     public void verifyCreatedShipmentsShipmentToGoWithTripDataLastIndexTransitHub(Map<String, String> finalData) {
@@ -368,7 +371,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
                 finalData.put("dropOffHub", "-");
                 finalData.put("comments", "-");
             }
-            verifyShipmentToGoWithTripData(finalData);
+            verifyShipmentWithTripData(finalData);
         }
     }
 
@@ -383,8 +386,8 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     }
 
     public void clickShipmentToGoWithId(String shipmentIdAsString) {
-        shipmentToGoWithTripDialog.waitUntilVisible();
-        for (PageElement shipmentIdElement : shipmentToGoWithTripDialog.shipmentId) {
+        shipmentWithTripDialog.waitUntilVisible();
+        for (PageElement shipmentIdElement : shipmentWithTripDialog.shipmentId) {
             String currentShipmentId = shipmentIdElement.getText();
             if (currentShipmentId.equals(shipmentIdAsString)) {
                 assertEquals(shipmentIdAsString, currentShipmentId);
@@ -464,9 +467,16 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         assertEquals(expectedTotalShipment, actualShipmentToGoCount);
     }
 
+    public void verifyShipmentToUnload(Long expectedTotalShipment) {
+        shipmentToUnload.waitUntilVisible();
+        String shipmentToUnloadText = shipmentToUnload.getText().trim();
+        Long actualShipmentToGoCount = Long.valueOf(shipmentToUnloadText.split(" ")[0]);
+        assertEquals(expectedTotalShipment, actualShipmentToGoCount);
+    }
+
     public void verifyShipmentToGoTableToScrollInto(String shipmentId) {
-        shipmentToGoWithTripDialog.waitUntilVisible();
-        for (PageElement shipmentIdElement : shipmentToGoWithTripDialog.shipmentId) {
+        shipmentWithTripDialog.waitUntilVisible();
+        for (PageElement shipmentIdElement : shipmentWithTripDialog.shipmentId) {
             String currentShipmentId = shipmentIdElement.getText();
             if (currentShipmentId.equals(shipmentId)) {
                 assertEquals(shipmentId, currentShipmentId);
@@ -530,7 +540,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         }
     }
 
-    public static class ShipmentToGoWithTripDialog extends MdDialog {
+    public static class ShipmentWithTrip extends MdDialog {
         @FindBy(xpath = "//div[@class='md-toolbar-tools']//h4")
         public TextBox dialogTitle;
 
@@ -549,7 +559,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         @FindBy(css = "[nv-table-highlight='filter.comments']")
         public List<PageElement> comments;
 
-        public ShipmentToGoWithTripDialog(WebDriver webDriver, WebElement webElement) {
+        public ShipmentWithTrip(WebDriver webDriver, WebElement webElement) {
             super(webDriver, webElement);
         }
 

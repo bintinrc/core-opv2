@@ -485,7 +485,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator click start inbound
     Then Operator verifies shipment to go with trip is shown with total "1"
     When Operator clicks shipment to go with trip
-    Then Operator verifies shipment to go with trip with data below:
+    Then Operator verifies shipment with trip with data below:
       | shipmentCount  | 1                                  |
       | shipmentId     | {KEY_CREATED_SHIPMENT_ID}          |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
@@ -567,7 +567,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator click start inbound
     Then Operator verifies shipment to go with trip is shown with total "1"
     When Operator clicks shipment to go with trip
-    Then Operator verifies shipment to go with trip with data below:
+    Then Operator verifies shipment with trip with data below:
       | shipmentCount  | 1                                  |
       | shipmentId     | {KEY_CREATED_SHIPMENT_ID}          |
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |

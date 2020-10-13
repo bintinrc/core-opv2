@@ -260,16 +260,28 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.verifyShipmentToGoWithTrip(totalShipmentToGo);
     }
 
+    @Then("Operator verifies shipment to unload is shown with total {string}")
+    public void operatorVerifiesShipmentToUnloadIsShownWithTotal(String totalAsString) {
+        Long totalShipmentToUnload = Long.valueOf(totalAsString);
+        shipmentScanningPage.verifyShipmentToUnload(totalShipmentToUnload);
+    }
+
     @When("Operator clicks shipment to go with trip")
     public void operatorClicksShipmentToGoWithTrip() {
         shipmentScanningPage.shipmentToGo.waitUntilClickable();
         shipmentScanningPage.shipmentToGo.click();
     }
 
-    @Then("Operator verifies shipment to go with trip with data below:")
-    public void operatorVerifiesShipmentToGoWithTripData(Map<String, String> data) {
+    @When("Operator clicks shipment to unload")
+    public void operatorClicksShipmentToUnload() {
+        shipmentScanningPage.shipmentToUnload.waitUntilClickable();
+        shipmentScanningPage.shipmentToUnload.click();
+    }
+
+    @Then("Operator verifies shipment with trip with data below:")
+    public void operatorVerifiesShipmentWithTripWithData(Map<String, String> data) {
         final Map<String, String> finalData = resolveKeyValues(data);
-        shipmentScanningPage.verifyShipmentToGoWithTripData(finalData);
+        shipmentScanningPage.verifyShipmentWithTripData(finalData);
     }
 
     @Then("Operator verifies created shipments data in shipment to go with trip with data below:")
