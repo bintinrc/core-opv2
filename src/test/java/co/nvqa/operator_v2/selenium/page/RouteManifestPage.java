@@ -3,10 +3,18 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.driver.FailureReason;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.RouteManifestWaypointDetails;
+import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.util.Stack;
 
@@ -21,14 +29,26 @@ public class RouteManifestPage extends OperatorV2SimplePage
     public static final String COLUMN_COMMENTS = "comments";
     public static final String ACTION_BUTTON_EDIT = "container.route-manifest.choose-outcome-for-waypoint";
     private static final String MD_VIRTUAL_REPEAT = "waypoint in getTableData()";
-    private WaypointDetailsDialog waypointDetailsDialog;
-    private WaypointsTable waypointsTable;
+    private final WaypointDetailsDialog waypointDetailsDialog;
+    private final WaypointsTable waypointsTable;
+
+    @FindBy(css = "md-dialog")
+    public ChooseAnOutcomeForTheWaypointDialog chooseAnOutcomeForTheWaypointDialog;
+
+    @FindBy(css = "md-dialog[aria-label='Are you sure?All ...']")
+    public ConfirmationDialog confirmationDialog;
 
     public RouteManifestPage(WebDriver webDriver)
     {
         super(webDriver);
         waypointDetailsDialog = new WaypointDetailsDialog(webDriver);
         waypointsTable = new WaypointsTable(webDriver);
+    }
+
+    public void openPage(long routeId)
+    {
+        getWebDriver().get(f("%s/%s/route-manifest/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, StandardTestConstants.COUNTRY_CODE.toLowerCase(), routeId));
+        waitUntilPageLoaded();
     }
 
     public void waitUntilPageLoaded()
@@ -49,11 +69,10 @@ public class RouteManifestPage extends OperatorV2SimplePage
 
     private void verify1DeliverySuccessOrFailAtRouteManifest(Route route, Order order, FailureReason expectedFailureReason, boolean verifyDeliverySuccess)
     {
-        if(verifyDeliverySuccess)
+        if (verifyDeliverySuccess)
         {
             verify1DeliveryIsSuccess(route, order);
-        }
-        else
+        } else
         {
             verify1DeliveryIsFailed(route, order, expectedFailureReason);
         }
@@ -108,15 +127,13 @@ public class RouteManifestPage extends OperatorV2SimplePage
 
         waitUntilPageLoaded();
 
-        if(StringUtils.isNotBlank(expectedWaypointDetails.getTrackingIds()))
+        if (StringUtils.isNotBlank(expectedWaypointDetails.getTrackingIds()))
         {
             waypointsTable.filterByColumn("trackingIds", String.valueOf(expectedWaypointDetails.getTrackingIds()));
-        }
-        else if(expectedWaypointDetails.getId()!=null)
+        } else if (expectedWaypointDetails.getId() != null)
         {
             waypointsTable.filterByColumn("id", String.valueOf(expectedWaypointDetails.getId()));
-        }
-        else if(StringUtils.isNotBlank(expectedWaypointDetails.getAddress()))
+        } else if (StringUtils.isNotBlank(expectedWaypointDetails.getAddress()))
         {
             waypointsTable.filterByColumn("address", String.valueOf(expectedWaypointDetails.getAddress()));
         }
@@ -124,22 +141,22 @@ public class RouteManifestPage extends OperatorV2SimplePage
         RouteManifestWaypointDetails actualWaypointDetails = waypointsTable.readEntity(1);
         expectedWaypointDetails.compareWithActual(actualWaypointDetails);
 
-        if(expectedReservation!=null || expectedPickup!=null || expectedDelivery!=null)
+        if (expectedReservation != null || expectedPickup != null || expectedDelivery != null)
         {
             waypointsTable.clickActionButton(1, "details");
             waypointDetailsDialog.waitUntilVisible();
 
-            if(expectedReservation!=null)
+            if (expectedReservation != null)
             {
                 RouteManifestWaypointDetails.Reservation actualReservation = waypointDetailsDialog.reservationsTable.readEntity(1);
                 expectedReservation.compareWithActual(actualReservation);
             }
-            if(expectedPickup!=null)
+            if (expectedPickup != null)
             {
                 RouteManifestWaypointDetails.Pickup actualPickup = waypointDetailsDialog.pickupsTable.readEntity(1);
                 expectedPickup.compareWithActual(actualPickup);
             }
-            if(expectedDelivery!=null)
+            if (expectedDelivery != null)
             {
                 RouteManifestWaypointDetails.Delivery actualDelivery = waypointDetailsDialog.deliveryTable.readEntity(1);
                 expectedDelivery.compareWithActual(actualDelivery);
@@ -150,8 +167,8 @@ public class RouteManifestPage extends OperatorV2SimplePage
     public void failDeliveryWaypoint(FailureReason failureReason)
     {
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
-        waitUntilEnabledAndClickNvIconTextButtonByName("commons.failure");
-        clickButtonOnMdDialogByAriaLabel("Failure");
+        chooseAnOutcomeForTheWaypointDialog.waitUntilVisible();
+        chooseAnOutcomeForTheWaypointDialog.failure.click();
 
         Stack<FailureReason> stackOfFailureReason = new Stack<>();
         FailureReason pointer = failureReason;
@@ -161,32 +178,34 @@ public class RouteManifestPage extends OperatorV2SimplePage
             stackOfFailureReason.push(pointer);
             pointer = pointer.getParent();
         }
-        while(pointer!=null);
+        while (pointer != null);
 
         FailureReason failureReasonGrandParent = stackOfFailureReason.pop();
-        selectValueFromMdSelectById("container.route-manifest.choose-failure-reason", failureReasonGrandParent.getDescription());
+        chooseAnOutcomeForTheWaypointDialog.chooseFailureReason.selectValue(failureReasonGrandParent.getDescription());
         int stackSize = stackOfFailureReason.size();
 
-        for(int i=0; i<stackSize; i++)
+        for (int i = 1; i <= stackSize; i++)
         {
             FailureReason childFailureReason = stackOfFailureReason.pop();
-            String childXpath = f("(//md-select[contains(@id, 'container.route-manifest.failure-reason-detail')])[%d]", (i+1));
-            selectValueFromMdSelectByMdSelectXpath(childXpath, childFailureReason.getDescription());
-            pause200ms();
+            chooseAnOutcomeForTheWaypointDialog.selectFailureReasonDetails(i, childFailureReason.getDescription());
         }
 
-        clickButtonOnMdDialogByAriaLabel("Update");
-        clickButtonOnMdDialogByAriaLabel("Proceed");
-        pause2s();
+        chooseAnOutcomeForTheWaypointDialog.update.click();
+        confirmationDialog.waitUntilVisible();
+        confirmationDialog.proceed.click();
+        confirmationDialog.waitUntilInvisible();
+        chooseAnOutcomeForTheWaypointDialog.waitUntilInvisible();
     }
 
     public void successDeliveryWaypoint()
     {
         clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
-        clickButtonOnMdDialogByAriaLabel("Success");
-        clickButtonOnMdDialogByAriaLabel("Update");
-        clickButtonOnMdDialogByAriaLabel("Proceed");
-        pause2s();
+        chooseAnOutcomeForTheWaypointDialog.success.click();
+        chooseAnOutcomeForTheWaypointDialog.update.click();
+        confirmationDialog.waitUntilVisible();
+        confirmationDialog.proceed.click();
+        confirmationDialog.waitUntilInvisible();
+        chooseAnOutcomeForTheWaypointDialog.waitUntilInvisible();
     }
 
     public void searchTableByTrackingId(String trackingId)
@@ -293,5 +312,45 @@ public class RouteManifestPage extends OperatorV2SimplePage
             setMdVirtualRepeat("waypoint in getTableData()");
             setEntityClass(RouteManifestWaypointDetails.class);
         }
+    }
+
+    public static class ChooseAnOutcomeForTheWaypointDialog extends MdDialog
+    {
+        public ChooseAnOutcomeForTheWaypointDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(name = "commons.success")
+        public NvIconTextButton success;
+
+        @FindBy(name = "commons.failure")
+        public NvIconTextButton failure;
+
+        @FindBy(name = "commons.go-back")
+        public NvIconTextButton goBack;
+
+        @FindBy(name = "commons.update")
+        public NvIconTextButton update;
+
+        @FindBy(css = "[id^='container.route-manifest.choose-failure-reason']")
+        public MdSelect chooseFailureReason;
+
+        public void selectFailureReasonDetails(int index, String reason)
+        {
+            String xpath = f("(.//md-select[contains(@id, 'container.route-manifest.failure-reason-detail')])[%d]", index);
+            new MdSelect(this, xpath).selectValue(reason);
+        }
+    }
+
+    public static class ConfirmationDialog extends MdDialog
+    {
+        public ConfirmationDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
+
+        @FindBy(css = "[aria-label='Proceed']")
+        public Button proceed;
     }
 }

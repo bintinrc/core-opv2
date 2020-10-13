@@ -1285,6 +1285,7 @@ public class OperatorV2SimplePage extends SimplePage
 
         do
         {
+            pause1s();
             Set<String> windowHandles = getWebDriver().getWindowHandles();
             for (String windowHandle : windowHandles)
             {

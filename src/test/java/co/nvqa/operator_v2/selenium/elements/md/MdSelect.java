@@ -16,6 +16,11 @@ import java.util.stream.Collectors;
 
 public class MdSelect extends PageElement
 {
+    public MdSelect(PageElement parent, String xpath)
+    {
+        super(parent, xpath);
+    }
+
     public MdSelect(WebDriver webDriver, WebElement webElement)
     {
         super(webDriver, webElement);
@@ -45,6 +50,7 @@ public class MdSelect extends PageElement
     public List<PageElement> options;
 
     private static final String MD_OPTION_LOCATOR = "//div[@id='%s']//md-option[.//div[contains(normalize-space(.), '%s')]]";
+    private static final String MD_OPTION_LOCATOR_2 = "//div[@id='%s']//md-option[.//div[contains(normalize-space(.), \"%s\")]]";
     private static final String MD_OPTION_BY_VALUE_LOCATOR = "//div[@id='%s']//md-option[@value='%s']";
 
     public void searchAndSelectValue(String value)
@@ -82,8 +88,8 @@ public class MdSelect extends PageElement
     public void selectValue(String value)
     {
         openMenu();
-        value = escapeValue(value);
-        click(f(MD_OPTION_LOCATOR, getMenuId(), StringUtils.normalizeSpace(value)));
+        String locator = value.contains("'") ? MD_OPTION_LOCATOR_2 : MD_OPTION_LOCATOR;
+        click(f(locator, getMenuId(), StringUtils.normalizeSpace(value)));
     }
 
     public void selectByValue(String value)
