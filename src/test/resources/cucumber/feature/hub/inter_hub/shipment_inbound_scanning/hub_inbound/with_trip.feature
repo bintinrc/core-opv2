@@ -914,6 +914,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | destHubName | {hub-name-temp}                                                     |
       | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+    And Operator refresh page
     And Operator fill Shipment Inbound Scanning page with data below:
       | inboundHub           | {KEY_LIST_OF_CREATED_HUBS[3].name}                                                     |
       | inboundType          | Into Van                                                                               |
@@ -945,7 +946,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | id          | {KEY_CREATED_SHIPMENT_ID}          |
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | currHubName | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-      | destHubName | {hub-name-temp-2}                  |
+      | destHubName | {hub-name-temp}                    |
       | status      | Transit                            |
     And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
