@@ -3,11 +3,13 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.driver.FailureReason;
+import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.RouteManifestWaypointDetails;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
@@ -41,6 +43,12 @@ public class RouteManifestPage extends OperatorV2SimplePage
         super(webDriver);
         waypointDetailsDialog = new WaypointDetailsDialog(webDriver);
         waypointsTable = new WaypointsTable(webDriver);
+    }
+
+    public void openPage(long routeId)
+    {
+        getWebDriver().get(f("%s/%s/route-manifest/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, StandardTestConstants.COUNTRY_CODE.toLowerCase(), routeId));
+        waitUntilPageLoaded();
     }
 
     public void waitUntilPageLoaded()
@@ -325,9 +333,8 @@ public class RouteManifestPage extends OperatorV2SimplePage
         @FindBy(name = "commons.update")
         public NvIconTextButton update;
 
-        @FindBy(id = "container.route-manifest.choose-failure-reason-1")
+        @FindBy(css = "[id^='container.route-manifest.choose-failure-reason']")
         public MdSelect chooseFailureReason;
-
 
         public void selectFailureReasonDetails(int index, String reason)
         {
@@ -336,7 +343,8 @@ public class RouteManifestPage extends OperatorV2SimplePage
         }
     }
 
-    public static class ConfirmationDialog extends MdDialog{
+    public static class ConfirmationDialog extends MdDialog
+    {
         public ConfirmationDialog(WebDriver webDriver, WebElement webElement)
         {
             super(webDriver, webElement);

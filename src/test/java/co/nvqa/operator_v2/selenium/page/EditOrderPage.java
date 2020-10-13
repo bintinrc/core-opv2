@@ -19,6 +19,7 @@ import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdCheckbox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdMenuBar;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
@@ -57,6 +58,9 @@ public class EditOrderPage extends OperatorV2SimplePage
 {
     @FindBy(id = "header")
     public PageElement header;
+
+    @FindBy(css = ".view-container md-menu-bar")
+    public MdMenuBar menuBar;
 
     @FindBy(xpath = "//div[label[.='Tracking ID']]/h3")
     public PageElement trackingId;
@@ -157,23 +161,20 @@ public class EditOrderPage extends OperatorV2SimplePage
         return transactionsTable;
     }
 
-    public void openPage(long orderId){
-        getWebDriver().get(f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, StandardTestConstants.COUNTRY_CODE, orderId));
+    public void openPage(long orderId)
+    {
+        getWebDriver().get(f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, StandardTestConstants.COUNTRY_CODE.toLowerCase(), orderId));
         waitUntilInvisibilityOfLoadingOrder();
     }
 
     public void clickMenu(String parentMenuName, String childMenuName)
     {
-        clickf("//md-menu-bar/md-menu/button[contains(text(), '%s')]", parentMenuName);
-        waitUntilVisibilityOfElementLocated("//div[@aria-hidden='false']/md-menu-content");
-        clickf("//div[@aria-hidden='false']/md-menu-content/md-menu-item/button/span[contains(text(), '%s')]", childMenuName);
+        menuBar.selectOption(parentMenuName, childMenuName);
     }
 
     public boolean isMenuItemEnabled(String parentMenuName, String childMenuName)
     {
-        clickf("//md-menu-bar/md-menu/button[contains(text(), '%s')]", parentMenuName);
-        waitUntilVisibilityOfElementLocated("//div[@aria-hidden='false']/md-menu-content");
-        return isElementEnabled(f("//div[@aria-hidden='false']/md-menu-content/md-menu-item/button[span[contains(text(), '%s')]]", childMenuName));
+        return menuBar.isOptionEnabled(parentMenuName, childMenuName);
     }
 
     public void editOrderDetails(Order order)

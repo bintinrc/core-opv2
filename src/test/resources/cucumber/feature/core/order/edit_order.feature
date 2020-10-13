@@ -340,7 +340,7 @@ Feature: Edit Order
       | Return - Delivery | uid:ce190fcf-c0d5-47ad-9777-0296edecc8c2 | Return    | Delivery  |
       | Return - Pickup   | uid:0c1c44ce-9fce-46e7-9016-f73613eef833 | Return    | Pickup    |
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute
   Scenario: Operator Reschedule Fail Pickup (uid:c1962397-8060-4485-9221-47cb46803ddf)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
@@ -349,16 +349,11 @@ Feature: Edit Order
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
-    Given Operator go to menu Routing -> Route Logs
-    When Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
-    And Operator open Route Manifest of created route from Route Logs page
-    When Operator fail pickup waypoint from Route Manifest page
+    And Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    And Operator fail pickup waypoint from Route Manifest page
     When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Order Settings -> Reschedule Order on Edit Order page
-    When Operator reschedule Pickup on Edit Order Page
+    And Operator reschedule Pickup on Edit Order Page
       | senderName     | test sender name          |
       | senderContact  | +9727894434               |
       | senderEmail    | test@mail.com             |
@@ -370,13 +365,13 @@ Feature: Edit Order
       | address1       | 116 Keng Lee Rd           |
       | address2       | 15                        |
       | postalCode     | 308402                    |
-    And DB Operator verifies pickup info is updated in order record
+    Then DB Operator verifies pickup info is updated in order record
     And DB Operator verify Pickup waypoint record for Pending transaction
     And DB Operator verifies orders record using data below:
       | status         | Pending        |
       | granularStatus | Pending Pickup |
 
-  @CloseNewWindows @DeleteOrArchiveRoute
+  @DeleteOrArchiveRoute
   Scenario: Operator Reschedule Fail Delivery (uid:af4f96cb-5ed1-4035-8a29-650ac5013aae)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -385,21 +380,14 @@ Feature: Edit Order
       | globalInboundRequest | { "hubId":{hub-id} } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator set tags of the new created route to [{route-tag-id}]
+    And API Operator set tags of the new created route to [{route-tag-id}]
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    Given Operator go to menu Routing -> Route Logs
-    When Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
-    And Operator open Route Manifest of created route from Route Logs page
-    When Operator fail delivery waypoint from Route Manifest page
-    When Operator go to menu Order -> All Orders
-    When Operator open page of the created order from All Orders page
+    And Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    And Operator fail delivery waypoint from Route Manifest page
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And Operator click Order Settings -> Reschedule Order on Edit Order page
-    When Operator reschedule Delivery on Edit Order Page
+    And Operator reschedule Delivery on Edit Order Page
       | recipientName    | test recipient name       |
       | recipientContact | +9727894434               |
       | recipientEmail   | test@mail.com             |
@@ -411,7 +399,7 @@ Feature: Edit Order
       | address1         | 116 Keng Lee Rd           |
       | address2         | 15                        |
       | postalCode       | 308402                    |
-    And DB Operator verifies delivery info is updated in order record
+    Then DB Operator verifies delivery info is updated in order record
     And DB Operator verify Delivery waypoint record for Pending transaction
     And DB Operator verifies orders record using data below:
       | status         | Transit                |
@@ -419,13 +407,11 @@ Feature: Edit Order
 
   @CloseNewWindows
   Scenario: Update Stamp ID - Update Stamp ID with New Stamp ID (uid:ce1f0e4d-435e-4467-ab58-76019c30f8a4)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of the created order from All Orders page
-    When Operator change Stamp ID of the created order to "GENERATED" on Edit order page
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator change Stamp ID of the created order to "GENERATED" on Edit order page
     Then Operator verify next order info on Edit order page:
       | stampId | KEY_STAMP_ID |
     And DB Core Operator gets Order by Stamp ID
@@ -434,51 +420,38 @@ Feature: Edit Order
       | category    | Tracking / Stamp ID |
       | searchLogic | contains            |
       | searchTerm  | KEY_STAMP_ID        |
-    When Operator switch to Edit Order's window
+    And Operator switch to Edit Order's window
 
-  @CloseNewWindows
   Scenario: Update Stamp ID - Update Stamp ID with Stamp ID that Have been Used Before (uid:e43837c6-311c-40c7-9a7b-08d47253ecf9)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of the created order from All Orders page
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And DB Core Operator gets order with Stamp ID
-    And Operator unable to change Stamp ID of the created order to "KEY_LAST_STAMP_ID" on Edit order page
+    Then Operator unable to change Stamp ID of the created order to "KEY_LAST_STAMP_ID" on Edit order page
     And Operator refresh page
     Then Operator verify next order info on Edit order page:
       | stampId | - |
 
-  @CloseNewWindows
   Scenario: Update Stamp ID - Update Stamp ID with Another Order's Tracking ID (uid:f80d5aa7-c010-4855-b405-32c478cb5eb1)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Order -> All Orders
-    When Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    When Operator switch to Edit Order's window
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     And DB Core Operator gets random trackingId
-    When Operator unable to change Stamp ID of the created order to "KEY_ANOTHER_ORDER_TRACKING_ID" on Edit order page
-    And Operator refresh page
+    Then Operator unable to change Stamp ID of the created order to "KEY_ANOTHER_ORDER_TRACKING_ID" on Edit order page
+    When Operator refresh page
     Then Operator verify next order info on Edit order page:
       | stampId | - |
 
-  @CloseNewWindows
   Scenario: Remove Stamp ID (uid:70f0c0e4-1331-4a92-911e-ca6ac132377c)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Order -> All Orders
-    And Operator open page of the created order from All Orders page
-    When Operator change Stamp ID of the created order to "GENERATED" on Edit order page
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator change Stamp ID of the created order to "GENERATED" on Edit order page
     And Operator remove Stamp ID of the created order on Edit order page
-    And Operator verify next order info on Edit order page:
+    Then Operator verify next order info on Edit order page:
       | stampId | - |
     When Operator go to menu Order -> All Orders
     Then Operator can't find order on All Orders page using this criteria below:
@@ -486,122 +459,80 @@ Feature: Edit Order
       | searchLogic | contains            |
       | searchTerm  | KEY_STAMP_ID        |
 
-  @CloseNewWindows
   Scenario: Operator Update Order Status from Pending/Pending to Transit/Arrived at Sorting Hub on Edit Order Page (uid:1f72e16b-afdb-4911-a2d1-4b4c5783f062)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Order -> All Orders
-    When Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    When Operator switch to Edit Order's window
-    When Operator update status of the created order on Edit order page using data below:
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator update status of the created order on Edit order page using data below:
       | status                        | Transit                |
       | granularStatus                | Arrived at Sorting Hub |
       | lastPickupTransactionStatus   | Success                |
       | lastDeliveryTransactionStatus | Pending                |
-    When Operator verify the created order info is correct on Edit Order page
+    Then Operator verify the created order info is correct on Edit Order page
 
-  @CloseNewWindows
   Scenario: Operator Update Order Status from Pending/Pending to Completed/Completed on Edit Order Page (uid:8f40d738-057c-4f14-a301-ed884bd6a91f)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Order -> All Orders
-    When Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    When Operator switch to Edit Order's window
-    When Operator update status of the created order on Edit order page using data below:
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator update status of the created order on Edit order page using data below:
       | status                        | Completed |
       | granularStatus                | Completed |
       | lastPickupTransactionStatus   | Success   |
       | lastDeliveryTransactionStatus | Success   |
-    When Operator verify the created order info is correct on Edit Order page
+    Then Operator verify the created order info is correct on Edit Order page
     And Operator verify color of order header on Edit Order page is "GREEN"
 
-  @CloseNewWindows
   Scenario: Operator Update Order Status from Pending/Pending to Cancelled/Cancelled on Edit Order Page (uid:3e788d22-fce5-4cf3-b22d-3985db12cfd3)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    When Operator go to menu Order -> All Orders
-    When Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    When Operator switch to Edit Order's window
-    When Operator update status of the created order on Edit order page using data below:
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator update status of the created order on Edit order page using data below:
       | status                        | Cancelled |
       | granularStatus                | Cancelled |
       | lastPickupTransactionStatus   | Cancelled |
       | lastDeliveryTransactionStatus | Cancelled |
-    When Operator verify the created order info is correct on Edit Order page
+    Then Operator verify the created order info is correct on Edit Order page
     And Operator verify color of order header on Edit Order page is "RED"
 
-  @CloseNewWindows
   Scenario: Operator Update Order Status from Transit/Arrived at Sorting Hub to Pending/Pending on Edit Order Page (uid:b3a052cf-9dbf-4cff-b4ec-8d944516cc2e)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound parcel using data below:
+    And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id-2} } |
-    When Operator go to menu Order -> All Orders
-    When Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    When Operator switch to Edit Order's window
-    When Operator update status of the created order on Edit order page using data below:
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator update status of the created order on Edit order page using data below:
       | status                        | Pending        |
       | granularStatus                | Pending Pickup |
       | lastPickupTransactionStatus   | Pending        |
       | lastDeliveryTransactionStatus | Pending        |
-    When Operator verify the created order info is correct on Edit Order page
+    Then Operator verify the created order info is correct on Edit Order page
 
-  @CloseNewWindows
   Scenario: Cancel Order - On Hold (uid:0bb9bcdb-c2aa-45fe-be71-4c182ffc7a8f)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound parcel using data below:
+    And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id-2} } |
-    When Operator go to menu Order -> All Orders
-    When Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    When Operator switch to Edit Order's window
-    When Operator update status of the created order on Edit order page using data below:
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
+    And Operator update status of the created order on Edit order page using data below:
       | status                        | Pending        |
       | granularStatus                | Pending Pickup |
       | lastPickupTransactionStatus   | Pending        |
       | lastDeliveryTransactionStatus | Pending        |
-    When Operator verify the created order info is correct on Edit Order page
+    Then Operator verify the created order info is correct on Edit Order page
 
-  @DeleteOrArchiveRoute @CloseNewWindows
   Scenario: Cancel Order - Pending Pickup (uid:3ebf2cfd-3988-4829-8416-9eecd213a923)
-    When Operator go to menu Shipper Support -> Blocked Dates
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    And Operator go to menu Order -> All Orders
-    And Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    And Operator switch to Edit Order's window
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Pending" on Edit Order page
     And Operator verify order granular status is "Pending Pickup" on Edit Order page
-    And Operator cancel order on Edit order page using data below:
+    When Operator cancel order on Edit order page using data below:
       | cancellationReason | Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     And API Operator get order details
     Then Operator verify order status is "Cancelled" on Edit Order page
@@ -626,9 +557,8 @@ Feature: Edit Order
       | status | PENDING |
     And DB Operator verify Jaro Scores of the created order after cancel
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Cancel Order - Van En-route to Pickup (uid:b270f6e4-2b52-4142-b4f5-a1c34153b449)
-    When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -637,15 +567,10 @@ Feature: Edit Order
     And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"PP" } |
     And API Operator start the route
-    And Operator go to menu Order -> All Orders
-    And Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    And Operator switch to Edit Order's window
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Van En-route to Pickup" on Edit Order page
-    And Operator cancel order on Edit order page using data below:
+    When Operator cancel order on Edit order page using data below:
       | cancellationReason | Cancelled by automated test {gradle-current-date-yyyy-MM-dd} |
     And API Operator get order details
     Then Operator verify order status is "Cancelled" on Edit Order page
@@ -675,9 +600,8 @@ Feature: Edit Order
       | status | PENDING |
     And DB Operator verify Jaro Scores of the created order after cancel
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Cancel Order - Pickup Fail (uid:91b0c811-faf3-41c0-ae2d-7398ec635134)
-    When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -689,12 +613,7 @@ Feature: Edit Order
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Driver failed the C2C/Return order pickup
-    And Operator go to menu Order -> All Orders
-    And Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    And Operator switch to Edit Order's window
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Pickup Fail" on Edit Order page
     And Operator verify order granular status is "Pickup Fail" on Edit Order page
     When Operator cancel order on Edit order page using data below:
@@ -721,13 +640,12 @@ Feature: Edit Order
       | status | PENDING |
     And DB Operator verify Jaro Scores of the created order after cancel
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Cancel Order - Staging (uid:0bd14e39-9e38-463c-ab66-784553f537cf)
-    When Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator create new shipper address V2 using data below:
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
-    When API Operator create V2 reservation using data below:
+    And API Operator create V2 reservation using data below:
       | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_start_time":"{gradle-next-1-day-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-next-1-day-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -736,14 +654,9 @@ Feature: Edit Order
     And API Driver collect all his routes
     And API Driver get Reservation Job
     And API Driver get estimated price of hyperlocal order
-    Then API Driver success reservation while creating hyperlocal order
-    And API Operator verify hyperlocal order created
-    And Operator go to menu Order -> All Orders
-    And Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    And Operator switch to Edit Order's window
+    And API Driver success reservation while creating hyperlocal order
+    Then API Operator verify hyperlocal order created
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Staging" on Edit Order page
     And Operator verify order granular status is "Staging" on Edit Order page
     And Operator cancel order on Edit order page using data below:
@@ -769,10 +682,9 @@ Feature: Edit Order
       | status | PENDING |
     And DB Operator verify Jaro Scores of the created order after cancel
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Cancel Order - En-route to Sorting Hub (uid:426b4ab8-7ed3-4220-88e1-e36c2b87003b)
-    When Operator go to menu Shipper Support -> Blocked Dates
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
@@ -788,44 +700,32 @@ Feature: Edit Order
     And API Driver failed the delivery of the created parcel
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
-    Then API Operator cancel created order and get error:
+    When API Operator cancel created order and get error:
       | statusCode | 500                               |
       | message    | Order is En-route to Sorting Hub! |
-    When Operator go to menu Order -> All Orders
-    And Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    And Operator switch to Edit Order's window
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order page
-    Then Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
+    And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Cancel Order - Arrived at Sorting Hub (uid:d2d30151-158f-4e04-945b-5f04e16a1c2d)
-    When Operator go to menu Shipper Support -> Blocked Dates
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
-    Then API Operator cancel created order and get error:
+    When API Operator cancel created order and get error:
       | statusCode | 500                              |
       | message    | Order is Arrived at Sorting Hub! |
-    When Operator go to menu Order -> All Orders
-    And Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    And Operator switch to Edit Order's window
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Sorting Hub" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Cancel Order - On Vehicle for Delivery (uid:8ef43ca4-b72b-4aaf-913e-ec96800c01fa)
-    When Operator go to menu Shipper Support -> Blocked Dates
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                     |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":23.57, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
@@ -838,23 +738,17 @@ Feature: Edit Order
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator start the route
-    Then API Operator cancel created order and get error:
+    When API Operator cancel created order and get error:
       | statusCode | 500                               |
       | message    | Order is On Vehicle for Delivery! |
-    When Operator go to menu Order -> All Orders
-    And Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    And Operator switch to Edit Order's window
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "On Vehicle for Delivery" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Cancel Order - Returned to Sender (uid:a3db613d-d61b-4da6-9d9f-bd0a27b755c9)
-    When Operator go to menu Shipper Support -> Blocked Dates
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
@@ -866,53 +760,41 @@ Feature: Edit Order
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     And API Operator force succeed created order
-    Then API Operator cancel created order and get error:
+    When API Operator cancel created order and get error:
       | statusCode | 500                          |
       | message    | Order is Returned to Sender! |
-    When Operator go to menu Order -> All Orders
-    And Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    And Operator switch to Edit Order's window
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Returned to Sender" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Cancel Order - Arrived at Distribution Point (uid:3efb6678-7df0-46a1-9fc1-2010534d58d2)
-    When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given API Operator Global Inbound parcel using data below:
+    And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
-    Given API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
-    Given API Operator create new route using data below:
+    And API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
+    And API Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
-    Given API Operator add parcel to the route using data below:
+    And API Operator add parcel to the route using data below:
       | addParcelToRouteRequest | { "type":"DD" } |
     And API Driver collect all his routes
     And API Driver get pickup/delivery waypoint of the created order
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully
-    Then API Operator cancel created order and get error:
+    When API Operator cancel created order and get error:
       | statusCode | 500                                     |
       | message    | Order is Arrived at Distribution Point! |
-    When Operator go to menu Order -> All Orders
-    And Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    And Operator switch to Edit Order's window
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Arrived at Distribution Point" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Cancel Order - Completed (uid:449f0846-f150-4dfe-b738-d9c72f701f16)
-    When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
@@ -927,55 +809,38 @@ Feature: Edit Order
     And API Operator Van Inbound parcel
     And API Operator start the route
     And API Driver deliver the created parcel successfully
-    Then API Operator cancel created order and get error:
+    When API Operator cancel created order and get error:
       | statusCode | 500                 |
       | message    | Order is Completed! |
-    When Operator go to menu Order -> All Orders
-    And Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    And Operator switch to Edit Order's window
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Completed" on Edit Order page
     And Operator verify order granular status is "Completed" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Cancel Order - Cancelled (uid:b6e1568f-28c8-4725-9903-412f7cd4d590)
-    When Operator go to menu Shipper Support -> Blocked Dates
-    And API Shipper create V4 order using data below:
+    Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator cancel created order
-    When Operator go to menu Order -> All Orders
-    And Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    And Operator switch to Edit Order's window
+    When Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Cancelled" on Edit Order page
     And Operator verify order granular status is "Cancelled" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page
 
-  @DeleteOrArchiveRoute @CloseNewWindows
+  @DeleteOrArchiveRoute
   Scenario: Cancel Order - Transferred to 3PL (uid:fb4a419b-e97a-4f3a-9414-b40b0f932fb4)
-    When Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest    | { "service_type":"Return", "service_level":"Standard", "parcel_job":{ "is_pickup_required":true, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Given Operator go to menu Cross Border & 3PL -> Third Party Order Management
-    When Operator uploads new mapping
+    When Operator go to menu Cross Border & 3PL -> Third Party Order Management
+    And Operator uploads new mapping
       | 3plShipperName | {3pl-shipper-name} |
       | 3plShipperId   | {3pl-shipper-id}   |
-    Then API Operator cancel created order and get error:
+    And API Operator cancel created order and get error:
       | statusCode | 500                          |
       | message    | Order is Transferred to 3PL! |
-    When Operator go to menu Order -> All Orders
-    And Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    And Operator switch to Edit Order's window
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "Transit" on Edit Order page
     And Operator verify order granular status is "Transferred to 3PL" on Edit Order page
     And Operator verify menu item "Order Settings" > "Cancel Order" is disabled on Edit order page

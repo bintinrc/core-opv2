@@ -82,4 +82,11 @@ public class RouteManifestSteps extends AbstractSteps
     {
         routeManifestPage.successDeliveryWaypoint();
     }
+
+    @When("^Operator open Route Manifest page for route ID \"(.+)\"$")
+    public void operatorOpenRouteManifestPage(String routeId)
+    {
+        routeId = resolveValue(routeId);
+        routeManifestPage.openPage(Long.parseLong(routeId));
+    }
 }
