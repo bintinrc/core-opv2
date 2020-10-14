@@ -138,8 +138,8 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
     @Then("Operator verifies toast with message {string} is shown on Shipment Inbound Scanning page")
     public void operatorVerifiesToastWithMessageIsShown(String toastMessage) {
-        toastMessage = resolveValue(toastMessage);
-        shipmentScanningPage.verifyToastWithMessageIsShown(toastMessage);
+        String resolvedToastMessage = resolveValue(toastMessage);
+        shipmentScanningPage.verifyToastWithMessageIsShown(resolvedToastMessage);
     }
 
     @Then("Operator verifies toast bottom with message {string} is shown on Shipment Inbound Scanning page")

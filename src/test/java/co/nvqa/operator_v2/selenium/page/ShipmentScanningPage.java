@@ -239,6 +239,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     }
 
     public void verifyToastWithMessageIsShown(String expectedToastMessage) {
+        waitUntilVisibilityOfElementLocated("//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
         String actualToastMessage = getToastTopText();
         assertThat("Shipment inbound toast message is the same", actualToastMessage, equalTo(expectedToastMessage));
         pause5s();
