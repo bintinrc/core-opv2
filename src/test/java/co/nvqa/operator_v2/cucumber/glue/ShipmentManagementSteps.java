@@ -382,7 +382,7 @@ public class ShipmentManagementSteps extends AbstractSteps
         {
             final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
             ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
-            List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readAllEntities();
+            List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readFirstEntities(1);
             ShipmentEvent actualEvent = events.stream()
                     .filter(event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
                     .findFirst()
