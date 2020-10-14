@@ -33,10 +33,10 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//md-select[contains(@id,'inbound-hub')]")
     public MdSelect inboundHub;
 
-    @FindBy(xpath = "//md-select[contains(@id,'driver-2')]")
+    @FindBy(xpath = "//md-select[contains(@id,'driver')]")
     public MdSelect driver;
 
-    @FindBy(xpath = "//md-select[contains(@id,'movement-trip-3')]")
+    @FindBy(xpath = "//md-select[contains(@id,'movement-trip')]")
     public MdSelect movementTrip;
 
     @FindBy(xpath = XPATH_INBOUND_HUB_TEXT)

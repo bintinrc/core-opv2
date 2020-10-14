@@ -450,8 +450,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         String month = TestUtils.integerToMonth(Integer.parseInt(departureDate.split("-")[1]) - 1);
         String date = departureDate.split("-")[2];
         String expectedDepartureTime = date + " " + month;
-        String actualDepartureTime = actualMovementTrip.split(",")[1].replace(" Departure ", "");
-
+        String actualDepartureTime = f("%s %s",
+                actualMovementTrip.split(",")[1].trim().split(" ")[1],
+                actualMovementTrip.split(",")[1].trim().split(" ")[2]);
         assertThat("Inbound Hub is the same", actualInboundHub, equalTo(expectedInboundHub));
         assertThat("Inbound Type is the same", actualInboundType, equalTo(expectedInboundType));
         assertThat("Driver is the same", actualDriver, equalTo(expectedDriver));

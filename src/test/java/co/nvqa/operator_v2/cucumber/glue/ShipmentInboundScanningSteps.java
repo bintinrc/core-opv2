@@ -124,11 +124,10 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
             } catch (Throwable ex) {
                 NvLogger.error(ex.getMessage());
                 NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
-                navigateRefresh();
-                pause2s();
+                scanningPage.refreshPage();
                 throw ex;
             }
-        }, 10);
+        }, getCurrentMethodName(), 5000, 10);
     }
 
     @Then("Operator verify start inbound button is {string}")
