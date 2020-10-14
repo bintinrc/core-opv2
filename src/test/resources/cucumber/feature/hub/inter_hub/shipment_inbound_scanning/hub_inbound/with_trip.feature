@@ -686,7 +686,6 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | currHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | status      | Completed                          |
-    And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
     Then Operator verifies event is present for shipment on Shipment Detail page
       | source | SHIPMENT_HUB_INBOUND               |
       | result | Completed                          |
@@ -781,7 +780,6 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | currHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | status      | At Transit Hub                     |
-    And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
     Then Operator verifies event is present for shipment on Shipment Detail page
       | source | SHIPMENT_HUB_INBOUND               |
       | result | At Transit Hub                     |

@@ -401,15 +401,22 @@ public class ShipmentManagementSteps extends AbstractSteps
         {
             retryIfAssertionErrorOccurred(() ->
             {
-                ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
-                navigateTo(f("%s/%s/shipment-details/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, shipment.getShipment().getId()));
-                shipmentManagementPage.waitUntilPageLoaded();
-                List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readFirstEntities(1);
-                ShipmentEvent actualEvent = events.stream()
-                        .filter(event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
-                        .findFirst()
-                        .orElseThrow(() -> new AssertionError(f("There is no [%s] shipment event on Shipment Details page", expectedEvent.getSource())));
-                expectedEvent.compareWithActual(actualEvent);
+                try
+                {
+                    ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
+                    navigateTo(f("%s/%s/shipment-details/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, shipment.getShipment().getId()));
+                    shipmentManagementPage.waitUntilPageLoaded();
+                    List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readFirstEntities(1);
+                    ShipmentEvent actualEvent = events.stream()
+                            .filter(event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
+                            .findFirst()
+                            .orElseThrow(() -> new AssertionError(f("There is no [%s] shipment event on Shipment Details page", expectedEvent.getSource())));
+                    expectedEvent.compareWithActual(actualEvent);
+                } catch (Throwable ex)
+                {
+                    NvLogger.error(ex.getMessage());
+                    throw ex;
+                }
             }, "retry shipment details event", 5000, 10);
         });
     }
