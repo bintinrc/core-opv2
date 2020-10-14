@@ -11,10 +11,7 @@ import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.*;
 import co.nvqa.operator_v2.util.TestUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
@@ -239,9 +236,15 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     }
 
     public void verifyToastWithMessageIsShown(String expectedToastMessage) {
-        waitUntilVisibilityOfElementLocated("//div[@id='toast-container']/div/div/div/div[@class='toast-top']/div");
-        String actualToastMessage = getToastTopText();
-        assertThat("Shipment inbound toast message is the same", actualToastMessage, equalTo(expectedToastMessage));
+        retryIfAssertionErrorOccurred(() -> {
+            try {
+                String actualToastMessage = getToastTopText();
+                assertThat("Shipment inbound toast message is the same", actualToastMessage, equalTo(expectedToastMessage));
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                throw ex;
+            }
+        }, getCurrentMethodName());
         pause5s();
     }
 
@@ -475,7 +478,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     }
 
     public void removeShipmentWithId(String shipmentId) {
-        sendKeysAndEnter(XPATH_REMOVE_SHIPMENT_SCAN, shipmentId);
+        WebElement we = findElementByXpath(XPATH_REMOVE_SHIPMENT_SCAN);
+        sendKeys(we, shipmentId);
+        we.sendKeys(Keys.RETURN);
     }
 
     public void verifySmallMessageAppearsInScanShipmentBox(String expectedSuccessMessage) {
