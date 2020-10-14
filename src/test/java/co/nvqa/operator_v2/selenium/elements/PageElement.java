@@ -15,6 +15,11 @@ public class PageElement extends SimplePage
 {
     protected WebElement webElement;
 
+    public PageElement(PageElement parent, String xpath)
+    {
+        this(parent.webDriver, parent.webElement, parent.findElementBy(By.xpath(xpath), parent.webElement));
+    }
+
     public PageElement(WebDriver webDriver)
     {
         super(webDriver);
@@ -49,7 +54,7 @@ public class PageElement extends SimplePage
         try
         {
             scrollIntoView();
-            webElement.click();
+            getWebElement().click();
         } catch (ElementClickInterceptedException ex)
         {
             jsClick();
@@ -142,12 +147,12 @@ public class PageElement extends SimplePage
 
     public void scrollIntoView(boolean alignToTop)
     {
-        scrollIntoView(webElement, alignToTop);
+        scrollIntoView(getWebElement(), alignToTop);
     }
 
     public void waitUntilClickable()
     {
-        waitUntilElementIsClickable(webElement);
+        waitUntilElementIsClickable(getWebElement());
     }
 
     public void waitUntilClickable(int timeoutInSeconds)
