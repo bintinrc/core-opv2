@@ -229,6 +229,24 @@ public class ShipmentScanningSteps extends AbstractSteps {
                 String resultStringValue = resolveValue(resultString);
                 shipmentScanningPage.verifyErrorShipmentWithMessage(shipmentId, resultStringValue);
             } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                shipmentScanningPage.clickCancelInMdDialog();
+                pause1s();
+                shipmentScanningPage.clickEndShipmentInbound();
+                throw ex;
+            }
+        }, "trying to find error shipment dialog");
+    }
+
+    @When("Operator verifies shipment with id {string} appears in error shipment dialog with result {string} in {string}")
+    public void operatorVerifiesShipmentWithIdAppearsInErrorShipmentDialogWithResult(String shipmentIdAsString, String resultString, String errorShipmentType) {
+        retryIfAssertionErrorOccurred(() -> {
+            try {
+                String shipmentId = resolveValue(shipmentIdAsString);
+                String resultStringValue = resolveValue(resultString);
+                shipmentScanningPage.verifyErrorShipmentWithMessage(shipmentId, resultStringValue, errorShipmentType);
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
                 shipmentScanningPage.clickCancelInMdDialog();
                 pause1s();
                 shipmentScanningPage.clickEndShipmentInbound();

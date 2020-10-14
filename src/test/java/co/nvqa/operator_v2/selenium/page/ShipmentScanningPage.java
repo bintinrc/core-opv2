@@ -3,16 +3,20 @@ package co.nvqa.operator_v2.selenium.page;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.*;
 import co.nvqa.operator_v2.util.TestUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import java.util.*;
 
@@ -73,7 +77,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     public ConfirmRemoveDialog confirmRemoveDialog;
 
     @FindBy(css = "md-dialog")
-    public ErrorShipment errorShipment;
+    public ErrorShipmentDialog errorShipment;
 
     @FindBy(name = "commons.remove")
     public NvIconButton removeButton;
@@ -113,6 +117,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     @FindBy(xpath = "//div[contains(@class,'tracking-id-remove')]//small")
     public TextBox smallRemoveMessage;
+
+    @FindBy(xpath = "//nv-table[@param='ctrl.missingTableParam']//table[@class='table-body']")
+    public NvTable<ErrorShipmentRow> missingShipmentRow;
+
+    @FindBy(xpath = "//nv-table[@param='ctrl.unregisteredTableParam']//table[@class='table-body']")
+    public NvTable<ErrorShipmentRow> unregisteredShipmentRow;
 
 
     public ShipmentScanningPage(WebDriver webDriver) {
@@ -314,6 +324,27 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
         assertEquals(shipmentId, actualShipmentId);
         assertEquals(resultMessage, actualResultMessage);
+    }
+
+    public void verifyErrorShipmentWithMessage(String shipmentId, String resultMessage, String errorShipmentType) {
+        errorShipment.waitUntilVisible();
+        String dialogTitleText = errorShipment.dialogTitle.getText();
+        assertEquals("Error Shipment", dialogTitleText);
+        String actualShipmentId = "";
+        String actualResultMessage = "";
+
+        if (errorShipmentType.equals("unregistered shipments")) {
+            actualShipmentId = unregisteredShipmentRow.rows.get(0).shipmentId.getText();
+            actualResultMessage = unregisteredShipmentRow.rows.get(0).result.getText();
+        }
+
+        if (errorShipmentType.equals("missing shipments")) {
+            actualShipmentId = missingShipmentRow.rows.get(0).shipmentId.getText();
+            actualResultMessage = missingShipmentRow.rows.get(0).result.getText();
+        }
+
+        assertThat("Shipment id is equal", actualShipmentId, equalTo(shipmentId));
+        assertThat("Result message is equal", actualResultMessage, equalTo(resultMessage));
     }
 
     public void clickCancelInMdDialog() {
@@ -575,7 +606,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     }
 
-    public static class ErrorShipment extends MdDialog {
+    public static class ErrorShipmentDialog extends MdDialog {
         @FindBy(xpath = "//div[@class='md-toolbar-tools']//h4")
         public TextBox dialogTitle;
 
@@ -591,8 +622,35 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         @FindBy(xpath = "//md-dialog-content//td[@class='result']")
         public TextBox resultTextBox;
 
-        public ErrorShipment(WebDriver webDriver, WebElement webElement) {
+        public ErrorShipmentDialog(WebDriver webDriver, WebElement webElement) {
             super(webDriver, webElement);
         }
+    }
+
+    public static class ErrorShipmentRow extends NvTable.NvRow {
+        public ErrorShipmentRow(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        public ErrorShipmentRow(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
+            super(webDriver, searchContext, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(className = "shipment_id")
+        public PageElement shipmentId;
+
+        @FindBy(className = "origin_hub_name")
+        public PageElement originHubName;
+
+        @FindBy(className = "dropoff_hub_name")
+        public PageElement dropoffHubName;
+
+        @FindBy(className = "destination_hub_name")
+        public PageElement destinationHubName;
+
+        @FindBy(className = "result")
+        public PageElement result;
     }
 }
