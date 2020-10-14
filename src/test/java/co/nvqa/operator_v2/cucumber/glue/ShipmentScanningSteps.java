@@ -328,4 +328,16 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.verifyShipmentToGoTableToScrollInto(shipmentIdAsString);
 
     }
+
+    @When("^Operator close current window and switch to Shipment management page$")
+    public void operatorCloseCurrentWindow()
+    {
+        if (shipmentScanningPage.getWebDriver().getWindowHandles().size() > 1)
+        {
+            shipmentScanningPage.getWebDriver().close();
+            String mainWindowHandle = get(KEY_MAIN_WINDOW_HANDLE);
+            shipmentScanningPage.getWebDriver().switchTo().window(mainWindowHandle);
+//            shipmentScanningPage.switchTo();
+        }
+    }
 }

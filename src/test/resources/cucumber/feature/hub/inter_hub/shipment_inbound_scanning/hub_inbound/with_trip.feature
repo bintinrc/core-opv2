@@ -1561,11 +1561,12 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | currHubName | {hub-name-temp}           |
       | destHubName | {hub-name-temp-2}         |
       | status      | Pending                   |
-    And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
+    And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_CREATED       |
       | result | Pending                |
       | userId | automation@ninjavan.co |
+    And Operator close current window and switch to Shipment management page
 
   @DeleteShipment @DeleteDriver @SoftDeleteHubViaDb
   Scenario: Invalid to Scan Closed Shipment From Another Country to Hub Inbound (uid:3abba664-7cd2-4d17-af97-e3aa384f99d5)
@@ -1631,11 +1632,12 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | currHubName | {hub-name-temp}           |
       | destHubName | {hub-name-temp-2}         |
       | status      | Closed                    |
-    And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
+    And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_CREATED       |
-      | result | Pending                |
+      | source | SHIPMENT_CLOSED        |
+      | result | Closed                 |
       | userId | automation@ninjavan.co |
+    And Operator close current window and switch to Shipment management page
 
   @DeleteShipment @DeleteDriver @SoftDeleteHubViaDb
   Scenario: Invalid to Scan Cancelled Shipment From Another Country to Hub Inbound (uid:8cc04fcd-6d84-42f5-bf40-52c57980fd62)
@@ -1698,11 +1700,12 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | currHubName | {hub-name-temp}           |
       | destHubName | {hub-name-temp-2}         |
       | status      | Cancelled                 |
-    And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
+    And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_CREATED       |
-      | result | Pending                |
+      | source | SHIPMENT_CANCELLED     |
+      | result | Cancelled              |
       | userId | automation@ninjavan.co |
+    And Operator close current window and switch to Shipment management page
 
   @DeleteShipment @DeleteDriver @SoftDeleteHubViaDb
   Scenario: Invalid to Scan Completed Shipment From Another Country to Hub Inbound (uid:911c9382-f4d5-497b-831c-8acddc793454)
@@ -1765,11 +1768,12 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | currHubName | {hub-name-temp}           |
       | destHubName | {hub-name-temp-2}         |
       | status      | Completed                 |
-    And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
+    And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
-      | source | SHIPMENT_CREATED       |
-      | result | Pending                |
-      | userId | automation@ninjavan.co |
+      | source | SHIPMENT_FORCE_COMPLETED |
+      | result | Completed                |
+      | userId | automation@ninjavan.co   |
+    And Operator close current window and switch to Shipment management page
 
   @DeleteShipment @DeleteDriver @SoftDeleteHubViaDb
   Scenario: Invalid to Scan Transit Shipment From Another Country to Hub Inbound (uid:476d787f-f99b-4375-a218-6893e319e440)
@@ -1878,11 +1882,12 @@ Feature: Shipment Hub Inbound With Trip Scanning
       | currHubName | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | destHubName | {hub-name-temp}                    |
       | status      | Transit                            |
-    And Operator open the shipment detail for the shipment "{KEY_CREATED_SHIPMENT_ID}" on Shipment Management Page
+    And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_VAN_INBOUND   |
       | result | Transit                |
       | userId | automation@ninjavan.co |
+    And Operator close current window and switch to Shipment management page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

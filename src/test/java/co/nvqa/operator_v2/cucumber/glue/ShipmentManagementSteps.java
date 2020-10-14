@@ -380,14 +380,20 @@ public class ShipmentManagementSteps extends AbstractSteps
     {
         retryIfAssertionErrorOccurred(() ->
         {
-            final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
-            ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
-            List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readFirstEntities(1);
-            ShipmentEvent actualEvent = events.stream()
-                    .filter(event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
-                    .findFirst()
-                    .orElseThrow(() -> new AssertionError(f("There is no [%s] shipment event on Shipment Details page", expectedEvent.getSource())));
-            expectedEvent.compareWithActual(actualEvent);
+            try {
+                final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
+                ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
+                List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readFirstEntities(1);
+                ShipmentEvent actualEvent = events.stream()
+                        .filter(event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
+                        .findFirst()
+                        .orElseThrow(() -> new AssertionError(f("There is no [%s] shipment event on Shipment Details page", expectedEvent.getSource())));
+                expectedEvent.compareWithActual(actualEvent);
+            } catch (Throwable ex)
+            {
+                NvLogger.error(ex.getMessage());
+                throw ex;
+            }
         }, "retry shipment details", 5000, 10);
     }
 
