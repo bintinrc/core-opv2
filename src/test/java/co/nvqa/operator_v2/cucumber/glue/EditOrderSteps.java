@@ -1073,7 +1073,8 @@ public class EditOrderSteps extends AbstractSteps
         Order order = get(KEY_CREATED_ORDER);
         String parcelSize = "";
 
-        switch(size) {
+        switch (size)
+        {
             case "S":
                 parcelSize = "SMALL";
                 break;
@@ -1093,5 +1094,12 @@ public class EditOrderSteps extends AbstractSteps
         Order orderAfterInbound = get(KEY_ORDER_DETAILS);
 
         assertEquals(("Size changed"), parcelSize, orderAfterInbound.getParcelSize());
+    }
+
+    @When("^Operator open Edit Order page for order ID \"(.+)\"$")
+    public void operatorOpenEditOrderPage(String orderId)
+    {
+        orderId = resolveValue(orderId);
+        editOrderPage.openPage(Long.parseLong(orderId));
     }
 }
