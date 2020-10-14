@@ -404,7 +404,7 @@ public class ShipmentManagementSteps extends AbstractSteps
                 ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
                 navigateTo(f("%s/%s/shipment-details/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, shipment.getShipment().getId()));
                 shipmentManagementPage.waitUntilPageLoaded();
-                List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readAllEntities();
+                List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readFirstEntities(1);
                 ShipmentEvent actualEvent = events.stream()
                         .filter(event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
                         .findFirst()
@@ -412,6 +412,32 @@ public class ShipmentManagementSteps extends AbstractSteps
                 expectedEvent.compareWithActual(actualEvent);
             }, "retry shipment details event", 5000, 10);
         });
+    }
+
+    @Then("Operator verifies event is present for shipment id {string} on Shipment Detail page")
+    public void operatorVerifiesEventIsPresentForShipmentIdOnShipmentDetailPage(String shipmentIdAsString, Map<String, String> mapOfData)
+    {
+        final Map <String, String> finalMapOfData = resolveKeyValues(mapOfData);
+        Long shipmentId = Long.valueOf(resolveValue(shipmentIdAsString));
+        retryIfAssertionErrorOccurred(() ->
+        {
+            try
+            {
+                ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
+                navigateTo(f("%s/%s/shipment-details/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, shipmentId));
+                shipmentManagementPage.waitUntilPageLoaded();
+                List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readFirstEntities(1);
+                ShipmentEvent actualEvent = events.stream()
+                        .filter(event -> StringUtils.equalsIgnoreCase(event.getSource(), expectedEvent.getSource()))
+                        .findFirst()
+                        .orElseThrow(() -> new AssertionError(f("There is no [%s] shipment event on Shipment Details page", expectedEvent.getSource())));
+                expectedEvent.compareWithActual(actualEvent);
+            } catch (Throwable ex)
+            {
+                NvLogger.error(ex.getMessage());
+                throw ex;
+            }
+        }, "retry shipment details event", 5000, 10);
     }
 
     @Then("^Operator verify movement event on Shipment Details page using data below:$")
