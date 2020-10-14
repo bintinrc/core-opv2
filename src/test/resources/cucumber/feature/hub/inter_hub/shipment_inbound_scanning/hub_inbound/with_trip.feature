@@ -1,4 +1,4 @@
-@ShipmentInboundScanning @InterHub @Shipment @MiddleMile @HubInbound @WithTrip @Refo
+@ShipmentInboundScanning @InterHub @Shipment @MiddleMile @HubInbound @WithTrip
 Feature: Shipment Hub Inbound With Trip Scanning
 
   @LaunchBrowser @ShouldAlwaysRun
