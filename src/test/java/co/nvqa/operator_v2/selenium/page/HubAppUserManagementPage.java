@@ -176,6 +176,7 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
         click(HUB_COMBOBOX_XPATH);
         waitUntilVisibilityOfElementLocated(f(HUB_SELECTION_XPATH, hubName));
+        pause1s();
         click(f(HUB_SELECTION_XPATH, hubName));
         getWebDriver().switchTo().parentFrame();
     }
