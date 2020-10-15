@@ -1,4 +1,4 @@
-@MiddleMile @InterHub @MiddleMileDrivers @SearchDriver @Refo
+@MiddleMile @InterHub @MiddleMileDrivers @SearchDriver
 Feature: Middle Mile Drivers
 
   @LaunchBrowser @ShouldAlwaysRun
