@@ -206,7 +206,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         mapOfDynamicVariable.put("RANDOM_LATITUDE", String.valueOf(HubFactory.getRandomHub().getLatitude()));
         mapOfDynamicVariable.put("RANDOM_LONGITUDE", String.valueOf(HubFactory.getRandomHub().getLongitude()));
 
-        String driverCreateRequestTemplate = mapOfData.get("driverCreateRequest");
+        Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+        String driverCreateRequestTemplate = resolvedMapOfData.get("driverCreateRequest");
         String driverCreateRequestJson = replaceTokens(driverCreateRequestTemplate, mapOfDynamicVariable);
 
         CreateDriverV2Request driverCreateRequest = fromJsonCamelCase(driverCreateRequestJson, CreateDriverV2Request.class);

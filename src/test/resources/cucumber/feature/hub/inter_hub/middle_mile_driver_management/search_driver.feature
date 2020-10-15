@@ -1,4 +1,4 @@
-@MiddleMile @InterHub @MiddleMileDrivers @SearchDriver
+@MiddleMile @InterHub @MiddleMileDrivers @SearchDriver @Refo
 Feature: Middle Mile Drivers
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -12,12 +12,24 @@ Feature: Middle Mile Drivers
     When Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator verifies that the data shown has the same value
 
+  @DeleteDriver @SoftDeleteHubViaDb
   Scenario: Load Driver by Filter - Hub (uid:c629d70f-53d3-4327-805f-e988e6b1e25c)
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | region       | JKB       |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{KEY_CREATED_HUB.id},"hub":"{KEY_CREATED_HUB.name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
     Given API Driver gets all the driver
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
-    Given Operator get info of hub details id "{hub-id}"
-    Given API Driver get all middle mile driver using hub filter with value "{hub-id}"
+    Given Operator get info of hub details string id "{KEY_CREATED_HUB.id}"
+    Given API Driver get all middle mile driver using hub filter with value "{KEY_CREATED_HUB.id}"
     When Operator selects the hub on the Middle Mile Drivers Page
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator verifies that the data shown has the same value
