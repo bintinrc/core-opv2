@@ -7,7 +7,7 @@ Feature: All Shippers
 
   @PricingProfile
   Scenario: Add New Shipper Pricing Profile (uid:e3bae772-87e8-4fbc-9698-c590871b4cdd)
-    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |
@@ -446,6 +446,7 @@ Feature: All Shippers
       | discount          | 10000000                    |
       | comments          | This is an invalid discount |
       | errorMessage      | Failed to update            |
+
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
