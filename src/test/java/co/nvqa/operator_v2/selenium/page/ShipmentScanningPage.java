@@ -337,12 +337,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         String actualShipmentId = "";
         String actualResultMessage = "";
 
-        if (errorShipmentType.equals("unregistered shipments")) {
+        if ("unregistered shipments".equals(errorShipmentType)) {
             actualShipmentId = unregisteredShipmentRow.rows.get(0).shipmentId.getText();
             actualResultMessage = unregisteredShipmentRow.rows.get(0).result.getText();
         }
 
-        if (errorShipmentType.equals("missing shipments")) {
+        if ("missing shipments".equals(errorShipmentType)) {
             actualShipmentId = missingShipmentRow.rows.get(0).shipmentId.getText();
             actualResultMessage = missingShipmentRow.rows.get(0).result.getText();
         }
@@ -364,7 +364,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     public void verifyShipmentWithTripData(Map<String, String> finalData) {
         String shipmentCount = finalData.get("shipmentCount");
         String dialogTitle = f("shipments to go with trip (%s)", shipmentCount);
-        if (finalData.get("inboundType") != null && finalData.get("inboundType").equals("Into Hub")) {
+        if (finalData.get("inboundType") != null && "Into Hub".equals(finalData.get("inboundType"))) {
             dialogTitle = f("shipments to unload (%s)", shipmentCount);
         }
         String shipmentId = finalData.get("shipmentId");
@@ -378,7 +378,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         int index = 0;
         for (PageElement shipmentIdElement : shipmentWithTripDialog.shipmentId) {
             String currentShipmentId = shipmentIdElement.getText().trim();
-            if (currentShipmentId.equals(shipmentId)) {
+            if (shipmentId.equals(currentShipmentId)) {
                 break;
             }
             index++;
@@ -423,7 +423,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         shipmentWithTripDialog.waitUntilVisible();
         for (PageElement shipmentIdElement : shipmentWithTripDialog.shipmentId) {
             String currentShipmentId = shipmentIdElement.getText();
-            if (currentShipmentId.equals(shipmentIdAsString)) {
+            if (shipmentIdAsString.equals(currentShipmentId)) {
                 assertEquals(shipmentIdAsString, currentShipmentId);
                 shipmentIdElement.click();
                 switchToOtherWindow();
@@ -526,7 +526,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         shipmentWithTripDialog.waitUntilVisible();
         for (PageElement shipmentIdElement : shipmentWithTripDialog.shipmentId) {
             String currentShipmentId = shipmentIdElement.getText();
-            if (currentShipmentId.equals(shipmentId)) {
+            if (shipmentId.equals(currentShipmentId)) {
                 assertEquals(shipmentId, currentShipmentId);
                 shipmentIdElement.scrollIntoView();
                 return;

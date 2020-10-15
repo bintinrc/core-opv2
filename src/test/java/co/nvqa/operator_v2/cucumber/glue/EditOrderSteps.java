@@ -388,7 +388,7 @@ public class EditOrderSteps extends AbstractSteps
         Long orderId = Long.valueOf(resolveValue(orderIdAsString));
         for (Order order: lists)
         {
-            if (order.getId().equals(orderId))
+            if (orderId.equals(order.getId()))
             {
                 navigateTo(f("%s/%s/order/%d", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE, order.getId()));
                 if (descriptionString != null)

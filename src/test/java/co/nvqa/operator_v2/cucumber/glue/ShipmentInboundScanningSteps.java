@@ -132,30 +132,30 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
 
     @Then("Operator verify start inbound button is {string}")
     public void verifyStartInboundButtonIs(String status) {
-        if (status.equals("enabled")) {
-            assertTrue( scanningPage.startInboundButton.isEnabled());
+        if ("enabled".equals(status)) {
+            assertThat("Inbound button enabled", scanningPage.startInboundButton.isEnabled(), equalTo(true));
             return;
         }
-        if (status.equals("disabled")) {
-            assertFalse(scanningPage.startInboundButton.isEnabled());
+        if ("disabled".equals(status)) {
+            assertThat("Inbound button disabled", scanningPage.startInboundButton.isEnabled(), equalTo(false));
         }
     }
 
     @Then("Operator verify small message {string} {string} in Start Inbound Box")
     public void verifySmallMessage(String message, String status) {
-        if (status.equals("appears")) {
-            assertEquals(message, scanningPage.tripUnselectedWarning.getText());
+        if ("appears".equals(status)) {
+            assertThat("Small message is equal", scanningPage.tripUnselectedWarning.getText(), equalTo(message));
             return;
         }
-        if (status.equals("not appears")) {
-            assertFalse(scanningPage.tripUnselectedWarning.isDisplayedFast());
+        if ("not appears".equals(status)) {
+            assertThat("Small message is not shown", scanningPage.tripUnselectedWarning.isDisplayedFast(), equalTo(false));
         }
     }
 
     @Then("Operator verify driver and movement trip is cleared")
     public void verifyDriverAndMovementTripIsCleared() {
-        assertEquals("Driver", scanningPage.driver.getText());
-        assertEquals("Movement Trip", scanningPage.movementTrip.getText());
+        assertThat("Driver place holder is equal", scanningPage.driver.getText(), equalTo("Driver"));
+        assertThat("Movement trip place holder is equal", scanningPage.movementTrip.getText(), equalTo("Movement Trip"));
     }
 
     @When("Operator click proceed in trip completion dialog")
