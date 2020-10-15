@@ -177,6 +177,7 @@ Feature: Crossdock to Crossdock
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And Operator refresh page
     And API Operator does the "van-inbound" scan for the shipment
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:
