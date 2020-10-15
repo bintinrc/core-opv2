@@ -6,7 +6,7 @@ Feature: Pricing Profiles
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteShipper @CloseNewWindows
-  Scenario: Update an Existing Pricing Profile - with 0 Flat Discount (uid:4ca58ddd-0dd6-4532-95df-a4040fd4b631)
+  Scenario: Update an Existing Pricing Profile - with 0 Flat Discount (uid:7764257b-02ad-41d6-99df-1a52e9c7f01f)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -42,7 +42,7 @@ Feature: Pricing Profiles
       | discountValue | 0 is not a valid discount value |
 
   @DeleteShipper @CloseNewWindows @ResetCountry
-  Scenario: Update an Existing Pricing Profile - with 0 Percentage Discount (uid:cee511cc-2fbc-402d-94e9-3ba7ca90a4ed)
+  Scenario: Update an Existing Pricing Profile - with 0 Percentage Discount (uid:8fa73f4b-69a1-4ce0-927a-82b2be6ace0c)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -79,7 +79,7 @@ Feature: Pricing Profiles
       | discountValue | 0 is not a valid discount value |
 
   @DeleteShipper @CloseNewWindows
-  Scenario: Update an Existing Pricing Profile - with none Flat Discount (uid:f65e4bf7-3cb1-4841-a670-57c4e969d5f3)
+  Scenario: Update an Existing Pricing Profile - with none Flat Discount (uid:df20d395-ed05-4890-a5c9-a9d287fd9251)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -128,7 +128,7 @@ Feature: Pricing Profiles
       | discountValue           | none                           |
 
   @DeleteShipper @CloseNewWindows @ResetCountry
-  Scenario: Update an Existing Pricing Profile - with none Percentage Discount (uid:dd03d13b-88e5-4862-bdb7-a756249c312c)
+  Scenario: Update an Existing Pricing Profile - with none Percentage Discount (uid:cdf6e3e4-da77-4867-bca0-ae734b97ad21)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
@@ -179,7 +179,7 @@ Feature: Pricing Profiles
       | discountValue           | none                           |
 
   @DeleteShipper @CloseNewWindows
-  Scenario: Update an Existing Pricing Profile - with special characters Discount (uid:f94be9dc-d21b-400c-a86b-ab16c33df3fb)
+  Scenario: Update an Existing Pricing Profile - with special characters Discount (uid:35faef0b-1dc5-41d3-8c25-e623af2fbbde)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -215,7 +215,7 @@ Feature: Pricing Profiles
       | discountValue | Special character is not allowed |
 
   @DeleteShipper @CloseNewWindows
-  Scenario: Update an Existing Pricing Profile - with 3-5 integer after decimal point (uid:1a8c31d5-c69f-4b09-8c39-1c3d95f20c35)
+  Scenario: Update an Existing Pricing Profile - with 3-5 integer after decimal point (uid:ed2da24e-c989-435f-9202-1fe5e69d9b30)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -264,7 +264,7 @@ Feature: Pricing Profiles
       | discountValue           | 4.38656                        |
 
   @DeleteShipper @CloseNewWindows
-  Scenario: Update an Existing Pricing Profile - with shipper discount within 6 digits Flat Discount (uid:5e0b90a7-da0f-40be-b512-876fbbc0f21f)
+  Scenario: Update an Existing Pricing Profile - with shipper discount within 6 digits Flat Discount (uid:0fd13d01-2339-4358-b177-c5e463da15af)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -314,7 +314,7 @@ Feature: Pricing Profiles
       | discountValue           | 50000                          |
 
   @DeleteShipper @CloseNewWindows
-  Scenario: Update an Existing Pricing Profile - with shipper discount over 6 digits Flat Discount (uid:9250ac10-5a29-49ca-ab35-e567a679016c)
+  Scenario: Update an Existing Pricing Profile - with shipper discount over 6 digits Flat Discount (uid:aaa6dc52-ffc5-42ec-8f64-80ebd4eb23cf)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -350,7 +350,7 @@ Feature: Pricing Profiles
       | discountValue | Failed to update |
 
   @DeleteShipper @CloseNewWindows
-  Scenario: Pricing Profile for TH (without Discount Value) - Create new Pricing Profile (uid:c9297b87-89bb-4ce9-a69d-33118db72113)
+  Scenario: Pricing Profile for TH (without Discount Value) - Create new Pricing Profile (uid:f350a950-3a1b-4814-83a9-6f84e5f41d32)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -387,7 +387,7 @@ Feature: Pricing Profiles
       | comments                | new Pricing Profile            |
 
   @DeleteShipper @CloseNewWindows
-  Scenario: Pricing Profile for TH (without Discount Value) - Update an Existing Pending Profile (uid:8108ae0d-8b14-41eb-80b4-959a62128e18)
+  Scenario: Pricing Profile for TH (without Discount Value) - Update an Existing Pending Profile
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
