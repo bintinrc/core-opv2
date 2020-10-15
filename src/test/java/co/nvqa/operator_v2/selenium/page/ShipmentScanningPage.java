@@ -1,21 +1,20 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.*;
 import co.nvqa.operator_v2.util.TestUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.Color;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
-import java.time.ZonedDateTime;
 import java.util.*;
 
 import static org.hamcrest.Matchers.allOf;
@@ -66,13 +65,16 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     public TripDepartureDialog tripDepartureDialog;
 
     @FindBy(css = "md-dialog")
-    public ShipmentToGoWithTripDialog shipmentToGoWithTripDialog;
+    public LeavePageDialog leavePageDialog;
+
+    @FindBy(css = "md-dialog")
+    public ShipmentWithTrip shipmentWithTripDialog;
 
     @FindBy(css = "md-dialog")
     public ConfirmRemoveDialog confirmRemoveDialog;
 
     @FindBy(css = "md-dialog")
-    public ErrorShipment errorShipment;
+    public ErrorShipmentDialog errorShipment;
 
     @FindBy(name = "commons.remove")
     public NvIconButton removeButton;
@@ -82,6 +84,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     @FindBy(xpath = "//div//p[@class='nv-p']//a")
     public TextBox shipmentToGo;
+
+    @FindBy(xpath = "//div//p[@class='nv-p']//a")
+    public TextBox shipmentToUnload;
 
     @FindBy(xpath = "//div[contains(@class,'nv-h4')]")
     public TextBox pageTitle;
@@ -109,6 +114,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     @FindBy(xpath = "//div[contains(@class,'tracking-id-remove')]//small")
     public TextBox smallRemoveMessage;
+
+    @FindBy(xpath = "//nv-table[@param='ctrl.missingTableParam']//table[@class='table-body']")
+    public NvTable<ErrorShipmentRow> missingShipmentRow;
+
+    @FindBy(xpath = "//nv-table[@param='ctrl.unregisteredTableParam']//table[@class='table-body']")
+    public NvTable<ErrorShipmentRow> unregisteredShipmentRow;
 
 
     public ShipmentScanningPage(WebDriver webDriver) {
@@ -225,8 +236,15 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     }
 
     public void verifyToastWithMessageIsShown(String expectedToastMessage) {
-        String actualToastMessage = getToastTopText();
-        assertEquals(expectedToastMessage, actualToastMessage);
+        retryIfAssertionErrorOccurred(() -> {
+            try {
+                String actualToastMessage = getToastTopText();
+                assertThat("Shipment inbound toast message is the same", actualToastMessage, equalTo(expectedToastMessage));
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                throw ex;
+            }
+        }, getCurrentMethodName());
         pause5s();
     }
 
@@ -243,12 +261,12 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     public void verifyScanShipmentColor(String expectedContainerColorAsHex) {
         String actualContainerColorAsHex = getBackgroundColor(XPATH_SCAN_SHIPMENT_CONTAINER).asHex();
-        assertEquals(expectedContainerColorAsHex, actualContainerColorAsHex);
+        assertThat("Scan container color is the same", actualContainerColorAsHex, equalTo(expectedContainerColorAsHex));
     }
 
     public void verifyScannedShipmentColor(String expectedShipmentColorAsHex) {
         String actualColorAsHex = getBackgroundColor(XPATH_SCANNED_SHIPMENT).asHex();
-        assertEquals(expectedShipmentColorAsHex, actualColorAsHex);
+        assertThat("Scanned shipment color is the same", expectedShipmentColorAsHex, equalTo(actualColorAsHex));
     }
 
     public void verifyScannedShipmentColorById(String expectedShipmentColorAsHex, String expectedShipmentId) {
@@ -267,14 +285,31 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     public void clickProceedInEndInboundDialog() {
         String dialogTitleText = tripDepartureDialog.dialogTitle.getText();
-        assertEquals("Trip Departure", dialogTitleText);
+        assertThat("Dialog title is the same", dialogTitleText, equalTo("Confirm End Inbound"));
 
         String dialogMessageText = tripDepartureDialog.dialogMessage.getText();
-        assertEquals("Are you sure you want to start departure?", dialogMessageText);
+        assertThat("Dialog message text is the same", dialogMessageText, equalTo("Are you sure you want to end inbound?"));
 
         tripDepartureDialog.proceed.waitUntilClickable();
         tripDepartureDialog.proceed.click();
-        tripDepartureDialog.waitUntilInvisible();
+        pause2s();
+    }
+
+    public void clickProceedInTripDepartureDialog() {
+        String dialogTitleText = tripDepartureDialog.dialogTitle.getText();
+        assertThat("Dialog title is the same", dialogTitleText, equalTo("Trip Departure"));
+
+        String dialogMessageText = tripDepartureDialog.dialogMessage.getText();
+        assertThat("Dialog message text is the same", dialogMessageText, equalTo("Are you sure you want to start departure?"));
+
+        tripDepartureDialog.proceed.waitUntilClickable();
+        tripDepartureDialog.proceed.click();
+        pause2s();
+    }
+
+    public void clickLeavePageDialog() {
+        WebElement leavePageButton = getWebDriver().findElement(By.cssSelector("[aria-label='Leave']"));
+        leavePageButton.click();
     }
 
     public void clickRemoveButton() {
@@ -295,6 +330,27 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         assertEquals(resultMessage, actualResultMessage);
     }
 
+    public void verifyErrorShipmentWithMessage(String shipmentId, String resultMessage, String errorShipmentType) {
+        errorShipment.waitUntilVisible();
+        String dialogTitleText = errorShipment.dialogTitle.getText();
+        assertEquals("Error Shipment", dialogTitleText);
+        String actualShipmentId = "";
+        String actualResultMessage = "";
+
+        if ("unregistered shipments".equals(errorShipmentType)) {
+            actualShipmentId = unregisteredShipmentRow.rows.get(0).shipmentId.getText();
+            actualResultMessage = unregisteredShipmentRow.rows.get(0).result.getText();
+        }
+
+        if ("missing shipments".equals(errorShipmentType)) {
+            actualShipmentId = missingShipmentRow.rows.get(0).shipmentId.getText();
+            actualResultMessage = missingShipmentRow.rows.get(0).result.getText();
+        }
+
+        assertThat("Shipment id is equal", actualShipmentId, equalTo(shipmentId));
+        assertThat("Result message is equal", actualResultMessage, equalTo(resultMessage));
+    }
+
     public void clickCancelInMdDialog() {
         cancelButton.waitUntilClickable();
         cancelButton.click();
@@ -303,40 +359,42 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     public void clickProceedButtonInErrorShipmentDialog() {
         errorShipment.proceed.waitUntilClickable();
         errorShipment.proceed.click();
-        errorShipment.waitUntilInvisible();
     }
 
-    public void verifyShipmentToGoWithTripData(Map<String, String> finalData) {
+    public void verifyShipmentWithTripData(Map<String, String> finalData) {
         String shipmentCount = finalData.get("shipmentCount");
         String dialogTitle = f("shipments to go with trip (%s)", shipmentCount);
+        if (finalData.get("inboundType") != null && "Into Hub".equals(finalData.get("inboundType"))) {
+            dialogTitle = f("shipments to unload (%s)", shipmentCount);
+        }
         String shipmentId = finalData.get("shipmentId");
         String originHub = finalData.get("originHub");
         String dropOffHub = finalData.get("dropOffHub");
         String destinationHub = finalData.get("destinationHub");
         String comments = finalData.get("comments");
 
-        shipmentToGoWithTripDialog.waitUntilVisible();
-        String actualDialogTitle = shipmentToGoWithTripDialog.dialogTitle.getText().toLowerCase();
+        shipmentWithTripDialog.waitUntilVisible();
+        String actualDialogTitle = shipmentWithTripDialog.dialogTitle.getText().toLowerCase();
         int index = 0;
-        for (PageElement shipmentIdElement : shipmentToGoWithTripDialog.shipmentId) {
+        for (PageElement shipmentIdElement : shipmentWithTripDialog.shipmentId) {
             String currentShipmentId = shipmentIdElement.getText().trim();
-            if (currentShipmentId.equals(shipmentId)) {
+            if (shipmentId.equals(currentShipmentId)) {
                 break;
             }
             index++;
         }
-        String actualShipmentId = shipmentToGoWithTripDialog.shipmentId.get(index).getText();
-        String actualOriginHub = shipmentToGoWithTripDialog.originHubName.get(index).getText();
-        String actualDropOffHub = shipmentToGoWithTripDialog.dropOffHubName.get(index).getText();
-        String actualDestinationHub = shipmentToGoWithTripDialog.destinationHubName.get(index).getText();
-        String actualComments = shipmentToGoWithTripDialog.comments.get(index).getText();
+        String actualShipmentId = shipmentWithTripDialog.shipmentId.get(index).getText();
+        String actualOriginHub = shipmentWithTripDialog.originHubName.get(index).getText();
+        String actualDropOffHub = shipmentWithTripDialog.dropOffHubName.get(index).getText();
+        String actualDestinationHub = shipmentWithTripDialog.destinationHubName.get(index).getText();
+        String actualComments = shipmentWithTripDialog.comments.get(index).getText();
 
-        assertEquals(dialogTitle, actualDialogTitle);
-        assertEquals(shipmentId, actualShipmentId);
-        assertEquals(originHub, actualOriginHub);
-        assertEquals(dropOffHub, actualDropOffHub);
-        assertEquals(destinationHub, actualDestinationHub);
-        assertEquals(comments, actualComments);
+        assertThat("Dialog title is equal", actualDialogTitle, equalTo(dialogTitle));
+        assertThat("Shipment id is equal", actualShipmentId, equalTo(shipmentId));
+        assertThat("Origin hub is equal", actualOriginHub, equalTo(originHub));
+        assertThat("Drop off hub is equal", actualDropOffHub, equalTo(dropOffHub));
+        assertThat("Destination hub is equal", actualDestinationHub, equalTo(destinationHub));
+        assertThat("Comments is equal", actualComments, equalTo(comments));
     }
 
     public void verifyCreatedShipmentsShipmentToGoWithTripDataLastIndexTransitHub(Map<String, String> finalData) {
@@ -347,7 +405,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
                 finalData.put("dropOffHub", "-");
                 finalData.put("comments", "-");
             }
-            verifyShipmentToGoWithTripData(finalData);
+            verifyShipmentWithTripData(finalData);
         }
     }
 
@@ -362,10 +420,10 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     }
 
     public void clickShipmentToGoWithId(String shipmentIdAsString) {
-        shipmentToGoWithTripDialog.waitUntilVisible();
-        for (PageElement shipmentIdElement : shipmentToGoWithTripDialog.shipmentId) {
+        shipmentWithTripDialog.waitUntilVisible();
+        for (PageElement shipmentIdElement : shipmentWithTripDialog.shipmentId) {
             String currentShipmentId = shipmentIdElement.getText();
-            if (currentShipmentId.equals(shipmentIdAsString)) {
+            if (shipmentIdAsString.equals(currentShipmentId)) {
                 assertEquals(shipmentIdAsString, currentShipmentId);
                 shipmentIdElement.click();
                 switchToOtherWindow();
@@ -391,18 +449,19 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         String actualInboundType = inboundTypeText.getText();
         String actualDriver = driverText.getText();
         String actualMovementTrip = movementTripText.getText();
-        String actualDestinationHub = actualMovementTrip.split(",")[0].replace("To ", "");
+        String actualDestinationHub = actualMovementTrip.split(",")[0];
         String departureDate = DateUtil.displayDate(DateUtil.getDate());
         String month = TestUtils.integerToMonth(Integer.parseInt(departureDate.split("-")[1]) - 1);
         String date = departureDate.split("-")[2];
         String expectedDepartureTime = date + " " + month;
-        String actualDepartureTime = actualMovementTrip.split(",")[1].replace(" Departure ", "");
-
-        assertEquals(expectedInboundHub, actualInboundHub);
-        assertEquals(expectedInboundType, actualInboundType);
-        assertEquals(expectedDriver, actualDriver);
-        assertEquals(expectedDestinationHub, actualDestinationHub);
-        assertEquals(expectedDepartureTime, actualDepartureTime);
+        String actualDepartureTime = f("%s %s",
+                actualMovementTrip.split(",")[1].trim().split(" ")[1],
+                actualMovementTrip.split(",")[1].trim().split(" ")[2]);
+        assertThat("Inbound Hub is the same", actualInboundHub, equalTo(expectedInboundHub));
+        assertThat("Inbound Type is the same", actualInboundType, equalTo(expectedInboundType));
+        assertThat("Driver is the same", actualDriver, equalTo(expectedDriver));
+        assertThat("Destination or Origin hub is the same", actualDestinationHub, containsString(expectedDestinationHub));
+        assertThat("Departure time is the same", actualDepartureTime, equalTo(expectedDepartureTime));
     }
 
     public void verifyShipmentInTrip(String expectedShipmentId) {
@@ -413,25 +472,40 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
 
     public void verifyShipmentCount(String numberOfShipment) {
         String textNumberOfScannedParcel = numberOfScannedParcel.getText();
-        assertEquals(f("%s Shipment Scanned to Hub", numberOfShipment), textNumberOfScannedParcel);
+        assertThat("Number of shipment scanned to Hub message is the same",
+                textNumberOfScannedParcel,
+                equalTo(f("%s Shipment Scanned to Hub", numberOfShipment)));
     }
 
     public void removeShipmentWithId(String shipmentId) {
-        sendKeysAndEnter(XPATH_REMOVE_SHIPMENT_SCAN, shipmentId);
+        WebElement we = findElementByXpath(XPATH_REMOVE_SHIPMENT_SCAN);
+        sendKeys(we, shipmentId);
+        we.sendKeys(Keys.RETURN);
     }
 
     public void verifySmallMessageAppearsInScanShipmentBox(String expectedSuccessMessage) {
         retryIfAssertionErrorOccurred(() -> {
-            String actualSuccessMessage = findElementByXpath(XPATH_SMALL_SUCCESS_MESSAGE).getText();
-            assertEquals(expectedSuccessMessage, actualSuccessMessage);
-        }, "retry if small text not found");
+            try {
+                String actualSuccessMessage = findElementByXpath(XPATH_SMALL_SUCCESS_MESSAGE).getText();
+                assertThat("Small message is equal", actualSuccessMessage, equalTo(expectedSuccessMessage));
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                throw ex;
+            }
+        }, getCurrentMethodName());
     }
 
     public void verifySmallMessageAppearsInRemoveShipmentBox(String expectedRemoveMessage) {
         retryIfAssertionErrorOccurred(() -> {
-            String actualSuccessMessage = smallRemoveMessage.getText();
-            assertEquals(expectedRemoveMessage, actualSuccessMessage);
-        }, "retry if small text not found");
+            try {
+                String actualSuccessMessage = smallRemoveMessage.getText();
+                assertThat("Small message is equal", actualSuccessMessage, equalTo(expectedRemoveMessage));
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                throw ex;
+            }
+        }, getCurrentMethodName());
+
     }
 
     public void verifyShipmentToGoWithTrip(Long expectedTotalShipment) {
@@ -441,11 +515,18 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         assertEquals(expectedTotalShipment, actualShipmentToGoCount);
     }
 
+    public void verifyShipmentToUnload(Long expectedTotalShipment) {
+        shipmentToUnload.waitUntilVisible();
+        String shipmentToUnloadText = shipmentToUnload.getText().trim();
+        Long actualShipmentToGoCount = Long.valueOf(shipmentToUnloadText.split(" ")[0]);
+        assertEquals(expectedTotalShipment, actualShipmentToGoCount);
+    }
+
     public void verifyShipmentToGoTableToScrollInto(String shipmentId) {
-        shipmentToGoWithTripDialog.waitUntilVisible();
-        for (PageElement shipmentIdElement : shipmentToGoWithTripDialog.shipmentId) {
+        shipmentWithTripDialog.waitUntilVisible();
+        for (PageElement shipmentIdElement : shipmentWithTripDialog.shipmentId) {
             String currentShipmentId = shipmentIdElement.getText();
-            if (currentShipmentId.equals(shipmentId)) {
+            if (shipmentId.equals(currentShipmentId)) {
                 assertEquals(shipmentId, currentShipmentId);
                 shipmentIdElement.scrollIntoView();
                 return;
@@ -483,6 +564,18 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         }
     }
 
+    public static class LeavePageDialog extends MdDialog {
+        @FindBy(css = "[aria-label='Leave']")
+        public Button leave;
+
+        @FindBy(css = "[aria-label='Stay']")
+        public Button stay;
+
+        public LeavePageDialog(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+        }
+    }
+
     public static class ConfirmRemoveDialog extends MdDialog {
         @FindBy(xpath = "//button//span[.='Cancel']")
         public Button cancel;
@@ -495,7 +588,7 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         }
     }
 
-    public static class ShipmentToGoWithTripDialog extends MdDialog {
+    public static class ShipmentWithTrip extends MdDialog {
         @FindBy(xpath = "//div[@class='md-toolbar-tools']//h4")
         public TextBox dialogTitle;
 
@@ -514,13 +607,13 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         @FindBy(css = "[nv-table-highlight='filter.comments']")
         public List<PageElement> comments;
 
-        public ShipmentToGoWithTripDialog(WebDriver webDriver, WebElement webElement) {
+        public ShipmentWithTrip(WebDriver webDriver, WebElement webElement) {
             super(webDriver, webElement);
         }
 
     }
 
-    public static class ErrorShipment extends MdDialog {
+    public static class ErrorShipmentDialog extends MdDialog {
         @FindBy(xpath = "//div[@class='md-toolbar-tools']//h4")
         public TextBox dialogTitle;
 
@@ -536,8 +629,35 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         @FindBy(xpath = "//md-dialog-content//td[@class='result']")
         public TextBox resultTextBox;
 
-        public ErrorShipment(WebDriver webDriver, WebElement webElement) {
+        public ErrorShipmentDialog(WebDriver webDriver, WebElement webElement) {
             super(webDriver, webElement);
         }
+    }
+
+    public static class ErrorShipmentRow extends NvTable.NvRow {
+        public ErrorShipmentRow(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        public ErrorShipmentRow(WebDriver webDriver, SearchContext searchContext, WebElement webElement) {
+            super(webDriver, searchContext, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(className = "shipment_id")
+        public PageElement shipmentId;
+
+        @FindBy(className = "origin_hub_name")
+        public PageElement originHubName;
+
+        @FindBy(className = "dropoff_hub_name")
+        public PageElement dropoffHubName;
+
+        @FindBy(className = "destination_hub_name")
+        public PageElement destinationHubName;
+
+        @FindBy(className = "result")
+        public PageElement result;
     }
 }

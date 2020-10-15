@@ -138,8 +138,8 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
     @Then("Operator verifies toast with message {string} is shown on Shipment Inbound Scanning page")
     public void operatorVerifiesToastWithMessageIsShown(String toastMessage) {
-        toastMessage = resolveValue(toastMessage);
-        shipmentScanningPage.verifyToastWithMessageIsShown(toastMessage);
+        String resolvedToastMessage = resolveValue(toastMessage);
+        shipmentScanningPage.verifyToastWithMessageIsShown(resolvedToastMessage);
     }
 
     @Then("Operator verifies toast bottom with message {string} is shown on Shipment Inbound Scanning page")
@@ -191,9 +191,18 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.verifyTripData(inboundHub, inboundType, driver, destinationHub);
     }
 
-    @And("Operator clicks proceed in end inbound dialog")
-    public void operatorClicksProceedInEndInboundDialog() {
+    @And("Operator clicks proceed in end inbound dialog {string}")
+    public void operatorClicksProceedInEndInboundDialog(String inboundType) {
+        if ("Van Inbound".equals(inboundType)) {
+            shipmentScanningPage.clickProceedInTripDepartureDialog();
+            return;
+        }
         shipmentScanningPage.clickProceedInEndInboundDialog();
+    }
+
+    @And("Operator clicks leave in leaving page dialog")
+    public void operatorClicksLeaveInLeavingPageDialog() {
+        shipmentScanningPage.clickLeavePageDialog();
     }
 
     @When("Operator remove scanned shipment from remove button in scanned shipment table")
@@ -220,6 +229,24 @@ public class ShipmentScanningSteps extends AbstractSteps {
                 String resultStringValue = resolveValue(resultString);
                 shipmentScanningPage.verifyErrorShipmentWithMessage(shipmentId, resultStringValue);
             } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                shipmentScanningPage.clickCancelInMdDialog();
+                pause1s();
+                shipmentScanningPage.clickEndShipmentInbound();
+                throw ex;
+            }
+        }, "trying to find error shipment dialog");
+    }
+
+    @When("Operator verifies shipment with id {string} appears in error shipment dialog with result {string} in {string}")
+    public void operatorVerifiesShipmentWithIdAppearsInErrorShipmentDialogWithResult(String shipmentIdAsString, String resultString, String errorShipmentType) {
+        retryIfAssertionErrorOccurred(() -> {
+            try {
+                String shipmentId = resolveValue(shipmentIdAsString);
+                String resultStringValue = resolveValue(resultString);
+                shipmentScanningPage.verifyErrorShipmentWithMessage(shipmentId, resultStringValue, errorShipmentType);
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
                 shipmentScanningPage.clickCancelInMdDialog();
                 pause1s();
                 shipmentScanningPage.clickEndShipmentInbound();
@@ -234,14 +261,14 @@ public class ShipmentScanningSteps extends AbstractSteps {
     }
 
     @Then("Operator verify small message {string} appears in Shipment Inbound Box")
-    public void operatorVerifySmallMessageAppearsInShipmentInboundBox(String smallMessage) {
-        smallMessage = resolveValue(smallMessage);
+    public void operatorVerifySmallMessageAppearsInShipmentInboundBox(String smallMessageAsString) {
+        String smallMessage = resolveValue(smallMessageAsString);
         shipmentScanningPage.verifySmallMessageAppearsInScanShipmentBox(smallMessage);
     }
 
     @Then("Operator verify small message {string} appears in Remove Shipment Container")
-    public void operatorVerifySmallMessageAppearsInRemoveShipmentContainer(String smallMessage) {
-        smallMessage = resolveValue(smallMessage);
+    public void operatorVerifySmallMessageAppearsInRemoveShipmentContainer(String smallMessageAsString) {
+        String smallMessage = resolveValue(smallMessageAsString);
         shipmentScanningPage.verifySmallMessageAppearsInRemoveShipmentBox(smallMessage);
     }
 
@@ -251,16 +278,28 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentScanningPage.verifyShipmentToGoWithTrip(totalShipmentToGo);
     }
 
+    @Then("Operator verifies shipment to unload is shown with total {string}")
+    public void operatorVerifiesShipmentToUnloadIsShownWithTotal(String totalAsString) {
+        Long totalShipmentToUnload = Long.valueOf(totalAsString);
+        shipmentScanningPage.verifyShipmentToUnload(totalShipmentToUnload);
+    }
+
     @When("Operator clicks shipment to go with trip")
     public void operatorClicksShipmentToGoWithTrip() {
         shipmentScanningPage.shipmentToGo.waitUntilClickable();
         shipmentScanningPage.shipmentToGo.click();
     }
 
-    @Then("Operator verifies shipment to go with trip with data below:")
-    public void operatorVerifiesShipmentToGoWithTripData(Map<String, String> data) {
+    @When("Operator clicks shipment to unload")
+    public void operatorClicksShipmentToUnload() {
+        shipmentScanningPage.shipmentToUnload.waitUntilClickable();
+        shipmentScanningPage.shipmentToUnload.click();
+    }
+
+    @Then("Operator verifies shipment with trip with data below:")
+    public void operatorVerifiesShipmentWithTripWithData(Map<String, String> data) {
         final Map<String, String> finalData = resolveKeyValues(data);
-        shipmentScanningPage.verifyShipmentToGoWithTripData(finalData);
+        shipmentScanningPage.verifyShipmentWithTripData(finalData);
     }
 
     @Then("Operator verifies created shipments data in shipment to go with trip with data below:")
@@ -288,5 +327,17 @@ public class ShipmentScanningSteps extends AbstractSteps {
         shipmentIdAsString = resolveValue(shipmentIdAsString);
         shipmentScanningPage.verifyShipmentToGoTableToScrollInto(shipmentIdAsString);
 
+    }
+
+    @When("^Operator close current window and switch to Shipment management page$")
+    public void operatorCloseCurrentWindow()
+    {
+        if (shipmentScanningPage.getWebDriver().getWindowHandles().size() > 1)
+        {
+            shipmentScanningPage.getWebDriver().close();
+            String mainWindowHandle = get(KEY_MAIN_WINDOW_HANDLE);
+            shipmentScanningPage.getWebDriver().switchTo().window(mainWindowHandle);
+//            shipmentScanningPage.switchTo();
+        }
     }
 }

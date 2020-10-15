@@ -103,25 +103,63 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
         scanningPage.checkEndDateSessionScanChange(mustCheckId, next2DaysDate);
     }
 
-    @When("^Operator inbound scanning Into Van Shipment Inbound Scanning page with data below:$")
-    public void inboundScanningIntoVanWithDataBelow(Map<String, String> data) {
+    @When("Operator click start inbound")
+    public void clickStartInbound() {
+        scanningPage.startInboundButton.waitUntilClickable();
+        scanningPage.clickStartInbound();
+
+    }
+
+    @When("Operator fill Shipment Inbound Scanning page with data below:")
+    public void fillInboundScanningIntoVanValuesDataBelow(Map<String, String> data) {
         retryIfRuntimeExceptionOccurred(() ->
         {
             try {
-                navigateRefresh();
-                pause2s();
                 final Map<String, String> finalData = resolveKeyValues(data);
                 String inboundHub = finalData.get("inboundHub");
                 String inboundType = finalData.get("inboundType");
                 String driver = finalData.get("driver");
                 String movementTripSchedule = finalData.get("movementTripSchedule");
-
                 scanningPage.inboundScanningWithTripReturnMovementTrip(inboundHub, inboundType, driver, movementTripSchedule);
             } catch (Throwable ex) {
                 NvLogger.error(ex.getMessage());
                 NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
+                scanningPage.refreshPage();
                 throw ex;
             }
-        }, 10);
+        }, getCurrentMethodName(), 5000, 10);
+    }
+
+    @Then("Operator verify start inbound button is {string}")
+    public void verifyStartInboundButtonIs(String status) {
+        if ("enabled".equals(status)) {
+            assertThat("Inbound button enabled", scanningPage.startInboundButton.isEnabled(), equalTo(true));
+            return;
+        }
+        if ("disabled".equals(status)) {
+            assertThat("Inbound button disabled", scanningPage.startInboundButton.isEnabled(), equalTo(false));
+        }
+    }
+
+    @Then("Operator verify small message {string} {string} in Start Inbound Box")
+    public void verifySmallMessage(String message, String status) {
+        if ("appears".equals(status)) {
+            assertThat("Small message is equal", scanningPage.tripUnselectedWarning.getText(), equalTo(message));
+            return;
+        }
+        if ("not appears".equals(status)) {
+            assertThat("Small message is not shown", scanningPage.tripUnselectedWarning.isDisplayedFast(), equalTo(false));
+        }
+    }
+
+    @Then("Operator verify driver and movement trip is cleared")
+    public void verifyDriverAndMovementTripIsCleared() {
+        assertThat("Driver place holder is equal", scanningPage.driver.getText(), equalTo("Driver"));
+        assertThat("Movement trip place holder is equal", scanningPage.movementTrip.getText(), equalTo("Movement Trip"));
+    }
+
+    @When("Operator click proceed in trip completion dialog")
+    public void clickProceedInTripCompletionDialog() {
+        scanningPage.completeTrip();
     }
 }
