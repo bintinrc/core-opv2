@@ -432,6 +432,39 @@ Feature: Pricing Profiles
       | salespersonDiscountType | Flat                           |
       | discountValue           | none                           |
 
+  @PricingProfile
+  Scenario: Edit Shipper Pricing Profile (uid:f350a950-3a1b-4814-83a9-6f84e5f41d32)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    When Operator create new Shipper with basic settings using data below:
+      | isShipperActive              | true                  |
+      | shipperType                  | Normal                |
+      | ocVersion                    | v4                    |
+      | services                     | STANDARD              |
+      | trackingType                 | Fixed                 |
+      | isAllowCod                   | true                  |
+      | isAllowCashPickup            | true                  |
+      | isPrepaid                    | true                  |
+      | isAllowStagedOrders          | true                  |
+      | isMultiParcelShipper         | true                  |
+      | isDisableDriverAppReschedule | true                  |
+      | pricingScriptName            | {pricing-script-name} |
+      | industryName                 | {industry-name}       |
+      | salesPerson                  | {sales-person}        |
+    And Operator edits the created shipper
+    Then Operator adds new Shipper's Pricing Script
+      | pricingScriptName | 2402 - New Script             |
+      | discount          | 20                            |
+      | comments          | This is a test pricing script |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Shipper -> All Shippers
+    And Operator edits the created shipper
+    Then Operator edits the Pending Pricing Script
+      | discount | 30                         |
+      | comments | Edited test pricing script |
+    When DB Operator soft delete shipper by Legacy ID
+    Then Operator verify the shipper is deleted successfully
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op
