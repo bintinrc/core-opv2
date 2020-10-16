@@ -315,7 +315,14 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         hub.setLatitude(Double.parseDouble(latitude));
         hub.setLongitude(Double.parseDouble(longitude));
         hub.setFacilityType(facilityType);
-        hub = getHubClient().create(hub);
+        Map<String, Hub > hubMap = new HashMap<>();
+        hubMap.put(hub.getName(), hub);
+        final String hubName = name;
+        retryIfAssertionErrorOccurred(() -> {
+            Hub hubResp = getHubClient().create(hubMap.get(hubName));
+            hubMap.put(hubResp.getName(), hubResp);
+        }, getCurrentMethodName());
+        hub = hubMap.get(hubName);
 
         put(KEY_CREATED_HUB, hub);
         putInList(KEY_LIST_OF_CREATED_HUBS, hub);
