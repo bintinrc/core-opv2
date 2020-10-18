@@ -5,7 +5,7 @@ Feature: Crossdock Hubs
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @SoftDeleteHubViaDb
+  @DeleteHubsViaDb
   Scenario: Create New Crossdock Hub (uid:c25c8b85-445d-4caa-a737-bd26c75a9a40)
     When API Operator creates new Hub using data below:
       | name         | GENERATED |
@@ -21,7 +21,7 @@ Feature: Crossdock Hubs
     And Operator opens Add Movement Schedule modal on Movement Management page
     Then Operator can select "{KEY_LIST_OF_CREATED_HUBS[1].name}" crossdock hub when create crossdock movement schedule
 
-  @SoftDeleteHubViaDb
+  @DeleteHubsViaDb
   Scenario: Create New Crossdock Movement Schedule - Add schedule for new Crossdock Hub relation (uid:a339c376-b12f-4a18-a553-ce776576083d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -57,7 +57,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @SoftDeleteHubViaDb
+  @DeleteHubsViaDb
   Scenario: Create New Crossdock Movement Schedule - Add schedule for existing Crossdock Hub relation (uid:c774d293-0a5b-47d5-a961-854231d0ec40)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -106,7 +106,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @SoftDeleteHubViaDb
+  @DeleteHubsViaDb
   Scenario: Create New Crossdock Movement Schedule - Add multiple schedules (uid:9f15a576-6e91-4a5d-82c2-748de2a910eb)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -150,7 +150,7 @@ Feature: Crossdock Hubs
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
 
-  @SoftDeleteHubViaDb
+  @DeleteHubsViaDb
   Scenario: Create New Crossdock Movement Schedule - Add multiple schedule with existing schedules data (uid:a3d80ad7-e554-495e-aa7d-e3c6da95449e)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -193,7 +193,7 @@ Feature: Crossdock Hubs
     And Operator click "Create" button on Add Movement Schedule dialog
     Then Operator verify "Schedule already exists" error Message is displayed in Add Crossdock Movement Schedule dialog
 
-  @SoftDeleteHubViaDb
+  @DeleteHubsViaDb
   Scenario: Create New Crossdock Movement Schedule - Origin Crossdock Hub same with Destination Crossdock Hub (uid:5086569b-7db9-495b-a3e3-f7e8c0a94ff1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -212,7 +212,7 @@ Feature: Crossdock Hubs
       | schedules[1].originHub | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     Then Operator can not select "{KEY_LIST_OF_CREATED_HUBS[1].name}" destination crossdock hub on Add Movement Schedule dialog
 
-  @SoftDeleteHubViaDb
+  @DeleteHubsViaDb
   Scenario: Cancel Create New Crossdock Movement Schedule (uid:5c65e255-6ea6-4049-99ba-f1e1d92b33c6)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -249,7 +249,7 @@ Feature: Crossdock Hubs
     And Operator opens Add Movement Schedule modal on Movement Management page
     Then Operator verify Add Movement Schedule form is empty
 
-  @SoftDeleteHubViaDb
+  @DeleteHubsViaDb
   Scenario: View Crossdock Movement Schedule (uid:56b4708c-607e-40fd-8e20-5b0fa7caf652)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -298,7 +298,7 @@ Feature: Crossdock Hubs
       | destinationHub | WRONG_HUB_NAME |
     Then Operator verify schedules list is empty on Movement Management page
 
-  @SoftDeleteHubViaDb # todo: migration deprecate, check https://studio.cucumber.io/projects/210778/test-plan/folders/1576332/scenarios/5228387
+  @DeleteHubsViaDb # todo: migration deprecate, check https://studio.cucumber.io/projects/210778/test-plan/folders/1576332/scenarios/5228387
   Scenario: Edit Crossdock Movement Schedule (uid:1ee7d8dd-f6f1-4662-981e-b8744cbf0f18)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:

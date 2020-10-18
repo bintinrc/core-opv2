@@ -5,7 +5,7 @@ Feature: Crossdock to it's Station
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
   Scenario: Crossdock to its Station - Station Movement Found and there is available schedule (uid:4be9aa9e-813f-4c02-8d92-5af401b4a6f4)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -73,7 +73,7 @@ Feature: Crossdock to it's Station
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
   Scenario: Crossdock to its Station - Station Movement Found but there is no available schedule (uid:459a5ba5-3ffd-4fe4-ae77-250e77e4c1b0)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -121,7 +121,7 @@ Feature: Crossdock to it's Station
       | status   | FAILED                                                                                                               |
       | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (sg) |
 
-  @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
   Scenario: Crossdock to its Station - Station Movement not found (uid:9aa9d622-d1e1-41d0-9ab0-c7b960051f91)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
