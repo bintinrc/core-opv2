@@ -62,9 +62,6 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
         retryIfRuntimeExceptionOccurred(() ->
         {
             try {
-                navigateRefresh();
-                pause2s();
-
                 final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
                 parcelSweeperLivePage.selectHubToBegin(finalMapOfData.get("hubName"));
 
