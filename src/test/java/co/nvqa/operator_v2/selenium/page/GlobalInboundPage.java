@@ -17,6 +17,7 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -58,6 +59,12 @@ public class GlobalInboundPage extends OperatorV2SimplePage
 
     @FindBy(xpath = ".//nv-autocomplete[@selected-options='ctrl.data.selectedTagOptions']")
     public NvAutocomplete selectTag;
+
+    @FindBy(xpath = "//nv-icon-button/button[@aria-label='Settings']")
+    public Button settings;
+
+    @FindBy(xpath = "    //nv-icon-text-button[@name='Save changes']")
+    public Button saveChanges;
 
     public static final String XPATH_ORDER_TAGS_ON_GLOBAL_INBOUND_PAGE = "//div[contains(@class,'order-tags-container')]//span";
     public static String XPATH_CONTAINER = "//div[contains(@class, 'rack-container')]";
@@ -106,7 +113,11 @@ public class GlobalInboundPage extends OperatorV2SimplePage
             if (isElementExistFast("//nv-icon-text-button[@name='container.global-inbound.retain']"))
             {
                 clickNvIconTextButtonByName("container.global-inbound.retain");
-                selectValueFromMdSelectById("size", overrideSize);
+                clickf(".//md-select[starts-with(@id, 'size')]");
+                pause1s();
+                sendKeys("//input[@ng-model=\"searchTerm\"]", overrideSize);
+                clickf("//div[contains(@class, 'md-select-menu-container')][@aria-hidden='false']//md-option[contains(@value,\"%s\") or contains(./div/text(),\"%s\")]", overrideSize, overrideSize);
+                pause50ms();
             }
         }
     }
@@ -165,6 +176,7 @@ public class GlobalInboundPage extends OperatorV2SimplePage
         Double height = globalInboundParams.getOverrideDimHeight();
         Double width = globalInboundParams.getOverrideDimWidth();
         Double length = globalInboundParams.getOverrideDimLength();
+        String tags = globalInboundParams.getTags();
 
         if (Optional.ofNullable(size).isPresent())
         {
@@ -192,6 +204,12 @@ public class GlobalInboundPage extends OperatorV2SimplePage
         if (Optional.ofNullable(length).isPresent())
         {
             overrideDimLength(length);
+        }
+
+        if (Optional.ofNullable(tags).isPresent())
+        {
+            List<String> items = Arrays.asList(tags.split("\\s*,\\s*"));
+            addTag(items);
         }
 
         sendKeysAndEnterByAriaLabel("Scan a new parcel / Enter a tracking ID", globalInboundParams.getTrackingId());
@@ -304,11 +322,12 @@ public class GlobalInboundPage extends OperatorV2SimplePage
 
     public void addTag(List<String> orderTags)
     {
-        useOrderTagging.click();
+        settings.click();
         for (String tag : orderTags)
         {
             selectTag.selectValue(tag);
         }
+        saveChanges.click();
     }
 
     public void verifyFailedTaggingToast(String message)

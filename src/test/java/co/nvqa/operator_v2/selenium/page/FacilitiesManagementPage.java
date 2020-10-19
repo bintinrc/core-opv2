@@ -20,7 +20,10 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage.HubsTable.*;
+import static co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage.HubsTable.ACTION_ACTIVATE;
+import static co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage.HubsTable.ACTION_DISABLE;
+import static co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage.HubsTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage.HubsTable.COLUMN_NAME;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -136,6 +139,10 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
     {
         Hub actualHub = searchHub(expectedHub.getName());
         expectedHub.setId(actualHub.getId());
+        if (expectedHub.getFacilityType().equalsIgnoreCase("CROSSDOCK"))
+        {
+            expectedHub.setFacilityType("Hub - Crossdock");
+        }
         expectedHub.compareWithActual(actualHub, "createdAt", "updatedAt", "deletedAt");
     }
 
