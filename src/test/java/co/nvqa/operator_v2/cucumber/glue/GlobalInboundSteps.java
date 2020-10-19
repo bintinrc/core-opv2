@@ -60,6 +60,7 @@ public class GlobalInboundSteps extends AbstractSteps
         String deviceId = mapOfData.get("deviceId");
         String trackingId = mapOfData.get("trackingId");
         String overrideSize = mapOfData.get("overrideSize");
+        String tags = mapOfData.get("tags");
 
         Double overrideWeight = parseDoubleOrNull(mapOfData.get("overrideWeight"));
         Double overrideDimHeight = parseDoubleOrNull(mapOfData.get("overrideDimHeight"));
@@ -80,6 +81,7 @@ public class GlobalInboundSteps extends AbstractSteps
         globalInboundParams.setOverrideDimHeight(overrideDimHeight);
         globalInboundParams.setOverrideDimWidth(overrideDimWidth);
         globalInboundParams.setOverrideDimLength(overrideDimLength);
+        globalInboundParams.setTags(tags);
         return globalInboundParams;
     }
 
