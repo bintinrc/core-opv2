@@ -30,8 +30,8 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     private static final String SORT_TASK_INPUT_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and contains(@class,'invalid')]";
     private static final String MASTER_VIEW_SORT_TASK_OPTION = "Master View";
 
-    @FindBy(css = "[aria-label='Proceed']")
-    private Button proceedButton;
+    @FindBy(xpath = "//nv-icon-text-button[@name='Proceed']")
+    public Button proceedButton;
 
     public ParcelSweeperLivePage(WebDriver webDriver) {
         super(webDriver);
