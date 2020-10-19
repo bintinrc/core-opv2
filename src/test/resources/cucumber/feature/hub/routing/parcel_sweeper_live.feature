@@ -175,7 +175,7 @@ Feature: Parcel Sweeper Live
       | trackingId | CREATED  |
       | hubId      | {hub-id} |
     And DB Operator verify the order_events record exists for the created order with type:
-      | 27    |
+      | 27 |
     And Operator verifies event is present for order on Edit order page
       | eventName | PARCEL ROUTING SCAN |
       | hubName   | {hub-name}          |
@@ -218,14 +218,14 @@ Feature: Parcel Sweeper Live
       | zoneName | FROM CREATED ORDER |
       | color    | #e86161            |
     And DB Operator verifies warehouse_sweeps record
-      | trackingId | CREATED  |
+      | trackingId | CREATED    |
       | hubId      | {hub-id-2} |
     And DB Operator verify the order_events record exists for the created order with type:
-      | 27    |
+      | 27 |
     And Operator verifies event is present for order on Edit order page
-      | eventName | PARCEL ROUTING SCAN   |
-      | hubName   | {hub-name-2}          |
-      | hubId     | {hub-id-2}            |
+      | eventName | PARCEL ROUTING SCAN |
+      | hubName   | {hub-name-2}        |
+      | hubId     | {hub-id-2}          |
     And Operator verify order status is "Transit" on Edit Order page
 
   @DeleteShipment @ForceSuccessOrder
@@ -262,7 +262,7 @@ Feature: Parcel Sweeper Live
   Scenario Outline: Sweep Parcel In Shipment with Priority Level (<hiptest-uid>) - <scenarioName>
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id-2} } |
@@ -292,8 +292,8 @@ Feature: Parcel Sweeper Live
       | driverName |         |
       | color      | #55a1e8 |
     Then Operator verifies priority level dialog box shows correct priority level info using data below:
-      | priorityLevel           | <priorityLevel>             |
-      | priorityLevelColorAsHex | <priorityLevelColorAsHex>   |
+      | priorityLevel           | <priorityLevel>           |
+      | priorityLevelColorAsHex | <priorityLevelColorAsHex> |
     When API Operator get all zones preferences
     Then Operator verify Zone on Parcel Sweeper page using data below:
       | zoneName | FROM CREATED ORDER |
@@ -312,6 +312,194 @@ Feature: Parcel Sweeper Live
       | Priority 1      | uid:79172574-1375-48fb-ad29-d2212e585d15 | 1             | #f8cf5c                 |
       | Priority 2 - 90 | uid:5ad3c195-9f34-4987-863b-0ceb8e7b09d8 | 50            | #e29d4a                 |
       | Priority >90    | uid:fc7de149-fc0a-48db-993e-f7cbcf57e301 | 100           | #c65d44                 |
+
+#  @DeleteShipment
+#  Scenario: Sweep Parcel In Shipment with Tag (uid:a8a79d87-8d05-433b-acaf-9fed5504e9eb)
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given API Shipper create V4 order using data below:
+#      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+#      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+#    Given Operator go to menu Order -> Order Tag Management
+#    When Operator selects filter and clicks Load Selection on Add Tags to Order page using data below:
+#      | shipperName     | {shipper-v4-name} |
+#      | status          | Pending           |
+#      | granular status | Pending Pickup    |
+#    And Operator searches and selects orders created on Add Tags to Order page
+#    And Operator tags order with:
+#      | OPV2AUTO1 |
+#    Then Operator verify the tags shown on Edit Order page
+#      | OPV2AUTO1 |
+#    And DB Operator verify order_events record for the created order:
+#      | type | 48 |
+#    And DB Operator gets Hub ID by Hub Name of created parcel
+#    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+#    Given API Operator put created parcel to shipment
+#    When Operator go to menu Order -> All Orders
+#    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+#    And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
+#    Given Operator go to menu Inbounding -> Global Inbound
+#    When Operator global inbounds parcel using data below:
+#      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
+#      | trackingId | GET_FROM_CREATED_ORDER             |
+#    Then API Operator verify order info after Global Inbound
+#    When Operator go to menu Routing -> Parcel Sweeper Live
+#    When Operator provides data on Parcel Sweeper Live page:
+#      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
+#      | trackingId | CREATED                            |
+#    Then Operator verify Route ID on Parcel Sweeper page using data below:
+#      | routeId    | -       |
+#      | driverName |         |
+#      | color      | #55a1e8 |
+#    And DB Operator verifies warehouse_sweeps record
+#      | trackingId | CREATED               |
+#      | hubId      | {KEY_DESTINATION_HUB} |
+
+#  @DeleteShipment
+#  Scenario: Sweep RTS Parcel In Shipment (uid:cf0232e8-aa91-4c8d-ac4f-28b8cd9e786e)
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given API Shipper create V4 order using data below:
+#      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+#      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+#    When API Operator Global Inbound parcel using data below:
+#      | globalInboundRequest | { "hubId":{hub-id} } |
+#    When API Operator create new route using data below:
+#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+#    When API Operator add parcel to the route using data below:
+#      | addParcelToRouteRequest | { "type":"DD" } |
+#    And API Driver collect all his routes
+#    And API Driver get pickup/delivery waypoint of the created order
+#    And API Operator Van Inbound parcel
+#    And API Operator start the route
+#    And API Driver failed the delivery of the created parcel
+#    Then API Operator verify order info after delivery "DELIVERY_FAILED"
+#    When API Operator RTS created order:
+#      | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
+#    And DB Operator gets Hub ID by Hub Name of created parcel
+#    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+#    Given API Operator put created parcel to shipment
+#    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+#    And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
+#    Given Operator go to menu Inbounding -> Global Inbound
+#    When Operator global inbounds parcel using data below:
+#      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
+#      | trackingId | GET_FROM_CREATED_ORDER             |
+#    Then API Operator verify order info after Global Inbound
+#    When Operator go to menu Routing -> Parcel Sweeper Live
+#    When Operator provides data on Parcel Sweeper Live page:
+#      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
+#      | trackingId | CREATED                            |
+#    Then Operator verify Route ID on Parcel Sweeper page using data below:
+#      | routeId    | -       |
+#      | driverName |         |
+#      | color      | #55a1e8 |
+#    And DB Operator verifies warehouse_sweeps record
+#      | trackingId | CREATED               |
+#      | hubId      | {KEY_DESTINATION_HUB} |
+#
+#  @DeleteShipment
+#  Scenario: Sweep On Hold with Missing Parcel In Shipment (uid:0f32fa81-30a2-4857-a6c6-990a120922fc)
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given API Shipper create V4 order using data below:
+#      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+#      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+#    When API Operator Global Inbound parcel using data below:
+#      | globalInboundRequest | { "hubId":{hub-id} } |
+#    Given Operator go to menu Recovery -> Recovery Tickets
+#    When Operator create new ticket on page Recovery Tickets using data below:
+#      | entrySource             | CUSTOMER COMPLAINT |
+#      | investigatingDepartment | Fleet (First Mile) |
+#      | investigatingHub        | {hub-name}         |
+#      | ticketType              | MISSING            |
+#      | orderOutcomeMissing     | LOST - DECLARED    |
+#      | parcelDescription       | GENERATED          |
+#      | custZendeskId           | 1                  |
+#      | shipperZendeskId        | 1                  |
+#      | ticketNotes             | GENERATED          |
+#    Then Operator verify ticket is created successfully on page Recovery Tickets
+#    And DB Operator gets Hub ID by Hub Name of created parcel
+#    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+#    Given API Operator put created parcel to shipment
+#    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+#    And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
+#    Given Operator go to menu Inbounding -> Global Inbound
+#    When Operator global inbounds parcel using data below:
+#      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
+#      | trackingId | GET_FROM_CREATED_ORDER             |
+#    Then API Operator verify order info after Global Inbound
+#    And API Operator create new route using data below:
+#      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+#    And API Operator add parcel to the route using data below:
+#      | addParcelToRouteRequest | { "type":"DD" } |
+#    When Operator go to menu Routing -> Parcel Sweeper Live
+#    When Operator provides data on Parcel Sweeper Live page:
+#      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
+#      | trackingId | CREATED                            |
+#    Then Operator verify Route ID on Parcel Sweeper page using data below:
+#      | routeId    | {KEY_CREATED_ROUTE_ID} |
+#      | driverName | {ninja-driver-name}    |
+#      | color      | #55a1e8                |
+#    When API Operator get all zones preferences
+#    Then Operator verify Zone on Parcel Sweeper page using data below:
+#      | zoneName | FROM CREATED ORDER |
+#      | color    | #55a1e8            |
+#
+#  @DeleteShipment
+#  Scenario: Operator Sweep Parcel in Shipment - On Hold Non Missing Ticket (Shipper issue, Damaged, Parcel Exception) (uid:68d540f4-88af-4be7-82b1-8af9a95ebe0b)
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given API Shipper create V4 order using data below:
+#      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+#      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+#    When API Operator Global Inbound parcel using data below:
+#      | globalInboundRequest | { "hubId":{hub-id} } |
+#    Given Operator go to menu Recovery -> Recovery Tickets
+#    When Operator create new ticket on page Recovery Tickets using data below:
+#      | entrySource             | CUSTOMER COMPLAINT |
+#      | investigatingDepartment | Fleet (First Mile) |
+#      | investigatingHub        | {hub-name}         |
+#      | ticketType              | DAMAGED            |
+#      | ticketSubType           | IMPROPER PACKAGING |
+#      | parcelLocation          | DAMAGED RACK       |
+#      | liability               | NV DRIVER          |
+#      | damageDescription       | GENERATED          |
+#      | orderOutcomeDamaged     | NV LIABLE - FULL   |
+#      | custZendeskId           | 1                  |
+#      | shipperZendeskId        | 1                  |
+#      | ticketNotes             | GENERATED          |
+#    Then Operator verify ticket is created successfully on page Recovery Tickets
+#    And DB Operator gets Hub ID by Hub Name of created parcel
+#    And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+#    Given API Operator put created parcel to shipment
+#    When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
+#    And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
+#    Given Operator go to menu Inbounding -> Global Inbound
+#    Then Operator global inbounds parcel using data below:
+#      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
+#      | trackingId | GET_FROM_CREATED_ORDER             |
+#    Then Operator verify info on Global Inbound page using data below:
+#      | destinationHub | ON HOLD - DAMAGED     |
+#      | rackInfo       | sync_problem RECOVERY |
+#      | color          | #e86161               |
+#    And DB Operator verify the last inbound_scans record for the created order:
+#      | hubId      | {hub-id}               |
+#      | trackingId | GET_FROM_CREATED_ORDER |
+#      | type       | 2                      |
+#    When Operator go to menu Routing -> Parcel Sweeper Live
+#    When Operator provides data on Parcel Sweeper Live page:
+#      | hubName    | {KEY_CREATED_ORDER.destinationHub} |
+#      | trackingId | CREATED                            |
+#    Then Operator verify Route ID on Parcel Sweeper page using data below:
+#      | routeId    | sync_problem RECOVERY |
+#      | driverName | ON HOLD               |
+#      | color      | #e86161               |
+#    When API Operator get all zones preferences
+#    Then Operator verify Zone on Parcel Sweeper page using data below:
+#      | zoneName |         |
+#      | color    | #e86161 |
+#    And DB Operator verifies warehouse_sweeps record
+#      | trackingId | CREATED               |
+#      | hubId      | {KEY_DESTINATION_HUB} |
+#    And DB Operator verify the order_events record exists for the created order with type:
+#      | 27    |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
