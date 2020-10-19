@@ -271,8 +271,7 @@ Feature: Parcel Sweeper Live
     Given API Operator put created parcel to shipment
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator inbound scanning Shipment Into Hub in hub {KEY_CREATED_ORDER.destinationHub} on Shipment Inbound Scanning page
-    When Operator go to menu Order -> All Orders
-    And Operator open page of the created order from All Orders page
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     When Operator change Priority Level to "<priorityLevel>" on Edit Order page
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
