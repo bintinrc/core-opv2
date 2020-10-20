@@ -7,7 +7,6 @@ Feature: All Shippers
 
   @PricingProfile
   Scenario: Add New Shipper Pricing Profile (uid:79bb423b-36d1-49a0-8b22-34972253afe7)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |

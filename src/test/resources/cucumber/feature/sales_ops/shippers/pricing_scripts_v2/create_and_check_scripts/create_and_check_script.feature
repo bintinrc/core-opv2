@@ -1,4 +1,4 @@
-@OperatorV2Disabled @Shipper @OperatorV2Part2Disabled @PricingScriptsV2
+@OperatorV2Disabled @Shipper @OperatorV2Part2Disabled @PricingScriptsV2 @SalesOps
 Feature: Pricing Scripts V2
 
   @LaunchBrowser @ShouldAlwaysRun
