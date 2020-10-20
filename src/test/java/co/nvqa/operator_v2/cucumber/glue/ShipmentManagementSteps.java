@@ -659,4 +659,16 @@ public class ShipmentManagementSteps extends AbstractSteps
             shipmentManagementPage.searchedShipmentVerification(shipmentIds.get(i));
         }
     }
+
+    @Then("Operator verify {string} action button is disabled on shipment Management page")
+    public void operatorVerifyActionButtonIsDisabled(String actionButton)
+    {
+
+        if ("Cancel Shipment".equals(actionButton))
+        {
+            shipmentManagementPage.cancelShipmentButton.waitUntilVisible();
+            assertThat("Cancel Shipment Button is disabled",
+                    shipmentManagementPage.cancelShipmentButton.isEnabled(), equalTo(false));
+        }
+    }
 }

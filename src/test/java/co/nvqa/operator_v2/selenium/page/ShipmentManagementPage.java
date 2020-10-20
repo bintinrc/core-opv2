@@ -92,6 +92,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     @FindBy(css = "md-dialog")
     public CancelShipmentDialog cancelShipmentDialog;
 
+    @FindBy(xpath = "//button[@aria-label='Cancel']")
+    public Button cancelShipmentButton;
+
     private static final String FILEPATH = TestConstants.TEMP_DIR;
 
     public ShipmentManagementPage(WebDriver webDriver)
@@ -599,9 +602,10 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
 
         uploadFile(fileName, numberOfOrder, isValid, isDuplicated, shipmentInfo);
         pause1s();
-        click("//md-toolbar[@title='Upload Results']//button[@aria-label='Cancel']");
+        click("//md-toolbar[@title='Edit Shipment']");
         pause1s();
-        click("//md-toolbar[@title='Edit Shipment']//button[@aria-label='Cancel']");
+        click("//button[@aria-label='Save Changes']");
+        pause1s();
     }
 
     public void createAndUploadCsv(List<Order> orders, String fileName, int numberOfOrder, ShipmentInfo shipmentInfo) throws FileNotFoundException
