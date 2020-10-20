@@ -75,9 +75,33 @@ public class ShipmentManagementSteps extends AbstractSteps
     @When("^Operator filter ([^\"]*) = ([^\"]*) on Shipment Management page$")
     public void fillSearchFilter(String filter, String value)
     {
-        value = resolveValue(value);
-        shipmentManagementPage.addFilter(filter, value, false);
-        putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, filter, value);
+        String resolvedValue = resolveValue(value);
+        shipmentManagementPage.addFilter(filter, resolvedValue, false);
+        putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, filter, resolvedValue);
+    }
+
+    @When("Operator filter with following data on Shipment Management Page")
+    public void operatorFilerWithData(Map<String, String> mapOfData)
+    {
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            Map<String, String> resolvedKeyValue = resolveKeyValues(mapOfData);
+            String shipmentStatus = resolvedKeyValue.get("shipmentStatus");
+            String lastInboundHub = resolvedKeyValue.get("lastInboundHub");
+            try
+            {
+                shipmentManagementPage.addFilter("Shipment Status", shipmentStatus, false);
+                shipmentManagementPage.addFilter("Last Inbound Hub", lastInboundHub, false);
+                putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, "Shipment Status", shipmentStatus);
+                putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, "Last Inbound Hub", lastInboundHub);
+
+            } catch (Throwable ex)
+            {
+                NvLogger.error(ex.getMessage());
+                shipmentManagementPage.refreshPage();
+                throw ex;
+            }
+        }, getCurrentMethodName(), 3000,10);
     }
 
     @When("^Operator search shipments by given Ids on Shipment Management page:$")
