@@ -1,8 +1,10 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.selenium.elements.Button;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,9 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     private static final String SORT_TASK_INPUT_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and contains(@class,'invalid')]";
     private static final String MASTER_VIEW_SORT_TASK_OPTION = "Master View";
 
+    @FindBy(xpath = "//nv-icon-text-button[@name='Proceed']")
+    public Button proceedButton;
+
     public ParcelSweeperLivePage(WebDriver webDriver) {
         super(webDriver);
     }
@@ -52,7 +57,8 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
             click(f(CHOSEN_VALUE_SELECTION_XPATH, MASTER_VIEW_SORT_TASK_OPTION));
         }
 
-        clickButtonByAriaLabelAndWaitUntilDone("Proceed");
+        proceedButton.waitUntilClickable();
+        proceedButton.click();
     }
 
     public void scanTrackingId(String trackingId)
