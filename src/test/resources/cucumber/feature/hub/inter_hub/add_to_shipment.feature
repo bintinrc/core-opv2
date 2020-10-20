@@ -1,5 +1,5 @@
-@ShipmentScanning @InterHub @Shipment @MiddleMile
-Feature: Shipment Scanning
+@ShipmentScanning @InterHub @Shipment @MiddleMile @AddToShipment
+Feature: Add To Shipment
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
@@ -336,8 +336,6 @@ Feature: Shipment Scanning
     Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
-
-
 
   @KillBrowser
   Scenario: Kill Browser
