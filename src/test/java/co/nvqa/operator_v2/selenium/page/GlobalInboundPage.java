@@ -30,7 +30,7 @@ public class GlobalInboundPage extends OperatorV2SimplePage
     @FindBy(xpath = "//div/*[self::h2]")
     public PageElement destinationHub;
 
-    @FindBy(xpath = "//div/*[self::h2]")
+    @FindBy(xpath = "//div/*[self::h1]")
     public PageElement rackInfo;
 
     @FindBy(css = "div.toast-bottom")

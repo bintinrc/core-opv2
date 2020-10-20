@@ -80,8 +80,9 @@ Feature: Shipment Global Inbound
       | hubName    | {hub-name-2}        |
       | trackingId | {AUTOMATIONTESTING} |
     Then Operator verify info on Global Inbound page using data below:
-      | rackInfo | INVALID |
-      | color    | #e86161 |
+      | destinationHub | INVALID               |
+      | rackInfo       | sync_problem RECOVERY |
+      | color          | #e86161               |
 
   @DeleteShipment @ForceSuccessOrder
   Scenario: Operator Inbound Parcel in Shipment - Size, Weight, and Dimension - Return Order - Original Size (uid:7dd3c726-fb0d-4acd-98d4-2d67b03dee47)
