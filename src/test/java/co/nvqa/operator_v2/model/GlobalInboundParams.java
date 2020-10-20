@@ -14,6 +14,7 @@ public class GlobalInboundParams
     private Double overrideDimHeight;
     private Double overrideDimWidth;
     private Double overrideDimLength;
+    private String tags;
 
     public GlobalInboundParams()
     {
@@ -97,5 +98,15 @@ public class GlobalInboundParams
     public void setOverrideDimLength(Double overrideDimLength)
     {
         this.overrideDimLength = overrideDimLength;
+    }
+
+    public String getTags()
+    {
+        return tags;
+    }
+
+    public void setTags(String tags)
+    {
+        this.tags = tags;
     }
 }
