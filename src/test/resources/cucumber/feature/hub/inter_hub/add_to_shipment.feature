@@ -1,4 +1,4 @@
-@ShipmentScanning @InterHub @Shipment @MiddleMile @AddToShipment
+@OperatorV2 @MiddleMile @Hub @InterHub @AddToShipment
 Feature: Add To Shipment
 
   @LaunchBrowser @ShouldAlwaysRun

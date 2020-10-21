@@ -1,4 +1,4 @@
-@MovementTrip @InterHub @Hub @MiddleMile @CancelTrip @TripManagement
+@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @CancelTrip
 Feature: Trip Management - Cancel Trip
 
   @LaunchBrowser @ShouldAlwaysRun

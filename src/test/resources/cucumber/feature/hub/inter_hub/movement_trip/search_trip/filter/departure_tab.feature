@@ -1,4 +1,4 @@
-@TripManagement @InterHub @MiddleMile @Filter @DepartureTab
+@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @SearchTrip @Filter @DepartureTab
 Feature: Trip Management - Filter - Departure Tab
 
   @LaunchBrowser @ShouldAlwaysRun

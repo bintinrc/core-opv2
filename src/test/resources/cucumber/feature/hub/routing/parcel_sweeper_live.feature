@@ -1,4 +1,4 @@
-@ParcelSweeperLive @ShipmentInbound @InterHub @Shipment @MiddleMile
+@OperatorV2 @MiddleMile @Hub @Routing @ParcelSweeperLive
 Feature: Parcel Sweeper Live
 
   @LaunchBrowser @ShouldAlwaysRun

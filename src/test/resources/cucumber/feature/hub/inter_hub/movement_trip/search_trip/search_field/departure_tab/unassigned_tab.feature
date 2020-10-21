@@ -1,4 +1,4 @@
-@TripManagement @InterHub @MiddleMile @SearchField @DepartureTab @UnassignedTab
+@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @SearchTrip @SearchField @DepartureTab @UnassignedTab
 Feature: Trip Management - Search Field - Departure Tab - Unassigned Tab
 
   @LaunchBrowser @ShouldAlwaysRun

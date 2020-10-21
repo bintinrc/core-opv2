@@ -1,4 +1,4 @@
-@TripManagement @InterHub @MiddleMile @SearchField @ArchivedTab
+@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @SearchTrip @SearchField @ArchivedTab
 Feature: Trip Management - Search Field - Archived Tab
 
   @LaunchBrowser @ShouldAlwaysRun

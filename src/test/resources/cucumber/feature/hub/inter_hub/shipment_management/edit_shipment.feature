@@ -1,4 +1,4 @@
-@ShipmentManagement @InterHub @Shipment @MiddleMile @EditShipment
+@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentManagement @EditShipment
 Feature: Shipment Management - Edit Shipment
 
   @LaunchBrowser @ShouldAlwaysRun

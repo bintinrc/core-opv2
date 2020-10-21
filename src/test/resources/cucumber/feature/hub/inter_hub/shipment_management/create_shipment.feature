@@ -1,4 +1,4 @@
-@ShipmentManagement @InterHub @Shipment @MiddleMile @CreateShipment
+@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentManagement @CreateShipment
 Feature: Shipment Management - Create Shipment
 
   @LaunchBrowser @ShouldAlwaysRun

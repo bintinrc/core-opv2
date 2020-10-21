@@ -1,4 +1,4 @@
-@TripManagement @InterHub @MiddleMile @SearchField @DepartureTab @AllTab
+@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @SearchTrip @SearchField @DepartureTab @AllTab
 Feature: Trip Management - Search Field - Departure Tab - All Tab
 
   @LaunchBrowser @ShouldAlwaysRun

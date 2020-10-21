@@ -1,5 +1,5 @@
-@ShipmentGlobalInbound @InterHub @Shipment @MiddleMile
-Feature: Shipment Global Inbound
+@OperatorV2 @MiddleMile @Hub @Inbounding @ShipmentGlobalInbound
+Feature: Global Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2

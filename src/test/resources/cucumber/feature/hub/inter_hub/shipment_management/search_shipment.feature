@@ -1,4 +1,4 @@
-@ShipmentManagement @InterHub @Shipment @MiddleMile @SearchShipment
+@OperatorV2 @MiddleMile @Hub @InterHub @ShipmentManagement @SearchShipment
 Feature: Shipment Management - Search Shipment
 
   @LaunchBrowser @ShouldAlwaysRun

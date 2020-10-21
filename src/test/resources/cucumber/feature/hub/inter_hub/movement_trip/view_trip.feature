@@ -1,4 +1,4 @@
-@TripManagement @InterHub @MiddleMile
+@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @ViewTrip
 Feature: Trip Management - View Trips
 
   @LaunchBrowser @ShouldAlwaysRun

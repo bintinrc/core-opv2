@@ -1,4 +1,4 @@
-@MiddleMile @AccessControl @HubAppUserManagement @Shipment
+@OperatorV2 @MiddleMile @Hub @AccessControl @HubAppUserManagement
 Feature: Hub App User Management
 
   @DeleteHubAppUser @KillBrowser @LaunchBrowser
