@@ -186,6 +186,20 @@ public class TripManagementSteps extends AbstractSteps {
         tripManagementPage.tableFiltering(tripManagementFilteringType, tripManagementDetailsData);
     }
 
+    @And("Operator searches for the Trip Management based on its {string} on arrival tab")
+    public void operatorSearchesForTheTripManagementBasedOnItsOnArrivalTab(String filteringName) {
+        TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
+        TripManagementFilteringType tripManagementFilteringType = TripManagementFilteringType.fromString(filteringName);
+        if (("expected_arrival_time").equals(tripManagementFilteringType.getVal())) {
+            ZonedDateTime expectedArrivalTime = tripManagementDetailsData.getData().get(0).getExpectedArrivalTime().plusDays(1);
+            tripManagementDetailsData.getData().get(0).setExpectedArrivalTime(expectedArrivalTime);
+            tripManagementPage.tableFiltering(tripManagementFilteringType, tripManagementDetailsData);
+            return;
+        }
+
+        tripManagementPage.tableFiltering(tripManagementFilteringType, tripManagementDetailsData);
+    }
+
     @Then("Operator verifies that the trip management shown with {string} as its filter is right")
     public void operatorVerifiesThatTheTripManagementShownWithAsItsFilterIsRight(String filteringName) {
         TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
@@ -193,6 +207,20 @@ public class TripManagementSteps extends AbstractSteps {
         if ("driver".equalsIgnoreCase(tripManagementFilteringType.getVal())) {
             String driverUsername = get(KEY_TRIP_MANAGEMENT_DRIVER_NAME);
             tripManagementPage.verifyResult(tripManagementFilteringType, tripManagementDetailsData, driverUsername);
+            return;
+        }
+
+        tripManagementPage.verifyResult(tripManagementFilteringType, tripManagementDetailsData);
+    }
+
+    @Then("Operator verifies that the trip management shown with {string} as its filter is right on arrival tab")
+    public void operatorVerifiesThatTheTripManagementShownWithAsItsFilterIsRightOnArrivalTab(String filteringName) {
+        TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
+        TripManagementFilteringType tripManagementFilteringType = TripManagementFilteringType.fromString(filteringName);
+        if (("expected_arrival_time").equals(tripManagementFilteringType.getVal())) {
+            ZonedDateTime expectedArrivalTime = tripManagementDetailsData.getData().get(0).getExpectedArrivalTime().plusDays(1);
+            tripManagementDetailsData.getData().get(0).setExpectedArrivalTime(expectedArrivalTime);
+            tripManagementPage.verifyResult(tripManagementFilteringType, tripManagementDetailsData);
             return;
         }
 
