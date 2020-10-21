@@ -5,7 +5,7 @@ Feature: Movement Trip - View Trips
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriver @DeleteHubsViaDb
+  @DeleteHubsViaDb
   Scenario: View Departure Trip (uid:fd9d635c-5dc2-4e14-8344-20b7acb3f984)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
