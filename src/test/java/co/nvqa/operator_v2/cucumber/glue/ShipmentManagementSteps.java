@@ -140,13 +140,10 @@ public class ShipmentManagementSteps extends AbstractSteps
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
         String dateOfToday = formatter.format(today);
         LocalDateTime tomorrow = today.plusDays(1);
-        System.out.println("DEBUG TOMORROW");
-        System.out.println(tomorrow.toString());
         String dateOfTomorrow = formatter.format(tomorrow);
 
         shipmentManagementPage.selectValueFromNvAutocompleteByItemTypesAndDismiss("filters", dateFieldName);
         shipmentManagementPage.changeDate(dateOfToday, true);
-        System.out.println(dateOfTomorrow);
         shipmentManagementPage.changeDate(dateOfTomorrow, false);
     }
 

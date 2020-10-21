@@ -5,7 +5,6 @@ Feature: Add To Shipment
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-    # TODO: FAILED
   @DeleteShipment @ForceSuccessOrder
   Scenario: Add Multiple Parcels to Shipment (uid:2b1021d1-828f-437c-a095-baebbae1d8c7)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -20,7 +19,6 @@ Feature: Add To Shipment
     Given Operator go to menu Inter-Hub -> Add To Shipment
     When Operator scan multiple created order to shipment in hub {hub-name}
 
-      # TODO: FAILED
   @DeleteShipment @ForceSuccessOrder
   Scenario: Remove Parcel In Shipment from Action Toggle (uid:ffad1735-0cb1-43ac-a6f2-2fe32cfcfadf)
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -37,13 +35,12 @@ Feature: Add To Shipment
     And Operator removes all the parcel from the shipment
     Then Operator verifies that the parcel shown is zero
 
-    # TODO: FAILED
   @DeleteShipment @DeleteOrArchiveRoute
   Scenario: Add Arrived at Distribution Point Parcel to Shipment (uid:af227045-0411-4130-a054-124ac1b6edb8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | generateFromAndTo | RANDOM |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}}|
     Given API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "type":"SORTING_HUB", "hubId":{hub-id} } |
     Given API Operator assign delivery waypoint of an order to DP Include Today with ID = "{dpms-id}"
@@ -58,7 +55,7 @@ Feature: Add To Shipment
     Given API Operator get order details
     Given DB Operator get DP job id
     And API Operator do the DP Success for From Driver Flow
-    Given API Driver deliver dp parcel successfully
+    Given API Driver "2.2" success dp drop off
     And DB Operator gets Hub ID by Hub Name of created parcel
     And API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment

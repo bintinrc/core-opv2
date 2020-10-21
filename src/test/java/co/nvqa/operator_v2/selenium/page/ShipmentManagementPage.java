@@ -167,8 +167,6 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         {
             clear(f(datepickerXpath, "container.toDate"));
             pause1s();
-            System.out.println("DEBUG tomorrow todate");
-            System.out.println(date);
             sendKeys(f(datepickerXpath, "container.toDate"), date);
         }
     }
