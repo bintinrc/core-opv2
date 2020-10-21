@@ -88,6 +88,7 @@ Feature: Shipment Management - Edit Shipment
 
   @DeleteShipment
   Scenario: Re-open Shipment - Invalid Shipment Status - Pending (uid:5ddf5f14-3298-4e4e-a747-aa832bb234bd)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator create Shipment on Shipment Management page using data below:
       | origHubName | {hub-name}                                                          |
