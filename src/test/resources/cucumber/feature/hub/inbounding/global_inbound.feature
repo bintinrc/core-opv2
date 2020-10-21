@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @Inbounding @ShipmentGlobalInbound
+@OperatorV2 @MiddleMile @Hub @Inbounding @GlobalInbound
 Feature: Global Inbound
 
   @LaunchBrowser @ShouldAlwaysRun
