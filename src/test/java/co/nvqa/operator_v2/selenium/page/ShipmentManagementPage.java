@@ -157,13 +157,19 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
 
     public void changeDate(String date, boolean isToday)
     {
-        String datepickerXpath = "//md-datepicker[@name='%s']//input";
+        String datepickerXpath = "//md-datepicker[@ng-model='%s']//input";
         if (isToday)
         {
-            sendKeys(f(datepickerXpath, "fromDateField"), date);
+            clear(f(datepickerXpath, "container.fromDate"));
+            pause1s();
+            sendKeys(f(datepickerXpath, "container.fromDate"), date);
         } else
         {
-            sendKeys(f(datepickerXpath, "toDateField"), date);
+            clear(f(datepickerXpath, "container.toDate"));
+            pause1s();
+            System.out.println("DEBUG tomorrow todate");
+            System.out.println(date);
+            sendKeys(f(datepickerXpath, "container.toDate"), date);
         }
     }
 
@@ -565,6 +571,12 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     {
         waitUntilVisibilityOfToast("We cannot process more than 30 shipments");
         waitUntilInvisibilityOfToast("We cannot process more than 30 shipments");
+    }
+
+    public void verifyEmptyLineParsingErrorToastExist()
+    {
+        waitUntilVisibilityOfToast("Network Request Error");
+        assertThat("toast message is the same", getToastBottomText(), containsString("Cannot parse parameter id as Long: For input string: \"\""));
     }
 
     public void createAndUploadCsv(List<Order> orders, String fileName, boolean isValid, boolean isDuplicated, int numberOfOrder, ShipmentInfo shipmentInfo) throws FileNotFoundException

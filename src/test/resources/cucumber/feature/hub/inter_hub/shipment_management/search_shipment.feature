@@ -5,25 +5,25 @@ Feature: Shipment Management - Search Shipment
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-#  @DeleteShipment
-#  Scenario: Search Shipment by Filter - MAWB (uid:59cc8df2-47e0-46c4-9ca6-08179b099a02)
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given Operator go to menu Inter-Hub -> Shipment Management
-#    When Operator create Shipment on Shipment Management page using data below:
-#      | origHubName | {hub-name}                                                          |
-#      | destHubName | {hub-name-2}                                                        |
-#      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-#    When Operator click "Load All Selection" on Shipment Management page
-#    When Operator edit Shipment on Shipment Management page including MAWB using data below:
-#      | destHubName | {hub-name-2}                                                         |
-#      | origHubName | {hub-name}                                                           |
-#      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
-#      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
-#    Given Operator go to menu Shipper Support -> Blocked Dates
-#    Given Operator go to menu Inter-Hub -> Shipment Management
-#    When Operator filter shipment based on MAWB value on Shipment Management page
-#    And Operator click "Load All Selection" on Shipment Management page
-#    Then Operator verify parameters of the created shipment on Shipment Management page
+  @DeleteShipment
+  Scenario: Search Shipment by Filter - MAWB (uid:59cc8df2-47e0-46c4-9ca6-08179b099a02)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator create Shipment on Shipment Management page using data below:
+      | origHubName | {hub-name}                                                          |
+      | destHubName | {hub-name-2}                                                        |
+      | comments    | Created by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+    When Operator click "Load All Selection" on Shipment Management page
+    When Operator edit Shipment on Shipment Management page including MAWB using data below:
+      | destHubName | {hub-name-2}                                                         |
+      | origHubName | {hub-name}                                                           |
+      | comments    | Modified by @ShipmentManagement at {gradle-current-date-yyyy-MM-dd}. |
+      | mawb        | AUTO-{gradle-current-date-yyyyMMddHHmmsss}                           |
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given Operator go to menu Inter-Hub -> Shipment Management
+    When Operator filter shipment based on MAWB value on Shipment Management page
+    And Operator click "Load All Selection" on Shipment Management page
+    Then Operator verify parameters of the created shipment on Shipment Management page
 
   @DeleteShipment
   Scenario: Search Shipment by Filter - Shipment Completion (uid:9667bb60-0933-49e3-8879-2bdac54aae68)
@@ -141,8 +141,8 @@ Feature: Shipment Management - Search Shipment
     Given Operator go to menu Inter-Hub -> Shipment Management
     Given DB Operator gets the 10 shipment IDs
     When Operator searches multiple shipment ids in the Shipment Management Page with "empty line"
-    Then Operator verifies that there is a search error modal shown with "valid shipment"
-    And Operator verifies the searched shipment ids result is right
+    Then Operator verify empty line parsing error toast exist
+
 
   @DeleteFilersPreset
   Scenario: Preset Setting - Save Current Shipment Filter as Preset (uid:81c46be2-466f-4c5f-b7ba-d1f15d05ddc9)

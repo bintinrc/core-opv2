@@ -139,10 +139,14 @@ public class ShipmentManagementSteps extends AbstractSteps
         LocalDateTime today = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
         String dateOfToday = formatter.format(today);
-        String dateOfTomorrow = formatter.format(today.plusDays(1));
+        LocalDateTime tomorrow = today.plusDays(1);
+        System.out.println("DEBUG TOMORROW");
+        System.out.println(tomorrow.toString());
+        String dateOfTomorrow = formatter.format(tomorrow);
 
         shipmentManagementPage.selectValueFromNvAutocompleteByItemTypesAndDismiss("filters", dateFieldName);
         shipmentManagementPage.changeDate(dateOfToday, true);
+        System.out.println(dateOfTomorrow);
         shipmentManagementPage.changeDate(dateOfTomorrow, false);
     }
 
@@ -670,5 +674,11 @@ public class ShipmentManagementSteps extends AbstractSteps
             assertThat("Cancel Shipment Button is disabled",
                     shipmentManagementPage.cancelShipmentButton.isEnabled(), equalTo(false));
         }
+    }
+
+    @Then("Operator verify empty line parsing error toast exist")
+    public void operatorVerifyEmptyLineParsingErrorToastExist()
+    {
+        shipmentManagementPage.verifyEmptyLineParsingErrorToastExist();
     }
 }
