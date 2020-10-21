@@ -42,7 +42,7 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
     private static final String TAB_DRAFTS = "Drafts";
     private static final String TAB_ACTIVE_SCRIPTS = "Active Scripts";
     private static final String ACTIVE_TAB_XPATH = "//tab-content[@aria-hidden='false']";
-    private static final Pattern SHIPPER_SELECT_VALUE_PATTERN = Pattern.compile("(\\d+-)(.*)");
+    private static final Pattern SHIPPER_SELECT_VALUE_PATTERN = Pattern.compile("(\\d+)-(.*)");
 
     public PricingScriptsV2Page(WebDriver webDriver)
     {
@@ -60,8 +60,14 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
     public void verifyTheNewScriptIsCreatedOnDrafts(Script script)
     {
         clickTabItem(TAB_DRAFTS);
-        searchTableDraftsByScriptName(script.getName());
-        wait10sUntil(()->!isTableEmpty(ACTIVE_TAB_XPATH), "Drafts table is empty. New script failed to created.");
+        retryIfAssertionErrorOccurred(() ->
+        {
+            searchTableDraftsByScriptName(script.getName());
+            if(isTableEmpty(ACTIVE_TAB_XPATH)){
+                refreshPage();
+                fail("Data still not loaded");
+            }
+        }, String.format("Draft script found "));
 
         String actualId = getTextOnTableDrafts(1, COLUMN_CLASS_DATA_ID_ON_TABLE_DRAFTS);
         assertNotNull("Script ID is empty. Script is not created.", actualId);
@@ -96,9 +102,6 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
     public void verifyTheRunCheckResultIsCorrect(RunCheckResult runCheckResult)
     {
         pricingScriptsV2CreateEditDraftPage.verifyTheRunCheckResultIsCorrect(runCheckResult);
-        pricingScriptsV2CreateEditDraftPage.cancelEditDraft();
-        waitUntilPageLoaded("pricing-scripts-v2/drafts");
-        waitUntilInvisibilityOfElementLocated("//h5[text()='Loading more results...']");
     }
 
     public void validateDraftAndReleaseScript(Script script, VerifyDraftParams verifyDraftParams)
@@ -134,18 +137,15 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
     public void linkShippers(Script script, Shipper shipper)
     {
         String scriptName = script.getName();
-        String shipperName = shipper.getName();
+        String legacyId = shipper.getLegacyId().toString();
 
         clickTabItem(TAB_ACTIVE_SCRIPTS);
         searchTableActiveScriptsByScriptName(scriptName);
-        wait10sUntil(()->!isTableEmpty(ACTIVE_TAB_XPATH), "Active Scripts table is empty. Script not found.");
+        wait10sUntil(() -> !isTableEmpty(ACTIVE_TAB_XPATH), "Active Scripts table is empty. Script not found.");
         clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS);
         NvLogger.info("Waiting until Link Shippers Dialog loaded.");
         waitUntilInvisibilityOfElementLocated("//md-dialog//md-dialog-content/div/md-progress-circular");
-        selectValueFromNvAutocomplete("ctrl.view.textShipper", shipperName);
-
-        List<String> listOfLinkedShippers = getLinkedShipperNames();
-        assertThat(String.format("Shipper '%s' is not added to table.", shipperName), listOfLinkedShippers, Matchers.hasItem(shipperName));
+        selectValueFromNvAutocomplete("ctrl.view.textShipper", legacyId);
         clickNvApiTextButtonByNameAndWaitUntilDone("commons.save-changes");
     }
 
@@ -168,21 +168,40 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
                 .collect(Collectors.toList());
     }
 
+
+    private List<String> getLinkedShipperIds()
+    {
+        return findElementsByXpath("//tr[@ng-repeat='shipper in $data']/td/div[1]").stream()
+                .map(we ->
+                {
+                    String text = we.getText().trim();
+                    Matcher m = SHIPPER_SELECT_VALUE_PATTERN.matcher(text);
+                    if (m.matches())
+                    {
+                        return m.group(1).trim();
+                    } else
+                    {
+                        return "";
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+
     public void verifyShipperIsLinked(Script script, Shipper shipper)
     {
         String scriptName = script.getName();
-        String shipperName = shipper.getName();
+        String legacyId = shipper.getLegacyId().toString();
 
         clickTabItem(TAB_ACTIVE_SCRIPTS);
         searchTableActiveScriptsByScriptName(scriptName);
-        wait10sUntil(()->!isTableEmpty(ACTIVE_TAB_XPATH), "Active Scripts table is empty. Script not found.");
+        wait10sUntil(() -> !isTableEmpty(ACTIVE_TAB_XPATH), "Active Scripts table is empty. Script not found.");
         clickActionButtonOnTableActiveScripts(1, ACTION_BUTTON_LINK_SHIPPERS_ON_TABLE_ACTIVE_SCRIPTS);
         NvLogger.info("Waiting until Link Shippers Dialog loaded.");
         waitUntilInvisibilityOfElementLocated("//md-dialog//md-dialog-content/div/md-progress-circular");
 
-        List<String> listOfLinkedShippers = getLinkedShipperNames();
-        assertThat(String.format("Shipper '%s' is not added to table.", shipperName), listOfLinkedShippers, Matchers.hasItem(shipperName));
-        clickButtonOnMdDialogByAriaLabel("Cancel");
+        List<String> listOfLinkedShippers = getLinkedShipperIds();
+        assertThat(String.format("Shipper '%s' is not added to table.", legacyId), listOfLinkedShippers, Matchers.hasItem(legacyId));
+        clickButtonOnMdDialogByAriaLabel("Save changes");
     }
 
     public void deleteActiveScript(Script script)
