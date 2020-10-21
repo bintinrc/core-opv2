@@ -1,5 +1,5 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @ViewTrip
-Feature: Trip Management - View Trips
+Feature: Movement Trip - View Trips
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2

@@ -1,5 +1,5 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @SearchTrip @SearchField @ArchivedTab
-Feature: Trip Management - Search Field - Archived Tab
+Feature: Movement Trip - Search Trip - Search Field - Archived Tab
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2

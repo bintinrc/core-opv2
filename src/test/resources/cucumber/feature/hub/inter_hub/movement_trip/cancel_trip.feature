@@ -1,5 +1,5 @@
 @OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @CancelTrip
-Feature: Trip Management - Cancel Trip
+Feature: Movement Trip - Cancel Trip
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
