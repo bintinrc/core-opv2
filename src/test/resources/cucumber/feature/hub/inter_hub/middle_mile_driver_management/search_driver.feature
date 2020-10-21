@@ -1,11 +1,12 @@
 @MiddleMile @InterHub @MiddleMileDrivers @SearchDriver
-Feature: Middle Mile Drivers
+Feature: Middle Mile Drivers - Search Driver
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   Scenario: Load All Drivers (uid:fc8158aa-ed1c-4c94-866a-bb4ced22ab35)
+    Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Driver gets all the driver
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
     Given API Driver get all middle mile driver

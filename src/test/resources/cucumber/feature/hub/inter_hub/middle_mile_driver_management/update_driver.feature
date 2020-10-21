@@ -1,5 +1,5 @@
 @MiddleMile @InterHub @MiddleMileDrivers @UpdateDriver
-Feature: Middle Mile Drivers
+Feature: Middle Mile Drivers - Update Driver
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
