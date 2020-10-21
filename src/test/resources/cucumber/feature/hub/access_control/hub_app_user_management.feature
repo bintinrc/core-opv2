@@ -2,7 +2,7 @@
 Feature: Hub App User Management
 
   @DeleteHubAppUser @KillBrowser @LaunchBrowser
-  Scenario: Success Create Hub User (uid:3c0e3793-b641-4037-97c5-cc2ff3dc4e79)
+  Scenario: Success Create Hub User (uid:37f9e8b0-cf84-409d-96e6-d69f9debc619)
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     Given Operator go to menu Access Control -> Hub App User Management
     When Operator create new Hub App User with details:
@@ -12,7 +12,7 @@ Feature: Hub App User Management
     Then Operator verifies that the newly created Hub App User will be shown
 
   @KillBrowser @LaunchBrowser
-  Scenario: Cannot Create Duplicate Hub User (uid:48fc37e3-0697-4b08-a3ae-03a1a8ddf6c1)
+  Scenario: Cannot Create Duplicate Hub User (uid:bc5a1f23-0b6e-4fb8-948e-0dbc3638ad91)
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Access Control -> Hub App User Management
@@ -33,16 +33,16 @@ Feature: Hub App User Management
     Then Operator verifies that there will be UI error of empty field of "<errorMessage>" shown
     Examples:
       | scenarioName                   | errorMessage                      | firstName | username | password | employmentType | employmentStartDate | hub        | position | hiptest-uid                              |
-      | First Name Is Empty            | Please fill First Name            |           | RANDOM   | password | FULL_TIME      | TODAY               | {hub-name} | QAE      | uid:8c5eda00-087f-4874-90bb-702a22ca74a2 |
-      | Username Is Empty              | Please fill Username              | QA        |          | password | FULL_TIME      | TODAY               | {hub-name} | QAE      | uid:fa3272b6-62f1-4906-bd09-919964fce126 |
-      | Password Is Empty              | Please fill Password              | QA        | RANDOM   |          | FULL_TIME      | TODAY               | {hub-name} | QAE      | uid:d4b01276-580a-46e2-9f35-2cd5f3375104 |
-      | Employment Type Is Empty       | Please fill Employment Type       | QA        | RANDOM   | password |                | TODAY               | {hub-name} | QAE      | uid:726a53bc-8120-4d20-bdaa-229f6bbd28d2 |
-      | Employment Start Date Is Empty | Please fill Employment Start Date | QA        | RANDOM   | password | FULL_TIME      |                     | {hub-name} | QAE      | uid:4aa8e4aa-f5a6-47bf-8c22-a02dbaf6d805 |
-      | Hub Is Empty                   | Please fill Hub                   | QA        | RANDOM   | password | FULL_TIME      | TODAY               |            | QAE      | uid:74985da8-5c38-43e9-a846-aee0f674e491 |
-      | Position is Empty              | Please fill Position              | QA        | RANDOM   | password | FULL_TIME      | TODAY               | {hub-name} |          | uid:e36d0d59-1aec-4021-a2e5-72e42654e147 |
+      | First Name Is Empty            | Please fill First Name            |           | RANDOM   | password | FULL_TIME      | TODAY               | {hub-name} | QAE      | uid:5a27de9e-2b27-4cc4-acf8-7bb0ad447d3a |
+      | Username Is Empty              | Please fill Username              | QA        |          | password | FULL_TIME      | TODAY               | {hub-name} | QAE      | uid:4d5498ae-fa34-465b-a208-11f5e792b4d0 |
+      | Password Is Empty              | Please fill Password              | QA        | RANDOM   |          | FULL_TIME      | TODAY               | {hub-name} | QAE      | uid:2b08e18f-5e17-4ac2-9664-4cb668061317 |
+      | Employment Type Is Empty       | Please fill Employment Type       | QA        | RANDOM   | password |                | TODAY               | {hub-name} | QAE      | uid:da92ea5e-2f5f-40cc-bfe9-b2193de713ae |
+      | Employment Start Date Is Empty | Please fill Employment Start Date | QA        | RANDOM   | password | FULL_TIME      |                     | {hub-name} | QAE      | uid:13e5cc0a-3314-4b06-b9ba-6b58a31b7a7f |
+      | Hub Is Empty                   | Please fill Hub                   | QA        | RANDOM   | password | FULL_TIME      | TODAY               |            | QAE      | uid:be36c43c-cae1-43d0-be1e-e9c6d3e6d857 |
+      | Position is Empty              | Please fill Position              | QA        | RANDOM   | password | FULL_TIME      | TODAY               | {hub-name} |          | uid:e8671051-6e5d-430a-85f3-2fe9540d9aa1 |
 
   @DeleteHubAppUser @KillBrowser @LaunchBrowser
-  Scenario: Search Hub User (uid:7c736e00-9fda-4f55-a21d-093809eb8e8f)
+  Scenario: Search Hub User (uid:b20f29ed-adbe-45ee-a4f6-97caf3059b5a)
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Access Control -> Hub App User Management
@@ -68,12 +68,12 @@ Feature: Hub App User Management
     And Operator Load all the Hub App User
     Then Operator verifies that the newly created Hub App User will be shown
     Examples:
-      | scenarioName                                        | filterName            | hiptest-uid                              |
-      | Search Hub App User by Hub Filter                   | hub                   | uid:7802965b-9f4a-43a1-a693-83dcb173e9e5 |
-      | Search Hub App User by Employment Type Filter       | employment type       | uid:d5c87142-d15d-4f43-bd0e-1d8a5d1606e8 |
-      | Search Hub App User by Employment Start Date Filter | employment start date | uid:79b7d18d-ad24-4c40-b38c-9027625b7400 |
-      | Search Hub App User by Status Filter                | status                | uid:4b9e9ce5-941f-4ce0-8c45-951394c14e6d |
-      | Search Hub App User by Multiple Filter              | multiple              | uid:91997ca6-351d-4dc8-84a2-ce1565fc4709 |
+      | scenarioName        | filterName            | hiptest-uid                              |
+      | Hub Id              | hub                   | uid:b2492424-7156-4ef2-aa23-b28035ed0f31 |
+      | Employee Type       | employment type       | uid:c6646b40-c0e9-415e-b181-4ad9d944bcfa |
+      | Employee Start Date | employment start date | uid:07f8f825-d44c-4db1-a0ff-1fa780516a31 |
+      | Employee Status     | status                | uid:8800b427-a6b1-4df6-9636-eaf91e8564bf |
+      | Multiple Filter     | multiple              | uid:52b08dcf-ccf9-4757-b8dd-04137140f0c7 |
 
   @DeleteHubAppUser @KillBrowser @LaunchBrowser
   Scenario Outline: Update Personal Detail - <scenarioName> (<hiptest-uid>)
@@ -93,11 +93,11 @@ Feature: Hub App User Management
     And Operator Load all the Hub App User
     Then Operator verifies that the newly created Hub App User will be shown
     Examples:
-      | scenarioName                                                             | firstName  | lastName   | contact                       | password   | employmentType | employmentStatus | hub        | warehouseTeamFormation | position | comments                                                             | hiptest-uid                              |
-      | Update Personal Detail - Normal Flow                                     | Automation | QA         | tristania.siagian@ninjavan.co | Ninjitsu89 | FULL_TIME      | ACTIVE           | {hub-name} | Middle Mile Team       | QAE      | This is generated by automation at {gradle-current-date-yyyy-MM-dd}. | uid:e5d7973c-dc21-464b-a106-266b2014aed8 |
-      | Update Personal Details - Last Name is Empty (Non-Negative Scenario)     | QA         |            | qa@ninjavan.co                | password   | FULL_TIME      | ACTIVE           | {hub-name} | Middle Mile Team       | QAE      | This is generated by automation at {gradle-current-date-yyyy-MM-dd}. | uid:06fe828f-d119-4a89-a9be-f9f6ed0aacf6 |
-      | Update Personal Detail - Contact Detail is Empty (Non-Negative Scenario) | QA         | Automation |                               | password   | FULL_TIME      | ACTIVE           | {hub-name} | Middle Mile Team       | QAE      | This is generated by automation at {gradle-current-date-yyyy-MM-dd}. | uid:05406423-e5fe-45ed-a692-676f7abd7165 |
-      | Update Personal Details - Password is Empty (Non-Negative Scenario)      | QA         | Automation | qa@ninjavan.co                |            | FULL_TIME      | ACTIVE           | {hub-name} | Middle Mile Team       | QAE      | This is generated by automation at {gradle-current-date-yyyy-MM-dd}. | uid:95ebb466-6bf7-4778-8187-85fa6f7d9824 |
+      | scenarioName            | firstName  | lastName   | contact                       | password   | employmentType | employmentStatus | hub        | warehouseTeamFormation | position | comments                                                             | hiptest-uid                              |
+      | Normal Flow             | Automation | QA         | tristania.siagian@ninjavan.co | Ninjitsu89 | FULL_TIME      | ACTIVE           | {hub-name} | Middle Mile Team       | QAE      | This is generated by automation at {gradle-current-date-yyyy-MM-dd}. | uid:887ea61e-b5ef-43bd-ba2d-2dfdc4a01315 |
+      | Last Name is Empty      | QA         |            | qa@ninjavan.co                | password   | FULL_TIME      | ACTIVE           | {hub-name} | Middle Mile Team       | QAE      | This is generated by automation at {gradle-current-date-yyyy-MM-dd}. | uid:81a11c2d-df0e-4c99-b1fb-20230e63085e |
+      | Contact Detail is Empty | QA         | Automation |                               | password   | FULL_TIME      | ACTIVE           | {hub-name} | Middle Mile Team       | QAE      | This is generated by automation at {gradle-current-date-yyyy-MM-dd}. | uid:506bf7bc-290c-4780-856d-285a47e9a93d |
+      | Password is Empty       | QA         | Automation | qa@ninjavan.co                |            | FULL_TIME      | ACTIVE           | {hub-name} | Middle Mile Team       | QAE      | This is generated by automation at {gradle-current-date-yyyy-MM-dd}. | uid:4b7bf906-b57a-4425-be91-7b05fb20d933 |
 
   @DeleteHubAppUser @KillBrowser @LaunchBrowser
   Scenario Outline: Update Employee Detail - <scenarioName> (<hiptest-uid>)
@@ -117,12 +117,12 @@ Feature: Hub App User Management
     And Operator Load all the Hub App User
     Then Operator verifies that the newly created Hub App User will be shown
     Examples:
-      | scenarioName                                                                        | firstName | lastName   | contact        | password | employmentType | employmentStatus | hub        | warehouseTeamFormation | position    | comments                                                             | hiptest-uid                              |
-      | Update Employee Details  - Normal Flow                                              | QA        | Automation | qa@ninjavan.co | password | PART_TIME      | ACTIVE           | JKB        | Middle Mile Team       | QA Engineer | This is generated by automation at {gradle-current-date-yyyy-MM-dd}. | uid:40c7f189-53c8-4c17-97b7-97c6821beb1b |
-      | Update Employee Details - Warehouse Team Formation is Empty (Non-Negative Scenario) | QA        | Automation | qa@ninjavan.co | password | FULL_TIME      | ACTIVE           | {hub-name} |                        | QA Engineer | This is generated by automation at {gradle-current-date-yyyy-MM-dd}. | uid:56787dc0-c5f9-4581-b494-a755f59fc8be |
+      | scenarioName                      | firstName | lastName   | contact        | password | employmentType | employmentStatus | hub        | warehouseTeamFormation | position    | comments                                                             | hiptest-uid                              |
+      | Normal Flow                       | QA        | Automation | qa@ninjavan.co | password | PART_TIME      | ACTIVE           | JKB        | Middle Mile Team       | QA Engineer | This is generated by automation at {gradle-current-date-yyyy-MM-dd}. | uid:273c4bbb-3142-4449-aa7c-cb55a0370591 |
+      | Warehouse Team Formation is Empty | QA        | Automation | qa@ninjavan.co | password | FULL_TIME      | ACTIVE           | {hub-name} |                        | QA Engineer | This is generated by automation at {gradle-current-date-yyyy-MM-dd}. | uid:fc842279-b840-40fd-a9e4-ffc376b3758a |
 
   @DeleteHubAppUser @KillBrowser @LaunchBrowser
-  Scenario: Update Activity of the Hub App User (uid:1ad221e9-6baa-4d1a-ae56-c074472961a3)
+  Scenario: Update Activity of the Hub App User (uid:a0b02d55-7b33-4cd6-94c2-8b8badabe0bb)
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Access Control -> Hub App User Management
@@ -157,9 +157,9 @@ Feature: Hub App User Management
     And Operator Load all the Hub App User
     Then Operator verifies that the newly created Hub App User will be shown
     Examples:
-      | scenarioName                                                         | firstName | lastName   | contact        | password | employmentType | employmentStatus | hub        | warehouseTeamFormation | position    | comments                                                          | hiptest-uid                              |
-      | Update Additional Details  - Normal Flow                             | QA        | Automation | qa@ninjavan.co | password | FULL_TIME      | ACTIVE           | {hub-name} | Middle Mile Team       | QA Engineer | This is edited by automation at {gradle-current-date-yyyy-MM-dd}. | uid:9281378b-1268-4a66-8ccc-17dc8e404c1b |
-      | Update Additional Details - Comment is Empty (Non-Negative Scenario) | QA        | Automation | qa@ninjavan.co | password | FULL_TIME      | ACTIVE           | {hub-name} | Middle Mile Team       | QA Engineer |                                                                   | uid:1424372b-9323-413e-a0ab-13be21f57100 |
+      | scenarioName     | firstName | lastName   | contact        | password | employmentType | employmentStatus | hub        | warehouseTeamFormation | position    | comments                                                          | hiptest-uid                              |
+      | Normal Flow      | QA        | Automation | qa@ninjavan.co | password | FULL_TIME      | ACTIVE           | {hub-name} | Middle Mile Team       | QA Engineer | This is edited by automation at {gradle-current-date-yyyy-MM-dd}. | uid:b3c19d40-2e19-48d9-adf7-aa8fc6cd77ac |
+      | Comment is Empty | QA        | Automation | qa@ninjavan.co | password | FULL_TIME      | ACTIVE           | {hub-name} | Middle Mile Team       | QA Engineer |                                                                   | uid:a62ed47c-4fc9-4aa7-9c55-d5f2e9cba179 |
 
   @DeleteHubAppUser @KillBrowser @LaunchBrowser
   Scenario Outline: Update Detail Negative Scenario - <scenarioName> (<hiptest-uid>)
@@ -176,6 +176,6 @@ Feature: Hub App User Management
       | <firstName> | <position> |
     Then Operator verifies that there will be UI error of empty field of "<errorMessage>" shown
     Examples:
-      | scenarioName                                  | firstName | position | errorMessage           | hiptest-uid                              |
-      | Update Personal Details - First Name is Empty |           | QAE      | Please fill First Name | uid:45a0b4b3-89a0-4ecb-a26c-4cf713cafc6c |
-      | Update Employee Details - Position is Empty   | QA        |          | Please fill Position   | uid:4397b019-568e-4601-81df-336d1c1294df |
+      | scenarioName        | firstName | position | errorMessage           | hiptest-uid                              |
+      | First Name is Empty |           | QAE      | Please fill First Name | uid:432e9b4a-9523-48ec-b149-74b63f476f64 |
+      | Position is Empty   | QA        |          | Please fill Position   | uid:c256cbfd-468b-42aa-b26c-26f62c5860fc |
