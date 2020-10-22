@@ -221,6 +221,7 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
         click(CREATE_UPDATE_BUTTON_ADD_HUB_DIALOG_XPATH);
+        waitUntilInvisibilityOfElementLocated("//md-dialog");
         if (isUpdated) {
             waitUntilVisibilityOfElementLocated(TOAST_HUB_APP_USER_UPDATED_XPATH);
             waitUntilInvisibilityOfElementLocated(TOAST_HUB_APP_USER_UPDATED_XPATH);
