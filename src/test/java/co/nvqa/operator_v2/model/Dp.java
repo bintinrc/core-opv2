@@ -43,6 +43,7 @@ public class Dp extends DataEntity<Dp>
     private Double longitude;
     private String externalStoreId;
     private String shipperId;
+    private String cutOffTime;
 
     public Dp()
     {
@@ -400,5 +401,15 @@ public class Dp extends DataEntity<Dp>
     public void setShipperId(String shipperId)
     {
         this.shipperId = shipperId;
+    }
+
+    public void setCutOffTime(String cutOffTime)
+    {
+        this.cutOffTime = cutOffTime;
+    }
+
+    public String getCutOffTime()
+    {
+        return cutOffTime;
     }
 }

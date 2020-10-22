@@ -3,6 +3,8 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.pricing.Script;
 import co.nvqa.commons.model.shipper.v2.Shipper;
+import co.nvqa.commons.model.shipper_support.PricedOrder;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.model.RunCheckParams;
 import co.nvqa.operator_v2.model.RunCheckResult;
 import co.nvqa.operator_v2.model.VerifyDraftParams;
@@ -153,13 +155,13 @@ public class PricingScriptsV2Steps extends AbstractSteps
         pricingScriptsV2Page.verifyDraftScriptIsReleased(script);
     }
 
-    @When("^Operator link Script to Shipper with name = \"([^\"]*)\"$")
-    public void operatorLinkShipperToTheScript(String shipperName)
+    @When("^Operator link Script to Shipper with ID = \"([^\"]*)\"$")
+    public void operatorLinkShipperToTheScript(String shipperId)
     {
         Script script = get(KEY_CREATED_PRICING_SCRIPT);
 
         Shipper shipper = new Shipper();
-        shipper.setName(shipperName);
+        shipper.setLegacyId(Long.parseLong(shipperId));
 
         pricingScriptsV2Page.linkShippers(script, shipper);
         put(KEY_CREATED_SHIPPER, shipper);
@@ -202,9 +204,10 @@ public class PricingScriptsV2Steps extends AbstractSteps
     @Then("^Operator verify the price is correct using data below:$")
     public void operatorVerifyThePriceIsCorrectUsingDataBelow(Map<String,String> mapOfData)
     {
-        Order order = get(KEY_ORDER_DETAILS);
-        Double expectedCost = Double.parseDouble(mapOfData.get("expectedCost"));
-        assertEquals("Order Cost", expectedCost, order.getCost());
+        PricedOrder order = get(KEY_ORDER_BILLING_PRICED_ORDER_DETAILS_DB);
+        NvLogger.info(f("Delivery fee is : %s", order.getDeliveryFee()));
+        String expectedCost = mapOfData.get("expectedCost");
+        assertEquals("Expected and Actual order cost mismatch ", expectedCost, order.getDeliveryFee().toString());
     }
 
     @When("^Operator create and release new Time-Bounded Script using data below:$")
