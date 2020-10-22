@@ -328,7 +328,6 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
         waitUntilVisibilityOfElementLocated(ERROR_TOAST_DUPLICATION_USERNAME_XPATH, existedUsername);
-//        click(ERROR_TOAST_DUPLICATION_CLOSE_XPATH);
         getWebDriver().switchTo().parentFrame();
     }
 
