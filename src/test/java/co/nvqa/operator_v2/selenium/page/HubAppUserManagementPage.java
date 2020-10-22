@@ -176,6 +176,7 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
         click(HUB_COMBOBOX_XPATH);
         waitUntilVisibilityOfElementLocated(f(HUB_SELECTION_XPATH, hubName));
+        pause1s();
         click(f(HUB_SELECTION_XPATH, hubName));
         getWebDriver().switchTo().parentFrame();
     }
@@ -220,6 +221,7 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
         click(CREATE_UPDATE_BUTTON_ADD_HUB_DIALOG_XPATH);
+        waitUntilInvisibilityOfElementLocated("//md-dialog");
         if (isUpdated) {
             waitUntilVisibilityOfElementLocated(TOAST_HUB_APP_USER_UPDATED_XPATH);
             waitUntilInvisibilityOfElementLocated(TOAST_HUB_APP_USER_UPDATED_XPATH);
@@ -240,6 +242,7 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
         click(LOAD_ALL_HUB_APP_USER_BUTTON_XPATH);
+        waitUntilVisibilityOfElementLocated("//tbody//td[@class='hubId']");
         getWebDriver().switchTo().parentFrame();
     }
 
@@ -325,7 +328,6 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
         waitUntilVisibilityOfElementLocated(ERROR_TOAST_DUPLICATION_USERNAME_XPATH, existedUsername);
-        click(ERROR_TOAST_DUPLICATION_CLOSE_XPATH);
         getWebDriver().switchTo().parentFrame();
     }
 

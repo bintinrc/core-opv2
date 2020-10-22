@@ -74,8 +74,7 @@ public class ParcelSweeperLiveSteps extends AbstractSteps {
             } catch (Throwable ex) {
                 NvLogger.error(ex.getMessage());
                 NvLogger.info("Searched element is not found, retrying after 2 seconds...");
-                navigateRefresh();
-                pause2s();
+                parcelSweeperLivePage.refreshPage();
                 throw ex;
             }
         }, 10);

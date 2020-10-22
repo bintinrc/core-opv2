@@ -143,7 +143,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
                 waitUntilInvisibilityOfElementLocated(DRIVERS_NOT_FOUND_TOAST_XPATH);
             } else
             {
-                waitUntilVisibilityOfElementLocated(DRIVERS_LIST_CONTAINER_XPATH);
+                loadDrivers.waitUntilInvisible();
             }
         } finally
         {

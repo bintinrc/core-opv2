@@ -50,6 +50,11 @@ public class TripManagementSteps extends AbstractSteps {
         tripManagementPage.loadButton.click();
     }
 
+    @When("Operator verify Load Trip Button is gone")
+    public void operatorVerifyLoadTripButtonIsGone() {
+        tripManagementPage.loadButton.waitUntilInvisible();
+    }
+
     @Then("Operator verifies trip has departed")
     public void operatorVerifiesTripHasDeparted() {
         tripManagementPage.verifyTripHasDeparted();
@@ -58,30 +63,6 @@ public class TripManagementSteps extends AbstractSteps {
     @Then("Operator verifies that there will be an error shown for unselected Origin Hub")
     public void operatorVerifiesThatThereWillBeAnErrorShownForUnselectedOriginHub() {
         tripManagementPage.verifiesFieldReqiredErrorMessageShown();
-    }
-
-    @When("Operator selects the {string} with value {string}")
-    public void operatorSelectsTheWithValue(String filterName, String filterValue) {
-        filterValue = resolveValue(filterValue);
-        switch (filterName.toLowerCase()) {
-            case "origin hub":
-                filterName = "originHub";
-                break;
-
-            case "destination hub":
-                filterName = "destinationHub";
-                break;
-
-            case "movement type":
-                filterName = "movementType";
-                put(KEY_MOVEMENT_TYPE_INCLUDED, true);
-                break;
-
-            default:
-                NvLogger.warn("Filter Type is not found!");
-        }
-
-        tripManagementPage.selectValueFromFilterDropDown(filterName, filterValue);
     }
 
     @When("Operator searches and selects the {string} with value {string}")
@@ -111,8 +92,7 @@ public class TripManagementSteps extends AbstractSteps {
             } catch (Throwable ex) {
                 NvLogger.error(ex.getMessage());
                 NvLogger.info("Searched element is not found, retrying after 2 seconds...");
-                navigateRefresh();
-                pause2s();
+                tripManagementPage.refreshPage();
                 tripManagementPage.switchTo();
                 throw ex;
             }
@@ -185,6 +165,20 @@ public class TripManagementSteps extends AbstractSteps {
         tripManagementPage.tableFiltering(tripManagementFilteringType, tripManagementDetailsData);
     }
 
+    @And("Operator searches for the Trip Management based on its {string} on arrival tab")
+    public void operatorSearchesForTheTripManagementBasedOnItsOnArrivalTab(String filteringName) {
+        TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
+        TripManagementFilteringType tripManagementFilteringType = TripManagementFilteringType.fromString(filteringName);
+        if (("expected_arrival_time").equals(tripManagementFilteringType.getVal())) {
+            ZonedDateTime expectedArrivalTime = tripManagementDetailsData.getData().get(0).getExpectedArrivalTime().plusDays(1);
+            tripManagementDetailsData.getData().get(0).setExpectedArrivalTime(expectedArrivalTime);
+            tripManagementPage.tableFiltering(tripManagementFilteringType, tripManagementDetailsData);
+            return;
+        }
+
+        tripManagementPage.tableFiltering(tripManagementFilteringType, tripManagementDetailsData);
+    }
+
     @Then("Operator verifies that the trip management shown with {string} as its filter is right")
     public void operatorVerifiesThatTheTripManagementShownWithAsItsFilterIsRight(String filteringName) {
         TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
@@ -192,6 +186,20 @@ public class TripManagementSteps extends AbstractSteps {
         if ("driver".equalsIgnoreCase(tripManagementFilteringType.getVal())) {
             String driverUsername = get(KEY_TRIP_MANAGEMENT_DRIVER_NAME);
             tripManagementPage.verifyResult(tripManagementFilteringType, tripManagementDetailsData, driverUsername);
+            return;
+        }
+
+        tripManagementPage.verifyResult(tripManagementFilteringType, tripManagementDetailsData);
+    }
+
+    @Then("Operator verifies that the trip management shown with {string} as its filter is right on arrival tab")
+    public void operatorVerifiesThatTheTripManagementShownWithAsItsFilterIsRightOnArrivalTab(String filteringName) {
+        TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
+        TripManagementFilteringType tripManagementFilteringType = TripManagementFilteringType.fromString(filteringName);
+        if (("expected_arrival_time").equals(tripManagementFilteringType.getVal())) {
+            ZonedDateTime expectedArrivalTime = tripManagementDetailsData.getData().get(0).getExpectedArrivalTime().plusDays(1);
+            tripManagementDetailsData.getData().get(0).setExpectedArrivalTime(expectedArrivalTime);
+            tripManagementPage.verifyResult(tripManagementFilteringType, tripManagementDetailsData);
             return;
         }
 

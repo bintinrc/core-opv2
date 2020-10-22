@@ -298,7 +298,6 @@ public class TripManagementPage extends OperatorV2SimplePage {
             case ACTUAL_DEPARTURE_TIME:
                 ZonedDateTime actualDepartureTime = tripManagementDetailsData.getData().get(index).getExpectedArrivalTime();
                 actualDepartTimeFilter.openButton.click();
-                actualDepartTimeFilter.selectDate(actualDepartureTime);
                 actualDepartTimeFilter.selectTime(actualDepartureTime);
                 actualDepartTimeFilter.ok.click();
                 break;

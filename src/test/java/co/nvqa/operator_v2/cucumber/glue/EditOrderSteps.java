@@ -7,6 +7,7 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.commons.util.StandardTestUtils;
+import co.nvqa.operator_v2.model.GlobalInboundParams;
 import co.nvqa.operator_v2.model.OrderEvent;
 import co.nvqa.operator_v2.selenium.page.EditOrderPage;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -25,6 +26,7 @@ import org.junit.jupiter.api.Assertions;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static co.nvqa.operator_v2.selenium.page.EditOrderPage.EventsTable.EVENT_NAME;
 
@@ -1101,5 +1103,22 @@ public class EditOrderSteps extends AbstractSteps
     {
         orderId = resolveValue(orderId);
         editOrderPage.openPage(Long.parseLong(orderId));
+    }
+
+    @Then("^Operator verify following order info parameters after Global Inbound$")
+    public void operatorVerifyFollowingOrderInfoParametersAfterGlobalInbound(Map<String, String> mapOfData)
+    {
+        Order createdOrder = get(KEY_CREATED_ORDER);
+        GlobalInboundParams globalInboundParams = get(KEY_GLOBAL_INBOUND_PARAMS);
+        Double currentOrderCost = get(KEY_CURRENT_ORDER_COST);
+        String expectedStatus = mapOfData.get("orderStatus");
+        String expectedGranularStatusStr = mapOfData.get("granularStatus");
+        List<String> expectedGranularStatus = null;
+        if (StringUtils.isNotBlank(expectedGranularStatusStr))
+        {
+            expectedGranularStatus = Arrays.stream(expectedGranularStatusStr.split(";")).map(String::trim).collect(Collectors.toList());
+        }
+        String expectedDeliveryStatus = mapOfData.get("deliveryStatus");
+        editOrderPage.verifyOrderIsGlobalInboundedSuccessfully(createdOrder, globalInboundParams, currentOrderCost, expectedStatus, expectedGranularStatus, expectedDeliveryStatus);
     }
 }
