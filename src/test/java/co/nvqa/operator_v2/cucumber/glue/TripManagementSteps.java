@@ -48,6 +48,10 @@ public class TripManagementSteps extends AbstractSteps {
     @When("Operator clicks on Load Trip Button")
     public void operatorClicksOnLoadTripButton() {
         tripManagementPage.loadButton.click();
+    }
+
+    @When("Operator verify Load Trip Button is gone")
+    public void operatorVerifyLoadTripButtonIsGone() {
         tripManagementPage.loadButton.waitUntilInvisible();
     }
 
@@ -59,30 +63,6 @@ public class TripManagementSteps extends AbstractSteps {
     @Then("Operator verifies that there will be an error shown for unselected Origin Hub")
     public void operatorVerifiesThatThereWillBeAnErrorShownForUnselectedOriginHub() {
         tripManagementPage.verifiesFieldReqiredErrorMessageShown();
-    }
-
-    @When("Operator selects the {string} with value {string}")
-    public void operatorSelectsTheWithValue(String filterName, String filterValue) {
-        filterValue = resolveValue(filterValue);
-        switch (filterName.toLowerCase()) {
-            case "origin hub":
-                filterName = "originHub";
-                break;
-
-            case "destination hub":
-                filterName = "destinationHub";
-                break;
-
-            case "movement type":
-                filterName = "movementType";
-                put(KEY_MOVEMENT_TYPE_INCLUDED, true);
-                break;
-
-            default:
-                NvLogger.warn("Filter Type is not found!");
-        }
-
-        tripManagementPage.selectValueFromFilterDropDown(filterName, filterValue);
     }
 
     @When("Operator searches and selects the {string} with value {string}")
@@ -112,8 +92,7 @@ public class TripManagementSteps extends AbstractSteps {
             } catch (Throwable ex) {
                 NvLogger.error(ex.getMessage());
                 NvLogger.info("Searched element is not found, retrying after 2 seconds...");
-                navigateRefresh();
-                pause2s();
+                tripManagementPage.refreshPage();
                 tripManagementPage.switchTo();
                 throw ex;
             }

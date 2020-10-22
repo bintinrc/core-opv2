@@ -59,8 +59,9 @@ Feature: Movement Trip - View Trips
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
     When Operator clicks on "Arrival" tab
-    When Operator selects the "destination hub" with value "{KEY_LIST_OF_CREATED_HUBS[2].name}"
+    When Operator searches and selects the "destination hub" with value "{KEY_LIST_OF_CREATED_HUBS[2].name}"
     And Operator clicks on Load Trip Button
+    And Operator verify Load Trip Button is gone
     And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}"
     Then Operator verifies that the trip management shown in "arrival" tab is correct
     When Operator clicks on "view" icon on the action column
@@ -72,6 +73,7 @@ Feature: Movement Trip - View Trips
     And Operator verifies movement Trip page is loaded
     When Operator clicks on "Archive" tab
     And Operator clicks on Load Trip Button
+    And Operator verify Load Trip Button is gone
     And API Operator gets the count of the Trip Management with data:
       | movementTripType | archive |
       | days             | 0       |

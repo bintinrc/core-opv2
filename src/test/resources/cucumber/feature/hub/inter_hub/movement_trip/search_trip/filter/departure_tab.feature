@@ -25,7 +25,7 @@ Feature: Movement Trip - Search Trip - Filter - Departure Tab
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
-    When Operator selects the "movement type" with value "Land Haul"
+    When Operator searches and selects the "movement type" with value "Land Haul"
     And Operator clicks on Load Trip Button
     Then Operator verifies that there will be an error shown for unselected Origin Hub
 
@@ -42,7 +42,7 @@ Feature: Movement Trip - Search Trip - Filter - Departure Tab
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
     When Operator searches and selects the "origin hub" with value "{hub-relation-origin-hub-name}"
-    When Operator selects the "movement type" with value "Land Haul"
+    When Operator searches and selects the "movement type" with value "Land Haul"
     And Operator clicks on Load Trip Button
     And API Operator gets the count of the "departure" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
     Then Operator verifies that the trip management shown in "departure" tab is correct
@@ -62,7 +62,7 @@ Feature: Movement Trip - Search Trip - Filter - Departure Tab
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
     When Operator searches and selects the "origin hub" with value "{hub-relation-origin-hub-name}"
-    When Operator selects the "movement type" with value "Land Haul"
+    When Operator searches and selects the "movement type" with value "Land Haul"
     When Operator selects the date to tomorrow in "departure" Tab
     And Operator clicks on Load Trip Button
     And API Operator gets the count of the "departure" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
