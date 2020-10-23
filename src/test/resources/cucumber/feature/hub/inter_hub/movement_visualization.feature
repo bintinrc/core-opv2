@@ -1,4 +1,4 @@
-@MiddleMile @InterHub @MovementVisualization
+@OperatorV2 @MiddleMile @Hub @InterHub @MovementVisualization
 Feature: Movement Visualization
 
   @LaunchBrowser @ShouldAlwaysRun
