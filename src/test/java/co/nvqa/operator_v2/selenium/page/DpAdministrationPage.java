@@ -59,6 +59,8 @@ public class DpAdministrationPage extends OperatorV2SimplePage
     private static final String XPATH_RETAIL_POINT_NETWORK = "//input[@value='RETAIL_POINT_NETWORK']";
     private static final String XPATH_COLLECT_CHECKBOX = "//input[@id='isCollect']";
     private static final String XPATH_MAXIMUM_CAPACITY = "//input[@id='actualMaxCapacity']";
+    private static final String XPATH_INPUT_CUTOFF_TIME = "//input[contains(@class,'time-picker-panel-input')]";
+    private static final String XPATH_CUTOFF_TIME = "//input[@id='deliveryTime']";
     private static final String XPATH_BUFFER_CAPACITY = "//input[@id='computedMaxCapacity']";
     private static final String XPATH_MAXIMUM_PARCEL_STAY = "//input[@id='maxParcelStayDuration']";
     private static final String XPATH_APPLY_ALL_DAYS = "(//span[text()='Apply first day slots to all days'])[%s]";
@@ -276,6 +278,13 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         sendKeys(XPATH_MAXIMUM_PARCEL_STAY, maxParcelStayAsString);
     }
 
+    public void setCutOffTime(String time)
+    {
+        click(XPATH_CUTOFF_TIME);
+        waitUntilVisibilityOfElementLocated(XPATH_INPUT_CUTOFF_TIME);
+        sendKeys(XPATH_INPUT_CUTOFF_TIME, time);
+    }
+
     public void setOfficialTimingCreateDpForm()
     {
         click(XPATH_APPLY_ALL_DAYS_OPENING_HOURS);
@@ -332,6 +341,10 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         isActiveCreateDpForm();
         isPublicCreateDpForm();
         setCapacityAndParcelStayCreateDpForm(dpParams.getMaxCap(), dpParams.getCapBuffer(), dpParams.getMaxParcelStayDuration());
+        if(dpParams.getCutOffTime()!=null)
+        {
+            setCutOffTime(dpParams.getCutOffTime());
+        }
         clickSaveSettingsCreateDpForm();
         getWebDriver().switchTo().defaultContent();
     }
@@ -388,6 +401,10 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         setTypeCreateDpForm(dpParams.getType());
         setDirectionsCreateDpForm(dpParams.getDirections());
         canShipperLodgeInCreateDpForm(dpParams.getCanShipperLodgeIn());
+        if(dpParams.getCutOffTime()!=null)
+        {
+            setCutOffTime(dpParams.getCutOffTime());
+        }
         clickSaveSettingsCreateDpForm();
         getWebDriver().switchTo().defaultContent();
     }
@@ -1094,5 +1111,10 @@ public class DpAdministrationPage extends OperatorV2SimplePage
         assertEquals("DP CITY", dbParams.getCity(), apiParams.getCity());
         assertEquals("DP ADDRESS 1", dbParams.getAddress1(), apiParams.getAddress1());
         assertEquals("DP ADDRESS 2", dbParams.getAddress2(), apiParams.getAddress2());
+    }
+
+    public void verifyCutOffTime(String expectedCutOffTime, String actualCutOffTime)
+    {
+        assertEquals("Cut off time is not correct", expectedCutOffTime, actualCutOffTime);
     }
 }

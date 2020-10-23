@@ -8,6 +8,7 @@ import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import net.bytebuddy.implementation.bytecode.Throw;
 
 import java.util.Date;
 import java.util.List;
@@ -75,9 +76,19 @@ public class ShipmentInboundScanningSteps extends AbstractSteps {
 
     @When("^Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page with ([^\"]*) alert$")
     public void inboundScanningNegativeScenario(String label, String hub, String condition) {
-        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
-        hub = resolveValue(hub);
-        scanningPage.inboundScanningNegativeScenario(shipmentId, label, hub, condition);
+        retryIfRuntimeExceptionOccurred(() ->
+                {
+                    try {
+                        Long shipmentId = get(KEY_CREATED_SHIPMENT_ID);
+                        final String resolvedHub = resolveValue(hub);
+                        scanningPage.inboundScanningNegativeScenario(shipmentId, label, resolvedHub, condition);
+                    } catch (Throwable ex) {
+                        NvLogger.error(ex.getMessage());
+                        scanningPage.refreshPage();
+                        throw ex;
+                    }
+                }, 10);
+
     }
 
     @When("^Operator inbound scanning Shipment ([^\"]*) in hub ([^\"]*) on Shipment Inbound Scanning page using MAWB with ([^\"]*) alert$")

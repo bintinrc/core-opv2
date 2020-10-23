@@ -186,4 +186,11 @@ public class DpAdministrationSteps extends AbstractSteps
         DpDetailsResponse apiDpParams = get(KEY_DP_DETAILS);
         dpAdminPage.verifyDpParamsWithDB(dbDpParams, apiDpParams);
     }
+
+    @Then("Operator verifies the cut off time is {string}")
+    public void operatorVerifiesTheCutOffTimeIs(String expectedCutOffTime)
+    {
+        String actualCutOffTime = get(KEY_DP_SETTING_DP_CUT_OFF_TIME);
+        dpAdminPage.verifyCutOffTime(expectedCutOffTime, actualCutOffTime);
+    }
 }

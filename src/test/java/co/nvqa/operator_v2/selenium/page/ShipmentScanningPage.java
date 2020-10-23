@@ -68,6 +68,9 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     public LeavePageDialog leavePageDialog;
 
     @FindBy(css = "md-dialog")
+    public RemoveAllParcelsDialog removeAllParcelsDialog;
+
+    @FindBy(css = "md-dialog")
     public ShipmentWithTrip shipmentWithTripDialog;
 
     @FindBy(css = "md-dialog")
@@ -138,6 +141,13 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         pause2s();
         waitUntilVisibilityOfElementLocated(f("//li//span[starts-with(text(),'%s')]", shipmentId.toString()));
         clickf("//li//span[starts-with(text(),'%s')]", shipmentId.toString());
+        pause50ms();
+    }
+
+    public void selectShipmentIdFast(String shipmentId) {
+        sendKeys("//nv-autocomplete[@item-types='shipment']//input", shipmentId);
+        pause2s();
+        clickf("//li//span[starts-with(text(),'%s')]", shipmentId);
         pause50ms();
     }
 
@@ -219,9 +229,10 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
     public void removeAllOrdersFromShipment() {
         pause1s();
         click("//nv-icon-text-button[@label='container.shipment-scanning.remove-all']");
-        waitUntilVisibilityOfElementLocated("//md-dialog-content[contains(@id,'dialogContent')]");
-        click("//button[@ng-click='dialog.hide()' and @aria-label='Remove']");
-        pause1s();
+        removeAllParcelsDialog.waitUntilVisible();
+        removeAllParcelsDialog.remove.waitUntilClickable();
+        removeAllParcelsDialog.remove.click();
+        removeAllParcelsDialog.waitUntilInvisible();
     }
 
     public void verifyTheSumOfOrderIsZero() {
@@ -630,6 +641,18 @@ public class ShipmentScanningPage extends OperatorV2SimplePage {
         public TextBox resultTextBox;
 
         public ErrorShipmentDialog(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+        }
+    }
+
+    public static class RemoveAllParcelsDialog extends MdDialog {
+        @FindBy(css = "[aria-label='Cancel']")
+        public Button cancel;
+
+        @FindBy(css = "[aria-label='Remove']")
+        public Button remove;
+
+        public RemoveAllParcelsDialog(WebDriver webDriver, WebElement webElement) {
             super(webDriver, webElement);
         }
     }

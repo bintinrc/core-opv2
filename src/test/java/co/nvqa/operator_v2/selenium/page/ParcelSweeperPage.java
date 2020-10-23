@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
@@ -18,6 +19,9 @@ public class ParcelSweeperPage extends OperatorV2SimplePage
 
     @FindBy(xpath = "//md-select[starts-with(@id,'commons.hub')]")
     public MdSelect hub;
+
+    @FindBy(xpath = LOCATOR_SPINNER)
+    public PageElement loadingSpinner;
 
     public ParcelSweeperPage(WebDriver webDriver)
     {
