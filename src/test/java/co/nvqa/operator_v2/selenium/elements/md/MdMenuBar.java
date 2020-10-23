@@ -20,7 +20,7 @@ public class MdMenuBar extends PageElement
     }
 
     private static final String MD_MENU_ITEM_LOCATOR = "div.md-active md-menu-item button[aria-label='%s']";
-    private static final String MD_MENU_LOCATOR = ".//md-menu/button[normalize-space(.)='Order Settings']";
+    private static final String MD_MENU_LOCATOR = ".//md-menu/button[normalize-space(.)='%s']";
 
     private void selectOptionInPopup(String option)
     {
