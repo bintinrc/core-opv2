@@ -1,4 +1,4 @@
-@Hub @InterHub @MiddleMile @TripManagement @MovementTrip @UpdateTrip
+@Hub @InterHub @MiddleMile @TripManagement @MovementTrip @UpdateTrip @Refo
 Feature: Movement Trip - Update Trip
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -11,8 +11,39 @@ Feature: Movement Trip - Update Trip
   Scenario: Register Trip Departure without Driver (uid:9af1c868-e9f5-4cf2-9b92-3c70c59d264c)
     Given no-op
 
-  Scenario: Register Trip Departure with Invalid Driver Employment Status - Main Driver Employment Status is Inactive (uid:aaee95f2-c6ee-4054-aa56-132d0757a5cf)
-    Given no-op
+#  @DeleteHubsViaDb @DeleteDriver
+#  Scenario: Register Trip Departure with Invalid Driver Employment Status - Main Driver Employment Status is Inactive (uid:aaee95f2-c6ee-4054-aa56-132d0757a5cf)
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    Given API Operator creates new Hub using data below:
+#      | name         | GENERATED |
+#      | displayName  | GENERATED |
+#      | facilityType | CROSSDOCK |
+#      | city         | GENERATED |
+#      | country      | GENERATED |
+#      | latitude     | GENERATED |
+#      | longitude    | GENERATED |
+#    Given API Operator creates new Hub using data below:
+#      | name         | GENERATED |
+#      | displayName  | GENERATED |
+#      | facilityType | CROSSDOCK |
+#      | city         | GENERATED |
+#      | country      | GENERATED |
+#      | latitude     | GENERATED |
+#      | longitude    | GENERATED |
+#    And API Operator reloads hubs cache
+#    Given API Operator create new Driver using data below:
+#      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+#    Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+#    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
+#    And API Operator deactivate "employment status" for driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}"
+#    And Operator refresh page
+#    Given Operator go to menu Inter-Hub -> Movement Trips
+#    And Operator verifies movement Trip page is loaded
+#    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
+#    And Operator clicks on Load Trip Button
+#    And Operator verify Load Trip Button is gone
+    # Click depart trip
+    # Wait for error toast
 
   Scenario: Register Trip Departure with Invalid Driver Employment Status - Additional Driver Employment Status is Inactive (uid:a9695379-6ce2-4c1b-926e-8409d24e9408)
     Given no-op
@@ -20,8 +51,39 @@ Feature: Movement Trip - Update Trip
   Scenario: Register Trip Departure with Invalid Driver Employment Status - Main and Additional Driver Employment Status are Inactive (uid:20557fe2-72fd-4b8f-9d50-f563d9148972)
     Given no-op
 
+  @DeleteHubsViaDb @DeleteDriver
   Scenario: Register Trip Departure With Invalid Driver License Status - Main Driver License Status is Inactive (uid:7c5bd44b-7fbd-4cc1-9699-acd274520c4e)
-    Given no-op
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    Given API Operator create new Driver using data below:
+      | driverCreateRequest | {"driver":{"firstName":"{{RANDOM_FIRST_NAME}}","lastName":"","licenseNumber":"D{{TIMESTAMP}}","driverType":"Middle-Mile-Driver","availability":false,"contacts":[{"active":true,"type":"Mobile Phone","details":"08176586525"}],"username":"D{{TIMESTAMP}}","comments":"This driver is created by \"Automation Test\" for testing purpose.","employmentStartDate":"{gradle-next-0-day-yyyy-MM-dd}","hubId":{hub-id},"hub":"{hub-name}","employmentType":"Full-time / Contract","licenseType":"Class 5","licenseExpiryDate":"{gradle-next-3-day-yyyy-MM-dd}","password":"password","employmentEndDate":"{gradle-next-3-day-yyyy-MM-dd}"}} |
+    Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And API Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}" to movement trip schedule "{KEY_LIST_OF_CREATED_MOVEMENT_SCHEDULE_WITH_TRIP[1].id}"
+    And API Operator deactivate "license status" for driver "{KEY_LIST_OF_CREATED_DRIVERS[1].id}"
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Movement Trips
+    And Operator verifies movement Trip page is loaded
+    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
+    And Operator clicks on Load Trip Button
+    And Operator verify Load Trip Button is gone
+    # Click depart trip
+    # Wait for error toast
 
   Scenario: Register Trip Departure With Invalid Driver License Status - Additional Driver License Status is Inactive (uid:074aaab5-7de0-486a-bf46-088611166c57)
     Given no-op
