@@ -47,14 +47,17 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
         waitUntilVisibilityOfElementLocated(f(CHOSEN_VALUE_SELECTION_XPATH, hubName));
         click(f(CHOSEN_VALUE_SELECTION_XPATH, hubName));
 
+        pause2s();
+
         //Select Sort Task
-        click(SORT_TASK_DROPDOWN_XPATH);
-        if (isElementExistFast(SORT_TASK_INPUT_XPATH))
-        {
-            waitUntilVisibilityOfElementLocated(SORT_TASK_INPUT_XPATH);
-            sendKeys(SORT_TASK_INPUT_XPATH, MASTER_VIEW_SORT_TASK_OPTION);
-            waitUntilVisibilityOfElementLocated(f(CHOSEN_VALUE_SELECTION_XPATH, MASTER_VIEW_SORT_TASK_OPTION));
-            click(f(CHOSEN_VALUE_SELECTION_XPATH, MASTER_VIEW_SORT_TASK_OPTION));
+        if (isElementExistFast(SORT_TASK_DROPDOWN_XPATH)) {
+            click(SORT_TASK_DROPDOWN_XPATH);
+            if (isElementExistFast(SORT_TASK_INPUT_XPATH)) {
+                waitUntilVisibilityOfElementLocated(SORT_TASK_INPUT_XPATH);
+                sendKeys(SORT_TASK_INPUT_XPATH, MASTER_VIEW_SORT_TASK_OPTION);
+                waitUntilVisibilityOfElementLocated(f(CHOSEN_VALUE_SELECTION_XPATH, MASTER_VIEW_SORT_TASK_OPTION));
+                click(f(CHOSEN_VALUE_SELECTION_XPATH, MASTER_VIEW_SORT_TASK_OPTION));
+            }
         }
 
         proceedButton.waitUntilClickable();

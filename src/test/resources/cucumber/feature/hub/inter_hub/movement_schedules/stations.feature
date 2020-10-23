@@ -18,6 +18,7 @@ Feature: Stations
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
+    And Operator refresh hubs cache on Facilities Management page
     And Operator refresh page
     Then Operator verify a new Hub is created successfully on Facilities Management page
 
@@ -35,10 +36,11 @@ Feature: Stations
       | longitude    | GENERATED |
     And Operator refresh page
     When Operator go to menu Hubs -> Facilities Management
+    And Operator refresh hubs cache on Facilities Management page
+    And Operator refresh page
     And Operator update Hub on page Hubs Administration using data below:
       | searchHubsKeyword | {KEY_CREATED_HUB.name} |
       | facilityType      | Station                |
-    And Operator refresh hubs cache on Facilities Management page
     And Operator refresh page
     Then Operator verify Hub is updated successfully on Facilities Management page
 

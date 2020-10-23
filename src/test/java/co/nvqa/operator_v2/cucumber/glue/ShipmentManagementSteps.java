@@ -75,9 +75,33 @@ public class ShipmentManagementSteps extends AbstractSteps
     @When("^Operator filter ([^\"]*) = ([^\"]*) on Shipment Management page$")
     public void fillSearchFilter(String filter, String value)
     {
-        value = resolveValue(value);
-        shipmentManagementPage.addFilter(filter, value, false);
-        putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, filter, value);
+        String resolvedValue = resolveValue(value);
+        shipmentManagementPage.addFilter(filter, resolvedValue, false);
+        putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, filter, resolvedValue);
+    }
+
+    @When("Operator filter with following data on Shipment Management Page")
+    public void operatorFilerWithData(Map<String, String> mapOfData)
+    {
+        retryIfRuntimeExceptionOccurred(() ->
+        {
+            Map<String, String> resolvedKeyValue = resolveKeyValues(mapOfData);
+            String shipmentStatus = resolvedKeyValue.get("shipmentStatus");
+            String lastInboundHub = resolvedKeyValue.get("lastInboundHub");
+            try
+            {
+                shipmentManagementPage.addFilter("Shipment Status", shipmentStatus, false);
+                shipmentManagementPage.addFilter("Last Inbound Hub", lastInboundHub, false);
+                putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, "Shipment Status", shipmentStatus);
+                putInMap(KEY_SHIPMENT_MANAGEMENT_FILTERS, "Last Inbound Hub", lastInboundHub);
+
+            } catch (Throwable ex)
+            {
+                NvLogger.error(ex.getMessage());
+                shipmentManagementPage.refreshPage();
+                throw ex;
+            }
+        }, getCurrentMethodName(), 3000,10);
     }
 
     @When("^Operator search shipments by given Ids on Shipment Management page:$")
@@ -115,7 +139,8 @@ public class ShipmentManagementSteps extends AbstractSteps
         LocalDateTime today = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
         String dateOfToday = formatter.format(today);
-        String dateOfTomorrow = formatter.format(today.plusDays(1));
+        LocalDateTime tomorrow = today.plusDays(1);
+        String dateOfTomorrow = formatter.format(tomorrow);
 
         shipmentManagementPage.selectValueFromNvAutocompleteByItemTypesAndDismiss("filters", dateFieldName);
         shipmentManagementPage.changeDate(dateOfToday, true);
@@ -634,5 +659,23 @@ public class ShipmentManagementSteps extends AbstractSteps
         {
             shipmentManagementPage.searchedShipmentVerification(shipmentIds.get(i));
         }
+    }
+
+    @Then("Operator verify {string} action button is disabled on shipment Management page")
+    public void operatorVerifyActionButtonIsDisabled(String actionButton)
+    {
+
+        if ("Cancel Shipment".equals(actionButton))
+        {
+            shipmentManagementPage.cancelShipmentButton.waitUntilVisible();
+            assertThat("Cancel Shipment Button is disabled",
+                    shipmentManagementPage.cancelShipmentButton.isEnabled(), equalTo(false));
+        }
+    }
+
+    @Then("Operator verify empty line parsing error toast exist")
+    public void operatorVerifyEmptyLineParsingErrorToastExist()
+    {
+        shipmentManagementPage.verifyEmptyLineParsingErrorToastExist();
     }
 }

@@ -232,43 +232,6 @@ public class AllOrdersSteps extends AbstractSteps
         allOrdersPage.verifyWaybillContentsIsCorrect(order);
     }
 
-    @Then("^Operator verify order info after Global Inbound$")
-    public void operatorVerifyOrderInfoAfterGlobalInbound()
-    {
-        retryIfRuntimeExceptionOccurred(() ->
-        {
-            try {
-                operatorVerifyFollowingOrderInfoParametersAfterGlobalInbound(ImmutableMap.of(
-                        "orderStatus", "TRANSIT",
-                        "granularStatus", "Arrived at Sorting Hub; Arrived at Origin Hub",
-                        "deliveryStatus", "PENDING"));
-            } catch (Throwable ex) {
-                NvLogger.error(ex.getMessage());
-                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
-                navigateRefresh();
-                pause2s();
-                throw ex;
-            }
-        }, 10);
-    }
-
-    @Then("^Operator verify following order info parameters after Global Inbound$")
-    public void operatorVerifyFollowingOrderInfoParametersAfterGlobalInbound(Map<String, String> mapOfData)
-    {
-        Order createdOrder = get(KEY_CREATED_ORDER);
-        GlobalInboundParams globalInboundParams = get(KEY_GLOBAL_INBOUND_PARAMS);
-        Double currentOrderCost = get(KEY_CURRENT_ORDER_COST);
-        String expectedStatus = mapOfData.get("orderStatus");
-        String expectedGranularStatusStr = mapOfData.get("granularStatus");
-        List<String> expectedGranularStatus = null;
-        if (StringUtils.isNotBlank(expectedGranularStatusStr))
-        {
-            expectedGranularStatus = Arrays.stream(expectedGranularStatusStr.split(";")).map(String::trim).collect(Collectors.toList());
-        }
-        String expectedDeliveryStatus = mapOfData.get("deliveryStatus");
-        allOrdersPage.verifyOrderInfoAfterGlobalInbound(createdOrder, globalInboundParams, currentOrderCost, expectedStatus, expectedGranularStatus, expectedDeliveryStatus);
-    }
-
     @When("^Operator resume order on All Orders page$")
     public void operatorResumeOrderOnAllOrdersPage()
     {

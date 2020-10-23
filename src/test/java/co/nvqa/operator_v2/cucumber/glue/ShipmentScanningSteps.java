@@ -86,7 +86,8 @@ public class ShipmentScanningSteps extends AbstractSteps {
 
                 shipmentScanningPage.selectHub(hub);
                 shipmentScanningPage.selectShipmentType(shipmentType);
-                shipmentScanningPage.selectShipmentId(shipmentId);
+                shipmentScanningPage.selectShipmentFilter.waitUntilVisible();
+                shipmentScanningPage.selectShipmentFilter.selectValue(String.valueOf(shipmentId));
                 shipmentScanningPage.clickSelectShipment();
 
                 for (String trackingId : trackingIds) {

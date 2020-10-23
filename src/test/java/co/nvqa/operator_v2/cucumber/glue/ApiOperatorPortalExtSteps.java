@@ -206,7 +206,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         mapOfDynamicVariable.put("RANDOM_LATITUDE", String.valueOf(HubFactory.getRandomHub().getLatitude()));
         mapOfDynamicVariable.put("RANDOM_LONGITUDE", String.valueOf(HubFactory.getRandomHub().getLongitude()));
 
-        String driverCreateRequestTemplate = mapOfData.get("driverCreateRequest");
+        Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+        String driverCreateRequestTemplate = resolvedMapOfData.get("driverCreateRequest");
         String driverCreateRequestJson = replaceTokens(driverCreateRequestTemplate, mapOfDynamicVariable);
 
         CreateDriverV2Request driverCreateRequest = fromJsonCamelCase(driverCreateRequestJson, CreateDriverV2Request.class);
@@ -314,7 +315,14 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         hub.setLatitude(Double.parseDouble(latitude));
         hub.setLongitude(Double.parseDouble(longitude));
         hub.setFacilityType(facilityType);
-        hub = getHubClient().create(hub);
+        Map<String, Hub > hubMap = new HashMap<>();
+        hubMap.put(hub.getName(), hub);
+        final String hubName = name;
+        retryIfAssertionErrorOccurred(() -> {
+            Hub hubResp = getHubClient().create(hubMap.get(hubName));
+            hubMap.put(hubResp.getName(), hubResp);
+        }, getCurrentMethodName());
+        hub = hubMap.get(hubName);
 
         put(KEY_CREATED_HUB, hub);
         putInList(KEY_LIST_OF_CREATED_HUBS, hub);

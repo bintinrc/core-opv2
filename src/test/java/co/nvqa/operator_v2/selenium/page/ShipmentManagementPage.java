@@ -92,6 +92,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
     @FindBy(css = "md-dialog")
     public CancelShipmentDialog cancelShipmentDialog;
 
+    @FindBy(xpath = "//button[@aria-label='Cancel']")
+    public Button cancelShipmentButton;
+
     private static final String FILEPATH = TestConstants.TEMP_DIR;
 
     public ShipmentManagementPage(WebDriver webDriver)
@@ -154,13 +157,17 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
 
     public void changeDate(String date, boolean isToday)
     {
-        String datepickerXpath = "//md-datepicker[@name='%s']//input";
+        String datepickerXpath = "//md-datepicker[@ng-model='%s']//input";
         if (isToday)
         {
-            sendKeys(f(datepickerXpath, "fromDateField"), date);
+            clear(f(datepickerXpath, "container.fromDate"));
+            pause1s();
+            sendKeys(f(datepickerXpath, "container.fromDate"), date);
         } else
         {
-            sendKeys(f(datepickerXpath, "toDateField"), date);
+            clear(f(datepickerXpath, "container.toDate"));
+            pause1s();
+            sendKeys(f(datepickerXpath, "container.toDate"), date);
         }
     }
 
@@ -564,6 +571,12 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfToast("We cannot process more than 30 shipments");
     }
 
+    public void verifyEmptyLineParsingErrorToastExist()
+    {
+        waitUntilVisibilityOfToast("Network Request Error");
+        assertThat("toast message is the same", getToastBottomText(), containsString("Cannot parse parameter id as Long: For input string: \"\""));
+    }
+
     public void createAndUploadCsv(List<Order> orders, String fileName, boolean isValid, boolean isDuplicated, int numberOfOrder, ShipmentInfo shipmentInfo) throws FileNotFoundException
     {
         StringBuilder bulkData = new StringBuilder();
@@ -599,9 +612,10 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
 
         uploadFile(fileName, numberOfOrder, isValid, isDuplicated, shipmentInfo);
         pause1s();
-        click("//md-toolbar[@title='Upload Results']//button[@aria-label='Cancel']");
+        click("//md-toolbar[@title='Edit Shipment']");
         pause1s();
-        click("//md-toolbar[@title='Edit Shipment']//button[@aria-label='Cancel']");
+        click("//button[@aria-label='Save Changes']");
+        pause1s();
     }
 
     public void createAndUploadCsv(List<Order> orders, String fileName, int numberOfOrder, ShipmentInfo shipmentInfo) throws FileNotFoundException

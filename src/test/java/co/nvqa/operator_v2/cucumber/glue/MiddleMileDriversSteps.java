@@ -92,6 +92,7 @@ public class MiddleMileDriversSteps extends AbstractSteps
     @Then("Operator verifies that the data shown has the same value")
     public void operatorVerifiesThatTheDataShownHasTheSameValue()
     {
+        pause10s();
         GetDriverResponse driver = get(KEY_ALL_DRIVERS_DATA);
         int totalDriver = 0;
 
