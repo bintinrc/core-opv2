@@ -1,16 +1,19 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.client.driver.DriverClient;
 import co.nvqa.commons.client.core.HubClient;
 import co.nvqa.commons.cucumber.glue.AbstractApiOperatorPortalSteps;
 import co.nvqa.commons.cucumber.glue.AddressFactory;
-import co.nvqa.commons.model.core.*;
-
+import co.nvqa.commons.model.core.Address;
+import co.nvqa.commons.model.core.BatchOrderInfo;
+import co.nvqa.commons.model.core.BulkOrderInfo;
+import co.nvqa.commons.model.core.CreateDriverV2Request;
+import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.ThirdPartyShippers;
+import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.core.route.MilkrunGroup;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.core.setaside.SetAsideRequest;
 import co.nvqa.commons.model.core.zone.Zone;
-import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.JsonUtils;
 import co.nvqa.commons.util.NvLogger;
@@ -40,6 +43,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -328,6 +332,93 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         putInList(KEY_LIST_OF_CREATED_HUBS, hub);
     }
 
+    @Given("^API Operator updates Hub using data below:$")
+    public void apiOperatorUpdatesHubUsingDataBelow(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+
+        String id = data.get("id");
+        Hub hub = findCreatedHubById(id);
+
+        String uniqueCode = generateDateUniqueString();
+        Address address = AddressFactory.getRandomAddress();
+
+        String name = data.get("name");
+        if (StringUtils.isNotBlank(name))
+        {
+            if ("GENERATED".equals(name))
+            {
+                name = "HUB DO NOT USE " + uniqueCode;
+            }
+            hub.setName(name);
+        }
+
+        String displayName = data.get("displayName");
+        if (StringUtils.isNotBlank(displayName))
+        {
+            if ("GENERATED".equals(displayName))
+            {
+                displayName = "Hub DNS " + uniqueCode;
+            }
+            hub.setShortName(displayName);
+        }
+
+        String facilityType = data.get("facilityType");
+        if (StringUtils.isNotBlank(facilityType))
+        {
+            hub.setFacilityType(facilityType);
+        }
+
+        String city = data.get("city");
+        if (StringUtils.isNotBlank(city))
+        {
+            if ("GENERATED".equals(city))
+            {
+                city = address.getCity();
+            }
+            hub.setCity(city);
+        }
+
+        String country = data.get("country");
+        if (StringUtils.isNotBlank(country))
+        {
+            if ("GENERATED".equals(country))
+            {
+                country = address.getCountry();
+            }
+            hub.setCountry(country);
+        }
+
+        Hub randomHub = HubFactory.getRandomHub();
+
+        String latitude = data.get("latitude");
+        if (StringUtils.isNotBlank(latitude))
+        {
+            if ("GENERATED".equals(latitude))
+            {
+                hub.setLatitude(randomHub.getLatitude());
+            } else
+            {
+                hub.setLatitude(Double.parseDouble(latitude));
+            }
+        }
+
+        String longitude = data.get("longitude");
+        if (StringUtils.isNotBlank(longitude))
+        {
+            if ("GENERATED".equals(longitude))
+            {
+                hub.setLongitude(randomHub.getLongitude());
+            } else
+            {
+                hub.setLongitude(Double.parseDouble(longitude));
+            }
+        }
+
+        Hub response = getHubClient().update(hub);
+        hub.merge(response);
+    }
+
 
     @Given("^API Operator reloads hubs cache$")
     public void apiOperatorReloadsHubsCache()
@@ -340,7 +431,8 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     {
         List<Hub> hubs = get(KEY_LIST_OF_CREATED_HUBS);
         HubClient hubClient = getHubClient();
-        for (Hub hub: hubs) {
+        for (Hub hub : hubs)
+        {
             hubClient.getHubById(hub.getId());
         }
     }
@@ -349,6 +441,15 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
     public void apiOperatorDisableCreatedHub()
     {
         Hub hub = get(KEY_CREATED_HUB);
+        Hub newHub = getHubClient().disable(hub.getId());
+        hub.merge(newHub);
+    }
+
+    @Given("^API Operator disable hub with ID \"(.+)\"$")
+    public void apiOperatorDisableHubWithId(String hubId)
+    {
+        hubId = resolveValue(hubId);
+        Hub hub = findCreatedHubById(hubId);
         Hub newHub = getHubClient().disable(hub.getId());
         hub.merge(newHub);
     }
@@ -506,5 +607,24 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
                 NvLogger.warn("Could not delete created address");
             }
         }
+    }
+
+    private Hub findCreatedHubById(String hubId)
+    {
+        if (StringUtils.isBlank(hubId))
+        {
+            throw new IllegalArgumentException("ID of a hub to update was not provided");
+        }
+
+        List<Hub> listOfCreatedHubs = get(KEY_LIST_OF_CREATED_HUBS);
+        if (CollectionUtils.isEmpty(listOfCreatedHubs))
+        {
+            throw new IllegalArgumentException("List of created hubs is empty");
+        }
+
+        return listOfCreatedHubs.stream()
+                .filter(h -> Objects.equals(h.getId(), Long.valueOf(hubId)))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(f("Created hub with ID [%s] was not found", hubId)));
     }
 }
