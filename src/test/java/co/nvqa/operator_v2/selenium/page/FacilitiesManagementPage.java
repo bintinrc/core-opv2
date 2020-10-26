@@ -57,6 +57,9 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
     @FindBy(css = "md-dialog")
     public ConfirmActivationDialog confirmActivationDialog;
 
+    @FindBy(xpath = "//button[@aria-label='Yes']")
+    public Button sortHub;
+
     public HubsTable hubsTable;
 
     public FacilitiesManagementPage(WebDriver webDriver)
@@ -84,6 +87,7 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
         addHubDialog.country.setValue(hub.getCountry());
         addHubDialog.latitude.setValue(String.valueOf(hub.getLatitude()));
         addHubDialog.longitude.setValue(String.valueOf(hub.getLongitude()));
+        Optional.ofNullable(hub.getSortHub()).ifPresent(value -> sortHub.click());
         addHubDialog.submit.clickAndWaitUntilDone();
         addHubDialog.waitUntilInvisible();
     }
@@ -143,7 +147,7 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
         {
             expectedHub.setFacilityType("Hub - Crossdock");
         }
-        expectedHub.compareWithActual(actualHub, "createdAt", "updatedAt", "deletedAt");
+        expectedHub.compareWithActual(actualHub, "createdAt", "updatedAt", "deletedAt", "sortHub");
     }
 
     public static class HubsTable extends MdVirtualRepeatTable<Hub>

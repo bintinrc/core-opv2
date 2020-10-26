@@ -171,6 +171,51 @@ Feature: Facilities Management
     And Operator refresh hubs cache on Facilities Management page
     Then Operator verify Hub is updated successfully on Facilities Management page
 
+  @SoftDeleteHubViaDb
+  Scenario: Create New Hub-Crossdock Not As Sort Hub (uid:9fbaa3fa-8415-456e-acf1-f68dd496ed26)
+    Given Operator go to menu Hubs -> Facilities Management
+    When Operator create new Hub on page Hubs Administration using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | region       | JKB       |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And Operator refresh page
+    Then Operator verify a new Hub is created successfully on Facilities Management page
+    And DB Operator verify a new hub is created in core.hubs using data below:
+      | hubName      | {KEY_CREATED_HUB.name} |
+      | facilityType | CROSSDOCK              |
+    And DB Operator verify a new hub is created in sort.hubs using data below:
+      | hubName      | {KEY_CREATED_HUB.name} |
+      | facilityType | CROSSDOCK              |
+      | sortHub      | 0                      |
+
+  @SoftDeleteHubViaDb
+  Scenario: Create New Hub-Crossdock As Sort Hub (uid:a2a0ab06-4a7a-42c1-8aed-eb29bf9c9f40)
+    Given Operator go to menu Hubs -> Facilities Management
+    When Operator create new Hub on page Hubs Administration using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | region       | JKB       |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+      | sortHub      | YES       |
+    And Operator refresh page
+    Then Operator verify a new Hub is created successfully on Facilities Management page
+    And DB Operator verify a new hub is created in core.hubs using data below:
+      | hubName      | {KEY_CREATED_HUB.name} |
+      | facilityType | CROSSDOCK              |
+    And DB Operator verify a new hub is created in sort.hubs using data below:
+      | hubName      | {KEY_CREATED_HUB.name} |
+      | facilityType | CROSSDOCK              |
+      | sortHub      | 1                      |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

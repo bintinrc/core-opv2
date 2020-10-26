@@ -11,7 +11,6 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import org.hamcrest.Matchers;
 import org.junit.platform.commons.util.StringUtils;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,6 +44,7 @@ public class FacilitiesManagementSteps extends AbstractSteps
         String longitude = data.get("longitude");
         String facilityType = data.get("facilityType");
         String region = data.get("region");
+        String sortHub = data.get("sortHub");
 
         String uniqueCode = generateDateUniqueString();
         Address address = AddressFactory.getRandomAddress();
@@ -91,6 +91,13 @@ public class FacilitiesManagementSteps extends AbstractSteps
         hub.setFacilityType(facilityType);
         hub.setRegion(region);
 
+        if ("YES".equals(sortHub))
+        {
+            hub.setSortHub(1);
+        } else {
+            hub.setSortHub(0);
+        }
+
         put(KEY_CREATED_HUB, hub);
         putInList(KEY_LIST_OF_CREATED_HUBS, hub);
 
@@ -101,7 +108,13 @@ public class FacilitiesManagementSteps extends AbstractSteps
     public void operatorVerifyANewHubIsCreatedSuccessfullyOnPageHubsAdministration()
     {
         Hub hub = get(KEY_CREATED_HUB);
-        facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
+
+        retryIfAssertionErrorOccurred(() ->
+        {
+            navigateRefresh();
+            pause2s();
+            facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
+        }, "Unable to find the hub, retrying...");
     }
 
     @When("^Operator update Hub on page Hubs Administration using data below:$")
@@ -186,7 +199,13 @@ public class FacilitiesManagementSteps extends AbstractSteps
     public void operatorVerifyHubIsUpdatedSuccessfullyOnPageHubsAdministration()
     {
         Hub hub = get(KEY_CREATED_HUB);
-        facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
+
+        retryIfAssertionErrorOccurred(() ->
+        {
+            navigateRefresh();
+            pause2s();
+            facilitiesManagementPage.verifyHubIsExistAndDataIsCorrect(hub);
+        }, "Unable to find the hub, retrying...");
     }
 
     @When("^Operator search Hub on page Hubs Administration using data below:$")
