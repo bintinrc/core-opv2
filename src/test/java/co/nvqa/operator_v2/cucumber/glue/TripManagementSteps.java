@@ -55,6 +55,27 @@ public class TripManagementSteps extends AbstractSteps {
         tripManagementPage.loadButton.waitUntilInvisible();
     }
 
+    @Then("Operator verifies toast with message {string} is shown on Trip Management page")
+    public void operatorVerifiesToastWithMessageIsShownOnTripManagementPage(String toastMessage) {
+        String resolvedToastMessage = resolveValue(toastMessage);
+        tripManagementPage.verifyToastContainingMessageIsShown(resolvedToastMessage);
+    }
+
+    @Then("Operator click force trip completion")
+    public void operatorClickForceTripCompletion() {
+        tripManagementPage.forceTripCompletion();
+    }
+
+    @When("Operator depart trip")
+    public void operatorClickDepartTripButton() {
+        tripManagementPage.departTrip();
+    }
+
+    @When("Operator arrive trip")
+    public void operatorClickArriveTripButton() {
+        tripManagementPage.arriveTrip();
+    }
+
     @Then("Operator verifies trip has departed")
     public void operatorVerifiesTripHasDeparted() {
         tripManagementPage.verifyTripHasDeparted();
