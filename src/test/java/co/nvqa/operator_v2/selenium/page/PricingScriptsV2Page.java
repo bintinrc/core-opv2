@@ -122,8 +122,15 @@ public class PricingScriptsV2Page extends OperatorV2SimplePage
     public void verifyDraftScriptIsReleased(Script script)
     {
         clickTabItem(TAB_ACTIVE_SCRIPTS);
-        searchTableActiveScriptsByScriptName(script.getName());
-        wait10sUntil(()->!isTableEmpty(ACTIVE_TAB_XPATH), "Active Scripts table is empty. Draft Script failed to release.");
+
+        retryIfAssertionErrorOccurred(() ->
+        {
+            searchTableActiveScriptsByScriptName(script.getName());
+            if(isTableEmpty(ACTIVE_TAB_XPATH)){
+                refreshPage();
+                fail("Data still not loaded");
+            }
+        }, String.format("Active script found "));
 
         String actualId = getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_ID_ON_TABLE_DRAFTS);
         String actualScriptName = getTextOnTableActiveScripts(1, COLUMN_CLASS_DATA_NAME_ON_TABLE_DRAFTS);

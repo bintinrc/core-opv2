@@ -21,12 +21,3 @@ Feature: Pricing Scripts V2
     When Operator link Script to Shipper with ID = "{shipper-v4-dummy-script-legacy-id}"
     And Operator refresh page
     Then Operator verify the Script is linked successfully
-    Given API Shipper create V4 order using data below:
-      | shipperClientId     | {shipper-v4-dummy-script-client-id}                                                                                                                                                                                                                                                                                                                               |
-      | shipperClientSecret | {shipper-v4-dummy-script-client-secret}                                                                                                                                                                                                                                                                                                                           |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                   |
-      | v4OrderRequest      | { "service_type":"Parcel", "order_type": "NORMAL", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-    Then API Operator force succeed created order
-    Then Operator gets price order details from the database
-    Then Operator verify the price is correct using data below:
-      | expectedCost | 2.00 |
