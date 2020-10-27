@@ -96,7 +96,7 @@ public class MovementManagementPage extends OperatorV2SimplePage
     public TextBox stationFilter;
 
     //region Stations tab
-    @FindBy(xpath = "//label[starts-with(.,'Stations')]")
+    @FindBy(xpath = "//label[starts-with(.,'Station')]")
     public PageElement stationsTab;
 
     @FindBy(xpath = "//button[.='Add Schedule']")
@@ -116,6 +116,9 @@ public class MovementManagementPage extends OperatorV2SimplePage
 
     @FindBy(className = "ant-modal-wrap")
     public AssignDriverModal assignDriverModal;
+
+    @FindBy(xpath = "//div[@class='ant-notification-notice-message' and .='Relation created']")
+    public PageElement successCreateRelation;
 
     //endregion
 
