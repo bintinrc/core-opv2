@@ -77,7 +77,7 @@ public class MovementManagementPage extends OperatorV2SimplePage
     @FindBy(xpath = "//div[@class='ant-popover-buttons']//button[.='Delete']")
     public Button popoverDeleteButton;
 
-    @FindBy(xpath = "//label[.='Crossdock Hubs']")
+    @FindBy(xpath = "//label[.='Crossdock']")
     public PageElement crossdockHubsTab;
 
     @FindBy(xpath = "//label[.='Relations']")
