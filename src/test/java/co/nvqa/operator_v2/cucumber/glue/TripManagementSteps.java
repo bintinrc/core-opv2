@@ -236,6 +236,13 @@ public class TripManagementSteps extends AbstractSteps {
         put(KEY_MAIN_WINDOW_HANDLE, windowHandle);
     }
 
+    @And("Operator assign driver {string} to created movement trip")
+    public void operatorAssignDriverToCreatedMovementScheduleWithData(String driverUsername)
+    {
+        String resolvedDriverUsername = resolveValue(driverUsername);
+        tripManagementPage.assignDriver(resolvedDriverUsername);
+    }
+
     @Then("Operator verifies that the new tab with trip details is opened")
     public void operatorVerifiesThatTheNewTabWithTripDetailsIsOpened() {
         String tripId = get(KEY_TRIP_ID);
