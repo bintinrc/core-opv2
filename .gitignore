@@ -17,6 +17,7 @@ out
 
 .idea
 *.iml
+.DS_STORE
 
 /hiptest
 chromedriver
