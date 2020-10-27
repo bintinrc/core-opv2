@@ -145,15 +145,15 @@ public class MovementManagementSteps extends AbstractSteps
                 movementManagementPage.editStationRelationsModal.waitUntilVisible();
                 retryIfRuntimeExceptionOccurred(() ->
                                 movementManagementPage.editStationRelationsModal.crossdockHub.selectValue(crossdockHub),
-                        2
-                );
+                        2);
                 movementManagementPage.editStationRelationsModal.save.click();
+                movementManagementPage.successCreateRelation.waitUntilVisible();
+                movementManagementPage.successCreateRelation.waitUntilInvisible();
                 movementManagementPage.editStationRelationsModal.waitUntilInvisible();
             } catch (Throwable ex) {
                 NvLogger.error(ex.getMessage());
-                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
-                navigateRefresh();
-                pause2s();
+                NvLogger.info("Searched element is not found, retrying...");
+                movementManagementPage.refreshPage();
                 movementManagementPage.switchTo();
                 movementManagementPage.relationsTab.waitUntilClickable(60);
                 throw ex;
@@ -216,9 +216,8 @@ public class MovementManagementSteps extends AbstractSteps
                 movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
             } catch (Throwable ex) {
                 NvLogger.error(ex.getMessage());
-                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
-                navigateRefresh();
-                pause2s();
+                NvLogger.info("Searched element is not found, retrying...");
+                movementManagementPage.refreshPage();
                 movementManagementPage.switchTo();
                 movementManagementPage.stationsTab.waitUntilClickable(60);
                 throw ex;
