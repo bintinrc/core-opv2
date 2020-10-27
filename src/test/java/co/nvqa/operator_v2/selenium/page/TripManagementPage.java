@@ -75,6 +75,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
     @FindBy(className = "ant-modal-wrap")
     public CancelTripModal cancelTripModal;
 
+    @FindBy(className = "ant-modal-wrap")
+    public TripDepartureArrivalModal tripDepartureArrivalModal;
+
     @FindBy(xpath = "//th[div[.='Status']]")
     public StatusFilter tripStatusFilter;
 
@@ -104,6 +107,15 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
     @FindBy(xpath = LOAD_BUTTON_XPATH)
     public Button loadButton;
+
+    @FindBy(xpath = "//button[.='Force trip completion']")
+    public Button forceTripCompletion;
+
+    @FindBy(xpath = "//button[.='Depart']")
+    public Button departTripButton;
+
+    @FindBy(xpath = "//button[.='Arrive']")
+    public Button arriveTripButton;
 
     public TripManagementPage(WebDriver webDriver) {
         super(webDriver);
@@ -530,6 +542,42 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
     }
 
+    public void verifyToastContainingMessageIsShown(String expectedToastMessage) {
+        retryIfAssertionErrorOccurred(() -> {
+            try {
+                WebElement toast = findElementByXpath("//div[contains(@class,'notification-notice-message')]");
+                String actualToastMessage = toast.getText();
+                assertThat("Trip Management toast message is the same", actualToastMessage, containsString(expectedToastMessage));
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                throw ex;
+            }
+        }, getCurrentMethodName());
+    }
+
+    public void forceTripCompletion() {
+        forceTripCompletion.waitUntilClickable();
+        forceTripCompletion.click();
+    }
+
+    public void departTrip() {
+        departTripButton.waitUntilClickable();
+        departTripButton.click();
+        tripDepartureArrivalModal.waitUntilVisible();
+        tripDepartureArrivalModal.submitTripDeparture.waitUntilClickable();
+        tripDepartureArrivalModal.submitTripDeparture.click();
+        tripDepartureArrivalModal.waitUntilInvisible();
+    }
+
+    public void arriveTrip() {
+        arriveTripButton.waitUntilClickable();
+        arriveTripButton.click();
+        tripDepartureArrivalModal.waitUntilVisible();
+        tripDepartureArrivalModal.submitTripDeparture.waitUntilClickable();
+        tripDepartureArrivalModal.submitTripDeparture.click();
+        tripDepartureArrivalModal.waitUntilInvisible();
+    }
+
     public void verifyStatusValue(String expectedTripId, String expectedStatusValue) {
         waitUntilVisibilityOfElementLocated(TRIP_ID_FIRST_ROW_XPATH);
         String actualTripId = getText(TRIP_ID_FIRST_ROW_XPATH);
@@ -788,6 +836,19 @@ public class TripManagementPage extends OperatorV2SimplePage {
             }
             none.check();
         }
+    }
+
+    public static class TripDepartureArrivalModal extends AntModal {
+        public TripDepartureArrivalModal(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(xpath = "//button[.='Submit']")
+        public Button submitTripDeparture;
+
+        @FindBy(xpath = "//button[.='No']")
+        public Button no;
     }
 
     public static class MovementTypeFilter extends TableFilterPopup {
