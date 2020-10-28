@@ -515,6 +515,13 @@ public class TripManagementPage extends OperatorV2SimplePage {
         assignTripModal.waitUntilInvisible();
     }
 
+    public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {
+        assignTripModal.waitUntilVisible();
+        assignTripModal.assignDriverWithAdditional(primaryDriver, additionalDriver);
+        assignTripModal.saveDriver.click();
+        assignTripModal.waitUntilInvisible();
+    }
+
     public void verifiesTripDetailIsOpened(String tripId, String windowHandle) {
         switchToNewWindow();
 
@@ -973,11 +980,26 @@ public class TripManagementPage extends OperatorV2SimplePage {
         @FindBy(xpath = "//button[.='Cancel']")
         public Button cancel;
 
-        @FindBy(xpath = ".//div[contains(@id,'driver')]")
-        public AntSelect assignDriverInput;
+        @FindBy(xpath = "(//div[contains(@id,'driver')])[1]")
+        public AntSelect assignPrimaryDriverInput;
+
+        @FindBy(xpath = "(//div[contains(@id,'driver')])[2]")
+        public AntSelect assignAdditionalDriverInput;
+
+        @FindBy(xpath = "//button[.='Add Another Driver']")
+        public Button addAnotherDriver;
 
         public void assignDriver(String driverName) {
-            assignDriverInput.selectValueWithContains(driverName);
+            assignPrimaryDriverInput.selectValueWithContains(driverName);
+        }
+
+        public void assignDriverWithAdditional(String primaryDriver,String additionalDriver) {
+            assignPrimaryDriverInput.selectValueWithContains(primaryDriver);
+            pause1s();
+            addAnotherDriver.waitUntilClickable();
+            addAnotherDriver.click();
+            pause1s();
+            assignAdditionalDriverInput.selectValueWithContains(additionalDriver);
         }
     }
 }
