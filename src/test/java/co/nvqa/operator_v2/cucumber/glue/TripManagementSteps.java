@@ -55,7 +55,7 @@ public class TripManagementSteps extends AbstractSteps {
         tripManagementPage.loadButton.waitUntilInvisible();
     }
 
-    @Then("Operator verifies toast with message {string} is shown on Trip Management page")
+    @Then("Operator verifies toast with message {string} is shown on movement page")
     public void operatorVerifiesToastWithMessageIsShownOnTripManagementPage(String toastMessage) {
         String resolvedToastMessage = resolveValue(toastMessage);
         tripManagementPage.verifyToastContainingMessageIsShown(resolvedToastMessage);
@@ -234,6 +234,27 @@ public class TripManagementSteps extends AbstractSteps {
         String tripId = tripManagementPage.getTripIdAndClickOnActionIcon(movementTripActionName);
         put(KEY_TRIP_ID, tripId);
         put(KEY_MAIN_WINDOW_HANDLE, windowHandle);
+    }
+
+    @And("Operator assign driver {string} to created movement trip")
+    public void operatorAssignDriverToCreatedMovementScheduleWithData(String driverUsername)
+    {
+        String resolvedDriverUsername = resolveValue(driverUsername);
+        tripManagementPage.assignDriver(resolvedDriverUsername);
+    }
+
+    @And("Operator clear all assigned driver in created movement")
+    public void operatorClearAllAssignedDriverInCreatedMovementTrip()
+    {
+        tripManagementPage.clearAssignedDriver();
+    }
+
+    @And("Operator assign following drivers to created movement trip:")
+    public void operatorSAssignFollowingDriversToCreatedMovementTrip(Map<String, String> mapOfData) {
+        Map<String,String> resolvedMapOfData = resolveKeyValues(mapOfData);
+        String primaryDriver = resolvedMapOfData.get("primaryDriver");
+        String additionalDriver = resolvedMapOfData.get("additionalDriver");
+        tripManagementPage.assignDriverWithAdditional(primaryDriver, additionalDriver);
     }
 
     @Then("Operator verifies that the new tab with trip details is opened")
