@@ -6,6 +6,42 @@ Feature: Middle Mile Driver Management - Update Driver
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeleteDriver
+  Scenario: Update Driver Details - Name (uid:c6c8e619-1437-4a8d-ab3e-954e9e1ad863)
+    Given no-op
+
+  @DeleteDriver
+  Scenario: Update Driver Details - Contact Number (uid:9ec5adc6-aa82-40d5-93a4-a593033154fb)
+    Given no-op
+
+  @DeleteDriver
+  Scenario: Update Driver Details - Hub (uid:1892577e-d469-45dc-8ad5-48cbb0ddbf2a)
+    Given no-op
+
+  @DeleteDriver
+  Scenario: Update Driver License - License Number (uid:869dea40-d9e0-4a59-82b0-59b1f503bca5)
+    Given no-op
+
+  @DeleteDriver
+  Scenario: Update Driver License - Expiry Date (uid:def761b9-8aca-463d-ba5c-1641915a3477)
+    Given no-op
+
+  @DeleteDriver
+  Scenario: Update Driver License - License Type (uid:213c5760-5212-4fd8-b0be-9806886da126)
+    Given no-op
+
+  @DeleteDriver
+  Scenario: Update Employment Details - Employment Type (uid:feb6e6ab-4c9c-408d-975b-8c4301feea5a)
+    Given no-op
+
+  @DeleteDriver
+  Scenario: Update Employment Details - Employment Start Date (uid:51d4a35e-8453-4c9a-9b35-3f16638b22e8)
+    Given no-op
+
+  @DeleteDriver
+  Scenario: Update Employment Details - Employment End Date (uid:e2b5d826-6669-46f0-8a08-b8e00dd6c51f)
+    Given no-op
+
+  @DeleteDriver
   Scenario: Update Driver Availability - From Yes to No (uid:bb0ba3dc-dd22-4a49-bb8f-819051ba5a44)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Inter-Hub -> Middle Mile Drivers
