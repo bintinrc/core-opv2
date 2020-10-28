@@ -522,6 +522,13 @@ public class TripManagementPage extends OperatorV2SimplePage {
         assignTripModal.waitUntilInvisible();
     }
 
+    public void clearAssignedDriver() {
+        assignTripModal.waitUntilVisible();
+        assignTripModal.clearAssignedDriver();
+        assignTripModal.saveDriver.click();
+        assignTripModal.waitUntilInvisible();
+    }
+
     public void verifiesTripDetailIsOpened(String tripId, String windowHandle) {
         switchToNewWindow();
 
@@ -989,6 +996,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
         @FindBy(xpath = "//button[.='Add Another Driver']")
         public Button addAnotherDriver;
 
+        @FindBy(className = "remove-link")
+        public Button removeDriver;
+
         public void assignDriver(String driverName) {
             assignPrimaryDriverInput.selectValueWithContains(driverName);
         }
@@ -1000,6 +1010,14 @@ public class TripManagementPage extends OperatorV2SimplePage {
             addAnotherDriver.click();
             pause1s();
             assignAdditionalDriverInput.selectValueWithContains(additionalDriver);
+        }
+
+        public void clearAssignedDriver() {
+            if (assignAdditionalDriverInput.isDisplayedFast()) {
+                removeDriver.click();
+                pause500ms();
+            }
+            assignPrimaryDriverInput.clearValue();
         }
     }
 }

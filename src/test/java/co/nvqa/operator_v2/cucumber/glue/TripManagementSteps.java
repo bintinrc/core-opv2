@@ -55,7 +55,7 @@ public class TripManagementSteps extends AbstractSteps {
         tripManagementPage.loadButton.waitUntilInvisible();
     }
 
-    @Then("Operator verifies toast with message {string} is shown on Trip Management page")
+    @Then("Operator verifies toast with message {string} is shown on movement page")
     public void operatorVerifiesToastWithMessageIsShownOnTripManagementPage(String toastMessage) {
         String resolvedToastMessage = resolveValue(toastMessage);
         tripManagementPage.verifyToastContainingMessageIsShown(resolvedToastMessage);
@@ -241,6 +241,12 @@ public class TripManagementSteps extends AbstractSteps {
     {
         String resolvedDriverUsername = resolveValue(driverUsername);
         tripManagementPage.assignDriver(resolvedDriverUsername);
+    }
+
+    @And("Operator clear all assigned driver in created movement")
+    public void operatorClearAllAssignedDriverInCreatedMovementTrip()
+    {
+        tripManagementPage.clearAssignedDriver();
     }
 
     @And("Operator assign following drivers to created movement trip:")

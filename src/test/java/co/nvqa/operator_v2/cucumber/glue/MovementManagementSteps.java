@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementSchedule;
+import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.MovementManagementPage;
@@ -104,11 +105,16 @@ public class MovementManagementSteps extends AbstractSteps
         }, 10);
     }
 
+    @When("Operator clicks on assign_driver icon on the action column in movement schedule page")
+    public void operatorClicksOnAssignDriverOnTheActionColumn() {
+        movementManagementPage.clickAssignDriverIcon();
+    }
+
     @And("Operator assign driver {string} to created movement schedule")
     public void operatorAssignDriverToCreatedMovementScheduleWithData(String driverUsername)
     {
-        driverUsername = resolveValue(driverUsername);
-        movementManagementPage.assignDriver(driverUsername);
+        String resolvedDriverUsername = resolveValue(driverUsername);
+        movementManagementPage.assignDriver(resolvedDriverUsername);
     }
 
     @Then("Operator edits Crossdock Movement Schedule on Movement Management page using data below:")

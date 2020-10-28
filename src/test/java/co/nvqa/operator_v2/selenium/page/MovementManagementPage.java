@@ -111,11 +111,11 @@ public class MovementManagementPage extends OperatorV2SimplePage
     @FindBy(css = "div.ant-modal")
     public AddStationMovementScheduleModal addStationMovementScheduleModal;
 
-    @FindBy(xpath = "//td//i")
+    @FindBy(xpath = "//tr[1]//td[contains(@class,'action')]/i[1]")
     public PageElement assignDriverButton;
 
     @FindBy(className = "ant-modal-wrap")
-    public AssignDriverModal assignDriverModal;
+    public TripManagementPage.AssignTripModal assignDriverModal;
 
     //endregion
 
@@ -157,12 +157,12 @@ public class MovementManagementPage extends OperatorV2SimplePage
         {
             if (StringUtils.isNotBlank(originHub))
             {
-                originCrossdockHub.selectValue(originHub);
+                originCrossdockHub.selectValueWithContains(originHub);
             }
 
             if (StringUtils.isNotBlank(destinationHub))
             {
-                destinationCrossdockHub.selectValue(destinationHub);
+                destinationCrossdockHub.selectValueWithContains(destinationHub);
             }
         }
 
@@ -170,13 +170,23 @@ public class MovementManagementPage extends OperatorV2SimplePage
         originCrossdockHubFilter.waitUntilClickable();
     }
 
-    public void assignDriver(String driverUsername)
+    public void clickAssignDriverIcon()
     {
+        assignDriverButton.waitUntilClickable();
         assignDriverButton.click();
+    }
+
+    public void assignDriver(String driverId) {
         assignDriverModal.waitUntilVisible();
-        assignDriverModal.driverSelect.enterSearchTerm(driverUsername);
-        assignDriverModal.driverSelect.sendReturnButton();
-        assignDriverModal.save.click();
+        assignDriverModal.assignDriver(driverId);
+        assignDriverModal.saveDriver.click();
+        assignDriverModal.waitUntilInvisible();
+    }
+
+    public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {
+        assignDriverModal.waitUntilVisible();
+        assignDriverModal.assignDriverWithAdditional(primaryDriver, additionalDriver);
+        assignDriverModal.saveDriver.click();
         assignDriverModal.waitUntilInvisible();
     }
 
