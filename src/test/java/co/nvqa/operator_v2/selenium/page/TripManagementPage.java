@@ -1000,16 +1000,16 @@ public class TripManagementPage extends OperatorV2SimplePage {
         public Button removeDriver;
 
         public void assignDriver(String driverName) {
-            assignPrimaryDriverInput.selectValueWithContains(driverName);
+            assignPrimaryDriverInput.selectValue(driverName);
         }
 
         public void assignDriverWithAdditional(String primaryDriver,String additionalDriver) {
-            assignPrimaryDriverInput.selectValueWithContains(primaryDriver);
+            assignPrimaryDriverInput.selectValue(primaryDriver);
             pause1s();
             addAnotherDriver.waitUntilClickable();
             addAnotherDriver.click();
             pause1s();
-            assignAdditionalDriverInput.selectValueWithContains(additionalDriver);
+            assignAdditionalDriverInput.selectValue(additionalDriver);
         }
 
         public void clearAssignedDriver() {

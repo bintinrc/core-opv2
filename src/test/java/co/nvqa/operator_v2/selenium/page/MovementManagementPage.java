@@ -163,12 +163,12 @@ public class MovementManagementPage extends OperatorV2SimplePage
         {
             if (StringUtils.isNotBlank(originHub))
             {
-                originCrossdockHub.selectValueWithContains(originHub);
+                originCrossdockHub.selectValue(originHub);
             }
 
             if (StringUtils.isNotBlank(destinationHub))
             {
-                destinationCrossdockHub.selectValueWithContains(destinationHub);
+                destinationCrossdockHub.selectValue(destinationHub);
             }
         }
 
