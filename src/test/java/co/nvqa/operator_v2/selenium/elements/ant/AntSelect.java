@@ -30,10 +30,18 @@ public class AntSelect extends PageElement
     @FindBy(className = "ant-select-search__field")
     public PageElement searchInput;
 
+    @FindBy(className = "ant-select-clear-icon")
+    public PageElement clearIcon;
+
     public void selectValue(String value)
     {
         enterSearchTerm(value);
-        clickf("//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[text()='%s']", value);
+        clickf("//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[contains(text(),'%s')]", value);
+    }
+
+    public void clearValue()
+    {
+        clearIcon.click();
     }
 
     private void openMenu()
