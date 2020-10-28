@@ -36,7 +36,7 @@ public class AntSelect extends PageElement
     public void selectValue(String value)
     {
         enterSearchTerm(value);
-        clickf("//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[text()='%s']", value);
+        clickf("//div[not(contains(@class,'dropdown-hidden'))]/div/ul/li[contains(text(),'%s')]", value);
     }
 
     public void selectValueWithContains(String value)
