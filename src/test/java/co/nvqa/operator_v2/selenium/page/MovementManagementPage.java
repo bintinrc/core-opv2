@@ -119,10 +119,7 @@ public class MovementManagementPage extends OperatorV2SimplePage
 
     @FindBy(xpath = "//div[@class='ant-notification-notice-message' and .='Relation created']")
     public PageElement successCreateRelation;
-
-    @FindBy(xpath = "//div[@class='ant-notification-notice-message' and .='Relation created']")
-    public PageElement successCreateRelation;
-
+    
     //endregion
 
     public SchedulesTable schedulesTable;
