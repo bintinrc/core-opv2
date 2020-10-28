@@ -7,6 +7,7 @@ import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.support.RandomUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.page.MiddleMileDriversPage;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
@@ -81,6 +82,13 @@ public class MiddleMileDriversSteps extends AbstractSteps
     public void init()
     {
         middleMileDriversPage = new MiddleMileDriversPage(getWebDriver());
+    }
+
+    @Given("Operator verifies middle mile driver management page is loaded")
+    public void operatorMovementTripPageIsLoaded()
+    {
+        middleMileDriversPage.switchTo();
+        middleMileDriversPage.loadButton.waitUntilClickable(30);
     }
 
     @When("Operator clicks on Load Driver Button on the Middle Mile Driver Page")
@@ -275,10 +283,28 @@ public class MiddleMileDriversSteps extends AbstractSteps
         middleMileDriversPage.driverHasBeenCreatedToast(username);
     }
 
+    @When("Operator selects the hub on the Middle Mile Drivers Page with value {string}")
+    public void operatorSelectsTheHubOnTheMiddleMileDriversPageWithValue(String hubName)
+    {
+        String resolvedHubName = resolveValue(hubName);
+        middleMileDriversPage.selectHubFilter(resolvedHubName);
+    }
+
     @When("Operator selects the {string} with the value of {string} on Middle Mile Driver Page")
     public void operatorSelectsTheWithTheValueOfOnMiddleMileDriverPage(String filterName, String value)
     {
         middleMileDriversPage.selectFilter(filterName, value);
+    }
+
+    @When("Operator searches by {string} with value {string}")
+    public void operatorSearchesByWithValue(String filterName, String filterValue)
+    {
+        String resolvedFilterValue = resolveValue(filterValue);
+        if ("id".equals(filterName))
+        {
+            middleMileDriversPage.tableFilterByIdWithValue(Long.valueOf(resolvedFilterValue));
+        }
+
     }
 
     @Then("Operator searches by {string} and verifies the created username")
@@ -340,6 +366,26 @@ public class MiddleMileDriversSteps extends AbstractSteps
     public void operatorClicksViewButtonOnTheMiddleMileDriverPage()
     {
         middleMileDriversPage.clickViewButton();
+    }
+
+    @When("Operator clicks edit button on the middle mile driver page")
+    public void operatorClicksEditButtonOnTheMiddleMileDriverPage()
+    {
+        middleMileDriversPage.clickEditButton();
+    }
+
+    @When("Operator edit {string} on edit driver dialog with value {string}")
+    public void operatorEditDriverOnEditDriverDialogWithValue(String column, String value)
+    {
+        String resolvedValue = resolveValue(value);
+        middleMileDriversPage.editDriverByWithValue(column, resolvedValue);
+    }
+
+    @Then("Operator verifies {string} is updated with value {string}")
+    public void operatorVerifiesDriverIsUpdatedWithValue(String column, String value)
+    {
+        String resolvedValue = resolveValue(value);
+        middleMileDriversPage.verifiesDriverIsUpdatedByWithValue(column, resolvedValue);
     }
 
     @Then("Operator verifies that the details of the middle mile driver is true")
