@@ -24,7 +24,7 @@ Feature: Order Billing
     And Operator gets price order details from the database
     When Operator generates success billings using data below:
       | startDate    | {gradle-current-date-yyyy-MM-dd}                    |
-      | endDate      | {gradle-next-1-day-yyyy-MM-dd}                    |
+      | endDate      | {gradle-next-1-day-yyyy-MM-dd}                      |
       | uploadCsv    | {shipper-sop-v4-legacy-id}                          |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |

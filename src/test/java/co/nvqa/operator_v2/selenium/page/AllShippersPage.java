@@ -8,6 +8,7 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
@@ -354,6 +355,13 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void quickSearchShipper(String keyword)
     {
+        String currentURL = getWebDriver().getCurrentUrl();
+        String editShipperPageURL =(f("%s/%s/shippers", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE));
+
+        if(currentURL.contains(editShipperPageURL)){
+            getWebDriver().navigate().to(editShipperPageURL);
+        }
+
         searchTerm.setValue(keyword);
         search.clickAndWaitUntilDone();
         loadingShippers.waitUntilInvisible();
@@ -361,7 +369,7 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void editShipper(Shipper shipper)
     {
-        searchShipper(shipper.getName());
+        quickSearchShipper(shipper.getName());
         shippersTable.clickActionButton(1, ACTION_EDIT);
         allShippersCreateEditPage.switchToNewWindow();
         allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
