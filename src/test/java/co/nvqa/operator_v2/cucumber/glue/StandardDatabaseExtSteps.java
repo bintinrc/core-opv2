@@ -2,7 +2,11 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
 import co.nvqa.commons.model.addressing.JaroScore;
-import co.nvqa.commons.model.core.*;
+import co.nvqa.commons.model.core.Driver;
+import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.Reservation;
+import co.nvqa.commons.model.core.Transaction;
+import co.nvqa.commons.model.core.Waypoint;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.model.driver.FailureReason;
 import co.nvqa.commons.model.entity.*;
