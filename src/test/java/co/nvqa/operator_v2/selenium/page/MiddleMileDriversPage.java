@@ -6,12 +6,15 @@ import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.ant.AntCalendarPicker;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
+import java.util.List;
 
 /**
  * @author Tristania Siagian
@@ -399,7 +402,7 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
             String actualLicenseType = null;
             String actualComments = null;
 
-            
+
             ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='70%'");
             pause3s();
             nameFilter.setValue(middleMileDriver.getFirstName());
@@ -499,7 +502,37 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
                 editDriverDialog.name.clear();
                 editDriverDialog.name.sendKeys(value);
                 break;
-            case "contact_number":
+            case "contactNumber":
+                editDriverDialog.contactNumber.clear();
+                editDriverDialog.contactNumber.sendKeys(value);
+                break;
+            case "hub":
+                editDriverDialog.hub.selectValue(value);
+                break;
+            case "licenseNumber":
+                editDriverDialog.licenseNumber.clear();
+                editDriverDialog.licenseNumber.sendKeys(value);
+                break;
+            case "licenseExpiryDate":
+                editDriverDialog.licenseExpiryDate.clear.click();
+                editDriverDialog.licenseExpiryDate.pickerInput.click();
+                editDriverDialog.licenseExpiryDate.sendDate(value);
+                break;
+            case "licenseType":
+                editDriverDialog.selectLicenseType(value);
+                break;
+            case "employmentType":
+                editDriverDialog.employmentType.selectValueWithoutSearch(value);
+                break;
+            case "employmentStartDate":
+                editDriverDialog.employmentStartDate.clear.click();
+                editDriverDialog.employmentStartDate.pickerInput.click();
+                editDriverDialog.employmentStartDate.sendDate(value);
+                break;
+            case "employmentEndDate":
+                editDriverDialog.employmentEndDate.clear.click();
+                editDriverDialog.employmentEndDate.pickerInput.click();
+                editDriverDialog.employmentEndDate.sendDate(value);
                 break;
         }
         editDriverDialog.save.click();
@@ -703,10 +736,38 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
         @FindBy(id = "name")
         public TextBox name;
 
+        @FindBy(id = "contactNumber")
+        public TextBox contactNumber;
+
+        @FindBy(id = "hubId")
+        public AntSelect hub;
+
+        @FindBy(id = "licenseNumber")
+        public TextBox licenseNumber;
+
+        @FindBy(xpath = "//span[@id='licenseExpiryDate']")
+        public AntCalendarPicker licenseExpiryDate;
+
+        @FindBy(id = "employmentType")
+        public AntSelect employmentType;
+
+        @FindBy(xpath = "//span[@id='employmentStartDate']")
+        public AntCalendarPicker employmentStartDate;
+
+        @FindBy(xpath = "//span[@id='employmentEndDate']")
+        public AntCalendarPicker employmentEndDate;
+
         @FindBy(className = "ant-btn")
         public Button cancel;
 
         @FindBy(className = "ant-btn-primary")
         public Button save;
+
+        public void selectLicenseType(String value)
+        {
+            String licenseTypeXpath = "//div[contains(.//label,'License Type')]//input[@value='%s']";
+            WebElement licenseTypeInput = findElementByXpath(f(licenseTypeXpath, value));
+            licenseTypeInput.click();
+        }
     }
 }
