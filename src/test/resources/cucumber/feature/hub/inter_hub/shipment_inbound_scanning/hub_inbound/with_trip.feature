@@ -1841,6 +1841,7 @@ Feature: Shipment Hub Inbound With Trip Scanning
     And Operator load schedules on Movement Management page with retry using data below:
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | destinationHub | {hub-name-temp}                    |
+    And Operator clicks on assign_driver icon on the action column in movement schedule page
     And Operator assign driver "{KEY_LIST_OF_CREATED_DRIVERS[2].firstName} ({KEY_LIST_OF_CREATED_DRIVERS[2].username})" to created movement schedule
     Given Operator go to menu Inter-Hub -> Shipment Management
     When Operator create Shipment on Shipment Management page using data below:
