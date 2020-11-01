@@ -301,8 +301,7 @@ Feature: Parcel Sweeper Live
     And API Operator new add parcel to the route using data below:
       | addParcelToRouteRequest | DELIVERY |
     When API Operator refresh created order data
-    When Operator switch to edit order page using direct URL
-    When Operator change Priority Level to "<priorityLevel>" on Edit Order page
+    When API Operator update priority level of an order to = "<priorityLevel>"
     When Operator go to menu Routing -> Parcel Sweeper Live
     When Operator provides data on Parcel Sweeper Live page:
       | hubName    | {hub-name} |
