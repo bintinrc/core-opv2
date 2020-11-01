@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
 import co.nvqa.commons.model.addressing.JaroScore;
+import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.Transaction;
@@ -1034,8 +1035,55 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         Long shipmentId = Long.valueOf(shipmentIdAsString);
         String actualInboundType = getHubJdbc().getInboundScanTypeByShipmentId(shipmentId);
         assertEquals(inboundType.toLowerCase(), actualInboundType.toLowerCase());
-
     }
 
+    @Then("DB Operator verifies driver {string} with username {string} and value {string} is updated")
+    public void dbOperatorVerifiesDriverIsUpdatedWithValue(String column, String username, String updatedValue)
+    {
+        String resolvedUserName = resolveValue(username);
+        String resolvedUpdatedValue = resolveValue(updatedValue);
+        Driver driverData = getDriverJdbc().getDetailedDriverData(resolvedUserName);
+        switch (column)
+        {
+            case "name":
+                String actualName = driverData.getFirstName();
+                assertThat("Updated name is the same", actualName, equalTo(resolvedUpdatedValue));
+                break;
+            case "contactNumber":
+                Long driverId = driverData.getId();
+                String actualContactNumber = getDriverJdbc().getLatestDriverContactNumber(driverId);
+                assertThat("Updated name is the same", actualContactNumber, equalTo(resolvedUpdatedValue));
+                break;
+            case "hub":
+                String actualHubId = String.valueOf(driverData.getHubId());
+                assertThat("Updated hub is the same", actualHubId, equalTo(resolvedUpdatedValue));
+                break;
+            case "licenseNumber":
+                String actualLicenseNumber = driverData.getLicenseNumber();
+                assertThat("Updated license number is the same", actualLicenseNumber, equalTo(resolvedUpdatedValue));
+                break;
+            case "licenseExpiryDate":
+                String actualLicenseExpiryDate = driverData.getLicenseExpiryDate().split(" ")[0];
+                assertThat("Updated license expiry date is the same", actualLicenseExpiryDate, equalTo(resolvedUpdatedValue));
+                break;
+            case "licenseType":
+                String actualLicenseType = driverData.getLicenseType();
+                assertThat("Updated license type is the same", actualLicenseType, equalTo(resolvedUpdatedValue));
+                break;
+            case "employmentType":
+                String actualEmploymnetType = driverData.getEmploymentType();
+                assertThat("Updated employment type is the same", actualEmploymnetType, equalTo(resolvedUpdatedValue));
+                break;
+            case "employmentStartDate":
+                String actualEmploymentStartDate = driverData.getEmploymentStartDate().split(" ")[0];
+                assertThat("Updated employment start date is the same", actualEmploymentStartDate, equalTo(resolvedUpdatedValue));
+                break;
+            case "employmentEndDate":
+                String actualEmploymentEndDate = driverData.getEmploymentEndDate().split(" ")[0];
+                assertThat("Updated employment end date is the same", actualEmploymentEndDate, equalTo(resolvedUpdatedValue));
+                break;
+        }
+
+    }
 
 }
