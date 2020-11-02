@@ -1,4 +1,4 @@
-@OperatorV2 @Shipper @OperatorV2Part2 @AllShippers @Saas   @LaunchBrowser @ShouldAlwaysRun @EnableClearCache
+@OperatorV2 @Shipper @OperatorV2Part2 @AllShippers @Saas @LaunchBrowser @ShouldAlwaysRun @EnableClearCache
 Feature: All Shippers
 
   Background: Login to Operator Portal V2
@@ -48,7 +48,6 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator verifies that Pricing Script is "Active" and ""
-
 
   @PricingProfile  @CloseNewWindows
   Scenario: Create a new Shipper - Create Pricing Profile and Update it before Created (uid:15c1b8b1-546f-4f30-95f4-492b86e7bd7c)
@@ -216,7 +215,7 @@ Feature: All Shippers
       | errorMessage      | 0 is not a valid discount value |
 
 
- @todo @PricingProfile  @CloseNewWindows @ResetCountry
+  @PricingProfile  @CloseNewWindows @ResetCountry
   Scenario: Create a new Pricing Profile - with 0 Percentage Discount (uid:71f8c382-2c78-4ba7-b052-ada13861d606)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper -> All Shippers
@@ -241,7 +240,6 @@ Feature: All Shippers
       | discount          | 0                               |
       | errorMessage      | 0 is not a valid discount value |
 
-  @nadeera
   @PricingProfile  @CloseNewWindows
   Scenario: Create a new Pricing Profile - with none Flat Discount (uid:3895c1e8-58b5-4625-9175-788c133a4b92)
     Given Operator go to menu Shipper -> All Shippers
@@ -299,7 +297,6 @@ Feature: All Shippers
     Then DB Operator fetches pricing script details
     And Operator verifies the pricing script details are correct
 
-#  @nadeera
   @PricingProfile  @CloseNewWindows
   Scenario: Create a new Pricing Profile - with special characters Discount (uid:4dde3d48-2513-4c84-9b6c-4b848833d3eb)
     Given Operator go to menu Shipper -> All Shippers
@@ -320,7 +317,7 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds pricing script with invalid discount and verifies the error message
-      | pricingScriptName | 2508 - PT Cucumber Test 2       |
+      | pricingScriptName | 2402 - New Script                |
       | discount          | $#^$^#@                          |
       | errorMessage      | Special character is not allowed |
 
@@ -384,7 +381,6 @@ Feature: All Shippers
 
   @PricingProfile  @CloseNewWindows
   Scenario: Create a new Pricing Profile - with shipper discount over 6 digits Flat Discount  (uid:7e8428a0-4af4-4d08-b168-4837a8606f7d)
-    Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
       | isShipperActive              | true                  |

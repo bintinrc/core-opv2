@@ -115,7 +115,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void waitUntilShipperCreateEditPageIsLoaded()
     {
-        shipperInformation.waitUntilClickable();
+        shipperInformation.waitUntilClickable(5);
     }
 
     public void createNewShipper(Shipper shipper)
@@ -268,6 +268,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         {
             clickToggleButtonByLabel("Marketplace", "No");
             clickToggleButtonByLabel("Marketplace International", "No");
+            clickToggleButtonByLabel("Corporate", "No");
         }
 
         if (isCreateForm)
@@ -1249,6 +1250,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
                 moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
                 sendKeys(XPATH_DISCOUNT_VALUE, pricing.getDiscount());
                 sendKeysByAriaLabel(ARIA_LABEL_COMMENTS, pricing.getComments());
+                newPricingProfileDialog.codCountryDefaultCheckbox.check();
+                newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
                 click(XPATH_SAVE_CHANGES_PRICING_SCRIPT);
                 pause1s();
             }
