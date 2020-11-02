@@ -93,9 +93,9 @@ public class FacilitiesManagementSteps extends AbstractSteps
 
         if ("YES".equals(sortHub))
         {
-            hub.setSortHub(1);
+            hub.setSortHub(true);
         } else {
-            hub.setSortHub(0);
+            hub.setSortHub(null);
         }
 
         put(KEY_CREATED_HUB, hub);
