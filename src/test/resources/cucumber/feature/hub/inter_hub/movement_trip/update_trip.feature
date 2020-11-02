@@ -28,7 +28,7 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "Movement trip departed" is shown on Trip Management page
+    Then Operator verifies toast with message "Movement trip departed" is shown on movement page
 
   @DeleteHubsViaDb @DeleteMovementTripsViaDb
   Scenario: Register Trip Departure without Driver (uid:9af1c868-e9f5-4cf2-9b92-3c70c59d264c)
@@ -50,7 +50,7 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "Trip must have assigned drivers" is shown on Trip Management page
+    Then Operator verifies toast with message "Trip must have assigned drivers" is shown on movement page
 
   @DeleteHubsViaDb @DeleteDriver @DeleteMovementTripsViaDb
   Scenario: Register Trip Departure with Invalid Driver Employment Status - Main Driver Employment Status is Inactive (uid:aaee95f2-c6ee-4054-aa56-132d0757a5cf)
@@ -76,7 +76,7 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[1].username} employment is inactive" is shown on Trip Management page
+    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[1].username} employment is inactive" is shown on movement page
 
   @DeleteHubsViaDb @DeleteDriver @DeleteMovementTripsViaDb
   Scenario: Register Trip Departure with Invalid Driver Employment Status - Additional Driver Employment Status is Inactive (uid:a9695379-6ce2-4c1b-926e-8409d24e9408)
@@ -106,7 +106,7 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} employment is inactive" is shown on Trip Management page
+    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} employment is inactive" is shown on movement page
 
   @DeleteMovementTripsViaDb @DeleteHubsViaDb @DeleteDriver
   Scenario: Register Trip Departure with Invalid Driver Employment Status - Main and Additional Driver Employment Status are Inactive (uid:20557fe2-72fd-4b8f-9d50-f563d9148972)
@@ -138,8 +138,8 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[1].username} employment is inactive" is shown on Trip Management page
-    And Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} employment is inactive" is shown on Trip Management page
+    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[1].username} employment is inactive" is shown on movement page
+    And Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} employment is inactive" is shown on movement page
 
   @DeleteHubsViaDb @DeleteDriver @DeleteMovementTripsViaDb
   Scenario: Register Trip Departure With Invalid Driver License Status - Main Driver License Status is Inactive (uid:7c5bd44b-7fbd-4cc1-9699-acd274520c4e)
@@ -165,7 +165,7 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[1].username} license is inactive" is shown on Trip Management page
+    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[1].username} license is inactive" is shown on movement page
 
   @DeleteHubsViaDb @DeleteDriver @DeleteMovementTripsViaDb
   Scenario: Register Trip Departure With Invalid Driver License Status - Additional Driver License Status is Inactive (uid:074aaab5-7de0-486a-bf46-088611166c57)
@@ -195,7 +195,7 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} license is inactive" is shown on Trip Management page
+    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} license is inactive" is shown on movement page
 
   @DeleteHubsViaDb @DeleteDriver @DeleteMovementTripsViaDb
   Scenario: Register Trip Departure With Invalid Driver License Status - Main and additional Driver License Status are Inactive (uid:cb5134b9-c414-4793-a77d-92384d590cda)
@@ -227,8 +227,8 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[1].username} license is inactive" is shown on Trip Management page
-    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} license is inactive" is shown on Trip Management page
+    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[1].username} license is inactive" is shown on movement page
+    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} license is inactive" is shown on movement page
 
   @DeleteHubsViaDb @DeleteDriver @DeleteMovementTripsViaDb
   Scenario: Register Trip Departure With Invalid Driver Employment and License Status - Main Driver Employment Status and License Status are Inactive (uid:b3677fa8-6905-4f1f-9d42-d0a4747a08ab)
@@ -255,8 +255,8 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[1].username} employment is inactive" is shown on Trip Management page
-    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[1].username} license is inactive" is shown on Trip Management page
+    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[1].username} employment is inactive" is shown on movement page
+    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[1].username} license is inactive" is shown on movement page
 
   @DeleteHubsViaDb @DeleteDriver @DeleteMovementTripsViaDb
   Scenario: Register Trip Departure With Invalid Driver Employment and License Status - Additional Driver Employment Status and License Status are Inactive (uid:65913ea4-f97c-4269-91c1-a695ffb6f15b)
@@ -287,8 +287,8 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} employment is inactive" is shown on Trip Management page
-    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} license is inactive" is shown on Trip Management page
+    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} employment is inactive" is shown on movement page
+    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} license is inactive" is shown on movement page
 
   @DeleteHubsViaDb @DeleteDriver @DeleteMovementTripsViaDb
   Scenario: Register Trip Departure With Invalid Driver Employment and License Status - Main and Additional Driver Employment Status and License Status are Inactive (uid:48ea8cc1-01f0-4d20-87ba-56fa8ee16862)
@@ -324,10 +324,10 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[1].username} employment is inactive" is shown on Trip Management page
-    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[1].username} license is inactive" is shown on Trip Management page
-    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} employment is inactive" is shown on Trip Management page
-    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} license is inactive" is shown on Trip Management page
+    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[1].username} employment is inactive" is shown on movement page
+    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[1].username} license is inactive" is shown on movement page
+    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} employment is inactive" is shown on movement page
+    Then Operator verifies toast with message "{KEY_LIST_OF_CREATED_DRIVERS[2].username} license is inactive" is shown on movement page
 
   @DeleteHubsViaDb @DeleteDriver @DeleteMovementTripsViaDb
   Scenario: Register Trip Arrival (uid:60b02a8a-555b-4282-a1d1-a8fbf76f550b)
@@ -365,7 +365,7 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator arrive trip
-    Then Operator verifies toast with message "Movement trip arrived" is shown on Trip Management page
+    Then Operator verifies toast with message "Movement trip arrived" is shown on movement page
 
   @DeleteHubsViaDb @DeleteDriver @DeleteMovementTripsViaDb
   Scenario: Register Trip Departure with Driver Still In Transit (uid:46df4679-d92c-4b16-b140-d8a3a28c3aa4)
@@ -403,10 +403,10 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].username} is in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" is shown on Trip Management page
+    Then Operator verifies toast with message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].username} is in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" is shown on movement page
     And Operator click force trip completion
     And Operator depart trip
-    Then Operator verifies toast with message "Movement trip departed" is shown on Trip Management page
+    Then Operator verifies toast with message "Movement trip departed" is shown on movement page
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

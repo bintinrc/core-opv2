@@ -7,6 +7,7 @@ import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.TripManagementFilteringType;
 import co.nvqa.operator_v2.selenium.elements.*;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
+import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
@@ -74,6 +75,9 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
     @FindBy(className = "ant-modal-wrap")
     public CancelTripModal cancelTripModal;
+
+    @FindBy(className = "ant-modal-wrap")
+    public AssignTripModal assignTripModal;
 
     @FindBy(className = "ant-modal-wrap")
     public TripDepartureArrivalModal tripDepartureArrivalModal;
@@ -502,6 +506,27 @@ public class TripManagementPage extends OperatorV2SimplePage {
         }
 
         return tripId;
+    }
+
+    public void assignDriver(String driverId) {
+        assignTripModal.waitUntilVisible();
+        assignTripModal.assignDriver(driverId);
+        assignTripModal.saveDriver.click();
+        assignTripModal.waitUntilInvisible();
+    }
+
+    public void assignDriverWithAdditional(String primaryDriver, String additionalDriver) {
+        assignTripModal.waitUntilVisible();
+        assignTripModal.assignDriverWithAdditional(primaryDriver, additionalDriver);
+        assignTripModal.saveDriver.click();
+        assignTripModal.waitUntilInvisible();
+    }
+
+    public void clearAssignedDriver() {
+        assignTripModal.waitUntilVisible();
+        assignTripModal.clearAssignedDriver();
+        assignTripModal.saveDriver.click();
+        assignTripModal.waitUntilInvisible();
     }
 
     public void verifiesTripDetailIsOpened(String tripId, String windowHandle) {
@@ -948,5 +973,51 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
         @FindBy(className = "createdAt")
         public PageElement createdAt;
+    }
+
+    public static class AssignTripModal extends AntModal {
+        public AssignTripModal(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(xpath = "//button[.='Save Driver']")
+        public Button saveDriver;
+
+        @FindBy(xpath = "//button[.='Cancel']")
+        public Button cancel;
+
+        @FindBy(xpath = "(//div[contains(@id,'driver')])[1]")
+        public AntSelect assignPrimaryDriverInput;
+
+        @FindBy(xpath = "(//div[contains(@id,'driver')])[2]")
+        public AntSelect assignAdditionalDriverInput;
+
+        @FindBy(xpath = "//button[.='Add Another Driver']")
+        public Button addAnotherDriver;
+
+        @FindBy(className = "remove-link")
+        public Button removeDriver;
+
+        public void assignDriver(String driverName) {
+            assignPrimaryDriverInput.selectValue(driverName);
+        }
+
+        public void assignDriverWithAdditional(String primaryDriver,String additionalDriver) {
+            assignPrimaryDriverInput.selectValue(primaryDriver);
+            pause1s();
+            addAnotherDriver.waitUntilClickable();
+            addAnotherDriver.click();
+            pause1s();
+            assignAdditionalDriverInput.selectValue(additionalDriver);
+        }
+
+        public void clearAssignedDriver() {
+            if (assignAdditionalDriverInput.isDisplayedFast()) {
+                removeDriver.click();
+                pause500ms();
+            }
+            assignPrimaryDriverInput.clearValue();
+        }
     }
 }

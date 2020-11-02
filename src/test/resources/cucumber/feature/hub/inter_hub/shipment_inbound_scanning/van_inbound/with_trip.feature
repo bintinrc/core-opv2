@@ -1803,6 +1803,7 @@ Feature: Shipment Van Inbound With Trip Scanning
     And Operator load schedules on Movement Management page with retry using data below:
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | destinationHub | {hub-name-temp}                    |
+    And Operator clicks on assign_driver icon on the action column in movement schedule page
     And Operator assign driver "{id-driver-name} ({id-driver-username})" to created movement schedule
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     And Operator fill Shipment Inbound Scanning page with data below:
