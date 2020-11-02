@@ -38,6 +38,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -115,7 +116,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void waitUntilShipperCreateEditPageIsLoaded()
     {
-        shipperInformation.waitUntilClickable(5);
+        shipperInformation.waitUntilClickable(10);
     }
 
     public void createNewShipper(Shipper shipper)
@@ -174,6 +175,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         pause2s();
         fillBasicSettingsForm(shipper);
         fillMoreSettingsForm(shipper);
+        fillBillingInformation(shipper);
 
         if (shipper.getMarketplaceDefault() != null)
         {
@@ -182,7 +184,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         clickNvIconTextButtonByName("container.shippers.create-shipper");
         String errorText = getText(XPATH_VALIDATION_ERROR);
-        assertTrue("Error message is not displayed!", errorText.contains("Pricing and Billing"));
+        assertTrue("Error message is not displayed!", errorText.contains("Pricing Profile (Pricing and Billing)"));
         backToShipperList();
         pause3s();
         getWebDriver().switchTo().window(currentWindowHandle);
@@ -366,30 +368,35 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     private void fillPricingAndBillingForm(Shipper shipper)
     {
-        // ===== PRICING & BILLING =====
-        Pricing pricing = shipper.getPricing();
+        fillPricingProfile(shipper);
+        fillBillingInformation(shipper);
+    }
 
-        if (pricing != null)
-        {
-            tabs.selectTab("Pricing and Billing");
-
-            if (StringUtils.isNotBlank(pricing.getScriptName()))
-            {
-                addNewProfile.click();
-                newPricingProfileDialog.waitUntilVisible();
-                newPricingProfileDialog.pricingScript.searchAndSelectValue(pricing.getScriptName());
-                newPricingProfileDialog.codCountryDefaultCheckbox.check();
-                newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
-
-                newPricingProfileDialog.saveChanges.clickAndWaitUntilDone();
-                newPricingProfileDialog.waitUntilInvisible();
-            }
-        }
-        // Billing
+    private void fillBillingInformation(Shipper shipper)
+    {
+        tabs.selectTab("Pricing and Billing");
         billingName.setValue(shipper.getBillingName());
         billingContact.setValue(shipper.getBillingContact());
         billingAddress.setValue(shipper.getBillingAddress());
         billingPostcode.setValue(shipper.getBillingPostcode());
+    }
+
+    private void fillPricingProfile(Shipper shipper)
+    {
+        Pricing pricing = shipper.getPricing();
+        tabs.selectTab("Pricing and Billing");
+        if (Objects.nonNull(pricing) && StringUtils.isNotBlank(pricing.getScriptName()))
+        {
+            addNewProfile.click();
+            newPricingProfileDialog.waitUntilVisible();
+            newPricingProfileDialog.pricingScript.searchAndSelectValue(pricing.getScriptName());
+            newPricingProfileDialog.codCountryDefaultCheckbox.check();
+            newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
+
+            newPricingProfileDialog.saveChanges.clickAndWaitUntilDone();
+            newPricingProfileDialog.waitUntilInvisible();
+        }
+
     }
 
     private void addAddress(Address address)

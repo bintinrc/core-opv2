@@ -70,8 +70,7 @@ Feature: All Shippers
     And Operator edits the created shipper
     Then Operator verifies that Pricing Script is "Active" and ""
 
-#  TODO
-  @todo @PricingProfile  @CloseNewWindows
+ @PricingProfile  @CloseNewWindows
   Scenario: Create a new Shipper - Not Creating Pricing Profile (uid:5f2fdf58-bc27-4a5f-9961-9f2b0b06f820)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings and without Pricing profile using data below:
@@ -89,8 +88,7 @@ Feature: All Shippers
       | industryName                 | {industry-name} |
       | salesPerson                  | {sales-person}  |
 
-  # TODO : ask audia whether this is a viable option (having active and expired)
-  @todo @PricingProfile  @CloseNewWindows
+   @PricingProfile  @CloseNewWindows
   Scenario: Create a new Pricing Profile - with Flat Discount where Shipper has Active & Expired Pricing Profile (uid:0e077755-8ca3-41af-8c7e-a852ab0ad0f2)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -124,7 +122,7 @@ Feature: All Shippers
     Then DB Operator fetches pricing script and shipper discount details
     And Operator verifies the pricing script and shipper discount details are correct
 
-  @todo # TODO : ask audia whether this is a viable option (having active and expired)
+  @PricingProfile  @CloseNewWindows
   Scenario: Create a new Pricing Profile - with Percentage Discount where Shipper has Active & Expired Pricing Profile (uid:bafe6400-ee59-4068-9e6d-fc3395ac7a8a)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper Support -> Blocked Dates
@@ -159,7 +157,6 @@ Feature: All Shippers
     Then DB Operator fetches pricing script and shipper discount details
     And Operator verifies the pricing script and shipper discount details are correct
 
-
   @PricingProfile  @CloseNewWindows
   Scenario: Create a new Pricing Profile - where Shipper has Pending Pricing Profile (uid:a2bc5de8-87ab-43b6-a538-1829e97eddd8)
     Given Operator go to menu Shipper -> All Shippers
@@ -189,7 +186,6 @@ Feature: All Shippers
     And Operator edits the created shipper
     And Operator verifies that Edit Pending Profile is displayed
 
-
   @PricingProfile  @CloseNewWindows
   Scenario: Create a new Pricing Profile - with 0 Flat Discount (uid:e5ba2876-828e-4340-9208-d294ea2052b1)
     Given Operator go to menu Shipper -> All Shippers
@@ -213,7 +209,6 @@ Feature: All Shippers
       | pricingScriptName | 2402 - New Script               |
       | discount          | 0                               |
       | errorMessage      | 0 is not a valid discount value |
-
 
   @PricingProfile  @CloseNewWindows @ResetCountry
   Scenario: Create a new Pricing Profile - with 0 Percentage Discount (uid:71f8c382-2c78-4ba7-b052-ada13861d606)
@@ -267,8 +262,7 @@ Feature: All Shippers
     Then DB Operator fetches pricing script details
     And Operator verifies the pricing script details are correct
 
-
-  @todo @PricingProfile  @CloseNewWindows @ResetCountry
+ @PricingProfile  @CloseNewWindows @ResetCountry
   Scenario: Create a new Pricing Profile - with none Percentage Discount (uid:67f49a74-87a8-4db8-b1a7-7787f4dd70e9)
     Given Operator changes the country to "Indonesia"
     Given Operator go to menu Shipper Support -> Blocked Dates
