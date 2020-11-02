@@ -1,4 +1,4 @@
-@MiddleMile @Hub @InterHub @MovementSchedules @CrossdockHubs
+@MiddleMile @Hub @InterHub @MovementSchedules @CrossdockHubs @Refo
 Feature: Crossdock Hubs
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -145,6 +145,8 @@ Feature: Crossdock Hubs
       | schedules[2].durationTime   | 18:30                                                         |
       | schedules[2].daysOfWeek     | monday,wednesday,friday                                       |
       | schedules[2].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
+    And Operator refresh page
+    And Movement Management page is loaded
     And Operator load schedules on Movement Management page using data below:
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
@@ -192,6 +194,138 @@ Feature: Crossdock Hubs
       | schedules[2].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
     And Operator click "Create" button on Add Movement Schedule dialog
     Then Operator verify "Schedule already exists" error Message is displayed in Add Crossdock Movement Schedule dialog
+
+  @DeleteHubsViaDb @DeleteMovementTripsViaDb
+  Scenario: Create New Crossdock Movement Schedule - Merged into Same Wave (uid:168af889-e0a1-44ca-948f-4a1799f4c9b0)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    When API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    When Operator go to menu Inter-Hub -> Movement Schedules
+    And Movement Management page is loaded
+    And Operator adds new Movement Schedule on Movement Management page using data below:
+      | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
+      | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
+      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].departureTime  | 15:15                                                         |
+      | schedules[1].durationDays   | 1                                                             |
+      | schedules[1].durationTime   | 16:30                                                         |
+      | schedules[1].daysOfWeek     | tuesday,thursday                                              |
+      | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
+      | schedules[2].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
+      | schedules[2].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
+      | schedules[2].movementType   | Land Haul                                                     |
+      | schedules[2].departureTime  | 17:15                                                         |
+      | schedules[2].durationDays   | 2                                                             |
+      | schedules[2].durationTime   | 18:30                                                         |
+      | schedules[2].daysOfWeek     | monday,wednesday,friday                                       |
+      | schedules[2].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
+    And Operator refresh page
+    And Movement Management page is loaded
+    And Operator load schedules on Movement Management page using data below:
+      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+    Then Operator verifies a new schedule is created on Movement Management page
+
+  @DeleteHubsViaDb @DeleteMovementTripsViaDb
+  Scenario: Create Crossdock Movement Schedule - Same Wave - Search by Origin Hub (uid:734e4fb3-17a6-46a8-a3b9-bc82d397520c)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    When API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    When Operator go to menu Inter-Hub -> Movement Schedules
+    And Movement Management page is loaded
+    And Operator load schedules on Movement Management page using data below:
+      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+    And Operator adds new Movement Schedule on Movement Management page using data below:
+      | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
+      | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
+      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].departureTime  | 15:15                                                         |
+      | schedules[1].durationDays   | 1                                                             |
+      | schedules[1].durationTime   | 16:30                                                         |
+      | schedules[1].daysOfWeek     | tuesday,thursday                                              |
+      | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
+      | schedules[2].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
+      | schedules[2].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
+      | schedules[2].movementType   | Land Haul                                                     |
+      | schedules[2].departureTime  | 17:15                                                         |
+      | schedules[2].durationDays   | 2                                                             |
+      | schedules[2].durationTime   | 18:30                                                         |
+      | schedules[2].daysOfWeek     | monday,wednesday,friday                                       |
+      | schedules[2].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
+    Then Operator verifies a new schedule is created on Movement Management page
+
+  @DeleteHubsViaDb @DeleteMovementTripsViaDb
+  Scenario: Create Crossdock Movement Schedule - Same Wave - Search by Destination Hub (uid:7f8e8674-beee-4e23-815e-573465a05cf1)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    When API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    When API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    When Operator go to menu Inter-Hub -> Movement Schedules
+    And Movement Management page is loaded
+    And Operator load schedules on Movement Management page using data below:
+      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+    And Operator adds new Movement Schedule on Movement Management page using data below:
+      | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
+      | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
+      | schedules[1].movementType   | Air Haul                                                      |
+      | schedules[1].departureTime  | 15:15                                                         |
+      | schedules[1].durationDays   | 1                                                             |
+      | schedules[1].durationTime   | 16:30                                                         |
+      | schedules[1].daysOfWeek     | tuesday,thursday                                              |
+      | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
+      | schedules[2].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
+      | schedules[2].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
+      | schedules[2].movementType   | Land Haul                                                     |
+      | schedules[2].departureTime  | 17:15                                                         |
+      | schedules[2].durationDays   | 2                                                             |
+      | schedules[2].durationTime   | 18:30                                                         |
+      | schedules[2].daysOfWeek     | monday,wednesday,friday                                       |
+      | schedules[2].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
+    Then Operator verifies a new schedule is created on Movement Management page
 
   @DeleteHubsViaDb
   Scenario: Create New Crossdock Movement Schedule - Origin Crossdock Hub same with Destination Crossdock Hub (uid:5086569b-7db9-495b-a3e3-f7e8c0a94ff1)
@@ -298,48 +432,60 @@ Feature: Crossdock Hubs
       | destinationHub | WRONG_HUB_NAME |
     Then Operator verify schedules list is empty on Movement Management page
 
-  @DeleteHubsViaDb # todo: migration deprecate, check https://studio.cucumber.io/projects/210778/test-plan/folders/1576332/scenarios/5228387
-  Scenario: Edit Crossdock Movement Schedule (uid:1ee7d8dd-f6f1-4662-981e-b8744cbf0f18)
-    Given Operator go to menu Shipper Support -> Blocked Dates
-    When API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | CROSSDOCK |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    And API Operator creates new Hub using data below:
-      | name         | GENERATED |
-      | displayName  | GENERATED |
-      | facilityType | CROSSDOCK |
-      | city         | GENERATED |
-      | country      | GENERATED |
-      | latitude     | GENERATED |
-      | longitude    | GENERATED |
-    And API Operator reloads hubs cache
-    When Operator go to menu Inter-Hub -> Movement Schedules
-    And Movement Management page is loaded
-    And Operator adds new Movement Schedule on Movement Management page using data below:
-      | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
-      | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
-      | schedules[1].movementType   | Air Haul                                                      |
-      | schedules[1].departureTime  | 15:15                                                         |
-      | schedules[1].durationDays   | 1                                                             |
-      | schedules[1].durationTime   | 16:30                                                         |
-      | schedules[1].daysOfWeek     | all                                                           |
-      | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
-    And Operator load schedules on Movement Management page using data below:
-      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
-      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
-    Then Operator verifies a new schedule is created on Movement Management page
-    When Operator edits Crossdock Movement Schedule on Movement Management page using data below:
-      | schedules[1].departureTime | 16:30                                                         |
-      | schedules[1].durationDays  | 2                                                             |
-      | schedules[1].durationTime  | 19:00                                                         |
-      | schedules[1].daysOfWeek    | monday                                                        |
-      | schedules[1].comment       | Updated by automated test at {gradle-current-date-yyyy-MM-dd} |
-    Then Operator verifies Crossdock Movement Schedule parameters on Movement Management page
+#  @DeleteHubsViaDb # todo: migration deprecate, check https://studio.cucumber.io/projects/210778/test-plan/folders/1576332/scenarios/5228387
+#  Scenario: Edit Crossdock Movement Schedule (uid:1ee7d8dd-f6f1-4662-981e-b8744cbf0f18)
+#    Given Operator go to menu Shipper Support -> Blocked Dates
+#    When API Operator creates new Hub using data below:
+#      | name         | GENERATED |
+#      | displayName  | GENERATED |
+#      | facilityType | CROSSDOCK |
+#      | city         | GENERATED |
+#      | country      | GENERATED |
+#      | latitude     | GENERATED |
+#      | longitude    | GENERATED |
+#    And API Operator creates new Hub using data below:
+#      | name         | GENERATED |
+#      | displayName  | GENERATED |
+#      | facilityType | CROSSDOCK |
+#      | city         | GENERATED |
+#      | country      | GENERATED |
+#      | latitude     | GENERATED |
+#      | longitude    | GENERATED |
+#    And API Operator reloads hubs cache
+#    When Operator go to menu Inter-Hub -> Movement Schedules
+#    And Movement Management page is loaded
+#    And Operator adds new Movement Schedule on Movement Management page using data below:
+#      | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
+#      | schedules[1].destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name}                            |
+#      | schedules[1].movementType   | Air Haul                                                      |
+#      | schedules[1].departureTime  | 15:15                                                         |
+#      | schedules[1].durationDays   | 1                                                             |
+#      | schedules[1].durationTime   | 16:30                                                         |
+#      | schedules[1].daysOfWeek     | all                                                           |
+#      | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
+#    And Operator load schedules on Movement Management page using data below:
+#      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+#      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+#    Then Operator verifies a new schedule is created on Movement Management page
+#    When Operator edits Crossdock Movement Schedule on Movement Management page using data below:
+#      | schedules[1].departureTime | 16:30                                                         |
+#      | schedules[1].durationDays  | 2                                                             |
+#      | schedules[1].durationTime  | 19:00                                                         |
+#      | schedules[1].daysOfWeek    | monday                                                        |
+#      | schedules[1].comment       | Updated by automated test at {gradle-current-date-yyyy-MM-dd} |
+#    Then Operator verifies Crossdock Movement Schedule parameters on Movement Management page
+
+  @DeleteHubsViaDb @DeleteMovementTripsViaDb @RT
+  Scenario: Delete Crossdock Movement Schedule (uid:6cc194d0-758b-4991-9caa-b22008e1a216)
+    Given dummy_noop
+
+  @DeleteHubsViaDb @DeleteMovementTripsViaDb
+  Scenario: Edit Crossdock Movement Schedule - Add Another Movement on Existing Schedule (uid:68087a06-685a-4088-a5f1-6b44f39cba03)
+    Given dummy_noop
+
+  @DeleteHubsViaDb @DeleteMovementTripsViaDb
+  Scenario: Edit Crossdock Movement Schedule - Remove Movement from Existing Schedule (uid:441471c8-1317-48fb-8664-fabe266abc12)
+    Given dummy_noop
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
