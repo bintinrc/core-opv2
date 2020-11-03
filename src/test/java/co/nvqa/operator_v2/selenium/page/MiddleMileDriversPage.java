@@ -141,6 +141,9 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
     @FindBy(className = "btn-edit-user")
     public Button editDriver;
 
+    @FindBy(xpath = "//button[.='Edit Search Filter']")
+    public Button editSearchFilterButton;
+
     public MiddleMileDriversPage(WebDriver webDriver)
     {
         super(webDriver);
@@ -158,8 +161,8 @@ public class MiddleMileDriversPage extends OperatorV2SimplePage
             waitUntilInvisibilityOfElementLocated(DRIVERS_NOT_FOUND_TOAST_XPATH);
         } else
         {
-
             loadDrivers.waitUntilInvisible();
+            editSearchFilterButton.waitUntilVisible();
         }
     }
 
