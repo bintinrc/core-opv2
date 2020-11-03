@@ -126,8 +126,6 @@ public class MiddleMileDriversSteps extends AbstractSteps
         retryIfRuntimeExceptionOccurred(() ->
         {
             try {
-                navigateRefresh();
-                pause2s();
                 String country = get(COUNTRY);
                 for (Map<String, String> data : middleMileDrivers)
                 {
@@ -269,7 +267,10 @@ public class MiddleMileDriversSteps extends AbstractSteps
                 }
             } catch (Throwable ex) {
                 NvLogger.error(ex.getMessage());
-                NvLogger.info("Element in Shipment inbound scanning not found, retrying...");
+                NvLogger.info("Element in middle mile driver page not found, retrying...");
+                middleMileDriversPage.refreshPage();
+                middleMileDriversPage.switchTo();
+                middleMileDriversPage.loadButton.waitUntilClickable();
                 throw ex;
             }
         }, 10);
