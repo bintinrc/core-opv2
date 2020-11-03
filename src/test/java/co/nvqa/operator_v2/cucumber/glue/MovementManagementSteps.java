@@ -413,15 +413,20 @@ public class MovementManagementSteps extends AbstractSteps
     @When("Operator deletes created movement schedule on Movement Management page")
     public void operatorDeletesCreatedMovementScheduleOnMovementManagementPage()
     {
-        MovementSchedule movementSchedule = get(KEY_CREATED_MOVEMENT_SCHEDULE);
-        Map<String, String> filters = ImmutableMap.of("originHub", movementSchedule.getSchedule(0).getOriginHub(), "destinationHub", movementSchedule.getSchedule(0).getDestinationHub());
-        operatorFiltersSchedulesListOnMovementManagementPageUsingDataBelow(filters);
-        //TODO Rework this according new scenarios
-//        movementManagementPage.schedulesTable.rows.get(0).clickAction("Delete Schedule");
+        movementManagementPage.modify.click();
+        movementManagementPage.rowCheckBox.check();
         pause1s();
-        movementManagementPage.popoverDeleteButton.click();
-        movementManagementPage.waitUntilInvisibilityOfNotification("Movement schedules deleted", true);
+        movementManagementPage.delete.click();
+        pause1s();
+        movementManagementPage.modalDeleteButton.click();
     }
+
+    @Then("Operator verifies movement schedule deleted toast is shown on Movement Management page")
+    public void operatorVerifiesMovementScheduleDeletedToastIsShownOnMovementManagementPage()
+    {
+        movementManagementPage.verifyNotificationWithMessage("1 schedule(s) have been deleted.");
+    }
+
 
     @Deprecated
     @When("Operator open view modal of a created movement schedule on Movement Management page")
