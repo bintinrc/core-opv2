@@ -177,7 +177,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         }
 
         Long actualTripManagementSum = (long) tripManagementList.size();
-        assertEquals("Sum of Trip Management", actualTripManagementSum, tripManagementCount);
+        assertThat("Sum of Trip Management", actualTripManagementSum, equalTo(tripManagementCount));
 
     }
 

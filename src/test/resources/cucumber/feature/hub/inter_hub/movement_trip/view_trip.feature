@@ -1,11 +1,11 @@
-@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @ViewTrip
+@OperatorV2 @MiddleMile @Hub @InterHub @MovementTrip @ViewTrip @Refo
 Feature: Movement Trip - View Trips
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteHubsViaDb
+  @DeleteHubsViaDb @DeleteMovementTripsViaDb @RT
   Scenario: View Departure Trip (uid:fd9d635c-5dc2-4e14-8344-20b7acb3f984)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -16,19 +16,28 @@ Feature: Movement Trip - View Trips
       | country      | GENERATED |
       | latitude     | GENERATED |
       | longitude    | GENERATED |
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
     And API Operator reloads hubs cache
-    Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {hub-relation-origin-hub-id} to hub id = {KEY_LIST_OF_CREATED_HUBS[1].id}
-    And Operator refresh page
+    Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
-    When Operator searches and selects the "origin hub" with value "{hub-relation-origin-hub-name}"
+    And Operator refresh page
+    And Operator verifies movement Trip page is loaded
+    When Operator searches and selects the "origin hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
     And Operator clicks on Load Trip Button
-    And API Operator gets the count of the "departure" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
+    And API Operator gets the count of the "departure" Trip Management based on the hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}"
     Then Operator verifies that the trip management shown in "departure" tab is correct
     When Operator clicks on "view" icon on the action column
     Then Operator verifies that the new tab with trip details is opened
 
-  @DeleteDriver @DeleteHubsViaDb
+  @DeleteDriver @DeleteHubsViaDb @DeleteMovementTripsViaDb
   Scenario: View Arrival Trip (uid:567dc293-b7c3-441a-8f00-2998fad953a9)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
