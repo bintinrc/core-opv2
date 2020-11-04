@@ -19,7 +19,7 @@ Feature: Middle Mile Driver Management - Create Driver
     And Operator clicks on Load Driver Button on the Middle Mile Driver Page
     Then Operator searches by "name" and verifies the created username
 
-  @DeleteDriver @RT
+  @DeleteDriver
   Scenario: Create Driver - ID (uid:e1e844f4-5af1-4238-b3a4-fe4c744ad43d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given Operator change the country to "Indonesia"
