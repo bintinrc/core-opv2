@@ -1,4 +1,4 @@
-@MiddleMile @Hub @InterHub @MovementSchedules @CrossdockHubs≠
+@MiddleMile @Hub @InterHub @MovementSchedules @CrossdockHubs
 Feature: Crossdock Hubs
 
   @LaunchBrowser @ShouldAlwaysRun
