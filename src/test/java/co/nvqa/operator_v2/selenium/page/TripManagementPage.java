@@ -320,6 +320,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
             case EXPECTED_ARRIVAL_TIME:
                 ZonedDateTime expectedArrivalTime = tripManagementDetailsData.getData().get(index).getExpectedArrivalTime();
+                System.out.println(expectedArrivalTime);
                 expectedArrivalTimeFilter.openButton.click();
                 expectedArrivalTimeFilter.selectDate(expectedArrivalTime);
                 expectedArrivalTimeFilter.selectTime(expectedArrivalTime);
@@ -821,6 +822,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         public void selectDate(ZonedDateTime dateTime) {
             DateTimeFormatter DD_MMMM_FORMAT = DateTimeFormatter.ofPattern("dd MMMM");
             String stringDate = dateTime.format(DD_MMMM_FORMAT);
+            System.out.println(stringDate);
             firstDateText.waitUntilVisible();
             if (firstDateText.getText().contains(stringDate)) {
                 firstDate.check();

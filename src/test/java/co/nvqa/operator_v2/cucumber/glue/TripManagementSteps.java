@@ -190,13 +190,9 @@ public class TripManagementSteps extends AbstractSteps {
     public void operatorSearchesForTheTripManagementBasedOnItsOnArrivalTab(String filteringName) {
         TripManagementDetailsData tripManagementDetailsData = get(KEY_DETAILS_OF_TRIP_MANAGEMENT);
         TripManagementFilteringType tripManagementFilteringType = TripManagementFilteringType.fromString(filteringName);
-        if (("expected_arrival_time").equals(tripManagementFilteringType.getVal())) {
-            ZonedDateTime expectedArrivalTime = tripManagementDetailsData.getData().get(0).getExpectedArrivalTime().plusDays(1);
-            tripManagementDetailsData.getData().get(0).setExpectedArrivalTime(expectedArrivalTime);
-            tripManagementPage.tableFiltering(tripManagementFilteringType, tripManagementDetailsData);
-            return;
-        }
-
+        int latestIndex = tripManagementDetailsData.getData().size() - 1;
+        ZonedDateTime expectedArrivalTime = tripManagementDetailsData.getData().get(latestIndex).getExpectedArrivalTime().plusDays(1);
+        tripManagementDetailsData.getData().get(latestIndex).setExpectedArrivalTime(expectedArrivalTime);
         tripManagementPage.tableFiltering(tripManagementFilteringType, tripManagementDetailsData);
     }
 
