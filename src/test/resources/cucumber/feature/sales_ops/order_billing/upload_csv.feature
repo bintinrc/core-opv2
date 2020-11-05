@@ -44,7 +44,6 @@ Feature: Order Billing
       | uploadCsv    | 1122334455                                          |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
-    Then Operator gets price order details from the database
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
   @DeleteOrArchiveRoute @KillBrowser
@@ -61,7 +60,6 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-v4-legacy-id},1122334455               |
       | generateFile | Orders consolidated by shipper (1 file per shipper) |
       | emailAddress | {order-billing-email}                               |
-    Then Operator gets price order details from the database
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
@@ -100,7 +98,6 @@ Feature: Order Billing
       | uploadCsv    | 1122334455                                                |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
-    Then Operator gets price order details from the database
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
 
@@ -112,7 +109,6 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-v4-legacy-id},1122334455                     |
       | generateFile | All orders (1 very big file, takes long time to generate) |
       | emailAddress | {order-billing-email}                                     |
-    Then Operator gets price order details from the database
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
@@ -152,7 +148,6 @@ Feature: Order Billing
       | uploadCsv    | 1122334455                                                                            |
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
-    Then Operator gets price order details from the database
     Then Operator opens Gmail and verifies the email body contains message "No orders found for the report request ; no file will be generated"
 
 
@@ -164,7 +159,6 @@ Feature: Order Billing
       | uploadCsv    | {shipper-sop-v4-legacy-id},1122334455                                                 |
       | generateFile | Orders consolidated by script (1 file per script), grouped by shipper within the file |
       | emailAddress | {order-billing-email}                                                                 |
-    Then Operator gets price order details from the database
     Then Operator opens Gmail and checks received email
     Then Operator verifies zip is attached with one CSV file in received email
     Then Operator reads the CSV attachment for "Shipper Billing Report"
