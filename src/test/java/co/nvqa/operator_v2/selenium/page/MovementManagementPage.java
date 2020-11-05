@@ -102,6 +102,9 @@ public class MovementManagementPage extends OperatorV2SimplePage
     @FindBy(xpath = "//button[.='Add Schedule']")
     public Button addSchedule;
 
+    @FindBy(xpath = "//button[.='Delete']")
+    public Button delete;
+
     @FindBy(xpath = "//button[.='Modify']")
     public Button modify;
 
@@ -119,6 +122,12 @@ public class MovementManagementPage extends OperatorV2SimplePage
 
     @FindBy(xpath = "//div[@class='ant-notification-notice-message' and .='Relation created']")
     public PageElement successCreateRelation;
+
+    @FindBy(xpath = "//tr[1]//td[1]//input")
+    public CheckBox rowCheckBox;
+
+    @FindBy(xpath = "//button[.='Delete' and contains(@class, 'ant-btn-primary')]")
+    public Button modalDeleteButton;
     
     //endregion
 
@@ -191,6 +200,14 @@ public class MovementManagementPage extends OperatorV2SimplePage
         assignDriverModal.assignDriverWithAdditional(primaryDriver, additionalDriver);
         assignDriverModal.saveDriver.click();
         assignDriverModal.waitUntilInvisible();
+    }
+
+    public void verifyNotificationWithMessage(String containsMessage) {
+        String notificationXpath = "//div[contains(@class,'ant-notification')]//div[@class='ant-notification-notice-message']";
+        waitUntilVisibilityOfElementLocated(notificationXpath);
+        WebElement notificationElement = findElementByXpath(notificationXpath);
+        assertThat("Toast message is the same", notificationElement.getText(), equalTo(containsMessage));
+        waitUntilInvisibilityOfNotification(notificationXpath, false);
     }
 
     public static class AssignDriverModal extends AntModal
