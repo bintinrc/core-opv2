@@ -13,14 +13,33 @@ Feature: Movement Trip - Search Trip - Filter - Arrival Tab
     When Operator clicks on Load Trip Button
     Then Operator verifies that there will be an error shown for unselected Origin Hub
 
+  @DeleteHubsViaDb @DeleteMovementTripsViaDb
   Scenario: Load Trip Use Filter - Arrival Tab - Filter by Destination Hub (uid:871871f1-adec-4f77-a624-fa363563fc80)
     Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    Given API Operator create new "CROSSDOCK" movement schedule with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
     Given Operator go to menu Inter-Hub -> Movement Trips
     And Operator verifies movement Trip page is loaded
     When Operator clicks on "Arrival" tab
-    When Operator searches and selects the "destination hub" with value "{hub-relation-origin-hub-name}"
+    When Operator searches and selects the "destination hub" with value "{KEY_LIST_OF_CREATED_HUBS[1].name}"
     And Operator clicks on Load Trip Button
-    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{hub-relation-origin-hub-id}"
+    And API Operator gets the count of the "arrival" Trip Management based on the hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}"
     Then Operator verifies that the trip management shown in "arrival" tab is correct
 
   Scenario: Load Trip Use Filter - Arrival Tab - Filter by Movement Type (uid:fd9cd117-58b3-49a1-9ed7-12c826fa174e)
