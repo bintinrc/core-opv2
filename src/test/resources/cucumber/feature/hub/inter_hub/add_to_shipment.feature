@@ -280,7 +280,7 @@ Feature: Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Add On Hold Parcel to Shipment (uid:0dd82e6d-3bf3-4343-9295-3b739733be11)
+  Scenario: Add On Hold Non Missing Parcel to Shipment (uid:0dd82e6d-3bf3-4343-9295-3b739733be11)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |

@@ -182,6 +182,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
+    When Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Inter-Hub -> Shipment Management
     And Operator filter with following data on Shipment Management Page
       | shipmentStatus | completed                          |
