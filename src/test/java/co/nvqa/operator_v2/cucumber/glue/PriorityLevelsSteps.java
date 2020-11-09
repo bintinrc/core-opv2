@@ -17,7 +17,8 @@ import java.util.Objects;
 
 
 @ScenarioScoped
-public class PriorityLevelsSteps extends AbstractSteps {
+public class PriorityLevelsSteps extends AbstractSteps
+{
 
     private PriorityLevelsPage priorityLevelsPage;
 
@@ -25,64 +26,72 @@ public class PriorityLevelsSteps extends AbstractSteps {
     @Inject
     private StandardApiOperatorPortalSteps standardApiOperatorPortalSteps;
 
-    public PriorityLevelsSteps(){
+    public PriorityLevelsSteps()
+    {
 
     }
 
     @Override
-    public void init() {
+    public void init()
+    {
         priorityLevelsPage = new PriorityLevelsPage(getWebDriver());
     }
 
     @Then("^Operator verifies \"Orders Sample CSV\" is downloaded successfully and correct$")
-    public void operatorsVerifiesSampleCsvOrdersIsDownloadedSuccessfullyAndCorrect() {
-        priorityLevelsPage.clickDownloadSampleCsvOrdersButton();
+    public void operatorsVerifiesSampleCsvOrdersIsDownloadedSuccessfullyAndCorrect()
+    {
+        priorityLevelsPage.downloadSimpleCsvOrders.click();
         priorityLevelsPage.verifyDownloadedSampleCsvOrders();
     }
 
     @Then("^Operator verifies \"Reservations Sample CSV\" is downloaded successfully and correct$")
-    public void operatorsVerifiesSampleCsvReservationsIsDownloadedSuccessfullyAndCorrect() {
-        priorityLevelsPage.clickDownloadSampleCsvReservationsButton();
+    public void operatorsVerifiesSampleCsvReservationsIsDownloadedSuccessfullyAndCorrect()
+    {
+        priorityLevelsPage.downloadSimpleCsvReservations.click();
         priorityLevelsPage.verifyDownloadedSampleCsvReservations();
     }
 
     @And("^Operator uploads \"Order CSV\" using next priority levels for orders:$")
-    public void operatorsUploads(DataTable dataTable) {
+    public void operatorsUploads(DataTable dataTable)
+    {
         List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
         Map<String, String> transactionToPriorityLevel = new HashMap<>();
 
-        dataTable.asMaps().forEach(rowAsMap -> {
+        dataTable.asMaps().forEach(rowAsMap ->
+        {
             String transactionId = orders.get(Integer.parseInt(rowAsMap.get("order")) - 1)
                     .getTransactions().stream().filter(transaction -> Objects.equals(transaction.getType(), TRANSACTION_TYPE))
                     .map(transaction -> String.valueOf(transaction.getId()))
                     .findFirst()
                     .orElseThrow(() -> new IllegalArgumentException(f("No transaction with Type %s", TRANSACTION_TYPE)));
-                    String priorityLevel = rowAsMap.get("priorityLevel");
+            String priorityLevel = rowAsMap.get("priorityLevel");
 
-                    transactionToPriorityLevel.put(transactionId, priorityLevel);
+            transactionToPriorityLevel.put(transactionId, priorityLevel);
         });
-            put(KEY_PRIORITY_LEVELS_TRANSACTION_TO_PRIORITY_LEVEL, transactionToPriorityLevel);
+        put(KEY_PRIORITY_LEVELS_TRANSACTION_TO_PRIORITY_LEVEL, transactionToPriorityLevel);
 
         priorityLevelsPage.uploadUpdateViaCsvOrders(transactionToPriorityLevel);
         priorityLevelsPage.clickBulkUpdateButton();
     }
 
     @Then("^Operator verifies order's priority is changed$")
-    public void operatorVerifiesOrdersPriorityIsChangedCorrectly() {
+    public void operatorVerifiesOrdersPriorityIsChangedCorrectly()
+    {
         Map<String, String> transactionToPriorityLevelExpected = get(KEY_PRIORITY_LEVELS_TRANSACTION_TO_PRIORITY_LEVEL);
         Map<String, String> transactionToPriorityLevelActual = new HashMap<>();
         List<Order> orders = get(KEY_LIST_OF_CREATED_ORDER);
 
-        orders.forEach(order -> {
-                    Order orderUpdated = retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> standardApiOperatorPortalSteps.getOrderClient()
-                            .searchOrderByTrackingId(order.getTrackingId()), f("%s - [Tracking ID = %s]", getCurrentMethodName(),
-                            order.getTrackingId()));
-                    Transaction transaction = orderUpdated.getTransactions().stream()
-                            .filter(transactionItem -> Objects.equals(transactionItem.getType(), TRANSACTION_TYPE))
-                            .findFirst()
-                            .orElseThrow(() -> new IllegalArgumentException(f("No transaction with %s type", TRANSACTION_TYPE)));
-                    transactionToPriorityLevelActual.put(String.valueOf(transaction.getId()), String.valueOf(transaction.getPriorityLevel()));
-                });
+        orders.forEach(order ->
+        {
+            Order orderUpdated = retryIfAssertionErrorOrRuntimeExceptionOccurred(() -> standardApiOperatorPortalSteps.getOrderClient()
+                    .searchOrderByTrackingId(order.getTrackingId()), f("%s - [Tracking ID = %s]", getCurrentMethodName(),
+                    order.getTrackingId()));
+            Transaction transaction = orderUpdated.getTransactions().stream()
+                    .filter(transactionItem -> Objects.equals(transactionItem.getType(), TRANSACTION_TYPE))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException(f("No transaction with %s type", TRANSACTION_TYPE)));
+            transactionToPriorityLevelActual.put(String.valueOf(transaction.getId()), String.valueOf(transaction.getPriorityLevel()));
+        });
 
         assertTrue("Priority Levels are not as expected for Transaction", transactionToPriorityLevelActual.entrySet().stream()
                 .allMatch(e -> e.getValue().equals(transactionToPriorityLevelExpected.get(e.getKey()))));
