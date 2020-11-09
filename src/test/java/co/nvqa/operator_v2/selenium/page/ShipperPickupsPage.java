@@ -4,10 +4,13 @@ import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.operator_v2.model.ReservationInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.SearchContext;
@@ -44,10 +47,12 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     private BulkRouteAssignmentDialog bulkRouteAssignmentDialog;
     private BulkPriorityEditDialog bulkPriorityEditDialog;
     private ApplyActionsMenu applyActionsMenu;
-    private ReservationsTable reservationsTable;
+    public ReservationsTable reservationsTable;
     private FiltersForm filtersForm;
-    private ReservationDetailsDialog reservationDetailsDialog;
     private EditRouteDialog editRouteDialog;
+
+    @FindBy(css = "md-dialog")
+    public ReservationDetailsDialog reservationDetailsDialog;
 
     @FindBy(xpath = "//md-dialog[contains(@class,'shipper-pickups-finish-reservation-dialog')]")
     public FinishReservationDialog finishReservationDialog;
@@ -67,7 +72,6 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         applyActionsMenu = new ApplyActionsMenu(webDriver);
         reservationsTable = new ReservationsTable(webDriver);
         filtersForm = new FiltersForm(webDriver);
-        reservationDetailsDialog = new ReservationDetailsDialog(webDriver);
         editRouteDialog = new EditRouteDialog(webDriver);
     }
 
@@ -190,12 +194,12 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     {
         String pickupAddress = reservationsTable.searchByPickupAddress(address);
         reservationsTable.clickActionButton(1, ACTION_BUTTON_DETAILS);
-        reservationDetailsDialog.waitUntilDialogDisplayed();
+        reservationDetailsDialog.waitUntilVisible();
 
-        assertEquals("Shipper Name", shipperName, reservationDetailsDialog.getShipperName());
-        assertEquals("Shipper ID", shipperId, reservationDetailsDialog.getShipperId());
-        assertEquals("Reservation ID", reservationId, reservationDetailsDialog.getReservationId());
-        assertThat("Pickup Address", reservationDetailsDialog.getPickupAddress(), startsWith(pickupAddress));
+        assertEquals("Shipper Name", shipperName, reservationDetailsDialog.shipperName.getNormalizedText());
+        assertEquals("Shipper ID", shipperId, reservationDetailsDialog.shipperId.getNormalizedText());
+        assertEquals("Reservation ID", reservationId, reservationDetailsDialog.reservationId.getNormalizedText());
+        assertThat("Pickup Address", reservationDetailsDialog.pickupAddress.getNormalizedText(), startsWith(pickupAddress));
     }
 
     @SuppressWarnings("unused")
@@ -372,42 +376,32 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     /**
      * Accessor for Reservation Details dialog
      */
-    public static class ReservationDetailsDialog extends OperatorV2SimplePage
+    public static class ReservationDetailsDialog extends MdDialog
     {
-        private static final String DIALOG_TITLE = "Reservation Details";
-        private static final String FIELD_SHIPPER_NAME_LOCATOR = "//md-input-container[@id='field-shipper-name']/div";
-        private static final String FIELD_SHIPPER_ID_LOCATOR = "//md-input-container[@id='field-shipper-id']/div";
-        private static final String FIELD_RESERVATION_ID_LOCATOR = "//md-input-container[@id='field-reservation-id']/div";
-        private static final String FIELD_PICKUP_ADDRESS_LOCATOR = "//md-input-container[@id='field-pickup-address']/div";
+        @FindBy(css = "#field-shipper-name > div")
+        public PageElement shipperName;
 
-        public ReservationDetailsDialog(WebDriver webDriver)
-        {
-            super(webDriver);
-        }
+        @FindBy(css = "#field-shipper-id > div")
+        public PageElement shipperId;
 
-        public void waitUntilDialogDisplayed()
-        {
-            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
-        }
+        @FindBy(css = "#field-reservation-id > div")
+        public PageElement reservationId;
 
-        public String getShipperName()
-        {
-            return getTextTrimmed(FIELD_SHIPPER_NAME_LOCATOR);
-        }
+        @FindBy(css = "#field-pickup-address > div")
+        public PageElement pickupAddress;
 
-        public String getShipperId()
-        {
-            return getTextTrimmed(FIELD_SHIPPER_ID_LOCATOR);
-        }
+        @FindBy(xpath = ".//div[normalize-space(.)='POD not found']")
+        public PageElement podNotFound;
 
-        public String getReservationId()
-        {
-            return getTextTrimmed(FIELD_RESERVATION_ID_LOCATOR);
-        }
+        @FindBy(css = "#field-scanned-at-shipper > div")
+        public PageElement scannedAtShipperCount;
 
-        public String getPickupAddress()
+        @FindBy(css = ".pod-table-content:nth-of-type(1) .content-row")
+        public PageElement scannedAtShipperPOD;
+
+        public ReservationDetailsDialog(WebDriver webDriver, WebElement webElement)
         {
-            return getTextTrimmed(FIELD_PICKUP_ADDRESS_LOCATOR);
+            super(webDriver, webElement);
         }
     }
 
@@ -647,6 +641,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     public static class ReservationsTable extends OperatorV2SimplePage
     {
         private static final String MD_VIRTUAL_REPEAT = "data in getTableData()";
+        private static final String COLUMN_CLASS_RESERVATION_ID = "id";
         private static final String COLUMN_CLASS_DATA_SHIPPER_NAME_AND_CONTACT = "name";
         private static final String COLUMN_CLASS_DATA_ROUTE_ID = "route-id";
         private static final String COLUMN_CLASS_DATA_DRIVER_NAME = "driver-name";
@@ -757,6 +752,11 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
             checkRowWithMdVirtualRepeat(rowNumber, MD_VIRTUAL_REPEAT);
         }
 
+        public void searchByReservationId(String reservationId)
+        {
+            searchTableCustom1(COLUMN_CLASS_RESERVATION_ID, reservationId);
+        }
+
         public void searchByPickupAddress(String pickupAddress)
         {
             searchTableCustom1(COLUMN_CLASS_DATA_PICKUP_ADDRESS, pickupAddress);
@@ -797,8 +797,14 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         @FindBy(name = "fromDateField")
         public MdDatepicker fromDateField;
 
-        @FindBy(name = "toDateField")
+        @FindBy(name = "maxdate")
         public MdDatepicker toDateField;
+
+        @FindBy(css = "nv-autocomplete[item-types='Shipper']")
+        public NvAutocomplete shipperField;
+
+        @FindBy(xpath = "//nv-filter-box[@main-title='Waypoint Status']")
+        public NvFilterAutocomplete statusFilter;
 
         public FiltersForm(WebDriver webDriver)
         {
@@ -825,7 +831,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
         public void filterByShipper(String shipperName)
         {
-            selectValueFromNvAutocompleteByItemTypesAndDismiss("Shipper", shipperName);
+            shipperField.selectValue(shipperName);
         }
 
         public void filterByType(String reservationType)
@@ -851,9 +857,8 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         {
             if (waypointStatus != null)
             {
-                clickButtonByAriaLabel("ROUTED");
-                clickButtonByAriaLabel("PENDING");
-                selectValueFromNvAutocompleteByItemTypesAndDismiss("Waypoint Status", waypointStatus);
+                statusFilter.clearAll();
+                statusFilter.selectFilter(waypointStatus);
             }
         }
 

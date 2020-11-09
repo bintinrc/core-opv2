@@ -208,6 +208,16 @@ public class RouteManifestPage extends OperatorV2SimplePage
         chooseAnOutcomeForTheWaypointDialog.waitUntilInvisible();
     }
 
+    public void successReservationWaypoint()
+    {
+        clickActionButtonOnTable(1, ACTION_BUTTON_EDIT);
+        chooseAnOutcomeForTheWaypointDialog.success.click();
+        confirmationDialog.waitUntilVisible();
+        confirmationDialog.proceed.click();
+        confirmationDialog.waitUntilInvisible();
+        chooseAnOutcomeForTheWaypointDialog.waitUntilInvisible();
+    }
+
     public void searchTableByTrackingId(String trackingId)
     {
         searchTableCustom1("tracking-ids", trackingId);

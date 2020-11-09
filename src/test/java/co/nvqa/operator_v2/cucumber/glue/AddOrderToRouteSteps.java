@@ -61,7 +61,7 @@ public class AddOrderToRouteSteps extends AbstractSteps
     }
 
     @And("Operator verifies error messages")
-    public void operatorVerfiesErrorMessages()
+    public void operatorVerifiesErrorMessages()
     {
         String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
         String errorMessage = "Order DD"+trackingId+" not found!";

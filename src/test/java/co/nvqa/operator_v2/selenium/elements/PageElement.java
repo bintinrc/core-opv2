@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.elements;
 
 import co.nvqa.common_selenium.page.SimplePage;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.SearchContext;
@@ -86,6 +87,11 @@ public class PageElement extends SimplePage
         return getText(webElement);
     }
 
+    public String getNormalizedText()
+    {
+        return StringUtils.normalizeSpace(getText(webElement));
+    }
+
     public void clear()
     {
         webElement.clear();
@@ -123,6 +129,17 @@ public class PageElement extends SimplePage
     public SearchContext getSearchContext()
     {
         return searchContext;
+    }
+
+    public boolean isDisplayed()
+    {
+        try
+        {
+            return webElement.isDisplayed();
+        } catch (Exception ex)
+        {
+            return false;
+        }
     }
 
     public boolean isDisplayedFast()
