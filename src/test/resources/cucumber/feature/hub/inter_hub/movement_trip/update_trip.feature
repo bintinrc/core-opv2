@@ -403,7 +403,7 @@ Feature: Movement Trip - Update Trip
     And Operator clicks on Load Trip Button
     And Operator verify Load Trip Button is gone
     And Operator depart trip
-    Then Operator verifies toast with message "Driver {KEY_LIST_OF_CREATED_DRIVERS[1].username} is in trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" is shown on movement page
+    Then Operator verifies toast with message "Driver(s) assigned to the selected trip is still in another trip {KEY_LIST_OF_CURRENT_MOVEMENT_TRIP_IDS[1]}" is shown on movement page
     And Operator click force trip completion
     And Operator depart trip
     Then Operator verifies toast with message "Movement trip departed" is shown on movement page
