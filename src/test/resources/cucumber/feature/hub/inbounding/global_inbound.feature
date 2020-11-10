@@ -182,6 +182,7 @@ Feature: Global Inbound
       | orderStatus    | TRANSIT                                       |
       | granularStatus | Arrived at Sorting Hub; Arrived at Origin Hub |
       | deliveryStatus | PENDING                                       |
+    When Operator go to menu Shipper Support -> Blocked Dates
     And Operator go to menu Inter-Hub -> Shipment Management
     And Operator filter with following data on Shipment Management Page
       | shipmentStatus | completed                          |
@@ -537,12 +538,7 @@ Feature: Global Inbound
       | hubId      | {hub-id}               |
       | trackingId | GET_FROM_CREATED_ORDER |
       | type       | 2                      |
-    When Operator go to menu Order -> All Orders
-    And Operator find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID           |
-      | searchLogic | contains                      |
-      | searchTerm  | KEY_CREATED_ORDER_TRACKING_ID |
-    And Operator switch to Edit Order's window
+    And Operator open Edit Order page for order ID "{KEY_CREATED_ORDER_ID}"
     Then Operator verify order status is "On Hold" on Edit Order page
     And Operator verify order granular status is "On Hold" on Edit Order page
     And DB Operator verify the last order_events record for the created order:
@@ -559,7 +555,7 @@ Feature: Global Inbound
       | shipperName     | {shipper-v4-name} |
       | status          | Pending           |
       | granular status | Pending Pickup    |
-    And Operator searches and selects orders created on Add Tags to Order page
+    And Operator searches and selects orders created first row on Add Tags to Order page
     And Operator tags order with:
       | OPV2AUTO1 |
     Then Operator verify the tags shown on Edit Order page

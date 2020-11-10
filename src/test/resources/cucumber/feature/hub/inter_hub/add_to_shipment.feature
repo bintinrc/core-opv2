@@ -27,11 +27,11 @@ Feature: Add To Shipment
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given API Operator Global Inbound parcel using data below:
-      | globalInboundRequest | { "hubId":{hub-id} } |
+      | globalInboundRequest | { "hubId":{hub-id-2} } |
     Given DB Operator gets Hub ID by Hub Name of created parcel
-    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id} to hub id = {KEY_DESTINATION_HUB}
+    Given API Operator create new shipment with type "AIR_HAUL" from hub id = {hub-id-2} to hub id = {KEY_DESTINATION_HUB}
     Given Operator go to menu Inter-Hub -> Add To Shipment
-    When Operator scan multiple created order to shipment in hub {hub-name}
+    When Operator scan multiple created order to shipment in hub {hub-name-2}
     And Operator removes all the parcel from the shipment
     Then Operator verifies that the parcel shown is zero
 
@@ -280,7 +280,7 @@ Feature: Add To Shipment
     Then Operator scan the created order to shipment in hub {hub-name}
 
   @DeleteShipment @ForceSuccessOrder
-  Scenario: Add On Hold Parcel to Shipment (uid:0dd82e6d-3bf3-4343-9295-3b739733be11)
+  Scenario: Add On Hold Non Missing Parcel to Shipment (uid:0dd82e6d-3bf3-4343-9295-3b739733be11)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
@@ -316,7 +316,7 @@ Feature: Add To Shipment
       | shipperName     | {shipper-v4-legacy-id}-{shipper-v4-name} |
       | status          | Pending                                  |
       | granular status | Pending Pickup                           |
-    And Operator searches and selects orders created on Add Tags to Order page
+    And Operator searches and selects orders created first row on Add Tags to Order page
     And Operator tags order with:
       | OPV2AUTO1 |
       | OPV2AUTO2 |

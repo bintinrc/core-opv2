@@ -177,7 +177,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
         }
 
         Long actualTripManagementSum = (long) tripManagementList.size();
-        assertEquals("Sum of Trip Management", actualTripManagementSum, tripManagementCount);
+        assertThat("Sum of Trip Management", actualTripManagementSum, equalTo(tripManagementCount));
 
     }
 
@@ -570,6 +570,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
     public void verifyToastContainingMessageIsShown(String expectedToastMessage) {
         retryIfAssertionErrorOccurred(() -> {
             try {
+                waitUntilVisibilityOfElementLocated("//div[contains(@class,'notification-notice-message')]");
                 WebElement toast = findElementByXpath("//div[contains(@class,'notification-notice-message')]");
                 String actualToastMessage = toast.getText();
                 assertThat("Trip Management toast message is the same", actualToastMessage, containsString(expectedToastMessage));

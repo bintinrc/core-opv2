@@ -68,6 +68,17 @@ public class OrderTagManagementSteps extends AbstractSteps
         });
     }
 
+    @And("Operator searches and selects orders created first row on Add Tags to Order page")
+    public void operatorSearchesAndSelectsOrdersCreatedFirstRowOnAddTagsToOrderPage()
+    {
+        List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
+        trackingIds.forEach(trackingId ->
+        {
+            orderTagManagementPage.ordersTable.filterByColumn("trackingId", trackingId);
+            orderTagManagementPage.ordersTable.selectFirstRowCheckBox();
+        });
+    }
+
     @And("^Operator tags order with:$")
     public void operatorTagsOrderWith(List<String> orderTag)
     {
