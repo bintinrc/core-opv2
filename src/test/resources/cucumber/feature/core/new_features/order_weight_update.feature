@@ -1,10 +1,11 @@
 @OperatorV2 @Core @NewFeatures @OrderWeightUpdate
 Feature: Order Weight Update V2
 
-  @LaunchBrowser @ShouldAlwaysRun
+  @LaunchBrowser @ShouldAlwaysRun @Debug
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+    @Debug
   Scenario: Operator Update Order Weight by Upload CSV - Single Order (uid:aa549ffc-adeb-4e00-a92d-a22275c68eb1)
     Given API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
