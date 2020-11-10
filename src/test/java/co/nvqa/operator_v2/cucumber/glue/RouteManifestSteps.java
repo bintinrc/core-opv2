@@ -10,6 +10,7 @@ import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -80,13 +81,20 @@ public class RouteManifestSteps extends AbstractSteps
     @When("^Operator success (delivery|pickup|reservation) waypoint from Route Manifest page$")
     public void operatorSuccessDeliveryWaypointFromRouteManifestPage(String waypointType)
     {
-        routeManifestPage.successDeliveryWaypoint();
+        switch (waypointType)
+        {
+            case "reservation":
+                routeManifestPage.successReservationWaypoint();
+                break;
+            default:
+                routeManifestPage.successDeliveryWaypoint();
+        }
     }
 
     @When("^Operator open Route Manifest page for route ID \"(.+)\"$")
     public void operatorOpenRouteManifestPage(String routeId)
     {
         routeId = resolveValue(routeId);
-        routeManifestPage.openPage(Long.parseLong(routeId));
+        routeManifestPage.openPage(Long.parseLong(StringUtils.trim(routeId)));
     }
 }

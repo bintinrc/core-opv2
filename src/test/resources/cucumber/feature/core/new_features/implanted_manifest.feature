@@ -19,8 +19,8 @@ Feature: Implanted Manifest
   Scenario: Operator Scan All Orders to Pickup on Implanted Manifest Page (uid:fb17a389-4f54-45b7-b5f1-c12a830d6aa8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Shipper create multiple V4 orders using data below:
-      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                                  |
-      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                             |
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     Given Operator go to menu New Features -> Implanted Manifest
     When Operator creates Manifest for Hub {hub-name} and scan barcodes
@@ -58,6 +58,165 @@ Feature: Implanted Manifest
     When Operator creates Manifest for Hub {hub-name} and scan barcodes
     And Operator clicks "Actions X" button on Manifest table for all created orders on Implanted Manifest page
     Then Operator verifies all scanned orders is removed from the Manifest table
+
+  Scenario: Operator Failed to Create Implanted Manifest Pickup with Invalid Reservation Id (uid:28477458-a062-40b7-b512-1d9acff22efa)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu New Features -> Implanted Manifest
+    And Operator selects "{hub-name}" hub on Implanted Manifest page
+    And Operator clicks Create Manifest on Implanted Manifest page
+    And Operator scans "{KEY_CREATED_ORDER_TRACKING_ID}" barcode on Implanted Manifest page
+    Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
+    When Operator creates manifest for "000000" reservation on Implanted Manifest page
+    Then Operator verifies that "Reservation ID not found! Please enter another Reservation ID" error toast message is displayed
+
+  Scenario: Operator Failed to Create Implanted Manifest Pickup with Invalid Reservation Status - Pending Reservation (uid:f88b803e-3992-4c04-8cf7-de10e37aaa9e)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu New Features -> Implanted Manifest
+    And Operator selects "{hub-name}" hub on Implanted Manifest page
+    And Operator clicks Create Manifest on Implanted Manifest page
+    And Operator scans "{KEY_CREATED_ORDER_TRACKING_ID}" barcode on Implanted Manifest page
+    Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
+    When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
+    Then Operator verifies that "Not a success reservation!" error toast message is displayed
+    When Operator closes Create Manifest dialog on Implanted Manifest page
+    And Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | TODAY             |
+      | toDate      | TOMORROW          |
+      | type        | Normal            |
+      | shipperName | {shipper-v4-name} |
+    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
+    Then Operator verifies POD not found in Reservation Details dialog on Shipper Pickups page
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Failed to Create Implanted Manifest Pickup with Invalid Reservation Status - Failed Reservation (uid:8365b0e2-1c23-4b1f-a560-0f3f49f8f645)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator add reservation pick-up to the route
+    And API Operator start the route
+    And API Driver collect all his routes
+    And API Driver get Reservation Job
+    And API Driver reject Reservation
+    And DB Operator get Booking ID of Reservation
+    And API Operator fail the reservation using data below:
+      | failureReasonFindMode  | findAdvance |
+      | failureReasonCodeId    | 7           |
+      | failureReasonIndexMode | FIRST       |
+    And API Shipper create V4 order using data below:
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    When Operator go to menu New Features -> Implanted Manifest
+    And Operator selects "{hub-name}" hub on Implanted Manifest page
+    And Operator clicks Create Manifest on Implanted Manifest page
+    And Operator scans "{KEY_CREATED_ORDER_TRACKING_ID}" barcode on Implanted Manifest page
+    Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
+    When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
+    Then Operator verifies that "Not a success reservation!" error toast message is displayed
+    When Operator closes Create Manifest dialog on Implanted Manifest page
+    And Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | TODAY             |
+      | toDate      | TOMORROW          |
+      | type        | Normal            |
+      | shipperName | {shipper-v4-name} |
+    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
+    Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
+      | scannedAtShipperCount | 0       |
+      | scannedAtShipperPOD   | No data |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Failed to Create Implanted Manifest Pickup - Reservation without POD Pickup (uid:1b598216-2d81-4ad9-8d40-7852ae149df0)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 2                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator add reservation pick-up to the route
+    And API Driver collect all his routes
+    And API Operator start the route
+    And API Driver get Reservation Job using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
+    And API Driver success Reservation using data below:
+      | reservationId | {KEY_LIST_OF_CREATED_RESERVATION_IDS[1]} |
+      | routeId       | {KEY_CREATED_ROUTE_ID}                   |
+      | orderId       | {KEY_LIST_OF_CREATED_ORDER_ID[1]}        |
+    When Operator go to menu New Features -> Implanted Manifest
+    And Operator selects "{hub-name}" hub on Implanted Manifest page
+    And Operator clicks Create Manifest on Implanted Manifest page
+    And Operator scans "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[2]}" barcode on Implanted Manifest page
+    When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
+    Then Operator verifies that "No POD available!" error toast message is displayed
+    And Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | TODAY             |
+      | toDate      | TOMORROW          |
+      | type        | Normal            |
+      | status      | SUCCESS           |
+      | shipperName | {shipper-v4-name} |
+    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
+    Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
+      | scannedAtShipperCount | 1                                          |
+      | scannedAtShipperPOD   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+
+  @DeleteOrArchiveRoute
+  Scenario: Operator Failed to Create Implanted Manifest Pickup - Total Scanned Orders != Total of POD (uid:995601b8-52cc-4d28-b1b1-3bf4f1e33a57)
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Shipper create multiple V4 orders using data below:
+      | numberOfOrder     | 1                                                                                                                                                                                                                                                                                                                                |
+      | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
+      | v4OrderRequest    | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    And API Operator create new shipper address V2 using data below:
+      | shipperId       | {shipper-v4-id} |
+      | generateAddress | RANDOM          |
+    And API Operator create V2 reservation using data below:
+      | reservationRequest | { "legacy_shipper_id":{shipper-v4-legacy-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+    And API Operator add reservation pick-up to the route
+    And Operator open Route Manifest page for route ID "{KEY_CREATED_ROUTE_ID}"
+    And Operator success reservation waypoint from Route Manifest page
+    When Operator go to menu New Features -> Implanted Manifest
+    And Operator selects "{hub-name}" hub on Implanted Manifest page
+    And Operator clicks Create Manifest on Implanted Manifest page
+    And Operator scans "{KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]}" barcode on Implanted Manifest page
+    When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
+    Then Operator verifies that "POD and Manifest parcel count do not match." error toast message is displayed
+    And Operator go to menu Pick Ups -> Shipper Pickups
+    And Operator set filter parameters and click Load Selection on Shipper Pickups page:
+      | fromDate    | TODAY             |
+      | toDate      | TOMORROW          |
+      | type        | Normal            |
+      | status      | SUCCESS           |
+      | shipperName | {shipper-v4-name} |
+    And Operator opens details of reservation "{KEY_CREATED_RESERVATION_ID}" on Shipper Pickups page
+    Then Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:
+      | scannedAtShipperCount | 0       |
+      | scannedAtShipperPOD   | No data |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

@@ -4,8 +4,16 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.StandardTestConstants;
 import co.nvqa.operator_v2.model.ImplantedManifestOrder;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -19,6 +27,18 @@ import java.util.Map;
 public class ImplantedManifestPage extends OperatorV2SimplePage
 {
     private static final String CSV_FILENAME_FORMAT = "implanted-manifest-%s.csv";
+
+    @FindBy(id = "scan_barcode_input")
+    public TextBox scanBarcodeInput;
+
+    @FindBy(id = "hub")
+    public MdSelect hubSelect;
+
+    @FindBy(name = "container.implanted-manifest.create-manifest")
+    public NvApiTextButton createManifest;
+
+    @FindBy(css = "md-dialog")
+    public CreateManifestDialog createManifestDialog;
 
     private ImplantedManifestOrderTable implantedManifestOrderTable;
 
@@ -104,7 +124,7 @@ public class ImplantedManifestPage extends OperatorV2SimplePage
 
     public void scanBarCodeAndSaveTime(Map<String, ZonedDateTime> barcodeToScannedAtTime, String barcode)
     {
-        sendKeysAndEnterByAriaLabel("scan_barcode", barcode);
+        scanBarcodeInput.setValue(barcode + Keys.ENTER);
         barcodeToScannedAtTime.put(barcode, DateUtil.getDate(ZoneId.of(StandardTestConstants.DEFAULT_TIMEZONE)));
         String xpathToBarCode = "//input[@aria-label='scan_barcode' and contains(@class,'ng-empty')]";
         waitUntilVisibilityOfElementLocated(xpathToBarCode);
@@ -131,23 +151,28 @@ public class ImplantedManifestPage extends OperatorV2SimplePage
     public void verifyInfoInManifestTableForOrder(Order order, Map<String, ZonedDateTime> barcodeToScannedAtTime)
     {
         String trackingId = order.getTrackingId();
-        ZonedDateTime scannedAt = barcodeToScannedAtTime.get(trackingId).truncatedTo(ChronoUnit.SECONDS);
-        String destination = order.getToAddress1() + (order.getToAddress2().trim().isEmpty()? "" : " " + order.getToAddress2());
+        ZonedDateTime scannedAt = barcodeToScannedAtTime != null ?
+                barcodeToScannedAtTime.get(trackingId).truncatedTo(ChronoUnit.SECONDS) :
+                null;
+        String destination = order.getToAddress1() + (order.getToAddress2().trim().isEmpty() ? "" : " " + order.getToAddress2());
         String rackSector = order.getRackSector();
         String addressee = order.getToName();
 
         boolean recordFound = false;
 
-        for(int i=1; i<=implantedManifestOrderTable.getRowsCount(); i++)
+        for (int i = 1; i <= implantedManifestOrderTable.getRowsCount(); i++)
         {
             ImplantedManifestOrder implantedManifestOrder = implantedManifestOrderTable.readEntity(i);
 
-            if(trackingId.equals(implantedManifestOrder.getTrackingId()))
+            if (trackingId.equals(implantedManifestOrder.getTrackingId()))
             {
                 recordFound = true;
-                LocalDateTime scannedAtLocalExpected = scannedAt.toLocalDateTime();
-                LocalDateTime scannedAtLocalActual = implantedManifestOrder.getScannedAt().toLocalDateTime();
-                assertThat("'Scanned At' value in Implant Manifest table is not in expected range", scannedAtLocalExpected, isOneOf(scannedAtLocalActual, scannedAtLocalActual.plusSeconds(1L), scannedAtLocalActual.minusSeconds(1L)));
+                if (scannedAt != null)
+                {
+                    LocalDateTime scannedAtLocalExpected = scannedAt.toLocalDateTime();
+                    LocalDateTime scannedAtLocalActual = implantedManifestOrder.getScannedAt().toLocalDateTime();
+                    assertThat("'Scanned At' value in Implant Manifest table is not in expected range", scannedAtLocalExpected, isOneOf(scannedAtLocalActual, scannedAtLocalActual.plusSeconds(1L), scannedAtLocalActual.minusSeconds(1L)));
+                }
                 assertEquals("'Destination' value in Implant Manifest table", destination, implantedManifestOrder.getDestination());
                 assertEquals("'Rack Sector' value in Implant Manifest table", rackSector, implantedManifestOrder.getRackSector());
                 assertEquals("'Addressee' value in Implant Manifest table", addressee, implantedManifestOrder.getAddressee());
@@ -160,5 +185,19 @@ public class ImplantedManifestPage extends OperatorV2SimplePage
     public void scrollToBottom()
     {
         scrollIntoView("//button[@aria-label='Create Manifest']");
+    }
+
+    public static class CreateManifestDialog extends MdDialog
+    {
+        @FindBy(id = "container.implanted-manifest.reservation-id")
+        public TextBox reservationId;
+
+        @FindBy(id = "createManifestButton")
+        public NvIconTextButton createManifestButton;
+
+        public CreateManifestDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
     }
 }
