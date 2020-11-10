@@ -216,6 +216,128 @@ Feature: Facilities Management
       | facilityType | CROSSDOCK              |
       | sortHub      | true                   |
 
+  @DeleteHubsViaDb
+  Scenario: Create New Station - Crossdock Hub (uid:ad68e27f-dca5-425b-8c7b-5a0e2a751981)
+    Given Operator go to menu Hubs -> Facilities Management
+    When Operator create new Hub on page Hubs Administration using data below:
+      | name         | GENERATED         |
+      | displayName  | GENERATED         |
+      | facilityType | CROSSDOCK_STATION |
+      | region       | JKB               |
+      | city         | GENERATED         |
+      | country      | GENERATED         |
+      | latitude     | GENERATED         |
+      | longitude    | GENERATED         |
+    And Operator refresh page
+    Then Operator verify a new Hub is created successfully on Facilities Management page
+    And DB Operator verify a new hub is created in core.hubs using data below:
+      | hubName      | {KEY_CREATED_HUB.name} |
+      | facilityType | CROSSDOCK_STATION      |
+    And DB Operator verify a new hub is created in sort.hubs using data below:
+      | hubName      | {KEY_CREATED_HUB.name} |
+      | facilityType | CROSSDOCK_STATION      |
+      | sortHub      | false                  |
+
+  @DeleteHubsViaDb
+  Scenario: Update to Hub-Crossdock but Not As Sort Hub (uid:1e8d997d-5cd9-4ec1-ac3d-1cd3fcdf7bdc)
+    Given Operator go to menu Hubs -> Facilities Management
+    When Operator create new Hub on page Hubs Administration using data below:
+      | name         | GENERATED         |
+      | displayName  | GENERATED         |
+      | facilityType | CROSSDOCK_STATION |
+      | region       | JKB               |
+      | city         | GENERATED         |
+      | country      | GENERATED         |
+      | latitude     | GENERATED         |
+      | longitude    | GENERATED         |
+    And Operator refresh page
+    Then Operator verify a new Hub is created successfully on Facilities Management page
+    And Operator update Hub on page Hubs Administration using data below:
+      | searchHubsKeyword | {KEY_CREATED_HUB.name}          |
+      | name              | {KEY_CREATED_HUB.name} [E]      |
+      | displayName       | {KEY_CREATED_HUB.shortName} [E] |
+      | facilityType      | CROSSDOCK                       |
+      | city              | GENERATED                       |
+      | country           | GENERATED                       |
+      | latitude          | GENERATED                       |
+      | longitude         | GENERATED                       |
+    And Operator refresh page
+    Then Operator verify Hub is updated successfully on Facilities Management page
+    And DB Operator verify a new hub is created in core.hubs using data below:
+      | hubName      | {KEY_CREATED_HUB.name} |
+      | facilityType | CROSSDOCK              |
+    And DB Operator verify a new hub is created in sort.hubs using data below:
+      | hubName      | {KEY_CREATED_HUB.name} |
+      | facilityType | CROSSDOCK              |
+      | sortHub      | false                  |
+
+  @DeleteHubsViaDb
+  Scenario: Update to Hub-Crossdock As Sort Hub (uid:4795b7a6-2311-43de-9290-b1d41e31cdb7)
+    Given Operator go to menu Hubs -> Facilities Management
+    When Operator create new Hub on page Hubs Administration using data below:
+      | name         | GENERATED         |
+      | displayName  | GENERATED         |
+      | facilityType | CROSSDOCK_STATION |
+      | region       | JKB               |
+      | city         | GENERATED         |
+      | country      | GENERATED         |
+      | latitude     | GENERATED         |
+      | longitude    | GENERATED         |
+    And Operator refresh page
+    Then Operator verify a new Hub is created successfully on Facilities Management page
+    And Operator update Hub on page Hubs Administration using data below:
+      | searchHubsKeyword | {KEY_CREATED_HUB.name}          |
+      | name              | {KEY_CREATED_HUB.name} [E]      |
+      | displayName       | {KEY_CREATED_HUB.shortName} [E] |
+      | facilityType      | CROSSDOCK                       |
+      | city              | GENERATED                       |
+      | country           | GENERATED                       |
+      | latitude          | GENERATED                       |
+      | longitude         | GENERATED                       |
+      | sortHub           | YES                             |
+    And Operator refresh page
+    Then Operator verify Hub is updated successfully on Facilities Management page
+    And DB Operator verify a new hub is created in core.hubs using data below:
+      | hubName      | {KEY_CREATED_HUB.name} |
+      | facilityType | CROSSDOCK              |
+    And DB Operator verify a new hub is created in sort.hubs using data below:
+      | hubName      | {KEY_CREATED_HUB.name} |
+      | facilityType | CROSSDOCK              |
+      | sortHub      | true                   |
+
+  @DeleteHubsViaDb
+  Scenario: Update to Station-Crossdock Hub (uid:155b7bc7-d031-4bdf-b0f5-2812f1a5737d)
+    Given Operator go to menu Hubs -> Facilities Management
+    When Operator create new Hub on page Hubs Administration using data below:
+      | name         | GENERATED         |
+      | displayName  | GENERATED         |
+      | facilityType | CROSSDOCK         |
+      | region       | JKB               |
+      | city         | GENERATED         |
+      | country      | GENERATED         |
+      | latitude     | GENERATED         |
+      | longitude    | GENERATED         |
+    And Operator refresh page
+    Then Operator verify a new Hub is created successfully on Facilities Management page
+    And Operator update Hub on page Hubs Administration using data below:
+      | searchHubsKeyword | {KEY_CREATED_HUB.name}          |
+      | name              | {KEY_CREATED_HUB.name} [E]      |
+      | displayName       | {KEY_CREATED_HUB.shortName} [E] |
+      | facilityType      | CROSSDOCK_STATION               |
+      | city              | GENERATED                       |
+      | country           | GENERATED                       |
+      | latitude          | GENERATED                       |
+      | longitude         | GENERATED                       |
+    And Operator refresh page
+    Then Operator verify Hub is updated successfully on Facilities Management page
+    And DB Operator verify a new hub is created in core.hubs using data below:
+      | hubName      | {KEY_CREATED_HUB.name} |
+      | facilityType | CROSSDOCK_STATION      |
+    And DB Operator verify a new hub is created in sort.hubs using data below:
+      | hubName      | {KEY_CREATED_HUB.name} |
+      | facilityType | CROSSDOCK_STATION      |
+      | sortHub      | false                  |
+
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given no-op

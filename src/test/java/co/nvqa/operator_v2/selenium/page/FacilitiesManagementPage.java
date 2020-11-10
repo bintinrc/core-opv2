@@ -108,6 +108,7 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
         Optional.ofNullable(hub.getCountry()).ifPresent(value -> editHubDialog.country.setValue(value));
         Optional.ofNullable(hub.getLatitude()).ifPresent(value -> editHubDialog.latitude.setValue(value));
         Optional.ofNullable(hub.getLongitude()).ifPresent(value -> editHubDialog.longitude.setValue(value));
+        Optional.ofNullable(hub.getSortHub()).ifPresent(value -> sortHub.click());
         editHubDialog.submitChanges.clickAndWaitUntilDone();
         editHubDialog.waitUntilInvisible();
     }
@@ -146,6 +147,10 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
         if (expectedHub.getFacilityType().equalsIgnoreCase("CROSSDOCK"))
         {
             expectedHub.setFacilityType("Hub - Crossdock");
+        }
+        else if (expectedHub.getFacilityType().equalsIgnoreCase("CROSSDOCK_STATION"))
+        {
+            expectedHub.setFacilityType("Station - Crossdock");
         }
         expectedHub.compareWithActual(actualHub, "createdAt", "updatedAt", "deletedAt", "sortHub");
     }

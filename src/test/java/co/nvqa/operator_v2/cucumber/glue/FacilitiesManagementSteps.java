@@ -131,6 +131,7 @@ public class FacilitiesManagementSteps extends AbstractSteps
         String country = data.get("country");
         String latitude = data.get("latitude");
         String longitude = data.get("longitude");
+        String sortHub = data.get("sortHub");
 
         if (hub == null)
         {
@@ -190,6 +191,12 @@ public class FacilitiesManagementSteps extends AbstractSteps
         if (StringUtils.isNotBlank(longitude))
         {
             hub.setLongitude(Double.parseDouble(longitude));
+        }
+        if ("YES".equals(sortHub))
+        {
+            hub.setSortHub(true);
+        } else {
+            hub.setSortHub(null);
         }
 
         facilitiesManagementPage.updateHub(searchHubsKeyword, hub);
