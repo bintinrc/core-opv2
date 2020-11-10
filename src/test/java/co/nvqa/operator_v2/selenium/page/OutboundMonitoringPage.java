@@ -5,14 +5,14 @@ import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import java.util.Date;
 
 import static co.nvqa.operator_v2.selenium.page.OutboundMonitoringPage.RoutesTable.*;
 
@@ -30,6 +30,18 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage implements Scen
     @FindBy(tagName = "md-dialog")
     public PutCommentsModal putCommentsModal;
 
+    @FindBy(name = "fromDateField")
+    public MdDatepicker fromDateField;
+
+    @FindBy(css = "nv-filter-box[item-types='Hubs Select']")
+    public NvFilterBox hubsSelect;
+
+    @FindBy(css = "nv-filter-box[item-types='Zones Select']")
+    public NvFilterBox zonesSelect;
+
+    @FindBy(name = "Load Selection")
+    public NvApiTextButton loadSelection;
+
     public OutboundMonitoringPage(WebDriver webDriver, ScenarioStorage scenarioStorage)
     {
         super(webDriver);
@@ -38,18 +50,11 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage implements Scen
         routesTable = new RoutesTable(webDriver);
     }
 
-    public void selectFiltersAndClickLoadSelection(Date fromDate, Date toDate, String zoneName, String hubName)
+    public void selectFiltersAndClickLoadSelection(String zoneName, String hubName)
     {
-        setMdDatepicker("fromModel", fromDate);
-        setMdDatepicker("toModel", toDate);
-        selectValueFromNvAutocompleteByItemTypesAndDismiss("Zone Select", zoneName);
-        selectValueFromNvAutocompleteByItemTypesAndDismiss("Hub Select", hubName);
-        clickLoadSelection();
-    }
-
-    public void clickLoadSelection()
-    {
-        clickNvApiTextButtonByNameAndWaitUntilDone("Load Selection");
+        hubsSelect.selectFilter(hubName);
+        zonesSelect.selectFilter(zoneName);
+        loadSelection.clickAndWaitUntilDone();
     }
 
     public void verifyRouteIdExists(String routeId)
@@ -87,7 +92,7 @@ public class OutboundMonitoringPage extends OperatorV2SimplePage implements Scen
         putCommentsModal.waitUntilVisible();
         putCommentsModal.comments.setValue("This comment is for test purpose.");
         putCommentsModal.submit.clickAndWaitUntilDone();
-        pause1s();
+        pause2s();
     }
 
     public void verifyCommentIsRight()

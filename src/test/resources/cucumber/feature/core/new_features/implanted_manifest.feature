@@ -89,8 +89,7 @@ Feature: Implanted Manifest
     Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
     When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
     Then Operator verifies that "Not a success reservation!" error toast message is displayed
-    When Operator closes Create Manifest dialog on Implanted Manifest page
-    And Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | TODAY             |
       | toDate      | TOMORROW          |
@@ -129,8 +128,7 @@ Feature: Implanted Manifest
     Then Operator verifies all scanned orders is listed on Manifest table and the info is correct
     When Operator creates manifest for "{KEY_CREATED_RESERVATION_ID}" reservation on Implanted Manifest page
     Then Operator verifies that "Not a success reservation!" error toast message is displayed
-    When Operator closes Create Manifest dialog on Implanted Manifest page
-    And Operator go to menu Pick Ups -> Shipper Pickups
+    When Operator go to menu Pick Ups -> Shipper Pickups
     And Operator set filter parameters and click Load Selection on Shipper Pickups page:
       | fromDate    | TODAY             |
       | toDate      | TOMORROW          |

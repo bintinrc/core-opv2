@@ -2,15 +2,16 @@ package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.util.TestConstants;
+import com.google.common.collect.ImmutableList;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author Soewandi Wirjawan
  */
 @SuppressWarnings("WeakerAccess")
@@ -47,6 +48,7 @@ public class MainPage extends OperatorV2SimplePage
         MAP_OF_END_URL.put("Lat/Lng Cleanup", "lat-lng-cleanup");
         MAP_OF_END_URL.put("Hubs Group Management", "hub-group");
         MAP_OF_END_URL.put("Outbound/Route Load Monitoring", "outbound-monitoring");
+        MAP_OF_END_URL.put("Outbound Load Monitoring", "outbound-monitoring");
         MAP_OF_END_URL.put("Ninja Pack Tracking ID Generator", "ninja-pack-tid-generator");
         MAP_OF_END_URL.put("Update Delivery Address with CSV", "order-delivery-update");
         MAP_OF_END_URL.put("Route Monitoring V2", "route-monitoring-paged");
@@ -62,11 +64,10 @@ public class MainPage extends OperatorV2SimplePage
         navTitle = navTitle.trim();
         String endUrl;
 
-        if(MAP_OF_END_URL.containsKey(navTitle))
+        if (MAP_OF_END_URL.containsKey(navTitle))
         {
             endUrl = MAP_OF_END_URL.get(navTitle);
-        }
-        else
+        } else
         {
             endUrl = navTitle.toLowerCase().replaceAll(" ", "-");
         }
@@ -76,14 +77,14 @@ public class MainPage extends OperatorV2SimplePage
 
     public void verifyTheMainPageIsLoaded()
     {
-        if(isElementExistWait2Seconds("//button[@aria-label='login.sign-in-button']"))
+        if (isElementExistWait2Seconds("//button[@aria-label='login.sign-in-button']"))
         {
             getWebDriver().navigate().refresh();
         }
 
         String mainDashboardUrl = grabEndURL("All Orders");
 
-        waitUntil(()->
+        waitUntil(() ->
         {
             String currentUrl = getCurrentUrl();
             NvLogger.infof("verifyTheMainPageIsLoaded: Current URL = [%s] - Expected URL Ends With = [%s]", currentUrl, mainDashboardUrl);
@@ -95,31 +96,57 @@ public class MainPage extends OperatorV2SimplePage
         waitUntilInvisibilityOfElementLocated(XPATH_OF_TOAST_WELCOME_DASHBOARD, TestConstants.VERY_LONG_WAIT_FOR_TOAST);
 
         String currentUrl = getCurrentUrl();
-        String countrySpecificDashboardUrl = TestConstants.COUNTRY_CODE.toLowerCase()+'/'+mainDashboardUrl;
+        String countrySpecificDashboardUrl = TestConstants.COUNTRY_CODE.toLowerCase() + '/' + mainDashboardUrl;
 
-        if(!currentUrl.endsWith(countrySpecificDashboardUrl))
+        if (!currentUrl.endsWith(countrySpecificDashboardUrl))
         {
-            getWebDriver().navigate().to(TestConstants.OPERATOR_PORTAL_BASE_URL+'/'+countrySpecificDashboardUrl);
+            getWebDriver().navigate().to(TestConstants.OPERATOR_PORTAL_BASE_URL + '/' + countrySpecificDashboardUrl);
         }
     }
 
-    public void closeDialogIfVisible(){
-        String xpath = "//md-dialog//nv-icon-button[@name='Cancel']";
-        if (isElementVisible(xpath, 0)){
-            click(xpath);
-            waitUntilInvisibilityOfElementLocated(xpath);
+    public void closeDialogIfVisible()
+    {
+        String dialogXpath = "//md-dialog";
+        if (isElementVisible(dialogXpath, 0))
+        {
+            List<String> closeLocators = ImmutableList.of(
+                    dialogXpath + "//nv-icon-button[@name='Cancel']",
+                    dialogXpath + "//nv-icon-text-button[@name='Cancel']"
+            );
+            boolean closed = false;
+            for (String closeLocator : closeLocators)
+            {
+                if (isElementVisible(closeLocator, 0))
+                {
+                    click(closeLocator);
+                    closed = true;
+                    break;
+                }
+            }
+            if (!closed)
+            {
+                try
+                {
+                    executeScript("angular.element(arguments[0]).controller().function.cancel()", findElementByXpath(dialogXpath));
+                } catch (Exception ex)
+                {
+
+                }
+            }
+            waitUntilInvisibilityOfElementLocated(dialogXpath);
         }
     }
 
     public void clickNavigation(String parentTitle, String navTitle)
     {
         WebDriver webDriver = getWebDriver();
-        if (webDriver == null) {
+        if (webDriver == null)
+        {
             throw new RuntimeException("WebDriver session was not started");
         }
         webDriver.switchTo().defaultContent();
         closeDialogIfVisible();
-        if(isElementVisible("//i[@ng-if='!showLogo()']"))
+        if (isElementVisible("//i[@ng-if='!showLogo()']"))
         {
             openNavigationPanel();
         }
@@ -137,11 +164,11 @@ public class MainPage extends OperatorV2SimplePage
         String childNavXpath = String.format("//nv-section-item/button[div='%s']", navTitle);
         String parentNavXpath = String.format("//nv-section-header/button[span='%s']", parentTitle);
 
-        for(int i=0; i<2; i++)
+        for (int i = 0; i < 2; i++)
         {
             WebElement childNavWe = findElementByXpath(childNavXpath);
 
-            if(!childNavWe.isDisplayed())
+            if (!childNavWe.isDisplayed())
             {
                 click(parentNavXpath);
                 checkLeavingPage();
@@ -150,43 +177,40 @@ public class MainPage extends OperatorV2SimplePage
             pause100ms();
             boolean refreshPage = true;
 
-            if(childNavWe.isDisplayed())
+            if (childNavWe.isDisplayed())
             {
                 try
                 {
                     childNavWe.click();
                     checkLeavingPage();
                     refreshPage = false;
-                }
-                catch(WebDriverException ex)
+                } catch (WebDriverException ex)
                 {
                     NvLogger.warn("Failed to click nav child.", ex);
                 }
             }
 
-            if(refreshPage)
+            if (refreshPage)
             {
                 // Ensure no dialog that prevents menu from being clicked.
                 getWebDriver().navigate().refresh();
                 refreshPage();
-            }
-            else
+            } else
             {
                 break;
             }
         }
 
-        waitUntil(()->
+        waitUntil(() ->
         {
             boolean result;
             String currentUrl = getCurrentUrl();
             NvLogger.infof("clickNavigation: Current URL = [%s] - Expected URL Ends With = [%s]", currentUrl, urlPart);
 
-            if("linehaul".equals(urlPart))
+            if ("linehaul".equals(urlPart))
             {
                 result = currentUrl.contains(urlPart);
-            }
-            else
+            } else
             {
                 result = currentUrl.endsWith(urlPart);
             }
@@ -201,7 +225,7 @@ public class MainPage extends OperatorV2SimplePage
     {
         String xpath = "//md-dialog//h2[text()='Leaving Page']";
 
-        if(isElementExistWait0Second(xpath))
+        if (isElementExistWait0Second(xpath))
         {
             clickButtonByAriaLabel("Leave");
         }
