@@ -50,6 +50,13 @@ public class NvAutocomplete extends PageElement
         String suggestionsId = inputElement.getAttribute("aria-owns");
         String menuXpath = f("//ul[@id='%s']", suggestionsId);
         String itemXpath = menuXpath + f("//li//span[contains(.,'%s')]", value);
+        int count = 0;
+        while (!isElementVisible(itemXpath, 1) && count < 5)
+        {
+            String lastItemXpath = menuXpath + "//li[last()]";
+            scrollIntoView(lastItemXpath, true);
+            count++;
+        }
         click(itemXpath);
         pause200ms();
         if (isElementVisible(menuXpath, 0))
