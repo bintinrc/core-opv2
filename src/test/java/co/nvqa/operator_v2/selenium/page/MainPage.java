@@ -4,7 +4,6 @@ import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.util.TestConstants;
 import com.google.common.collect.ImmutableList;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import java.util.HashMap;
@@ -111,29 +110,30 @@ public class MainPage extends OperatorV2SimplePage
         {
             List<String> closeLocators = ImmutableList.of(
                     dialogXpath + "//nv-icon-button[@name='Cancel']",
-                    dialogXpath + "//nv-icon-text-button[@name='Cancel']"
+                    dialogXpath + "//nv-icon-text-button[@name='Cancel']",
+                    dialogXpath + "//button[@aria-label='Leave']"
+
             );
-            boolean closed = false;
             for (String closeLocator : closeLocators)
             {
                 if (isElementVisible(closeLocator, 0))
                 {
                     click(closeLocator);
-                    closed = true;
+                    waitUntilInvisibilityOfElementLocated(closeLocator);
                     break;
                 }
             }
-            if (!closed)
+            if (isElementVisible(dialogXpath, 0))
             {
                 try
                 {
                     executeScript("angular.element(arguments[0]).controller().function.cancel()", findElementByXpath(dialogXpath));
+                    waitUntilInvisibilityOfElementLocated(dialogXpath);
                 } catch (Exception ex)
                 {
 
                 }
             }
-            waitUntilInvisibilityOfElementLocated(dialogXpath);
         }
     }
 
@@ -171,7 +171,8 @@ public class MainPage extends OperatorV2SimplePage
             if (!childNavWe.isDisplayed())
             {
                 click(parentNavXpath);
-                checkLeavingPage();
+                pause200ms();
+                closeDialogIfVisible();
             }
 
             pause100ms();
@@ -182,9 +183,10 @@ public class MainPage extends OperatorV2SimplePage
                 try
                 {
                     childNavWe.click();
-                    checkLeavingPage();
+                    pause200ms();
+                    closeDialogIfVisible();
                     refreshPage = false;
-                } catch (WebDriverException ex)
+                } catch (Exception ex)
                 {
                     NvLogger.warn("Failed to click nav child.", ex);
                 }
@@ -193,7 +195,6 @@ public class MainPage extends OperatorV2SimplePage
             if (refreshPage)
             {
                 // Ensure no dialog that prevents menu from being clicked.
-                getWebDriver().navigate().refresh();
                 refreshPage();
             } else
             {
