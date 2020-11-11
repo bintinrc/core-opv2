@@ -1,6 +1,6 @@
 package co.nvqa.operator_v2.selenium.page;
 
-import co.nvqa.operator_v2.model.HubAppUser;
+import co.nvqa.operator_v2.model.SortAppUser;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 
@@ -11,9 +11,9 @@ import java.util.Locale;
 /**
  * @author Tristania Siagian
  */
-public class HubAppUserManagementPage extends OperatorV2SimplePage
+public class SortAppUserManagementPage extends OperatorV2SimplePage
 {
-    private static final String ADD_HUB_USER_BUTTON_XPATH = "//button[@id='btnAddUser']";
+    private static final String ADD_SORT_USER_BUTTON_XPATH = "//button[@id='btnAddUser']";
     private static final String FILTER_XPATH = "//div[@id='%s']";
     private static final String EMPLOYMENT_START_DATE_FILTER_XPATH = "//span[@id='employmentStartDate']";
     private static final String START_DATE_INPUT_XPATH = "//div[contains(@class,'calendar-range-left')]//td[@title='%s']";
@@ -21,7 +21,7 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     private static final String INACTIVE_EMPLOYMENT_FILTER_XPATH = "//li[text()='INACTIVE']";
     private static final String UNSELECTABLE_FILTER = "//div[@id='%s']//span[@unselectable='on']";
 
-    private static final String ADD_EDIT_HUB_USER_DIALOG_XPATH = "//div[contains(@id,'rcDialogTitle')]";
+    private static final String ADD_EDIT_SORT_USER_DIALOG_XPATH = "//div[contains(@id,'rcDialogTitle')]";
     private static final String EMPLOYMENT_TYPE_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='employmentType']";
     private static final String FULL_TIME_EMPLOYMENT_TYPE_XPATH = "//li[text()='FULL_TIME']";
     private static final String PART_TIME_EMPLOYMENT_TYPE_XPATH = "//li[text()='PART_TIME']";
@@ -35,12 +35,12 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     private static final String STATUS_COMBOBOX_XPATH = "//form[contains(@class,'StyledForm')]//div[@id='isActive']";
 
     private static final String CLEAR_FILTERS_BUTTON_XPATH = "//button[span[text()='Clear Filters']]";
-    private static final String IFRAME_XPATH = "//iframe[contains(@src,'hub-user-management')]";
-    private static final String LOAD_ALL_HUB_APP_USER_BUTTON_XPATH = "//button[span[text()='Load Hub Users']]";
+    private static final String IFRAME_XPATH = "//iframe[contains(@src,'sort-app-user-management')]";
+    private static final String LOAD_ALL_SORT_APP_USER_BUTTON_XPATH = "//button[span[text()='Load Users']]";
     private static final String USERNAME_TABLE_FILTER_XPATH = "//th[contains(@class,'username')]//input";
     private static final String TABLE_RESULT_XPATH = "//td[contains(@class,'%s')]/span/%s";
-    private static final String TOAST_HUB_APP_USER_CREATED_XPATH = "//div[contains(@class,'notification-notice-content')]//div[contains(text(),'Hub User has been created')]";
-    private static final String TOAST_HUB_APP_USER_UPDATED_XPATH = "//div[contains(@class,'notification-notice-content')]//div[contains(text(),'Hub User has been updated')]";
+    private static final String TOAST_SORT_APP_USER_CREATED_XPATH = "//div[contains(@class,'notification-notice-content')]//div[contains(text(),'Sort App User has been created')]";
+    private static final String TOAST_SORT_APP_USER_UPDATED_XPATH = "//div[contains(@class,'notification-notice-content')]//div[contains(text(),'Sort App User has been updated')]";
     private static final String ERROR_TOAST_DUPLICATION_USERNAME_XPATH = "//div[contains(@class,'notification-notice-message') and (contains(text(),'username %s already exists'))]";
     private static final String ERROR_TOAST_DUPLICATION_CLOSE_XPATH = "//a[contains(@class,'notification-notice-close')]";
     private static final String ERROR_MESSAGE_EMPTY_FIELD_XPATH = "//div[@class='ant-form-explain']/span[text()='%s']";
@@ -64,17 +64,17 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
     private static final String LAST_NAME_CLASS = "lastName";
     private static final String EMPLOYMENT_START_DATE_CLASS = "employmentStartDate";
 
-    public HubAppUserManagementPage(WebDriver webDriver)
+    public SortAppUserManagementPage(WebDriver webDriver)
     {
         super(webDriver);
     }
 
-    public void clickAddHubUserButton()
+    public void clickAddSortAppUserButton()
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-        waitUntilVisibilityOfElementLocated(LOAD_ALL_HUB_APP_USER_BUTTON_XPATH);
-        click(ADD_HUB_USER_BUTTON_XPATH);
-        waitUntilVisibilityOfElementLocated(ADD_EDIT_HUB_USER_DIALOG_XPATH);
+        waitUntilVisibilityOfElementLocated(LOAD_ALL_SORT_APP_USER_BUTTON_XPATH);
+        click(ADD_SORT_USER_BUTTON_XPATH);
+        waitUntilVisibilityOfElementLocated(ADD_EDIT_SORT_USER_DIALOG_XPATH);
         getWebDriver().switchTo().parentFrame();
     }
 
@@ -171,7 +171,7 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
         getWebDriver().switchTo().parentFrame();
     }
 
-    public void selectHubForHubAppUser(String hubName)
+    public void selectHubForSortAppUser(String hubName)
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
         click(HUB_COMBOBOX_XPATH);
@@ -223,12 +223,12 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
         click(CREATE_UPDATE_BUTTON_ADD_HUB_DIALOG_XPATH);
         waitUntilInvisibilityOfElementLocated("//md-dialog");
         if (isUpdated) {
-            waitUntilVisibilityOfElementLocated(TOAST_HUB_APP_USER_UPDATED_XPATH);
-            waitUntilInvisibilityOfElementLocated(TOAST_HUB_APP_USER_UPDATED_XPATH);
+            waitUntilVisibilityOfElementLocated(TOAST_SORT_APP_USER_UPDATED_XPATH);
+            waitUntilInvisibilityOfElementLocated(TOAST_SORT_APP_USER_UPDATED_XPATH);
         }
         if (!isInvalid) {
-            waitUntilVisibilityOfElementLocated(TOAST_HUB_APP_USER_CREATED_XPATH);
-            waitUntilInvisibilityOfElementLocated(TOAST_HUB_APP_USER_CREATED_XPATH);
+            waitUntilVisibilityOfElementLocated(TOAST_SORT_APP_USER_CREATED_XPATH);
+            waitUntilInvisibilityOfElementLocated(TOAST_SORT_APP_USER_CREATED_XPATH);
         }
         getWebDriver().switchTo().parentFrame();
     }
@@ -238,10 +238,10 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
         clickCreateEditHubUserButton(isInvalid, false);
     }
 
-    public void clickAllHubAppUser()
+    public void clickAllSortAppUser()
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-        click(LOAD_ALL_HUB_APP_USER_BUTTON_XPATH);
+        click(LOAD_ALL_SORT_APP_USER_BUTTON_XPATH);
         waitUntilVisibilityOfElementLocated("//tbody//td[@class='hubId']");
         getWebDriver().switchTo().parentFrame();
     }
@@ -253,7 +253,7 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
         getWebDriver().switchTo().parentFrame();
     }
 
-    public void selectFilter(String filterName, HubAppUser hubAppUser)
+    public void selectFilter(String filterName, SortAppUser sortAppUser)
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
 
@@ -261,8 +261,8 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
         {
             case "hub" :
                 click(f(FILTER_XPATH, HUB_CLASS));
-                waitUntilVisibilityOfElementLocated(f(HUB_SELECTION_XPATH, hubAppUser.getHub()));
-                click(f(HUB_SELECTION_XPATH, hubAppUser.getHub()));
+                waitUntilVisibilityOfElementLocated(f(HUB_SELECTION_XPATH, sortAppUser.getHub()));
+                click(f(HUB_SELECTION_XPATH, sortAppUser.getHub()));
                 break;
 
             case "employment type" :
@@ -289,8 +289,8 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
 
             case "multiple" :
                 click(f(FILTER_XPATH, HUB_CLASS));
-                waitUntilVisibilityOfElementLocated(f(HUB_SELECTION_XPATH, hubAppUser.getHub()));
-                click(f(HUB_SELECTION_XPATH, hubAppUser.getHub()));
+                waitUntilVisibilityOfElementLocated(f(HUB_SELECTION_XPATH, sortAppUser.getHub()));
+                click(f(HUB_SELECTION_XPATH, sortAppUser.getHub()));
 
                 pause1s();
                 click(f(FILTER_XPATH, EMPLOYMENT_TYPE_CLASS));
@@ -307,7 +307,7 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
         getWebDriver().switchTo().parentFrame();
     }
 
-    public void selectFilterWithoutCreatingHubAppUser()
+    public void selectFilterWithoutCreatingSortAppUser()
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
 
@@ -339,32 +339,32 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
         getWebDriver().switchTo().parentFrame();
     }
 
-    public void checkTheHubAppUserIsCreated(HubAppUser hubAppUser)
+    public void checkTheSortAppUserIsCreated(SortAppUser sortAppUser)
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-        sendKeys(USERNAME_TABLE_FILTER_XPATH, hubAppUser.getUsername());
+        sendKeys(USERNAME_TABLE_FILTER_XPATH, sortAppUser.getUsername());
         waitUntilVisibilityOfElementLocated(f(TABLE_RESULT_XPATH, USERNAME_CLASS, "mark"));
 
         String actualUsernameShown = getText(f(TABLE_RESULT_XPATH, USERNAME_CLASS, "mark"));
-        assertEquals("Username is different : ", hubAppUser.getUsername(), actualUsernameShown);
+        assertEquals("Username is different : ", sortAppUser.getUsername(), actualUsernameShown);
 
         String actualHubShown = getText(f(TABLE_RESULT_XPATH, HUB_CLASS, "span"));
-        assertEquals("Hub is different : ", hubAppUser.getHub(), actualHubShown);
+        assertEquals("Hub is different : ", sortAppUser.getHub(), actualHubShown);
 
         String actualPositionShown = getText(f(TABLE_RESULT_XPATH, POSITION_CLASS, "span"));
-        assertEquals("Position is different : ", hubAppUser.getPosition(), actualPositionShown);
+        assertEquals("Position is different : ", sortAppUser.getPosition(), actualPositionShown);
 
         String actualEmploymentTypeShown = getText(f(TABLE_RESULT_XPATH, EMPLOYMENT_TYPE_CLASS, "span"));
-        assertEquals("Employment Type is different : ", hubAppUser.getEmploymentType(), actualEmploymentTypeShown);
+        assertEquals("Employment Type is different : ", sortAppUser.getEmploymentType(), actualEmploymentTypeShown);
 
         String actualFirstNameShown = getText(f(TABLE_RESULT_XPATH, FIRST_NAME_CLASS, "span"));
-        assertEquals("First Name is different : ", hubAppUser.getFirstName(), actualFirstNameShown);
+        assertEquals("First Name is different : ", sortAppUser.getFirstName(), actualFirstNameShown);
 
         String actualLastNameShown = getText(f(TABLE_RESULT_XPATH, LAST_NAME_CLASS, "span"));
-        assertEquals("Last Name is different : ", hubAppUser.getLastName(), actualLastNameShown);
+        assertEquals("Last Name is different : ", sortAppUser.getLastName(), actualLastNameShown);
 
         String actualEmploymentStartDateShown = getText(f(TABLE_RESULT_XPATH, EMPLOYMENT_START_DATE_CLASS, "span"));
-        assertEquals("Employment Start Date is different : ", hubAppUser.getEmploymentStartDate(), actualEmploymentStartDateShown);
+        assertEquals("Employment Start Date is different : ", sortAppUser.getEmploymentStartDate(), actualEmploymentStartDateShown);
 
         getWebDriver().switchTo().parentFrame();
     }
@@ -378,11 +378,11 @@ public class HubAppUserManagementPage extends OperatorV2SimplePage
         getWebDriver().switchTo().parentFrame();
     }
 
-    public void clickEditHubAppUser()
+    public void clickEditSortAppUser()
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
         click(EDIT_LINK_TEXT_XPATH);
-        waitUntilVisibilityOfElementLocated(ADD_EDIT_HUB_USER_DIALOG_XPATH);
+        waitUntilVisibilityOfElementLocated(ADD_EDIT_SORT_USER_DIALOG_XPATH);
         getWebDriver().switchTo().parentFrame();
     }
 }

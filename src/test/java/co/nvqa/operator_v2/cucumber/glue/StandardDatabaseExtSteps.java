@@ -654,21 +654,21 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         }
     }
 
-    @After(value = "@DeleteHubAppUser")
-    public void deleteHubAppUser()
+    @After(value = "@DeleteSortAppUser")
+    public void deleteSortAppUser()
     {
-        if (get(KEY_CREATED_HUB_APP_USERNAME) != null)
+        if (get(KEY_CREATED_SORT_APP_USERNAME) != null)
         {
-            getHubJdbc().deleteHubAppUser(get(KEY_CREATED_HUB_APP_USERNAME));
-            getAuthJdbc().softDeleteOauthClientByClientId(get(KEY_CREATED_HUB_APP_USERNAME));
+            getHubJdbc().deleteSortAppUser(get(KEY_CREATED_SORT_APP_USERNAME));
+            getAuthJdbc().softDeleteOauthClientByClientId(get(KEY_CREATED_SORT_APP_USERNAME));
         }
     }
 
-    @Given("DB Operator gets the newest existed username for Hub App")
-    public void dbOperatorGetsTheNewestExistedUsernameForHubApp()
+    @Given("DB Operator gets the newest existed username for Sort App")
+    public void dbOperatorGetsTheNewestExistedUsernameForSortApp()
     {
         String username = getHubJdbc().getExistedUsername();
-        put(KEY_EXISTED_HUB_APP_USERNAME, username);
+        put(KEY_EXISTED_SORT_APP_USERNAME, username);
     }
 
     @Given("DB Operator gets the {int} shipment IDs")

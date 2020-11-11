@@ -5,7 +5,7 @@ package co.nvqa.operator_v2.model;
  * @author Tristania Siagian
  */
 
-public class HubAppUser
+public class SortAppUser
 {
     private String firstName;
     private String lastName;
@@ -20,7 +20,7 @@ public class HubAppUser
     private String position;
     private String comments;
 
-    public HubAppUser()
+    public SortAppUser()
     {
     }
 
