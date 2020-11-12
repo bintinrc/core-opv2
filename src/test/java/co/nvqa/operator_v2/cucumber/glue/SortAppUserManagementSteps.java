@@ -61,7 +61,10 @@ public class SortAppUserManagementSteps extends AbstractSteps
             sortAppUser.setEmploymentStartDate(dataFormatter.format(today));
             sortAppUserManagementPage.selectEmploymentStartDate(calFormatter.format(today));
 
-            sortAppUserManagementPage.selectHubForSortAppUser(sortAppUser.getHub());
+            sortAppUserManagementPage.selectPrimaryHubForSortAppUser(sortAppUser.getPrimaryHub());
+            if (sortAppUser.getAdditionalHub() != null) {
+                sortAppUserManagementPage.selectAdditionalHubForSortAppUser(sortAppUser.getAdditionalHub());
+            }
             sortAppUserManagementPage.fillWareHouseTeamFormation(sortAppUser.getWarehouseTeamFormation());
             sortAppUserManagementPage.fillPosition(sortAppUser.getPosition());
             sortAppUserManagementPage.fillComments(sortAppUser.getComments());
@@ -104,8 +107,8 @@ public class SortAppUserManagementSteps extends AbstractSteps
                 sortAppUserManagementPage.selectEmploymentStartDate(calFormatter.format(today));
             }
 
-            if (!("".equalsIgnoreCase(sortAppUser.getHub()))) {
-                sortAppUserManagementPage.selectHubForSortAppUser(sortAppUser.getHub());
+            if (!("".equalsIgnoreCase(sortAppUser.getPrimaryHub()))) {
+                sortAppUserManagementPage.selectPrimaryHubForSortAppUser(sortAppUser.getPrimaryHub());
             }
 
             sortAppUserManagementPage.fillWareHouseTeamFormation(sortAppUser.getWarehouseTeamFormation());
@@ -200,7 +203,7 @@ public class SortAppUserManagementSteps extends AbstractSteps
             sortAppUserManagementPage.selectEmploymentType(sortAppUser.getEmploymentType());
             sortAppUserManagementPage.selectEmploymentActivity(sortAppUser.getEmploymentStatus());
 
-            sortAppUserManagementPage.selectHubForSortAppUser(sortAppUser.getHub());
+            sortAppUserManagementPage.selectPrimaryHubForSortAppUser(sortAppUser.getPrimaryHub());
             sortAppUserManagementPage.fillWareHouseTeamFormation(sortAppUser.getWarehouseTeamFormation());
             sortAppUserManagementPage.fillPosition(sortAppUser.getPosition());
             sortAppUserManagementPage.fillComments(sortAppUser.getComments());

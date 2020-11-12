@@ -25,10 +25,12 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage
     private static final String EMPLOYMENT_TYPE_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='employmentType']";
     private static final String FULL_TIME_EMPLOYMENT_TYPE_XPATH = "//li[text()='FULL_TIME']";
     private static final String PART_TIME_EMPLOYMENT_TYPE_XPATH = "//li[text()='PART_TIME']";
-    private static final String HUB_SELECTION_XPATH = "//li[text()='%s']";
+    private static final String PRIMARY_HUB_SELECTION_XPATH = "(//li[text()='%s'])[1]";
+    private static final String ADDITIONAL_HUB_SELECTION_XPATH = "(//li[text()='%s'])[2]";
     private static final String EMPLOYMENT_START_DATE_XPATH = "//div[contains(@class,'ant-card-bordered')]//span[@id='employmentStartDate']";
     private static final String RECENT_MONTH_XPATH = "//a[contains(@class,'month-select')]";
-    private static final String HUB_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='hubId']";
+    private static final String PRIMARY_HUB_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='hubId']";
+    private static final String ADDITIONAL_HUB_COMBOBOX_XPATH = "//div[contains(@class,'ant-card-bordered')]//div[@id='additionalHubs[0]']";
     private static final String CREATE_UPDATE_BUTTON_ADD_HUB_DIALOG_XPATH = "//button[@id='btnUpsertUser']";
     private static final String CLOSE_BUTTON_MODAL_XPATH = "//button[@aria-label='Close']";
     private static final String EDIT_LINK_TEXT_XPATH = "//a[contains(@class, 'edit-user')]";
@@ -171,13 +173,23 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage
         getWebDriver().switchTo().parentFrame();
     }
 
-    public void selectHubForSortAppUser(String hubName)
+    public void selectPrimaryHubForSortAppUser(String hubName)
     {
         getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
-        click(HUB_COMBOBOX_XPATH);
-        waitUntilVisibilityOfElementLocated(f(HUB_SELECTION_XPATH, hubName));
+        click(PRIMARY_HUB_COMBOBOX_XPATH);
+        waitUntilVisibilityOfElementLocated(f(PRIMARY_HUB_SELECTION_XPATH, hubName));
         pause1s();
-        click(f(HUB_SELECTION_XPATH, hubName));
+        click(f(PRIMARY_HUB_SELECTION_XPATH, hubName));
+        getWebDriver().switchTo().parentFrame();
+    }
+
+    public void selectAdditionalHubForSortAppUser(String hubName)
+    {
+        getWebDriver().switchTo().frame(findElementByXpath(IFRAME_XPATH));
+        click(ADDITIONAL_HUB_COMBOBOX_XPATH);
+        waitUntilVisibilityOfElementLocated(f(ADDITIONAL_HUB_SELECTION_XPATH, hubName));
+        pause1s();
+        click(f(ADDITIONAL_HUB_SELECTION_XPATH, hubName));
         getWebDriver().switchTo().parentFrame();
     }
 
@@ -261,8 +273,8 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage
         {
             case "hub" :
                 click(f(FILTER_XPATH, HUB_CLASS));
-                waitUntilVisibilityOfElementLocated(f(HUB_SELECTION_XPATH, sortAppUser.getHub()));
-                click(f(HUB_SELECTION_XPATH, sortAppUser.getHub()));
+                waitUntilVisibilityOfElementLocated(f(PRIMARY_HUB_SELECTION_XPATH, sortAppUser.getPrimaryHub()));
+                click(f(PRIMARY_HUB_SELECTION_XPATH, sortAppUser.getPrimaryHub()));
                 break;
 
             case "employment type" :
@@ -289,8 +301,8 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage
 
             case "multiple" :
                 click(f(FILTER_XPATH, HUB_CLASS));
-                waitUntilVisibilityOfElementLocated(f(HUB_SELECTION_XPATH, sortAppUser.getHub()));
-                click(f(HUB_SELECTION_XPATH, sortAppUser.getHub()));
+                waitUntilVisibilityOfElementLocated(f(PRIMARY_HUB_SELECTION_XPATH, sortAppUser.getPrimaryHub()));
+                click(f(PRIMARY_HUB_SELECTION_XPATH, sortAppUser.getPrimaryHub()));
 
                 pause1s();
                 click(f(FILTER_XPATH, EMPLOYMENT_TYPE_CLASS));
@@ -348,8 +360,8 @@ public class SortAppUserManagementPage extends OperatorV2SimplePage
         String actualUsernameShown = getText(f(TABLE_RESULT_XPATH, USERNAME_CLASS, "mark"));
         assertEquals("Username is different : ", sortAppUser.getUsername(), actualUsernameShown);
 
-        String actualHubShown = getText(f(TABLE_RESULT_XPATH, HUB_CLASS, "span"));
-        assertEquals("Hub is different : ", sortAppUser.getHub(), actualHubShown);
+        String actualPrimaryHubShown = getText(f(TABLE_RESULT_XPATH, HUB_CLASS, "span"));
+        assertEquals("Primary Hub is different : ", sortAppUser.getPrimaryHub(), actualPrimaryHubShown);
 
         String actualPositionShown = getText(f(TABLE_RESULT_XPATH, POSITION_CLASS, "span"));
         assertEquals("Position is different : ", sortAppUser.getPosition(), actualPositionShown);

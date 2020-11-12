@@ -15,7 +15,8 @@ public class SortAppUser
     private String employmentType;
     private String employmentStartDate;
     private String employmentStatus;
-    private String hub;
+    private String primaryHub;
+    private String additionalHub;
     private String warehouseTeamFormation;
     private String position;
     private String comments;
@@ -88,12 +89,20 @@ public class SortAppUser
         this.employmentStatus = employmentStatus;
     }
 
-    public String getHub() {
-        return hub;
+    public String getPrimaryHub() {
+        return primaryHub;
     }
 
-    public void setHub(String hub) {
-        this.hub = hub;
+    public void setPrimaryHub(String primaryHub) {
+        this.primaryHub = primaryHub;
+    }
+
+    public String getAdditionalHub() {
+        return additionalHub;
+    }
+
+    public void setAdditionalHub(String additionalHub) {
+        this.additionalHub = additionalHub;
     }
 
     public String getWarehouseTeamFormation() {
