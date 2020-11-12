@@ -31,6 +31,10 @@ public class MdDialog extends PageElement
         close.moveAndClick();
     }
 
+    public void forceClose(){
+        executeScript("angular.element(arguments[0]).controller().function.cancel()", getWebElement());
+    }
+
     public boolean isDisplayed()
     {
         return title.isDisplayedFast();
