@@ -12,8 +12,6 @@ import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -89,12 +87,12 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps
         Map<String, Address> addresses = get(KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES);
 
         int tableSize = updateDeliveryAddressWithCsvPage.addressesTable.getRowsCount();
-        Assertions.assertEquals(addresses.size(), tableSize, "Number of updated addresses");
+        assertEquals("Number of updated addresses", addresses.size(), tableSize);
 
         for (int i = 1; i <= tableSize; i++)
         {
             String trackingId = updateDeliveryAddressWithCsvPage.addressesTable.getColumnText(i, COLUMN_TRACKING_ID);
-            Assertions.assertTrue(addresses.containsKey(trackingId), "Unexpected Tracking ID");
+            assertTrue("Unexpected Tracking ID", addresses.containsKey(trackingId));
             Address actualAddress = updateDeliveryAddressWithCsvPage.addressesTable.readEntity(i);
             Address expectedAddress = addresses.get(trackingId);
             expectedAddress.compareWithActual(actualAddress);
@@ -109,15 +107,15 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps
                 map -> resolveValue(map.get("status"))
         ));
         int tableSize = updateDeliveryAddressWithCsvPage.addressesTable.getRowsCount();
-        Assertions.assertEquals(data.size(), tableSize, "Number of updated addresses");
+        assertEquals("Number of updated addresses", data.size(), tableSize);
 
         for (int i = 1; i <= tableSize; i++)
         {
             String trackingId = updateDeliveryAddressWithCsvPage.addressesTable.getColumnText(i, COLUMN_TRACKING_ID);
-            Assertions.assertTrue(data.containsKey(trackingId), f("Unexpected Tracking ID [%s]", trackingId));
+            assertTrue(f("Unexpected Tracking ID [%s]", trackingId), data.containsKey(trackingId));
             String actualStatus = updateDeliveryAddressWithCsvPage.addressesTable.getColumnText(i, COLUMN_VALIDATION);
             String expectedAddress = data.get(trackingId);
-            Assert.assertThat(f("Validation status for Tracking ID", trackingId), actualStatus, Matchers.equalToIgnoringCase(expectedAddress));
+            assertThat(f("Validation status for Tracking ID", trackingId), actualStatus, Matchers.equalToIgnoringCase(expectedAddress));
         }
     }
 
@@ -135,7 +133,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps
     {
         Map<String, Address> addresses = get(KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES);
         retryIfAssertionErrorOccurred(
-                () -> Assertions.assertEquals(f("All %d records updated", addresses.size()), updateDeliveryAddressWithCsvPage.tableDescription.getText(), "Number of updated addresses"),
+                () -> assertEquals("Number of updated addresses", f("All %d records updated", addresses.size()), updateDeliveryAddressWithCsvPage.tableDescription.getText()),
                 "Assert Addresses table description after addresses update");
     }
 
@@ -245,7 +243,8 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps
     }
 
     @When("Operator update delivery address of created orders on Update Delivery Address with CSV page with technical issues")
-    public void operatorUpdateDeliveryAddressOfCreatedOrdersOnUpdateDeliveryAddressWithCSVPageWithTechinalIssues() {
+    public void operatorUpdateDeliveryAddressOfCreatedOrdersOnUpdateDeliveryAddressWithCSVPageWithTechinalIssues()
+    {
         List<String> trackingIds = get(KEY_LIST_OF_CREATED_ORDER_TRACKING_ID);
         Map<String, Address> addresses = trackingIds == null ?
                 new HashMap<>() :
@@ -350,7 +349,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps
         AtomicInteger ordinal = new AtomicInteger(0);
         addresses.forEach((trackingId, toAddress) ->
                 {
-                    if(ordinal.intValue()==0)
+                    if (ordinal.intValue() == 0)
                     {
                         addressSb
                                 .append(getNonOptionalValue(trackingId)).append(",")
@@ -367,8 +366,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps
                                 .append(getOptionalValue(toAddress.getLatitude() != null ? String.valueOf(toAddress.getLatitude()) : null)).append(",")
                                 .append(getOptionalValue(toAddress.getLongitude() != null ? String.valueOf(toAddress.getLongitude()) : null))
                                 .append(System.lineSeparator());
-                    }
-                    else
+                    } else
                     {
                         if (StringUtils.startsWith(toAddress.getContact(), "+"))
                         {
@@ -421,10 +419,10 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps
     public void operatorVerifyAddressesWithTechnicalIssuesUpdatedSuccessfully()
     {
         Map<String, Address> addresses = get(KEY_MAP_OF_UPDATED_DELIVERY_ADDRESSES);
-        int a =0;
-        for(Map.Entry mapElement : addresses.entrySet())
+        int a = 0;
+        for (Map.Entry mapElement : addresses.entrySet())
         {
-            if(a != 0)
+            if (a != 0)
             {
                 assertEquals(f("All %d records updated", updateDeliveryAddressWithCsvPage.tableDescription.getText(), "Number of updated addresses"),
                         "Assert Addresses table description after addresses update");
@@ -442,7 +440,7 @@ public class UpdateDeliveryAddressWithCsvSteps extends AbstractSteps
         AtomicInteger ordinal = new AtomicInteger(0);
         addresses.forEach((trackingId, toAddress) ->
         {
-            if(ordinal.intValue()!=0)
+            if (ordinal.intValue() != 0)
             {
                 Order order = orders.stream()
                         .filter(o -> StringUtils.equals(o.getTrackingId(), trackingId))
