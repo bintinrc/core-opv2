@@ -49,7 +49,6 @@ public class SortAppUserManagementSteps extends AbstractSteps
                 put(KeyConstants.KEY_IS_INVALID, true);
             } else if ("RANDOM".equalsIgnoreCase(sortAppUser.getUsername())) {
                 String username = "AUTO" + generateRequestedTrackingNumber();
-                System.out.println(username);
                 sortAppUser.setUsername(username);
                 sortAppUserManagementPage.fillUsername(username);
                 put(KeyConstants.KEY_IS_INVALID, false);
