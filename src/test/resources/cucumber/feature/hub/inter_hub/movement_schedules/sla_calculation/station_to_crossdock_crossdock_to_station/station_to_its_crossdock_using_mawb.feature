@@ -1,4 +1,4 @@
-@MiddleMile @Hub @InterHub @MovementSchedules @StationToItsCrossdockUsingMawb
+@MiddleMile @Hub @InterHub @MovementSchedules @SlaCalculation @StationToCrossdock @StationToItsCrossdockUsingMawb
 Feature: Station to its Crossdock using MAWB
 
   @LaunchBrowser @ShouldAlwaysRun

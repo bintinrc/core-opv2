@@ -1,4 +1,4 @@
-@MiddleMile @Hub @InterHub @MovementSchedules @StationToItsCrossdock
+@MiddleMile @Hub @InterHub @MovementSchedules @SlaCalculation @StationToCrossdock @StationToItsCrossdock
 Feature: Station to it's Crossdock
 
   @LaunchBrowser @ShouldAlwaysRun

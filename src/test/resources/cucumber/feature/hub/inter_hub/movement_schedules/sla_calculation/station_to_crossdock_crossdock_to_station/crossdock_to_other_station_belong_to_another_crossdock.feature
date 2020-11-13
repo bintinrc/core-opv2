@@ -1,4 +1,4 @@
-@MiddleMile @Hub @InterHub @MovementSchedules @CrossdockToOtherStation
+@MiddleMile @Hub @InterHub @MovementSchedules @SlaCalculation @StationToCrossdock @CrossdockToOtherStation
 Feature: Crossdock to other station belong to another crossdock
 
   @LaunchBrowser @ShouldAlwaysRun
