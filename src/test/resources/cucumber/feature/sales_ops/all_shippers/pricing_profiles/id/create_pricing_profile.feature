@@ -1,4 +1,4 @@
-@OperatorV2 @Shipper @OperatorV2Part2 @AllShippers @Saas @LaunchBrowser @ShouldAlwaysRun @EnableClearCache @PricingProfile
+@OperatorV2 @Shipper @OperatorV2Part2 @AllShippers @Saas @LaunchBrowser @ShouldAlwaysRun @EnableClearCache @PricingProfilesID
 Feature: All Shippers
 
   Background: Login to Operator Portal V2
