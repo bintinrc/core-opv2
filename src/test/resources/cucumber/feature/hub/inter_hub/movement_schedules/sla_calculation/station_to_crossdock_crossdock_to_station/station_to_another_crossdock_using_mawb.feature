@@ -158,7 +158,7 @@ Feature: Station to another Crossdock using MAWB
     Then Operator verify movement event on Shipment Details page using data below:
       | source   | SLA_CALCULATION                                                                                                      |
       | status   | FAILED                                                                                                               |
-      | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (sg) |
+      | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[3].id} (sg) |
 
   @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
   Scenario: Station to another Crossdock using MAWB - Station Movement not found (uid:78d93bdc-8539-47b1-a050-68f748c2d9a8)
@@ -229,7 +229,7 @@ Feature: Station to another Crossdock using MAWB
     Then Operator verify movement event on Shipment Details page using data below:
       | source   | SLA_CALCULATION                                                                                                      |
       | status   | FAILED                                                                                                               |
-      | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (sg) |
+      | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[3].id} (sg) |
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
