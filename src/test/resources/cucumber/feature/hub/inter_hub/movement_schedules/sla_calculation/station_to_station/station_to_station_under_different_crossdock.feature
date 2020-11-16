@@ -63,6 +63,22 @@ Feature: Station to Station Under Different Crossdock
     And Operator adds new relation on Movement Management page using data below:
       | station      | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | crossdockHub | {KEY_LIST_OF_CREATED_HUBS[4].name} |
+    And Operator adds new Station Movement Schedule on Movement Management page using data below:
+      | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | movementType   | Air Haul                           |
+      | departureTime  | 13:15                              |
+      | duration       | 0                                  |
+      | endTime        | 00:30                              |
+    And Operator adds new Station Movement Schedule on Movement Management page using data below:
+      | crossdockHub   | {KEY_LIST_OF_CREATED_HUBS[4].name} |
+      | originHub      | {KEY_LIST_OF_CREATED_HUBS[4].name} |
+      | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | movementType   | Air Haul                           |
+      | departureTime  | 13:15                              |
+      | duration       | 0                                  |
+      | endTime        | 00:30                              |
     When Operator go to menu Inter-Hub -> Shipment Inbound Scanning
     When Operator inbound scanning Shipment Into Van in hub {KEY_LIST_OF_CREATED_HUBS[1].name} on Shipment Inbound Scanning page
     Given Operator go to menu Inter-Hub -> Shipment Management
@@ -73,7 +89,7 @@ Feature: Station to Station Under Different Crossdock
       | origHubName | {KEY_LIST_OF_CREATED_HUBS[1].name}  |
       | destHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}  |
       | status      | Transit                             |
-      | sla         | {{next-2-days-yyyy-MM-dd}} 12:45:00 |
+      | sla         | {{next-3-days-yyyy-MM-dd}} 13:45:00 |
     And Operator open the shipment detail for the created shipment on Shipment Management Page
     Then Operator verify shipment event on Shipment Details page using data below:
       | source | SHIPMENT_VAN_INBOUND               |
