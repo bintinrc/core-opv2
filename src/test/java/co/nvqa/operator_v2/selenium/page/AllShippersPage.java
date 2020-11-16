@@ -4,6 +4,7 @@ import co.nvqa.commons.model.core.Address;
 import co.nvqa.commons.model.shipper.v2.Pricing;
 import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Shipper;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
@@ -369,7 +370,9 @@ public class AllShippersPage extends OperatorV2SimplePage
 
     public void editShipper(Shipper shipper)
     {
-        quickSearchShipper(shipper.getName());
+        String shipperName = shipper.getName();
+        NvLogger.infof("Created Shipper name : %s ", shipperName);
+        quickSearchShipper(shipperName == null ? String.valueOf(shipper.getLegacyId()) :shipperName);
         shippersTable.clickActionButton(1, ACTION_EDIT);
         allShippersCreateEditPage.switchToNewWindow();
         allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();

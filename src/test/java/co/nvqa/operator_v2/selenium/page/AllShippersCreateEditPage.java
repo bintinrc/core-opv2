@@ -116,7 +116,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void waitUntilShipperCreateEditPageIsLoaded()
     {
-        shipperInformation.waitUntilClickable(10);
+        shipperInformation.waitUntilClickable(20);
     }
 
     public void createNewShipper(Shipper shipper)
@@ -1254,6 +1254,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
                 addNewProfile.click();
                 pause2s();
                 selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT, pricing.getScriptName());
+                setMdDatepickerById(LOCATOR_START_DATE, TestUtils.getNextDate(1));
                 moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
                 sendKeys(XPATH_DISCOUNT_VALUE, pricing.getDiscount());
                 sendKeysByAriaLabel(ARIA_LABEL_COMMENTS, pricing.getComments());
@@ -1300,10 +1301,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         @FindBy(id = "discount-value")
         public TextBox discountValue;
 
-        @FindBy(css = "md-input-container[label='Use Country Default - Higher of: S$ 1 OR 3% of COD Value'] div.md-container")
+        @FindBy(css = "md-input-container[label$='COD Value'] div.md-container")
         public CheckBox codCountryDefaultCheckbox;
 
-        @FindBy(css = "md-input-container[label='Use Country Default - Higher of: S$ 0 OR 1.2% of Insured Value'] div.md-container")
+        @FindBy(css = "md-input-container[label$='Insured Value'] div.md-container")
         public CheckBox insuranceCountryDefaultCheckbox;
 
         @FindBy(css = "[id^='container.shippers.pricing-billing-comments']")

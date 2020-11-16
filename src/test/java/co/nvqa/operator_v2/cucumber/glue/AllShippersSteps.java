@@ -366,6 +366,8 @@ public class AllShippersSteps extends AbstractSteps
         {
             allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.comments.setValue(value);
         }
+        allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.codCountryDefaultCheckbox.check();
+        allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
         allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.saveChanges.clickAndWaitUntilDone();
         allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.waitUntilInvisible();
     }
@@ -438,6 +440,8 @@ public class AllShippersSteps extends AbstractSteps
         String value = data.get("discountValue");
         if (StringUtils.isNotBlank(value))
         {
+            allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges.clickAndWaitUntilDone();
+            allShippersPage.allShippersCreateEditPage.saveChanges.click();
             Assert.assertEquals("Discount Value Error message", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValueError.getText());
         }
     }
@@ -803,6 +807,16 @@ public class AllShippersSteps extends AbstractSteps
     public void operatorEditsTheCreatedShipper()
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
+        put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
+        allShippersPage.editShipper(shipper);
+    }
+
+    @And("Operator edits shipper {string}")
+    public void operatorEditsShipper(String shipperLegacyId)
+    {
+        Shipper shipper = new Shipper();
+        shipper.setLegacyId(Long.valueOf(shipperLegacyId));
+        put(KEY_CREATED_SHIPPER, shipper);
         put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
         allShippersPage.editShipper(shipper);
     }
