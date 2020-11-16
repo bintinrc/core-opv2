@@ -15,7 +15,7 @@ Feature: Global Inbound
     When Operator global inbounds parcel using data below:
       | hubName      | {hub-name}                                 |
       | trackingId   | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-    Then Operator verify info on Global Inbound page using data below:
+    Then OParcel Sweeper Live - Returned to Senderperator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
@@ -624,7 +624,7 @@ Feature: Global Inbound
       | shipperName     | {shipper-v4-name} |
       | status          | Pending           |
       | granular status | Pending Pickup    |
-    And Operator searches and selects orders created on Add Tags to Order page
+    And Operator searches and selects orders created first row on Add Tags to Order page
     And Operator tags order with:
       | OPV2AUTO1 |
       | OPV2AUTO2 |
