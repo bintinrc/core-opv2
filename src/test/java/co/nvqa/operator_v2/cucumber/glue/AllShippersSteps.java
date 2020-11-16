@@ -821,8 +821,8 @@ public class AllShippersSteps extends AbstractSteps
         allShippersPage.editShipper(shipper);
     }
 
-    @Then("Operator adds new Shipper's Pricing Script")
-    public void OperatorAddsNewShippersPricingScript(Map<String, String> mapOfData)
+    @Then("Operator adds new Shipper's Pricing Profile")
+    public void OperatorAddsNewShippersPricingProfile(Map<String, String> mapOfData)
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
         String pricingScriptName = mapOfData.get("pricingScriptName");

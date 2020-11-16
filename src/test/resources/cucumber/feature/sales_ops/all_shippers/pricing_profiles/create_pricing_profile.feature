@@ -1,4 +1,4 @@
-@OperatorV2 @Shipper @OperatorV2Part2 @AllShippers @Saas @LaunchBrowser @ShouldAlwaysRun @PricingProfile @EnableClearCache
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache  @PricingProfiles @CreatePricingProfiles
 Feature: All Shippers
 
   Background: Login to Operator Portal V2
@@ -23,7 +23,7 @@ Feature: All Shippers
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
-    Then Operator adds new Shipper's Pricing Script
+    Then Operator adds new Shipper's Pricing Profile
       | pricingScriptName | 2402 - New Script             |
       | discount          | 20                            |
       | comments          | This is a test pricing script |
@@ -93,7 +93,7 @@ Feature: All Shippers
     And Operator edits shipper "{shipper-v4-active-expired-pp-legacy-id}"
     Then Operator verifies that Pricing Script is "Active" and "Expired"
     And Operator edits the created shipper
-    Then Operator adds new Shipper's Pricing Script
+    Then Operator adds new Shipper's Pricing Profile
       | pricingScriptName | 2402 - New Script             |
       | discount          | 20.00                         |
       | comments          | This is a test pricing script |
@@ -121,7 +121,7 @@ Feature: All Shippers
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
-    Then Operator adds new Shipper's Pricing Script
+    Then Operator adds new Shipper's Pricing Profile
       | pricingScriptName | 2402 - New Script             |
       | discount          | 20                            |
       | comments          | This is a test pricing script |
@@ -174,7 +174,7 @@ Feature: All Shippers
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
-    Then Operator adds new Shipper's Pricing Script
+    Then Operator adds new Shipper's Pricing Profile
       | pricingScriptName | 2402 - New Script             |
       | comments          | This is a test pricing script |
       | type              | FLAT                          |
@@ -225,7 +225,7 @@ Feature: All Shippers
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
-    Then Operator adds new Shipper's Pricing Script
+    Then Operator adds new Shipper's Pricing Profile
       | pricingScriptName | 2402 - New Script             |
       | discount          | 20.54321                      |
       | comments          | This is a test pricing script |
@@ -253,7 +253,7 @@ Feature: All Shippers
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
-    Then Operator adds new Shipper's Pricing Script
+    Then Operator adds new Shipper's Pricing Profile
       | pricingScriptName | 2402 - New Script             |
       | discount          | 50000.00                      |
       | comments          | This is a test pricing script |

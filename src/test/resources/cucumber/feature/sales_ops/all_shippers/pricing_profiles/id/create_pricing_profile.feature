@@ -1,4 +1,4 @@
-@OperatorV2 @Shipper @OperatorV2Part2 @AllShippers @Saas @LaunchBrowser @ShouldAlwaysRun @EnableClearCache @PricingProfilesID
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache  @PricingProfilesID @CreatePricingProfilesID
 Feature: All Shippers
 
   Background: Login to Operator Portal V2
@@ -11,7 +11,7 @@ Feature: All Shippers
     And Operator edits shipper "{shipper-v4-active-expired-pp-legacy-id}"
     Then Operator verifies that Pricing Script is "Active" and "Expired"
     And Operator edits the created shipper
-    Then Operator adds new Shipper's Pricing Script
+    Then Operator adds new Shipper's Pricing Profile
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | discount          | 20.00                                           |
       | comments          | This is a test pricing script                   |
@@ -65,7 +65,7 @@ Feature: All Shippers
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
-    Then Operator adds new Shipper's Pricing Script
+    Then Operator adds new Shipper's Pricing Profile
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | comments          | This is a test pricing script                   |
       | type              | PERCENTAGE                                      |
