@@ -466,9 +466,7 @@ public class AllShippersSteps extends AbstractSteps
         String value = data.get("discountValue");
         if (StringUtils.isNotBlank(value))
         {
-            allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges.clickAndWaitUntilDone();
-            allShippersPage.allShippersCreateEditPage.saveChanges.click();
-            Assert.assertEquals("Discount Value Error message", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValueError.getText());
+                  Assert.assertEquals("Discount Value Error message", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValueError.getText());
         }
     }
 
