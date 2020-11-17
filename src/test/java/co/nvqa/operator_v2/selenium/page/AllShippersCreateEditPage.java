@@ -17,6 +17,7 @@ import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.shipper.v2.Shopify;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.CheckBox;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.ContainerSwitch;
@@ -37,6 +38,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -104,7 +106,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public static final String XPATH_ADD_NEW_PROFILE = "//button[@aria-label='Add New Profile']";
     public static final String XPATH_PRICING_PROFILE_ID = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='id']";
     public static final String XPATH_EDIT_PENDING_PROFILE = "//button[@aria-label='Edit Pending Profile']";
-    public static final String XPATH_DISCOUNT_ERROR_MESSAGE = "//div[contains(@ng-messages,'error') and contains(@class,'ng-active')]";
+    public static final String XPATH_DISCOUNT_ERROR_MESSAGE = "//div[contains(@ng-messages,'error') and contains(@class,'ng-active')]/div[@ng-repeat='e in errorMsgs']";
     public static final String XPATH_UPDATE_ERROR_MESSAGE = "//div[@class='error-box']//div[@class='title']";
 
     public AllShippersCreateEditPage(WebDriver webDriver)
@@ -114,7 +116,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void waitUntilShipperCreateEditPageIsLoaded()
     {
-        shipperInformation.waitUntilClickable();
+        shipperInformation.waitUntilClickable(10);
     }
 
     public void createNewShipper(Shipper shipper)
@@ -173,6 +175,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         pause2s();
         fillBasicSettingsForm(shipper);
         fillMoreSettingsForm(shipper);
+        fillBillingInformation(shipper);
 
         if (shipper.getMarketplaceDefault() != null)
         {
@@ -181,7 +184,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         clickNvIconTextButtonByName("container.shippers.create-shipper");
         String errorText = getText(XPATH_VALIDATION_ERROR);
-        assertTrue("Error message is not displayed!", errorText.contains("Pricing and Billing"));
+        assertTrue("Error message is not displayed!", errorText.contains("Pricing Profile (Pricing and Billing)"));
         backToShipperList();
         pause3s();
         getWebDriver().switchTo().window(currentWindowHandle);
@@ -267,6 +270,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         {
             clickToggleButtonByLabel("Marketplace", "No");
             clickToggleButtonByLabel("Marketplace International", "No");
+            clickToggleButtonByLabel("Corporate", "No");
         }
 
         if (isCreateForm)
@@ -364,27 +368,35 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     private void fillPricingAndBillingForm(Shipper shipper)
     {
-        // ===== PRICING & BILLING =====
-        Pricing pricing = shipper.getPricing();
+        fillPricingProfile(shipper);
+        fillBillingInformation(shipper);
+    }
 
-        if (pricing != null)
-        {
-            tabs.selectTab("Pricing and Billing");
-
-            if (StringUtils.isNotBlank(pricing.getScriptName()))
-            {
-                addNewProfile.click();
-                newPricingProfileDialog.waitUntilVisible();
-                newPricingProfileDialog.pricingScript.searchAndSelectValue(pricing.getScriptName());
-                newPricingProfileDialog.saveChanges.clickAndWaitUntilDone();
-                newPricingProfileDialog.waitUntilInvisible();
-            }
-        }
-        // Billing
+    private void fillBillingInformation(Shipper shipper)
+    {
+        tabs.selectTab("Pricing and Billing");
         billingName.setValue(shipper.getBillingName());
         billingContact.setValue(shipper.getBillingContact());
         billingAddress.setValue(shipper.getBillingAddress());
         billingPostcode.setValue(shipper.getBillingPostcode());
+    }
+
+    private void fillPricingProfile(Shipper shipper)
+    {
+        Pricing pricing = shipper.getPricing();
+        tabs.selectTab("Pricing and Billing");
+        if (Objects.nonNull(pricing) && StringUtils.isNotBlank(pricing.getScriptName()))
+        {
+            addNewProfile.click();
+            newPricingProfileDialog.waitUntilVisible();
+            newPricingProfileDialog.pricingScript.searchAndSelectValue(pricing.getScriptName());
+            newPricingProfileDialog.codCountryDefaultCheckbox.check();
+            newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
+
+            newPricingProfileDialog.saveChanges.clickAndWaitUntilDone();
+            newPricingProfileDialog.waitUntilInvisible();
+        }
+
     }
 
     private void addAddress(Address address)
@@ -1114,19 +1126,20 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         {
             clickTabItem(" Pricing and Billing");
 
-            if (pricing != null && StringUtils.isNotBlank(pricing.getScriptName()))
+            if (StringUtils.isNotBlank(pricing.getScriptName()))
             {
                 click(XPATH_ADD_NEW_PROFILE);
                 pause2s();
                 selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT, pricing.getScriptName());
+                setMdDatepickerById(LOCATOR_START_DATE, TestUtils.getNextDate(1));
+                setMdDatepickerById(LOCATOR_END_DATE, TestUtils.getNextDate(10));
                 if (pricing.getDiscount() != null)
                 {
-                    setMdDatepickerById(LOCATOR_START_DATE, TestUtils.getNextDate(1));
-                    setMdDatepickerById(LOCATOR_END_DATE, TestUtils.getNextDate(10));
-                    setMdDatepickerById(LOCATOR_START_DATE, TestUtils.getNextDate(1));
                     moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
                     sendKeys(XPATH_DISCOUNT_VALUE, pricing.getDiscount());
                 }
+                newPricingProfileDialog.codCountryDefaultCheckbox.check();
+                newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
                 if (pricing.getComments() != null)
                 {
                     sendKeysByAriaLabel(ARIA_LABEL_COMMENTS, pricing.getComments());
@@ -1139,7 +1152,14 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         assertEquals("Status is not Pending ", status, "Pending");
         saveChanges.click();
         waitUntilInvisibilityOfElementLocated(XPATH_DISCOUNT_VALUE);
-        return getText(XPATH_PRICING_PROFILE_ID);
+
+        return retryIfAssertionErrorOccurred(() ->
+        {
+            String pricingProfileId = getText(XPATH_PRICING_PROFILE_ID);
+            assertNotNull(pricingProfileId);
+            assertFalse(pricingProfileId.equals(""));
+            return pricingProfileId;
+        }, "Getting Pricing Profile ID");
     }
 
     public void editPricingScript(Shipper shipper)
@@ -1176,8 +1196,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
     public void verifyPricingScriptIsActive(String status, String status1)
     {
-        String currentWindowHandle = switchToNewWindow();
-
         waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
         clickTabItem(" Pricing and Billing");
 
@@ -1192,13 +1210,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         backToShipperList();
         pause3s();
-        getWebDriver().switchTo().window(currentWindowHandle);
     }
 
     public void verifyEditPendingProfileIsDisplayed()
     {
-        String currentWindowHandle = switchToNewWindow();
-
         waitUntilVisibilityOfElementLocated(XPATH_SHIPPER_INFORMATION);
         clickTabItem(" Pricing and Billing");
 
@@ -1206,7 +1221,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         backToShipperList();
         pause3s();
-        getWebDriver().switchTo().window(currentWindowHandle);
     }
 
     public void addNewPricingScriptAndVerifyErrorMessage(Shipper shipper, String errorMessage)
@@ -1243,6 +1257,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
                 moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
                 sendKeys(XPATH_DISCOUNT_VALUE, pricing.getDiscount());
                 sendKeysByAriaLabel(ARIA_LABEL_COMMENTS, pricing.getComments());
+                newPricingProfileDialog.codCountryDefaultCheckbox.check();
+                newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
                 click(XPATH_SAVE_CHANGES_PRICING_SCRIPT);
                 pause1s();
             }
@@ -1283,6 +1299,12 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         @FindBy(id = "discount-value")
         public TextBox discountValue;
+
+        @FindBy(css = "md-input-container[label='Use Country Default - Higher of: S$ 1 OR 3% of COD Value'] div.md-container")
+        public CheckBox codCountryDefaultCheckbox;
+
+        @FindBy(css = "md-input-container[label='Use Country Default - Higher of: S$ 0 OR 1.2% of Insured Value'] div.md-container")
+        public CheckBox insuranceCountryDefaultCheckbox;
 
         @FindBy(css = "[id^='container.shippers.pricing-billing-comments']")
         public TextBox comments;

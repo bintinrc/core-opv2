@@ -1,10 +1,12 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.selenium.elements.Button;
+import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.util.TestConstants;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -19,16 +21,14 @@ import java.util.stream.Collectors;
  * Modified by Daniel Joi Partogi Hutapea
  */
 @SuppressWarnings("WeakerAccess")
-public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
-    public static final String XPATH_SCAN_INPUT = "//md-card-content[div[h5[text()='Scan Shipment to Inbound']]]/md-input-container/input";
+public class ShipmentInboundScanningPage extends OperatorV2SimplePage
+{
     public static final String XPATH_CHANGE_END_DATE_BUTTON = "//button[@aria-label='Change End Date']";
     public static final String XPATH_SCANNING_SESSION = "//table/tbody/tr[contains(@ng-repeat,'log in ctrl.scans')]";
     public static final String XPATH_SCANNING_SESSION_NO_CHANGE = XPATH_SCANNING_SESSION;
     public static final String XPATH_SCANNING_SESSION_CHANGE = XPATH_SCANNING_SESSION + "[contains(@class,'changed')]";
     public static final String XPATH_CHANGE_DATE_BUTTON = "//button[@aria-label='Change Date']";
-    public static final String XPATH_ACTIVE_INPUT_SELECTION = "//div[contains(@class,'md-select-menu-container nv-input-select-container md-active md-clickable')]//md-option[1]";
     public static final String XPATH_INBOUND_HUB_TEXT = "//div[span[.='Inbound Hub']]//p";
-    public static final String XPATH_SHIPMENT_ID = "//td[@class='shipment_id']";
 
     @FindBy(xpath = "//md-select[contains(@id,'inbound-hub')]")
     public MdSelect inboundHub;
@@ -51,114 +51,121 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//div[contains(@class,'trip-unselected-warning')]")
     public TextBox tripUnselectedWarning;
 
+    @FindBy(css = "[ng-model='ctrl.shipmentId']")
+    public TextBox shipmentIdInput;
+
+    @FindBy(xpath = "//input[contains(@ng-model,'ctrl.shipmentId')]/following-sibling::span")
+    public PageElement scanAlertMessage;
+
     @FindBy(css = "md-dialog")
     public TripCompletion tripCompletionDialog;
 
-    public ShipmentInboundScanningPage(WebDriver webDriver) {
+    public ShipmentInboundScanningPage(WebDriver webDriver)
+    {
         super(webDriver);
     }
 
-    public void selectHub(String hubName) {
-        inboundHub.searchAndSelectValue(hubName);
-    }
-
-    public void inboundScanning(Long shipmentId, String label, String hub) {
+    public void inboundScanning(Long shipmentId, String label, String hub)
+    {
         pause2s();
-        selectHub(hub);
+        inboundHub.searchAndSelectValue(hub);
         click(grabXpathButton(label));
-        clickStartInbound();
-
-        inputShipmentToInbound(shipmentId);
-        checkSessionScan(shipmentId);
-    }
-
-    public void inboundScanningUsingMawb(Long shipmentId, String mawb, String label, String hub) {
-        pause2s();
-        selectHub(hub);
-        click(grabXpathButton(label));
-        clickStartInbound();
-
-        inputShipmentToInboundUsingMawb(mawb);
-        checkSessionScan(shipmentId);
-    }
-
-    public void inboundScanningNegativeScenario(Long shipmentId, String label, String hub, String condition) {
-        pause2s();
-        selectHub(hub);
-        click(grabXpathButton(label));
-        clickStartInbound();
-
-        inputShipmentToInbound(shipmentId);
-        pause2s();
-        checkAlert(shipmentId, condition);
-    }
-
-    public void inboundScanningUsingMawbWithAlerts(Long shipmentId, String mawb, String label, String hub, String condition) {
-        pause2s();
-        selectHub(hub);
-        click(grabXpathButton(label));
-        clickStartInbound();
-
-        inputShipmentToInboundUsingMawb(mawb);
-        checkAlert(shipmentId, condition);
-    }
-
-    public void clickStartInbound() {
         startInboundButton.click();
+        fillShipmentId(shipmentId);
+        checkSessionScan(String.valueOf(shipmentId));
     }
 
-    public String grabXpathButton(String label) {
+    public void inboundScanningUsingMawb(Long shipmentId, String mawb, String label, String hub)
+    {
+        pause2s();
+        inboundHub.searchAndSelectValue(hub);
+        click(grabXpathButton(label));
+        startInboundButton.click();
+        fillShipmentId(mawb);
+        checkSessionScan(String.valueOf(shipmentId));
+    }
+
+    public void inboundScanningNegativeScenario(Long shipmentId, String label, String hub, String condition)
+    {
+        pause2s();
+        inboundHub.searchAndSelectValue(hub);
+        click(grabXpathButton(label));
+        startInboundButton.click();
+        fillShipmentId(shipmentId);
+        pause2s();
+        checkAlert(shipmentId, condition);
+    }
+
+    public void inboundScanningUsingMawbWithAlerts(Long shipmentId, String mawb, String label, String hub, String condition)
+    {
+        pause2s();
+        inboundHub.searchAndSelectValue(hub);
+        click(grabXpathButton(label));
+        startInboundButton.click();
+        fillShipmentId(mawb);
+        checkAlert(shipmentId, condition);
+    }
+
+    public String grabXpathButton(String label)
+    {
         return "//button[span[text()='" + label + "']]";
     }
 
-    public List<String> grabSessionIdNotChangedScan() {
+    public List<String> grabSessionIdNotChangedScan()
+    {
         List<WebElement> scans = findElementsByXpath(XPATH_SCANNING_SESSION_NO_CHANGE + "/td[contains(@class,'sn')]");
         return scans.stream().map(WebElement::getText).collect(Collectors.toList());
     }
 
-    public void clickEditEndDate() {
+    public void clickEditEndDate()
+    {
         click(XPATH_CHANGE_END_DATE_BUTTON);
     }
 
-    public void clickChangeDateButton() {
+    public void clickChangeDateButton()
+    {
         click(XPATH_CHANGE_DATE_BUTTON);
     }
 
-    public void inputShipmentToInbound(Long shipmentId) {
-        sendKeysAndEnter(XPATH_SCAN_INPUT, String.valueOf(shipmentId));
+    public void fillShipmentId(Object value)
+    {
+        shipmentIdInput.setValue(String.valueOf(value) + Keys.ENTER);
     }
 
-    public void inputShipmentToInboundUsingMawb(String mawb) {
-        sendKeysAndEnter(XPATH_SCAN_INPUT, mawb);
+    public void checkSessionScan(String shipmentId)
+    {
+        waitUntilVisibilityOfElementLocated(XPATH_SCANNING_SESSION_NO_CHANGE + String.format("[td[contains(@class,'sn')][text()='1']][td[@class='shipmentId'][text()='%s']]", shipmentId));
     }
 
-    public void checkSessionScan(Long shipmentId) {
-        waitUntilVisibilityOfElementLocated(XPATH_SCANNING_SESSION_NO_CHANGE + String.format("[td[contains(@class,'sn')][text()='1']][td[@class='shipmentId'][text()='%s']]", String.valueOf(shipmentId)));
-    }
-
-    public void checkEndDateSessionScanChange(List<String> mustCheckId, Date endDate) {
+    public void checkEndDateSessionScanChange(List<String> mustCheckId, Date endDate)
+    {
         String formattedEndDate = MD_DATEPICKER_SDF.format(endDate);
 
-        for (String shipmentId : mustCheckId) {
+        for (String shipmentId : mustCheckId)
+        {
             waitUntilVisibilityOfElementLocated(XPATH_SCANNING_SESSION_CHANGE + f("[td[contains(@class,'sn')][text()='%s']][td[contains(@class,'end-date')][text()='%s']]", shipmentId, formattedEndDate));
         }
     }
 
-    public void completeTrip() {
+    public void completeTrip()
+    {
         tripCompletionDialog.waitUntilVisible();
         tripCompletionDialog.proceed.waitUntilClickable();
         tripCompletionDialog.proceed.click();
         tripCompletionDialog.waitUntilInvisible();
     }
 
-    public void inputEndDate(Date date) {
+    public void inputEndDate(Date date)
+    {
         setMdDatepicker("ctrl.date", date);
     }
 
-    private void checkAlert(Long shipmentId, String condition) {
-        waitUntilVisibilityOfElementLocated("//input[contains(@ng-model,'ctrl.shipmentId')]/following-sibling::span");
-        String errorMessage = getText("//input[contains(@ng-model,'ctrl.shipmentId')]/following-sibling::span");
-        switch (condition) {
+    private void checkAlert(Long shipmentId, String condition)
+    {
+        scanAlertMessage.waitUntilVisible();
+        String errorMessage = scanAlertMessage.getText();
+        switch (condition)
+        {
             case "Completed":
                 assertEquals("Error Message is not the same : ", errorMessage, f("shipment %d is in terminal state: [%s]", shipmentId, condition));
                 break;
@@ -185,30 +192,37 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
         }
     }
 
-    public void selectDriver(String driverName) {
+    public void selectDriver(String driverName)
+    {
         driver.searchAndSelectValue(driverName);
     }
 
-    public void selectMovementTrip(String movementTripSchedule) {
+    public void selectMovementTrip(String movementTripSchedule)
+    {
         movementTrip.searchAndSelectValue(movementTripSchedule);
     }
 
-    public void inboundScanningWithTripReturnMovementTrip(String hub, String label, String driver, String movementTripSchedule) {
-        if (hub != null) {
+    public void inboundScanningWithTripReturnMovementTrip(String hub, String label, String driver, String movementTripSchedule)
+    {
+        if (hub != null)
+        {
             pause2s();
-            selectHub(hub);
+            inboundHub.searchAndSelectValue(hub);
         }
 
-        if (label != null) {
+        if (label != null)
+        {
             pause2s();
             click(grabXpathButton(label));
         }
 
-        if (driver != null) {
+        if (driver != null)
+        {
             pause2s();
             selectDriver(driver);
         }
-        if (movementTripSchedule != null) {
+        if (movementTripSchedule != null)
+        {
             pause2s();
             selectMovementTrip(movementTripSchedule);
         }
@@ -216,7 +230,8 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
         pause2s();
     }
 
-    public static class TripCompletion extends MdDialog {
+    public static class TripCompletion extends MdDialog
+    {
         @FindBy(className = "md-title")
         public TextBox dialogTitle;
 
@@ -226,10 +241,9 @@ public class ShipmentInboundScanningPage extends OperatorV2SimplePage {
         @FindBy(xpath = ".//button[.='Proceed']")
         public Button proceed;
 
-        public TripCompletion(WebDriver webDriver, WebElement webElement) {
+        public TripCompletion(WebDriver webDriver, WebElement webElement)
+        {
             super(webDriver, webElement);
         }
     }
-
-
 }

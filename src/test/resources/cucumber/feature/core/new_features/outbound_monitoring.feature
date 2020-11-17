@@ -128,10 +128,8 @@ Feature: Outbound Monitoring
       | addParcelToRouteRequest | { "type":"DD" } |
     Given Operator go to menu New Features -> Outbound Load Monitoring
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
-      | fromDate | {{previous-1-day-yyyy-MM-dd}} |
-      | toDate   | {{current-date-yyyy-MM-dd}}   |
-      | zoneName | {zone-name}                   |
-      | hubName  | {hub-name}                    |
+      | zoneName | {zone-name} |
+      | hubName  | {hub-name}  |
     When Operator pull out order from route on Outbound Monitoring page
     Then API Operator verify order is pulled out from route
 

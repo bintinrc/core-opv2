@@ -1,11 +1,11 @@
-@MiddleMile @Hub @InterHub @MovementSchedules @StationToStationUnderDifferentCrossdock
+@MiddleMile @Hub @InterHub @MovementSchedules @SlaCalculation @StationToStation @StationToStationUnderDifferentCrossdock
 Feature: Station to Station Under Same Crossdock
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
   Scenario: Station to Station Under Same Crossdock - Station Movement Found and there is available schedule (uid:3958c45b-c383-42a0-a703-cd1b2049981d)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -73,7 +73,7 @@ Feature: Station to Station Under Same Crossdock
       | source | SLA_CALCULATION |
       | status | SUCCESS         |
 
-  @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
   Scenario: Station to Station Under Same Crossdock - Station Movement Found but there is no available schedule (uid:2ee4bf00-db13-4c9e-8d62-65ef2c3b0ad8)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -133,7 +133,7 @@ Feature: Station to Station Under Same Crossdock
       | status   | FAILED                                                                                                               |
       | comments | found no path from origin {KEY_LIST_OF_CREATED_HUBS[1].id} (sg) to destination {KEY_LIST_OF_CREATED_HUBS[2].id} (sg) |
 
-  @SoftDeleteHubViaDb @DeleteShipment @CloseNewWindows
+  @DeleteHubsViaDb @DeleteShipment @CloseNewWindows
   Scenario: Station to Station Under Same Crossdock - Station Movement not found (uid:819bcd3c-2da6-4a3c-8e96-20a9558567b1)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
@@ -165,6 +165,7 @@ Feature: Station to Station Under Same Crossdock
       | longitude    | GENERATED |
     And API Operator reloads hubs cache
     When API Operator create new shipment with type "AIR_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And Operator refresh page
     And API Operator does the "van-inbound" scan for the shipment
     Given Operator go to menu Inter-Hub -> Shipment Management
     And Operator search shipments by given Ids on Shipment Management page:

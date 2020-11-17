@@ -3,6 +3,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementSchedule;
+import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.MovementManagementPage;
@@ -104,11 +105,16 @@ public class MovementManagementSteps extends AbstractSteps
         }, 10);
     }
 
+    @When("Operator clicks on assign_driver icon on the action column in movement schedule page")
+    public void operatorClicksOnAssignDriverOnTheActionColumn() {
+        movementManagementPage.clickAssignDriverIcon();
+    }
+
     @And("Operator assign driver {string} to created movement schedule")
     public void operatorAssignDriverToCreatedMovementScheduleWithData(String driverUsername)
     {
-        driverUsername = resolveValue(driverUsername);
-        movementManagementPage.assignDriver(driverUsername);
+        String resolvedDriverUsername = resolveValue(driverUsername);
+        movementManagementPage.assignDriver(resolvedDriverUsername);
     }
 
     @Then("Operator edits Crossdock Movement Schedule on Movement Management page using data below:")
@@ -145,15 +151,15 @@ public class MovementManagementSteps extends AbstractSteps
                 movementManagementPage.editStationRelationsModal.waitUntilVisible();
                 retryIfRuntimeExceptionOccurred(() ->
                                 movementManagementPage.editStationRelationsModal.crossdockHub.selectValue(crossdockHub),
-                        2
-                );
+                        2);
                 movementManagementPage.editStationRelationsModal.save.click();
+                movementManagementPage.successCreateRelation.waitUntilVisible();
+                movementManagementPage.successCreateRelation.waitUntilInvisible();
                 movementManagementPage.editStationRelationsModal.waitUntilInvisible();
             } catch (Throwable ex) {
                 NvLogger.error(ex.getMessage());
-                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
-                navigateRefresh();
-                pause2s();
+                NvLogger.info("Searched element is not found, retrying...");
+                movementManagementPage.refreshPage();
                 movementManagementPage.switchTo();
                 movementManagementPage.relationsTab.waitUntilClickable(60);
                 throw ex;
@@ -216,9 +222,8 @@ public class MovementManagementSteps extends AbstractSteps
                 movementManagementPage.addStationMovementScheduleModal.waitUntilInvisible();
             } catch (Throwable ex) {
                 NvLogger.error(ex.getMessage());
-                NvLogger.info("Searched element is not found, retrying after 2 seconds...");
-                navigateRefresh();
-                pause2s();
+                NvLogger.info("Searched element is not found, retrying...");
+                movementManagementPage.refreshPage();
                 movementManagementPage.switchTo();
                 movementManagementPage.stationsTab.waitUntilClickable(60);
                 throw ex;
@@ -408,15 +413,20 @@ public class MovementManagementSteps extends AbstractSteps
     @When("Operator deletes created movement schedule on Movement Management page")
     public void operatorDeletesCreatedMovementScheduleOnMovementManagementPage()
     {
-        MovementSchedule movementSchedule = get(KEY_CREATED_MOVEMENT_SCHEDULE);
-        Map<String, String> filters = ImmutableMap.of("originHub", movementSchedule.getSchedule(0).getOriginHub(), "destinationHub", movementSchedule.getSchedule(0).getDestinationHub());
-        operatorFiltersSchedulesListOnMovementManagementPageUsingDataBelow(filters);
-        //TODO Rework this according new scenarios
-//        movementManagementPage.schedulesTable.rows.get(0).clickAction("Delete Schedule");
+        movementManagementPage.modify.click();
+        movementManagementPage.rowCheckBox.check();
         pause1s();
-        movementManagementPage.popoverDeleteButton.click();
-        movementManagementPage.waitUntilInvisibilityOfNotification("Movement schedules deleted", true);
+        movementManagementPage.delete.click();
+        pause1s();
+        movementManagementPage.modalDeleteButton.click();
     }
+
+    @Then("Operator verifies movement schedule deleted toast is shown on Movement Management page")
+    public void operatorVerifiesMovementScheduleDeletedToastIsShownOnMovementManagementPage()
+    {
+        movementManagementPage.verifyNotificationWithMessage("1 schedule(s) have been deleted.");
+    }
+
 
     @Deprecated
     @When("Operator open view modal of a created movement schedule on Movement Management page")

@@ -41,7 +41,7 @@ public class ProfilePage extends OperatorV2SimplePage
 
     public String getCurrentCountry()
     {
-        return countrySelect.getValue();
+        return countrySelect.getAttribute("innerText");
     }
 
     public void changeCountry(String newCountry)

@@ -506,23 +506,6 @@ public class AllOrdersPage extends OperatorV2SimplePage
         }
     }
 
-    public void verifyOrderInfoAfterGlobalInbound(Order order, GlobalInboundParams globalInboundParams, Double expectedOrderCost, String expectedStatus, List<String> expectedGranularStatus, String expectedDeliveryStatus)
-    {
-        String mainWindowHandle = getWebDriver().getWindowHandle();
-        Long orderId = order.getId();
-        String trackingId = order.getTrackingId();
-        specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, trackingId);
-
-        try
-        {
-            switchToEditOrderWindow(orderId);
-            editOrderPage.verifyOrderIsGlobalInboundedSuccessfully(order, globalInboundParams, expectedOrderCost, expectedStatus, expectedGranularStatus, expectedDeliveryStatus);
-        } finally
-        {
-            closeAllWindows(mainWindowHandle);
-        }
-    }
-
     public void searchTrackingId(String trackingId)
     {
         specificSearch(Category.TRACKING_OR_STAMP_ID, SearchLogic.EXACTLY_MATCHES, trackingId);

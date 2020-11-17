@@ -55,11 +55,11 @@ public class ParcelSweeperSteps extends AbstractSteps
     @Then("^Operator verify Route ID on Parcel Sweeper page using data below:$")
     public void operatorVerifyRouteIDOnParcelSweeperPageUsingDataBelow(Map<String, String> mapOfData)
     {
-        parcelSweeperPage.pause10s();
-        mapOfData = resolveKeyValues(mapOfData);
-        String routeId = mapOfData.get("routeId");
-        String driverName = mapOfData.get("driverName");
-        String color = mapOfData.get("color");
+        parcelSweeperPage.loadingSpinner.waitUntilInvisible();
+        Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+        String routeId = resolvedMapOfData.get("routeId");
+        String driverName = resolvedMapOfData.get("driverName");
+        String color = resolvedMapOfData.get("color");
         parcelSweeperPage.verifyRouteInfo(routeId, driverName, color);
     }
 

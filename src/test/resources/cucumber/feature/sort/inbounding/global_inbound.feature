@@ -199,6 +199,7 @@ Feature: Global Inbound
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Operator Global Inbound parcel using data below:
       | globalInboundRequest | { "hubId":{hub-id} } |
+    And API Operator refresh created order data
     And API Operator RTS created order:
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When API Operator force succeed created order
@@ -1054,7 +1055,7 @@ Feature: Global Inbound
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | INTERNATIONAL                      |
-      | rackInfo       | {KEY_CREATED_ORDER.destinationHub} |
+      | rackInfo       | {KEY_CREATED_ORDER.rackSector} |
       | color          | #ffa400                            |
     And DB Operator verify the last order_events record for the created order:
       | type | 26 |
@@ -1135,13 +1136,10 @@ Feature: Global Inbound
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And Operator go to menu Inbounding -> Global Inbound
-    And Operator add the order tags
-      | OPV2AUTO1 |
-      | OPV2AUTO2 |
-      | OPV2AUTO3 |
     When Operator global inbounds parcel using data below:
       | hubName        | {hub-name}                                 |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | tags           | OPV2AUTO1,OPV2AUTO2,OPV2AUTO3              |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
@@ -1164,14 +1162,10 @@ Feature: Global Inbound
     And API Shipper tags multiple parcels as per the below tag
       | OrderTag | 5570 |
     And Operator go to menu Inbounding -> Global Inbound
-    And Operator add the order tags
-      | OPV2AUTO1  |
-      | OPV2AUTO2  |
-      | SORTAUTO01 |
-      | SORTAUTO02 |
     When Operator global inbounds parcel using data below:
       | hubName        | {hub-name}                                 |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
+      | tags           | OPV2AUTO1,OPV2AUTO2,OPV2AUTO3,SORTAUTO02    |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |

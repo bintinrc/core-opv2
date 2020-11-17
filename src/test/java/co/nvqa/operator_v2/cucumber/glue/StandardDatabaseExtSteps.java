@@ -2,6 +2,7 @@ package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.cucumber.glue.AbstractDatabaseSteps;
 import co.nvqa.commons.model.addressing.JaroScore;
+import co.nvqa.commons.model.core.Driver;
 import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.Transaction;
@@ -653,21 +654,21 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         }
     }
 
-    @After(value = "@DeleteHubAppUser")
-    public void deleteHubAppUser()
+    @After(value = "@DeleteSortAppUser")
+    public void deleteSortAppUser()
     {
-        if (get(KEY_CREATED_HUB_APP_USERNAME) != null)
+        if (get(KEY_CREATED_SORT_APP_USERNAME) != null)
         {
-            getHubJdbc().deleteHubAppUser(get(KEY_CREATED_HUB_APP_USERNAME));
-            getAuthJdbc().softDeleteOauthClientByClientId(get(KEY_CREATED_HUB_APP_USERNAME));
+            getHubJdbc().deleteSortAppUser(get(KEY_CREATED_SORT_APP_USERNAME));
+            getAuthJdbc().softDeleteOauthClientByClientId(get(KEY_CREATED_SORT_APP_USERNAME));
         }
     }
 
-    @Given("DB Operator gets the newest existed username for Hub App")
-    public void dbOperatorGetsTheNewestExistedUsernameForHubApp()
+    @Given("DB Operator gets the newest existed username for Sort App")
+    public void dbOperatorGetsTheNewestExistedUsernameForSortApp()
     {
         String username = getHubJdbc().getExistedUsername();
-        put(KEY_EXISTED_HUB_APP_USERNAME, username);
+        put(KEY_EXISTED_SORT_APP_USERNAME, username);
     }
 
     @Given("DB Operator gets the {int} shipment IDs")
@@ -1034,8 +1035,55 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         Long shipmentId = Long.valueOf(shipmentIdAsString);
         String actualInboundType = getHubJdbc().getInboundScanTypeByShipmentId(shipmentId);
         assertEquals(inboundType.toLowerCase(), actualInboundType.toLowerCase());
-
     }
 
+    @Then("DB Operator verifies driver {string} with username {string} and value {string} is updated")
+    public void dbOperatorVerifiesDriverIsUpdatedWithValue(String column, String username, String updatedValue)
+    {
+        String resolvedUserName = resolveValue(username);
+        String resolvedUpdatedValue = resolveValue(updatedValue);
+        Driver driverData = getDriverJdbc().getDetailedDriverData(resolvedUserName);
+        switch (column)
+        {
+            case "name":
+                String actualName = driverData.getFirstName();
+                assertThat("Updated name is the same", actualName, equalTo(resolvedUpdatedValue));
+                break;
+            case "contactNumber":
+                Long driverId = driverData.getId();
+                String actualContactNumber = getDriverJdbc().getLatestDriverContactNumber(driverId);
+                assertThat("Updated name is the same", actualContactNumber, equalTo(resolvedUpdatedValue));
+                break;
+            case "hub":
+                String actualHubId = String.valueOf(driverData.getHubId());
+                assertThat("Updated hub is the same", actualHubId, equalTo(resolvedUpdatedValue));
+                break;
+            case "licenseNumber":
+                String actualLicenseNumber = driverData.getLicenseNumber();
+                assertThat("Updated license number is the same", actualLicenseNumber, equalTo(resolvedUpdatedValue));
+                break;
+            case "licenseExpiryDate":
+                String actualLicenseExpiryDate = driverData.getLicenseExpiryDate().split(" ")[0];
+                assertThat("Updated license expiry date is the same", actualLicenseExpiryDate, equalTo(resolvedUpdatedValue));
+                break;
+            case "licenseType":
+                String actualLicenseType = driverData.getLicenseType();
+                assertThat("Updated license type is the same", actualLicenseType, equalTo(resolvedUpdatedValue));
+                break;
+            case "employmentType":
+                String actualEmploymnetType = driverData.getEmploymentType();
+                assertThat("Updated employment type is the same", actualEmploymnetType, equalTo(resolvedUpdatedValue));
+                break;
+            case "employmentStartDate":
+                String actualEmploymentStartDate = driverData.getEmploymentStartDate().split(" ")[0];
+                assertThat("Updated employment start date is the same", actualEmploymentStartDate, equalTo(resolvedUpdatedValue));
+                break;
+            case "employmentEndDate":
+                String actualEmploymentEndDate = driverData.getEmploymentEndDate().split(" ")[0];
+                assertThat("Updated employment end date is the same", actualEmploymentEndDate, equalTo(resolvedUpdatedValue));
+                break;
+        }
+
+    }
 
 }

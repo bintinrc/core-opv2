@@ -24,8 +24,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.ACTION_BUTTON_DETAILS;
+
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 @ScenarioScoped
@@ -63,8 +64,7 @@ public class ShipperPickupsSteps extends AbstractSteps
             shipperPickupsPage.filtersForm().filterByShipper(dataTableAsMap.get("shipperName"));
             shipperPickupsPage.filtersForm().filterByStatus(dataTableAsMap.get("waypointStatus"));
             shipperPickupsPage.filtersForm().clickButtonLoadSelection();
-        }
-        catch(ParseException ex)
+        } catch (ParseException ex)
         {
             throw new NvTestRuntimeException(ex);
         }
@@ -75,7 +75,7 @@ public class ShipperPickupsSteps extends AbstractSteps
     {
         Date fromDate = resolveFilterDate(mapOfData.getOrDefault("fromDate", "TODAY"));
         Date toDate = resolveFilterDate(mapOfData.getOrDefault("toDate", "TOMORROW"));
-        Map<String,String> dataTableAsMapReplaced = replaceDataTableTokens(mapOfData, mapOfData);
+        Map<String, String> dataTableAsMapReplaced = replaceDataTableTokens(mapOfData, mapOfData);
         shipperPickupsPage.filtersForm().filterReservationDate(fromDate, toDate);
         String value = mapOfData.get("hub");
         if (StringUtils.isNotBlank(value))
@@ -91,6 +91,11 @@ public class ShipperPickupsSteps extends AbstractSteps
         if (StringUtils.isNotBlank(value))
         {
             shipperPickupsPage.filtersForm().filterByType(value);
+        }
+        value = mapOfData.get("status");
+        if (StringUtils.isNotBlank(value))
+        {
+            shipperPickupsPage.filtersForm().filterByStatus(value);
         }
         value = dataTableAsMapReplaced.get("shipperName");
         if (StringUtils.isNotBlank(value))
@@ -178,12 +183,12 @@ public class ShipperPickupsSteps extends AbstractSteps
 
     private String resolveExpectedRouteId(String routeIdParam)
     {
-        if(StringUtils.isBlank(routeIdParam))
+        if (StringUtils.isBlank(routeIdParam))
         {
             return null;
         }
 
-        switch(routeIdParam.toUpperCase())
+        switch (routeIdParam.toUpperCase())
         {
             case "GET_FROM_CREATED_ROUTE":
                 return String.valueOf((Long) get(KEY_CREATED_ROUTE_ID));
@@ -196,7 +201,7 @@ public class ShipperPickupsSteps extends AbstractSteps
 
     private String resolveExpectedDriverName(String driverNameParam)
     {
-        if(StringUtils.isBlank(driverNameParam))
+        if (StringUtils.isBlank(driverNameParam))
         {
             return null;
         }
@@ -225,7 +230,7 @@ public class ShipperPickupsSteps extends AbstractSteps
         String shipperId = mapOfData.get("shipperId");
         String reservationId = mapOfData.get("reservationId");
 
-        if("GET_FROM_CREATED_RESERVATION".equals(reservationId))
+        if ("GET_FROM_CREATED_RESERVATION".equals(reservationId))
         {
             Reservation reservationResult = get(KEY_CREATED_RESERVATION);
             reservationId = String.valueOf(reservationResult.getId());
@@ -290,7 +295,7 @@ public class ShipperPickupsSteps extends AbstractSteps
     }
 
     @And("^Operator use the Route Suggestion to add created reservation to the route using data below:$")
-    public void operatorUseTheRouteSuggestionToAddCreatedReservationToTheRoute(Map<String,String> dataTableAsMap)
+    public void operatorUseTheRouteSuggestionToAddCreatedReservationToTheRoute(Map<String, String> dataTableAsMap)
     {
         Address address = get(KEY_CREATED_ADDRESS);
         String routeTagName = dataTableAsMap.get("routeTagName");
@@ -298,7 +303,7 @@ public class ShipperPickupsSteps extends AbstractSteps
     }
 
     @And("^Operator use the Route Suggestion to add created reservations to the route using data below:$")
-    public void operatorUseTheRouteSuggestionToAddCreatedReservationsToTheRoute(Map<String,String> dataTableAsMap)
+    public void operatorUseTheRouteSuggestionToAddCreatedReservationsToTheRoute(Map<String, String> dataTableAsMap)
     {
         List<Address> addresses = get(KEY_LIST_OF_CREATED_ADDRESSES);
         String routeTagName = dataTableAsMap.get("routeTagName");
@@ -407,11 +412,43 @@ public class ShipperPickupsSteps extends AbstractSteps
     }
 
     @Then("^Operator verifies reservation is finished using data below:$")
-    public void operatorVerifiesReservationIsFailed(Map<String,String> dataTableAsMap)
+    public void operatorVerifiesReservationIsFailed(Map<String, String> dataTableAsMap)
     {
         String color = dataTableAsMap.get("backgroundColor");
         String status = dataTableAsMap.get("status");
         shipperPickupsPage.verifyFinishedReservationHighlighted(color);
         shipperPickupsPage.verifyFinishedReservationHasStatus(status);
+    }
+
+    @Then("^Operator opens details of reservation \"(.+)\" on Shipper Pickups page$")
+    public void operatorOpensDetailsOfReservation(String reservationId)
+    {
+        reservationId = resolveValue(reservationId);
+        shipperPickupsPage.reservationsTable.searchByReservationId(reservationId);
+        shipperPickupsPage.reservationsTable.clickActionButton(1, ACTION_BUTTON_DETAILS);
+    }
+
+    @Then("^Operator verifies POD not found in Reservation Details dialog on Shipper Pickups page$")
+    public void operatorVerifiesPodNotFound()
+    {
+        shipperPickupsPage.reservationDetailsDialog.waitUntilVisible();
+        assertTrue("POD not found", shipperPickupsPage.reservationDetailsDialog.podNotFound.isDisplayed());
+    }
+
+    @Then("^Operator verifies POD details in Reservation Details dialog on Shipper Pickups page using data below:$")
+    public void operatorVerifiesPodDetails(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+        shipperPickupsPage.reservationDetailsDialog.waitUntilVisible();
+        String expectedValue = data.get("scannedAtShipperCount");
+        if (StringUtils.isNotBlank(expectedValue))
+        {
+            assertEquals("Scanned at Shipper count", expectedValue, shipperPickupsPage.reservationDetailsDialog.scannedAtShipperCount.getNormalizedText());
+        }
+        expectedValue = data.get("scannedAtShipperPOD");
+        if (StringUtils.isNotBlank(expectedValue))
+        {
+            assertEquals("Scanned at Shipper (POD)", expectedValue, shipperPickupsPage.reservationDetailsDialog.scannedAtShipperPOD.getNormalizedText());
+        }
     }
 }

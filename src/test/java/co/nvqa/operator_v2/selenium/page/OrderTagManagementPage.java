@@ -91,6 +91,11 @@ public class OrderTagManagementPage extends OperatorV2SimplePage
             setMdVirtualRepeat("data in getTableData()");
             setEntityClass(Order.class);
         }
+
+        public void selectFirstRowCheckBox()
+        {
+            click(".//tr[1]//td//md-checkbox");
+        }
     }
 
     public static class AddTagsDialog extends MdDialog

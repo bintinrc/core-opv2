@@ -20,7 +20,10 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage.HubsTable.*;
+import static co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage.HubsTable.ACTION_ACTIVATE;
+import static co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage.HubsTable.ACTION_DISABLE;
+import static co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage.HubsTable.ACTION_EDIT;
+import static co.nvqa.operator_v2.selenium.page.FacilitiesManagementPage.HubsTable.COLUMN_NAME;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -54,6 +57,9 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
     @FindBy(css = "md-dialog")
     public ConfirmActivationDialog confirmActivationDialog;
 
+    @FindBy(xpath = "//button[@aria-label='Yes']")
+    public Button sortHub;
+
     public HubsTable hubsTable;
 
     public FacilitiesManagementPage(WebDriver webDriver)
@@ -81,6 +87,7 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
         addHubDialog.country.setValue(hub.getCountry());
         addHubDialog.latitude.setValue(String.valueOf(hub.getLatitude()));
         addHubDialog.longitude.setValue(String.valueOf(hub.getLongitude()));
+        Optional.ofNullable(hub.getSortHub()).ifPresent(value -> sortHub.click());
         addHubDialog.submit.clickAndWaitUntilDone();
         addHubDialog.waitUntilInvisible();
     }
@@ -101,6 +108,7 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
         Optional.ofNullable(hub.getCountry()).ifPresent(value -> editHubDialog.country.setValue(value));
         Optional.ofNullable(hub.getLatitude()).ifPresent(value -> editHubDialog.latitude.setValue(value));
         Optional.ofNullable(hub.getLongitude()).ifPresent(value -> editHubDialog.longitude.setValue(value));
+        Optional.ofNullable(hub.getSortHub()).ifPresent(value -> sortHub.click());
         editHubDialog.submitChanges.clickAndWaitUntilDone();
         editHubDialog.waitUntilInvisible();
     }
@@ -136,7 +144,15 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
     {
         Hub actualHub = searchHub(expectedHub.getName());
         expectedHub.setId(actualHub.getId());
-        expectedHub.compareWithActual(actualHub, "createdAt", "updatedAt", "deletedAt");
+        if (expectedHub.getFacilityType().equalsIgnoreCase("CROSSDOCK"))
+        {
+            expectedHub.setFacilityType("Hub - Crossdock");
+        }
+        else if (expectedHub.getFacilityType().equalsIgnoreCase("CROSSDOCK_STATION"))
+        {
+            expectedHub.setFacilityType("Station - Crossdock");
+        }
+        expectedHub.compareWithActual(actualHub, "createdAt", "updatedAt", "deletedAt", "sortHub");
     }
 
     public static class HubsTable extends MdVirtualRepeatTable<Hub>
