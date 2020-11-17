@@ -13,7 +13,7 @@ Feature: Movement Trip - Search Trip - Filter - Arrival Tab
     When Operator clicks on Load Trip Button
     Then Operator verifies that there will be an error shown for unselected Origin Hub
 
-  @DeleteHubsViaDb @DeleteMovementTripsViaDb
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Load Trip Use Filter - Arrival Tab - Filter by Destination Hub (uid:871871f1-adec-4f77-a624-fa363563fc80)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:

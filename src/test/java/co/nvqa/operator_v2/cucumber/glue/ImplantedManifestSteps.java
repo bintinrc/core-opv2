@@ -169,7 +169,7 @@ public class ImplantedManifestSteps extends AbstractSteps
         implantedManifestPage.createManifestDialog.waitUntilVisible();
         implantedManifestPage.createManifestDialog.reservationId.setValue(reservationId);
         implantedManifestPage.createManifestDialog.createManifestButton.click();
-        implantedManifestPage.createManifestDialog.waitUntilInvisible();
+        pause1s();
     }
 
     @When("^Operator closes Create Manifest dialog on Implanted Manifest page$")

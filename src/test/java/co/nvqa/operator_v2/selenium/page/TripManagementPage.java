@@ -433,7 +433,7 @@ public class TripManagementPage extends OperatorV2SimplePage {
 
             case EXPECTED_ARRIVAL_TIME:
                 expectedValue = expectedValueDateTime(tripManagementDetailsData.getData().get(index).getExpectedArrivalTime());
-                actualValue = getText(f(FIRST_ROW_TIME_FILTERED_RESULT_XPATH, EXPECTED_ARRIVAL_TIME_CLASS));
+                actualValue = getText(f(FIRST_ROW_OPTION_FILTERED_RESULT_XPATH, EXPECTED_ARRIVAL_TIME_CLASS));
                 assertTrue("Expected Arrival Time", actualValue.contains(expectedValue));
                 ((JavascriptExecutor) webDriver).executeScript("document.body.style.zoom='100%'");
                 break;
