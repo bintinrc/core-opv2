@@ -1,5 +1,5 @@
 @Sort @SortBeltManager
-Feature: Sort Task
+Feature: Sort Belt Manager
 
   @LaunchBrowser @ShouldAlwaysRun
   Scenario: Login to Operator Portal V2
