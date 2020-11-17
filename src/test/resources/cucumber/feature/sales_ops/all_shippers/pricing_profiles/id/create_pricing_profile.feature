@@ -1,4 +1,4 @@
-@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache  @PricingProfilesID @CreatePricingProfilesID
+@OperatorV2 @AllShippers @LaunchBrowser @EnableClearCache @PricingProfilesID @CreatePricingProfilesID
 Feature: All Shippers
 
   Background: Login to Operator Portal V2
@@ -16,9 +16,9 @@ Feature: All Shippers
       | discount          | 20.00                                           |
       | comments          | This is a test pricing script                   |
       | type              | PERCENTAGE                                      |
-    And Operator save changes on Edit Shipper Page
-    Then DB Operator fetches pricing script and shipper discount details
-    And Operator verifies the pricing script and shipper discount details are correct
+    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
+    Then DB Operator fetches pricing profile and shipper discount details
+    And Operator verifies the pricing profile and shipper discount details are correct
 
   @CloseNewWindows
   Scenario: Create a new Pricing Profile - with 0 Percentage Discount (uid:71f8c382-2c78-4ba7-b052-ada13861d606)
@@ -69,9 +69,9 @@ Feature: All Shippers
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | comments          | This is a test pricing script                   |
       | type              | PERCENTAGE                                      |
-    And Operator save changes on Edit Shipper Page
-    Then DB Operator fetches pricing script details
-    And Operator verifies the pricing script details are correct
+    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
+    Then DB Operator fetches pricing profile details
+    And Operator verifies the pricing profile and shipper discount details are correct
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

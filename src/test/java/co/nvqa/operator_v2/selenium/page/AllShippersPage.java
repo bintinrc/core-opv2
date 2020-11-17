@@ -16,6 +16,9 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 
+import java.text.ParseException;
+import java.util.Objects;
+
 import static co.nvqa.operator_v2.selenium.page.AllShippersPage.ShippersTable.ACTION_EDIT;
 import static co.nvqa.operator_v2.selenium.page.AllShippersPage.ShippersTable.COLUMN_NAME;
 
@@ -92,6 +95,11 @@ public class AllShippersPage extends OperatorV2SimplePage
         waitUntilPageLoaded();
         createShipper.click();
         allShippersCreateEditPage.createNewShipperWithoutPricingScript(shipper);
+    }
+
+    public Pricing getCreatedPricingProfile() throws ParseException
+    {
+        return allShippersCreateEditPage.getAddedPricingProfileDetails();
     }
 
     public void verifyNewShipperIsCreatedSuccessfully(Shipper shipper)
@@ -359,7 +367,7 @@ public class AllShippersPage extends OperatorV2SimplePage
         String currentURL = getWebDriver().getCurrentUrl();
         String editShipperPageURL =(f("%s/%s/shippers", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE));
 
-        if(currentURL.contains(editShipperPageURL)){
+        if(currentURL.contains(editShipperPageURL)) {
             getWebDriver().navigate().to(editShipperPageURL);
         }
 
@@ -396,22 +404,29 @@ public class AllShippersPage extends OperatorV2SimplePage
         allShippersCreateEditPage.verifyPricingScriptIsActive(status, status1);
     }
 
-    public void verifyPricingScriptAndShipperDiscountDetails(Pricing pricingProfile, Pricing pricingProfileFromDb)
+    public void verifyPricingScriptAndShipperDiscountDetails(Pricing pricingProfile, Pricing pricingProfileFromDb, Pricing pricingProfileFromOPV2)
     {
         assertTrue("Script id is not same: ", pricingProfile.getScriptName().contains(pricingProfileFromDb.getScriptId().toString()));
         assertEquals("Pricing profile id is not same: ", pricingProfile.getTemplateId(), pricingProfileFromDb.getTemplateId());
         assertTrue("Shipper discount Id is null:", pricingProfileFromDb.getShipperDiscountId() != null);
         assertEquals("Comments are not the same: ", pricingProfile.getComments(), pricingProfileFromDb.getComments());
-        assertTrue("Discount amount is not same:", pricingProfile.getDiscount().contains(pricingProfileFromDb.getDiscount()));
-        assertEquals("Type is not the same:", pricingProfile.getType(), pricingProfileFromDb.getType());
-    }
-
-    public void verifyPricingScriptDetails(Pricing pricingProfile, Pricing pricingProfileFromDb)
-    {
-        assertTrue("Script id is not same: ", pricingProfile.getScriptName().contains(pricingProfileFromDb.getScriptId().toString()));
-        assertEquals("Pricing profile id is not same: ", pricingProfile.getTemplateId(), pricingProfileFromDb.getTemplateId());
-        assertTrue("Shipper discount Id is not null:", pricingProfileFromDb.getShipperDiscountId() == 0);
-        assertEquals("Comments are not the same: ", pricingProfile.getComments(), pricingProfileFromDb.getComments());
+        assertNotNull("Start Date is null:", pricingProfileFromOPV2.getEffectiveDate());
+        assertNotNull("End Date is null:", pricingProfileFromOPV2.getContractEndDate());
+        final String discount = pricingProfile.getDiscount();
+        if (Objects.isNull(discount))
+        {
+            assertEquals("Discount amount is not blank:", "-", pricingProfileFromOPV2.getDiscount());
+            assertNull("Type is not not null", pricingProfileFromDb.getType());
+        }else if (Double.parseDouble(discount) * 100 % 1 > 0)
+        {
+            double expectedDiscount = Math.round(Double.parseDouble(discount) * 100.0) / 100.0;
+            assertEquals("Discount amount is not rounded:", Double.toString(expectedDiscount), pricingProfileFromOPV2.getDiscount());
+            assertEquals("Type is not the same:", pricingProfile.getType(), pricingProfileFromDb.getType());
+        } else
+        {
+            assertTrue("Discount amount is not same:", pricingProfileFromDb.getDiscount().contains(pricingProfile.getDiscount()));
+            assertEquals("Type is not the same:", pricingProfile.getType(), pricingProfileFromDb.getType());
+        }
     }
 
     public void changeCountry(String country)

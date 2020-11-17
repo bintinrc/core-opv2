@@ -15,6 +15,7 @@ import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Return;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.shipper.v2.Shopify;
+import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CheckBox;
@@ -36,6 +37,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -105,6 +107,15 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public static final String XPATH_SHIPPER_INFORMATION = "//div[text()='Shipper Information']";
     public static final String XPATH_ADD_NEW_PROFILE = "//button[@aria-label='Add New Profile']";
     public static final String XPATH_PRICING_PROFILE_ID = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='id']";
+    public static final String XPATH_PRICING_PROFILE_EFFECTIVE_DATE = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='effective-date']";
+    public static final String XPATH_PRICING_PROFILE_DISCOUNT = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='discount']";
+    public static final String XPATH_PRICING_PROFILE_SCRIPT_NAME = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='pricing-script-name']";
+    public static final String XPATH_PRICING_PROFILE_COMMENTS = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='comments']";
+    public static final String XPATH_PRICING_PROFILE_CONTACT_END_DATE = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='contract-end-date']";
+    public static final String XPATH_PRICING_PROFILE_COD_MIN = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='cod-min']";
+    public static final String XPATH_PRICING_PROFILE_COD_PERCENT = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='cod-percent']";
+    public static final String XPATH_PRICING_PROFILE_INSURANCE_MIN = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='insurance-min']";
+    public static final String XPATH_PRICING_PROFILE_INSURANCE_PERCENT = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='insurance-percent']";
     public static final String XPATH_EDIT_PENDING_PROFILE = "//button[@aria-label='Edit Pending Profile']";
     public static final String XPATH_DISCOUNT_ERROR_MESSAGE = "//div[contains(@ng-messages,'error') and contains(@class,'ng-active')]/div[@ng-repeat='e in errorMsgs']";
     public static final String XPATH_UPDATE_ERROR_MESSAGE = "//div[@class='error-box']//div[@class='title']";
@@ -117,6 +128,14 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void waitUntilShipperCreateEditPageIsLoaded()
     {
         shipperInformation.waitUntilClickable(20);
+        retryIfAssertionErrorOccurred(() ->
+        {
+            if (getText("//md-select-value[@id='select_value_label_25']/span").equalsIgnoreCase("container.shippers.shipper-channel"))
+            {
+                refreshPage();
+                fail("Edit shipper page not loaded properly");
+            }
+        }, String.format("Edit shipper page not loaded properly"));
     }
 
     public void createNewShipper(Shipper shipper)
@@ -1131,8 +1150,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
                 click(XPATH_ADD_NEW_PROFILE);
                 pause2s();
                 selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT, pricing.getScriptName());
-                setMdDatepickerById(LOCATOR_START_DATE, TestUtils.getNextDate(1));
-                setMdDatepickerById(LOCATOR_END_DATE, TestUtils.getNextDate(10));
+                setMdDatepickerById(LOCATOR_START_DATE, pricing.getEffectiveDate());
+                setMdDatepickerById(LOCATOR_END_DATE, pricing.getContractEndDate());
                 if (pricing.getDiscount() != null)
                 {
                     moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
@@ -1161,6 +1180,19 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
             return pricingProfileId;
         }, "Getting Pricing Profile ID");
     }
+
+    public Pricing getAddedPricingProfileDetails() throws ParseException
+    {
+        Pricing addedPricingProfileOPV2 = new Pricing();
+        addedPricingProfileOPV2.setScriptId(Long.valueOf(getText(XPATH_PRICING_PROFILE_ID)));
+        addedPricingProfileOPV2.setEffectiveDate(DateUtil.SDF_YYYY_MM_DD.parse(getText(XPATH_PRICING_PROFILE_EFFECTIVE_DATE)));
+        addedPricingProfileOPV2.setDiscount(getText(XPATH_PRICING_PROFILE_DISCOUNT));
+        addedPricingProfileOPV2.setScriptName(getText(XPATH_PRICING_PROFILE_SCRIPT_NAME));
+        addedPricingProfileOPV2.setComments(getText(XPATH_PRICING_PROFILE_COMMENTS));
+        addedPricingProfileOPV2.setContractEndDate(DateUtil.SDF_YYYY_MM_DD.parse(getText(XPATH_PRICING_PROFILE_CONTACT_END_DATE)));
+        return addedPricingProfileOPV2;
+    }
+
 
     public void editPricingScript(Shipper shipper)
     {

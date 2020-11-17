@@ -17,8 +17,10 @@ import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Return;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.shipper.v2.Shopify;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
+import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
@@ -32,6 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -94,12 +97,12 @@ public class AllShippersSteps extends AbstractSteps
         String dateUniqueString = generateDateUniqueString();
 
         Shipper shipper = new Shipper();
-        setShipperDetails(shipper,dateUniqueString, mapOfData);
+        setShipperDetails(shipper, dateUniqueString, mapOfData);
         setLiaisonDetails(dateUniqueString, shipper);
         setServices(shipper, mapOfData);
-        setIndustryAndSales(shipper,mapOfData);
-        setPricing(shipper,mapOfData);
-        setBilling(shipper,dateUniqueString);
+        setIndustryAndSales(shipper, mapOfData);
+        setPricing(shipper, mapOfData);
+        setBilling(shipper, dateUniqueString);
         fillMarketplaceProperties(shipper, mapOfData);
         generatePickupAddresses(shipper, mapOfData);
 
@@ -423,6 +426,29 @@ public class AllShippersSteps extends AbstractSteps
         pause3s();
         getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
     }
+
+    @Then("^Operator save changes on Edit Shipper Page and gets saved pricing profile values$")
+    public void operatorSaveChangesOnEditShipperPageAndGetsPPDiscountValue()
+    {
+        try
+        {
+            allShippersPage.allShippersCreateEditPage.saveChanges.click();
+            allShippersPage.allShippersCreateEditPage.waitUntilInvisibilityOfToast("All changes saved successfully");
+
+            Shipper shipper = get(KEY_CREATED_SHIPPER);
+            getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
+            allShippersPage.editShipper(shipper);
+            allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
+            put(KEY_CREATED_PRICING_SCRIPT_OPV2, allShippersPage.getCreatedPricingProfile());
+            allShippersPage.allShippersCreateEditPage.backToShipperList();
+            pause3s();
+            getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
+        } catch (ParseException e)
+        {
+            throw new NvTestRuntimeException("Failed to parse date.", e);
+        }
+    }
+
 
     @Then("^Operator go back to Shipper List page")
     public void operatorGoBackToShipperListPage()
@@ -835,6 +861,8 @@ public class AllShippersSteps extends AbstractSteps
         pricing.setDiscount(discount);
         pricing.setComments(comments);
         pricing.setType(type);
+        pricing.setEffectiveDate(TestUtils.getNextDate(1));
+        pricing.setContractEndDate(TestUtils.getNextDate(10));
 
         shipper.setPricing(pricing);
 
@@ -999,20 +1027,13 @@ public class AllShippersSteps extends AbstractSteps
         put(KEY_CREATED_SHIPPER, shipper);
     }
 
-    @And("Operator verifies the pricing script and shipper discount details are correct")
-    public void OperatorVerifiesThePricingScriptAndShipperDiscountDetailsAreCorrect()
+    @And("Operator verifies the pricing profile and shipper discount details are correct")
+    public void OperatorVerifiesThePricingProfileAndShipperDiscountDetailsAreCorrect()
     {
         Pricing pricingProfile = get(KEY_CREATED_PRICING_SCRIPT);
         Pricing pricingProfileFromDb = get(KEY_PRICING_PROFILE_DETAILS);
-        allShippersPage.verifyPricingScriptAndShipperDiscountDetails(pricingProfile, pricingProfileFromDb);
-    }
-
-    @And("Operator verifies the pricing script details are correct")
-    public void OperatorVerifiesThePricingScriptDetailsAreCorrect()
-    {
-        Pricing pricingProfile = get(KEY_CREATED_PRICING_SCRIPT);
-        Pricing pricingProfileFromDb = get(KEY_PRICING_PROFILE_DETAILS);
-        allShippersPage.verifyPricingScriptDetails(pricingProfile, pricingProfileFromDb);
+        Pricing pricingProfileFromOPV2 = get(KEY_CREATED_PRICING_SCRIPT_OPV2);
+        allShippersPage.verifyPricingScriptAndShipperDiscountDetails(pricingProfile, pricingProfileFromDb, pricingProfileFromOPV2);
     }
 
     @Given("Operator changes the country to {string}")
