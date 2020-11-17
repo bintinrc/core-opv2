@@ -432,7 +432,7 @@ Feature: Crossdock Hubs
       | destinationHub | WRONG_HUB_NAME |
     Then Operator verify schedules list is empty on Movement Management page
 
-  @DeleteHubsViaDb @DeleteMovementTripsViaDb
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Delete Crossdock Movement Schedule (uid:6cc194d0-758b-4991-9caa-b22008e1a216)
     Given Operator go to menu Shipper Support -> Blocked Dates
     When API Operator creates new Hub using data below:
