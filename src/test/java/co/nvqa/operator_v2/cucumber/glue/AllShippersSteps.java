@@ -302,15 +302,13 @@ public class AllShippersSteps extends AbstractSteps
         value = data.get("startDate");
         if (StringUtils.isNotBlank(value))
         {
-            int dateValue = Integer.parseInt(value.split("-")[1]);
-            value = DateUtil.getDate(TestUtils.getNextDate(dateValue).toInstant()).format(DTF_YYYY_MM_DD);
+            value = DateUtil.getDefaultDateFromUTC(value);
             Assert.assertEquals("Start Date", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.getValue());
         }
         value = data.get("endDate");
         if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("nextDay"))
         {
-            int dateValue = Integer.parseInt(value.split("-")[1]);
-            value = DateUtil.getDate(TestUtils.getNextDate(dateValue).toInstant()).format(DTF_YYYY_MM_DD);
+            value = DateUtil.getDefaultDateFromUTC(value);
             Assert.assertEquals("End Date", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate.getValue());
         }
         value = data.get("pricingScript");
@@ -349,14 +347,12 @@ public class AllShippersSteps extends AbstractSteps
         String value = data.get("startDate");
         if (StringUtils.isNotBlank(value))
         {
-            int dateValue = Integer.parseInt(value.split("-")[1]);
-            allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.pricingBillingStartDate.setDate(TestUtils.getNextDate(dateValue));
+            allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.pricingBillingStartDate.simpleSetValue(value);
         }
         value = data.get("endDate");
         if (StringUtils.isNotBlank(value))
         {
-            int dateValue = Integer.parseInt(value.split("-")[1]);
-            allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.pricingBillingEndDate.setDate(TestUtils.getNextDate(dateValue));
+            allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.pricingBillingEndDate.simpleSetValue(value);
         }
         value = data.get("pricingScript");
         if (StringUtils.isNotBlank(value))
@@ -387,14 +383,12 @@ public class AllShippersSteps extends AbstractSteps
         String value = data.get("startDate");
         if (StringUtils.isNotBlank(value))
         {
-            int dateValue = Integer.parseInt(value.split("-")[1]);
-            allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.setDate(TestUtils.getNextDate(dateValue));
+            allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.simpleSetValue(value);
         }
         value = data.get("endDate");
         if (StringUtils.isNotBlank(value))
         {
-            int dateValue = Integer.parseInt(value.split("-")[1]);
-            allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate.setDate(TestUtils.getNextDate(dateValue));
+            allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate.simpleSetValue(value);
         }
         value = data.get("pricingScript");
         if (StringUtils.isNotBlank(value))
