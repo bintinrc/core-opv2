@@ -18,6 +18,7 @@ import co.nvqa.commons.model.shipper.v2.Return;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.shipper.v2.Shopify;
 import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
@@ -299,10 +300,14 @@ public class AllShippersSteps extends AbstractSteps
         {
             Assert.assertEquals("Shipper Name", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.shipperName.getText());
         }
-        value = data.get("startDate");
+        value = data.get("startDate"); //gradle date(UTC)
         if (StringUtils.isNotBlank(value))
         {
-            value = DateUtil.getDefaultDateFromUTC(value);
+            NvLogger.warn("NADEERA verify - getting gradle date "+ value);
+            value = DateUtil.getDefaultDateFromUTC(value); //sg date
+            //expected : 2020-11-1[9]
+            // actual: 2020-11-1[8]
+            NvLogger.warn("NADEERA verify - after converting gradle date "+ value);
             Assert.assertEquals("Start Date", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.getValue());
         }
         value = data.get("endDate");
@@ -347,6 +352,7 @@ public class AllShippersSteps extends AbstractSteps
         String value = data.get("startDate");
         if (StringUtils.isNotBlank(value))
         {
+            NvLogger.warn("NADEERA setting gradle date "+ value);
             allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.pricingBillingStartDate.simpleSetValue(value);
         }
         value = data.get("endDate");
