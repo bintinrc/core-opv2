@@ -4,6 +4,7 @@ Feature: Pricing Profiles
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+    @nadeera
   @CloseNewWindows
   Scenario: Update an Existing Pricing Profile - with 0 Flat Discount (uid:7764257b-02ad-41d6-99df-1a52e9c7f01f)
     Given Operator go to menu Shipper -> All Shippers

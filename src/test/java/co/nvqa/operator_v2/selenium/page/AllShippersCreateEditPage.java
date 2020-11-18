@@ -93,7 +93,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public static final String ACTION_BUTTON_SET_AS_DEFAULT = "Set as Default";
     public static final String LOCATOR_FIELD_OC_VERSION = "ctrl.data.basic.ocVersion";
     public static final String LOCATOR_FIELD_PRICING_SCRIPT = "container.shippers.pricing-billing-pricing-scripts";
-    public static final String XPATH_FIELD_PASSWORD ="//*[self::input or self::textarea][contains(@id, 'shipper-dashboard-password')]";
+    public static final String XPATH_FIELD_PASSWORD = "//*[self::input or self::textarea][contains(@id, 'shipper-dashboard-password')]";
     public static final String LOCATOR_FIELD_INDUSTRY = "ctrl.data.basic.industry";
     public static final String LOCATOR_FIELD_SALES_PERSON = "salesperson";
     public static final String LOCATOR_FIELD_CHANNEL = "ctrl.data.basic.shipperClassification";
@@ -129,7 +129,7 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public void waitUntilShipperCreateEditPageIsLoaded()
     {
         shipperInformation.waitUntilClickable(20);
-  }
+    }
 
     public void createNewShipper(Shipper shipper)
     {

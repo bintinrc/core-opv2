@@ -365,9 +365,10 @@ public class AllShippersPage extends OperatorV2SimplePage
     public void quickSearchShipper(String keyword)
     {
         String currentURL = getWebDriver().getCurrentUrl();
-        String editShipperPageURL =(f("%s/%s/shippers", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE));
+        String editShipperPageURL = (f("%s/%s/shippers", TestConstants.OPERATOR_PORTAL_BASE_URL, TestConstants.COUNTRY_CODE));
 
-        if(currentURL.contains(editShipperPageURL)) {
+        if (currentURL.contains(editShipperPageURL))
+        {
             getWebDriver().navigate().to(editShipperPageURL);
         }
 
@@ -380,7 +381,7 @@ public class AllShippersPage extends OperatorV2SimplePage
     {
         String shipperName = shipper.getName();
         NvLogger.infof("Created Shipper name : %s ", shipperName);
-        quickSearchShipper(shipperName == null ? String.valueOf(shipper.getLegacyId()) :shipperName);
+        quickSearchShipper(shipperName == null ? String.valueOf(shipper.getLegacyId()) : shipperName);
         shippersTable.clickActionButton(1, ACTION_EDIT);
         allShippersCreateEditPage.switchToNewWindow();
         allShippersCreateEditPage.waitUntilShipperCreateEditPageIsLoaded();
@@ -417,7 +418,7 @@ public class AllShippersPage extends OperatorV2SimplePage
         {
             assertEquals("Discount amount is not blank:", "-", pricingProfileFromOPV2.getDiscount());
             assertNull("Type is not not null", pricingProfileFromDb.getType());
-        }else if (Double.parseDouble(discount) * 100 % 1 > 0)
+        } else if (Double.parseDouble(discount) * 100 % 1 > 0)
         {
             double expectedDiscount = Math.round(Double.parseDouble(discount) * 100.0) / 100.0;
             assertEquals("Discount amount is not rounded:", Double.toString(expectedDiscount), pricingProfileFromOPV2.getDiscount());

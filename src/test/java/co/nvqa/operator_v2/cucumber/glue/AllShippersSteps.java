@@ -304,11 +304,13 @@ public class AllShippersSteps extends AbstractSteps
         value = data.get("startDate");
         if (StringUtils.isNotBlank(value))
         {
+             value = TestUtils.getNextDate(1).toString();
             Assert.assertEquals("Start Date", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.getValue());
         }
         value = data.get("endDate");
         if (StringUtils.isNotBlank(value))
         {
+            value = TestUtils.getNextDate(1).toString();
             Assert.assertEquals("End Date", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate.getValue());
         }
         value = data.get("pricingScript");
@@ -347,11 +349,13 @@ public class AllShippersSteps extends AbstractSteps
         String value = data.get("startDate");
         if (StringUtils.isNotBlank(value))
         {
+            value = TestUtils.getNextDate(1).toString();
             allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.pricingBillingStartDate.simpleSetValue(value);
         }
         value = data.get("endDate");
         if (StringUtils.isNotBlank(value))
         {
+            value = TestUtils.getNextDate(1).toString();
             allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.pricingBillingEndDate.simpleSetValue(value);
         }
         value = data.get("pricingScript");
@@ -466,7 +470,7 @@ public class AllShippersSteps extends AbstractSteps
         String value = data.get("discountValue");
         if (StringUtils.isNotBlank(value))
         {
-                  Assert.assertEquals("Discount Value Error message", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValueError.getText());
+            Assert.assertEquals("Discount Value Error message", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValueError.getText());
         }
     }
 
@@ -901,12 +905,12 @@ public class AllShippersSteps extends AbstractSteps
         String dateUniqueString = generateDateUniqueString();
 
         Shipper shipper = new Shipper();
-        setShipperDetails(shipper,dateUniqueString, mapOfData);
+        setShipperDetails(shipper, dateUniqueString, mapOfData);
         setLiaisonDetails(dateUniqueString, shipper);
         setServices(shipper, mapOfData);
-        setIndustryAndSales(shipper,mapOfData);
-        setPricing(shipper,mapOfData);
-        setBilling(shipper,dateUniqueString);
+        setIndustryAndSales(shipper, mapOfData);
+        setPricing(shipper, mapOfData);
+        setBilling(shipper, dateUniqueString);
         fillMarketplaceProperties(shipper, mapOfData);
         generatePickupAddresses(shipper, mapOfData);
 
@@ -914,7 +918,7 @@ public class AllShippersSteps extends AbstractSteps
         put(KEY_CREATED_SHIPPER, shipper);
     }
 
-    private void setBilling( Shipper shipper,String dateUniqueString)
+    private void setBilling(Shipper shipper, String dateUniqueString)
     {
         Address billingAddress = generateRandomAddress();
 
@@ -924,14 +928,14 @@ public class AllShippersSteps extends AbstractSteps
         shipper.setBillingPostcode(billingAddress.getPostcode());
     }
 
-    private void setPricing(Shipper shipper,Map<String, String> mapOfData)
+    private void setPricing(Shipper shipper, Map<String, String> mapOfData)
     {
         Pricing pricing = new Pricing();
         pricing.setScriptName(mapOfData.get("pricingScriptName"));
         shipper.setPricing(pricing);
     }
 
-    private void setIndustryAndSales(Shipper shipper,Map<String, String> mapOfData)
+    private void setIndustryAndSales(Shipper shipper, Map<String, String> mapOfData)
     {
         shipper.setIndustryName(mapOfData.get("industryName"));
         shipper.setSalesPerson(mapOfData.get("salesPerson"));
@@ -947,7 +951,7 @@ public class AllShippersSteps extends AbstractSteps
         shipper.setPickup(pickupSettings);
     }
 
-    private void setServices(Shipper shipper,Map<String, String> mapOfData)
+    private void setServices(Shipper shipper, Map<String, String> mapOfData)
     {
         Boolean isAllowCod = Boolean.parseBoolean(mapOfData.get("isAllowCod"));
         Boolean isAllowCashPickup = Boolean.parseBoolean(mapOfData.get("isAllowCashPickup"));
@@ -995,7 +999,7 @@ public class AllShippersSteps extends AbstractSteps
         shipper.setLiaisonPostcode(liaisonAddress.getPostcode());
     }
 
-    private Shipper setShipperDetails(Shipper shipper,String dateUniqueString,Map<String, String> mapOfData)
+    private Shipper setShipperDetails(Shipper shipper, String dateUniqueString, Map<String, String> mapOfData)
     {
         shipper.setActive(Boolean.parseBoolean(mapOfData.get("isShipperActive")));
         shipper.setType(mapOfData.get("shipperType"));
@@ -1013,11 +1017,11 @@ public class AllShippersSteps extends AbstractSteps
         String dateUniqueString = generateDateUniqueString();
 
         Shipper shipper = new Shipper();
-        setShipperDetails(shipper,dateUniqueString, mapOfData);
+        setShipperDetails(shipper, dateUniqueString, mapOfData);
         setLiaisonDetails(dateUniqueString, shipper);
         setServices(shipper, mapOfData);
-        setIndustryAndSales(shipper,mapOfData);
-        setBilling(shipper,dateUniqueString);
+        setIndustryAndSales(shipper, mapOfData);
+        setBilling(shipper, dateUniqueString);
         fillMarketplaceProperties(shipper, mapOfData);
         generatePickupAddresses(shipper, mapOfData);
 
