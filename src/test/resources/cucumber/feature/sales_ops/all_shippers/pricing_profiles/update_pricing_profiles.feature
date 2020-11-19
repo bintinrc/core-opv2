@@ -156,8 +156,8 @@ Feature: Pricing Profiles
       | salespersonDiscountType | Flat                           |
       | discountValue           | 10                             |
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
-#      | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
-#      | endDate       | {gradle-next-2-day-yyyy-MM-dd} |
+      | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate       | {gradle-next-2-day-yyyy-MM-dd} |
       | discountValue | 4.38656                        |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page

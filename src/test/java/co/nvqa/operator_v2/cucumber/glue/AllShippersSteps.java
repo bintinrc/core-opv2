@@ -380,7 +380,6 @@ public class AllShippersSteps extends AbstractSteps
     @Then("^Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:$")
     public void operatorFillNewPricingProfileOnEditShipperPage(Map<String, String> data)
     {
-        NvLogger.info("Edit Pricing profile");
         data = resolveKeyValues(data);
 
         String value = data.get("startDate");
@@ -423,21 +422,15 @@ public class AllShippersSteps extends AbstractSteps
     @Then("^Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page$")
     public void operatorSaveChangesPricingProfileOnEditShipperPage()
     {
-        NvLogger.info("Save changes");
         takesScreenshot();
-        allShippersPage.allShippersCreateEditPage.click(XPATH_SAVE_CHANGES_PRICING_SCRIPT);
-
-//        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges.clickAndWaitUntilDone();
-        takesScreenshot();
-        NvLogger.info("Wait Until Invisible");
-//        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.waitUntilInvisible();
+//        allShippersPage.allShippersCreateEditPage.click(XPATH_SAVE_CHANGES_PRICING_SCRIPT);
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges.clickAndWaitUntilDone();
+        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.waitUntilInvisible();
     }
 
     @Then("^Operator save changes on Edit Shipper Page$")
     public void operatorSaveChangesOnEditShipperPage()
     {
-        NvLogger.info("Save changes on Edit shipper");
-        takesScreenshot();
         allShippersPage.allShippersCreateEditPage.saveChanges.click();
         allShippersPage.allShippersCreateEditPage.waitUntilInvisibilityOfToast("All changes saved successfully");
         allShippersPage.allShippersCreateEditPage.backToShipperList();
