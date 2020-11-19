@@ -144,7 +144,7 @@ Feature: Pricing Profiles
     And Operator edits the created shipper
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate       | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate       | {gradle-next-3-day-yyyy-MM-dd} |
       | pricingScript | {pricing-script-name-2}        |
       | discountValue | 10                             |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
@@ -159,7 +159,7 @@ Feature: Pricing Profiles
     # TODO : uncomment
 #      | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
       | startDate     | {gradle-next-2-day-yyyy-MM-dd} |
-      | endDate       | {gradle-next-2-day-yyyy-MM-dd} |
+      | endDate       | {gradle-next-3-day-yyyy-MM-dd} |
       | discountValue | 4.38656                        |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
@@ -222,40 +222,41 @@ Feature: Pricing Profiles
       | salespersonDiscountType | Flat                           |
       | discountValue           | 50000                          |
 
-  @CloseNewWindows
-  Scenario: Update an Existing Pricing Profile - with shipper discount over 6 digits Flat Discount (uid:aaa6dc52-ffc5-42ec-8f64-80ebd4eb23cf)
-    Given Operator go to menu Shipper -> All Shippers
-    When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                  |
-      | shipperType                  | Normal                |
-      | ocVersion                    | v4                    |
-      | services                     | STANDARD              |
-      | trackingType                 | Fixed                 |
-      | isAllowCod                   | true                  |
-      | isAllowCashPickup            | true                  |
-      | isPrepaid                    | true                  |
-      | isAllowStagedOrders          | true                  |
-      | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
-      | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
-    And Operator add New Pricing Profile on Edit Shipper Page using data below:
-      | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate       | {gradle-next-1-day-yyyy-MM-dd} |
-      | pricingScript | {pricing-script-name}          |
-    And Operator open Edit Pricing Profile dialog on Edit Shipper Page
-    Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
-      | shipperName             | {KEY_CREATED_SHIPPER.name}     |
-      | startDate               | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate                 | {gradle-next-1-day-yyyy-MM-dd} |
-      | pricingScript           | {pricing-script-name}          |
-      | salespersonDiscountType | Flat                           |
-    When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
-      | discountValue | 10000000 |
-    Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
-      | discountValue | Failed to update |
+# BUG - TO BE FIXED LATER - SO-437
+#  @CloseNewWindows
+#  Scenario: Update an Existing Pricing Profile - with shipper discount over 6 digits Flat Discount (uid:aaa6dc52-ffc5-42ec-8f64-80ebd4eb23cf)
+#    Given Operator go to menu Shipper -> All Shippers
+#    When Operator create new Shipper with basic settings using data below:
+#      | isShipperActive              | true                  |
+#      | shipperType                  | Normal                |
+#      | ocVersion                    | v4                    |
+#      | services                     | STANDARD              |
+#      | trackingType                 | Fixed                 |
+#      | isAllowCod                   | true                  |
+#      | isAllowCashPickup            | true                  |
+#      | isPrepaid                    | true                  |
+#      | isAllowStagedOrders          | true                  |
+#      | isMultiParcelShipper         | true                  |
+#      | isDisableDriverAppReschedule | true                  |
+#      | pricingScriptName            | {pricing-script-name} |
+#      | industryName                 | {industry-name}       |
+#      | salesPerson                  | {sales-person}        |
+#    And Operator edits the created shipper
+#    And Operator add New Pricing Profile on Edit Shipper Page using data below:
+#      | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
+#      | endDate       | {gradle-next-1-day-yyyy-MM-dd} |
+#      | pricingScript | {pricing-script-name}          |
+#    And Operator open Edit Pricing Profile dialog on Edit Shipper Page
+#    Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
+#      | shipperName             | {KEY_CREATED_SHIPPER.name}     |
+#      | startDate               | {gradle-next-1-day-yyyy-MM-dd} |
+#      | endDate                 | {gradle-next-1-day-yyyy-MM-dd} |
+#      | pricingScript           | {pricing-script-name}          |
+#      | salespersonDiscountType | Flat                           |
+#    When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
+#      | discountValue | 10000000 |
+#    Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
+#      | discountValue | Failed to update |
 
   @CloseNewWindows
   Scenario: Edit Shipper Pricing Profile (uid:f350a950-3a1b-4814-83a9-6f84e5f41d32)

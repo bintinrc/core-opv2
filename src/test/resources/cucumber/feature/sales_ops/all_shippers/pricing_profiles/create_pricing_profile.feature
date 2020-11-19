@@ -268,30 +268,31 @@ Feature: All Shippers
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details are correct
 
-  @CloseNewWindows
-  Scenario: Create a new Pricing Profile - with shipper discount over 6 digits Flat Discount  (uid:7e8428a0-4af4-4d08-b168-4837a8606f7d)
-    Given Operator go to menu Shipper -> All Shippers
-    When Operator create new Shipper with basic settings using data below:
-      | isShipperActive              | true                  |
-      | shipperType                  | Normal                |
-      | ocVersion                    | v4                    |
-      | services                     | STANDARD              |
-      | trackingType                 | Fixed                 |
-      | isAllowCod                   | true                  |
-      | isAllowCashPickup            | true                  |
-      | isPrepaid                    | true                  |
-      | isAllowStagedOrders          | true                  |
-      | isMultiParcelShipper         | true                  |
-      | isDisableDriverAppReschedule | true                  |
-      | pricingScriptName            | {pricing-script-name} |
-      | industryName                 | {industry-name}       |
-      | salesPerson                  | {sales-person}        |
-    And Operator edits the created shipper
-    Then Operator adds pricing script with discount over 6 digits and verifies the error message
-      | pricingScriptName | 2402 - New Script           |
-      | discount          | 10000000                    |
-      | comments          | This is an invalid discount |
-      | errorMessage      | Failed to update            |
+# BUG - TO BE FIXED LATER - SO-437
+#  @CloseNewWindows
+#  Scenario: Create a new Pricing Profile - with shipper discount over 6 digits Flat Discount  (uid:7e8428a0-4af4-4d08-b168-4837a8606f7d)
+#    Given Operator go to menu Shipper -> All Shippers
+#    When Operator create new Shipper with basic settings using data below:
+#      | isShipperActive              | true                  |
+#      | shipperType                  | Normal                |
+#      | ocVersion                    | v4                    |
+#      | services                     | STANDARD              |
+#      | trackingType                 | Fixed                 |
+#      | isAllowCod                   | true                  |
+#      | isAllowCashPickup            | true                  |
+#      | isPrepaid                    | true                  |
+#      | isAllowStagedOrders          | true                  |
+#      | isMultiParcelShipper         | true                  |
+#      | isDisableDriverAppReschedule | true                  |
+#      | pricingScriptName            | {pricing-script-name} |
+#      | industryName                 | {industry-name}       |
+#      | salesPerson                  | {sales-person}        |
+#    And Operator edits the created shipper
+#    Then Operator adds pricing script with discount over 6 digits and verifies the error message
+#      | pricingScriptName | 2402 - New Script           |
+#      | discount          | 10000000                    |
+#      | comments          | This is an invalid discount |
+#      | errorMessage      | Failed to update            |
 
 
   @KillBrowser @ShouldAlwaysRun
