@@ -42,7 +42,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static co.nvqa.commons.support.DateUtil.DTF_YYYY_MM_DD;
+import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_CONTACT_END_DATE;
 import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_EFFECTIVE_DATE;
 
 /**
@@ -310,8 +310,7 @@ public class AllShippersSteps extends AbstractSteps
         value = data.get("endDate");
         if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("nextDay"))
         {
-            value = DateUtil.getDefaultDateFromUTC(value);
-            Assert.assertEquals("End Date", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate.getValue());
+            Assert.assertEquals("End Date", value, getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_CONTACT_END_DATE)).getText());
         }
         value = data.get("pricingScript");
         if (StringUtils.isNotBlank(value))
