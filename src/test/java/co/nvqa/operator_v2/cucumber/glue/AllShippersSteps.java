@@ -424,6 +424,7 @@ public class AllShippersSteps extends AbstractSteps
     public void operatorSaveChangesPricingProfileOnEditShipperPage()
     {
         NvLogger.info("Save changes");
+        takesScreenshot();
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges.clickAndWaitUntilDone();
         takesScreenshot();
         NvLogger.info("Wait Until Invisible");

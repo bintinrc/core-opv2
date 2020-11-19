@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.selenium.elements.nv;
 
+import co.nvqa.commons.util.NvLogger;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
@@ -44,6 +45,7 @@ public class NvApiTextButton extends PageElement
     public void clickAndWaitUntilDone()
     {
         click();
+        NvLogger.info("NADEERA Clicked");
         waitUntilDone();
     }
 
