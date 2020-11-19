@@ -145,21 +145,19 @@ Feature: Pricing Profiles
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
       | endDate       | {gradle-next-3-day-yyyy-MM-dd} |
-      | pricingScript | {pricing-script-name-2}        |
+      | pricingScript | {pricing-script-name}        |
       | discountValue | 10                             |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | shipperName             | {KEY_CREATED_SHIPPER.name}     |
-#      | startDate               | {gradle-next-1-day-yyyy-MM-dd} |
-#      | endDate                 | {gradle-next-1-day-yyyy-MM-dd} |
-      | pricingScript           | {pricing-script-name-2}        |
+      | startDate               | {gradle-next-2-day-yyyy-MM-dd} |
+      | endDate                 | {gradle-next-4-day-yyyy-MM-dd} |
+      | pricingScript           | {pricing-script-name}        |
       | salespersonDiscountType | Flat                           |
       | discountValue           | 10                             |
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
-    # TODO : uncomment
-#      | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
-      | startDate     | {gradle-next-2-day-yyyy-MM-dd} |
-      | endDate       | {gradle-next-3-day-yyyy-MM-dd} |
+      | startDate     | {gradle-next-3-day-yyyy-MM-dd} |
+      | endDate       | {gradle-next-5-day-yyyy-MM-dd} |
       | discountValue | 4.38656                        |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
@@ -167,8 +165,8 @@ Feature: Pricing Profiles
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | shipperName             | {KEY_CREATED_SHIPPER.name}     |
-#      | startDate               | {gradle-next-1-day-yyyy-MM-dd} |
-#      | endDate                 | {gradle-next-2-day-yyyy-MM-dd} |
+      | startDate               | {gradle-next-3-day-yyyy-MM-dd} |
+      | endDate                 | {gradle-next-5-day-yyyy-MM-dd} |
       | pricingScript           | {pricing-script-name}          |
       | salespersonDiscountType | Flat                           |
       | discountValue           | 4.39                           |
