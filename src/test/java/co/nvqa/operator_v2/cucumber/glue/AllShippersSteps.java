@@ -396,6 +396,7 @@ public class AllShippersSteps extends AbstractSteps
         value = data.get("pricingScript");
         if (StringUtils.isNotBlank(value))
         {
+            NvLogger.infof("Set Pricing Script value : %s",value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingScript.searchAndSelectValue(value);
         }
         value = data.get("discountValue");
@@ -410,6 +411,7 @@ public class AllShippersSteps extends AbstractSteps
         value = data.get("comments");
         if (StringUtils.isNotBlank(value))
         {
+            NvLogger.infof("Set comments : %s",value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.setValue(value);
         }
     }

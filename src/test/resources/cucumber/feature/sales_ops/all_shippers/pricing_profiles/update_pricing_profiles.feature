@@ -121,7 +121,8 @@ Feature: Pricing Profiles
       | discountValue | $#^$^#@5 |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | discountValue | Special character is not allowed |
-@nadeera
+
+  @nadeera
   @CloseNewWindows
   Scenario: Update an Existing Pricing Profile - with 3-5 integer after decimal point (uid:ed2da24e-c989-435f-9202-1fe5e69d9b30)
     Given Operator go to menu Shipper -> All Shippers
@@ -157,6 +158,7 @@ Feature: Pricing Profiles
     When Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:
       | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
       | endDate       | {gradle-next-2-day-yyyy-MM-dd} |
+      | pricingScript | {pricing-script-name}          |
       | discountValue | 4.38656                        |
     And Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page
     And Operator save changes on Edit Shipper Page
