@@ -35,6 +35,7 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 
 import java.text.ParseException;
 import java.util.*;
@@ -42,6 +43,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static co.nvqa.commons.support.DateUtil.DTF_YYYY_MM_DD;
+import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_EFFECTIVE_DATE;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -308,6 +310,13 @@ public class AllShippersSteps extends AbstractSteps
             //expected : 2020-11-1[9]
             // actual: 2020-11-1[8]
             NvLogger.warn("NADEERA verify - after converting gradle date "+ value);
+            try
+            {
+                NvLogger.warn("NADEERA verify - actual start date"+ DateUtil.SDF_YYYY_MM_DD.parse(getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_EFFECTIVE_DATE)).getText()));
+            } catch (ParseException e)
+            {
+                e.printStackTrace();
+            }
             Assert.assertEquals("Start Date", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.getValue());
         }
         value = data.get("endDate");
