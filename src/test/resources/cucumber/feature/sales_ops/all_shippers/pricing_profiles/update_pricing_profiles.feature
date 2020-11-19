@@ -39,7 +39,6 @@ Feature: Pricing Profiles
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | discountValue | 0 is not a valid discount value |
 
-
   @CloseNewWindows
   Scenario: Update an Existing Pricing Profile - with none Flat Discount (uid:df20d395-ed05-4890-a5c9-a9d287fd9251)
     Given Operator go to menu Shipper -> All Shippers
@@ -122,7 +121,7 @@ Feature: Pricing Profiles
       | discountValue | $#^$^#@5 |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | discountValue | Special character is not allowed |
-
+@nadeera
   @CloseNewWindows
   Scenario: Update an Existing Pricing Profile - with 3-5 integer after decimal point (uid:ed2da24e-c989-435f-9202-1fe5e69d9b30)
     Given Operator go to menu Shipper -> All Shippers
