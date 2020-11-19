@@ -398,6 +398,7 @@ public class AllShippersSteps extends AbstractSteps
         {
             NvLogger.infof("Set Pricing Script value : %s",value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingScript.searchAndSelectValue(value);
+            NvLogger.infof("Set Pricing Script value DONE ");
         }
         value = data.get("discountValue");
         if (StringUtils.equalsIgnoreCase("none", value))
