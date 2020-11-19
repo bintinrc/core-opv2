@@ -406,6 +406,7 @@ public class AllShippersSteps extends AbstractSteps
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.clear();
         } else if (StringUtils.isNotBlank(value))
         {
+            NvLogger.infof("Set Discount value : %s",value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.setValue(value);
         }
         value = data.get("comments");
