@@ -308,7 +308,7 @@ public class AllShippersSteps extends AbstractSteps
             Assert.assertEquals("Start Date", value, getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_EFFECTIVE_DATE)).getText());
         }
         value = data.get("endDate");
-        if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("nextDay"))
+        if (StringUtils.isNotBlank(value))
         {
             Assert.assertEquals("End Date", value, getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_CONTACT_END_DATE)).getText());
         }
@@ -325,6 +325,7 @@ public class AllShippersSteps extends AbstractSteps
         value = data.get("discountValue");
         if (StringUtils.equalsIgnoreCase("none", value))
         {
+            NvLogger.infof("Discount Valye is %s" , allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.getValue());
             Assert.assertThat("Discount Value", allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.getValue(), Matchers.is(Matchers.emptyOrNullString()));
         } else if (StringUtils.isNotBlank(value))
         {
@@ -340,6 +341,7 @@ public class AllShippersSteps extends AbstractSteps
     @Then("^Operator add New Pricing Profile on Edit Shipper Page using data below:$")
     public void operatorAddNewPricingProfileOnEditShipperPage(Map<String, String> data)
     {
+        NvLogger.info("Add new Pricing Profile");
         data = resolveKeyValues(data);
         allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
         allShippersPage.allShippersCreateEditPage.addNewProfile.click();
@@ -379,6 +381,7 @@ public class AllShippersSteps extends AbstractSteps
     @Then("^Operator fill Edit Pending Profile Dialog form on Edit Shipper Page using data below:$")
     public void operatorFillNewPricingProfileOnEditShipperPage(Map<String, String> data)
     {
+        NvLogger.info("Edit Pricing profile");
         data = resolveKeyValues(data);
 
         String value = data.get("startDate");
