@@ -420,7 +420,9 @@ public class AllShippersSteps extends AbstractSteps
     @Then("^Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page$")
     public void operatorSaveChangesPricingProfileOnEditShipperPage()
     {
+        NvLogger.info("Save changes");
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges.clickAndWaitUntilDone();
+        NvLogger.info("Wait Until Invisible");
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.waitUntilInvisible();
     }
 
