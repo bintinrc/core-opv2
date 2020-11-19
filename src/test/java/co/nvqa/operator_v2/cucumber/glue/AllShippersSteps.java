@@ -385,11 +385,12 @@ public class AllShippersSteps extends AbstractSteps
         String value = data.get("startDate");
         if (StringUtils.isNotBlank(value))
         {
+            NvLogger.infof("Set Start date : %s",value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.simpleSetValue(value);
         }
         value = data.get("endDate");
         if (StringUtils.isNotBlank(value))
-        {
+        {            NvLogger.infof("Set End date : %s",value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate.simpleSetValue(value);
         }
         value = data.get("pricingScript");
@@ -400,6 +401,7 @@ public class AllShippersSteps extends AbstractSteps
         value = data.get("discountValue");
         if (StringUtils.equalsIgnoreCase("none", value))
         {
+            NvLogger.infof("Set Discount value : %s",value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.clear();
         } else if (StringUtils.isNotBlank(value))
         {
