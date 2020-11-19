@@ -423,12 +423,13 @@ public class AllShippersSteps extends AbstractSteps
         NvLogger.info("Save changes");
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges.clickAndWaitUntilDone();
         NvLogger.info("Wait Until Invisible");
-        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.waitUntilInvisible();
+//        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.waitUntilInvisible();
     }
 
     @Then("^Operator save changes on Edit Shipper Page$")
     public void operatorSaveChangesOnEditShipperPage()
     {
+        NvLogger.info("Save changes on Edit shipper");
         allShippersPage.allShippersCreateEditPage.saveChanges.click();
         allShippersPage.allShippersCreateEditPage.waitUntilInvisibilityOfToast("All changes saved successfully");
         allShippersPage.allShippersCreateEditPage.backToShipperList();
