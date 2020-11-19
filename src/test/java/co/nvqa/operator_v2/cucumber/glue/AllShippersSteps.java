@@ -302,23 +302,10 @@ public class AllShippersSteps extends AbstractSteps
         {
             Assert.assertEquals("Shipper Name", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.shipperName.getText());
         }
-        value = data.get("startDate"); //gradle date(UTC)
+        value = data.get("startDate");
         if (StringUtils.isNotBlank(value))
         {
-            NvLogger.warn("NADEERA verify - getting gradle date "+ value);
-            value = DateUtil.getDefaultDateFromUTC(value); //sg date
-            //expected : 2020-11-1[9]
-            // actual: 2020-11-1[8]
-            NvLogger.warn("NADEERA verify - after converting gradle date "+ value);
-            try
-            {
-                NvLogger.warn("NADEERA verify - actual start date nadeera way "+ DateUtil.SDF_YYYY_MM_DD.parse(getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_EFFECTIVE_DATE)).getText()));
-                NvLogger.warn("NADEERA verify - actual start date old way "+ allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.getValue());
-            } catch (ParseException e)
-            {
-                e.printStackTrace();
-            }
-            Assert.assertEquals("Start Date", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.getValue());
+            Assert.assertEquals("Start Date", value, getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_EFFECTIVE_DATE)).getText());
         }
         value = data.get("endDate");
         if (StringUtils.isNotBlank(value) && value.equalsIgnoreCase("nextDay"))
@@ -362,7 +349,7 @@ public class AllShippersSteps extends AbstractSteps
         String value = data.get("startDate");
         if (StringUtils.isNotBlank(value))
         {
-            NvLogger.warn("NADEERA setting gradle date "+ value);
+            NvLogger.warn("NADEERA setting gradle date " + value);
             allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.pricingBillingStartDate.simpleSetValue(value);
         }
         value = data.get("endDate");

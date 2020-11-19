@@ -151,8 +151,8 @@ Feature: Pricing Profiles
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | shipperName             | {KEY_CREATED_SHIPPER.name}              |
-      | startDate               | {gradle-next-1-day-yyyy-MM-dd} 16:00:00 |
-      | endDate                 | {gradle-next-1-day-yyyy-MM-dd} 16:00:00 |
+      | startDate               | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate                 | {gradle-next-1-day-yyyy-MM-dd} |
       | pricingScript           | {pricing-script-name}                   |
       | salespersonDiscountType | Flat                                    |
       | discountValue           | 10                                      |
