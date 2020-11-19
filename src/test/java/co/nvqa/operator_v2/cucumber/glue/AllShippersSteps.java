@@ -312,7 +312,8 @@ public class AllShippersSteps extends AbstractSteps
             NvLogger.warn("NADEERA verify - after converting gradle date "+ value);
             try
             {
-                NvLogger.warn("NADEERA verify - actual start date"+ DateUtil.SDF_YYYY_MM_DD.parse(getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_EFFECTIVE_DATE)).getText()));
+                NvLogger.warn("NADEERA verify - actual start date nadeera way "+ DateUtil.SDF_YYYY_MM_DD.parse(getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_EFFECTIVE_DATE)).getText()));
+                NvLogger.warn("NADEERA verify - actual start date old way "+ allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.getValue());
             } catch (ParseException e)
             {
                 e.printStackTrace();
