@@ -45,7 +45,6 @@ public class NvApiTextButton extends PageElement
     public void clickAndWaitUntilDone()
     {
         click();
-        NvLogger.info("NADEERA Clicked");
         waitUntilDone();
     }
 

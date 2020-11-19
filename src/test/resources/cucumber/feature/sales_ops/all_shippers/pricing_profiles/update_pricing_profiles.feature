@@ -38,7 +38,7 @@ Feature: Pricing Profiles
       | discountValue | 0 |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | discountValue | 0 is not a valid discount value |
-@nadeera
+
   @CloseNewWindows
   Scenario: Update an Existing Pricing Profile - with none Flat Discount (uid:df20d395-ed05-4890-a5c9-a9d287fd9251)
     Given Operator go to menu Shipper -> All Shippers
