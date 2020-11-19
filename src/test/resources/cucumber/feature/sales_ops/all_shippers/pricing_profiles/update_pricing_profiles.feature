@@ -38,7 +38,7 @@ Feature: Pricing Profiles
       | discountValue | 0 |
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | discountValue | 0 is not a valid discount value |
-
+@nadeera
   @CloseNewWindows
   Scenario: Update an Existing Pricing Profile - with none Flat Discount (uid:df20d395-ed05-4890-a5c9-a9d287fd9251)
     Given Operator go to menu Shipper -> All Shippers
@@ -60,14 +60,14 @@ Feature: Pricing Profiles
     And Operator edits the created shipper
     And Operator add New Pricing Profile on Edit Shipper Page using data below:
       | startDate     | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate       | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate       | {gradle-next-3-day-yyyy-MM-dd} |
       | pricingScript | {pricing-script-name}          |
       | discountValue | 10                             |
     And Operator open Edit Pricing Profile dialog on Edit Shipper Page
     Then Operator verify Edit Pricing Profile dialog data on Edit Shipper Page:
       | shipperName             | {KEY_CREATED_SHIPPER.name}     |
       | startDate               | {gradle-next-1-day-yyyy-MM-dd} |
-      | endDate                 | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDate                 | {gradle-next-3-day-yyyy-MM-dd} |
       | pricingScript           | {pricing-script-name}          |
       | salespersonDiscountType | Flat                           |
       | discountValue           | 10                             |
@@ -122,7 +122,6 @@ Feature: Pricing Profiles
     Then Operator verify error messages in Edit Pending Profile Dialog on Edit Shipper Page:
       | discountValue | Special character is not allowed |
 
-  @nadeera
   @CloseNewWindows
   Scenario: Update an Existing Pricing Profile - with 3-5 integer after decimal point (uid:ed2da24e-c989-435f-9202-1fe5e69d9b30)
     Given Operator go to menu Shipper -> All Shippers
