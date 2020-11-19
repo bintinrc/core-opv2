@@ -42,8 +42,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_CONTACT_END_DATE;
-import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_EFFECTIVE_DATE;
+import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.*;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -418,6 +417,7 @@ public class AllShippersSteps extends AbstractSteps
             NvLogger.infof("Set comments : %s",value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.setValue(value);
         }
+        takesScreenshot();
     }
 
     @Then("^Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page$")
@@ -425,7 +425,9 @@ public class AllShippersSteps extends AbstractSteps
     {
         NvLogger.info("Save changes");
         takesScreenshot();
-        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges.clickAndWaitUntilDone();
+        allShippersPage.allShippersCreateEditPage.click(XPATH_SAVE_CHANGES_PRICING_SCRIPT);
+
+//        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges.clickAndWaitUntilDone();
         takesScreenshot();
         NvLogger.info("Wait Until Invisible");
 //        allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.waitUntilInvisible();
