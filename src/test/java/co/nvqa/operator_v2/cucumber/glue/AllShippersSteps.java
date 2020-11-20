@@ -324,7 +324,6 @@ public class AllShippersSteps extends AbstractSteps
         value = data.get("discountValue");
         if (StringUtils.equalsIgnoreCase("none", value))
         {
-            NvLogger.infof("Discount Valye is %s" , allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.getValue());
             Assert.assertThat("Discount Value", allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.getValue(), Matchers.is(Matchers.emptyOrNullString()));
         } else if (StringUtils.isNotBlank(value))
         {
@@ -340,7 +339,6 @@ public class AllShippersSteps extends AbstractSteps
     @Then("^Operator add New Pricing Profile on Edit Shipper Page using data below:$")
     public void operatorAddNewPricingProfileOnEditShipperPage(Map<String, String> data)
     {
-        NvLogger.info("Add new Pricing Profile");
         data = resolveKeyValues(data);
         allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
         allShippersPage.allShippersCreateEditPage.addNewProfile.click();
@@ -385,45 +383,43 @@ public class AllShippersSteps extends AbstractSteps
         String value = data.get("startDate");
         if (StringUtils.isNotBlank(value))
         {
-            NvLogger.infof("Set Start date : %s",value);
+            NvLogger.infof("Set Start date : %s", value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.simpleSetValue(value);
         }
         value = data.get("endDate");
         if (StringUtils.isNotBlank(value))
-        {            NvLogger.infof("Set End date : %s",value);
+        {
+            NvLogger.infof("Set End date : %s", value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate.simpleSetValue(value);
         }
         value = data.get("pricingScript");
         if (StringUtils.isNotBlank(value))
         {
-            NvLogger.infof("Set Pricing Script value : %s",value);
+            NvLogger.infof("Set Pricing Script value : %s", value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingScript.searchAndSelectValue(value);
-            NvLogger.infof("Set Pricing Script value DONE ");
         }
         value = data.get("discountValue");
         if (StringUtils.equalsIgnoreCase("none", value))
         {
-            NvLogger.infof("Set Discount value : %s",value);
+            NvLogger.infof("Set Discount value : %s", value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.clear();
         } else if (StringUtils.isNotBlank(value))
         {
-            NvLogger.infof("Set Discount value : %s",value);
+            NvLogger.infof("Set Discount value : %s", value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.setValue(value);
         }
         value = data.get("comments");
         if (StringUtils.isNotBlank(value))
         {
-            NvLogger.infof("Set comments : %s",value);
+            NvLogger.infof("Set comments : %s", value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.setValue(value);
         }
-        takesScreenshot();
     }
 
     @Then("^Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page$")
     public void operatorSaveChangesPricingProfileOnEditShipperPage()
     {
         takesScreenshot();
-//        allShippersPage.allShippersCreateEditPage.click(XPATH_SAVE_CHANGES_PRICING_SCRIPT);
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges.clickAndWaitUntilDone();
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.waitUntilInvisible();
     }
