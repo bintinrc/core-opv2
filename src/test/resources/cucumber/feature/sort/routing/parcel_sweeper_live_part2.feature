@@ -172,7 +172,7 @@ Feature: Parcel Sweeper Live
       | shipperName     | {shipper-v4-name} |
       | status          | Pending           |
       | granular status | Pending Pickup    |
-    And Operator searches and selects orders created on Add Tags to Order page
+    And Operator searches and selects orders created first row on Add Tags to Order page
     And Operator tags order with:
       | OPV2AUTO1   |
       | OPV2AUTO2   |
