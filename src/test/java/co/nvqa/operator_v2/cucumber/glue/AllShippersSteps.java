@@ -1002,7 +1002,7 @@ public class AllShippersSteps extends AbstractSteps
         shipper.setLiaisonPostcode(liaisonAddress.getPostcode());
     }
 
-    private Shipper setShipperDetails(Shipper shipper,String dateUniqueString, Map<String, String> mapOfData)
+    private Shipper setShipperDetails(Shipper shipper,String dateUniqueString,Map<String, String> mapOfData)
     {
         shipper.setActive(Boolean.parseBoolean(mapOfData.get("isShipperActive")));
         shipper.setType(mapOfData.get("shipperType"));
