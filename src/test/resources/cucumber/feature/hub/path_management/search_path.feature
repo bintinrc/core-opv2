@@ -1,7 +1,4 @@
-# new feature
-# Tags: optional
-
-Feature: A description
+Feature: Path Management - Search Path
 
   Scenario: A scenario
-    Given something..
+    Given no-op
