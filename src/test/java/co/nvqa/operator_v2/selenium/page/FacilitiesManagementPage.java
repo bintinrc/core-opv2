@@ -60,6 +60,9 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
     @FindBy(xpath = "//button[@aria-label='Yes']")
     public Button sortHub;
 
+    @FindBy(xpath = "//button[@aria-label='Save']")
+    public Button saveChanges;
+
     public HubsTable hubsTable;
 
     public FacilitiesManagementPage(WebDriver webDriver)
@@ -94,9 +97,14 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
 
     public void updateHub(String searchHubsKeyword, Hub hub)
     {
-        loadingHubsLabel.waitUntilInvisible();
-        hubsTable.filterByColumn(COLUMN_NAME, searchHubsKeyword);
-        assertFalse(f("Table is empty. Hub with keywords = '%s' not found.", searchHubsKeyword), hubsTable.isEmpty());
+        retryIfAssertionErrorOccurred(() ->
+        {
+            refreshPage();
+            loadingHubsLabel.waitUntilInvisible();
+            hubsTable.filterByColumn(COLUMN_NAME, searchHubsKeyword);
+            assertFalse(f("Table is empty. Hub with keywords = '%s' not found.", searchHubsKeyword), hubsTable.isEmpty());
+        }, "Unable to find the hub, retrying...");
+
         hubsTable.clickActionButton(1, ACTION_EDIT);
         editHubDialog.waitUntilVisible();
 
@@ -109,7 +117,15 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
         Optional.ofNullable(hub.getLatitude()).ifPresent(value -> editHubDialog.latitude.setValue(value));
         Optional.ofNullable(hub.getLongitude()).ifPresent(value -> editHubDialog.longitude.setValue(value));
         Optional.ofNullable(hub.getSortHub()).ifPresent(value -> sortHub.click());
-        editHubDialog.submitChanges.clickAndWaitUntilDone();
+        editHubDialog.submitChanges.click();
+
+        String facilityType = hub.getFacilityType();
+        if(facilityType.equalsIgnoreCase("CROSSDOCK") || facilityType.equalsIgnoreCase("CROSSDOCK_STATION") || facilityType.equalsIgnoreCase("STATION"))
+        {
+            saveChanges.waitUntilVisible();
+            saveChanges.waitUntilClickable();
+            saveChanges.click();
+        }
         editHubDialog.waitUntilInvisible();
     }
 
