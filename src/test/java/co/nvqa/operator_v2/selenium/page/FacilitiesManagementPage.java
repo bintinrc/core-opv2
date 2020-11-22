@@ -80,6 +80,7 @@ public class FacilitiesManagementPage extends OperatorV2SimplePage
     public void createNewHub(Hub hub)
     {
         loadingHubsLabel.waitUntilInvisible();
+        addHub.waitUntilClickable();
         addHub.click();
         addHubDialog.waitUntilVisible();
         addHubDialog.hubName.setValue(hub.getName());
