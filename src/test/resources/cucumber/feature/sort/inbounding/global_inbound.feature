@@ -179,7 +179,6 @@ Feature: Global Inbound
       | hubName           | {hub-name}                                 |
       | trackingId        | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | ROUTED                             |
       | color          | #e86161                            |
     And API Operator verify order info after Global Inbound
