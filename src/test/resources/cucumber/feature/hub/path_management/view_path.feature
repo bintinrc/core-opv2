@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @PathManagement @ViewPath @CFW
+@OperatorV2 @MiddleMile @Hub @PathManagement @ViewPath
 Feature: Path Management - View Path
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -35,7 +35,7 @@ Feature: Path Management - View Path
     When Operator click "view" hyperlink button
     Then Operator verify shown "default paths" path details modal data
 
-  @KillBrowser @ShouldAlwaysRun @RT
+  @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates new Hub using data below:
@@ -64,3 +64,7 @@ Feature: Path Management - View Path
     Then Operator verify "manual paths" data appear in path table
     When Operator click "view" hyperlink button
     Then Operator verify shown "manual paths" path details modal data
+
+  @KillBrowser @ShouldAlwaysRun
+  Scenario: Kill Browser
+    Given no-op

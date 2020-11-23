@@ -33,6 +33,12 @@ public class PathManagementPage extends OperatorV2SimplePage {
     @FindBy(id = "pathType")
     public AntSelect pathTypeFilter;
 
+    @FindBy(id = "originHubs")
+    public AntSelect originHubFilter;
+
+    @FindBy(id = "destinationHubs")
+    public AntSelect destinationHubFilter;
+
     @FindBy(xpath = "//button[.='Load Selection']")
     public Button loadSelectionButton;
 
@@ -72,6 +78,14 @@ public class PathManagementPage extends OperatorV2SimplePage {
         pathTypeFilter.selectValueWithoutSearch(value);
     }
 
+    public void selectOriginHub(String value) {
+        originHubFilter.selectValue(value);
+    }
+
+    public void selectDestinationHub(String value) {
+        destinationHubFilter.selectValue(value);
+    }
+
     public void verifyDataAppearInPathTable(String pathType) {
         String originHubName = originHubFirstRow.getText();
         String destinationHubName = destinationHubFirstRow.getText();
@@ -84,7 +98,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
             pathType = "Default";
             pathTagText = pathTagFirstRow.getText();
         }
-        if ("manual paths".equals(pathType)){
+        if ("manual paths".equals(pathType)) {
             pathType = "";
             expectedActionText += "EditRemove";
         }
@@ -99,7 +113,6 @@ public class PathManagementPage extends OperatorV2SimplePage {
     public void verifyShownPathDetail(String pathType) {
         pause3s();
         String pathDetailsRaw = pathDetailsModal.pathDetails.getText();
-        System.out.println(pathDetailsRaw);
         String actualPath = pathDetailsRaw.split("Path Type")[0].split("Path")[1].trim();
         String actualPathType = pathDetailsRaw.split("Movement Type")[0].split("Path Type")[1].trim();
         String actualMovementType = pathDetailsRaw.split("Movement Type")[1].trim();
@@ -130,10 +143,24 @@ public class PathManagementPage extends OperatorV2SimplePage {
         }
     }
 
-    public static class PathDetailsModal extends AntModal
-    {
-        public PathDetailsModal(WebDriver webDriver, WebElement webElement)
-        {
+    public void verifyPathDataAppearInPathTable(String expectedOriginHub, String expectedDestinationHub) {
+        String originHubName = originHubFirstRow.getText();
+        String destinationHubName = destinationHubFirstRow.getText();
+        String path = pathFirstRow.getText();
+
+        String expectedPath = expectedOriginHub + " → " + expectedDestinationHub;
+
+        assertThat("Origin Hub is equal", originHubName, equalTo(expectedOriginHub));
+        assertThat("Destination Hub is equal", destinationHubName, equalTo(expectedDestinationHub));
+        assertThat("Path is equal", path, equalTo(expectedPath));
+        String actualActionText = actionFirstRow.getText();
+        assertThat("View Hyperlink in action column", actualActionText, containsString("View"));
+        assertThat("View Hyperlink in action column", actualActionText, containsString("Edit"));
+        assertThat("View Hyperlink in action column", actualActionText, containsString("Remove"));
+    }
+
+    public static class PathDetailsModal extends AntModal {
+        public PathDetailsModal(WebDriver webDriver, WebElement webElement) {
             super(webDriver, webElement);
             PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
         }

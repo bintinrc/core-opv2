@@ -1,10 +1,14 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
+import co.nvqa.commons.util.NvLogger;
+import co.nvqa.operator_v2.model.StationMovementSchedule;
 import co.nvqa.operator_v2.selenium.page.PathManagementPage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+
+import java.util.Map;
 
 /**
  * Created on 17/11/20.
@@ -31,7 +35,7 @@ public class PathManagementSteps extends AbstractSteps {
     }
 
     @And("Operator clicks show or hide filters")
-    public void OperatorClickShowHideFilters() {
+    public void operatorClickShowHideFilters() {
         pathManagementPage.showHideFilters.click();
     }
 
@@ -41,6 +45,34 @@ public class PathManagementSteps extends AbstractSteps {
         if ("Path Type".equals(filter)) {
             pathManagementPage.selectPathType(resolvedValue);
         }
+        if ("Origin Hub".equals(filter)) {
+            pathManagementPage.selectOriginHub(resolvedValue);
+        }
+        if ("Destination Hub".equals(filter)) {
+            pathManagementPage.selectDestinationHub(resolvedValue);
+        }
+    }
+
+    @And("Operator selects {string} and {string} as origin and destination hub")
+    public void operatorSelectsOriginAndDestinationHub(String originHub, String destinationHub) {
+        final String resolvedOriginHub = resolveValue(originHub);
+        final String resolvedDestinationHub = resolveValue(destinationHub);
+        retryIfRuntimeExceptionOccurred(() -> {
+            try {
+                if (!("".equals(resolvedOriginHub))) {
+                    operatorSelectsValueInFilter(resolvedOriginHub, "Origin Hub");
+                }
+                if (!("".equals(resolvedDestinationHub))) {
+                    operatorSelectsValueInFilter(resolvedDestinationHub, "Destination Hub");
+                }
+            } catch (Throwable ex) {
+                NvLogger.error(ex.getMessage());
+                NvLogger.info("Hub not found, retrying...");
+                pathManagementPage.refreshPage();
+                pathManagementPage.switchTo();
+                operatorClickShowHideFilters();
+            }
+        }, 10);
     }
 
     @And("Operator clicks load selection button")
@@ -53,6 +85,13 @@ public class PathManagementSteps extends AbstractSteps {
     @And("Operator verify {string} data appear in path table")
     public void operatorVerifyAppearInPathTable(String pathType) {
         pathManagementPage.verifyDataAppearInPathTable(pathType);
+    }
+
+    @And("Operator verify path data from {string} to {string} appear in path table")
+    public void operatorVerifyPathDataAppearInPathTable(String originHub, String destinationHub) {
+        String resolvedOriginHub = resolveValue(originHub);
+        String resolvedDestinationHub = resolveValue(destinationHub);
+        pathManagementPage.verifyPathDataAppearInPathTable(resolvedOriginHub, resolvedDestinationHub);
     }
 
     @When("Operator click {string} hyperlink button")
