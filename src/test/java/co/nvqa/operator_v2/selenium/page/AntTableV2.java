@@ -57,7 +57,14 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T>
     @Override
     public void selectRow(int rowNumber)
     {
-        throw new UnsupportedOperationException("Not implemented yet");
+        String xpath = f(CELL_LOCATOR_PATTERN, rowNumber, "__checkbox__") + "//input";
+        click(xpath);
+    }
+
+    public boolean isRowSelected(int rowNumber)
+    {
+        String xpath = f(CELL_LOCATOR_PATTERN, rowNumber, "__checkbox__") + "//input";
+        return findElementByXpath(xpath).isSelected();
     }
 
     @Override

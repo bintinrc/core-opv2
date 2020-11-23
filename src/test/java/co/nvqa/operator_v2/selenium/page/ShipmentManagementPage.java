@@ -33,7 +33,6 @@ import java.util.regex.Pattern;
 import static co.nvqa.operator_v2.selenium.page.ShipmentManagementPage.ShipmentsTable.*;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.is;
 
 /**
  * @author Lanang Jati
@@ -94,6 +93,9 @@ public class ShipmentManagementPage extends OperatorV2SimplePage
 
     @FindBy(xpath = "//button[@aria-label='Cancel']")
     public Button cancelShipmentButton;
+
+    @FindBy(css = "[id^='commons.preset.load-filter-preset']")
+    public MdSelect filterPresetSelector;
 
     private static final String FILEPATH = TestConstants.TEMP_DIR;
 

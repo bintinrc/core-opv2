@@ -14,11 +14,13 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.Matchers;
 
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -449,6 +451,17 @@ public class ShipperPickupsSteps extends AbstractSteps
         if (StringUtils.isNotBlank(expectedValue))
         {
             assertEquals("Scanned at Shipper (POD)", expectedValue, shipperPickupsPage.reservationDetailsDialog.scannedAtShipperPOD.getNormalizedText());
+        }
+    }
+
+    @Then("^Operator verifies filter parameters on Shipper Pickups page using data below:$")
+    public void operatorVerifiesFilterParametersDetails(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+        String expectedValue = data.get("shippers");
+        if (StringUtils.isNotBlank(expectedValue))
+        {
+            assertThat("Shipper filter", shipperPickupsPage.shipperFilter.getSelectedValues(), Matchers.containsInAnyOrder(Arrays.stream(expectedValue.split(",")).map(StringUtils::trim).toArray()));
         }
     }
 }

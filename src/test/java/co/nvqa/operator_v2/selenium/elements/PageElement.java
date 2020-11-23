@@ -187,6 +187,18 @@ public class PageElement extends SimplePage
         waitUntilVisibilityOfElementLocated(webElement);
     }
 
+    public boolean waitUntilVisible(int timeout)
+    {
+        try
+        {
+            waitUntilVisibilityOfElementLocated(webElement, timeout);
+            return true;
+        } catch (Throwable ex)
+        {
+            return false;
+        }
+    }
+
     public boolean isEnabled()
     {
         return webElement.isEnabled();

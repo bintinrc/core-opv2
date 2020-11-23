@@ -3,7 +3,6 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementSchedule;
-import co.nvqa.operator_v2.model.MovementTripActionName;
 import co.nvqa.operator_v2.model.StationMovementSchedule;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.page.MovementManagementPage;
@@ -426,7 +425,6 @@ public class MovementManagementSteps extends AbstractSteps
     {
         movementManagementPage.verifyNotificationWithMessage("1 schedule(s) have been deleted.");
     }
-
 
     @Deprecated
     @When("Operator open view modal of a created movement schedule on Movement Management page")

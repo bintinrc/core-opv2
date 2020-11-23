@@ -149,6 +149,8 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         createShipper.click();
         waitUntilInvisibilityOfToast("All changes saved successfully");
+        String url = getWebDriver().getCurrentUrl();
+        shipper.setLegacyId(Long.valueOf(url.substring(url.lastIndexOf("/") + 1)));
         backToShipperList();
         pause3s();
         getWebDriver().switchTo().window(currentWindowHandle);
