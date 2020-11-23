@@ -66,6 +66,9 @@ public class PathManagementPage extends OperatorV2SimplePage {
     @FindBy(className = "ant-modal-wrap")
     public PathDetailsModal pathDetailsModal;
 
+    @FindBy(xpath = "//th[contains(@class,'originHubName')]//input")
+    public PageElement originHubField;
+
     public PathManagementPage(WebDriver webDriver) {
         super(webDriver);
     }
@@ -157,6 +160,10 @@ public class PathManagementPage extends OperatorV2SimplePage {
         assertThat("View Hyperlink in action column", actualActionText, containsString("View"));
         assertThat("View Hyperlink in action column", actualActionText, containsString("Edit"));
         assertThat("View Hyperlink in action column", actualActionText, containsString("Remove"));
+    }
+
+    public void searchOriginHub(String resolvedValue) {
+        originHubField.sendKeys(resolvedValue);
     }
 
     public static class PathDetailsModal extends AntModal {

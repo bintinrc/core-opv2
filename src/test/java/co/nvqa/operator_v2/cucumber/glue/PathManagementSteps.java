@@ -107,4 +107,12 @@ public class PathManagementSteps extends AbstractSteps {
         pathManagementPage.verifyShownPathDetail(pathType);
     }
 
+    @And("Operator searches {string} in {string} field")
+    public void operatorSearchesInField(String value, String field) {
+        String resolvedValue = resolveValue(value);
+        if ("Origin Hub".equals(field)) {
+            pathManagementPage.searchOriginHub(resolvedValue);
+        }
+    }
+
 }
