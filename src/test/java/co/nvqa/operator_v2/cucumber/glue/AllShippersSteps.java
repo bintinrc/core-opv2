@@ -17,8 +17,12 @@ import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Return;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.shipper.v2.Shopify;
+import co.nvqa.commons.support.DateUtil;
+import co.nvqa.commons.util.NvLogger;
+import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
 import co.nvqa.operator_v2.selenium.page.ProfilePage;
+import co.nvqa.operator_v2.util.TestUtils;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
@@ -31,15 +35,14 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.*;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -301,12 +304,12 @@ public class AllShippersSteps extends AbstractSteps
         value = data.get("startDate");
         if (StringUtils.isNotBlank(value))
         {
-            Assert.assertEquals("Start Date", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.getValue());
+            Assert.assertEquals("Start Date", value, getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_EFFECTIVE_DATE)).getText());
         }
         value = data.get("endDate");
         if (StringUtils.isNotBlank(value))
         {
-            Assert.assertEquals("End Date", value, allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate.getValue());
+            Assert.assertEquals("End Date", value, getWebDriver().findElement(By.xpath(XPATH_PRICING_PROFILE_CONTACT_END_DATE)).getText());
         }
         value = data.get("pricingScript");
         if (StringUtils.isNotBlank(value))
@@ -366,6 +369,8 @@ public class AllShippersSteps extends AbstractSteps
         {
             allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.comments.setValue(value);
         }
+        allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.codCountryDefaultCheckbox.check();
+        allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
         allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.saveChanges.clickAndWaitUntilDone();
         allShippersPage.allShippersCreateEditPage.newPricingProfileDialog.waitUntilInvisible();
     }
@@ -378,29 +383,35 @@ public class AllShippersSteps extends AbstractSteps
         String value = data.get("startDate");
         if (StringUtils.isNotBlank(value))
         {
+            NvLogger.infof("Set Start date : %s", value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingStartDate.simpleSetValue(value);
         }
         value = data.get("endDate");
         if (StringUtils.isNotBlank(value))
         {
+            NvLogger.infof("Set End date : %s", value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingBillingEndDate.simpleSetValue(value);
         }
         value = data.get("pricingScript");
         if (StringUtils.isNotBlank(value))
         {
+            NvLogger.infof("Set Pricing Script value : %s", value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.pricingScript.searchAndSelectValue(value);
         }
         value = data.get("discountValue");
         if (StringUtils.equalsIgnoreCase("none", value))
         {
+            NvLogger.infof("Set Discount value : %s", value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.clear();
         } else if (StringUtils.isNotBlank(value))
         {
+            NvLogger.infof("Set Discount value : %s", value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.discountValue.setValue(value);
         }
         value = data.get("comments");
         if (StringUtils.isNotBlank(value))
         {
+            NvLogger.infof("Set comments : %s", value);
             allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.comments.setValue(value);
         }
     }
@@ -408,6 +419,7 @@ public class AllShippersSteps extends AbstractSteps
     @Then("^Operator save changes in Edit Pending Profile Dialog form on Edit Shipper Page$")
     public void operatorSaveChangesPricingProfileOnEditShipperPage()
     {
+        takesScreenshot();
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.saveChanges.clickAndWaitUntilDone();
         allShippersPage.allShippersCreateEditPage.editPendingProfileDialog.waitUntilInvisible();
     }
@@ -421,6 +433,29 @@ public class AllShippersSteps extends AbstractSteps
         pause3s();
         getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
     }
+
+    @Then("^Operator save changes on Edit Shipper Page and gets saved pricing profile values$")
+    public void operatorSaveChangesOnEditShipperPageAndGetsPPDiscountValue()
+    {
+        try
+        {
+            allShippersPage.allShippersCreateEditPage.saveChanges.click();
+            allShippersPage.allShippersCreateEditPage.waitUntilInvisibilityOfToast("All changes saved successfully");
+
+            Shipper shipper = get(KEY_CREATED_SHIPPER);
+            getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
+            allShippersPage.editShipper(shipper);
+            allShippersPage.allShippersCreateEditPage.tabs.selectTab("Pricing and Billing");
+            put(KEY_CREATED_PRICING_SCRIPT_OPV2, allShippersPage.getCreatedPricingProfile());
+            allShippersPage.allShippersCreateEditPage.backToShipperList();
+            pause3s();
+            getWebDriver().switchTo().window(get(KEY_MAIN_WINDOW_HANDLE));
+        } catch (ParseException e)
+        {
+            throw new NvTestRuntimeException("Failed to parse date.", e);
+        }
+    }
+
 
     @Then("^Operator go back to Shipper List page")
     public void operatorGoBackToShipperListPage()
@@ -807,8 +842,18 @@ public class AllShippersSteps extends AbstractSteps
         allShippersPage.editShipper(shipper);
     }
 
-    @Then("Operator adds new Shipper's Pricing Script")
-    public void OperatorAddsNewShippersPricingScript(Map<String, String> mapOfData)
+    @And("Operator edits shipper {string}")
+    public void operatorEditsShipper(String shipperLegacyId)
+    {
+        Shipper shipper = new Shipper();
+        shipper.setLegacyId(Long.valueOf(shipperLegacyId));
+        put(KEY_CREATED_SHIPPER, shipper);
+        put(KEY_MAIN_WINDOW_HANDLE, getWebDriver().getWindowHandle());
+        allShippersPage.editShipper(shipper);
+    }
+
+    @Then("Operator adds new Shipper's Pricing Profile")
+    public void OperatorAddsNewShippersPricingProfile(Map<String, String> mapOfData)
     {
         Shipper shipper = get(KEY_CREATED_SHIPPER);
         String pricingScriptName = mapOfData.get("pricingScriptName");
@@ -821,6 +866,8 @@ public class AllShippersSteps extends AbstractSteps
         pricing.setDiscount(discount);
         pricing.setComments(comments);
         pricing.setType(type);
+        pricing.setEffectiveDate(TestUtils.getNextDate(1));
+        pricing.setContractEndDate(TestUtils.getNextDate(10));
 
         shipper.setPricing(pricing);
 
@@ -985,20 +1032,13 @@ public class AllShippersSteps extends AbstractSteps
         put(KEY_CREATED_SHIPPER, shipper);
     }
 
-    @And("Operator verifies the pricing script and shipper discount details are correct")
-    public void OperatorVerifiesThePricingScriptAndShipperDiscountDetailsAreCorrect()
+    @And("Operator verifies the pricing profile and shipper discount details are correct")
+    public void OperatorVerifiesThePricingProfileAndShipperDiscountDetailsAreCorrect()
     {
         Pricing pricingProfile = get(KEY_CREATED_PRICING_SCRIPT);
         Pricing pricingProfileFromDb = get(KEY_PRICING_PROFILE_DETAILS);
-        allShippersPage.verifyPricingScriptAndShipperDiscountDetails(pricingProfile, pricingProfileFromDb);
-    }
-
-    @And("Operator verifies the pricing script details are correct")
-    public void OperatorVerifiesThePricingScriptDetailsAreCorrect()
-    {
-        Pricing pricingProfile = get(KEY_CREATED_PRICING_SCRIPT);
-        Pricing pricingProfileFromDb = get(KEY_PRICING_PROFILE_DETAILS);
-        allShippersPage.verifyPricingScriptDetails(pricingProfile, pricingProfileFromDb);
+        Pricing pricingProfileFromOPV2 = get(KEY_CREATED_PRICING_SCRIPT_OPV2);
+        allShippersPage.verifyPricingScriptAndShipperDiscountDetails(pricingProfile, pricingProfileFromDb, pricingProfileFromOPV2);
     }
 
     @Given("Operator changes the country to {string}")
