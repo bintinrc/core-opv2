@@ -42,6 +42,9 @@ public class PathManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//button[.='Load Selection']")
     public Button loadSelectionButton;
 
+    @FindBy(xpath = "//button[.='Manual Path']")
+    public Button addManualPathButton;
+
     @FindBy(xpath = "//div[contains(@class,'ant-spin-blur')]")
     public PageElement antBlurSpinner;
 
@@ -66,6 +69,12 @@ public class PathManagementPage extends OperatorV2SimplePage {
     @FindBy(className = "ant-modal-wrap")
     public PathDetailsModal pathDetailsModal;
 
+    @FindBy(className = "ant-modal-wrap")
+    public CreateManualPathModal createManualPathModal;
+
+    @FindBy(xpath = "(//div[@class='ant-modal-wrap '])[2]")
+    public PathDetailsModal createdPathDetailsModal;
+
     @FindBy(xpath = "//div[contains(@class,'footer-row')]")
     public TextBox footerRowDiv;
 
@@ -77,6 +86,12 @@ public class PathManagementPage extends OperatorV2SimplePage {
 
     @FindBy(xpath = "//th[contains(@class,'pathItems')]//input")
     private PageElement pathField;
+
+    @FindBy(xpath = "//div[@class='ant-notification-notice-message']")
+    public PageElement antNotificationMessage;
+
+    @FindBy(className = "ant-notification-notice-close")
+    public PageElement closeAntNotificationMessage;
 
     public PathManagementPage(WebDriver webDriver) {
         super(webDriver);
@@ -155,12 +170,12 @@ public class PathManagementPage extends OperatorV2SimplePage {
         }
     }
 
-    public void verifyPathDataAppearInPathTable(String expectedOriginHub, String expectedDestinationHub) {
+    public void verifyPathDataAppearInPathTable(String expectedOriginHub, String expectedDestinationHub, List<String> passedHub) {
         String originHubName = originHubFirstRow.getText();
         String destinationHubName = destinationHubFirstRow.getText();
         String path = pathFirstRow.getText();
 
-        String expectedPath = expectedOriginHub + " → " + expectedDestinationHub;
+        String expectedPath = String.join(" → ", passedHub);
 
         assertThat("Origin Hub is equal", originHubName, equalTo(expectedOriginHub));
         assertThat("Destination Hub is equal", destinationHubName, equalTo(expectedDestinationHub));
@@ -189,6 +204,57 @@ public class PathManagementPage extends OperatorV2SimplePage {
         pathField.sendKeys(resolvedValue);
     }
 
+    public void createManualPath(String originHubName, String destinationHubName, String transitHubName) {
+        createManualPathModal.waitUntilVisible();
+
+        String actualCreateManualPathModalTitle = createManualPathModal.modalTitle.getText();
+        String expectedFirstCreateManualPathModalTitle = "Create Manual Path (1/3)";
+        assertThat("Modal title is the same", actualCreateManualPathModalTitle, equalTo(expectedFirstCreateManualPathModalTitle));
+        createManualPathModal.originHubFilter.selectValue(originHubName);
+        createManualPathModal.destinationHubFilter.selectValue(destinationHubName);
+        createManualPathModal.nextButton.click();
+        pause2s();
+
+        actualCreateManualPathModalTitle = createManualPathModal.modalTitle.getText();
+        String expectedSecondCreateManualPathModalTitle = "Create Manual Path (2/3)";
+        assertThat("Modal title is the same", actualCreateManualPathModalTitle, equalTo(expectedSecondCreateManualPathModalTitle));
+        createManualPathModal.transitHubFilter.selectValue(transitHubName);
+        createManualPathModal.nextButton.click();
+        pause2s();
+
+        actualCreateManualPathModalTitle = createManualPathModal.modalTitle.getText();
+        String expectedThirdCreateManualPathModalTitle = "Create Manual Path (3/3)";
+        assertThat("Modal title is the same", actualCreateManualPathModalTitle, equalTo(expectedThirdCreateManualPathModalTitle));
+        createManualPathModal.departureScheduleFirst.click();
+        createManualPathModal.createButton.click();
+        pause2s();
+    }
+
+    public void verifyNotificationMessageIsShown(String expectedNotificationMessage) {
+        antNotificationMessage.waitUntilVisible();
+        String actualNotificationMessage = antNotificationMessage.getText();
+        assertThat("Notification message is the same", actualNotificationMessage, equalTo(expectedNotificationMessage));
+        closeAntNotificationMessage.click();
+        antNotificationMessage.waitUntilInvisible();
+    }
+
+    public void verifyCreatedPathDetail(String expectedPath, String departureTime) {
+        createdPathDetailsModal.waitUntilVisible();
+        String pathDetailsRaw = createdPathDetailsModal.pathDetails.getText();
+        String actualPath = pathDetailsRaw.split("Path Type")[0].split("Path")[1].trim();
+        assertThat("Path is the same", actualPath, equalTo(expectedPath));
+
+        String actualDepartureTime = createdPathDetailsModal.pathDepartureTime.getText();
+        assertThat("Departure time is the same", actualDepartureTime, equalTo(departureTime));
+
+        String actualDaysOfWeek = createdPathDetailsModal.pathDepartureDaysOfWeek.getText();
+        String expectedDaysOfWeek = "MO\nTU\nWE\nTH\nFR\nSA\nSU";
+        assertThat("Days of week is the same", actualDaysOfWeek, equalTo(expectedDaysOfWeek));
+
+        createdPathDetailsModal.closeModalButton.click();
+        createdPathDetailsModal.waitUntilInvisible();
+    }
+
     public static class PathDetailsModal extends AntModal {
         public PathDetailsModal(WebDriver webDriver, WebElement webElement) {
             super(webDriver, webElement);
@@ -204,11 +270,54 @@ public class PathManagementPage extends OperatorV2SimplePage {
         @FindBy(xpath = ".//button[.='Edit Path']")
         public Button editPathButton;
 
+        @FindBy(className = "ant-modal-close")
+        public Button closeModalButton;
+
         @FindBy(className = "ant-card-body")
         public TextBox pathDetails;
 
-        @FindBy(xpath = "//thead[@class='ant-table-thead']")
+        @FindBy(xpath = ".//thead[@class='ant-table-thead']")
         public PageElement pathScheduleTableHead;
+
+        @FindBy(xpath = ".//tbody[@class='ant-table-tbody']//tr[1]//td[1]")
+        public PageElement pathDepartureTime;
+
+        @FindBy(xpath = ".//tbody[@class='ant-table-tbody']//tr[1]//td[2]")
+        public PageElement pathDepartureDaysOfWeek;
+    }
+
+    public static class CreateManualPathModal extends AntModal {
+        public CreateManualPathModal(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(className = "ant-modal-title")
+        public TextBox modalTitle;
+
+        @FindBy(id = "originHub")
+        public AntSelect originHubFilter;
+
+        @FindBy(id = "destinationHub")
+        public AntSelect destinationHubFilter;
+
+        @FindBy(xpath = ".//div[div[div[div[.='Add Transit Hub']]]]")
+        public AntSelect transitHubFilter;
+
+        @FindBy(xpath = "(.//button[span[contains(text(),'Departure time')]])[1]")
+        public Button departureScheduleFirst;
+
+        @FindBy(xpath = "(.//button[span[contains(text(),'Departure time')]])[2]")
+        public Button departureScheduleSecond;
+
+        @FindBy(xpath = ".//button[.='Cancel']")
+        public Button cancelButton;
+
+        @FindBy(xpath = ".//button[.='Next']")
+        public Button nextButton;
+
+        @FindBy(xpath = ".//button[.='Create']")
+        public Button createButton;
     }
 
 }
