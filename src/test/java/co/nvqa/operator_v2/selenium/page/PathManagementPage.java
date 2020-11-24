@@ -66,8 +66,17 @@ public class PathManagementPage extends OperatorV2SimplePage {
     @FindBy(className = "ant-modal-wrap")
     public PathDetailsModal pathDetailsModal;
 
+    @FindBy(xpath = "//div[contains(@class,'footer-row')]")
+    public TextBox footerRowDiv;
+
     @FindBy(xpath = "//th[contains(@class,'originHubName')]//input")
     public PageElement originHubField;
+
+    @FindBy(xpath = "//th[contains(@class,'destinationHubName')]//input")
+    private PageElement destinationHubField;
+
+    @FindBy(xpath = "//th[contains(@class,'pathItems')]//input")
+    private PageElement pathField;
 
     public PathManagementPage(WebDriver webDriver) {
         super(webDriver);
@@ -162,8 +171,22 @@ public class PathManagementPage extends OperatorV2SimplePage {
         assertThat("View Hyperlink in action column", actualActionText, containsString("Remove"));
     }
 
+    public void verifyNoResultsFound() {
+        String actualMessage = footerRowDiv.getText();
+        String expectedMessage = "No Results Found";
+        assertThat("Message is no results found", actualMessage, equalTo(expectedMessage));
+    }
+
     public void searchOriginHub(String resolvedValue) {
         originHubField.sendKeys(resolvedValue);
+    }
+
+    public void searchDestinationHub(String resolvedValue) {
+        destinationHubField.sendKeys(resolvedValue);
+    }
+
+    public void searchPath(String resolvedValue) {
+        pathField.sendKeys(resolvedValue);
     }
 
     public static class PathDetailsModal extends AntModal {

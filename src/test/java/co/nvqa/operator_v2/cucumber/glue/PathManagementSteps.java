@@ -69,8 +69,9 @@ public class PathManagementSteps extends AbstractSteps {
                 NvLogger.error(ex.getMessage());
                 NvLogger.info("Hub not found, retrying...");
                 pathManagementPage.refreshPage();
-                pathManagementPage.switchTo();
+                operatorMovementTripPageIsLoaded();
                 operatorClickShowHideFilters();
+                throw ex;
             }
         }, 10);
     }
@@ -78,8 +79,7 @@ public class PathManagementSteps extends AbstractSteps {
     @And("Operator clicks load selection button")
     public void operatorClicksLoadSelectionButton() {
         pathManagementPage.loadSelectionButton.click();
-        pathManagementPage.antBlurSpinner.waitUntilVisible();
-        pathManagementPage.antBlurSpinner.waitUntilInvisible();
+        pause2s();
     }
 
     @And("Operator verify {string} data appear in path table")
@@ -113,6 +113,17 @@ public class PathManagementSteps extends AbstractSteps {
         if ("Origin Hub".equals(field)) {
             pathManagementPage.searchOriginHub(resolvedValue);
         }
+        if ("Destination Hub".equals(field)) {
+            pathManagementPage.searchDestinationHub(resolvedValue);
+        }
+        if ("Path".equals(field)) {
+            pathManagementPage.searchPath(resolvedValue);
+        }
+    }
+
+    @Then("Operator verify no results found message shown in path management page")
+    public void operatorVerifyNoResultsFoundMessageShownInPathManagementPage() {
+        pathManagementPage.verifyNoResultsFound();
     }
 
 }
