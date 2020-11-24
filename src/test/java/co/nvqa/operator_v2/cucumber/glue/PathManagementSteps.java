@@ -7,6 +7,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -59,10 +60,10 @@ public class PathManagementSteps extends AbstractSteps {
         final String resolvedDestinationHub = resolveValue(destinationHub);
         retryIfRuntimeExceptionOccurred(() -> {
             try {
-                if (!("".equals(resolvedOriginHub))) {
+                if (StringUtils.isNotEmpty(resolvedOriginHub)) {
                     operatorSelectsValueInFilter(resolvedOriginHub, "Origin Hub");
                 }
-                if (!("".equals(resolvedDestinationHub))) {
+                if (StringUtils.isNotEmpty(resolvedDestinationHub)) {
                     operatorSelectsValueInFilter(resolvedDestinationHub, "Destination Hub");
                 }
             } catch (Throwable ex) {
