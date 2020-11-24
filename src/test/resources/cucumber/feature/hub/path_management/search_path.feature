@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @PathManagement @SearchPath @CFW
+@OperatorV2 @MiddleMile @Hub @PathManagement @SearchPath
 Feature: Path Management - Search Path
 
   @LaunchBrowser @ShouldAlwaysRun
