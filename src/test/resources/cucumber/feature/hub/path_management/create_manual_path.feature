@@ -43,6 +43,7 @@ Feature: Path Management - Create Manual Path
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | selectSchedule     | single                             |
     Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[3].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
     And Operator verify created manual path data in path detail with following data:
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
@@ -91,10 +92,11 @@ Feature: Path Management - Create Manual Path
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
     When Operator clicks add manual path button
-    And Operator create manual path with "multiple" schedule for following data:
+    And Operator create manual path with following data:
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | selectSchedule     | multiple                           |
     Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[3].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
     And Operator verify created manual path data with "multiple" schedule in path detail with following data:
       | originHubName       | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
@@ -137,6 +139,7 @@ Feature: Path Management - Create Manual Path
     And Operator create manual path with following data:
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | selectSchedule     | single                             |
     Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
     And Operator verify created manual path data in path detail with following data:
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
@@ -172,9 +175,10 @@ Feature: Path Management - Create Manual Path
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
     When Operator clicks add manual path button
-    And Operator create manual path with "multiple" schedule for following data:
+    And Operator create manual path with following data:
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | selectSchedule     | multiple                           |
     Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
     And Operator verify created manual path data with "multiple" schedule in path detail with following data:
       | originHubName       | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
@@ -185,28 +189,248 @@ Feature: Path Management - Create Manual Path
     Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
     Then DB Operator verifies manual path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
 
-  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb @RT
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Unable to Create New Path without Selecting Schedule (uid:9f133662-b9ec-4395-8c50-b7ec516b9ea6)
-    Given no-op
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Path Management
+    And Operator verifies path management page is loaded
+    When Operator clicks add manual path button
+    And Operator create manual path with following data:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | selectSchedule     | none                               |
+    Then Operator verify it cannot create manual path "no schedule(s) selected" with data:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
 
   @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Unable to Create New Path - Adding Transit Hub Fails no schedule from Origin to Transit Hub (uid:b0e503d1-1d55-4cc6-adab-b49672f1b16a)
-    Given no-op
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 2
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Path Management
+    And Operator verifies path management page is loaded
+    When Operator clicks add manual path button
+    And Operator create manual path with following data:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | selectSchedule     | false                              |
+    Then Operator verify it cannot create manual path "no schedule from origin to transit hub" with data:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
 
   @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Unable to Create New Path - Adding Transit Hub Fails no schedule from Transit Hub to Destination Hub (uid:997f674a-9433-4807-b537-cfcca6d1892d)
-    Given no-op
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" plus hours 2
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Path Management
+    And Operator verifies path management page is loaded
+    When Operator clicks add manual path button
+    And Operator create manual path with following data:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | selectSchedule     | false                              |
+    Then Operator verify it cannot create manual path "no schedule from transit to destination hub" with data:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
 
   @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Cancel Creating Path (uid:4fbdec5e-a707-4897-a2e3-b72b404c4f62)
-    Given no-op
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Path Management
+    And Operator verifies path management page is loaded
+    When Operator clicks add manual path button
+    And Operator cancel add manual path button after fill "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "{KEY_LIST_OF_CREATED_HUBS[2].name}" as origin and destination hub
+    Then Operator verify it will direct to path management page
 
-  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb @RT
   Scenario: Retract Step  in Creating Path (uid:12090f37-ee2b-4b4e-8df8-c47437eab517)
-    Given no-op
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator creates new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[1].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" plus hours 1
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[3].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 2
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = "{KEY_LIST_OF_CREATED_HUBS[4].id}" to hub id = "{KEY_LIST_OF_CREATED_HUBS[2].id}" plus hours 1
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Path Management
+    And Operator verifies path management page is loaded
+    When Operator clicks add manual path button
+    And Operator create manual path with following data:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | selectSchedule     | false                              |
+    Then Operator verify transit hub input empty after retract one step with "{KEY_LIST_OF_CREATED_HUBS[4].name}" and "{KEY_LIST_OF_CREATED_HUBS[3].name}" as origin and destination hub
 
   @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Unable to Create New Path - Removing Transit Hub (uid:7c5a61d2-d09c-4a06-b2b1-d3f37a646407)
+    Given no-op
+
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
+  Scenario: Unable to Create New Path - No Schedule for Origin-Destination (uid:97537292-187c-4215-9634-98d9ae5efbb7)
+    Given no-op
+
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
+  Scenario: Unable to Create New Path with Multiple Same Transit Hubs (uid:cdddc689-3282-4e01-aa54-2bde018ad094)
+    Given no-op
+
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
+  Scenario: Unable to Create New Path - Schedule Not Available / Conflicted with Other Paths (uid:aaf82481-3714-4b4c-9461-a9833ac2bc7d)
+    Given no-op
+
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
+  Scenario: Unable to Create New Path - Update First Transit Hub (uid:d0ac46d7-22b6-4b91-bbe6-ab2357c666af)
+    Given no-op
+
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
+  Scenario: Unable to Create New Path - Update Second Transit Hub (uid:5b9f4521-2d00-4024-b093-629caa2f6693)
+    Given no-op
+
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
+  Scenario: Unable to Create New Path - Update Third Transit Hub (uid:2e15e03b-595a-429a-b3a9-1ba052e36c70)
+    Given no-op
+
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
+  Scenario: Unable to Create New Path - Removing First Transit Hub (uid:a43b4d86-52d2-4ca1-870a-849331a81f5d)
+    Given no-op
+
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
+  Scenario: Unable to Create New Path - Removing Second Transit Hub (uid:2fe6c04a-d0af-4af9-9291-ce47b060ffae)
+    Given no-op
+
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
+  Scenario: Unable to Create New Path - Removing Third Transit Hub (uid:eae2aeaf-2c4e-4ceb-a1db-214534e96887)
+    Given no-op
+
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
+  Scenario: Create New Path with Different Path and Same Schedule using 2 tabs (uid:21db2b2e-0183-4272-afeb-aaea601d447d)
+    Given no-op
+
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
+  Scenario: Create New Path with Same Path and Same Schedule using 2 tabs (uid:3cd2a72f-3cda-4d72-a5f2-1a06effc81eb)
     Given no-op
 
   @KillBrowser @ShouldAlwaysRun

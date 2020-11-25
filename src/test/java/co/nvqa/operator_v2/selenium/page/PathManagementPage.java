@@ -8,6 +8,7 @@ import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
@@ -23,6 +24,9 @@ import java.util.List;
 public class PathManagementPage extends OperatorV2SimplePage {
     @FindBy(tagName = "iframe")
     private PageElement pageFrame;
+
+    @FindBy(xpath = "//div[contains(@class,'nv-h4')]")
+    private PageElement parentPageTitle;
 
     @FindBy(xpath = "//button[.='Default Path']")
     public Button defaultPathButton;
@@ -99,6 +103,10 @@ public class PathManagementPage extends OperatorV2SimplePage {
 
     public void switchTo() {
         getWebDriver().switchTo().frame(pageFrame.getWebElement());
+    }
+
+    public void switchToParentFrame() {
+        getWebDriver().switchTo().parentFrame();
     }
 
     public void selectPathType(String value) {
@@ -204,27 +212,25 @@ public class PathManagementPage extends OperatorV2SimplePage {
         pathField.sendKeys(resolvedValue);
     }
 
-    public void createManualPath(String originHubName, String destinationHubName, String transitHubName, Boolean hasMultipleSchedule) {
-        createManualPathModal.waitUntilVisible();
-
+    public void createManualPathFirstStage(String originHubName, String destinationHubName) {
         String actualCreateManualPathModalTitle = createManualPathModal.modalTitle.getText();
         String expectedFirstCreateManualPathModalTitle = "Create Manual Path (1/3)";
         assertThat("Modal title is the same", actualCreateManualPathModalTitle, equalTo(expectedFirstCreateManualPathModalTitle));
         createManualPathModal.originHubFilter.selectValue(originHubName);
         createManualPathModal.destinationHubFilter.selectValue(destinationHubName);
-        createManualPathModal.nextButton.click();
-        pause2s();
+    }
 
-        actualCreateManualPathModalTitle = createManualPathModal.modalTitle.getText();
+    public void createManualPathSecondStage(String transitHubName) {
+        String actualCreateManualPathModalTitle = createManualPathModal.modalTitle.getText();
         String expectedSecondCreateManualPathModalTitle = "Create Manual Path (2/3)";
         assertThat("Modal title is the same", actualCreateManualPathModalTitle, equalTo(expectedSecondCreateManualPathModalTitle));
         if (transitHubName != null) {
             createManualPathModal.transitHubFilter.selectValue(transitHubName);
         }
-        createManualPathModal.nextButton.click();
-        pause2s();
+    }
 
-        actualCreateManualPathModalTitle = createManualPathModal.modalTitle.getText();
+    public void createManualPathThirdStage(Boolean hasMultipleSchedule) {
+        String actualCreateManualPathModalTitle = createManualPathModal.modalTitle.getText();
         String expectedThirdCreateManualPathModalTitle = "Create Manual Path (3/3)";
         assertThat("Modal title is the same", actualCreateManualPathModalTitle, equalTo(expectedThirdCreateManualPathModalTitle));
         createManualPathModal.departureScheduleFirst.click();
@@ -265,6 +271,53 @@ public class PathManagementPage extends OperatorV2SimplePage {
         createdPathDetailsModal.waitUntilInvisible();
     }
 
+    public void verifyCannotCreateSchedule(String reason, String originHubName, String transitHubName, String destinationHubName) {
+        if ("no schedule(s) selected".equals(reason)) {
+            Color actualBorderColor = Color.fromString(createManualPathModal.departureScheduleFirst.getCssValue("border-top-color"));
+            String actualErrorInfo = createManualPathModal.thirdStageErrorInfo.getText();
+            Color actualErrorInfoColor = Color.fromString(createManualPathModal.thirdStageErrorInfo.getCssValue("color"));
+            String expectedErrorInfo = "Cannot be blank.";
+            String expectedColor = "#f5222d";
+
+            assertThat("Border color is correct", actualBorderColor.asHex(), equalTo(expectedColor));
+            assertThat("Error info is correct", actualErrorInfo, equalTo(expectedErrorInfo));
+            assertThat("Text color is correct", actualErrorInfoColor.asHex(), equalTo(expectedColor));
+        }
+        if ("no schedule from origin to transit hub".equals(reason)) {
+            String actualErrorInfo = createManualPathModal.thirdStageErrorInfo.getText();
+            Color actualErrorInfoColor = Color.fromString(createManualPathModal.thirdStageErrorInfo.getCssValue("color"));
+            Boolean actualNextButtonIsEnabled = createManualPathModal.nextButton.isEnabled();
+            String expectedErrorInfo = f("No schedule from: %s to %s", originHubName, transitHubName);
+            String expectedColor = "#f5222d";
+
+            assertThat("Error info is correct", actualErrorInfo, equalTo(expectedErrorInfo));
+            assertThat("Text color is correct", actualErrorInfoColor.asHex(), equalTo(expectedColor));
+            assertThat("NextButton is disabled", actualNextButtonIsEnabled, equalTo(false));
+        }
+        if ("no schedule from transit to destination hub".equals(reason)) {
+            String actualErrorInfo = createManualPathModal.thirdStageErrorInfo.getText();
+            Color actualErrorInfoColor = Color.fromString(createManualPathModal.thirdStageErrorInfo.getCssValue("color"));
+            Boolean actualNextButtonIsEnabled = createManualPathModal.nextButton.isEnabled();
+            String expectedErrorInfo = f("No schedule from: %s to %s", transitHubName, destinationHubName);
+            String expectedColor = "#f5222d";
+
+            assertThat("Error info is correct", actualErrorInfo, equalTo(expectedErrorInfo));
+            assertThat("Text color is correct", actualErrorInfoColor.asHex(), equalTo(expectedColor));
+            assertThat("NextButton is disabled", actualNextButtonIsEnabled, equalTo(false));
+        }
+    }
+
+    public void verifyCurrentPageIsPathManagementPage() {
+        String actualPageTitle = parentPageTitle.getText();
+        String expectedPageTitle = "Path Management";
+        assertThat("Page title is the same", actualPageTitle, equalTo(expectedPageTitle));
+    }
+
+    public void verifyTransitHubInputIsEmpty() {
+        String actualTransitHubValue = createManualPathModal.transitHubFilter.getValue();
+        assertThat("Transit Hub Value is empty", actualTransitHubValue, isEmptyOrNullString());
+    }
+
     public static class PathDetailsModal extends AntModal {
         public PathDetailsModal(WebDriver webDriver, WebElement webElement) {
             super(webDriver, webElement);
@@ -303,10 +356,8 @@ public class PathManagementPage extends OperatorV2SimplePage {
     }
 
     public static class CreateManualPathModal extends AntModal {
-        public CreateManualPathModal(WebDriver webDriver, WebElement webElement) {
-            super(webDriver, webElement);
-            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
-        }
+        @FindBy(className = "ant-form-explain")
+        public PageElement thirdStageErrorInfo;
 
         @FindBy(className = "ant-modal-title")
         public TextBox modalTitle;
@@ -340,6 +391,14 @@ public class PathManagementPage extends OperatorV2SimplePage {
 
         @FindBy(xpath = ".//button[.='Create']")
         public Button createButton;
+
+        @FindBy(xpath = ".//button[.='Back']")
+        public Button backButton;
+
+        public CreateManualPathModal(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
     }
 
 }

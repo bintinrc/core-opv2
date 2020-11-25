@@ -139,29 +139,38 @@ public class PathManagementSteps extends AbstractSteps {
 
     @And("Operator create manual path with following data:")
     public void operatorCreateManualPathWithFollowingData(Map<String, String> mapOfData) {
-        operatorCreateManualPathWithMultipleScheduleFollowingData("single", mapOfData);
-    }
-
-    @And("Operator create manual path with {string} schedule for following data:")
-    public void operatorCreateManualPathWithMultipleScheduleFollowingData(String scheduleNumber, Map<String, String> mapOfData) {
         Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
         String originHubName = resolvedMapOfData.get("originHubName");
         String destinationHubName = resolvedMapOfData.get("destinationHubName");
         String transitHubName = resolvedMapOfData.get("transitHubName");
+        String selectSchedule = resolvedMapOfData.get("selectSchedule");
 
-        if ("single".equals(scheduleNumber)) {
-            pathManagementPage.createManualPath(originHubName, destinationHubName, transitHubName, false);
+        pathManagementPage.createManualPathModal.waitUntilVisible();
+        pathManagementPage.createManualPathFirstStage(originHubName, destinationHubName);
+        pathManagementPage.createManualPathModal.nextButton.click();
+        pause2s();
+
+        pathManagementPage.createManualPathSecondStage(transitHubName);
+        if (!"false".equals(selectSchedule)) {
+            pathManagementPage.createManualPathModal.nextButton.click();
+        }
+        pause2s();
+
+        if ("single".equals(selectSchedule)) {
+            pathManagementPage.createManualPathThirdStage(false);
             String departureTime = pathManagementPage.createManualPathModal.departureScheduleFirstInfo.getText().split(" ")[2];
             putInList(KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES, departureTime);
         }
-        if ("multiple".equals(scheduleNumber)) {
-            pathManagementPage.createManualPath(originHubName, destinationHubName, transitHubName, true);
+        if ("multiple".equals(selectSchedule)) {
+            pathManagementPage.createManualPathThirdStage(true);
             String departureTime = pathManagementPage.createManualPathModal.departureScheduleFirstInfo.getText().split(" ")[2];
             String secondDepartureTime = pathManagementPage.createManualPathModal.departureScheduleSecondInfo.getText().split(" ")[2];
             putInList(KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES, departureTime);
             putInList(KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES, secondDepartureTime);
         }
-        pathManagementPage.createManualPathModal.createButton.click();
+        if (!"false".equals(selectSchedule)) {
+            pathManagementPage.createManualPathModal.createButton.click();
+        }
         pause2s();
     }
 
@@ -222,4 +231,40 @@ public class PathManagementSteps extends AbstractSteps {
         pathManagementPage.verifyPathDataAppearInPathTable(originHubName, destinationHubName, passedHub);
     }
 
+    @Then("Operator verify it cannot create manual path {string} with data:")
+    public void operatorVerifyItCannotCreateManualPathWithoutSelectingSchedule(String reason, Map<String, String> mapOfData) {
+        Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+        String originHubName = resolvedMapOfData.get("originHubName");
+        String destinationHubName = resolvedMapOfData.get("destinationHubName");
+        String transitHubName = resolvedMapOfData.get("transitHubName");
+        pathManagementPage.verifyCannotCreateSchedule(reason, originHubName, transitHubName, destinationHubName);
+    }
+
+    @When("Operator cancel add manual path button after fill {string} and {string} as origin and destination hub")
+    public void operatorCancelAddManualPathButtonAfterFillOriginAndDestinationHub(String originHubName, String destinationHubName) {
+        String resolvedOriginHubName = resolveValue(originHubName);
+        String resolvedDestinationHubName = resolveValue(destinationHubName);
+
+        pathManagementPage.createManualPathModal.waitUntilVisible();
+        pathManagementPage.createManualPathFirstStage(resolvedOriginHubName, resolvedDestinationHubName);
+        pathManagementPage.createManualPathModal.cancelButton.click();
+        pause2s();
+    }
+
+    @Then("Operator verify it will direct to path management page")
+    public void operatorVerifyItWillDirectToPathManagementPage() {
+        pathManagementPage.switchToParentFrame();
+        pathManagementPage.verifyCurrentPageIsPathManagementPage();
+    }
+
+    @Then("Operator verify transit hub input empty after retract one step with {string} and {string} as origin and destination hub")
+    public void operatorVerifyTransitHubInputEmptyAfterRetractOneStep(String originHubName, String destinationHubName) {
+        String resolvedOriginHubName = resolveValue(originHubName);
+        String resolvedDestinationHubName = resolveValue(destinationHubName);
+        pathManagementPage.createManualPathModal.backButton.click();
+        pathManagementPage.createManualPathFirstStage(resolvedOriginHubName, resolvedDestinationHubName);
+        pathManagementPage.createManualPathModal.nextButton.click();
+        pause2s();
+        pathManagementPage.verifyTransitHubInputIsEmpty();
+    }
 }
