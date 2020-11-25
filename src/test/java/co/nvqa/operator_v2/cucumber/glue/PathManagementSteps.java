@@ -11,10 +11,7 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created on 17/11/20.
@@ -142,12 +139,30 @@ public class PathManagementSteps extends AbstractSteps {
 
     @And("Operator create manual path with following data:")
     public void operatorCreateManualPathWithFollowingData(Map<String, String> mapOfData) {
+        operatorCreateManualPathWithMultipleScheduleFollowingData("single", mapOfData);
+    }
+
+    @And("Operator create manual path with {string} schedule for following data:")
+    public void operatorCreateManualPathWithMultipleScheduleFollowingData(String scheduleNumber, Map<String, String> mapOfData) {
         Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
         String originHubName = resolvedMapOfData.get("originHubName");
         String destinationHubName = resolvedMapOfData.get("destinationHubName");
         String transitHubName = resolvedMapOfData.get("transitHubName");
 
-        pathManagementPage.createManualPath(originHubName, destinationHubName, transitHubName);
+        if ("single".equals(scheduleNumber)) {
+            pathManagementPage.createManualPath(originHubName, destinationHubName, transitHubName, false);
+            String departureTime = pathManagementPage.createManualPathModal.departureScheduleFirstInfo.getText().split(" ")[2];
+            putInList(KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES, departureTime);
+        }
+        if ("multiple".equals(scheduleNumber)) {
+            pathManagementPage.createManualPath(originHubName, destinationHubName, transitHubName, true);
+            String departureTime = pathManagementPage.createManualPathModal.departureScheduleFirstInfo.getText().split(" ")[2];
+            String secondDepartureTime = pathManagementPage.createManualPathModal.departureScheduleSecondInfo.getText().split(" ")[2];
+            putInList(KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES, departureTime);
+            putInList(KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES, secondDepartureTime);
+        }
+        pathManagementPage.createManualPathModal.createButton.click();
+        pause2s();
     }
 
     @Then("Operator verify a notification with message {string} is shown on path management page")
@@ -169,26 +184,31 @@ public class PathManagementSteps extends AbstractSteps {
 
     @And("Operator verify created manual path data in path detail with following data:")
     public void operatorVerifyCreatedManualPathDataInPathDetail(Map<String, String> mapOfData) {
+        operatorVerifyCreatedManualPathWithScheduleDataInPathDetail("single", mapOfData);
+    }
+
+    @And("Operator verify created manual path data with {string} schedule in path detail with following data:")
+    public void operatorVerifyCreatedManualPathWithScheduleDataInPathDetail(String scheduleNumber, Map<String, String> mapOfData) {
         Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
         String originHubName = resolvedMapOfData.get("originHubName");
         String destinationHubName = resolvedMapOfData.get("destinationHubName");
         String transitHubName = resolvedMapOfData.get("transitHubName");
-        Long movementScheduleId = Long.valueOf(resolvedMapOfData.get("movementScheduleId"));
-        MovementTripSchedule movementSchedule = getCreatedMovementScheduleWithTripById(movementScheduleId);
+        String departureTime = resolvedMapOfData.get("departureTime");
+        String departureTimeSecond = resolvedMapOfData.get("departureTimeSecond");
 
-        String departureTime = movementSchedule.getSchedules().get(0).getStartTime();
-        int hour = Integer.parseInt(departureTime.split(":")[0]);
-        int minute = Integer.parseInt(departureTime.split(":")[1]);
-        String path = originHubName + " → " + transitHubName + " → " + destinationHubName;
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, hour);
-        cal.set(Calendar.MINUTE, minute);
-        cal.add(Calendar.HOUR_OF_DAY, 8);
-        int hours = cal.get(Calendar.HOUR_OF_DAY);
-        int minutes = cal.get(Calendar.MINUTE);
-        departureTime = String.format("%02d:%02d", hours, minutes);
+        String path = originHubName + " → ";
+        if (transitHubName != null) {
+            path += transitHubName + " → ";
+        }
+        path +=  destinationHubName;
 
-        pathManagementPage.verifyCreatedPathDetail(path, departureTime);
+        List<String> departureTimes = new ArrayList<>();
+        departureTimes.add(departureTime);
+        if ("multiple".equals(scheduleNumber)) {
+            departureTimes.add(departureTimeSecond);
+        }
+
+        pathManagementPage.verifyCreatedPathDetail(path, departureTimes);
     }
 
     @Then("Operator verifies path data appear in path table with following hubs:")

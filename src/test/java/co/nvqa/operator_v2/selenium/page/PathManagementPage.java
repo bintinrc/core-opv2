@@ -204,7 +204,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
         pathField.sendKeys(resolvedValue);
     }
 
-    public void createManualPath(String originHubName, String destinationHubName, String transitHubName) {
+    public void createManualPath(String originHubName, String destinationHubName, String transitHubName, Boolean hasMultipleSchedule) {
         createManualPathModal.waitUntilVisible();
 
         String actualCreateManualPathModalTitle = createManualPathModal.modalTitle.getText();
@@ -218,7 +218,9 @@ public class PathManagementPage extends OperatorV2SimplePage {
         actualCreateManualPathModalTitle = createManualPathModal.modalTitle.getText();
         String expectedSecondCreateManualPathModalTitle = "Create Manual Path (2/3)";
         assertThat("Modal title is the same", actualCreateManualPathModalTitle, equalTo(expectedSecondCreateManualPathModalTitle));
-        createManualPathModal.transitHubFilter.selectValue(transitHubName);
+        if (transitHubName != null) {
+            createManualPathModal.transitHubFilter.selectValue(transitHubName);
+        }
         createManualPathModal.nextButton.click();
         pause2s();
 
@@ -226,8 +228,9 @@ public class PathManagementPage extends OperatorV2SimplePage {
         String expectedThirdCreateManualPathModalTitle = "Create Manual Path (3/3)";
         assertThat("Modal title is the same", actualCreateManualPathModalTitle, equalTo(expectedThirdCreateManualPathModalTitle));
         createManualPathModal.departureScheduleFirst.click();
-        createManualPathModal.createButton.click();
-        pause2s();
+        if (hasMultipleSchedule) {
+            createManualPathModal.departureScheduleSecond.click();
+        }
     }
 
     public void verifyNotificationMessageIsShown(String expectedNotificationMessage) {
@@ -238,18 +241,25 @@ public class PathManagementPage extends OperatorV2SimplePage {
         antNotificationMessage.waitUntilInvisible();
     }
 
-    public void verifyCreatedPathDetail(String expectedPath, String departureTime) {
+    public void verifyCreatedPathDetail(String expectedPath, List<String> departureTimes) {
         createdPathDetailsModal.waitUntilVisible();
         String pathDetailsRaw = createdPathDetailsModal.pathDetails.getText();
         String actualPath = pathDetailsRaw.split("Path Type")[0].split("Path")[1].trim();
         assertThat("Path is the same", actualPath, equalTo(expectedPath));
 
         String actualDepartureTime = createdPathDetailsModal.pathDepartureTime.getText();
-        assertThat("Departure time is the same", actualDepartureTime, equalTo(departureTime));
+        assertThat("Departure time is the same", actualDepartureTime, equalTo(departureTimes.get(0)));
 
         String actualDaysOfWeek = createdPathDetailsModal.pathDepartureDaysOfWeek.getText();
         String expectedDaysOfWeek = "MO\nTU\nWE\nTH\nFR\nSA\nSU";
         assertThat("Days of week is the same", actualDaysOfWeek, equalTo(expectedDaysOfWeek));
+
+        if (departureTimes.size() > 1) {
+            String secondActualDepartureTime = createdPathDetailsModal.secondPathDepartureTime.getText();
+            String secondActualDaysOfWeek = createdPathDetailsModal.secondPathDepartureDaysOfWeek.getText();
+            assertThat("Departure time is the same", secondActualDepartureTime, equalTo(departureTimes.get(1)));
+            assertThat("Days of week is the same", secondActualDaysOfWeek, equalTo(expectedDaysOfWeek));
+        }
 
         createdPathDetailsModal.closeModalButton.click();
         createdPathDetailsModal.waitUntilInvisible();
@@ -284,6 +294,12 @@ public class PathManagementPage extends OperatorV2SimplePage {
 
         @FindBy(xpath = ".//tbody[@class='ant-table-tbody']//tr[1]//td[2]")
         public PageElement pathDepartureDaysOfWeek;
+
+        @FindBy(xpath = ".//tbody[@class='ant-table-tbody']//tr[2]//td[1]")
+        public PageElement secondPathDepartureTime;
+
+        @FindBy(xpath = ".//tbody[@class='ant-table-tbody']//tr[2]//td[2]")
+        public PageElement secondPathDepartureDaysOfWeek;
     }
 
     public static class CreateManualPathModal extends AntModal {
@@ -307,8 +323,14 @@ public class PathManagementPage extends OperatorV2SimplePage {
         @FindBy(xpath = "(.//button[span[contains(text(),'Departure time')]])[1]")
         public Button departureScheduleFirst;
 
+        @FindBy(xpath = "(.//button[span[contains(text(),'Departure time')]])[1]//span")
+        public TextBox departureScheduleFirstInfo;
+
         @FindBy(xpath = "(.//button[span[contains(text(),'Departure time')]])[2]")
         public Button departureScheduleSecond;
+
+        @FindBy(xpath = "(.//button[span[contains(text(),'Departure time')]])[2]//span")
+        public TextBox departureScheduleSecondInfo;
 
         @FindBy(xpath = ".//button[.='Cancel']")
         public Button cancelButton;
