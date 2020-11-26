@@ -143,6 +143,8 @@ public class PathManagementSteps extends AbstractSteps {
         String originHubName = resolvedMapOfData.get("originHubName");
         String destinationHubName = resolvedMapOfData.get("destinationHubName");
         String transitHubName = resolvedMapOfData.get("transitHubName");
+        String transitHubNameSecond = resolvedMapOfData.get("transitHubNameSecond");
+        String transitHubNameThird = resolvedMapOfData.get("transitHubNameThird");
         String selectSchedule = resolvedMapOfData.get("selectSchedule");
 
         pathManagementPage.createManualPathModal.waitUntilVisible();
@@ -150,7 +152,13 @@ public class PathManagementSteps extends AbstractSteps {
         pathManagementPage.createManualPathModal.nextButton.click();
         pause2s();
 
-        pathManagementPage.createManualPathSecondStage(transitHubName);
+        pathManagementPage.createManualPathSecondStage(transitHubName, "first");
+        if (transitHubNameSecond != null) {
+            pathManagementPage.createManualPathSecondStage(transitHubNameSecond, "second");
+        }
+        if (transitHubNameThird != null) {
+            pathManagementPage.createManualPathSecondStage(transitHubNameThird, "third");
+        }
         if (!"false".equals(selectSchedule)) {
             pathManagementPage.createManualPathModal.nextButton.click();
         }
@@ -234,10 +242,14 @@ public class PathManagementSteps extends AbstractSteps {
     @Then("Operator verify it cannot create manual path {string} with data:")
     public void operatorVerifyItCannotCreateManualPathWithoutSelectingSchedule(String reason, Map<String, String> mapOfData) {
         Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
-        String originHubName = resolvedMapOfData.get("originHubName");
-        String destinationHubName = resolvedMapOfData.get("destinationHubName");
+        String resolvedSourceHub = resolvedMapOfData.get("sourceHub");
+        String resolvedTargetHub = resolvedMapOfData.get("targetHub");
         String transitHubName = resolvedMapOfData.get("transitHubName");
-        pathManagementPage.verifyCannotCreateSchedule(reason, originHubName, transitHubName, destinationHubName);
+
+        if ("multiple same transit hubs".equals(reason)) {
+            resolvedSourceHub = transitHubName;
+        }
+        pathManagementPage.verifyCannotCreateSchedule(reason, resolvedSourceHub, resolvedTargetHub);
     }
 
     @When("Operator cancel add manual path button after fill {string} and {string} as origin and destination hub")
@@ -266,5 +278,24 @@ public class PathManagementSteps extends AbstractSteps {
         pathManagementPage.createManualPathModal.nextButton.click();
         pause2s();
         pathManagementPage.verifyTransitHubInputIsEmpty();
+    }
+
+    @And("Operator remove {string} transit hub")
+    public void operatorRemoveTransitHub(String transitHubInfo) {
+        pathManagementPage.removeTransitHubInManualPathCreation(transitHubInfo);
+        pause2s();
+    }
+
+    @And("Operator clicks next button in create manual path modal")
+    public void operatorClicksNextButtonInCreateManualPathModal() {
+        pathManagementPage.createManualPathModal.nextButton.click();
+    }
+
+
+    @And("Operator update {string} transit hub with {string}")
+    public void operatorUpdateTransitHub(String transitHubInfo, String newTransitHub) {
+        String resolvedNewTransitHub = resolveValue(newTransitHub);
+        pathManagementPage.updateTransitHubInManualPathCreation(transitHubInfo, resolvedNewTransitHub);
+        pause2s();
     }
 }
