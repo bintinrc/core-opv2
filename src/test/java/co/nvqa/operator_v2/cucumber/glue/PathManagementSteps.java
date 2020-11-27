@@ -1,9 +1,7 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
 import co.nvqa.commons.model.sort.hub.movement_trips.MovementTripSchedule;
-import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
-import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.page.PathManagementPage;
 import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.And;
@@ -13,8 +11,12 @@ import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.JavascriptExecutor;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 
 /**
  * Created on 17/11/20.
