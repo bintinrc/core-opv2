@@ -7,9 +7,17 @@ import co.nvqa.commons.model.core.Order;
 import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.Transaction;
 import co.nvqa.commons.model.core.Waypoint;
+import co.nvqa.commons.model.core.hub.MovementPath;
 import co.nvqa.commons.model.core.hub.trip_management.TripManagementDetailsData;
 import co.nvqa.commons.model.driver.FailureReason;
-import co.nvqa.commons.model.entity.*;
+import co.nvqa.commons.model.entity.DriverEntity;
+import co.nvqa.commons.model.entity.InboundScanEntity;
+import co.nvqa.commons.model.entity.MovementTripEventEntity;
+import co.nvqa.commons.model.entity.OrderEventEntity;
+import co.nvqa.commons.model.entity.RouteDriverTypeEntity;
+import co.nvqa.commons.model.entity.ShipmentPathEntity;
+import co.nvqa.commons.model.entity.TransactionEntity;
+import co.nvqa.commons.model.entity.TransactionFailureReasonEntity;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.StandardTestConstants;
@@ -1083,7 +1091,19 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
                 assertThat("Updated employment end date is the same", actualEmploymentEndDate, equalTo(resolvedUpdatedValue));
                 break;
         }
-
     }
 
+    @Then("DB Operator verifies manual path with origin {string} and {string} is created in movement_path table")
+    public void dbOperatorVerifiesManualPathIsCreatedInMovementPathTable(String originHubIdAsString, String destinationHubIdAsString)
+    {
+        Long originHubId = Long.valueOf(resolveValue(originHubIdAsString));
+        Long destinationHubId = Long.valueOf(resolveValue(destinationHubIdAsString));
+
+        MovementPath movementPath = getHubJdbc().getMovementPath(originHubId, destinationHubId);
+        String expectedMovementPathType = "MANUAL";
+        String expectedMovementPathMovementType = "LAND_HAUL";
+        assertThat("Movement path type is Manual", movementPath.getType(), equalTo(expectedMovementPathType));
+        assertThat("Movement path type is Manual", movementPath.getMovementType(), equalTo(expectedMovementPathMovementType));
+
+    }
 }
