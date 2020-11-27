@@ -333,9 +333,9 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         NvLogger.success(f("Created hub with id %d and name %s", hub.getId(), hub.getName()));
     }
 
-    @Given("API Operator creates {long} new Hub using data below:")
-    public void apiOperatorCreatesMultipleNewHubUsingDataBelow(Long numberOfHubs, Map<String, String> mapOfData) {
-        for (long i = 0; i < numberOfHubs; i++) {
+    @Given("API Operator creates {int} new Hub using data below:")
+    public void apiOperatorCreatesMultipleNewHubUsingDataBelow(Integer numberOfHubs, Map<String, String> mapOfData) {
+        for (int i = 0; i < numberOfHubs; i++) {
             apiOperatorCreatesNewHubUsingDataBelow(mapOfData);
         }
     }
