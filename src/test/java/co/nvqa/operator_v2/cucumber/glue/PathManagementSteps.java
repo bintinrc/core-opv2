@@ -3,12 +3,15 @@ package co.nvqa.operator_v2.cucumber.glue;
 import co.nvqa.commons.model.sort.hub.movement_trips.MovementTripSchedule;
 import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
+import co.nvqa.operator_v2.cucumber.ScenarioStorageKeys;
 import co.nvqa.operator_v2.selenium.page.PathManagementPage;
+import co.nvqa.operator_v2.util.TestConstants;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.runtime.java.guice.ScenarioScoped;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.JavascriptExecutor;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -110,7 +113,6 @@ public class PathManagementSteps extends AbstractSteps {
         if ("view".equals(hyperlinkAction)) {
             pathManagementPage.viewFirstRow.click();
         }
-        pathManagementPage.pathDetailsModal.waitUntilVisible();
     }
 
     @Then("Operator verify shown {string} path details modal data")
@@ -168,6 +170,7 @@ public class PathManagementSteps extends AbstractSteps {
             pathManagementPage.createManualPathThirdStage(false);
             String departureTime = pathManagementPage.createManualPathModal.departureScheduleFirstInfo.getText().split(" ")[2];
             putInList(KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES, departureTime);
+            pathManagementPage.createManualPathModal.createButton.click();
         }
         if ("multiple".equals(selectSchedule)) {
             pathManagementPage.createManualPathThirdStage(true);
@@ -175,8 +178,6 @@ public class PathManagementSteps extends AbstractSteps {
             String secondDepartureTime = pathManagementPage.createManualPathModal.departureScheduleSecondInfo.getText().split(" ")[2];
             putInList(KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES, departureTime);
             putInList(KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES, secondDepartureTime);
-        }
-        if (!"false".equals(selectSchedule)) {
             pathManagementPage.createManualPathModal.createButton.click();
         }
         pause2s();
@@ -204,6 +205,24 @@ public class PathManagementSteps extends AbstractSteps {
         operatorVerifyCreatedManualPathWithScheduleDataInPathDetail("single", mapOfData);
     }
 
+    @And("Operator verify created manual path data in path detail empty schedule with following data:")
+    public void operatorVerifyCreatedManualPathDataInPathDetailEmptyScheduleWithFollowingData(Map<String, String> mapOfData) {
+        Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+        String originHubName = resolvedMapOfData.get("originHubName");
+        String destinationHubName = resolvedMapOfData.get("destinationHubName");
+        String transitHubName = resolvedMapOfData.get("transitHubName");
+
+        String path = originHubName + " → ";
+        if (transitHubName != null) {
+            path += transitHubName + " → ";
+        }
+        path += destinationHubName;
+
+        List<String> departureTimes = new ArrayList<>();
+
+        pathManagementPage.verifyCreatedPathDetail(path, departureTimes);
+    }
+
     @And("Operator verify created manual path data with {string} schedule in path detail with following data:")
     public void operatorVerifyCreatedManualPathWithScheduleDataInPathDetail(String scheduleNumber, Map<String, String> mapOfData) {
         Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
@@ -217,7 +236,7 @@ public class PathManagementSteps extends AbstractSteps {
         if (transitHubName != null) {
             path += transitHubName + " → ";
         }
-        path +=  destinationHubName;
+        path += destinationHubName;
 
         List<String> departureTimes = new ArrayList<>();
         departureTimes.add(departureTime);
@@ -291,11 +310,52 @@ public class PathManagementSteps extends AbstractSteps {
         pathManagementPage.createManualPathModal.nextButton.click();
     }
 
+    @And("Operator clicks create button in create manual path modal")
+    public void operatorClicksCreateButtonInCreateManualPathModel() {
+        pathManagementPage.createManualPathModal.createButton.click();
+    }
+
+    @And("Operator choose single schedule and clicks create button in create manual path modal")
+    public void operatorChooseScheduleClicksCreateButtonInCreateManualPathModel() {
+        pathManagementPage.createManualPathThirdStage(false);
+        String departureTime = pathManagementPage.createManualPathModal.departureScheduleFirstInfo.getText().split(" ")[2];
+        putInList(KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES, departureTime);
+        pathManagementPage.createManualPathModal.createButton.click();
+        pause2s();
+    }
 
     @And("Operator update {string} transit hub with {string}")
     public void operatorUpdateTransitHub(String transitHubInfo, String newTransitHub) {
         String resolvedNewTransitHub = resolveValue(newTransitHub);
         pathManagementPage.updateTransitHubInManualPathCreation(transitHubInfo, resolvedNewTransitHub);
         pause2s();
+    }
+
+    @When("Operator opens new tab and switch to new tab in path management page")
+    public void operatorOpensNewTabInPathManagementPage() {
+        String mainWindowHandle = pathManagementPage.getWebDriver().getWindowHandle();
+        put(KEY_MAIN_WINDOW_HANDLE, mainWindowHandle);
+        ((JavascriptExecutor) pathManagementPage.getWebDriver()).executeScript("window.open()");
+        operatorSwitchToNewTabInPathManagementPage();
+        pathManagementPage.getWebDriver().get(TestConstants.OPERATOR_PORTAL_LOGIN_URL);
+        pathManagementPage.waitUntilPageLoaded();
+    }
+
+    @And("Operator switch to main tab in path management page")
+    public void operatorOpensMainTabInPathManagementPage() {
+        String mainWindowHandle = get(KEY_MAIN_WINDOW_HANDLE);
+        pathManagementPage.getWebDriver().switchTo().window(mainWindowHandle);
+    }
+
+    @And("Operator switch to new tab in path management page")
+    public void operatorSwitchToNewTabInPathManagementPage() {
+        String mainWindowHandle = get(KEY_MAIN_WINDOW_HANDLE);
+        Set<String> windowHandles = pathManagementPage.getWebDriver().getWindowHandles();
+
+        for (String windowHandle : windowHandles) {
+            if (!windowHandle.equalsIgnoreCase(mainWindowHandle)) {
+                pathManagementPage.getWebDriver().switchTo().window(windowHandle);
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @PathManagement @CreateManualPath
+@OperatorV2 @MiddleMile @Hub @PathManagement @CreateManualPath @CFW
 Feature: Path Management - Create Manual Path
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -162,6 +162,7 @@ Feature: Path Management - Create Manual Path
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | selectSchedule     | none                               |
+    And Operator clicks create button in create manual path modal
     Then Operator verify it cannot create manual path "no schedule(s) selected" with data:
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
@@ -367,6 +368,7 @@ Feature: Path Management - Create Manual Path
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | selectSchedule     | none                               |
+    And Operator clicks create button in create manual path modal
     Then Operator verify it cannot create manual path "no schedule(s) available" with data:
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
@@ -569,13 +571,157 @@ Feature: Path Management - Create Manual Path
       | sourceHub | {KEY_LIST_OF_CREATED_HUBS[3].name} |
       | targetHub | {KEY_LIST_OF_CREATED_HUBS[5].name} |
 
-  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb @CloseNewWindows
   Scenario: Create New Path with Different Path and Same Schedule using 2 tabs (uid:21db2b2e-0183-4272-afeb-aaea601d447d)
-    Given no-op
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator creates 4 new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[3].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[3].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[4].id}
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Path Management
+    And Operator verifies path management page is loaded
+    And Operator clicks show or hide filters
+    And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "" as origin and destination hub
+    When Operator clicks add manual path button
+    And Operator create manual path with following data:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | selectSchedule     | none                               |
+    When Operator opens new tab and switch to new tab in path management page
+    And Operator switch to new tab in path management page
+    Given Operator go to menu Inter-Hub -> Path Management
+    And Operator verifies path management page is loaded
+    And Operator clicks show or hide filters
+    And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "" as origin and destination hub
+    When Operator clicks add manual path button
+    And Operator create manual path with following data:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[4].name} |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | selectSchedule     | none                               |
+    When Operator switch to main tab in path management page
+    And Operator verifies path management page is loaded
+    And Operator choose single schedule and clicks create button in create manual path modal
+    Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[3].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
+    And Operator verify created manual path data in path detail with following data:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
+      | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
+    When Operator searches "{KEY_LIST_OF_CREATED_HUBS[2].name} " in "Path" field
+    Then Operator verifies path data appear in path table with following hubs:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+    Then DB Operator verifies manual path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
+    When Operator switch to new tab in path management page
+    And Operator verifies path management page is loaded
+    And Operator choose single schedule and clicks create button in create manual path modal
+    Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[3].name} → {KEY_LIST_OF_CREATED_HUBS[4].name} has been successfully created" is shown on path management page
+    And Operator verify created manual path data in path detail with following data:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[4].name}        |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
+      | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
+    When Operator searches "{KEY_LIST_OF_CREATED_HUBS[4].name} " in "Path" field
+    Then Operator verifies path data appear in path table with following hubs:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[4].name} |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+    When Operator switch to main tab in path management page
+    And Operator verifies path management page is loaded
+    And Operator click "view" hyperlink button
+    Then Operator verify created manual path data in path detail with following data:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
+      | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
+    Then DB Operator verifies manual path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[4].id}" is created in movement_path table
 
-  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb @CloseNewWindows
   Scenario: Create New Path with Same Path and Same Schedule using 2 tabs (uid:3cd2a72f-3cda-4d72-a5f2-1a06effc81eb)
-    Given no-op
+    Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator creates 3 new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[1].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[3].id}
+    Given API Operator create new "CROSSDOCK" movement schedule with type "LAND_HAUL" from hub id = {KEY_LIST_OF_CREATED_HUBS[3].id} to hub id = {KEY_LIST_OF_CREATED_HUBS[2].id}
+    And Operator refresh page
+    Given Operator go to menu Inter-Hub -> Path Management
+    And Operator verifies path management page is loaded
+    And Operator clicks show or hide filters
+    And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "" as origin and destination hub
+    When Operator clicks add manual path button
+    And Operator create manual path with following data:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | selectSchedule     | none                               |
+    When Operator opens new tab and switch to new tab in path management page
+    And Operator switch to new tab in path management page
+    Given Operator go to menu Inter-Hub -> Path Management
+    And Operator verifies path management page is loaded
+    And Operator clicks show or hide filters
+    And Operator selects "{KEY_LIST_OF_CREATED_HUBS[1].name}" and "" as origin and destination hub
+    When Operator clicks add manual path button
+    And Operator create manual path with following data:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+      | selectSchedule     | none                               |
+    When Operator switch to main tab in path management page
+    And Operator verifies path management page is loaded
+    And Operator choose single schedule and clicks create button in create manual path modal
+    Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[3].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
+    And Operator verify created manual path data in path detail with following data:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
+      | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
+    When Operator searches "{KEY_LIST_OF_CREATED_HUBS[2].name} " in "Path" field
+    Then Operator verifies path data appear in path table with following hubs:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+    Then DB Operator verifies manual path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
+    When Operator switch to new tab in path management page
+    And Operator verifies path management page is loaded
+    And Operator choose single schedule and clicks create button in create manual path modal
+    Then Operator verify a notification with message "Path {KEY_LIST_OF_CREATED_HUBS[1].name} → {KEY_LIST_OF_CREATED_HUBS[3].name} → {KEY_LIST_OF_CREATED_HUBS[2].name} has been successfully created" is shown on path management page
+    And Operator verify created manual path data in path detail with following data:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
+      | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
+    When Operator searches "{KEY_LIST_OF_CREATED_HUBS[2].name} " in "Path" field
+    Then Operator verifies path data appear in path table with following hubs:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
+    When Operator switch to main tab in path management page
+    And Operator verifies path management page is loaded
+    And Operator click "view" hyperlink button
+    Then Operator verify created manual path data in path detail empty schedule with following data:
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
+      | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
+    Then DB Operator verifies manual path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser

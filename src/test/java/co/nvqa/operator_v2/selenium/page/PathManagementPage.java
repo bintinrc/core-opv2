@@ -262,18 +262,23 @@ public class PathManagementPage extends OperatorV2SimplePage {
         String actualPath = pathDetailsRaw.split("Path Type")[0].split("Path")[1].trim();
         assertThat("Path is the same", actualPath, equalTo(expectedPath));
 
-        String actualDepartureTime = createdPathDetailsModal.pathDepartureTime.getText();
-        assertThat("Departure time is the same", actualDepartureTime, equalTo(departureTimes.get(0)));
-
-        String actualDaysOfWeek = createdPathDetailsModal.pathDepartureDaysOfWeek.getText();
-        String expectedDaysOfWeek = "MO\nTU\nWE\nTH\nFR\nSA\nSU";
-        assertThat("Days of week is the same", actualDaysOfWeek, equalTo(expectedDaysOfWeek));
-
-        if (departureTimes.size() > 1) {
-            String secondActualDepartureTime = createdPathDetailsModal.secondPathDepartureTime.getText();
-            String secondActualDaysOfWeek = createdPathDetailsModal.secondPathDepartureDaysOfWeek.getText();
-            assertThat("Departure time is the same", secondActualDepartureTime, equalTo(departureTimes.get(1)));
-            assertThat("Days of week is the same", secondActualDaysOfWeek, equalTo(expectedDaysOfWeek));
+        if (departureTimes.size() != 0) {
+            String actualDepartureTime = createdPathDetailsModal.pathDepartureTime.getText();
+            assertThat("Departure time is the same", actualDepartureTime, equalTo(departureTimes.get(0)));
+            String actualDaysOfWeek = createdPathDetailsModal.pathDepartureDaysOfWeek.getText();
+            String expectedDaysOfWeek = "MO\nTU\nWE\nTH\nFR\nSA\nSU";
+            assertThat("Days of week is the same", actualDaysOfWeek, equalTo(expectedDaysOfWeek));
+            if (departureTimes.size() > 1) {
+                String secondActualDepartureTime = createdPathDetailsModal.secondPathDepartureTime.getText();
+                String secondActualDaysOfWeek = createdPathDetailsModal.secondPathDepartureDaysOfWeek.getText();
+                assertThat("Departure time is the same", secondActualDepartureTime, equalTo(departureTimes.get(1)));
+                assertThat("Days of week is the same", secondActualDaysOfWeek, equalTo(expectedDaysOfWeek));
+            }
+        }
+        if (departureTimes.size() == 0) {
+            String actualEmptyDescription = createdPathDetailsModal.emptyDescription.getText();
+            String expectedEmptyDescription = "No Data";
+            assertThat("Empty Description is the same", actualEmptyDescription, equalTo(expectedEmptyDescription));
         }
 
         createdPathDetailsModal.closeModalButton.click();
@@ -295,10 +300,6 @@ public class PathManagementPage extends OperatorV2SimplePage {
         if ("no schedules between hubs".equals(reason)) {
             List<PageElement> actualErrorInfo = createManualPathModal.thirdStageErrorInfo;
             String expectedErrorInfo = f("No schedule from: %s to %s", sourceHub, targetHub);
-            System.out.println("DEBUG");
-            for (PageElement actualError: actualErrorInfo) {
-                System.out.println(actualError.getText());
-            }
             assertThat("Error info is contained",
                     actualErrorInfo.stream().anyMatch(item -> expectedErrorInfo.equals(item.getText())),
                     equalTo(true));
@@ -397,6 +398,9 @@ public class PathManagementPage extends OperatorV2SimplePage {
 
         @FindBy(xpath = ".//tbody[@class='ant-table-tbody']//tr[2]//td[2]")
         public PageElement secondPathDepartureDaysOfWeek;
+
+        @FindBy(xpath = "//p[@class='ant-empty-description']")
+        public TextBox emptyDescription;
     }
 
     public static class CreateManualPathModal extends AntModal {
