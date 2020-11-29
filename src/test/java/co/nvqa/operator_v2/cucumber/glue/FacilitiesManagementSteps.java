@@ -220,9 +220,15 @@ public class FacilitiesManagementSteps extends AbstractSteps
     {
         data = resolveKeyValues(data);
         String searchHubsKeyword = data.get("searchHubsKeyword");
-        Hub facilitiesManagementSearchResult = facilitiesManagementPage.searchHub(searchHubsKeyword);
-        put(KEY_HUBS_ADMINISTRATION_SEARCH_RESULT, facilitiesManagementSearchResult);
-        put("searchHubsKeyword", searchHubsKeyword);
+
+        retryIfAssertionErrorOrRuntimeExceptionOccurred(() ->
+        {
+            navigateRefresh();
+            pause2s();
+            Hub facilitiesManagementSearchResult = facilitiesManagementPage.searchHub(searchHubsKeyword);
+            put(KEY_HUBS_ADMINISTRATION_SEARCH_RESULT, facilitiesManagementSearchResult);
+            put("searchHubsKeyword", searchHubsKeyword);
+        }, "Unable to find the hub, retrying...");
     }
 
     @Then("^Operator verify Hub is found on Facilities Management page and contains correct info$")
