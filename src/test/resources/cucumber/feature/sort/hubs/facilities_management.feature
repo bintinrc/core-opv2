@@ -33,15 +33,14 @@ Feature: Facilities Management
       | latitude     | GENERATED |
       | longitude    | GENERATED |
     When Operator go to menu Hubs -> Facilities Management
-    And Operator refresh page
     And Operator update Hub on page Hubs Administration using data below:
       | searchHubsKeyword | {KEY_CREATED_HUB.name}          |
       | name              | {KEY_CREATED_HUB.name} [E]      |
       | displayName       | {KEY_CREATED_HUB.shortName} [E] |
       | city              | GENERATED                       |
       | country           | GENERATED                       |
-      | latitude          | GENERATED                       |
-      | longitude         | GENERATED                       |
+      | latitude          | 11                              |
+      | longitude         | 11                              |
     And Operator refresh page
     Then Operator verify Hub is updated successfully on Facilities Management page
 
@@ -259,8 +258,8 @@ Feature: Facilities Management
       | facilityType      | CROSSDOCK                       |
       | city              | GENERATED                       |
       | country           | GENERATED                       |
-      | latitude          | GENERATED                       |
-      | longitude         | GENERATED                       |
+      | latitude          | 11                              |
+      | longitude         | 11                              |
     And Operator refresh page
     Then Operator verify Hub is updated successfully on Facilities Management page
     And DB Operator verify a new hub is created in core.hubs using data below:
@@ -292,8 +291,8 @@ Feature: Facilities Management
       | facilityType      | CROSSDOCK                       |
       | city              | GENERATED                       |
       | country           | GENERATED                       |
-      | latitude          | GENERATED                       |
-      | longitude         | GENERATED                       |
+      | latitude          | 11                              |
+      | longitude         | 11                              |
       | sortHub           | YES                             |
     And Operator refresh page
     Then Operator verify Hub is updated successfully on Facilities Management page
@@ -326,8 +325,8 @@ Feature: Facilities Management
       | facilityType      | CROSSDOCK_STATION               |
       | city              | GENERATED                       |
       | country           | GENERATED                       |
-      | latitude          | GENERATED                       |
-      | longitude         | GENERATED                       |
+      | latitude          | 11                              |
+      | longitude         | 11                              |
     And Operator refresh page
     Then Operator verify Hub is updated successfully on Facilities Management page
     And DB Operator verify a new hub is created in core.hubs using data below:
