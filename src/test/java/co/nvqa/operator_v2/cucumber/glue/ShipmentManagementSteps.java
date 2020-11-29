@@ -7,7 +7,6 @@ import co.nvqa.commons.util.StandardTestUtils;
 import co.nvqa.operator_v2.model.MovementEvent;
 import co.nvqa.operator_v2.model.ShipmentEvent;
 import co.nvqa.operator_v2.model.ShipmentInfo;
-import co.nvqa.operator_v2.model.StationMovementSchedule;
 import co.nvqa.operator_v2.selenium.page.ShipmentManagementPage;
 import co.nvqa.operator_v2.util.KeyConstants;
 import co.nvqa.operator_v2.util.TestConstants;
@@ -101,7 +100,7 @@ public class ShipmentManagementSteps extends AbstractSteps
                 shipmentManagementPage.refreshPage();
                 throw ex;
             }
-        }, getCurrentMethodName(), 3000,10);
+        }, getCurrentMethodName(), 3000, 10);
     }
 
     @When("^Operator search shipments by given Ids on Shipment Management page:$")
@@ -109,12 +108,14 @@ public class ShipmentManagementSteps extends AbstractSteps
     {
         retryIfRuntimeExceptionOccurred(() ->
         {
-            try {
+            try
+            {
                 List<Long> shipmentIds = ids.stream()
                         .map(id -> Long.valueOf(resolveValue(id)))
                         .collect(Collectors.toList());
                 shipmentManagementPage.searchByShipmentIds(shipmentIds);
-            } catch (Throwable ex) {
+            } catch (Throwable ex)
+            {
                 NvLogger.error(ex.getMessage());
                 NvLogger.info("Searched element is not found, retrying after 2 seconds...");
                 navigateRefresh();
@@ -183,7 +184,8 @@ public class ShipmentManagementSteps extends AbstractSteps
     {
         retryIfRuntimeExceptionOccurred(() ->
         {
-            try {
+            try
+            {
                 final Map<String, String> finalData = resolveKeyValues(mapOfData);
                 List<Order> listOfOrders;
                 boolean isNextOrder = false;
@@ -230,7 +232,8 @@ public class ShipmentManagementSteps extends AbstractSteps
 
                     put(KEY_LIST_OF_CREATED_SHIPMENT_ID, listOfShipmentId);
                 }
-            } catch (Throwable ex) {
+            } catch (Throwable ex)
+            {
                 NvLogger.error(ex.getMessage());
                 NvLogger.info("Searched element is not found, retrying after 2 seconds...");
                 navigateRefresh();
@@ -405,7 +408,8 @@ public class ShipmentManagementSteps extends AbstractSteps
     {
         retryIfAssertionErrorOccurred(() ->
         {
-            try {
+            try
+            {
                 final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
                 ShipmentEvent expectedEvent = new ShipmentEvent(finalMapOfData);
                 List<ShipmentEvent> events = shipmentManagementPage.shipmentEventsTable.readFirstEntities(1);
@@ -425,7 +429,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     @Then("Operator verifies event is present for shipment on Shipment Detail page")
     public void operatorVerifiesEventIsPresentForShipmentOnShipmentDetailPage(Map<String, String> mapOfData)
     {
-        final Map <String, String> finalMapOfData = resolveKeyValues(mapOfData);
+        final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
         List<Shipments> lists = get(KEY_LIST_OF_CREATED_SHIPMENT);
 
         lists.forEach(shipment ->
@@ -455,7 +459,7 @@ public class ShipmentManagementSteps extends AbstractSteps
     @Then("Operator verifies event is present for shipment id {string} on Shipment Detail page")
     public void operatorVerifiesEventIsPresentForShipmentIdOnShipmentDetailPage(String shipmentIdAsString, Map<String, String> mapOfData)
     {
-        final Map <String, String> finalMapOfData = resolveKeyValues(mapOfData);
+        final Map<String, String> finalMapOfData = resolveKeyValues(mapOfData);
         Long shipmentId = Long.valueOf(resolveValue(shipmentIdAsString));
         retryIfAssertionErrorOccurred(() ->
         {
@@ -510,7 +514,14 @@ public class ShipmentManagementSteps extends AbstractSteps
     public void operatorSelectCreatedFiltersPresetOnShipmentManagementPage()
     {
         String presetName = get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_ID) + "-" + get(KEY_SHIPMENT_MANAGEMENT_FILTERS_PRESET_NAME);
-        shipmentManagementPage.selectFiltersPreset(presetName);
+        operatorSelectGivenFiltersPresetOnShipmentManagementPage(presetName);
+    }
+
+    @And("^Operator select \"(.+)\" filters preset on Shipment Management page$")
+    public void operatorSelectGivenFiltersPresetOnShipmentManagementPage(String filterPresetName)
+    {
+        filterPresetName = resolveValue(filterPresetName);
+        shipmentManagementPage.filterPresetSelector.searchAndSelectValue(filterPresetName);
     }
 
     @And("^Operator verify parameters of selected filters preset on Shipment Management page$")
@@ -640,7 +651,8 @@ public class ShipmentManagementSteps extends AbstractSteps
     @Then("Operator verifies that there is a search error modal shown with {string}")
     public void operatorVerifiesThatThereIsASearchErrorModalShownWith(String mode)
     {
-        if ("valid shipment".equalsIgnoreCase(mode)) {
+        if ("valid shipment".equalsIgnoreCase(mode))
+        {
             shipmentManagementPage.verifiesSearchErrorModalIsShown(true);
         } else if ("none".equalsIgnoreCase(mode))
         {
