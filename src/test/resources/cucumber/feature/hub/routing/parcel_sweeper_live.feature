@@ -306,7 +306,6 @@ Feature: Parcel Sweeper Live
       | hubName   | {KEY_CREATED_ORDER.destinationHub} |
       | hubId     | {KEY_DESTINATION_HUB}              |
     And Operator verify order status is "Transit" on Edit Order page
-
     Examples:
       | scenarioName    | hiptest-uid                              | priorityLevel | priorityLevelColorAsHex |
       | Priority 1      | uid:79172574-1375-48fb-ad29-d2212e585d15 | 1             | #f8cf5c                 |

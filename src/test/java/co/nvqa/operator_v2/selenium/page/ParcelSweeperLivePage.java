@@ -19,8 +19,8 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     private static final String DESTINATION_HUB_DIV_XPATH = "//div[contains(@class, 'destination-hub-container')]";
     private static final String DESTINATION_HUB_DIV_TEXT_XPATH = "//div[contains(@class,'destination-hub')]";
     private static final String SCAN_ERROR_CLASS_XPATH = "[contains(@ng-class,'scan-error')]";
-    private static final String PRIORITY_LEVEL_XPATH = "//div[contains(text(), 'Priority Level')]/following-sibling::div";
-    private static final String PRIORITY_LEVEL_COLOR_XPATH ="//div[contains(@class,'priority-container')][descendant::div[contains(text(), 'Priority Level')]]";
+    private static final String PRIORITY_LEVEL_XPATH = "//div[contains(@class,'priority-container')]//h5";
+    private static final String PRIORITY_LEVEL_COLOR_XPATH ="//div[contains(@class,'priority-container')]";
     private static final String LOCATOR_RTS_INFO = "//div[contains(@class,'rts-info-container')]/div/h5";
     private static final String XPATH_ORDER_TAGS = "//div[contains(@class,'panel tags-info-container')]//span";
     private static final String HUB_DROPDOWN_XPATH = "//input[contains(@ng-model,'AutocompleteCtrl.scope.searchText') and not(@disabled)]/ancestor::md-autocomplete";
@@ -99,6 +99,7 @@ public class ParcelSweeperLivePage extends OperatorV2SimplePage {
     public void verifiesPriorityLevel(int expectedPriorityLevel, String expectedPriorityLevelColorAsHex)
     {
         String actualPriorityLevel = getText(PRIORITY_LEVEL_XPATH);
+        actualPriorityLevel = actualPriorityLevel.split(" ")[1];
         Color actualPriorityLevelColor = getBackgroundColor(PRIORITY_LEVEL_COLOR_XPATH);
 
         assertEquals("Priority Level", String.valueOf(expectedPriorityLevel), actualPriorityLevel);
