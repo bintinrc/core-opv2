@@ -254,8 +254,7 @@ public class MovementManagementSteps extends AbstractSteps
             } catch (Throwable ex) {
                 NvLogger.error(ex.getMessage());
                 NvLogger.info("Searched element is not found, retrying after 2 seconds...");
-                navigateRefresh();
-                pause2s();
+                movementManagementPage.refreshPage();
                 movementManagementPageIsLoaded();
                 throw ex;
             }
