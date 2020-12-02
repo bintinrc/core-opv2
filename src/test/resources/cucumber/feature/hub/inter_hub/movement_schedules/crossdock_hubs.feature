@@ -52,7 +52,7 @@ Feature: Crossdock Hubs
       | schedules[1].durationTime   | 16:30                                                         |
       | schedules[1].daysOfWeek     | all                                                           |
       | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
-    And Operator load schedules on Movement Management page using data below:
+    And Operator load schedules on Movement Management page with retry using data below:
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
@@ -88,7 +88,7 @@ Feature: Crossdock Hubs
       | schedules[1].durationTime   | 16:30                                                         |
       | schedules[1].daysOfWeek     | all                                                           |
       | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
-    And Operator load schedules on Movement Management page using data below:
+    And Operator load schedules on Movement Management page with retry using data below:
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
@@ -101,7 +101,7 @@ Feature: Crossdock Hubs
       | schedules[1].durationTime   | 18:30                                                         |
       | schedules[1].daysOfWeek     | monday                                                        |
       | schedules[1].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
-    And Operator load schedules on Movement Management page using data below:
+    And Operator load schedules on Movement Management page with retry using data below:
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
@@ -147,7 +147,7 @@ Feature: Crossdock Hubs
       | schedules[2].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
     And Operator refresh page
     And Movement Management page is loaded
-    And Operator load schedules on Movement Management page using data below:
+    And Operator load schedules on Movement Management page with retry using data below:
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
@@ -236,7 +236,7 @@ Feature: Crossdock Hubs
       | schedules[2].comment        | Created by automated test at {gradle-current-date-yyyy-MM-dd} |
     And Operator refresh page
     And Movement Management page is loaded
-    And Operator load schedules on Movement Management page using data below:
+    And Operator load schedules on Movement Management page with retry using data below:
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     Then Operator verifies a new schedule is created on Movement Management page
@@ -263,7 +263,7 @@ Feature: Crossdock Hubs
     And API Operator reloads hubs cache
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
-    And Operator load schedules on Movement Management page using data below:
+    And Operator load schedules on Movement Management page with retry using data below:
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
@@ -306,7 +306,7 @@ Feature: Crossdock Hubs
     And API Operator reloads hubs cache
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Movement Management page is loaded
-    And Operator load schedules on Movement Management page using data below:
+    And Operator load schedules on Movement Management page with retry using data below:
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     And Operator adds new Movement Schedule on Movement Management page using data below:
       | schedules[1].originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name}                            |
@@ -456,7 +456,7 @@ Feature: Crossdock Hubs
     When Operator go to menu Inter-Hub -> Movement Schedules
     And Operator refresh page
     And Movement Management page is loaded
-    And Operator load schedules on Movement Management page using data below:
+    And Operator load schedules on Movement Management page with retry using data below:
       | originHub      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHub | {KEY_LIST_OF_CREATED_HUBS[2].name} |
     And Operator deletes created movement schedule on Movement Management page

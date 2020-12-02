@@ -8,6 +8,7 @@ import co.nvqa.commons.model.core.BatchOrderInfo;
 import co.nvqa.commons.model.core.BulkOrderInfo;
 import co.nvqa.commons.model.core.CreateDriverV2Request;
 import co.nvqa.commons.model.core.Order;
+import co.nvqa.commons.model.core.ShipperPickupFilterTemplate;
 import co.nvqa.commons.model.core.ThirdPartyShippers;
 import co.nvqa.commons.model.core.hub.Hub;
 import co.nvqa.commons.model.core.route.MilkrunGroup;
@@ -319,10 +320,11 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         hub.setLatitude(Double.parseDouble(latitude));
         hub.setLongitude(Double.parseDouble(longitude));
         hub.setFacilityType(facilityType);
-        Map<String, Hub > hubMap = new HashMap<>();
+        Map<String, Hub> hubMap = new HashMap<>();
         hubMap.put(hub.getName(), hub);
         final String hubName = name;
-        retryIfAssertionErrorOccurred(() -> {
+        retryIfAssertionErrorOccurred(() ->
+        {
             Hub hubResp = getHubClient().create(hubMap.get(hubName));
             hubMap.put(hubResp.getName(), hubResp);
         }, getCurrentMethodName());
@@ -333,9 +335,9 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         NvLogger.success(f("Created hub with id %d and name %s", hub.getId(), hub.getName()));
     }
 
-    @Given("API Operator creates {long} new Hub using data below:")
-    public void apiOperatorCreatesMultipleNewHubUsingDataBelow(Long numberOfHubs, Map<String, String> mapOfData) {
-        for (long i = 0; i < numberOfHubs; i++) {
+    @Given("API Operator creates {int} new Hub using data below:")
+    public void apiOperatorCreatesMultipleNewHubUsingDataBelow(Integer numberOfHubs, Map<String, String> mapOfData) {
+        for (int i = 0; i < numberOfHubs; i++) {
             apiOperatorCreatesNewHubUsingDataBelow(mapOfData);
         }
     }
@@ -635,5 +637,24 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
                 .filter(h -> Objects.equals(h.getId(), Long.valueOf(hubId)))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(f("Created hub with ID [%s] was not found", hubId)));
+    }
+
+    @Given("^API Operator creates new Shipper Pickup Filter Template using data below:$")
+    public void apiOperatorCreatesShipperPickupFilterTemplate(Map<String, String> data)
+    {
+        data = resolveKeyValues(data);
+        ShipperPickupFilterTemplate shipperPickupFilterTemplate = new ShipperPickupFilterTemplate(data);
+        shipperPickupFilterTemplate = getShipperPickupFilterTemplatesClient().createFilerTemplate(shipperPickupFilterTemplate);
+        put(KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE, shipperPickupFilterTemplate);
+    }
+
+    @After("@DeleteShipperPickupFilterTemplate")
+    public void deleteShipperPickupFilterTemplate()
+    {
+        ShipperPickupFilterTemplate shipperPickupFilterTemplate = get(KEY_CREATED_SHIPPER_PICKUP_FILTER_TEMPLATE);
+        if (shipperPickupFilterTemplate != null && shipperPickupFilterTemplate.getId() != null)
+        {
+            getShipperPickupFilterTemplatesClient().deleteFilerTemplate(shipperPickupFilterTemplate.getId());
+        }
     }
 }

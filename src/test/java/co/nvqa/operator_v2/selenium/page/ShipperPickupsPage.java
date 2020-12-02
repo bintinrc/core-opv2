@@ -63,6 +63,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     @FindBy(css = "md-dialog")
     public RemoveRouteFromReservationsDialog removeRouteFromReservationsDialog;
 
+    @FindBy(css = "nv-filter-autocomplete[item-types='Shipper']")
+    public NvFilterAutocomplete shipperFilter;
+
     public ShipperPickupsPage(WebDriver webDriver)
     {
         super(webDriver);
