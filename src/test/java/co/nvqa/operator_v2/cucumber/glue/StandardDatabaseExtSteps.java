@@ -1104,6 +1104,12 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         String expectedMovementPathMovementType = "LAND_HAUL";
         assertThat("Movement path type is Manual", movementPath.getType(), equalTo(expectedMovementPathType));
         assertThat("Movement path type is Manual", movementPath.getMovementType(), equalTo(expectedMovementPathMovementType));
+    }
 
+    @Then("DB Operator verify {string} is deleted in movement_path table")
+    public void dbOperatorVerifyPathIsDeletedInMovementPathTable(String pathIdAsString) {
+        Long pathId = Long.valueOf(resolveValue(pathIdAsString));
+        MovementPath movementPath = getHubJdbc().getMovementPathById(pathId);
+        assertThat("Movement path deleted at is not null", movementPath.getDeletedAt(), notNullValue());
     }
 }

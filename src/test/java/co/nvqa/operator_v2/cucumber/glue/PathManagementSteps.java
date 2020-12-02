@@ -115,6 +115,9 @@ public class PathManagementSteps extends AbstractSteps {
         if ("view".equals(hyperlinkAction)) {
             pathManagementPage.viewFirstRow.click();
         }
+        if ("remove".equals(hyperlinkAction)) {
+            pathManagementPage.removeFirstRow.click();
+        }
     }
 
     @Then("Operator verify shown {string} path details modal data")
@@ -358,6 +361,13 @@ public class PathManagementSteps extends AbstractSteps {
             if (!windowHandle.equalsIgnoreCase(mainWindowHandle)) {
                 pathManagementPage.getWebDriver().switchTo().window(windowHandle);
             }
+        }
+    }
+
+    @And("Operator click {string} button in path details")
+    public void operatorClickButtonInPathDetails(String buttonName) {
+        if ("remove".equals(buttonName)) {
+            pathManagementPage.pathDetailsModal.removePathButton.click();
         }
     }
 }

@@ -69,6 +69,9 @@ public class PathManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//tr[1]//td[contains(@class, 'action')]//a[.='View']")
     public PageElement viewFirstRow;
 
+    @FindBy(xpath = "//tr[1]//td[contains(@class, 'action')]//a[.='Remove']")
+    public PageElement removeFirstRow;
+
     @FindBy(className = "ant-modal-wrap")
     public PathDetailsModal pathDetailsModal;
 
