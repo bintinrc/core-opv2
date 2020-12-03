@@ -287,10 +287,10 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds pricing script with invalid discount and verifies the error message
-      | pricingScriptName | 2402 - New Script                  |
-      | discount          | 10000000                           |
-      | comments          | This is an invalid discount        |
-      | errorMessage      | Discounts cannot exceed 6 figures. |
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | discount          | 10000000                                        |
+      | comments          | This is an invalid discount                     |
+      | errorMessage      | Discounts cannot exceed 6 figures.              |
 
 
   @KillBrowser @ShouldAlwaysRun
