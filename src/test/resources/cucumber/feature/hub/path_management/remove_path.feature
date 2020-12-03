@@ -56,7 +56,8 @@ Feature: Remove Path
     And Operator clicks load selection button
     Then Operator verify "manual paths" data appear in path table
     When Operator click "remove" hyperlink button
-    # TODO: IMPLEMENT REMOVE POPUP
+    Then Operator verify shown "manual paths" remove path modal data
+    When Operator click "remove" button in path details
     Then Operator verify a notification with message "Path {KEY_CREATED_MANUAL_PATH_ID} successfully removed!" is shown on path management page
     And DB Operator verify "{KEY_CREATED_MANUAL_PATH_ID}" is deleted in movement_path table
 

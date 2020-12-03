@@ -125,6 +125,11 @@ public class PathManagementSteps extends AbstractSteps {
         pathManagementPage.verifyShownPathDetail(pathType);
     }
 
+    @Then("Operator verify shown {string} remove path modal data")
+    public void operatorVerifyShownRemovePathModalData(String pathType) {
+        pathManagementPage.verifyShownRemovePathDetail(pathType);
+    }
+
     @And("Operator searches {string} in {string} field")
     public void operatorSearchesInField(String value, String field) {
         String resolvedValue = resolveValue(value);

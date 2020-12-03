@@ -76,6 +76,9 @@ public class PathManagementPage extends OperatorV2SimplePage {
     public PathDetailsModal pathDetailsModal;
 
     @FindBy(className = "ant-modal-wrap")
+    public RemovePathModal removePathModal;
+
+    @FindBy(className = "ant-modal-wrap")
     public CreateManualPathModal createManualPathModal;
 
     @FindBy(xpath = "(//div[@class='ant-modal-wrap '])[2]")
@@ -177,6 +180,38 @@ public class PathManagementPage extends OperatorV2SimplePage {
 
             Boolean actualEditManualPathButtonExistence = pathDetailsModal.editPathButton.isDisplayed();
             assertThat("Edit Manual Path Button existed", actualEditManualPathButtonExistence, equalTo(true));
+        }
+    }
+
+    public void verifyShownRemovePathDetail(String pathType) {
+        pause3s();
+        String removePathInfo = removePathModal.removePathInfo.getText();
+        String expectedRemovePathInfo = "Removing path cannot be undone! Are you sure want to remove? " +
+                "The following schedule(s) will be associated with the default path instead.";
+        assertThat("Remove path info is equal", removePathInfo, equalTo(expectedRemovePathInfo));
+
+        String pathDetailsRaw = removePathModal.pathDetails.getText();
+        String actualPath = pathDetailsRaw.split("Path Type")[0].split("Path")[1].trim();
+        String actualPathType = pathDetailsRaw.split("Movement Type")[0].split("Path Type")[1].trim();
+        String actualMovementType = pathDetailsRaw.split("Movement Type")[1].trim();
+
+        String expectedPathType = "AUTO_GENERATED";
+        if ("manual paths".equals(pathType)) {
+            expectedPathType = "MANUAL";
+        }
+
+        assertThat("Actual Path is true", actualPath, not(equalTo("")));
+        assertThat("Actual Path Type is true", actualPathType, equalTo(expectedPathType));
+        assertThat("Actual Movement Type is true", actualMovementType, not(equalTo("")));
+        if ("manual paths".equals(pathType)) {
+            String actualPathScheduleTableHeadText = removePathModal.pathScheduleTableHead.getText();
+            String departureTimeText = "Departure Time";
+            String daysOfWeekText = "Days of Week";
+            assertThat("Departure Time in Table Head", actualPathScheduleTableHeadText, containsString(departureTimeText));
+            assertThat("Departure Time in Table Head", actualPathScheduleTableHeadText, containsString(daysOfWeekText));
+
+            Boolean actualRemoveManualPathButtonExistence = removePathModal.removePathButton.isDisplayed();
+            assertThat("Remove Manual Path Button existed", actualRemoveManualPathButtonExistence, equalTo(true));
         }
     }
 
@@ -471,6 +506,37 @@ public class PathManagementPage extends OperatorV2SimplePage {
             super(webDriver, webElement);
             PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
         }
+    }
+
+    public static class RemovePathModal extends AntModal {
+        public RemovePathModal(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(xpath = ".//button[.='Remove Path']")
+        public Button removePathButton;
+
+        @FindBy(xpath = ".//button[.='Cancel']")
+        public Button cancelButton;
+
+        @FindBy(className = "ant-modal-close")
+        public Button closeModalButton;
+
+        @FindBy(xpath = ".//div//p")
+        public TextBox removePathInfo;
+
+        @FindBy(className = "ant-card-body")
+        public TextBox pathDetails;
+
+        @FindBy(xpath = ".//thead[@class='ant-table-thead']")
+        public PageElement pathScheduleTableHead;
+
+        @FindBy(xpath = ".//tbody[@class='ant-table-tbody']//tr[1]//td[1]")
+        public PageElement pathDepartureTime;
+
+        @FindBy(xpath = ".//tbody[@class='ant-table-tbody']//tr[1]//td[2]")
+        public PageElement pathDepartureDaysOfWeek;
     }
 
 }
