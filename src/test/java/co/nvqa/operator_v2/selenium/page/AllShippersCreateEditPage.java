@@ -1270,36 +1270,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         }
     }
 
-    public void addNewPricingScriptWithDiscountOver6DigitsAndVerifyErrorMessage(Shipper shipper, String errorMessage)
-    {
-        Pricing pricing = shipper.getPricing();
-        if (pricing != null)
-        {
-            tabs.selectTab("Pricing and Billing");
-            if (StringUtils.isNotBlank(pricing.getScriptName()))
-            {
-                addNewProfile.click();
-                pause2s();
-                selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_PRICING_SCRIPT, pricing.getScriptName());
-                setMdDatepickerById(LOCATOR_START_DATE, TestUtils.getNextDate(1));
-                moveToElementWithXpath(XPATH_DISCOUNT_VALUE);
-                sendKeys(XPATH_DISCOUNT_VALUE, pricing.getDiscount());
-                sendKeysByAriaLabel(ARIA_LABEL_COMMENTS, pricing.getComments());
-                newPricingProfileDialog.codCountryDefaultCheckbox.check();
-                newPricingProfileDialog.insuranceCountryDefaultCheckbox.check();
-                click(XPATH_SAVE_CHANGES_PRICING_SCRIPT);
-                pause1s();
-            }
-        }
-        clickNvIconTextButtonByName("Save Changes");
-        waitUntilVisibilityOfToast("Some changes may not saved successfully");
-
-        String errorMessageText = getText(XPATH_UPDATE_ERROR_MESSAGE);
-        assertTrue("Error message is not displayed: ", errorMessageText.contains(errorMessage));
-
-        clickNvIconTextButtonByName("Close");
-    }
-
     public static class NewPricingProfileDialog extends MdDialog
     {
         public NewPricingProfileDialog(WebDriver webDriver, WebElement webElement)

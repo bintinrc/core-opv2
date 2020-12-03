@@ -1071,23 +1071,4 @@ public class AllShippersSteps extends AbstractSteps
 
         allShippersPage.addNewPricingScriptAndVerifyErrorMessage(shipper, errorMessage);
     }
-
-    @Then("Operator adds pricing script with discount over 6 digits and verifies the error message")
-    public void operatorAddsPricingScriptWithDiscountOver6DigitsAndVerifiesTheErrorMessage(Map<String, String> mapOfData)
-    {
-        Shipper shipper = get(KEY_CREATED_SHIPPER);
-        String pricingScriptName = mapOfData.get("pricingScriptName");
-        String discount = mapOfData.get("discount");
-        String comments = mapOfData.get("comments");
-        String errorMessage = mapOfData.get("errorMessage");
-
-        Pricing pricing = new Pricing();
-        pricing.setScriptName(pricingScriptName);
-        pricing.setDiscount(discount);
-        pricing.setComments(comments);
-
-        shipper.setPricing(pricing);
-
-        allShippersPage.addNewPricingScriptWithDiscountOver6DigitsAndVerifyErrorMessage(shipper, errorMessage);
-    }
 }

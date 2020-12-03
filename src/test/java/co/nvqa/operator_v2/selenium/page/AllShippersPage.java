@@ -448,12 +448,6 @@ public class AllShippersPage extends OperatorV2SimplePage
         allShippersCreateEditPage.addNewPricingScriptAndVerifyErrorMessage(shipper, errorMessage);
     }
 
-    public void addNewPricingScriptWithDiscountOver6DigitsAndVerifyErrorMessage(Shipper shipper, String errorMessage)
-    {
-        waitUntilPageLoaded();
-        allShippersCreateEditPage.addNewPricingScriptWithDiscountOver6DigitsAndVerifyErrorMessage(shipper, errorMessage);
-    }
-
     public static class ShippersTable extends MdVirtualRepeatTable<Shipper>
     {
         public static final String MD_VIRTUAL_REPEAT = "shipper in getTableData()";
