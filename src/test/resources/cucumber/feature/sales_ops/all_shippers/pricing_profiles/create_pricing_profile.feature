@@ -207,9 +207,9 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds pricing script with invalid discount and verifies the error message
-      | pricingScriptName | {pricing-script-name-2}          |
-      | discount          | $#^$^#@                          |
-      | errorMessage      | Special character is not allowed |
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | discount          | $#^$^#@                                         |
+      | errorMessage      | Special character is not allowed                |
 
   @CloseNewWindows
   Scenario: Create a new Pricing Profile - with 3-5 integer after decimal point (uid:30ed9502-76df-4695-8a33-f21d40dc9ad5)
