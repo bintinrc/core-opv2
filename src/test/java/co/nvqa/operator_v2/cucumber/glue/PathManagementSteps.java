@@ -39,7 +39,7 @@ public class PathManagementSteps extends AbstractSteps {
     @And("Operator verifies path management page is loaded")
     public void operatorMovementTripPageIsLoaded() {
         pathManagementPage.switchTo();
-        pathManagementPage.defaultPathButton.waitUntilClickable(30);
+        pathManagementPage.addDefaultPathButton.waitUntilClickable(30);
     }
 
     @And("Operator clicks show or hide filters")
@@ -94,6 +94,13 @@ public class PathManagementSteps extends AbstractSteps {
     public void operatorClicksAddManualPathButton() {
         pathManagementPage.addManualPathButton.click();
         pathManagementPage.createManualPathModal.waitUntilVisible();
+        pause1s();
+    }
+
+    @When("Operator clicks add default path button")
+    public void operatorClicksAddDefaultPathButton() {
+        pathManagementPage.addDefaultPathButton.click();
+        pathManagementPage.createDefaultPathModal.waitUntilVisible();
         pause1s();
     }
 
@@ -193,6 +200,15 @@ public class PathManagementSteps extends AbstractSteps {
         pause2s();
     }
 
+    @And("Operator create default path with following data:")
+    public void operatorCreateDefaultPathWithFollowingData(Map<String, String> mapOfData) {
+        Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+        String originHubName = resolvedMapOfData.get("originHubName");
+        String destinationHubName = resolvedMapOfData.get("destinationHubName");
+
+        pathManagementPage.createDefaultPath(originHubName, destinationHubName);
+    }
+
     @Then("Operator verify a notification with message {string} is shown on path management page")
     public void operatorVerifyANotificationWithMessageIsShownOnPathManagementPage(String notificationMessage) {
         String resolvedNotificationMessage = resolveValue(notificationMessage);
@@ -215,8 +231,17 @@ public class PathManagementSteps extends AbstractSteps {
         operatorVerifyCreatedManualPathWithScheduleDataInPathDetail("single", mapOfData);
     }
 
+    @And("Operator verify created default path data in path detail with following data:")
+    public void operatorVerifyCreatedDefaultPathDataInPathDetail(Map<String, String> mapOfData) {
+        Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
+        String originHubName = resolvedMapOfData.get("originHubName");
+        String destinationHubName = resolvedMapOfData.get("destinationHubName");
+        String path = originHubName + " → " + destinationHubName;
+        pathManagementPage.verifyCreatedPathDetail(path, null);
+    }
+
     @And("Operator verify created manual path data in path detail empty schedule with following data:")
-    public void operatorVerifyCreatedManualPathDataInPathDetailEmptyScheduleWithFollowingData(Map<String, String> mapOfData) {
+    public void operatorVerifyCreatedPathDataInPathDetailWithFollowingData(Map<String, String> mapOfData) {
         Map<String, String> resolvedMapOfData = resolveKeyValues(mapOfData);
         String originHubName = resolvedMapOfData.get("originHubName");
         String destinationHubName = resolvedMapOfData.get("destinationHubName");

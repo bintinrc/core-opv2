@@ -1093,17 +1093,20 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         }
     }
 
-    @Then("DB Operator verifies manual path with origin {string} and {string} is created in movement_path table")
-    public void dbOperatorVerifiesManualPathIsCreatedInMovementPathTable(String originHubIdAsString, String destinationHubIdAsString)
+    @Then("DB Operator verifies {string} path with origin {string} and {string} is created in movement_path table")
+    public void dbOperatorVerifiesManualPathIsCreatedInMovementPathTable(String pathType, String originHubIdAsString, String destinationHubIdAsString)
     {
         Long originHubId = Long.valueOf(resolveValue(originHubIdAsString));
         Long destinationHubId = Long.valueOf(resolveValue(destinationHubIdAsString));
 
         MovementPath movementPath = getHubJdbc().getMovementPath(originHubId, destinationHubId);
-        String expectedMovementPathType = "MANUAL";
         String expectedMovementPathMovementType = "LAND_HAUL";
-        assertThat("Movement path type is Manual", movementPath.getType(), equalTo(expectedMovementPathType));
-        assertThat("Movement path type is Manual", movementPath.getMovementType(), equalTo(expectedMovementPathMovementType));
+        String expectedMovementPathType = "MANUAL";
+        if ("default".equals(pathType)) {
+            expectedMovementPathType = "AUTO_GENERATED";
+        }
+        assertThat("Movement path type is equal", movementPath.getType(), equalTo(expectedMovementPathType));
+        assertThat("Movement path type is equal", movementPath.getMovementType(), equalTo(expectedMovementPathMovementType));
     }
 
     @Then("DB Operator verify {string} is deleted in movement_path table")

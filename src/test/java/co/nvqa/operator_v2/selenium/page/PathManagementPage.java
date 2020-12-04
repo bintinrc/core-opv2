@@ -28,7 +28,7 @@ public class PathManagementPage extends OperatorV2SimplePage {
     private PageElement parentPageTitle;
 
     @FindBy(xpath = "//button[.='Default Path']")
-    public Button defaultPathButton;
+    public Button addDefaultPathButton;
 
     @FindBy(xpath = "//span[.='Show / Hide Filters']")
     public PageElement showHideFilters;
@@ -80,6 +80,9 @@ public class PathManagementPage extends OperatorV2SimplePage {
 
     @FindBy(className = "ant-modal-wrap")
     public CreateManualPathModal createManualPathModal;
+
+    @FindBy(className = "ant-modal-wrap")
+    public CreateDefaultPathModal createDefaultPathModal;
 
     @FindBy(xpath = "(//div[@class='ant-modal-wrap '])[2]")
     public PathDetailsModal createdPathDetailsModal;
@@ -300,23 +303,25 @@ public class PathManagementPage extends OperatorV2SimplePage {
         String actualPath = pathDetailsRaw.split("Path Type")[0].split("Path")[1].trim();
         assertThat("Path is the same", actualPath, equalTo(expectedPath));
 
-        if (departureTimes.size() != 0) {
-            String actualDepartureTime = createdPathDetailsModal.pathDepartureTime.getText();
-            assertThat("Departure time is the same", actualDepartureTime, equalTo(departureTimes.get(0)));
-            String actualDaysOfWeek = createdPathDetailsModal.pathDepartureDaysOfWeek.getText();
-            String expectedDaysOfWeek = "MO\nTU\nWE\nTH\nFR\nSA\nSU";
-            assertThat("Days of week is the same", actualDaysOfWeek, equalTo(expectedDaysOfWeek));
-            if (departureTimes.size() > 1) {
-                String secondActualDepartureTime = createdPathDetailsModal.secondPathDepartureTime.getText();
-                String secondActualDaysOfWeek = createdPathDetailsModal.secondPathDepartureDaysOfWeek.getText();
-                assertThat("Departure time is the same", secondActualDepartureTime, equalTo(departureTimes.get(1)));
-                assertThat("Days of week is the same", secondActualDaysOfWeek, equalTo(expectedDaysOfWeek));
+        if (departureTimes != null) {
+            if (departureTimes.size() != 0) {
+                String actualDepartureTime = createdPathDetailsModal.pathDepartureTime.getText();
+                assertThat("Departure time is the same", actualDepartureTime, equalTo(departureTimes.get(0)));
+                String actualDaysOfWeek = createdPathDetailsModal.pathDepartureDaysOfWeek.getText();
+                String expectedDaysOfWeek = "MO\nTU\nWE\nTH\nFR\nSA\nSU";
+                assertThat("Days of week is the same", actualDaysOfWeek, equalTo(expectedDaysOfWeek));
+                if (departureTimes.size() > 1) {
+                    String secondActualDepartureTime = createdPathDetailsModal.secondPathDepartureTime.getText();
+                    String secondActualDaysOfWeek = createdPathDetailsModal.secondPathDepartureDaysOfWeek.getText();
+                    assertThat("Departure time is the same", secondActualDepartureTime, equalTo(departureTimes.get(1)));
+                    assertThat("Days of week is the same", secondActualDaysOfWeek, equalTo(expectedDaysOfWeek));
+                }
             }
-        }
-        if (departureTimes.size() == 0) {
-            String actualEmptyDescription = createdPathDetailsModal.emptyDescription.getText();
-            String expectedEmptyDescription = "No Data";
-            assertThat("Empty Description is the same", actualEmptyDescription, equalTo(expectedEmptyDescription));
+            if (departureTimes.size() == 0) {
+                String actualEmptyDescription = createdPathDetailsModal.emptyDescription.getText();
+                String expectedEmptyDescription = "No Data";
+                assertThat("Empty Description is the same", actualEmptyDescription, equalTo(expectedEmptyDescription));
+            }
         }
 
         createdPathDetailsModal.closeModalButton.click();
@@ -399,6 +404,19 @@ public class PathManagementPage extends OperatorV2SimplePage {
         if ("third".equals(transitHubInfo)) {
             createManualPathModal.thirdTransitHubFilter.selectValue(resolvedNewTransitHub);
         }
+    }
+
+    public void createDefaultPath(String originHubName, String destinationHubName) {
+        createDefaultPathModal.originHubFilter.selectValue(originHubName);
+        createDefaultPathModal.destinationHubFilter.selectValue(destinationHubName);
+        createDefaultPathModal.generateButton.click();
+
+        String actualCreateDefaultPathInfoText = createDefaultPathModal.createDefaultPathInfo.getText();
+        String expectedCreateDefaultPathInfoText = f("The system is generating a path from: %s to %s\nThis might take up few minutes...",
+                originHubName, destinationHubName);
+        assertThat("Create default path is equal", actualCreateDefaultPathInfoText,
+                equalTo(expectedCreateDefaultPathInfoText));
+
     }
 
     public static class PathDetailsModal extends AntModal {
@@ -539,4 +557,25 @@ public class PathManagementPage extends OperatorV2SimplePage {
         public PageElement pathDepartureDaysOfWeek;
     }
 
+    public static class CreateDefaultPathModal extends AntModal {
+        public CreateDefaultPathModal(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(id = "originHub")
+        public AntSelect originHubFilter;
+
+        @FindBy(id = "destinationHub")
+        public AntSelect destinationHubFilter;
+
+        @FindBy(xpath = ".//button[.='Generate']")
+        public Button generateButton;
+
+        @FindBy(xpath = ".//button[.='Cancel']")
+        public Button cancelButton;
+
+        @FindBy(className = "ant-modal-body")
+        public TextBox createDefaultPathInfo;
+    }
 }

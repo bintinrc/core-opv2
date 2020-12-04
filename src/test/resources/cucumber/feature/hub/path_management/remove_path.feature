@@ -1,4 +1,4 @@
-@OperatorV2 @MiddleMile @Hub @PathManagement @RemovePath @CFW
+@OperatorV2 @MiddleMile @Hub @PathManagement @RemovePath
 Feature: Remove Path
 
   @LaunchBrowser @ShouldAlwaysRun
@@ -33,7 +33,7 @@ Feature: Remove Path
     Then Operator verify a notification with message "Path {KEY_CREATED_MANUAL_PATH_ID} successfully removed!" is shown on path management page
     And DB Operator verify "{KEY_CREATED_MANUAL_PATH_ID}" is deleted in movement_path table
 
-  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb @RT
+  @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Remove Path by Path Table (uid:17ea0b88-c3c4-43b2-86d7-0d59c9f73402)
     Given Operator go to menu Shipper Support -> Blocked Dates
     Given API Operator creates 2 new Hub using data below:

@@ -39,7 +39,7 @@ Feature: Path Management - Create Manual Path
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-    Then DB Operator verifies manual path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
+    Then DB Operator verifies "manual" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
 
   @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Create New Path with Transit Hubs and Multiple Schedule (uid:a49e28a0-cf9f-407c-84e7-abbe9e8052bc)
@@ -77,7 +77,7 @@ Feature: Path Management - Create Manual Path
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-    Then DB Operator verifies manual path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
+    Then DB Operator verifies "manual" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
 
   @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Create New Path without Transit Hub with Single Schedule (uid:5220881c-bec9-40e2-87e7-b3893cccf181)
@@ -107,7 +107,7 @@ Feature: Path Management - Create Manual Path
       | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
     When Operator searches "{KEY_LIST_OF_CREATED_HUBS[1].name} " in "Path" field
     Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
-    Then DB Operator verifies manual path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
+    Then DB Operator verifies "manual" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
 
   @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Create New Path without Transit Hub with Multiple Schedule (uid:7498d4f6-9c9f-4d13-8522-05d35b49c0c9)
@@ -139,7 +139,7 @@ Feature: Path Management - Create Manual Path
       | departureTimeSecond | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[2]} |
     When Operator searches "{KEY_LIST_OF_CREATED_HUBS[1].name} " in "Path" field
     Then Operator verify path data from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" appear in path table
-    Then DB Operator verifies manual path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
+    Then DB Operator verifies "manual" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
 
   @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Unable to Create New Path without Selecting Schedule (uid:9f133662-b9ec-4395-8c50-b7ec516b9ea6)
@@ -623,7 +623,7 @@ Feature: Path Management - Create Manual Path
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-    Then DB Operator verifies manual path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
+    Then DB Operator verifies "manual" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
     When Operator switch to new tab in path management page
     And Operator verifies path management page is loaded
     And Operator choose single schedule and clicks create button in create manual path modal
@@ -646,7 +646,7 @@ Feature: Path Management - Create Manual Path
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
       | departureTime      | {KEY_LIST_MANUAL_PATH_DEPARTURE_TIMES[1]} |
-    Then DB Operator verifies manual path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[4].id}" is created in movement_path table
+    Then DB Operator verifies "manual" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[4].id}" is created in movement_path table
 
   @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb @CloseNewWindows
   Scenario: Create New Path with Same Path and Same Schedule using 2 tabs (uid:3cd2a72f-3cda-4d72-a5f2-1a06effc81eb)
@@ -699,7 +699,7 @@ Feature: Path Management - Create Manual Path
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name} |
-    Then DB Operator verifies manual path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
+    Then DB Operator verifies "manual" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
     When Operator switch to new tab in path management page
     And Operator verifies path management page is loaded
     And Operator choose single schedule and clicks create button in create manual path modal
@@ -721,7 +721,7 @@ Feature: Path Management - Create Manual Path
       | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name}        |
       | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name}        |
       | transitHubName     | {KEY_LIST_OF_CREATED_HUBS[3].name}        |
-    Then DB Operator verifies manual path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
+    Then DB Operator verifies "manual" path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is created in movement_path table
 
   @KillBrowser @ShouldAlwaysRun
   Scenario: Kill Browser
