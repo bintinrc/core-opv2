@@ -4,6 +4,7 @@ Feature: All Shippers
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
+  @test
   Scenario: Add New Shipper Pricing Profile (uid:79bb423b-36d1-49a0-8b22-34972253afe7)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:

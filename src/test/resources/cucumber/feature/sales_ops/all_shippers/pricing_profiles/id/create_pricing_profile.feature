@@ -20,7 +20,7 @@ Feature: All Shippers
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details are correct
-  @test
+
   @CloseNewWindows
   Scenario: Create a new Pricing Profile - with 0 Percentage Discount (uid:71f8c382-2c78-4ba7-b052-ada13861d606)
     Given Operator changes the country to "Indonesia"
