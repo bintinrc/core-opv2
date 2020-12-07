@@ -6,6 +6,8 @@ import co.nvqa.operator_v2.selenium.elements.PageElement;
 import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.ant.AntModal;
 import co.nvqa.operator_v2.selenium.elements.ant.AntSelect;
+import co.nvqa.operator_v2.selenium.elements.ant.NvTable;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
@@ -104,6 +106,9 @@ public class PathManagementPage extends OperatorV2SimplePage {
 
     @FindBy(className = "ant-notification-notice-close")
     public PageElement closeAntNotificationMessage;
+
+    @FindBy(xpath = "//table")
+    public NvTable<PathRow> pathRowNvTable;
 
     public PathManagementPage(WebDriver webDriver) {
         super(webDriver);
@@ -407,16 +412,21 @@ public class PathManagementPage extends OperatorV2SimplePage {
     }
 
     public void createDefaultPath(String originHubName, String destinationHubName) {
-        createDefaultPathModal.originHubFilter.selectValue(originHubName);
-        createDefaultPathModal.destinationHubFilter.selectValue(destinationHubName);
+        if (!"empty".equals(originHubName)) {
+            createDefaultPathModal.originHubFilter.selectValue(originHubName);
+        }
+        if (!"empty".equals(destinationHubName)) {
+            createDefaultPathModal.destinationHubFilter.selectValue(destinationHubName);
+        }
         createDefaultPathModal.generateButton.click();
+    }
 
+    public void verifyCreatingDefaultPath(String originHubName, String destinationHubName) {
         String actualCreateDefaultPathInfoText = createDefaultPathModal.createDefaultPathInfo.getText();
         String expectedCreateDefaultPathInfoText = f("The system is generating a path from: %s to %s\nThis might take up few minutes...",
                 originHubName, destinationHubName);
         assertThat("Create default path is equal", actualCreateDefaultPathInfoText,
                 equalTo(expectedCreateDefaultPathInfoText));
-
     }
 
     public static class PathDetailsModal extends AntModal {
@@ -577,5 +587,43 @@ public class PathManagementPage extends OperatorV2SimplePage {
 
         @FindBy(className = "ant-modal-body")
         public TextBox createDefaultPathInfo;
+
+        @FindBy(xpath = "//div[div[.='Origin Hub']]//div[@class='ant-form-explain']")
+        public TextBox originHubErrorInfo;
+
+        @FindBy(xpath = "//div[div[.='Destination Hub']]//div[@class='ant-form-explain']")
+        public TextBox destinationHubErrorInfo;
+    }
+
+    public static class PathRow extends NvTable.NvRow {
+        public PathRow(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        public PathRow(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
+        {
+            super(webDriver, searchContext, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        @FindBy(className = "originHubName")
+        public PageElement originHubName;
+
+        @FindBy(className = "destinationHubName")
+        public PageElement destinationHubName;
+
+        @FindBy(className = "pathItems")
+        public PageElement pathItems;
+
+        @FindBy(xpath = "(//td//a)[1]")
+        public PageElement viewAction;
+
+        @FindBy(xpath = "(//td//a)[2]")
+        public PageElement editAction;
+
+        @FindBy(xpath = "(//td//a)[3]")
+        public PageElement removeAction;
     }
 }

@@ -207,6 +207,10 @@ public class PathManagementSteps extends AbstractSteps {
         String destinationHubName = resolvedMapOfData.get("destinationHubName");
 
         pathManagementPage.createDefaultPath(originHubName, destinationHubName);
+        if (!"empty".equals(originHubName) && !"empty".equals(destinationHubName)) {
+            pathManagementPage.verifyCreatingDefaultPath(originHubName, destinationHubName);
+        }
+        pause2s();
     }
 
     @Then("Operator verify a notification with message {string} is shown on path management page")
@@ -398,6 +402,43 @@ public class PathManagementSteps extends AbstractSteps {
     public void operatorClickButtonInPathDetails(String buttonName) {
         if ("remove".equals(buttonName)) {
             pathManagementPage.pathDetailsModal.removePathButton.click();
+        }
+    }
+
+    @And("Operator verify no new path created")
+    public void operatorVerifyNoNewPathCreated() {
+        Integer actualPathRowsSize = pathManagementPage.pathRowNvTable.rows.size();
+        assertThat("Path rows size is one", actualPathRowsSize, equalTo(1));
+    }
+
+    @And("Operator verify no path found from {string} to {string} message is shown in create default path modal")
+    public void operatorVerifyNoPathFoundMessageIsShownInCreateDefaultPathModal(String originHub, String destinationHub) {
+        String resolvedOriginHub = resolveValue(originHub);
+        String resolvedDestinationHub = resolveValue(destinationHub);
+
+        String actualCreateDefaultPathInfoText = pathManagementPage.createDefaultPathModal.createDefaultPathInfo.getText();
+        String expectedCreateDefaultPathInfoText = f("No path found from %s to %s!\nPlease add movement schedule(s) in Movement Schedule page in order to create a path between facilities.",
+                resolvedOriginHub, resolvedDestinationHub);
+        assertThat("Create default path message is equal", actualCreateDefaultPathInfoText,
+                equalTo(expectedCreateDefaultPathInfoText));
+    }
+
+    @Then("Operator verify {string} error info shown on create default path modal")
+    public void operatorVerifyErrorInfoShownOnCreateDefaultPathModal(String errorField) {
+        String expectedErrorInfo = "This field is required.";
+        if ("both".equals(errorField)) {
+            String actualOriginHubErrorInfo = pathManagementPage.createDefaultPathModal.originHubErrorInfo.getText();
+            String actualDestinationHubErrorInfo = pathManagementPage.createDefaultPathModal.destinationHubErrorInfo.getText();
+            assertThat("Error origin hub info is equal", actualOriginHubErrorInfo, equalTo(expectedErrorInfo));
+            assertThat("Error destination info is equal", actualDestinationHubErrorInfo, equalTo(expectedErrorInfo));
+        }
+        if ("origin hub".equals(errorField)) {
+            String actualOriginHubErrorInfo = pathManagementPage.createDefaultPathModal.originHubErrorInfo.getText();
+            assertThat("Error origin hub info is equal", actualOriginHubErrorInfo, equalTo(expectedErrorInfo));
+        }
+        if ("destination hub".equals(errorField)) {
+            String actualDestinationHubErrorInfo = pathManagementPage.createDefaultPathModal.destinationHubErrorInfo.getText();
+            assertThat("Error destination info is equal", actualDestinationHubErrorInfo, equalTo(expectedErrorInfo));
         }
     }
 }

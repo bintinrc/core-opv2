@@ -1109,6 +1109,16 @@ public class StandardDatabaseExtSteps extends AbstractDatabaseSteps<ScenarioMana
         assertThat("Movement path type is equal", movementPath.getMovementType(), equalTo(expectedMovementPathMovementType));
     }
 
+    @Then("DB Operator verifies number of path with origin {string} and {string} is {int} in movement_path table")
+    public void dbOperatorVerifiesNoNewPathWithOriginIsCreatedInMovementPathTable(String originHubIdAsString, String destinationHubIdAsString, Integer numberOfPaths)
+    {
+        Long originHubId = Long.valueOf(resolveValue(originHubIdAsString));
+        Long destinationHubId = Long.valueOf(resolveValue(destinationHubIdAsString));
+
+        List<MovementPath> movementPath = getHubJdbc().getAllMovementPath(originHubId, destinationHubId);
+        assertThat("Movement path length is equal", movementPath.size(), equalTo(numberOfPaths));
+    }
+
     @Then("DB Operator verify {string} is deleted in movement_path table")
     public void dbOperatorVerifyPathIsDeletedInMovementPathTable(String pathIdAsString) {
         Long pathId = Long.valueOf(resolveValue(pathIdAsString));
