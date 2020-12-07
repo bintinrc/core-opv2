@@ -76,7 +76,7 @@ public class MdVirtualRepeatTable<T extends DataEntity<?>> extends AbstractTable
     @Override
     public void selectRow(int rowNumber)
     {
-        clickf(".//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]/md-checkbox", mdVirtualRepeat, rowNumber);
+        clickf(".//tr[@md-virtual-repeat='%s'][%d]/td[contains(@class, 'column-checkbox')]//md-checkbox", mdVirtualRepeat, rowNumber);
     }
 
     @Override

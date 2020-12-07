@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.model;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.support.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.translate.CsvTranslators;
@@ -14,9 +15,12 @@ import java.util.List;
  * @author Sergey Mishanin
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class ReservationInfo {
+public class ReservationInfo extends DataEntity<ReservationInfo>
+{
     private static final CsvTranslators.CsvEscaper CSV_ESCAPER = new CsvTranslators.CsvEscaper();
 
+    private String id;
+    private String shipperId;
     private String shipperName;
     private String pickupAddress;
     private String routeId;
@@ -50,6 +54,26 @@ public class ReservationInfo {
         setApproxVolume(reservationInfo.getApproxVolume());
         setFailureReason(reservationInfo.getFailureReason());
         setComments(reservationInfo.getComments());
+    }
+
+    public String getId()
+    {
+        return id;
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
+    public String getShipperId()
+    {
+        return shipperId;
+    }
+
+    public void setShipperId(String shipperId)
+    {
+        this.shipperId = shipperId;
     }
 
     public String getShipperName() {

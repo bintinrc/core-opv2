@@ -15,9 +15,9 @@ import co.nvqa.commons.model.shipper.v2.Pricing;
 import co.nvqa.commons.model.shipper.v2.Qoo10;
 import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Return;
+import co.nvqa.commons.model.shipper.v2.ServiceTypeLevel;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.shipper.v2.Shopify;
-import co.nvqa.commons.support.DateUtil;
 import co.nvqa.commons.util.NvLogger;
 import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.selenium.page.AllShippersPage;
@@ -38,11 +38,17 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.*;
+import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_CONTACT_END_DATE;
+import static co.nvqa.operator_v2.selenium.page.AllShippersCreateEditPage.XPATH_PRICING_PROFILE_EFFECTIVE_DATE;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -94,20 +100,22 @@ public class AllShippersSteps extends AbstractSteps
     @When("^Operator create new Shipper with basic settings using data below:$")
     public void operatorCreateNewShipperWithBasicSettingsUsingDataBelow(Map<String, String> mapOfData)
     {
+        mapOfData = resolveKeyValues(mapOfData);
         String dateUniqueString = generateDateUniqueString();
 
         Shipper shipper = new Shipper();
-        setShipperDetails(shipper,dateUniqueString, mapOfData);
+        setShipperDetails(shipper, dateUniqueString, mapOfData);
         setLiaisonDetails(dateUniqueString, shipper);
         setServices(shipper, mapOfData);
-        setIndustryAndSales(shipper,mapOfData);
-        setPricing(shipper,mapOfData);
-        setBilling(shipper,dateUniqueString);
+        setIndustryAndSales(shipper, mapOfData);
+        setPricing(shipper, mapOfData);
+        setBilling(shipper, dateUniqueString);
         fillMarketplaceProperties(shipper, mapOfData);
         generatePickupAddresses(shipper, mapOfData);
 
         allShippersPage.createNewShipper(shipper);
         put(KEY_CREATED_SHIPPER, shipper);
+        putInList(KEY_LIST_OF_CREATED_SHIPPERS, shipper);
     }
 
     private void generatePickupAddresses(Shipper shipper, Map<String, String> mapOfData)
@@ -166,10 +174,15 @@ public class AllShippersSteps extends AbstractSteps
             md.setOrderCreateIsMultiParcelShipper(Boolean.valueOf(mapOfData.get("marketplace.isMultiParcel")));
 
             value = mapOfData.get("marketplace.premiumPickupDailyLimit");
-
             if (StringUtils.isNotBlank(value))
             {
                 md.setPickupPremiumPickupDailyLimit(Integer.valueOf(value));
+            }
+            value = mapOfData.get("marketplace.orderCreateAvailableServiceLevels");
+            if (StringUtils.isNotBlank(value))
+            {
+                List<String> serviceLevels = Arrays.stream(value.split(",")).map(StringUtils::trim).collect(Collectors.toList());
+                md.setOrderCreateAvailableServiceLevels(serviceLevels);
             }
 
             // Billing
@@ -908,12 +921,12 @@ public class AllShippersSteps extends AbstractSteps
         String dateUniqueString = generateDateUniqueString();
 
         Shipper shipper = new Shipper();
-        setShipperDetails(shipper,dateUniqueString, mapOfData);
+        setShipperDetails(shipper, dateUniqueString, mapOfData);
         setLiaisonDetails(dateUniqueString, shipper);
         setServices(shipper, mapOfData);
-        setIndustryAndSales(shipper,mapOfData);
-        setPricing(shipper,mapOfData);
-        setBilling(shipper,dateUniqueString);
+        setIndustryAndSales(shipper, mapOfData);
+        setPricing(shipper, mapOfData);
+        setBilling(shipper, dateUniqueString);
         fillMarketplaceProperties(shipper, mapOfData);
         generatePickupAddresses(shipper, mapOfData);
 
@@ -921,7 +934,7 @@ public class AllShippersSteps extends AbstractSteps
         put(KEY_CREATED_SHIPPER, shipper);
     }
 
-    private void setBilling( Shipper shipper,String dateUniqueString)
+    private void setBilling(Shipper shipper, String dateUniqueString)
     {
         Address billingAddress = generateRandomAddress();
 
@@ -931,14 +944,14 @@ public class AllShippersSteps extends AbstractSteps
         shipper.setBillingPostcode(billingAddress.getPostcode());
     }
 
-    private void setPricing(Shipper shipper,Map<String, String> mapOfData)
+    private void setPricing(Shipper shipper, Map<String, String> mapOfData)
     {
         Pricing pricing = new Pricing();
         pricing.setScriptName(mapOfData.get("pricingScriptName"));
         shipper.setPricing(pricing);
     }
 
-    private void setIndustryAndSales(Shipper shipper,Map<String, String> mapOfData)
+    private void setIndustryAndSales(Shipper shipper, Map<String, String> mapOfData)
     {
         shipper.setIndustryName(mapOfData.get("industryName"));
         shipper.setSalesPerson(mapOfData.get("salesPerson"));
@@ -951,10 +964,24 @@ public class AllShippersSteps extends AbstractSteps
         {
             pickupSettings.setPremiumPickupDailyLimit(Integer.valueOf(mapOfData.get("premiumPickupDailyLimit")));
         }
+        if (mapOfData.containsKey("pickupServiceTypeLevels"))
+        {
+            List<ServiceTypeLevel> serviceTypeLevels = Arrays.stream(mapOfData.get("pickupServiceTypeLevels").split(","))
+                    .map(val ->
+                    {
+                        ServiceTypeLevel serviceTypeLevel = new ServiceTypeLevel();
+                        String[] values = val.split(":");
+                        serviceTypeLevel.setType(values[0].trim());
+                        serviceTypeLevel.setLevel(values[1].trim());
+                        return serviceTypeLevel;
+                    })
+                    .collect(Collectors.toList());
+            pickupSettings.setServiceTypeLevel(serviceTypeLevels);
+        }
         shipper.setPickup(pickupSettings);
     }
 
-    private void setServices(Shipper shipper,Map<String, String> mapOfData)
+    private void setServices(Shipper shipper, Map<String, String> mapOfData)
     {
         Boolean isAllowCod = Boolean.parseBoolean(mapOfData.get("isAllowCod"));
         Boolean isAllowCashPickup = Boolean.parseBoolean(mapOfData.get("isAllowCashPickup"));
@@ -1002,7 +1029,7 @@ public class AllShippersSteps extends AbstractSteps
         shipper.setLiaisonPostcode(liaisonAddress.getPostcode());
     }
 
-    private Shipper setShipperDetails(Shipper shipper,String dateUniqueString,Map<String, String> mapOfData)
+    private Shipper setShipperDetails(Shipper shipper, String dateUniqueString, Map<String, String> mapOfData)
     {
         shipper.setActive(Boolean.parseBoolean(mapOfData.get("isShipperActive")));
         shipper.setType(mapOfData.get("shipperType"));
@@ -1020,11 +1047,11 @@ public class AllShippersSteps extends AbstractSteps
         String dateUniqueString = generateDateUniqueString();
 
         Shipper shipper = new Shipper();
-        setShipperDetails(shipper,dateUniqueString, mapOfData);
+        setShipperDetails(shipper, dateUniqueString, mapOfData);
         setLiaisonDetails(dateUniqueString, shipper);
         setServices(shipper, mapOfData);
-        setIndustryAndSales(shipper,mapOfData);
-        setBilling(shipper,dateUniqueString);
+        setIndustryAndSales(shipper, mapOfData);
+        setBilling(shipper, dateUniqueString);
         fillMarketplaceProperties(shipper, mapOfData);
         generatePickupAddresses(shipper, mapOfData);
 
