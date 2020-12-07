@@ -5,7 +5,6 @@ import co.nvqa.commons.model.core.Reservation;
 import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.support.DateUtil;
-import co.nvqa.commons.util.NvTestRuntimeException;
 import co.nvqa.operator_v2.model.ReservationInfo;
 import co.nvqa.operator_v2.selenium.page.ShipperPickupsPage;
 import co.nvqa.operator_v2.util.TestUtils;
@@ -25,6 +24,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.*;
 
@@ -51,62 +51,52 @@ public class ShipperPickupsSteps extends AbstractSteps
     {
         Date currentDate = new Date();
         Date nextDayDate = TestUtils.getNextDate(1);
-        shipperPickupsPage.filtersForm().filterReservationDate(currentDate, nextDayDate);
-        shipperPickupsPage.filtersForm().loadSelection.clickAndWaitUntilDone();
-    }
-
-    @When("^Operator set filters using data below and click Load Selection on Shipper Pickups page:$")
-    public void operatorSetFilterUsingDataBelowAndClickLoadSelectionOnShipperPickupsPage(Map<String, String> dataTableAsMap)
-    {
-        dataTableAsMap = resolveKeyValues(dataTableAsMap);
-        try
-        {
-            Date reservationDateStart = YYYY_MM_DD_SDF.parse(dataTableAsMap.get("reservationDateStart"));
-            Date reservationDateEnd = YYYY_MM_DD_SDF.parse(dataTableAsMap.get("reservationDateEnd"));
-            shipperPickupsPage.filtersForm().filterReservationDate(reservationDateStart, reservationDateEnd);
-            shipperPickupsPage.filtersForm().filterByShipper(dataTableAsMap.get("shipperName"));
-            shipperPickupsPage.filtersForm().filterByStatus(dataTableAsMap.get("waypointStatus"));
-            shipperPickupsPage.filtersForm().loadSelection.clickAndWaitUntilDone();
-        } catch (ParseException ex)
-        {
-            throw new NvTestRuntimeException(ex);
-        }
+        shipperPickupsPage.filtersForm.filterReservationDate(currentDate, nextDayDate);
+        shipperPickupsPage.filtersForm.loadSelection.clickAndWaitUntilDone();
     }
 
     @When("^Operator set filter parameters and click Load Selection on Shipper Pickups page:$")
-    public void operatorSetFilterParametersAndClickLoadSelectionOnShipperPickupsPage(Map<String, String> mapOfData)
+    public void operatorSetFilterParametersAndClickLoadSelectionOnShipperPickupsPage(Map<String, String> mapOfData) throws ParseException
     {
         mapOfData = resolveKeyValues(mapOfData);
-        Date fromDate = resolveFilterDate(mapOfData.getOrDefault("fromDate", "TODAY"));
-        Date toDate = resolveFilterDate(mapOfData.getOrDefault("toDate", "TOMORROW"));
-        Map<String, String> dataTableAsMapReplaced = replaceDataTableTokens(mapOfData, mapOfData);
-        shipperPickupsPage.filtersForm().filterReservationDate(fromDate, toDate);
-        String value = mapOfData.get("hub");
+
+        String value = mapOfData.get("fromDate");
+        Date fromDate = StringUtils.isNotBlank(value) ? YYYY_MM_DD_SDF.parse(value) : new Date();
+        value = mapOfData.get("toDate");
+        Date toDate = StringUtils.isNotBlank(value) ? YYYY_MM_DD_SDF.parse(value) : TestUtils.getNextDate(1);
+        shipperPickupsPage.filtersForm.filterReservationDate(fromDate, toDate);
+
+        value = mapOfData.get("hub");
         if (StringUtils.isNotBlank(value))
         {
-            shipperPickupsPage.filtersForm().filterByHub(value);
+            shipperPickupsPage.filtersForm.filterByHub(value);
         }
         value = mapOfData.get("zone");
         if (StringUtils.isNotBlank(value))
         {
-            shipperPickupsPage.filtersForm().filterByZone(value);
+            shipperPickupsPage.filtersForm.filterByZone(value);
         }
         value = mapOfData.get("type");
         if (StringUtils.isNotBlank(value))
         {
-            shipperPickupsPage.filtersForm().filterByType(value);
+            shipperPickupsPage.filtersForm.filterByType(value);
         }
         value = mapOfData.get("status");
         if (StringUtils.isNotBlank(value))
         {
-            shipperPickupsPage.filtersForm().filterByStatus(value);
+            shipperPickupsPage.filtersForm.filterByStatus(value);
         }
-        value = dataTableAsMapReplaced.get("shipperName");
+        value = mapOfData.get("shipperName");
         if (StringUtils.isNotBlank(value))
         {
-            shipperPickupsPage.filtersForm().filterByShipper(value);
+            shipperPickupsPage.filtersForm.filterByShipper(value);
         }
-        shipperPickupsPage.filtersForm().loadSelection.clickAndWaitUntilDone();
+        value = mapOfData.get("masterShipperName");
+        if (StringUtils.isNotBlank(value))
+        {
+            shipperPickupsPage.filtersForm.filterByMasterShipper(value);
+        }
+        shipperPickupsPage.filtersForm.loadSelection.clickAndWaitUntilDone();
     }
 
     private Date resolveFilterDate(String value)
@@ -300,13 +290,23 @@ public class ShipperPickupsSteps extends AbstractSteps
     @Then("^Operator verify the duplicated reservation is created successfully$")
     public void operatorVerifyTheDuplicatedReservationIsCreatedSuccessfully()
     {
-        shipperPickupsPage.verifyReservationInfo(get(KEY_DUPLICATED_RESERVATION_INFO), get(KEY_CREATED_ADDRESS));
+        ReservationInfo expected = get(KEY_DUPLICATED_RESERVATION_INFO);
+        expected = new ReservationInfo(expected);
+        expected.setId(null);
+        shipperPickupsPage.verifyReservationInfo(expected, get(KEY_CREATED_ADDRESS));
     }
 
     @Then("^Operator verify the duplicated reservations are created successfully$")
     public void operatorVerifyTheDuplicatedReservationsAreCreatedSuccessfully()
     {
-        shipperPickupsPage.verifyReservationsInfo(get(KEY_LIST_OF_DUPLICATED_RESERVATIONS_INFO), get(KEY_LIST_OF_CREATED_ADDRESSES));
+        List<ReservationInfo> expected = get(KEY_LIST_OF_DUPLICATED_RESERVATIONS_INFO);
+        expected = expected.stream().map(val ->
+        {
+            val = new ReservationInfo(val);
+            val.setId(null);
+            return val;
+        }).collect(Collectors.toList());
+        shipperPickupsPage.verifyReservationsInfo(expected, get(KEY_LIST_OF_CREATED_ADDRESSES));
     }
 
     @And("^Operator use the Route Suggestion to add created reservation to the route using data below:$")
@@ -338,7 +338,8 @@ public class ShipperPickupsSteps extends AbstractSteps
     {
         action = resolveValue(action);
         List<Address> addresses = get(KEY_LIST_OF_CREATED_ADDRESSES);
-        addresses.forEach(address -> {
+        addresses.forEach(address ->
+        {
             shipperPickupsPage.reservationsTable.searchByPickupAddress(address);
             shipperPickupsPage.reservationsTable.selectRow(1);
         });
@@ -349,7 +350,8 @@ public class ShipperPickupsSteps extends AbstractSteps
     @And("^Operator verifies no route suggested for selected reservations$")
     public void operatorVerifiesNoRouteSuggestedForSelectedReservations()
     {
-        shipperPickupsPage.bulkRouteAssignmentDialog.suggestedRoutes.forEach(routeSelector -> {
+        shipperPickupsPage.bulkRouteAssignmentDialog.suggestedRoutes.forEach(routeSelector ->
+        {
             assertEquals("Suggested route value", "", routeSelector.getValue());
         });
     }
@@ -391,20 +393,23 @@ public class ShipperPickupsSteps extends AbstractSteps
     public void operatorVerifyTheRouteWasRemovedFromTheCreatedReservation()
     {
         Address address = get(KEY_CREATED_ADDRESS);
-        ReservationInfo reservationInfo = new ReservationInfo();
-        reservationInfo.setRouteId("-");
-        reservationInfo.setDriverName("-");
-        shipperPickupsPage.verifyReservationInfo(reservationInfo, address);
+        shipperPickupsPage.reservationsTable.searchByPickupAddress(address);
+        ReservationInfo actual = shipperPickupsPage.reservationsTable.readEntity(1);
+        assertNull("Route Id", actual.getRouteId());
+        assertNull("Driver Name", actual.getDriverName());
     }
 
     @Then("^Operator verify the route was removed from the created reservations$")
     public void operatorVerifyTheRouteWasRemovedFromTheCreatedReservations()
     {
         List<Address> addresses = get(KEY_LIST_OF_CREATED_ADDRESSES);
-        ReservationInfo reservationInfo = new ReservationInfo();
-        reservationInfo.setRouteId("-");
-        reservationInfo.setDriverName("-");
-        addresses.forEach(address -> shipperPickupsPage.verifyReservationInfo(reservationInfo, address));
+        addresses.forEach(address ->
+        {
+            shipperPickupsPage.reservationsTable.searchByPickupAddress(address);
+            ReservationInfo actual = shipperPickupsPage.reservationsTable.readEntity(1);
+            assertNull("Route Id", actual.getRouteId());
+            assertNull("Driver Name", actual.getDriverName());
+        });
     }
 
     @Then("^Operator verify the reservation data is correct on Shipper Pickups page$")
