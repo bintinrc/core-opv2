@@ -330,6 +330,7 @@ Feature: Global Inbound
       | failureReasonCodeId    | <failureReasonCodeId> |
       | failureReasonIndexMode | FIRST                 |
     When Operator go to menu Inbounding -> Global Inbound
+    And Operator refresh page
     And Operator global inbounds parcel using data below:
       | hubName    | {hub-name}                                 |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
@@ -385,12 +386,13 @@ Feature: Global Inbound
     And Operator go to menu System Settings -> Global Settings
     And Operator set Weight Tolerance value to "2" on Global Settings page
     And Operator save Inbound settings on Global Settings page
+    And Operator refresh page
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below and check alert:
       | hubName        | {hub-name}                                 |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | overrideWeight | 7                                          |
-      | weightWarning  | Weight is higher than original by 3.0 kg   |
+      | overrideWeight | 10                                         |
+      | weightWarning  | Weight is higher than original by 6.0 kg   |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
@@ -406,13 +408,14 @@ Feature: Global Inbound
     And Operator go to menu System Settings -> Global Settings
     And Operator set Weight Tolerance value to "2" on Global Settings page
     And Operator save Inbound settings on Global Settings page
-    And API Operator update order weight to 5
+    And API Operator update order weight to 10
+    And Operator refresh page
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below and check alert:
       | hubName        | {hub-name}                                 |
       | trackingId     | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | overrideWeight | 2                                          |
-      | weightWarning  | Weight is lower than original by 3.0 kg    |
+      | weightWarning  | Weight is lower than original by 8.0 kg    |
     Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
@@ -469,32 +472,32 @@ Feature: Global Inbound
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
-      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":4.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+      | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":1.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API DP lodge in an order to DP with ID = "{dp-id}" and Shipper Legacy ID = "{shipper-v4-legacy-id}"
-    And DB Operator gets DP Job ID by Barcode
-    And API Operator do the DP Success for From Driver Flow
-    And API Operator get order details
+    Given DB Operator gets the Order ID by Tracking ID
+    Given DB Operator gets Reservation ID based on Order ID from order pickups table
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add pickup reservation based on Address ID to route
+    And API Operator start the route
+    And API Driver collect all his routes
+    And API Driver get Reservation Job
+    Given DB Operator get DP job id
+    And API Operator do the DP Success for To Driver Flow
+    And API Driver success Reservation by scanning created parcel
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
       | hubName    | {hub-name}                                 |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | {KEY_ORDER_DETAILS.destinationHub} |
-      | rackInfo       | {KEY_ORDER_DETAILS.rackSector}     |
-    Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
-    And DB Operator verify the last inbound_scans record for the created order:
-      | hubId   | {hub-id}                                   |
-      | orderId | {KEY_CREATED_ORDER_ID}                     |
-      | scan    | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | type    | 2                                          |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
     And DB Operator verify dp_qa_gl.dp_job_orders record using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | status     | CLEANED                                    |
+      | status     | SUCCESS                                    |
     And DB Operator verify dp_qa_gl.dp_jobs record using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | status     | COMPLETED                                  |
@@ -561,10 +564,10 @@ Feature: Global Inbound
   Scenario: Inbound Fully Integrated DP Order (uid:8a855ffd-2b50-4aea-a358-53cff150ad98)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
-      | shipperClientId     | {shipper-fully-integrated-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-      | shipperClientSecret | {shipper-fully-integrated-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-      | v4OrderRequest      | {"service_type":"Parcel","service_level":"standard","reference":{"merchant_order_number":"ship-123"},"to":{"name":"Latika Jamnal","phone_number":"+6588923644","email":"ninjavan.qa3@gmail.com","address":{"country":"{country-code}","address1":"30 Jalan Kilang Barat","address2":"NVQA V4 HQ","postcode":"628586"}, "collection_point": "{dp-short-name}"},"parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":null,"pickup_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"pickup_address_slot_id":1,"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"dimensions":{"weight":2},"allow_self_collection":true},"marketplace":{"seller_id":"Hazelcast-Lock-4","seller_company_name":"weee"},"international":{"portation":"Import"}} |
+      | shipperClientId     | {shipper-fully-integrated-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | shipperClientSecret | {shipper-fully-integrated-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"standard","reference":{"merchant_order_number":"ship-123"},"to":{"name":"Latika Jamnal","phone_number":"+6588923644","email":"ninjavan.qa3@gmail.com","address":{"country":"SG","address1":"30 Jalan Kilang Barat","address2":"NVQA V4 HQ","postcode":"628586"}, "collection_point": "{dp-short-name}"},"parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":null,"pickup_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"pickup_address_slot_id":1,"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"dimensions":{"weight":2},"allow_self_collection":true}} |
     And Operator go to menu Inbounding -> Global Inbound
     Then Operator global inbounds parcel using data below:
       | hubName    | {hub-name}                                 |
@@ -589,10 +592,10 @@ Feature: Global Inbound
   Scenario: Inbound Semi Integrated DP Order (uid:d846ee76-cf66-4b14-8e91-88f3f8f3999f)
     When Operator go to menu Shipper Support -> Blocked Dates
     And API Shipper create V4 order using data below:
-      | shipperClientId     | {shipper-semi-integrated-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-      | shipperClientSecret | {shipper-semi-integrated-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-      | v4OrderRequest      | {"service_type":"Parcel","service_level":"standard","reference":{"merchant_order_number":"ship-123"},"to":{"name":"Latika Jamnal","phone_number":"+6588923644","email":"ninjavan.qa3@gmail.com","address":{"country":"{country-code}","address2":"{dp-address-2}","address1":"{dp-address-1}","postcode":"{dp-postcode}"}},"parcel_job":{"is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":null,"pickup_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"pickup_address_slot_id":1,"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"dimensions":{"weight":2},"allow_self_collection":true},"marketplace":{"seller_id":"Hazelcast-Lock-4","seller_company_name":"weee"},"international":{"portation":"Import"}} |
+      | shipperClientId     | {shipper-semi-integrated-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+      | shipperClientSecret | {shipper-semi-integrated-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+      | v4OrderRequest      | {"service_type":"Parcel","service_level":"standard","reference":{"merchant_order_number":"ship-123"},"to":{"name":"Latika Jamnal","phone_number":"+6596548707","email":"ninjavan.qa3@gmail.com","address":{"country":"SG","address2":"SIANG LIM SIAN LI BUDDHIST TEMPLE","address1":"184E JALAN TOA PAYOH #1-1","postcode":"319941"}},"parcel_job":{"allow_doorstep_dropoff": true,"enforce_delivery_verification": false,"delivery_verification_mode": "SIGNATURE","is_pickup_required":true,"pickup_date":"{{next-1-day-yyyy-MM-dd}}","cash_on_delivery":null,"pickup_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"pickup_address_slot_id":1,"delivery_start_date":"{{next-1-day-yyyy-MM-dd}}","delivery_timeslot":{"start_time":"09:00","end_time":"22:00","timezone":"Asia/Singapore"},"dimensions":{"weight":1},"allow_self_collection":true}} |
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
       | hubName    | {hub-name}                                 |

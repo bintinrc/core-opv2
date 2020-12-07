@@ -41,9 +41,9 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds pricing script with invalid discount and verifies the error message
-      | pricingScriptName | {pricing-script-name-2}         |
-      | discount          | 0                               |
-      | errorMessage      | 0 is not a valid discount value |
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | discount          | 0                                               |
+      | errorMessage      | 0 is not a valid discount value                 |
 
   @CloseNewWindows
   Scenario: Create a new Pricing Profile - with none Percentage Discount (uid:67f49a74-87a8-4db8-b1a7-7787f4dd70e9)
