@@ -265,7 +265,7 @@ public class OrderBillingPage extends OperatorV2SimplePage
                     String line = reader.readLine();
                     if (isFirstLine)
                     {
-                        if (line.startsWith("\"Shipper ID"))
+                        if (line.startsWith("\ufeff\"Shipper ID"))
                         {
                             saveHeaderInCSv(line);
                         } else

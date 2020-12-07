@@ -4,7 +4,6 @@ Feature: All Shippers
   Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-
   Scenario: Add New Shipper Pricing Profile (uid:79bb423b-36d1-49a0-8b22-34972253afe7)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -24,10 +23,10 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile
-      | pricingScriptName | 2402 - New Script             |
-      | discount          | 20                            |
-      | comments          | This is a test pricing script |
-      | type              | FLAT                          |
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | discount          | 20                                              |
+      | comments          | This is a test pricing script                   |
+      | type              | FLAT                                            |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details are correct
@@ -98,10 +97,10 @@ Feature: All Shippers
     Then Operator verifies that Pricing Script is "Active" and "Expired"
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile
-      | pricingScriptName | 2402 - New Script             |
-      | discount          | 20.00                         |
-      | comments          | This is a test pricing script |
-      | type              | FLAT                          |
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | discount          | 20.00                                           |
+      | comments          | This is a test pricing script                   |
+      | type              | FLAT                                            |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details are correct
@@ -126,10 +125,10 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile
-      | pricingScriptName | 2402 - New Script             |
-      | discount          | 20                            |
-      | comments          | This is a test pricing script |
-      | type              | FLAT                          |
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | discount          | 20                                              |
+      | comments          | This is a test pricing script                   |
+      | type              | FLAT                                            |
     And Operator save changes on Edit Shipper Page
     And Operator edits the created shipper
     Then Operator verifies that Pricing Script is "Pending" and "Active"
@@ -156,9 +155,9 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds pricing script with invalid discount and verifies the error message
-      | pricingScriptName | 2402 - New Script               |
-      | discount          | 0                               |
-      | errorMessage      | 0 is not a valid discount value |
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | discount          | 0                                               |
+      | errorMessage      | 0 is not a valid discount value                 |
 
 
   @CloseNewWindows
@@ -181,9 +180,9 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile
-      | pricingScriptName | 2402 - New Script             |
-      | comments          | This is a test pricing script |
-      | type              | FLAT                          |
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | comments          | This is a test pricing script                   |
+      | type              | FLAT                                            |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     Then DB Operator fetches pricing profile details
     And Operator verifies the pricing profile and shipper discount details are correct
@@ -208,9 +207,9 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds pricing script with invalid discount and verifies the error message
-      | pricingScriptName | 2402 - New Script                |
-      | discount          | $#^$^#@                          |
-      | errorMessage      | Special character is not allowed |
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | discount          | $#^$^#@                                         |
+      | errorMessage      | Special character is not allowed                |
 
   @CloseNewWindows
   Scenario: Create a new Pricing Profile - with 3-5 integer after decimal point (uid:30ed9502-76df-4695-8a33-f21d40dc9ad5)
@@ -232,10 +231,10 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile
-      | pricingScriptName | 2402 - New Script             |
-      | discount          | 20.54321                      |
-      | comments          | This is a test pricing script |
-      | type              | FLAT                          |
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | discount          | 20.54321                                        |
+      | comments          | This is a test pricing script                   |
+      | type              | FLAT                                            |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details are correct
@@ -260,10 +259,10 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds new Shipper's Pricing Profile
-      | pricingScriptName | 2402 - New Script             |
-      | discount          | 50000.00                      |
-      | comments          | This is a test pricing script |
-      | type              | FLAT                          |
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | discount          | 50000.00                                        |
+      | comments          | This is a test pricing script                   |
+      | type              | FLAT                                            |
     And Operator save changes on Edit Shipper Page and gets saved pricing profile values
     Then DB Operator fetches pricing profile and shipper discount details
     And Operator verifies the pricing profile and shipper discount details are correct
@@ -288,10 +287,10 @@ Feature: All Shippers
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
     Then Operator adds pricing script with invalid discount and verifies the error message
-      | pricingScriptName | 2402 - New Script                  |
-      | discount          | 10000000                           |
-      | comments          | This is an invalid discount        |
-      | errorMessage      | Discounts cannot exceed 6 figures. |
+      | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
+      | discount          | 10000000                                        |
+      | comments          | This is an invalid discount                     |
+      | errorMessage      | Discounts cannot exceed 6 figures.              |
 
 
   @KillBrowser @ShouldAlwaysRun

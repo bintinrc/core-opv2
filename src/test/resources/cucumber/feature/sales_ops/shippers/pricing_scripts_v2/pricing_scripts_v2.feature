@@ -1,9 +1,8 @@
-@OperatorV2Disabled @Shipper @OperatorV2Part2Disabled @PricingScriptsV2 @SalesOps
+@OperatorV2Disabled @Shipper @OperatorV2Part2Disabled @LaunchBrowser @ShouldAlwaysRun @PricingScriptsV2 @SalesOps
 
 Feature: Pricing Scripts V2
 
-  @LaunchBrowser @ShouldAlwaysRun
-  Scenario: Login to Operator Portal V2
+  Background: Login to Operator Portal V2
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
   @DeletePricingScript

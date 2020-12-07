@@ -140,7 +140,7 @@ public class OrderBillingSteps extends AbstractSteps
     public void operatorVerifiesTheHeaderUsingDataBelow(List<String> headerColumns)
     {
         String expectedHeaderLine = String.join(",", headerColumns);
-        String actualHeaderLine = orderBillingPage.getHeaderLine();
+        String actualHeaderLine = orderBillingPage.getHeaderLine().replaceAll("\ufeff","");
         String assertMessage = f("Actual header line does not match with the expected header line. Actual Header is %s , Expected Header is %s", actualHeaderLine, expectedHeaderLine);
         assertEquals(assertMessage, expectedHeaderLine, actualHeaderLine);
     }
