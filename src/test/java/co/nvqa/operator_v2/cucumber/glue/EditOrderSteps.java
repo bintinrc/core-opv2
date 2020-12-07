@@ -705,7 +705,7 @@ public class EditOrderSteps extends AbstractSteps
         }
         if (Objects.nonNull(pickupTimeslot))
         {
-            order.setPickupTimeslot(pickupTimeslot);
+            order.setPickupTimeslot(Order.Timeslot.fromText(pickupTimeslot));
         }
         if (Objects.nonNull(address1))
         {
@@ -889,7 +889,7 @@ public class EditOrderSteps extends AbstractSteps
         }
         if (Objects.nonNull(pickupTimeslot))
         {
-            order.setPickupTimeslot(pickupTimeslot);
+            order.setPickupTimeslot(Order.Timeslot.fromText(pickupTimeslot));
         }
         if (Objects.nonNull(address1))
         {

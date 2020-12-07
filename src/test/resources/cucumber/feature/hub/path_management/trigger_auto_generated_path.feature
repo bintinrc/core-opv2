@@ -101,14 +101,24 @@ Feature: Trigger Auto Generated Path
   @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb @SoftDeleteCreatedPaths
   Scenario: Generate Default Path with Path Can't Be Found (uid:adf8f889-2bd8-4782-8e01-2ad650f6e644)
     Given Operator go to menu Shipper Support -> Blocked Dates
+    Given API Operator creates 2 new Hub using data below:
+      | name         | GENERATED |
+      | displayName  | GENERATED |
+      | facilityType | CROSSDOCK |
+      | city         | GENERATED |
+      | country      | GENERATED |
+      | latitude     | GENERATED |
+      | longitude    | GENERATED |
+    And API Operator reloads hubs cache
+    And Operator refresh page
     Given Operator go to menu Inter-Hub -> Path Management
     And Operator verifies path management page is loaded
     When Operator clicks add default path button
     And Operator create default path with following data:
-      | originHubName      | {hub-relation-destination-hub-name-2} |
-      | destinationHubName | {hub-relation-origin-hub-name-2}      |
-    Then Operator verify no path found from "{hub-relation-destination-hub-name-2}" to "{hub-relation-origin-hub-name-2}" message is shown in create default path modal
-    And DB Operator verifies number of path with origin "{hub-relation-destination-hub-id-2}" and "{hub-relation-origin-hub-id-2}" is 0 in movement_path table
+      | originHubName      | {KEY_LIST_OF_CREATED_HUBS[1].name} |
+      | destinationHubName | {KEY_LIST_OF_CREATED_HUBS[2].name} |
+    Then Operator verify no path found from "{KEY_LIST_OF_CREATED_HUBS[1].name}" to "{KEY_LIST_OF_CREATED_HUBS[2].name}" message is shown in create default path modal
+    And DB Operator verifies number of path with origin "{KEY_LIST_OF_CREATED_HUBS[1].id}" and "{KEY_LIST_OF_CREATED_HUBS[2].id}" is 0 in movement_path table
 
   @DeleteHubsViaDb @SoftDeleteAllCreatedMovementsViaDb
   Scenario: Unable to Generate Default Path without Selecting Origin Hub & Destination Hub (uid:f723558d-ea7b-48a7-af5c-a678b897fa9d)
