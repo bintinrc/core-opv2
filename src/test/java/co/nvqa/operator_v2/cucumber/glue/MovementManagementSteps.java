@@ -145,6 +145,11 @@ public class MovementManagementSteps extends AbstractSteps
                 String crossdockHub = finalData.get("crossdockHub");
                 String stationId = finalData.get("stationId");
                 String crossdockId = finalData.get("crossdockHubId");
+                if (stationId != null && crossdockId != null)
+                {
+                    putInList(KEY_LIST_OF_CROSSDOCK_DETAIL_STATION_ID, Long.valueOf(stationId));
+                    putInList(KEY_LIST_OF_CROSSDOCK_DETAIL_CROSSDOCK_ID, Long.valueOf(crossdockId));
+                }
                 operatorSelectTabOnMovementManagementPage("Relations");
                 operatorSelectTabOnMovementManagementPage("Pending");
                 movementManagementPage.stationFilter.forceClear();
@@ -158,11 +163,6 @@ public class MovementManagementSteps extends AbstractSteps
                 movementManagementPage.successCreateRelation.waitUntilVisible();
                 movementManagementPage.successCreateRelation.waitUntilInvisible();
                 movementManagementPage.editStationRelationsModal.waitUntilInvisible();
-                if (stationId != null && crossdockId != null)
-                {
-                    putInList(KEY_LIST_OF_CROSSDOCK_DETAIL_STATION_ID, Long.valueOf(stationId));
-                    putInList(KEY_LIST_OF_CROSSDOCK_DETAIL_CROSSDOCK_ID, Long.valueOf(crossdockId));
-                }
             } catch (Throwable ex) {
                 NvLogger.error(ex.getMessage());
                 NvLogger.info("Searched element is not found, retrying...");
