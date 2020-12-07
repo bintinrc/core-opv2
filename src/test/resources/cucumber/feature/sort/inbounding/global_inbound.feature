@@ -474,30 +474,30 @@ Feature: Global Inbound
       | generateFromAndTo | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
       | v4OrderRequest    | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "dimensions":{ "size":"S", "volume":1.0, "weight":1.0 }, "is_pickup_required":false, "pickup_date":"{{next-working-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-2-working-days-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API DP lodge in an order to DP with ID = "{dp-id}" and Shipper Legacy ID = "{shipper-v4-legacy-id}"
-    And DB Operator gets DP Job ID by Barcode
-    And API Operator do the DP Success for From Driver Flow
-    And API Operator get order details
+    Given DB Operator gets the Order ID by Tracking ID
+    Given DB Operator gets Reservation ID based on Order ID from order pickups table
+    And API Operator create new route using data below:
+      | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
+    Given API Operator add pickup reservation based on Address ID to route
+    And API Operator start the route
+    And API Driver collect all his routes
+    And API Driver get Reservation Job
+    Given DB Operator get DP job id
+    And API Operator do the DP Success for To Driver Flow
+    And API Driver success Reservation by scanning created parcel
     And Operator go to menu Inbounding -> Global Inbound
     And Operator global inbounds parcel using data below:
       | hubName    | {hub-name}                                 |
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
     Then Operator verify info on Global Inbound page using data below:
-      | destinationHub | {KEY_ORDER_DETAILS.destinationHub} |
-      | rackInfo       | {KEY_ORDER_DETAILS.rackSector}     |
-    Then Operator verify info on Global Inbound page using data below:
       | destinationHub | {KEY_CREATED_ORDER.destinationHub} |
       | rackInfo       | {KEY_CREATED_ORDER.rackSector}     |
       | color          | #ffa400                            |
-    And DB Operator verify the last inbound_scans record for the created order:
-      | hubId   | {hub-id}                                   |
-      | orderId | {KEY_CREATED_ORDER_ID}                     |
-      | scan    | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | type    | 2                                          |
     And DB Operator verify order_events record for the created order:
       | type | 26 |
     And DB Operator verify dp_qa_gl.dp_job_orders record using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
-      | status     | CLEANED                                    |
+      | status     | SUCCESS                                    |
     And DB Operator verify dp_qa_gl.dp_jobs record using data below:
       | trackingId | {KEY_LIST_OF_CREATED_ORDER_TRACKING_ID[1]} |
       | status     | COMPLETED                                  |
