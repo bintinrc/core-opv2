@@ -1,6 +1,7 @@
 package co.nvqa.operator_v2.selenium.elements.nv;
 
 import co.nvqa.commons.util.NvTestRuntimeException;
+import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.openqa.selenium.Keys;
@@ -29,6 +30,9 @@ public class NvAutocomplete extends PageElement
 
     @FindBy(css = "md-progress-linear")
     public PageElement progressBar;
+
+    @FindBy(css = "button[ng-click='$mdAutocompleteCtrl.clear()']")
+    public Button clear;
 
     public void selectValue(String value)
     {
@@ -63,6 +67,14 @@ public class NvAutocomplete extends PageElement
         {
             inputElement.sendKeys(Keys.ESCAPE);
         }
+    }
+
+    public void selectValue(Object value){
+        selectValue(String.valueOf(value));
+    }
+
+    public void clear(){
+        clear.click();
     }
 
     public String getValue()

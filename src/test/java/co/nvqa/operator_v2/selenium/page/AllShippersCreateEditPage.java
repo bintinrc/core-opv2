@@ -13,6 +13,7 @@ import co.nvqa.commons.model.shipper.v2.Pricing;
 import co.nvqa.commons.model.shipper.v2.Qoo10;
 import co.nvqa.commons.model.shipper.v2.Reservation;
 import co.nvqa.commons.model.shipper.v2.Return;
+import co.nvqa.commons.model.shipper.v2.ServiceTypeLevel;
 import co.nvqa.commons.model.shipper.v2.Shipper;
 import co.nvqa.commons.model.shipper.v2.Shopify;
 import co.nvqa.commons.support.DateUtil;
@@ -63,10 +64,73 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     @FindBy(name = "Save Changes")
     public NvIconTextButton saveChanges;
 
+    //region BASIC
     @FindBy(css = "div[model='ctrl.data.basic.status']")
     public ContainerSwitch shipperStatus;
     @FindBy(css = "md-select[ng-model='ctrl.data.basic.shipperType']")
-    public MdSelect sipperType;
+    public MdSelect shipperType;
+    @FindBy(id = "shipper-name")
+    public TextBox shipperName;
+    @FindBy(id = "Short Name")
+    public TextBox shortName;
+    @FindBy(id = "shipper-phone-number")
+    public TextBox shipperPhoneNumber;
+    @FindBy(id = "shipper-email")
+    public TextBox shipperEmail;
+    @FindBy(css = "[id*='shipper-dashboard-password']")
+    public TextBox shipperDashboardPassword;
+    @FindBy(name = "shipper-classification")
+    public MdSelect channel;
+    @FindBy(name = "industry")
+    public MdSelect industry;
+    @FindBy(name = "account-type")
+    public MdSelect accountType;
+    @FindBy(id = "salesperson")
+    public MdSelect salesperson;
+
+    //endregion
+
+    //region MORE SETTINGS
+
+    @FindBy(css = "form[name='ctrl.moreForm'] md-select[ng-model='ctrl.data.more.allowedTypes']")
+    public MdSelect allowedTypes;
+
+    @FindBy(css = "form[name='ctrl.moreForm'] [name='container.shippers.add-new-service']")
+    public NvIconTextButton moreSettingsAddNewService;
+
+    //endregion
+
+
+    //region MARKETPLACE
+
+    //region Services
+    @FindBy(css = "md-select[ng-model='ctrl.data.marketplace.ocVersion']")
+    public MdSelect ocVersion;
+    @FindBy(css = "md-select[ng-model='ctrl.data.marketplace.selectedOcServices']")
+    public MdSelect ocServices;
+    @FindBy(css = "md-select[ng-model='ctrl.data.marketplace.trackingType']")
+    public MdSelect trackingType;
+    //endregion
+
+    //region Billing
+    @FindBy(css = "form[name='ctrl.marketplaceForm'] [id='Billing Name']")
+    public TextBox marketplaceBillingName;
+    @FindBy(css = "form[name='ctrl.marketplaceForm'] [id='Billing Contact']")
+    public TextBox marketplaceBillingContact;
+    @FindBy(css = "form[name='ctrl.marketplaceForm'] [id='Billing Address']")
+    public TextBox marketplaceBillingAddress;
+    @FindBy(css = "form[name='ctrl.marketplaceForm'] [id='Billing Postcode']")
+    public TextBox marketplaceBillingPostcode;
+    //endregion
+
+    //region Pickup Service
+    @FindBy(css = "form[name='ctrl.marketplaceForm'] [id='premium-pickup-daily-limit']")
+    public TextBox premiumPickupDailyLimit;
+    @FindBy(name = "container.shippers.add-new-service")
+    public NvIconTextButton addNewService;
+    //endregion
+
+    //endregion
 
     @FindBy(name = "container.shippers.pricing-billing-add-new-profile")
     public NvIconTextButton addNewProfile;
@@ -113,10 +177,6 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
     public static final String XPATH_PRICING_PROFILE_SCRIPT_NAME = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='pricing-script-name']";
     public static final String XPATH_PRICING_PROFILE_COMMENTS = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='comments']";
     public static final String XPATH_PRICING_PROFILE_CONTACT_END_DATE = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='contract-end-date']";
-    public static final String XPATH_PRICING_PROFILE_COD_MIN = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='cod-min']";
-    public static final String XPATH_PRICING_PROFILE_COD_PERCENT = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='cod-percent']";
-    public static final String XPATH_PRICING_PROFILE_INSURANCE_MIN = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='insurance-min']";
-    public static final String XPATH_PRICING_PROFILE_INSURANCE_PERCENT = "//table[@class='table-body']//td[contains(@class,'status') and text()='Pending']/preceding-sibling::td[@class='insurance-percent']";
     public static final String XPATH_EDIT_PENDING_PROFILE = "//button[@aria-label='Edit Pending Profile']";
     public static final String XPATH_DISCOUNT_ERROR_MESSAGE = "//div[contains(@ng-messages,'error') and contains(@class,'ng-active')]/div[@ng-repeat='e in errorMsgs']";
     public static final String XPATH_UPDATE_ERROR_MESSAGE = "//div[@class='error-box']//div[@class='title']";
@@ -237,29 +297,28 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         String shipperStatusAriaLabel = convertBooleanToString(shipper.getActive(), "Active", "Disabled");
         shipperStatus.selectValue(shipperStatusAriaLabel);
-        sipperType.selectValue(shipper.getType());
+        shipperType.selectValue(shipper.getType());
 
         /*
           ===== SHIPPER INFORMATION =====
          */
-        sendKeysById("shipper-name", shipper.getName());
-        sendKeysById("Short Name", shipper.getShortName());
-        sendKeysById("shipper-phone-number", shipper.getContact());
+        shipperName.setValue(shipper.getName());
+        shortName.setValue(shipper.getShortName());
+        shipperPhoneNumber.setValue(shipper.getContact());
 
         if (isCreateForm)
         {
-            sendKeysById("shipper-email", shipper.getEmail());
-            sendKeys(XPATH_FIELD_PASSWORD, shipper.getShipperDashboardPassword());
+            shipperEmail.setValue(shipper.getEmail());
+            shipperDashboardPassword.setValue(shipper.getShipperDashboardPassword());
         }
 
-        selectValueFromMdSelect(LOCATOR_FIELD_CHANNEL, "B2C Marketplace");
-        selectValueFromMdSelect(LOCATOR_FIELD_INDUSTRY, shipper.getIndustryName());
+        channel.selectValue("B2C Marketplace");
+        industry.selectValue(shipper.getIndustryName());
         String accountTypeId = shipper.getAccountTypeId() != null ? String.valueOf(shipper.getAccountTypeId()) : "0";
-        selectValueFromMdSelect(LOCATOR_FIELD_ACCOUNT_TYPE, accountTypeId);
-
+        accountType.selectByValue(accountTypeId);
         if (isCreateForm)
         {
-            selectValueFromMdSelectWithSearchById(LOCATOR_FIELD_SALES_PERSON, shipper.getSalesPerson());
+            salesperson.searchAndSelectValue(shipper.getSalesPerson());
         }
 
         /*
@@ -284,6 +343,9 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         {
             clickToggleButtonByLabel("Marketplace", "No");
             clickToggleButtonByLabel("Marketplace International", "No");
+        }
+        if (StringUtils.equalsAnyIgnoreCase(shipper.getType(), "Normal", "Marketplace"))
+        {
             clickToggleButtonByLabel("Corporate", "No");
         }
 
@@ -377,6 +439,20 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
             String defaultPickupTimeSelector = startTimeFormatted + " - " + endTimeFormatted;
             scrollIntoView("//md-select[contains(@id, 'commons.select')]", false);
             selectValueFromMdSelectByIdContains("commons.select", defaultPickupTimeSelector);
+            if (CollectionUtils.isNotEmpty(pickupSettings.getServiceTypeLevel()))
+            {
+                List<ServiceTypeLevel> serviceTypeLevels = pickupSettings.getServiceTypeLevel();
+                for (int i = 0; i < serviceTypeLevels.size(); i++)
+                {
+                    ServiceTypeLevel serviceTypeLevel = serviceTypeLevels.get(i);
+                    new MdSelect(getWebDriver(), f("//*[@id='more-settings-service-type%d']", i)).selectValue(serviceTypeLevel.getType());
+                    new MdSelect(getWebDriver(), f("//*[@id='more-settings-service-level%d']", i)).selectValue(serviceTypeLevel.getLevel());
+                    if (i < serviceTypeLevels.size() - 1)
+                    {
+                        moreSettingsAddNewService.click();
+                    }
+                }
+            }
         }
     }
 
@@ -543,16 +619,16 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
         if (md != null)
         {
             // Services
-            selectValueFromMdSelect("ctrl.data.marketplace.ocVersion", md.getOrderCreateVersion());
-            selectMultipleValuesFromMdSelect("ctrl.data.marketplace.selectedOcServices", md.getOrderCreateServicesAvailable());
-            selectValueFromMdSelect("ctrl.data.marketplace.trackingType", md.getOrderCreateTrackingType());
+            ocVersion.selectValue(md.getOrderCreateVersion());
+            ocServices.selectValues(md.getOrderCreateServicesAvailable());
+            trackingType.selectValue(md.getOrderCreateTrackingType());
 
             clickToggleButton("ctrl.data.marketplace.allowCod", convertBooleanToString(md.getOrderCreateAllowCodService(), "Yes", "No"));
             clickToggleButton("ctrl.data.marketplace.allowCp", convertBooleanToString(md.getOrderCreateAllowCpService(), "Yes", "No"));
             clickToggleButton("ctrl.data.marketplace.isPrePaid", convertBooleanToString(md.getOrderCreateIsPrePaid(), "Yes", "No"));
             clickToggleButton("ctrl.data.marketplace.allowStaging", convertBooleanToString(md.getOrderCreateAllowStagedOrders(), "Yes", "No"));
             clickToggleButton("ctrl.data.marketplace.isMultiParcel", convertBooleanToString(md.getOrderCreateIsMultiParcelShipper(), "Yes", "No"));
-            sendKeys("//md-input-container[@model='ctrl.data.marketplace.premiumPickupDailyLimit']//input", String.valueOf(md.getPickupPremiumPickupDailyLimit()));
+            premiumPickupDailyLimit.setValue(md.getPickupPremiumPickupDailyLimit());
         }
 
         // Billing
@@ -560,10 +636,10 @@ public class AllShippersCreateEditPage extends OperatorV2SimplePage
 
         if (mb != null)
         {
-            sendKeys("//md-input-container[@model='ctrl.data.marketplace.billingName']//input", mb.getBillingName());
-            sendKeys("//md-input-container[@model='ctrl.data.marketplace.billingContact']//input", mb.getBillingContact());
-            sendKeys("//md-input-container[@model='ctrl.data.marketplace.billingAddress']//input", mb.getBillingAddress());
-            sendKeys("//md-input-container[@model='ctrl.data.marketplace.billingPostcode']//input", mb.getBillingPostcode());
+            marketplaceBillingName.setValue(mb.getBillingName());
+            marketplaceBillingContact.setValue(mb.getBillingContact());
+            marketplaceBillingAddress.setValue(mb.getBillingAddress());
+            marketplaceBillingPostcode.setValue(mb.getBillingPostcode());
         }
     }
 
