@@ -8,6 +8,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.Arrays;
@@ -19,6 +20,11 @@ public class MdSelect extends PageElement
     public MdSelect(PageElement parent, String xpath)
     {
         super(parent, xpath);
+    }
+
+    public MdSelect(WebDriver webDriver, String xpath)
+    {
+        super(webDriver, xpath);
     }
 
     public MdSelect(WebDriver webDriver, WebElement webElement)
@@ -92,6 +98,18 @@ public class MdSelect extends PageElement
         click(f(locator, getMenuId(), StringUtils.normalizeSpace(value)));
     }
 
+    public void selectValues(Iterable<String> values)
+    {
+        openMenu();
+        String menuId = getMenuId();
+        values.forEach(value ->
+        {
+            String locator = value.contains("'") ? MD_OPTION_LOCATOR_2 : MD_OPTION_LOCATOR;
+            click(f(locator, menuId, StringUtils.normalizeSpace(value)));
+        });
+        closeMenu();
+    }
+
     public void selectByValue(String value)
     {
         openMenu();
@@ -115,7 +133,8 @@ public class MdSelect extends PageElement
 
     private void closeMenu()
     {
-        option.sendKeys(Keys.ESCAPE);
+        Actions actions = new Actions(getWebDriver());
+        actions.sendKeys(Keys.ESCAPE).perform();
     }
 
     private void enterSearchTerm(String value)

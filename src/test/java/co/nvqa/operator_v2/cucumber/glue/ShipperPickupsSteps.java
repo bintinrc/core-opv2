@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.ACTION_BUTTON_DETAILS;
+import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsTable.*;
 
 /**
  * @author Daniel Joi Partogi Hutapea
@@ -52,12 +52,13 @@ public class ShipperPickupsSteps extends AbstractSteps
         Date currentDate = new Date();
         Date nextDayDate = TestUtils.getNextDate(1);
         shipperPickupsPage.filtersForm().filterReservationDate(currentDate, nextDayDate);
-        shipperPickupsPage.filtersForm().clickButtonLoadSelection();
+        shipperPickupsPage.filtersForm().loadSelection.clickAndWaitUntilDone();
     }
 
     @When("^Operator set filters using data below and click Load Selection on Shipper Pickups page:$")
     public void operatorSetFilterUsingDataBelowAndClickLoadSelectionOnShipperPickupsPage(Map<String, String> dataTableAsMap)
     {
+        dataTableAsMap = resolveKeyValues(dataTableAsMap);
         try
         {
             Date reservationDateStart = YYYY_MM_DD_SDF.parse(dataTableAsMap.get("reservationDateStart"));
@@ -65,7 +66,7 @@ public class ShipperPickupsSteps extends AbstractSteps
             shipperPickupsPage.filtersForm().filterReservationDate(reservationDateStart, reservationDateEnd);
             shipperPickupsPage.filtersForm().filterByShipper(dataTableAsMap.get("shipperName"));
             shipperPickupsPage.filtersForm().filterByStatus(dataTableAsMap.get("waypointStatus"));
-            shipperPickupsPage.filtersForm().clickButtonLoadSelection();
+            shipperPickupsPage.filtersForm().loadSelection.clickAndWaitUntilDone();
         } catch (ParseException ex)
         {
             throw new NvTestRuntimeException(ex);
@@ -75,6 +76,7 @@ public class ShipperPickupsSteps extends AbstractSteps
     @When("^Operator set filter parameters and click Load Selection on Shipper Pickups page:$")
     public void operatorSetFilterParametersAndClickLoadSelectionOnShipperPickupsPage(Map<String, String> mapOfData)
     {
+        mapOfData = resolveKeyValues(mapOfData);
         Date fromDate = resolveFilterDate(mapOfData.getOrDefault("fromDate", "TODAY"));
         Date toDate = resolveFilterDate(mapOfData.getOrDefault("toDate", "TOMORROW"));
         Map<String, String> dataTableAsMapReplaced = replaceDataTableTokens(mapOfData, mapOfData);
@@ -104,7 +106,7 @@ public class ShipperPickupsSteps extends AbstractSteps
         {
             shipperPickupsPage.filtersForm().filterByShipper(value);
         }
-        shipperPickupsPage.filtersForm().clickButtonLoadSelection();
+        shipperPickupsPage.filtersForm().loadSelection.clickAndWaitUntilDone();
     }
 
     private Date resolveFilterDate(String value)
@@ -134,6 +136,16 @@ public class ShipperPickupsSteps extends AbstractSteps
         shipperPickupsPage.assignReservationToRoute(addressResult, routeId);
     }
 
+    @When("^Operator removes reservation from route from Edit Route Details dialog$")
+    public void operatorRemovesReservationFromEditRouteDetailsDialog()
+    {
+        Address addressResult = get(KEY_CREATED_ADDRESS);
+        shipperPickupsPage.reservationsTable.searchByPickupAddress(addressResult);
+        shipperPickupsPage.reservationsTable.clickActionButton(1, ACTION_BUTTON_ROUTE_EDIT);
+        shipperPickupsPage.editRouteDialog.newRoute.clear();
+        shipperPickupsPage.editRouteDialog.submitForm();
+    }
+
     @When("^Operator assign Reservation to Route with priority level = \"([^\"]*)\" on Shipper Pickups page$")
     public void operatorAssignReservationToRouteWithPriorityOnShipperPickupsPage(String priorityLevelAsString)
     {
@@ -146,6 +158,7 @@ public class ShipperPickupsSteps extends AbstractSteps
     @Then("^Operator verify the new reservation is listed on table in Shipper Pickups page using data below:$")
     public void operatorVerifyTheNewReservationIsListedOnTableInShipperPickupsPageUsingDataBelow(Map<String, String> mapOfData)
     {
+        mapOfData = resolveKeyValues(mapOfData);
         Address addressResult = get(KEY_CREATED_ADDRESS);
         verifyReservationData(addressResult, mapOfData);
     }
@@ -304,6 +317,43 @@ public class ShipperPickupsSteps extends AbstractSteps
         addRouteViaRouteSuggestion(Collections.singletonList(address), Collections.singletonList(routeTagName));
     }
 
+    @And("^Operator select Route Tags for Route Suggestion of created reservation using data below:$")
+    public void operatorSelectRouteTagsForRouteSuggestionsOfTheRouteUsingDataBelow(Map<String, String> dataTableAsMap)
+    {
+        Address address = get(KEY_CREATED_ADDRESS);
+        String routeTagName = dataTableAsMap.get("routeTagName");
+        shipperPickupsPage.suggestRoute(Collections.singletonList(address), Collections.singletonList(routeTagName));
+    }
+
+    @And("^Operator select Route Tags for Route Suggestion of created reservations using data below:$")
+    public void operatorSelectRouteTagsForRouteSuggestionsOfCreatedReservationsUsingDataBelow(Map<String, String> dataTableAsMap)
+    {
+        List<Address> addresses = get(KEY_LIST_OF_CREATED_ADDRESSES);
+        String routeTagName = dataTableAsMap.get("routeTagName");
+        shipperPickupsPage.suggestRoute(addresses, Collections.singletonList(routeTagName));
+    }
+
+    @And("^Operator select \"(.+)\" action for created reservations on Shipper Pickup page$")
+    public void operatorSelectActionForCreatedReservations(String action)
+    {
+        action = resolveValue(action);
+        List<Address> addresses = get(KEY_LIST_OF_CREATED_ADDRESSES);
+        addresses.forEach(address -> {
+            shipperPickupsPage.reservationsTable.searchByPickupAddress(address);
+            shipperPickupsPage.reservationsTable.selectRow(1);
+        });
+        shipperPickupsPage.actionsMenu.selectOption(action);
+
+    }
+
+    @And("^Operator verifies no route suggested for selected reservations$")
+    public void operatorVerifiesNoRouteSuggestedForSelectedReservations()
+    {
+        shipperPickupsPage.bulkRouteAssignmentDialog.suggestedRoutes.forEach(routeSelector -> {
+            assertEquals("Suggested route value", "", routeSelector.getValue());
+        });
+    }
+
     @And("^Operator use the Route Suggestion to add created reservations to the route using data below:$")
     public void operatorUseTheRouteSuggestionToAddCreatedReservationsToTheRoute(Map<String, String> dataTableAsMap)
     {
@@ -426,7 +476,7 @@ public class ShipperPickupsSteps extends AbstractSteps
     public void operatorOpensDetailsOfReservation(String reservationId)
     {
         reservationId = resolveValue(reservationId);
-        shipperPickupsPage.reservationsTable.searchByReservationId(reservationId);
+        shipperPickupsPage.reservationsTable.filterByColumn(COLUMN_RESERVATION_ID, reservationId);
         shipperPickupsPage.reservationsTable.clickActionButton(1, ACTION_BUTTON_DETAILS);
     }
 
