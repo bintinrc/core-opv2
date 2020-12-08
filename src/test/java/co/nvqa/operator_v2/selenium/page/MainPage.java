@@ -127,7 +127,20 @@ public class MainPage extends OperatorV2SimplePage
             {
                 try
                 {
-                    executeScript("angular.element(arguments[0]).controller().function.cancel()", findElementByXpath(dialogXpath));
+                    WebElement webElement = findElementByXpath(dialogXpath);
+                    try
+                    {
+                        executeScript("angular.element(arguments[0]).controller().function.cancel()", webElement);
+                    } catch (Exception ex1)
+                    {
+                        try
+                        {
+                            executeScript("angular.element(arguments[0]).controller().onCancel()", webElement);
+                        } catch (Exception ex2)
+                        {
+                            executeScript("angular.element(arguments[0]).controller().function.onCancel()", webElement);
+                        }
+                    }
                     waitUntilInvisibilityOfElementLocated(dialogXpath);
                 } catch (Exception ex)
                 {
