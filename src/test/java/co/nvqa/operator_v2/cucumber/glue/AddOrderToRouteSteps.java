@@ -1,16 +1,15 @@
 package co.nvqa.operator_v2.cucumber.glue;
 
-import co.nvqa.commons.model.core.Transaction;
+import co.nvqa.commons.model.core.Order;
 import co.nvqa.operator_v2.selenium.page.AddOrderToRoutePage;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.openqa.selenium.Keys;
 
 /**
- *
- * @author Latika Jamnal
+ * @author Sergey Mishanin
  */
-
 public class AddOrderToRouteSteps extends AbstractSteps
 {
     private AddOrderToRoutePage addOrderToRoutePage;
@@ -25,78 +24,44 @@ public class AddOrderToRouteSteps extends AbstractSteps
         addOrderToRoutePage = new AddOrderToRoutePage(getWebDriver());
     }
 
-    @When("Operator add the route and transaction type")
-    public void operatorAddTheRouteAndTransactionType()
+    @When("Operator set \"(.+)\" route id on Add Order to Route page")
+    public void operatorAddTheRoute(String routeId)
     {
-        Long route = get(KEY_CREATED_ROUTE_ID);
-        String routeId = Long.toString(route);
-        addOrderToRoutePage.setRouteIdAndTransactionType(routeId);
+        addOrderToRoutePage.routeId.setValue(resolveValue(routeId));
     }
 
-    @When("Operator add the prefix")
-    public void operatorAddThePrefix()
+    @When("Operator set \"(.+)\" transaction type on Add Order to Route page")
+    public void operatorSetTransactionType(String transactionType)
     {
-        addOrderToRoutePage.addPrefix();
+        addOrderToRoutePage.transactionType.selectValue(resolveValue(transactionType));
     }
 
-    @And("Operator enters the valid tracking id")
-    public void operatorEntersTheValidTrackingId()
+    @When("Operator add \"(.+)\" prefix on Add Order to Route page")
+    public void operatorAddPrefix(String prefix)
     {
-        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        addOrderToRoutePage.enterTrackingId(trackingId);
+        addOrderToRoutePage.addPrefix(resolveValue(prefix));
     }
 
-    @And("Operator enters the invalid tracking Id")
-    public void operatorEntersTheInvalidTrackingId() {
-        String trackingId = "NVSGTEST" + f(String.valueOf(System.currentTimeMillis() / 1000));
-        put(KEY_CREATED_ORDER_TRACKING_ID, trackingId);
-        addOrderToRoutePage.enterTrackingId(trackingId);
-    }
-
-    @Then("Operator verifies the last scanned with prefix tracking id")
-    public void operatorVerifiesTheLastScannedTrackingId()
+    @When("Operator add prefix of the created order on Add Order to Route page")
+    public void operatorAddPrefix()
     {
-        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        addOrderToRoutePage.verifyLastScannedWithPrefix(trackingId);
+        Order order = get(KEY_CREATED_ORDER);
+        String requestedId = order.getRequestedTrackingId();
+        String trackingId = order.getTrackingId();
+        String prefix = trackingId.replace(requestedId, "");
+        addOrderToRoutePage.addPrefix(prefix);
     }
 
-    @And("Operator verifies error messages")
-    public void operatorVerifiesErrorMessages()
+    @And("Operator enters \"(.+)\" tracking id on Add Order to Route page")
+    public void operatorEntersTrackingId(String trackingId)
     {
-        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        String errorMessage = "Order DD"+trackingId+" not found!";
-        addOrderToRoutePage.verifyErrorMessage(errorMessage);
+        trackingId = resolveValue(trackingId);
+        addOrderToRoutePage.trackingId.setValue(trackingId + Keys.ENTER);
     }
 
-    @And("Operator verifies the success messages")
-    public void operatorVerifiesTheSuccessMessages()
+    @Then("Operator verifies the last scanned tracking id is \"(.+)\"")
+    public void operatorVerifiesTheLastScannedTrackingId(String expectedTrackingId)
     {
-        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        String routeId = get(KEY_CREATED_ROUTE_ID).toString();
-        String successMessage = "Order "+trackingId+" added to route "+routeId;
-        addOrderToRoutePage.verifySuccessMessage(successMessage);
-    }
-
-    @Then("Operator verifies the last scanned without prefix tracking id")
-    public void operatorVerifiesTheLastScannedWithoutPrefixTrackingId()
-    {
-        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        addOrderToRoutePage.verifyLastScannedWithoutPrefix(trackingId);
-    }
-
-    @And("Operator verifies transaction tables for route")
-    public void operatorVerifiesTransactionTablesForRoute() {
-        Transaction transaction = get(KEY_TRANSACTION_DETAILS);
-        Long orderId = get(KEY_CREATED_ORDER_ID);
-        Long routeId = get(KEY_CREATED_ROUTE_ID);
-        addOrderToRoutePage.verifyTransactionRouteDetails(transaction, orderId, routeId);
-    }
-
-    @And("Operator verifies error messages without prefix")
-    public void operatorVerfiesErrorMessagesWithoutPrefix()
-    {
-        String trackingId = get(KEY_CREATED_ORDER_TRACKING_ID);
-        String errorMessage = "Order "+trackingId+" not found!";
-        addOrderToRoutePage.verifyErrorMessage(errorMessage);
+        assertEquals("Last scanned tracking id", resolveValue(expectedTrackingId), addOrderToRoutePage.lastScannedTrackingId.getText());
     }
 }

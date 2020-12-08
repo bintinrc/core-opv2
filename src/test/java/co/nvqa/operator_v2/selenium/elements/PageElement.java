@@ -52,7 +52,12 @@ public class PageElement extends SimplePage
 
     public void moveAndClick()
     {
-        moveAndClick(webElement);
+        moveAndClick(getWebElement());
+    }
+
+    public void moveToElement()
+    {
+        moveToElement(getWebElement());
     }
 
     public void click()
