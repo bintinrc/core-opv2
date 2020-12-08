@@ -5,13 +5,17 @@ import co.nvqa.commons.model.core.route.Route;
 import co.nvqa.operator_v2.model.ReservationInfo;
 import co.nvqa.operator_v2.selenium.elements.Button;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
 import co.nvqa.operator_v2.selenium.elements.md.MdDatepicker;
 import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.md.MdMenu;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
 import co.nvqa.operator_v2.selenium.elements.nv.NvFilterAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvFilterBox;
 import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
@@ -23,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
@@ -38,21 +41,29 @@ import static co.nvqa.operator_v2.selenium.page.ShipperPickupsPage.ReservationsT
 public class ShipperPickupsPage extends OperatorV2SimplePage
 {
     public static final String REFRESH_BUTTON_ARIA_LABEL = "Refresh";
-    public static final String EDIT_FILTERS_BUTTON_ARIA_LABEL = "Edit Filters";
 
     private static final String CSV_FILENAME = "shipper-pickups.csv";
     private static final String SELECTED_COUNT_LABEL_LOCATOR = "//h5[contains(text(),'Selected:')]";
 
     private CreateSelectedReservationsDialog createSelectedReservationsDialog;
-    private BulkRouteAssignmentDialog bulkRouteAssignmentDialog;
     private BulkPriorityEditDialog bulkPriorityEditDialog;
-    private ApplyActionsMenu applyActionsMenu;
     public ReservationsTable reservationsTable;
-    private FiltersForm filtersForm;
-    private EditRouteDialog editRouteDialog;
+    public FiltersForm filtersForm;
+
+    public static final String ITEM_DOWNLOAD_CSV_FILE = "Download CSV File";
+    public static final String ITEM_CREATE_RESERVATION = "Create Reservation";
+    public static final String ITEM_REMOVE_ROUTE = "Remove Route";
+    public static final String ITEM_SUGGEST_ROUTE = "Suggest Route";
+    public static final String ITEM_EDIT_PRIORITY_LEVEL = "Edit Priority Level";
 
     @FindBy(css = "md-dialog")
     public ReservationDetailsDialog reservationDetailsDialog;
+
+    @FindBy(css = "md-dialog")
+    public EditRouteDialog editRouteDialog;
+
+    @FindBy(css = "md-dialog")
+    public BulkRouteAssignmentDialog bulkRouteAssignmentDialog;
 
     @FindBy(xpath = "//md-dialog[contains(@class,'shipper-pickups-finish-reservation-dialog')]")
     public FinishReservationDialog finishReservationDialog;
@@ -66,26 +77,24 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     @FindBy(css = "nv-filter-autocomplete[item-types='Shipper']")
     public NvFilterAutocomplete shipperFilter;
 
+    @FindBy(name = "commons.edit-fiters")
+    public NvIconTextButton editFilters;
+
+    @FindBy(css = "div.navigation md-menu")
+    public MdMenu actionsMenu;
+
     public ShipperPickupsPage(WebDriver webDriver)
     {
         super(webDriver);
         createSelectedReservationsDialog = new CreateSelectedReservationsDialog(webDriver);
-        bulkRouteAssignmentDialog = new BulkRouteAssignmentDialog(webDriver);
         bulkPriorityEditDialog = new BulkPriorityEditDialog(webDriver);
-        applyActionsMenu = new ApplyActionsMenu(webDriver);
         reservationsTable = new ReservationsTable(webDriver);
         filtersForm = new FiltersForm(webDriver);
-        editRouteDialog = new EditRouteDialog(webDriver);
     }
 
     public BulkRouteAssignmentDialog bulkRouteAssignmentDialog()
     {
         return bulkRouteAssignmentDialog;
-    }
-
-    public FiltersForm filtersForm()
-    {
-        return filtersForm;
     }
 
     private static String buildPickupAddress(Address address)
@@ -112,33 +121,35 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         /*
           Reload the table to make sure the table info is updated.
          */
-        openFiltersForm();
-        filtersForm.clickButtonLoadSelection();
+        editFilters.click();
+        filtersForm.loadSelection.clickAndWaitUntilDone();
 
-        String pickupAddress = reservationsTable.searchByPickupAddress(address);
-        String actualPickupAddress = reservationsTable.getPickupAddress(1);
+        String pickupAddress = null;
+        if (address != null)
+        {
+            pickupAddress = reservationsTable.searchByPickupAddress(address);
+        }
+        ReservationInfo actual = reservationsTable.readEntity(1);
 
         if (comments != null && comments.length() > 255)
         {
             comments = comments.substring(0, 255) + "...";
         }
 
-        // Remove multiple [SPACE] chars from String value.
-        actualPickupAddress = StringUtils.normalizeSpace(actualPickupAddress);
-        pickupAddress = StringUtils.normalizeSpace(pickupAddress);
-        assertThat("Pickup Address", actualPickupAddress, startsWith(pickupAddress));
+        if (address != null)
+        {
+            // Remove multiple [SPACE] chars from String value.
+            String actualPickupAddress = StringUtils.normalizeSpace(actual.getPickupAddress());
+            pickupAddress = StringUtils.normalizeSpace(pickupAddress);
+            assertThat("Pickup Address", actualPickupAddress, startsWith(pickupAddress));
+        }
 
-        assertThatIfExpectedValueNotBlank("Shipper Name", shipperName, reservationsTable.getShipperNameAndContact(1), startsWith(shipperName));
-        assertEqualsIfExpectedValueNotBlank("Route ID", routeId, reservationsTable.getRouteId(1));
-        assertEqualsIfExpectedValueNotBlank("Driver Name", driverName, reservationsTable.getDriverName(1));
-        assertEqualsIfExpectedValueNotBlank("Priority Level", priorityLevel, reservationsTable.getPriorityLevel(1));
-        assertEqualsIfExpectedValueNotBlank("Approx. Volume", approxVolume, reservationsTable.getApproxVolume(1));
-        assertEqualsIfExpectedValueNotBlank("Comments", comments, reservationsTable.getComments(1));
-    }
-
-    public void openFiltersForm()
-    {
-        clickButtonByAriaLabel(EDIT_FILTERS_BUTTON_ARIA_LABEL);
+        assertThatIfExpectedValueNotBlank("Shipper Name", shipperName, actual.getShipperName(), startsWith(shipperName));
+        assertEqualsIfExpectedValueNotBlank("Route ID", routeId, actual.getRouteId());
+        assertEqualsIfExpectedValueNotBlank("Driver Name", driverName, actual.getDriverName());
+        assertEqualsIfExpectedValueNotBlank("Priority Level", priorityLevel, actual.getPriorityLevel());
+        assertEqualsIfExpectedValueNotBlank("Approx. Volume", approxVolume, actual.getApproxVolume());
+        assertEqualsIfExpectedValueNotBlank("Comments", comments, actual.getComments());
     }
 
     public void verifyReservationInfo(ReservationInfo expectedReservationInfo, Address address)
@@ -148,26 +159,15 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
         if (readyDate != null && latestDate != null)
         {
-            openFiltersForm();
+            editFilters.click();
             filtersForm.filterReservationDate(readyDate, latestDate);
-            filtersForm.clickButtonLoadSelection();
+            filtersForm.loadSelection.clickAndWaitUntilDone();
         }
 
         ReservationInfo actualReservationInfo = readReservationInfo(address);
-        assertEqualsIfExpectedValueNotNull("Shipper Name", expectedReservationInfo.getShipperName(), actualReservationInfo.getShipperName());
-        assertEqualsIfExpectedValueNotNull("Pickup Address", expectedReservationInfo.getPickupAddress(), actualReservationInfo.getPickupAddress());
-        assertEqualsIfExpectedValueNotNull("Route Id", expectedReservationInfo.getRouteId(), actualReservationInfo.getRouteId());
-        assertEqualsIfExpectedValueNotNull("Driver Name", expectedReservationInfo.getDriverName(), actualReservationInfo.getDriverName());
-        assertEqualsIfExpectedValueNotNull("Priority Level", expectedReservationInfo.getPriorityLevel(), actualReservationInfo.getPriorityLevel());
-        assertEqualsIfExpectedValueNotNull("Ready By", expectedReservationInfo.getReadyBy(), actualReservationInfo.getReadyBy());
-        assertEqualsIfExpectedValueNotNull("Latest By", expectedReservationInfo.getLatestBy(), actualReservationInfo.getLatestBy());
-        assertEqualsIfExpectedValueNotNull("Reservation Type", expectedReservationInfo.getReservationType(), actualReservationInfo.getReservationType());
-        assertEqualsIfExpectedValueNotNull("Reservation Status", expectedReservationInfo.getReservationStatus(), actualReservationInfo.getReservationStatus());
+        expectedReservationInfo.compareWithActual(actualReservationInfo, "reservationCreatedTime", "serviceTime");
         assertDateIsEqualIfExpectedValueNotNullOrBlank("Reservation Created Time", expectedReservationInfo.getReservationCreatedTime(), actualReservationInfo.getReservationCreatedTime());
         assertDateIsEqualIfExpectedValueNotNullOrBlank("Service Time", expectedReservationInfo.getServiceTime(), actualReservationInfo.getServiceTime());
-        assertEqualsIfExpectedValueNotNull("Approx. Volume", expectedReservationInfo.getApproxVolume(), actualReservationInfo.getApproxVolume());
-        assertEqualsIfExpectedValueNotNull("Failure Reason", expectedReservationInfo.getFailureReason(), actualReservationInfo.getFailureReason());
-        assertEqualsIfExpectedValueNotNull("Comments", expectedReservationInfo.getComments(), actualReservationInfo.getComments());
     }
 
     private void assertDateIsEqualIfExpectedValueNotNullOrBlank(String message, String expected, String actual)
@@ -219,7 +219,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     public List<ReservationInfo> downloadCsvFiles(List<Address> addresses)
     {
         List<ReservationInfo> reservationsInfo = selectReservationsAndStoreInfo(addresses);
-        applyActionsMenu.chooseDownloadCsvFile();
+        actionsMenu.selectOption(ITEM_DOWNLOAD_CSV_FILE);
         return reservationsInfo;
     }
 
@@ -231,15 +231,18 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     public List<ReservationInfo> duplicateReservations(List<Address> addresses, Date date)
     {
         List<ReservationInfo> originalReservationsInfo = selectReservationsAndStoreInfo(addresses);
-        applyActionsMenu.chooseCreateReservation();
+        actionsMenu.selectOption(ITEM_CREATE_RESERVATION);
         createSelectedReservationsDialog.fillTheForm(date);
         createSelectedReservationsDialog.submitForm();
         String toastMessage = addresses.size() == 1 ?
                 "1 Reservation(s) Created" :
                 "Reservation(s) created successfully";
         waitUntilInvisibilityOfToast(toastMessage, true);
-        operationResultsDialog.close();
-        operationResultsDialog.waitUntilInvisible();
+        if (operationResultsDialog.isDisplayedFast())
+        {
+            operationResultsDialog.forceClose();
+            operationResultsDialog.waitUntilInvisible();
+        }
 
         return originalReservationsInfo;
     }
@@ -252,7 +255,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     public void editPriorityLevel(List<Address> addresses, int priorityLevel, boolean setToAll)
     {
         selectReservationsByAddress(addresses);
-        applyActionsMenu.chooseEditPriorityLevel();
+        actionsMenu.selectOption(ITEM_EDIT_PRIORITY_LEVEL);
         bulkPriorityEditDialog.fillTheForm(priorityLevel, setToAll);
         bulkPriorityEditDialog.submitForm();
     }
@@ -260,9 +263,10 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     public BulkRouteAssignmentDialog suggestRoute(List<Address> addresses, List<String> routeTags)
     {
         selectReservationsByAddress(addresses);
-        applyActionsMenu.chooseSuggestRoute();
-        bulkRouteAssignmentDialog.addRouteTags(routeTags);
-        bulkRouteAssignmentDialog.clickSuggestButton();
+        actionsMenu.selectOption(ITEM_SUGGEST_ROUTE);
+        bulkRouteAssignmentDialog.waitUntilVisible();
+        routeTags.forEach(routeTag -> bulkRouteAssignmentDialog.routeTags.selectValue(routeTag));
+        bulkRouteAssignmentDialog.suggest.clickAndWaitUntilDone();
         return bulkRouteAssignmentDialog;
     }
 
@@ -274,7 +278,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     public void removeRoutes(List<Address> addresses)
     {
         selectReservationsByAddress(addresses);
-        applyActionsMenu.chooseRemoveRoute();
+        actionsMenu.selectOption(ITEM_REMOVE_ROUTE);
         removeRouteFromReservationsDialog.waitUntilVisible();
         removeRouteFromReservationsDialog.remove.click();
         waitUntilInvisibilityOfToast(f("%d Reservation(s) Pulled Out from Route", addresses.size()));
@@ -285,7 +289,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         addresses.forEach(address ->
         {
             reservationsTable.searchByPickupAddress(address);
-            reservationsTable.checkSelectionCheckbox(1);
+            reservationsTable.selectRow(1);
         });
         verifySelectedCount(addresses.size());
     }
@@ -296,7 +300,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         addresses.forEach(address ->
         {
             reservationsInfo.add(readReservationInfo(address));
-            reservationsTable.checkSelectionCheckbox(1);
+            reservationsTable.selectRow(1);
         });
         verifySelectedCount(addresses.size());
         return reservationsInfo;
@@ -309,24 +313,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
     public ReservationInfo readReservationInfo(Address address)
     {
-        ReservationInfo reservationInfo = new ReservationInfo();
         reservationsTable.searchByPickupAddress(address);
-        assertFalse("Reservation was not found", isTableEmpty());
-        reservationInfo.setShipperName(reservationsTable.getShipperNameAndContact(1));
-        reservationInfo.setPickupAddress(reservationsTable.getPickupAddress(1));
-        reservationInfo.setRouteId(reservationsTable.getRouteId(1));
-        reservationInfo.setDriverName(reservationsTable.getDriverName(1));
-        reservationInfo.setPriorityLevel(reservationsTable.getPriorityLevel(1));
-        reservationInfo.setReadyBy(reservationsTable.getReadyBy(1));
-        reservationInfo.setLatestBy(reservationsTable.getLatestBy(1));
-        reservationInfo.setReservationType(reservationsTable.getReservationType(1));
-        reservationInfo.setReservationStatus(reservationsTable.getReservationStatus(1));
-        reservationInfo.setReservationCreatedTime(reservationsTable.getReservationCreatedTime(1));
-        reservationInfo.setServiceTime(reservationsTable.getServiceTime(1));
-        reservationInfo.setApproxVolume(reservationsTable.getApproxVolume(1));
-        reservationInfo.setFailureReason(reservationsTable.getFailureReason(1));
-        reservationInfo.setComments(reservationsTable.getComments(1));
-        return reservationInfo;
+        assertFalse("Reservation was not found", reservationsTable.isTableEmpty());
+        return reservationsTable.readEntity(1);
     }
 
     public void clickButtonRefresh()
@@ -373,7 +362,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     {
         assertEquals("Expected another reservation status for finished reservation with failure",
                 status,
-                reservationsTable.getReservationStatus(1));
+                reservationsTable.getTextOnTable(1, ReservationsTable.COLUMN_RESERVATION_STATUS_CLASS));
     }
 
     /**
@@ -437,36 +426,40 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     /**
      * Accessor for Create Reservation dialog
      */
-    public static class EditRouteDialog extends OperatorV2SimplePage
+    public static class EditRouteDialog extends MdDialog
     {
-        private static final String DIALOG_TITLE = "Edit Route";
-        private static final String FIELD_NEW_ROUTE_LOCATOR = "ctrl.data.textRoute";
-        private static final String FIELD_PRIORITY_LEVEL_LOCATOR = "Priority Level";
-        private static final String BUTTON_SUBMIT_LOCATOR = "commons.save-changes";
+        @FindBy(css = "nv-autocomplete[selected-item='ctrl.data.selectedRoute']")
+        public NvAutocomplete newRoute;
 
-        public EditRouteDialog(WebDriver webDriver)
+        @FindBy(id = "Priority Level")
+        public TextBox priorityLevel;
+
+        @FindBy(name = "commons.save-changes")
+        public NvApiTextButton saveChanges;
+
+        public EditRouteDialog(WebDriver webDriver, WebElement webElement)
         {
-            super(webDriver);
+            super(webDriver, webElement);
         }
 
         public void fillTheForm(Long routeId, Integer priorityLevel)
         {
-            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
+            waitUntilVisible();
             pause2s();
             assertNotNull("Route ID should not be null.", routeId);
 
-            selectValueFromNvAutocomplete(FIELD_NEW_ROUTE_LOCATOR, String.valueOf(routeId));
+            newRoute.selectValue(routeId);
 
             if (priorityLevel != null)
             {
-                sendKeysById(FIELD_PRIORITY_LEVEL_LOCATOR, String.valueOf(priorityLevel));
+                this.priorityLevel.setValue(priorityLevel);
             }
         }
 
         public void submitForm()
         {
-            clickNvApiTextButtonByNameAndWaitUntilDone(BUTTON_SUBMIT_LOCATOR);
-            waitUntilInvisibilityOfMdDialogByTitle(DIALOG_TITLE);
+            saveChanges.clickAndWaitUntilDone();
+            waitUntilInvisible();
         }
     }
 
@@ -521,38 +514,34 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     /**
      * Accessor for Bulk Route Assignment dialog
      */
-    public static class BulkRouteAssignmentDialog extends OperatorV2SimplePage
+    public static class BulkRouteAssignmentDialog extends MdDialog
     {
-        private static final String DIALOG_TITLE = "Bulk Route Assignment";
-        private static final String FIELD_ROUTE_TAGS_SEARCH_TEXT = "ctrl.view.tagSearchText";
-        private static final String BUTTON_SUGGEST_ARIA_LABEL = "Suggest";
-        private static final String BUTTON_SUBMIT_ARIA_LABEL = "Save changes";
+        @FindBy(css = "nv-autocomplete[search-text='ctrl.view.tagSearchText']")
+        public NvAutocomplete routeTags;
 
-        public BulkRouteAssignmentDialog(WebDriver webDriver)
-        {
-            super(webDriver);
-        }
+        @FindBy(css = "nv-autocomplete[search-text='reservation.serviceSearchText']")
+        public List<NvAutocomplete> suggestedRoutes;
 
-        public void addRouteTags(List<String> routeTags)
-        {
-            waitUntilVisibilityOfMdDialogByTitle(DIALOG_TITLE);
-            routeTags.forEach(routeTag -> selectValueFromNvAutocomplete(FIELD_ROUTE_TAGS_SEARCH_TEXT, routeTag));
-        }
+        @FindBy(name = "container.shipper-pickups.dialog.suggest")
+        public NvApiTextButton suggest;
 
-        public void clickSuggestButton()
+        @FindBy(name = "commons.save-changes")
+        public NvApiTextButton saveChanges;
+
+        public BulkRouteAssignmentDialog(WebDriver webDriver, WebElement webElement)
         {
-            clickButtonByAriaLabelAndWaitUntilDone(BUTTON_SUGGEST_ARIA_LABEL);
+            super(webDriver, webElement);
         }
 
         public String readSuggestedRoute(int index)
         {
-            return getSelectedValueOfMdAutocompleteOnTableWithNgRepeat(index, "route", "reservation in ctrl.data.reservations");
+            return suggestedRoutes.get(index - 1).getValue();
         }
 
         public Route validateSuggestedRoutes(List<Route> validRoutes)
         {
             Route route = null;
-            int rowsCount = getRowsCountOfTableWithNgRepeat("reservation in ctrl.data.reservations");
+            int rowsCount = suggestedRoutes.size();
 
             for (int index = 1; index <= rowsCount; index++)
             {
@@ -585,191 +574,60 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
         public void submitForm()
         {
-            clickButtonByAriaLabelAndWaitUntilDone(BUTTON_SUBMIT_ARIA_LABEL);
-            waitUntilInvisibilityOfMdDialogByTitle(DIALOG_TITLE);
-        }
-    }
-
-    /**
-     * Accessor for Apply Action menu
-     */
-    public static class ApplyActionsMenu extends OperatorV2SimplePage
-    {
-        private static final String PARENT_MENU_NAME = "Apply Action";
-        private static final String ITEM_DOWNLOAD_CSV_FILE = "Download CSV File";
-        private static final String ITEM_CREATE_RESERVATION = "Create Reservation";
-        private static final String ITEM_REMOVE_ROUTE = "Remove Route";
-        private static final String ITEM_SUGGEST_ROUTE = "Suggest Route";
-        private static final String ITEM_EDIT_PRIORITY_LEVEL = "Edit Priority Level";
-
-        public ApplyActionsMenu(WebDriver webDriver)
-        {
-            super(webDriver);
-        }
-
-        public void chooseDownloadCsvFile()
-        {
-            chooseItem(ITEM_DOWNLOAD_CSV_FILE);
-        }
-
-        public void chooseCreateReservation()
-        {
-            chooseItem(ITEM_CREATE_RESERVATION);
-        }
-
-        public void chooseRemoveRoute()
-        {
-            chooseItem(ITEM_REMOVE_ROUTE);
-        }
-
-        public void chooseSuggestRoute()
-        {
-            chooseItem(ITEM_SUGGEST_ROUTE);
-        }
-
-        public void chooseEditPriorityLevel()
-        {
-            chooseItem(ITEM_EDIT_PRIORITY_LEVEL);
-        }
-
-        private void chooseItem(String childMenuName)
-        {
-            clickMdMenuItem(PARENT_MENU_NAME, childMenuName);
+            saveChanges.clickAndWaitUntilDone();
+            waitUntilInvisible();
         }
     }
 
     /**
      * Accessor for Reservations table
      */
-    public static class ReservationsTable extends OperatorV2SimplePage
+    public static class ReservationsTable extends MdVirtualRepeatTable<ReservationInfo>
     {
         private static final String MD_VIRTUAL_REPEAT = "data in getTableData()";
-        private static final String COLUMN_CLASS_RESERVATION_ID = "id";
-        private static final String COLUMN_CLASS_DATA_SHIPPER_NAME_AND_CONTACT = "name";
-        private static final String COLUMN_CLASS_DATA_ROUTE_ID = "route-id";
-        private static final String COLUMN_CLASS_DATA_DRIVER_NAME = "driver-name";
-        private static final String COLUMN_CLASS_DATA_PRIORITY_LEVEL = "priority-level";
-        private static final String COLUMN_CLASS_DATA_READY_BY = "ready-by";
-        private static final String COLUMN_CLASS_DATA_LATEST_BY = "last-by";
-        private static final String COLUMN_CLASS_DATA_RESERVATION_TYPE = "type";
-        private static final String COLUMN_CLASS_DATA_RESERVATION_STATUS = "status";
-        private static final String COLUMN_CLASS_DATA_RESERVATION_CREATED_TIME = "created-date";
-        private static final String COLUMN_CLASS_DATA_SERVICE_TIME = "service-time";
-        private static final String COLUMN_CLASS_DATA_PICKUP_ADDRESS = "pickup-address";
-        private static final String COLUMN_CLASS_DATA_APPROX_VOLUME = "approx-volume";
-        private static final String COLUMN_CLASS_DATA_FAILURE_REASON = "failure-reason";
-        private static final String COLUMN_CLASS_DATA_COMMENTS = "comments";
+        public static final String COLUMN_RESERVATION_ID = "id";
+        public static final String COLUMN_PICKUP_ADDRESS = "pickupAddress";
+        public static final String COLUMN_RESERVATION_STATUS = "reservationStatus";
+        private static final String COLUMN_RESERVATION_STATUS_CLASS = "status";
 
-        public static final String ACTION_BUTTON_ROUTE_EDIT = "Route Edit";
+        public static final String ACTION_BUTTON_ROUTE_EDIT = "Edit";
         public static final String ACTION_BUTTON_DETAILS = "Details";
         public static final String ACTION_BUTTON_FINISH = "Finish";
+
 
         public ReservationsTable(WebDriver webDriver)
         {
             super(webDriver);
-        }
-
-        public String getShipperNameAndContact(int rowNumber)
-        {
-            return getTextOnTable(rowNumber, COLUMN_CLASS_DATA_SHIPPER_NAME_AND_CONTACT);
-        }
-
-        public String getRouteId(int rowNumber)
-        {
-            return getTextOnTable(rowNumber, COLUMN_CLASS_DATA_ROUTE_ID);
-        }
-
-        public String getDriverName(int rowNumber)
-        {
-            return getTextOnTable(rowNumber, COLUMN_CLASS_DATA_DRIVER_NAME);
-        }
-
-        public String getPriorityLevel(int rowNumber)
-        {
-            return getTextOnTable(rowNumber, COLUMN_CLASS_DATA_PRIORITY_LEVEL);
-        }
-
-        public String getReadyBy(int rowNumber)
-        {
-            return getTextOnTable(rowNumber, COLUMN_CLASS_DATA_READY_BY);
-        }
-
-        public String getLatestBy(int rowNumber)
-        {
-            return getTextOnTable(rowNumber, COLUMN_CLASS_DATA_LATEST_BY);
-        }
-
-        public String getReservationType(int rowNumber)
-        {
-            return getTextOnTable(rowNumber, COLUMN_CLASS_DATA_RESERVATION_TYPE);
-        }
-
-        public String getReservationStatus(int rowNumber)
-        {
-            return getTextOnTable(rowNumber, COLUMN_CLASS_DATA_RESERVATION_STATUS);
-        }
-
-        public String getReservationCreatedTime(int rowNumber)
-        {
-            return getTextOnTable(rowNumber, COLUMN_CLASS_DATA_RESERVATION_CREATED_TIME);
-        }
-
-        public String getServiceTime(int rowNumber)
-        {
-            return getTextOnTable(rowNumber, COLUMN_CLASS_DATA_SERVICE_TIME);
-        }
-
-        public String getPickupAddress(int rowNumber)
-        {
-            return getTextOnTable(rowNumber, COLUMN_CLASS_DATA_PICKUP_ADDRESS);
-        }
-
-        public String getApproxVolume(int rowNumber)
-        {
-            return getTextOnTable(rowNumber, COLUMN_CLASS_DATA_APPROX_VOLUME);
-        }
-
-        public String getFailureReason(int rowNumber)
-        {
-            return getTextOnTable(rowNumber, COLUMN_CLASS_DATA_FAILURE_REASON);
-        }
-
-        public String getComments(int rowNumber)
-        {
-            return getTextOnTable(rowNumber, COLUMN_CLASS_DATA_COMMENTS);
-        }
-
-        private String getTextOnTable(int rowNumber, String columnDataClass)
-        {
-            String text = getTextOnTableWithMdVirtualRepeat(rowNumber, columnDataClass, MD_VIRTUAL_REPEAT);
-            return StringUtils.normalizeSpace(text);
-        }
-
-        public void clickActionButton(int rowNumber, String actionButtonName)
-        {
-            clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
-        }
-
-        public void checkSelectionCheckbox(int rowNumber)
-        {
-            checkRowWithMdVirtualRepeat(rowNumber, MD_VIRTUAL_REPEAT);
-        }
-
-        public void searchByReservationId(String reservationId)
-        {
-            searchTableCustom1(COLUMN_CLASS_RESERVATION_ID, reservationId);
-        }
-
-        public void searchByPickupAddress(String pickupAddress)
-        {
-            searchTableCustom1(COLUMN_CLASS_DATA_PICKUP_ADDRESS, pickupAddress);
+            setColumnLocators(ImmutableMap.<String, String>builder()
+                    .put(COLUMN_RESERVATION_ID, "id")
+                    .put("shipperId", "shipper-id")
+                    .put("shipperName", "name")
+                    .put(COLUMN_PICKUP_ADDRESS, "pickup-address")
+                    .put("routeId", "route-id")
+                    .put("driverName", "driver-name")
+                    .put("priorityLevel", "priority-level")
+                    .put("readyBy", "ready-by")
+                    .put("latestBy", "last-by")
+                    .put("reservationType", "type")
+                    .put(COLUMN_RESERVATION_STATUS, COLUMN_RESERVATION_STATUS_CLASS)
+                    .put("reservationCreatedTime", "created-date")
+                    .put("serviceTime", "service-time")
+                    .put("approxVolume", "approx-volume")
+                    .put("failureReason", "failure-reason")
+                    .put("comments", "comments")
+                    .build()
+            );
+            setActionButtonsLocators(ImmutableMap.of(ACTION_BUTTON_ROUTE_EDIT, "container.shipper-pickups.route-edit",
+                    ACTION_BUTTON_DETAILS, "container.shipper-pickups.details",
+                    ACTION_BUTTON_FINISH, "Finish"));
+            setEntityClass(ReservationInfo.class);
         }
 
         public String searchByPickupAddress(Address address)
         {
-            String pickupAddress = buildPickupAddress(address);
-            searchByPickupAddress(pickupAddress);
-            return pickupAddress;
+            String addressValue = buildPickupAddress(address);
+            filterByColumn(COLUMN_PICKUP_ADDRESS, addressValue);
+            return addressValue;
         }
 
         public String getNotDefaultBackgroundColorOfRow(int rowNumber)
@@ -792,22 +650,32 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
      */
     public static class FiltersForm extends OperatorV2SimplePage
     {
-        private static final String BUTTON_LOAD_SELECTION_NAME = "Load Selection";
-        private static final String FIELD_SELECT_FILTER_PLACEHOLDER = "Select Filter";
-        private static final String HUBS_ITEM_TYPE = "Hubs";
-        private static final String ZONES_ITEM_TYPE = "Zones";
-
         @FindBy(name = "fromDateField")
         public MdDatepicker fromDateField;
 
-        @FindBy(name = "maxdate")
+        @FindBy(name = "rsvnDate")
         public MdDatepicker toDateField;
 
-        @FindBy(css = "nv-autocomplete[item-types='Shipper']")
-        public NvAutocomplete shipperField;
+        @FindBy(xpath = "//nv-filter-box[@main-title='Reservation Types']")
+        public NvFilterBox reservationTypesFilter;
+
+        @FindBy(xpath = "//nv-filter-autocomplete[@main-title='Shipper']")
+        public NvFilterAutocomplete shipperFilter;
+
+        @FindBy(xpath = "//nv-filter-box[@main-title='Master Shipper']")
+        public NvFilterBox masterShipperFilter;
 
         @FindBy(xpath = "//nv-filter-box[@main-title='Waypoint Status']")
         public NvFilterAutocomplete statusFilter;
+
+        @FindBy(xpath = "//nv-filter-box[@main-title='Hubs']")
+        public NvFilterBox hubsFilter;
+
+        @FindBy(xpath = "//nv-filter-box[@main-title='Zones']")
+        public NvFilterBox zonesFilter;
+
+        @FindBy(name = "Load Selection")
+        public NvApiTextButton loadSelection;
 
         public FiltersForm(WebDriver webDriver)
         {
@@ -822,38 +690,32 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
 
         public void filterByHub(String hub)
         {
-            selectValueFromMdAutocomplete(FIELD_SELECT_FILTER_PLACEHOLDER, HUBS_ITEM_TYPE);
-            selectValueFromNvAutocompleteByItemTypesAndDismiss(HUBS_ITEM_TYPE, hub);
+            hubsFilter.clearAll();
+            hubsFilter.selectFilter(hub);
         }
 
         public void filterByZone(String zone)
         {
-            selectValueFromMdAutocomplete(FIELD_SELECT_FILTER_PLACEHOLDER, ZONES_ITEM_TYPE);
-            selectValueFromNvAutocompleteByItemTypesAndDismiss(ZONES_ITEM_TYPE, zone);
+            zonesFilter.clearAll();
+            zonesFilter.selectFilter(zone);
         }
 
         public void filterByShipper(String shipperName)
         {
-            shipperField.selectValue(shipperName);
+            shipperFilter.clearAll();
+            shipperFilter.selectFilter(shipperName);
+        }
+
+        public void filterByMasterShipper(String masterShipperName)
+        {
+            masterShipperFilter.clearAll();
+            masterShipperFilter.selectFilter(masterShipperName);
         }
 
         public void filterByType(String reservationType)
         {
-            List<String> valuesSelected = getSelectedValuesFromNvFilterBox("Reservation Types");
-
-            if ((Objects.nonNull(valuesSelected) && !valuesSelected.contains(reservationType)) || valuesSelected.isEmpty())
-            {
-                selectValueFromNvAutocompleteByItemTypesAndDismiss("Reservation Types", reservationType);
-            }
-
-            valuesSelected = getSelectedValuesFromNvFilterBox("Reservation Types");
-
-            if (Objects.nonNull(valuesSelected) && !valuesSelected.isEmpty())
-            {
-                valuesSelected.stream()
-                        .filter(valueSelected -> !valueSelected.equals(reservationType))
-                        .forEach(valueSelected -> removeSelectedValueFromNvFilterBoxByAriaLabel("Reservation Types", valueSelected));
-            }
+            reservationTypesFilter.clearAll();
+            reservationTypesFilter.selectFilter(reservationType);
         }
 
         public void filterByStatus(String waypointStatus)
@@ -863,11 +725,6 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
                 statusFilter.clearAll();
                 statusFilter.selectFilter(waypointStatus);
             }
-        }
-
-        public void clickButtonLoadSelection()
-        {
-            clickNvApiTextButtonByNameAndWaitUntilDone(BUTTON_LOAD_SELECTION_NAME);
         }
     }
 
@@ -900,11 +757,6 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         public FinishReservationDialog(WebDriver webDriver, WebElement webElement)
         {
             super(webDriver, webElement);
-        }
-
-        public FinishReservationDialog(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-        {
-            super(webDriver, searchContext, webElement);
         }
 
         public void selectFailureAsReason()

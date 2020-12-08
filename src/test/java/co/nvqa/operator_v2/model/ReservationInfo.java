@@ -1,5 +1,6 @@
 package co.nvqa.operator_v2.model;
 
+import co.nvqa.commons.model.DataEntity;
 import co.nvqa.commons.support.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.translate.CsvTranslators;
@@ -10,13 +11,15 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *
  * @author Sergey Mishanin
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class ReservationInfo {
+public class ReservationInfo extends DataEntity<ReservationInfo>
+{
     private static final CsvTranslators.CsvEscaper CSV_ESCAPER = new CsvTranslators.CsvEscaper();
 
+    private String id;
+    private String shipperId;
     private String shipperName;
     private String pickupAddress;
     private String routeId;
@@ -32,10 +35,14 @@ public class ReservationInfo {
     private String failureReason;
     private String comments;
 
-    public ReservationInfo() {
+    public ReservationInfo()
+    {
     }
 
-    public ReservationInfo(ReservationInfo reservationInfo) {
+    public ReservationInfo(ReservationInfo reservationInfo)
+    {
+        setId(reservationInfo.getId());
+        setShipperId(reservationInfo.getShipperId());
         setShipperName(reservationInfo.getShipperName());
         setPickupAddress(reservationInfo.getPickupAddress());
         setRouteId(reservationInfo.getRouteId());
@@ -52,147 +59,204 @@ public class ReservationInfo {
         setComments(reservationInfo.getComments());
     }
 
-    public String getShipperName() {
+    public String getId()
+    {
+        return id;
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
+    public String getShipperId()
+    {
+        return shipperId;
+    }
+
+    public void setShipperId(String shipperId)
+    {
+        this.shipperId = shipperId;
+    }
+
+    public String getShipperName()
+    {
         return shipperName;
     }
 
-    public void setShipperName(String shipperName) {
+    public void setShipperName(String shipperName)
+    {
         this.shipperName = shipperName;
     }
 
-    public String getPickupAddress() {
+    public String getPickupAddress()
+    {
         return pickupAddress;
     }
 
-    public void setPickupAddress(String pickupAddress) {
+    public void setPickupAddress(String pickupAddress)
+    {
         this.pickupAddress = pickupAddress;
     }
 
-    public String getRouteId() {
+    public String getRouteId()
+    {
         return routeId;
     }
 
-    public void setRouteId(String routeId) {
+    public void setRouteId(String routeId)
+    {
         this.routeId = routeId;
     }
 
-    public String getDriverName() {
+    public String getDriverName()
+    {
         return driverName;
     }
 
-    public void setDriverName(String driverName) {
+    public void setDriverName(String driverName)
+    {
         this.driverName = driverName;
     }
 
-    public String getPriorityLevel() {
+    public String getPriorityLevel()
+    {
         return priorityLevel;
     }
 
-    public void setPriorityLevel(String priorityLevel) {
+    public void setPriorityLevel(String priorityLevel)
+    {
         this.priorityLevel = priorityLevel;
     }
 
-    public String getReadyBy() {
+    public String getReadyBy()
+    {
         return readyBy;
     }
 
-    public Date getReadyByDate() {
-        if (readyBy == null) {
+    public Date getReadyByDate()
+    {
+        if (readyBy == null)
+        {
             return null;
         }
         return Date.from(getReadyByDateTime().toInstant());
     }
 
-    public ZonedDateTime getReadyByDateTime() {
-        if (readyBy == null) {
+    public ZonedDateTime getReadyByDateTime()
+    {
+        if (readyBy == null)
+        {
             return null;
         }
         return DateUtil.getDate(getReadyBy().replace(" ", "T") + "Z");
     }
 
-    public void setReadyBy(String readyBy) {
+    public void setReadyBy(String readyBy)
+    {
         this.readyBy = readyBy;
     }
 
-    public String getLatestBy() {
+    public String getLatestBy()
+    {
         return latestBy;
     }
 
-    public Date getLatestByDate() {
-        if (latestBy == null) {
+    public Date getLatestByDate()
+    {
+        if (latestBy == null)
+        {
             return null;
         }
         return Date.from(getLatestByDateTime().toInstant());
     }
 
-    public ZonedDateTime getLatestByDateTime() {
-        if (latestBy == null) {
+    public ZonedDateTime getLatestByDateTime()
+    {
+        if (latestBy == null)
+        {
             return null;
         }
         return DateUtil.getDate(getLatestBy().replace(" ", "T") + "Z");
     }
 
-    public void setLatestBy(String latestBy) {
+    public void setLatestBy(String latestBy)
+    {
         this.latestBy = latestBy;
     }
 
-    public String getReservationType() {
+    public String getReservationType()
+    {
         return reservationType;
     }
 
-    public void setReservationType(String reservationType) {
+    public void setReservationType(String reservationType)
+    {
         this.reservationType = reservationType;
     }
 
-    public String getReservationCreatedTime() {
+    public String getReservationCreatedTime()
+    {
         return reservationCreatedTime;
     }
 
-    public void setReservationCreatedTime(String reservationCreatedTime) {
+    public void setReservationCreatedTime(String reservationCreatedTime)
+    {
         this.reservationCreatedTime = reservationCreatedTime;
     }
 
-    public String getServiceTime() {
+    public String getServiceTime()
+    {
         return serviceTime;
     }
 
-    public void setServiceTime(String serviceTime) {
+    public void setServiceTime(String serviceTime)
+    {
         this.serviceTime = serviceTime;
     }
 
-    public String getApproxVolume() {
+    public String getApproxVolume()
+    {
         return approxVolume;
     }
 
-    public void setApproxVolume(String approxVolume) {
+    public void setApproxVolume(String approxVolume)
+    {
         this.approxVolume = approxVolume;
     }
 
-    public String getFailureReason() {
+    public String getFailureReason()
+    {
         return failureReason;
     }
 
-    public void setFailureReason(String failureReason) {
+    public void setFailureReason(String failureReason)
+    {
         this.failureReason = failureReason;
     }
 
-    public String getComments() {
+    public String getComments()
+    {
         return comments;
     }
 
-    public void setComments(String comments) {
+    public void setComments(String comments)
+    {
         this.comments = comments;
     }
 
-    public String getReservationStatus() {
+    public String getReservationStatus()
+    {
         return reservationStatus;
     }
 
-    public void setReservationStatus(String reservationStatus) {
+    public void setReservationStatus(String reservationStatus)
+    {
         this.reservationStatus = reservationStatus;
     }
 
-    public String toCsvLine() {
+    public String toCsvLine()
+    {
         List<String> line = new ArrayList<>();
         line.add(escapeCsv(shipperName));
         line.add(escapeCsv(pickupAddress));
@@ -211,7 +275,8 @@ public class ReservationInfo {
         return StringUtils.join(line, ",");
     }
 
-    private String escapeCsv(String text) {
-        return CSV_ESCAPER.translate(text);
+    private String escapeCsv(String text)
+    {
+        return text == null ? "-" : CSV_ESCAPER.translate(text);
     }
 }

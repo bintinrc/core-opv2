@@ -21,6 +21,11 @@ public class PageElement extends SimplePage
         this(parent.webDriver, parent.webElement, parent.findElementBy(By.xpath(xpath), parent.webElement));
     }
 
+    public PageElement(WebDriver webDriver, String xpath)
+    {
+        this(webDriver, webDriver.findElement(By.xpath(xpath)));
+    }
+
     public PageElement(WebDriver webDriver)
     {
         super(webDriver);
