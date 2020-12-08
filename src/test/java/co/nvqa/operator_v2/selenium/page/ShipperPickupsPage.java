@@ -48,9 +48,8 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     private CreateSelectedReservationsDialog createSelectedReservationsDialog;
     private BulkPriorityEditDialog bulkPriorityEditDialog;
     public ReservationsTable reservationsTable;
-    private FiltersForm filtersForm;
+    public FiltersForm filtersForm;
 
-    public static final String PARENT_MENU_NAME = "Apply Action";
     public static final String ITEM_DOWNLOAD_CSV_FILE = "Download CSV File";
     public static final String ITEM_CREATE_RESERVATION = "Create Reservation";
     public static final String ITEM_REMOVE_ROUTE = "Remove Route";
@@ -98,11 +97,6 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         return bulkRouteAssignmentDialog;
     }
 
-    public FiltersForm filtersForm()
-    {
-        return filtersForm;
-    }
-
     private static String buildPickupAddress(Address address)
     {
         return StringUtils.trim(address.getAddress1());
@@ -130,7 +124,11 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         editFilters.click();
         filtersForm.loadSelection.clickAndWaitUntilDone();
 
-        String pickupAddress = reservationsTable.searchByPickupAddress(address);
+        String pickupAddress = null;
+        if (address != null)
+        {
+            pickupAddress = reservationsTable.searchByPickupAddress(address);
+        }
         ReservationInfo actual = reservationsTable.readEntity(1);
 
         if (comments != null && comments.length() > 255)
@@ -138,10 +136,13 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
             comments = comments.substring(0, 255) + "...";
         }
 
-        // Remove multiple [SPACE] chars from String value.
-        String actualPickupAddress = StringUtils.normalizeSpace(actual.getPickupAddress());
-        pickupAddress = StringUtils.normalizeSpace(pickupAddress);
-        assertThat("Pickup Address", actualPickupAddress, startsWith(pickupAddress));
+        if (address != null)
+        {
+            // Remove multiple [SPACE] chars from String value.
+            String actualPickupAddress = StringUtils.normalizeSpace(actual.getPickupAddress());
+            pickupAddress = StringUtils.normalizeSpace(pickupAddress);
+            assertThat("Pickup Address", actualPickupAddress, startsWith(pickupAddress));
+        }
 
         assertThatIfExpectedValueNotBlank("Shipper Name", shipperName, actual.getShipperName(), startsWith(shipperName));
         assertEqualsIfExpectedValueNotBlank("Route ID", routeId, actual.getRouteId());
@@ -164,20 +165,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         }
 
         ReservationInfo actualReservationInfo = readReservationInfo(address);
-        assertEqualsIfExpectedValueNotNull("Shipper Name", expectedReservationInfo.getShipperName(), actualReservationInfo.getShipperName());
-        assertEqualsIfExpectedValueNotNull("Pickup Address", expectedReservationInfo.getPickupAddress(), actualReservationInfo.getPickupAddress());
-        assertEqualsIfExpectedValueNotNull("Route Id", expectedReservationInfo.getRouteId(), actualReservationInfo.getRouteId());
-        assertEqualsIfExpectedValueNotNull("Driver Name", expectedReservationInfo.getDriverName(), actualReservationInfo.getDriverName());
-        assertEqualsIfExpectedValueNotNull("Priority Level", expectedReservationInfo.getPriorityLevel(), actualReservationInfo.getPriorityLevel());
-        assertEqualsIfExpectedValueNotNull("Ready By", expectedReservationInfo.getReadyBy(), actualReservationInfo.getReadyBy());
-        assertEqualsIfExpectedValueNotNull("Latest By", expectedReservationInfo.getLatestBy(), actualReservationInfo.getLatestBy());
-        assertEqualsIfExpectedValueNotNull("Reservation Type", expectedReservationInfo.getReservationType(), actualReservationInfo.getReservationType());
-        assertEqualsIfExpectedValueNotNull("Reservation Status", expectedReservationInfo.getReservationStatus(), actualReservationInfo.getReservationStatus());
+        expectedReservationInfo.compareWithActual(actualReservationInfo, "reservationCreatedTime", "serviceTime");
         assertDateIsEqualIfExpectedValueNotNullOrBlank("Reservation Created Time", expectedReservationInfo.getReservationCreatedTime(), actualReservationInfo.getReservationCreatedTime());
         assertDateIsEqualIfExpectedValueNotNullOrBlank("Service Time", expectedReservationInfo.getServiceTime(), actualReservationInfo.getServiceTime());
-        assertEqualsIfExpectedValueNotNull("Approx. Volume", expectedReservationInfo.getApproxVolume(), actualReservationInfo.getApproxVolume());
-        assertEqualsIfExpectedValueNotNull("Failure Reason", expectedReservationInfo.getFailureReason(), actualReservationInfo.getFailureReason());
-        assertEqualsIfExpectedValueNotNull("Comments", expectedReservationInfo.getComments(), actualReservationInfo.getComments());
     }
 
     private void assertDateIsEqualIfExpectedValueNotNullOrBlank(String message, String expected, String actual)
@@ -248,8 +238,11 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
                 "1 Reservation(s) Created" :
                 "Reservation(s) created successfully";
         waitUntilInvisibilityOfToast(toastMessage, true);
-        operationResultsDialog.close();
-        operationResultsDialog.waitUntilInvisible();
+        if (operationResultsDialog.isDisplayedFast())
+        {
+            operationResultsDialog.forceClose();
+            operationResultsDialog.waitUntilInvisible();
+        }
 
         return originalReservationsInfo;
     }
@@ -369,7 +362,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
     {
         assertEquals("Expected another reservation status for finished reservation with failure",
                 status,
-                reservationsTable.getTextOnTable(1, ReservationsTable.COLUMN_RESERVATION_STATUS));
+                reservationsTable.getTextOnTable(1, ReservationsTable.COLUMN_RESERVATION_STATUS_CLASS));
     }
 
     /**
@@ -523,11 +516,6 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
      */
     public static class BulkRouteAssignmentDialog extends MdDialog
     {
-        private static final String DIALOG_TITLE = "Bulk Route Assignment";
-        private static final String FIELD_ROUTE_TAGS_SEARCH_TEXT = "ctrl.view.tagSearchText";
-        private static final String BUTTON_SUGGEST_ARIA_LABEL = "Suggest";
-        private static final String BUTTON_SUBMIT_ARIA_LABEL = "Save changes";
-
         @FindBy(css = "nv-autocomplete[search-text='ctrl.view.tagSearchText']")
         public NvAutocomplete routeTags;
 
@@ -600,6 +588,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         public static final String COLUMN_RESERVATION_ID = "id";
         public static final String COLUMN_PICKUP_ADDRESS = "pickupAddress";
         public static final String COLUMN_RESERVATION_STATUS = "reservationStatus";
+        private static final String COLUMN_RESERVATION_STATUS_CLASS = "status";
 
         public static final String ACTION_BUTTON_ROUTE_EDIT = "Edit";
         public static final String ACTION_BUTTON_DETAILS = "Details";
@@ -620,7 +609,7 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
                     .put("readyBy", "ready-by")
                     .put("latestBy", "last-by")
                     .put("reservationType", "type")
-                    .put("reservationStatus", "status")
+                    .put(COLUMN_RESERVATION_STATUS, COLUMN_RESERVATION_STATUS_CLASS)
                     .put("reservationCreatedTime", "created-date")
                     .put("serviceTime", "service-time")
                     .put("approxVolume", "approx-volume")
@@ -628,7 +617,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
                     .put("comments", "comments")
                     .build()
             );
-            setActionButtonsLocators(ImmutableMap.of(ACTION_BUTTON_ROUTE_EDIT, "container.shipper-pickups.route-edit", ACTION_BUTTON_DETAILS, "container.shipper-pickups.details"));
+            setActionButtonsLocators(ImmutableMap.of(ACTION_BUTTON_ROUTE_EDIT, "container.shipper-pickups.route-edit",
+                    ACTION_BUTTON_DETAILS, "container.shipper-pickups.details",
+                    ACTION_BUTTON_FINISH, "Finish"));
             setEntityClass(ReservationInfo.class);
         }
 
@@ -671,6 +662,9 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         @FindBy(xpath = "//nv-filter-autocomplete[@main-title='Shipper']")
         public NvFilterAutocomplete shipperFilter;
 
+        @FindBy(xpath = "//nv-filter-box[@main-title='Master Shipper']")
+        public NvFilterBox masterShipperFilter;
+
         @FindBy(xpath = "//nv-filter-box[@main-title='Waypoint Status']")
         public NvFilterAutocomplete statusFilter;
 
@@ -710,6 +704,12 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         {
             shipperFilter.clearAll();
             shipperFilter.selectFilter(shipperName);
+        }
+
+        public void filterByMasterShipper(String masterShipperName)
+        {
+            masterShipperFilter.clearAll();
+            masterShipperFilter.selectFilter(masterShipperName);
         }
 
         public void filterByType(String reservationType)
@@ -757,11 +757,6 @@ public class ShipperPickupsPage extends OperatorV2SimplePage
         public FinishReservationDialog(WebDriver webDriver, WebElement webElement)
         {
             super(webDriver, webElement);
-        }
-
-        public FinishReservationDialog(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-        {
-            super(webDriver, searchContext, webElement);
         }
 
         public void selectFailureAsReason()
