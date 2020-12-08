@@ -141,6 +141,7 @@ public class DriverStrengthPageV2 extends OperatorV2SimplePage
         waitUntilVisibilityOfMdDialogByTitle("Confirm delete");
         waitUntilVisibilityOfElementLocated(LOCATOR_DELETE_BUTTON);
         waitUntilElementIsClickable(LOCATOR_DELETE_BUTTON);
+        pause1s();
         click(LOCATOR_DELETE_BUTTON);
         waitUntilInvisibilityOfMdDialogByTitle("Confirm delete");
     }
