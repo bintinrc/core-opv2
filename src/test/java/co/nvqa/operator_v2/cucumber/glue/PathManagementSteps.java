@@ -120,10 +120,13 @@ public class PathManagementSteps extends AbstractSteps {
     @When("Operator click {string} hyperlink button")
     public void operatorClickHyperlinkButton(String hyperlinkAction) {
         if ("view".equals(hyperlinkAction)) {
-            pathManagementPage.viewFirstRow.click();
+            pathManagementPage.pathRowNvTable.getRow(0).viewAction.click();
         }
         if ("remove".equals(hyperlinkAction)) {
-            pathManagementPage.removeFirstRow.click();
+            pathManagementPage.pathRowNvTable.getRow(0).removeAction.click();
+        }
+        if ("edit".equals(hyperlinkAction)) {
+            pathManagementPage.pathRowNvTable.getRow(0).editAction.click();
         }
     }
 
@@ -440,5 +443,15 @@ public class PathManagementSteps extends AbstractSteps {
             String actualDestinationHubErrorInfo = pathManagementPage.createDefaultPathModal.destinationHubErrorInfo.getText();
             assertThat("Error destination info is equal", actualDestinationHubErrorInfo, equalTo(expectedErrorInfo));
         }
+    }
+
+    @When("Operator selects {string} as transit hub in edit path modal")
+    public void operatorSelectsHubAsTransitHubInEditPathModal(String transitHub) {
+        String resolvedTransitHub = resolveValue(transitHub);
+
+        pathManagementPage.editManualPathModal.waitUntilVisible();
+
+        pathManagementPage.editManualPathFirstStage(resolvedTransitHub);
+        pathManagementPage.editManualPathSecondStage();
     }
 }

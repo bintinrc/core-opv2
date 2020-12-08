@@ -68,12 +68,6 @@ public class PathManagementPage extends OperatorV2SimplePage {
     @FindBy(xpath = "//tr[1]//td[contains(@class, 'action')]")
     public TextBox actionFirstRow;
 
-    @FindBy(xpath = "//tr[1]//td[contains(@class, 'action')]//a[.='View']")
-    public PageElement viewFirstRow;
-
-    @FindBy(xpath = "//tr[1]//td[contains(@class, 'action')]//a[.='Remove']")
-    public PageElement removeFirstRow;
-
     @FindBy(className = "ant-modal-wrap")
     public PathDetailsModal pathDetailsModal;
 
@@ -82,6 +76,9 @@ public class PathManagementPage extends OperatorV2SimplePage {
 
     @FindBy(className = "ant-modal-wrap")
     public CreateManualPathModal createManualPathModal;
+
+    @FindBy(className = "ant-modal-wrap")
+    public EditManualPathModal editManualPathModal;
 
     @FindBy(className = "ant-modal-wrap")
     public CreateDefaultPathModal createDefaultPathModal;
@@ -429,6 +426,24 @@ public class PathManagementPage extends OperatorV2SimplePage {
                 equalTo(expectedCreateDefaultPathInfoText));
     }
 
+    public void editManualPathFirstStage(String resolvedTransitHub) {
+        String actualModalTitle = editManualPathModal.title.getText();
+        String expectedModalTitle = "Edit Path (1/2)";
+        assertThat("Modal title is the same", actualModalTitle, equalTo(expectedModalTitle));
+        editManualPathModal.selectTransitHub(resolvedTransitHub);
+        editManualPathModal.nextButton.click();
+        pause1s();
+    }
+
+    public void editManualPathSecondStage() {
+        String actualModalTitle = editManualPathModal.title.getText();
+        String expectedModalTitle = "Edit Path (2/2)";
+        assertThat("Modal title is the same", actualModalTitle, equalTo(expectedModalTitle));
+        editManualPathModal.selectFirstSchedule();
+        editManualPathModal.updateButton.click();
+        pause1s();
+    }
+
     public static class PathDetailsModal extends AntModal {
         public PathDetailsModal(WebDriver webDriver, WebElement webElement) {
             super(webDriver, webElement);
@@ -626,4 +641,83 @@ public class PathManagementPage extends OperatorV2SimplePage {
         @FindBy(xpath = "(//td//a)[3]")
         public PageElement removeAction;
     }
+
+    public static class EditManualPathModal extends AntModal {
+        @FindBy(xpath = "//div[contains(@class,'ant-form-explain')]")
+        public List<PageElement> thirdStageErrorInfo;
+
+        @FindBy(className = "ant-alert-info")
+        public PageElement thirdStageErrorDetail;
+
+        @FindBy(className = "ant-modal-title")
+        public TextBox modalTitle;
+
+        @FindBy(id = "originHub")
+        public AntSelect originHubFilter;
+
+        @FindBy(id = "destinationHub")
+        public AntSelect destinationHubFilter;
+
+        @FindBy(xpath = "(.//div[div[div[div[.='Add Transit Hub']]]])[1]")
+        public AntSelect firstTransitHubFilter;
+
+        @FindBy(xpath = "(.//div[div[div[div[.='Add Transit Hub']]]])[2]")
+        public AntSelect secondTransitHubFilter;
+
+        @FindBy(xpath = "(.//div[div[div[div[.='Add Transit Hub']]]])[3]")
+        public AntSelect thirdTransitHubFilter;
+
+        @FindBy(xpath = "//div[contains(text(),'validating')]")
+        public PageElement validatingInfo;
+
+        @FindBy(xpath = "(//i[@class='anticon anticon-minus-circle'])[1]")
+        public PageElement removeFirstTransitHub;
+
+        @FindBy(xpath = "(//i[@class='anticon anticon-minus-circle'])[2]")
+        public PageElement removeSecondTransitHub;
+
+        @FindBy(xpath = "(//i[@class='anticon anticon-minus-circle'])[3]")
+        public PageElement removeThirdTransitHub;
+
+        @FindBy(xpath = "(.//button[span[contains(text(),'Departure time')]])[1]")
+        public Button departureScheduleFirst;
+
+        @FindBy(xpath = "(.//button[span[contains(text(),'Departure time')]])[1]//span")
+        public TextBox departureScheduleFirstInfo;
+
+        @FindBy(xpath = "(.//button[span[contains(text(),'Departure time')]])[2]")
+        public Button departureScheduleSecond;
+
+        @FindBy(xpath = "(.//button[span[contains(text(),'Departure time')]])[2]//span")
+        public TextBox departureScheduleSecondInfo;
+
+        @FindBy(xpath = ".//button[.='Cancel']")
+        public Button cancelButton;
+
+        @FindBy(xpath = ".//button[.='Next']")
+        public Button nextButton;
+
+        @FindBy(xpath = ".//button[.='Create']")
+        public Button createButton;
+
+        @FindBy(xpath = ".//button[.='Back']")
+        public Button backButton;
+
+        @FindBy(xpath = ".//button[.='Update']")
+        public Button updateButton;
+
+        public EditManualPathModal(WebDriver webDriver, WebElement webElement) {
+            super(webDriver, webElement);
+            PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
+        }
+
+        public void selectTransitHub(String resolvedTransitHub) {
+            firstTransitHubFilter.selectValue(resolvedTransitHub);
+        }
+
+        public void selectFirstSchedule() {
+            departureScheduleFirst.click();
+        }
+    }
+
 }
