@@ -1,9 +1,15 @@
 package co.nvqa.operator_v2.selenium.page;
 
 import co.nvqa.operator_v2.model.ReservationGroup;
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
+import co.nvqa.operator_v2.selenium.elements.nv.NvAutocomplete;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static co.nvqa.operator_v2.selenium.page.HubsGroupManagementPage.HubsGroupTable.*;
@@ -17,23 +23,23 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage
     @FindBy(css = "md-dialog")
     public ConfirmDeleteDialog confirmDeleteDialog;
 
+    @FindBy(css = "md-dialog")
+    public AddNewGroupDialog addNewGroupDialog;
+
+    @FindBy(css = "md-dialog")
+    public EditGroupDialog editGroupDialog;
+
+    @FindBy(name = "container.reservation-preset-management.add-new-group")
+    public NvIconTextButton addNewGroup;
+
     public static final String LOCATOR_SPINNER_LOADING_FILTERS = "//md-progress-circular/following-sibling::div[text()='Loading filters...']";
 
-    private AddNewGroupDialog addNewGroupDialog;
-    private EditGroupDialog editGroupDialog;
     private ReservationPresetTable reservationPresetTable;
 
     public ReservationPresetManagementPage(WebDriver webDriver)
     {
         super(webDriver);
-        addNewGroupDialog = new AddNewGroupDialog(webDriver);
         reservationPresetTable = new ReservationPresetTable(webDriver);
-        editGroupDialog = new EditGroupDialog(webDriver);
-    }
-
-    public void clickAddNewGroup()
-    {
-        clickNvIconTextButtonByName("container.reservation-preset-management.add-new-group");
     }
 
     public void waitUntilPageLoaded()
@@ -46,7 +52,8 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage
     public void addNewGroup(ReservationGroup reservationPreset)
     {
         waitUntilPageLoaded();
-        clickAddNewGroup();
+        addNewGroup.click();
+        addNewGroupDialog.waitUntilVisible();
         addNewGroupDialog.fillForm(reservationPreset);
     }
 
@@ -82,63 +89,57 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage
      * Accessor for Add New Group dialog
      */
     @SuppressWarnings("UnusedReturnValue")
-    public static class AddNewGroupDialog extends OperatorV2SimplePage
+    public static class AddNewGroupDialog extends MdDialog
     {
-        protected String dialogTittle;
-        protected String locatorButtonSubmit;
+        @FindBy(css = "[id^='commons.name']")
+        public TextBox name;
 
-        public static final String DIALOG_TITLE = "Add New Group";
-        public static final String LOCATOR_BUTTON_SUBMIT = "Submit";
+        @FindBy(css = "nv-autocomplete[possible-options='ctrl.driversSelectionOptions']")
+        public NvAutocomplete driver;
 
-        public AddNewGroupDialog(WebDriver webDriver)
+        @FindBy(css = "nv-autocomplete[possible-options='ctrl.hubsSelectionOptions']")
+        public NvAutocomplete hub;
+
+        @FindBy(name = "Submit")
+        public NvApiTextButton submit;
+
+        public AddNewGroupDialog(WebDriver webDriver, WebElement webElement)
         {
-            super(webDriver);
-            dialogTittle = DIALOG_TITLE;
-            locatorButtonSubmit = LOCATOR_BUTTON_SUBMIT;
+            super(webDriver, webElement);
         }
 
-        public AddNewGroupDialog waitUntilVisible()
-        {
-            waitUntilVisibilityOfMdDialogByTitle(dialogTittle);
-            return this;
-        }
-
-        public AddNewGroupDialog setName(String value)
+        public void setName(String value)
         {
             if (StringUtils.isNotBlank(value))
             {
-                sendKeysById("commons.name", value);
+                name.setValue(value);
             }
-            return this;
         }
 
-        public AddNewGroupDialog setDriver(String value)
+        public void setDriver(String value)
         {
             if (StringUtils.isNotBlank(value))
             {
-                selectValueFromNvAutocompleteByPossibleOptions("ctrl.driversSelectionOptions", value);
+                driver.selectValue(value);
             }
-            return this;
         }
 
-        public AddNewGroupDialog setHub(String value)
+        public void setHub(String value)
         {
             if (StringUtils.isNotBlank(value))
             {
-                selectValueFromNvAutocompleteByPossibleOptions("ctrl.hubsSelectionOptions", value);
+                hub.selectValue(value);
             }
-            return this;
         }
 
         public void submitForm()
         {
-            clickNvApiTextButtonByNameAndWaitUntilDone(locatorButtonSubmit);
-            waitUntilInvisibilityOfMdDialogByTitle(dialogTittle);
+            submit.clickAndWaitUntilDone();
+            waitUntilInvisible();
         }
 
         public void fillForm(ReservationGroup reservationPreset)
         {
-            waitUntilVisible();
             setName(reservationPreset.getName());
             setDriver(reservationPreset.getDriver());
             setHub(reservationPreset.getHub());
@@ -151,14 +152,19 @@ public class ReservationPresetManagementPage extends OperatorV2SimplePage
      */
     public static class EditGroupDialog extends AddNewGroupDialog
     {
-        public static final String DIALOG_TITLE = "Edit Group";
-        public static final String LOCATOR_BUTTON_SUBMIT = "Update";
+        @FindBy(name = "Update")
+        public NvApiTextButton update;
 
-        public EditGroupDialog(WebDriver webDriver)
+        public EditGroupDialog(WebDriver webDriver, WebElement webElement)
         {
-            super(webDriver);
-            dialogTittle = DIALOG_TITLE;
-            locatorButtonSubmit = LOCATOR_BUTTON_SUBMIT;
+            super(webDriver, webElement);
+        }
+
+        @Override
+        public void submitForm()
+        {
+            update.clickAndWaitUntilDone();
+            waitUntilInvisible();
         }
     }
 

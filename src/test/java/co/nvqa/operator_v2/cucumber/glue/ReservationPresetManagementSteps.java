@@ -30,7 +30,7 @@ public class ReservationPresetManagementSteps extends AbstractSteps
     public void operatorCreateNewReservationGroupOnReservationPresetManagementPageUsingDataBelow(Map<String, String> mapOfData)
     {
         ReservationGroup reservationGroup = new ReservationGroup();
-        reservationGroup.fromMap(mapOfData);
+        reservationGroup.fromMap(resolveKeyValues(mapOfData));
         reservationPresetManagementPage.addNewGroup(reservationGroup);
         put(KEY_CREATED_RESERVATION_GROUP, reservationGroup);
     }
