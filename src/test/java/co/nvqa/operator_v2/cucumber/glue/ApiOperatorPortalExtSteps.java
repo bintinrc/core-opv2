@@ -275,6 +275,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         String country = data.get("country");
         String latitude = data.get("latitude");
         String longitude = data.get("longitude");
+        String region = "JKB";
 
         String uniqueCode = generateDateUniqueString();
         Address address = AddressFactory.getRandomAddress();
@@ -320,6 +321,7 @@ public class ApiOperatorPortalExtSteps extends AbstractApiOperatorPortalSteps<Sc
         hub.setLatitude(Double.parseDouble(latitude));
         hub.setLongitude(Double.parseDouble(longitude));
         hub.setFacilityType(facilityType);
+        hub.setRegion(region);
         Map<String, Hub> hubMap = new HashMap<>();
         hubMap.put(hub.getName(), hub);
         final String hubName = name;
