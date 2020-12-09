@@ -179,6 +179,7 @@ public class ImplantedManifestSteps extends AbstractSteps
         implantedManifestPage.createManifestDialog.waitUntilInvisible();
     }
 
+    @When("Operator verifies that \"(.+)\" success toast message is displayed")
     @And("Operator verifies that \"(.+)\" error toast message is displayed")
     public void operatorVerifiesErrorToast(String message)
     {

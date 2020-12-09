@@ -55,7 +55,7 @@ public class ReservationRejectionSteps extends AbstractSteps
     public void operatorVerifiesPickupFailedSuccessfully()
     {
         Address address = get(KEY_CREATED_ADDRESS);
-        String address2 = address.getAddress2().isEmpty()? "" : " " + address.getAddress2();
+        String address2 = address.getAddress2().isEmpty() ? "" : " " + address.getAddress2();
         String pickupInfo = address.getAddress1() + address2 + " " + address.getCountry() + " " + address.getPostcode();
 
         reservationRejectionPage.verifyToastAboutFailedPickupIsPresent();
@@ -63,7 +63,8 @@ public class ReservationRejectionSteps extends AbstractSteps
     }
 
     @And("^Operator reassigns RSVN to new route$")
-    public void operatorReassignsRSVNToNewRoute() {
+    public void operatorReassignsRSVNToNewRoute()
+    {
         Long routeId = get(KEY_CREATED_ROUTE_ID);
         Address address = get(KEY_CREATED_ADDRESS);
         String address1 = address.getAddress1();
@@ -74,7 +75,8 @@ public class ReservationRejectionSteps extends AbstractSteps
     }
 
     @And("^Operator verifies RSVN reassigned successfully$")
-    public void operatorVerifiesRSVNReassignedSuccessfully() {
+    public void operatorVerifiesRSVNReassignedSuccessfully()
+    {
         Address address = get(KEY_CREATED_ADDRESS);
         String address1 = address.getAddress1();
 

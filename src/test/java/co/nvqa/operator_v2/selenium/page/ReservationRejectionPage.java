@@ -8,7 +8,6 @@ import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
 import co.nvqa.operator_v2.selenium.elements.md.MdSelect;
 import co.nvqa.operator_v2.selenium.elements.nv.NvApiTextButton;
 import com.google.common.collect.ImmutableMap;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -25,9 +24,6 @@ import static co.nvqa.operator_v2.selenium.page.ReservationRejectionPage.Reserva
  */
 public class ReservationRejectionPage extends OperatorV2SimplePage
 {
-    private static final String FAIL_PICKUP_MD_DIALOG_TITLE = "Fail Pickup";
-    private static final String FAIL_PICKUP_MD_DIALOG_BUTTON_ARIA_LABEL = "Fail Pickup";
-    private static final String FAIL_PICKUP_MD_DIALOG_REASON_FOR_FAILURE = "Testing the app - Hyperlocal";
     private static final String FAIL_PICKUP_TOAST_MESSAGE_SUCCESSFULLY = "Pick up has been failed";
 
     private static final String REASSIGN_RESERVATION_MD_DIALOG_TITLE = "Reassign Reservation";
@@ -153,11 +149,6 @@ public class ReservationRejectionPage extends OperatorV2SimplePage
             super(webDriver, webElement);
         }
 
-        public RejectReservationDialog(WebDriver webDriver, SearchContext searchContext, WebElement webElement)
-        {
-            super(webDriver, searchContext, webElement);
-        }
-
         @FindBy(css = "[id^='container.reservation-rejection.reason-for-failure']")
         public MdSelect reasonForFailure;
 
@@ -191,7 +182,7 @@ public class ReservationRejectionPage extends OperatorV2SimplePage
             List<String> failureReasonDetailsSecond = failureReasonDetail.get(index).getOptions();
             int randomFailureReasonDetailsIndexSecond = (int) (Math.random() * failureReasonDetailsSecond.size());
             failureReasonDetail.get(index)
-                    .selectValue(failureReasonDetailsSecond.get(randomFailureReasonDetailsIndexSecond).replace("'", "/'"));
+                    .selectValue(failureReasonDetailsSecond.get(randomFailureReasonDetailsIndexSecond));
         }
 
     }
