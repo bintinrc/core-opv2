@@ -47,7 +47,7 @@ public class NvAutocomplete extends PageElement
 
                 String suggestionsId = inputElement.getAttribute("aria-owns");
                 String menuXpath = f("//ul[@id='%s']", suggestionsId);
-                String itemXpath = menuXpath + f("//li//span[contains(.,'%s')]", value);
+                String itemXpath = menuXpath + f("//li//span[contains(.,'%s') and not(contains(.,'No  matching'))]", value);
                 int count = 0;
                 while (!isElementVisible(itemXpath, 1) && count < 5)
                 {
