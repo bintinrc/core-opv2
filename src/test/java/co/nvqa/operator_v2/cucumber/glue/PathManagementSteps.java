@@ -13,6 +13,7 @@ import org.openqa.selenium.JavascriptExecutor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -117,6 +118,21 @@ public class PathManagementSteps extends AbstractSteps {
         pathManagementPage.verifyPathDataAppearInPathTable(resolvedOriginHub, resolvedDestinationHub, passedHub);
     }
 
+    @And("Operator verify path data from {string} to {string} appear in path table with following transit hubs:")
+    public void operatorVerifyPathDataAppearInPathTableWithFollowingTransitHubs(String originHubName, String destinationHubName, List<String> transitHubs) {
+        String resolvedOriginHub = resolveValue(originHubName);
+        String resolvedDestinationHub = resolveValue(destinationHubName);
+        List<String> resolvedTransitHubs = new ArrayList<>();
+        for (String transitHub: transitHubs) {
+            resolvedTransitHubs.add(resolveValue(transitHub));
+        }
+        List<String> passedHubs = new ArrayList<>();
+        passedHubs.add(resolvedOriginHub);
+        passedHubs.addAll(resolvedTransitHubs);
+        passedHubs.add(resolvedDestinationHub);
+        pathManagementPage.verifyPathDataAppearInPathTable(resolvedOriginHub, resolvedDestinationHub, passedHubs);
+    }
+
     @When("Operator click {string} hyperlink button")
     public void operatorClickHyperlinkButton(String hyperlinkAction) {
         if ("view".equals(hyperlinkAction)) {
@@ -128,6 +144,7 @@ public class PathManagementSteps extends AbstractSteps {
         if ("edit".equals(hyperlinkAction)) {
             pathManagementPage.pathRowNvTable.getRow(0).editAction.click();
         }
+        pause1s();
     }
 
     @Then("Operator verify shown {string} path details modal data")
@@ -406,6 +423,10 @@ public class PathManagementSteps extends AbstractSteps {
         if ("remove".equals(buttonName)) {
             pathManagementPage.pathDetailsModal.removePathButton.click();
         }
+        if ("edit".equals(buttonName)) {
+            pathManagementPage.pathDetailsModal.editPathButton.click();
+        }
+        pause1s();
     }
 
     @And("Operator verify no new path created")
@@ -448,10 +469,73 @@ public class PathManagementSteps extends AbstractSteps {
     @When("Operator selects {string} as transit hub in edit path modal")
     public void operatorSelectsHubAsTransitHubInEditPathModal(String transitHub) {
         String resolvedTransitHub = resolveValue(transitHub);
-
         pathManagementPage.editManualPathModal.waitUntilVisible();
-
-        pathManagementPage.editManualPathFirstStage(resolvedTransitHub);
-        pathManagementPage.editManualPathSecondStage();
+        pathManagementPage.editManualPathFirstStage(resolvedTransitHub, false);
     }
+
+    @When("Operator selects {string} as transit hub in created edit path modal")
+    public void operatorSelectsHubAsTransitHubInCreatedEditPathModal(String transitHub) {
+        String resolvedTransitHub = resolveValue(transitHub);
+        pathManagementPage.createdEditPathModal.waitUntilVisible();
+        pathManagementPage.editManualPathFirstStage(resolvedTransitHub, true);
+    }
+
+    @When("Operator selects following transit hubs in edit path modal:")
+    public void operatorSelectsFollowingTransitHubsInEditPathModal(List<String> transitHubs) {
+        List<String> resolvedTransitHubs = new ArrayList<>();
+        for (String transitHub: transitHubs) {
+            resolvedTransitHubs.add(resolveValue(transitHub));
+        }
+        pathManagementPage.editManualPathModal.waitUntilVisible();
+        pathManagementPage.editManualPathFirstStage(resolvedTransitHubs);
+    }
+
+    @When("Operator clicks {string} button in edit path modal")
+    public void operatorClicksButtonInEditPathModal(String button) {
+        if ("next".equals(button)) {
+            pathManagementPage.editManualPathModal.nextButton.click();
+        }
+        if ("update".equals(button)) {
+            pathManagementPage.editManualPathModal.updateButton.click();
+        }
+        if ("cancel".equals(button)) {
+            pathManagementPage.editManualPathModal.cancelButton.click();
+        }
+        pause2s();
+    }
+
+    @When("Operator clicks {string} button in created edit path modal")
+    public void operatorClicksButtonInCreatedEditPathModal(String button) {
+        if ("next".equals(button)) {
+            pathManagementPage.createdEditPathModal.nextButton.click();
+        }
+        if ("update".equals(button)) {
+            pathManagementPage.createdEditPathModal.updateButton.click();
+        }
+        if ("cancel".equals(button)) {
+            pathManagementPage.createdEditPathModal.cancelButton.click();
+        }
+        pause2s();
+    }
+
+    @When("Operator selects first schedule in edit path modal")
+    public void operatorSelectsFirstScheduleInEditPathModal() {
+        pathManagementPage.editManualPathSecondStage(false);
+    }
+
+    @When("Operator selects first schedule in created edit path modal")
+    public void operatorSelectsFirstScheduleInCreatedEditPathModal() {
+        pathManagementPage.editCreatedManualPathSecondStage();
+    }
+
+    @When("Operator selects second schedule in edit path modal")
+    public void operatorSelectsSecondScheduleInEditPathModal() {
+        pathManagementPage.editManualPathSecondStage(true);
+    }
+
+    @Then("Operator verify it cannot edit manual path {string} with data:")
+    public void operatorVerifyItCannotEditManualPathWithData(String reason, Map<String, String> mapOfData) {
+        operatorVerifyItCannotCreateManualPathWithoutSelectingSchedule(reason, mapOfData);
+    }
+
 }
