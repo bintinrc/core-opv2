@@ -211,7 +211,7 @@ Feature: All Shippers
       | discount          | $#^$^#@                                         |
       | errorMessage      | Special character is not allowed                |
 
-  @CloseNewWindows
+  @CloseNewWindows @NotInGaia
   Scenario: Create a new Pricing Profile - with 3-5 integer after decimal point (uid:30ed9502-76df-4695-8a33-f21d40dc9ad5)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
@@ -230,16 +230,13 @@ Feature: All Shippers
       | industryName                 | {industry-name}       |
       | salesPerson                  | {sales-person}        |
     And Operator edits the created shipper
-    Then Operator adds new Shipper's Pricing Profile
+    Then Operator adds pricing script with invalid discount and verifies the error message
       | pricingScriptName | {pricing-script-id-2} - {pricing-script-name-2} |
       | discount          | 20.54321                                        |
-      | comments          | This is a test pricing script                   |
-      | type              | FLAT                                            |
-    And Operator save changes on Edit Shipper Page and gets saved pricing profile values
-    Then DB Operator fetches pricing profile and shipper discount details
-    And Operator verifies the pricing profile and shipper discount details are correct
+      | comments          | This is an invalid discount                     |
+      | errorMessage      | Please provide only 2 decimal places.           |
 
-  @CloseNewWindows
+  @CloseNewWindows @NotInGaia
   Scenario: Create a new Pricing Profile - with shipper discount within 6 digits Flat Discount (uid:5e17e04a-7461-4546-9e3b-20dc2add40e6)
     Given Operator go to menu Shipper -> All Shippers
     When Operator create new Shipper with basic settings using data below:
