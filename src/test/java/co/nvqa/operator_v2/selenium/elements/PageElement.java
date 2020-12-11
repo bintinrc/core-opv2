@@ -36,6 +36,11 @@ public class PageElement extends SimplePage
         super(webDriver, searchContext);
     }
 
+    public PageElement(WebDriver webDriver, SearchContext searchContext, String xpath)
+    {
+        this(webDriver, searchContext.findElement(By.xpath(xpath)));
+    }
+
     public PageElement(WebDriver webDriver, WebElement webElement)
     {
         this(webDriver);
