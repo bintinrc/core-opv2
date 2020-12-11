@@ -171,7 +171,7 @@ public class ImplantedManifestPage extends OperatorV2SimplePage
                 {
                     LocalDateTime scannedAtLocalExpected = scannedAt.toLocalDateTime();
                     LocalDateTime scannedAtLocalActual = implantedManifestOrder.getScannedAt().toLocalDateTime();
-                    assertThat("'Scanned At' value in Implant Manifest table is not in expected range", scannedAtLocalExpected, isOneOf(scannedAtLocalActual, scannedAtLocalActual.plusSeconds(1L), scannedAtLocalActual.minusSeconds(1L)));
+                    assertThat("'Scanned At' value in Implant Manifest table is not in expected range", scannedAtLocalExpected, isOneOf(scannedAtLocalActual, scannedAtLocalActual.plusSeconds(1L), scannedAtLocalActual.plusSeconds(2L), scannedAtLocalActual.minusSeconds(1L), scannedAtLocalActual.minusSeconds(2L)));
                 }
                 assertEquals("'Destination' value in Implant Manifest table", destination, implantedManifestOrder.getDestination());
                 assertEquals("'Rack Sector' value in Implant Manifest table", rackSector, implantedManifestOrder.getRackSector());

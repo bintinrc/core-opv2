@@ -1,18 +1,15 @@
 package co.nvqa.operator_v2.selenium.elements.nv;
 
-import co.nvqa.operator_v2.selenium.elements.CustomFieldDecorator;
 import co.nvqa.operator_v2.selenium.elements.PageElement;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
-public class NvFilterBox extends PageElement
+public class NvFilterBox extends AbstractFilterBox
 {
     public NvFilterBox(WebDriver webDriver, WebElement webElement)
     {
         super(webDriver, webElement);
-        PageFactory.initElements(new CustomFieldDecorator(webDriver, webElement), this);
     }
 
     @FindBy(tagName = "nv-autocomplete")
@@ -27,6 +24,12 @@ public class NvFilterBox extends PageElement
         {
             clearAll.moveAndClick();
         }
+    }
+
+    @Override
+    void setValue(String... values)
+    {
+        selectFilter(values[0]);
     }
 
     public void selectFilter(String value)

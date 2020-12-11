@@ -1,10 +1,14 @@
 package co.nvqa.operator_v2.selenium.page;
 
+import co.nvqa.operator_v2.selenium.elements.TextBox;
+import co.nvqa.operator_v2.selenium.elements.md.MdDialog;
+import co.nvqa.operator_v2.selenium.elements.nv.NvButtonSave;
+import co.nvqa.operator_v2.selenium.elements.nv.NvIconTextButton;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 /**
- *
  * @author Daniel Joi Partogi Hutapea
  */
 public class TagManagementPage extends OperatorV2SimplePage
@@ -18,6 +22,12 @@ public class TagManagementPage extends OperatorV2SimplePage
     public static final String ACTION_BUTTON_EDIT = "commons.edit";
     public static final String ACTION_BUTTON_DELETE = "commons.delete";
 
+    @FindBy(name = "container.tag-management.create-tag")
+    public NvIconTextButton createTag;
+
+    @FindBy(css = "md-dialog")
+    public AddTagDialog addTagDialog;
+
     public TagManagementPage(WebDriver webDriver)
     {
         super(webDriver);
@@ -28,36 +38,6 @@ public class TagManagementPage extends OperatorV2SimplePage
         WebElement we = findElementByXpath("//th[contains(@class, 'name')]");
         moveAndClick(we);
         pause200ms();
-    }
-
-    public void clickCreateTag()
-    {
-        clickNvIconTextButtonByName("container.tag-management.create-tag");
-        waitUntilVisibilityOfElementLocated("//md-dialog[contains(@class, 'tag-management-add')]");
-    }
-
-    public void setTagNameValue(String value)
-    {
-        sendKeysById("tag-name", value);
-        pause100ms();
-    }
-
-    public void setDescriptionValue(String value)
-    {
-        sendKeysById("description", value);
-        pause100ms();
-    }
-
-    public void clickSubmitOnAddTag()
-    {
-        clickNvButtonSaveByNameAndWaitUntilDone("Submit");
-        waitUntilInvisibilityOfToast("1 Tag Created");
-    }
-
-    public void clickSubmitChangesOnEditTag()
-    {
-        clickNvButtonSaveByNameAndWaitUntilDone("Submit Changes");
-        waitUntilInvisibilityOfToast("1 Tag Updated");
     }
 
     public void clickDeleteOnConfirmDeleteDialog()
@@ -75,5 +55,25 @@ public class TagManagementPage extends OperatorV2SimplePage
     {
         clickActionButtonOnTableWithMdVirtualRepeat(rowNumber, actionButtonName, MD_VIRTUAL_REPEAT);
         pause200ms();
+    }
+
+    public static class AddTagDialog extends MdDialog
+    {
+        @FindBy(css = "[id^='tag-name']")
+        public TextBox tagName;
+
+        @FindBy(id = "description")
+        public TextBox description;
+
+        @FindBy(name = "Submit")
+        public NvButtonSave submit;
+
+        @FindBy(name = "Submit Changes")
+        public NvButtonSave submitChanges;
+
+        public AddTagDialog(WebDriver webDriver, WebElement webElement)
+        {
+            super(webDriver, webElement);
+        }
     }
 }
