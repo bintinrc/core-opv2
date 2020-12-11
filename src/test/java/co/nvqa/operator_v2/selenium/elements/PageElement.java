@@ -74,12 +74,12 @@ public class PageElement extends SimplePage
 
     public void jsClick()
     {
-        executeScript("arguments[0].click()", webElement);
+        executeScript("arguments[0].click()", getWebElement());
     }
 
     public String getAttribute(String attributeName)
     {
-        return getAttribute(webElement, attributeName);
+        return getAttribute(getWebElement(), attributeName);
     }
 
     public String getValue()
@@ -89,22 +89,22 @@ public class PageElement extends SimplePage
 
     public String getCssValue(String propertyName)
     {
-        return webElement.getCssValue(propertyName);
+        return getWebElement().getCssValue(propertyName);
     }
 
     public String getText()
     {
-        return getText(webElement);
+        return getWebElement().getText();
     }
 
     public String getNormalizedText()
     {
-        return StringUtils.normalizeSpace(getText(webElement));
+        return StringUtils.normalizeSpace(getText());
     }
 
     public void clear()
     {
-        webElement.clear();
+        getWebElement().clear();
     }
 
     public void sendKeys(CharSequence keysToSend)
@@ -121,7 +121,7 @@ public class PageElement extends SimplePage
     {
         waitUntilClickable();
         clear();
-        sendKeys(webElement, keysToSend);
+        sendKeys(getWebElement(), keysToSend);
     }
 
     public WebElement getWebElement()
@@ -145,7 +145,7 @@ public class PageElement extends SimplePage
     {
         try
         {
-            return webElement.isDisplayed();
+            return getWebElement().isDisplayed();
         } catch (Exception ex)
         {
             return false;
@@ -157,7 +157,7 @@ public class PageElement extends SimplePage
         try
         {
             setImplicitTimeout(0);
-            return webElement.isDisplayed();
+            return getWebElement().isDisplayed();
         } catch (Exception ex)
         {
             return false;
@@ -201,7 +201,7 @@ public class PageElement extends SimplePage
     {
         try
         {
-            waitUntilVisibilityOfElementLocated(webElement, timeout);
+            waitUntilVisibilityOfElementLocated(getWebElement(), timeout);
             return true;
         } catch (Throwable ex)
         {
@@ -211,12 +211,12 @@ public class PageElement extends SimplePage
 
     public boolean isEnabled()
     {
-        return webElement.isEnabled();
+        return getWebElement().isEnabled();
     }
 
     public WebElement findElement(By by)
     {
-        return webElement.findElement(by);
+        return getWebElement().findElement(by);
     }
 
     protected String escapeValue(String value)
